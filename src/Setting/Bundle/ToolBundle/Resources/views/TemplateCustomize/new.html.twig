@@ -1,0 +1,459 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN templatecustomize HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="templatecustomize-title">
+                    Form Components
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('templatecustomize') }}">Template Customize</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Form Components</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END templatecustomize HEADER-->
+        <!-- BEGIN templatecustomize CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn blue" href="{{ path('globaloption_modify') }}">
+                                    <i class="icon-cogs"></i>
+                                    Setting
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="portlet-body">
+                        <div class="portlet-body form">
+                            {% include('flash-message.html.twig')  %}
+                            <!-- BEGIN FORM-->
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+
+                            <!--/row-->
+
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Site Font Size</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+
+                                                {{ form_widget(form.siteFontSize) }}
+                                                {{ form_errors(form.siteFontSize) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Site Background Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.siteBgColor) }}
+                                                {{ form_errors(form.siteBgColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Button Bg Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.buttonBgColor) }}
+                                                {{ form_errors(form.buttonBgColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Button Bg Color Hover</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.buttonBgColorHover) }}
+                                                {{ form_errors(form.buttonBgColorHover) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--/row-->
+                            <div class="row-fluid">
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Site Title Bg Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.siteTitleBgColor) }}
+                                                {{ form_errors(form.siteTitleBgColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Sub Page Bg Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.subPageBgColor) }}
+                                                {{ form_errors(form.subPageBgColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Anchor Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.anchorColor) }}
+                                                {{ form_errors(form.anchorColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Anchor Color Hover</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.anchorHoverColor) }}
+                                                {{ form_errors(form.anchorHoverColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--/row-->
+                            <div class="row-fluid">
+                                <div class="span4 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Site Font Family</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                {{ form_widget(form.siteFontFamily) }}
+                                                {{ form_errors(form.siteFontFamily) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Site H1</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                {{ form_widget(form.siteH1TextSize) }}
+                                                {{ form_errors(form.siteH1TextSize) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Site H2</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+
+                                                {{ form_widget(form.siteH2TextSize) }}
+                                                {{ form_errors(form.siteH2TextSize) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Site H3</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                {{ form_widget(form.siteH3TextSize) }}
+                                                {{ form_errors(form.siteH3TextSize) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Site H4</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+
+                                                {{ form_widget(form.siteH4TextSize) }}
+                                                {{ form_errors(form.siteH4TextSize) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--/row-->
+                            <div class="clearfix">&nbsp;</div>
+                            <!--/row-->
+                            <div class="form-actions portlet box grey">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Header/Body/Footer</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid">
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Header Bg Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.headerBgColor) }}
+                                                {{ form_errors(form.headerBgColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Menu Bg Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.menuBgColor) }}
+                                                {{ form_errors(form.menuBgColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Menu li A</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.menuLiAColor) }}
+                                                {{ form_errors(form.menuLiAColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Menu li A:hover</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.menuLiAHoverColor) }}
+                                                {{ form_errors(form.menuLiAHoverColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Body Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.bodyColor) }}
+                                                {{ form_errors(form.bodyColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Footer Bg Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.footerBgColor) }}
+                                                {{ form_errors(form.footerBgColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-actions portlet box blue">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Logo</div>
+                                    <div class="pull-right">Remove logo<input type="checkbox" class="checkbox" id="removeLogo" name="removeLogo" value="1"></div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <!--/row-->
+                            <div class="row-fluid" >
+
+                                <div class="span6 ">
+                                    <div class="control-group">
+
+                                        <div class="controls">
+                                            <div data-provides="fileupload" class="fileupload fileupload-new">
+                                                <div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
+                                                    {% if(entity.webPath('logo') is defined ) %}
+                                                        <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.webPath('logo') }}">
+                                                    {% else %}
+                                                        <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+                                                    {% endif %}
+                                                </div>
+                                                <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                                <div>
+													<span class="btn btn-file">
+                                                        <span class="fileupload-new">Select image</span>
+													    <span class="fileupload-exists">Change</span>
+                                                        <input type="file" name="logo" id="logo">
+                                                    </span>
+                                                    <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span6 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Display only on website</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                {{ form_widget(form.logoDisplayWebsite) }}
+                                                {{ form_errors(form.logoDisplayWebsite) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--/span-->
+                            <div class="form-actions portlet box blue">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Header Image</div>
+                                    <div class="pull-right">Remove Header Image<input type="checkbox" class="checkbox" id="removeHeaderImage" name="removeHeaderImage" value="1"></div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <!--/row-->
+                            <div class="row-fluid" >
+
+                                <div class="span12">
+                                    <div class="control-group">
+
+                                        <div class="controls">
+                                            <div data-provides="fileupload" class="fileupload fileupload-new">
+                                                <div style="height: 150px;" class="fileupload-new thumbnail span12">
+                                                    {% if(entity.webPath('headerBgImage') is defined ) %}
+                                                        <img class="fileupload-preview fileupload-exists thumbnail span12" alt="" src="/{{ entity.webPath('headerBgImage') }}">
+                                                    {% else %}
+                                                        <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+                                                    {% endif %}
+                                                </div>
+                                                <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                                <div>
+													<span class="btn btn-file">
+                                                        <span class="fileupload-new">Select image</span>
+													    <span class="fileupload-exists">Change</span>
+                                                        <input type="file" name="headerBgImage" id="headerBgImage">
+                                                    </span>
+                                                    <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                                                </div>
+                                            </div>
+                                            <span class="label label-important">NOTE!</span>
+                                            <span> Image size must be use 1024px x 450 px or more</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <!--/span-->
+                            <div class="form-actions portlet box blue">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Body Image</div>
+                                    <div class="pull-right">Remove Body Image<input type="checkbox" class="checkbox" id="removeBodyImage" name="removeBodyImage" value="1"></div>
+
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <!--/row-->
+                            <div class="row-fluid" >
+
+                                <div class="span12">
+                                    <div class="control-group">
+
+                                        <div class="controls">
+                                            <div data-provides="fileupload" class="fileupload fileupload-new">
+                                                <div style="height: 150px;" class="fileupload-new thumbnail span12">
+                                                    {% if(entity.webPath('bgImage') is defined ) %}
+                                                        <img class="fileupload-preview fileupload-exists thumbnail span12" alt="" src="/{{ entity.webPath('bgImage') }}">
+                                                    {% else %}
+                                                        <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+                                                    {% endif %}
+                                                </div>
+                                                <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                                <div>
+													<span class="btn btn-file">
+                                                        <span class="fileupload-new">Select image</span>
+													    <span class="fileupload-exists">Change</span>
+                                                        <input type="file" name="bgImage" id="bgImage">
+                                                    </span>
+                                                    <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                                                </div>
+                                            </div>
+                                            <span class="label label-important">NOTE!</span>
+                                            <span> Image size  use minimum 1024px x 10240 px or more</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <!--/span-->
+                            <div class="form-actions portlet box grey">
+                                <div class="pull-center">
+                                    <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
+                                    <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+                            <!-- END FORM-->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

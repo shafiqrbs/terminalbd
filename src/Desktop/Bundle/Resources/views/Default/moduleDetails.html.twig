@@ -1,0 +1,51 @@
+{% extends ':desktop:base.html.twig' %}
+{% block body %}
+    {% if ( moduleName == 'News') %}
+        {{ include('@Desktop/ModuleDetails/news.html.twig')}}
+    {% elseif( moduleName == 'Blog' ) %}
+        {{ include('@Desktop/ModuleDetails/blog.html.twig')}}
+    {% elseif( moduleName == 'Testimonial' ) %}
+        {{ include('@Desktop/ModuleDetails/testimonial.html.twig')}}
+    {% elseif( moduleName == 'Timeline' ) %}
+        {{ include('@Desktop/ModuleDetails/timeline.html.twig')}}
+    {% elseif( moduleName == 'Branch' ) %}
+        {{ include('@Desktop/ModuleDetails/branch.html.twig')}}
+    {% elseif( moduleName == 'Event' ) %}
+        {{ include('@Desktop/ModuleDetails/event.html.twig')}}
+    {% elseif( moduleName == 'ClassRoutine' ) %}
+        {{ include('@Desktop/ModuleDetails/blackout.html.twig')}}
+    {% elseif( moduleName == 'Blackout' ) %}
+        {{ include('@Desktop/ModuleDetails/blackout.html.twig')}}
+    {% elseif( moduleName == 'NoticeBoard' ) %}
+        {{ include('@Desktop/ModuleDetails/noticeboard.html.twig')}}
+    {% elseif( moduleName == 'Admission' ) %}
+        {{ include('@Desktop/ModuleDetails/admission.html.twig')}}
+    {% elseif( moduleName == 'SyndicateContent' ) %}
+        {{ include('@Desktop/ModuleDetails/syndicate.html.twig')}}
+    {% else %}
+        {{ include('@Desktop/Module/default.html.twig')}}
+    {% endif %}
+{% endblock %}
+{#
+
+{% block documentready %}
+    {% if( moduleName != 'Admission' ) %}
+        {% if(details.photoGallery) %}
+
+            $( '#gallery' ).click( function( e ) {
+            e.preventDefault();
+            $.swipebox( [
+            {% for image in details.photoGallery.galleryImages %}
+                { href : '/{{ image.webPath }}', title : '{{ image.caption }}' },
+            {% endfor %}
+            ]);
+            });
+
+        {% endif %}
+    {% endif %}
+{% endblock %}
+#}
+
+
+
+

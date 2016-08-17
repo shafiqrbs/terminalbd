@@ -1,0 +1,68 @@
+bindu_build:
+    path:     /
+    defaults: { _controller: BinduBundle:SettingBuilder:build }
+
+
+bindu_build_checking_subdomain:
+    path:     /checking-subdomain
+    defaults: { _controller: BinduBundle:SettingBuilder:checkingSubdomain }
+    requirements: { _method: post }
+
+
+bindu_build_option:
+    path:     /option
+    defaults: { _controller: BinduBundle:SettingBuilder:option }
+    requirements: { _method: post }
+
+bindu_build_template:
+    path:     /template
+    defaults: { _controller: BinduBundle:SettingBuilder:template }
+    requirements: { _method: post }
+
+bindu_build_homepage:
+    path:     /homepage
+    defaults: { _controller: BinduBundle:SettingBuilder:homepage }
+    requirements: { _method: post }
+
+bindu_build_customize:
+    path:     /customize
+    defaults: { _controller: BinduBundle:SettingBuilder:customize }
+    requirements: { _method: post }
+
+bindu_build_footer:
+    path:     /footer
+    defaults: { _controller: BinduBundle:SettingBuilder:footer }
+    requirements: { _method: post }
+
+bindu_build_find_child:
+    path:     /find-child
+    defaults: { _controller: BinduBundle:SettingBuilder:findChild }
+    requirements: { _method: post }
+
+bindu_build_contact:
+    path:     /contact
+    defaults: { _controller: BinduBundle:SettingBuilder:contact }
+    requirements: { _method: post }
+
+bindu_build_about:
+    path:     /about
+    defaults: { _controller: BinduBundle:SettingBuilder:about }
+    requirements: { _method: post }
+
+bindu_build_sitesetting:
+    path:     /site-setting
+    defaults: { _controller: BinduBundle:SettingBuilder:sitesetting }
+    requirements: { _method: post }
+
+bindu_build_adsTool:
+    path:     /ads-setting
+    defaults: { _controller: BinduBundle:SettingBuilder:adstool }
+    requirements: { _method: post }
+
+bindu_build_finish:
+    path:     /finish
+    defaults: { _controller: BinduBundle:SettingBuilder:finish }
+    requirements: { _method: post }
+
+
+

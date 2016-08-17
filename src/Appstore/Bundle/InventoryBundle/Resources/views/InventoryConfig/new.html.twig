@@ -1,0 +1,129 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN inventory_warehouse HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="inventory_warehouse-title">
+                    Inventory configuration
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+
+                    <li><a href="#">Inventory configuration </a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END inventory_warehouse HEADER-->
+        <!-- BEGIN inventory_warehouse CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Inventory configuration Information</div>
+                    </div>
+
+                    <div class="portlet-body">
+
+                        <div class="portlet-body form">
+                            {% include('flash-message.html.twig')  %}
+                            <div class="clearfix"><br/></div>
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                            <div class="row-fluid box green">
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Delivery Process<span class="required">*</span></label>
+                                            <div class="controls">
+                                                {{ form_widget(form.deliveryProcess) }}
+                                                {{ form_errors(form.deliveryProcess) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span2">
+                                        <div class="control-group">
+                                            <label class="control-label pull-left" for="vatEnable">Vat Enable{{ form_widget(form.vatEnable) }}
+                                                {{ form_errors(form.vatEnable) }}</label>
+
+                                        </div>
+
+                                     </div>
+                                    <div class="span4">
+
+                                        <div class="control-group">
+                                            <label class="control-label" for="vatPercentage">Vat percentage &nbsp;</label>
+                                            <div class="control">
+                                                {{ form_widget(form.vatPercentage) }}
+                                                {{ form_errors(form.vatPercentage) }}%
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <label class="control-label " for="salesReturnDayLimit">Item return day &nbsp;</label>
+                                            <div class="control">
+                                                {{ form_widget(form.salesReturnDayLimit) }}
+                                                {{ form_errors(form.salesReturnDayLimit) }}
+                                            </div>
+                                        </div>
+                                     </div>
+
+                                </div>
+                                <div class="fluid">
+                                    <div class="span12">
+                                     <div class="pull-left"><label>Stock Keeping Unit(SKU) & Barcode print setting</label></div>
+                                    </div>
+                                </div>
+                                <div class="fluid">
+                                    <div class="span4">
+
+                                        <select class="select2 span12" name="brandvendor">
+                                            <option>Select any one</option>
+                                            <option {% if entity.isVendor == 1 %} selected="selected" {% endif %} value="vendor">Vendor</option>
+                                            <option {% if entity.isBrand == 1 %} selected="selected" {% endif %} value="brand">Brand</option>
+                                        </select>
+                                    </div>
+                                    <div class="span4">
+                                        <div class="control-group">
+                                            <label class="control-label" for="vatEnable">Color/Shape&nbsp;  {{ form_widget(form.isColor) }}
+                                                {{ form_errors(form.isColor) }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="span4">
+                                        <div class="control-group">
+                                            <label class="control-label" for="vatEnable">Size/Weight&nbsp;  {{ form_widget(form.isSize) }}
+                                                {{ form_errors(form.isSize) }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!--/span-->
+                            <div class="form-actions portlet box grey">
+                                <div class="pull-center">
+                                    <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
+                                    <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
+
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+                            <!-- END FORM-->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

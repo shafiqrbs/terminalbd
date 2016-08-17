@@ -1,0 +1,107 @@
+{% extends ':template:base.html.twig' %}
+    {% block body %}
+        <div class="clearfix"></div>
+
+        <div class="page_title">
+            <div class="container">
+                <div class="title"><h1>Products</h1></div>
+                <div class="pagenation">&nbsp;<a href="">Home</a> <i>/</i> Products</div>
+            </div>
+        </div>
+        <!-- Contant
+        ======================================= -->
+
+        <div class="container">
+            <div class="content_fullwidth">
+                <div class="pull-center pagination"  >
+                    {{ knp_pagination_render(products) }}
+                </div>
+                {% for product in products %}
+
+                        <div class="one_fourth {% if loop.index is divisible by(4) %} last {% endif %} ">
+                            <div class="item">
+                                <div class="fresh_projects_list">
+                                    <section class="cheapest">
+                                        <div class="display">
+                                            <div class="small-group" style="width: 100%">
+                                                <div class="small" style="width: 100%" >
+                                                    <img src="{{ image(product.webPath()).resize(275,300) }}" alt="">
+                                                    <div class="info">
+                                                        <div class="title">{% if product.masterItem %}{{ product.masterItem.name }}{% endif %}-{% if product.webName %} - {{ product.webName }}{% endif %}
+                                                            <div class="product-short-details">
+                                                                <span class="left">BDT {{ product.webPrice|format }}</span>
+                                                                <span class="right">{{ product.quantity }}{#{{ product.purchaseStockItem }}#}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="additionnal product-details">
+                                                           <table>
+                                                                {% if product.masterItem is not empty and product.masterItem.category is not empty %}<tr><td>Category</td><td>{{ product.masterItem.category.name }}</td></tr>{% endif %}
+                                                                {% if product.gender is not empty %}<tr><td>Gender</td><td>{{ product.gender }}</td></tr>{% endif %}
+                                                                {% if product.ageGroup is not empty %}<tr><td>Age Group</td><td >{{ product.ageGroup }}</td></tr>{% endif %}
+                                                                {% if product.brand is not empty %}<tr><td>Brand</td><td>{{ product.brand.name }}</td></tr>{% endif %}
+                                                                {% if product.country is not empty %}<tr><td>Made in</td><td>{{ product.country.name }}</td></tr>{% endif %}
+                                                           </table>
+                                                           <br /><br />
+                                                            <b>
+                                                                <a href="javascript:" data-url="{{ path('webservice_product_cart',{'subdomain':globalOption.subDomain,'cart':'cart','item':product.id}) }}">Add to cart</a>
+                                                            </b>&nbsp;|&nbsp; <b>
+                                                                <a href="{{ path('webservice_product_details',{'subdomain':globalOption.subDomain,'product':'product','item':product.id}) }}">Details ></a></b>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hover"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div><!-- end item -->
+                {% endfor %}
+                <div class="pull-center pagination"  >
+                    {{ knp_pagination_render(products) }}
+                </div>
+            </div>
+
+        </div><!-- end content area -->
+<style>
+
+    .pagination {
+        margin:0 !important;
+    }
+    .pagination ul {
+        display: inline-block;
+        margin-bottom: 0;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .pagination ul>li>a, .pagination ul>li>span {
+        float: left;
+        padding: 4px 12px;
+        line-height: 20px;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-left-width: 0;
+    }
+
+
+    .pagination ul>.disabled>span, .pagination ul>.disabled>a, .pagination ul>.disabled>a:hover, .pagination ul>.disabled>a:focus {
+        color: #999;
+        cursor: default;
+        background-color: transparent;
+    }
+
+</style>
+    {% endblock %}
+
+
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@DesktopBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+
+

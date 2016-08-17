@@ -1,0 +1,20 @@
+setting_appearance_menucustom:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/menucustom.yml"
+    prefix:   /admin/menucustom
+
+setting_appearance_megamenu:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/megamenu.yml"
+    prefix:   /domain/megamenu
+
+
+SettingAppearanceBundle_menu:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/menu.yml"
+    prefix:   /domain/menu
+
+SettingAppearanceBundle_menugroup:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/menugroup.yml"
+    prefix:   /domain/menugroup
+
+SettingAppearanceBundle_menugrouping:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/menugrouping.yml"
+    prefix:   /domain/menugrouping

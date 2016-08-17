@@ -1,0 +1,37 @@
+account_journal:
+    path:     /
+    defaults: { _controller: "AccountingBundle:AccountJournal:index" }
+
+account_journal_show:
+    path:     /{id}/show
+    defaults: { _controller: "AccountingBundle:AccountJournal:show" }
+
+account_journal_new:
+    path:     /new
+    defaults: { _controller: "AccountingBundle:AccountJournal:new" }
+
+account_journal_create:
+    path:     /create
+    defaults: { _controller: "AccountingBundle:AccountJournal:create" }
+    methods:  POST
+
+account_journal_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AccountingBundle:AccountJournal:edit" }
+
+account_journal_approve:
+    path:     /{id}/payment-approve
+    defaults: { _controller: "AccountingBundle:AccountJournal:approve" }
+    options:
+           expose: true
+
+account_journal_inline:
+    path:     /inline-update
+    defaults: { _controller: "AccountingBundle:AccountJournal:inlineUpdate" }
+
+
+account_journal_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AccountingBundle:AccountJournal:delete" }
+    options:
+           expose: true

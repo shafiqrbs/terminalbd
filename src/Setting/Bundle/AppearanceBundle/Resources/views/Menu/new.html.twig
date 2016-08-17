@@ -1,0 +1,68 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <div class="portlet box grey">
+        <div class="portlet-title">
+            <div class="caption"><i class="icon-cogs"></i>Menu
+
+            </div>
+            <div id="" class="date-tooltip" >
+                <i class="fa fa-calendar"></i>
+                {{ "now"|date("d-F-Y") }}
+            </div>
+        </div>
+        <div>
+
+            <ul class="page-breadcrumb breadcrumb">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="{{ path('homepage') }}" >Home</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+
+                    <a href="javascript:" >Menu</a>
+
+                </li>
+
+                <li class="pull-right custom-pull-right" >
+                    <a class="btn green-stripe blue" href="{{ path('menu') }}"><i class="icon-plus"></i> New Create</a>
+
+
+                </li>
+            </ul>
+        </div>
+        {% include('flash-message.html.twig')  %}
+        <div class="form-group form-group-custom backgroundWhite ">
+
+            <div class="tabbable tabbable-custom" >
+                <table class="table table-striped table-bordered table-hover table-full-width dataTable" >
+                    <thead class="header">
+                    <tr>
+                        <th>Menu </th>
+                        <th>Menu Slug</th>
+                    </tr>
+                    </thead>
+                    {{ form_start(form) }}
+                    {{ form_row(form._token) }}
+
+                    <tbody>
+
+                    {% for entity in entities %}
+
+                        <tr>
+                            <td>{{ entity.menu }}</td>
+                            <td>{{ entity.menuSlug }}</td>
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+                    {{ form_end(form) }}
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+

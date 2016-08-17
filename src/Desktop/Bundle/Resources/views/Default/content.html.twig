@@ -1,0 +1,128 @@
+{% extends ':desktop:base.html.twig' %}
+{% block body %}
+    <div class="clearfix"></div>
+
+    <div class="page_title">
+
+        <div class="container">
+            <div class="title"><h1>{{ page.name }}</h1></div>
+            {% if page.parent is not empty %}
+                <div class="pagenation">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i> <a href="{{ path('desktop_content',{'subdomain':entity.subDomain,'slug': page.parent.nav.slug}) }}">{{ page.parent.name }}</a> <i>/</i> {{ page.name }}</div>
+            {% else %}
+                <div class="pagenation">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i> {{ page.name }}</div>
+            {% endif %}
+
+        </div>
+    </div><!-- end page title -->
+    <!-- Contant
+    ======================================= -->
+
+    <div class="container">
+
+        <div class="content_left">
+
+            <h2>{{ page.name }}</h2>
+            {% if page.webPath %}
+            <img class="image_left1" src="{{ image(page.webPath()).resize(810,360) }}" alt="" />
+            {% endif %}
+            <p>{{ page.content|raw }}</p>
+            <div class="clearfix mar_top2"></div>
+            <div class="sharepost">
+                <h4><i>Share this Post</i></h4>
+                <ul>
+                    <li><a href="#">&nbsp;<i class="fa fa-facebook fa-lg"></i>&nbsp;</a></li>
+                    <li><a href="#"><i class="fa fa-google-plus fa-lg"></i></a></li>
+                    <li><a href="#"><i class="fa fa-skype fa-lg"></i></a></li>
+                    <li><a href="#"><i class="fa fa-youtube fa-lg"></i></a></li>
+                </ul>
+
+            </div>
+
+        </div><!-- end content left side area -->
+
+
+        <!-- right sidebar starts -->
+        <div class="right_sidebar">
+
+            <div class="sidebar_widget">
+                {% if page.parent is not empty %}
+                <div class="sidebar_title"><h3>More <i>{{ page.parent.name }}</i></h3></div>
+                {% else %}
+                <div class="sidebar_title"><h3>More <i>{{ page.name }}</i></h3></div>
+                {% endif %}
+                <ul class="arrows_list1">
+                    {% if page.children is not empty %}
+                        {% for subPage in page.children %}
+                              <li><a href="{{ path('desktop_content',{'subdomain':entity.subDomain,'slug': subPage.nav.slug}) }}"><i class="fa fa-angle-right"></i>{{ subPage.name }}</a></li>
+                        {% endfor %}
+                    {% elseif page.parent.children is defined and page.parent.children is not empty %}
+                        {% for subPage in page.parent.children %}
+                            <li><a href="{{ path('desktop_content',{'subdomain':entity.subDomain,'slug': subPage.nav.slug}) }}"><i class="fa fa-angle-right"></i>{{ subPage.name }}</a></li>
+                        {% endfor %}
+                    {% endif %}
+
+                </ul>
+            </div><!-- end section -->
+            {% if entity.newses is not empty %}
+            <div class="clearfix mar_top4"></div>
+
+            <div class="sidebar_widget">
+                <div class="sidebar_title"><h3>Recent <i>News</i></h3></div>
+                <ul class="recent_posts_list">
+                    {% for news in  entity.newses %}
+                    <li>
+                        <span><a href="{{ path('desktop_module',{'subdomain':entity.subDomain,'module':'news','slug': news.slug}) }}"><img src="{{ image(news.webPath()).resize(50,50) }}" alt="" /></a></span>
+                        <a href="{{ path('desktop_module',{'subdomain':entity.subDomain,'module':'news','slug': news.slug}) }}">{{ news.name }}</a>
+                        <i> {{ news.startDate|date("d-F-Y") }} To  {{ news.endDate|date("d-F-Y") }}</i>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div><!-- end section -->
+            {% endif %}
+            {% if entity.blogs is not empty %}
+            <div class="clearfix mar_top4"></div>
+
+            <div class="sidebar_widget">
+                <div class="sidebar_title"><h3>Recent <i>Blogs</i></h3></div>
+                <ul class="recent_posts_list">
+                    {% for blog in  entity.blogs %}
+                    <li>
+                        <span><a href="#"><img src="{{ image(subPage.webPath()).resize(50,50) }}" alt="" /></a></span>
+                        <a href="#">{{ blog.name }}</a>
+                        <i>{{ blog.created|date('d-m-Y') }}</i>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div><!-- end section -->
+            {% endif %}
+
+        </div>
+        {% if page.children is not empty and page.isSubPage == true %}
+        <div class="content_fullwidth">
+            <div id="tabs">
+
+                <ul class="tabs">
+                    {% for key,subPage in page.children %}
+                    <li  {% if key == 0 %} class="active" {% endif %} ><a href="#tab{{ key }}">{{ subPage.name }}</a></li>
+                   {% endfor %}
+                </ul><!-- /# end tab links -->
+
+                <div class="tab-container">
+                    {% for key,subPage in page.children %}
+                    <div id="tab{{ key }}" class="tab-content">
+                        <img src="{{ image(subPage.webPath()).resize(275,250) }}" class="image_left1" alt="" />
+                        <h4>{{ subPage.name }}</h4>
+                        <p>{{ subPage.content|raw }}</p>
+                        <div class="clearfix"></div>
+                    </div><!-- end tab single section -->
+                    {% endfor %}
+                </div>
+
+            </div><!-- end tab -->
+
+        </div>
+        {% endif %}
+    </div><!-- end content area -->
+    <div class="clearfix mar_top5"></div>
+
+{% endblock %}

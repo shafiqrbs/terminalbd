@@ -1,0 +1,110 @@
+<div class="blog_post">
+    <div class="blog_postcontent">
+        <div  class="image_frame" ><a href="#"><img src="{{ image(details.webPath()).resize(810,360) }}" alt="" /></a></div>
+        <a href="blog-archive.html" class="date"><strong>{{ details.created|date('j') }}</strong><i>{{ details.created|date('F') }}</i></a>
+        <h3>{{ details.title }}</h3>
+        <ul class="post_meta_links">
+            <li class="post_by"><a href="#">{{ details.name }}</a></li>
+            <li class="post_categoty"><a href="#">Web tutorials</a></li>
+            <li class="post_comments"><a href="#">18 Comments</a></li>
+        </ul>
+        <div class="clearfix"></div>
+        <div class="post_info_content">
+            <p>{{ details.content|raw }}</p>
+        </div>
+
+    </div>
+</div>
+<div class="clearfix divider_line2"></div>
+<div class="sharepost">
+    <h4><i>Share this Post</i></h4>
+    <ul>
+        <li><a href="#">&nbsp;<i class="fa fa-facebook fa-lg"></i>&nbsp;</a></li>
+        <li><a href="#"><i class="fa fa-google-plus fa-lg"></i></a></li>
+        <li><a href="#"><i class="fa fa-skype fa-lg"></i></a></li>
+        <li><a href="#"><i class="fa fa-youtube fa-lg"></i></a></li>
+    </ul>
+</div>
+<div class="clearfix divider_line"></div>
+<div class="blog_post">
+    <div class="popular-posts-area">
+        <h4><i>Recent Posts</i></h4>
+        <ul class="recent_posts_list">
+            {% for row in globalOption.blogs %}
+                <li>
+                    {% if row.webPath() %} <span><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': moduleName|lower,'slug':row.slug }) }}"><img src="{{ image(row.webPath()).resize(50,50) }}" alt=""></a></span>{% endif %}
+                    <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': moduleName|lower,'slug':row.slug }) }}">{{ row.title }}</a>
+                    <i>October 18, 2013</i>
+                </li>
+
+            {% endfor %}
+
+
+        </ul>
+
+    </div>
+</div>
+
+<div class="blog_post" >
+    {% set commentID = globalOption.id~'-'~moduleName|lower~'-'~details.id %}
+    {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': commentID } %}
+</div>
+
+
+<style>
+    #fos_comment_comment_body {
+        height: 120px;
+        width: 100%;
+        border: 1px solid #ccc;
+        padding: 5px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 13px;
+        line-height: 20px;
+    }
+
+    #fos_comment_thread h3{
+        width: 100% !important;
+    }
+    .fos_comment_submit{
+        text-align: right;
+        margin-top: 5px;
+    }
+    .fos_comment_submit input[type="submit"]{
+        text-align: center;
+        padding: 5px 50px;
+        display: inline-block;
+        margin-bottom: 2px;
+        margin-left: 2px;
+        cursor: pointer;
+        background-color: #0896b8;
+        border: 1px solid #c1cbd0;
+        color: #FFFFFF;
+        font-weight: bold;
+    }
+    .fos_comment_comment_reply_show_form{
+
+        background-color: #e67e22;
+        text-align: center;
+        color: #FFFFFF;
+        display: inline-block;
+        margin-bottom: 2px;
+        margin-left: 2px;
+        cursor: pointer;
+    }
+    .fos_comment_comment_reply_cancel{
+
+        background-color: #c0392b;
+        text-align: center;
+        color: #FFFFFF;
+        padding:5px 20px;
+        display: inline-block;
+        margin-bottom: 2px;
+        margin-left: 2px;
+        cursor: pointer;
+        border: 1px solid #c1cbd0;
+    }
+    .fos_comment_comment_replies{
+        margin-left: 20px;
+    }
+</style>
+

@@ -1,0 +1,68 @@
+studyabroad:
+    path:     /
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:index" }
+
+studyabroad_show:
+    path:     /{id}/show
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:show" }
+
+studyabroad_new:
+    path:     /new
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:new" }
+
+studyabroad_create:
+    path:     /create
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:create" }
+    methods:  POST
+
+studyabroad_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:edit" }
+
+studyabroad_update:
+    path:     /{id}/update
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:update" }
+    methods:  [POST, PUT]
+
+studyabroad_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:delete" }
+    methods:  [POST, DELETE]
+
+studyabroad_modify:
+    path:     /modify
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:modify" }
+
+studyabroad_status:
+    path:     /{id}/status
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:status" }
+
+studyabroad_print_list:
+    path:     /print-list
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:printList" }
+
+studyabroad_pdf_list:
+    path:     /pdf-list
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:pdfList" }
+
+studyabroad_export_list:
+    path:     /export-list
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:exportList" }
+
+studyabroad_import:
+    path:     /import
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:import" }
+
+studyabroad_print:
+    path:     /{id}/print-details
+    defaults: { _controller: "SyndicateComponentBundle:Education:printDetails" }
+
+studyabroad_pdf:
+    path:     /{id}/pdf-details
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:pdfDetails" }
+
+
+studyabroad_export:
+    path:     /{id}/export-details
+    defaults: { _controller: "SyndicateComponentBundle:StudyAbroad:exportDetails" }
+

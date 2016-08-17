@@ -1,0 +1,47 @@
+{% extends ':mobile:base.html.twig' %}
+{% block body %}
+    {% if ( moduleName == 'News') %}
+        {{ include('@Mobile/Module/news.html.twig')}}
+    {% elseif( moduleName == 'Blog' ) %}
+        {{ include('@Mobile/Module/blog.html.twig')}}
+    {% elseif( moduleName == 'Testimonial' ) %}
+        {{ include('@Mobile/Module/testimonial.html.twig')}}
+    {% elseif( moduleName == 'Timeline' ) %}
+        {{ include('@Mobile/Module/timeline.html.twig')}}
+    {% elseif( moduleName == 'Branch' ) %}
+        {{ include('@Mobile/Module/branch.html.twig')}}
+    {% elseif( moduleName == 'Event' ) %}
+        {{ include('@Mobile/Module/event.html.twig')}}
+    {% elseif( moduleName == 'ClassRoutine' ) %}
+        {{ include('@Mobile/Module/blackout.html.twig')}}
+    {% elseif( moduleName == 'Blackout' ) %}
+        {{ include('@Mobile/Module/blackout.html.twig')}}
+    {% elseif( moduleName == 'NoticeBoard' ) %}
+        {{ include('@Mobile/Module/noticeboard.html.twig')}}
+    {% elseif( moduleName == 'Admission' ) %}
+        {{ include('@Mobile/Module/admission.html.twig')}}
+    {% elseif( moduleName == 'Syndicate' ) %}
+        {{ include('@Mobile/Module/syndicate.html.twig')}}
+    {% else %}
+        {{ include('@Mobile/Module/default.html.twig')}}
+    {% endif %}
+{% endblock %}
+
+{% block documentready %}
+
+    {% if( moduleName == 'Blackout' ) %}
+        $('#blackout').multiDatesPicker({
+        dateFormat: "dd/mm/yy",
+        addDates:{{ entity.user.blackout.offBlackoutDate|json_encode|raw }}
+        });
+    {% endif %}
+
+    $("#newsFeed").bootstrapNews({
+    newsPerPage:1,
+    autoplay: false,
+    onToDo: function () {
+    //console.log(this);
+    }
+    });
+
+{% endblock %}

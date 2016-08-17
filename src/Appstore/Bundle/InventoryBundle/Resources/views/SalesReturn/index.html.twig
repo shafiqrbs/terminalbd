@@ -1,0 +1,160 @@
+
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Sales Return Lists
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('inventory_salesreturn') }}">Sales Return</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Sales Return Lists</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+
+                        <div class="portlet-title">
+                            <div class="caption"><i class="icon-reorder"></i>Sales Return Lists</div>
+                            <div class="actions">
+                                <div class="btn-group">
+                                    <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                        Tools
+                                        <i class="icon-tasks"></i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="{{ path('inventory_salesreturn') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="portlet-body">
+                            <div class="portlet-body flip-scroll">
+                                {% include('flash-message.html.twig')  %}
+                                <table class="table table-bordered table-striped table-condensed flip-content ">
+                                    <thead>
+                                    <form action="{{ path('inventory_salesreturn_search') }}" method="post" name="itemSearch" id="itemSearch"  >
+                                        <tr id="search-input">
+                                              <td colspan="7" class="numeric">
+                                                <div class="input-icon left" >
+                                                    <i class="icon-eye-open"></i>
+                                                    <input type="text" id="salesId" name="salesId"  class="m-wrap span12" placeholder="enter customer invoice no"  autocomplete="off">
+                                                </div>
+                                            </td>
+                                            <td class="numeric td-search-button" ><button class="btn blue mini"><i class="icon-search"></i>&nbsp;Go</button></td>
+                                        </tr>
+                                    </form>
+                                    </thead>
+
+                                    <tbody class="flip-content ">
+                                    <tr class="head-grey">
+                                        <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
+                                        <th class="numeric" >Invoice</th>
+                                        <th class="numeric" >Date</th>
+                                        <th class="numeric" >Item</th>
+                                        <th class="numeric" >Quantity</th>
+                                        <th class="numeric" >Total</th>
+                                        <th class="numeric" >Created By</th>
+                                        <th class="numeric" >Action</th>
+                                    </tr>
+                                    </tbody>
+                                    <tbody id="sales">
+
+                                    {% for entity in entities %}
+                                        <tr id="salesRemove-{{ entity.id }}">
+                                            <td> {% if entity.salesReturnItems is defined and  entity.salesReturnItems is not empty  %}<span  class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
+                                            <td class="numeric" >{{ entity.invoice }}</td>
+                                            <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                            <td class="numeric" >{{ entity.totalItem }}</td>
+                                            <td class="numeric" >{{ entity.totalQuantity }}</td>
+                                            <td class="numeric" >{{ entity.total|number_format()  }}</td>
+                                            <td class="numeric" ></td>
+                                            <td class="numeric" >
+                                                <a href="{{ path('inventory_salesreturn_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                                {% if entity.process == "complete" %}
+                                                    <a href="javascript:" class="btn blue mini" ><i class="icon-ok"></i></a>
+                                                {% endif %}
+                                                {% if entity.salesReturnItems is defined and  entity.salesReturnItems is empty and entity.process == 'created'  %}
+                                                    <a data-title="Add purchase item" href="{{ path('inventory_salesreturn_edit', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-plus-sign"></i></a>
+                                                    <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_salesreturn_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr id="show-{{ entity.id }}" class="showing-overview">
+                                            <td colspan="10">
+                                                {% if entity.salesReturnItems is defined and  entity.salesReturnItems is not empty  %}
+                                                    <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                                        <thead class="flip-content ">
+                                                        <tr class="head-green">
+                                                            <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
+                                                            <th class="numeric" >Item</th>
+                                                            <th class="numeric" >Item Code</th>
+                                                            <th class="numeric" >Qnt</th>
+                                                            <th class="numeric" >Sales price</th>
+                                                            <th class="numeric" >Sub-total</th>
+                                                            <th class="numeric" >Return Qnt</th>
+                                                            <th class="numeric" >Return price</th>
+                                                            <th class="numeric" >Sub-total</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {% for subList in entity.salesReturnItems %}
+                                                            <tr>
+                                                                <td class="numeric" >{{ loop.index }}</td>
+                                                                <td class="numeric" >{{ subList.salesItem.item.name }}</td>
+                                                                <td class="numeric" >{{ subList.salesItem.item.vendor.code }}-{{ subList.salesItem.item.code }}</td>
+                                                                <td class="numeric" >{{ subList.salesItem.quantity }}</td>
+                                                                <td class="numeric" >{{ subList.salesItem.salesPrice|number_format() }}</td>
+                                                                <td class="numeric" >{{ subList.salesItem.subTotal|number_format() }}</td>
+                                                                <td class="numeric" >{{ subList.quantity }}</td>
+                                                                <td class="numeric" >{{ subList.price|number_format() }}</td>
+                                                                <td class="numeric" >{{ subList.subTotal|number_format() }}</td>
+
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+                    </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascriptBlock %}
+{{ parent() }}
+{% javascripts
+'@InventoryBundle/Resources/public/js/salesReturn.js'
+%}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% endblock  %}

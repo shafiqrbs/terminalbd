@@ -1,0 +1,22 @@
+<div class="accrodation">
+        {% for  row in pagination %}
+        <span class="acc-trigger"><a href="#">{{ row.name }}<em>{{ row.created|date('F j, Y') }}</em></a></span>
+        <div class="acc-container">
+            <div class="content">
+                {{ row.content|raw }}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<div class="pagination pull-center"  >
+    {{ knp_pagination_render(pagination) }}
+</div>
+
+<style>
+    .acc-trigger a em{
+        float: right;
+        font-size: 12px;
+        color: #000;
+        font-weight: normal;
+    }
+</style>

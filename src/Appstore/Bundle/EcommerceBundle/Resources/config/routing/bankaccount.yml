@@ -1,0 +1,34 @@
+ecommerce_bank:
+    path:     /
+    defaults: { _controller: "EcommerceBundle:BankAccount:index" }
+
+ecommerce_bank_show:
+    path:     /{id}/show
+    defaults: { _controller: "EcommerceBundle:BankAccount:show" }
+
+ecommerce_bank_new:
+    path:     /new
+    defaults: { _controller: "EcommerceBundle:BankAccount:new" }
+
+ecommerce_bank_create:
+    path:     /create
+    defaults: { _controller: "EcommerceBundle:BankAccount:create" }
+    methods:  POST
+
+ecommerce_bank_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "EcommerceBundle:BankAccount:edit" }
+
+ecommerce_bank_update:
+    path:     /{id}/update
+    defaults: { _controller: "EcommerceBundle:BankAccount:update" }
+    methods:  [POST, PUT]
+
+ecommerce_bank_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "EcommerceBundle:BankAccount:delete" }
+
+ecommerce_bank_status:
+    path:     /{id}/status
+    defaults: { _controller: "EcommerceBundle:BankAccount:status" }
+

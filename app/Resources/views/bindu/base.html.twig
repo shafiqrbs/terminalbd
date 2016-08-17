@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+
+<head>
+    <meta charset="utf-8"/>
+    <title>TERMINALBD.COM is Most of popular Website,Application & Mobile application create & manage</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <meta name="MobileOptimized" content="320">
+    <meta property="og:site_name" content="-CUSTOMER VALUE-">
+    <meta property="og:title" content="-CUSTOMER VALUE-">
+    <meta property="og:description" content="-CUSTOMER VALUE-">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="-CUSTOMER VALUE-"><!-- link to image for socio -->
+    <meta property="og:url" content="-CUSTOMER VALUE-">
+    <link rel="shortcut icon" href="favicon.ico">
+    {% stylesheets filter='cssrewrite'
+
+        'assets/bindu/css/style.css'
+        'assets/bindu/css/shortcode.css'
+        'assets/bindu/css/responsive.css'
+        'assets/bindu/3rd/font-awesome/font-awesome.css'
+        'assets/bindu/3rd/pretty-photo/pretty-photo.css'
+        'assets/bindu/3rd/layerslider/css/layerslider.css'
+        'assets/bindu/3rd/pretty-photo/pretty-photo.css'
+        'assets/bindu/3rd/layerslider/css/layerslider.css'
+        'assets/bindu/3rd/simple-editor/css/jquery.classyedit.css'
+        'assets/bindu/3rd/tooltip/css/iml-styles.css'
+        'assets/bindu/3rd/jQuery.filer/css/jquery.filer.css'
+        'assets/bindu/3rd/jQuery.filer/css/themes/jquery.filer-dragdropbox-theme.css'
+        'assets/bindu/3rd/rcswitcher/css/rcswitcher.min.css'
+        'assets/bindu/3rd/jscroll/css/jscroll.css'
+        'assets/bindu/3rd/select2/select2.css'
+        'assets/bindu/3rd/colorpicker/css/evol.colorpicker.min.css'
+        'assets/bindu/3rd/time-picker/css/jquery.ptTimeSelect.css'
+        'assets/bindu/css/custom.css'
+
+    %}
+
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+</head>
+<body>
+{{ include('bindu/header.html.twig')}}
+{% block body %}{% endblock %}
+{{ include('bindu/footer.html.twig')}}
+{% block footer %}
+{% endblock footer %}
+{% javascripts
+    'assets/bindu/3rd/jquery/jquery-core.js'
+    'assets/bindu/3rd/jquery/jquery-ui.js'
+    'assets/bindu/3rd/jquery/jquery-tinynav.js'
+    'assets/bindu/3rd/jquery/jquery-isotope.js'
+    'assets/bindu/3rd/jquery/jquery-flexslider.js'
+    'assets/bindu/3rd/jquery/jquery-countdown.js'
+    'assets/bindu/3rd/jquery/jquery-masonry.js'
+    'assets/bindu/3rd/jquery/jquery.leanModal.min.js'
+    'assets/bindu/3rd/jquery/jquery-validate.js'
+    'assets/bindu/3rd/pretty-photo/pretty-photo.js'
+    'assets/bindu/3rd/select2/select2.js'
+    'assets/bindu/3rd/jquery-validation/jquery.validate.min.js'
+    'assets/bindu/3rd/layerslider/js/greensock.js'
+    'assets/bindu/3rd/layerslider/js/layerslider.kreaturamedia.jquery.js'
+    'assets/bindu/3rd/layerslider/js/layerslider.transitions.js'
+    'assets/bindu/3rd/mask/js/jquery.maskedinput.min.js'
+    'assets/bindu/3rd/simple-editor/js/jquery.classyedit.js'
+    'assets/bindu/3rd/tooltip/js/iml.js'
+    'assets/bindu/3rd/jQuery.filer/js/jquery.filer.min.js'
+    'assets/bindu/3rd/cookietab/js/jquery.cookie.js'
+    'assets/bindu/3rd/cookietab/js/cookie-based-jquery-tab.js'
+    'assets/bindu/3rd/jscroll/js/jquery.jscroll.min.js'
+    'assets/bindu/3rd/rcswitcher/js/rcswitcher.min.js'
+    'assets/bindu/3rd/colorpicker/js/evol.colorpicker.min.js'
+    'assets/bindu/3rd/time-picker/js/jquery.ptTimeSelect.js'
+    'assets/bindu/js/theme.js'
+
+%}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% block javascriptBlock %}
+{% endblock %}
+<!--[if IE]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+<![endif]-->
+<script type="text/javascript">
+
+     jQuery(document).ready(function () {
+
+
+// Change theme
+
+         $('.cpButton').colorpicker();
+
+
+         $('.select2').select2({
+
+            placeholder: "Select a institute level",
+            allowClear: true,
+            theme: "classic"
+
+
+         });
+        $( ".tm-search" ).hide();
+        $( "#search" ).click(function() {
+            $( ".tm-search" ).slideToggle('slow');
+        });
+
+        $("#layerslider").layerSlider();
+        $(".mobile").mask("(99999) 999-999");
+        $(".secured").mask("9999");
+        $('.plainText').bind('keyup blur',function(){
+                    var node = $(this);
+                    node.val(node.val().replace(/[^a-z]/g,'') ); }
+        );
+
+        $(".classy-editor").ClassyEdit();
+        $(".aboutus-editor").ClassyEdit();
+
+
+
+        {% block documentready %}
+        {% endblock %}
+
+    });
+</script>
+
+<style>
+
+    .evo-cp-wrap{
+        width: 100% !important;
+    }
+    .cpButton{
+        width: 95%;
+        height: 30px;
+        border: 1px solid #A9A9A9;
+        padding-left: 25px;
+    }
+    .evo-colorind, .evo-colorind-ie, .evo-colorind-ff {
+        border: solid 1px #c3c3c3;
+        width: 24px;
+        height: 30px;
+        float: right;
+    }
+    .evo-pop {
+        width: 95%;
+        background: #ffffff;
+        border: 1px solid #A9A9A9;
+        border-top: none;
+    }
+    .evo-color div {
+        border: solid 1px #808080;
+        border-right: solid 1px #c0c0c0;
+        border-bottom: solid 1px #c0c0c0;
+        padding: 3px;
+        margin-bottom: 5px;
+        width: 24px;
+        height: 24px;
+        float: left;
+    }
+
+    #logoPreview{
+        display: none;
+    }
+
+    .img-preview{
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .select2-container{
+        width: 100%;
+        height: 30px!important;
+    }
+    .select2-container .select2-choice {
+        height: 35px!important;
+        line-height: 35px!important;
+    }
+    .accordion-title{
+        position: relative;
+    }
+
+    .select2-container .select2-choice .select2-arrow b{
+        background-position: 0 4px;
+    }
+
+    .tm-search{
+        display: none;
+    }
+
+    .block {
+        float: left;
+    }
+    .block label {
+        display: inline-block;
+        width: 205px;
+        color: #000;
+    }
+
+    .block label.label-big {
+        display: inline-block;
+        width: 87% !important;
+        color: #000;
+    }
+
+
+    .swraper.modern .stoggler{
+        font-size: 12px!important;
+        font: 12px/1.8 Arial, sans-serif!important;
+    }
+    .swraper.modern .stoggler.on {
+        background: -webkit-linear-gradient(#008d71, #567);
+        font-size: 12px!important;
+        font: 12px/1.8 Arial, sans-serif!important;
+    }
+    #preview {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    #preview img{
+        margin-top: 30px;
+        max-width: 50%;
+        border: 0;
+        border-radius: 3px;
+        -webkit-box-shadow: 0px 2px 7px 0px rgba(0, 0, 0, .27);
+        box-shadow: 0px 2px 7px 0px rgba(0, 0, 0, .27);
+        overflow: hidden;
+    }
+    .error{
+        color: #fff;
+        margin-top: 2px;
+        line-height: 15px;
+        border-radius: 2px;
+        font-weight: normal;
+        padding-left:5px;
+    }
+
+</style>
+
+</body>
+</html>

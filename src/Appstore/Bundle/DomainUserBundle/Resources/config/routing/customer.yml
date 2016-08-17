@@ -1,0 +1,54 @@
+domain_customer:
+    path:     /
+    defaults: { _controller: "DomainUserBundle:Customer:index" }
+
+domain_customer_sms:
+    path:     /sms
+    defaults: { _controller: "DomainUserBundle:Customer:index" }
+
+domain_customer_email:
+    path:     /email
+    defaults: { _controller: "DomainUserBundle:Customer:index" }
+
+domain_customer_online:
+    path:     /online
+    defaults: { _controller: "DomainUserBundle:Customer:index" }
+
+domain_customer_show:
+    path:     /{id}/show
+    defaults: { _controller: "DomainUserBundle:Customer:show" }
+
+domain_customer_new:
+    path:     /new
+    defaults: { _controller: "DomainUserBundle:Customer:new" }
+
+domain_customer_create:
+    path:     /create
+    defaults: { _controller: "DomainUserBundle:Customer:create" }
+    methods:  POST
+
+domain_customer_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "DomainUserBundle:Customer:edit" }
+
+domain_customer_update:
+    path:     /{id}/update
+    defaults: { _controller: "DomainUserBundle:Customer:update" }
+    methods:  [POST, PUT]
+
+domain_customer_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "DomainUserBundle:Customer:delete" }
+    methods:  [POST, DELETE]
+
+domain_customer_search:
+    path:     /search
+    defaults: { _controller: "DomainUserBundle:Customer:autoSearch" }
+    options:
+            expose: true
+
+domain_customer_name:
+    path:      /{customer}/customer-name
+    defaults: { _controller: "DomainUserBundle:Customer:searchUserName" }
+    options:
+           expose: true

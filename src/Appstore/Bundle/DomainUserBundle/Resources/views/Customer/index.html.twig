@@ -1,0 +1,121 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Customer list
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('domain') }}">Customer list</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">View Lists</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Customer list</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    Tools
+                                    <i class="icon-tasks"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="{{ path('domain') }}"><i class="icon-th-list"></i>&nbsp;List</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="portlet-body">
+                        <div class="portlet-body flip-scroll">
+                            {% include('flash-message.html.twig')  %}
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                <thead class="flip-content ">
+                                <tr class="head-grey">
+                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
+                                    <th class="numeric">Name</th>
+                                    <th class="numeric">Mobile</th>
+                                    <th class="numeric">Email</th>
+                                    <th class="numeric">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for entity in entities %}
+                                    <tr>
+                                        <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
+                                        <td>{{ entity.name }}</td>
+                                        <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
+                                        <td class="numeric"><a href="mailto:{{ entity.email }}"> {{ entity.email }}</a></td>
+                                        <td class="numeric">
+                                            <a class="btn mini green-stripe btn-action" href="{{ path('domain_edit', { 'id': entity.id }) }}">Edit</a>
+                                            <a class="btn mini blue-stripe btn-action" href="{{ path('domain_show', { 'id': entity.id }) }}">View</a>
+                                            <a class="btn mini red-stripe btn-action delete" href="javascript:" rel="{{ path('domain_delete', { 'id': entity.id }) }}" >Delete</a>
+                                        </td>
+                                    </tr>
+                                    {% if entity.customerInboxs is not empty %}
+                                    <tr id="show-{{ entity.id }}" class="showing-overview">
+                                        <td colspan="5">
+                                            <div class="row-fluid">
+                                                <div class="span12">
+                                                    <br/>
+                                                    <ul class="timeline">
+
+                                                        {% for key,sms in entity.customerInboxs %}
+                                                            <li  class="{{ cycle(['timeline-blue', 'timeline-green'], key) }}" >
+                                                                <div class="timeline-time">
+                                                                    <span class="date">{{ sms.updated|date('d F, Y') }}</span>
+                                                                    <span class="time">{{ sms.updated|date('h:i') }}</span>
+                                                                </div>
+                                                                <div class="timeline-icon"><i class="{{ cycle(['icon-comments', 'icon-comments-alt'], key) }}"></i></div>
+                                                                <div class="timeline-body">
+                                                                    <h2>{{ entity.name }}</h2>
+                                                                    <div class="timeline-content">
+                                                                        {{ sms.content }}
+                                                                    </div>
+
+                                                                </div>
+                                                            </li>
+                                                        {% endfor %}
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                             <table class="inner-table">
+
+                                             </table>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <link href="{{ asset('assets/css/pages/timeline.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}

@@ -1,0 +1,88 @@
+parameters:
+#    setting_tool.example.class: Setting\Bundle\ToolBundle\Example
+
+services:
+#    setting_tool.example:
+#        class: %setting_tool.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+  settong.toolManageRepo:
+    class: Setting\Bundle\ToolBundle\Service\ToolManager
+    arguments: [@doctrine]
+
+  setting_tool.sms_gateWay:
+       class: Setting\Bundle\ToolBundle\Service\SmsGateWay
+       arguments: [%sms_username%, %sms_password%, @guzzle.client.api_crm]
+
+  setting_tool.easy_email:
+       class: Setting\Bundle\ToolBundle\Service\EasyMailer
+       arguments: [@mailer]
+
+
+  setting_tool.listener.sms:
+      class: Setting\Bundle\ToolBundle\EventListener\SmsListener
+      arguments: [@setting_tool.sms_gateWay]
+      tags:
+        - { name: kernel.event_listener, event: setting_tool.post.sms_message, method: sendSms }
+
+  setting_tool.listener.email:
+      class: Setting\Bundle\ToolBundle\EventListener\EmailListener
+      arguments: [@setting_tool.easy_email]
+      tags:
+        - { name: kernel.event_listener, event: setting_tool.post.email_message, method: sendSms }
+
+
+  setting_tool.listener.sms.receive:
+      class: Setting\Bundle\ToolBundle\EventListener\ReceiveSmsListener
+      arguments: [@setting_tool.sms_gateWay]
+      tags:
+        - { name: kernel.event_listener, event: setting_tool.post.sms_receive, method: receiveSms }
+
+  setting_tool.listener.email.receive:
+      class: Setting\Bundle\ToolBundle\EventListener\ReceiveEmailListener
+      arguments: [@setting_tool.easy_email]
+      tags:
+        - { name: kernel.event_listener, event: setting_tool.post.email_receive, method: receiveEmail }
+
+
+  setting_tool.listener.sms_and_email:
+      class: Setting\Bundle\ToolBundle\EventListener\SmsEmailListener
+      arguments: [@setting_tool.sms_gateWay]
+      calls:
+        - [setMailer, [@setting_tool.easy_email]]
+      tags:
+        - { name: kernel.event_listener, event: setting_tool.post.sms_email_message, method: onSmsEmail }
+
+
+  setting_tool.listener.user_signup:
+      class: Setting\Bundle\ToolBundle\EventListener\UserSignupListener
+      arguments: [@setting_tool.sms_gateWay]
+      calls:
+        - [setMailer, [@setting_tool.easy_email]]
+      tags:
+        - { name: kernel.event_listener, event: setting_tool.post.user_signup_msg, method: onUserSignup }
+
+  setting_tool.listener.changepassword:
+      class: Setting\Bundle\ToolBundle\EventListener\PasswordChangeSmsListener
+      arguments: [@setting_tool.sms_gateWay]
+      tags:
+        - { name: kernel.event_listener, event: setting_tool.post.change_password, method: sendSms }
+
+  setting_tool.listener.domain_notification:
+      class: Setting\Bundle\ToolBundle\EventListener\DomainNotificationListener
+      arguments: [@setting_tool.sms_gateWay]
+      calls:
+        - [setMailer, [@setting_tool.easy_email]]
+      tags:
+        - { name: kernel.event_listener, event: setting_tool.post.domain_notification, method: domainNotify }
+
+  setting_tool.invoicesmsemail.event.listener:
+      class: Setting\Bundle\ToolBundle\EventListener\InvoiceSmsEmailListener
+      tags:
+          - { name: doctrine.event_listener, event: prePersist }
+
+  setting_tool.invoicemodule.event.listener:
+      class: Setting\Bundle\ToolBundle\EventListener\InvoiceModuleListener
+      tags:
+          - { name: doctrine.event_listener, event: prePersist }
+

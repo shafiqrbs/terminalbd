@@ -1,0 +1,60 @@
+xiidea_main_domain_app_homepage:
+    prefix:     /
+    resource: "@FrontendBundle/Resources/config/routing/webservice.yml"
+    host: "www.tlsbd.org"
+    defaults:
+        subdomain: "tlsbd"
+
+xiidea_sub_domain_app_homepage:
+    prefix:     /
+    resource: "@FrontendBundle/Resources/config/routing/portalsubdomain.yml"
+    host: "{subdomain}.%domain.main%"
+    defaults:
+        subdomain: "tlsbd"
+
+main_home:
+    prefix: /
+    resource: "@BinduBundle/Resources/config/routing.yml"
+    host: "www.%domain.main%"
+
+
+#main_mobile_home:
+#    prefix: /
+#    resource: "@BinduBundle/Resources/config/routing.yml"
+#    host: "m.%domain.main%"
+
+xiidea_ecommerce_domain_homepage:
+    prefix: /
+    resource: "@FrontendBundle/Resources/config/routing/ecommerce.yml"
+    host: "www.%domain.ecommerce%"
+
+xiidea_ecommerce_domain_app_homepage:
+    prefix:     /
+    host: "{subdomain}.%domain.ecommerce%"
+    resource: "@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml"
+    defaults:
+        subdomain: ""
+
+#xiidea_education_domain_homepage:
+#    path:     /
+#    defaults: { _controller: XiideaDomainBundle:Default:educationHome }
+#    host: "www.%education_domain%"
+#
+#xiidea_education_domain_app_homepage:
+#    path:     /
+#    host: "{subdomain}.%education_domain%"
+#    defaults:
+#            _controller: XiideaDomainBundle:Default:educationAppHome
+#            subdomain: ""
+#
+#xiidea_education_domain_app_mobile_homepage:
+#    path:     /
+#    host: "m.{subdomain}.%education_domain%"
+#    defaults:
+#            _controller: XiideaDomainBundle:Default:educationAppMobileHome
+#            subdomain: ""
+
+#
+#xiidea_domain_homepage:
+#    path:     /
+#    defaults: { _controller: XiideaDomainBundle:Default:error }

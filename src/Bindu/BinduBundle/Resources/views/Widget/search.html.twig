@@ -1,0 +1,30 @@
+
+<style>
+    .search-span{
+        float: right;
+        display: inline-block;
+        width: 30%;
+        margin-right: 2px;
+    }
+    .search-span-last{
+        float: right;
+        display: inline-block;
+        width: 5%;
+    }
+    .search-span input{
+        width: 100%;
+    }
+    .search-span .select2{
+        width: 100%;
+    }
+</style>
+<div class="tm-row tm-search">
+            <!-- BEGIN FORM-->
+            {{ form_start(form) }}
+            {{ form_row(form._token) }}
+            <span class="search-span-last"><button role="button" type="submit"  class="tm-button">Go</button></span><span class="search-span">{{ form_widget(form.location) }}</span><span class="search-span">{{ form_widget(form.syndicate) }}</span><span class="search-span">{{ form_widget(form.name) }}</span>
+              {{ form_end(form) }}
+        <div class="clear"></div>
+        <!--end .search-span .three-fourth-->
+</div>
+

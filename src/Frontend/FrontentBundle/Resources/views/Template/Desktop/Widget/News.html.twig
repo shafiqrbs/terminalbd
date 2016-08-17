@@ -1,0 +1,39 @@
+{% if globalOption.newses is defined and globalOption.newses is not empty  %}
+<section>
+    <div class="container">
+        <div class="text-center"><h2>{% if title is not empty %}{{ title }}{% else %}Latest News {% endif %}</h2>
+            <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="about">
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {% for news in globalOption.newses|slice(0,limit)  %}
+                <div class="post-slide col-md-3">
+                    <div class="post-img">
+                        <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':news.slug }) }}"><img src="{{ image(news.webPath).scaleResize() }}" alt="{{ news.name }}" ></a>
+                    </div>
+                    <div class="post-content">
+                        <h3 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':news.slug }) }}">{{ news.name }}</a></h3>
+                        <p class="post-description">
+                            {{ news.content|raw|truncate(150) }}
+                        </p>
+                        <ul class="post-bar">
+                            <li><i class="fa fa-calendar"></i> {{ news.updated|date('d-F-Y') }} </li>
+                            {% if news.moduleCategory is defined and news.moduleCategory is not empty %}
+                            <li>
+                                <i class="fa fa-folder"></i>
+                                {% for cat in news.moduleCategory %}
+                                <a href="#">{{ cat.name }}</a>
+                                {% endfor %}
+                            </li>
+                            {% endif %}
+                        </ul>
+                        <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':news.slug }) }}" class="btn btn-sm orange">Read More<i class="fa fa-link"></i></a>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}

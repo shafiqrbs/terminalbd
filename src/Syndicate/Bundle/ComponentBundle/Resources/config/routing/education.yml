@@ -1,0 +1,68 @@
+education:
+    path:     /
+    defaults: { _controller: "SyndicateComponentBundle:Education:index" }
+
+education_show:
+    path:     /{id}/show
+    defaults: { _controller: "SyndicateComponentBundle:Education:show" }
+
+education_new:
+    path:     /new
+    defaults: { _controller: "SyndicateComponentBundle:Education:new" }
+
+education_create:
+    path:     /create
+    defaults: { _controller: "SyndicateComponentBundle:Education:create" }
+    requirements: { _method: post }
+
+education_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "SyndicateComponentBundle:Education:edit" }
+
+education_modify:
+    path:     /modify
+    defaults: { _controller: "SyndicateComponentBundle:Education:modify" }
+
+education_update:
+    path:     /{id}/update
+    defaults: { _controller: "SyndicateComponentBundle:Education:update" }
+    requirements: { _method: post|put }
+
+education_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "SyndicateComponentBundle:Education:delete" }
+    requirements: { _method: post|delete }
+
+education_status:
+    path:     /{id}/status
+    defaults: { _controller: "SyndicateComponentBundle:Education:status" }
+
+education_print_list:
+    path:     /print-list
+    defaults: { _controller: "SyndicateComponentBundle:Education:printList" }
+
+education_pdf_list:
+    path:     /pdf-list
+    defaults: { _controller: "SyndicateComponentBundle:Education:pdfList" }
+
+education_export_list:
+    path:     /export-list
+    defaults: { _controller: "SyndicateComponentBundle:Education:exportList" }
+
+education_import:
+    path:     /import
+    defaults: { _controller: "SyndicateComponentBundle:Education:import" }
+
+education_print:
+    path:     /{id}/print-details
+    defaults: { _controller: "SyndicateComponentBundle:Education:printDetails" }
+
+education_pdf:
+    path:     /{id}/pdf-details
+    defaults: { _controller: "SyndicateComponentBundle:Education:pdfDetails" }
+
+
+education_export:
+    path:     /{id}/export-details
+    defaults: { _controller: "SyndicateComponentBundle:Education:exportDetails" }
+

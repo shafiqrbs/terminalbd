@@ -1,0 +1,17 @@
+services:
+#    frontend.example:
+#        class: Frontend\FrontentBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+
+    bbpl.frontend.utility.breadcrumb:
+        class: Frontend\FrontentBundle\Utility\Breadcrumb
+        arguments: [@router, '@doctrine.orm.default_entity_manager']
+
+    app.cart_item_resolver:
+        class: Frontend\FrontentBundle\Cart\ItemResolver
+        arguments: [@doctrine.orm.entity_manager]
+
+    device.detect_manage_repo:
+        class: Frontend\FrontentBundle\Service\MobileDetect
+        arguments: [@doctrine]

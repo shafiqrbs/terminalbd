@@ -1,0 +1,91 @@
+<div class="page-header-clear"></div>
+    <div class="content">
+        <div class="container" style="position: relative">
+            <button id="slidx_button" class="clipboard-list" >More views</button>
+            <h1 class="left-text">{{ details.title|default() }}</h1>
+            <strong>{{ details.name }}</strong>, <em>{{ details.created|date('F j, Y') }}</em>
+            <div class="decoration"></div>
+            {% if(details.webPath()) %}
+                <div class="wide-item">
+                    {% if(details.photoGallery) %}
+                        <div class="wide-item-titles">
+                            <h4>Click here show Gallery</h4>
+                        </div>
+                    {% endif %}
+                    <div class="wide-image">
+                        <div class="overlay"></div>
+                        <a class="tile-wide" id="gallery" href="javascript:"><img class="responsive-image" src="{{ image(details.webPath()).resize(400,224) }}" alt="img"></a>
+                    </div>
+
+                </div>
+                <div class="decoration"></div>
+            {% endif %}
+
+            <p class="justify-text">{{ details.content|raw }}</p>
+        </div>
+        <div class="container">
+           {# {% set commentID = entity.user.id~'-'~entity.id~'-'~moduleName|lower~'-'~details.id %}
+            {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': commentID } %}#}
+        </div>
+    </div>
+    <nav id="slidx_menu">
+        <ul>
+            {% for row in entity.blogs %}
+                <li>
+                    <a href="{{ path('mobile_module',{'subdomain': entity.subDomain,'module': moduleName|lower,'slug':row.slug }) }}">{{ row.title | truncate(50, true) }}</a>
+                </li>
+            {% endfor %}
+
+        </ul>
+    </nav>
+<style>
+    #fos_comment_comment_body {
+        height: 120px;
+        width: 100%;
+        border: 1px solid #ccc;
+        padding: 5px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 13px;
+        line-height: 20px;
+    }
+    .fos_comment_submit{
+        text-align: right;
+        margin-top: 5px;
+    }
+    .fos_comment_submit input[type="submit"]{
+        background-color: #16a085;
+        text-align: center;
+        color: #FFFFFF;
+        padding: 8px 20px;
+        display: inline-block;
+        margin-bottom: 2px;
+        margin-left: 2px;
+        cursor: pointer;
+    }
+    .fos_comment_comment_reply_show_form{
+
+        background-color: #e67e22;
+        text-align: center;
+        color: #FFFFFF;
+        padding: 4px 20px;
+        display: inline-block;
+        margin-bottom: 2px;
+        margin-left: 2px;
+        cursor: pointer;
+    }
+    .fos_comment_comment_reply_cancel{
+
+        background-color: #c0392b;
+        text-align: center;
+        color: #FFFFFF;
+        padding:10px 20px;
+        display: inline-block;
+        margin-bottom: 2px;
+        margin-left: 2px;
+        cursor: pointer;
+    }
+    .fos_comment_comment_replies{
+        margin-left: 20px;
+    }
+</style>
+

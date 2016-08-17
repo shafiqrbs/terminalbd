@@ -1,0 +1,46 @@
+inventory_salesreturn:
+    path:     /
+    defaults: { _controller: "InventoryBundle:SalesReturn:index" }
+
+inventory_salesreturn_search:
+    path:     /create
+    defaults: { _controller: "InventoryBundle:SalesReturn:search" }
+    methods:  POST
+
+inventory_salesreturn_show:
+    path:     /{id}/show
+    defaults: { _controller: "InventoryBundle:SalesReturn:show" }
+
+inventory_salesreturn_new:
+    path:     /new
+    defaults: { _controller: "InventoryBundle:SalesReturn:new" }
+
+inventory_salesreturn_create:
+    path:     /create
+    defaults: { _controller: "InventoryBundle:SalesReturn:create" }
+    methods:  POST
+
+inventory_salesreturn_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "InventoryBundle:SalesReturn:edit" }
+
+inventory_salesreturn_item:
+    path:     /sales-return-item
+    defaults: { _controller: "InventoryBundle:SalesReturn:salesItem" }
+    methods:  [POST, PUT]
+    options:
+            expose: true
+
+inventory_salesreturn_item_delete:
+    path:     /{id}/item-delete
+    defaults: { _controller: "InventoryBundle:SalesReturn:itemDelete" }
+
+inventory_salesreturn_update:
+    path:     /{id}/update
+    defaults: { _controller: "InventoryBundle:SalesReturn:update" }
+    methods:  [POST, PUT]
+
+inventory_salesreturn_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "InventoryBundle:SalesReturn:delete" }
+

@@ -1,0 +1,59 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Order list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Invoice</th>
+                <th>Amount</th>
+                <th>Paidamount</th>
+                <th>Dueamount</th>
+                <th>Commissionamount</th>
+                <th>Process</th>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('customer_order_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.invoice }}</td>
+                <td>{{ entity.amount }}</td>
+                <td>{{ entity.paidAmount }}</td>
+                <td>{{ entity.dueAmount }}</td>
+                <td>{{ entity.commissionAmount }}</td>
+                <td>{{ entity.process }}</td>
+                <td>{{ entity.item }}</td>
+                <td>{{ entity.quantity }}</td>
+                <td>{% if entity.created %}{{ entity.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.updated %}{{ entity.updated|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('customer_order_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('customer_order_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('customer_order_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

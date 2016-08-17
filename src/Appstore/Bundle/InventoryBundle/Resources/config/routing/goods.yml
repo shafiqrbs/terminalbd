@@ -1,0 +1,48 @@
+inventory_goods:
+    path:     /
+    defaults: { _controller: "InventoryBundle:Goods:index" }
+
+inventory_goods_show:
+    path:     /{id}/show
+    defaults: { _controller: "InventoryBundle:Goods:show" }
+
+inventory_goods_new:
+    path:     /new
+    defaults: { _controller: "InventoryBundle:Goods:new" }
+
+inventory_goods_create:
+    path:      /create
+    defaults: { _controller: "InventoryBundle:Goods:create" }
+    methods:  POST
+    options:
+            expose: true
+
+inventory_goods_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "InventoryBundle:Goods:edit" }
+
+inventory_goods_update:
+    path:     /{id}/update
+    defaults: { _controller: "InventoryBundle:Goods:update" }
+    methods:  [POST, PUT]
+
+inventory_goods_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "InventoryBundle:Goods:delete" }
+
+inventory_vendoritem_status:
+    path:     /{id}/web-status
+    defaults: { _controller: "InventoryBundle:Goods:webStatus" }
+
+inventory_vendoritem_inline_update:
+    path:     /inline-item-update
+    defaults: { _controller: "InventoryBundle:PurchaseItem:inlineItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+inventory_vendoritem_gallery:
+    path:     /{item}/upload
+    defaults: { _controller: "InventoryBundle:Goods:uploadItemImage" }
+    options:
+           expose: true

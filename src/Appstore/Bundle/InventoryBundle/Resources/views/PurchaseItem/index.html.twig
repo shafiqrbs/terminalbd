@@ -1,0 +1,55 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>PurchaseItem list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Vendorname</th>
+                <th>Quantity</th>
+                <th>Purchaseprice</th>
+                <th>Barcode</th>
+                <th>Itemcode</th>
+                <th>Salesprice</th>
+                <th>Purchasesubtotal</th>
+                <th>Salessubtotal</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('inventory_purchaseitem_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.vendorName }}</td>
+                <td>{{ entity.quantity }}</td>
+                <td>{{ entity.purchasePrice }}</td>
+                <td>{{ entity.barcode }}</td>
+                <td>{{ entity.itemCode }}</td>
+                <td>{{ entity.salesPrice }}</td>
+                <td>{{ entity.purchaseSubTotal }}</td>
+                <td>{{ entity.salesSubTotal }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('inventory_purchaseitem_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('inventory_purchaseitem_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('inventory_purchaseitem_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

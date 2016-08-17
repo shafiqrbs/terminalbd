@@ -1,0 +1,16 @@
+<div class="page-header-clear"></div>
+<div class="content">
+        <div class="container" >
+            <h1>Blogs</h1>
+            {% for row in entity.blogs %}
+            <div class="portfolio-item-full-width">
+                <h5>{{ row.title }}<br/><strong>{{ row.name }}</strong>, <em>{{ row.created|date('F j, Y') }}</em></h5>
+                <p>{{ row.content|truncate(150, true)|raw }}<a href="{{ path('mobile_module',{'subdomain': entity.subDomain,'module': moduleName|lower,'slug':row.slug }) }}"> -more</a>
+                </p>
+            </div>
+            <div class="decoration"></div>
+            {% endfor %}
+        </div>
+</div>
+
+

@@ -1,0 +1,17 @@
+    <div class="content">
+        <div class="container">
+            <div>
+                <img class="responsive-image" src="{{ image(details.webPath) }}">
+            </div>
+            <h1 class="left-text">Testimonials</h1>
+            <strong>{{ details.name }}</strong><br/> <em>{{ details.designation }}</em>
+            <address>{{ details.title|default() }}</address>
+            <div class="decoration"></div>
+            <h3 class="left-text"></h3>
+            <p class="justify-text">{{ details.content|raw }}</p>
+            <div class="decoration"></div>
+
+        </div>
+
+    </div>
+

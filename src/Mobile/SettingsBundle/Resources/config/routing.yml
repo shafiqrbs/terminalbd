@@ -1,0 +1,70 @@
+mobile:
+    path:     /
+    defaults: { _controller: MobileBundle:Default:index }
+
+mobile_home:
+    path:     /mobile/{slug}/home
+    defaults: { _controller: MobileBundle:Default:home }
+
+mobile_product:
+    path:     /mobile/{subdomain}/product
+    defaults: { _controller: MobileBundle:Product:product }
+
+mobile_product_details:
+    path:     /mobile/{subdomain}/{slug}/product-details
+    defaults: { _controller: MobileBundle:Product:productDetails }
+
+mobile_product_add_cart:
+    path:     /mobile/{subdomain}/{id}/add-cart
+    defaults: { _controller: MobileBundle:Product:productAddCart }
+
+blog_message:
+    path:      /mobile/{subdomain}/{module}/{slug}
+    defaults: { _controller: MobileBundle:Page:blogSubmit }
+    requirements: { _method: post }
+
+admission_message:
+    path:      /mobile/{subdomain}/{module}/{slug}
+    defaults: { _controller: MobileBundle:Page:admissionSubmit }
+    requirements: { _method: post }
+
+mobile_blogs:
+    path:      /mobile/{subdomain}/blogs
+    defaults: { _controller: MobileBundle:Module:blogs }
+
+mobile_contact:
+    path:      /mobile/{subdomain}/contact
+    defaults: { _controller: MobileBundle:Default:contact }
+
+mobile_sms:
+    path:      /mobile/{subdomain}/sms
+    defaults: { _controller: MobileBundle:Default:sms}
+
+mobile_email_receive:
+    path:      /mobile/{subdomain}/email-receive
+    defaults: { _controller: MobileBundle:Receive:emailReceiving }
+    requirements: { _method: post }
+
+mobile_sms_receive:
+    path:      /mobile/{subdomain}/sms-receive
+    defaults: { _controller: MobileBundle:Receive:smsReceiving }
+
+mobile_maps:
+    path:      /mobile/{subdomain}/maps
+    defaults: { _controller: MobileBundle:Default:maps }
+
+mobile_sms_send:
+    path:      /mobile/{subdomain}/{slug}
+    defaults: { _controller: MobileBundle:Page:smsSending }
+    requirements: { _method: post }
+
+mobile_content:
+    path:      /mobile/{subdomain}/{slug}
+    defaults: { _controller: MobileBundle:Page:index }
+
+mobile_module:
+    path:      /mobile/{subdomain}/{module}/{slug}
+    defaults: { _controller: MobileBundle:Module:index }
+
+
+

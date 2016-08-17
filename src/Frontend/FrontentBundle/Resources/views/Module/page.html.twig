@@ -1,0 +1,233 @@
+{% extends ':frontend:base.html.twig' %}
+{% block body %}
+    <div id="tm-page-title">
+        <div class="tm-wrap tm-table">
+            <div class="tm-title-captions">
+                <h2 class="tm-entry-title">{{ domain.user.globalOption.name }}: Page</h2>
+            </div>
+            <ul class="tm-breadcrumbs">
+                <li><a href="/">Home</a></li>
+                <li>Details</li>
+            </ul>
+        </div>
+    </div>
+    <!--tm-page-title-->
+    <div id="tm-page-body">
+        <div id="tm-blog" class="tm-container tm-wrap tm-blog-style-magazine2 tm-sidebar-right">
+            <div class="page-content">
+                <div id="tm-portfolio" class="tm-portfolio-classic" >
+                    <div class="tm-content tm-col-4">
+                        {% for relatedVendor in promotions %}
+                            <article class="cat1 cat3">
+                                <img alt="img" src="{{ image( relatedVendor.user.education.webPath).resize(189,139) }}">
+                                <div class="tm-mask">
+                                    <div class="tm-mask-content">
+                                        <h3><a href="{{ path('frontend_subdomain_module_content',{'subdomain':relatedVendor.user.globalOption.slug,'module':'admission','slug':relatedVendor.slug }) }}">{{ relatedVendor.user.globalOption.name }}</a></h3>
+                                        <span class="line"></span>
+                                        <div class="incategory">
+                                            <a href="javascript:">{{ relatedVendor.user.education.address }}</a>,
+                                            <a href="tel:+88 {{ relatedVendor.user.education.hotline|default('') }}">{{ relatedVendor.user.education.hotline }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p><a href="{{ path('frontend_subdomain_module_content',{'subdomain':relatedVendor.user.globalOption.slug,'module':'admission','slug':relatedVendor.slug }) }}">{{ relatedVendor.name }}</a></p>
+                            </article>
+                        {% endfor %}
+                    </div>
+
+                </div>
+                <!--tm-featured-->
+                <div class="tm-double-line"></div>
+                <div class="entry-thumbnail">
+                    <div class="flexslider">
+                        <ul class="slides">
+                            {% if slug == '' %}
+                                {% for entity in entities |slice(0,1) %}
+                                    {% if(entity.photoGallery is defined and entity.photoGallery is not null ) %}
+                                        {% if(entity.photoGallery.galleryImages is defined and entity.photoGallery.galleryImages is not null ) %}
+                                            {% for image in entity.photoGallery.galleryImages %}
+                                                <li>
+                                                    <a href="{{ image(image.webPath).resize(815,494) }}" data-rel="prettyPhoto[gallery]">
+                                                        <img src="{{ image(image.webPath).resize(815,494) }}" alt="Thumb">
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for entity in entities %}
+                                    {% if slug == entity.slug %}
+                                        {% if(entity.photoGallery is defined and entity.photoGallery is not null ) %}
+                                            {% if(entity.photoGallery.galleryImages is defined and entity.photoGallery.galleryImages is not null ) %}
+                                                {% for image in entity.photoGallery.galleryImages %}
+                                                    <li>
+                                                        <a href="{{ image(image.webPath).resize(815,494) }}" data-rel="prettyPhoto[gallery]">
+                                                            <img src="{{ image(image.webPath).resize(815,494) }}" alt="Thumb">
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="tm-content page-content-inner">
+                    <div class="tm-main-content">
+                        <article>
+                                <div class="tm-content-inner">
+                                    <div class="tm-category-block">
+                                        <div class="tm-block-content">
+                                            {% if slug == '' %}
+                                            {% for entity in entities |slice(0,1) %}
+                                                <div class="entry-container">
+                                                    <div class="time">{{ entity.created|date('M j') }}</div>
+
+                                                    <h3>{{ entity.name }}</h3>
+                                                    <p>
+                                                        <span class="tm-dropcap tm-style3">{{ entity.content[:1] }}</span>
+                                                        {{ entity.content[1:]|raw }}
+                                                    </p>
+
+                                                </div>
+                                            {% endfor %}
+                                            {% else %}
+                                                {% for entity in entities %}
+                                                    {% if slug == entity.slug %}
+                                                        <div class="entry-container">
+                                                            <div class="time">{{ entity.created|date('l jS  F, Y') }}</div>
+                                                            <h3>{{ entity.name }}</h3>
+                                                            <p>
+                                                                <span class="tm-dropcap tm-style3">{{ entity.content[:1] }}</span>
+                                                                {{ entity.content[1:]|raw }}
+                                                            </p>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="entry-others">
+
+                                            <h3 class="tm-title">Recent Pages</h3>
+                                            <ul>
+                                                {% if slug == '' %}
+                                                    {% for entity in entities |slice(1,5) %}
+                                                        <li>
+                                                            <a href="{{ path('frontend_subdomain_module_content',{'subdomain':entity.user.globalOption.slug,'module':module,'slug':entity.slug}) }}">{{ entity.name }}</a>
+                                                        </li>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                {% if slug != '' %}
+                                                    {% for entity in entities %}
+                                                        {% if slug != entity.slug %}
+                                                            <li>
+                                                                <a href="{{ path('frontend_subdomain_module_content',{'subdomain':entity.user.globalOption.slug,'module':module,'slug': entity.slug|default('') }) }}">{{ entity.name }}</a>
+                                                            </li>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="tm-double-line"></div>
+                <div class="page-content-inner" style="background:#fff">
+                    {{ syndicateModules|raw }}
+                    <div class="clear"></div>
+                    <br/>
+                    <div class="clear"></div>
+                    {{ modules|raw }}
+                </div>
+            </div>
+            <!--page-content-->
+            {{ include('frontend/sidebar.html.twig')}}
+            <div class="clear"></div>
+            <div class="tm-double-line"></div>
+            <div class="tm-row tm-row-padding" >
+                {% if domain.user.branches is not defined and domain.user.branches is null %}
+                    <div class="one-fourth">
+                        <div class="tm-content-inner">
+                            <img src="{{ image(domain.webPath).resize(250,185) }}" alt="img">
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="one-fourth">
+                    <h3 class="tm-title">{{ domain.user.globalOption.name }}</h3>
+                    <ul class="blog-info">
+                        <li><i class="fa  fa-map-marker"></i>&nbsp;{{ domain.location.name|default('') }}</li>
+                        <li><i class="fa fa-home"></i>&nbsp;{{ domain.address|default('') }}-{{ domain.postalCode|default('') }}</li>
+                        <li><i class="fa fa-mobile" ></i>&nbsp;<a href="tel:+88 {{ domain.hotline|default('') }}"> +88 {{ domain.hotline|default('') }} </a></li>
+                        {% if domain.fax is not null %}
+                            <li><i class="fa fa-phone"></i>&nbsp;+88 02 {{ domain.phone|default('') }}</li>
+                        {% endif %}
+                        <li><i class="fa fa-envelope-o"></i>&nbsp;<a href="mailto:{{ domain.email|default('') }}">{{ domain.email|default('') }}</a> </li>
+                        <li><i class="fa  fa-anchor"></i><a target="_blank" href="http://{{ domain.user.globalOption.subdomain|default('') }}.{{ portal_name }}">&nbsp;http://{{ domain.user.globalOption.subdomain|default('') }}.{{ portal_name }}</a></li>
+                        <li><i class="fa  fa-anchor"></i><a target="_blank" href="http://{{ domain.user.globalOption.domain|default('') }}">&nbsp;http://{{ domain.user.globalOption.domain|default('') }}</a></li>
+                    </ul>
+                </div>
+                <div class="one-fourth">
+                    <h3 class="tm-title">Contact</h3>
+                    <ul class="blog-info ul-listing">
+                        <li><i class="fa fa-user"></i>&nbsp;{{ domain.contactPerson|default('') }}</li>
+                        <li><i class="fa fa-bullseye"></i>&nbsp;{{ domain.contactPersonDesignation|default('') }}</li>
+                        <li><i class="fa fa-calendar"></i>&nbsp;{{ domain.startHour|default('') }} To {{ domain.endHour|default('') }}</li>
+                        <li><i class="fa fa-calendar-times-o"></i>&nbsp;{{ domain.weeklyOffDay|default('') }}</li>
+                        {% if domain.fax is not null %}
+                            <li><i class="fa fa-fax"></i>&nbsp;{{ domain.fax|default('') }}</li>
+                        {% endif %}
+                        {% if domain.skypeId is not null %}
+                            <li><i class="fa fa-skype"></i>&nbsp;{{ domain.skypeId|default('') }}</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="one-fourth">
+                    <aside class="widget tm-list-style1">
+                        <h3 class="tm-title">Information</h3>
+                        <ul>
+                            {% for menu in domain.user.menus|slice(0,5) %}
+                                <li>
+                                    <a target="_blank" href="{{ path('frontend_subdomain_module',{'subdomain':domain.user.globalOption.slug ,'module':menu.menuSlug}) }}">{{ menu.menu }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                </div>
+                {% if domain.user.branches is defined and domain.user.branches is not null %}
+                    <div class="one-fourth last">
+                        <h3 class="tm-title">Our Branch</h3>
+                        <ul class="blog-info">
+
+                            {% for branch in domain.user.branches|slice(0,5) %}
+                                <li>
+                                    <i class="fa fa-check-square-o"></i>&nbsp;<a target="_blank" href="{{ path('frontend_subdomain_module',{'subdomain':domain.user.globalOption.slug ,'module':'branches'}) }}">{{ branch.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+
+            <div class="clear"></div>
+            <!--page-content-->
+
+            <div class="clear"></div>
+
+            <!--portfolio-->
+        </div>
+        <!--single-portfolio-->
+    </div>
+{% endblock %}
+
+

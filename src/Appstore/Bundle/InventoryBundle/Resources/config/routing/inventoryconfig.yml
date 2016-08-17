@@ -1,0 +1,41 @@
+inventoryconfig:
+    path:     /
+    defaults: { _controller: "InventoryBundle:InventoryConfig:index" }
+
+inventoryconfig_show:
+    path:     /{id}/show
+    defaults: { _controller: "InventoryBundle:InventoryConfig:show" }
+
+inventoryconfig_new:
+    path:     /new
+    defaults: { _controller: "InventoryBundle:InventoryConfig:new" }
+
+inventoryconfig_create:
+    path:     /create
+    defaults: { _controller: "InventoryBundle:InventoryConfig:create" }
+    methods:  POST
+
+inventoryconfig_edit:
+    path:     /manage
+    defaults: { _controller: "InventoryBundle:InventoryConfig:edit" }
+
+inventoryconfig_data_import_form:
+    path:     /{id}/data-import-form
+    defaults: { _controller: "InventoryBundle:InventoryConfig:excelDataImportForm" }
+    methods:  GET
+
+inventoryconfig_data_import:
+    path:     /{id}/data-import
+    defaults: { _controller: "InventoryBundle:InventoryConfig:excelDataImport" }
+
+
+inventoryconfig_update:
+    path:     /{id}/update
+    defaults: { _controller: "InventoryBundle:InventoryConfig:update" }
+    methods:  [POST, PUT]
+
+inventoryconfig_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "InventoryBundle:InventoryConfig:delete" }
+    methods:  [POST, DELETE]
+

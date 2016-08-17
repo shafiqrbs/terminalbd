@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>{{ globalOption.name }}</title>
+    <!-- Google fonts - witch you want to use - (rest you can just remove) -->
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,800,700italic,700,600italic,600,400italic,300italic,300|Roboto:100,300,400,500,700&amp;subset=latin,latin-ext' type='text/css' />
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- HEADER -->
+    <!-- HEADER -->
+    {% stylesheets filter='cssrewrite'
+    'assets/template/desktop/default/css/reset.css'
+    'assets/template/desktop/default/css/style.css'
+    'assets/template/desktop/default/css/font-awesome/css/font-awesome.css'
+    'assets/template/desktop/default/css/responsive-leyouts.css'
+    'assets/template/desktop/default/js/style-switcher/color-switcher.css'
+    'assets/template/desktop/default/js/sticky-menu/core.css'
+    'assets/template/desktop/default/js/revolutionslider/rs-plugin/css/settings.css'
+    'assets/template/desktop/default/js/revolutionslider/css/slider_main.css'
+    'assets/template/desktop/default/js/jcarousel/skin.css'
+    'assets/template/desktop/default/js/jcarousel/skin2.css'
+    'assets/template/desktop/default/js/jcarousel/skin3.css'
+    'assets/template/desktop/default/js/accordion/accordion.css'
+    'assets/template/desktop/default/js/tabs/tabs.css'
+    'assets/template/desktop/default/js/testimonials/fadeeffect.css'
+    'assets/module/scroll/jquery.mCustomScrollbar.css'
+    'assets/module/capSlide/css/jquery.capSlide.css'
+    'assets/template/desktop/css/template.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+
+</head>
+<body>
+<div class="site_wrapper">
+<div class="joosa top_section">
+    <header id="header">
+        <!-- Top header bar -->
+        <div id="topHeader">
+
+            <div class="wrapper">
+
+                <div class="top_contact_info">
+
+                    <div class="container">
+
+                        <div class="date_wrap">
+                            <script type="text/javascript">
+                                var mydate=new Date()
+                                var year=mydate.getYear()
+                                if (year < 1000)
+                                    year+=1900
+                                var day=mydate.getDay()
+                                var month=mydate.getMonth()
+                                var daym=mydate.getDate()
+                                if (daym<10)
+                                    daym="0"+daym
+                                var montharray=new Array("January","February","March","April","May","June","July","August","September","October","November","December")
+                                document.write("<b class='date'>"+montharray[month]+" "+daym+", "+year+"</b>")
+                            </script>
+                        </div><!-- end date -->
+
+                        <ul class="tci_list">
+
+                            {# <li class="empty"><a href="#"><i class="fa fa-comment"></i> live chat</a></li>#}
+                            <li class="empty"><a href="mailto:{{ globalOption.email }}"><i class="fa fa-envelope"></i> {{ globalOption.email }}</a></li>
+                            <li class="empty"><i class="fa fa-headphones"></i> {{ globalOption.mobile }}</li>
+                            {#                  <li class="empty two"><a href="#">Login</a> |</li>
+                                              <li class="empty two"><a href="#">Signup</a> |</li>
+                                              <li class="empty two"><a href="#">Contact</a></li>#}
+                            <li class="space"></li>
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+                            <li></li>
+                        </ul>
+
+                    </div>
+
+                </div><!-- end top contact info -->
+
+            </div>
+        </div>
+        <div id="trueHeader">
+            <div class="wrapper">
+                <div class="container">
+                    <!-- Logo -->
+                    {% if(globalOption.templateCustomize) %}
+                        <div class="logo_main"><a href="{{ globalOption.subDomain }}" id="logo" style="background:url('{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}')"></a></div>
+                    {% endif %}
+                    <!-- Menu -->
+                    <div class="menu_main">
+                        <div class="joosa top_links">&nbsp;</div>
+                        <nav id="access" class="access" role="navigation">
+                            <div id="menu" class="menu">
+                                {{ menuTree|raw }}
+                            </div>
+                        </nav>
+                    </div><!-- end nav menu -->
+                </div>
+            </div>
+        </div>
+    </header>
+</div><!-- end header -->
+<div class="clearfix mar_top13"></div>
+

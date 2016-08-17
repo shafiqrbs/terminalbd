@@ -1,0 +1,319 @@
+{% extends ':frontend:base.html.twig' %}
+{% block body %}
+    <div id="tm-page-title">
+        <div class="tm-wrap tm-table">
+            <div class="tm-title-captions">
+                <h2 class="tm-entry-title">{{ entity.name }}</h2>
+            </div>
+            <ul class="tm-breadcrumbs">
+                <li><a href="/">Home</a></li>
+                <li>{{ entity.name }}</li>
+            </ul>
+        </div>
+    </div>
+    <!--tm-page-title-->
+    <div id="tm-page-body">
+        <div id="tm-single-portfolio" class="tm-container tm-wrap tm-sidebar-right">
+            <div class="page-content">
+                <div class="page-content-inner">
+
+                    <div class="tm-row tm-row-padding">
+
+                        <div class="four-fourth last">
+                            <span class="tm-dropcap tm-style1">{{ entity.user.education.overview[:1]|default|raw }}</span>
+                            <p>{{ entity.user.education.overview[1:]|default|raw }}</p>
+                        </div>
+                        <div class="clear"></div>
+                        <!--end .one-fourth .three-fourth-->
+                    </div>
+
+                    <div class="clear"></div>
+                    <!--entry-thumb-->
+                    {% if entity.user.homePage is defined and entity.user.homePage is not null %}
+                    <div style="background:#ddd;padding:52px 20px 20px;margin:20px -20px" class="tm-row">
+                        <div class="tm-iconbox tm-style4">
+                            {% for key, block in entity.user.homePage.homeBlocks  %}
+                            <div class="one-third tm-box {% if key == 2 %}last{% endif %}">
+                                <div class="iconlist-icon">
+										<span>
+		                                    {% if key == 0 %}
+                                                <i class="fa fa-magic"></i>
+                                            {% endif %}
+                                            {% if key == 1 %}
+                                                <i class="fa fa-crop"></i>
+                                            {% endif %}
+                                            {% if key == 2 %}
+                                                <i class="fa fa-signal"></i>
+                                            {% endif %}
+										</span>
+                                </div>
+                                <div class="iconlist-entry">
+                                    <div class="iconlist-container">
+                                        <h3 class="tm-title">{{ block.name|default('') }}</h3>
+                                        <div class="iconlist-content">
+                                            <p>{{ block.content|truncate(100)|raw|default('') }}<br/>
+                                            <a target="_blank"  href="{{ path('frontend_subdomain_module',{'subdomain':entity.slug,'module':block.menu.menuSlug}) }}">{{ block.menu.menu }}</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <div class="clear"></div>
+                            <section class="tm-share">
+                                <ul class="social-networks">
+                                    <li>
+                                        <a data-title="Facebook" target="_blank" href="https://facebook.com/{{ entity.facebookPageUrl|default('') }}">
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a data-title="Twitter" target="_blank" href="https://twitter.com/{{ entity.twitterUrl }}">
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a data-title="GooglePlus" target="_blank" href="{{ entity.googlePlus }}">
+                                            <i class="fa fa-google-plus"></i>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </section>
+
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="tm-row">
+                        {% if admissionModule is defined and admissionModule is not null %}
+                            <div class="header-line-center">
+                                <h3 class="tm-title">Admission Information</h3>
+                            </div>
+                        <div class="clear"></div>
+                         <div class="tm-accordion tm-style1">
+                            {% for admission in admissionModule %}
+                             <div class="accordion-title">
+                                <h3><a href="javascript:">{{ admission.name }}</a></h3>
+                            </div>
+                            <div class="accordion-container">
+
+                                <div class="">
+                                    <blockquote class="tm-style2">
+
+                                        <div class="one-half">
+                                            <ul class="blog-info ul-listing">
+                                                <li><strong>Admission Date:</strong>{{ admission.startDate|date('M j') }} To {{ admission.endDate|date('M j, y') }}</li>
+                                                {% if admission.courseLevel is defined and admission.courseLevel is not null %}
+                                                    <li><strong>Label:</strong>{{ admission.courseLevel.name|default('') }}</li>
+                                                {% endif %}
+                                                {% if admission.course is defined and admission.course is not null %}
+                                                    <li><strong>Course:</strong>{{ admission.course.name|default('') }}</li>
+                                                {% endif %}
+                                                {% if admission.tuitionFee is defined and admission.tuitionFee is not null %}
+                                                    <li><strong>Tuition Fees:</strong>BDT <b>{{ admission.tuitionFee|number_format }}</b> Taka</li>
+                                                {% endif %}
+                                                {% if admission.coursePeriod is defined and admission.coursePeriod is not null %}
+                                                    <li><strong>Duration:</strong>{{ admission.coursePeriod }}</li>
+                                                {% endif %}
+                                                {% if admission.shifting is defined and admission.shifting is not null %}
+                                                    <li><strong>Shifting:</strong>
+                                                            {% for shift in admission.shifting %}
+                                                                {{ shift }}{{ loop.last ? '':', ' }}
+                                                            {% endfor %}
+                                                    </li>
+                                                {% endif %}
+                                                {% if admission.qualification is defined and admission.qualification is not null %}
+                                                    <li><strong>Eligible:</strong>{{ admission.qualification }}</li>
+                                                {% endif %}
+
+                                            </ul>
+                                        </div>
+                                        <div class="one-half last">
+
+                                            <ul class="blog-info">
+                                                <li><strong>Open & Close</strong>:&nbsp;{{ admission.startHour|default('') }} to {{ admission.endHour|default('') }}</li>
+                                                <li><i class="fa fa-home"></i>&nbsp;<a href="">{{ admission.address|raw|default('') }}</a></li>
+                                                <li><i class="fa fa-user" ></i>&nbsp;{{ admission.contactPerson|default('') }}</li>
+                                                <li><i class="fa fa-mobile" ></i>&nbsp;<a href="tel:+88 {{ admission.mobile|default('') }}"> +88 {{ admission.mobile|default('') }} </a></li>
+                                                <li><i class="fa fa-phone" ></i>&nbsp; +88 02 {{ admission.phone|default('') }}</li>
+                                                <li><i class="fa fa-envelope-o"></i>&nbsp;<a href="mailto:{{ admission.email|default('') }}">{{ admission.email|default('') }}</a> </li>
+                                            </ul>
+
+                                        </div>
+                                        <div class="clear"></div>
+                                    </blockquote>
+
+                                    <div class="clear"></div>
+                                    <br/>
+                                    {{ admission.content|truncate(300)|raw }}
+                                    <a class="tm-btn darkblue small small-link-right" href="/{{ entity.slug }}/admission/{{ admission.slug }}"><i  class="fa fa-link"></i>&nbsp;&nbsp;&nbsp;Details</a>
+                                </div>
+
+                                <div class="clear"></div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                        <div class="clear"></div>
+                            <div class="tm-double-line"></div>
+                        {% endif %}
+
+                        <div class="clear"></div>
+                        {% if(testimonial) %}
+                        <div class="one-third">
+
+                            <div class="tm-team">
+                                <div class="tm-team-img">
+                                    <img src="{{ image(testimonial.webPath).resize(250,159) }}" alt="img">
+                                </div>
+                                <h2>{{ testimonial.name }}</h2>
+                                <div class="job-title">
+                                    {{ testimonial.designation }}, {{ testimonial.title }}
+                                </div>
+                                <div class="description">
+                                    <p>{{ testimonial.content|raw }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="{% if testimonial is not null %} two-third {% endif %} last">
+                        {{ homeModule|raw }}
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+
+            </div>
+            <!--page-content-->
+            {{ include('frontend/sidebar.html.twig')}}
+            <div class="clear"></div>
+            <div class="tm-double-line"></div>
+            <div class="tm-row tm-row-padding" >
+                {% if entity.user.branches is not defined and entity.user.branches is null %}
+                <div class="one-fourth">
+                    <div class="tm-content-inner">
+                            <img src="{{ image(entity.user.education.webPath).resize(250,185) }}" alt="img">
+                      </div>
+                </div>
+                {% endif %}
+                <div class="one-fourth">
+                    <h3 class="tm-title">{{ entity.name }}</h3>
+                    <ul class="blog-info">
+                        <li><i class="fa  fa-map-marker"></i>&nbsp;<a href="">{{ entity.user.education.location.name|default('') }}</a></li>
+                        <li><i class="fa fa-home"></i>&nbsp;{{ entity.user.education.address|default('') }}-{{ entity.user.education.postalCode|default('') }}</li>
+                        <li><i class="fa fa-mobile" ></i>&nbsp;<a href="tel:+88 {{ entity.user.education.hotline|default('') }}"> +88 {{ entity.user.education.hotline|default('') }} </a></li>
+                        {% if entity.user.education.fax is not null %}
+                        <li><i class="fa fa-phone"></i>&nbsp;+88 02 {{ entity.user.education.phone|default('') }}</li>
+                        {% endif %}
+                        <li><i class="fa fa-envelope-o"></i>&nbsp;<a href="mailto:{{ entity.user.education.email|default('') }}">{{ entity.user.education.email|default('') }}</a> </li>
+                        <li><i class="fa  fa-anchor"></i><a target="_blank" href="http://{{ entity.domain|default('') }}.{{ portal_name }}">&nbsp;{{ entity.domain|default('') }}.{{ portal_name }}</a></li>
+                        <li><i class="fa  fa-anchor"></i><a target="_blank" href="http://{{ entity.domain|default('') }}">&nbsp;{{ entity.domain|default('') }}</a></li>
+                    </ul>
+                </div>
+                <div class="one-fourth">
+                    <h3 class="tm-title">Contact</h3>
+                    <ul class="blog-info ul-listing">
+                        <li><i class="fa fa-user"></i>&nbsp;{{ entity.user.education.contactPerson|default('') }}</li>
+                        <li><i class="fa fa-bullseye"></i>&nbsp;{{ entity.user.education.contactPersonDesignation|default('') }}</li>
+                        <li><i class="fa fa-calendar"></i>&nbsp;{{ entity.user.education.startHour|default('') }} To {{ entity.user.education.endHour|default('') }}</li>
+                        <li><i class="fa fa-calendar-times-o"></i>&nbsp;{{ entity.user.education.weeklyOffDay|default('') }}</li>
+                        {% if entity.user.education.fax is not null %}
+                        <li><i class="fa fa-fax"></i>&nbsp;{{ entity.user.education.fax|default('') }}</li>
+                        {% endif %}
+                        {% if entity.user.education.skypeId is not null %}
+                        <li><i class="fa fa-skype"></i>&nbsp;{{ entity.user.education.skypeId|default('') }}</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="one-fourth">
+                    <aside class="widget tm-list-style1">
+                        <h3 class="tm-title">Information</h3>
+                        <ul>
+                            {% for menu in entity.user.menus|slice(0,5) %}
+                                <li>
+                                    <a href="{{ path('frontend_subdomain_module',{'subdomain':entity.slug ,'module':menu.menuSlug}) }}">{{ menu.menu }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                </div>
+                {% if entity.user.branches is defined and entity.user.branches is not null %}
+                <div class="one-fourth last">
+                        <h3 class="tm-title">Our Branch</h3>
+                        <ul class="blog-info">
+
+                            {% for branch in entity.user.branches|slice(0,5) %}
+                                <li>
+                                    <i class="fa fa-check-square-o"></i>&nbsp;<a target="_blank" href="{{ path('frontend_subdomain_module',{'subdomain':entity.slug ,'module':'branches'}) }}">{{ branch.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                </div>
+                {% endif %}
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+            <div id="tm-portfolio" class="tm-portfolio-classic" style ="margin-top:40px;">
+                <div class="header-double-line-right">
+                    <h3 class="tm-title">Location: {{ entity.user.education.location.name }}</h3>
+                </div>
+                <div class="tm-content tm-col-4">
+                    {% for relatedVendor in relatedLocationVendors %}
+                    <article class="cat1 cat3">
+                        <img alt="img" src="{{ image( relatedVendor.user.education.webPath).resize(250,180) }}">
+                        <div class="tm-mask">
+                            <div class="tm-mask-content">
+                                <h3><a href="{{ path('frontend_institute_subdomain',{'subdomain':relatedVendor.slug}) }}">{{ relatedVendor.name }}</a></h3>
+                                <span class="line"></span>
+                                <div class="incategory">
+                                    <a href="javascript:">{{ relatedVendor.user.education.address }}</a>,
+                                    <a href="tel:+88 {{ relatedVendor.user.education.hotline|default('') }}">{{ relatedVendor.user.education.hotline }}</a>
+                                    <a href="mailto:{{ relatedVendor.user.education.email|default('') }}">{{ relatedVendor.user.education.email }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <!--page-content-->
+
+            {% if previous is not null %}
+            <a href="{{ path('frontend_institute_subdomain',{'subdomain':previous.slug}) }}" class="tm-single-nav post-prev">
+                <i class="fa fa-angle-left"></i>
+                <div class="post-entry">
+                    <div class="post-entry-inner">
+                        <h3>{{ previous.name }}: Prev</h3>
+                        <div class="img">
+                            <img src="{{ image(previous.user.education.webPath).resize(60,60) }}" alt="thumb">
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endif %}
+            {% if next is not null %}
+            <a href="{{ path('frontend_institute_subdomain',{'subdomain':next.slug}) }}" class="tm-single-nav post-next">
+                <i class="fa fa-angle-right"></i>
+                <div class="post-entry">
+                    <div class="post-entry-inner">
+                        {% if next.user.education is not null %}
+                        <div class="img">
+                            <img src="{{ image(next.user.education.webPath).resize(60,60) }}" alt="thumb">
+                        </div>
+                        {% endif %}
+                        <h3>{{ next.name }}: Next</h3>
+                    </div>
+                </div>
+            </a>
+            {% endif %}
+            <div class="clear"></div>
+
+            <!--portfolio-->
+        </div>
+        <!--single-portfolio-->
+    </div>
+{% endblock %}
+
+

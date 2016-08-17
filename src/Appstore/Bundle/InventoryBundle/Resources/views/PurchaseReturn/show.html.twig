@@ -1,0 +1,191 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN inventory_purchasereturn_order HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="inventory_purchasereturn_order-title">
+                    Purchase Return
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('inventory_purchasereturn') }}">Purchase Return</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Add/Edit Purchase Return</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END inventory_purchasereturn_order HEADER-->
+        <!-- BEGIN inventory_purchasereturn_order CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Purchase Return Details</div>
+
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <i class="icon-cogs"></i>&nbsp;Tools
+                                    <i class="icon-tasks"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="{{ path('inventory_purchasereturn') }}"><i class="icon-plus-sign"></i>&nbsp;List</a></li>
+                                    {% if(entity.id > 0 ) %}
+                                        <li><a href="{{ path('inventory_purchasereturn_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
+                                        <li><a href="{{ path('inventory_purchasereturn_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="portlet-body">
+
+                        <div class="portlet-body form">
+                            <div class="row-fluid">
+
+                                <div class="span4">
+                                    <h4>About:</h4>
+                                    <ul class="unstyled">
+                                        <li><strong>Purchase Return ID:</strong>&nbsp;{{ entity.code }}</li>
+                                        <li><strong>Created:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
+                                        <li><strong>Created By:</strong>&nbsp;{% if entity.createdBy  is not empty %}{{ entity.createdBy.profile.name }}{% endif %}</li>
+                                    </ul>
+                                </div>
+
+                                <div class="span4 invoice-payment">
+                                    <h4>Payment Details:</h4>
+                                    <ul class="unstyled">
+                                        <li><strong>Total item:</strong>&nbsp;{{ entity.totalItem }}</li>
+                                        <li><strong>Total Quantity:</strong>&nbsp;{{ entity.totalQuantity }}</li>
+                                        <li><strong>Total BDT:</strong>&nbsp;{{ entity.total|number_format() }}</li>
+                                     </ul>
+                                </div>
+                                <div class="span4 invoice-payment">
+                                    <h4>Vendor Details:</h4>
+                                    <ul class="unstyled">
+                                        <li><strong>Company name:</strong>&nbsp;{{ entity.vendor.companyName }}</li>
+                                        <li><strong>Name:</strong>&nbsp;{{ entity.vendor.name }}</li>
+                                        <li><strong>Mobile:</strong>&nbsp;{{ entity.vendor.mobile }}</li>
+                                        {% if entity.vendor.country is not empty %}
+                                        <li><strong>Country:</strong>&nbsp;{{ entity.vendor.country.name }}</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+
+                            </div>
+                            {% include('flash-message.html.twig')  %}
+
+                            <form>
+                                <div class="row-fluid box green" id="replaceItem">
+                                    {% if entity.purchaseReturnItems is defined and  entity.purchaseReturnItems is not empty  %}
+                                        <table class="table table-bordered table-striped table-condensed flip-content ">
+
+
+                                            <thead class="flip-content ">
+                                            <tr class="head-green">
+                                                <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
+                                                <th class="numeric" >Item</th>
+                                                <th class="numeric" >Barcode</th>
+                                                <th class="numeric" >Date/Memo</th>
+                                                <th class="numeric" >Purchase price</th>
+                                                <th class="numeric" >Qnt</th>
+                                                {% if entity.process == 'approved' %}
+                                                    <th class="numeric" >Replace remaining Qnt</th>
+                                                    <th class="numeric" >ReplaceQnt</th>
+                                                {% endif %}
+                                                <th class="numeric" >Sub-total</th>
+                                                <th class="numeric" >Replace Sub-total</th>
+                                                <th><i class="icon-cogs"></i></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for subList in entity.purchaseReturnItems %}
+                                                <tr id="subItem-{{ subList.id }}">
+                                                    <td class="numeric" >{{ loop.index }}</td>
+                                                    <td class="numeric" >{{ subList.purchaseItem.item.name }}</td>
+                                                    <td class="numeric" >{{ subList.purchaseItem.barCode }}</td>
+                                                    <td class="numeric" >{{ subList.purchaseItem.purchase.receiveDate|date('d-m-Y') }}/{{ subList.purchaseItem.purchase.memo }}</td>
+                                                    <td class="numeric" ><input type="hidden" name="price" id="price-{{ subList.id }}" value="{{ subList.price }}">{{ subList.price }}</td>
+                                                    <td class="numeric" ><input type="hidden" name="curQuantity" id="curQuantity-{{ subList.id }}" value="{{ subList.quantity }}"><span id="curQnt-{{ subList.id }}">{{ subList.quantity }}</span></td>
+                                                    {% if entity.process == 'approved' %}
+                                                        <td class="numeric" ><input type="text" class="m-wrap span5 numeric td-inline-input"  id="quantity-{{ subList.id }}" name="quantity" value="{{ subList.quantity - subList.replaceQuantity }}"></td>
+                                                        <td class="numeric" >{{ subList.replaceQuantity }}</td>
+                                                    {% endif %}
+                                                    <td class="numeric" ><span id="subTotal-{{ subList.id }}">{{ subList.subTotal }}</span></td>
+                                                    <td class="numeric" >{{ subList.replaceQuantity * subList.price }}</td>
+                                                    <td class="numeric" id="action-{{ subList.id }}">
+                                                        {% if subList.quantity > subList.replaceQuantity  %}<a title="Are you sure went to replace item?" id="{{ subList.id }}" rel="{{ subList.id }}" href="javascript:" class="btn green mini replace" ><i class="icon-retweet"></i></a>{% endif %}
+                                                        {% if entity.process != 'approved' %}
+                                                        <a title="Are you sure went to delete ?" id="{{ subList.id }}" rel="{{ path('inventory_purchasereturn_delete', { 'id': subList.id }) }}" href="javascrireplaceQuantitypt:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+
+                                        </table>
+                                    {% endif %}
+                                </div>
+                                <div class="clearfix">&nbsp;</div>
+                                <div class="form-actions portlet box grey">
+                                    <div class="span8" id="message"></div>
+
+                                    <div class="pull-right" id="action-{{ entity.id }}">
+                                    {#
+                                        <a type="reset" class="btn"><i class="icon-print"></i>&nbsp;Print</a>
+                                        <a type="reset" class="btn blue"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>
+                                   #}     {% if entity.process != 'approved' %}
+                                            <span  class="btn green"><i class="icon-ok"></i>&nbsp;Pending</span>
+                                        {% else %}
+                                            <span  class="btn green"><i class="icon-ok"></i>&nbsp;Approved</span>
+                                        {% endif %}
+                                    </div>
+
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        var purchaseReturn = {{ entity.id }}
+    </script>
+{% endblock %}
+
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@InventoryBundle/Resources/public/css/style.css' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@InventoryBundle/Resources/public/js/puschaseReturn.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    InventoryPurchaseReturnPage(purchaseReturn);
+{% endblock %}

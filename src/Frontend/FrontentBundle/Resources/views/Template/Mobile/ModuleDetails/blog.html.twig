@@ -1,0 +1,16 @@
+<div class="bannerPane bannerPane-business-locaton"  {% if details.webPath() is defined and details.webPath() is not empty %} style="background-repeat:no-repeat!important; background-position:center center!important;background:url('{{ image(details.webPath()).resize() }}')" {% endif %} >
+    <div class="overlay"></div>
+    <div class="s-banner-content">
+        <div><img width="100" src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" /></div>
+        {{ moduleName }}
+    </div>
+</div>
+<div id="content" class="content-margin">
+    <article>
+        <div class="module-title">
+            <p>{{ details.title }}</p>
+            <i class="fa fa-user"></i>&nbsp;{{ details.name }}&nbsp;&nbsp;&nbsp;<i class="fa fa-calendar"></i>&nbsp;{{ details.created|date('F j, Y') }}
+        </div>
+        <p>{{ details.content|raw }}</p>
+    </article>
+</div>

@@ -1,0 +1,26 @@
+tools_domain:
+    path:     /
+    defaults: { _controller: "SettingToolBundle:Domain:index" }
+
+tools_domain_application:
+    path:     /
+    defaults: { _controller: "SettingToolBundle:Domain:application" }
+
+tools_domain_sms:
+    path:     /
+    defaults: { _controller: "SettingToolBundle:Domain:sms" }
+
+tools_domain_module:
+    path:     /
+    defaults: { _controller: "SettingToolBundle:Domain:module" }
+
+tools_option_status:
+    path:     /domain/option-status
+    defaults: { _controller: "SettingToolBundle:Domain:optionStatus" }
+
+tools_option_status_update:
+    path:     /domain/option-status-update
+    defaults: { _controller: "SettingToolBundle:Domain:optionStatusUpdate" }
+    methods:  POST
+
+

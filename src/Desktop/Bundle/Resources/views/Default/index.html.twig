@@ -1,0 +1,190 @@
+{% extends ':desktop:base.html.twig' %}
+{% block body %}
+    {% if entity.homesliders is not empty %}
+        <div class="container_full">
+            <div id="sequence" class="seq">
+
+                <div class="seq-screen">
+                    <ul class="seq-canvas">
+                        {% for slide in entity.homeSliders %}
+                            <li class="seq-in" style="background: url('{{ image(slide.webPath()) }}'); background-repeat: no-repeat; background-position: center center; background-size: 100%">
+
+                                <div class="seq-title">
+                                    <h5 data-seq >{{ slide.name }}</h5>
+                                            <div class="clearfix"></div>
+                                    <p data-seq >{{ slide.content|raw }}</p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <fieldset class="seq-nav" aria-controls="sequence" aria-label="Slider buttons">
+                    <button type="button" class="seq-prev" aria-label="Previous">Previous</button>
+                    <button type="button" class="seq-next" aria-label="Next">Next</button>
+                </fieldset>
+
+                <ul role="navigation" aria-label="Pagination" class="seq-pagination">
+                    {% for slide in entity.homeSliders %}
+                        <li><a href="#step{{ loop.index  }}" rel="step{{ loop.index  }}" title="Go to slide 1"><img src="{{ image(slide.webPath()).resize(80,80) }}" /></a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div><!-- end slider -->
+        <div class="clearfix"></div>
+    {% endif %}
+
+    <div class="joosa fusectio2">
+        <div class="container">
+
+            <h1><i>Welcome To</i>
+                <strong>{{ entity.name }}</strong>
+            </h1>
+            <div  {% if entity.homePage.webPath is not empty %} class="two_third" {% endif %} style="color: #ffffff; text-align: justify">
+                {{ entity.homePage.content|raw }}
+            </div><!-- end section -->
+            {% if entity.homePage.webPath is not empty %}
+                <div class="one_third last"><img src="{{ image(entity.homePage.webPath()).resize(360,380) }}" alt="" /></div>
+            {% endif %}
+
+            <div class="clearfix mar_top2"></div>
+
+        </div>
+    </div><!-- end features section 3 -->
+    <div class="clearfix mar_top2"></div>
+    {% if entity.homePage.homeBlocks is not empty %}
+        <div class="clearfix"></div>
+        <div class="joosa fusectio1">
+            <div class="container">
+                {% for key ,block in entity.homePage.homeBlocks|slice(0,3) %}
+                {% if selectedBlockBg is not empty %}
+                    <div class="one_third  {% if key == 2 %}last{% endif %}" >
+                        <div class="left">
+                            <h5>{{ block.name }}</h5>
+                            <p>{{ block.content|raw|truncate(80) }}</p>
+                            {% if block.menu is not empty %}
+                                {% if block.menu.module is not empty %}
+                                    <a href="{{ path('desktop_module',{'subdomain':entity.subDomain,'module': block.menu.module.slug ,'slug': block.menu.slug}) }}"><i class="fa fa-plus-square"></i>&nbsp; Read More</a>
+                                {% else %}
+                                    <a href="{{ path('desktop_content',{'subdomain':entity.subDomain,'slug': block.menu.slug}) }}"><i class="fa fa-plus-square"></i>&nbsp; Read More</a>
+                                {% endif %}
+                            {% endif %}
+
+                        </div>
+                        {% if selectedBlockBg is not empty %}
+                        {%  set image =  random(selectedBlockBg) %}
+                        <div class="right one" style="background:url('/{{ image }}');" ></div>
+                        {% endif %}
+                    {% endif %}
+                    </div><!-- end section -->
+
+                {% endfor %}
+            </div>
+        </div>
+        <div class="clearfix mar_top2"></div>
+    {% endif %}
+    <div class="container">
+        {% if entity.testimonials is not empty %}
+            <div class="people_says_main">
+                <div class="testimonials">
+
+                    <h3>Our Messages</h3>
+
+                    <div class="people_says">
+
+                        <ul id="mycarousel" class="jcarousel-skin-tango">
+                            {% for key ,message in entity.testimonials %}
+                                {% if entity.homePage.webPath() %}
+                                <li>
+                                    <div class="picture"><img src="{{ image(entity.homePage.webPath()).resize(160,160) }}" alt="{{ message.name }}" /></div>
+                                    <div class="who_pic">
+                                        <p>" {{ message.content|raw|truncate(120) }}" <a href="{{ path('desktop',{'subdomain':entity.subDomain}) }}">More</a></p>
+                                        <div class="name"><strong>- {{ message.name }}</strong>
+                                            <i>{{ message.designation }}, {{ message.title }}</i></div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                </div>
+            </div><!-- end testimonials section -->
+        {% endif %}
+        {% if entity.faqs is not empty %}
+            <div class="partners">
+
+                <div class="one_third">
+                    <h3><strong>FAQs</strong></h3>
+                    <div class="accrodation">
+                        {%  for faq in entity.faqs|slice(0,3) %}
+                            <!-- section 1 -->
+                            <span class="acc-trigger active"><a href="#">{{ faq.name }}</a></span>
+                            <div class="acc-container"><div class="content">{{ faq.content }}</div></div>
+                        {% endfor %}
+                    </div>
+                </div><!-- end faqs section -->
+            </div><!-- end section -->
+        {% endif %}
+
+    </div><!-- end two sections -->
+    <div class="clearfix mar_top2"></div>
+
+    <style>
+
+        .seq .seq-title {
+            width: 100%;
+            margin-right: 0;
+            position: absolute;
+            left: 0%;
+            background: #000;
+            bottom: 0px;
+            opacity: 0.5;
+            min-height: 91px;
+            margin-left: 0;
+            padding-left: 45px;
+        }
+        .seq .seq-title h5{
+            font-size: 16px;
+            color: rgb(255, 255, 255);
+            font-weight: bold;
+            padding-top: 10px;
+            margin-bottom: 5px;
+            opacity: 1;
+            -webkit-transform: translate(0, 0);
+            transform: translate(0, 0);
+        }
+        .seq .seq-title p{
+            font-size: 12px;
+            color: rgb(255, 255, 255);
+            padding-bottom:5px;
+            opacity: 1;
+            -webkit-transform: translate(0, 0);
+            transform: translate(0, 0);
+        }
+
+    </style>
+
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    var sequenceElement = document.getElementById("sequence");
+
+    // Change Sequence's default options
+    var options = {
+        autoPlayInterval: 500
+    };
+
+    // Initiate Sequence
+    var sequence1 = sequence(sequenceElement, options);
+
+{% endblock %}
+
+
+
+
+
+
+
+

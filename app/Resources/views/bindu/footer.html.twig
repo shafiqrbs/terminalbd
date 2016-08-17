@@ -1,0 +1,216 @@
+<!--tm-page-body-->
+{#<div id="tm-page-footer">
+    <div class="tm-sidebar-footer">
+        <div class="tm-wrap">
+            <div class="tm-sidebar-footer-inner">
+                <div class="tm-column tm3">
+                    <aside class="widget widget_text">
+                        <div class="textwidget">
+                            <p>
+                                <img alt="img" src="../../assets/frontend/img/sample/home/logo.png" width="139" height="24">
+                            </p>
+                            <p>&#123;&#35;{% render controller("FrontendBundle:Widget:aboutus") %}&#35;&#125;</p>
+                        </div>
+                    </aside>
+                </div>
+                <div class="tm-column tm2">
+                    <aside class="widget tm-list-style1">
+                        {{ knp_menu_render('SettingAppearanceBundle:Builder:footerMenu', {'template':'SettingAppearanceBundle:Menu:simple-menu.html.twig','currentClass': 'active'}) }}
+                    </aside>
+                </div>
+
+                <div class="tm-column tm3">
+                    <aside class="widget widget_tag_cloud">
+                        <h3 class="tm-title">Contact Us</h3>
+                        <div>
+                            <address class="margin-bottom-40">
+                                House#18 , Road No# 1, Block G<br>
+                                Mirpur-1, Dhaka<br>
+                                Phone: +88 01558 148 148<br>
+                                Fax: +88 01558 148 148<br>
+                                Email: <a href="mailto:info@metronic.com">info@bdeducations.com</a><br>
+                                Skype: <a href="skype:bdeducations">bdeducations</a>
+                            </address>
+                        </div>
+                    </aside>
+                </div>
+                <div class="tm-column tm4">
+                    <aside class="widget widget_text">
+                        <h3 class="tm-title">Get the latest news and promotion!</h3>
+                        <div class="textwidget">
+                            <form action="{{ path('frontend_newsletter') }}" method="post" class="newsletter">
+                                <input type="email" value="" name="email" required="required" class="tm-input required" placeholder="Email..." />
+                                <button class="tm-button" type="submit" role="button">Subscribe</button>
+                            </form>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>#}
+<!--tm-page-page-footer-->
+<footer>
+    <div class="tm-wrap tm-table">
+        <div class="copyright">
+            <p>© Copyright - Business Booster Limited Bangladesh</p>
+        </div>
+        <div class="tm-social-icons">
+            <a class="tm-icon-facebook" href="#">
+                <i class="fa fa-facebook"></i>
+            </a>
+            <a class="tm-icon-twitter" href="#">
+                <i class="fa fa-twitter"></i>
+            </a>
+            <a class="tm-icon-dribbble" href="#">
+                <i class="fa fa-dribbble"></i>
+            </a>
+        </div>
+    </div>
+</footer>
+
+<div id="loginmodal" style="display:none;width:70%;">
+    <div class="ui-modal-heading">
+        <button class="close">×</button>
+        <h3>
+            Help</h3>
+    </div>
+    <div class="helpPageContainer" style=" height: 60%; overflow-y: scroll">
+
+
+        <div id="webinar-overlay"><div id="close-webinar">x</div></div>
+        <div id="top"></div>
+        <h1 style="font-size:14px; margin-top:20px; font-weight:bold;">How to use your <span>Web Manager</span></h1>
+
+        <ul id="quick-links">
+            <li><a href="#design">Design</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#tools">Tools</a></li>
+            <li><a href="#settings">Settings</a></li>
+            <li><a href="#faqs">FAQs</a></li>
+        </ul>
+
+        <div id="clear-started">
+            <div class="video-container">
+                <div style="" class="video-wrapper">
+                    <div style="" class="video">
+                        <a style="" class="player fancybox.iframe" onclick="$('#webinar-vid').attr('src','//www.youtube.com/embed/wI_eoQapWc4');$('#webinar-overlay').show(); $('#webinar-overlay').css('opacity','0.5'); $('#webinar-vid').fadeIn();">
+                            <span style="" class="play-icon"></span>
+                            <img style="" width="180" height="139" alt="" src="//img.youtube.com/vi/wI_eoQapWc4/0.jpg">
+                        </a>
+                        <br>
+                        <span style="display: block; color:#000; padding-top:5px"></span>
+                        <span style="color:black;font-size:13px;">How to use your Web Manager</span>
+                    </div>
+                </div>
+            </div>
+            <p>If you have provided your website address some content may already have been populated on your mobile site e.g. phone number, address and logo.</p>
+            <p>First, on the "<strong>Design</strong>" tab, select the theme, color, logo, and description for your site to set its look and feel. Next, on the "<strong>Features</strong>" tab, add and edit content specific to your business for each of our mobile-friendly features. Click the 'Add to Site' or 'Update' buttons each time you add a feature or make a change to set your preferences. You can also remove any of the features you wish.</p>
+            <p>Adding and customizing your features will give you a robust site that meets the needs of your mobile customers and builds your business.  Any changes to your site will be made immediately, allowing you to always stay in control of your mobile site. You can access the Web Manager anytime for updates and edits as needed.</p>
+        </div>
+        <div class="to-top"><a href="#top">^ back to top</a></div>
+
+        <h2><a name="design">Design</a></h2>
+        <ul>
+            <li>
+                <p>
+                    <strong>Templates</strong> — Choose the look and feel of your mobile site. Additionally, you can customize the header, body and icons of the site separately.                <!--                    <a style="" class="player fancybox.iframe" onclick ="$('#webinar-vid').attr('src','//www.youtube.com/embed/ttxkEbaf_BM');$('#webinar-overlay').show(); $('#webinar-overlay').css('opacity','0.5'); $('#webinar-vid').fadeIn();" >-->
+                    <!--                        Watch Video-->
+                    <!--                    </a>-->
+                </p>
+            </li>
+            <li><p><strong>Description</strong> — Enter a description of your company. This text will appear below the logo on the homepage on your mobile site.</p></li>
+            <li><p><strong>Phone Layout</strong> — Customize the navigation menu, header and body layout of your site.</p></li>
+            <li><p><strong>Logo</strong> — Extend your brand by uploading your logo, this can be displayed on every page of your mobile site or only on the home page. Supported image formats include: JPEG, PNG and GIF. Maximum file size is 4 megabytes.                                    <a style="" class="player fancybox.iframe" onclick="$('#webinar-vid').attr('src','//www.youtube.com/embed/35qkiB6Vc_A');$('#webinar-overlay').show(); $('#webinar-overlay').css('opacity','0.5'); $('#webinar-vid').fadeIn();">
+                        Watch Video
+                    </a>
+                </p>
+            </li>
+            <li><p><strong>Tablet / Large Screen Layout</strong> — Customize the layout of your site on tablet / large screen devices by selecting a head, body and widget option. You can activate or deactivate the Tablet View layout from here.</p></li>
+            <li><p><strong>Main Image / Carousel</strong> — Add an image or create an image carousel [6 images maximum]. Supported image formats include: JPEG, PNG and GIF. Maximum file size is 4 megabytes. Image width should be 1200 pixels wide to display properly on tablets and larger screens.</p></li>
+            <!--<li><p><strong>Main Image / Carousel</strong> &mdash; Add an image or create an image carousel [6 images maximum]. Supported image formats include: JPEG, PNG and GIF. Maximum file size is 4 megabytes.</p></li>-->
+            <li><p><strong>Icon Set</strong> — Select an icon set to add to your site</p></li>
+            <li><p><strong>Site Colors</strong> — You can control the site color by clicking your preference in the color grid. In options you can further customize both site and text colors.</p></li>
+            <li><p><strong>Background</strong> — Customize the background of your site.  Upload an image to appear as the background of your site and then select how far down the page you want the site content to appear [offset site content].  Supported formats: JPEG, PNG and GIF. Max upload file size is 4 megabytes. Remember to click to the ‘update’ button. Note that Background images will not be resized on sites viewed in IE8 browsers.                                    <a style="" class="player fancybox.iframe" onclick="$('#webinar-vid').attr('src','//www.youtube.com/embed/tMBD6cqkVfk');$('#webinar-overlay').show(); $('#webinar-overlay').css('opacity','0.5'); $('#webinar-vid').fadeIn();">
+                        Watch Video
+                    </a>
+                </p>
+            </li>
+            <li><p><strong>Site Footer</strong> — Customize the footer of your site.  To display the Phone number and Address in the site footer, the 'Call Us' and 'Find Us' features must be added to the site.                                    <a style="" class="player fancybox.iframe" onclick="$('#webinar-vid').attr('src','//www.youtube.com/embed/UCBsh-sRafE');$('#webinar-overlay').show(); $('#webinar-overlay').css('opacity','0.5'); $('#webinar-vid').fadeIn();">
+                        Watch Video
+                    </a>
+                </p>
+            </li>
+        </ul>
+        <div class="to-top"><a href="#top">^ back to top</a></div>
+
+        <h2><a name="features">Features</a></h2>
+        <ul>
+
+            <li><p><strong>Call Us</strong> — Connect with customers faster by allowing them to call you with just one click. Your customers will click this feature to call you directly without dialing additional digits. Enter the complete phone number of your business as you would dial it in your area. You can add up to 6 Call Us features to your site.<a class="player fancybox.iframe" onclick="$('#webinar-vid').attr('src','//www.youtube.com/embed/8EE1p5EsRpE');$('#webinar-overlay').show(); $('#webinar-overlay').css('opacity','0.5'); $('#webinar-vid').fadeIn();">Watch Video</a></p></li><li><p><strong>Find Us</strong> — Help customers find you with just one click to a Google map and directions. Customers will be presented with a mobile-friendly map and directions to help them find your location. Enter the street address of your business on one line, making sure to include the street number, city, state, postal code and country.  You can add up to 6 locations to your site. Multiple locations will be displayed on one page in the order they were added.<a class="player fancybox.iframe" onclick="$('#webinar-vid').attr('src','//www.youtube.com/embed/xcgLjcgvg_k');$('#webinar-overlay').show(); $('#webinar-overlay').css('opacity','0.5'); $('#webinar-vid').fadeIn();">Watch Video</a></p></li><li><p><strong>Full Website</strong> — Provide a link for customers to optionally use your full desktop site. Choose if you want to add or remove this feature.</p></li><li><p><strong>Opening Hours</strong> — Make sure customers know when you are open for business. You can enter opening hours for standard business days or enter the opening hours for each day separately.</p></li><li><p><strong>Booking Request</strong> — Secure more business by allowing customers to book reservations or appointments directly from your mobile site. First choose the type of business from the drop down menu.  This will dynamically change the available booking times. Next, provide an email address where you'd like these requests to be sent. Or alternatively you can add a link to the booking request page on your existing website.</p></li><li><p><strong>Menu</strong> — Menu - Add a menu to your site. You can either find your menu online or build your own. - <a class="player fancybox.iframe" onclick="$(&quot;#webinar-vid&quot;).attr(&quot;src&quot;,&quot;//www.youtube.com/embed/5UNonLsEXho&quot;);$(&quot;#webinar-overlay&quot;).show(); $(&quot;#webinar-overlay&quot;).css(&quot;opacity&quot;,&quot;0.5&quot;); $(&quot;#webinar-vid&quot;).fadeIn();">Watch Video</a></p></li><li><p><strong>Images</strong> — Showcase your business with images of products, services locations etc.  Simply add a link to an external photo gallery or upload up to 50 images to create your own gallery.</p><ul class="sub-ul"></ul></li><li><p><strong>About</strong> — Users click on this to get information on your business. Enter a short description of your business or the web address of a page of your existing site that describes your business. Twenty-five words or less typically works best.</p></li><li><p><strong>Products</strong> — Link to an existing products page on your full website or create a custom Product page detailing your products</p></li><li><p><strong>Shopping Cart</strong> — Create a full shopping cart where users can buy your products on your mobile site. You can add up to 100 products to your shopping cart.  PayPal and/or Amazon payment gateways supported.</p></li><li><p><strong>Services</strong> — Customers can access information about your services with just one click and you can convert leads to business. Enter a short description of your services or the web address of a page of your existing site that describes your services.</p></li><li><p><strong>Coupons</strong> — Convert leads to business with special offers or coupons. Enter the information of the offer and select the expiry date of your offer [the expiry date is optional] . Once the expiry date is reached the Coupon/Special Offer will automatically be removed from your mobile site.<a class="player fancybox.iframe" onclick="$('#webinar-vid').attr('src','//www.youtube.com/embed/bPmFiGVYA4k');$('#webinar-overlay').show(); $('#webinar-overlay').css('opacity','0.5'); $('#webinar-vid').fadeIn();">Watch Video</a></p></li><li><p><strong>Call Me Back</strong> — Customers click this icon, enter their phone number and you call them back, offering a real convenience and great service. Enter an optional brief description to appear at the top of the page, and the email address where you would like messages left to be sent.</p></li><li><p><strong>Leave A Message</strong> — Customers can leave a message for you with just one click.  Provide an email address where you'd like to receive your messages.</p></li><li><p><strong>Tell A Friend</strong> — Grow traffic by allowing customers to send a message to friends containing a link to your mobile site and a brief message provided by you.</p></li><li><p><strong>News Feed</strong> — Customers can access your news feeds to stay updated directly from your mobile site. Enter the web address of your RSS or Atom feed.</p></li><li><p><strong>Blog</strong> — Customers can access your blog directly from your mobile site. This will link them directly to an existing blog. Enter the web address of your blog.</p></li><li><p><strong>Add Link</strong> — Customize this content by selecting a link to any page on an existing site you want to share with your mobile customers in one click. Enter the web address of a page you want to link to. You can change the name of the icon afterwards.</p></li><li><p><strong>Add Page</strong> — Add more content to your mobile site by increasing the number of pages with your own customized content. Each new page can be given a different title and icon, for example "Today's Specials". To add pages to your mobile site simply choose the 'Add Page' application and enter in your company information. You can style and format your page with the included controls, or add custom CSS, HTML or Javascript to the page by opening the 'source' dialog. - <a class="player fancybox.iframe" onclick="$(&quot;#webinar-vid&quot;).attr(&quot;src&quot;,&quot;//www.youtube.com/embed/_usgiK988dw&quot;);$(&quot;#webinar-overlay&quot;).show(); $(&quot;#webinar-overlay&quot;).css(&quot;opacity&quot;,&quot;0.5&quot;); $(&quot;#webinar-vid&quot;).fadeIn();">Watch Video</a><br><br>Enhanced functionality can be added by adding the following markup to your page. *<i>optional</i></p><ul><li style="text-align:left;"><span style="font-weight:bold">PayPal</span> - A "Buy Now" button allows customers instantly purchase a product or service using PayPal.<br><i>e.g. [PaypalBuyNow item_name="" price="" currency_code="" paypal_login="" *quantity=""]</i></li><li style="text-align:left;"><span style="font-weight:bold">Google AdSense</span> - Additional revenue can be generated by including ads within a webpage.<br><i>e.g. [GoogleAds ad_client="" *ad_slot=""]</i></li><li style="text-align:left;"><span style="font-weight:bold">Smaato</span> - Additional revenue can be generated by including ads within a webpage.<br><i>e.g. [SmaatoAds ad_space_id="" publisher_id=""]</i></li><li style="text-align:left;"><span style="font-weight:bold">Mojiva</span> - Additional revenue can be generated by including ads within a webpage.<br><i>e.g. [MojivaAds zone="" type=""]</i></li></ul><p></p></li><li><p><strong>Forms</strong> — Create custom forms to suit your business needs. You can choose from multiple field types such as text fields, text areas, check boxes, radio buttons, and drop down menus.  You also have the option to make fields required so the site visitor has to fill them before they can submit the form.  You can add up to 5 custom forms to your mobile site.</p></li><li><p><strong>Videos</strong> — Display videos on your mobile site.  Select the video type and enter the link to a Vimeo or YouTube video or a playlist/channel. You can add multiple videos to a page or add multiple video pages. <a class="player fancybox.iframe" onclick="$('#webinar-vid').attr('src','//www.youtube.com/embed/X6SxcF2HszQ');$('#webinar-overlay').show(); $('#webinar-overlay').css('opacity','0.5'); $('#webinar-vid').fadeIn();">Watch Video</a></p></li><li><p><strong>Event Calendar</strong> — This feature allows you to publicize your events using a Google Calendar feed.  (Calendar feeds provide users with frequently updated content e.g. using a local theatres event guide feed).</p></li><li><p><strong>Reviews</strong> — Display your reviews from Foursquare and Yelp on your mobile site. Select the review site from the drop down list and add the URL of a page that contains reviews for your service/website, e.g. http://www.yelp.com/biz/your-business-city.  The top 5 reviews will be displayed on your mobile site with a link to the review site.</p></li><li><p><strong>Check-In Services</strong> — Allow customers to connect with your business on popular location based social sites including Foursquare and Google Places.  Icons will link to a presense you have previously created on the location based site. Also your mobile site can be automatically submitted to create a presence on Foursquare.</p></li><li><p><strong>Facebook</strong> — Let customers access your Facebook updates with just one click to deepen your relationship and increase communication. Enter your Facebook URL or your page name. <br>[<a href="https://www.facebook.com/help/281592001947683/" target="_blank">https://www.facebook.com/help/281592001947683/</a>] for more details on managing pages on facebook.</p></li><li><p><strong>Google+</strong> — Let customers see your Google+ updates with just one click. Just add your Google+ page URL or
+                    just enter your Google+ Page ID in to the field provided in the feature and click 'Add to site'. - <a class="player fancybox.iframe" onclick="$(&quot;#webinar-vid&quot;).attr(&quot;src&quot;,&quot;//www.youtube.com/embed/mR5baOzA71s&quot;);$(&quot;#webinar-overlay&quot;).show(); $(&quot;#webinar-overlay&quot;).css(&quot;opacity&quot;,&quot;0.5&quot;); $(&quot;#webinar-vid&quot;).fadeIn();">Watch Video</a></p></li><li><p><strong>Twitter</strong> — Let customers follow your Tweets or find your brand with just one click so that you're always in touch. Enter either your Twitter username e.g. "@JohnDoe" or a hashtag for your brand e.g. #quickStop</p></li><li><p><strong>Site Translation</strong> — This feature allows the site visitor to select the language of their choice via an icon on your mobile site</p></li><li><p><strong>Legal</strong> — Customers can access your primary legal disclaimers and information with one click. Enter text that describes your Copyright Information, Privacy Policy, and Terms &amp; Conditions  or provide a web address of a page on an existing site for each.</p></li>
+        </ul>
+        <div class="to-top"><a href="#top">^ back to top</a></div>
+
+        <h2><a name="tools">Tools</a></h2>
+        <ul>
+            <li><p><strong>QR Code</strong> — Allows you to automatically create a marketing flyer and QR code to promote your business and mobile site.</p></li>
+            <li><p><strong>Ads</strong> — Make extra revenue for your business by adding third-party advertising to your mobile
+                    site. Just enter your ID provided by the Ad Provider you have selected to seamlessly add
+                    mobile ads to your site.<br></p><ul>  <li>Google AdSense - Sign up for Google AdSense at <a href="http://www.google.com/adsense" target="_blank">google.com/adsense</a></li> <li>Mojiva - Sign up for Mojiva for free at <a href="http://www.mojiva.com/" target="_blank">www.mojiva.com</a></li><li>Smaato - Sign up for Smaato for free at <a href="http://www.smaato.com/" target="_blank">www.smaato.com</a></li> </ul><p></p></li>
+            <li><p><strong>Site SEO</strong> — Enter keywords words and a short description that bests describes your business so that search engines can better index your site and have your mobile site displayed in search results on Yahoo, Google etc. when people search using those keywords. You can also add keywords to every active feature of your mobile site in the ‘Options’ area of each feature.<br><br>The business' Google+ Page can be added to the site SEO feature to enhance search results and verify ownership.<br><br>The owner ship of the mobile site can be validated using the Site Verification feature of Google's Webmaster Tools.<br></p><ol style="margin:0px 22px"><li>On the Webmaster Tools Home page, click the Manage Site button next to the site, and then click Verify this site.</li><li>If HTML tag is not visible on the Recommended method tab, click the Alternate methods tab.</li><li>Select HTML tag.</li><li>Copy the verification code and paste it into the "Google Site Verification Code" field of the Site SEO feature, then click Update.</li></ol>For more information see -<br><a href="http://support.google.com/webmasters/bin/answer.py?hl=en&amp;answer=35659" target="_blank">http://support.google.com/webmasters/bin/answer.py?hl=en&amp;answer=35659</a><p></p></li>
+            <li><p><strong>Analytics</strong> — Track how your customers are using your mobile site with 3rd party analytic providers such as StatCounter and Google Analytics. Select your provider and enter your tracking ID into the field provided.</p><h3>Statcounter</h3><ul><li>To sign up at StatCounter and get real-time analytics, fast, friendly email support and detailed mobile device tracking (not just smartphones) visit <a target="_blank" href="http://statcounter.com/sign-up/?guided=mp">http://statcounter.com/sign-up/?guided=mp</a></li><li>To access your StatCounter account and stats log in at <a target="_blank" href="http://statcounter.com">http://statcounter.com</a></li><li>If you already have a StatCounter account, log in here <a href="http://statcounter.com/add-project/?guided=mp" target="_blank">http://statcounter.com/add-project/?guided=mp</a> to create a new project for your mobile site</li></ul><h3>Google Analytics</h3><ul><li>To use this feature you need to have a Google Analytics ID. Go to <a href="http://www.google.com/analytics/" alt="Google Analytics" target="_blank">http://www.google.com/analytics/</a> to set up your account and enter the ID here. Your tracking ID should start with UA-XXXXXX-X.  For full instructions go to the help page.</li></ul><p></p></li>
+            <li><p><strong>Site Cookies</strong> — It is a legal requirement in EU countries to inform visitors that your site used cookies and to obtain their consent. A cookie notification will be displayed in the header of your site.  The cookie notification will be displayed until the visitor consents.</p></li>
+            <li><p><strong>Copy Site</strong> — Copy content from one mobile site to another (note that this erases all existing content on target site) by following these simple steps: simply open the Web Manager for the site to be used as the source, copy the Site Identification code, and paste it into the 'Source Site Identification Code' field on the Web Manager for the target mobile site.</p></li>
+            <li><p><strong>Redirection Code Generator</strong> — The redirection code can be embedded in your desktop site to send mobile visitors to your mobile site. Select the language of your desktop site to get the appropriate code. Then copy the code into your desktop site. You may require the help of your site developer for this step.</p></li>
+        </ul>
+        <div class="to-top"><a href="#top">^ back to top</a></div>
+
+
+        <h2><a name="gmanalytics">Analytics</a></h2>
+        <ul>
+            <li><strong>What data can I view in the traffic tab?</strong> There are three tabs in Traffic, in each you can view daily, weekly and monthly data.                <ul class="disc-style">
+                    <li><strong>Visitor Data</strong> —                         This provides a view of the performance data of your mobile website. You can view visit counts, time on site and page views.</li>
+                    <li><strong>Visitor Profile Data</strong> —                         This allows you to drill down into your data by feature, device, device language and country.</li>
+                    <li><strong>Traffic Sources</strong> —                         You can see where traffic to your mobile site is coming i.e. search engines, direct traffic and referring traffic.</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="to-top"><a href="#top">^ back to top</a></div>
+
+        <h2><a name="settings">Settings</a></h2>
+        <ul>
+            <li><p><strong>Desktop Site Link</strong> —  Add the URL of your desktop site and pull information from your into your mobile site automatically such as logo, colours, address, Twitter, Facebook. Results may vary. You can edit or remove and information we add.</p></li>
+            <li><p><strong>Language &amp; Region</strong> — You can choose the language of your site by selecting a language from the drop down list. You can still enter content and rename icons in any language of your choice. Any content you add will not be affected.</p></li>
+            <li><p><strong>Business Sectors</strong> —  Choose a business category that best fits your business. This increases your search engine visibility and helps people find your mobile site.</p></li>
+        </ul>
+        <div class="to-top"><a href="#top">^ back to top</a></div>
+
+        <h2><a name="faqs">FAQs</a></h2>
+        <ul>
+            <li><p><strong>Some of the features do not appear on my mobile site?</strong> Not all the mobile features map to an icon on the site. An example is the Site SEO, which is a feature that works in the background to enhance the overall performance of the site and its findability on the net.</p></li>
+            <li><p><strong>What format should my phone be in?</strong> — Ideally in standard format e.g. +1.1223434344 . Avoid putting any space or any sign in between other than the leading + (can be replaced by a double 0) or the dot after the countrycode. You can also just write it as an uninterrupted sequence of number the way it should be dialed.</p></li>        <li><p><strong>Do I need an international code with my phone number?</strong> — It is recommended to include the international code so that click to call would work also on foreign phones (e.g. a tourist wanting to get in touch with you via your mobile site). You can however also just write the local number if you prefer.</p></li>        <li><p><strong>How do I change the position of a feature?</strong> To change a position of a feature please use the Options tab in each feature, within Options there is the ability to change the position of the feature.</p></li>
+            <li><p><strong>When I choose to select a language some text is not changing</strong> If you have renamed a feature or icon name this text will not be translated, this you would need to do manually.</p></li>
+            <li><p><strong>I want to remove the branding on the footer of my mobile site, how do I do this?</strong> Go to the Site Footer panel in the design area and select the 'Turn off footer branding' option.</p></li>
+            <li><p><strong>The Navigation Menu Bar does not appear when I view the site on my phone?</strong> The Navigation Menu Bar will only work on Smartphones, tablets and desktops; therefore we do
+                    not display it on any other devices, this ensures that all visitors to your site get the best experience.</p></li>
+            <li><p><strong>How do I create subpages?</strong> You can create subpages by clicking on the ‘link’ icon on the WYSIWYG editor on any feature that has one. A dialog box will open and you can select to link to any feature/page that you have already activated on your site from the drop down list. The link will appear anywhere on the page you position it.                                    <a style="" class="player fancybox.iframe" onclick="$('#webinar-vid').attr('src','//www.youtube.com/embed/auGeq5HcfOo');$('#webinar-overlay').show(); $('#webinar-overlay').css('opacity','0.5'); $('#webinar-vid').fadeIn();">
+                        Watch Video
+                    </a>
+                </p></li>
+            <li><p><strong>How do I track Google Adwords visits to my site?</strong> Add Google Adwords tracking code to track traffic and conversions from your Google Adwords campaigns. Go to the ‘Options’ area of the feature you want to add the code to and enter your Conversion ID and label into the fields provided. We will take care of the rest. You will then be able to track conversions from your Google Adwords dashboard. For features with forms the conversion will be counted as a visit to the form confirmation page [page displayed once the form is submitted]. To learn more about Google Adwords conversion tracking see: <a href="https://support.google.com/adwords/answer/1722054" target="_blank">https://support.google.com/adwords/answer/1722054</a></p></li>
+        </ul>
+
+        <div class="to-top"><a href="#top">^ back to top</a></div>
+
+    </div>
+    <div class="ui-modal-footer">
+        <button class="ui-modal-button button-ok" href="">
+            OK
+        </button>
+    </div>
+</div>
+<!-- Go to top -->
+<a href="#" id="tm-gotop">
+    <i class="fa fa-hand-o-up"></i>
+</a>

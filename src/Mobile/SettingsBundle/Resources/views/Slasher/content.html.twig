@@ -1,0 +1,48 @@
+{% extends ':mobile/slasher:base.html.twig' %}
+{% block body %}
+   <div class="content">
+        <div class="container">
+            <h1 class="left-text">{{ page.name }}</h1>
+            <div class="decoration"></div>
+            <p class="left-text">{{ page.content|raw }}</p>
+            <div class="decoration"></div>
+            {% if(page.webPath()) %}
+                <div class="wide-item">
+                    <div class="wide-item-titles">
+                        <h4>Click here show Gallery</h4>
+                    </div>
+                    <div class="wide-image">
+                        <div class="overlay"></div>
+                        <a class="tile-wide" id="gallery" href="javascript:"><img class="responsive-image" src="/{{ page.webPath() }}" alt="img"></a>
+                    </div>
+
+                </div>
+            {% endif %}
+            {% for row in page.children  %}
+                <div class="decoration"></div>
+                    <div class="clear"></div>
+                    <div class="accordion" id="section{{ loop.index }}">{{ row.name }}<span></span></div>
+                    <div class="container">
+                        <div class="content">
+                        {{ row.content|raw }}
+                        </div>
+                    </div>
+
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+{% block documentready %}
+    {% if page.photoGallery %}
+        $( '#gallery' ).click( function( e ) {
+
+        e.preventDefault();
+            $.swipebox( [
+            {% for image in page.photoGallery.galleryImages %}
+                { href : '/{{ image.webPath }}', title : '{{ image.caption }}' },
+            {% endfor %}
+
+        ] );
+        } );
+    {% endif %}
+{% endblock %}

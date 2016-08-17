@@ -1,0 +1,30 @@
+scholarship:
+    path:     /
+    defaults: { _controller: "SyndicateComponentBundle:Scholarship:index" }
+
+scholarship_show:
+    path:     /{id}/show
+    defaults: { _controller: "SyndicateComponentBundle:Scholarship:show" }
+
+scholarship_new:
+    path:     /new
+    defaults: { _controller: "SyndicateComponentBundle:Scholarship:new" }
+
+scholarship_create:
+    path:     /create
+    defaults: { _controller: "SyndicateComponentBundle:Scholarship:create" }
+    methods:  POST
+
+scholarship_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "SyndicateComponentBundle:Scholarship:edit" }
+
+scholarship_update:
+    path:     /{id}/update
+    defaults: { _controller: "SyndicateComponentBundle:Scholarship:update" }
+    methods:  [POST, PUT]
+
+scholarship_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "SyndicateComponentBundle:Scholarship:delete" }
+    methods:  [POST, DELETE]

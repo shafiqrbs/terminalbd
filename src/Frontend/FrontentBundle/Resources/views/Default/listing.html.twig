@@ -1,0 +1,105 @@
+{% extends ':frontend:base.html.twig' %}
+{% block body %}
+    <div id="tm-page-title">
+        <div class="tm-wrap tm-table">
+            <div class="tm-title-captions">
+                <h2 class="tm-entry-title">Listing</h2>
+
+            </div>
+            <ul class="tm-breadcrumbs">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    Listing
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--tm-page-title-->
+    <div id="tm-page-body">
+    <div id="tm-blog" class="tm-container tm-wrap tm-blog-style-magazine1 tm-sidebar-right">
+        <div class="page-content">
+            <div class="tm-content page-content-inner ">
+
+                <div id="tm-portfolio" class="tm-portfolio-text">
+                    <div class="tm-content tm-col-4" style="margin-top:0">
+                        {% for promotion in promotions %}
+                            <article>
+                            <div class="tm-content-inner">
+                                <a href="{{ image(promotion.user.education.webPath).resize(189,139) }}" data-rel="prettyPhoto" class="tm-lightbox">
+                                    <img alt="img" src="{{ image(promotion.user.education.webPath).resize(189,139) }}">
+                                </a>
+                                <h3><a href="{{ path('frontend_education',{'subdomain':promotion.subDomain }) }}">{{ promotion.name }}</a></h3>
+
+                            </div>
+                        </article>
+                        {% endfor %}
+
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <!--portfolio-->
+                <div class="tm-double-line"></div>
+                <div class="tm-main-content">
+                    <div class="tm-main-content-inner">
+                        {% for entity in pagination %}
+                        <article>
+                            <div class="tm-content-inner">
+
+                                <div class="entry-container">
+                                    <h2>
+                                        <a href="{{ path('frontend_education',{'subdomain':entity.slug }) }}"><span class="tm-dropcap tm-style3">{{ entity.name[:1] }}</span>{{ entity.name[1:] }}</a>
+                                        <div class="meta">
+                                            <a href="{{ path('frontend_education',{'subdomain':entity.slug }) }}" class="tm-icon-comment">Visit now</a>
+                                        </div>
+                                    </h2>
+                                    <div class="one-half">
+                                        <ul class="blog-info">
+                                            <li><i class="fa fa-envelope-o"></i>&nbsp;<a href="mailto:farazi.umar@gmail.com">{{ entity.user.education.email|default('') }}</a> </li>
+                                            <li><i class="fa fa-mobile" ></i>&nbsp;<a href="tel:+88 018282148148"> +88 01558 148 148 </a></li>
+                                            <li><i class="fa  fa-map-marker"></i>&nbsp;<a href="">{{ entity.user.education.location.name|default('') }}</a></li>
+                                            <li><i class="fa fa-home"></i>&nbsp;{{ entity.user.education.address|default('') }} -{{ entity.user.education.postalCode|default('') }}</li>
+                                            <li><i class="fa  fa-anchor"></i><a target="_blank" href="{{ entity.domain|default('') }}">&nbsp;http://{{ entity.domain|default('') }}</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="one-third">
+                                        <aside class="widget tm-list-style1">
+                                            <ul>
+                                                {% for menu in entity.user.menus|slice(0,5) %}
+                                                <li>
+                                                    <a  href="{{ path('frontend_education_module',{'subdomain':entity.subdomain ,'module':menu.menuSlug}) }}">{{ menu.menu }}</a>
+                                                </li>
+                                                {% endfor %}
+
+                                            </ul>
+                                        </aside>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </article>
+                        {% endfor %}
+                    </div>
+
+
+                    <div class="tm-paginator" style="margin-top:30px">
+                        {{ knp_pagination_render(pagination) }}
+                    </div>
+                    <!--tm-paginator-->
+                </div>
+                <!--tm-main-content-->
+
+                <div class="clear"></div>
+            </div>
+        </div>
+        <!--page-content-->
+        {{ include('frontend/sidebar.html.twig')}}
+        <!--end-page-sidebar-->
+    </div>
+    <!--tm-blog-->
+    </div>
+    <!--tm-page-body-->
+{% endblock %}
+
+

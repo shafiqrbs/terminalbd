@@ -1,0 +1,68 @@
+vendor_user:
+    path:     /
+    defaults: { _controller: "SyndicateComponentBundle:Vendor:index" }
+
+vendor_show:
+    path:     /{id}/show
+    defaults: { _controller: "SyndicateComponentBundle:Vendor:show" }
+
+vendor_new:
+    path:     /new
+    defaults: { _controller: "SyndicateComponentBundle:Vendor:new" }
+
+vendor_create:
+    path:     /create
+    defaults: { _controller: "SyndicateComponentBundle:Vendor:create" }
+    requirements: { _method: post }
+
+vendor_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "SyndicateComponentBundle:Vendor:edit" }
+
+vendor_status:
+    path:     /{id}/status
+    defaults: { _controller: "SyndicateComponentBundle:Vendor:status" }
+
+vendor_modify:
+    path:     /modify
+    defaults: { _controller: "SyndicateComponentBundle:Vendor:modify" }
+
+vendor_update:
+    path:     /{id}/update
+    defaults: { _controller: "SyndicateComponentBundle:Vendor:update" }
+    requirements: { _method: post|put }
+
+vendor_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "SyndicateComponentBundle:Vendor:delete" }
+    requirements: { _method: post|delete }
+
+vendor_print_list:
+    path:     /print-list
+    defaults: { _controller: "SyndicateComponentBundle:Vendor:printList" }
+
+vendor_pdf_list:
+    path:     /pdf-list
+    defaults: { _controller: "SyndicateComponentBundle:Vendor:pdfList" }
+
+vendor_export_list:
+    path:     /export-list
+    defaults: { _controller: "SyndicateComponentBundle:Vendor:exportList" }
+
+vendor_import:
+    path:     /import
+    defaults: { _controller: "SyndicateComponentBundle:Vendor:import" }
+
+vendor_print:
+    path:     /{id}/print-details
+    defaults: { _controller: "SyndicateComponentBundle:Education:printDetails" }
+
+vendor_pdf:
+    path:     /{id}/pdf-details
+    defaults: { _controller: "SyndicateComponentBundle:Education:pdfDetails" }
+
+
+vendor_export:
+    path:     /{id}/export-details
+    defaults: { _controller: "SyndicateComponentBundle:Education:exportDetails" }
+

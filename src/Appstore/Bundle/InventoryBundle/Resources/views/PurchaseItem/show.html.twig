@@ -1,0 +1,60 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>PurchaseItem</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Vendorname</th>
+                <td>{{ entity.vendorName }}</td>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td>{{ entity.quantity }}</td>
+            </tr>
+            <tr>
+                <th>Purchaseprice</th>
+                <td>{{ entity.purchasePrice }}</td>
+            </tr>
+            <tr>
+                <th>Barcode</th>
+                <td>{{ entity.barcode }}</td>
+            </tr>
+            <tr>
+                <th>Itemcode</th>
+                <td>{{ entity.itemCode }}</td>
+            </tr>
+            <tr>
+                <th>Salesprice</th>
+                <td>{{ entity.salesPrice }}</td>
+            </tr>
+            <tr>
+                <th>Purchasesubtotal</th>
+                <td>{{ entity.purchaseSubTotal }}</td>
+            </tr>
+            <tr>
+                <th>Salessubtotal</th>
+                <td>{{ entity.salesSubTotal }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('inventory_purchaseitem') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('inventory_purchaseitem_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends ':template:base.html.twig' %}
+{% block body %}
+    <div class="clearfix"></div>
+    <div class="page_title">
+        <div class="container">
+            <div class="title"><h1>{{ moduleName }}</h1></div>
+            <div class="pagenation">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i><a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':moduleName|lower }) }}"> {{ moduleName }}</a><i>/</i>{{ details.name }}</div>
+        </div>
+    </div><!-- end page title -->
+    <!-- Contant
+    ======================================= -->
+
+    <div class="container">
+
+        <div class="content_left">
+
+            {% if ( moduleName == 'News') %}
+                {{ include('@Frontend/Template/Desktop/ModuleDetails/news.html.twig')}}
+            {% elseif( moduleName == 'Blog' ) %}
+                {{ include('@Frontend/Template/Desktop/ModuleDetails/blog.html.twig')}}
+            {% elseif( moduleName == 'Testimonial' ) %}
+                {{ include('@Frontend/Template/Desktop/ModuleDetails/testimonial.html.twig')}}
+            {% elseif( moduleName == 'Timeline' ) %}
+                {{ include('@Frontend/Template/Desktop/ModuleDetails/timeline.html.twig')}}
+            {% elseif( moduleName == 'Branch' ) %}
+                {{ include('@Frontend/Template/Desktop/ModuleDetails/branch.html.twig')}}
+            {% elseif( moduleName == 'Event' ) %}
+                {{ include('@Frontend/Template/Desktop/ModuleDetails/event.html.twig')}}
+            {% elseif( moduleName == 'ClassRoutine' ) %}
+                {{ include('@Frontend/Template/Desktop/ModuleDetails/blackout.html.twig')}}
+            {% elseif( moduleName == 'Blackout' ) %}
+                {{ include('@Frontend/Template/Desktop/ModuleDetails/blackout.html.twig')}}
+            {% elseif( moduleName == 'NoticeBoard' ) %}
+                {{ include('@Frontend/Template/Desktop/ModuleDetails/noticeboard.html.twig')}}
+            {% elseif( moduleName == 'Admission' ) %}
+                {{ include('@Frontend/Template/Desktop/ModuleDetails/admission.html.twig')}}
+            {% elseif( moduleName == 'Syndicate' ) %}
+                {{ include('@Frontend/Template/Desktop/ModuleDetails/syndicate.html.twig')}}
+            {% else %}
+                {{ include('@Frontend/Template/Desktop/Module/default.html.twig')}}
+            {% endif %}
+
+        </div><!-- end content left side area -->
+
+
+{% endblock %}

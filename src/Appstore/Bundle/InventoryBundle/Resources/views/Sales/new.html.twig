@@ -1,0 +1,431 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN purchase_order HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="purchase_order-title">
+                    Point of sale
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('inventory_sales') }}">Sales</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#"> Point of sale</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="clearfix">&nbsp;</div>
+        <!-- BEGIN purchase_order CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>POS Information</div>
+                        <div id="wrongBarcode"></div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <i class="icon-cogs"></i>&nbsp;Tools
+                                    <i class="icon-tasks"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="{{ path('inventory_sales_new') }}"><i class="icon-plus-sign"></i>&nbsp;POS</a></li>
+                                    <li><a href="{{ path('inventory_sales') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="portlet-body">
+
+                            <div class="portlet-body form">
+                                <!-- END purchase_order HEADER-->
+                                <div class="row-fluid" style="margin-bottom: 5px">
+                                    <form class="search-form" >
+                                        <input type="text" id="item" name="item" required="required"  class="m-wrap span12 select2Item " >
+                                    </form>
+                                </div>
+                                <div class="row-fluid">
+                                    <table class="table table-bordered table-striped table-condensed flip-conten" id="stockItemDetails">
+
+                                        <thead class="flip-content ">
+                                        <tr class="head-green">
+                                            <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
+                                            <th class="numeric" >Received/Memo</th>
+                                            <th class="numeric" >Qnt</th>
+                                            <th class="numeric" >Purchase price</th>
+                                            <th class="numeric" >Sales price</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="itemDetails">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="row-fluid">
+                                    <div class="span8">
+
+                                        <div class="row-fluid">
+                                            <div class="span12 ">
+                                                <div class="control-group">
+                                                    <div class="controls">
+                                                        <div class="span6">
+                                                            <div class="input-icon left" style="float: left; width: 100%">
+                                                                <i class="icon-barcode" style="color: #000"></i>
+                                                                <input type="text" id="barcode" name="barcode" required="required" class="m-wrap span12"  autocomplete="off">
+                                                            </div>
+                                                        </div>
+                                                        <div class="span1" style="line-height:33px; font-weight: bold; text-align: center">OR</div>
+                                                        <div class="span5" style="margin-left:0">
+                                                            <input type="text" id="barcodeNo" name="barcodeNo" required="required" class="m-wrap span12"  autocomplete="off">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid " id="purchaseItemx">
+                                            <div class="span4"><ul class="unstyled"><li><strong>Estimate Amount #:</strong>&nbsp; {{ todaySalesOverview[0]["subTotal"] }}</li><li><strong>Sales Amount:</strong>&nbsp; {{ todaySalesOverview[0]["total"] }}</li></ul></div>
+                                            <div class="span4"><ul class="unstyled"><li><strong>Due Amount:</strong> &nbsp; {{ todaySalesOverview[0]["totalDue"] }}</li><li><strong>Discount Amount:</strong>&nbsp; {{ todaySalesOverview[0]["totalDiscount"] }}</li></ul></div>
+                                            <div class="span4"><ul class="unstyled"><li><strong>Receive Amount:</strong> &nbsp; {{ todaySalesOverview[0]["total"]-todaySalesOverview[0]["totalDue"] }}</li><li><strong>Total Voucher:</strong>&nbsp;{{ todaySalesOverview[0]["totalVoucher"] }}</li></ul></div></div>
+                                        </div>
+                                    <div class="span4">
+                                        <div class="row-fluid">
+                                            <div class="span12 responsive" data-tablet="span6" data-desktop="span3">
+                                                <div class="dashboard-stat green" style="margin-bottom: 0; padding-bottom: 13px">
+                                                    <div class="details">
+                                                        <div class="number">TK.<span class="salesTotal">{{ entity.total }}</span></div>
+                                                        <div class="desc">Order no. {{ entity.invoice }}</div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                {{ form_start(form) }}
+                                {{ form_row(form._token) }}
+                                <div class="row-fluid">
+                                    <div class="span8">
+
+                                        <div class="row-fluid">
+                                            <div class="span12">
+
+                                                <table class="table table-bordered ">
+
+                                                    <thead class="">
+                                                    <tr class="head-blue">
+                                                        <th class="numeric" >Sl</th>
+                                                        <th class="numeric span3">Barcode</th>
+                                                        <th  class="numeric span2">Qnt</th>
+                                                        <th>Price</th>
+                                                        <th>Total</th>
+                                                        <th><i class="icon-trash"></i></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="salesItem" >
+                                                        {% for salesitem in entity.salesItems %}
+                                                        <tr id="remove-{{ salesitem.id }}">
+                                                            <td class="numeric" > {{ loop.index }}</td>
+                                                            <td  class="numeric">{{ salesitem.purchaseItem.barcode }}</td>
+                                                            <td class="numeric" ><input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="m-wrap span10 quantity" placeholder="{{ salesitem.item.quantity }}"></td>
+                                                            <td>
+                                                                <div class="input-prepend">
+                                                                    <span class="add-on">
+                                                                        <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
+                                                                        <input type="checkbox" {% if salesitem.customPrice == 1 and salesitem.salesPrice != salesitem.estimatePrice %} checked="checked" {% endif %} name="customPrice" rel="{{ salesitem.id }}" id="customPrice-{{ salesitem.id }}" class="customPrice" value="1" >
+                                                                    </span>
+                                                                    <input class="m-wrap span8 numeric salesPrice" {% if salesitem.customPrice != 1 and salesitem.salesPrice == salesitem.estimatePrice %} readonly="readonly" {% endif %} rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
+                                                                </div>
+                                                            </td>
+                                                            <td><span id="subTotalShow-{{ salesitem.id }}" >{{ salesitem.subTotal }}</span></td>
+                                                            <td>
+                                                                <a title="Are you sure went to delete ?" id="{{ salesitem.id }}" rel="{{ path('inventory_salesitem_delete',{'sales':entity.id,'salesItem':salesitem.id}) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="clearfix">&nbsp;</div>
+                                    </div>
+                                    <div class="span4">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="input-prepend input-append input-append-border">
+                                                    <span class="add-on add-on-custom">Sub-Total TK.</span><input class="m-wrap span8 center-input numeric salesTotal" readonly="readonly" type="text" value="{{ entity.total }}"><span class="add-on">.00</span>
+                                                    <input class="m-wrap span8 center-input numeric" name="vat" id="vat" type="hidden">
+                                                </div>
+                                            </div>
+                                        </div>
+                                       {# <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="input-prepend input-append input-append-border">
+                                                    <span class="add-on add-on-custom">VAT/TAX TK.</span><input class="m-wrap span8 center-input numeric" name="vat" id="vat" type="text"><span class="add-on">.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        #}<div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="input-prepend input-append input-append-border">
+                                                    <span class="add-on add-on-custom">Discount TK.</span><input class="m-wrap span8 center-input numeric" name="discount" id="discount" type="text"><span class="add-on">.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="input-prepend input-append input-append-border">
+                                                    <span class="add-on add-on-custom">Due TK.</span><input class="m-wrap span8 center-input numeric" type="text" name="dueAmount" readonly="readonly" id="dueAmount"><span class="add-on">.00</span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row-fluid">
+                                               <div class="span12 input-append-border">
+                                               {{ form_widget(form.paymentMethod) }}
+                                               {{ form_errors(form.paymentMethod) }}
+                                               </div>
+                                        </div>
+                                        <div id="cartMethod">
+                                            <div class="row-fluid">
+                                                <div class="span12">
+                                                    <div class="input-prepend input-append input-append-border span12">
+                                                        <input type="text" id="chequeCardNo" name="chequeCardNo"  class="m-wrap span12" placeholder="Add your card no"  autocomplete="off">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span12 input-append-border">
+                                                    <select class="span12 select2" name="paymentCard" id="paymentCard" >
+                                                        <option>--Payment Card--</option>
+                                                        {% for paymentCard in paymentCards %}
+                                                            <option value="{{ paymentCard.id }}">{{ paymentCard.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span12 input-append-border">
+                                                    <select class="select2 span12" name="bank" id="bank" >
+                                                        <option>--Payment Bank Name--</option>
+                                                        {% for bank in banks %}
+                                                            <option value="{{ bank.id }}">{{ bank.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row-fluid">
+                                            <div class="span7">
+                                                <div class="input-prepend input-append input-append-border">
+                                                    <span class="add-on add-on-custom">Receive TK.</span><input class="m-wrap span8 center-input numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder=""><span class="add-on">.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span7">
+                                                <div class="input-prepend input-append input-append-border">
+                                                    <span class="add-on add-on-custom">Return TK.</span><input class="m-wrap span8 center-input numeric" readonly="readonly" type="text" id="returnAmount" name="returnAmount"><span class="add-on">.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="input-prepend input-append input-append-border span12">
+                                                    {{ form_widget(form.mobile) }}
+                                                    {{ form_errors(form.mobile) }}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12 input-append-border">
+                                                <select class="select2 span12" name="salesBy" id="salesBY"  >
+                                                    <option>--Sales user--</option>
+                                                    {% for user in salesUsers %}
+                                                        <option value="{{ user.id }}">{{ user.username }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="row-fluid">
+                                            <div class="span12 ">
+                                                <div class="portlet box grey">
+                                                    <div class="pull-right">
+                                                        <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
+                                                        <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
+                                                        <button disabled="disabled" id="paymentBtn" type="submit" class="btn green"><i class="m-icon-swapright m-icon-white"></i>&nbsp;Payment</button>
+                                                        <a href="{{ path('inventory_sales_edit',{'code':entity.code}) }}"  class="btn purple"><i class="icon-refresh"></i>&nbsp;Reset</a>
+                                                        <a href="{{ path('inventory_sales') }}"  class="btn yellow"><i class="m-icon-swapleft m-icon-white"></i>&nbsp;Back</a>
+                                           {#             <button type="submit" class="btn blue"><i class="icon-print"></i></button>
+                                                        <button type="reset" class="btn purple"><i class="icon-refresh"></i> </button>
+                                                        <button type="submit" class="btn yellow"><i class="icon-pushpin"></i></button>
+                                           #}         </div>
+                                                    <div class="clearfix">&nbsp;</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                {{ form_end(form) }}
+                            <!-- BEGIN FORM-->
+
+                            <div class="clearfix">&nbsp;</div>
+                            <!--/span-->
+
+                            <!-- END FORM-->
+                        </div>
+
+                    </div>
+                </div>
+                <style>
+
+                </style>
+                <div class="portlet box blue tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>List of sales</div>
+                    </div>
+
+                    <div class="portlet-body">
+                        <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                            <thead class="flip-content ">
+                            <tr class="head-grey">
+                                <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
+                                <th class="numeric" >Invoice</th>
+                                <th class="numeric" >Item</th>
+                                <th class="numeric" >Sub-Total</th>
+                                <th class="numeric" >Discount</th>
+                                <th class="numeric" >Due</th>
+                                <th class="numeric" >Total</th>
+                                <th class="numeric" >Method</th>
+                                <th class="numeric" >Sales By</th>
+                                <th class="numeric" >Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="sales">
+
+                            {% for dailySales in todaySales %}
+                                <tr id="salesRemove-{{ dailySales.id }}">
+                                    <td> {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ dailySales.id  }}" ><span>[+]</span></span>{% endif %}</td>
+                                    <td class="numeric" >{{ dailySales.invoice }}</td>
+
+                                    <td class="numeric" >{{ dailySales.totalItem }}</td>
+                                    <td class="numeric" >{{ dailySales.subTotal|number_format(2, '.', ',')  }}</td>
+                                    <td class="numeric" >{{ dailySales.discount|number_format(2, '.', ',')  }}</td>
+                                    <td class="numeric" >{{ dailySales.due|number_format(2, '.', ',')  }}</td>
+                                    <td class="numeric" >{{ dailySales.total|number_format(2, '.', ',')  }}</td>
+                                    <td class="numeric" >{{ dailySales.paymentMethod }}</td>
+                                    <td class="numeric" >{{ dailySales.salesBy }}</td>
+                                    <td class="numeric" >
+                                        {% if dailySales.paymentStatus == "Pending" %}
+                                        <a href="{{ path('inventory_sales_edit', { 'code': dailySales.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
+                                        {% endif %}
+                                        {% if dailySales.paymentStatus == "Due" %}
+                                        <a href="{{ path('inventory_sales_due', { 'code': dailySales.invoice }) }}" class="btn mini blue" ><i class="icon-money"></i></a>
+                                        {% endif %}
+                                        {% if dailySales.salesItems is defined and  dailySales.salesItems is empty  %}
+                                        <a data-title="Add purchase item" href="{{ path('inventory_sales_edit', { 'code': dailySales.invoice }) }}" class="btn blue mini" ><i class="icon-plus-sign"></i></a>
+                                        {% if dailySales.id != entity.id  %}
+                                            <a title="Are you sure went to delete ?" id="{{ dailySales.id }}" rel="{{ path('inventory_sales_delete', { 'id': dailySales.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                        {% endif %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                 <tr id="show-{{ dailySales.id }}" class="showing-overview">
+                                     <td colspan="10">
+                                         {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}
+                                             <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                                 <thead class="flip-content ">
+                                                 <tr class="head-green">
+                                                     <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
+                                                     <th class="numeric" >Item</th>
+                                                     <th class="numeric" >Barcode</th>
+                                                     <th class="numeric" >Qnt</th>
+                                                     <th class="numeric" >Estimate price</th>
+                                                     <th class="numeric" >Sales price</th>
+                                                     <th class="numeric" >Sub-total</th>
+                                                 </tr>
+                                                 </thead>
+                                                 <tbody>
+                                                 {% for salesItem in dailySales.salesItems %}
+                                                     <tr>
+                                                         <td class="numeric" >{{ loop.index }}</td>
+                                                         <td class="numeric" >{{ salesItem.item.masterItem.name }}
+                                                             {% if salesItem.item.color  %}-{{ salesItem.item.color.name }}{% endif %}
+                                                             {% if salesItem.item.size  %}-{{ salesItem.item.size.name }}{% endif %}
+                                                             {% if salesItem.item.vendor  %}-{{ salesItem.item.vendor.vendorCode }}{% endif %}
+                                                         </td>
+                                                         <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
+                                                         <td class="numeric" >{{ salesItem.quantity }}</td>
+                                                         <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
+                                                         <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
+                                                         <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
+
+                                                     </tr>
+                                                 {% endfor %}
+                                                 </tbody>
+                                             </table>
+                                         {% endif %}
+                                     </td>
+                                 </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@InventoryBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@InventoryBundle/Resources/public/js/editable.js'
+    '@InventoryBundle/Resources/public/js/sales.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+    EditableInit();
+    InventorySales({{ entity.id ? entity.id : 0 }});
+{% endblock %}

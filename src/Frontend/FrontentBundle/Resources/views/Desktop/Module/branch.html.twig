@@ -1,0 +1,32 @@
+{% for  details in entity.branches %}
+    <div class="one_third {% if loop.index is divisible by(3) %} last {% endif %}">
+        <div class="framed-box">
+            <div class="framed-box-wrap">
+                <div class="pricing-title">
+                    <h3>{{ details.name }}</h3>
+                </div>
+                <div class="pricing-text-list">
+                    <ul class="list1">
+                        <li><i class="fa fa-home"></i>Address: {{ details.address|raw }}</li>
+                        <li><i class="fa fa-user"></i><strong>{{ details.contactPerson }}</strong>, {{ details.designation }}</li>
+                        <li><i class="fa fa-mobile"></i> <a href="tel:+ 088 {{ details.mobile|raw }}" class="contact-call">Mobile: + 088 {{ details.mobile|raw }}</a></li>
+                        {% if(details.phone) %}<li><i class="fa fa-phone-square"></i></i><a href="javascript:" class="contact-call">Phone: + {{ details.phone|raw }}</a></li>{% endif %}
+                        {% if(details.fax) %}<li><i class="fa fa-phone"></i>Fax: + {{ details.fax|raw }}</a></li>{% endif %}
+                        {% if(details.email) %}<li><i class="fa fa-envelope-o"></i>Email: {{ details.email|raw }}</li>{% endif %}
+                    </ul>
+                    <br />
+                    <p><a href="#" class="but_download"><i class="fa fa-map-marker"></i> Direction</a></p>
+                </div>
+            </div>
+
+        </div>
+    </div><!-- end section -->
+{% endfor %}
+<style>
+    .framed-box{
+     margin-bottom: 20px;
+    }
+    .framed-box-wrap .pricing-text-list{
+        min-height: 240px;
+    }
+</style>

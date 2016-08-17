@@ -1,0 +1,24 @@
+    <div class="content">
+        <div class="container">
+            <h1 class="left-text">Notice Board</h1><button id="slidx_button" >Lists</button>
+            Admission Date: <em>{{ details.created|date('M j, Y') }}</em>
+            <div class="decoration"></div>
+            <h3 class="left-text">{{ details.name|default() }}</h3>
+            <p class="justify-text">{{ details.content|raw }}</p>
+            <div class="decoration"></div>
+
+        </div>
+    </div>
+    <nav id="slidx_menu">
+        <ul>
+            {% for row in entity.user.noticeBoards %}
+                <li>
+                    <a href="{{ path('mobile_module',{'subdomain': entity.user.globalOption.subDomain,'module': moduleName|lower,'slug':row.slug }) }}">{{ row.name | truncate(50, true) }}</a>
+                </li>
+            {% endfor %}
+
+        </ul>
+    </nav>
+
+
+

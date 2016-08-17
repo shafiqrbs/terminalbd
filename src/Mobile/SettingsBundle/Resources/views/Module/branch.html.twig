@@ -1,0 +1,30 @@
+    <div class="content">
+
+        <div class="container">
+            <h1>Our Branches</h1>
+            <div class="decoration"></div>
+            <div class="tab-content tab-content-1">
+
+                {% for  details in entity.branches %}
+                <div class="one-half-responsive">
+                    <div class="container no-bottom">
+
+                        <p>
+                            <strong>{{ details.name }}</strong><br>
+                            Address: {{ details.address|raw }}
+                        </p>
+                        <p>
+                            <a href="javascript:" class="contact-person">Contact Person:{{ details.contactPerson|raw }}</a>
+                            <a href="tel:+ 088 {{ details.mobile|raw }}" class="contact-call">Mobile: + 088 {{ details.mobile|raw }}</a>
+                            {% if(details.phone) %}<a href="javascript:" class="contact-call">Phone: + {{ details.phone|raw }}</a>{% endif %}
+                            {% if(details.fax) %}<a href="javascript:" class="contact-call">Fax: + {{ details.fax|raw }}</a>{% endif %}
+                            <a href="mailto:{{ details.email|raw }}"  class="contact-mail">Email: {{ details.email|raw }}</a>
+                        </p>
+                    </div>
+                </div>
+                    <div class="decoration"></div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>

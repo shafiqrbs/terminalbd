@@ -1,0 +1,274 @@
+<?php
+
+namespace Appstore\Bundle\AccountingBundle\Controller;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+use Appstore\Bundle\AccountingBundle\Form\AccountPurchaseType;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * AccountPurchase controller.
+ *
+ */
+class AccountPurchaseController extends Controller
+{
+
+    public function paginate($entities)
+    {
+
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        return $pagination;
+    }
+
+
+    /**
+     * Lists all AccountPurchase entities.
+     *
+     */
+    public function indexAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->findWithSearch($globalOption,$data);
+        $pagination = $this->paginate($entities);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($globalOption,$data);
+        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(5));
+        return $this->render('AccountingBundle:AccountPurchase:index.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'accountHead' => $accountHead,
+            'searchForm' => $data,
+        ));
+    }
+    /**
+     * Creates a new AccountPurchase entity.
+     *
+     */
+    public function createAction(Request $request)
+    {
+        $entity = new AccountPurchase();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+
+            $toIncrease = $entity->getProcessType();
+
+            $em = $this->getDoctrine()->getManager();
+            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $entity->setInventoryConfig($inventory);
+            $entity->setGlobalOption($this->getUser()->getGlobalOption());
+
+            if($toIncrease == "Debit"){
+                $entity->setAccountHead($this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->find(31));
+                $entity->setAmount($entity->getAmount());
+            }else{
+                $entity->setAccountHead($this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->find(13));
+                $entity->setTotalAmount($entity->getAmount());
+                $entity->setDueAmount($entity->getAmount());
+                $entity->setAmount(0);
+            }
+
+            $entity->setToIncrease($toIncrease);
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+            return $this->redirect($this->generateUrl('account_purchase'));
+        }
+
+        return $this->render('AccountingBundle:AccountPurchase:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    /**
+     * Creates a form to create a AccountPurchase entity.
+     *
+     * @param AccountPurchase $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(AccountPurchase $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $form = $this->createForm(new AccountPurchaseType($inventory), $entity, array(
+            'action' => $this->generateUrl('account_purchase_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form purchase',
+                'novalidate' => 'novalidate',
+            )
+        ));
+      return $form;
+    }
+
+    /**
+     * Displays a form to create a new AccountPurchase entity.
+     *
+     */
+    public function newAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = new AccountPurchase();
+        $form   = $this->createCreateForm($entity);
+        $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
+        return $this->render('AccountingBundle:AccountPurchase:new.html.twig', array(
+            'entity' => $entity,
+            'banks' => $banks,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    /**
+     * Finds and displays a AccountPurchase entity.
+     *
+     */
+    public function showAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('AccountingBundle:AccountPurchase')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
+        }
+        return $this->render('AccountingBundle:AccountPurchase:show.html.twig', array(
+            'entity'      => $entity,
+        ));
+    }
+
+    /**
+     * Displays a form to edit an existing AccountPurchase entity.
+     *
+     */
+    public function editAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AccountingBundle:AccountPurchase')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
+        }
+
+        $editForm = $this->createEditForm($entity);
+
+        return $this->render('AccountingBundle:AccountPurchase:edit.html.twig', array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+        ));
+    }
+
+    /**
+    * Creates a form to edit a AccountPurchase entity.
+    *
+    * @param AccountPurchase $entity The entity
+    *
+    * @return \Symfony\Component\Form\Form The form
+    */
+    private function createEditForm(AccountPurchase $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $form = $this->createForm(new AccountPurchaseType($inventory), $entity, array(
+            'action' => $this->generateUrl('account_purchase_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form purchase',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+    /**
+     * Edits an existing AccountPurchase entity.
+     *
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('AccountingBundle:AccountPurchase')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
+        }
+
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('account_purchase_edit', array('id' => $id)));
+        }
+
+        return $this->render('AccountingBundle:AccountPurchase:edit.html.twig', array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+
+        ));
+    }
+
+    /**
+     * Displays a form to edit an existing Expenditure entity.
+     *
+     */
+    public function inlineUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('AccountingBundle:AccountPurchase')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
+        }
+        $entity->setAmount($data['value']);
+        $em->flush();
+        exit;
+    }
+
+    public function approveAction(AccountPurchase $entity)
+    {
+        if (!empty($entity)) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setProcess('approved');
+            $entity->setApprovedBy($this->getUser());
+            $em->flush();
+            if($entity->getProcess() == "Debit"){
+                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertVendorTransaction($entity);
+            }else{
+                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertVendorReturnTransaction($entity);
+            }
+
+            return new Response('success');
+        } else {
+            return new Response('failed');
+        }
+        exit;
+    }
+
+    /**
+     * Deletes a Expenditure entity.
+     *
+     */
+    public function deleteAction(AccountPurchase $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
+        }
+        $em->remove($entity);
+        $em->flush();
+        return new Response('success');
+        exit;
+    }
+
+}

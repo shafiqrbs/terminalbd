@@ -1,0 +1,25 @@
+{% for row in pagination %}
+    <div class="blog_post">
+        <div class="blog_postcontent">
+            <div  class="image_frame small" ><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': moduleName|lower,'slug':row.slug }) }}"><img src="{{ image(row.webPath()).resize(810,360) }}" alt="" /></a></div>
+            <div class="post_info_content_small">
+                <a href="blog-archive.html" class="date"><strong>{{ row.created|date('j') }}</strong><i>{{ row.created|date('F') }}</i></a>
+                <h3><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': moduleName|lower,'slug':row.slug }) }}">{{ row.title }}</a></h3>
+                <ul class="post_meta_links_small">
+                    <li class="post_by"><a href="#">{{ row.name }}</a></li>
+                    <li class="post_categoty"><a href="#">Web tutorials</a></li>
+                    <li class="post_comments"><a href="#">18 Comments</a></li>
+                </ul>
+                <div class="clearfix"></div>
+                <p>{{ row.content|truncate(250, true)|raw }}</p>
+
+            </div>
+        </div>
+    </div>
+    <div class="clearfix divider_line"></div>
+{% endfor %}
+<div class="pagination pull-center"  >
+    {{ knp_pagination_render(pagination) }}
+</div>
+
+

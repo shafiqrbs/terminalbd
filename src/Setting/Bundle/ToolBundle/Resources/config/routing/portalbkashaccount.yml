@@ -1,0 +1,34 @@
+bkash:
+    path:     /
+    defaults: { _controller: "SettingToolBundle:PortalBkashAccount:index" }
+
+bkash_show:
+    path:     /{id}/show
+    defaults: { _controller: "SettingToolBundle:PortalBkashAccount:show" }
+
+bkash_new:
+    path:     /new
+    defaults: { _controller: "SettingToolBundle:PortalBkashAccount:new" }
+
+bkash_create:
+    path:     /create
+    defaults: { _controller: "SettingToolBundle:PortalBkashAccount:create" }
+    methods:  POST
+
+bkash_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "SettingToolBundle:PortalBkashAccount:edit" }
+
+bkash_status:
+    path:     /{id}/status
+    defaults: { _controller: "SettingToolBundle:PortalBkashAccount:status" }
+
+
+bkash_update:
+    path:     /{id}/update
+    defaults: { _controller: "SettingToolBundle:PortalBkashAccount:update" }
+    methods:  [POST, PUT]
+
+bkash_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "SettingToolBundle:PortalBkashAccount:delete" }

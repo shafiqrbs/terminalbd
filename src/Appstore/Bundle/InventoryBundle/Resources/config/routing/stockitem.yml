@@ -1,0 +1,13 @@
+inventory_stockitem:
+    path:     /
+    defaults: { _controller: "InventoryBundle:StockItem:index" }
+    options:
+        expose: true
+
+inventory_stockitem_show:
+    path:     /{item}/show
+    defaults: { _controller: "InventoryBundle:StockItem:show" }
+
+inventory_stockitem_print:
+    path:     /print
+    defaults: { _controller: "InventoryBundle:StockItem:print" }

@@ -1,0 +1,27 @@
+{% extends ':template:base.html.twig' %}
+{% block body %}
+    <div id="content" style="margin-top: 0 !important;">
+        <div class="home-content">
+		<span id="Logo" class="svg">
+			<img width="200" src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" />
+		</span>
+        </div>
+        <div class="fluid_container">
+            <div class="camera_wrap camera_black_skin camera_emboss pattern_1" id="camera_wrap_4">
+                {% for slide in globalOption.homeSliders  %}
+                <div data-thumb="{{ image(slide.webPath).resize(150,150) }}" data-src="{{ image(slide.webPath).resize() }}">
+                    <div class="bannerContent fadeFromBottom">
+                        <div class="b-c-textpane">
+                            <a href="http://facebook.com/terminalbd" class="home-scl-icon facebook">
+                                <i class="fa fa-facebook"></i>
+                                <div>{{ slide.name }}</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div><!-- #camera_wrap_3 -->
+        </div><!-- .fluid_container -->
+    </div>
+</div>
+{% endblock %}

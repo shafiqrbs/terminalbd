@@ -1,0 +1,72 @@
+inventory_sales:
+    path:     /
+    defaults: { _controller: "InventoryBundle:Sales:index" }
+
+inventory_sales_item_search:
+    path:     /search
+    defaults: { _controller: "InventoryBundle:Sales:search" }
+    methods:  POST
+    options:
+            expose: true
+
+inventory_sales_item_purchase:
+    path:     /item-purchase-details
+    defaults: { _controller: "InventoryBundle:Sales:itemPurchaseDetails" }
+    methods:  POST
+    options:
+            expose: true
+
+inventory_sales_show:
+    path:     /{id}/show
+    defaults: { _controller: "InventoryBundle:Sales:show" }
+
+inventory_sales_new:
+    path:     /new
+    defaults: { _controller: "InventoryBundle:Sales:new" }
+
+inventory_sales_create:
+    path:     /create
+    defaults: { _controller: "InventoryBundle:Sales:create" }
+    methods:  POST
+
+inventory_sales_edit:
+    path:     /{code}/pos
+    defaults: { _controller: "InventoryBundle:Sales:edit" }
+
+inventory_sales_print:
+    path:     /{code}/print
+    defaults: { _controller: "InventoryBundle:Sales:print" }
+
+inventory_sales_print_invoice:
+    path:     /{invoice}/invoice
+    defaults: { _controller: "InventoryBundle:Sales:invoicePrint" }
+
+inventory_sales_due:
+    path:     /{code}/due-payment
+    defaults: { _controller: "InventoryBundle:Sales:duePayment" }
+
+inventory_sales_item_update:
+    path:     /sales/item/update
+    defaults: { _controller: "InventoryBundle:Sales:salesItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+inventory_sales_approve:
+    path:     /{id}/approve
+    defaults: { _controller: "InventoryBundle:Sales:approve" }
+    options:
+           expose: true
+
+inventory_sales_update:
+    path:     /{id}/update
+    defaults: { _controller: "InventoryBundle:Sales:update" }
+    methods:  [POST, PUT]
+
+inventory_sales_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "InventoryBundle:Sales:delete" }
+
+inventory_salesitem_delete:
+    path:     /{sales}/{salesItem}/delete
+    defaults: { _controller: "InventoryBundle:Sales:itemDelete" }

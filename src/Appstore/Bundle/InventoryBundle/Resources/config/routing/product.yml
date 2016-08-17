@@ -1,0 +1,48 @@
+inventory_product:
+    path:     /
+    defaults: { _controller: "InventoryBundle:Product:index" }
+
+inventory_product_show:
+    path:     /{id}/show
+    defaults: { _controller: "InventoryBundle:Product:show" }
+
+inventory_product_search:
+    path:     /search
+    defaults: { _controller: "InventoryBundle:Product:autoSearch" }
+    options:
+            expose: true
+
+inventory_product_name:
+    path:      /{product}/product-name
+    defaults: { _controller: "InventoryBundle:Product:searchProductName" }
+    options:
+            expose: true
+
+inventory_product_new:
+    path:     /new
+    defaults: { _controller: "InventoryBundle:Product:new" }
+
+inventory_product_create:
+    path:     /create
+    defaults: { _controller: "InventoryBundle:Product:create" }
+    methods:  POST
+
+inventory_product_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "InventoryBundle:Product:edit" }
+
+inventory_product_update:
+    path:     /{id}/update
+    defaults: { _controller: "InventoryBundle:Product:update" }
+    methods:  [POST, PUT]
+
+inventory_product_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "InventoryBundle:Product:delete" }
+    methods:  [POST, DELETE]
+
+inventory_product_inline_search:
+    path:     /inline-product-search
+    defaults: { _controller: "InventoryBundle:Product:masterItemSelect" }
+    options:
+           expose: true

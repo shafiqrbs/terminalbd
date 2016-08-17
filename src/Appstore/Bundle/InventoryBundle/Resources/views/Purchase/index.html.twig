@@ -1,0 +1,276 @@
+
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    View Purchase Lists
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('purchase') }}">Purchase</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Purchase Lists</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Purchase Information</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <i class="icon-cogs"></i>&nbsp;Tools
+                                    <i class="icon-tasks"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="{{ path('purchase_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                    <li><a href="{{ path('purchase') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('account_purchase_new') }}"><i class="icon-th-list"></i>&nbsp;Purchase payment</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+<style>
+    .search-input{
+        height: 34px!important;
+    }
+</style>
+                    <div class="portlet-body">
+                        <div class="portlet-body flip-scroll">
+                            {% include('flash-message.html.twig')  %}
+                            <div class="row-fluid " id="purchaseItemx">
+                                <div class="span4">
+                                    <ul class="unstyled">
+                                        <li><strong>Purchase BDT:</strong>&nbsp;{{ purchaseOverview.total|format }}</li>
+                                        <li><strong>Payment BDT:</strong>&nbsp;{{ purchaseOverview.payment|format }}</li>
+                                    </ul>
+                                </div>
+                                <div class="span4">
+                                    <ul class="unstyled">
+                                        <li><strong>Due BDT:</strong> &nbsp;{{ purchaseOverview.due }}</li>
+                                        <li><strong>Discount BDT:</strong>&nbsp;{{ purchaseOverview.discount }}</li>
+                                    </ul>
+                                </div>
+                               {# <div class="span3">
+                                    <ul class="unstyled">
+                                        <li><strong>Sales BDT:</strong> &nbsp;</li>
+                                        <li><strong>Sales Due BDT:</strong>&nbsp;</li>
+                                    </ul>
+                                </div>#}
+                                <div class="span4">
+                                    <ul class="unstyled">
+                                        <li><strong>Purhase Qnt:</strong> &nbsp;{{ purchaseOverview.quantity }}</li>
+
+                                    </ul>
+                                </div>
+
+                            </div>
+                            <div class="portlet search-portlet box grey">
+                                <div class="row-fluid" >
+                                    <form class="search-form" action="" method="get" name="itemSearch">
+                                        <div class="span7">
+                                            <div class="controls">
+                                                <input type="text" id="grn" name="grn"  class="span4 search-input" value="{% if searchForm.grn is defined %}{{ searchForm.grn }}{% endif %}"  autocomplete="off" placeholder="goods receive no">
+                                                <input type="text" id="receiveDate" name="receiveDate"  class="span4 search-input  m-ctrl-medium date-picker" value="{% if searchForm.receiveDate is defined %}{{ searchForm.receiveDate }}{% endif %}"  autocomplete="off" placeholder="received date ">
+                                                <input type="text" id="memo" name="memo"  class="span4 search-input" value="{% if searchForm.memo is defined %}{{ searchForm.memo }}{% endif %}"  autocomplete="off" placeholder="memo no">
+                                           </div>
+                                        </div>
+                                        <div class="span4 left-margin">
+                                            <input type="text" id="vendor" name="vendor"  class="span11 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name ">
+                                        </div>
+                                        <div class="span1">
+                                            <div class="btn-group">
+                                                <button class="btn" type="submit" >
+                                                    <i class="icon-search"></i>&nbsp;Go</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                            <table class="table table-bordered table-striped table-condensed flip-content">
+
+                                <thead>
+                                <tr class="head-blue">
+                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
+                                    <th class="numeric" >GRN</th>
+                                    <th class="numeric" >Received date</th>
+                                    <th class="numeric" >Memo</th>
+                                    <th class="numeric" >Vendor</th>
+                                    <th class="numeric" >Total</th>
+                                    <th class="numeric" >Payment</th>
+                                    <th class="numeric" >Due</th>
+                                    <th class="numeric" >Item/Quantity</th>
+                                    <th class="numeric" >Process</th>
+                                    <th class="numeric" >Action</th>
+                                </tr>
+                                </thead>
+                                <tbody class="flip-content " id="purchase">
+
+                                {% for entity in entities %}
+                                    <tr id="remove-{{ entity.id }}">
+                                        <td> {% if entity.purchaseVendorItems is defined and  entity.purchaseVendorItems is not empty  %}<span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
+                                        <td class="numeric" >{{ entity.grn }}</td>
+                                        <td class="numeric" >{{ entity.receiveDate|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.memo }}</td>
+                                        <td class="numeric" >{% if entity.vendor is defined and entity.vendor is not null %}<a title="Approve" target="_blank" href="{{ path('inventory_vendor_show',{'id':entity.vendor.id}) }}" class="green  mini" >{{ entity.vendor.vendorCode }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.totalAmount|number_format() }}</td>
+                                        <td class="numeric" >{{ entity.paymentAmount|number_format() }}</td>
+                                        <td class="numeric" >{{ entity.dueAmount|number_format() }}</td>
+                                        <td class="numeric" >{{ entity.totalItem }}/{{ entity.totalQnt }}</td>
+                                        <td class="numeric pull-center" ><a title="Approve" href="javascript:" class="btn green disabled mini" >&nbsp;{{ entity.process|capitalize }}</a></td>
+                                        <td class="numeric" id="action-{{ entity.id }}"  >
+                                            {% include "@Inventory/Purchase/action.html.twig" %}
+                                        </td>
+                                    </tr>
+                                    <tr id="show-{{ entity.id }}" class="showing-overview">
+                                        <td colspan="11">
+                                            <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                                <thead class="flip-content ">
+                                                <tr class="head-grey">
+                                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
+                                                    <th class="numeric" >Vendor item name</th>
+                                                    <th class="numeric" >Qnt</th>
+                                                    <th class="numeric" >Purchase</th>
+                                                    <th class="numeric" >Sub-total</th>
+                                                    <th class="numeric" >Sales</th>
+                                                    <th class="numeric" >Sub-total</th>
+                                                    {% if entity.process != 'approved' %}
+                                                    <th class="numeric" ></th>
+                                                    {% endif %}
+                                                </tr>
+                                                </thead>
+                                                <tbody id="purchaseVendorItem" >
+                                                {% for vendorItem in entity.purchaseVendorItems %}
+                                                    <tr class="remove-vendor-item-{{ vendorItem.id }}">
+                                                        <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}-{{ vendorItem.id  }}" ><span>[+]</span></span>{% endif %}</td>
+                                                        <td class="numeric" >{{ vendorItem.name }}</td>
+                                                        <td class="numeric" >{{ vendorItem.quantity }}</td>
+                                                        <td class="numeric" >{{ vendorItem.purchasePrice |number_format() }}</td>
+                                                        <td class="numeric" >{{ (vendorItem.purchasePrice * vendorItem.quantity) |number_format() }}</td>
+                                                        <td class="numeric" >{{ vendorItem.salesPrice|number_format() }}</td>
+                                                        <td class="numeric" >{{ (vendorItem.salesPrice * vendorItem.quantity) |number_format() }}</td>
+                                                         {% if entity.process != 'approved' %}
+                                                        <td class="numeric" >
+                                                            <a title="Are you sure went to delete ?" id="{{ entity.id }}" href="" rel="{{ path('purchase_vendor_item_delete', { 'id': vendorItem.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                                        </td>
+                                                        {% endif %}
+                                                    </tr>
+
+                                                    <tr id="show-{{ entity.id  }}-{{ vendorItem.id }}" class="showing-overview remove-vendor-item-{{ vendorItem.id }}">
+                                                        <td colspan="8">
+                                                            {% if vendorItem.purchaseItems is defined and  vendorItem.purchaseItems is not empty  %}
+                                                                <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                                                    <thead class="flip-content ">
+                                                                    <tr class="head-green">
+                                                                        <th class="numeric" >Item</th>
+                                                                        <th class="numeric" >Qnt</th>
+                                                                        <th class="numeric" >Sales</th>
+                                                                        <th class="numeric" >Sub-total</th>
+                                                                        {% if entity.process != 'approved' %} <th></th> {% endif %}
+
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody id="purchaseItem" >
+                                                                    {% for purchaseItem in vendorItem.purchaseItems %}
+                                                                        <tr id="remove-purchase-item-{{ purchaseItem.id }}">
+                                                                            <td class="numeric" >
+{#                                                                                {% if entity.process != "approved" %}
+                                                                                    <a  data-type="select" class="editable" id="item" data-name="Item" href="#" data-source="{{ path('inventory_item_inline_update',{'vendor':entity.vendor.id}) }}"  data-url="{{ path('inventory_purchaseitem_inline_item_update') }}" data-pk="{{ purchaseItem.id }}" data-original-title="Enter SKU Item">{{ purchaseItem.item.masterItem.name }}-{{ purchaseItem.item.color.name }}-{{ purchaseItem.item.size.name }}-{{ purchaseItem.item.vendor.vendorCode }}</a>
+                                                                                {% else %}#}
+                                                                                    {{ purchaseItem.item.masterItem.name }}
+                                                                                    {% if purchaseItem.item.color and entity.inventoryConfig.isColor == 1  %}-{{ purchaseItem.item.color.name }} {% endif %}
+                                                                                    {% if purchaseItem.item.size  and entity.inventoryConfig.isSize == 1 %}-{{ purchaseItem.item.size.name }}{% endif %}
+                                                                                    {% if purchaseItem.item.brand  and entity.inventoryConfig.isBrand == 1 %}-{{ purchaseItem.item.brand.name }}{% endif %}
+                                                                                    {% if purchaseItem.item.vendor  and entity.inventoryConfig.isVendor == 1 %}-{{ purchaseItem.item.vendor.vendorCode }}{% endif %}
+                                                                               {# {% endif %}#}
+                                                                            </td>
+                                                                            <td class="numeric" >{{ purchaseItem.quantity }}</td>
+                                                                            <td class="numeric" >
+                                                                                {% if entity.process != "approved" %}
+                                                                                    <a class="editable" data-name="SalesPrice" href="#"  data-url="{{ path('inventory_purchaseitem_inline_update') }}" data-type="text" data-pk="{{ purchaseItem.id }}" data-original-title="Enter sales price">{{purchaseItem.salesPrice}}</a>
+                                                                                {% else %}
+                                                                                    {{purchaseItem.salesPrice}}
+                                                                                {% endif %}
+                                                                            </td>
+                                                                            <td class="numeric" >{{  purchaseItem.salesPrice * purchaseItem.quantity|number_format() }}</td>
+                                                                             {% if entity.process != 'approved' %}
+                                                                            <td class="pull-center" >
+                                                                                <a title="Are you sure went to delete ?" href="javascript" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini" ><i class="icon-trash"></i></a>
+                                                                            </td>
+                                                                            {% endif %}
+                                                                        </tr>
+                                                                    {% endfor %}
+
+                                                                    </tbody>
+
+                                                                </table>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+
+                                                {% endfor %}
+
+                                                </tbody>
+                                            </table>
+
+
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                            <div class="pagination pull-center"  >
+                                {{ knp_pagination_render(entities) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@InventoryBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@InventoryBundle/Resources/public/js/editable.js'
+    '@InventoryBundle/Resources/public/js/puschase.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+    EditableInit();
+    InventoryPurchasePage();
+{% endblock %}
+

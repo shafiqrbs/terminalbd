@@ -1,0 +1,63 @@
+services:
+#    appstore_inventory.example:
+#        class: Appstore\Bundle\InventoryBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    app.datatable.stockitem:
+        class: Appstore\Bundle\InventoryBundle\Datatables\StockItemDatatable
+        tags:
+            - { name: sg.datatable.view }
+
+    appstore.sales.event.listener:
+        class: Appstore\Bundle\InventoryBundle\EventListener\SalesListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.purchase.event.listener:
+        class: Appstore\Bundle\InventoryBundle\EventListener\PurchaseListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.purchaseitem.event.listener:
+        class: Appstore\Bundle\InventoryBundle\EventListener\PurchaseItemListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.item.event.listener:
+        class: Appstore\Bundle\InventoryBundle\EventListener\ItemListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.setting.event.listener:
+        class: Appstore\Bundle\InventoryBundle\EventListener\SettingListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.purchasereturn.event.listener:
+        class: Appstore\Bundle\InventoryBundle\EventListener\PurchaseReturnListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.salesreturn.event.listener:
+        class: Appstore\Bundle\InventoryBundle\EventListener\SalesReturnListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore_inventory_importer_excel:
+        class: Appstore\Bundle\InventoryBundle\Importer\Excel
+        calls:
+            - [ setContainer, [ @service_container ] ]
+
+    appstore_inventory.importer.excel_data_reader:
+        class: Appstore\Bundle\InventoryBundle\Importer\ExcelDataReader
+        arguments: [ @phpexcel ]
+
+
+    appstore_inventory_sales_import:
+        class: Appstore\Bundle\InventoryBundle\Importer\SalesExcel
+        calls:
+            - [ setContainer, [ @service_container ] ]
+
+    appstore_inventory.importer.sales_excel_data_reader:
+        class: Appstore\Bundle\InventoryBundle\Importer\SalesDataReader
+        arguments: [ @phpexcel ]

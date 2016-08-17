@@ -1,0 +1,266 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Manage Domain
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('tools_domain') }}">Manage Domain</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Manage Domain Lists</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Manage Domain Information</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <i class="icon-cogs"></i>&nbsp;Tools
+                                    <i class="icon-tasks"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="{{ path('tools_domain') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="portlet-body">
+                        <div class="portlet-body flip-scroll">
+                            {% include('flash-message.html.twig')  %}
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                <thead class="flip-content ">
+                                <tr class="head-grey">
+                                    <th class="numeric" >Name</th>
+                                    <th class="numeric" >Mobile</th>
+                                    <th class="numeric" >Created</th>
+                                    <th class="numeric" >Domain/Sub-domain</th>
+                                    <th class="numeric" >Status</th>
+                                    <th class="numeric" >Invoice/Payment</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for entity in entities %}
+                                    <tr>
+                                        <td class="numeric" >{{ entity.name }}</td>
+                                        <td class="numeric" >{{ entity.mobile }}</td>
+                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >
+                                            <a target="_blank" href="http://{{ entity.domain }}">{{ entity.domain }}</a>/
+                                            {% if entity.subDomain is not empty %}
+                                                <a target="_blank" href="">{{ entity.subDomain }}</a>
+                                            {% endif %}
+                                        </td>
+                                        <td class="numeric" >
+                                            <a href="#" class="editable" id="group" data-type="select" data-pk="{{ entity.id }}" data-value="{{ entity.status }}" data-source="{{ path('tools_option_status') }}" data-url="{{ path('tools_option_status_update') }}" data-original-title="Select domain status">{{ entity.currentStatus }}</a></td>
+                                        <td class="numeric" >
+                                            <a href="javascript:" class="btn blue mini badge badge-warning toggle badge-custom" id="{{ entity.id }}" ><i class="icon-cogs"></i>&nbsp;Operation</a>
+                                            <a href="javascript:" class="btn green mini badge badge-warning toggle badge-custom" id="software-{{ entity.id }}" ><i class="icon-money"></i>&nbsp;Software</a>
+                                            <a href="javascript:" class="btn purple mini badge badge-warning toggle badge-custom" id="sms-{{ entity.id }}" ><i class="icon-money"></i>&nbsp;SMS/Email</a>
+                                        </td>
+                                    </tr>
+                                    <tr id="show-{{ entity.id }}" class="showing-overview">
+                                        <td colspan="10">
+                                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                                <tr>
+                                                    <th class="numeric" >Change Password</th>
+                                                    <td class="numeric" >
+                                                        <a href="{{ path('invoicemodule_new',{option:entity.id}) }}" class="btn blue mini" ><i class="icon-key"></i>&nbsp;Generate new password</a>
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="numeric" >Invoice Generate for Module & Software</th>
+                                                    <td class="numeric" >
+                                                        <a href="{{ path('invoicemodule_new',{option:entity.id}) }}" class="btn green mini" ><i class="icon-credit-card"></i>&nbsp;Generate Invoice</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="numeric" >Customer Payment invoice for Module & Software</th>
+                                                    <td class="numeric" >
+                                                        {% if entity.invoiceSmsEmails is not empty %}
+                                                            <a href="javascript" class="btn blue mini badge badge-warning toggle badge-custom" id="{{ entity.id }}" ><i class="icon-phone"></i>&nbsp;Requested</a>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="numeric" >Invoice Generate for sms or email</th>
+                                                    <td class="numeric" >
+                                                        <a href="{{ path('invoicesmsemail_new',{option:entity.id}) }}" class="btn green mini" ><i class="icon-phone"></i>&nbsp;Sms/Email Invoice</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="numeric" >Customer Payment invoice for sms or email</th>
+                                                    <td class="numeric" >
+                                                        {% if entity.invoiceSmsEmails is not empty %}
+                                                            <a href="javascript" class="btn blue mini badge badge-warning toggle badge-custom" id="{{ entity.id }}" ><i class="icon-phone"></i>&nbsp;Requested</a>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    {% if entity.invoiceModules is not empty %}
+                                        <tr id="show-software-{{ entity.id }}" class="showing-overview">
+                                            <td colspan="10">
+                                                <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                                    <thead class="flip-content ">
+                                                    <tr class="head-grey">
+                                                        <th class="numeric" >Invoice</th>
+                                                        <th class="numeric" >Created</th>
+                                                        <th class="numeric" >Total Amount</th>
+                                                        <th class="numeric" >Paid Amount</th>
+                                                        <th class="numeric" >Due Amount</th>
+                                                        <th class="numeric" >Created By</th>
+                                                        <th class="numeric" >Payment Method</th>
+                                                        <th class="numeric" >Process</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    {% for invoice in entity.invoiceModules %}
+
+                                                            <tr>
+                                                                <td class="numeric" >{{ invoice.invoice }}</td>
+                                                                <td class="numeric" >{{ invoice.updated|date('d-m-Y') }}</td>
+                                                                <td class="numeric" >{{ invoice.totalAmount }}</td>
+                                                                <td class="numeric" >{{ invoice.paidAmount }}</td>
+                                                                <td class="numeric" >{{ invoice.dueAmount }}</td>
+                                                                <td class="numeric" >{{ invoice.createdBy }}</td>
+                                                                <td class="numeric" >
+                                                                   {% if invoice.paymentMethod == 'Bank' %}
+                                                                        {{ invoice.portalBankAccount.bank.name }}/{{ invoice.portalBankAccount.accountNo }}
+                                                                    {% elseif invoice.paymentMethod == 'bKash' %}
+                                                                        {{ invoice.portalBkash.mobile }}/{{ invoice.portalBkash.accounttype }}
+                                                                    {% endif %}
+
+                                                                </td>
+                                                                <td class="numeric" >
+                                                                    {% if invoice.process == 'In-progress' %}
+                                                                        <span  class="btn yellow approve mini" data-id="{{ invoice.id }}" data-url="{{ path('invoicesmsemail_approve',{id:invoice.id}) }}" ><i class="icon-ok"></i>&nbsp;In-progress</span>
+                                                                    {% endif %}
+                                                                </td>
+
+                                                            </tr>
+
+                                                    {% endfor %}
+
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                    {% if entity.invoiceSmsEmails is not empty %}
+                                        <tr id="show-sms-{{ entity.id }}" class="showing-overview">
+                                            <td colspan="10">
+                                                <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                                    <thead class="flip-content ">
+                                                    <tr class="head-grey">
+                                                        <th class="numeric" >Invoice</th>
+                                                        <th class="numeric" >Created</th>
+                                                        <th class="numeric" >Total Amount</th>
+                                                        <th class="numeric" >Paid Amount</th>
+                                                        <th class="numeric" >Due Amount</th>
+                                                        <th class="numeric" >Created By</th>
+                                                        <th class="numeric" >Payment Method</th>
+                                                        <th class="numeric" >Process</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    {% for invoice in entity.invoiceSmsEmails %}
+                                                      {#  {% if invoice.process =='In-progress' %}#}
+                                                            <tr>
+                                                                <td class="numeric" >{{ invoice.invoice }}</td>
+                                                                <td class="numeric" >{{ invoice.updated|date('d-m-Y') }}</td>
+                                                                <td class="numeric" >{{ invoice.totalAmount }}</td>
+                                                                <td class="numeric" >{{ invoice.paidAmount }}</td>
+                                                                <td class="numeric" >{{ invoice.dueAmount }}</td>
+                                                                <td class="numeric" >{{ invoice.createdBy }}</td>
+                                                                <td class="numeric" >
+                                                                    {% if invoice.paymentMethod == 'Bank' %}
+                                                                        {{ invoice.portalBankAccount.bank.name }}/{{ invoice.portalBankAccount.accountNo }}
+                                                                    {% elseif invoice.paymentMethod == 'bKash' %}
+                                                                        {{ invoice.portalBkash.mobile }}/{{ invoice.portalBkash.accounttype }}
+                                                                    {% endif %}
+
+                                                                </td>
+                                                                <td class="numeric" >
+                                                                    {% if invoice.process == 'In-progress' %}
+                                                                        <span  class="btn yellow approve mini" data-id="{{ invoice.id }}" data-url="{{ path('invoicesmsemail_approve',{id:invoice.id}) }}" ><i class="icon-ok"></i>&nbsp;In-progress</span>
+                                                                    {% endif %}
+                                                                </td>
+
+                                                            </tr>
+                                                       {# {% endif %}#}
+                                                    {% endfor %}
+
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+
+
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                            <div class="pagination pull-center"  >
+                                {{ knp_pagination_render(entities) }}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@SettingToolBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@SettingToolBundle/Resources/public/js/editable.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    EditableInit();
+{% endblock %}
+
+

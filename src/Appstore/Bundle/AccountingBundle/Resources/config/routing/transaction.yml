@@ -1,0 +1,9 @@
+account_transaction:
+    path:     /
+    defaults: { _controller: "AccountingBundle:Transaction:index" }
+
+account_transaction_show:
+    path:     /{id}/show
+    defaults: { _controller: "AccountingBundle:Transaction:show" }
+
+

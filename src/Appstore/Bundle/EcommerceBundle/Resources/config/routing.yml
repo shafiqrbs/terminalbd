@@ -1,0 +1,28 @@
+ecommerce_ecommerce:
+    resource: "@EcommerceBundle/Resources/config/routing/ecommerce.yml"
+    prefix:   /ecommerce/product
+
+ecommerce_config:
+    resource: "@EcommerceBundle/Resources/config/routing/ecommerceconfig.yml"
+    prefix:   /ecommerce/config
+
+ecommerce_ecommerce_bank:
+    resource: "@EcommerceBundle/Resources/config/routing/bankaccount.yml"
+    prefix:   /ecommerce/bankaccount
+
+ecommerce_ecommerce_bkash:
+    resource: "@EcommerceBundle/Resources/config/routing/bkashaccount.yml"
+    prefix:   /ecommerce/bkashaccount
+
+ecommerce_customer_order:
+    resource: "@EcommerceBundle/Resources/config/routing/customerorder.yml"
+    prefix:   /customer/order
+
+ecommerce_ecommerce_order:
+    resource: "@EcommerceBundle/Resources/config/routing/order.yml"
+    prefix:   /ecommerce/order
+
+ecommerce_ecommerce_preorder:
+    resource: "@EcommerceBundle/Resources/config/routing/preorder.yml"
+    prefix:   /ecommerce/preorder
+

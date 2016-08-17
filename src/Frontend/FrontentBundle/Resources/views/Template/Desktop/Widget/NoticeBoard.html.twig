@@ -1,0 +1,41 @@
+{% if (globalOption.noticeBords is defined and globalOption.noticeBords is not empty )  %}
+    <section id="testmonial-noticeboard">
+        <div class="container">
+            <div class="text-center"><h2>Notice Boards</h2></div>
+            <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="short" />
+            <div class="row">
+                {% if globalOption.noticeBords is defined and globalOption.noticeBords is not empty  %}
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="news-slider" class="owl-carousel">
+                                    {% for notice in globalOption.noticeBords|slice(0,limit)  %}
+
+                                        <div class="notice-slide">
+                                            <div class="post-content">
+                                                <div class="post-date">
+                                                    <span class="month">{{ notice.updated|date('F') }}</span>
+                                                    <span class="date">{{ notice.updated|date('d') }}</span>
+                                                </div>
+                                                <h5 class="post-title"><a href="#"> {{ notice.name }}</a></h5>
+                                                <p class="post-description">
+                                                    {{ notice.content }}
+                                                </p>
+                                            </div>
+                                            <ul class="post-bar">
+                                                <li> <i class="fa fa-users"></i> <a href="#">admin</a> </li>
+                                                <li> <i class="fa fa-comments"></i> <a href="#">2</a> </li>
+                                                <li> <i class="fa fa-thumbs-up"></i> <a href="#">2 Likes</a> </li>
+                                            </ul>
+                                        </div>
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endif %}

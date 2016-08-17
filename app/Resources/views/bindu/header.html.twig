@@ -1,0 +1,90 @@
+<header>
+    <style>
+        .sub-menu ul li{
+
+        }
+        .sub-menu ul li a{
+            font-size: 12px;
+            text-transform: capitalize;
+            font-weight: normal;
+            padding: 0;
+
+        }
+        header #tm-header-nav nav.tm-nav ul.tm-menu > li > ul.sub-menu li{
+            padding: 10px!important;
+            padding-left: 0!important;
+            padding-bottom: 0!important;
+            padding-right: 0!important;
+            width: 100%!important;
+
+        }
+        header #tm-header-nav nav.tm-nav ul.tm-menu > li > ul.sub-menu li a {
+            font-size: 12px;
+            text-transform: capitalize;
+            font-weight: normal;
+            padding: 0;
+        }
+
+    </style>
+
+    <div id="tm-header-top">
+        <div class="tm-wrap tm-table">
+            <div class="tm-logo">
+                <a href="/" class="tm-logo-simple">
+                    TERMINALBD.COM
+                    {#<img style="height: 60px" alt="Logo" src="../../assets/frontend/img/bdeducations.png">#}
+                </a>
+                <a href="/" class="tm-logo-retina">
+                    <img alt="Logo" width="142" height="60" src="../../assets/frontend/img/bdeducations.png">
+                </a>
+            </div>
+
+        </div>
+        <!--tm-wrap-->
+    </div>
+    <!--tm-header-top-->
+    <div id="tm-header-nav" class="tm-menu-style1 tm-sticky-menu">
+        <div class="tm-wrap tm-table">
+
+            <nav class="tm-nav">
+                <ul class="tm-menu tm-menu-simple">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    {#
+                    <li class="current-menu-item">
+                        <a href="{{ path('bindu_explore') }}">Explore</a>
+                    </li>
+                    <li class="current-menu-item">
+                        <a href="{{ path('bindu_explore') }}">Partner</a>
+                    </li>
+                    #}
+                    <li>
+                        <a href="{{ path('bindu_find') }}">Find me</a>
+                    </li>
+
+                </ul>
+
+                {#  {{ knp_menu_render('SettingAppearanceBundle:Builder:megaMenu', {'template':'SettingAppearanceBundle:Menu:mega-menu.html.twig','currentClass': 'active'}) }}#}
+            </nav>
+            <!--tm-nav-->
+            <div class="tm-social-icons">
+                <a href="https://www.facebook.com/Terminalbd-304478469740886/?fref=ts" target="_blank" class="tm-icon-facebook">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a href="{{ path('homepage') }}" id="" class="tm-icon-dribbble">
+                    <i class="fa fa-lock"></i>
+                </a>
+                <a href="javascript:" id="search" class="tm-icon-twitter">
+                    <i class="fa fa-search"></i>
+                </a>
+
+            </div>
+            <!--tm-social-icons-->
+        </div>
+    </div>
+    <!--tm-header-nav-->
+    <div id="tm-page-title" style="padding: 5px; background: #000; display: block!important">
+        <div class="tm-wrap tm-table">{% render controller("BinduBundle:Widget:search") %}</div>
+    </div>
+</header>

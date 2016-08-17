@@ -1,0 +1,44 @@
+accounting_expensecategory:
+    resource: "@AccountingBundle/Resources/config/routing/expensecategory.yml"
+    prefix:   /finance/expensecategory
+
+accounting_paymentsalary:
+    resource: "@AccountingBundle/Resources/config/routing/paymentsalary.yml"
+    prefix:   /finance/paymentsalary
+
+accounting_salarysetting:
+    resource: "@AccountingBundle/Resources/config/routing/salarysetting.yml"
+    prefix:   /finance/salarysetting
+
+accounting_journal:
+    resource: "@AccountingBundle/Resources/config/routing/accountjournal.yml"
+    prefix:   /finance/journal
+
+accounting_expenditure:
+    resource: "@AccountingBundle/Resources/config/routing/expenditure.yml"
+    prefix:   /finance/expenditure
+
+accounting_bank:
+    resource: "@AccountingBundle/Resources/config/routing/accountbank.yml"
+    prefix:   /finance/bank
+
+accounting_pettycash:
+    resource: "@AccountingBundle/Resources/config/routing/pettycash.yml"
+    prefix:   /finance/pettycash
+
+accounting_transaction:
+    resource: "@AccountingBundle/Resources/config/routing/transaction.yml"
+    prefix:   /finance/transaction
+
+accounting_accounthead:
+    resource: "@AccountingBundle/Resources/config/routing/accounthead.yml"
+    prefix:   /finance/accounthead
+
+accounting_account_purchase:
+    resource: "@AccountingBundle/Resources/config/routing/accountpurchase.yml"
+    prefix:   /finance/purchase
+
+accounting_account_sales:
+    resource: "@AccountingBundle/Resources/config/routing/accountsales.yml"
+    prefix:   /finance/sales
+

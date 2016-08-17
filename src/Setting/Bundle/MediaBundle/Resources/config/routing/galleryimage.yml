@@ -1,0 +1,34 @@
+galleryimage:
+    path:     /
+    defaults: { _controller: "SettingMediaBundle:GalleryImage:index" }
+
+galleryimage_show:
+    path:     /{id}/show
+    defaults: { _controller: "SettingMediaBundle:GalleryImage:show" }
+
+galleryimage_new:
+    path:     /new
+    defaults: { _controller: "SettingMediaBundle:GalleryImage:new" }
+
+galleryimage_create:
+    path:     /create
+    defaults: { _controller: "SettingMediaBundle:GalleryImage:create" }
+    requirements: { _method: post }
+
+galleryimage_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "SettingMediaBundle:GalleryImage:edit" }
+
+galleryimage_update:
+    path:     /{id}/update
+    defaults: { _controller: "SettingMediaBundle:GalleryImage:update" }
+    requirements: { _method: post|put }
+
+galleryimage_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "SettingMediaBundle:GalleryImage:delete" }
+    requirements: { _method: post|delete }
+
+galleryimage_upload:
+    path:     /{id}/upload
+    defaults: { _controller: "SettingMediaBundle:GalleryImage:upload" }

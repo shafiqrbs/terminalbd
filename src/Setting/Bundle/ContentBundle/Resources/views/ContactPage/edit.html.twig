@@ -1,0 +1,343 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+    <!-- BEGIN PAGE HEADER-->
+    <div class="row-fluid">
+        <div class="span12">
+            <h3 class="page-title">
+                Form Components
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="{{ path('homepage') }}">Home</a>
+                    <span class="icon-angle-right"></span>
+                </li>
+                <li>
+                    <a href="{{ path('page') }}">Contact page</a>
+                    <span class="icon-angle-right"></span>
+                </li>
+                <li><a href="#">Form Components</a></li>
+                <li class="pull-right btn blue disabled mini">
+                    <i class="fa fa-calendar"></i>
+                    {{ "now"|date("d-F-Y") }}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row-fluid">
+        <div class="span12">
+
+            <div class="portlet box green tabbable">
+
+                <div class="portlet-title">
+                    <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
+                </div>
+
+                <div class="portlet-body">
+
+                    <div class="tabbable portlet-tabs">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a  href="javascript:"><i class="icon-edit"></i>&nbsp;Add/Edit</a></li>
+                        </ul>
+                        <div class="tab-content">
+
+                            <div class="portlet-body form">
+                                {% include('flash-message.html.twig')  %}
+                                <!-- BEGIN FORM-->
+                                {{ form_start(form) }}
+                                {{ form_row(form._token) }}
+
+                                <div class="row-fluid">
+                                    <div class="span12 ">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Title <span class="required">*</span></label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-font"></i>
+                                                    {{ form_widget(form.name) }}
+                                                    {{ form_errors(form.name) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12 ">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Address<span class="required">*</span></label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-font"></i>
+                                                    {{ form_widget(form.address1) }}
+                                                    {{ form_errors(form.address1) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12 ">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Address2</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-font"></i>
+                                                    {{ form_widget(form.address2) }}
+                                                    {{ form_errors(form.address2) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">District</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+
+                                                    {{ form_widget(form.district) }}
+                                                    {{ form_errors(form.district) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Thana</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                     {{ form_widget(form.thana) }}
+                                                    {{ form_errors(form.thana) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Postal Code</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-font"></i>
+                                                    {{ form_widget(form.postalCode) }}
+                                                    {{ form_errors(form.postalCode) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Fax</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-font"></i>
+                                                    {{ form_widget(form.fax) }}
+                                                    {{ form_errors(form.fax) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12 ">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Additional Phone/Mobile</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-phone"></i>
+                                                    {{ form_widget(form.additionalPhone) }}
+                                                    {{ form_errors(form.additionalPhone) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12 ">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Additional Email</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-envelope"></i>
+                                                    {{ form_widget(form.additionalEmail) }}
+                                                    {{ form_errors(form.additionalEmail) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!--/row-->
+                                <div class="row-fluid">
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Contact Person</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-user"></i>
+                                                    {{ form_widget(form.contactPerson) }}
+                                                    {{ form_errors(form.contactPerson) }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Designation</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-font"></i>
+                                                    {{ form_widget(form.designation) }}
+                                                    {{ form_errors(form.designation) }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Is Base Information</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    {{ form_widget(form.isBaseInformation) }}
+                                                    {{ form_errors(form.isBaseInformation) }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Is Branch</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    {{ form_widget(form.isBranch) }}
+                                                    {{ form_errors(form.isBranch) }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <!--/row-->
+                                <div class="row-fluid">
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Is Contact Form</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    {{ form_widget(form.isContactForm) }}
+                                                    {{ form_errors(form.isContactForm) }}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Is map</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    {{ form_widget(form.isMap) }}
+                                                    {{ form_errors(form.isMap) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <!--/row-->
+                                <div class="row-fluid">
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Weekly off day</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    {{ form_widget(form.weeklyOffDay) }}
+                                                    {{ form_errors(form.weeklyOffDay) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Start/End Hour</label>
+                                            <div class="controls">
+                                                <div class="">
+                                                    {{ form_widget(form.startHour) }}
+                                                    {{ form_errors(form.startHour) }}
+                                                   {{ form_widget(form.endHour) }}
+                                                    {{ form_errors(form.endHour) }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <!--/row-->
+                                <div class="row-fluid">
+                                    <div class="span12 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Content</label>
+
+                                            <div class="controls">
+                                                {{ form_widget(form.content) }}
+                                                {{ form_errors(form.content) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div class="row-fluid">
+                                    <div class="span12 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Google Map</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.googleMap) }}
+                                                {{ form_errors(form.googleMap) }}
+                                                <p>Follow this link <a target="_blank" href="https://www.google.com.bd/maps/place/Dhaka+1000-1200/@23.7805729,90.2788946,11z/data=!3m1!4b1!4m5!3m4!1s0x3755b8b087026b81:0x8fa563bbdd5904c2!8m2!3d23.8103183!4d90.4125023?hl=en">Google Maps</a></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions portlet box grey">
+                                    <div class="pull-center">
+                                        <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
+                                        <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
+
+                                    </div>
+                                </div>
+                                {{ form_end(form) }}
+                                <!-- END FORM-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+{% endblock %}

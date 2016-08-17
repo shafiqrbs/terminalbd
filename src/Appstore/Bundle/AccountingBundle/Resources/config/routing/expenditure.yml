@@ -1,0 +1,37 @@
+account_expenditure:
+    path:     /
+    defaults: { _controller: "AccountingBundle:Expenditure:index" }
+
+account_expenditure_show:
+    path:     /{id}/show
+    defaults: { _controller: "AccountingBundle:Expenditure:show" }
+
+account_expenditure_new:
+    path:     /new
+    defaults: { _controller: "AccountingBundle:Expenditure:new" }
+
+account_expenditure_create:
+    path:     /create
+    defaults: { _controller: "AccountingBundle:Expenditure:create" }
+    methods:  POST
+
+account_expenditure_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AccountingBundle:Expenditure:edit" }
+
+account_expenditure_approve:
+    path:     /{id}/payment-approve
+    defaults: { _controller: "AccountingBundle:Expenditure:approve" }
+    options:
+           expose: true
+
+account_expenditure_inline:
+    path:     /inline-update
+    defaults: { _controller: "AccountingBundle:Expenditure:inlineUpdate" }
+
+
+account_expenditure_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AccountingBundle:Expenditure:delete" }
+    options:
+           expose: true

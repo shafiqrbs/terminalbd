@@ -1,0 +1,137 @@
+<div class="bannerPane bannerPane-business-locaton"  {% if details.webPath() is defined and details.webPath() is not empty %} style="background-repeat:no-repeat!important; background-position:center center!important;background:url('{{ image(details.webPath()).resize() }}')" {% endif %} >
+    <div class="overlay"></div>
+    <div class="s-banner-content">
+        <div><img width="100" src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" /></div>
+        {{ moduleName }}
+    </div>
+</div>
+<div id="content" class="content-margin">
+    <article>
+        <div class="module-title">
+            <p>{{ details.name }}</p>
+            <i class="fa fa-calendar"></i>  {{ details.startDate|date('F j, Y') }}
+        </div>
+        <p>{{ details.content|raw }}</p>
+    </article>
+</div>
+
+
+
+<div class="content">
+    <div class="container" style="position: relative">
+        <button id="slidx_button" >Lists</button>
+        <h1 class="left-text">{{ details.name|default() }}</h1>
+        <strong><em><em>{{ details.startDate|date('F j, Y H:m a') }}</em> To <em>{{ details.endDate|date('F j, Y H:m a') }}</em></em>
+        <div class="decoration"></div>
+        <p class="justify-text">{{ details.content|raw }}</p>
+        <div class="decoration"></div>
+        {% if(details.webPath()) %}
+        <div class="wide-item">
+            {% if(details.photoGallery) %}
+            <div class="wide-item-titles">
+                <h4>Click here show Gallery</h4>
+            </div>
+            {% endif %}
+            <div class="wide-image">
+                <div class="overlay"></div>
+                <a class="tile-wide" id="gallery" href="javascript:"><img class="responsive-image" src="/{{ details.webPath() }}" alt="img"></a>
+            </div>
+
+        </div>
+        {% endif %}
+        <div class="decoration"></div>
+
+    </div>
+    <div class="container">
+        <div class="tabs">
+            <a class="tab-but tab-but-1 tab-active" href="javascript:">Comment Form</a>
+            <a class="tab-but tab-but-2" href="javascript:">Reviews</a>
+        </div>
+        <div class="decoration"></div>
+        <div class="tab-content tab-content-1" style="display: block;">
+            <div class="one-responsive">
+
+                <div class="container no-bottom">
+                    <div class="contact-form no-bottom">
+                        <div class="formSuccessMessageWrap" id="formSuccessMessageWrap">
+                            <div class="big-notification green-notification">
+                                <a href="#" class="close-big-notification">x</a>
+                                <p>Your message has been successfuly sent. Please allow up to 48 hours for a reply! Thank you!</p>
+                            </div>
+                        </div>
+
+                        <form action="{{ path('blog_message',{'subdomain': entity.user.globalOption.subDomain,'module': moduleName|lower,'slug':details.slug }) }}" method="post" class="contactForm" id="contactForm">
+                            <fieldset>
+                                <div class="formValidationError" id="contactNameFieldError">
+                                    <div class="static-notification-red tap-dismiss-notification">
+                                        <p class="center-text uppercase">Name is required!</p>
+                                    </div>
+                                </div>
+                                <div class="formValidationError" id="contactEmailFieldError">
+                                    <div class="static-notification-red tap-dismiss-notification">
+                                        <p class="center-text uppercase">Mail address required!</p>
+                                    </div>
+                                </div>
+                                <div class="formValidationError" id="contactEmailFieldError2">
+                                    <div class="static-notification-red tap-dismiss-notification">
+                                        <p class="center-text uppercase">Mail address must be valid!</p>
+                                    </div>
+                                </div>
+                                <div class="formValidationError" id="contactMessageTextareaError">
+                                    <div class="static-notification-red tap-dismiss-notification">
+                                        <p class="center-text uppercase">Message field is empty!</p>
+                                    </div>
+                                </div>
+                                <div class="formFieldWrap">
+                                    <label class="field-title contactNameField" for="contactNameField">Name:<span>(required)</span></label>
+                                    <input type="text" name="name" value="" class="contactField requiredField" id="contactNameField"/>
+                                </div>
+                                <div class="formFieldWrap">
+                                    <label class="field-title contactEmailField" for="contactEmailField">Email: <span>(required)</span></label>
+                                    <input type="text" name="email" value="" class="contactField requiredField requiredEmailField" id="contactEmailField"/>
+                                </div>
+                                <div class="formTextareaWrap">
+                                    <label class="field-title contactMessageTextarea" for="contactMessageTextarea">Comments: <span>(required)</span></label>
+                                    <textarea name="content" class="contactTextarea requiredField" id="contactMessageTextarea"></textarea>
+                                </div>
+                                <div class="formSubmitButtonErrorsWrap">
+                                    <input type="hidden" name="id" value="{{ details.id }}">
+                                    <input type="submit" class="buttonWrap button button-dark contactSubmitButton" id="contactSubmitButton" value="SUBMIT" data-formId="contactForm"/>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if(comments) %}
+            <div class="tab-content tab-content-2" style="display: none;">
+                <div class="one-responsive">
+                    <div class="container no-bottom">
+                        <h4>Reviews</h4>
+                        <ul>
+                            {% for comment in comments %}
+                                <li>
+                                    <strong>{{ comment.name }}</strong>, <em>{{ details.created|date('F j, Y') }}</em>
+                                    <div class="decoration"></div>
+                                    <p>{{ comment.content|raw }}</p>
+                                    <p><br/></p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<nav id="slidx_menu">
+    <ul>
+        {% for row in entity.user.events %}
+            <li>
+                <a href="{{ path('mobile_module',{'subdomain': entity.user.globalOption.subDomain,'module': moduleName|lower,'slug':row.slug }) }}">{{ row.name | truncate(50, true) }}</a>
+            </li>
+        {% endfor %}
+
+    </ul>
+</nav>

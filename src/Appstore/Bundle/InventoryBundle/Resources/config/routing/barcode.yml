@@ -1,0 +1,18 @@
+barcode_add:
+    path:     /
+    defaults: { _controller: "InventoryBundle:Barcode:add" }
+
+barcode_new:
+    path:     /
+    defaults: { _controller: "InventoryBundle:Barcode:new" }
+
+
+barcode_create:
+    path:     /create
+    defaults: { _controller: "InventoryBundle:Barcode:create" }
+    options:
+           expose: true
+
+barcode_print:
+    path:     /print
+    defaults: { _controller: "InventoryBundle:Barcode:print" }

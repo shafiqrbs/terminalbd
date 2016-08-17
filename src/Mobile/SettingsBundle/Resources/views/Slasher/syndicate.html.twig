@@ -1,0 +1,45 @@
+
+{% block body %}
+
+    <div class="homepage-wrapper">
+        <img class="homepage-logo" src="images/misc/logo.png"  alt="img">
+        <em class="homepage-logo-sub"> {{ entity.name }}</em>
+
+        <div class="homepage-navigation">
+            <a class="home-icon"    href="homepage.html">Homepage</a>
+            <a class="type-icon"    href="type.html">Type</a>
+            <a class="jquery-icon"  href="jquery.html">jQuery</a>
+
+            <a href="tile-gallery.html" class="gallery-icon">Gallery</a>
+            <a class="folio-icon"   href="tile-folio.html">Portfolio</a>
+            <a class="mail-icon"	href="contact.html">Contact</a>
+
+            <div class="clear"></div>
+        </div>
+
+        <div class="footer">
+            <a class="facebook-icon" href="#"></a>
+            <a class="google-icon"   href="#"></a>
+            <a class="twitter-icon"  href="#"></a>
+            <div class="clear"></div>
+        </div>
+        <div class="webapp-wrapper">
+            <div class="webapp">
+                <img src="images/splash/splash-icon.png" alt="img">
+                <h3>SLASHER</h3>
+                <p>You’re running iOS. Add this page to your homescreen for an enhanced experience!</p>
+                <em class="corner-deco"></em>
+                <a href="#" class="close-webapp">x</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="homepage-background">
+        <div class="bg-pattern"></div>
+        <div class="bg-overlay"></div>
+        <img id="bg" src="images/bg.png" alt="img">
+    </div>
+
+{% endblock %}
+

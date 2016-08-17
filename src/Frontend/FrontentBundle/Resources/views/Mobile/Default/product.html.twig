@@ -1,0 +1,79 @@
+{% extends ':mobile:base.html.twig' %}
+{% block body %}
+    <div class="content">
+        <div class="container container-right-margin" style="margin-right:15px!important;">
+            <!-- content -->
+            <h3>Products</h3>
+            <div class="one-responsive">
+                <div class="contact-form no-bottom">
+                    {% for product in products %}
+                        {% if(product.itemGalleries) %}
+                            <div class="outer-div">
+                                <div class="inner-div">
+                                    <div id="" class="ic_container capslide_img_cont ">
+                                        <img src="{{ image(product.itemGalleries[0].getAbsolutePath(product.inventoryConfig.globalOption.id,product.id)).resize(350) }}"  alt=""/>
+                                        <div class="overlay" style="display:none;"></div>
+                                        <div class="ic_caption">
+                                            <p class="left title"><a href="{{ path('mobile_product_details',{'subdomain':entity.subDomain,'slug':product.slug}) }}"  >{{ product.masterItem.name }}</a></p>
+                                            <div class="product-short-details">
+                                                <span class="left">BDT {{ product.webPrice|format }}</span>
+                                                <span class="right">{{ product.color.name }}&nbsp;/&nbsp;{{ product.size.name }}</span>
+                                            </div>
+                                            <div class="ic_text product-details">
+                                                <table>
+                                                    {% if product.masterItem.category is not empty %}<tr><td>Category</td><td class="left">{{ product.masterItem.category.name }}</td></tr>{% endif %}
+                                                    {% if product.gender is not empty %}<tr><td>Gender</td><td class="left">{{ product.gender }}</td></tr>{% endif %}
+                                                    {% if product.ageGroup is not empty %}<tr><td>Age Group</td><td class="left">{{ product.ageGroup }}</td></tr>{% endif %}
+                                                    {% if product.material is not empty %}<tr><td>Material</td><td class="left">{{ product.material }}&nbsp;</td></tr>{% endif %}
+                                                    {% if product.brand is not empty %}<tr><td>Brand</td><td class="left">{{ product.brand.name }}</td></tr>{% endif %}
+                                                    {% if product.country is not empty %}<tr><td>Made in</td><td class="left">{{ product.country.name }}</td></tr>{% endif %}
+                                                    <tr><td>&nbsp;</td><td class="right">
+                                                            <a href="javascript:" data-url="{{ path('mobile_product_add_cart',{'subdomain':entity.subDomain,'id':product.id}) }}" class="button button-blue buy-list">Add to cart</a><a href="{{ path('mobile_product_details',{'subdomain':entity.subDomain,'slug':product.slug}) }}" class="button button-turqoise info-list">Details</a>
+
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@MobileBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@MobileBundle/Resources/public/js/mobile.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+
+    {#MobileVersion();#}
+    $(".capslide_img_cont").capslide({
+    caption_color	: 'white',
+    caption_bgcolor	: 'black',
+    overlay_bgcolor : 'black',
+    border			: '',
+    showcaption	    : true
+    });
+
+{% endblock %}
+
+
