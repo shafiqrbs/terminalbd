@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ContentBundle\Controller;
 
+use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -15,56 +16,22 @@ use Setting\Bundle\ContentBundle\Form\NewsType;
 class NewsController extends Controller
 {
 
-     /**
-     * Lists all News entities.
-     *
-     */
-    public function listingAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:News')->findBy(array('globalOption' => $globalOption),array('name' => 'asc'));
-
-        return $this->render('SettingContentBundle:News:index.html.twig', array(
-            'pagination' => $entities,
-        ));
-    }
-    /**
-     * Lists all Delete News entities.
-     *
-     */
-    public function listingDeleteAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('SettingContentBundle:News')->findBy(array(),array('name' => 'asc'));
-
-        return $this->render('SettingContentBundle:News:index.html.twig', array(
-            'pagination' => $entities,
-        ));
-    }
-
     /**
      * Lists Spacific user News entities.
      *
      */
     public function indexAction()
     {
+
+        exit;
         $em = $this->getDoctrine()->getManager();
-
-        $user = $this->getUser();
-
-        $entities = $em->getRepository('SettingContentBundle:News')->findBy(array('user' => $user),array('name' => 'asc'));
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption' => $globalOption,'module'=>1),array('name' => 'asc'));
 
         return $this->render('SettingContentBundle:News:index.html.twig', array(
             'pagination' => $entities,
         ));
     }
-    /**
-     * Creates a new News entity.
-     *
-     */
-
 
     /**
      * Creates a new News entity.
@@ -74,13 +41,14 @@ class NewsController extends Controller
     {
 
         $user = $this->getUser();
-        $entity = new News();
+        $entity = new Page();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity ->setUser($user);
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(1));
             $entity ->setGlobalOption($user->getGlobalOption());
             $entity->upload();
             $em->persist($entity);
@@ -128,13 +96,8 @@ class NewsController extends Controller
      */
     public function newAction()
     {
-        $entity = new News();
-        $form   = $this->createCreateForm($entity);
 
-        return $this->render('SettingContentBundle:News:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+
     }
 
     /**
@@ -167,7 +130,7 @@ class NewsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:News')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find News entity.');
@@ -190,7 +153,7 @@ class NewsController extends Controller
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(News $entity)
+    private function createEditForm(Page $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
 
@@ -212,7 +175,7 @@ class NewsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:News')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find News entity.');
@@ -223,6 +186,9 @@ class NewsController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            if(!empty($entity->upload())){
+                $entity->removeUpload();
+            }
             $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -289,7 +255,7 @@ class NewsController extends Controller
         $form->handleRequest($request);
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SettingContentBundle:News')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');

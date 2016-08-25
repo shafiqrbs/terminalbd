@@ -15,3 +15,7 @@ services:
     device.detect_manage_repo:
         class: Frontend\FrontentBundle\Service\MobileDetect
         arguments: [@doctrine]
+
+    setting.menuTreeSettingRepo:
+        class: Frontend\FrontentBundle\Service\MenuTreeManager
+        arguments: [@doctrine]

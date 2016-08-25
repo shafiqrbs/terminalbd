@@ -43,7 +43,6 @@ class AppKernel extends Kernel
             new Setting\Bundle\AppearanceBundle\SettingAppearanceBundle(),
             new Setting\Bundle\ContentBundle\SettingContentBundle(),
             new Setting\Bundle\ToolBundle\SettingToolBundle(),
-            new Mobile\SettingsBundle\MobileBundle(),
             new Syndicate\Bundle\ComponentBundle\SyndicateComponentBundle(),
             new Gregwar\ImageBundle\GregwarImageBundle(),
             new Product\Bundle\ProductBundle\ProductProductBundle(),
@@ -64,7 +63,6 @@ class AppKernel extends Kernel
            /* new SunCat\MobileDetectBundle\MobileDetectBundle(),*/
             new Appstore\Bundle\AccountingBundle\AccountingBundle(),
             new Appstore\Bundle\ConfigBundle\ConfigBundle(),
-            new Desktop\Bundle\DesktopBundle(),
             new Appstore\Bundle\ImsBundle\ImsBundle(),
             new Xiidea\Bundle\DomainBundle\XiideaDomainBundle()
         );

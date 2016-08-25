@@ -44,25 +44,9 @@ class Menu
 
 
     /**
-     * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="menus")
-     **/
-
-    protected $user;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="menus")
      **/
     protected $globalOption;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="uniqueCode", type="string", length=255 , nullable = true)
-     */
-    private $uniqueCode;
-
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MenuGrouping", mappedBy="menu" , cascade={"persist", "remove"})
@@ -99,12 +83,6 @@ class Menu
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\SiteSetting", inversedBy="nav")
      */
     protected $siteSetting;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeBlock", mappedBy="menu" , cascade={"persist", "remove"})
-     **/
-
-    protected $homeBlock;
 
     /**
      * @var boolean
@@ -204,47 +182,6 @@ class Menu
         return $this;
     }
 
-    /**
-     * Get status
-     *
-     * @return boolean 
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param mixed $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param string $uniqueCode
-     */
-    public function setUniqueCode($uniqueCode)
-    {
-        $this->uniqueCode = $uniqueCode;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUniqueCode()
-    {
-        return $this->uniqueCode;
-    }
 
     /**
      * @param mixed $module

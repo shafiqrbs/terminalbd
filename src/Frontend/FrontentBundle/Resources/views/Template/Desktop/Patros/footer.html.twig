@@ -2,15 +2,17 @@
     <div class="container">
         <div class="row myfooter">
             <div class="col-sm-6"><div class="pull-left">
-                    © Copyright Company 2016 | <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a>
+                    &copy; Copyright {{ globalOption.name }} {{ "now"|date('Y') }}
                 </div></div>
             <div class="col-sm-6">
-                <div class="pull-right">Designed by <a href="http://www.atis.al">ATIS</a></div>
+                <div class="pull-right">Designed & Developed by <a target="_blank" href="http://www.terminalbd.com">Umar It Limited</a></div>
             </div>
         </div>
     </div>
 </footer>
-
+{% if globalOption.templateCustomize.showSidebar == 1 %}
+<div class="side-toolbar" style=""></div>
+{% endif %}
 <!-- jQuery -->
 <!--Jquery Smooth Scrolling-->
 {% javascripts
@@ -21,6 +23,7 @@
 'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
 'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
 'assets/template/plugin/owl.carousel/owl.carousel.min.js'
+'assets/template/plugin/side.toolbar/vcore.sidebar.js'
 'assets/template/desktop/patros/js/jquery.quicksand.js'
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -30,6 +33,23 @@
 
         $(".numeric").numeric();
         $(".mobile").inputmask("mask", {"mask": "99999-999-999"}); //specifying fn & options
+        $('#searchEvent').click(function(){
+            $('#nav-search').slideToggle('slow');
+        });
+
+        $('#catlist').children('.news-list').each(function(index) {
+            $(this).addClass(index % 2 ? 'odd' : 'even');
+        });
+
+        $('.side-toolbar').vSidebar({
+            'items': [
+                {link: 'http://{{ globalOption.subDomain }}.kintethako.dev',id: '1','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-home.png') }}','label':'Home'},
+                {link: '{{ path('webservice_contact',{'subdomain':globalOption.subDomain}) }}#contact',id: '2','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-envelope.png') }}','label':'{{ globalOption.email }}'},
+                {link: 'javascript:',id: '3','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-sms.png') }}','label':'{{ globalOption.mobile }}'},
+                {link: '{{ path('webservice_contact',{'subdomain':globalOption.subDomain}) }}',id: '4','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-map.png') }}','label':'{{ globalOption.location.name }}'}
+            ],
+            'position': 'right bottom'
+        });
 
         var owlProduct = $("#product-slider");
         owlProduct.owlCarousel({

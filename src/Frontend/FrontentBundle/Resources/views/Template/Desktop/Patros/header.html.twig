@@ -17,8 +17,9 @@
     'assets/template/desktop/patros/font-awesome/css/font-awesome.min.css'
     'assets/template/plugin/owl.carousel/owl.carousel.min.css'
     'assets/template/plugin/owl.carousel/owl.theme.min.css'
+    'assets/template/plugin/side.toolbar/vcore.sidebar.css'
     'assets/template/desktop/css/module.css'
-    'assets/template/desktop/patros/css/patros.css'
+    'assets/template/desktop/patros/css/patros-black.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -30,28 +31,58 @@
 <body data-spy="scroll">
 <!-- Navigation -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="index.html"><img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" alt="company logo" /></a>
-        </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right custom-menu">
-                <li class="active"><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#meet-team">Team</a></li>
-                <li><a href="#portfolio1">Portofolio</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="single-post.html">Single</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+    <section id="top-bar">
+        <div class="container" id="menu">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-6 text-left">
+                        <div class="box">
+                            <ul class="info-links">
+                                {% if globalOption.templateCustomize.showCalendar == 1 %}<li><i class="fa fa-calendar"></i>&nbsp;{{ "now"|date("F j, Y") }}</li>{% endif %}
+                                {% if globalOption.templateCustomize.showEmail == 1 %}<li><i class="fa fa-envelope"></i>&nbsp;{{ globalOption.email }}</li>{% endif %}
+                                {% if globalOption.templateCustomize.showMobile == 1 %}<li><i class="fa fa-mobile"></i>&nbsp;{{ globalOption.mobile }}</li>{% endif %}
+                            </ul>
+                        </div>
+                    </div>
 
+                    <div class=" col-md-6 text-right">
+                        <div class="box">
+                            <ul class="social-links">
+                                {% if globalOption.facebookPageUrl == 1 %}<li><a href="https://{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>{% endif %}
+                                {% if globalOption.templateCustomize.showSearch == 1 %}<li><a href="javascript:" id="searchEvent"><i class="fa fa-search"></i></a></li>{% endif %}
+                                <li><a href="{{ path('webservice_customer_register') }}"><i class="fa fa-sign-in"></i></a></li>
+                                <li><a href="{{ path('webservice_customer_login') }}"><i class="fa fa-lock"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container">
+        <div class="navbar-header col-md-12">
+            <a class="navbar-brand" href="http://{{ globalOption.subDomain }}.kintethako.dev"><img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" alt="company logo" /></a>
+
+        </div>
+
+    </div>
+    <section id="menu-bar" >
+        <div class="container" id="menu">
+            <div class="row">
+                <div class="col-md-8">
+                    <nav id="header-menu">{{ menuTree|raw }}</nav>
+
+                </div>
+                {% if globalOption.templateCustomize.showSearch == 1 %}
+                    <div class="input-group searchbar col-md-3" id="nav-search">
+                        <input type="text" class="form-control searchbar" placeholder="Search for...">
+		                        <span class="input-group-btn">
+		                        <button class="btn btn-default glyphicon glyphicon-search" type="button"></button>
+		                        </span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</nav>

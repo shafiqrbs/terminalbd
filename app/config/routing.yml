@@ -2,10 +2,6 @@ domain_control:
     resource: "@XiideaDomainBundle/Resources/config/routing.yml"
     prefix:   /
 
-mobile:
-    resource: "@MobileBundle/Resources/config/routing.yml"
-    prefix:   /
-
 ims:
     resource: "@ImsBundle/Resources/config/routing.yml"
     prefix:   /

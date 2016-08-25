@@ -31,7 +31,45 @@ class TemplateCustomize
     protected $globalOption;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="showCalendar", type="boolean", nullable=true)
+     */
+    private $showCalendar = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="showSidebar", type="boolean", nullable=true)
+     */
+    private $showSidebar = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="showSearch", type="boolean", nullable=true)
+     */
+    private $showSearch = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="showMobile", type="boolean", nullable=true)
+     */
+    private $showMobile = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="showEmail", type="boolean", nullable=true)
+     */
+    private $showEmail = true;
+
+
+
+    /**
      * @var string
+     *
      *
      * @ORM\Column(name="logo", type="string", length=255, nullable=true)
      */
@@ -808,6 +846,86 @@ class TemplateCustomize
     public function setBgImageFile(UploadedFile $bgImageFile)
     {
         $this->bgImageFile = $bgImageFile;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getShowEmail()
+    {
+        return $this->showEmail;
+    }
+
+    /**
+     * @param boolean $showEmail
+     */
+    public function setShowEmail($showEmail)
+    {
+        $this->showEmail = $showEmail;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isShowCalendar()
+    {
+        return $this->showCalendar;
+    }
+
+    /**
+     * @param boolean $showCalendar
+     */
+    public function setShowCalendar($showCalendar)
+    {
+        $this->showCalendar = $showCalendar;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isShowSidebar()
+    {
+        return $this->showSidebar;
+    }
+
+    /**
+     * @param boolean $showSidebar
+     */
+    public function setShowSidebar($showSidebar)
+    {
+        $this->showSidebar = $showSidebar;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isShowSearch()
+    {
+        return $this->showSearch;
+    }
+
+    /**
+     * @param boolean $showSearch
+     */
+    public function setShowSearch($showSearch)
+    {
+        $this->showSearch = $showSearch;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isShowMobile()
+    {
+        return $this->showMobile;
+    }
+
+    /**
+     * @param boolean $showMobile
+     */
+    public function setShowMobile($showMobile)
+    {
+        $this->showMobile = $showMobile;
     }
 
 

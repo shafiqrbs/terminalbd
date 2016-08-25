@@ -38,35 +38,6 @@ class Page
      **/
     private $children;
 
-    /**
-     * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="pages" )
-     **/
-    protected $user;
-
-    /**
-     * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="pages" )
-     **/
-    protected $globalOption;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\PageModule", mappedBy="page" )
-     **/
-    protected $pageModules;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\PageMeta", mappedBy="page" )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    protected $pageMetas;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeSlider", mappedBy="page" )
-     **/
-
-    protected $homeSlider;
 
     /**
      * @var string
@@ -137,7 +108,185 @@ class Page
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
      */
-    private $updatedAt;
+    private $updated;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="authorName", type="string", length=255, nullable=true)
+     */
+    private $authorName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="designation", type="string", length=255, nullable=true)
+     */
+    private $designation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="organization", type="string", length=255, nullable=true)
+     */
+    private $organization;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facebook", type="string", length=255, nullable=true)
+     */
+    private $facebook;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
+     */
+    private $twitter;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="linkedIn", type="string", length=255,  nullable=true)
+     */
+    private $linkedIn;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gmail", type="string", length=255, nullable=true)
+     */
+    private $gmail;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="youtube", type="string", length=255, nullable=true)
+     */
+    private $youtube;
+
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="contactPerson", type="string", length=255, nullable=true)
+     */
+    private $contactPerson;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobile", type="string", length=255, nullable=true)
+     */
+    private $mobile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="additionalPhone", type="string", length=255, nullable=true)
+     */
+    private $additionalPhone;
+
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="startDate", type="datetime", nullable=true)
+     */
+    private $startDate;
+
+    /**
+     * @var datetime
+     *
+     * @ORM\Column(name="endDate", type="datetime", nullable=true)
+     */
+    private $endDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="startHour", type="string", length=255 , nullable = true)
+     */
+    private $startHour;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="endHour", type="string", length=255 , nullable = true)
+     */
+    private $endHour;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255 , nullable=true)
+     */
+    private $email;
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="address", type="text",  nullable=true)
+     */
+    private $address;
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="googleMap", type="text", nullable=true )
+     */
+    private $googleMap;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="website", type="string", length=255, nullable=true)
+     */
+    private $website;
+
+
+    /**
+     * @Gedmo\Blameable(on="create")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="pages" )
+     **/
+    protected $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Module", inversedBy="pages")
+     **/
+
+    protected $module;
+
+    /**
+     * @Gedmo\Blameable(on="create")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="pages" )
+     **/
+    protected $globalOption;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\PageModule", mappedBy="page" )
+     **/
+    protected $pageModules;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\PageMeta", mappedBy="page" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    protected $pageMetas;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Icon", inversedBy="page")
+     **/
+    protected $icon;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\MediaBundle\Entity\PageFile", inversedBy="page")
+     */
+    protected $pageFiles;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\MediaBundle\Entity\PhotoGallery", inversedBy="pageGalleries")
@@ -159,6 +308,14 @@ class Page
      * @Assert\File(maxSize="8388608")
      */
     protected $file;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="feature", type="boolean", nullable=true)
+     */
+    private $feature = false;
 
 
     /**
@@ -464,17 +621,17 @@ class Page
     /**
      * @return \DateTime
      */
-    public function getUpdatedAt()
+    public function getUpdated()
     {
-        return $this->updatedAt;
+        return $this->updated;
     }
 
     /**
-     * @param \DateTime $updatedAt
+     * @param \DateTime $updated
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdated($updated)
     {
-        $this->updatedAt = $updatedAt;
+        $this->updated = $updated;
     }
 
     /**
@@ -540,6 +697,358 @@ class Page
     public function getPageMetas()
     {
         return $this->pageMetas;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthorName()
+    {
+        return $this->authorName;
+    }
+
+    /**
+     * @param string $authorName
+     */
+    public function setAuthorName($authorName)
+    {
+        $this->authorName = $authorName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDesignation()
+    {
+        return $this->designation;
+    }
+
+    /**
+     * @param string $designation
+     */
+    public function setDesignation($designation)
+    {
+        $this->designation = $designation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
+    }
+
+    /**
+     * @param string $organization
+     */
+    public function setOrganization($organization)
+    {
+        $this->organization = $organization;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacebook()
+    {
+        return $this->facebook;
+    }
+
+    /**
+     * @param string $facebook
+     */
+    public function setFacebook($facebook)
+    {
+        $this->facebook = $facebook;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTwitter()
+    {
+        return $this->twitter;
+    }
+
+    /**
+     * @param string $twitter
+     */
+    public function setTwitter($twitter)
+    {
+        $this->twitter = $twitter;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLinkedIn()
+    {
+        return $this->linkedIn;
+    }
+
+    /**
+     * @param string $linkedIn
+     */
+    public function setLinkedIn($linkedIn)
+    {
+        $this->linkedIn = $linkedIn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGmail()
+    {
+        return $this->gmail;
+    }
+
+    /**
+     * @param string $gmail
+     */
+    public function setGmail($gmail)
+    {
+        $this->gmail = $gmail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getYoutube()
+    {
+        return $this->youtube;
+    }
+
+    /**
+     * @param string $youtube
+     */
+    public function setYoutube($youtube)
+    {
+        $this->youtube = $youtube;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactPerson()
+    {
+        return $this->contactPerson;
+    }
+
+    /**
+     * @param string $contactPerson
+     */
+    public function setContactPerson($contactPerson)
+    {
+        $this->contactPerson = $contactPerson;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobile()
+    {
+        return $this->mobile;
+    }
+
+    /**
+     * @param string $mobile
+     */
+    public function setMobile($mobile)
+    {
+        $this->mobile = $mobile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdditionalPhone()
+    {
+        return $this->additionalPhone;
+    }
+
+    /**
+     * @param string $additionalPhone
+     */
+    public function setAdditionalPhone($additionalPhone)
+    {
+        $this->additionalPhone = $additionalPhone;
+    }
+
+    /**
+     * @return datetime
+     */
+    public function getStartDate()
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * @param datetime $startDate
+     */
+    public function setStartDate($startDate)
+    {
+        $this->startDate = $startDate;
+    }
+
+    /**
+     * @return datetime
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
+    }
+
+    /**
+     * @param datetime $endDate
+     */
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStartHour()
+    {
+        return $this->startHour;
+    }
+
+    /**
+     * @param string $startHour
+     */
+    public function setStartHour($startHour)
+    {
+        $this->startHour = $startHour;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEndHour()
+    {
+        return $this->endHour;
+    }
+
+    /**
+     * @param string $endHour
+     */
+    public function setEndHour($endHour)
+    {
+        $this->endHour = $endHour;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return text
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param text $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
+
+    /**
+     * @return text
+     */
+    public function getGoogleMap()
+    {
+        return $this->googleMap;
+    }
+
+    /**
+     * @param text $googleMap
+     */
+    public function setGoogleMap($googleMap)
+    {
+        $this->googleMap = $googleMap;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
+    /**
+     * @param string $website
+     */
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIcon()
+    {
+        return $this->icon;
+    }
+
+    /**
+     * @param mixed $icon
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPageFiles()
+    {
+        return $this->pageFiles;
+    }
+
+    /**
+     * @param mixed $pageFiles
+     */
+    public function setPageFiles($pageFiles)
+    {
+        $this->pageFiles = $pageFiles;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModule()
+    {
+        return $this->module;
+    }
+
+    /**
+     * @param mixed $module
+     */
+    public function setModule($module)
+    {
+        $this->module = $module;
     }
 
 

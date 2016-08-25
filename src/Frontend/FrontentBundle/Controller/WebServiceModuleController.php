@@ -20,6 +20,8 @@ class WebServiceModuleController extends Controller
         if(!empty($globalOption)){
 
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=>$globalOption ,'slug' => $module));
+
+            $categories ='';
             $page ='';
             $pagination ='';
             $moduleName ='';
@@ -34,6 +36,9 @@ class WebServiceModuleController extends Controller
                     $twigName = "module";
                     $pagination = $em->getRepository('SettingContentBundle:'.$moduleName)->findBy(array('globalOption'=>$globalOption,'status'=>1),array('id'=>'desc'));
                     $pagination = $this->paginate( $pagination,$limit= 10 );
+                    if(!empty($menu->getModule())){
+                        $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
+                    }
 
                 }else{
 
@@ -60,12 +65,79 @@ class WebServiceModuleController extends Controller
 
                 'globalOption'  => $globalOption,
                 'menu'          => $menu,
+                'categories'    => $categories,
                 'moduleName'    => $moduleName,
                 'pagination'    => $pagination,
                 'page'          => $page,
             )
         );
     }
+
+
+    public function moduleCategoryAction($subdomain,$module,$slug)
+    {
+
+
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        if(!empty($globalOption)){
+
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=>$globalOption ,'slug' => $module));
+
+            $page ='';
+            $pagination ='';
+            $moduleName ='';
+
+            if(!empty($menu)){
+
+                $siteEntity = $globalOption->getSiteSetting();
+                $themeName = $siteEntity->getTheme()->getFolderName();
+
+                $moduleName = $this->get('setting.menuTreeSettingRepo')->getCheckModule($menu);
+                if($moduleName){
+                    $twigName = "module";
+                    $cat = $em->getRepository('SettingContentBundle:ModuleCategory')->findOneBy(array('globalOption'=>$globalOption ,'slug' => $slug));
+                    $pagination = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=>$globalOption,'module'=>$menu->getModule()->getId(),'id'=>$cat->getId(),'status'=>1),array('id'=>'desc'));
+                    $pagination = $this->paginate( $pagination,$limit= 10 );
+                    if(!empty($menu->getModule())){
+                        $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
+                    }
+
+                }else{
+
+                    $page = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'slug' => $module));
+                    $twigName = "content";
+
+                }
+            }
+
+        }
+
+        $pagination = ($pagination) ? $pagination :'';
+        $page = ($page) ? $page :'';
+
+        /* Device Detection code desktop or mobile */
+
+        $detect = new MobileDetect();
+        if( $detect->isMobile() &&  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName;
+        }else{
+            $theme = 'Template/Desktop/'.$themeName;
+        }
+        return $this->render('FrontendBundle:'.$theme.':'.$twigName.'.html.twig',
+            array(
+
+                'globalOption'  => $globalOption,
+                'menu'          => $menu,
+                'categories'    => $categories,
+                'moduleName'    => $cat->getName(),
+                'pagination'    => $pagination,
+                'page'          => $page,
+            )
+        );
+    }
+
+
 
     public function modulePageAction($subdomain,$module,$slug)
     {
@@ -75,6 +147,8 @@ class WebServiceModuleController extends Controller
         if(!empty($globalOption)){
 
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=>$globalOption ,'slug' => $module));
+
+            $categories ='';
             $page ='';
             $moduleName ='';
             $details = "";
@@ -88,6 +162,9 @@ class WebServiceModuleController extends Controller
 
                     $details = $em->getRepository('SettingContentBundle:'.$moduleName)->findOneBy(array('globalOption'=>$globalOption,'slug' => $slug));
                     $twigName = "moduleDetails";
+                    if(!empty($menu->getModule())){
+                        $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
+                    }
 
                 }else{
 
@@ -100,6 +177,7 @@ class WebServiceModuleController extends Controller
         }
 
         $page = ($page) ? $page :'';
+        $categories = ($categories) ? $categories :'';
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();
         if( $detect->isMobile() && $detect->isTablet() ) {
@@ -110,6 +188,7 @@ class WebServiceModuleController extends Controller
         return $this->render('FrontendBundle:'.$theme.':'.$twigName.'.html.twig',
             array(
                 'globalOption'          => $globalOption,
+                'categories'            => $categories,
                 'page'                  => $page,
                 'moduleName'            => $moduleName,
                 'details'               => $details,
@@ -145,7 +224,7 @@ class WebServiceModuleController extends Controller
 
                     $moduleName = $this->get('setting.menuTreeSettingRepo')->getModuleTheme($menu);
                 }else{
-                    $page = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'slug' => $module));
+                    $page = $em->getRepository('SettingContentBundle:Content')->findOneBy(array('globalOption'=>$globalOption,'slug' => $module));
 
                 }
             }

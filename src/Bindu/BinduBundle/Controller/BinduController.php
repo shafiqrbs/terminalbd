@@ -5,7 +5,7 @@ namespace Bindu\BinduBundle\Controller;
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\SignupType;
 use Core\UserBundle\Form\UserConfirmType;
-use Desktop\Bundle\Service\MobileDetect;
+use Frontend\FrontentBundle\Service\MobileDetect;
 use Setting\Bundle\ToolBundle\Event\ReceiveSmsEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;

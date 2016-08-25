@@ -27,11 +27,16 @@ class Icon
     private $id;
 
     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="icon")
+     **/
+
+    private $page;
+
+    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Service", mappedBy="icon")
      **/
 
     private $service;
-
 
     /**
      * @var string
@@ -204,22 +209,12 @@ class Icon
         $this->file = null;
     }
 
-
-
     /**
      * @return mixed
      */
     public function getService()
     {
         return $this->service;
-    }
-
-    /**
-     * @param mixed $service
-     */
-    public function setService($service)
-    {
-        $this->service = $service;
     }
 
     /**
@@ -237,6 +232,16 @@ class Icon
     {
         $this->className = $className;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+
 
 }
 

@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ContentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\ToolBundle\Entity\Module;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -133,7 +134,7 @@ class ModuleCategory
     }
 
     /**
-     * @return mixed
+     * @return Module
      */
     public function getModule()
     {
@@ -141,7 +142,7 @@ class ModuleCategory
     }
 
     /**
-     * @param mixed $module
+     * @param Module $module
      */
     public function setModule($module)
     {

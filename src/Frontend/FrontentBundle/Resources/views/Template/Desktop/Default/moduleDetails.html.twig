@@ -14,7 +14,9 @@
 
         <div class="content_left">
 
-            {% if ( moduleName == 'News') %}
+            {% if ( moduleName == 'Page') %}
+                {{ include('@Frontend/Template/Desktop/ModuleDetails/page.html.twig')}}
+            {% elseif ( moduleName == 'News') %}
                 {{ include('@Frontend/Template/Desktop/ModuleDetails/news.html.twig')}}
             {% elseif( moduleName == 'Blog' ) %}
                 {{ include('@Frontend/Template/Desktop/ModuleDetails/blog.html.twig')}}

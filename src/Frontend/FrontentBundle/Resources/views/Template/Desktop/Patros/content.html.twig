@@ -1,9 +1,25 @@
 {% extends ':template:base.html.twig' %}
 {% block body %}
+<div class="clearfix"></div>
+<section id="breadcrumb">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% if page.parent is not empty %}
+                    <div class="crumb">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i> <a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module': page.parent.nav.slug}) }}">{{ page.parent.name }}</a> <i>/</i> {{ page.name }}</div>
+                {% else %}
+                    <div class="crumb">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i> {{ page.name }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</section>
 <div class="container blog singlepost">
+
         <div class="row">
             <article class="col-md-8">
-                <h1 class="page-header sidebar-title">{{ page.name }}</h1>
+                <div class="page-header sidebar-title"><h2>{{ page.name }}</h2></div>
                 <img class="img-responsive displayed" src="{{ image(page.webPath).resize() }}" alt="" />
                 <p>{{ page.content|raw }}</p>
 
@@ -19,25 +35,27 @@
                 </div>
             </article>
             <!-- Blog Sidebar Column -->
+
             <aside class="col-md-4 sidebar-padding">
-                <div class="blog-sidebar">
-                    <div class="input-group searchbar">
-                        <input type="text" class="form-control searchbar" placeholder="Search for...">
-							<span class="input-group-btn">
-							<button class="btn btn-default" type="button">Search</button>
-							</span>
-                    </div><!-- /input-group -->
-                </div>
                 <!-- Blog Categories -->
                 <div class="blog-sidebar">
-                    <h4 class="sidebar-title"><i class="fa fa-list-ul"></i> Categories</h4>
+                    {% if page.parent is not empty %}
+                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;&nbsp;{{ page.parent.name }}</h4>
+                    {% else %}
+                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;&nbsp;{{ page.name }}</h4>
+                    {% endif %}
                     <hr>
                     <ul class="sidebar-list">
-                        <li><a href="#">Applications</a></li>
-                        <li><a href="#">Photography</a></li>
-                        <li><a href="#">Art Design</a></li>
-                        <li><a href="#">Graphic Design</a></li>
-                        <li><a href="#">Category Name</a></li>
+                        {% if page.children is not empty %}
+                            {% for subPage in page.children %}
+                                <li><a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':subPage.nav.slug}) }}">{{ subPage.name }}</a></li>
+                            {% endfor %}
+                        {% elseif page.parent.children is defined and page.parent.children is not empty %}
+                            {% for subPage in page.parent.children %}
+                                <li><a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':subPage.nav.slug}) }}">{{ subPage.name }}</a></li>
+                            {% endfor %}
+                        {% endif %}
+
                     </ul>
                 </div>
                 <!-- Recent Posts -->
@@ -47,7 +65,7 @@
                     {% for news in globalOption.newses|slice(0,5)  %}
                     <div class="media">
                         <a class="pull-left" href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':news.slug }) }}">
-                            <img class="img-responsive media-object" src="{{ image(page.webPath).resize(100,100) }}" alt="Media Object">
+                            <img class="img-responsive media-object" src="{{ image(news.webPath).resize(100,100) }}" alt="Media Object">
                         </a>
                         <div class="media-body">
                             <h4 class="media-heading"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':news.slug }) }}">{{ news.name }}</a></h4>

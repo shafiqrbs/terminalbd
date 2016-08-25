@@ -131,6 +131,13 @@ class Module
     private $homePages;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="modules")
+     * @ORM\OrderBy({"name" = "ASC"})
+     **/
+
+    private $pages;
+
+    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="module")
      **/
 
@@ -434,6 +441,14 @@ class Module
     public function getPhotoGallery()
     {
         return $this->photoGallery;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPages()
+    {
+        return $this->pages;
     }
 
 

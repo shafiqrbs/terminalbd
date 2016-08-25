@@ -22,6 +22,11 @@ webservice_module_page:
     path:     /{subdomain}/{module}/{slug}
     defaults: { _controller: FrontendBundle:WebServiceModule:modulePage }
 
+webservice_module_category:
+    path:     /{subdomain}/category/{module}/{slug}
+    defaults: { _controller: FrontendBundle:WebServiceModule:moduleCategory }
+
+
 webservice_contact:
     path:     /{subdomain}/contact
     defaults: { _controller: FrontendBundle:WebServiceModule:contact }

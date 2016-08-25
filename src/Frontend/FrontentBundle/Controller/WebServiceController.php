@@ -1,8 +1,7 @@
 <?php
 
 namespace Frontend\FrontentBundle\Controller;
-
-use Desktop\Bundle\Service\MobileDetect;
+use Frontend\FrontentBundle\Service\MobileDetect;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 

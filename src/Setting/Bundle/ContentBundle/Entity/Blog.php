@@ -101,6 +101,7 @@ class Blog
     protected $globalOption;
 
 
+
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\MediaBundle\Entity\PhotoGallery", inversedBy="blogs")
      */
