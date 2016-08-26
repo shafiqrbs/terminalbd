@@ -82,7 +82,7 @@ class GlobalOption
 
 
    /**
-     * @ORM\OneToMany(targetEntity="etting\Bundle\MediaBundle\Entity\PageFile", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\MediaBundle\Entity\PageFile", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
     protected $pageFiles;
 
@@ -1309,13 +1309,6 @@ class GlobalOption
         return $this->photoGalleries;
     }
 
-    /**
-     * @return Team
-     */
-    public function getTeams()
-    {
-        return $this->teams;
-    }
 
     /**
      * @return ModuleCategory
