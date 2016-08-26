@@ -37,10 +37,10 @@ class Damage
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="damage" )
      **/
-    private  $stockItem;
+    private  $stockItems;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="damage" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="damages" )
      **/
     private  $purchaseItem;
 
@@ -139,22 +139,6 @@ class Damage
     public function setItem($item)
     {
         $this->item = $item;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStockItem()
-    {
-        return $this->stockItem;
-    }
-
-    /**
-     * @param mixed $stockItem
-     */
-    public function setStockItem($stockItem)
-    {
-        $this->stockItem = $stockItem;
     }
 
     /**
@@ -300,6 +284,14 @@ class Damage
     public function setTotal($total)
     {
         $this->total = $total;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
     }
 
 

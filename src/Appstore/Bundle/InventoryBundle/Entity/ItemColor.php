@@ -32,6 +32,11 @@ class ItemColor implements CodeAwareEntity
      */
     protected $item;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="color")
+     */
+    protected $goodsItems;
+
 
     /**
      * @var string
@@ -209,6 +214,14 @@ class ItemColor implements CodeAwareEntity
     {
         $code = str_pad($this->getCode(),2, '0', STR_PAD_LEFT);
         return $code;
+    }
+
+    /**
+     * @return GoodsItem
+     */
+    public function getGoodsItems()
+    {
+        return $this->goodsItems;
     }
 }
 

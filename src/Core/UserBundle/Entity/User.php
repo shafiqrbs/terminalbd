@@ -4,6 +4,7 @@ namespace Core\UserBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
@@ -236,6 +237,20 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesImport", mappedBy="createdBy" , cascade={"persist", "remove"} )
      */
     protected $salesImport;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="createdBy" , cascade={"persist", "remove"} )
+     */
+    protected $damage;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="approvedBy" , cascade={"persist", "remove"} )
+     */
+    protected $damageApprovedBy;
+
+
 
     /* ----------------------------------Accounting------------------*/
 
@@ -860,7 +875,21 @@ class User extends BaseUser
         return $this->preOrderApproved;
     }
 
+    /**
+     * @return Damage
+     */
+    public function getDamageApprovedBy()
+    {
+        return $this->damageApprovedBy;
+    }
 
+    /**
+     * @return Damage
+     */
+    public function getDamage()
+    {
+        return $this->damage;
+    }
 
 
 }

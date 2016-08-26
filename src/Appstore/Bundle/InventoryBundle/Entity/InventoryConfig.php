@@ -56,6 +56,11 @@ class InventoryConfig
     protected $purchases;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $purchaseVendorItems;
+
+    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemTypeGrouping", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
      */
     protected $itemTypeGrouping;
@@ -117,6 +122,11 @@ class InventoryConfig
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PettyCash", mappedBy="inventoryConfig", cascade={"persist", "remove"} )
      **/
     private  $pettyCash;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $damages;
 
 
     /**
@@ -475,6 +485,22 @@ class InventoryConfig
     public function setDeliveryProcess($deliveryProcess)
     {
         $this->deliveryProcess = $deliveryProcess;
+    }
+
+    /**
+     * @return Damage
+     */
+    public function getDamages()
+    {
+        return $this->damages;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPurchaseVendorItems()
+    {
+        return $this->purchaseVendorItems;
     }
 
 

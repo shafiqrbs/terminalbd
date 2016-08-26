@@ -26,7 +26,7 @@ class PurchaseVendorItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="goods" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="purchaseVendorItems" , cascade={"detach","merge"} )
      **/
     private  $inventoryConfig;
 

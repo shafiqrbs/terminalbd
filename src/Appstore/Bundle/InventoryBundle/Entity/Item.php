@@ -64,6 +64,11 @@ class Item
      */
     protected $salesItems;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="item")
+     */
+    protected $damages;
+
     /**
      * @var string
      *
@@ -1106,6 +1111,14 @@ class Item
     public function setDamageQuantity($damageQuantity)
     {
         $this->damageQuantity = $damageQuantity;
+    }
+
+    /**
+     * @return Damage
+     */
+    public function getDamages()
+    {
+        return $this->damages;
     }
 
 

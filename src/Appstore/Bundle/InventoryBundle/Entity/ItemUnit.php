@@ -34,10 +34,6 @@ class ItemUnit
      */
     protected $purchaseVendorItems;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="unit")
-     */
-    protected $products;
 
 
     /**

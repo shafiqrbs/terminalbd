@@ -32,6 +32,7 @@ class StockItem
      */
     protected $item;
 
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="stockItem")
      */
@@ -48,7 +49,7 @@ class StockItem
     protected $purchaseReplaceItem;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", inversedBy="stockItem")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", inversedBy="stockItems")
      */
     protected $damage;
 

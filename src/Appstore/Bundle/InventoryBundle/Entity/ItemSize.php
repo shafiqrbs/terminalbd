@@ -28,6 +28,11 @@ class ItemSize  implements CodeAwareEntity
     private  $inventoryConfig;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="size")
+     */
+    protected $goodsItems;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", mappedBy="size")
      */
     protected $item;
@@ -197,6 +202,14 @@ class ItemSize  implements CodeAwareEntity
     {
         $code = str_pad($this->getCode(),2, '0', STR_PAD_LEFT);
         return $code;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGoodsItems()
+    {
+        return $this->goodsItems;
     }
 }
 

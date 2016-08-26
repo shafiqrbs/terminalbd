@@ -27,7 +27,7 @@ class SalesReturnItem
     private  $salesReturn;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", inversedBy="salesReturnItem" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", inversedBy="salesReturnItems" )
      **/
     private  $salesItem;
 

@@ -58,6 +58,11 @@ class PurchaseItem
      **/
     private  $salesItems;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="purchaseItem" )
+     **/
+    private  $damages;
+
 
     /**
      * @var string
@@ -430,6 +435,14 @@ class PurchaseItem
             return $quantity;
         }
         return false;
+    }
+
+    /**
+     * @return Damage
+     */
+    public function getDamages()
+    {
+        return $this->damages;
     }
 
 
