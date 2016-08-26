@@ -33,10 +33,11 @@ class Icon
     private $page;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Service", mappedBy="icon")
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeBlock", mappedBy="icon")
      **/
 
-    private $service;
+    private $homeBlocks;
+
 
     /**
      * @var string
@@ -241,6 +242,13 @@ class Icon
         return $this->page;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getHomeBlocks()
+    {
+        return $this->homeBlocks;
+    }
 
 
 }

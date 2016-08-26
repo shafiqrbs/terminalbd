@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="crumb">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i>{{ moduleName }}</div>
+                    <div class="crumb">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i>{{ title }}</div>
                 </div>
             </div>
 
@@ -15,23 +15,23 @@
         <div class="row">
             <article class="col-md-8">
 
-                {% if ( moduleName == 'News') %}
+                {% if ( module.moduleClass == 'News') %}
                     {{ include('@Frontend/Template/Desktop/Module/news.html.twig')}}
-                {% elseif( moduleName == 'Blog' ) %}
+                {% elseif( module.moduleClass == 'Blog' ) %}
                     {{ include('@Frontend/Template/Desktop/Module/blog.html.twig')}}
-                {% elseif( moduleName == 'Testimonial' ) %}
+                {% elseif( module.moduleClass == 'Testimonial' ) %}
                     {{ include('@Frontend/Template/Desktop/Module/testimonial.html.twig')}}
-                {% elseif( moduleName == 'Timeline' ) %}
+                {% elseif( module.moduleClass == 'Timeline' ) %}
                     {{ include('@Frontend/Template/Desktop/Module/timeline.html.twig')}}
-                {% elseif( moduleName == 'Branch' ) %}
+                {% elseif( module.moduleClass == 'Branch' ) %}
                     {{ include('@Frontend/Template/Desktop/Module/branch.html.twig')}}
-                {% elseif( moduleName == 'Event' ) %}
+                {% elseif( module.moduleClass == 'Event' ) %}
                     {{ include('@Frontend/Template/Desktop/Module/event.html.twig')}}
-                {% elseif( moduleName == 'NoticeBoard' ) %}
+                {% elseif( module.moduleClass == 'NoticeBoard' ) %}
                     {{ include('@Frontend/Template/Desktop/Module/noticeboard.html.twig')}}
-                {% elseif( moduleName == 'Admission' ) %}
+                {% elseif( module.moduleClass == 'Admission' ) %}
                     {{ include('@Frontend/Template/Desktop/Module/admission.html.twig')}}
-                {% elseif( moduleName == 'Syndicate' ) %}
+                {% elseif( module.moduleClass == 'Syndicate' ) %}
                     {{ include('@Frontend/Template/Desktop/Module/syndicate.html.twig')}}
                 {% else %}
                     {{ include('@Frontend/Template/Desktop/Module/default.html.twig')}}
@@ -45,7 +45,7 @@
                     <hr>
                     <ul class="sidebar-list">
                         {% for cat in categories %}
-                            <li><a href="{{ path('webservice_module_category',{'subdomain': globalOption.subDomain,'module':moduleName|lower ,'slug':cat.slug }) }}">{{ cat.name }}</a></li>
+                            <li><a href="{{ path('webservice_module_category',{'subdomain': globalOption.subDomain,'module':module.name|lower ,'slug':cat.slug }) }}">{{ cat.name }}</a></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -53,7 +53,7 @@
                 <div class="blog-sidebar">
                     <h4 class="sidebar-title"><i class="fa fa-align-left"></i> Recent News</h4>
                     <hr style="margin-bottom: 5px;">
-                    {% for news in globalOption.newses|slice(0,5)  %}
+                    {% for news in module.pages|slice(0,5)  %}
                         <div class="media">
                             <a class="pull-left" href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':news.slug }) }}">
                                 <img class="img-responsive media-object" src="{{ image(news.webPath).resize(100,100) }}" alt="Media Object">

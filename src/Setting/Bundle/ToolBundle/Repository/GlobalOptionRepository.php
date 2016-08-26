@@ -205,24 +205,19 @@ class GlobalOptionRepository extends EntityRepository
         $about->setUser($entity);
         $about->setName('About us');
         $about->setMenu('About us');
-        $about->setMenuSlug($aboutus);
         $about->setSlug($aboutus);
         $em->persist($about);
 
         $menu = new Menu();
         $menu->setGlobalOption($globalOption);
-        $menu->setUser($entity);
         $menu->setPage($about);
         $menu->setMenu($about->getName());
-        $menu->setMenuSlug($about->getSlug());
         $menu->setSlug($about->getSlug());
         $em->persist($menu);
 
         $menu = new Menu();
         $menu->setGlobalOption($globalOption);
-        $menu->setUser($entity);
         $menu->setMenu('Contact us');
-        $menu->setMenuSlug($globalOption->getSlug().'-contact-us');
         $menu->setSlug('contact');
         $em->persist($menu);
         $em->flush();
@@ -242,7 +237,6 @@ class GlobalOptionRepository extends EntityRepository
             $menu->setGlobalOption($globalOption);
             $menu->setMenuCustom($custom);
             $menu->setMenu($custom->getMenu());
-            $menu->setMenuSlug($globalOption->getSlug().'-'.$custom->getSlug());
             $menu->setSlug($custom->getSlug());
             $menu->setStatus(0);
             $em->persist($menu);
@@ -261,7 +255,6 @@ class GlobalOptionRepository extends EntityRepository
 
             $menuGrouping = new MenuGrouping();
             $menuGrouping->setGlobalOption($globalOption);
-            $menuGrouping->setUser($menu->getUser());
             $menuGrouping->setMenu($menu);
             $menuGrouping->setMenuGroup($em->getRepository('SettingAppearanceBundle:MenuGroup')->find(1));
             $em->persist($menuGrouping);
@@ -271,7 +264,6 @@ class GlobalOptionRepository extends EntityRepository
 
             $menuGrouping = new MenuGrouping();
             $menuGrouping->setGlobalOption($globalOption);
-            $menuGrouping->setUser($menu->getUser());
             $menuGrouping->setMenu($menu);
             $menuGrouping->setMenuGroup($em->getRepository('SettingAppearanceBundle:MenuGroup')->find(6));
             $em->persist($menuGrouping);

@@ -70,7 +70,7 @@ class ServiceType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Service'
+            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Page'
         ));
     }
 
@@ -79,6 +79,6 @@ class ServiceType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_contentbundle_service';
+        return 'setting_bundle_contentbundle_page';
     }
 }

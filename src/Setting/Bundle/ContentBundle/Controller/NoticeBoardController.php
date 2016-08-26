@@ -2,28 +2,28 @@
 
 namespace Setting\Bundle\ContentBundle\Controller;
 
+use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Setting\Bundle\ContentBundle\Entity\NoticeBoard;
 use Setting\Bundle\ContentBundle\Form\NoticeBoardType;
 
 /**
- * NoticeBoard controller.
+ * Page controller.
  *
  */
 class NoticeBoardController extends Controller
 {
 
     /**
-     * Lists all NoticeBoard entities.
+     * Lists all Page entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:NoticeBoard')->findBy(array('globalOption'=> $globalOption),array('created'=>'desc'));
+        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=> $globalOption,'module'=>8),array('created'=>'desc'));
 
         return $this->render('SettingContentBundle:NoticeBoard:index.html.twig', array(
             'entities' => $entities,
@@ -35,13 +35,13 @@ class NoticeBoardController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new NoticeBoard();
+        $entity = new Page();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $user = $this->get('security.context')->getToken()->getUser();
+            $user = $this->getUser();
             $entity->setUser($user);
             $globalOption = $this->getUser()->getGlobalOption();
             $entity->setGlobalOption($globalOption);
@@ -49,7 +49,7 @@ class NoticeBoardController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('noticeboard_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('noticeboard'));
         }
 
         return $this->render('SettingContentBundle:NoticeBoard:new.html.twig', array(
@@ -61,11 +61,11 @@ class NoticeBoardController extends Controller
     /**
      * Creates a form to create a NoticeBoard entity.
      *
-     * @param NoticeBoard $entity The entity
+     * @param Page $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(NoticeBoard $entity)
+    private function createCreateForm(Page $entity)
     {
 
 
@@ -86,7 +86,7 @@ class NoticeBoardController extends Controller
      */
     public function newAction()
     {
-        $entity = new NoticeBoard();
+        $entity = new Page();
         $form   = $this->createCreateForm($entity);
 
         return $this->render('SettingContentBundle:NoticeBoard:new.html.twig', array(
@@ -104,7 +104,7 @@ class NoticeBoardController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:NoticeBoard')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find NoticeBoard entity.');
@@ -126,7 +126,7 @@ class NoticeBoardController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:NoticeBoard')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find NoticeBoard entity.');
@@ -145,11 +145,11 @@ class NoticeBoardController extends Controller
     /**
     * Creates a form to edit a NoticeBoard entity.
     *
-    * @param NoticeBoard $entity The entity
+    * @param Page $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(NoticeBoard $entity)
+    private function createEditForm(Page $entity)
     {
 
         $form = $this->createForm(new NoticeBoardType(), $entity, array(
@@ -171,7 +171,7 @@ class NoticeBoardController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:NoticeBoard')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find NoticeBoard entity.');
@@ -183,8 +183,10 @@ class NoticeBoardController extends Controller
 
         if ($editForm->isValid()) {
 
+            if(!empty($entity->upload())){
+                $entity->removeUpload();
+            }
             $entity->upload();
-            $entity->setSlug($this->get('setting.menuSettingRepo')->urlSlug($entity->getName()));
             $em->flush();
 
             return $this->redirect($this->generateUrl('noticeboard_edit', array('id' => $id)));
@@ -197,26 +199,20 @@ class NoticeBoardController extends Controller
         ));
     }
     /**
-     * Deletes a NoticeBoard entity.
+     * Deletes a Page entity.
      *
      */
     public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SettingContentBundle:NoticeBoard')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find NoticeBoard entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find NoticeBoard entity.');
         }
-
+        $entity->removeUpload();
+        $em->remove($entity);
+        $em->flush();
         return $this->redirect($this->generateUrl('noticeboard'));
     }
 
@@ -247,7 +243,7 @@ class NoticeBoardController extends Controller
         $form->handleRequest($request);
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SettingContentBundle:NoticeBoard')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');

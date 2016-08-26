@@ -51,9 +51,9 @@ class ModuleCategory
     protected $module;
 
      /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\News", inversedBy="moduleCategory" )
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="moduleCategory" )
      **/
-    protected $newses;
+    protected $pages;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="moduleCategories" )
@@ -163,6 +163,14 @@ class ModuleCategory
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return Page
+     */
+    public function getPages()
+    {
+        return $this->pages;
     }
 
 }

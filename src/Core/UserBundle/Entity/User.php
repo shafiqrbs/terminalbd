@@ -78,71 +78,22 @@ class User extends BaseUser
     protected $pages;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Branch", mappedBy="user" , cascade={"persist", "remove"} )
-     */
-    protected $branches;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\News", mappedBy="user" , cascade={"persist", "remove"})
-     */
-    protected $news;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Admission", mappedBy="user" , cascade={"persist", "remove"})
-     */
-    protected $admissions;
-
-    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Admission", mappedBy="createUser" , cascade={"persist", "remove"})
      */
     protected $admissionPromotions;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Faq", mappedBy="user" , cascade={"persist", "remove"} )
-     */
-    protected $faqs;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Event", mappedBy="user" , cascade={"persist", "remove"})
-     */
-    protected $events;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Blog", mappedBy="user" , cascade={"persist", "remove"})
-     */
-    protected $blogs;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeSlider", mappedBy="user" , cascade={"persist", "remove"})
      */
     protected $homeSliders;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Blackout", mappedBy="user" , cascade={"persist", "remove"})
-     */
-    protected $blackout;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Testimonial", mappedBy="user" , cascade={"persist", "remove"})
-     */
-    protected $testimonials;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\NoticeBoard", mappedBy="user" , cascade={"persist", "remove"})
-     */
-    protected $noticeboards;
 
     /**
      * @ORM\OneToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Product", mappedBy="user" , cascade={"persist", "remove"})
      */
     protected $products;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="user" , cascade={"persist", "remove"})
-     * @ORM\OrderBy({"menu" = "ASC"})
-     */
-    protected $menus;
 
     /**
      * @ORM\OneToOne(targetEntity="Syndicate\Bundle\ComponentBundle\Entity\Education", mappedBy="user" , cascade={"persist", "remove"})
@@ -437,6 +388,20 @@ class User extends BaseUser
      **/
     private  $preOrders;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="processBy"  )
+     **/
+    private  $preOrderProcess;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="approvedBy"  )
+     **/
+    private  $preOrderApproved;
+
+
+
+
+
 
     public function isGranted($role)
     {
@@ -546,18 +511,6 @@ class User extends BaseUser
     }
 
     /**
-     * @param boolean $notification
-     *
-     * @return $this
-     */
-    public function setNotification($notification)
-    {
-        $this->notification = $notification;
-        return $this;
-    }
-
-
-    /**
      * @param mixed $education
      */
     public function setEducation($education)
@@ -575,35 +528,11 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $pages
-     */
-    public function setPages($pages)
-    {
-        $this->pages = $pages;
-    }
-
-    /**
      * @return mixed
      */
     public function getPages()
     {
         return $this->pages;
-    }
-
-    /**
-     * @param mixed $menus
-     */
-    public function setMenus($menus)
-    {
-        $this->menus = $menus;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMenus()
-    {
-        return $this->menus;
     }
 
 
@@ -632,29 +561,6 @@ class User extends BaseUser
         return $this->blackout;
     }
 
-    /**
-     * @param mixed $blackout
-     */
-    public function setBlackout($blackout)
-    {
-        $this->blackout = $blackout;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMenuGrouping()
-    {
-        return $this->menuGrouping;
-    }
-
-    /**
-     * @param mixed $menuGrouping
-     */
-    public function setMenuGrouping($menuGrouping)
-    {
-        $this->menuGrouping = $menuGrouping;
-    }
 
     /**
      * @return mixed
@@ -672,13 +578,6 @@ class User extends BaseUser
         $this->globalOption = $globalOption;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getNews()
-    {
-        return $this->news;
-    }
 
 
     /**
@@ -690,35 +589,11 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $homePage
-     */
-    public function setHomePage($homePage)
-    {
-        $this->homePage = $homePage;
-    }
-
-    /**
      * @return mixed
      */
     public function getContactPage()
     {
         return $this->contactPage;
-    }
-
-    /**
-     * @param mixed $contactPage
-     */
-    public function setContactPage($contactPage)
-    {
-        $this->contactPage = $contactPage;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBranches()
-    {
-        return $this->branches;
     }
 
     /**
@@ -729,53 +604,6 @@ class User extends BaseUser
         return $this->syndicateContents;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getAdmissions()
-    {
-        return $this->admissions;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEvents()
-    {
-        return $this->events;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBlogs()
-    {
-        return $this->blogs;
-    }
-
-    /**
-     * @param mixed $blogs
-     */
-    public function setBlogs($blogs)
-    {
-        $this->blogs = $blogs;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTestimonials()
-    {
-        return $this->testimonials;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getNoticeboards()
-    {
-        return $this->noticeboards;
-    }
 
     /**
      * @return mixed
@@ -817,13 +645,6 @@ class User extends BaseUser
         return $this->homeSliders;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getFaqs()
-    {
-        return $this->faqs;
-    }
 
     /**
      * @return mixed
@@ -1022,6 +843,23 @@ class User extends BaseUser
         }
 
     }
+
+    /**
+     * @return PreOrder
+     */
+    public function getPreOrderProcess()
+    {
+        return $this->preOrderProcess;
+    }
+
+    /**
+     * @return PreOrder
+     */
+    public function getPreOrderApproved()
+    {
+        return $this->preOrderApproved;
+    }
+
 
 
 

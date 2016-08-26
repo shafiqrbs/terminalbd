@@ -56,7 +56,7 @@ class  BranchType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Branch'
+            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Page'
         ));
     }
 
@@ -65,6 +65,6 @@ class  BranchType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_contentbundle_branch';
+        return 'setting_bundle_contentbundle_page';
     }
 }

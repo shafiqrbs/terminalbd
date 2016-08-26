@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ContentBundle\Controller;
 
+use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -9,28 +10,28 @@ use Setting\Bundle\ContentBundle\Entity\Portfolio;
 use Setting\Bundle\ContentBundle\Form\PortfolioType;
 
 /**
- * Portfolio controller.
+ * Page controller.
  *
  */
 class PortfolioController extends Controller
 {
 
     /**
-     * Lists all Portfolio entities.
+     * Lists all Page entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Portfolio')->findBy(array('globalOption'=>$globalOption));
+        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=>$globalOption,'module'=>17));
 
         return $this->render('SettingContentBundle:Portfolio:index.html.twig', array(
             'entities' => $entities,
         ));
     }
     /**
-     * Creates a new Portfolio entity.
+     * Creates a new Page entity.
      *
      */
     public function createAction(Request $request)
@@ -57,13 +58,13 @@ class PortfolioController extends Controller
     }
 
     /**
-     * Creates a form to create a Portfolio entity.
+     * Creates a form to create a Page entity.
      *
-     * @param Portfolio $entity The entity
+     * @param Page $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Portfolio $entity)
+    private function createCreateForm(Page $entity)
     {
 
         $form = $this->createForm(new PortfolioType($this->getUser()->getGlobalOption()), $entity, array(
@@ -83,7 +84,7 @@ class PortfolioController extends Controller
      */
     public function newAction()
     {
-        $entity = new Portfolio();
+        $entity = new Page();
         $form   = $this->createCreateForm($entity);
 
         return $this->render('SettingContentBundle:Portfolio:new.html.twig', array(
@@ -100,7 +101,7 @@ class PortfolioController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Portfolio')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Portfolio entity.');
@@ -118,7 +119,7 @@ class PortfolioController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Portfolio')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Portfolio entity.');
@@ -160,7 +161,7 @@ class PortfolioController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SettingContentBundle:Portfolio')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Portfolio entity.');
@@ -187,14 +188,14 @@ class PortfolioController extends Controller
 
 
     /**
-     * Deletes a Portfolio entity.
+     * Deletes a Page entity.
      *
      */
     public function deleteAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entity = $em->getRepository('SettingContentBundle:Portfolio')->findOneBy(array('globalOption'=>$globalOption,'id'=>$id));
+        $entity = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'id'=>$id));
         if (!empty($entity)) {
 
             $entity->removeUpload();
@@ -214,14 +215,14 @@ class PortfolioController extends Controller
 
 
     /**
-     * Status a news entity.
+     * Status a Page entity.
      *
      */
     public function statusAction($id)
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SettingContentBundle:Portfolio')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');

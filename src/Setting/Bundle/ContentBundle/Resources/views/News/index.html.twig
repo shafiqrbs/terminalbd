@@ -66,6 +66,8 @@
                                 <tr class="head-grey">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric" >Name</th>
+                                    <th class="numeric" >Author</th>
+                                    <th class="numeric" >Category</th>
                                     <th class="numeric" >Date</th>
                                     <th class="numeric" >Action</th>
 
@@ -78,6 +80,16 @@
                                         <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
 
                                         <td class="numeric" ><a href="{{ path('news_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric" >{{ entity.authorName }}</td>
+                                        <td class="numeric" >
+                                            {% if entity.moduleCategory is defined and entity.moduleCategory is not empty %}
+                                                <ul>
+                                            {% for  cat in entity.moduleCategory %}
+                                            <li>{{ cat.name }}</li>
+                                            {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </td>
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}

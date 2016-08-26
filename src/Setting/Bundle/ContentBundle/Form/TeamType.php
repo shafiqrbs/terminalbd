@@ -55,7 +55,7 @@ class TeamType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Team'
+            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Page'
         ));
     }
 
@@ -64,6 +64,6 @@ class TeamType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_contentbundle_blog';
+        return 'setting_bundle_contentbundle_page';
     }
 }

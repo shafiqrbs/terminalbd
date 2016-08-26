@@ -25,12 +25,6 @@ class ProductUnit
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\TradeItem", mappedBy="unit")
-     **/
-
-    private $tradeItem;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)

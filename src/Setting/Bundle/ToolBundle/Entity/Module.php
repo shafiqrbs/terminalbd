@@ -131,8 +131,8 @@ class Module
     private $homePages;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="modules")
-     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="module")
+     * @ORM\OrderBy({"name" = "DESC"})
      **/
 
     private $pages;

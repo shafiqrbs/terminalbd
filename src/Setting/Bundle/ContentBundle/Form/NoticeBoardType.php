@@ -36,7 +36,7 @@ class NoticeBoardType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Setting\Bundle\ContentBundle\Entity\NoticeBoard'
+            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Page'
         ));
     }
 
@@ -45,6 +45,6 @@ class NoticeBoardType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_contentbundle_noticeboard';
+        return 'setting_bundle_contentbundle_page';
     }
 }

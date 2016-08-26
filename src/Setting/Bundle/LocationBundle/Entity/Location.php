@@ -83,6 +83,16 @@ class Location
      */
     protected $thanaProfiles;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="district")
+     */
+    protected $customerDistrict;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="thana")
+     */
+    protected $customerThana;
+
 
     /**
      * @var string
@@ -283,5 +293,21 @@ class Location
     public function getThanaProfiles()
     {
         return $this->thanaProfiles;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomerDistrict()
+    {
+        return $this->customerDistrict;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomerThana()
+    {
+        return $this->customerThana;
     }
 }

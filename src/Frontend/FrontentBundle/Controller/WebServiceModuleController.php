@@ -64,9 +64,9 @@ class WebServiceModuleController extends Controller
             array(
 
                 'globalOption'  => $globalOption,
-                'menu'          => $menu,
+                'module'        => $menu->getModule(),
                 'categories'    => $categories,
-                'moduleName'    => $moduleName,
+                'title'    => $moduleName,
                 'pagination'    => $pagination,
                 'page'          => $page,
             )
@@ -76,7 +76,6 @@ class WebServiceModuleController extends Controller
 
     public function moduleCategoryAction($subdomain,$module,$slug)
     {
-
 
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
@@ -97,7 +96,7 @@ class WebServiceModuleController extends Controller
                 if($moduleName){
                     $twigName = "module";
                     $cat = $em->getRepository('SettingContentBundle:ModuleCategory')->findOneBy(array('globalOption'=>$globalOption ,'slug' => $slug));
-                    $pagination = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=>$globalOption,'module'=>$menu->getModule()->getId(),'id'=>$cat->getId(),'status'=>1),array('id'=>'desc'));
+                    $pagination = $em->getRepository('SettingContentBundle:Page')->getCategoryPage($globalOption,$menu->getModule(),$cat);
                     $pagination = $this->paginate( $pagination,$limit= 10 );
                     if(!empty($menu->getModule())){
                         $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
@@ -128,9 +127,9 @@ class WebServiceModuleController extends Controller
             array(
 
                 'globalOption'  => $globalOption,
-                'menu'          => $menu,
+                'module'        => $menu->getModule(),
                 'categories'    => $categories,
-                'moduleName'    => $cat->getName(),
+                'title'         => $cat->getName(),
                 'pagination'    => $pagination,
                 'page'          => $page,
             )

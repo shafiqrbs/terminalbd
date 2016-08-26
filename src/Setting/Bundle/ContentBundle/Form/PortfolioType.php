@@ -62,7 +62,7 @@ class PortfolioType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Portfolio'
+            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Page'
         ));
     }
 
@@ -71,6 +71,6 @@ class PortfolioType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_contentbundle_portfolio';
+        return 'setting_bundle_contentbundle_page';
     }
 }

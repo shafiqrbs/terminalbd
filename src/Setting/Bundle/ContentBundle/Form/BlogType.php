@@ -34,12 +34,8 @@ class BlogType extends AbstractType
 
                 )
             ))
-             ->add('title','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter blog title'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-
-                )
-            ))
+            ->add('authorName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter author name')))
+            ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter author designation')))
             ->add('file','file', array('attr'=>array('class'=>'default')))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 wysihtml5 m-wrap','rows'=>15)))
             ->add('photo_gallery', 'entity', array(
@@ -66,7 +62,7 @@ class BlogType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Blog'
+            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Page'
         ));
     }
 
@@ -75,6 +71,6 @@ class BlogType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_contentbundle_blog';
+        return 'setting_bundle_contentbundle_page';
     }
 }

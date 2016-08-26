@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ContentBundle\Controller;
 
+use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -29,7 +30,7 @@ class BlogController extends Controller
 
 
     /**
-     * Lists all Blog entities.
+     * Lists all Page entities.
      *
      */
     public function indexAction()
@@ -37,7 +38,7 @@ class BlogController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Blog')->findBy(array('globalOption'=> $globalOption),array('name' => 'asc'));
+        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=> $globalOption,'module'=>2),array('name' => 'asc'));
         $entities = $this->paginate($entities);
 
         return $this->render('SettingContentBundle:Blog:index.html.twig', array(
@@ -45,18 +46,19 @@ class BlogController extends Controller
         ));
     }
     /**
-     * Creates a new Blog entity.
+     * Creates a new Page entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new Blog();
+        $entity = new Page();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         $user = $this->getUser();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(2));
             $entity->setGlobalOption($user->getGlobalOption());
             $entity->upload();
             $em->persist($entity);
@@ -74,13 +76,13 @@ class BlogController extends Controller
     }
 
     /**
-     * Creates a form to create a Blog entity.
+     * Creates a form to create a Page entity.
      *
-     * @param Blog $entity The entity
+     * @param Page $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Blog $entity)
+    private function createCreateForm(Page $entity)
     {
 
         $globalOption = $this->getUser()->getGlobalOption()->getId();
@@ -97,12 +99,12 @@ class BlogController extends Controller
     }
 
     /**
-     * Displays a form to create a new Blog entity.
+     * Displays a form to create a new Page entity.
      *
      */
     public function newAction()
     {
-        $entity = new Blog();
+        $entity = new Page();
         $form   = $this->createCreateForm($entity);
 
         return $this->render('SettingContentBundle:Blog:new.html.twig', array(
@@ -112,7 +114,7 @@ class BlogController extends Controller
     }
 
     /**
-     * Finds and displays a Blog entity.
+     * Finds and displays a Page entity.
      *
      */
     public function showAction($id)
@@ -134,10 +136,10 @@ class BlogController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Blog entity.
+     * Displays a form to edit an existing Page entity.
      *
      */
-    public function editAction(Blog $entity )
+    public function editAction(Page $entity )
     {
         $em = $this->getDoctrine()->getManager();
         $editForm = $this->createEditForm($entity);
@@ -152,11 +154,11 @@ class BlogController extends Controller
     /**
      * Creates a form to edit a Blog entity.
      *
-     * @param Blog $entity The entity
+     * @param Page $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Blog $entity)
+    private function createEditForm(Page $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption()->getId();
         $form = $this->createForm(new BlogType($globalOption), $entity, array(
@@ -171,7 +173,7 @@ class BlogController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Blog entity.
+     * Edits an existing Page entity.
      *
      */
     public function updateAction(Request $request, $id)
@@ -210,7 +212,7 @@ class BlogController extends Controller
         ));
     }
     /**
-     * Deletes a Blog entity.
+     * Deletes a Page entity.
      *
      */
     public function deleteAction(Request $request, $id)
@@ -229,7 +231,7 @@ class BlogController extends Controller
     }
 
     /**
-     * Creates a form to delete a Blog entity by id.
+     * Creates a form to delete a Page entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -246,10 +248,10 @@ class BlogController extends Controller
     }
 
     /**
-     * Status a Blog entity.
+     * Status a Page entity.
      *
      */
-    public function statusAction(Request $request, Blog $entity)
+    public function statusAction(Request $request, Page $entity)
     {
 
         $em = $this->getDoctrine()->getManager();

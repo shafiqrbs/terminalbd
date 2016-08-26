@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ContentBundle\Controller;
 
 use Setting\Bundle\ContentBundle\Entity\Client;
+use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -37,7 +38,7 @@ class ClientController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Client')->findBy(array('globalOption'=> $globalOption),array('name' => 'asc'));
+        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=> $globalOption,'module'=>19),array('name' => 'asc'));
         $entities = $this->paginate($entities);
 
         return $this->render('SettingContentBundle:Client:index.html.twig', array(
@@ -50,7 +51,7 @@ class ClientController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new Client();
+        $entity = new Page();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -74,13 +75,13 @@ class ClientController extends Controller
     }
 
     /**
-     * Creates a form to create a Team entity.
+     * Creates a form to create a Page entity.
      *
-     * @param Team $entity The entity
+     * @param Page $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Client $entity)
+    private function createCreateForm(Page $entity)
     {
 
         $globalOption = $this->getUser()->getGlobalOption()->getId();
@@ -102,7 +103,7 @@ class ClientController extends Controller
      */
     public function newAction()
     {
-        $entity = new Client();
+        $entity = new Page();
         $form   = $this->createCreateForm($entity);
 
         return $this->render('SettingContentBundle:Client:new.html.twig', array(
@@ -137,7 +138,7 @@ class ClientController extends Controller
      * Displays a form to edit an existing Team entity.
      *
      */
-    public function editAction(Client $entity )
+    public function editAction(Page $entity )
     {
         $em = $this->getDoctrine()->getManager();
         $editForm = $this->createEditForm($entity);
@@ -152,11 +153,11 @@ class ClientController extends Controller
     /**
      * Creates a form to edit a Team entity.
      *
-     * @param Team $entity The entity
+     * @param Page $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Client $entity)
+    private function createEditForm(Page $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption()->getId();
         $form = $this->createForm(new ClientType($globalOption), $entity, array(
@@ -249,7 +250,7 @@ class ClientController extends Controller
      * Status a Team entity.
      *
      */
-    public function statusAction(Request $request, Client $entity)
+    public function statusAction(Request $request, Page $entity)
     {
 
         $em = $this->getDoctrine()->getManager();

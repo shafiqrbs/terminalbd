@@ -91,16 +91,6 @@ class HomeSlider
      **/
     protected $user;
 
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", inversedBy="homeSlider" )
-     **/
-
-    protected $page;
-
-
-
-
     /**
      * Get id
      *
@@ -303,24 +293,6 @@ class HomeSlider
     {
         $this->sorting = $sorting;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getPage()
-    {
-        return $this->page;
-    }
-
-    /**
-     * @param mixed $page
-     */
-    public function setPage($page)
-    {
-        $this->page = $page;
-    }
-
-
 
     /**
      * @return mixed

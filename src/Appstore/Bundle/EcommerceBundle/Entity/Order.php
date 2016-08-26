@@ -24,13 +24,13 @@ class Order
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="preOrders")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="orders")
      */
     protected $ecommerceConfig;
 
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="order" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="orders" )
      **/
     private  $createdBy;
 

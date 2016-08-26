@@ -2,10 +2,10 @@
 
 namespace Setting\Bundle\ContentBundle\Controller;
 
+use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Setting\Bundle\ContentBundle\Entity\Testimonial;
 use Setting\Bundle\ContentBundle\Form\TestimonialType;
 
 /**
@@ -23,20 +23,20 @@ class TestimonialController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $user = $this->get('security.context')->getToken()->getUser();
-        $entities = $em->getRepository('SettingContentBundle:Testimonial')->findBy(array('user'=> $user),array('name' => 'asc'));
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=> $globalOption,'module'=>3),array('name' => 'asc'));
 
         return $this->render('SettingContentBundle:Testimonial:index.html.twig', array(
             'entities' => $entities,
         ));
     }
     /**
-     * Creates a new Testimonial entity.
+     * Creates a new Page entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new Testimonial();
+        $entity = new Page();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -60,11 +60,11 @@ class TestimonialController extends Controller
     /**
      * Creates a form to create a Testimonial entity.
      *
-     * @param Testimonial $entity The entity
+     * @param Page $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Testimonial $entity)
+    private function createCreateForm(Page $entity)
     {
 
         $form = $this->createForm(new TestimonialType(), $entity, array(
@@ -79,12 +79,12 @@ class TestimonialController extends Controller
     }
 
     /**
-     * Displays a form to create a new Testimonial entity.
+     * Displays a form to create a new Page entity.
      *
      */
     public function newAction()
     {
-        $entity = new Testimonial();
+        $entity = new Page();
         $form   = $this->createCreateForm($entity);
 
         return $this->render('SettingContentBundle:Testimonial:new.html.twig', array(
@@ -94,14 +94,14 @@ class TestimonialController extends Controller
     }
 
     /**
-     * Finds and displays a Testimonial entity.
+     * Finds and displays a Page entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Testimonial')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Testimonial entity.');
@@ -116,14 +116,14 @@ class TestimonialController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Testimonial entity.
+     * Displays a form to edit an existing Page entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Testimonial')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Testimonial entity.');
@@ -140,13 +140,13 @@ class TestimonialController extends Controller
     }
 
     /**
-    * Creates a form to edit a Testimonial entity.
+    * Creates a form to edit a Page entity.
     *
-    * @param Testimonial $entity The entity
+    * @param Page $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Testimonial $entity)
+    private function createEditForm(Page $entity)
     {
 
 
@@ -163,14 +163,14 @@ class TestimonialController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Testimonial entity.
+     * Edits an existing Page entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Testimonial')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Testimonial entity.');
@@ -197,7 +197,7 @@ class TestimonialController extends Controller
         ));
     }
     /**
-     * Deletes a Testimonial entity.
+     * Deletes a Page entity.
      *
      */
     public function deleteAction(Request $request, $id)
@@ -207,7 +207,7 @@ class TestimonialController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SettingContentBundle:Testimonial')->find($id);
+            $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Testimonial entity.');

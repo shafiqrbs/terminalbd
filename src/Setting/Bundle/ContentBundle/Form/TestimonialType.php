@@ -48,7 +48,7 @@ class TestimonialType extends AbstractType
     {
 
         $resolver->setDefaults(array(
-            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Testimonial'
+            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Page'
         ));
     }
 
@@ -57,6 +57,6 @@ class TestimonialType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_contentbundle_testimonial';
+        return 'setting_bundle_contentbundle_page';
     }
 }

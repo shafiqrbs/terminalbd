@@ -83,5 +83,23 @@ class PageRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function getCategoryPage($globalOption,$module,$cat){
+
+        $em = $this->_em;
+
+        $repository = $em->getRepository('SettingContentBundle:Page');
+        $query = $repository->createQueryBuilder('p')
+            ->innerJoin('p.moduleCategory', 'moduleCategory')
+            ->where('p.globalOption = :option')
+            ->setParameter('option', $globalOption->getId())
+            ->andWhere('p.module = :module')
+            ->setParameter('module', $module)
+            ->andWhere('moduleCategory.id = :category')
+            ->setParameter('category', $cat)
+            ->getQuery();
+
+        return $query;
+    }
+
 
 }

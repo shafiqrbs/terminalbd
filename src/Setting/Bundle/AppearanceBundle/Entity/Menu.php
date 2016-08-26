@@ -85,6 +85,11 @@ class Menu
     protected $siteSetting;
 
     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeBlock", mappedBy="menu")
+     */
+    protected $homeBlocks;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="defaultMenu", type="boolean")

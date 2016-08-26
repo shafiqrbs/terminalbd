@@ -79,36 +79,6 @@ class GlobalOption
      **/
     protected $pages;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\News", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     * @ORM\OrderBy({"updated" = "DESC"})
-     **/
-    protected $newses;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Blog", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $blogs;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Portfolio", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $portfolios;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Service", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $services;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Client", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $clients;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\TradeItem", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $tradeItems;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", mappedBy="globalOption" , cascade={"persist", "remove"} )
@@ -121,44 +91,6 @@ class GlobalOption
      **/
     protected $blackout;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\NoticeBoard", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $noticeBoards;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Testimonial", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     * @ORM\OrderBy({"updated" = "DESC"})
-     **/
-    protected $testimonials;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Admission", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $admissions;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Event", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $events;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Faq", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     * @ORM\OrderBy({"created" = "DESC"})
-     **/
-    protected $faqs;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Team", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     * @ORM\OrderBy({"created" = "DESC"})
-     **/
-    protected $teams;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Branch", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     * @ORM\OrderBy({"name" = "ASC"})
-     **/
-    protected $branches;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeSlider", mappedBy="globalOption" , cascade={"persist", "remove"} )
@@ -531,7 +463,7 @@ class GlobalOption
     protected $shops;
 
     /**
-     * @ORM\OneToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="globalOption" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $mallConnects;
 

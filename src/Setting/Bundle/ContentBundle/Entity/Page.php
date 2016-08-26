@@ -42,36 +42,26 @@ class Page
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, nullable = true)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="menu", type="string", length=255)
+     * @ORM\Column(name="menu", type="string", length=255, nullable = true)
      */
     private $menu;
 
-    /**
-     * @Gedmo\Slug(handlers={
-     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\TreeSlugHandler", options={
-     *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="parent"),
-     *          @Gedmo\SlugHandlerOption(name="separator", value="-")
-     *      })
-     * }, fields={"menu"})
-     * @Doctrine\ORM\Mapping\Column(length=255)
-     */
-    private $menuSlug;
 
     /**
      * @Gedmo\Slug(handlers={
      *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\TreeSlugHandler", options={
-     *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="parent"),
+     *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="globalOption"),
      *          @Gedmo\SlugHandlerOption(name="separator", value="-")
      *      })
-     * }, fields={"menu"})
-     * @Doctrine\ORM\Mapping\Column(length=255)
+     * }, fields={"name"})
+     * @Doctrine\ORM\Mapping\Column()
      */
     private $slug;
 
@@ -92,7 +82,7 @@ class Page
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isSubPage", type="boolean" )
+     * @ORM\Column(name="isSubPage", type="boolean", nullable = true )
      */
     private $isSubPage = false;
 
@@ -180,9 +170,23 @@ class Page
     /**
      * @var string
      *
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
+     */
+    private $phone;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="mobile", type="string", length=255, nullable=true)
      */
     private $mobile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fax", type="string", length=255, nullable=true)
+     */
+    private $fax;
 
     /**
      * @var string
@@ -273,6 +277,11 @@ class Page
     protected $pageModules;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", inversedBy="pages")
+     **/
+    protected $moduleCategory;
+
+    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\PageMeta", mappedBy="page" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
@@ -284,12 +293,13 @@ class Page
     protected $icon;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\MediaBundle\Entity\PageFile", inversedBy="page")
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\MediaBundle\Entity\PageFile", mappedBy="page")
+     * @ORM\OrderBy({"id" = "DESC"})
      */
     protected $pageFiles;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\MediaBundle\Entity\PhotoGallery", inversedBy="pageGalleries")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\MediaBundle\Entity\PhotoGallery", inversedBy="pages")
      */
     protected $photoGallery;
 
@@ -308,7 +318,6 @@ class Page
      * @Assert\File(maxSize="8388608")
      */
     protected $file;
-
 
     /**
      * @var boolean
@@ -372,29 +381,6 @@ class Page
     public function getMenu()
     {
         return $this->menu;
-    }
-
-    /**
-     * Set menuSlug
-     *
-     * @param string $menuSlug
-     * @return Page
-     */
-    public function setMenuSlug($menuSlug)
-    {
-        $this->menuSlug = $menuSlug;
-
-        return $this;
-    }
-
-    /**
-     * Get menuSlug
-     *
-     * @return string
-     */
-    public function getMenuSlug()
-    {
-        return $this->menuSlug;
     }
 
     /**
@@ -1049,6 +1035,54 @@ class Page
     public function setModule($module)
     {
         $this->module = $module;
+    }
+
+    /**
+     * @return ModuleCategory
+     */
+    public function getModuleCategory()
+    {
+        return $this->moduleCategory;
+    }
+
+    /**
+     * @param ModuleCategory $moduleCategory
+     */
+    public function setModuleCategory($moduleCategory)
+    {
+        $this->moduleCategory = $moduleCategory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string $phone
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFax()
+    {
+        return $this->fax;
+    }
+
+    /**
+     * @param string $fax
+     */
+    public function setFax($fax)
+    {
+        $this->fax = $fax;
     }
 
 

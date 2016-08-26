@@ -2,10 +2,6 @@ setting_content_client:
     resource: "@SettingContentBundle/Resources/config/routing/client.yml"
     prefix:    /website/client
 
-setting_content_tradeitem:
-    resource: "@SettingContentBundle/Resources/config/routing/tradeitem.yml"
-    prefix:    /website/tradeitem
-
 setting_content_portfolio:
     resource: "@SettingContentBundle/Resources/config/routing/portfolio.yml"
     prefix:    /website/portfolio

@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ContentBundle\Controller;
 
+use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -23,8 +24,8 @@ class EventController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $user = $this->get('security.context')->getToken()->getUser();
-        $entities = $em->getRepository('SettingContentBundle:Event')->findBy(array('user'=> $user),array('name' => 'asc'));
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=> $globalOption,'module'=>7),array('name' => 'asc'));
 
         return $this->render('SettingContentBundle:Event:index.html.twig', array(
             'entities' => $entities,
@@ -36,19 +37,19 @@ class EventController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new Event();
+        $entity = new Page();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setUser($user);
-            $entity->setSlug($this->get('setting.menuSettingRepo')->urlSlug($entity->getName()));
+            $entity->setGlobalOption($user->getGlobalOption());
             $entity->upload();
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('event_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('event'));
         }
 
         return $this->render('SettingContentBundle:Event:new.html.twig', array(
@@ -64,7 +65,7 @@ class EventController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Event $entity)
+    private function createCreateForm(Page $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption()->getId();
 
@@ -103,7 +104,7 @@ class EventController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Event')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Event entity.');
@@ -125,7 +126,7 @@ class EventController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Event')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Event entity.');
@@ -142,13 +143,13 @@ class EventController extends Controller
     }
 
     /**
-    * Creates a form to edit a Event entity.
+    * Creates a form to edit a Page entity.
     *
-    * @param Event $entity The entity
+    * @param Page $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Event $entity)
+    private function createEditForm(Page $entity)
     {
 
         $globalOption = $this->getUser()->getGlobalOption()->getId();
@@ -173,7 +174,7 @@ class EventController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Event')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Event entity.');
@@ -184,7 +185,9 @@ class EventController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $entity->setSlug($this->get('setting.menuSettingRepo')->urlSlug($entity->getName()));
+            if(!empty($entity->upload())){
+                $entity->removeUpload();
+            }
             $entity->upload();
             $em->flush();
 
@@ -208,7 +211,7 @@ class EventController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SettingContentBundle:Event')->find($id);
+            $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Event entity.');
@@ -248,7 +251,7 @@ class EventController extends Controller
         $form->handleRequest($request);
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SettingContentBundle:News')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');

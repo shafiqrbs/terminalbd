@@ -46,40 +46,16 @@ class PhotoGallery
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="photoGallery")
-     */
-
-    protected $pageGalleries;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Event", mappedBy="photoGallery")
-     */
-
-    protected $eventGalleries;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Blog", mappedBy="photoGallery")
-     */
-
-    protected $blogs;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\News", mappedBy="photoGallery")
-     */
-
-    protected $newses;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\TradeItem", mappedBy="photoGallery")
-     */
-
-    protected $tradeItem;
-
-    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomePage", mappedBy="photoGallery")
      */
 
     protected $homePage;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="photoGallery")
+     */
+
+    protected $pages;
 
 
     /**
@@ -368,21 +344,6 @@ class PhotoGallery
 
     }
 
-    /**
-     * @return mixed
-     */
-    public function getEventGalleries()
-    {
-        return $this->eventGalleries;
-    }
-
-    /**
-     * @return Blog
-     */
-    public function getBlogs()
-    {
-        return $this->blogs;
-    }
 
     /**
      * @return GlobalOption
@@ -419,9 +380,9 @@ class PhotoGallery
     /**
      * @return mixed
      */
-    public function getNewses()
+    public function getPages()
     {
-        return $this->newses;
+        return $this->pages;
     }
 
 

@@ -32,7 +32,7 @@ class FaqType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Faq'
+            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Page'
         ));
     }
 
@@ -41,6 +41,6 @@ class FaqType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_contentbundle_faq';
+        return 'setting_bundle_contentbundle_page';
     }
 }

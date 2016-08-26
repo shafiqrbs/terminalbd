@@ -33,20 +33,6 @@ class PageMeta
      **/
     protected $page;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Portfolio", inversedBy="pageMetas" )
-     **/
-    protected $portfolio;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Service", inversedBy="pageMetas" )
-     **/
-    protected $service;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\TradeItem", inversedBy="pageMetas" )
-     **/
-    protected $tradeItem;
 
     /**
      * @var string
@@ -130,54 +116,5 @@ class PageMeta
     {
         $this->metaValue = $metaValue;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getService()
-    {
-        return $this->service;
-    }
-
-    /**
-     * @param mixed $service
-     */
-    public function setService($service)
-    {
-        $this->service = $service;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPortfolio()
-    {
-        return $this->portfolio;
-    }
-
-    /**
-     * @param mixed $portfolio
-     */
-    public function setPortfolio($portfolio)
-    {
-        $this->portfolio = $portfolio;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTradeItem()
-    {
-        return $this->tradeItem;
-    }
-
-    /**
-     * @param mixed $tradeItem
-     */
-    public function setTradeItem($tradeItem)
-    {
-        $this->tradeItem = $tradeItem;
-    }
-
 
 }

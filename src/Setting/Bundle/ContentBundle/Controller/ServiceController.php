@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ContentBundle\Controller;
 
+use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -9,33 +10,33 @@ use Setting\Bundle\ContentBundle\Entity\Service;
 use Setting\Bundle\ContentBundle\Form\ServiceType;
 
 /**
- * Service controller.
+ * Page controller.
  *
  */
 class ServiceController extends Controller
 {
 
     /**
-     * Lists all Service entities.
+     * Lists all Page entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Service')->findBy(array('globalOption'=>$globalOption));
+        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=>$globalOption,'module'=>16));
 
         return $this->render('SettingContentBundle:Service:index.html.twig', array(
             'entities' => $entities,
         ));
     }
     /**
-     * Creates a new Service entity.
+     * Creates a new Page entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new Service();
+        $entity = new Page();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $data = $request->request->all();
@@ -57,13 +58,13 @@ class ServiceController extends Controller
     }
 
     /**
-     * Creates a form to create a Service entity.
+     * Creates a form to create a Page entity.
      *
-     * @param Service $entity The entity
+     * @param Page $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Service $entity)
+    private function createCreateForm(Page $entity)
     {
 
         $form = $this->createForm(new ServiceType($this->getUser()->getGlobalOption()), $entity, array(
@@ -78,12 +79,12 @@ class ServiceController extends Controller
     }
 
     /**
-     * Displays a form to create a new Service entity.
+     * Displays a form to create a new Page entity.
      *
      */
     public function newAction()
     {
-        $entity = new Service();
+        $entity = new Page();
         $form   = $this->createCreateForm($entity);
 
         return $this->render('SettingContentBundle:Service:new.html.twig', array(
@@ -93,7 +94,7 @@ class ServiceController extends Controller
     }
 
     /**
-     * Finds and displays a Service entity.
+     * Finds and displays a Page entity.
      *
      */
     public function showAction($id)
@@ -111,14 +112,14 @@ class ServiceController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Service entity.
+     * Displays a form to edit an existing Page entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Service')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Service entity.');
@@ -134,13 +135,13 @@ class ServiceController extends Controller
 
 
     /**
-     * Creates a form to edit a Service entity.
+     * Creates a form to edit a Page entity.
      *
-     * @param Service $entity The entity
+     * @param Page $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Service $entity)
+    private function createEditForm(Page $entity)
     {
 
         $form = $this->createForm(new ServiceType($this->getUser()->getGlobalOption()), $entity, array(
@@ -154,13 +155,13 @@ class ServiceController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Service entity.
+     * Edits an existing Page entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SettingContentBundle:Service')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Service entity.');
@@ -187,7 +188,7 @@ class ServiceController extends Controller
 
 
     /**
-     * Deletes a Service entity.
+     * Deletes a Page entity.
      *
      */
     public function deleteAction($id)
@@ -221,7 +222,7 @@ class ServiceController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SettingContentBundle:Service')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');

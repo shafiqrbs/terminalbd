@@ -36,13 +36,6 @@ class Blackout
     protected $globalOption;
 
     /**
-     * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="blackout")
-     **/
-
-    protected $user;
-
-
-    /**
      * @var string
      *
      * @ORM\Column(name="blackoutDate", type="text")

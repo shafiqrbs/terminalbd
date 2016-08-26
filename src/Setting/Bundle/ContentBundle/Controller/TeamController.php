@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ContentBundle\Controller;
 
+use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -36,7 +37,7 @@ class TeamController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Team')->findBy(array('globalOption'=> $globalOption),array('name' => 'asc'));
+        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=> $globalOption,'module'=>14),array('name' => 'asc'));
         $entities = $this->paginate($entities);
 
         return $this->render('SettingContentBundle:Team:index.html.twig', array(
@@ -49,7 +50,7 @@ class TeamController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new Team();
+        $entity = new Page();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -73,13 +74,13 @@ class TeamController extends Controller
     }
 
     /**
-     * Creates a form to create a Team entity.
+     * Creates a form to create a Page entity.
      *
-     * @param Team $entity The entity
+     * @param Page $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Team $entity)
+    private function createCreateForm(Page $entity)
     {
 
         $globalOption = $this->getUser()->getGlobalOption()->getId();
@@ -96,12 +97,12 @@ class TeamController extends Controller
     }
 
     /**
-     * Displays a form to create a new Team entity.
+     * Displays a form to create a new Page entity.
      *
      */
     public function newAction()
     {
-        $entity = new Team();
+        $entity = new Page();
         $form   = $this->createCreateForm($entity);
 
         return $this->render('SettingContentBundle:Team:new.html.twig', array(
@@ -136,7 +137,7 @@ class TeamController extends Controller
      * Displays a form to edit an existing Team entity.
      *
      */
-    public function editAction(Team $entity )
+    public function editAction(Page $entity )
     {
         $em = $this->getDoctrine()->getManager();
         $editForm = $this->createEditForm($entity);
@@ -149,13 +150,13 @@ class TeamController extends Controller
     }
 
     /**
-     * Creates a form to edit a Team entity.
+     * Creates a form to edit a Page entity.
      *
      * @param Team $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Team $entity)
+    private function createEditForm(Page $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption()->getId();
         $form = $this->createForm(new TeamType($globalOption), $entity, array(
@@ -177,7 +178,7 @@ class TeamController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Team')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Team entity.');
@@ -209,13 +210,13 @@ class TeamController extends Controller
         ));
     }
     /**
-     * Deletes a Team entity.
+     * Deletes a Page entity.
      *
      */
     public function deleteAction(Request $request, $id)
     {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SettingContentBundle:Team')->find($id);
+            $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Team entity.');
@@ -248,7 +249,7 @@ class TeamController extends Controller
      * Status a Team entity.
      *
      */
-    public function statusAction(Request $request, Team $entity)
+    public function statusAction(Request $request, Page $entity)
     {
 
         $em = $this->getDoctrine()->getManager();

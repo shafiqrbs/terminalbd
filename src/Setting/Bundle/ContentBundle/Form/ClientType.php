@@ -47,7 +47,7 @@ class ClientType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Client'
+            'data_class' => 'Setting\Bundle\ContentBundle\Entity\Page'
         ));
     }
 
@@ -56,6 +56,6 @@ class ClientType extends AbstractType
      */
     public function getName()
     {
-        return 'setting_bundle_contentbundle_client';
+        return 'setting_bundle_contentbundle_page';
     }
 }

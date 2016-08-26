@@ -17,13 +17,12 @@ class NewsController extends Controller
 {
 
     /**
-     * Lists Spacific user News entities.
+     * Lists Spacific user Page entities.
      *
      */
     public function indexAction()
     {
 
-        exit;
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption' => $globalOption,'module'=>1),array('name' => 'asc'));
@@ -34,7 +33,7 @@ class NewsController extends Controller
     }
 
     /**
-     * Creates a new News entity.
+     * Creates a new Page entity.
      *
      */
     public function createAction(Request $request)
@@ -68,13 +67,13 @@ class NewsController extends Controller
     }
 
     /**
-     * Creates a form to create a News entity.
+     * Creates a form to create a Page entity.
      *
-     * @param News $entity The entity
+     * @param Page $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(News $entity)
+    private function createCreateForm(Page $entity)
     {
 
         $globalOption = $this->getUser()->getGlobalOption();
@@ -91,24 +90,31 @@ class NewsController extends Controller
     }
 
     /**
-     * Displays a form to create a new News entity.
+     * Displays a form to create a new Page entity.
      *
      */
     public function newAction()
     {
+        $entity = new Page();
+        $form   = $this->createCreateForm($entity);
 
+        return $this->render('SettingContentBundle:News:new.html.twig', array(
+            'entity' => $entity,
+            'globalOption' => $this->getUser()->getGlobalOption(),
+            'form'   => $form->createView(),
+        ));
 
     }
 
     /**
-     * Finds and displays a News entity.
+     * Finds and displays a Page entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:News')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find News entity.');
@@ -123,7 +129,7 @@ class NewsController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing News entity.
+     * Displays a form to edit an existing Page entity.
      *
      */
     public function editAction($id)
@@ -147,9 +153,9 @@ class NewsController extends Controller
     }
 
     /**
-    * Creates a form to edit a News entity.
+    * Creates a form to edit a Page entity.
     *
-    * @param News $entity The entity
+    * @param Page $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
@@ -168,7 +174,7 @@ class NewsController extends Controller
        return $form;
     }
     /**
-     * Edits an existing News entity.
+     * Edits an existing Page entity.
      *
      */
     public function updateAction(Request $request, $id)
@@ -205,7 +211,7 @@ class NewsController extends Controller
         ));
     }
     /**
-     * Deletes a News entity.
+     * Deletes a Page entity.
      *
      */
     public function deleteAction(Request $request, $id)
@@ -229,7 +235,7 @@ class NewsController extends Controller
     }
 
     /**
-     * Creates a form to delete a News entity by id.
+     * Creates a form to delete a Page entity by id.
      *
      * @param mixed $id The entity id
      *

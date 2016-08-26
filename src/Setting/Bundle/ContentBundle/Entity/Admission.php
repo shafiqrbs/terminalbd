@@ -137,17 +137,6 @@ class Admission
     protected $file;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="admissions")
-     **/
-
-    protected $globalOption;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="admissions")
-     **/
-    protected $user;
-
-    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\AdmissionComment", mappedBy="admission")
      */
     protected $comments;
@@ -161,11 +150,6 @@ class Admission
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Course", inversedBy="admissions")
      */
     protected $course;
-
-     /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Branch", inversedBy="admissions")
-     */
-    protected $branches;
 
     /**
      * @var string
@@ -395,22 +379,6 @@ class Admission
     public function setStatus($status)
     {
         $this->status = $status;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param mixed $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
     }
 
 
@@ -749,21 +717,6 @@ class Admission
         $this->isPayment = $isPayment;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getBranches()
-    {
-        return $this->branches;
-    }
-
-    /**
-     * @param mixed $branches
-     */
-    public function setBranches($branches)
-    {
-        $this->branches = $branches;
-    }
 
     /**
      * @return mixed
@@ -877,19 +830,5 @@ class Admission
         $this->isPromotion = $isPromotion;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getGlobalOption()
-    {
-        return $this->globalOption;
-    }
 
-    /**
-     * @param mixed $globalOption
-     */
-    public function setGlobalOption($globalOption)
-    {
-        $this->globalOption = $globalOption;
-    }
 }

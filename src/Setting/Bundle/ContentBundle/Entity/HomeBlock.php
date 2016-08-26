@@ -29,13 +29,13 @@ class HomeBlock
     protected $homePage;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="homeBlock" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="homeBlocks" )
      **/
 
     protected $menu;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Icon", inversedBy="homeBlock" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Icon", inversedBy="homeBlocks" )
      **/
 
     protected $icon;

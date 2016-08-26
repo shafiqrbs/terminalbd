@@ -2,10 +2,9 @@
 
 namespace Setting\Bundle\ContentBundle\Controller;
 
+use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Setting\Bundle\ContentBundle\Entity\Faq;
 use Setting\Bundle\ContentBundle\Form\FaqType;
 
 /**
@@ -22,9 +21,9 @@ class FaqController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $globalOption = $this->getUser()->getGlobalOption();
 
-        $entities = $em->getRepository('SettingContentBundle:Faq')->findBy(array('user'=>$user),array('created'=>'desc'));
+        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=>$globalOption,'module'=>11),array('created'=>'desc'));
 
         return $this->render('SettingContentBundle:Faq:index.html.twig', array(
             'entities' => $entities,
@@ -36,18 +35,19 @@ class FaqController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new Faq();
+        $entity = new Page();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $user = $this->get('security.context')->getToken()->getUser();
+            $user = $this->getUser();
             $entity->setUser($user);
+            $entity->setGlobalOption($user->getGlobalOption());
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('faq_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('faq'));
         }
 
         return $this->render('SettingContentBundle:Faq:new.html.twig', array(
@@ -59,11 +59,11 @@ class FaqController extends Controller
     /**
      * Creates a form to create a Faq entity.
      *
-     * @param Faq $entity The entity
+     * @param Page $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Faq $entity)
+    private function createCreateForm(Page $entity)
     {
         $form = $this->createForm(new FaqType(), $entity, array(
             'action' => $this->generateUrl('faq_create', array('id' => $entity->getId())),
@@ -78,12 +78,12 @@ class FaqController extends Controller
     }
 
     /**
-     * Displays a form to create a new Faq entity.
+     * Displays a form to create a new Page entity.
      *
      */
     public function newAction()
     {
-        $entity = new Faq();
+        $entity = new Page();
         $form   = $this->createCreateForm($entity);
 
         return $this->render('SettingContentBundle:Faq:new.html.twig', array(
@@ -100,7 +100,7 @@ class FaqController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Faq')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Faq entity.');
@@ -122,7 +122,7 @@ class FaqController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Faq')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Faq entity.');
@@ -139,13 +139,13 @@ class FaqController extends Controller
     }
 
     /**
-    * Creates a form to edit a Faq entity.
+    * Creates a form to edit a Page entity.
     *
-    * @param Faq $entity The entity
+    * @param Page $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Faq $entity)
+    private function createEditForm(Page $entity)
     {
         $form = $this->createForm(new FaqType(), $entity, array(
             'action' => $this->generateUrl('faq_update', array('id' => $entity->getId())),
@@ -166,7 +166,7 @@ class FaqController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Faq')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Faq entity.');
@@ -189,7 +189,7 @@ class FaqController extends Controller
         ));
     }
     /**
-     * Deletes a Faq entity.
+     * Deletes a Page entity.
      *
      */
     public function deleteAction(Request $request, $id)
@@ -199,7 +199,7 @@ class FaqController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SettingContentBundle:Faq')->find($id);
+            $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Faq entity.');
@@ -239,7 +239,7 @@ class FaqController extends Controller
         $form->handleRequest($request);
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SettingContentBundle:Faq')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
@@ -255,6 +255,6 @@ class FaqController extends Controller
         $this->get('session')->getFlashBag()->add(
             'error',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('news'));
+        return $this->redirect($this->generateUrl('faq'));
     }
 }

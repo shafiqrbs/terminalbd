@@ -97,11 +97,6 @@ class Branding
      */
     protected $products;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\TradeItem", mappedBy="brand")
-     **/
-    private $tradeItem;
-
 
     /**
      * Get id
