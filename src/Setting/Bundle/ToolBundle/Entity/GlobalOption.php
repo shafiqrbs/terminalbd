@@ -24,6 +24,7 @@ use Setting\Bundle\ContentBundle\Entity\Team;
 use Setting\Bundle\ContentBundle\Entity\Testimonial;
 use Setting\Bundle\ContentBundle\Entity\TradeItem;
 use Setting\Bundle\LocationBundle\Entity\Location;
+use Setting\Bundle\MediaBundle\Entity\PageFile;
 use Setting\Bundle\MediaBundle\Entity\PhotoGallery;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
@@ -78,6 +79,12 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
     protected $pages;
+
+
+   /**
+     * @ORM\OneToMany(targetEntity="etting\Bundle\MediaBundle\Entity\PageFile", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $pageFiles;
 
 
     /**
@@ -1135,13 +1142,6 @@ class GlobalOption
         return $this->menuGrouping;
     }
 
-    /**
-     * @param mixed $menuGrouping
-     */
-    public function setMenuGrouping($menuGrouping)
-    {
-        $this->menuGrouping = $menuGrouping;
-    }
 
     /**
      * @return Page
@@ -1149,55 +1149,6 @@ class GlobalOption
     public function getPages()
     {
         return $this->pages;
-    }
-
-    /**
-     * @return Blog
-     */
-    public function getBlogs()
-    {
-        return $this->blogs;
-    }
-
-    /**
-     * @return Testimonial
-     */
-    public function getTestimonials()
-    {
-        return $this->testimonials;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getFaqs()
-    {
-        return $this->faqs;
-    }
-
-    /**
-     * @return News
-     */
-    public function getNewses()
-    {
-        return $this->newses;
-    }
-
-    /**
-     * @return Branch
-     */
-    public function getBranches()
-    {
-        return $this->branches;
-    }
-
-    /**
-     * @return Admission
-     */
-    public function getAdmissions()
-    {
-        return $this->admissions;
     }
 
     /**
@@ -1333,21 +1284,6 @@ class GlobalOption
         return $this->ecommerceConfig;
     }
 
-    /**
-     * @return NoticeBoard
-     */
-    public function getNoticeBoards()
-    {
-        return $this->noticeBoards;
-    }
-
-    /**
-     * @return Event
-     */
-    public function getEvents()
-    {
-        return $this->events;
-    }
 
     /**
      * @return MallConnect
@@ -1389,36 +1325,13 @@ class GlobalOption
         return $this->moduleCategories;
     }
 
-    /**
-     * @return TradeItem
-     */
-    public function getTradeItems()
-    {
-        return $this->tradeItems;
-    }
 
     /**
-     * @return Portfolio
+     * @return PageFile
      */
-    public function getPortfolios()
+    public function getPageFiles()
     {
-        return $this->portfolios;
-    }
-
-    /**
-     * @return Service
-     */
-    public function getServices()
-    {
-        return $this->services;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getClients()
-    {
-        return $this->clients;
+        return $this->pageFiles;
     }
 
 
