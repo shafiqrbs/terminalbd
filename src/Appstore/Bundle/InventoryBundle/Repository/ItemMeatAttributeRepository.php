@@ -32,7 +32,6 @@ class ItemMeatAttributeRepository extends EntityRepository
                     $entity->setPurchaseVendorItem($reEntity);
                     $em->persist($entity);
                 }
-
                 $i++;
             }
             $em->flush();

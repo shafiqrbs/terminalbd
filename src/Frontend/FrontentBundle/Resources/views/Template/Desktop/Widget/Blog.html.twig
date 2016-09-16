@@ -1,4 +1,4 @@
-{% if homeEntity.checkPageModule('Blog') == true and globalOption.blogs is defined and globalOption.blogs is not empty  %}
+{% if mod.module is defined and mod.module is not empty  %}
     <section id="blog">
         <div class="container">
             <div class="text-center"><h2>{% if title is not empty %}{{ title }}{% else %}Latest Blog Posts {% endif %}</h2>
@@ -6,12 +6,12 @@
             </div>
             <div class="row">
                 <div class="col-md-12 homeport1">
-                    {% for blog in globalOption.blogs|slice(0,3)  %}
+                    {% for blog in mod.module.pages|slice(0,limit)  %}
                         <div class="col-md-4 col-sm-12 col-xs-12 portfolio-item">
                             <figure class="effect-oscar">
-                                <img src="{{ image(blog.webPath).scaleResize(350,263) }}" alt="{{ blog.title }}" class="img-responsive" />
+                                <img src="{{ image(blog.webPath).scaleResize(350,263) }}" alt="{{ blog.name }}" class="img-responsive" />
                                 <figcaption>
-                                    <h2>{{ blog.title }}</h2>
+                                    <h2>{{ blog.name }}</h2>
                                     <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':blog.slug }) }}">View more</a>
                                 </figcaption>
                             </figure>

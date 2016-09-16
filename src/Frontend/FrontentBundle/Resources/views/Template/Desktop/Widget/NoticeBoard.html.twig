@@ -1,15 +1,15 @@
-{% if (globalOption.noticeBords is defined and globalOption.noticeBords is not empty )  %}
+{% if mod.module is defined and mod.module is not empty  %}
     <section id="testmonial-noticeboard">
         <div class="container">
             <div class="text-center"><h2>Notice Boards</h2></div>
             <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="short" />
             <div class="row">
-                {% if globalOption.noticeBords is defined and globalOption.noticeBords is not empty  %}
+                {% if mod.module is defined and mod.module is not empty  %}
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-12">
                                 <div id="news-slider" class="owl-carousel">
-                                    {% for notice in globalOption.noticeBords|slice(0,limit)  %}
+                                    {% for notice in mod.module.pages|slice(0,limit)  %}
 
                                         <div class="notice-slide">
                                             <div class="post-content">
@@ -17,15 +17,13 @@
                                                     <span class="month">{{ notice.updated|date('F') }}</span>
                                                     <span class="date">{{ notice.updated|date('d') }}</span>
                                                 </div>
-                                                <h5 class="post-title"><a href="#"> {{ notice.name }}</a></h5>
+                                                <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'noticeBoard','slug':notice.slug }) }}"> {{ notice.name }}</a></h5>
                                                 <p class="post-description">
-                                                    {{ notice.content }}
+                                                    {{ notice.content|raw|truncate(200) }}
                                                 </p>
                                             </div>
                                             <ul class="post-bar">
-                                                <li> <i class="fa fa-users"></i> <a href="#">admin</a> </li>
-                                                <li> <i class="fa fa-comments"></i> <a href="#">2</a> </li>
-                                                <li> <i class="fa fa-thumbs-up"></i> <a href="#">2 Likes</a> </li>
+                                                {% if notice.webPath is not empty %}<li> <i class="fa fa-file"></i> <a target="_blank" href="{{ notice.webPath }}">Download</a> </li>{% endif %}
                                             </ul>
                                         </div>
 

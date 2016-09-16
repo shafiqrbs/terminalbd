@@ -73,7 +73,7 @@
                                             <th {% if pagination.isSorted('name') %} class="sorted" {% endif %} >{{ knp_pagination_sortable(pagination, 'Name', 'name') }}{% if( direction == 'desc' and sort == 'name') %}<i class="icon-sort-by-alphabet-alt"></i> {% else %}<i class="icon-sort-by-alphabet"></i> {% endif %}</th>
                                             <th class="numeric" >Parent </th>
                                             <th class="numeric" >Menu </th>
-                                            <th class="numeric" >Menu Slug</th>
+                                            <th class="numeric" >Slug</th>
                                             <th class="numeric" >Action</th>
 
                                         </tr>
@@ -86,8 +86,7 @@
                                                 <td class="numeric" ><a href="{{ path('page_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                                 <td class="numeric" >{% if(entity.parent) %}{{ entity.parent.name }}{% endif %}</td>
                                                 <td class="numeric" >{{ entity.menu }}</td>
-                                                <td class="numeric" >{{ entity.menuSlug }}</td>
-
+                                                <td class="numeric" >{{ entity.slug }}</td>
                                                 <td class="numeric" >
                                                     {% if( entity.status == 1) %}
                                                         <a class="btn mini green-stripe btn-action" href="{{ path('page_status', { 'id': entity.id}) }}"><span class="badge badge-success">x</span></a>

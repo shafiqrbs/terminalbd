@@ -46,9 +46,9 @@ function ApproveProcess(){
 
     $(".select2Category").select2({
 
-        placeholder: "Search vendor name",
+        placeholder: "Search by product category",
         ajax: {
-            url: Routing.generate('inventory_vendor_search'),
+            url: Routing.generate('inventory_category_search'),
             dataType: 'json',
             delay: 250,
             data: function (params, page) {
@@ -76,7 +76,7 @@ function ApproveProcess(){
         initSelection: function (element, callback) {
 
             var id = $(element).val();
-            $.ajax(Routing.generate('inventory_vendor_name', { vendor : id}), {
+            $.ajax(Routing.generate('inventory_category_name', { category : id}), {
                 dataType: "json"
             }).done(function (data) {
                 return  callback(data);

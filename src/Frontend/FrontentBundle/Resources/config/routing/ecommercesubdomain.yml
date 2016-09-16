@@ -6,17 +6,32 @@ webservice_product_details:
     path:     /{subdomain}/product/{item}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productDetails }
 
+webservice_product_modal:
+    path:     /{subdomain}/product-modal/{item}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productModal }
+
+webservice_product_checkout:
+    path:     /{subdomain}/product-check-our
+    defaults: { _controller: FrontendBundle:WebServiceProduct:checkout }
+
 webservice_product_cart:
-    path:     /{subdomain}/cart/{item}
+    path:     /{subdomain}/cart/{product}/{subitem}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productAddCart }
+    methods:  POST
+    options:
+            expose: true
 
 webservice_product_wishlist:
     path:     /{subdomain}/wishlist/{item}
-    defaults: { _controller: FrontendBundle:WebServiceProduct:productAddCart }
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productAddWishList }
 
-webservice_customer_home:
-    path:     /{subdomain}/customer/home
-    defaults: { _controller: FrontendBundle:WebServiceCustomer:domainCustomerHome }
+webservice_product_sub_item:
+    path:     /{subdomain}/sub-item/{product}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productSubProduct }
+
+webservice_product_sub_item_cart:
+    path:     /{subdomain}/sub-item/{product}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productSubProductCart }
 
 webservice_module_page:
     path:     /{subdomain}/{module}/{slug}
@@ -30,6 +45,10 @@ webservice_module_category:
 webservice_contact:
     path:     /{subdomain}/contact
     defaults: { _controller: FrontendBundle:WebServiceModule:contact }
+
+webservice_product_cart_details:
+    path:     /{subdomain}/cart-details
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productCart }
 
 webservice_product:
     path:     /{subdomain}/product
@@ -48,8 +67,8 @@ webservice_customer_confirm:
     defaults: { _controller: FrontendBundle:WebServiceCustomer:confirm }
 
 webservice_customer_login:
-    path:     /{subdomain}/customer-login-check
-    defaults: { _controller: UserBundle:Security:domainLogin }
+    path:     /{subdomain}/customer-login
+    defaults: { _controller:  FrontendBundle:WebServiceCustomer:domainLogin }
 
 webservice_login:
     path:     /{subdomain}/customer-login

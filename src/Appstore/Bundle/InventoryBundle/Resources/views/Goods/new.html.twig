@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('item') }}">Food Product</a>
+                        <a href="{{ path('inventory_goods') }}">Product</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#"> {{ entity.name }} Details</a></li>
@@ -33,7 +33,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Food Product Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Product Information</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -60,9 +60,9 @@
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
                         <div class="row-fluid">
-                            <div class="span10">
+                            <div class="span8">
                                 <div class="control-group">
-                                    <label class="control-label" for="firstName">Product Name</label>
+                                    <label class="control-label" for="firstName">Item name</label>
                                     <div class="controls">
                                         <div class="input-icon left">
                                             <i class="icon-font"></i>
@@ -74,11 +74,22 @@
                             </div>
                             <div class="span2 ">
                                 <div class="control-group">
-                                    <label class="control-label" for="isWeb">Sub product</label>
+                                    <label class="control-label" for="isWeb">Size</label>
                                     <div class="controls">
                                         <div class="input-icon left">
-                                            {{ form_widget(form.subProduct) }}
-                                            {{ form_errors(form.subProduct) }}
+                                            {{ form_widget(form.size) }}
+                                            {{ form_errors(form.size) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span2 ">
+                                <div class="control-group">
+                                    <label class="control-label" for="isWeb">Color</label>
+                                    <div class="controls">
+                                        <div class="input-icon left">
+                                            {{ form_widget(form.color) }}
+                                            {{ form_errors(form.color) }}
                                         </div>
                                     </div>
                                 </div>
@@ -127,11 +138,8 @@
                                         <div class="control-group">
                                             <label class="control-label" for="salesPrice">Unit</label>
                                             <div class="controls">
-                                                <div class="input-icon left">
-                                                    <i class="icon-font"></i>
-                                                    {{ form_widget(form.unit) }}
-                                                    {{ form_errors(form.unit) }}
-                                                </div>
+                                                {{ form_widget(form.unit) }}
+                                                {{ form_errors(form.unit) }}
                                             </div>
                                         </div>
                                     </div>

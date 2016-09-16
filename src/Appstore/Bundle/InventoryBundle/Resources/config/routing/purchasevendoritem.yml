@@ -46,3 +46,5 @@ inventory_vendoritem_gallery:
     defaults: { _controller: "InventoryBundle:PurchaseVendorItem:uploadItemImage" }
     options:
            expose: true
+
+

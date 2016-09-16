@@ -45,6 +45,7 @@ class TestimonialController extends Controller
             $em->persist($entity);
             $entity->setUser($this->getUser());
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(3));
             $entity->upload();
             $em->flush();
 

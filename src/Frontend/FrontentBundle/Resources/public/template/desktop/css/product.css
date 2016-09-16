@@ -1,3 +1,10 @@
+.addCart .form-control-custom{
+    height: 34px;
+    border-radius:0 !important;
+    margin-bottom: 15px;
+}
+
+
 
 .outer-div
 {

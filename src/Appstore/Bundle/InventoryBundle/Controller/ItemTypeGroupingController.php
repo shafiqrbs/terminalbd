@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use Proxies\__CG__\Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -218,5 +219,23 @@ class ItemTypeGroupingController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    public function autoSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $item = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->searchAutoComplete($item,$inventory);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchVendorNameAction($category)
+    {
+        return new JsonResponse(array(
+            'id'    =>  $category,
+            'text'  =>  $category
+        ));
     }
 }

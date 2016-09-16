@@ -33,7 +33,7 @@ class ServiceType extends AbstractType
                 )
             ))
             ->add('file','file', array('attr'=>array('class'=>'default')))
-            ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap','rows'=>15)))
+            ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap','rows'=>8)))
             ->add('icon', 'entity', array(
                 'required'    => false,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\Icon',
@@ -48,10 +48,12 @@ class ServiceType extends AbstractType
             ))
             ->add('moduleCategory', 'entity', array(
                 'required'    => false,
+                'expanded'      =>true,
+                'multiple'      =>true,
                 'class' => 'Setting\Bundle\ContentBundle\Entity\ModuleCategory',
                 'empty_value' => '---Select category---',
                 'property' => 'name',
-                'attr'=>array('class'=>'select2  span12'),
+                'attr'=>array('class'=>'check-list  span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('o')
                         ->where("o.status = 1")

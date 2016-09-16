@@ -399,6 +399,17 @@ class User extends BaseUser
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="processBy"  )
+     **/
+    private  $orderProcess;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="approvedBy"  )
+     **/
+    private  $orderApproved;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="createdBy"  )
      **/
     private  $preOrders;
@@ -412,6 +423,8 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="approvedBy"  )
      **/
     private  $preOrderApproved;
+
+
 
 
 
@@ -889,6 +902,22 @@ class User extends BaseUser
     public function getDamage()
     {
         return $this->damage;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrderProcess()
+    {
+        return $this->orderProcess;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrderApproved()
+    {
+        return $this->orderApproved;
     }
 
 

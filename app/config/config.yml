@@ -38,7 +38,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [UserBundle, FOSCommentBundle,InventoryBundle, AccountingBundle, DomainUserBundle, BinduBundle , XiideaDomainBundle, SettingToolBundle, EcommerceBundle,FrontendBundle,SettingContentBundle]
+    bundles:        [UserBundle, FOSCommentBundle,InventoryBundle, AccountingBundle, DomainUserBundle, BinduBundle , XiideaDomainBundle, SettingToolBundle, EcommerceBundle,FrontendBundle,SettingContentBundle,CustomerBundle]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~

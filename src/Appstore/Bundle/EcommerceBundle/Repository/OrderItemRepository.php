@@ -1,6 +1,8 @@
 <?php
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
+use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -11,4 +13,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class OrderItemRepository extends EntityRepository
 {
+
+    public function insertOrderItem($order,$product,GoodsItem $subitem,$quantity)
+    {
+        $em = $this->_em;
+        $entity = new OrderItem();
+        $entity->setOrder($order);
+        $entity->setPurchaseVendorItem($product);
+        $entity->setGoodsItem($subitem);
+        $entity->setQuantity($quantity);
+        $entity->setPrice($subitem->getSalesPrice());
+        $entity->setSubTotal($subitem->getSalesPrice() * $quantity );
+        $em->persist($entity);
+        $em->flush();
+    }
 }

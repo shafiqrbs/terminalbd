@@ -28,3 +28,16 @@ itemtypegrouping_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:ItemTypeGrouping:delete" }
     methods:  [POST, DELETE]
+
+
+inventory_category_search:
+    path:     /search
+    defaults: { _controller: "InventoryBundle:ItemTypeGrouping:autoSearch" }
+    options:
+            expose: true
+
+inventory_category_name:
+    path:      /{category}/vendor-name
+    defaults: { _controller: "InventoryBundle:ItemTypeGrouping:searchVendorName" }
+    options:
+            expose: true

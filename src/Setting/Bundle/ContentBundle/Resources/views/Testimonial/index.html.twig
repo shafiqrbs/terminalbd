@@ -58,7 +58,6 @@
                                     <th class="numeric" >Name</th>
                                     <th class="numeric">Designation</th>
                                     <th class="numeric" >Organization</th>
-                                    <th>Is Feature</th>
                                     <th class="numeric">Created</th>
                                     <th class="numeric">Action</th>
                                 </tr>
@@ -69,8 +68,7 @@
                                     <tr>
                                         <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.designation }}</td>
-                                        <td class="numeric" >{{ entity.title }}</td>
-                                        <td class="numeric" >{% if entity.isFeature == 1 %} Yes {% endif %}</td>
+                                        <td class="numeric" >{{ entity.organization }}</td>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td>
                                             {% if( entity.status == 1) %}

@@ -3,6 +3,9 @@
 namespace Product\Bundle\ProductBundle\Entity;
 
 use Appstore\Bundle\InventoryBundle\Entity\ItemAttribute;
+use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ContentBundle\Entity\MallConnect;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -42,6 +45,16 @@ class Category
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="category" )
      **/
     protected $masterProducts;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="category" )
+     **/
+    protected $purchaseVendorItems;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", mappedBy="category" )
+     **/
+    protected $size;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemAttribute", mappedBy="category" )
@@ -436,37 +449,6 @@ class Category
         return $this->parentProducts;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getItems()
-    {
-        return $this->items;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getParentItems()
-    {
-        return $this->parentItems;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getGlobalOption()
-    {
-        return $this->globalOption;
-    }
-
-    /**
-     * @param mixed $globalOption
-     */
-    public function setGlobalOption($globalOption)
-    {
-        $this->globalOption = $globalOption;
-    }
 
     /**
      * @return mixed
@@ -476,29 +458,6 @@ class Category
         return $this->inventoryConfig;
     }
 
-    /**
-     * @param mixed $inventoryConfig
-     */
-    public function setInventoryConfig($inventoryConfig)
-    {
-        $this->inventoryConfig = $inventoryConfig;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPurchaseItems()
-    {
-        return $this->purchaseItems;
-    }
-
-    /**
-     * @param mixed $purchaseItems
-     */
-    public function setPurchaseItems($purchaseItems)
-    {
-        $this->purchaseItems = $purchaseItems;
-    }
 
     /**
      * @return mixed
@@ -540,6 +499,22 @@ class Category
     public function getMallConnects()
     {
         return $this->mallConnects;
+    }
+
+    /**
+     * @return PurchaseVendorItem
+     */
+    public function getPurchaseVendorItems()
+    {
+        return $this->purchaseVendorItems;
+    }
+
+    /**
+     * @return ItemSize
+     */
+    public function getSize()
+    {
+        return $this->size;
     }
 
 }

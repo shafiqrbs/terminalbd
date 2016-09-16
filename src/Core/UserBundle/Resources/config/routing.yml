@@ -10,6 +10,10 @@ domain:
     pattern: /domain
     defaults: { _controller: UserBundle:Default:domain }
 
+customer:
+    pattern: /customer/dashboard
+    defaults:  { _controller: FrontendBundle:Customer:index }
+
 domain_pendig:
     pattern: /domain-pendeing
     defaults: { _controller: UserBundle:Default:pendeing }
@@ -92,6 +96,5 @@ fos_user_registration:
 user_lock:
      pattern: /lock
      defaults: { _controller: UserBundle:Default:lock }
-
 
 

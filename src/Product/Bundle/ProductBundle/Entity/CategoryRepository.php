@@ -56,47 +56,79 @@ class CategoryRepository extends MaterializedPathRepository
             }
 
         }
-        return $tree .= '</select>';
+        $tree .= '</select>';
+
+        return $tree;
     }
 
 
 
-    public function build_child($oldID,$array)
+    public function build_child($oldID = null ,$array=array())
     {
 
         $em = $this->_em;
-        global $exclude;
-        //echo $menu_id;
+        $tree = "";					// Clear the directory tree
+        $this->depth = 1;			// Child level depth.
+        $top_level_on = 1;			// What top-level category are we on?
+        $exclude = array();			// Define the exclusion array
+        array_push($exclude, 0);	// Put a starting value in it
         $tempTree="";
 
-        $childData = $em->getRepository('ProductProductBundle:Category')->findBy(array('parent'=>$oldID),array('name'=>'asc'));
+        $childData = $em->getRepository('ProductProductBundle:Category')->findBy(array('parent' => $oldID ),array('name'=>'asc'));
 
         foreach ( $childData as $child ){
 
-            if ( $child->getId() != $child->getParent()->getId() )
-            {
+            if(in_array($child->getId(), $array)){
+                $tempTree .= '<option value="'.$child->getId().'" rel="'.$this->depth.'">';
+                for ( $c=0;$c<$this->depth;$c++ )
+                { $tempTree .= "&nbsp;&nbsp;&nbsp;"; }
+                for ( $c=0; $c < $this->depth; $c++ )
+                { $tempTree .= ">"; }
+                $tempTree .= "" . $child->getName(). "</option>";
+            }
 
-
-                if(in_array($child->getId(), $array)){
-                    $tempTree .= '<option value="'.$child->getId().'" rel="'.$this->depth.'">';
-                    for ( $c=0;$c<$this->depth;$c++ )
-                    { $tempTree .= "&nbsp;&nbsp;&nbsp;"; }
-                    for ( $c=0; $c < $this->depth; $c++ )
-                    { $tempTree .= ">"; }
-                    $tempTree .= "" . $child->getName(). "</option>";
-                }
-
-                $this->depth++;
-                $tempTree .=$this->build_child($child->getId(),$array);
-                $this->depth--;
-                if(is_array($exclude)){
-                    array_push($exclude,$child->getId());
-                }
+            $this->depth++;
+            $tempTree .=$this->build_child($child->getId(),$array);
+            $this->depth--;
+            if(is_array($exclude)){
+                array_push($exclude,$child->getId());
             }
         }
 
         return $tempTree;
     }
+
+    public function printTree( $parent = NULL , $spacing = '--', $user_tree_array = '' ) {
+
+        $em = $this->_em;
+
+       /* if(is_array($user_tree_array)){
+            $user_tree_array = array();
+        }*/
+        $category = $em->getRepository('ProductProductBundle:Category')->findBy(array('parent' => $parent ),array('name'=>'asc'));
+        foreach ($category as $row )
+        {
+            $user_tree_array[] = array("id" => $row->getId(), "name" => $spacing . $row->getName());
+            //$user_tree_array[] = array("id" => $row->getId(), "name" => $spacing . $row->getName());
+            $user_tree_array = $this->printTree($row->getId(), $spacing . '--', $user_tree_array);
+        }
+        return $user_tree_array;
+    }
+
+    public function  getReturnCategoryTree($slected='')
+    {
+        $categoryTree = $this->printTree();
+        $tree='';
+        $tree .= "<select name='category' id='category' class='select2' style='width: 50%'>";
+        $tree .= "<option>Filter by category</option>";
+        foreach($categoryTree as $row) {
+            $selected = ($slected == $row['id'])? 'selected="selected"':'';
+            $tree .= "<option ".$selected." value=".$row["id"].">".$row["name"]."</option>";
+        }
+        $tree .= "</select>";
+        return $tree;
+    }
+
 
     public function getSelectdDropdownCategories($data,$array,$slected=''){
 
@@ -507,7 +539,10 @@ class CategoryRepository extends MaterializedPathRepository
             ->where('node.parent IN (:parent)')
             ->setParameter('parent', $arr)
             ->getQuery();
-        $this->buildFlatCategoryTree($query->getArrayResult(), $array);
+
+
+        $categories = $this->childrenHierarchy($query->getArrayResult());
+        $this->buildFlatCategoryTree($categories , $array);
 
         return $array == null ? array() : $array;
     }

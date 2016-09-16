@@ -142,6 +142,16 @@ class ItemUnit
     }
 
     /**
+     * @return mixed
+     */
+    public function getSTRPadCode()
+    {
+        $code = str_pad($this->getCode(),2, '0', STR_PAD_LEFT);
+        return $code;
+    }
+
+
+    /**
      * Get status
      *
      * @return boolean
@@ -173,6 +183,22 @@ class ItemUnit
     public function getPurchaseVendorItems()
     {
         return $this->purchaseVendorItems;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param int $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
     }
 
 

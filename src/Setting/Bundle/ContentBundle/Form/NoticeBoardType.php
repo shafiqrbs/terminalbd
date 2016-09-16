@@ -24,8 +24,26 @@ class NoticeBoardType extends AbstractType
             ))
             ->add('file','file', array('attr'=>array('class'=>'default')))
             ->add('content','textarea', array('attr'=>array('class'=>'wysihtml5 m-wrap span12','rows'=>8)))
-            ->add('startDate','date', array('attr'=>array('class'=>'selectbox'),'years' => range(2025,date('d-m-Y'))))
-            ->add('endDate','date', array('attr'=>array('class'=>'selectbox')))
+            ->add('startDate','date', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>''),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+                'years'=> array('2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'),
+                'widget' => 'single_text',
+                // this is actually the default format for single_text
+                'format' => 'yyyy-MM-dd',
+
+            ))
+            ->add('endDate','date', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>''),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+                'years'=> array('2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'),
+                'widget' => 'single_text',
+                // this is actually the default format for single_text
+                'format' => 'yyyy-MM-dd',
+
+            ))
             ->add('status')
         ;
     }

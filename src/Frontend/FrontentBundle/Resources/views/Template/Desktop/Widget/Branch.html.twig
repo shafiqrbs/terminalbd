@@ -1,4 +1,4 @@
-{% if globalOption.branches is defined and globalOption.branches is not empty  %}
+{% if mod.module is defined and mod.module is not empty  %}
 <section id="branch">
     <div class="container">
         <div class="text-center">
@@ -6,9 +6,9 @@
             <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="about">
         </div>
         <div class="row">
-            {% for key,branch in globalOption.branches|slice(0,4)  %}
+            {% for key,branch in mod.module.pages|slice(0,4)  %}
             <div class="col-md-3 col-sm-6">
-                <div class="pricingTable {% if key == 0 %}blue{% elseif key == 1 %}purple{% elseif  key == 2 %}orange{% elseif  key == 3 %}green{% endif %}">
+                <div class="pricingTable btn-block black">
                     <div class="pricingTable-header">
                         <span>{{ branch.name }}</span>
                     </div>

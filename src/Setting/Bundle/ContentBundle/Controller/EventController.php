@@ -5,8 +5,6 @@ namespace Setting\Bundle\ContentBundle\Controller;
 use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Setting\Bundle\ContentBundle\Entity\Event;
 use Setting\Bundle\ContentBundle\Form\EventType;
 
 /**
@@ -44,6 +42,7 @@ class EventController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setUser($user);
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(7));
             $entity->setGlobalOption($user->getGlobalOption());
             $entity->upload();
             $em->persist($entity);
@@ -87,7 +86,7 @@ class EventController extends Controller
      */
     public function newAction()
     {
-        $entity = new Event();
+        $entity = new Page();
         $form   = $this->createCreateForm($entity);
 
         return $this->render('SettingContentBundle:Event:new.html.twig', array(

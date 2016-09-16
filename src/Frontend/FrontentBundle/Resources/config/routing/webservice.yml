@@ -14,10 +14,6 @@ webservice_product_wishlist:
     path:     /{subdomain}/wishlist/{item}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productAddCart }
 
-webservice_customer_home:
-    path:     /{subdomain}/customer/home
-    defaults: { _controller: FrontendBundle:WebServiceCustomer:domainCustomerHome }
-
 webservice_module_page:
     path:     /{subdomain}/{module}/{slug}
     defaults: { _controller: FrontendBundle:WebServiceModule:modulePage }

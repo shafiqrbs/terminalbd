@@ -350,5 +350,13 @@ class Menu
         $this->menuCustom = $menuCustom;
     }
 
+    /**
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
 
 }

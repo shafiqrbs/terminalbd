@@ -12,6 +12,10 @@ services:
         class: Frontend\FrontentBundle\Cart\ItemResolver
         arguments: [@doctrine.orm.entity_manager]
 
+    app.shopping_cart:
+        class: Frontend\FrontentBundle\Service\Cart
+        arguments: [@doctrine]
+
     device.detect_manage_repo:
         class: Frontend\FrontentBundle\Service\MobileDetect
         arguments: [@doctrine]

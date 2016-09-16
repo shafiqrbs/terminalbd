@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -40,6 +41,20 @@ class ItemSizeRepository extends EntityRepository
         $query->groupBy('e.id');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '10' );
+        return $query->getQuery()->getResult();
+
+    }
+
+    public function getCategoryBaseSize(PurchaseVendorItem $entity)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.category', 'category');
+        $query->where("e.status = 1");
+        $query->andWhere("e.inventoryConfig = :inventory");
+        $query->setParameter('inventory', $entity->getInventoryConfig()->getId());
+        $query->andWhere("category.id = :catId");
+        $query->setParameter('catId', $entity->getCategory()->getId());
+        $query->orderBy('e.name', 'ASC');
         return $query->getQuery()->getResult();
 
     }

@@ -6,7 +6,6 @@ use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Setting\Bundle\ContentBundle\Entity\Service;
 use Setting\Bundle\ContentBundle\Form\ServiceType;
 
 /**
@@ -44,6 +43,7 @@ class ServiceController extends Controller
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
             $entity->setGlobalOption($user->getGlobalOption());
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(16));
             $entity->upload();
             $em->persist($entity);
             $em->flush();

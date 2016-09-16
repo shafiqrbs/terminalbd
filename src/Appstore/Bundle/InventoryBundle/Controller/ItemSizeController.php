@@ -67,7 +67,9 @@ class ItemSizeController extends Controller
      */
     private function createCreateForm(ItemSize $entity)
     {
-        $form = $this->createForm(new ItemSizeType(), $entity, array(
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
+        $form = $this->createForm(new ItemSizeType($em,$inventory), $entity, array(
             'action' => $this->generateUrl('itemsize_create'),
             'method' => 'POST',
             'attr' => array(
@@ -148,7 +150,9 @@ class ItemSizeController extends Controller
     */
     private function createEditForm(ItemSize $entity)
     {
-        $form = $this->createForm(new ItemSizeType(), $entity, array(
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
+        $form = $this->createForm(new ItemSizeType($em,$inventory), $entity, array(
             'action' => $this->generateUrl('itemsize_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

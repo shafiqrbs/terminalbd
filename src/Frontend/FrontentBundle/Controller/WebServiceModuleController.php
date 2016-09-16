@@ -30,11 +30,10 @@ class WebServiceModuleController extends Controller
 
                 $siteEntity = $globalOption->getSiteSetting();
                 $themeName = $siteEntity->getTheme()->getFolderName();
-
                 $moduleName = $this->get('setting.menuTreeSettingRepo')->getCheckModule($menu);
                 if($moduleName){
                     $twigName = "module";
-                    $pagination = $em->getRepository('SettingContentBundle:'.$moduleName)->findBy(array('globalOption'=>$globalOption,'status'=>1),array('id'=>'desc'));
+                    $pagination = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=>$globalOption,'module'=>$menu->getModule()->getId(),'status'=>1),array('id'=>'desc'));
                     $pagination = $this->paginate( $pagination,$limit= 10 );
                     if(!empty($menu->getModule())){
                         $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
@@ -66,7 +65,7 @@ class WebServiceModuleController extends Controller
                 'globalOption'  => $globalOption,
                 'module'        => $menu->getModule(),
                 'categories'    => $categories,
-                'title'    => $moduleName,
+                'title'         => $moduleName,
                 'pagination'    => $pagination,
                 'page'          => $page,
             )

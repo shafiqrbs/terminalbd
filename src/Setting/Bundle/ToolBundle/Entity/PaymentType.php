@@ -29,6 +29,11 @@ class PaymentType
     protected $paymentMethods;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="paymentType" , cascade={"persist", "remove"})
+     */
+    protected $orders;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="paymentType" , cascade={"persist", "remove"})
      */
     protected $preOrders;
@@ -136,6 +141,14 @@ class PaymentType
     public function setSlug($slug)
     {
         $this->slug = $slug;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrders()
+    {
+        return $this->orders;
     }
 }
 

@@ -1,4 +1,4 @@
-{% if globalOption.newses is defined and globalOption.newses is not empty  %}
+{% if mod.module is defined and mod.module is not empty  %}
 <section>
     <div class="container">
         <div class="text-center"><h2>{% if title is not empty %}{{ title }}{% else %}Latest News {% endif %}</h2>
@@ -6,7 +6,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                {% for news in globalOption.newses|slice(0,limit)  %}
+                {% for news in mod.module.pages|slice(0,limit)  %}
                 <div class="post-slide col-md-3">
                     <div class="post-img">
                         <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':news.slug }) }}"><img src="{{ image(news.webPath).scaleResize() }}" alt="{{ news.name }}" ></a>

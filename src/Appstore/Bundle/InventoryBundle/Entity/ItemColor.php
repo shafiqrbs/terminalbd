@@ -37,6 +37,10 @@ class ItemColor implements CodeAwareEntity
      */
     protected $goodsItems;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="color")
+     */
+    protected $purchaseVendorItems;
 
     /**
      * @var string

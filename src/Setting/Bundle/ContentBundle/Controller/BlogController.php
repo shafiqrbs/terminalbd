@@ -180,7 +180,7 @@ class BlogController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Blog')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Blog entity.');

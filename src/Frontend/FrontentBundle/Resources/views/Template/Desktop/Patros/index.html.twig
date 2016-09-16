@@ -61,7 +61,7 @@
     </section>#}
     <!-- Page Content -->
     {% for mod in  homeEntity.pageModules %}
-        {% include 'FrontendBundle:Template/Desktop/Widget:'~ mod.module.moduleClass ~'.html.twig' with {'title' : mod.name ,'limit': 5,'cloumn': 2 } %}
+        {% include 'FrontendBundle:Template/Desktop/Widget:'~ mod.module.moduleClass ~'.html.twig' with {'module':mod.module , 'title' : mod.name ,'limit': 5,'cloumn': 2 } %}
     {% endfor %}
 
     <section id="contact" style="margin-top:40px">
@@ -158,7 +158,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@FrontendBundle/Resources/public/js/common.js'
+    '@FrontendBundle/Resources/public/template/js/common.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

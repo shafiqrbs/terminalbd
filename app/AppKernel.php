@@ -64,7 +64,8 @@ class AppKernel extends Kernel
             new Appstore\Bundle\AccountingBundle\AccountingBundle(),
             new Appstore\Bundle\ConfigBundle\ConfigBundle(),
             new Appstore\Bundle\ImsBundle\ImsBundle(),
-            new Xiidea\Bundle\DomainBundle\XiideaDomainBundle()
+            new Xiidea\Bundle\DomainBundle\XiideaDomainBundle(),
+            new Appstore\Bundle\CustomerBundle\CustomerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

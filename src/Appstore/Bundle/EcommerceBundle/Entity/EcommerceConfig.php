@@ -224,13 +224,6 @@ class EcommerceConfig
         return $this->orders;
     }
 
-    /**
-     * @param Order $orders
-     */
-    public function setOrders($orders)
-    {
-        $this->orders = $orders;
-    }
 
     /**
      * @return boolean

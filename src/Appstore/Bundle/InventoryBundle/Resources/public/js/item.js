@@ -356,5 +356,4 @@ var InventoryItemEditPage = function (item) {
         $(this).closest('.clone').remove();
     });
 
-
 }

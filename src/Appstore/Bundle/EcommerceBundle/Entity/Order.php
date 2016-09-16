@@ -5,11 +5,12 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\PaymentType;
 
 /**
  * Order
  *
- * @ORM\Table()
+ * @ORM\Table("orders")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\OrderRepository")
  */
 class Order
@@ -41,23 +42,96 @@ class Order
     private  $orderItems;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PaymentMethod", inversedBy="orders" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PaymentType", inversedBy="orders")
      */
-    protected $paymentMethod;
+    protected $paymentType;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\BankAccount", inversedBy="orders")
+     */
+    protected $bankAccount;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\BkashAccount", inversedBy="orders")
+     */
+
+    protected $bkashAccount;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="orderProcess" )
+     **/
+
+    private $processBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="orderApproved")
+     **/
+
+    private $approvedBy;
+
 
     /**
      * @var string
      *
-     * @ORM\Column(name="invoice", type="string", length=255)
+     * @ORM\Column(name="process", type="string", length=255,  nullable=true)
+     */
+    private $process = 'created';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="delivery", type="string", length=255,  nullable=true)
+     */
+    private $delivery = 'delivery';
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="deliveryDate", type="datetime" , nullable=true)
+     */
+    private $deliveryDate ;
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="address", type="text", nullable=true)
+     */
+    private $address;
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="comment", type="text", nullable=true)
+     */
+    private $comment;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="invoice", type="string", length=255 , nullable = true)
      */
     private $invoice;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="amount", type="float", nullable = true)
+     * @ORM\Column(name="shippingCharge", type="float", nullable = true)
      */
-    private $amount;
+    private $shippingCharge;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="totalAmount", type="float", nullable = true)
+     */
+    private $totalAmount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="grandTotalAmount", type="float", nullable = true)
+     */
+    private $grandTotalAmount;
 
     /**
      * @var float
@@ -82,25 +156,12 @@ class Order
 
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="process", type="string", length=255)
-     */
-    private $process;
-
-    /**
      * @var integer
      *
-     * @ORM\Column(name="item", type="smallint")
+     * @ORM\Column(name="item", type="integer" , nullable = true)
      */
     private $item;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="quantity", type="smallint")
-     */
-    private $quantity;
 
     /**
      * @var integer
@@ -184,54 +245,6 @@ class Order
     }
 
     /**
-     * Set item
-     *
-     * @param integer $item
-     *
-     * @return Order
-     */
-    public function setItem($item)
-    {
-        $this->item = $item;
-
-        return $this;
-    }
-
-    /**
-     * Get item
-     *
-     * @return integer
-     */
-    public function getItem()
-    {
-        return $this->item;
-    }
-
-    /**
-     * Set quantity
-     *
-     * @param integer $quantity
-     *
-     * @return Order
-     */
-    public function setQuantity($quantity)
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    /**
-     * Get quantity
-     *
-     * @return integer
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-    /**
      * @return \DateTime
      */
     public function getCreated()
@@ -269,31 +282,6 @@ class Order
     public function getOrderItems()
     {
         return $this->orderItems;
-    }
-
-
-    /**
-     * @param mixed $customer
-     */
-    public function setCustomer($customer)
-    {
-        $this->customer = $customer;
-    }
-
-    /**
-     * @return float
-     */
-    public function getAmount()
-    {
-        return $this->amount;
-    }
-
-    /**
-     * @param float $amount
-     */
-    public function setAmount($amount)
-    {
-        $this->amount = $amount;
     }
 
     /**
@@ -344,21 +332,6 @@ class Order
         $this->commissionAmount = $commissionAmount;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPaymentMethod()
-    {
-        return $this->paymentMethod;
-    }
-
-    /**
-     * @param mixed $paymentMethod
-     */
-    public function setPaymentMethod($paymentMethod)
-    {
-        $this->paymentMethod = $paymentMethod;
-    }
 
     /**
      * @return User
@@ -393,7 +366,7 @@ class Order
     }
 
     /**
-     * @return mixed
+     * @return EcommerceConfig
      */
     public function getEcommerceConfig()
     {
@@ -406,6 +379,214 @@ class Order
     public function setEcommerceConfig($ecommerceConfig)
     {
         $this->ecommerceConfig = $ecommerceConfig;
+    }
+
+    /**
+     * @return int
+     */
+    public function getItem()
+    {
+        return $this->item;
+    }
+
+    /**
+     * @param int $item
+     */
+    public function setItem($item)
+    {
+        $this->item = $item;
+    }
+
+    /**
+     * @return float
+     */
+    public function getShippingCharge()
+    {
+        return $this->shippingCharge;
+    }
+
+    /**
+     * @param float $shippingCharge
+     */
+    public function setShippingCharge($shippingCharge)
+    {
+        $this->shippingCharge = $shippingCharge;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalAmount()
+    {
+        return $this->totalAmount;
+    }
+
+    /**
+     * @param float $totalAmount
+     */
+    public function setTotalAmount($totalAmount)
+    {
+        $this->totalAmount = $totalAmount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getGrandTotalAmount()
+    {
+        return $this->grandTotalAmount;
+    }
+
+    /**
+     * @param float $grandTotalAmount
+     */
+    public function setGrandTotalAmount($grandTotalAmount)
+    {
+        $this->grandTotalAmount = $grandTotalAmount;
+    }
+
+    /**
+     * @return BankAccount
+     */
+    public function getBankAccount()
+    {
+        return $this->bankAccount;
+    }
+
+    /**
+     * @param BankAccount $bankAccount
+     */
+    public function setBankAccount($bankAccount)
+    {
+        $this->bankAccount = $bankAccount;
+    }
+
+    /**
+     * @return BkashAccount
+     */
+    public function getBkashAccount()
+    {
+        return $this->bkashAccount;
+    }
+
+    /**
+     * @param BkashAccount $bkashAccount
+     */
+    public function setBkashAccount($bkashAccount)
+    {
+        $this->bkashAccount = $bkashAccount;
+    }
+
+    /**
+     * @return User
+     */
+    public function getProcessBy()
+    {
+        return $this->processBy;
+    }
+
+    /**
+     * @param User $processBy
+     */
+    public function setProcessBy($processBy)
+    {
+        $this->processBy = $processBy;
+    }
+
+    /**
+     * @return User
+     */
+    public function getApprovedBy()
+    {
+        return $this->approvedBy;
+    }
+
+    /**
+     * @param User $approvedBy
+     */
+    public function setApprovedBy($approvedBy)
+    {
+        $this->approvedBy = $approvedBy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDelivery()
+    {
+        return $this->delivery;
+    }
+
+    /**
+     * @param string $delivery
+     */
+    public function setDelivery($delivery)
+    {
+        $this->delivery = $delivery;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDeliveryDate()
+    {
+        return $this->deliveryDate;
+    }
+
+    /**
+     * @param \DateTime $deliveryDate
+     */
+    public function setDeliveryDate($deliveryDate)
+    {
+        $this->deliveryDate = $deliveryDate;
+    }
+
+    /**
+     * @return text
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param text $address
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
+
+    /**
+     * @return PaymentType
+     */
+    public function getPaymentType()
+    {
+        return $this->paymentType;
+    }
+
+    /**
+     * @param PaymentType $paymentType
+     */
+    public function setPaymentType($paymentType)
+    {
+        $this->paymentType = $paymentType;
+    }
+
+    /**
+     * @return text
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @param text $comment
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
     }
 
 }

@@ -77,7 +77,7 @@ class PageMetaRepository extends EntityRepository
         }
 
     }
-    public function servicePageMeta(Service $service, $data)
+    public function servicePageMeta(Page $service, $data)
     {
 
         $em = $this->_em;

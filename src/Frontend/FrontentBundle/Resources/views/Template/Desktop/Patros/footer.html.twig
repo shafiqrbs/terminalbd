@@ -23,14 +23,24 @@
 'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
 'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
 'assets/template/plugin/owl.carousel/owl.carousel.min.js'
+'assets/bindu/3rd/select2/select2.js'
+'assets/template/plugin/side.toolbar/vcore.sidebar.js'
+'assets/template/plugin/pgslider/imagezoom.js'
+'assets/template/plugin/pgslider/pgwslider.js'
 'assets/template/plugin/side.toolbar/vcore.sidebar.js'
 'assets/template/desktop/patros/js/jquery.quicksand.js'
+
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 <script>
     $(document).ready(function(){
 
+        $('.select2').select2({
+            placeholder: "Select",
+            allowClear: true,
+            color: "black"
+        });
         $(".numeric").numeric();
         $(".mobile").inputmask("mask", {"mask": "99999-999-999"}); //specifying fn & options
         $('#searchEvent').click(function(){
@@ -46,14 +56,35 @@
                 {link: 'http://{{ globalOption.subDomain }}.kintethako.dev',id: '1','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-home.png') }}','label':'Home'},
                 {link: '{{ path('webservice_contact',{'subdomain':globalOption.subDomain}) }}#contact',id: '2','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-envelope.png') }}','label':'{{ globalOption.email }}'},
                 {link: 'javascript:',id: '3','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-sms.png') }}','label':'{{ globalOption.mobile }}'},
-                {link: '{{ path('webservice_contact',{'subdomain':globalOption.subDomain}) }}',id: '4','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-map.png') }}','label':'{{ globalOption.location.name }}'}
+                {link: '{{ path('webservice_contact',{'subdomain':globalOption.subDomain}) }}',id: '4','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-map.png') }}','label':'{{ globalOption.location.name }}'},
+                {link: '{{ path('webservice_product_cart_details',{'subdomain':globalOption.subDomain}) }}',id: '5','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-cart.png') }}','label':'৳&nbsp;50,456(20)'}
             ],
             'position': 'right bottom'
         });
 
-        var owlProduct = $("#product-slider");
+        var owlProduct = $("#preview-slider");
         owlProduct.owlCarousel({
             items:3,
+            itemsDesktop:[1199,3],
+            itemsDesktopSmall:[979,2],
+            itemsTablet:[768,1],
+            pagination: false,
+            paginationNumbers: false,
+            autoPlay:false,
+            rewindNav:false
+         });
+        // Custom Navigation Events
+        $(".preview-next").click(function(){
+            owlProduct.trigger('owl.next');
+        })
+
+        $(".preview-prev").click(function(){
+            owlProduct.trigger('owl.prev');
+        })
+
+        var owlProduct = $("#product-slider");
+        owlProduct.owlCarousel({
+            items:6,
             itemsDesktop:[1199,3],
             itemsDesktopSmall:[979,2],
             itemsTablet:[768,1],
@@ -109,6 +140,7 @@
             pagination:false,
             autoPlay : true
         });
+
 
         $('#list').click(function(event){event.preventDefault();$('#product .item').addClass('list-group-item');});
         $('#grid').click(function(event){event.preventDefault();$('#product .item').removeClass('list-group-item');$('#products .item').addClass('grid-group-item');});

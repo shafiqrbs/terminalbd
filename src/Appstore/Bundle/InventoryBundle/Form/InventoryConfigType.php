@@ -21,7 +21,10 @@ class InventoryConfigType extends AbstractType
         $builder
             ->add('salesReturnDayLimit','integer',array('attr'=>array('class'=>'m-wrap span4 numeric')))
             ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap span4 numeric')))
-            ->add('deliveryProcess', 'choice', array(
+            ->add('deliveryProcess',
+
+                'choice', array(
+                'attr'=>array('class'=>'check-list  span12'),
                 'choices' => array(
                     'Pos' => 'Point of sales(POS)',
                     'ManualPos' => 'Manual Sales System',

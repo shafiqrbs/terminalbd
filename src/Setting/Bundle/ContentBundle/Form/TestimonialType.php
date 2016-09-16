@@ -29,7 +29,7 @@ class TestimonialType extends AbstractType
 
                 )
             ))
-            ->add('title','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter organization name'),
+            ->add('organization','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter organization name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
 

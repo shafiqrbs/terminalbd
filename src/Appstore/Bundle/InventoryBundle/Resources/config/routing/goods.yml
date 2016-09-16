@@ -34,6 +34,11 @@ inventory_vendoritem_status:
     path:     /{id}/web-status
     defaults: { _controller: "InventoryBundle:Goods:webStatus" }
 
+inventory_goods_copy:
+    path:     /{id}/item-copy
+    defaults: { _controller: "InventoryBundle:Goods:itemCopy" }
+
+
 inventory_vendoritem_inline_update:
     path:     /inline-item-update
     defaults: { _controller: "InventoryBundle:PurchaseItem:inlineItemUpdate" }
@@ -46,3 +51,11 @@ inventory_vendoritem_gallery:
     defaults: { _controller: "InventoryBundle:Goods:uploadItemImage" }
     options:
            expose: true
+
+inventory_goods_subItem_delete:
+    path:     /{id}/sub-item-delete
+    defaults: { _controller: "InventoryBundle:Goods:subItemDelete" }
+
+inventory_goods_itemkeyvalue_delete:
+    path:     /{id}/item-key-value-delete
+    defaults: { _controller: "InventoryBundle:Goods:keyValueDelete" }

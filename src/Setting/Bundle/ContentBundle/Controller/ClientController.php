@@ -58,7 +58,9 @@ class ClientController extends Controller
         $user = $this->getUser();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->setUser($user);
             $entity->setGlobalOption($user->getGlobalOption());
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(19));
             $entity->upload();
             $em->persist($entity);
             $em->flush();
@@ -120,7 +122,7 @@ class ClientController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Client')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Team entity.');
@@ -179,7 +181,7 @@ class ClientController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingContentBundle:Client')->find($id);
+        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Team entity.');

@@ -44,6 +44,7 @@ class NoticeBoardController extends Controller
             $user = $this->getUser();
             $entity->setUser($user);
             $globalOption = $this->getUser()->getGlobalOption();
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(8));
             $entity->setGlobalOption($globalOption);
             $entity->upload();
             $em->persist($entity);

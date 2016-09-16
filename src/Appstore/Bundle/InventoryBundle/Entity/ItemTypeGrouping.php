@@ -24,6 +24,7 @@ class ItemTypeGrouping
 
     /**
      * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="categoryGrouping" , cascade={"detach","merge"})
+     * @ORM\OrderBy({"name" = "ASC"})
      **/
 
     protected $categories;

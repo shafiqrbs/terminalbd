@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -28,6 +29,11 @@ class GoodsItem
     private  $purchaseVendorItem;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", inversedBy="goodsItem" )
+     **/
+    private  $orderItems;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", inversedBy="goodsItems")
      */
     protected $size;
@@ -48,6 +54,13 @@ class GoodsItem
     /**
      * @var string
      *
+     * @ORM\Column(name="quantity", type="integer", nullable = true)
+     */
+    private $quantity;
+
+     /**
+     * @var string
+     *
      * @ORM\Column(name="salesPrice", type="decimal", nullable = true)
      */
     private $salesPrice;
@@ -58,6 +71,13 @@ class GoodsItem
      * @ORM\Column(name="webPrice", type="decimal", nullable = true)
      */
     private $webPrice;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="masterItem", type="boolean", nullable=true)
+     */
+    private $masterItem = false;
 
 
     /**
@@ -165,6 +185,47 @@ class GoodsItem
     {
         $this->name = $name;
     }
+
+    /**
+     * @return string
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param string $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getMasterItem()
+    {
+        return $this->masterItem;
+    }
+
+    /**
+     * @param boolean $masterItem
+     */
+    public function setMasterItem($masterItem)
+    {
+        $this->masterItem = $masterItem;
+    }
+
+    /**
+     * @return OrderItem
+     */
+    public function getOrderItems()
+    {
+        return $this->orderItems;
+    }
+
 
 }
 

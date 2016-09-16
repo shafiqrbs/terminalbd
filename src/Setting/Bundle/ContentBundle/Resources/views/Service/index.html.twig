@@ -67,12 +67,16 @@
 
                                     <tr>
                                         <td class="numeric" ><a href="{{ path('service_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
-                                        <td class="numeric" >
+                                        <td class="numeric">
                                             {% if(entity.moduleCategory is defined and entity.moduleCategory is not empty ) %}
-                                                {{ entity.moduleCategory.name }}
+                                                <ul>
+                                                {% for cat in entity.moduleCategory  %}
+                                                   <li>{{ cat.name }}</li>
+                                            {% endfor %}
+                                                </ul>
                                             {% endif %}
                                         </td>
-                                        <td class="numeric" >
+                                        <td class="numeric">
                                             {% if(entity.icon is defined and entity.icon is not empty ) %}
                                                 {{ entity.icon.name }}
                                             {% endif %}

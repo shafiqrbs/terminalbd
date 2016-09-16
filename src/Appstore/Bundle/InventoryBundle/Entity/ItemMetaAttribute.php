@@ -46,7 +46,7 @@ class ItemMetaAttribute
      *
      * @ORM\Column(name="status", type="boolean")
      */
-    private $status=true;
+    private $status = true;
 
 
     /**
@@ -105,6 +105,14 @@ class ItemMetaAttribute
     public function setValue($value)
     {
         $this->value = $value;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isStatus()
+    {
+        return $this->status;
     }
 }
 

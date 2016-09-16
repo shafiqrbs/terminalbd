@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+
+<head>
+    <meta charset="utf-8"/>
+    <title>TERMINALBD | ADMIN PANEL</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <meta name="MobileOptimized" content="320">
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
+    {% stylesheets filter='cssrewrite'
+        'assets/plugins/bootstrap/css/bootstrap.min.css'
+        'assets/plugins/bootstrap/css/bootstrap-responsive.min.css'
+        'assets/plugins/font-awesome/css/font-awesome.min.css'
+        'assets/plugins/font-awesome/css/fa-font-awesome.css'
+        'assets/css/style-metro.css'
+        'assets/css/style.css'
+        'assets/css/style-responsive.css'
+        'assets/css/themes/default.css'
+        'assets/plugins/uniform/css/uniform.default.css'
+        'assets/plugins/bootstrap-fileupload/bootstrap-fileupload.css'
+        'assets/plugins/gritter/css/jquery.gritter.css'
+        'assets/plugins/chosen-bootstrap/chosen/chosen.css'
+        'assets/plugins/select2/select2_metro.css'
+        'assets/plugins/clockface/css/clockface.css'
+        'assets/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css'
+        'assets/plugins/bootstrap-datepicker/css/datepicker.css'
+        'assets/plugins/bootstrap-timepicker/compiled/timepicker.css'
+        'assets/plugins/bootstrap-colorpicker/css/colorpicker.css'
+        'assets/plugins/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css'
+        'assets/plugins/bootstrap-daterangepicker/daterangepicker.css'
+        'assets/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css'
+        'assets/plugins/bootstrap-datetimepicker/css/datetimepicker.css'
+        'assets/plugins/jquery-multi-select/css/multi-select.css'
+        'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
+        'assets/plugins/bootstrap-switch/static/stylesheets/bootstrap-switch-metro.css'
+        'assets/plugins/jquery-tags-input/jquery.tagsinput.css'
+        'assets/plugins/jquery-selectbox/css/jquery.selectbox.css'
+        'assets/plugins/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css'
+        'assets/plugins/data-tables/DT_bootstrap.css'
+        'assets/plugins/glyphicons/css/glyphicons.css'
+        'assets/plugins/glyphicons_halflings/css/halflings.css'
+        'assets/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css'
+        'assets/plugins/bootstrap-editable/inputs-ext/address/address.css'
+        'assets/plugins/jquery-nestable/jquery.nestable.css'
+        'assets/plugins/jquery-tree/src/css/jquery.tree.css'
+        'assets/css/comments.css'
+        'assets/css/overwrite.css'
+
+
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+    {% block cssBlock %}
+    {% endblock %}
+    <link rel="shortcut icon" href="favicon.ico"/>
+{#
+    'assets/css/custom.css'
+    'assets/css/pages/profile.css'#}
+
+</head>
+<body class="page-header-fixed {{ app.request.locale }}{% block bodyClass %}{% endblock bodyClass %}">
+<div class="modal fade" id="ajax" tabindex="-1" role="basic" aria-hidden="true">
+    {% image 'assets/img/ajax-modal-loading.gif'
+    filter='' output='/img/ajax-modal-loading.gif' %}
+    <img src="{{ asset_url }}" alt="" class="loading"/>
+    {% endimage %}
+</div>
+<!-- BEGIN HEADER -->
+    <div class="header navbar navbar-inverse navbar-fixed-top">
+<!-- BEGIN TOP NAVIGATION BAR -->
+<div class="navbar-inner">
+<div class="container-fluid">
+<!-- BEGIN LOGO -->
+<a class="brand" href="{{ path('home') }}" style="margin-left:0">
+   {# {{ app.user.globaloption.name }}#}
+</a>
+<!-- END LOGO -->
+<!-- BEGIN RESPONSIVE MENU TOGGLER -->
+<a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+    {% image 'assets//img/menu-toggler.png'
+    filter='' output='/img/menu-toggler.png' %}
+    <img src="{{ asset_url }}" alt="" />
+    {% endimage %}
+</a>
+{{ include('customer/topbar.html.twig')}}
+<!-- END RESPONSIVE MENU TOGGLER -->
+<!-- BEGIN TOP NAVIGATION MENU -->
+
+<!-- END TOP NAVIGATION MENU -->
+</div>
+</div>
+<!-- END TOP NAVIGATION BAR -->
+</div>
+<!-- END HEADER -->
+<div class="page-container row-fluid">
+    {#{{ dump(app.security.token.user.roles) }}#}
+    {% block navigation %}
+        <div class="page-sidebar nav-collapse collapse">
+            <!-- BEGIN SIDEBAR MENU -->
+            {{ include('customer/sidebar.html.twig')}}
+        </div>
+    {% endblock navigation %}
+    <div class="page-content">
+        {% block body %}{% endblock %}
+    </div>
+</div>
+
+{% javascripts
+'assets/plugins/jquery-1.10.2.min.js'
+'assets/plugins/jquery-migrate-1.2.1.min.js'
+'assets/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js'
+'assets/plugins/jquery-ui/jquery.ui.droppable.js'
+'assets/plugins/jquery-tree/src/js/jquery.tree.js'
+'assets/plugins/bootstrap/js/bootstrap.min.js'
+'assets/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js'
+'assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js'
+'assets/plugins/jquery.blockui.min.js'
+'assets/plugins/jquery.cookie.min.js'
+'assets/plugins/uniform/jquery.uniform.min.js'
+'assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js'
+'assets/plugins/select2/select2.min.js'
+'assets/plugins/chosen-bootstrap/chosen/chosen.jquery.min.js'
+'assets/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js'
+'assets/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js'
+'assets/plugins/bootstrap-toggle-buttons/static/js/jquery.toggle.buttons.js'
+'assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js'
+'assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js'
+'assets/plugins/bootstrap-daterangepicker/moment.min.js'
+'assets/plugins/bootstrap-multiselect/js/bootstrap-multiselect.js'
+'assets/plugins/clockface/js/clockface.js'
+'assets/plugins/bootstrap-daterangepicker/date.js'
+'assets/plugins/bootstrap-daterangepicker/daterangepicker.js'
+'assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js'
+'assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.js'
+'assets/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js'
+'assets/plugins/jquery.input-ip-address-control-1.0.min.js'
+'assets/plugins/jquery-multi-select/js/jquery.multi-select.js'
+'assets/plugins/bootstrap-modal/js/bootstrap-modal.js'
+'assets/plugins/bootstrap-modal/js/bootstrap-modalmanager.js'
+'assets/plugins/jquery.pwstrength.bootstrap/src/pwstrength.js'
+'assets/plugins/bootstrap-switch/static/js/bootstrap-switch.js'
+'assets/plugins/jquery-tags-input/jquery.tagsinput.min.js'
+'assets/plugins/plupload/js/plupload.full.js'
+'assets/plugins/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js'
+'assets/plugins/multi-datepicker/js/jquery.ui.datepicker.js'
+'assets/plugins/multi-datepicker/js/jquery.ui.core.js'
+'assets/plugins/multi-datepicker/js/jquery-ui.multidatespicker.js'
+'assets/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js'
+'assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js'
+'assets/plugins/fuelux/js/spinner.min.js'
+'assets/plugins/jquery-selectbox/js/jquery.selectBox.js'
+'assets/plugins/data-tables/jquery.dataTables.min.js'
+'assets/plugins/data-tables/DT_bootstrap.js'
+'assets/scripts/table-managed.js'
+'assets/plugins/jquery.mockjax.js'
+'assets/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js'
+'assets/plugins/bootstrap-editable/inputs-ext/address/address.js'
+'assets/plugins/bootstrap-editable/inputs-ext/wysihtml5/wysihtml5.js'
+'assets/plugins/jquery-validation/dist/jquery.validate.min.js'
+'assets/plugins/jquery-easy-confirm/jquery.easy.confirm.js'
+'assets/plugins/plupload/js/plupload.full.js'
+'assets/plugins/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js'
+'assets/plugins/jquery-ui/sortable.js'
+'assets/module/numeric/jquery.numeric.js'
+'assets/scripts/jquery.mjs.nestedSortable.js'
+'assets/scripts/nested-sortable.js'
+'assets/scripts/app.js'
+'assets/scripts/form-editable.js'
+'assets/js/jquery.cookie-1.4.1.min.js'
+'assets/scripts/ui-jqueryui.js'
+'assets/scripts/form-components.js'
+'assets/scripts/table-advanced.js'
+%}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+
+{% endjavascripts %}
+{% block javascriptBlock %}
+{% endblock %}
+{#'http://bp.yahooapis.com/2.4.21/browserplus-min.js'#}
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        {% block documentready %}
+            App.init();
+            //FormValidation.init();
+            FormComponents.init();
+            //Tasks.initDashboardWidget();
+            //Index.initPieCharts();
+            // UIJQueryUI.init();
+            //CloneDiv.init();
+            //FormFileUpload.init();
+            TableAdvanced.init();
+        $('.select2').select2();
+        $('.selectbox').selectBox();
+        $('.selectbox select').selectBox();
+        $(".numeric").numeric();
+        $(".mask_number").numeric();
+        $(".mobile").inputmask("mask", {"mask": "99999-999-999"}); //specifying fn & options
+        $(".phone").inputmask("mask", {"mask": "99-999999"}); //specifying fn & options
+        $( ".date-picker" ).datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+        $('.multiselect').multiselect();
+        $(".toggle").click(function(){
+            var id = $(this).attr('id');
+            $("#show-"+id).slideToggle(100);
+        }).toggle( function() {
+            $(this).children("span").text("[-]");
+        }, function() {
+            $(this).children("span").text("[+]");
+        });
+        //$(".confirm").easyconfirm();
+        $('.confirm').click(function(){
+            $('[data-toggle="confirmation"]').confirmation()
+        });
+        $('.current_ancestor').addClass('active');
+
+        {% endblock %}
+    });
+</script>
+<style>
+    ul.page-sidebar-menu > li.current_ancestor > ul > li.current_ancestor > a{
+        background: #000!important;
+    }
+</style>
+{% block footer %}
+    <div class="footer">
+        <div class="footer-inner">
+            {{ "now"|date("Y") }} &copy; Create By Business Booster Ltd.
+        </div>
+        <div class="footer-tools">
+        <span class="go-top">
+            <i class="fa fa-angle-up"></i>
+        </span>
+        </div>
+    </div>
+{% endblock footer %}
+</body>
+</html>

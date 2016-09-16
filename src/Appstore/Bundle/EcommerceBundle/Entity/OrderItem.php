@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * OrderItem
  *
- * @ORM\Table()
+ * @ORM\Table("order_items")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\OrderItemRepository")
  */
 class OrderItem
@@ -25,6 +25,16 @@ class OrderItem
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="orderItems"  , cascade={"remove"} )
      **/
     private  $order;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", inversedBy="orderItems"  , cascade={"remove"} )
+     **/
+    private  $purchaseVendorItem;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", inversedBy="orderItems"  , cascade={"remove"} )
+     **/
+    private  $goodsItem;
 
     /**
      * @var integer
@@ -144,6 +154,38 @@ class OrderItem
     public function setOrder($order)
     {
         $this->order = $order;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPurchaseVendorItem()
+    {
+        return $this->purchaseVendorItem;
+    }
+
+    /**
+     * @param mixed $purchaseVendorItem
+     */
+    public function setPurchaseVendorItem($purchaseVendorItem)
+    {
+        $this->purchaseVendorItem = $purchaseVendorItem;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGoodsItem()
+    {
+        return $this->goodsItem;
+    }
+
+    /**
+     * @param mixed $goodsItem
+     */
+    public function setGoodsItem($goodsItem)
+    {
+        $this->goodsItem = $goodsItem;
     }
 
 

@@ -152,7 +152,6 @@ class SecurityController extends Controller
         $router = $this->container->get('router');
 
         if ($authChecker->isGranted('ROLE_CUSTOMER')) {
-
             return new RedirectResponse($router->generate('webservice_customer_home',array('subdomain'=> $subdomain )), 307);
         }elseif (!$authChecker->isGranted('ROLE_CUSTOMER')) {
             return new RedirectResponse($router->generate('homepage'), 307);

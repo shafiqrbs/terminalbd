@@ -26,36 +26,37 @@ class ProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
            $builder
-                ->add('name','text', array('required' => false,'attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your full name'),
+                ->add('name','text', array('required' => false,'attr'=>array('class'=>'m-wrap span12 form-control','placeholder'=>'Enter your full name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter your full name required')),
                     new Length(array('max'=>200))
                     ))
                 )
-                ->add('address','text', array('required' => false,'attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your full address'),
+                ->add('address','text', array('required' => false,'attr'=>array('class'=>'m-wrap span12 form-control','placeholder'=>'Enter your full address'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter your address required')),
                     new Length(array('max'=>200))
                     ))
                 )
-                ->add('additionalPhone','text', array('required' => false,'attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your additional phone')))
+                ->add('additionalPhone','text', array('required' => false,'attr'=>array('class'=>'m-wrap span12 form-control','placeholder'=>'Enter your additional phone')))
                ->add('location', 'entity', array(
                    'constraints' =>array(
                        new NotBlank(array('message'=>'Enter your location name required'))
                    ),
+                   'placeholder' => 'Choose your location',
                    'required'      => true,
                    'multiple'      =>false,
                    'expanded'      =>false,
                    'class'         => 'SettingLocationBundle:Location',
                    'property'      => 'name',
-                   'attr'          =>array('class'=>'m-wrap span12 select2'),
+                   'attr'          =>array('class'=>'col-xs-12 select2 o-margin-padding'),
                    'query_builder' => function(EntityRepository $er){
                        return $er->createQueryBuilder('d')
                            ->where("d.level = 2")
                            ->orderBy('d.name','ASC');
                    }
                ))
-                ->add('mobile','text', array('attr'=>array('class'=>'mobile','placeholder'=>'Enter your mobile no'),
+                ->add('mobile','text', array('attr'=>array('class'=>'mobile form-control','placeholder'=>'Enter your mobile no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter your mobile no required')),
                     new Length(array('max'=>200))

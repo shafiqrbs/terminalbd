@@ -28,7 +28,7 @@ class WebServiceCustomerController extends Controller
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
-            if( ! $detect->isMobile() && ! $detect->isTablet() ) {
+            if( $detect->isMobile() && $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
@@ -84,9 +84,7 @@ class WebServiceCustomerController extends Controller
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         if ($form->isValid()) {
 
-            $entity->setEnabled(true);
             $entity->setPlainPassword("1234");
-            $entity->setGlobalOption($globalOption);
             $entity->setEnabled(true);
             $entity->setUsername($mobile);
             if(empty($entity->getEmail())){
@@ -106,7 +104,7 @@ class WebServiceCustomerController extends Controller
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
-            if( ! $detect->isMobile() && ! $detect->isTablet() ) {
+            if( $detect->isMobile() &&  $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
@@ -136,7 +134,7 @@ class WebServiceCustomerController extends Controller
         }
         $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
         $detect = new MobileDetect();
-        if( ! $detect->isMobile() && ! $detect->isTablet() ) {
+        if( $detect->isMobile() &&  $detect->isTablet() ) {
             $theme = 'Template/Mobile/'.$themeName;
         }else{
             $theme = 'Template/Desktop/'.$themeName;
@@ -145,16 +143,40 @@ class WebServiceCustomerController extends Controller
             array(
                 'globalOption'  => $globalOption,
                 'entity' => $entity,
+                'error' => '',
                 'csrf_token' => $csrfToken,
             )
         );
-
-
     }
 
-    public function loginAction()
+    public function domainLoginAction($subdomain)
     {
-
+        $em = $this->getDoctrine()->getManager();
+        $entity = new User();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        if ($this->has('security.csrf.token_manager')) {
+            $csrfToken = $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue();
+        } else {
+            // BC for SF < 2.4
+            $csrfToken = $this->has('form.csrf_provider')
+                ? $this->get('form.csrf_provider')->generateCsrfToken('authenticate')
+                : null;
+        }
+        $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+        $detect = new MobileDetect();
+        if( $detect->isMobile() &&  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName;
+        }else{
+            $theme = 'Template/Desktop/'.$themeName;
+        }
+        return $this->render('FrontendBundle:'.$theme.':login.html.twig',
+            array(
+                'globalOption'  => $globalOption,
+                'entity' => $entity,
+                'error' => '',
+                'csrf_token' => $csrfToken,
+            )
+        );
     }
 
     public function domainCustomerHomeAction($subdomain)

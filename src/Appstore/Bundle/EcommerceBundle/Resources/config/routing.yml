@@ -14,10 +14,6 @@ ecommerce_ecommerce_bkash:
     resource: "@EcommerceBundle/Resources/config/routing/bkashaccount.yml"
     prefix:   /ecommerce/bkashaccount
 
-ecommerce_customer_order:
-    resource: "@EcommerceBundle/Resources/config/routing/customerorder.yml"
-    prefix:   /customer/order
-
 ecommerce_ecommerce_order:
     resource: "@EcommerceBundle/Resources/config/routing/order.yml"
     prefix:   /ecommerce/order

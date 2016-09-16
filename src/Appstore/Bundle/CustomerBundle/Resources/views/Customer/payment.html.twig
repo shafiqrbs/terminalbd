@@ -1,0 +1,357 @@
+{% extends ':customer:base.html.twig' %}
+{% block body %}
+<div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Manage Order
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('customer_preorder') }}">Manage Order</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Manage Order Lists</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Manage Order Information</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <i class="icon-cogs"></i>&nbsp;Tools
+                                    <i class="icon-tasks"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="{{ path('customer_preorder_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                    <li><a href="{{ path('customer_preorder') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="portlet-body">
+                        <div class="portlet-body flip-scroll">
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                <thead class="flip-content ">
+                                <tr class="head-grey">
+                                    <th class="numeric" >Item</th>
+                                    <th class="numeric" >Size/Weight/Dimension</th>
+                                    <th class="numeric" >Color</th>
+                                    <th class="numeric" >Quantity</th>
+                                    <th class="numeric" >Unit Price</th>
+                                    <th class="numeric" >Total Price</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in entity.orderItems %}
+                                    <tr id="remove-{{ item.id }}">
+                                        <td class="numeric" >{{ item.purchaseVendorItem.name }}</td>
+                                        <td class="numeric" >{{ item.goodsItem.size.name }}</td>
+                                        <td class="numeric" >{{ item.goodsItem.color.name }}</td>
+                                        <td class="numeric" >{{ item.quantity }}&nbsp;{{ item.purchaseVendorItem.unit.name }}</td>
+                                        <td class="numeric" >{{ item.price }}</td>
+                                        <td class="numeric" >{{ item.subTotal }}</td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td class="numeric" colspan="5" ><span class="pull-right">Delivery Charge</span></td>
+                                    <td class="numeric" colspan="1" >1000</td>
+                                </tr>
+                                <tr>
+                                    <td class="numeric" colspan="5" ><span class="pull-right">Grand Total</span></td>
+                                    <td class="numeric" colspan="1" >{{ ( entity.totalAmount + entity.shippingCharge)|number_format }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="clearfix"><br/></div>
+                        <!--/span-->
+                    </div>
+                    <div class="form-actions">
+
+                        <div class="">
+                            {% if entity.process == 'created' %}
+                                <div>
+                                    <form id="process" name="process">
+                                        <div class="row-fluid">
+                                            <div class="span10">
+                                                <div class="control-group">
+                                                    <div class="controls">
+                                                        <select class="span12" name="delivery" id="delivery">
+                                                            <option value="pickup" {% if entity.delivery == 'pickup'  %} selected="selected" {% endif %}>Pickup address: [ {{ entity.ecommerceConfig.pickupLocation }} ]</option>
+                                                            <option value="delivery" {% if entity.delivery == 'delivery'  %} selected="selected" {% endif %} >Delivery address</option>
+                                                        </select>
+                                                        <input type="text" name="address" id="address" class="span12" value="{% if entity.delivery == 'pickup'  %} {{ entity.ecommerceConfig.pickupLocation }}  {% elseif entity.delivery == 'delivery' and entity.address is empty %} {{ entity.createdBy.profile.address }} {% else %} {{ entity.address }} {% endif %}" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% if entity.grandTotalAmount > 0 %}
+
+                                                <div class="span2">
+                                                    <div class="control-group">
+                                                        <div class="controls" style="margin-top: 20px">
+                                                            <button type="button" id="submitProcess" name="submitProcess"  data-url="{{ path('domain_customer_order_process',{id:entity.id,'process':'in-progress'}) }}"  class="btn blue"><i class="icon-refresh"></i>&nbsp;Process</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </form>
+                                </div>
+                            {% elseif entity.process == 'in-progress'  %}
+
+                                <form name="payment" id="payment" action="" method="post" >
+                                    <div class="row-fluid">
+                                        <div class="span4">
+                                            <div class="row-fluid">
+                                                <div class="span12">Grand Total: {{ entity.grandTotalAmount }}</div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span12">Due amount: {{ entity.grandTotalAmount }}</div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span12">Delivery Date: {{ entity.deliveryDate|date('d-m-Y') }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="span4">
+                                            <div class="row-fluid">
+                                                <div class="span12">{{ entity.delivery|capitalize }}</div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span9">{% if entity.delivery == 'pickup'  %} {{ entity.ecommerceConfig.pickupLocation }}  {% else %} {{ entity.address }}{% endif %}</div>
+                                            </div>
+                                        </div>
+                                        <div class="span4">
+                                            <div class="row-fluid">
+                                                <div class="span12">Delivery Date(Approximately)</div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span12"><input type="datetime" name="deliveryDate" id="deliveryDate" class="date-picker span12" value="{{ "now"|date("d-m-Y") }}" placeholder="{{ "now"|date("d-m-Y") }}" ></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"><br/></div>
+
+                                    <div class="row-fluid">
+                                        <div class="span10">
+                                            <div class="row-fluid">
+                                                <div class="span4">
+                                                    <div class="control-group">
+                                                        <div class="controls">
+                                                            <select name="paymentType" id="paymentType" class="span12">
+                                                                <option value="">--Select Payment Type--</option>
+                                                                {% for paymentType in paymentTypes %}
+                                                                    <option {% if entity.paymentType is not empty and entity.paymentType.id == paymentType.id %} selected="selected" {% endif %} value="{{ paymentType.slug }}" >{{ paymentType.name }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="span8">
+                                                    <div class="control-group span12">
+                                                        <div class="row-fluid">
+                                                        <div class="controls span12" id="bankbox">
+                                                            <select name="bank" id="bank" class=" span12">
+                                                                <option value="">--Select Bank Account--</option>
+                                                                {% for bank in banks %}
+                                                                    <option {% if entity.bankAccount is not empty and entity.bankAccount.id == bank.id %} selected="selected" {% endif %} value="{{ bank.id }}" >{{ bank.bank.name }}-{{ bank.accountNo }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        </div>
+                                                        <div class="row-fluid">
+                                                        <div class="controls span12" id="bkashbox">
+                                                            <select name="bkash" id="bkash" class=" span12">
+                                                                <option value="">--Select bKash Account--</option>
+                                                                {% for bkash in bkashs %}
+                                                                    <option {% if entity.bkashAccount is not empty and entity.bkashAccount.id == bkash.id %} selected="selected" {% endif %} value="{{ bkash.id }}">{{ bkash.accountType }}-{{ bkash.mobile }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span12">
+                                                    <input type="text" name="comment" id="comment" placeholder="Add your payment information & any payment related comment" class="span12" value="" >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span2 ">
+                                            <div class="control-group">
+                                                <div class="controls" style="margin-top: 20px">
+                                                    <button type="submit" id="submitted" class="btn green" data-url="{{ path('domain_order_ajax_payment',{id:entity.id}) }}"><i class=" icon-money"></i>&nbsp;Add Payment</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            {% elseif entity.process == 'wfc'  %}
+                                <div class="">
+
+                                    <form name="payment" id="payment" action="" method="post" >
+                                        <div class="row-fluid">
+                                            <div class="span4">
+                                                <div class="row-fluid">
+                                                    <div class="span12">Grand Total: {{ entity.grandTotalAmount }}</div>
+                                                </div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">Due amount: {{ entity.grandTotalAmount }}</div>
+                                                </div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">Delivery Date: {{ entity.deliveryDate|date('d-m-Y') }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="span8">
+                                                <div class="row-fluid">
+                                                    <div class="span12">{{ entity.delivery|capitalize }}</div>
+                                                </div>
+                                                <div class="row-fluid">
+                                                    <div class="span9">{% if entity.delivery == 'pickup'  %} {{ entity.ecommerceConfig.pickupLocation }}  {% else %} {{ entity.address }}{% endif %}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"><br/></div>
+
+                                        <div class="row-fluid">
+                                            <div class="span10">
+                                                <div class="row-fluid">
+                                                    <div class="span4">
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                <select name="paymentType" id="paymentType" class="span12">
+                                                                    <option value="">--Select Payment Type--</option>
+                                                                    {% for paymentType in paymentTypes %}
+                                                                        <option {% if entity.paymentType is not empty and entity.paymentType.id == paymentType.id %} selected="selected" {% endif %} value="{{ paymentType.slug }}" >{{ paymentType.name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="span8">
+                                                        <div class="control-group span12">
+                                                            <div class="row-fluid">
+                                                                <div class="controls span12" id="bankbox">
+                                                                    <select name="bank" id="bank" class=" span12">
+                                                                        <option value="">--Select Bank Account--</option>
+                                                                        {% for bank in banks %}
+                                                                            <option {% if entity.bankAccount is not empty and entity.bankAccount.id == bank.id %} selected="selected" {% endif %} value="{{ bank.id }}" >{{ bank.bank.name }}-{{ bank.accountNo }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row-fluid">
+                                                                <div class="controls span12" id="bkashbox">
+                                                                    <select name="bkash" id="bkash" class=" span12">
+                                                                        <option value="">--Select bKash Account--</option>
+                                                                        {% for bkash in bkashs %}
+                                                                            <option {% if entity.bkashAccount is not empty and entity.bkashAccount.id == bkash.id %} selected="selected" {% endif %} value="{{ bkash.id }}">{{ bkash.accountType }}-{{ bkash.mobile }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <input type="text" name="comment" id="comment" placeholder="Add your payment information & any payment related comment" class="span12" value="" >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="span2 ">
+                                                <div class="control-group">
+                                                    <div class="controls" style="margin-top: 20px">
+                                                        <button type="submit" id="submitted" class="btn green" data-url="{{ path('domain_order_ajax_payment',{id:entity.id}) }}"><i class=" icon-money"></i>&nbsp;Add Payment</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="pull-center">  <a  href="javascript:" data-url="{{ path('customer_preorder_process',{id:entity.id,'process':'confirm'}) }}"  class="btn blue process"><i class="icon-cog"></i>&nbsp;Order Confirm</a></div>
+
+                            {% elseif entity.process == 'confirm'  %}
+                                <div class="row-fluid">
+                                    <div class="span4">
+                                        <div class="row-fluid">
+                                            <div class="span12">Grand Total: {{ entity.grandTotalAmount }}</div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">Advance amount: {{ entity.advanceAmount }}</div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">Due amount: {{ entity.grandTotalAmount - entity.advanceAmount }}</div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">Delivery Date: {{ entity.deliveryDate|date('d-m-Y') }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="span8">
+                                        <div class="row-fluid">
+                                            <div class="span12">{{ entity.delivery|capitalize }}</div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span9">{% if entity.delivery == 'pickup'  %} {{ entity.ecommerceConfig.pickupLocation }}  {% else %} {{ entity.address }}{% endif %}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"><br/></div>
+                                <div class="pull-center">
+                                {% if entity.checkRoleEcommercePreorder(app.user.role) == true %}
+                                    <a  href="{{ path('customer_preorder_invoice',{id:entity.id}) }}" target="_blank" data-url=""  class="btn purple process"><i class="icon-truck"></i>&nbsp;Delivery Invoice</a>
+                                {% else %}
+                                    <a  href="javascript:"   class="btn purple process"><i class="icon-truck"></i>&nbsp;Way of Delivery</a></div>
+                                {% endif %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@EcommerceBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@EcommerceBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    ApproveProcess();
+{% endblock %}

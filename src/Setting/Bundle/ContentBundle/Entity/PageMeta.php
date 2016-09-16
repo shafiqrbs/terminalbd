@@ -27,7 +27,6 @@ class PageMeta
      */
     private $id;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", inversedBy="pageMetas" )
      **/

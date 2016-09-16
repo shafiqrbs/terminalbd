@@ -1,26 +1,25 @@
-{% if  (globalOption.testimonials is defined and globalOption.testimonials is not empty) or (globalOption.noticeBords is defined and globalOption.noticeBords is not empty )  %}
-<section id="testmonial-noticeboard">
+{% if mod.module is defined and mod.module is not empty  %}
+    <section id="testmonial-noticeboard">
     <div class="testimonial-bg">
         <div class="container">
             <div class="row">
-                {% if globalOption.testimonials is defined and globalOption.testimonials is not empty  %}
                 <div class="col-md-12">
                     <div id="testimonial-single-slider" class="owl-carousel">
-                        {% for testimonial in globalOption.testimonials|slice(0,limit) %}
+                        {% for testimonial in mod.module.pages|slice(0,limit) %}
                         <div class="testimonial">
                             <div class="pic">
                                 <img src="{{ image(testimonial.webPath).scaleResize(150,150) }}" alt="">
                             </div>
                             <p class="description">
-                                "{{ testimonial.content|raw|truncate(250) }} "
+                                "{{ testimonial.content|raw }} "
                             </p>
                             <h3 class="testimonial-title"> {{ testimonial.name }}</h3>
-                            <span class="post">{{ testimonial.designation }}&nbsp;,&nbsp;<em>{{ testimonial.title }}</em></span>
+                            <span class="post">{{ testimonial.designation }}&nbsp;,&nbsp;<em>{{ testimonial.organization }}</em></span>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
-                {% endif %}
+
             </div>
         </div>
     </div>

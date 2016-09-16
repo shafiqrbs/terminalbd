@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;
@@ -31,7 +32,7 @@ class PurchaseVendorItem
     private  $inventoryConfig;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="masterProducts" )
+     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="purchaseVendorItems" )
      **/
     private  $category;
 
@@ -51,6 +52,11 @@ class PurchaseVendorItem
     private  $goodsItems;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="purchaseVendorItem" )
+     **/
+    private  $orderItems;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", inversedBy="purchaseVendorItem" )
      **/
     private  $masterItem;
@@ -59,6 +65,11 @@ class PurchaseVendorItem
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemMetaAttribute", mappedBy="purchaseVendorItem" )
      **/
     private  $itemMetaAttributes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemKeyValue", mappedBy="purchaseVendorItem" )
+     **/
+    private  $itemKeyValues;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemGallery", mappedBy="purchaseVendorItem")
@@ -79,6 +90,16 @@ class PurchaseVendorItem
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="purchaseVendorItems")
      */
     protected $brand;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="purchaseVendorItems" )
+     **/
+    private  $color;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", inversedBy="purchaseVendorItems" )
+     **/
+    private  $size;
 
     /**
      * @var string
@@ -186,6 +207,8 @@ class PurchaseVendorItem
      * @ORM\Column(name="source", type="string", length=255 , nullable = true)
      */
     private $source;
+
+
 
 
     /**
@@ -857,6 +880,58 @@ class PurchaseVendorItem
     public function setSource($source)
     {
         $this->source = $source;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param mixed $color
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param mixed $size
+     */
+    public function setSize($size)
+    {
+        $this->size = $size;
+    }
+
+    /**
+     * @return ItemKeyValue
+     */
+    public function getItemKeyValues()
+    {
+        return $this->itemKeyValues;
+    }
+
+    public function __clone() {
+        $this->id = null;
+    }
+
+    /**
+     * @return OrderItem
+     */
+    public function getOrderItems()
+    {
+        return $this->orderItems;
     }
 
 

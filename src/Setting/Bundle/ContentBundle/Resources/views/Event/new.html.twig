@@ -30,7 +30,7 @@
     <!-- BEGIN event CONTENT-->
     <div class="row-fluid">
         <div class="span12">
-            <div class="btn-group pull-right">
+            {#<div class="btn-group pull-right">
                 {% if entity.id > 0  %}
                     <a class="btn black" target="_blank" href="{{ path('event_print',{'id': entity.id}) }}">Print</a>
                     <a class="btn yellow" target="_blank" href="{{ path('event_pdf',{'id': entity.id}) }}">PDF</a>
@@ -38,264 +38,259 @@
                 {% else %}
                     <a class="btn purple" href="{{ path('event_import') }}">Import</a>
                 {% endif %}
-            </div>
+            </div>#}
             <div class="portlet box green tabbable">
 
                 <div class="portlet-title">
                     <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
+                    <div class="actions">
+                        <div class="btn-group">
+                            <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <i class="icon-cogs"></i>&nbsp;Tools
+                                <i class="icon-tasks"></i>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="{{ path('event_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                <li><a href="{{ path('event') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="portlet-body">
+                <div class="portlet-body form">
+                    {% include('flash-message.html.twig')  %}
+                    <!-- BEGIN FORM-->
+                    {{ form_start(form) }}
+                    {{ form_row(form._token) }}
 
-                    <div class="tabbable portlet-tabs">
-                        <ul class="nav nav-tabs">
-                            {% if entity.id > 0  %}
-                                <li><a  href="{{ path('event_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;View</a></li>
-                            {% endif %}
-                            <li class=""><a  href="{{ path('event') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                            <li class="active"><a  href="javascript:"><i class="icon-edit"></i>&nbsp;Add/Edit</a></li>
+                    <div class="row-fluid">
+                        <div class="span12 ">
+                            <div class="control-group">
+                                <label class="control-label" for="firstName">Title <span class="required">*</span></label>
+                                <div class="controls">
+                                    <div class="input-icon left">
+                                        <i class="icon-font"></i>
+                                        {{ form_widget(form.name) }}
+                                        {{ form_errors(form.name) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
+                    </div>
 
-                        </ul>
-                        <div class="tab-content">
-
-                            <div class="portlet-body form">
-                                {% include('flash-message.html.twig')  %}
-                                <!-- BEGIN FORM-->
-                                {{ form_start(form) }}
-                                {{ form_row(form._token) }}
-
-                                <div class="row-fluid">
-                                    <div class="span12 ">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName">Title <span class="required">*</span></label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-                                                    <i class="icon-font"></i>
-                                                    {{ form_widget(form.name) }}
-                                                    {{ form_errors(form.name) }}
-                                                </div>
-                                            </div>
-                                        </div>
+                    <!--/row-->
+                    <div class="row-fluid">
+                        <div class="span6 ">
+                            <div class="control-group">
+                                <label class="control-label" >Contact Person<span class="required">*</span></label>
+                                <div class="controls">
+                                    <div class="input-icon left">
+                                        <i class="icon-user"></i>
+                                        {{ form_widget(form.contactPerson) }}
+                                        {{ form_errors(form.contactPerson) }}
                                     </div>
 
                                 </div>
-
-                                <!--/row-->
-                                <div class="row-fluid">
-                                    <div class="span6 ">
-                                        <div class="control-group">
-                                            <label class="control-label" >Contact Person<span class="required">*</span></label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-                                                    <i class="icon-user"></i>
-                                                    {{ form_widget(form.contactPerson) }}
-                                                    {{ form_errors(form.contactPerson) }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                    <div class="span6 ">
-                                        <div class="control-group">
-                                            <label class="control-label" >Mobile</label>
-                                            <div class="controls">
-                                                <div class="input-prepend"><span class="add-on">+88</span>
-                                                    {{ form_widget(form.mobile) }}
-                                                    {{ form_errors(form.mobile) }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                </div>
-                                <!--/row-->
-                                <!--/row-->
-                                <div class="row-fluid">
-                                    <div class="span6 ">
-                                        <div class="control-group">
-                                            <label class="control-label" >Email<span class="required">*</span></label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-                                                    <i class="icon-envelope"></i>
-                                                    {{ form_widget(form.email) }}
-                                                    {{ form_errors(form.email) }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                    <div class="span6 ">
-                                        <div class="control-group">
-                                            <label class="control-label" >Additional Phone no</label>
-                                            <div class="controls">
-                                                <div class="input-prepend"><span class="add-on">+88 2</span>
-                                                    {{ form_widget(form.additionalPhone) }}
-                                                    {{ form_errors(form.additionalPhone) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                </div>
-                                <!--/row-->
-                                <div class="row-fluid">
-                                    <div class="span12 ">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName">Location <span class="required">*</span></label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-                                                    <i class="icon-map-marker"></i>
-                                                    {{ form_widget(form.address) }}
-                                                    {{ form_errors(form.address) }}
-                                                </div>
-                                            </div>
-                                        </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="span6 ">
+                            <div class="control-group">
+                                <label class="control-label" >Mobile</label>
+                                <div class="controls">
+                                    <div class="input-prepend"><span class="add-on">+88</span>
+                                        {{ form_widget(form.mobile) }}
+                                        {{ form_errors(form.mobile) }}
                                     </div>
 
                                 </div>
-                                <!--/row-->
-                                <div class="row-fluid">
-                                    <div class="span6 ">
-                                        <div class="control-group">
-                                            <label class="control-label" >Start/End date<span class="required">*</span></label>
-                                            <div class="controls">
-                                                <div class="bootstrap-timepicker-component  span5">
-                                                    {{ form_widget(form.startDate) }}
-                                                    {{ form_errors(form.startDate) }}
-                                                </div>
-                                                <span class="span1 span-line-height">to</span>
-                                                <div class="bootstrap-timepicker-component  span5">
-                                                    {{ form_widget(form.endDate) }}
-                                                    {{ form_errors(form.endDate) }}
-
-                                                </div>
-                                            </div>
-                                        </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+                    <!--/row-->
+                    <div class="row-fluid">
+                        <div class="span6 ">
+                            <div class="control-group">
+                                <label class="control-label" >Email<span class="required">*</span></label>
+                                <div class="controls">
+                                    <div class="input-icon left">
+                                        <i class="icon-envelope"></i>
+                                        {{ form_widget(form.email) }}
+                                        {{ form_errors(form.email) }}
                                     </div>
-                                    <!--/span-->
-                                    <div class="span6 ">
-                                        <div class="control-group">
-                                            <label class="control-label" >Open/Close Time</label>
-                                            <div class="controls">
-                                                <div class="input-append bootstrap-timepicker-component  span5">
-                                                    {{ form_widget(form.startHour) }}
-                                                    {{ form_errors(form.startHour) }}
-                                                    <span class="add-on"><i class="icon-time"></i></span>
-                                                </div>
-                                                <span class="span1 span-line-height">to</span>
-                                                <div class="input-append bootstrap-timepicker-component  span5">
-                                                    {{ form_widget(form.endHour) }}
-                                                    {{ form_errors(form.endHour) }}
-                                                    <span class="add-on"><i class="icon-time"></i></span>
-                                                </div>
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
                                 </div>
-                                <!--/row-->
-
-
-                                <div class="form-actions portlet box grey">
-                                    <div class="portlet-title">
-                                        <div class="caption"><i class="icon-reorder"></i>Content</div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="span6 ">
+                            <div class="control-group">
+                                <label class="control-label" >Additional Phone no</label>
+                                <div class="controls">
+                                    <div class="input-prepend"><span class="add-on">+88 2</span>
+                                        {{ form_widget(form.additionalPhone) }}
+                                        {{ form_errors(form.additionalPhone) }}
                                     </div>
                                 </div>
-                                <div class="clearfix">&nbsp;</div>
-                                <div class="row-fluid">
-                                    <div class="span12 ">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                {{ form_widget(form.content) }}
-                                                {{ form_errors(form.content) }}
-                                            </div>
-                                        </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+                    <div class="row-fluid">
+                        <div class="span12 ">
+                            <div class="control-group">
+                                <label class="control-label" for="firstName">Location <span class="required">*</span></label>
+                                <div class="controls">
+                                    <div class="input-icon left">
+                                        <i class="icon-map-marker"></i>
+                                        {{ form_widget(form.address) }}
+                                        {{ form_errors(form.address) }}
                                     </div>
                                 </div>
-                                <div class="row-fluid">
-                                    <div class="span6 ">
-                                        <div class="control-group">
-                                            <label class="control-label" >Feature image</label>
-                                            <div class="controls">
+                            </div>
+                        </div>
 
-                                            </div>
-                                            <div class="controls">
-                                                <div data-provides="fileupload" class="fileupload fileupload-new">
-                                                    <div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
-                                                        {% if(entity.webPath) %}
-                                                            <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.webPath }}">
-                                                        {% else %}
-                                                            <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
-                                                        {% endif %}
-                                                    </div>
-                                                    <div  class="fileupload-preview fileupload-exists thumbnail"></div>
-                                                    <div>
+                    </div>
+                    <!--/row-->
+                    <div class="row-fluid">
+                        <div class="span6 ">
+                            <div class="control-group">
+                                <label class="control-label" >Start/End date<span class="required">*</span></label>
+                                <div class="controls">
+                                    <div class="bootstrap-timepicker-component  span5">
+                                        {{ form_widget(form.startDate) }}
+                                        {{ form_errors(form.startDate) }}
+                                    </div>
+                                    <span class="span1 span-line-height">to</span>
+                                    <div class="bootstrap-timepicker-component  span5">
+                                        {{ form_widget(form.endDate) }}
+                                        {{ form_errors(form.endDate) }}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="span6 ">
+                            <div class="control-group">
+                                <label class="control-label" >Open/Close Time</label>
+                                <div class="controls">
+                                    <div class="input-append bootstrap-timepicker-component  span5">
+                                        {{ form_widget(form.startHour) }}
+                                        {{ form_errors(form.startHour) }}
+                                        <span class="add-on"><i class="icon-time"></i></span>
+                                    </div>
+                                    <span class="span1 span-line-height">to</span>
+                                    <div class="input-append bootstrap-timepicker-component  span5">
+                                        {{ form_widget(form.endHour) }}
+                                        {{ form_errors(form.endHour) }}
+                                        <span class="add-on"><i class="icon-time"></i></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+
+
+                    <div class="form-actions portlet box grey">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="icon-reorder"></i>Content</div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="row-fluid">
+                        <div class="span12 ">
+                            <div class="control-group">
+                                <div class="controls">
+                                    {{ form_widget(form.content) }}
+                                    {{ form_errors(form.content) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span6 ">
+                            <div class="control-group">
+                                <label class="control-label" >Feature image</label>
+                                <div class="controls">
+
+                                </div>
+                                <div class="controls">
+                                    <div data-provides="fileupload" class="fileupload fileupload-new">
+                                        <div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
+                                            {% if(entity.webPath) %}
+                                                <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.webPath }}">
+                                            {% else %}
+                                                <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+                                            {% endif %}
+                                        </div>
+                                        <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                        <div>
 													<span class="btn btn-file">
                                                         <span class="fileupload-new">Select image</span>
 													    <span class="fileupload-exists">Change</span>
                                                         {{ form_widget(form.file) }}
                                                         {{ form_errors(form.file) }}
                                                     </span>
-                                                        <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
-                                                    </div>
-                                                </div>
-                                                <span class="label label-important">NOTE!</span>
+                                            <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                                        </div>
+                                    </div>
+                                    <span class="label label-important">NOTE!</span>
                                                 <span>
                                                 Attached image thumbnail is
                                                 supported in Latest Firefox, Chrome, Opera,
                                                 Safari and Internet Explorer 10 only
                                                 </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                    <div class="span6 ">
-                                        <div class="control-group">
-                                            <label class="control-label" >Add Photo Gallery</label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-
-                                                    {{ form_widget(form.photo_gallery) }}
-                                                    {{ form_errors(form.photo_gallery) }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        <div class="control-group">
-                                            <label class="control-label" >Status</label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-
-                                                    {{ form_widget(form.status) }}
-                                                    {{ form_errors(form.status) }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-
-
                                 </div>
-                                <div class="form-actions portlet box grey">
-                                    <div class="pull-center">
-                                        <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
-                                        <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
-                                        {% if(entity.id > 0 ) %}
-                                            <a href="{{ path('event_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                {{ form_end(form) }}
-                                <!-- END FORM-->
                             </div>
                         </div>
+                        <!--/span-->
+                        <div class="span6 ">
+                            <div class="control-group">
+                                <label class="control-label" >Add Photo Gallery</label>
+                                <div class="controls">
+                                    <div class="input-icon left">
+
+                                        {{ form_widget(form.photo_gallery) }}
+                                        {{ form_errors(form.photo_gallery) }}
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" >Status</label>
+                                <div class="controls">
+                                    <div class="input-icon left">
+
+                                        {{ form_widget(form.status) }}
+                                        {{ form_errors(form.status) }}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+
+
                     </div>
+                    <div class="form-actions portlet box grey">
+                        <div class="pull-center">
+                            <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
+                            <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
+                            {% if(entity.id > 0 ) %}
+                                <a href="{{ path('event_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                    <!-- END FORM-->
                 </div>
             </div>
 

@@ -4,6 +4,7 @@ namespace Appstore\Bundle\InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Product\Bundle\ProductBundle\Entity\Category;
 
 /**
  * ItemSize
@@ -27,16 +28,26 @@ class ItemSize  implements CodeAwareEntity
      **/
     private  $inventoryConfig;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="size")
-     */
-    protected $goodsItems;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", mappedBy="size")
      */
     protected $item;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="size")
+     */
+    protected $purchaseVendorItems;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="size")
+     */
+    protected $goodsItems;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="size" )
+     **/
+    private  $category;
 
     /**
      * @var string
@@ -155,9 +166,9 @@ class ItemSize  implements CodeAwareEntity
 
 
     /**
-     * Set status1
+     * Set status
      *
-     * @param boolean $status1
+     * @param boolean $status
      *
      * @return ItemSize
      */
@@ -200,16 +211,40 @@ class ItemSize  implements CodeAwareEntity
      */
     public function getSTRPadCode()
     {
-        $code = str_pad($this->getCode(),2, '0', STR_PAD_LEFT);
+        $code = str_pad($this->getCode(),3, '0', STR_PAD_LEFT);
         return $code;
     }
 
     /**
-     * @return mixed
+     * @return GoodsItem
      */
     public function getGoodsItems()
     {
         return $this->goodsItems;
+    }
+
+    /**
+     * @return PurchaseVendorItem
+     */
+    public function getPurchaseVendorItems()
+    {
+        return $this->purchaseVendorItems;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param Category $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
     }
 }
 

@@ -43,6 +43,7 @@ class FaqController extends Controller
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
             $entity->setUser($user);
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(11));
             $entity->setGlobalOption($user->getGlobalOption());
             $em->persist($entity);
             $em->flush();
