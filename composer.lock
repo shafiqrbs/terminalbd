@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "55fc68490c9e6ca6e9f238c24c237a48",
-    "content-hash": "0b3721047db30bdd490f9c3e5d5c22d3",
+    "hash": "2fd60632deb55be8fd78f43523b16eab",
+    "content-hash": "afa67876766a662f7fce21fbf656ace6",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -89,6 +89,51 @@
                 "symfony"
             ],
             "time": "2015-10-27 16:49:54"
+        },
+        {
+            "name": "divi/ajax-login-bundle",
+            "version": "dev-master",
+            "target-dir": "Divi/AjaxLoginBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Divi/AjaxLoginBundle.git",
+                "reference": "5b298e72edc967e95239941ce35d6e42522bc78d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Divi/AjaxLoginBundle/zipball/5b298e72edc967e95239941ce35d6e42522bc78d",
+                "reference": "5b298e72edc967e95239941ce35d6e42522bc78d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Divi\\AjaxLoginBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sylvain Lorinet",
+                    "email": "sylvain.lorinet@gmail.com"
+                }
+            ],
+            "description": "Ajax Form Login for Symfony 2 PHP Framework",
+            "homepage": "https://github.com/Divi/AjaxLoginBundle",
+            "keywords": [
+                "Authentication",
+                "ajax",
+                "form",
+                "login",
+                "symfony"
+            ],
+            "time": "2014-07-25 11:52:24"
         },
         {
             "name": "doctrine/annotations",
@@ -865,7 +910,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/8p/GuzzleBundle/zipball/5f6c1086d6ddd27fff56af8490969919f5ce0fd8",
+                "url": "https://api.github.com/repos/8p/GuzzleBundle/zipball/da86e45a281b05528f880036f448d2c40183bd15",
                 "reference": "da86e45a281b05528f880036f448d2c40183bd15",
                 "shasum": ""
             },
@@ -1197,7 +1242,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/298f27ce696deaa6ecd72e6ba563f892a17e0512",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/6ccff96434c0ac7fee077d1dce90966341dfd278",
                 "reference": "6ccff96434c0ac7fee077d1dce90966341dfd278",
                 "shasum": ""
             },
@@ -1569,6 +1614,7 @@
                 "rest",
                 "web service"
             ],
+            "abandoned": "guzzlehttp/guzzle",
             "time": "2015-04-29 17:06:53"
         },
         {
@@ -3055,7 +3101,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mike42/escpos-php/zipball/688c9dff49bc8010b26d409e9a86c4cad025a1b3",
+                "url": "https://api.github.com/repos/mike42/escpos-php/zipball/96f05cbf460f5b67c2184ee4e91aedfbcedeb788",
                 "reference": "96f05cbf460f5b67c2184ee4e91aedfbcedeb788",
                 "shasum": ""
             },
@@ -3943,7 +3989,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/4e7499d25dc5d0862da09fa8e336164948a29a25",
+                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/6672ca37fe19a8e2a8ae52a93a7163e1b00ef7d5",
                 "reference": "6672ca37fe19a8e2a8ae52a93a7163e1b00ef7d5",
                 "shasum": ""
             },
@@ -5544,7 +5590,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/swiftmailer-bundle/zipball/d8d7ca2a9820086ad6821eb211009e9625c1ea0f",
+                "url": "https://api.github.com/repos/symfony/swiftmailer-bundle/zipball/3d21ada19f23631f558ad6df653b168e35362e78",
                 "reference": "3d21ada19f23631f558ad6df653b168e35362e78",
                 "shasum": ""
             },
@@ -6159,6 +6205,7 @@
         "stof/doctrine-extensions-bundle": 20,
         "eightpoints/guzzle-bundle": 20,
         "mike42/escpos-php": 20,
+        "divi/ajax-login-bundle": 20,
         "moltin/cart": 20
     },
     "prefer-stable": false,

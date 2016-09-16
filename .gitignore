@@ -18,6 +18,7 @@ bin/*
 !bin/build.sh
 
 # Configuration files
+app/config/dynamic/*.yml
 app/config/parameters.ini
 app/config/parameters.yml
 web/.htaccess

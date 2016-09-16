@@ -8,13 +8,20 @@
 
 namespace Frontend\FrontentBundle\Service;
 
+use Symfony\Component\HttpFoundation\Session\Session;
+
 class Cart {
 
     protected $cart_contents = array();
 
-    public function _construct(){
+    /** @var  Session */
+    protected $session;
+
+    public function __construct(Session $session){
+
+        $this->session = $session;
         // get the shopping cart array from the session
-        $this->cart_contents = $_SESSION['cart_contents'];
+        $this->cart_contents = $session->get('cart_contents');
         if ($this->cart_contents === NULL){
             // set some base values
             $this->cart_contents = array('cart_total' => 0, 'total_items' => 0);
@@ -164,10 +171,10 @@ class Cart {
 
         // if cart empty, delete it from the session
         if(count($this->cart_contents) <= 2){
-            unset($_SESSION['cart_contents']);
+            $this->session->remove('cart_contents');
             return FALSE;
         }else{
-            $_SESSION['cart_contents'] = $this->cart_contents;
+            $this->session->set('cart_contents', $this->cart_contents);
             return TRUE;
         }
     }
@@ -190,6 +197,6 @@ class Cart {
      */
     public function destroy(){
         $this->cart_contents = array('cart_total' => 0, 'total_items' => 0);
-        unset($_SESSION['cart_contents']);
+        $this->session->remove('cart_contents');
     }
 }

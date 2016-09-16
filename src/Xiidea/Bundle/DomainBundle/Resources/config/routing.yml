@@ -1,22 +1,14 @@
-xiidea_main_domain_app_homepage:
-    prefix:     /
-    resource: "@FrontendBundle/Resources/config/routing/webservice.yml"
-    host: "www.tlsbd.org"
-    defaults:
-        subdomain: "tlsbd"
-
-xiidea_sub_domain_app_homepage:
-    prefix:     /
-    resource: "@FrontendBundle/Resources/config/routing/portalsubdomain.yml"
-    host: "{subdomain}.%domain.main%"
-    defaults:
-        subdomain: "tlsbd"
-
 main_home:
     prefix: /
     resource: "@BinduBundle/Resources/config/routing.yml"
     host: "www.%domain.main%"
 
+xiidea_main_domain_app:
+    prefix:     /
+    host: "{subdomain}.%domain.main%"
+    resource: "@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml"
+    defaults:
+        subdomain: ""
 
 #main_mobile_home:
 #    prefix: /
@@ -54,7 +46,6 @@ xiidea_ecommerce_domain_app_homepage:
 #            _controller: XiideaDomainBundle:Default:educationAppMobileHome
 #            subdomain: ""
 
-#
-#xiidea_domain_homepage:
-#    path:     /
-#    defaults: { _controller: XiideaDomainBundle:Default:error }
+xiidea_domain_homepage:
+    path:     /
+    defaults: { _controller: XiideaDomainBundle:Default:error }

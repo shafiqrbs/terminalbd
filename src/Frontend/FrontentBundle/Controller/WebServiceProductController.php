@@ -210,9 +210,9 @@ class WebServiceProductController extends Controller
     public function productAddCartAction(Request $request , $subdomain , PurchaseVendorItem $product, GoodsItem $subitem)
     {
 
-        $cart = new Cart();
+        $cart = new Cart($request->getSession());
         $quantity = $request->request->get('quantity');
-        $data = array('id' => $subitem->getId(), 'name'=>$product->getName(),'size'=>$subitem->getSize()->getName(), 'price'=>$subitem->getSalesPrice(),'qty' => $quantity);
+        $data = array('id' => $subitem->getId(), 'name'=>$product->getName(),'size'=>$subitem->getSize()->getName(), 'color'=>$subitem->getColor()->getName(), 'price'=>$subitem->getSalesPrice(),'qty' => $quantity);
         $data1 = array('id'=>2,'name'=>'Lux Soap','size'=>"100 gm",'price'=>'10','qty'=>5);
         $cart->insert($data);
         var_dump($cart->contents());
@@ -220,7 +220,7 @@ class WebServiceProductController extends Controller
 
     }
 
-    public function productCartAction($subdomain)
+    public function productCartAction($subdomain, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
@@ -252,13 +252,11 @@ class WebServiceProductController extends Controller
                 $theme = 'Template/Desktop/'.$themeName;
             }
 
-            $cart = new Cart();
+            $cart = new Cart($request->getSession());
+
             //$quantity = $request->request->get('quantity');
             //$data = array('id' => $subitem->getId(), 'name'=>$product->getName(),'size'=>$subitem->getSize()->getName(), 'price'=>$subitem->getSalesPrice(),'qty' => $quantity);
-            $data = array('id'=>2,'name'=>'Lux Soap','size'=>"100 gm",'color'=>"Red",'price'=>'10','qty'=>5);
-            $cart->insert($data);
-            $data1 = array('id'=>3,'name'=>'Dettol','size'=>"200 gm",'color'=>"White",'price'=>'20','qty'=>5);
-            $cart->insert($data1);
+
             return $this->render('FrontendBundle:'.$theme.':cart.html.twig',
                 array(
                     'globalOption'      => $globalOption,
