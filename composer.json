@@ -24,6 +24,7 @@
         "knplabs/knp-paginator-bundle": "~2.4",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "friendsofsymfony/jsrouting-bundle": "@stable",
+        "friendsofsymfony/rest-bundle": "@stable",
         "jms/security-extra-bundle": "dev-master",
         "slik/dompdf-bundle" : "dev-master",
         "gregwar/image-bundle": "dev-master",

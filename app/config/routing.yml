@@ -1,6 +1,6 @@
 site_domain_control:
     resource: "dynamic/sites.yml"
-    prefix:   /
+    type:     rest
 
 domain_control:
     resource: "@XiideaDomainBundle/Resources/config/routing.yml"

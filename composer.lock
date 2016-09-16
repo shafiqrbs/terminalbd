@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2fd60632deb55be8fd78f43523b16eab",
-    "content-hash": "afa67876766a662f7fce21fbf656ace6",
+    "content-hash": "b14b123464ef8c37e5ae3cfd4643e6ea",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -6199,6 +6198,7 @@
         "symfony/swiftmailer-bundle": 20,
         "friendsofsymfony/user-bundle": 20,
         "friendsofsymfony/jsrouting-bundle": 0,
+        "friendsofsymfony/rest-bundle": 0,
         "jms/security-extra-bundle": 20,
         "slik/dompdf-bundle": 20,
         "gregwar/image-bundle": 20,

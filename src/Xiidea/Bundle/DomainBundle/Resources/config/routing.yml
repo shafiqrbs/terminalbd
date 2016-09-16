@@ -1,26 +1,26 @@
-main_home:
+_main_domain:
     prefix: /
     resource: "@BinduBundle/Resources/config/routing.yml"
     host: "www.%domain.main%"
 
-xiidea_main_domain_app:
-    prefix:     /
-    host: "{subdomain}.%domain.main%"
-    resource: "@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml"
-    defaults:
-        subdomain: ""
+#_xiidea_main_domain_app:
+#    prefix:     /
+#    host: "{subdomain}.%domain.main%"
+#    resource: "@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml"
+#    defaults:
+#        subdomain: ""
 
 #main_mobile_home:
 #    prefix: /
 #    resource: "@BinduBundle/Resources/config/routing.yml"
 #    host: "m.%domain.main%"
 
-xiidea_ecommerce_domain_homepage:
+_xiidea_ecommerce_domain:
     prefix: /
     resource: "@FrontendBundle/Resources/config/routing/ecommerce.yml"
     host: "www.%domain.ecommerce%"
 
-xiidea_ecommerce_domain_app_homepage:
+_xiidea_ecommerce_domain_app:
     prefix:     /
     host: "{subdomain}.%domain.ecommerce%"
     resource: "@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml"
@@ -45,7 +45,7 @@ xiidea_ecommerce_domain_app_homepage:
 #    defaults:
 #            _controller: XiideaDomainBundle:Default:educationAppMobileHome
 #            subdomain: ""
-
-xiidea_domain_homepage:
-    path:     /
-    defaults: { _controller: XiideaDomainBundle:Default:error }
+#
+#xiidea_domain_error_page:
+#    path:     /
+#    defaults: { _controller: XiideaDomainBundle:Default:error }
