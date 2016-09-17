@@ -3,6 +3,7 @@
 namespace Xiidea\Bundle\DomainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Yaml\Yaml;
 
 class DefaultController extends Controller
 {
@@ -19,13 +20,11 @@ class DefaultController extends Controller
             'subdomain' =>'tlsbd'
         );
 
-
-
         $routes = array(
             '_domain_app_' . strtolower(str_replace('.', '_', $data['domain'])) => array(
-                'prefix' => '/',
                 'resource' => $data['resource'],
-                'domain' => $data['domain'],
+                'host' => $data['domain'],
+                'name_prefix' =>  $data['subdomain'] . "_",
                 'defaults' => array(
                     'subdomain' =>$data['subdomain']
                 )
