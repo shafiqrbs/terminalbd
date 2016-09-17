@@ -5,6 +5,7 @@ site_domain_control:
 domain_control:
     resource: "@XiideaDomainBundle/Resources/config/routing.yml"
     prefix:   /
+    type:     rest
 
 customer:
     resource: "@CustomerBundle/Resources/config/routing.yml"

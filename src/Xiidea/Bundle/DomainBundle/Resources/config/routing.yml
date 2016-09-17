@@ -3,12 +3,13 @@ _main_domain:
     resource: "@BinduBundle/Resources/config/routing.yml"
     host: "www.%domain.main%"
 
-#_xiidea_main_domain_app:
-#    prefix:     /
-#    host: "{subdomain}.%domain.main%"
-#    resource: "@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml"
-#    defaults:
-#        subdomain: ""
+_xiidea_main_domain_app:
+    prefix:     /
+    host: "{subdomain}.%domain.main%"
+    resource: "@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml"
+    name_prefix: "main_"
+    defaults:
+        subdomain: ""
 
 #main_mobile_home:
 #    prefix: /
