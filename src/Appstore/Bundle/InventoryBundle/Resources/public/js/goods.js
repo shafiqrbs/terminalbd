@@ -304,7 +304,7 @@ var InventoryItemEditPage = function (item) {
             silverlight_xap_url: 'theme/scripts/plupload/js/plupload.silverlight.xap',
             init : {
                 FilesAdded: function(up, files) {
-                    var maxfiles = 2;
+                    var maxfiles = 6;
                     if(up.files.length > maxfiles )
                     {
                         up.splice(maxfiles);

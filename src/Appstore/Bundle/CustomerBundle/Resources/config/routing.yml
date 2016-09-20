@@ -1,25 +1,29 @@
 domain_customer_homepage:
-    path:     /customer/dashboard
+    path:     /dashboard
     defaults: { _controller: CustomerBundle:Customer:index }
 
+customer_order_cart:
+    path:     /order-cart
+    defaults: { _controller: CustomerBundle:Customer:cart }
+
 domain_customer_order:
-    path:     /customer/order
+    path:     /order
     defaults: { _controller: CustomerBundle:Customer:order }
 
 domain_customer_payment:
-    path:     /customer/payment/{id}
+    path:     /payment/{id}
     defaults: { _controller: CustomerBundle:Customer:payment }
 
 domain_customer_order_process:
-    path:      /customer/{id}/{process}/order-process
+    path:      /{id}/{process}/order-process
     defaults: { _controller: CustomerBundle:Customer:process }
     methods:  [GET, PUT]
 
 domain_order_ajax_payment:
-    path:      /customer/{id}/order-payment
+    path:      /{id}/order-payment
     defaults: { _controller: "CustomerBundle:Customer:pay" }
     methods:  [POST]
 
 domain_order_invoice:
-    path:      /customer/{id}/preorder-invoice
+    path:      /{id}/preorder-invoice
     defaults: { _controller: "EcommerceBundle:PreOrder:invoice" }

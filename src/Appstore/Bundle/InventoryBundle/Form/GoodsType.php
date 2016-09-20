@@ -45,7 +45,7 @@ class GoodsType extends AbstractType
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',
                 'property' => 'name',
                 'empty_value' => '-Choose a brand-',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -58,7 +58,7 @@ class GoodsType extends AbstractType
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemUnit',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -72,7 +72,7 @@ class GoodsType extends AbstractType
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemSize',
                 'empty_value' => '-Choose a size-',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -86,7 +86,7 @@ class GoodsType extends AbstractType
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemColor',
                 'empty_value' => '-Choose a color-',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -132,11 +132,12 @@ class GoodsType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add sales price'))
             )))
-            ->add('webPrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'web price'),
+            /*->add('webPrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'web price'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add web price'))
                 )))
-            ->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
+            */->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
+            ->add('subProduct')
             ->add('file')
             ->add('isWeb')
         ;

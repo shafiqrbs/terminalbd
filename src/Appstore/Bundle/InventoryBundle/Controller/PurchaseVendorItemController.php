@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use Appstore\Bundle\InventoryBundle\Entity\ItemGallery;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Form\PurchaseVendorItemDetailsType;
 use Symfony\Component\HttpFoundation\Request;

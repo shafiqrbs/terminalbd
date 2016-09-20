@@ -56,6 +56,140 @@ function commonJs(){
     });
 }
 
+$('.login-preview').click(function () {
+    $('#registerModal').modal('hide');
+    $('#forgetModal').modal('hide');
+    $('#loginModal').modal('toggle');
+});
+$('#register-btn').click(function () {
+    $('#loginModal').modal('hide');
+    $('#forgetModal').modal('hide');
+    $('#registerModal').modal('toggle');
+});
+$('#forget-password').click(function () {
+    $('#loginModal').modal('hide');
+    $('#registerModal').modal('hide');
+    $('#forgetModal').modal('toggle');
+});
+
+$.validator.setDefaults({
+
+    errorElement: "span",
+    errorClass: "help-block",
+    //	validClass: 'stay',
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass(errorClass); //.removeClass(errorClass);
+        $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass(errorClass); //.addClass(validClass);
+        $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+    },
+    errorPlacement: function (error, element) {
+        if (element.parent('.input-group').length) {
+            error.insertAfter(element.parent());
+        } else if (element.hasClass('select2')) {
+            error.insertAfter(element.next('span'));
+        } else {
+            error.insertAfter(element);
+        }
+    }
+});
+
+$('.select2').on('change', function () {
+    $(this).valid();
+});
+
+$("#commentform").submit(function (e) {
+
+    e.preventDefault();
+    var $this = $(e.currentTarget),
+        inputs = {};
+
+    // Send all form's inputs
+    $.each($this.find('input'), function (i, item) {
+        var $item = $(item);
+        inputs[$item.attr('name')] = $item.val();
+    });
+
+    // Send form into ajax
+    $.ajax({
+        url: $this.attr('action'),
+        type: 'POST',
+        dataType: 'json',
+        data: inputs,
+        success: function (data) {
+            if (data.has_error) {
+                $('#error').html(data.error);
+            }else {
+                location.reload();
+            }
+        }
+    });
+});
+
+
+var validator =  $("#signup").validate({
+
+    rules: {
+
+        "Core_userbundle_user[profile][name]": {required: true},
+        "Core_userbundle_user[profile][mobile]": {
+            required: true,
+            //remote: Routing.generate('webservice_customer_checking',{'subdomain':'plaza'})
+        },
+        "Core_userbundle_user[email]": {required: false , email:true,},
+        "Core_userbundle_user[profile][location]": {required: true},
+        "Core_userbundle_user[profile][address]": {required: true},
+        "Core_userbundle_user[profile][termsConditionAccept]": {required: true},
+    },
+
+    messages: {
+
+        "Core_userbundle_user[profile][name]":"Enter your full name",
+        "Core_userbundle_user[profile][mobile]":"Enter valid phone no",
+        "Core_userbundle_user[email]":{
+            required: "Enter valid email address",
+            remote: "This username is already taken! Try another."
+        },
+        "Core_userbundle_user[profile][location]": "Enter your location",
+        "Core_userbundle_user[profile][address]": "Enter your present address",
+        "Core_userbundle_user[profile][termsConditionAccept]": "Please read terms & condition and agree",
+    },
+
+    tooltip_options: {
+
+        "Core_userbundle_user[profile][name]": {placement:'top',html:true},
+        "Core_userbundle_user[profile][mobile]": {placement:'top',html:true},
+        "Core_userbundle_user[email]": {placement:'top',html:true},
+        "Core_userbundle_user[profile][location]": {placement:'top',html:true},
+        "Core_userbundle_user[profile][address]": {placement:'top',html:true},
+        "Core_userbundle_user[profile][termsConditionAccept]":{placement:'right',html:true},
+    },
+    submitHandler: function(form) {
+
+        $.ajax({
+
+            url         : $(form).attr( 'action' ),
+            type        : $(form).attr( 'method' ),
+            data        : new FormData(form),
+            processData : false,
+            contentType : false,
+            success: function(response) {
+                if(success == 'valid'){
+                    $('#registerModal').modal('hide');
+                    $('#forgetModal').modal('hide');
+                    $('#loginModal').modal('toggle');
+                }
+            },
+            complete: function(){
+
+            }
+        });
+    }
+});
+
+
 $("div.list-group>a").click(function(e) {
     e.preventDefault();
     $(this).siblings('a.active').removeClass("active");
@@ -152,6 +286,7 @@ if (document.addEventListener) {
 setTimeout(function () { // set 1 second timeout for having all fonts loaded
     heightsEqualizer('.js-equal-height');
 }, 1000);
+
 
 
 

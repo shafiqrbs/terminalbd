@@ -24,8 +24,7 @@ class CustomerRegisterType extends AbstractType
     {
         $builder
 
-            ->add('email','text', array('attr'=>array('class'=>'m-wrap span12 form-control','placeholder'=>'Enter your secured email address'))
-            );
+            ->add('email','text', array('attr'=>array('class'=>'m-wrap span12 form-control','placeholder'=>'Enter your secured email address')));
            $builder->add('profile', new ProfileType());
            /* ->add('enabled');*/
     }

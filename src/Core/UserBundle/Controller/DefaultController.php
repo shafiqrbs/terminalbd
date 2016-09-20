@@ -41,7 +41,7 @@ class DefaultController extends Controller
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE') && $enable == 1) {
             return $this->redirect($this->generateUrl('purchase'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_CUSTOMER')) {
-            return $this->redirect($this->generateUrl('domain_customer_homepage'));
+              return $this->redirect($this->generateUrl('customer'));
         }elseif (!empty($user) && $enable == 2 ) {
             return $this->redirect($this->generateUrl('domain_pendig'));
         }elseif (!empty($user) && $enable == 3 ) {

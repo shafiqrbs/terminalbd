@@ -14,7 +14,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-
+            new Divi\AjaxLoginBundle\DiviAjaxLoginBundle(),
             new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
             new Sylius\Bundle\TranslationBundle\SyliusTranslationBundle(),
             new Sylius\Bundle\MoneyBundle\SyliusMoneyBundle(),

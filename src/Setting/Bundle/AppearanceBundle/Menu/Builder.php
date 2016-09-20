@@ -41,6 +41,7 @@ class Builder extends ContainerAware
             $menu = $this->manageAccountingSettingMenu($menu);
             $menu = $this->manageDomainMenu($menu);
             $menu = $this->manageSystemAccountMenu($menu);
+            $menu = $this->manageCustomerOrderMenu($menu);
 
 
         }else{
@@ -98,6 +99,20 @@ class Builder extends ContainerAware
         $menu
             ->addChild('Dashboard',array('route' => 'homepage'))
             ->setAttribute('icon','fa fa-home');
+        return $menu;
+    }
+
+    public function manageCustomerOrderMenu($menu)
+    {
+        $menu
+            ->addChild('My Account & Transaction')
+            ->setAttribute('dropdown', true);
+        $menu['My Account & Transaction']->addChild('Dashboard',          array('route' => 'bankaccount'))->setAttribute('icon', 'icon-money');
+        $menu['My Account & Transaction']->addChild('Order',        array('route' => 'bkash'))->setAttribute('icon', 'icon-money');
+        $menu['My Account & Transaction']->addChild('Pre-order',        array('route' => 'bkash'))->setAttribute('icon', 'icon-money');
+        $menu['My Account & Transaction']->addChild('Manage Inbox') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
+        $menu['My Account & Transaction']['Manage Inbox']->addChild('Email',              array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
+        $menu['My Account & Transaction']['Manage Inbox']->addChild('SMS',         array('route' => 'invoicemodule'))->setAttribute('icon', 'icon-money');
         return $menu;
     }
 

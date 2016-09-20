@@ -88,50 +88,7 @@
             </table>
 
         </div>
-        <div class="container">
-            <div class="col-xs-12 col-md-12">
-                <table class="table table-hover table-responsive table-bordered">
-                    <tbody>
-                    <tr><th class="textAlignLeft">Product Name</th><th>Size</th><th>Color</th><th>Price (BDT)</th><th style="width:15em;">Quantity</th></tr>
-                    {% for product in carts %}
-                        <tr>
-                            <td>
-                                <div class="product-name">{{ product.name }}</div>
-                            </td>
-                            <td>{{ product.size }}</td>
-                            <td>{{ product.color }}</td>
-                            <td>{{ product.price|number_format }}</td>
-                            <td>
-                                <form class="add-to-cart-form">
-                                    <div class="input-group">
-                                        <input type="number" name="quantity" value="1" min="1" class="form-control" placeholder="Type quantity here...">
-                                        <span class="input-group-btn"><button type="submit" class="btn btn-primary add-to-cart"><span class="glyphicon glyphicon-shopping-cart"></span></button></span>
-                                        <span class="input-group-btn"><button type="submit" class="btn btn-primary red add-to-cart"><span class="glyphicon glyphicon-trash"></span></button></span>
-                                    </div>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    <tr>
-                        <th colspan="4"><span class="pull-right">Sub Total</span></th>
-                        <th>£250.00</th>
-                    </tr>
-                    <tr>
-                        <th colspan="4"><span class="pull-right">VAT 20%</span></th>
-                        <th>£50.00</th>
-                    </tr>
-                    <tr>
-                        <th colspan="4"><span class="pull-right">Total</span></th>
-                        <th>£300.00</th>
-                    </tr>
-                    <tr>
-                        <td><a href="#" class="btn btn-primary">Continue Shopping</a></td>
-                        <td colspan="4"><a href="#" class="pull-right btn btn-success">Checkout</a></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+
     </section>
 
     <style>
@@ -156,46 +113,29 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {% for product in carts %}
                     <tr>
                         <td class="col-sm-8 col-md-6">
                             <div class="media">
                                 <a class="thumbnail pull-left" href="#"> <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" style="width: 72px; height: 72px;"> </a>
                                 <div class="media-body">
-                                    <h4 class="media-heading"><a href="#">Product name</a></h4>
-                                    <h5 class="media-heading"> by <a href="#">Brand name</a></h5>
+                                    <h4 class="media-heading"><a href="#">{{ product.name }}</a></h4>
+                                    <h5 class="media-heading"> by <a href="#">{{ product.brand }}</a></h5>
                                     <span>Status: </span><span class="text-success"><strong>In Stock</strong></span>
                                 </div>
                             </div></td>
                         <td class="col-sm-1 col-md-1" style="text-align: center">
-                            <input type="email" class="form-control" id="exampleInputEmail1" value="3">
+                            <input type="email" class="form-control" id="exampleInputEmail1" value="{{ product.quantity }}">
                         </td>
-                        <td class="col-sm-1 col-md-1 text-center"><strong>$4.87</strong></td>
-                        <td class="col-sm-1 col-md-1 text-center"><strong>$14.61</strong></td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong>{{ product.price }}</strong></td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong>{{ product.price * product.quantity |number_format  }}</strong></td>
                         <td class="col-sm-1 col-md-1">
                             <button type="button" class="btn btn-danger">
                                 <span class="glyphicon glyphicon-remove"></span> Remove
                             </button></td>
                     </tr>
-                    <tr>
-                        <td class="col-md-6">
-                            <div class="media">
-                                <a class="thumbnail pull-left" href="#"> <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" style="width: 72px; height: 72px;"> </a>
-                                <div class="media-body">
-                                    <h4 class="media-heading"><a href="#">Product name</a></h4>
-                                    <h5 class="media-heading"> by <a href="#">Brand name</a></h5>
-                                    <span>Status: </span><span class="text-warning"><strong>Leaves warehouse in 2 - 3 weeks</strong></span>
-                                </div>
-                            </div></td>
-                        <td class="col-md-1" style="text-align: center">
-                            <input type="email" class="form-control" id="exampleInputEmail1" value="2">
-                        </td>
-                        <td class="col-md-1 text-center"><strong>$4.99</strong></td>
-                        <td class="col-md-1 text-center"><strong>$9.98</strong></td>
-                        <td class="col-md-1">
-                            <button type="button" class="btn btn-danger">
-                                <span class="glyphicon glyphicon-remove"></span> Remove
-                            </button></td>
-                    </tr>
+                    {% endfor %}
+
                     <tr>
                         <td>   </td>
                         <td>   </td>
@@ -207,14 +147,7 @@
                         <td>   </td>
                         <td>   </td>
                         <td>   </td>
-                        <td><h5>Estimated shipping</h5></td>
-                        <td class="text-right"><h5><strong>$6.94</strong></h5></td>
-                    </tr>
-                    <tr>
-                        <td>   </td>
-                        <td>   </td>
-                        <td>   </td>
-                        <td><h3>Total</h3></td>
+                        <td><h3>Grand Total</h3></td>
                         <td class="text-right"><h3><strong>$31.53</strong></h3></td>
                     </tr>
                     <tr>
@@ -226,114 +159,24 @@
                                 <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
                             </button></td>
                         <td>
-                            <button type="button" class="btn btn-success">
+                            {% if  app.user %}
+                            <a href="{{ path('customer_order_cart') }}" type="button" class="btn btn-success">
                                 Checkout <span class="glyphicon glyphicon-play"></span>
-                            </button></td>
+                            </a>
+                            {% else %}
+                                <button type="button" class="btn btn-success login-preview">
+                                   Login & Checkout <span class="glyphicon glyphicon-play"></span>
+                                </button>
+                            {% endif %}
+                        </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </section>
-    <section id="">
-        <style>
-            .form-signin {
-            }
 
-            .input-group-addon
-            {
-                background-color: rgb(50, 118, 177);
-                border-color: rgb(40, 94, 142);
-                color: rgb(255, 255, 255);
-            }
-            .form-control:focus
-            {
-                background-color: rgb(50, 118, 177);
-                border-color: rgb(40, 94, 142);
-                color: rgb(255, 255, 255);
-            }
-            .form-signup input[type="text"],.form-signup input[type="password"] { border: 1px solid rgb(50, 118, 177); }
-
-        </style>
-        <div class="container">
-            <div class="col-xs-6 col-md-6">
-                <form class="form-signin">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <h4 class="text-left"><strong>SIGNIN</strong></h4>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                        <input type="text" class="form-control" placeholder="Enter Full Name" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
-                                        <input type="Text" class="form-control" placeholder="Mobile No" />
-                                    </div>
-                                </div>
-                            <div class="form-group"><div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
-                                        <input type="Text" class="form-control" placeholder="Mobile No" />
-                                    </div>
-                                </div>
-
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span></span>
-                                    <input type="text" class="form-control" placeholder="Location" />
-                                </div>
-                            </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="glyphicon glyphicon-home"></span></span>
-                                        <input type="Text" class="form-control" placeholder="Address" />
-                                    </div>
-                                </div>
-
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                    <input type="Text" class="form-control" placeholder="User name" />
-                                </div>
-                            </div>
-                            <button type="submit"  class="btn btn-sm btn-primary pull-right" role="button">Register</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="col-xs-6 col-md-6">
-                <form class="form-signin">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <h4 class="text-left"><strong>LOGIN</strong></h4>
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                    <input type="Text" class="form-control" placeholder="User name" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
-                                    <input type="password" class="form-control" placeholder="User password" />
-                                </div>
-                            </div>
-                            <button type="submit"  class="btn btn-sm btn-primary btn-block" role="button">Add Item</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
     <section>
-        <!--
-User Profile Sidebar by @keenthemes
-A component of Metronic Theme - #1 Selling Bootstrap 3 Admin Theme in Themeforest: http://j.mp/metronictheme
-Licensed under MIT
--->
-
         <div class="container">
             <div class="row">
                 <div class="col-md-3">
@@ -670,15 +513,15 @@ Licensed under MIT
         </div>
     </section>
     <!-- Modal -->
-    <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content col-xs-12 col-md-12">
-
-            </div>
-        </div>
-    </div>
+    {{ include ('FrontendBundle:Template/Desktop/Widget:modalLogin.html.twig') }}
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/desktop/css/common.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts

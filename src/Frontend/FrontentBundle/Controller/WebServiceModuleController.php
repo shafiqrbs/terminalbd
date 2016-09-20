@@ -15,6 +15,7 @@ class WebServiceModuleController extends Controller
     public function moduleAction($subdomain,$module)
     {
 
+
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         if(!empty($globalOption)){

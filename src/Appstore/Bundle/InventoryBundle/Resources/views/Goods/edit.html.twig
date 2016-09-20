@@ -35,15 +35,21 @@
                         <div class="caption"><i class="icon-reorder"></i>Product Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown"
+                                   data-close-others="true">
                                     Tools
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('inventory_goods') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('inventory_goods') }}"><i class="icon-th-list"></i>&nbsp;Lists</a>
+                                    </li>
+                                    <li><a href="{{ path('inventory_goods_new') }}"><i class="icon-plus"></i>&nbsp;New
+                                            Create</a></li>
                                     {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('inventory_goods_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('inventory_goods_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
+                                        <li><a href="{{ path('inventory_goods_edit',{'id':entity.id}) }}"><i
+                                                        class="icon-edit"></i>&nbsp;Edit</a></li>
+                                        <li><a href="{{ path('inventory_goods_show',{'id':entity.id}) }}"><i
+                                                        class="icon-eye-open"></i>&nbsp;Show</a></li>
                                     {% endif %}
                                 </ul>
                             </div>
@@ -51,7 +57,7 @@
 
                     </div>
                     <div class="portlet-body form">
-                        {% include('flash-message.html.twig')  %}
+                        {% include('flash-message.html.twig') %}
                         <!-- BEGIN FORM-->
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
@@ -59,6 +65,7 @@
                             <div class="span8">
                                 <div class="control-group">
                                     <label class="control-label" for="firstName">Product Name</label>
+
                                     <div class="controls">
                                         <div class="input-icon left">
                                             <i class="icon-font"></i>
@@ -71,6 +78,7 @@
                             <div class="span2 ">
                                 <div class="control-group">
                                     <label class="control-label" for="isWeb">Size</label>
+
                                     <div class="controls">
                                         <div class="input-icon left">
                                             {{ form_widget(form.size) }}
@@ -82,6 +90,7 @@
                             <div class="span2 ">
                                 <div class="control-group">
                                     <label class="control-label" for="isWeb">Color</label>
+
                                     <div class="controls">
                                         <div class="input-icon left">
                                             {{ form_widget(form.color) }}
@@ -98,6 +107,7 @@
                                     <div class="span12">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName">Product Category</label>
+
                                             <div class="controls">
                                                 {{ form_widget(form.category) }}
                                                 {{ form_errors(form.category) }}
@@ -109,6 +119,7 @@
                                     <div class="span12">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName">Country</label>
+
                                             <div class="controls">
                                                 {{ form_widget(form.country) }}
                                                 {{ form_errors(form.country) }}
@@ -120,6 +131,7 @@
                                     <div class="span12">
                                         <div class="control-group">
                                             <label class="control-label" for="unit">Brand</label>
+
                                             <div class="controls">
                                                 {{ form_widget(form.brand) }}
                                                 {{ form_errors(form.brand) }}
@@ -133,6 +145,7 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="salesPrice">Unit</label>
+
                                             <div class="controls">
                                                 {{ form_widget(form.unit) }}
                                                 {{ form_errors(form.unit) }}
@@ -142,6 +155,7 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="salesPrice">Quantity</label>
+
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-font"></i>
@@ -156,6 +170,7 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="salesPrice">Purchase</label>
+
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-font"></i>
@@ -168,6 +183,7 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="salesPrice">Sales price</label>
+
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-font"></i>
@@ -181,23 +197,16 @@
                                 <div class="row-fluid">
                                     <div class="span6">
                                         <div class="control-group">
-                                            <label class="control-label" for="salesPrice">Is web</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.isWeb) }}
-                                                {{ form_errors(form.isWeb) }}
-                                            </div>
+                                            <label class="control-label" for="salesPrice">Is
+                                                web {{ form_widget(form.isWeb) }}
+                                                {{ form_errors(form.isWeb) }}</label>
                                         </div>
                                     </div>
                                     <div class="span6">
                                         <div class="control-group">
-                                            <label class="control-label" for="salesPrice">Web price</label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-                                                    <i class="icon-font"></i>
-                                                    {{ form_widget(form.webPrice) }}
-                                                    {{ form_errors(form.webPrice) }}
-                                                </div>
-                                            </div>
+                                            <label class="control-label" for="salesPrice">Is Sub
+                                                Product {{ form_widget(form.subProduct) }}
+                                                {{ form_errors(form.subProduct) }}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -208,7 +217,8 @@
 
                             <div class="span9">
                                 <div class="control-group">
-                                    <label class="control-label" >Description</label>
+                                    <label class="control-label">Description</label>
+
                                     <div class="controls">
                                         {{ form_widget(form.content) }}
                                         {{ form_errors(form.content) }}
@@ -219,20 +229,23 @@
                             <!--/span-->
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" >Feature image</label>
+                                    <label class="control-label">Feature image</label>
+
                                     <div class="controls">
 
                                     </div>
                                     <div class="controls">
                                         <div data-provides="fileupload" class="fileupload fileupload-new">
-                                            <div  class="fileupload-new thumbnail">
+                                            <div class="fileupload-new thumbnail">
                                                 {% if(entity.webPath) %}
-                                                    <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="{{ image(entity.webPath).resize(100,100) }}">
+                                                    <img class="fileupload-preview fileupload-exists thumbnail" alt=""
+                                                         src="{{ image(entity.webPath).resize(100,100) }}">
                                                 {% else %}
-                                                    <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+                                                    <img alt=""
+                                                         src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
                                                 {% endif %}
                                             </div>
-                                            <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                            <div class="fileupload-preview fileupload-exists thumbnail"></div>
                                             <div>
 													<span class="btn btn-file">
                                                         <span class="fileupload-new">Select image</span>
@@ -252,74 +265,125 @@
                             <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>Sub item</div>
-                                    <a href="javascript:"  data-ref-id="1"  class="btn black pull-right mini addSubProduct" ><i class="icon-plus m-icon-white"></i></a>
+                                    <a href="javascript:" data-ref-id="1"
+                                       class="btn black pull-right mini addSubProduct"><i
+                                                class="icon-plus m-icon-white"></i></a>
 
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
                                 <div class="span12">
+                                    <div class="clone-block trash" id="clone-sub-product">
+                                        <div class="row-fluid clone  box blue">
+                                            <div class="span11">
+                                                <div class="span3"><input type="hidden" id="" name="goodsItem[]"
+                                                                          class="" value="">
+                                                    <select class="span12" name="size[]">
+                                                        <option value="">Select size/dimension/weight/pic</option>
+                                                        {% for size in sizes %}
+                                                            <option value="{{ size.id }}">{{ size.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="span2">
+                                                    <select class="span12" name="color[]">
+                                                        <option value="">Color</option>
+                                                        {% for color in colors %}
+                                                            <option value="{{ color.id }}">{{ color.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="span4">
+                                                    <input type="text" id="name" name="name[]"
+                                                           class="m-wrap span12 tooltips"
+                                                           placeholder="Add additional item" value=""
+                                                           data-original-title="Add sub product name"
+                                                           data-trigger="hover">
+                                                </div>
+                                                <div class="span3">
+                                                    <input type="text" id="" name="quantity[]"
+                                                           class="m-wrap span4 tooltips" placeholder="quantity" value=""
+                                                           data-original-title="Please add item quantity"
+                                                           data-trigger="hover">
+                                                    <input type="text" id="" name="salesPrice[]"
+                                                           class="m-wrap span4 tooltips" placeholder="sales" value=""
+                                                           data-original-title="Please add sales price"
+                                                           data-trigger="hover">
+                                                    <input type="text" id="" name="webPrice[]"
+                                                           class="m-wrap span4 tooltips" placeholder="web" value=""
+                                                           data-original-title="Please add web price"
+                                                           data-trigger="hover">
+                                                </div>
+                                            </div>
+                                            <div class="span1"><a href="javascript:" data-id="" data-url=""
+                                                                  class="btn red mini hidden  remove"><i
+                                                            class="icon-trash m-icon-white"></i></a></div>
+                                        </div>
+                                    </div>
                                     {% if entity.goodsItems is not empty and entity.goodsItems is defined %}
                                         {% for goodsItem in  entity.goodsItems %}
-                                            {% if goodsItem.masterItem is null %}
-                                            <div class="clone-block trash" id="clone-sub-product">
-                                                <div class="row-fluid clone  box blue">
-                                                    <div class="span11">
-                                                        <div class="span3"><input type="hidden" id="" name="goodsItem[]" class="" value="{{ goodsItem.id }}"  >
-                                                            <select class="span12" name="size[]" >
-                                                                <option value="">Select size/dimension/weight/pic</option>
-                                                                {% for size in sizes %}
-                                                                    <option value="{{ size.id }}" {% if goodsItem.size is not empty and  goodsItem.size.id == size.id  %} selected="selected" {% endif %}>{{ size.name }}</option>
-                                                                {% endfor %}
-                                                            </select>
+                                            {% if goodsItem.masterItem != 1 %}
+                                                <div class="clone-block trash">
+                                                    <div class="row-fluid  box blue">
+                                                        <div class="span11">
+                                                            <div class="span3"><input type="hidden" id=""
+                                                                                      name="goodsItem[]" class=""
+                                                                                      value="{{ goodsItem.id }}">
+                                                                <select class="span12" name="size[]">
+                                                                    <option value="">Select size/dimension/weight/pic
+                                                                    </option>
+                                                                    {% for size in sizes %}
+                                                                        <option value="{{ size.id }}" {% if goodsItem.size is not empty and  goodsItem.size.id == size.id %} selected="selected" {% endif %}>{{ size.name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            <div class="span2">
+                                                                <select class="span12" name="color[]">
+                                                                    <option value="">Color</option>
+                                                                    {% for color in colors %}
+                                                                        <option value="{{ color.id }}" {% if goodsItem.color is not empty and  goodsItem.color.id == color.id %} selected="selected" {% endif %}>{{ color.name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            <div class="span4">
+                                                                <input type="text" id="name" name="name[]"
+                                                                       class="m-wrap span12 tooltips"
+                                                                       placeholder="Add additional item"
+                                                                       value="{{ goodsItem.name }}"
+                                                                       data-original-title="Add sub product name"
+                                                                       data-trigger="hover">
+                                                            </div>
+                                                            <div class="span3">
+                                                                <input type="text" id="" name="quantity[]"
+                                                                       class="m-wrap span4 tooltips"
+                                                                       placeholder="quantity"
+                                                                       value="{{ goodsItem.quantity }}"
+                                                                       data-original-title="Please add item quantity"
+                                                                       data-trigger="hover">
+                                                                <input type="text" id="" name="salesPrice[]"
+                                                                       class="m-wrap span4 tooltips" placeholder="sales"
+                                                                       value="{{ goodsItem.salesPrice }}"
+                                                                       data-original-title="Please add sales price"
+                                                                       data-trigger="hover">
+                                                                <input type="text" id="" name="webPrice[]"
+                                                                       class="m-wrap span4 tooltips" placeholder="web"
+                                                                       value="{{ goodsItem.webPrice }}"
+                                                                       data-original-title="Please add web price"
+                                                                       data-trigger="hover">
+                                                            </div>
                                                         </div>
-                                                        <div class="span2">
-                                                            <select class="span12" name="color[]" >
-                                                                <option value="">Color</option>
-                                                                {% for color in colors %}
-                                                                    <option value="{{ color.id }}" {% if goodsItem.color is not empty and  goodsItem.color.id == color.id  %} selected="selected" {% endif %}>{{ color.name }}</option>
-                                                                {% endfor %}
-                                                            </select>
-                                                        </div>
-                                                        <div class="span4">
-                                                            <input type="text" id="name" name="name[]" class="m-wrap span12 tooltips"  placeholder="Add additional item" value="{{ goodsItem.name }}" data-original-title ="Add sub product name"  data-trigger = "hover" >
-                                                        </div>
-                                                        <div class="span3">
-                                                            <input type="text" id="" name="quantity[]" class="m-wrap span4 tooltips"  placeholder="quantity" value="{{ goodsItem.quantity }}"  data-original-title ="Please add item quantity"  data-trigger = "hover" >
-                                                            <input type="text" id="" name="salesPrice[]" class="m-wrap span4 tooltips"  placeholder="sales" value="{{ goodsItem.salesPrice }}"  data-original-title ="Please add sales price"  data-trigger = "hover" >
-                                                            <input type="text" id="" name="webPrice[]" class="m-wrap span4 tooltips"  placeholder="web" value="{{ goodsItem.webPrice }}"  data-original-title ="Please add web price"  data-trigger = "hover" >
-                                                        </div>
+                                                        <div class="span1"><a href="javascript:"
+                                                                              data-id="{{ goodsItem.id }}"
+                                                                              data-url="{{ path('inventory_goods_subItem_delete',{'id':goodsItem.id} ) }}"
+                                                                              class="btn red mini  remove"><i
+                                                                        class="icon-trash m-icon-white"></i></a></div>
                                                     </div>
-                                                    <div class="span1"><a href="javascript:" data-id="{{ goodsItem.id }}" data-url="{{ path('inventory_goods_subItem_delete',{'id':goodsItem.id} ) }}"  class="btn red mini  remove" ><i class="icon-trash m-icon-white"></i></a></div>
                                                 </div>
-                                            </div>
-                                                {% endif %}
+                                            {% endif %}
                                         {% endfor %}
-                                    {% else %}
-                                        <div class="clone-block" id="clone-sub-product">
-                                            <div class="row-fluid clone  box blue">
-                                                <div class="span11">
-                                                    <div class="span4"><input type="hidden" id="" name="goodsItem[]" class="" value=""  >
-                                                        <select class="span12" name="size[]" >
-                                                            <option value="">Select size/dimension/weight/pic</option>
-                                                            {% for size in sizes %}
-                                                                <option value="{{ size.id }}">{{ size.name }}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                    <div class="span5">
-                                                        <input type="text" id="additionalItem" name="additionalItem[]" class="m-wrap span12 tooltips"  placeholder="Add additional item" value=""  data-original-title ="Add additional item"  data-trigger = "hover" >
-                                                    </div>
-                                                    <div class="span3">
-                                                        <input type="text" id="" name="salesPrice[]" class="m-wrap span6 tooltips"  placeholder="sales price" value=""  data-original-title ="Please add sales price"  data-trigger = "hover" >
-                                                        <input type="text" id="" name="webPrice[]" class="m-wrap span6 tooltips"  placeholder="web price" value=""  data-original-title ="Please add web price"  data-trigger = "hover" >
-                                                    </div>
-
-                                                </div>
-                                                <div class="span1"><button type="button" class="btn red  mini remove hidden" ><i class="icon-trash m-icon-white"></i></button></div>
-                                            </div>
-                                        </div>
                                     {% endif %}
+
 
                                 </div>
                             </div>
@@ -333,21 +397,26 @@
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
-                            {%  for attribute in entity.itemMetaAttributes %}
+                            {% for attribute in entity.itemMetaAttributes %}
 
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" >{{ attribute.itemAttribute.name }}</label>
+                                            <label class="control-label">{{ attribute.itemAttribute.name }}</label>
+
                                             <div class="controls">
-                                                <input type="hidden" name="attributeId[]" value="{{ attribute.itemAttribute.id }}">
-                                                <input type="text" id="" name="value[]"  class="m-wrap span12 tooltips" placeholder="{{ attribute.itemAttribute.placeholder }}" data-original-title="{{ attribute.itemAttribute.toolTip }}" data-trigger="hover" value="{{ attribute.value }}">
+                                                <input type="hidden" name="attributeId[]"
+                                                       value="{{ attribute.itemAttribute.id }}">
+                                                <input type="text" id="" name="value[]" class="m-wrap span12 tooltips"
+                                                       placeholder="{{ attribute.itemAttribute.placeholder }}"
+                                                       data-original-title="{{ attribute.itemAttribute.toolTip }}"
+                                                       data-trigger="hover" value="{{ attribute.value }}">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             {% endfor %}
-                        {% elseif  entity.category is not empty and entity.category is not empty %}
+                        {% elseif  entity.category is not empty and entity.category is not empty and entity.category.itemAttributes is  not empty %}
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
@@ -355,14 +424,19 @@
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
-                            {%  for itemAttributes in entity.category.itemAttributes %}
+                            {% for itemAttributes in entity.category.itemAttributes %}
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" >{{ itemAttributes.name }}</label>
+                                            <label class="control-label">{{ itemAttributes.name }}</label>
+
                                             <div class="controls">
-                                                <input type="hidden" name="attributeId[]" value="{{ itemAttributes.id }}">
-                                                <input type="text" id="" name="value[]"  class="m-wrap span12 tooltips" placeholder="{{ itemAttributes.placeholder }}" data-original-title="{{ itemAttributes.toolTip }}" data-trigger="hover" value="{{ itemAttributes.placeholder }}">
+                                                <input type="hidden" name="attributeId[]"
+                                                       value="{{ itemAttributes.id }}">
+                                                <input type="text" id="" name="value[]" class="m-wrap span12 tooltips"
+                                                       placeholder="{{ itemAttributes.placeholder }}"
+                                                       data-original-title="{{ itemAttributes.toolTip }}"
+                                                       data-trigger="hover" value="{{ itemAttributes.placeholder }}">
                                             </div>
                                         </div>
                                     </div>
@@ -373,7 +447,8 @@
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i>Additional Field & Value</div>
-                                <a href="javascript:" class="btn green pull-right mini addmore"><i class="icon-plus"></i></a>
+                                <a href="javascript:" class="btn green pull-right mini addmore"><i
+                                            class="icon-plus"></i></a>
                             </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>
@@ -381,42 +456,49 @@
                             <div class="clone">
                                 <div class="span3 ">
                                     <div class="control-group">
-                                        <input type="hidden" name="metaId[]" value="" >
-                                        <input type="text" name="metaKey[]" class="m-wrap span12" placeholder="Label name" value="">
+                                        <input type="hidden" name="metaId[]" value="">
+                                        <input type="text" name="metaKey[]" class="m-wrap span12"
+                                               placeholder="Label name" value="">
                                     </div>
                                 </div>
                                 <div class="span8">
                                     <div class="control-group">
-                                        <input type="text" name="metaValue[]" class="m-wrap span12" placeholder="Label value" value="">
+                                        <input type="text" name="metaValue[]" class="m-wrap span12"
+                                               placeholder="Label value" value="">
                                     </div>
                                 </div>
                                 <div class="span1">
                                     <div class="control-group">
                                         <div class="controls">
-                                            <a href="javascript:"  class="btn red  remove hidden mini"><i class="icon-trash"></i></a>
+                                            <a href="javascript:" class="btn red  remove hidden mini"><i
+                                                        class="icon-trash"></i></a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         {% if  entity.itemKeyValues is defined and entity.itemKeyValues is not empty %}
-                        {% for meta in entity.itemKeyValues %}
-                        <div class="row-fluid trash" id="remove-{{ meta.id }}"  >
-                            <div class="span3 ">
-                                <div class="control-group">
-                                    <input type="hidden" name="metaId[]" value="{{ meta.id }}" >
-                                    <input type="text" name="metaKey[]" class="m-wrap span12" placeholder="Label name" value="{{ meta.metaKey }}">
-                                </div>
-                            </div>
-                            <div class="span8">
-                                <div class="control-group">
-                                    <input type="text" name="metaValue[]" class="m-wrap span12" placeholder="Label value" value="{{ meta.metaValue }}">
-                                </div>
-                            </div>
-                            <div class="span1">
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <a href="javascript:" id="{{ meta.id }}"  data-url="{{ path('inventory_goods_itemkeyvalue_delete',{'id':meta.id}) }}" class="btn red  remove mini" ><i class="icon-trash"></i></a>
+                            {% for meta in entity.itemKeyValues %}
+                                <div class="row-fluid trash" id="remove-{{ meta.id }}">
+                                    <div class="span3 ">
+                                        <div class="control-group">
+                                            <input type="hidden" name="metaId[]" value="{{ meta.id }}">
+                                            <input type="text" name="metaKey[]" class="m-wrap span12"
+                                                   placeholder="Label name" value="{{ meta.metaKey }}">
+                                        </div>
+                                    </div>
+                                    <div class="span8">
+                                        <div class="control-group">
+                                            <input type="text" name="metaValue[]" class="m-wrap span12"
+                                                   placeholder="Label value" value="{{ meta.metaValue }}">
+                                        </div>
+                                    </div>
+                                    <div class="span1">
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <a href="javascript:" id="{{ meta.id }}"
+                                                   data-url="{{ path('inventory_goods_itemkeyvalue_delete',{'id':meta.id}) }}"
+                                                   class="btn red  remove mini"><i class="icon-trash"></i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -433,8 +515,14 @@
                             {% if(entity.itemGalleries) %}
                                 {% for photo in entity.itemGalleries %}
                                     <div class="span2">
-                                        <input type="checkbox" data-placement="left" class="checker popovers" data-trigger="hover" data-content="Are you remove image, Please click here." data-original-title="Remove image" name="imageId[]"  value="{{ photo.id }}">
-                                        <a href="/{{ photo.getWebPath(entity.inventoryConfig.globalOption.id,entity.id) }}" target="_blank"> <img src="{{ image(photo.getAbsolutePath(entity.inventoryConfig.globalOption.id,entity.id)).resize(100,100) }}" /></a>
+                                        <input type="checkbox" data-placement="left" class="checker popovers"
+                                               data-trigger="hover"
+                                               data-content="Are you remove image, Please click here."
+                                               data-original-title="Remove image" name="imageId[]"
+                                               value="{{ photo.id }}">
+                                        <a href="/{{ photo.getWebPath(entity.inventoryConfig.globalOption.id,entity.id) }}"
+                                           target="_blank"> <img
+                                                    src="{{ image(photo.getAbsolutePath(entity.inventoryConfig.globalOption.id,entity.id)).resize(100,100) }}"/></a>
                                     </div>
                                 {% endfor %}
                             {% endif %}
@@ -442,7 +530,8 @@
                         <div class="row-fluid">
                             <div class="span12">
                                 <div id="pluploadUploader">
-                                    <p>You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5 support.</p>
+                                    <p>You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5
+                                        support.</p>
                                 </div>
                             </div>
                         </div>
@@ -461,26 +550,24 @@
         </div>
     </div>
     <style>
-        .popover{
+        .popover {
             width: 250px !important;
         }
     </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/style.css'
-    %}
+    '@InventoryBundle/Resources/public/css/style.css' %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
-{% endblock  %}
+{% endblock %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@InventoryBundle/Resources/public/js/goods.js'
-    %}
+    '@InventoryBundle/Resources/public/js/goods.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-{% endblock  %}
+{% endblock %}
 {% block documentready %}
     {{ parent() }}
     InventoryItemEditPage({{ entity.id ? entity.id : 0 }});

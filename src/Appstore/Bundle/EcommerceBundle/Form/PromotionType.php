@@ -17,13 +17,6 @@ class EcommerceConfigType extends AbstractType
         $builder
 
             ->add('pickupLocation','textarea', array('attr'=>array('class'=>'m-wrap span12','row'=>3,'placeholder'=>'Notes...')))
-            ->add('currency', 'choice', array(
-                'attr'=>array('class'=>'span12'),
-                'choices' => array(
-                    '৳'       => 'Taka(৳)',
-                    '$'       => 'Dollar($)'
-                ),
-            ))
             ->add('perColumn', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(
@@ -32,18 +25,7 @@ class EcommerceConfigType extends AbstractType
                     '6'       => 'Per Column-6',
                 ),
             ))
-            ->add('owlProductColumn', 'choice', array(
-                'attr'=>array('class'=>'span12'),
-                'choices' => array(
-                    '3'       => 'Per Column-3',
-                    '4'       => 'Per Column-4',
-                    '6'       => 'Per Column-6',
-                ),
-            ))
-            ->add('isPreorder')
-            ->add('cart')
-            ->add('webProduct')
-            ->add('promotion')
+
         ;
     }
     

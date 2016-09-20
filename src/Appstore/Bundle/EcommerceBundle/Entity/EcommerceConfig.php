@@ -39,6 +39,16 @@ class EcommerceConfig
      */
     protected $orders;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
+     */
+    protected $discounts;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
+     */
+    protected $promotions;
+
 
     /**
      * @var string
@@ -46,6 +56,27 @@ class EcommerceConfig
      * @ORM\Column(name="pickupLocation", type="text", nullable = true)
      */
     private $pickupLocation;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="perColumn", type="smallint", nullable = true)
+     */
+     private $perColumn = 4;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="currency", type="smallint", nullable = true)
+     */
+     private $currency = "৳";
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="owlProductColumn", type="smallint", nullable = true)
+     */
+     private $owlProductColumn = 4;
 
     /**
      * @var boolean
@@ -239,6 +270,54 @@ class EcommerceConfig
     public function setPromotion($promotion)
     {
         $this->promotion = $promotion;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPerColumn()
+    {
+        return $this->perColumn;
+    }
+
+    /**
+     * @param int $perColumn
+     */
+    public function setPerColumn($perColumn)
+    {
+        $this->perColumn = $perColumn;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOwlProductColumn()
+    {
+        return $this->owlProductColumn;
+    }
+
+    /**
+     * @param int $owlProductColumn
+     */
+    public function setOwlProductColumn($owlProductColumn)
+    {
+        $this->owlProductColumn = $owlProductColumn;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param int $currency
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
     }
 
 

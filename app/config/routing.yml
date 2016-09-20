@@ -1,15 +1,9 @@
-site_domain_control:
-    resource: "dynamic/sites.yml"
-    type:     rest
-
-domain_control:
-    resource: "@XiideaDomainBundle/Resources/config/routing.yml"
-    prefix:   /
-    type:     rest
+core_user_bundle:
+    resource: "@UserBundle/Resources/config/routing.yml"
 
 customer:
     resource: "@CustomerBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /customer
 
 ims:
     resource: "@ImsBundle/Resources/config/routing.yml"
@@ -71,10 +65,6 @@ setting_location:
     resource: "@SettingLocationBundle/Resources/config/routing.yml"
     prefix:   /admin
 
-core_user_bundle:
-    resource: "@UserBundle/Resources/config/routing.yml"
-    prefix:   /
-
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
@@ -84,3 +74,11 @@ fos_comment_api:
     resource: "@FOSCommentBundle/Resources/config/routing.yml"
     prefix: /api
     defaults: { _format: html }
+
+site_domain_control:
+    resource: "dynamic/sites.yml"
+    type:     rest
+
+domain_control:
+    resource: "@XiideaDomainBundle/Resources/config/routing.yml"
+    type:     rest

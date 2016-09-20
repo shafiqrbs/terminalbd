@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\CustomerBundle\Controller;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Frontend\FrontentBundle\Service\Cart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,6 +45,16 @@ class CustomerController extends Controller
         $pagination = $this->paginate($entities);
         return $this->render('CustomerBundle:Customer:order.html.twig', array(
             'entities' => $pagination,
+        ));
+
+    }
+
+    public function cartAction(Request $request)
+    {
+
+        $cart = new Cart($request->getSession());
+        return $this->render('CustomerBundle:Customer:cart.html.twig', array(
+            'carts'             => $cart->contents(),
         ));
 
     }

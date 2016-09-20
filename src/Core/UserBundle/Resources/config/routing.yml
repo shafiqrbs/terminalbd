@@ -11,8 +11,8 @@ domain:
     defaults: { _controller: UserBundle:Default:domain }
 
 customer:
-    pattern: /customer/dashboard
-    defaults:  { _controller: FrontendBundle:Customer:index }
+    pattern: /customer
+    defaults:  { _controller: CustomerBundle:Customer:index }
 
 domain_pendig:
     pattern: /domain-pendeing
@@ -30,7 +30,7 @@ general:
     pattern: /general
     defaults: { _controller: UserBundle:Default:general }
 
-homepage:
+landing_page:
      pattern: /user-home
      defaults: { _controller: UserBundle:Default:landing }
 

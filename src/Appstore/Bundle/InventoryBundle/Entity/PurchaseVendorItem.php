@@ -102,6 +102,16 @@ class PurchaseVendorItem
     private  $size;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", inversedBy="purchaseVendorItems" )
+     **/
+    private  $discount;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="purchaseVendorItems" )
+     **/
+    private  $promotions;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable = true)
@@ -115,11 +125,19 @@ class PurchaseVendorItem
      */
     private $webName;
 
+
+
     /**
-     * @Gedmo\Slug(fields={"name"})
-     * @Doctrine\ORM\Mapping\Column(length=255)
+     * @Gedmo\Slug(handlers={
+     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\TreeSlugHandler", options={
+     *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="category"),
+     *          @Gedmo\SlugHandlerOption(name="separator", value="-")
+     *      })
+     * }, fields={"name"})
+     * @Doctrine\ORM\Mapping\Column()
      */
     private $slug;
+
 
     /**
      * @var integer
@@ -932,6 +950,38 @@ class PurchaseVendorItem
     public function getOrderItems()
     {
         return $this->orderItems;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPromotions()
+    {
+        return $this->promotions;
+    }
+
+    /**
+     * @param mixed $promotions
+     */
+    public function setPromotions($promotions)
+    {
+        $this->promotions = $promotions;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @param mixed $discount
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
     }
 
 

@@ -185,23 +185,14 @@
                                 <div class="row-fluid">
                                     <div class="span6">
                                         <div class="control-group">
-                                            <label class="control-label" for="salesPrice">Is web</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.isWeb) }}
-                                                {{ form_errors(form.isWeb) }}
-                                             </div>
+                                            <label class="control-label" for="salesPrice">Is web {{ form_widget(form.isWeb) }}
+                                                {{ form_errors(form.isWeb) }}</label>
                                         </div>
                                     </div>
                                     <div class="span6">
                                         <div class="control-group">
-                                            <label class="control-label" for="salesPrice">Web price</label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-                                                    <i class="icon-font"></i>
-                                                    {{ form_widget(form.webPrice) }}
-                                                    {{ form_errors(form.webPrice) }}
-                                                </div>
-                                            </div>
+                                            <label class="control-label" for="salesPrice">Is Sub Product {{ form_widget(form.subProduct) }}
+                                                {{ form_errors(form.subProduct) }}</label>
                                         </div>
                                     </div>
                                 </div>

@@ -4,6 +4,7 @@ use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\Constraints\Null;
 
 /**
  * GoodsItemRepository
@@ -95,6 +96,8 @@ class GoodsItemRepository extends EntityRepository
         }
         if($reEntity->getColor()){
             $goods->setColor($reEntity->getColor());
+        }else{
+            $goods->setColor(NULL);
         }
         $goods->setPurchaseVendorItem($reEntity);
         $em->persist($goods);

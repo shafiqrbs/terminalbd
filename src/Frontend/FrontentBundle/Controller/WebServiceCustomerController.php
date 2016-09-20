@@ -9,6 +9,7 @@ use Frontend\FrontentBundle\Service\MobileDetect;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class WebServiceCustomerController extends Controller
@@ -61,8 +62,30 @@ class WebServiceCustomerController extends Controller
                 'novalidate' => 'novalidate',
             )
         ));
-
         return $form;
+    }
+
+    /**
+     * Creates a new User entity.
+     *
+     */
+
+    public function userCheckingAction()
+    {
+       // echo $request->request->all();
+        exit;
+        $em = $this->getDoctrine()->getManager();
+        $intlMobile = $_REQUEST['Core_userbundle_user_profile_mobile'];
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $entity = $em->getRepository('UserBundle:User')->findBy(array('username'=>$mobile));
+
+        if( count($entity) > 0 ){
+            $valid = 'true';
+        }else{
+            $valid = 'false';
+        }
+        echo $valid;
+        exit;
     }
 
     /**
@@ -118,6 +141,39 @@ class WebServiceCustomerController extends Controller
         }
 
     }
+
+    public function insertAction($subdomain, Request $request)
+    {
+        //$data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = new User();
+        $form = $this->createCreateForm($subdomain,$entity);
+        $form->handleRequest($request);
+        $intlMobile = $entity->getProfile()->getMobile();
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+
+        if ($form->isValid()) {
+
+            $entity->setPlainPassword("1234");
+            $entity->setEnabled(true);
+            $entity->setUsername($mobile);
+            if(empty($entity->getEmail())){
+                $entity->setEmail($mobile.'@gmail.com');
+            }
+            $entity->setRoles(array('ROLE_CUSTOMER'));
+            $em->persist($entity);
+            $em->flush();
+            return new Response('success');
+
+            //$dispatcher = $this->container->get('event_dispatcher');
+            //$dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
+        }else{
+            return new Response('invalid');
+        }
+
+
+    }
+
 
     public function confirmAction($subdomain)
     {

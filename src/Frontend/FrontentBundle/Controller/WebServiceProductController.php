@@ -5,14 +5,14 @@ namespace Frontend\FrontentBundle\Controller;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
+use Core\UserBundle\Form\CustomerRegisterType;
 use Frontend\FrontentBundle\Service\Cart;
-use Frontend\FrontentBundle\Service\Item;
 use Frontend\FrontentBundle\Service\MobileDetect;
-use Frontend\FrontentBundle\Service\ShoppingCart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Core\UserBundle\Entity\User;
 
 
 class WebServiceProductController extends Controller
@@ -211,9 +211,19 @@ class WebServiceProductController extends Controller
     {
 
         $cart = new Cart($request->getSession());
+
         $quantity = $request->request->get('quantity');
-        $data = array('id' => $subitem->getId(), 'name'=>$product->getName(),'size'=>$subitem->getSize()->getName(), 'color'=>$subitem->getColor()->getName(), 'price'=>$subitem->getSalesPrice(),'qty' => $quantity);
-        $data1 = array('id'=>2,'name'=>'Lux Soap','size'=>"100 gm",'price'=>'10','qty'=>5);
+        $data = array(
+            'id' => $subitem->getId(),
+            'name'=>$product->getName(),
+            'brand'=>$product->getBrand()->getName(),
+            'category'=>$product->getCategory()->getName(),
+            'size'=>!empty($subitem->getSize()) ? $subitem->getSize()->getName():0 ,
+            'color'=> !empty($subitem->getColor()) ? $subitem->getColor()->getName():0,
+            'price'=>$subitem->getSalesPrice(),
+            'quantity' => $quantity
+        );
+        $cart->destroy();
         $cart->insert($data);
         var_dump($cart->contents());
         return new Response('success');
@@ -256,6 +266,9 @@ class WebServiceProductController extends Controller
 
             //$quantity = $request->request->get('quantity');
             //$data = array('id' => $subitem->getId(), 'name'=>$product->getName(),'size'=>$subitem->getSize()->getName(), 'price'=>$subitem->getSalesPrice(),'qty' => $quantity);
+            $user = new User();
+            $form   = $this->createCreateForm($subdomain,$user);
+            $csrfToken = $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue();
 
             return $this->render('FrontendBundle:'.$theme.':cart.html.twig',
                 array(
@@ -264,9 +277,34 @@ class WebServiceProductController extends Controller
                     'brands'            => $brands,
                     'carts'             => $cart->contents(),
                     'products'          => $products,
+                    'csrfToken'   => $csrfToken,
+                    'form'   => $form->createView(),
                 )
             );
         }
+
+    }
+
+    /**
+     * Creates a form to create a User entity.
+     *
+     * @param User $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+
+    private function createCreateForm($subdomain,User $entity)
+    {
+        $form = $this->createForm(new CustomerRegisterType(), $entity, array(
+            'action' => $this->generateUrl('webservice_customer_insert', array('subdomain' => $subdomain)),
+            'method' => 'POST',
+            'attr' => array(
+                'id' => 'signup',
+                'class' => 'register',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
 
     }
 

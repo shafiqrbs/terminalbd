@@ -43,18 +43,21 @@
                                 </select>
                             </div>
                         </div>
+                        {% if subItem.color is not empty and subItem.color is defined %}
                         <div class="form-group">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-text-background"></span></span>
                                 <select class="form-control" name="color" disabled="disabled" >
                                     <option value="">Choose</option>
                                     {% for goodsItem in  product.goodsItems %}
+                                        {% if goodsItem.color is not empty and goodsItem.color is defined %}
                                         <option {% if goodsItem.id == subItem.id %} selected="selected" {% endif %} value="{{ goodsItem.id }}" >{{ goodsItem.color.name }}</option>
+                                        {% endif %}
                                     {% endfor %}
                                 </select>
-
                             </div>
                         </div>
+                        {% endif %}
                         <div class="form-group">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-sort-by-order"></span></span>

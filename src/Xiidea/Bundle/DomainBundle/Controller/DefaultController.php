@@ -14,22 +14,26 @@ class DefaultController extends Controller
 
     public function educationHomeAction()
     {
-        $data = array(
-            'resource' => '@FrontendBundle/Resources/config/routing/webservice.yml',
-            'domain' => 'www.tlsbd.org',
-            'subdomain' =>'tlsbd'
-        );
-
-        $routes = array(
-            '_domain_app_' . strtolower(str_replace('.', '_', $data['domain'])) => array(
-                'resource' => $data['resource'],
-                'host' => $data['domain'],
-                'name_prefix' =>  $data['subdomain'] . "_",
-                'defaults' => array(
-                    'subdomain' =>$data['subdomain']
-                )
+        $domains = array(
+            array(
+                'resource' => '@FrontendBundle/Resources/config/routing/webservice.yml',
+                'domain' => 'www.tlsbd.org',
+                'subdomain' => 'tlsbd'
             )
         );
+
+        $routes = array();
+
+        foreach ($domains as $data)
+            $routes['_domain_app_' . strtolower(str_replace('.', '_', $data['domain']))] = array(
+                'resource' => $data['resource'],
+                'host' => $data['domain'],
+                'name_prefix' => $data['subdomain'] . "_",
+                'defaults' => array(
+                    'subdomain' => $data['subdomain']
+                )
+            );
+
 
         $routesString = Yaml::dump($routes);
 

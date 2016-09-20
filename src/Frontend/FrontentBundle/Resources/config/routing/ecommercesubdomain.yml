@@ -3,78 +3,92 @@ ecommercesubdomain:
     defaults: { _controller: FrontendBundle:WebService:index }
 
 webservice_product_details:
-    path:     /{subdomain}/product/{item}
+    path:     /product/{item}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productDetails }
 
 webservice_product_modal:
-    path:     /{subdomain}/product-modal/{item}
+    path:     /product-modal/{item}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productModal }
 
 webservice_product_checkout:
-    path:     /{subdomain}/product-check-our
+    path:     /product-check-our
     defaults: { _controller: FrontendBundle:WebServiceProduct:checkout }
 
 webservice_product_cart:
-    path:     /{subdomain}/cart/{product}/{subitem}
+    path:     /cart/{product}/{subitem}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productAddCart }
     methods:  POST
     options:
             expose: true
 
 webservice_product_wishlist:
-    path:     /{subdomain}/wishlist/{item}
+    path:     /wishlist/{item}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productAddWishList }
 
 webservice_product_sub_item:
-    path:     /{subdomain}/sub-item/{product}
+    path:     /sub-item/{product}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productSubProduct }
 
 webservice_product_sub_item_cart:
-    path:     /{subdomain}/sub-item/{product}
+    path:     /sub-item/{product}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productSubProductCart }
 
 webservice_module_page:
-    path:     /{subdomain}/{module}/{slug}
+    path:     /{module}/{slug}
     defaults: { _controller: FrontendBundle:WebServiceModule:modulePage }
 
 webservice_module_category:
-    path:     /{subdomain}/category/{module}/{slug}
+    path:     /category/{module}/{slug}
     defaults: { _controller: FrontendBundle:WebServiceModule:moduleCategory }
 
 
 webservice_contact:
-    path:     /{subdomain}/contact
+    path:     /contact
     defaults: { _controller: FrontendBundle:WebServiceModule:contact }
 
 webservice_product_cart_details:
-    path:     /{subdomain}/cart-details
+    path:     /cart-details
     defaults: { _controller: FrontendBundle:WebServiceProduct:productCart }
 
 webservice_product:
-    path:     /{subdomain}/product
+    path:     /product
     defaults: { _controller: FrontendBundle:WebServiceProduct:product }
 
 webservice_customer_register:
-    path:     /{subdomain}/register
+    path:     /register
     defaults: { _controller: FrontendBundle:WebServiceCustomer:register }
 
 webservice_customer_create:
-    path:     /{subdomain}/customer-registration-create
+    path:     /customer-registration-create
     defaults: { _controller: FrontendBundle:WebServiceCustomer:create }
 
+webservice_customer_insert:
+    path:     /customer-registration-insert
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:insert }
+    methods:  POST
+    options:
+            expose: true
+
 webservice_customer_confirm:
-    path:     /{subdomain}/customer-registration-confirm
+    path:     /customer-registration-confirm
     defaults: { _controller: FrontendBundle:WebServiceCustomer:confirm }
 
+webservice_customer_checking:
+    path:      /username/checking
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:userChecking }
+    methods:  POST
+    options:
+            expose: true
+
 webservice_customer_login:
-    path:     /{subdomain}/customer-login
+    path:     /customer-login
     defaults: { _controller:  FrontendBundle:WebServiceCustomer:domainLogin }
 
 webservice_login:
-    path:     /{subdomain}/customer-login
+    path:     /customer-login
     defaults: { _controller: FrontendBundle:WebServiceCustomer:confirm }
 
 webservice_module:
-    path:     /{subdomain}/{module}
+    path:     /{module}
     defaults: { _controller: FrontendBundle:WebServiceModule:module }
 

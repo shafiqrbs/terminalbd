@@ -74,25 +74,24 @@
                                                 <div class="input-group input-group-sm">
                                                     <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-list-alt"></span></span>
                                                     <select data-url="{{ path('webservice_product_sub_item', {'subdomain':globalOption.subDomain, 'product' : product.id }) }}" class="form-control changeSize" name="size" id="size" >
-                                                        <option value="">Choose</option>
                                                         {% for goodsItem in  product.goodsItems %}
                                                             <option {% if goodsItem.masterItem == 1 %} selected="selected" {% endif %} value="{{ goodsItem.id }}" >{{ goodsItem.size.name }}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
                                             </div>
+                                            {% if product.color is not empty and product.color is defined %}
                                             <div class="form-group">
                                                 <div class="input-group input-group-sm">
                                                     <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-text-background"></span></span>
                                                     <select class="form-control" name="color" disabled="disabled" >
-                                                        <option value="">Choose</option>
                                                         {% for goodsItem in  product.goodsItems %}
                                                             <option {% if goodsItem.masterItem == 1 %} selected="selected" {% endif %} value="{{ goodsItem.id }}" >{{ goodsItem.color.name }}</option>
                                                         {% endfor %}
                                                     </select>
-
                                                 </div>
                                             </div>
+                                            {% endif %}
                                             <div class="form-group">
                                                 <div class="input-group input-group-sm">
                                                     <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-sort-by-order"></span></span>

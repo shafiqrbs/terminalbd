@@ -26,19 +26,13 @@ class TemplateWidgetController extends Controller
         /* Device Detection code desktop or mobile */
 
         $detect = new MobileDetect();
+        $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
+        $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
 
         if($detect->isMobile() && $detect->isTablet()) {
-
             $theme = 'Mobile/'.$themeName;
-            $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
-            $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
-
         }else{
-
             $theme = 'Desktop/'.$themeName;
-            $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
-            $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
-
         }
 
         return $this->render('@Frontend/Template/'.$theme.'/header.html.twig', array(
