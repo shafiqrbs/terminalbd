@@ -33,14 +33,14 @@ class ItemColor implements CodeAwareEntity
     protected $item;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="color")
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="colors")
      */
-    protected $goodsItems;
+    protected $goodsItem;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="color")
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="itemColors")
      */
-    protected $purchaseVendorItems;
+    protected $purchaseVendorItem;
 
     /**
      * @var string
@@ -226,6 +226,14 @@ class ItemColor implements CodeAwareEntity
     public function getGoodsItems()
     {
         return $this->goodsItems;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPurchaseVendorItem()
+    {
+        return $this->purchaseVendorItem;
     }
 }
 

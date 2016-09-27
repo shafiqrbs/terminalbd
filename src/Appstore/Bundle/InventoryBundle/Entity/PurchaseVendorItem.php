@@ -92,9 +92,9 @@ class PurchaseVendorItem
     protected $brand;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="purchaseVendorItems" )
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="purchaseVendorItems" )
      **/
-    private  $color;
+    private  $itemColors;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", inversedBy="purchaseVendorItems" )
@@ -225,9 +225,6 @@ class PurchaseVendorItem
      * @ORM\Column(name="source", type="string", length=255 , nullable = true)
      */
     private $source;
-
-
-
 
     /**
      * @var text
@@ -900,21 +897,6 @@ class PurchaseVendorItem
         $this->source = $source;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getColor()
-    {
-        return $this->color;
-    }
-
-    /**
-     * @param mixed $color
-     */
-    public function setColor($color)
-    {
-        $this->color = $color;
-    }
 
     /**
      * @return mixed
@@ -982,6 +964,22 @@ class PurchaseVendorItem
     public function setDiscount($discount)
     {
         $this->discount = $discount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getItemColors()
+    {
+        return $this->itemColors;
+    }
+
+    /**
+     * @param mixed $itemColors
+     */
+    public function setItemColors($itemColors)
+    {
+        $this->itemColors = $itemColors;
     }
 
 

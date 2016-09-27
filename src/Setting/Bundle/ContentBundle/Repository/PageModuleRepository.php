@@ -14,29 +14,48 @@ class PageModuleRepository extends EntityRepository
 {
     public function createFeatureModule($page,$data)
     {
-        $this->remove($page);
-        if(isset($data['module']) and !empty( $data['module']) ){
 
-            $i = 0;
-            foreach( $data['module'] as $row ){
+       foreach( $data['rowModule'] as $key => $row ){
 
-               if(isset($data['module'][$i]) and !empty( $data['module'][$i]) ) {
+                $pageModule = !empty($data['pageModule'][$key]) ? $data['pageModule'][$key] :0;
+                $module = !empty($data['module'][$key]) ? $data['module'][$key] :0;
+                if($pageModule > 0 and $module == 0 ){
+                    $this->remove($pageModule);
+                }
+                if(!empty($data['module'][$key])) {
 
-                    $moduleId = $data['module'][$i];
+                    $pageModuleId = !empty($data['pageModule'][$key]) ? $data['pageModule'][$key] :0;
+                    $moduleId = !empty($data['module'][$key]) ? $data['module'][$key] :0;
+
+                    if($pageModuleId > 0){
+                        $entity = $this->_em->getRepository('SettingContentBundle:PageModule')->find($pageModuleId);
+                    }else{
+                         $entity = new PageModule();
+                    }
                     $module = $this->_em->getRepository('SettingToolBundle:Module')->find($moduleId);
-                    $entity = new PageModule();
-                    $entity->setName($data['name'][$i]);
-                    $entity->setShowLimit($data['showLimit'][$i]);
-                    $entity->setShowColumn($data['column'][$i]);
+                    $entity->setName($data['name'][$key]);
+                    $entity->setShowLimit($data['showLimit'][$key]);
+                    $entity->setShowColumn($data['showColumn'][$key]);
+                    $entity->setContentPosition($data['contentPosition'][$key]);
                     $entity->setPage($page);
                     $entity->setModule($module);
                     $this->_em->persist($entity);
+                    $this->_em->flush();
 
-                }
-                $i++;
-            }
-            $this->_em->flush();
+               }
+
+       }
+    }
+
+    private  function remove($pageModule)
+    {
+        if(!empty($pageModule)){
+            $em =$this->_em;
+            $entity = $em->getRepository('SettingContentBundle:PageModule')->find($pageModule);
+            $em->remove($entity);
+            $em->flush();
         }
+
     }
 
     public function createHomeFeatureModule($page,$data)
@@ -54,7 +73,7 @@ class PageModuleRepository extends EntityRepository
                     $entity = new PageModule();
                     $entity->setName($data['name'][$i]);
                     $entity->setShowLimit($data['showLimit'][$i]);
-                    $entity->setColumn($data['column'][$i]);
+                    $entity->setShowColumn($data['showColumn'][$i]);
                     $entity->setHomePage($page);
                     $entity->setModule($module);
                     $this->_em->persist($entity);
@@ -66,19 +85,7 @@ class PageModuleRepository extends EntityRepository
         }
     }
 
-    private  function remove($page)
-    {
 
-        $em =$this->_em;
-        $entities = $em->getRepository('SettingContentBundle:PageModule')->findBy(array('page'=>$page));
-        foreach ($entities as $entity )
-        {
-            $em->remove($entity);
-        }
-        $em->flush();
-
-
-    }
     private  function removeHome($page)
     {
 

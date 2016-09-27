@@ -79,10 +79,10 @@
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Product name</th>
-                                    <th class="numeric" >Category</th>
                                     <th class="numeric" >Qnt</th>
+                                    <th class="numeric" >Purchase price</th>
                                     <th class="numeric" >Sales price</th>
-                                    <th class="numeric" >Web price</th>
+                                    <th class="numeric" >Discount</th>
                                     <th class="numeric" >Is web</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -92,8 +92,7 @@
                                     <tr class="remove-vendor-item-{{ entity.id }}">
                                         <td> {% if entity.goodsItems is defined and  entity.goodsItems is not empty  %}<span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.name }}</td>
-                                        <td class="numeric" >{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.masterItem %}{{ entity.masterItem.name }}-{% endif %}{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >{{ entity.salesPrice|number_format() }}</td>
                                         <td class="numeric" >
@@ -107,7 +106,7 @@
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
-                                            <a href="{{ path('inventory_goods_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i>&nbsp;Edit</a>
+                                            <a href="{{ path('inventory_goods_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i>&nbsp;</a>
                                             <a href="{{ path('inventory_goods_show',{'id':entity.id}) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                             <a href="{{ path('inventory_goods_copy',{'id':entity.id}) }}" class="btn blue mini" ><i class="icon-copy"></i>&nbsp;Copy</a>
                                         </td>
@@ -121,21 +120,25 @@
                                                     <tr class="head-green">
                                                         <th class="numeric" >Size/Dimension/Weight/Pic</th>
                                                         <th class="numeric" >Color</th>
-                                                        <th class="numeric" >Name</th>
                                                         <th class="numeric" >Qnt</th>
+                                                        <th class="numeric" >Purchase</th>
                                                         <th class="numeric" >Sales</th>
-                                                        <th class="numeric" >Web</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody id="purchaseItem" >
                                                     {% for purchaseItem in  entity.goodsItems %}
                                                         <tr id="remove-purchase-item-{{ entity.id }}">
                                                             <td class="numeric" >{% if purchaseItem.size %}{{ purchaseItem.size.name }}{% endif %}</td>
-                                                            <td class="numeric" >{% if purchaseItem.color %}{{ purchaseItem.color.name }}{% endif %}</td>
-                                                            <td class="numeric" >{{ purchaseItem.name }}</td>
+                                                            <td class="numeric" >
+                                                                {% if purchaseItem.colors is not empty %}
+                                                                    {% for color in purchaseItem.colors   %}
+                                                                        {{ color.name|join(',') }}
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                            </td>
                                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
-                                                            <td class="numeric" >{{purchaseItem.salesPrice}}</td>
-                                                            <td class="numeric" >{{purchaseItem.webPrice}}</td>
+                                                            <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
+                                                            <td class="numeric" >{{ purchaseItem.salesPrice }}</td>
                                                         </tr>
                                                     {% endfor %}
 

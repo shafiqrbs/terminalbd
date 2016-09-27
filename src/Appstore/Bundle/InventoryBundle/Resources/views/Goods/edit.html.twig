@@ -62,10 +62,18 @@
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
                         <div class="row-fluid">
-                            <div class="span8">
+                            <div class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="firstName">Master Product</label>
+                                    <div class="controls">
+                                            {{ form_widget(form.masterItem) }}
+                                            {{ form_errors(form.masterItem) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
                                 <div class="control-group">
                                     <label class="control-label" for="firstName">Product Name</label>
-
                                     <div class="controls">
                                         <div class="input-icon left">
                                             <i class="icon-font"></i>
@@ -87,19 +95,22 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="span2 ">
+                        </div>
+                        <!--/span-->
+                        {% if ecommerceConfig.isColor == 1 %}
+                        <div class="row-fluid">
+                            <div class="span12 ">
                                 <div class="control-group">
-                                    <label class="control-label" for="isWeb">Color</label>
-
+                                    <label class="control-label" >Colors</label>
+                                    <div class="clearfix" style="height:5px"></div>
                                     <div class="controls">
-                                        <div class="input-icon left">
-                                            {{ form_widget(form.color) }}
-                                            {{ form_errors(form.color) }}
-                                        </div>
+                                        {{ form_widget(form.itemColors) }}
+                                        {{ form_errors(form.itemColors) }}
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                         <!--/span-->
                         <div class="row-fluid">
                             <div class="span8">
@@ -145,7 +156,6 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="salesPrice">Unit</label>
-
                                             <div class="controls">
                                                 {{ form_widget(form.unit) }}
                                                 {{ form_errors(form.unit) }}
@@ -155,7 +165,6 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="salesPrice">Quantity</label>
-
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-font"></i>
@@ -170,7 +179,6 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="salesPrice">Purchase</label>
-
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-font"></i>
@@ -183,7 +191,6 @@
                                     <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="salesPrice">Sales price</label>
-
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-font"></i>
@@ -277,7 +284,7 @@
                                     <div class="clone-block trash" id="clone-sub-product">
                                         <div class="row-fluid clone  box blue">
                                             <div class="span11">
-                                                <div class="span3"><input type="hidden" id="" name="goodsItem[]"
+                                                <div class="span4"><input type="hidden" id="" name="goodsItem[]"
                                                                           class="" value="">
                                                     <select class="span12" name="size[]">
                                                         <option value="">Select size/dimension/weight/pic</option>
@@ -286,33 +293,27 @@
                                                         {% endfor %}
                                                     </select>
                                                 </div>
+                                                {% if ecommerceConfig.isColor == 1 %}
                                                 <div class="span2">
-                                                    <select class="span12" name="color[]">
-                                                        <option value="">Color</option>
+                                                    <select class="span12" multiple="multiple" name="color[]">
                                                         {% for color in colors %}
                                                             <option value="{{ color.id }}">{{ color.name }}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
-                                                <div class="span4">
-                                                    <input type="text" id="name" name="name[]"
-                                                           class="m-wrap span12 tooltips"
-                                                           placeholder="Add additional item" value=""
-                                                           data-original-title="Add sub product name"
-                                                           data-trigger="hover">
-                                                </div>
-                                                <div class="span3">
+                                                {% endif %}
+                                                <div class="span6">
                                                     <input type="text" id="" name="quantity[]"
                                                            class="m-wrap span4 tooltips" placeholder="quantity" value=""
                                                            data-original-title="Please add item quantity"
                                                            data-trigger="hover">
+                                                    <input type="text" id="" name="purchasePrice[]"
+                                                           class="m-wrap span4 tooltips" placeholder="purchase" value=""
+                                                           data-original-title="Please add purchase price"
+                                                           data-trigger="hover">
                                                     <input type="text" id="" name="salesPrice[]"
                                                            class="m-wrap span4 tooltips" placeholder="sales" value=""
                                                            data-original-title="Please add sales price"
-                                                           data-trigger="hover">
-                                                    <input type="text" id="" name="webPrice[]"
-                                                           class="m-wrap span4 tooltips" placeholder="web" value=""
-                                                           data-original-title="Please add web price"
                                                            data-trigger="hover">
                                                 </div>
                                             </div>
@@ -338,38 +339,32 @@
                                                                     {% endfor %}
                                                                 </select>
                                                             </div>
+                                                            {% if ecommerceConfig.isColor == 1 %}
                                                             <div class="span2">
-                                                                <select class="span12" name="color[]">
+                                                                <select class="span12" multiple="multiple" name="color[]">
                                                                     <option value="">Color</option>
                                                                     {% for color in colors %}
-                                                                        <option value="{{ color.id }}" {% if goodsItem.color is not empty and  goodsItem.color.id == color.id %} selected="selected" {% endif %}>{{ color.name }}</option>
+                                                                        <option value="{{ color.id }}"  {% if goodsItem.color is not empty and  color.id in goodsItem.colors|keys %} selected="selected" {% endif %}>{{ color.name }}</option>
                                                                     {% endfor %}
                                                                 </select>
                                                             </div>
-                                                            <div class="span4">
-                                                                <input type="text" id="name" name="name[]"
-                                                                       class="m-wrap span12 tooltips"
-                                                                       placeholder="Add additional item"
-                                                                       value="{{ goodsItem.name }}"
-                                                                       data-original-title="Add sub product name"
-                                                                       data-trigger="hover">
-                                                            </div>
-                                                            <div class="span3">
+                                                            {% endif %}
+                                                           <div class="span6">
                                                                 <input type="text" id="" name="quantity[]"
                                                                        class="m-wrap span4 tooltips"
                                                                        placeholder="quantity"
                                                                        value="{{ goodsItem.quantity }}"
                                                                        data-original-title="Please add item quantity"
                                                                        data-trigger="hover">
+                                                               <input type="text" id="" name="purchasePrice[]"
+                                                                      class="m-wrap span4 tooltips" placeholder="Paurchase"
+                                                                      value="{{ goodsItem.purchasePrice }}"
+                                                                      data-original-title="Please add paurchase price"
+                                                                      data-trigger="hover">
                                                                 <input type="text" id="" name="salesPrice[]"
                                                                        class="m-wrap span4 tooltips" placeholder="sales"
                                                                        value="{{ goodsItem.salesPrice }}"
                                                                        data-original-title="Please add sales price"
-                                                                       data-trigger="hover">
-                                                                <input type="text" id="" name="webPrice[]"
-                                                                       class="m-wrap span4 tooltips" placeholder="web"
-                                                                       value="{{ goodsItem.webPrice }}"
-                                                                       data-original-title="Please add web price"
                                                                        data-trigger="hover">
                                                             </div>
                                                         </div>

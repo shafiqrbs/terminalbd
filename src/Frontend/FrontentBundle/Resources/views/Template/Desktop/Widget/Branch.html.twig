@@ -1,12 +1,12 @@
-{% if mod.module is defined and mod.module is not empty  %}
+{% if entities is defined and entities is not empty  %}
 <section id="branch">
     <div class="container">
         <div class="text-center">
-            <h2>{% if title is not empty %}{{ title }}{% else %}Our Branches{% endif %}</h2>
+            <h2>{% if pageModule.name is not empty %}{{ pageModule.name }}{% else %}Our Branches{% endif %}</h2>
             <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="about">
         </div>
         <div class="row">
-            {% for key,branch in mod.module.pages|slice(0,4)  %}
+            {% for key,branch in entities  %}
             <div class="col-md-3 col-sm-6">
                 <div class="pricingTable btn-block black">
                     <div class="pricingTable-header">
@@ -28,8 +28,6 @@
                 </div>
             </div>
             {% endfor %}
-
-
         </div>
     </div>
 </section>

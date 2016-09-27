@@ -1,14 +1,13 @@
-{% if mod.module is defined and mod.module is not empty  %}
+{% if entities is defined and entities is not empty  %}
 <div class="container">
     <div class="text-center">
-        <h2>{% if title is not empty %}{{ title }}{% else %}Frequently Question & Answer {% endif %}</h2>
+        <h2>{% if pageModule.name is not empty %}{{ pageModule.name }}{% else %}Frequently Question & Answer {% endif %}</h2>
         <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="about">
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                {% for key,faq in  mod.module.pages %}
-
+                {% for key,faq in entities  %}
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="headingTwo{{ key  }}">
                             <h4 class="panel-title">

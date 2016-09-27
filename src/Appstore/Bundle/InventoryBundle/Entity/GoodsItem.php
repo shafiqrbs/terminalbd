@@ -39,9 +39,9 @@ class GoodsItem
     protected $size;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="goodsItems")
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="goodsItem")
      */
-    protected $color;
+    protected $colors;
 
     /**
      * @var string
@@ -68,9 +68,9 @@ class GoodsItem
     /**
      * @var string
      *
-     * @ORM\Column(name="webPrice", type="decimal", nullable = true)
+     * @ORM\Column(name="purchasePrice", type="decimal", nullable = true)
      */
-    private $webPrice;
+    private $purchasePrice;
 
     /**
      * @var boolean
@@ -107,22 +107,6 @@ class GoodsItem
     }
 
     /**
-     * @return mixed
-     */
-    public function getColor()
-    {
-        return $this->color;
-    }
-
-    /**
-     * @param mixed $color
-     */
-    public function setColor($color)
-    {
-        $this->color = $color;
-    }
-
-    /**
      * @return string
      */
     public function getSalesPrice()
@@ -136,22 +120,6 @@ class GoodsItem
     public function setSalesPrice($salesPrice)
     {
         $this->salesPrice = $salesPrice;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWebPrice()
-    {
-        return $this->webPrice;
-    }
-
-    /**
-     * @param string $webPrice
-     */
-    public function setWebPrice($webPrice)
-    {
-        $this->webPrice = $webPrice;
     }
 
     /**
@@ -224,6 +192,38 @@ class GoodsItem
     public function getOrderItems()
     {
         return $this->orderItems;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
+     * @param string $purchasePrice
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getColors()
+    {
+        return $this->colors;
+    }
+
+    /**
+     * @param mixed $colors
+     */
+    public function setColors($colors)
+    {
+        $this->colors = $colors;
     }
 
 

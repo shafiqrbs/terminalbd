@@ -1,13 +1,13 @@
-{% if mod.module is defined and mod.module is not empty  %}
+{% if entities is defined and entities is not empty  %}
 <section id="client">
     <div class="container">
         <div class="text-center">
-            <h2>{% if title is not empty %}{{ title }}{% else %}Our Clients {% endif %}</h2>
+            <h2>{% if pageModule.name is not empty %}{{ pageModule.name }}{% else %}Our Clients {% endif %}</h2>
             <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="about">
         </div>
         <div class="row" style="background-color: #333">
             <div id="client-slider" class="owl-carousel">
-                {% for key,client in mod.module.pages|slice(0,limit)  %}
+                {% for key,client in entities  %}
                 <div class="col-md-3 col-sm-6">
                     <div class="client">
                         <div class="service-image">

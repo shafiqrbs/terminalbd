@@ -49,11 +49,17 @@
                             <div class="row-fluid">
                                 <div class="span3">
                                     <div class="control-group">
+                                        <label class="control-label" for="price">Product using Color &nbsp; {{ form_widget(form.isColor) }}
+                                            {{ form_errors(form.isColor) }}</label>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
                                         <label class="control-label" for="quantity">Is Pre-order&nbsp;  {{ form_widget(form.isPreorder) }}
                                             {{ form_errors(form.isPreorder) }}</label>
                                     </div>
                                 </div>
-                                <div class="span3">
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="price">Is cart &nbsp; {{ form_widget(form.cart) }}
                                             {{ form_errors(form.cart) }}</label>
@@ -65,7 +71,7 @@
                                             {{ form_errors(form.webProduct) }}</label>
                                     </div>
                                 </div>
-                                <div class="span3">
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="price">Is promotion&nbsp; {{ form_widget(form.promotion) }}
                                             {{ form_errors(form.promotion) }}</label>

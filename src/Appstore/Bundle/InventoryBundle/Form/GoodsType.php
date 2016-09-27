@@ -40,6 +40,23 @@ class GoodsType extends AbstractType
                     new NotBlank(array('message'=>'Please add your Product name'))
                 )))
 
+            ->add('masterItem', 'entity', array(
+                'required'    => true,
+                'empty_value' => '-Choose a master product-',
+                'class' => 'Appstore\Bundle\InventoryBundle\Entity\Product',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('p')
+                        ->where("p.status = 1")
+                        ->andWhere("p.inventoryConfig =".$this->inventoryConfig->getId())
+                        ->orderBy("p.name","ASC");
+                },
+            ))
+
             ->add('brand', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',
@@ -71,6 +88,9 @@ class GoodsType extends AbstractType
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemSize',
                 'empty_value' => '-Choose a size-',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
                 'property' => 'name',
                 'attr'=>array('class'=>'span12'),
                 'query_builder' => function(EntityRepository $er){
@@ -80,21 +100,6 @@ class GoodsType extends AbstractType
                         ->orderBy("p.name","ASC");
                 },
             ))
-
-            ->add('color', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemColor',
-                'empty_value' => '-Choose a color-',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('p')
-                        ->where("p.status = 1")
-                        ->andWhere("p.inventoryConfig =".$this->inventoryConfig->getId())
-                        ->orderBy("p.name","ASC");
-                },
-            ))
-
             ->add('country', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\LocationBundle\Entity\Country',
@@ -139,8 +144,25 @@ class GoodsType extends AbstractType
             */->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
             ->add('subProduct')
             ->add('file')
-            ->add('isWeb')
-        ;
+            ->add('isWeb');
+        if($this->inventoryConfig->getGlobalOption()->getEcommerceConfig()->getIsColor() == 1){
+            $builder->add('itemColors', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemColor',
+                'empty_value' => '-Choose a color-',
+                'property' => 'name',
+                'multiple' => 'multiple',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('p')
+                        ->where("p.status = 1")
+                        ->andWhere("p.inventoryConfig =".$this->inventoryConfig->getId())
+                        ->orderBy("p.name","ASC");
+                },
+            ));
+        }
+
+
     }
     
     /**

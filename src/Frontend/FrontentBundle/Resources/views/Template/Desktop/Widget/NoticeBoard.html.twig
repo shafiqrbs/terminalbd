@@ -1,16 +1,14 @@
-{% if mod.module is defined and mod.module is not empty  %}
+{% if entities is defined and entities is not empty  %}
     <section id="testmonial-noticeboard">
         <div class="container">
-            <div class="text-center"><h2>Notice Boards</h2></div>
+            <div class="text-center"><h2>{% if pageModule.name is not empty %}{{ pageModule.name }}{% else %}Notice Boards{% endif %}</h2></div>
             <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="short" />
             <div class="row">
-                {% if mod.module is defined and mod.module is not empty  %}
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-12">
                                 <div id="news-slider" class="owl-carousel">
-                                    {% for notice in mod.module.pages|slice(0,limit)  %}
-
+                                    {% for key,notice in entities  %}
                                         <div class="notice-slide">
                                             <div class="post-content">
                                                 <div class="post-date">
@@ -32,8 +30,8 @@
                             </div>
                         </div>
                     </div>
-                {% endif %}
             </div>
+
         </div>
     </section>
 {% endif %}

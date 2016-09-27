@@ -83,6 +83,8 @@ class WidgetController extends Controller
         ));
     }
 
+
+
     public function newsAction()
     {
         $newses                    = $this->getDoctrine()->getRepository('SettingContentBundle:Mews')->findModuleContent(5);

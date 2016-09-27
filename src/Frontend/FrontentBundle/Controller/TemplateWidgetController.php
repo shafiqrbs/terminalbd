@@ -3,6 +3,7 @@
 namespace Frontend\FrontentBundle\Controller;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ContentBundle\Entity\PageModule;
 use Setting\Bundle\ToolBundle\Entity\Branding;
 use Product\Bundle\ProductBundle\Entity\Product;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -65,11 +66,24 @@ class TemplateWidgetController extends Controller
 
     public function aboutusAction(GlobalOption $globalOption,$wordlimit)
     {
-        $slug = $globalOption->getSlug().'-about-us';
+        echo $slug = $globalOption->getSlug().'-about-us';
+        exit;
         $about                     = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption' => $globalOption,'slug' => $slug));
         return $this->render('@Frontend/Widget/aboutus.html.twig', array(
             'about'           => $about,
             'wordlimit'           => $wordlimit,
+        ));
+    }
+
+    public function moduleBaseContentAction(GlobalOption $globalOption , PageModule $pageModule )
+    {
+        $limit = $pageModule->getShowLimit() > 0 ? $pageModule->getShowLimit() : 5;
+        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(),$pageModule->getModule()->getId(),$limit);
+
+        return $this->render('@Frontend/Template/Desktop/Widget/'.$pageModule->getModule()->getModuleClass().'.html.twig', array(
+            'entities'           => $entities,
+            'pageModule'           => $pageModule,
+            'globalOption'           => $globalOption,
         ));
     }
 

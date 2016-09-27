@@ -1,12 +1,12 @@
-{% if mod.module is defined and mod.module is not empty  %}
+{% if entities is defined and entities is not empty  %}
     <section id="blog">
         <div class="container">
-            <div class="text-center"><h2>{% if title is not empty %}{{ title }}{% else %}Latest Blog Posts {% endif %}</h2>
+            <div class="text-center"><h2>{% if pageModule.name is not empty %}{{ pageModule.name }}{% else %}Latest Blog Posts {% endif %}</h2>
                 <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="about">
             </div>
             <div class="row">
                 <div class="col-md-12 homeport1">
-                    {% for blog in mod.module.pages|slice(0,limit)  %}
+                    {% for blog in entities  %}
                         <div class="col-md-4 col-sm-12 col-xs-12 portfolio-item">
                             <figure class="effect-oscar">
                                 <img src="{{ image(blog.webPath).scaleResize(350,263) }}" alt="{{ blog.name }}" class="img-responsive" />

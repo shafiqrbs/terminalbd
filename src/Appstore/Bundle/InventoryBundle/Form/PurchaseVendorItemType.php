@@ -47,7 +47,6 @@ class PurchaseVendorItemType extends AbstractType
                         ->where("p.status = 1")
                         ->andWhere("p.inventoryConfig =".$this->inventoryConfig->getId())
                         ->orderBy("p.name","ASC");
-
                 },
             ))
 

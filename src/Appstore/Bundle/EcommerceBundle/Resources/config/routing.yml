@@ -1,3 +1,11 @@
+ecommerce_promotion:
+    resource: "@EcommerceBundle/Resources/config/routing/promotion.yml"
+    prefix:   /ecommerce/promotion
+
+eecommerce_discount:
+    resource: "@EcommerceBundle/Resources/config/routing/discount.yml"
+    prefix:   /ecommerce/discount
+
 ecommerce_ecommerce:
     resource: "@EcommerceBundle/Resources/config/routing/ecommerce.yml"
     prefix:   /ecommerce/product

@@ -7,6 +7,7 @@ use Appstore\Bundle\InventoryBundle\Entity\ItemAttribute;
 use Appstore\Bundle\InventoryBundle\Entity\ItemGallery;
 use Appstore\Bundle\InventoryBundle\Entity\ItemKeyValue;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Form\GoodsType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -70,8 +71,10 @@ class GoodsController extends Controller
             $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->initialInsertSubProduct($entity);
             return $this->redirect($this->generateUrl('inventory_goods_edit',array('id'=>$entity->getId())));
         }
+        $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         return $this->render('InventoryBundle:Goods:new.html.twig', array(
             'entity' => $entity,
+            'ecommerceConfig' => $ecommerceConfig,
             'form'   => $form->createView(),
         ));
     }
@@ -123,9 +126,10 @@ class GoodsController extends Controller
     {
         $entity = new PurchaseVendorItem();
         $form   = $this->createCreateForm($entity);
-
+        $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         return $this->render('InventoryBundle:Goods:new.html.twig', array(
             'entity' => $entity,
+            'ecommerceConfig' => $ecommerceConfig,
             'form'   => $form->createView(),
         ));
     }
@@ -165,12 +169,70 @@ class GoodsController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseVendorItem entity.');
         }
-        $editForm = $this->createEditForm($entity);
 
+        /*$id =295;
+        $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->findBy(array('inventoryConfig'=>$entity->getInventoryConfig()));
+        foreach($entities as $en)
+        {
+            $size = $em->getRepository('InventoryBundle:ItemSize')->find(1);
+            $en->setSize($size);
+            $unit = $em->getRepository('InventoryBundle:ItemUnit')->find(1);
+            $en->setUnit($unit);
+            $category = $em->getRepository('ProductProductBundle:Category')->find(5);
+            $en->setCategory($category);
+            $en->setSlug($en->getName());
+            $color = $em->getRepository('InventoryBundle:ItemColor')->find(1);
+            $en->setItemColors(array($color));
+            $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->initialInsertSubProduct($en);
+        }
+        $em->flush();
+        */
+
+        $val = '<ul>';
+        /** @param $item PurchaseItem */
+        $rows=array();
+        foreach($entity->getPurchaseItems() as $item )
+        {
+            $color = array();
+
+            if(!isset($rows[$item->getItem()->getSize()->getName()]['color'])) {
+                $rows[$item->getItem()->getSize()->getName()]['color'] = array();
+            }
+
+            $rows[$item->getItem()->getSize()->getName()]['color'][$item->getItem()->getColor()->getName()] = $item->getItem()->getColor()->getName();
+
+            if(!isset($rows[$item->getItem()->getSize()->getName()]['quantity'])){
+                $rows[$item->getItem()->getSize()->getName()]['quantity'] = 0;
+            }
+
+            $rows[$item->getItem()->getSize()->getName()]['quantity'] += $item->getQuantity();
+
+            $val .='<li>Item ID='.$item->getItem()->getId().'==Size=='.$item->getItem()->getSize()->getName().'=Color='.$item->getItem()->getColor()->getName().'===Quantity=='.$item->getQuantity().'</li>';
+        }
+        $val .='</ul>';
+
+        echo $val;
+
+
+        echo '<ul>';
+        /** @param $item PurchaseItem */
+        foreach($rows as $size => $row )
+        {
+
+            echo  '<li>==Size=='.$size.'=Color='.implode(', ', $row['color']).'===Quantity=='.$row['quantity'].'</li>';
+        }
+        echo '</ul>';
+
+
+        exit;
+
+        $editForm = $this->createEditForm($entity);
+        $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         return $this->render('InventoryBundle:Goods:edit.html.twig', array(
             'entity'        => $entity,
             'sizes'         => $sizes,
             'colors'         => $colors,
+            'ecommerceConfig' => $ecommerceConfig,
             'form'          => $editForm->createView(),
         ));
     }
@@ -229,10 +291,11 @@ class GoodsController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $sizes = $em->getRepository('InventoryBundle:ItemSize')->findBy(array('inventoryConfig'=>$inventory, 'status'=>1),array('name'=>'ASC'));
         $colors = $em->getRepository('InventoryBundle:ItemColor')->findBy(array('inventoryConfig'=>$inventory, 'status'=>1),array('name'=>'ASC'));
-
+        $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         return $this->render('InventoryBundle:Goods:edit.html.twig', array(
             'entity'      => $entity,
-            'sizes'      => $sizes,
+            'ecommerceConfig'      => $ecommerceConfig,
+            'sizes'       => $sizes,
             'colors'      => $colors,
             'form'   => $editForm->createView(),
         ));

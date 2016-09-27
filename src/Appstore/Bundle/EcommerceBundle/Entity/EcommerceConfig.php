@@ -65,9 +65,9 @@ class EcommerceConfig
      private $perColumn = 4;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="currency", type="smallint", nullable = true)
+     * @ORM\Column(name="currency", type="text",  length=2, nullable = true)
      */
      private $currency = "৳";
 
@@ -91,6 +91,14 @@ class EcommerceConfig
      * @ORM\Column(name="cart", type="boolean")
      */
     private $cart = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isColor", type="boolean")
+     */
+    private $isColor = false;
+
 
     /**
      * @var boolean
@@ -304,8 +312,25 @@ class EcommerceConfig
         $this->owlProductColumn = $owlProductColumn;
     }
 
+
     /**
-     * @return int
+     * @return boolean
+     */
+    public function getIsColor()
+    {
+        return $this->isColor;
+    }
+
+    /**
+     * @param boolean $isColor
+     */
+    public function setIsColor($isColor)
+    {
+        $this->isColor = $isColor;
+    }
+
+    /**
+     * @return string
      */
     public function getCurrency()
     {
@@ -313,7 +338,7 @@ class EcommerceConfig
     }
 
     /**
-     * @param int $currency
+     * @param string $currency
      */
     public function setCurrency($currency)
     {

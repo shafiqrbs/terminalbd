@@ -178,30 +178,47 @@
                         {% for module in globalOption.siteSetting.getModules %}
                             {% if module.isSingle != 1 %}
                                 <div class="row-fluid">
-                                    <div class="span3">
+                                    <div class="span2">
                                         <div class="control-group">
                                             <div class="controls">
-                                                <input type="hidden" name="pageModule[]" value="{% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id %}{{ pageFeature[module.id].id }}{% endif %}">
+                                                <input type="hidden" id="" name="rowModule[]" value="{{ loop.index }}">
+                                                <input type="hidden" id="pageModule-{% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id %}{{ pageFeature[module.id].id }}{% endif %}" name="pageModule[]" value="{% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id %}{{ pageFeature[module.id].id }}{% endif %}">
                                                 <input name="module[]" type="checkbox"  value="{{ module.id }}" {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id %}{{ 'checked="checked"' }}{% endif %}>{{ module.name }}
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span5">
+                                    <div class="span4">
                                         <div class="control-group">
                                             <div class="controls">
-                                                <input type="text" name="name[]" class="m-wrap span12" value="{% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id %}{{ pageFeature[module.id].name }}{% endif %}">
+                                                <input  placeholder="Alternative Feature Title"
+                                                       data-original-title="Alternative Feature Title"
+                                                       data-trigger="hover" type="text" name="name[]" class="m-wrap span12 tooltips" value="{% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id %}{{ pageFeature[module.id].name }}{% endif %}">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="span2">
                                         <div class="control-group">
                                             <div class="controls">
-                                                <select name="column[]" class="span12" >
-                                                    <option>Show Column</option>
-                                                    <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].column == 1 %} selected ="selected" {% endif %} value="1">1</option>
-                                                    <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].column == 2 %} selected ="selected" {% endif %} value="2">2</option>
-                                                    <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].column == 3 %} selected ="selected" {% endif %} value="3">3</option>
-                                                    <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].column == 4 %} selected ="selected" {% endif %} value="4">4</option>
+                                                <select name="showColumn[]" class="span12" >
+                                                    <option value="">Show Column</option>
+                                                    <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].showColumn == 12 %} selected ="selected" {% endif %} value="12">1</option>
+                                                    <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].showColumn == 6 %} selected ="selected" {% endif %} value="6">2</option>
+                                                    <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].showColumn == 4 %} selected ="selected" {% endif %} value="4">3</option>
+                                                    <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].showColumn == 3 %} selected ="selected" {% endif %} value="3">4</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span2">
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <select name="contentPosition[]" class="span12" >
+                                                    <option value="">Content Position</option>
+                                                    <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].contentPosition == 'Top' %} selected ="selected" {% endif %} value="Top">Top</option>
+                                                    <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].contentPosition == 'Bottom' %} selected ="selected" {% endif %} value="Bottom">Bottom</option>
+                                                    <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].contentPosition == 'Body' %} selected ="selected" {% endif %} value="Body">Body</option>
+                                                    <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].contentPosition == 'Sidebar' %} selected ="selected" {% endif %} value="Sidebar">Sidebar</option>
+                                                    <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].contentPosition == 'Footer' %} selected ="selected" {% endif %} value="Footer">Footer</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -210,7 +227,7 @@
                                         <div class="control-group">
                                             <div class="controls">
                                                 <select name="showLimit[]" class="span12" >
-                                                    <option>Show Data</option>
+                                                    <option value="">Show Data</option>
                                                     <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].showLimit == 1 %} selected ="selected" {% endif %} value="1">1</option>
                                                     <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].showLimit == 2 %} selected ="selected" {% endif %} value="2">2</option>
                                                     <option {% if pageFeature[module.id] is defined and pageFeature[module.id].module.id == module.id and pageFeature[module.id].showLimit == 3 %} selected ="selected" {% endif %} value="3">3</option>

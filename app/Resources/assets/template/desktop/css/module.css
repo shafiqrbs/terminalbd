@@ -893,6 +893,11 @@
     text-decoration:none;
 }
 
+.thumbnail .product-caption{
+    min-height: 125px;
+    padding: 10px;
+}
+
 .separator-margin{
     margin-left: 5px;
     margin-right: 5px;
@@ -901,6 +906,11 @@
 .separator
 {
     border-top: 1px solid #E1E1E1;
+}
+.separator-absolute
+{
+    position: absolute;
+    bottom: 9px
 }
 
 .separator span

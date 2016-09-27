@@ -1,11 +1,11 @@
-{% if mod.module is defined and mod.module is not empty  %}
+{% if entities is defined and entities is not empty  %}
 <section id="services">
     <div class="orangeback">
         <div class="container">
-            <div class="text-center homeport2"><h2>{% if title is not empty %}{{ title }}{% else %}Services {% endif %}</h2></div>
+            <div class="text-center homeport2"><h2>{% if pageModule.name is not empty %}{{ pageModule.name }}{% else %}Services {% endif %}</h2></div>
             <div class="row">
                 <div class="col-md-12">
-                    {% for service in mod.module.pages|slice(0,4)  %}
+                    {% for key,service in entities  %}
                     <div class="col-md-3 portfolio-item">
                         <div class="text-center">
                             <a href="javascript:void(0);">

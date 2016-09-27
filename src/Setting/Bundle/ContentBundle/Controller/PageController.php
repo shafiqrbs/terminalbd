@@ -194,8 +194,8 @@ class PageController extends Controller
 
             if($entity->upload()){
                 $entity->removeUpload();
-                $entity->upload();
             }
+            $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

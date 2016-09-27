@@ -37,14 +37,13 @@
                 </div>
                 <div class="col-xs-7 col-md-7" id="subItemDetails">
                     <div class="col-xs-6 col-md-6">
-                        <div><h3>{{ product.name }}</h3></div>
+                        <div><h5><strong>{{ product.masterItem.name }}&nbsp;-&nbsp;{{ product.name }}</strong></h5></div>
                         <hr>
                         <div >
                             <table class="list-table">
-                                <tr><td>Price</td><td class="left-text"><strong>৳&nbsp;{{ product.salesPrice|number_format }}</strong></td></tr>
-                                <tr><td>Stock in</td><td class="left-text">&nbsp;:&nbsp;<strong>{{ product.quantity  }}</strong></td></tr>
+                                <tr><td>Price</td><td class="left-text"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.salesPrice|number_format }}</strong></td></tr>
+                                <tr><td>Stock in</td><td class="left-text">&nbsp;:&nbsp;<strong>{{ product.quantity  }}</strong>&nbsp;{% if product.unit is not empty %}{{ product.unit.name }}{% endif %}</td></tr>
                                 {% if product.category is not empty %}<tr><td>Category</td><td class="left-text">&nbsp;:&nbsp;{{ product.category.name }}</td></tr>{% endif %}
-                                {% if product.unit is not empty %}<tr><td>Unit</td><td class="left-text">&nbsp;:&nbsp;{{ product.unit.name }}</td></tr>{% endif %}
                                 {% if product.gender is not empty %}<tr><td>Gender</td><td class="left-text">&nbsp;:&nbsp;{{ product.gender }}</td></tr>{% endif %}
                                 {% if product.ageGroup is not empty %}<tr><td>Age Group</td><td class="left-text">&nbsp;:&nbsp;{{ product.ageGroup }}</td></tr>{% endif %}
                                 {% if product.brand is not empty %}<tr><td>Brand</td><td class="left-text">&nbsp;:&nbsp;{{ product.brand.name }}</td></tr>{% endif %}
@@ -80,13 +79,13 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            {% if product.color is not empty and product.color is defined %}
+                                            {% if globalOption.ecommerceConfig.isColor == 1 and product.itemColors is not empty and product.itemColors is defined %}
                                             <div class="form-group">
                                                 <div class="input-group input-group-sm">
                                                     <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-text-background"></span></span>
-                                                    <select class="form-control" name="color" disabled="disabled" >
-                                                        {% for goodsItem in  product.goodsItems %}
-                                                            <option {% if goodsItem.masterItem == 1 %} selected="selected" {% endif %} value="{{ goodsItem.id }}" >{{ goodsItem.color.name }}</option>
+                                                    <select class="form-control" name="color" >
+                                                        {% for color in  product.itemColors %}
+                                                            <option value="{{ color.id }}" >{{ color.name }}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
@@ -144,7 +143,9 @@
                                 <tr><td colspan="2" ><h4>Specification</h4></td></tr>
                                 {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
                                     {%  for attribute in product.itemMetaAttributes %}
+                                    {% if attribute.value is not empty %}
                                         <tr><td>{{ attribute.itemAttribute.name }}</td><td class="left-text">&nbsp;:&nbsp;{{ attribute.value }}</td></tr>
+                                    {% endif %}
                                     {% endfor %}
                                 {% endif %}
                                 {% if  product.itemKeyValues is defined and product.itemKeyValues is not empty %}

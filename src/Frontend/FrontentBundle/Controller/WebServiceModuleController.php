@@ -26,7 +26,7 @@ class WebServiceModuleController extends Controller
             $page ='';
             $pagination ='';
             $moduleName ='';
-
+            $featurePages ='';
             if(!empty($menu)){
 
                 $siteEntity = $globalOption->getSiteSetting();
@@ -44,7 +44,7 @@ class WebServiceModuleController extends Controller
 
                     $page = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'slug' => $module));
                     $twigName = "content";
-
+                    $featurePages = $em->getRepository('SettingContentBundle:Page')->getListForModule($globalOption,$page);
                 }
             }
 
@@ -69,6 +69,7 @@ class WebServiceModuleController extends Controller
                 'title'         => $moduleName,
                 'pagination'    => $pagination,
                 'page'          => $page,
+                'featurePages'  => $featurePages,
             )
         );
     }
@@ -167,13 +168,21 @@ class WebServiceModuleController extends Controller
 
                 }else{
 
+                    /** @pram $page Page */
                     $page = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'slug' => $module));
+                    $featurePages = $em->getRepository('SettingContentBundle:Page')->getListForModule($globalOption,$page);
+
+                    if(!empty($featurePages)){
+                        echo "Test";
+                    }
+
                     $twigName = "content";
 
                 }
             }
 
         }
+
 
         $page = ($page) ? $page :'';
         $categories = ($categories) ? $categories :'';

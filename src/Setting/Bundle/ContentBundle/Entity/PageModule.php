@@ -51,6 +51,13 @@ class PageModule
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="contentPosition", type="string", nullable= true)
+     */
+    private $contentPosition = 'Body';
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="showLimit", type="smallint", nullable= true)
@@ -70,7 +77,7 @@ class PageModule
      *
      * @ORM\Column(name="showColumn", type="smallint", nullable= true)
      */
-    private $column = 3;
+    private $showColumn = 3;
 
 
     /**
@@ -163,21 +170,6 @@ class PageModule
         $this->homePage = $homePage;
     }
 
-    /**
-     * @return int
-     */
-    public function getColumn()
-    {
-        return $this->column;
-    }
-
-    /**
-     * @param int $column
-     */
-    public function setColumn($column)
-    {
-        $this->column = $column;
-    }
 
     /**
      * @return int
@@ -193,6 +185,42 @@ class PageModule
     public function setOrdering($ordering)
     {
         $this->ordering = $ordering;
+    }
+
+    /**
+     * @return int
+     */
+    public function getShowColumn()
+    {
+        return $this->showColumn;
+    }
+
+    /**
+     * @param int $showColumn
+     */
+    public function setShowColumn($showColumn)
+    {
+        $this->showColumn = $showColumn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentPosition()
+    {
+        return $this->contentPosition;
+    }
+
+    /**
+     * @param string $contentPosition
+     * Body
+     * SideBar
+     * Footer
+     * Top
+     */
+    public function setContentPosition($contentPosition)
+    {
+        $this->contentPosition = $contentPosition;
     }
 
 

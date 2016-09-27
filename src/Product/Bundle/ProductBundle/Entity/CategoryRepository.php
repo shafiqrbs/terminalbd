@@ -120,7 +120,7 @@ class CategoryRepository extends MaterializedPathRepository
         $categoryTree = $this->printTree();
         $tree='';
         $tree .= "<select name='category' id='category' class='select2' style='width: 50%'>";
-        $tree .= "<option>Filter by category</option>";
+        $tree .= "<option value=''>Filter by category</option>";
         foreach($categoryTree as $row) {
             $selected = ($slected == $row['id'])? 'selected="selected"':'';
             $tree .= "<option ".$selected." value=".$row["id"].">".$row["name"]."</option>";

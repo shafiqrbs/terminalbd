@@ -6,6 +6,3 @@ ecommerce_home:
     path:     /home
     defaults: { _controller: "EcommerceBundle:EcommerceConfig:update" }
 
-ecommerce_promotion:
-    path:     /promotion
-    defaults: { _controller: "EcommerceBundle:EcommerceConfig:modify" }

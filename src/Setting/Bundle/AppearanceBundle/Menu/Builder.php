@@ -527,6 +527,42 @@ class Builder extends ContainerAware
 
     }
 
+    public function OnlineSalesSystemMenu($menu)
+    {
+
+        $menu
+            ->addChild('E-commerce')
+            ->setAttribute('icon','icon  icon-shopping-cart')
+            ->setAttribute('dropdown', true);
+        $menu['E-commerce']->addChild('Product', array('route' => 'account_expenditure'))
+            ->setAttribute('icon','fa fa-bookmark')
+            ->setAttribute('dropdown', true);
+        $menu['E-commerce']['Product']->addChild('Add Product',    array('route' => 'inventory_goods_new'))->setAttribute('icon', 'icon-th-list');;
+        $menu['E-commerce']['Product']->addChild('Product',        array('route' => 'inventory_goods'))->setAttribute('icon', 'icon-th-list');;
+        $menu['E-commerce']['Product']->addChild('Product Home',   array('route' => 'ecommerce_home'))->setAttribute('icon', 'icon-th-list');;
+        $menu['E-commerce']['Product']->addChild('Promotion',      array('route' => 'ecommerce_promotion'))->setAttribute('icon', 'icon-th-list');;
+        $menu['E-commerce']->addChild('Transaction', array('route' => 'account_expenditure'))
+            ->setAttribute('icon','fa fa-bookmark')
+            ->setAttribute('dropdown', true);
+        $menu['E-commerce']['Transaction']->addChild('Order',        array('route' => 'customer_order'))->setAttribute('icon', 'icon-th-list');;
+        $menu['E-commerce']['Transaction']->addChild('Pre-order',    array('route' => 'customer_preorder'))->setAttribute('icon', 'icon-th-list');;
+        $menu['E-commerce']->addChild('Order', array('route' => ''))
+            ->setAttribute('icon','fa fa-bookmark')
+            ->setAttribute('dropdown', true);
+        $menu['E-commerce']['Order']->addChild('Order',        array('route' => 'customer_order'))->setAttribute('icon', 'icon-th-list');;
+        $menu['E-commerce']['Order']->addChild('Pre-order',        array('route' => 'customer_preorder'))->setAttribute('icon', 'icon-th-list');;
+        $menu['E-commerce']->addChild('Setting', array('route' => ''))
+            ->setAttribute('icon','fa fa-bookmark')
+            ->setAttribute('dropdown', true);
+        $menu['E-commerce']['Setting']->addChild('E-commerce Config', array('route' => 'ecommerce_config_modify'))->setAttribute('icon','fa fa-cog');
+        $menu['E-commerce']['Setting']->addChild('Bank', array('route' => 'ecommerce_bank'))->setAttribute('icon','fa fa-cog');
+        $menu['E-commerce']['Setting']->addChild('Bkash', array('route' => 'ecommerce_bkash'))->setAttribute('icon','fa fa-cog');
+        $menu['E-commerce']['Setting']->addChild('Promotion', array('route' => 'ecommerce_promotion'))->setAttribute('icon','fa fa-cog');
+        $menu['E-commerce']['Setting']->addChild('Discount', array('route' => 'ecommerce_discount'))->setAttribute('icon','fa fa-cog');
+
+        return $menu;
+    }
+
     public function AnonymousProductSalesMenu($menu)
     {
 
@@ -644,8 +680,6 @@ class Builder extends ContainerAware
 
     }
 
-
-
     public function ClientRelationManagementMenu($menu)
     {
         $menu
@@ -716,38 +750,7 @@ class Builder extends ContainerAware
 
     }
 
-    public function OnlineSalesSystemMenu($menu)
-    {
 
-        $menu
-            ->addChild('E-commerce')
-            ->setAttribute('icon','icon  icon-shopping-cart')
-            ->setAttribute('dropdown', true);
-        $menu['E-commerce']->addChild('Product', array('route' => 'account_expenditure'))
-            ->setAttribute('icon','fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-        $menu['E-commerce']['Product']->addChild('Product',        array('route' => 'ecommerce_product'))->setAttribute('icon', 'icon-th-list');;
-        $menu['E-commerce']['Product']->addChild('Product Home',   array('route' => 'ecommerce_home'))->setAttribute('icon', 'icon-th-list');;
-        $menu['E-commerce']['Product']->addChild('Promotion',      array('route' => 'ecommerce_promotion'))->setAttribute('icon', 'icon-th-list');;
-        $menu['E-commerce']->addChild('Transaction', array('route' => 'account_expenditure'))
-            ->setAttribute('icon','fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-        $menu['E-commerce']['Transaction']->addChild('Order',        array('route' => 'customer_order'))->setAttribute('icon', 'icon-th-list');;
-        $menu['E-commerce']['Transaction']->addChild('Pre-order',    array('route' => 'customer_preorder'))->setAttribute('icon', 'icon-th-list');;
-        $menu['E-commerce']->addChild('Order', array('route' => ''))
-            ->setAttribute('icon','fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-        $menu['E-commerce']['Order']->addChild('Order',        array('route' => 'customer_order'))->setAttribute('icon', 'icon-th-list');;
-        $menu['E-commerce']['Order']->addChild('Pre-order',        array('route' => 'customer_preorder'))->setAttribute('icon', 'icon-th-list');;
-        $menu['E-commerce']->addChild('Setting', array('route' => ''))
-            ->setAttribute('icon','fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-        $menu['E-commerce']['Setting']->addChild('E-commerce Config', array('route' => 'ecommerce_config_modify'))->setAttribute('icon','fa fa-cog');
-        $menu['E-commerce']['Setting']->addChild('Bank', array('route' => 'ecommerce_bank'))->setAttribute('icon','fa fa-cog');
-        $menu['E-commerce']['Setting']->addChild('Bkash', array('route' => 'ecommerce_bkash'))->setAttribute('icon','fa fa-cog');
-
-        return $menu;
-    }
 
     public function manageAccountingSettingMenu($menu)
     {

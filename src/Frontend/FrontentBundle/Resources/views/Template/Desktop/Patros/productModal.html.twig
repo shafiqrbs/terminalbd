@@ -1,6 +1,6 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <h4 class="modal-title">{{ product.name }}</h4>
+    <h4 class="modal-title">{{ product.masterItem.name }}&nbsp;-&nbsp;{{ product.name }}</h4>
 </div>
 <div class="modal-body">
     <div class="row">
@@ -10,10 +10,9 @@
             </div>
             <div class="col-xs-3 col-md-3" >
                 <table>
-                    <tr><td>Price</td><td class="left-text"><strong>৳&nbsp;{{ subItem.salesPrice|number_format }}</strong></td></tr>
-                    <tr><td>Stock in</td><td class="left-text">&nbsp;:&nbsp;<strong>{{ subItem.quantity  }}</strong></td></tr>
+                    <tr><td>Price</td><td class="left-text"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ subItem.salesPrice|number_format }}</strong></td></tr>
+                    <tr><td>Stock in</td><td class="left-text">&nbsp;:&nbsp;<strong>{{ subItem.quantity  }}</strong>&nbsp;{% if product.unit is not empty %}{{ product.unit.name }}{% endif %}</td></tr>
                     {% if product.category is not empty %}<tr><td>Category</td><td class="left-text">&nbsp;:&nbsp;{{ product.category.name }}</td></tr>{% endif %}
-                    {% if product.unit is not empty %}<tr><td>Unit</td><td class="left-text">&nbsp;:&nbsp;{{ product.unit.name }}</td></tr>{% endif %}
                     {% if product.gender is not empty %}<tr><td>Gender</td><td class="left-text">&nbsp;:&nbsp;{{ product.gender }}</td></tr>{% endif %}
                     {% if product.ageGroup is not empty %}<tr><td>Age Group</td><td class="left-text">&nbsp;:&nbsp;{{ product.ageGroup }}</td></tr>{% endif %}
                     {% if product.brand is not empty %}<tr><td>Brand</td><td class="left-text">&nbsp;:&nbsp;{{ product.brand.name }}</td></tr>{% endif %}
@@ -26,7 +25,9 @@
                     <tr><td colspan="2" ><strong>Specification</strong></td></tr>
                     {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
                         {%  for attribute in product.itemMetaAttributes %}
+                            {% if attribute.value is not empty %}
                             <tr><td>{{ attribute.itemAttribute.name }}</td><td class="left-text">&nbsp;:&nbsp;{{ attribute.value }}</td></tr>
+                            {% endif %}
                         {% endfor %}
                     {% endif %}
                     {% if  product.itemKeyValues is defined and product.itemKeyValues is not empty %}
@@ -56,16 +57,14 @@
                     </div>
                 </div>
             </div>
-            {% if subItem.color is defined and subItem.color is not empty %}
+            {% if globalOption.ecommerceConfig.isColor == 1 and subItem.colors is defined and subItem.colors is not empty %}
             <div class="col-xs-3 col-md-3">
                 <div class="form-group">
                     <div class="input-group input-group-sm">
                         <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-text-background"></span></span>
-                        <select class="form-control" name="color" id="color" disabled="disabled" >
-                            {% for goodsItem in  product.goodsItems %}
-                            {% if goodsItem.color is not empty and goodsItem.color is defined %}
-                                <option {% if subItem.id == goodsItem.id %} selected="selected" {% endif %} value="{{ goodsItem.id }}" >{{ goodsItem.color.name }}</option>
-                            {% endif %}
+                        <select class="form-control" name="color" id="color" >
+                            {% for color in  subItem.colors %}
+                                 <option  value="{{ color.id }}" >{{ color.name }}</option>
                             {% endfor %}
                         </select>
                     </div>

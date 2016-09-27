@@ -4,6 +4,7 @@ namespace Setting\Bundle\ContentBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
+use Setting\Bundle\ContentBundle\Entity\Page;
 
 /**
  * PageRepository
@@ -14,7 +15,7 @@ use Setting\Bundle\AppearanceBundle\Entity\Menu;
 class PageRepository extends EntityRepository
 {
 
-    public  function insertPageMenu($page)
+    public  function insertPageMenu(Page $page)
     {
 
         $entity = new Menu();
@@ -22,7 +23,6 @@ class PageRepository extends EntityRepository
         if($page){
 
             $entity->setMenu($page->getMenu());
-            $entity->setMenuSlug($page->getMenuSlug());
             $entity->setSlug($page->getSlug());
             $entity->setPage($page);
             $entity->setGlobalOption($page->getGlobalOption());
@@ -38,7 +38,7 @@ class PageRepository extends EntityRepository
         return $this->findBy(array('globalOption'=> $globalOption),array('name' => 'asc'));
     }
 
-    public  function updatePageMenu($page)
+    public  function updatePageMenu(Page $page)
     {
 
         $em = $this->_em;
@@ -47,7 +47,6 @@ class PageRepository extends EntityRepository
             if(!empty($entity)){
 
                 $entity->setMenu($page->getMenu());
-                $entity->setMenuSlug($page->getMenuSlug());
                 $entity->setSlug($page->getSlug());
                 $em->persist($entity);
                 $em->flush();
@@ -99,6 +98,42 @@ class PageRepository extends EntityRepository
             ->getQuery();
 
         return $query;
+    }
+
+    public function findModuleContent($doamin,$module,$limit=5)
+    {
+
+        $em = $this->_em;
+        $repository = $em->getRepository('SettingContentBundle:Page');
+        $query = $repository->createQueryBuilder('p')
+            ->where('p.status = 1')
+            ->andWhere('p.globalOption = :option')
+            ->setParameter('option', $doamin)
+            ->andWhere('p.module = :module')
+            ->setParameter('module', $module)
+            ->setMaxResults($limit)
+            ->orderBy('p.updated','DESC')
+            ->getQuery()->getResult();
+        return $query;
+    }
+
+    public function getListForModule($globalOption,$page)
+    {
+
+        $em = $this->_em;
+        $modArr = array();
+        foreach ($page->getPageModules() as $mod){
+            $modArr[] = $mod->getModule()->getId();
+        }
+        $repository = $em->getRepository('SettingContentBundle:Page');
+        $query = $repository->createQueryBuilder('p')
+            ->where('p.globalOption = :option')
+            ->setParameter('option', $globalOption->getId())
+            ->andWhere('p.module IN  (:modules)')
+            ->setParameter('modules',$modArr)
+            ->orderBy('p.updated','DESC')
+            ->getQuery()->getResult();
+            return $query;
     }
 
 
