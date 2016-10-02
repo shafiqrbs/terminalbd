@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
+use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\EntityRepository;
 
@@ -218,6 +219,19 @@ class PurchaseVendorItemRepository extends EntityRepository
             $data .='</tr>';
         }
         return $data;
+
+    }
+
+    public function getCulculationDiscountPrice(PurchaseVendorItem $purchase , Discount $discount)
+    {
+        if($discount->getType() == 'percentage'){
+            $price = ( ($purchase->getSalesPrice() * (int)$discount->getName())/100 );
+            $discountPrice = $purchase->getSalesPrice() - $price;
+        }else{
+            $discountPrice = ( $purchase->getSalesPrice() - (int)$discount->getName());
+        }
+
+        return $discountPrice;
 
     }
 

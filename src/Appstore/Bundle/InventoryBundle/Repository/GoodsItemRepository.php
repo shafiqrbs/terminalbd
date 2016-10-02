@@ -1,6 +1,7 @@
 <?php
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
+use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\EntityRepository;
@@ -153,7 +154,52 @@ class GoodsItemRepository extends EntityRepository
                 $em->flush();
             }
         }
+    }
 
+    public function insertInventorySubProduct(PurchaseVendorItem $entity)
+    {
+        $em = $this->_em;
+        $rows=array();
+        foreach($entity->getPurchaseItems() as $item ) {
+
+            if(!isset($rows[$item->getItem()->getSize()->getId()]['color'])) {
+                $rows[$item->getItem()->getSize()->getId()]['color'] = array();
+            }
+
+            $rows[$item->getItem()->getSize()->getId()]['color'][$item->getItem()->getColor()->getId()] = $item->getItem()->getColor()->getId();
+
+            if(!isset($rows[$item->getItem()->getSize()->getId()]['quantity'])){
+                $rows[$item->getItem()->getSize()->getId()]['quantity'] = 0;
+            }
+
+            $rows[$item->getItem()->getSize()->getId()]['quantity'] += $item->getQuantity();
+            $rows[$item->getItem()->getSize()->getId()]['purchasePrice'] = $item->getPurchasePrice();
+            $rows[$item->getItem()->getSize()->getId()]['salesPrice'] = $item->getSalesPrice();
+        }
+
+        foreach($rows as $size => $row )
+        {
+            $colors = $row['color'];
+            $goods = new GoodsItem();
+            $goods->setSalesPrice($row['salesPrice']);
+            $goods->setPurchasePrice($row['purchasePrice']);
+            $goods->setQuantity($row['quantity']);
+
+            $sizeObj = $this->_em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('inventoryConfig' => $entity->getInventoryConfig(),'id'=> $size));
+            $goods->setSize($sizeObj);
+
+            $colorObjs =array();
+            foreach ($colors as $color){
+                $colorObjs[] = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('inventoryConfig' => $entity->getInventoryConfig(),'id'=> $color));
+            }
+            if(!empty($colors) && is_array($colors)){
+                $goods->setColors($colorObjs);
+            }
+            $goods->setPurchaseVendorItem($entity);
+           // $goods->setMasterItem(1);
+            $em->persist($goods);
+            $em->flush();
+        }
 
     }
 
@@ -175,6 +221,30 @@ class GoodsItemRepository extends EntityRepository
             $goods->setColors(array($color));
         }
         $em->flush();
+    }
+
+    public function subItemDiscountPrice(PurchaseVendorItem $entity ,Discount $discount)
+    {
+        $em = $this->_em;
+        /** @var GoodsItem $item */
+        foreach( $entity->getGoodsItems() as $item){
+            $discountPrice = $this->getCulculationDiscountPrice($entity,$discount);
+            $item->setDiscountPrice($discountPrice);
+        }
+        $em->flush();
+    }
+
+    public function getCulculationDiscountPrice(PurchaseVendorItem $purchase , Discount $discount)
+    {
+        if($discount->getType() == 'percentage'){
+            $price = ( ($purchase->getSalesPrice() * (int)$discount->getName())/100 );
+            $discountPrice = $purchase->getSalesPrice() - $price;
+        }else{
+            $discountPrice = ( $purchase->getSalesPrice() - $discount->getName());
+        }
+
+        return $discountPrice;
+
     }
 
 }

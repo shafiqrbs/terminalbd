@@ -100,7 +100,7 @@
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
                                     <th class="numeric" >Name </th>
-                                    <th class="numeric" >Code</th>
+                                    <th class="numeric" >Type</th>
                                     <th class="numeric" >Status</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -111,7 +111,7 @@
                                     <tr>
 
                                         <td class="numeric" ><a href="{{ path('itemcolor_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
-                                        <td class="numeric" >{{ entity.getSTRPadCode }}</td>
+                                        <td class="numeric" >{{ entity.type  }}</td>
                                         <td class="numeric" >{% if entity.status == 1 %}Active {% else %}In-active {% endif %}</td>
                                         <td class="numeric" >
                                             <a href="{{ path('itemcolor_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>

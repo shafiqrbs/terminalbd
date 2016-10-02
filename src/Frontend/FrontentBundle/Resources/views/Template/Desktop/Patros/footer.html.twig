@@ -10,6 +10,7 @@
         </div>
     </div>
 </footer>
+{{ include ('FrontendBundle:Template/Desktop/Widget:modalLogin.html.twig') }}
 {% if globalOption.templateCustomize.showSidebar == 1 %}
 <div class="side-toolbar" style=""></div>
 {% endif %}
@@ -34,6 +35,7 @@
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 <script>
+    var subdomain ="{{ globalOption.subDomain }}" ;
     $(document).ready(function(){
 
         $('.select2').select2({
@@ -57,7 +59,7 @@
                 {link: '{{ path('webservice_contact',{'subdomain':globalOption.subDomain}) }}#contact',id: '2','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-envelope.png') }}','label':'{{ globalOption.email }}'},
                 {link: 'javascript:',id: '3','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-sms.png') }}','label':'{{ globalOption.mobile }}'},
                 {link: '{{ path('webservice_contact',{'subdomain':globalOption.subDomain}) }}',id: '4','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-map.png') }}','label':'{{ globalOption.location.name }}'},
-                {link: '{{ path('webservice_product_cart_details',{'subdomain':globalOption.subDomain}) }}',id: '5','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-cart.png') }}','label':'৳&nbsp;50,456(20)'}
+                {link: '{{ path('webservice_product_cart_details',{'subdomain':globalOption.subDomain}) }}',id: '5','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-cart.png') }}','label':'{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cartResult }}'}
             ],
             'position': 'right bottom'
         });

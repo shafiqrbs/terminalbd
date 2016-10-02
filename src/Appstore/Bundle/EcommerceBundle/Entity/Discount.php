@@ -38,9 +38,9 @@ class Discount
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="decimal", nullable = true)
      */
-    private $name;
+    private $name=0;
 
     /**
      * @var string
@@ -48,18 +48,6 @@ class Discount
      * @ORM\Column(name="type", type="string", length=255)
      */
     private $type;
-
-    /**
-     * @Gedmo\Slug(handlers={
-     *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\TreeSlugHandler", options={
-     *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="ecommerceConfig"),
-     *          @Gedmo\SlugHandlerOption(name="separator", value="-")
-     *      })
-     * }, fields={"name"})
-     * @Doctrine\ORM\Mapping\Column()
-     */
-    private $slug;
-
 
     /**
      * @var integer
@@ -111,36 +99,10 @@ class Discount
         return $this->name;
     }
 
-
-
     /**
-     * Set slug
+     * Set status
      *
-     * @param string $slug
-     *
-     * @return Discount
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    /**
-     * Set status1
-     *
-     * @param boolean $status1
+     * @param boolean $status
      *
      * @return Discount
      */

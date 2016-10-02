@@ -54,8 +54,13 @@
                             <ul class="social-links">
                                 {% if globalOption.facebookPageUrl == 1 %}<li><a href="https://{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>{% endif %}
                                 {% if globalOption.templateCustomize.showSearch == 1 %}<li><a href="javascript:" id="searchEvent"><i class="fa fa-search"></i></a></li>{% endif %}
-                                <li><a href="{{ path('webservice_customer_register') }}"><i class="fa fa-sign-in"></i></a></li>
-                                <li><a href="{{ path('webservice_customer_login') }}"><i class="fa fa-lock"></i></a></li>
+                                {% if  globalOption.ecommerceConfig.cart == 1  %}<li><a href="{{ path('webservice_product_cart_details',{'subdomain':globalOption.subDomain}) }}" class="" ><i class="fa fa-shopping-cart"></i></a></li>{% endif %}
+                                <li><a href="javascript:" class="register-btn" ><i class="fa fa-sign-in"></i></a></li>
+                                {% if  app.user %}
+                                <li><a href="{{ path('fos_user_security_logout') }}" class="" ><i class="fa fa-unlock-alt"></i></a></li>
+                                {% else %}
+                                <li><a href="javascript:" class="login-preview" ><i class="fa fa-lock"></i></a></li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -67,7 +72,6 @@
     <div class="container">
         <div class="navbar-header col-md-12">
             <a class="navbar-brand" href="http://{{ globalOption.subDomain }}.kintethako.dev"><img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" alt="company logo" /></a>
-
         </div>
 
     </div>

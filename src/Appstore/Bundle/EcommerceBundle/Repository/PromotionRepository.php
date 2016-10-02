@@ -12,5 +12,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class PromotionRepository extends EntityRepository
 {
+    public function getTypeBasePromotion($config,$type)
+    {
 
+        $qb = $this->createQueryBuilder('promot');
+        $qb ->where("promot.status = 1")
+/*            ->andWhere('promot.type IN (:type)')
+            ->setParameter('type', array($type))*/
+            ->andWhere("promot.ecommerceConfig =".$config)
+            ->orderBy('promot.name','ASC');
+        $result = $qb->getQuery()->getResult();
+
+        return $result;
+
+    }
 }

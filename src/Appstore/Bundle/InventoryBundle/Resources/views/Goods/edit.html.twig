@@ -344,7 +344,7 @@
                                                                 <select class="span12" multiple="multiple" name="color[]">
                                                                     <option value="">Color</option>
                                                                     {% for color in colors %}
-                                                                        <option value="{{ color.id }}"  {% if goodsItem.color is not empty and  color.id in goodsItem.colors|keys %} selected="selected" {% endif %}>{{ color.name }}</option>
+                                                                        <option value="{{ color.id }}" >{{ color.name }}</option>
                                                                     {% endfor %}
                                                                 </select>
                                                             </div>

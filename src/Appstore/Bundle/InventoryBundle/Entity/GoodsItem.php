@@ -73,6 +73,13 @@ class GoodsItem
     private $purchasePrice;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="discountPrice", type="decimal", nullable = true)
+     */
+    private $discountPrice;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="masterItem", type="boolean", nullable=true)
@@ -224,6 +231,22 @@ class GoodsItem
     public function setColors($colors)
     {
         $this->colors = $colors;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountPrice()
+    {
+        return $this->discountPrice;
+    }
+
+    /**
+     * @param string $discountPrice
+     */
+    public function setDiscountPrice($discountPrice)
+    {
+        $this->discountPrice = $discountPrice;
     }
 
 

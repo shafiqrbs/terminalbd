@@ -70,12 +70,11 @@ class WebServiceCustomerController extends Controller
      *
      */
 
-    public function userCheckingAction()
+    public function userCheckingAction(Request $request)
     {
-       // echo $request->request->all();
-        exit;
+
+        $intlMobile = $request->query->get('Core_userbundle_user[profile][mobile]',NULL,true);
         $em = $this->getDoctrine()->getManager();
-        $intlMobile = $_REQUEST['Core_userbundle_user_profile_mobile'];
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
         $entity = $em->getRepository('UserBundle:User')->findBy(array('username'=>$mobile));
 

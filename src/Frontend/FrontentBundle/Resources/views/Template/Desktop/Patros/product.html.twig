@@ -53,10 +53,10 @@
                     {% for product in products %}
                         <div class="item  col-xs-{{ globalOption.ecommerceConfig.perColumn }}">
                             <div class="thumbnail js-equal-height" style="position: relative">
-                                <div class="offer-tag"><h6>5% <br> Off</h6></div>
-                                <div class="new-tag"><h6>New</h6></div>
+                               {% if product.discount is not empty %} <div class="offer-tag"><h6> {{ product.discount.name }}{% if product.discount.type == 'percentage' %} % {% endif %} <br> Off</h6></div>{% endif %}
+                                {% if product.tag is not empty %}<div class="new-tag"><h6>{{ product.tag.name }}</h6></div>{% endif %}
                                 <div class="product-preview group list-group-image "  >
-                                    <img class="img-responsive" src="{{ image(product.webPath).resize(450,400) }}" alt="">
+                                    <img class="img-responsive" src="{{ image(product.webPath).scaleResize(400,400) }}" data-key="sameHeights" alt="">
                                     <div class="team-content" >
                                         <h5 class="team-prof">
                                             <a class="btn btn-sm blue preview"  data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" >Preview<i class="fa fa-link"></i></a>
@@ -64,7 +64,7 @@
                                     </div>
                                 </div>
                                 <div class="caption product-caption">
-                                    <p class="group inner list-group-item-heading"><a href="">{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</a> </p>
+                                    <p class="group inner list-group-item-heading"><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}">{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</a> </p>
                                     <div class="row">
                                         <div class="row-fluid">
                                             <div class="col-xs-6 col-md-6"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<strike>{{ product.salesPrice|number_format }}</strike>&nbsp;<strong>{{ product.salesPrice|number_format }}</strong></div>
@@ -72,9 +72,13 @@
                                         </div>
                                         <div class="row-fluid separator-margin" >
                                             <div class="col-xs-12 col-md-12  separator separator-absolute" >
-                                                    <span class="btn-add">
-                                                        <i class="fa fa-shopping-cart"></i><a data-url="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}" href="javascript:" class="hidden-sm">cart</a></span>
-                                                    <span class="btn-details">
+                                                   {% if  globalOption.ecommerceConfig.cart == 1  %}
+                                                       <span class="btn-add">
+                                                        <i class="fa fa-shopping-cart"></i><a data-url="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}" href="javascript:" class="hidden-sm">Cart</a>
+                                                        </span>
+                                                   {% endif %}
+
+                                                <span class="btn-details">
                                                         <i class="fa fa-list"></i><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}" class="hidden-sm">More</a></span>
                                             </div>
                                         </div>
@@ -106,7 +110,7 @@
                         <div class="col-md-12">
                             <div class="thumbnail" data-key="sameHeights" style="position: relative" >
                                 <div class="product-preview group list-group-image" >
-                                    <img class="img-responsive" src="{{ image(product.webPath).scaleResize(400.250) }}" alt="">
+                                    <img class="img-responsive" src="{{ image(product.webPath).scaleResize(400,400) }}" data-key="featureHeights" alt="">
                                     <div class="team-content">
                                         <h3 class="team-prof">
                                             <a class="preview"  data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" >Preview</a>
@@ -115,15 +119,18 @@
                                     </div>
                                 </div>
                                 <div class="caption">
-                                    <p class="group inner list-group-item-heading">{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</p>
+                                    <p class="group inner list-group-item-heading"><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}">{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</a></p>
                                     <div class="row">
                                         <div class="row-fluid">
                                             <div class="col-md-12"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<strike>{{ product.salesPrice|number_format }}</strike>&nbsp;<strong>{{ product.salesPrice|number_format }}</strong></div>
                                         </div>
                                         <div class="row-fluid separator-margin" >
                                             <div class="col-xs-12 col-md-12  separator" >
+                                                {% if  globalOption.ecommerceConfig.cart == 1  %}
                                                     <span class="btn-add">
-                                                        <i class="fa fa-shopping-cart"></i><a data-url="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}" href="javascript:" class="hidden-sm">cart</a></span>
+                                                        <i class="fa fa-shopping-cart"></i><a data-url="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}" href="javascript:" class="hidden-sm">Buy</a>
+                                                    </span>
+                                                {% endif %}
                                                     <span class="btn-details">
                                                         <i class="fa fa-list"></i><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}" class="hidden-sm">More</a></span>
                                             </div>
@@ -142,14 +149,9 @@
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
-            <div class="modal-content col-xs-12 col-md-12">
-
-            </div>
+            <div class="modal-content col-xs-12 col-md-12"></div>
         </div>
     </div>
-<script>
-   var item = {{ globalOption.ecommerceConfig.owlProductColumn }}
-</script>
 {% endblock %}
 {% block javascriptBlock %}
     {{ parent() }}
@@ -163,5 +165,5 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    ProductFeatureSlider({{ globalOption.ecommerceConfig.perColumn }});
+    ProductFeatureSlider({{ globalOption.ecommerceConfig.owlProductColumn }});
 {% endblock %}

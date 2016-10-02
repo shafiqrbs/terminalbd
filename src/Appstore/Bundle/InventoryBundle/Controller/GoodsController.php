@@ -9,6 +9,7 @@ use Appstore\Bundle\InventoryBundle\Entity\ItemKeyValue;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Form\GoodsType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
@@ -42,14 +43,18 @@ class GoodsController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $getEcommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
         $pagination = $this->paginate($entities);
+        $promotions = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->findBy(array('ecommerceConfig'=>$getEcommerceConfig,'status'=>1,'type'=>'Promotion'));
         return $this->render('InventoryBundle:Goods:index.html.twig', array(
+            'promotions' => $promotions,
             'entities' => $pagination,
         ));
     }
     /**
      * Creates a new PurchaseVendorItem entity.
+     *
      *
      */
     public function createAction(Request $request)
@@ -169,6 +174,7 @@ class GoodsController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseVendorItem entity.');
         }
+        //$this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertInventorySubProduct($entity);
 
         /*$id =295;
         $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->findBy(array('inventoryConfig'=>$entity->getInventoryConfig()));
@@ -186,11 +192,12 @@ class GoodsController extends Controller
             $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->initialInsertSubProduct($en);
         }
         $em->flush();
-        */
 
-        $val = '<ul>';
+
+        $val = '<ul>';     */
         /** @param $item PurchaseItem */
-        $rows=array();
+
+        /*$rows=array();
         foreach($entity->getPurchaseItems() as $item )
         {
             $color = array();
@@ -206,8 +213,9 @@ class GoodsController extends Controller
             }
 
             $rows[$item->getItem()->getSize()->getName()]['quantity'] += $item->getQuantity();
+            $rows[$item->getItem()->getSize()->getName()]['price'] = $item->getSalesPrice();
 
-            $val .='<li>Item ID='.$item->getItem()->getId().'==Size=='.$item->getItem()->getSize()->getName().'=Color='.$item->getItem()->getColor()->getName().'===Quantity=='.$item->getQuantity().'</li>';
+            $val .='<li>Item ID='.$item->getItem()->getId().'==Size=='.$item->getItem()->getSize()->getName().'=Color='.$item->getItem()->getColor()->getName().'===Quantity=='.$item->getQuantity().'===Price=='.$item->getSalesPrice().'</li>';
         }
         $val .='</ul>';
 
@@ -216,15 +224,21 @@ class GoodsController extends Controller
 
         echo '<ul>';
         /** @param $item PurchaseItem */
-        foreach($rows as $size => $row )
+       /* foreach($rows as $size => $row )
         {
 
-            echo  '<li>==Size=='.$size.'=Color='.implode(', ', $row['color']).'===Quantity=='.$row['quantity'].'</li>';
+            echo  '<li>==Size=='.$size.'=Color='.implode(', ', $row['color']).'===Quantity=='.$row['quantity'].'===Price=='.$row['price'].'</li>';
         }
-        echo '</ul>';
+        echo '</ul>';*/
 
 
-        exit;
+       /* $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->findBy(array('inventoryConfig'=>$entity->getInventoryConfig()));
+        foreach($entities as $entity)
+        {
+           $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertInventorySubProduct($entity);
+        }*/
+
+
 
         $editForm = $this->createEditForm($entity);
         $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
@@ -365,20 +379,6 @@ class GoodsController extends Controller
     }
 
 
-    public function inlineItemUpdateAction(Request $request)
-    {
-        $data = $request->request->all();
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('InventoryBundle:PurchaseItem')->find($data['pk']);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
-        }
-        $item =$em->getRepository('InventoryBundle:Item')->find($data['value']);
-        $entity->setItem($item);
-        $em->flush();
-        exit;
-
-    }
 
     public function uploadItemImageAction(PurchaseVendorItem $item)
     {
@@ -433,6 +433,60 @@ class GoodsController extends Controller
 
 
     }
+
+    public function discountSelectAction()
+    {
+        $getEcommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Discount')->findBy(
+            array('ecommerceConfig'=>$getEcommerceConfig,'status'=>1)
+        );
+        $items = array();
+        foreach ($entities as $entity):
+            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName().'-'. ucfirst($entity->getType()));
+        endforeach;
+        return new JsonResponse($items);
+
+
+    }
+
+    public function tagSelectAction()
+    {
+        $getEcommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->getTypeBasePromotion($getEcommerceConfig->getId(),'Tag');
+        $items = array();
+        foreach ($entities as $entity):
+            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName());
+        endforeach;
+        return new JsonResponse($items);
+
+
+    }
+
+    public function inlineItemUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('InventoryBundle:PurchaseVendorItem')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        $setName = 'set'.$data['name'];
+        if($data['name'] == 'Discount'){
+
+            $setValue = $em->getRepository('EcommerceBundle:Discount')->find($data['value']);
+            $discountPrice = $em->getRepository('InventoryBundle:PurchaseVendorItem')->getCulculationDiscountPrice($entity,$setValue);
+            $entity->setDiscountPrice($discountPrice);
+            $em->getRepository('InventoryBundle:GoodsItem')->subItemDiscountPrice($entity,$setValue);
+
+        }else{
+            $setValue = $em->getRepository('EcommerceBundle:Promotion')->find($data['value']);
+        }
+        $entity->$setName($setValue);
+        $em->flush();
+        exit;
+
+    }
+
 
 
 

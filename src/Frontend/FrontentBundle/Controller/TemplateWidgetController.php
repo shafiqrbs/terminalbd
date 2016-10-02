@@ -1,6 +1,9 @@
 <?php
 
 namespace Frontend\FrontentBundle\Controller;
+use Core\UserBundle\Entity\User;
+use Core\UserBundle\Form\CustomerRegisterType;
+use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ContentBundle\Entity\PageModule;
@@ -42,7 +45,7 @@ class TemplateWidgetController extends Controller
         ));
     }
 
-    public function footerAction(GlobalOption $globalOption)
+    public function footerAction(GlobalOption $globalOption,Request $request)
     {
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
@@ -58,10 +61,45 @@ class TemplateWidgetController extends Controller
         $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
         $footerMenu = $this->get('setting.menuTreeSettingRepo')->getFooterMenu($menus,$globalOption->getSubDomain(),'desktop');
 
+        $csrfToken = $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue();
+        $user = new User();
+        $form   = $this->createCreateForm($globalOption->getSubDomain(),$user);
+
+        $cart = new Cart($request->getSession());
+        $cartTotal = $cart->total();
+        $totalItems = $cart->total_items();
+        $cartResult = $cartTotal.'('.$totalItems.')';
+
         return $this->render('@Frontend/Template/'.$theme.'/footer.html.twig', array(
             'globalOption'             => $globalOption,
             'footerMenu'               => $footerMenu,
+            'cartResult'               => $cartResult,
+            'csrfToken'   => $csrfToken,
+            'form'   => $form->createView(),
         ));
+    }
+
+    /**
+     * Creates a form to create a User entity.
+     *
+     * @param User $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+
+    private function createCreateForm($subdomain,User $entity)
+    {
+        $form = $this->createForm(new CustomerRegisterType(), $entity, array(
+            'action' => $this->generateUrl('webservice_customer_insert', array('subdomain' => $subdomain)),
+            'method' => 'POST',
+            'attr' => array(
+                'id' => 'signup',
+                'class' => 'register',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+
     }
 
     public function aboutusAction(GlobalOption $globalOption,$wordlimit)

@@ -21,6 +21,17 @@ webservice_product_cart:
     options:
             expose: true
 
+webservice_product_cart_update:
+    path:     /cart/product-update/{cartid}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productUpdateCart }
+    methods:  GET
+    options:
+            expose: true
+
+webservice_product_cart_remove:
+    path:      /cart/product-remove/{cartid}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productRemoveCart }
+
 webservice_product_wishlist:
     path:     /wishlist/{item}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productAddWishList }
@@ -59,24 +70,24 @@ webservice_customer_register:
     defaults: { _controller: FrontendBundle:WebServiceCustomer:register }
 
 webservice_customer_create:
-    path:     /customer-registration-create
+    path:     /register-customer-create
     defaults: { _controller: FrontendBundle:WebServiceCustomer:create }
 
 webservice_customer_insert:
-    path:     /customer-registration-insert
+    path:     /register-customer-insert
     defaults: { _controller: FrontendBundle:WebServiceCustomer:insert }
     methods:  POST
     options:
             expose: true
 
 webservice_customer_confirm:
-    path:     /customer-registration-confirm
+    path:     /registration-confirm
     defaults: { _controller: FrontendBundle:WebServiceCustomer:confirm }
 
 webservice_customer_checking:
-    path:      /username/checking
+    path:      /checking-username
     defaults: { _controller: FrontendBundle:WebServiceCustomer:userChecking }
-    methods:  POST
+    methods:  GET
     options:
             expose: true
 

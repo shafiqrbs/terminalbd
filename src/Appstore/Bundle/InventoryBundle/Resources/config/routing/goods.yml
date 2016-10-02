@@ -38,10 +38,21 @@ inventory_goods_copy:
     path:     /{id}/item-copy
     defaults: { _controller: "InventoryBundle:Goods:itemCopy" }
 
+inventory_product_inline_discount_search:
+    path:     /inline-discount-search
+    defaults: { _controller: "InventoryBundle:Goods:discountSelect" }
+    options:
+           expose: true
 
-inventory_vendoritem_inline_update:
-    path:     /inline-item-update
-    defaults: { _controller: "InventoryBundle:PurchaseItem:inlineItemUpdate" }
+inventory_product_inline_tag_search:
+    path:     /inline-tag-search
+    defaults: { _controller: "InventoryBundle:Goods:tagSelect" }
+    options:
+           expose: true
+
+inventory_goods_inline_update:
+    path:     /inline-goods-update
+    defaults: { _controller: "InventoryBundle:Goods:inlineItemUpdate" }
     methods:  POST
     options:
             expose: true

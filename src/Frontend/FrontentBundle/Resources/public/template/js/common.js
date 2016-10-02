@@ -1,23 +1,44 @@
 
-    var owlProduct = $("#product-slider");
+    var owlProduct = $(".product-slider");
     owlProduct.owlCarousel({
-        items:item,
-        itemsDesktop:[1199,3],
-        itemsDesktopSmall:[979,2],
-        itemsTablet:[768,1],
+        items: 6,
+        itemsDesktop: [1199, 3],
+        itemsDesktopSmall: [979, 2],
+        itemsTablet: [768, 1],
         pagination: false,
         paginationNumbers: false,
-        autoPlay:false,
-        rewindNav:false
+        autoPlay: false,
+        rewindNav: false
     });
-// Custom Navigation Events
-    $(".next").click(function(){
-        owlProduct.trigger('owl.next');
-    })
 
-    $(".prev").click(function(){
-        owlProduct.trigger('owl.prev');
-    })
+// Custom Navigation Events
+$(".next").click(function(){
+    owlProduct.trigger('owl.next');
+})
+
+$(".prev").click(function(){
+    owlProduct.trigger('owl.prev');
+})
+
+var owlProduct = $(".viewed-product-slider");
+owlProduct.owlCarousel({
+    items:6,
+    itemsDesktop:[1199,3],
+    itemsDesktopSmall:[979,2],
+    itemsTablet:[768,1],
+    pagination: false,
+    paginationNumbers: false,
+    autoPlay:false,
+    rewindNav:false
+});
+// Custom Navigation Events
+$(".viewed-next").click(function(){
+    owlProduct.trigger('owl.next');
+})
+
+$(".viewed-prev").click(function(){
+    owlProduct.trigger('owl.prev');
+})
 
 
 
@@ -79,14 +100,16 @@ function commonJs(){
     });
 }
 
-
+$( "#viewed" ).click(function() {
+    $( "#viewed-item" ).slideToggle( "slow" );
+});
 
 $('.login-preview').click(function () {
     $('#registerModal').modal('hide');
     $('#forgetModal').modal('hide');
     $('#loginModal').modal('toggle');
 });
-$('#register-btn').click(function () {
+$('.register-btn').click(function () {
     $('#loginModal').modal('hide');
     $('#forgetModal').modal('hide');
     $('#registerModal').modal('toggle');
@@ -161,7 +184,7 @@ var validator =  $("#signup").validate({
         "Core_userbundle_user[profile][name]": {required: true},
         "Core_userbundle_user[profile][mobile]": {
             required: true,
-            //remote: Routing.generate('webservice_customer_checking',{'subdomain':'plaza'})
+            remote: Routing.generate('webservice_customer_checking',{'subdomain':subdomain})
         },
         "Core_userbundle_user[email]": {required: false , email:true,},
         "Core_userbundle_user[profile][location]": {required: true},
@@ -172,8 +195,11 @@ var validator =  $("#signup").validate({
     messages: {
 
         "Core_userbundle_user[profile][name]":"Enter your full name",
-        "Core_userbundle_user[profile][mobile]":"Enter valid phone no",
-        "Core_userbundle_user[email]":{
+        "Core_userbundle_user[profile][mobile]":{
+            required: "Enter valid mobile no",
+            remote: "This mobile no is already registered. Please try to login."
+        },
+         "Core_userbundle_user[email]":{
             required: "Enter valid email address",
             remote: "This username is already taken! Try another."
         },
@@ -201,7 +227,7 @@ var validator =  $("#signup").validate({
             processData : false,
             contentType : false,
             success: function(response) {
-                if(success == 'valid'){
+                if(response == 'valid'){
                     $('#registerModal').modal('hide');
                     $('#forgetModal').modal('hide');
                     $('#loginModal').modal('toggle');
@@ -288,10 +314,18 @@ if ('addEventListener' in window) {
 
     // second group
     window.addEventListener('resize', function(){
-        sameHeights('[data-key="otherSameHeights"]');
+        sameHeights('[data-key="featureHeights"]');
     });
     window.addEventListener('load', function(){
-        sameHeights('[data-key="otherSameHeights"]');
+        sameHeights('[data-key="featureHeights"]');
+    });
+
+    // second group
+    window.addEventListener('resize', function(){
+        sameHeights('[data-key="viewHeights"]');
+    });
+    window.addEventListener('load', function(){
+        sameHeights('[data-key="viewHeights"]');
     });
 }
 

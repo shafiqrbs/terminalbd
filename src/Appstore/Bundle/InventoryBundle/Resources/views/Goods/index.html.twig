@@ -83,6 +83,7 @@
                                     <th class="numeric" >Purchase price</th>
                                     <th class="numeric" >Sales price</th>
                                     <th class="numeric" >Discount</th>
+                                    <th class="numeric" >Tags</th>
                                     <th class="numeric" >Is web</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -94,10 +95,14 @@
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.masterItem %}{{ entity.masterItem.name }}-{% endif %}{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.quantity }}</td>
-                                        <td class="numeric" >{{ entity.salesPrice|number_format() }}</td>
+                                        <td class="numeric" >{{ entity.purchasePrice|number_format() }}</td>
+                                        <td class="numeric" >{% if entity.discount is not empty  %}<strike>{% endif %}{{ entity.salesPrice|number_format() }}{% if entity.discount is not empty  %}</strike>{% endif %}{% if entity.discount is not empty  %}{{ entity.discountPrice|number_format() }}{% endif %}</td>
                                         <td class="numeric" >
-                                            <a class="editable" href="#" data-name="WebPrice" data-type="text" data-url="{{ path('inventory_item_web_price') }}" data-pk="{{ entity.id }}" data-original-title="Enter web price">{{entity.webPrice}}</a>
+                                            <a  data-type="select" class="editable" id="discount" data-name="Discount" href="#" data-source="{{ path('inventory_product_inline_discount_search') }}"  data-url="{{ path('inventory_goods_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.discount is not empty %}{{ entity.discount.id }}{% endif %}" data-original-title="Enter discount method">{% if entity.discount is not empty %}{{ entity.discount.name }}-{{ entity.discount.type|capitalize }}{% endif %}</a>
                                         </td>
+                                         <td class="numeric" >
+                                             <a  data-type="select" class="editable" id="tag" data-name="Tag" href="#" data-source="{{ path('inventory_product_inline_tag_search') }}"  data-url="{{ path('inventory_goods_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.tag is not empty %}{{ entity.masterItem.id }}{% endif %}" data-original-title="Enter tag name">{% if entity.tag is not empty %}{{ entity.tag.name }}{% endif %}</a>
+                                         </td>
                                         <td class="numeric" >
                                             {% if( entity.isWeb == 1) %}
                                                 <a href="{{ path('inventory_vendoritem_status', { 'id': entity.id}) }}" class="btn blue mini"><i class="icon-check"></i></a>

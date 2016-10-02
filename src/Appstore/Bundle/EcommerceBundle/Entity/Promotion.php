@@ -36,6 +36,11 @@ class Promotion
     protected $purchaseVendorItems;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="tag")
+     */
+    protected $itemTags;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
@@ -48,7 +53,6 @@ class Promotion
      * @ORM\Column(name="type", type="array",nullable=true)
      */
     private $type;
-
 
     /**
      * @Gedmo\Translatable
@@ -380,6 +384,14 @@ class Promotion
     public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getItemTags()
+    {
+        return $this->itemTags;
     }
 
 

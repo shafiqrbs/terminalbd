@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -107,6 +108,11 @@ class PurchaseVendorItem
     private  $discount;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="itemTags" )
+     **/
+    private  $tag;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="purchaseVendorItems" )
      **/
     private  $promotions;
@@ -166,6 +172,13 @@ class PurchaseVendorItem
      * @ORM\Column(name="salesPrice", type="decimal", nullable = true)
      */
     private $salesPrice;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="discountPrice", type="decimal", nullable = true)
+     */
+    private $discountPrice;
 
     /**
      * @var string
@@ -951,7 +964,7 @@ class PurchaseVendorItem
     }
 
     /**
-     * @return mixed
+     * @return Discount
      */
     public function getDiscount()
     {
@@ -959,7 +972,7 @@ class PurchaseVendorItem
     }
 
     /**
-     * @param mixed $discount
+     * @param Discount $discount
      */
     public function setDiscount($discount)
     {
@@ -980,6 +993,38 @@ class PurchaseVendorItem
     public function setItemColors($itemColors)
     {
         $this->itemColors = $itemColors;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTag()
+    {
+        return $this->tag;
+    }
+
+    /**
+     * @param mixed $tag
+     */
+    public function setTag($tag)
+    {
+        $this->tag = $tag;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountPrice()
+    {
+        return $this->discountPrice;
+    }
+
+    /**
+     * @param string $discountPrice
+     */
+    public function setDiscountPrice($discountPrice)
+    {
+        $this->discountPrice = $discountPrice;
     }
 
 

@@ -58,15 +58,46 @@ $(document).on( "change", ".changeCartSize", function( e ) {
 $('.addCart').submit( function( e ) {
 
     var url = $('.cartSubmit').attr("data-url");
-    alert(url);
     $.ajax({
         url:url ,
         type: 'POST',
         data: new FormData( this ),
         processData: false,
         contentType: false,
-        success: function(response) {
-            alert('success');
+        success: function(response){
+            $('.vsidebar .txt').html('54000');
+        }
+    });
+    e.preventDefault();
+
+});
+
+$('.update-cart').click( function() {
+
+    var url = $(this).attr("data-url");
+    var price = $(this).attr("data-id");
+    var rowid = $(this).attr("id");
+    var quantity = $('#'+rowid).val();
+    $.ajax({
+        url:url ,
+        type: 'GET',
+        data:'price='+price+'&quantity='+quantity,
+        success: function(response){
+            location.reload();
+        }
+    });
+    e.preventDefault();
+
+});
+
+$('.remove-cart').click( function() {
+
+    var url = $(this).attr("data-url");
+    $.ajax({
+        url:url ,
+        type: 'GET',
+        success: function(response){
+            location.reload();
         }
     });
     e.preventDefault();

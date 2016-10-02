@@ -35,9 +35,9 @@ class EcommerceConfigType extends AbstractType
             ->add('owlProductColumn', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(
-                    '4'       => 'Per Column-3',
-                    '3'       => 'Per Column-4',
-                    '2'       => 'Per Column-6',
+                    '3'       => 'Per Column-3',
+                    '4'       => 'Per Column-4',
+                    '6'       => 'Per Column-6',
                 ),
             ))
             ->add('isColor')

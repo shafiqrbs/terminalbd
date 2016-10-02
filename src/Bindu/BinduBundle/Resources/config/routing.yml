@@ -42,8 +42,10 @@ bindu_confirm:
 
 bindu_user_check:
     path:     /web-builder/user-check-availability
-    defaults: { _controller: BinduBundle:Bindu:checkUserName }
-    requirements: { _method: post }
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:userChecking }
+    methods:  GET
+    options:
+            expose: true
 
 bindu_check:
     path:     /web-builder/check

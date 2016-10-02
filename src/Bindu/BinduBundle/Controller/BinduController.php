@@ -138,6 +138,8 @@ class BinduController extends Controller
     public function checkUserNameAction(Request $request)
     {
 
+        var_dump($request);
+        exit;
         $mobile = $request->request->get('mobile');
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
 

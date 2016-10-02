@@ -1,3 +1,9 @@
+/* Bootstrap Override */
+
+.tooltip-inner{
+    max-width: 300px;
+}
+
 .navbar-inverse{
     padding-bottom: 0!important;
     padding-top: 0!important;
