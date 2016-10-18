@@ -50,33 +50,27 @@
                             {% include('flash-message.html.twig')  %}
                             <div class="portlet search-portlet box grey">
                                 <form class="search-form" action="" method="get" name="itemSearch">
-                                    <div class="span7">
-                                        <div class="controls">
-                                            <input type="text" id="startDate" name="startDate"  class="span4 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="start date ">
-                                            <input type="text" id="endDate" name="endDate"  class="span4 search-input  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="end date ">
-                                            <select class="search-input span4" id="accountHead" name="accountHead">
-                                                <option value="">Select account head</option>
-                                                {% for account in accountHead %}
-                                                    <option value="{{ account.id }}">{{ account.name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
+                                    <div class="span2">
+                                        <input type="text" id="startDate" name="startDate"  class="span12 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="start date ">
                                     </div>
-                                    <div class="span4">
-                                        <input type="text" id="toUser" name="toUser"  class="span11 select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }} {% endif %}"  autocomplete="off" placeholder="select user">
+                                    <div class="span2">
+                                        <input type="text" id="endDate" name="endDate"  class="span12 search-input  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="end date ">
                                     </div>
-                                    <div class="1">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <div class="input-append">
-                                                    <div class="btn-group">
-                                                        <button class="btn" type="submit" >
-                                                            <i class="icon-search"></i>&nbsp;Go</button>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    {#<div class="span3">{{ flatExpenseCategoryTree|raw }}</div>#}
+                                    <div class="span3">
+                                        <select class="search-input span12" id="accountHead" name="accountHead">
+                                            <option value="">--Select method--</option>
+                                            {% for method in transactionMethods %}
+                                                <option value="{{ method.id }}">{{ method.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="span3">
+                                        <input type="text" id="toUser" name="toUser"  class="span12 select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }} {% endif %}"  autocomplete="off" placeholder="select user">
+                                    </div>
+                                    <div class="span2">
+                                        <button class="btn blue" type="submit" >
+                                            <i class="icon-search"></i></button>
                                     </div>
                                 </form>
 
@@ -86,7 +80,7 @@
 
                                 <thead class="flip-content ">
                                 <tr>
-                                    <th class="numeric" colspan="6" style="text-align: right"><strong>Grand Total</strong></th>
+                                    <th class="numeric" colspan="7" style="text-align: right"><strong>Grand Total</strong></th>
                                     <td class="numeric" ><strong>{{ overview|number_format }}</strong></td>
                                     <td class="numeric" ></td>
                                 </tr>
@@ -97,7 +91,8 @@
                                     <th class="numeric" >From user</th>
                                     <th class="numeric" >To user</th>
                                     <th class="numeric" >Category</th>
-                                    <th class="numeric" >Account head</th>
+                                    <th class="numeric" >Ref No.</th>
+                                    <th class="numeric" >Trans. Method</th>
                                     <th class="numeric" >Amount</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -110,7 +105,8 @@
                                         <td class="numeric" >{% if entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.toUser is not empty %}{{ entity.toUser }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.expenseCategory is not empty %}{{ entity.expenseCategory.name }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.accountHead is not empty %}{{ entity.accountHead.name }}/{{ entity.accountHead.code }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.accountRefNo }}</td>
+                                        <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.process == 'approved'  %}
                                                 {{ entity.amount|number_format }}
@@ -131,9 +127,12 @@
                                         <td colspan="9">
                                             <table class="table">
                                                 <tr><td>Remark</td><td>{{ entity.remark }}</td></tr>
-                                                {% if entity.bank is not empty %}
-                                                    <tr><td>Bank name</td><td>{{ entity.bank.name }}</td></tr>
-                                                    <tr><td>Account no.</td><td>{{ entity.accountNo }}</td></tr>
+                                                {% if entity.accountBank is not empty %}
+                                                    <tr><td>Bank name</td><td>{{ entity.accountBank.bank.name }}</td></tr>
+                                                    <tr><td>Account no.</td><td>{{ entity.accountBank.accountNo }}</td></tr>
+                                                {% endif %}
+                                                {% if entity.accountBkash is not empty %}
+                                                    <tr><td>Bkash Account</td><td>{{ entity.accountBkash.name }}</td></tr>
                                                 {% endif %}
                                             </table>
                                         </td>

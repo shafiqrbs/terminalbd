@@ -28,30 +28,15 @@ class AccountSalesType extends AbstractType
     {
         $builder
 
-            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'add payment amount BDT'),
+            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Add Received Amount BDT'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add payment amount BDT'))
                 )))
-
-            ->add('accountNo','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'add your account no')))
-            ->add('paymentMethod', 'choice', array(
-                'attr'=>array('class'=>'span12 select2'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please chose required'))
-                ),
-                'choices' => array(
-                    'Cash' => 'Cash',
-                    'Cheque' => 'Cheque',
-                    'Gift card' => 'Gift card',
-                    'Bkash' => 'Bkash',
-                    'Payment Card' => 'Payment Card',
-                    'Other' => 'Other'
-                ),
-            ))
-            ->add('accountHead', 'entity', array(
+            ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add Remark')))
+            ->add('transactionMethod', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
-                'empty_value' => '---Choose a acount head---',
+                'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
+                'empty_value' => '---Choose a Transaction Method---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
                 'constraints' =>array(
@@ -59,8 +44,9 @@ class AccountSalesType extends AbstractType
                 ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
-                        ->where("e.parent = 20 ");
-                },
+                        ->where("e.status = 1")
+                        ->orderBy("e.id");
+                }
             ))
             ->add('customer', 'entity', array(
                 'required'    => true,
@@ -76,22 +62,21 @@ class AccountSalesType extends AbstractType
                         ->where("e.globalOption =".$this->globalOption->getId());
                 },
             ))
-           /* ->add('sales', 'entity', array(
+            ->add('accountBank', 'entity', array(
+               'required'    => true,
+               'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
+               'empty_value' => '---Choose a bank---',
+               'property' => 'name',
+               'attr'=>array('class'=>'span12 select2'),
+               'query_builder' => function(EntityRepository $er){
+                   return $er->createQueryBuilder('b')
+                       ->orderBy("b.name", "ASC");
+               },
+           ))
+            ->add('accountBkash', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\Purchase',
-                'empty_value' => '---Choose a sales---',
-                'property' => 'grn',
-                'attr'=>array('class'=>'span12 select2'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('wt')
-                          ->where("wt.globalOption =".$this->globalOption->getId());
-                },
-            ))
-             */
-            ->add('bank', 'entity', array(
-                'required'    => true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\Bank',
-                'empty_value' => '---Choose a bank---',
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBkash',
+                'empty_value' => '---Choose a mobile banking---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
@@ -99,7 +84,6 @@ class AccountSalesType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 },
             ))
-
 
         ;
     }

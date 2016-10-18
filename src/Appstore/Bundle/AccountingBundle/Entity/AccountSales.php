@@ -4,11 +4,13 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**
  * AccountSales
  *
- * @ORM\Table()
+ * @ORM\Table(name="account_sales")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\AccountSalesRepository")
  */
 class AccountSales
@@ -34,17 +36,26 @@ class AccountSales
 
     protected $globalOption;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="accountSales" )
+     **/
+    private  $transactionMethod;
+
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="accountSales" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountSales" )
      **/
-    private  $accountHead;
+    private  $accountBank;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Transaction", mappedBy="accountSales" )
-     * @ORM\OrderBy({"id" = "DESC"})
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountSales" )
      **/
-    private  $transactions;
+    private  $accountCash;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="accountSales" )
+     **/
+    private  $accountBkash;
 
 
     /**
@@ -68,38 +79,14 @@ class AccountSales
      **/
     private  $approvedBy;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesReturn", inversedBy="accountSales" )
-     **/
-    private  $salesReturn;
-
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="accountSales" )
-     **/
-    private  $bank;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="paymentMethod", type="string", length=50, nullable=true)
+     * @ORM\Column(name="processHead", type="string", length=255, nullable = true)
      */
-    private $paymentMethod;
+    private $processHead;
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="toIncrease", type="string", length=255)
-     */
-    private $toIncrease;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="accountNo", type="string", length=255, nullable = true)
-     */
-    private $accountNo;
 
     /**
      * @var float
@@ -119,16 +106,24 @@ class AccountSales
     /**
      * @var float
      *
-     * @ORM\Column(name="dueAmount", type="float", nullable=true)
+     * @ORM\Column(name="balance", type="float", nullable=true)
      */
-    private $dueAmount;
+    private $balance = 0;
+
 
     /**
-     * @var float
+     * @var string
      *
-     * @ORM\Column(name="returnAmount", type="float", nullable=true)
+     * @ORM\Column(name="accountRefNo", type="string", length=50, nullable=true)
      */
-    private $returnAmount;
+    private $accountRefNo;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="code", type="integer",  nullable=true)
+     */
+    private $code;
 
 
 
@@ -160,6 +155,12 @@ class AccountSales
      */
     private $process;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remark", type="text",  nullable = true)
+     */
+    private $remark;
 
 
 
@@ -174,30 +175,7 @@ class AccountSales
     }
 
 
-    /**
-     * @return string
-     */
-    public function getPaymentMethod()
-    {
-        return $this->paymentMethod;
-    }
-
-    /**
-     * @param string $paymentMethod
-     * Cash
-     * Cheque
-     * Giftcard
-     * Bkash
-     * Payment Card
-     * Other
-     */
-    public function setPaymentMethod($paymentMethod)
-    {
-        $this->paymentMethod = $paymentMethod;
-    }
-
-
-    /**
+   /**
      * Set amount
      *
      * @param float $amount
@@ -272,38 +250,6 @@ class AccountSales
     /**
      * @return mixed
      */
-    public function getTransaction()
-    {
-        return $this->transaction;
-    }
-
-    /**
-     * @param mixed $transaction
-     */
-    public function setTransaction($transaction)
-    {
-        $this->transaction = $transaction;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBank()
-    {
-        return $this->bank;
-    }
-
-    /**
-     * @param mixed $bank
-     */
-    public function setBank($bank)
-    {
-        $this->bank = $bank;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -331,72 +277,6 @@ class AccountSales
     public function setReceiveDate($receiveDate)
     {
         $this->receiveDate = $receiveDate;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAccountSales()
-    {
-        return $this->AccountSales;
-    }
-
-    /**
-     * @param mixed $AccountSales
-     */
-    public function setAccountSales($AccountSales)
-    {
-        $this->AccountSales = $AccountSales;
-    }
-
-    /**
-     * @return string
-     * Debit
-     * Credit
-     */
-    public function getToIncrease()
-    {
-        return $this->toIncrease;
-    }
-
-    /**
-     * @param string $toIncrease
-     */
-    public function setToIncrease($toIncrease)
-    {
-        $this->toIncrease = $toIncrease;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAccountNo()
-    {
-        return $this->accountNo;
-    }
-
-    /**
-     * @param string $accountNo
-     */
-    public function setAccountNo($accountNo)
-    {
-        $this->accountNo = $accountNo;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAccountHead()
-    {
-        return $this->accountHead;
-    }
-
-    /**
-     * @param mixed $accountHead
-     */
-    public function setAccountHead($accountHead)
-    {
-        $this->accountHead = $accountHead;
     }
 
     /**
@@ -431,21 +311,6 @@ class AccountSales
         $this->sales = $sales;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getSalesReturn()
-    {
-        return $this->salesReturn;
-    }
-
-    /**
-     * @param mixed $salesReturn
-     */
-    public function setSalesReturn($salesReturn)
-    {
-        $this->salesReturn = $salesReturn;
-    }
 
     /**
      * @return string
@@ -487,6 +352,135 @@ class AccountSales
         return $this->totalAmount;
     }
 
+
+    /**
+     * @return GlobalOption
+     */
+    public function getGlobalOption()
+    {
+        return $this->globalOption;
+    }
+
+    /**
+     * @param GlobalOption $globalOption
+     */
+    public function setGlobalOption($globalOption)
+    {
+        $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountRefNo()
+    {
+        return $this->accountRefNo;
+    }
+
+    /**
+     * @param string $accountRefNo
+     */
+    public function setAccountRefNo($accountRefNo)
+    {
+        $this->accountRefNo = $accountRefNo;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param int $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * @return AccountBank
+     */
+    public function getAccountBank()
+    {
+        return $this->accountBank;
+    }
+
+    /**
+     * @param AccountBank $accountBank
+     */
+    public function setAccountBank($accountBank)
+    {
+        $this->accountBank = $accountBank;
+    }
+
+    /**
+     * @return AccountCash
+     */
+    public function getAccountCash()
+    {
+        return $this->accountCash;
+    }
+
+    /**
+     * @param AccountCash $accountCash
+     */
+    public function setAccountCash($accountCash)
+    {
+        $this->accountCash = $accountCash;
+    }
+
+    /**
+     * @return TransactionMethod
+     */
+    public function getTransactionMethod()
+    {
+        return $this->transactionMethod;
+    }
+
+    /**
+     * @param TransactionMethod $transactionMethod
+     */
+    public function setTransactionMethod($transactionMethod)
+    {
+        $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
+     * @return AccountBkash
+     */
+    public function getAccountBkash()
+    {
+        return $this->accountBkash;
+    }
+
+    /**
+     * @param AccountBkash $accountBkash
+     */
+    public function setAccountBkash($accountBkash)
+    {
+        $this->accountBkash = $accountBkash;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * @param float $balance
+     */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
+    }
+
     /**
      * @param float $totalAmount
      */
@@ -496,59 +490,35 @@ class AccountSales
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getDueAmount()
+    public function getProcessHead()
     {
-        return $this->dueAmount;
+        return $this->processHead;
     }
 
     /**
-     * @param float $dueAmount
+     * @param string $processHead
      */
-    public function setDueAmount($dueAmount)
+    public function setProcessHead($processHead)
     {
-        $this->dueAmount = $dueAmount;
+        $this->processHead = $processHead;
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getReturnAmount()
+    public function getRemark()
     {
-        return $this->returnAmount;
+        return $this->remark;
     }
 
     /**
-     * @param float $returnAmount
+     * @param string $remark
      */
-    public function setReturnAmount($returnAmount)
+    public function setRemark($remark)
     {
-        $this->returnAmount = $returnAmount;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getGlobalOption()
-    {
-        return $this->globalOption;
-    }
-
-    /**
-     * @param mixed $globalOption
-     */
-    public function setGlobalOption($globalOption)
-    {
-        $this->globalOption = $globalOption;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTransactions()
-    {
-        return $this->transactions;
+        $this->remark = $remark;
     }
 }
 

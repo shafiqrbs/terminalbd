@@ -256,6 +256,21 @@ class User extends BaseUser
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="createdBy" , cascade={"persist", "remove"} )
+     */
+    protected $accountJournal;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="toUser" , cascade={"persist", "remove"} )
+     */
+    protected $accountJournalToUser;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="approvedBy" , cascade={"persist", "remove"} )
+     */
+    protected $accountJournalApprove;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="createdBy" , cascade={"persist", "remove"} )
      */
     protected $accountPurchases;
@@ -310,20 +325,6 @@ class User extends BaseUser
      */
     protected $expenditureApprove;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", mappedBy="createdBy" , cascade={"persist", "remove"} )
-     */
-    protected $accountBanks;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", mappedBy="toUser" , cascade={"persist", "remove"} )
-     */
-    protected $bankToUser;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", mappedBy="approvedBy" , cascade={"persist", "remove"} )
-     */
-    protected $bankApprove;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PaymentSalary", mappedBy="createdBy" , cascade={"persist", "remove"} )

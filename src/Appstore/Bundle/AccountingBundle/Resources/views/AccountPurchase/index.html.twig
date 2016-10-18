@@ -30,7 +30,6 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="portlet box green tabbable">
-
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Account purchase</div>
                         <div class="actions">
@@ -49,23 +48,28 @@
 
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
-                            {% include('flash-message.html.twig')  %}
+                            {% include('flash-message.html.twig') %}
                             <div class="portlet search-portlet box grey">
                                 <form class="search-form" action="" method="get" name="itemSearch">
-                                    <div class="span7">
-                                        <div class="controls">
-                                            <input type="text" id="startDate" name="startDate"  class="span6 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start receive date{% endif %} ">
-                                            <input type="text" id="endDate" name="endDate"  class="span6 search-input date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End receive date{% endif %}  ">
+                                    <div class="row-fluid">
+                                        <div class="span2">
+                                            <input type="text" id="startDate" name="startDate"  class="span12 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start receive date{% endif %} ">
                                         </div>
-                                    </div>
-                                    <div class="span4 leftMargin">
-                                        <input type="text" id="vendor" name="vendor"  class="span11 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" >
-                                    </div>
-                                    <div class="span1">
-                                        <div class="btn-group">
-                                            <button class="btn" type="submit" >
-                                                <i class="icon-search"></i>&nbsp;Go</button>
+                                        <div class="span2">
+                                            <input type="text" id="endDate" name="endDate"  class="span12 search-input date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End receive date{% endif %}  ">
                                         </div>
+                                        <div class="span4">
+                                            <select name="transactionMethod" id="transactionMethod" class="select2 leftMargin span12">
+                                                <option value="" >--Select Transaction Method--</option>
+                                                {% for method in transactionMethods %}
+                                                    <option {% if searchForm.transactionMethod is defined and searchForm.transactionMethod == method.id %} selected="selected" {% endif %} value="{{ method.id }}" >{{ method.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" >
+                                        </div>
+                                        <div class="span1"><button class="btn blue" type="submit" ><i class="icon-search"></i></button></div>
                                     </div>
                                 </form>
                             </div>
@@ -74,19 +78,20 @@
                                 <thead class="flip-content ">
                                 <tr>
                                     <th class="numeric" colspan="4" style="text-align: right"><strong>Grand Total</strong></th>
-                                    <td class="numeric" ><strong>{{ overview.totalAmount|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ overview.amount|number_format }}</strong></td>
-                                    <td class="numeric" ><strong><strong>{{  (overview.totalAmount - overview.amount)|number_format }}</strong></strong></td>
+                                    <td class="numeric" ><strong>{{ overview.purchaseAmount|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ overview.payment|number_format }}</strong></td>
+                                    <td class="numeric" ><strong><strong>{{  (overview.purchaseAmount - overview.payment)|number_format }}</strong></strong></td>
                                     <td class="numeric" ></td>
                                 </tr>
                                 <tr class="head-grey">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Company Name</th>
+                                    <th class="numeric" >Purchase GRN</th>
+                                    <th class="numeric" >Ref no.</th>
+                                    <th class="numeric" >Transaction Method</th>
                                     <th class="numeric" >Purchase</th>
-                                    <th class="numeric" >Purchase Return</th>
-                                    <th class="numeric" >Total Amount</th>
                                     <th class="numeric" >Payment</th>
-                                    <th class="numeric" >Due</th>
+                                    <th class="numeric" >Balance</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -95,17 +100,18 @@
                                     <tr id="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.vendor.name }}</td>
-                                        <td class="numeric" >{% if  entity.purchase is not empty %}{{ entity.purchase.receiveDate|date('d-m-Y') }}/{{  entity.purchase.grn }}{% elseif  entity.purchase is empty and  entity.purchaseReturn is empty and entity.toIncrease == 'Debit'   %} Purchase Due Payment {% endif %}</td>
-                                        <td class="numeric" >{% if  entity.purchaseReturn is not empty %}{{ entity.purchaseReturn.updated|date('d-m-Y') }}/{{  entity.purchaseReturn.invoice }}{% elseif  entity.purchase is empty and  entity.purchaseReturn is empty and entity.toIncrease == 'Credit'   %} Purchase Return Cash Receive {% endif %}{% if  entity.purchaseReturn is not empty %}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
+                                        <td class="numeric" >{% if entity.purchase is not empty %}{{ entity.purchase.grn }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.accountRefNo }}</td>
+                                        <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.purchaseAmount|number_format }}</td>
                                         <td class="numeric" >
                                                 {% if entity.process == 'approved'  %}
-                                                    {{ entity.amount|number_format }}
+                                                    {{ entity.payment|number_format }}
                                                 {% else %}
-                                                    <a  class="editable" data-name="amount" href="#"  data-url="{{ path('account_purchase_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>
+                                                    <a  class="editable" data-name="amount" href="#"  data-url="{{ path('account_purchase_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.payment }}</a>
                                                 {% endif %}
                                         </td>
-                                        <td class="numeric" >{{ entity.dueAmount|number_format }}</td>
+                                        <td class="numeric" >{{ entity.balance|number_format }}</td>
                                         <td class="numeric" >
                                             {% if entity.process != 'approved'  %}
                                                 <a href="javascript:" id="" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('account_purchase_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
@@ -128,6 +134,11 @@
             </div>
         </div>
     </div>
+    <style>
+        .leftMargin {
+            margin-left: 0!important;
+        }
+    </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

@@ -42,25 +42,37 @@ class ExpenditureType extends AbstractType
                     new NotBlank(array('message'=>'Please add payment amount BDT'))
                 )))
             ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Remark...')))
-            ->add('bank', 'entity', array(
+            ->add('transactionMethod', 'entity', array(
                 'required'    => true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\Bank',
+                'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
+                'empty_value' => '---Choose a transaction method---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2 transactionMethod'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->orderBy("e.id");
+                }
+            ))
+            ->add('accountBank', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'empty_value' => '---Choose a bank---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('b')
-                        ->orderBy("b.name", "ASC");
-                },
+                'attr'=>array('class'=>'span12 select2'),
             ))
-            ->add('paymentMethod', 'choice', array(
-                'attr'=>array('class'=>'span12 select2 paymentMethod'),
-                'choices' => array(
-                    'Cash' => 'Cash',
-                    'Cheque' => 'Cheque',
-                ),
+
+            ->add('accountBkash', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBkash',
+                'empty_value' => '---Choose a bkash---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
             ))
-            ->add('accountNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'add your account no')))
+
             ->add('accountHead', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',

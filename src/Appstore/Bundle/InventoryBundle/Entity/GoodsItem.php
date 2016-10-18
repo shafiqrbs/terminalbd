@@ -29,7 +29,7 @@ class GoodsItem
     private  $purchaseVendorItem;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", inversedBy="goodsItem" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="goodsItem" )
      **/
     private  $orderItems;
 

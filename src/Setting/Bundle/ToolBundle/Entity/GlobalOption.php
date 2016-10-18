@@ -1,6 +1,9 @@
 <?php
 
 namespace Setting\Bundle\ToolBundle\Entity;
+use Appstore\Bundle\AccountingBundle\Entity\AccountBkash;
+use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\DomainUserBundle\Entity\DomainUser;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
@@ -44,6 +47,153 @@ class GlobalOption
 {
 
     /**
+     * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\User", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $users;
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\MediaBundle\Entity\PhotoGallery", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $photoGalleries;
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     * @ORM\OrderBy({"menu" = "ASC"})
+     */
+    protected $menus;
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MenuGrouping", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     */
+    protected $menuGroupings;
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $pages;
+   /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\MediaBundle\Entity\PageFile", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $pageFiles;
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $moduleCategories;
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Blackout", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $blackout;
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeSlider", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     * @ORM\OrderBy({"updated" = "DESC"})
+     **/
+    protected $homeSliders;
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\DomainUser", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $domainUser;
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $customers;
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="globalOptions" , cascade={"persist", "remove"} )
+     **/
+
+    protected $location;
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AdvertismentBundle\Entity\Advertisment", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     */
+    protected $advertisment;
+
+    /**/
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Transaction", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $transactions;
+   /**
+    * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="globalOption" , cascade={"persist", "remove"})
+    */
+   protected $accountCashes;
+    /**
+    * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="globalOption" , cascade={"persist", "remove"})
+    */
+   protected $accountJournal;
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $accountPurchase;
+
+   /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $accountPurchaseReturn;
+
+   /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $accountSales;
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $accountSalesReturn;
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PettyCash", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $pettyCash;
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $expenditure;
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $expenseCategory;
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $accountBank;
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $accountBkash;
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PaymentSalary", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $paymentSalary;
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\SalarySetting", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $salarySetting;
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceSmsEmail", mappedBy="globalOption" , cascade={"persist", "remove"})
+     * @ORM\OrderBy({"updated" = "DESC"})
+     */
+    protected $invoiceSmsEmails;
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceModule", mappedBy="globalOption" , cascade={"persist", "remove"})
+     * @ORM\OrderBy({"updated" = "DESC"})
+     */
+    protected $invoiceModules;
+    /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InstituteLevel", inversedBy="globalOptions" , cascade={"persist", "remove"})
+     */
+    protected $instituteLevels;
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PaymentMethod", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $paymentMethods;
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $ecommerceConfig;
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="mall" , cascade={"persist", "remove"})
+     */
+    protected $shops;
+
+    /* This part using for Appstore bundle under Accounting module */
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $mallConnects;
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -51,196 +201,92 @@ class GlobalOption
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\User", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $users;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\MediaBundle\Entity\PhotoGallery", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $photoGalleries;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     * @ORM\OrderBy({"menu" = "ASC"})
-     */
-    protected $menus;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MenuGrouping", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     */
-    protected $menuGroupings;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $pages;
-
-
-   /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\MediaBundle\Entity\PageFile", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $pageFiles;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $moduleCategories;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Blackout", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $blackout;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeSlider", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     * @ORM\OrderBy({"updated" = "DESC"})
-     **/
-    protected $homeSliders;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\DomainUser", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $domainUser;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     **/
-    protected $customers;
-
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="globalOptions" , cascade={"persist", "remove"} )
-     **/
-
-    protected $location;
-
-    /**/
-
     /**
      * @var string
      *
      * @ORM\Column(name="mobile", type="string", length=15, nullable = true )
      */
     private $mobile;
-
-
     /**
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=100, nullable = true )
      */
     private $email;
-
-
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MegaMenu", mappedBy="globalOptions" , cascade={"persist", "remove"} )
      **/
 
     private $megaMenu;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AdvertismentBundle\Entity\Advertisment", mappedBy="globalOption" , cascade={"persist", "remove"} )
-     */
-    protected $advertisment;
-
-
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255  , nullable=true )
      */
     private $name;
-
     /**
      * @Gedmo\Slug(fields={"name"})
      * @ORM\Column(length=255, unique=true)
      */
     private $slug;
-
     /**
      * @var string
      *
      * @ORM\Column(name="domain", type="string", length=255 , unique=true , nullable=true)
      */
     private $domain;
-
-
     /**
      * @var string
      *
      * @ORM\Column(name="subDomain", type="string", length=255 , unique=true, nullable=true)
      */
     private $subDomain;
-
     /**
      * @var boolean
      *
      * @ORM\Column(name="isMobile", type="boolean" , nullable=true)
      */
     private $isMobile;
-
-
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Syndicate", inversedBy="globalOption" , cascade={"persist", "remove"} )
      **/
 
     private $syndicate;
-
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\SiteSetting", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
 
     private $siteSetting;
-
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\AdsTool", mappedBy="globalOption" ,  cascade={"remove"} )
      **/
 
     private $adsTool;
-
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Homepage", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
 
     private $homePage;
-
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\ContactPage", mappedBy="globalOption" , cascade={"remove"})
      **/
 
     private $contactPage;
-
-
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TemplateCustomize", mappedBy="globalOption" , cascade={"remove"})
      **/
 
     private $templateCustomize;
-
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\MobileIcon", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
 
     private $mobileIcon;
-
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\FooterSetting", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
 
     private $footerSetting;
-
-    /* This part using for Appstore bundle under Accounting module */
-
-
     /**
      * @var boolean
      *
@@ -248,84 +294,73 @@ class GlobalOption
      */
     private $customizeDesign;
 
+    /* App store relation for application work this domain */
     /**
      * @var boolean
      *
      * @ORM\Column(name="facebookAds", type="boolean" , nullable=true)
      */
     private $facebookAds;
-
     /**
      * @var boolean
      *
      * @ORM\Column(name="facebookApps", type="boolean" , nullable=true)
      */
     private $facebookApps;
-
     /**
      * @var string
      *
      * @ORM\Column(name="facebookPageUrl", type="string", length=255 , nullable=true)
      */
     private $facebookPageUrl;
-
      /**
      * @var string
      *
      * @ORM\Column(name="twitterUrl", type="string", length=255 , nullable=true)
      */
     private $twitterUrl;
-
      /**
      * @var string
      *
      * @ORM\Column(name="googlePlus", type="string", length=255 , nullable=true)
      */
     private $googlePlus;
-
     /**
      * @var boolean
      *
      * @ORM\Column(name="promotion", type="boolean" , nullable=true)
      */
     private $promotion;
-
     /**
      * @var boolean
      *
      * @ORM\Column(name="googleAds", type="boolean" , nullable=true)
      */
     private $googleAds;
-
     /**
      * @var boolean
      *
      * @ORM\Column(name="smsIntegration", type="boolean" , nullable=true)
      */
     private $smsIntegration;
-
     /**
      * @var boolean
      *
      * @ORM\Column(name="emailIntegration", type="boolean" , nullable=true)
      */
     private $emailIntegration;
-
     /**
      * @var boolean
      *
      * @ORM\Column(name="isIntro", type="boolean" , nullable=true)
      */
     private $isIntro;
-
-
     /**
      * @var string
      *
      * @ORM\Column(name="callBackEmail", type="string", length=255 , nullable=true)
      */
     private $callBackEmail;
-
     /**
      * @var text
      *
@@ -333,13 +368,13 @@ class GlobalOption
      */
     private $callBackContent;
 
+    /*---------------------- Manage Domain Pricing-------------------------------------*/
     /**
      * @var boolean
      *
      * @ORM\Column(name="callBackNotify", type="boolean", nullable=true)
      */
     private $callBackNotify;
-
     /**
      * @var boolean
      *
@@ -347,6 +382,7 @@ class GlobalOption
      */
     private $primaryNumber = true;
 
+    /*---------------------- Manage Education Portal-------------------------------------*/
     /**
      * @var string
      *
@@ -354,13 +390,13 @@ class GlobalOption
      */
     private $leaveEmail;
 
+    /*========================= Ecommerce & Payment Method Integration ================================*/
     /**
      * @var string
      *
      * @ORM\Column(name="webMail", type="string", length=255 , nullable=true)
      */
     private $webMail;
-
     /**
      * @var text
      *
@@ -368,114 +404,18 @@ class GlobalOption
      */
     private $leaveContent;
 
-
+    /*===================================Mall Connect =====================================*/
     /**
      * @var integer
      *
      * @ORM\Column(name="status", type="smallint", nullable=true)
      */
     private $status = 0;
-
-    /* App store relation for application work this domain */
-
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
 
     private $inventoryConfig;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Transaction", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $transactions;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $accountPurchase;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $accountSales;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PettyCash", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $pettyCash;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $expenditure;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $expenseCategory;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $accountBank;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PaymentSalary", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $paymentSalary;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\SalarySetting", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $salarySetting;
-
-    /*---------------------- Manage Domain Pricing-------------------------------------*/
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceSmsEmail", mappedBy="globalOption" , cascade={"persist", "remove"})
-     * @ORM\OrderBy({"updated" = "DESC"})
-     */
-    protected $invoiceSmsEmails;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceModule", mappedBy="globalOption" , cascade={"persist", "remove"})
-     * @ORM\OrderBy({"updated" = "DESC"})
-     */
-    protected $invoiceModules;
-
-    /*---------------------- Manage Education Portal-------------------------------------*/
-    /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InstituteLevel", inversedBy="globalOptions" , cascade={"persist", "remove"})
-     */
-    protected $instituteLevels;
-
-    /*========================= Ecommerce & Payment Method Integration ================================*/
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PaymentMethod", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $paymentMethods;
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $ecommerceConfig;
-
-    /*===================================Mall Connect =====================================*/
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="mall" , cascade={"persist", "remove"})
-     */
-    protected $shops;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $mallConnects;
-
-
-
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
@@ -493,11 +433,19 @@ class GlobalOption
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSyndicate()
+    {
+        return $this->syndicate;
     }
 
     /**
@@ -509,13 +457,14 @@ class GlobalOption
     }
 
     /**
-     * @return mixed
+     * Get domain
+     *
+     * @return string
      */
-    public function getSyndicate()
+    public function getDomain()
     {
-        return $this->syndicate;
+        return $this->domain;
     }
-
 
     /**
      * Set domain
@@ -531,13 +480,13 @@ class GlobalOption
     }
 
     /**
-     * Get domain
+     * Get subDomain
      *
-     * @return string 
+     * @return string
      */
-    public function getDomain()
+    public function getSubDomain()
     {
-        return $this->domain;
+        return $this->subDomain;
     }
 
     /**
@@ -554,13 +503,13 @@ class GlobalOption
     }
 
     /**
-     * Get subDomain
+     * Get isMobile
      *
-     * @return string 
+     * @return boolean
      */
-    public function getSubDomain()
+    public function getIsMobile()
     {
-        return $this->subDomain;
+        return $this->isMobile;
     }
 
     /**
@@ -574,16 +523,6 @@ class GlobalOption
         $this->isMobile = $isMobile;
 
         return $this;
-    }
-
-    /**
-     * Get isMobile
-     *
-     * @return boolean 
-     */
-    public function getIsMobile()
-    {
-        return $this->isMobile;
     }
 
     /**
@@ -621,7 +560,15 @@ class GlobalOption
         return $this->webTheme;
     }
 
-
+    /**
+     * Get customizeDesign
+     *
+     * @return boolean
+     */
+    public function getCustomizeDesign()
+    {
+        return $this->customizeDesign;
+    }
 
     /**
      * Set customizeDesign
@@ -637,13 +584,13 @@ class GlobalOption
     }
 
     /**
-     * Get customizeDesign
+     * Get facebookAds
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getCustomizeDesign()
+    public function getFacebookAds()
     {
-        return $this->customizeDesign;
+        return $this->facebookAds;
     }
 
     /**
@@ -660,13 +607,13 @@ class GlobalOption
     }
 
     /**
-     * Get facebookAds
+     * Get facebookApps
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getFacebookAds()
+    public function getFacebookApps()
     {
-        return $this->facebookAds;
+        return $this->facebookApps;
     }
 
     /**
@@ -683,13 +630,13 @@ class GlobalOption
     }
 
     /**
-     * Get facebookApps
+     * Get facebookPageUrl
      *
-     * @return boolean 
+     * @return string
      */
-    public function getFacebookApps()
+    public function getFacebookPageUrl()
     {
-        return $this->facebookApps;
+        return $this->facebookPageUrl;
     }
 
     /**
@@ -706,13 +653,13 @@ class GlobalOption
     }
 
     /**
-     * Get facebookPageUrl
+     * Get promotion
      *
-     * @return string 
+     * @return boolean
      */
-    public function getFacebookPageUrl()
+    public function getPromotion()
     {
-        return $this->facebookPageUrl;
+        return $this->promotion;
     }
 
     /**
@@ -727,18 +674,6 @@ class GlobalOption
 
         return $this;
     }
-
-    /**
-     * Get promotion
-     *
-     * @return boolean 
-     */
-    public function getPromotion()
-    {
-        return $this->promotion;
-    }
-
-
 
     /**
      * @return smallint
@@ -1326,6 +1261,38 @@ class GlobalOption
     {
         return $this->pageFiles;
     }
+
+   /**
+    * @return AccountCash
+    */
+   public function getAccountCashes()
+   {
+    return $this->accountCashes;
+   }
+
+ /**
+  * @return AccountBkash
+  */
+ public function getAccountBkash()
+ {
+  return $this->accountBkash;
+ }
+
+ /**
+  * @return mixed
+  */
+ public function getAccountSalesReturn()
+ {
+  return $this->accountSalesReturn;
+ }
+
+ /**
+  * @return AccountPurchaseReturn
+  */
+ public function getAccountPurchaseReturn()
+ {
+  return $this->accountPurchaseReturn;
+ }
 
 
 }

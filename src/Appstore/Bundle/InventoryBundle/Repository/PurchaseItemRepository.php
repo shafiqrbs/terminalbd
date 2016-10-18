@@ -129,8 +129,6 @@ class PurchaseItemRepository extends EntityRepository
     }
 
 
-
-
     public function searchAutoComplete($item, InventoryConfig $inventory)
     {
 
@@ -167,8 +165,8 @@ class PurchaseItemRepository extends EntityRepository
         $data ='';
 
         foreach($result as $purchaseItem ) {
-            $strDate = strtotime($purchaseItem["receiveDate"]);
-            $received = date('d-m-Y',$strDate);
+            //$strDate = strtotime($purchaseItem["receiveDate"]);
+            $received = $purchaseItem["receiveDate"]->format('d-m-Y');
             $data .= '<tr>';
             $data .= '<td class="numeric" >'.$purchaseItem["barcode"].'</td>';
             $data .= '<td class="numeric" >'.$received.'/'.$purchaseItem["memo"] .'</td>';

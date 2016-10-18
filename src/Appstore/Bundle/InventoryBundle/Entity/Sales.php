@@ -2,8 +2,13 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
+use Appstore\Bundle\AccountingBundle\Entity\AccountBkash;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\Bank;
+use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
+
 /**
  * Sales
  *
@@ -33,6 +38,7 @@ class Sales
 
         /**
          * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", mappedBy="sales"  , cascade={"remove"} )
+         * @ORM\OrderBy({"id" = "DESC"})
          **/
         private  $salesItems;
 
@@ -69,7 +75,6 @@ class Sales
          **/
         private  $approvedBy;
 
-
         /**
          * @var string
          *
@@ -78,9 +83,26 @@ class Sales
         private $paymentMethod='Cash';
 
         /**
+         * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="sales" )
+         **/
+        private  $transactionMethod;
+
+        /**
          * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="sales" )
          **/
         private  $bank;
+
+        /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="sales" )
+         **/
+        private  $accountBank;
+
+
+        /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="sales" )
+         **/
+        private  $accountBkash;
+
 
         /**
          * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\paymentCard", inversedBy="sales" )
@@ -93,6 +115,20 @@ class Sales
          * @ORM\Column(name="chequeCardNo", type="string", length=100, nullable=true)
          */
         private $chequeCardNo;
+
+        /**
+         * @var string
+         *
+         * @ORM\Column(name="bkashMobile", type="string", length=50, nullable=true)
+         */
+        private $bkashMobile;
+
+        /**
+         * @var string
+         *
+         * @ORM\Column(name="bkashTransactionId", type="string", length=100, nullable=true)
+         */
+        private $bkashTransactionId;
 
         /**
          * @var string
@@ -463,7 +499,7 @@ class Sales
         }
 
         /**
-         * @return mixed
+         * @return Bank
          */
         public function getBank()
         {
@@ -471,7 +507,7 @@ class Sales
         }
 
         /**
-         * @param mixed $bank
+         * @param Bank $bank
          */
         public function setBank($bank)
         {
@@ -646,6 +682,86 @@ class Sales
         public function setApprovedBy($approvedBy)
         {
                 $this->approvedBy = $approvedBy;
+        }
+
+        /**
+         * @return AccountBank
+         */
+        public function getAccountBank()
+        {
+                return $this->accountBank;
+        }
+
+        /**
+         * @param AccountBank $accountBank
+         */
+        public function setAccountBank($accountBank)
+        {
+                $this->accountBank = $accountBank;
+        }
+
+        /**
+         * @return TransactionMethod
+         */
+        public function getTransactionMethod()
+        {
+                return $this->transactionMethod;
+        }
+
+        /**
+         * @param TransactionMethod $transactionMethod
+         */
+        public function setTransactionMethod($transactionMethod)
+        {
+                $this->transactionMethod = $transactionMethod;
+        }
+
+        /**
+         * @return AccountBkash
+         */
+        public function getAccountBkash()
+        {
+                return $this->accountBkash;
+        }
+
+        /**
+         * @param AccountBkash $accountBkash
+         */
+        public function setAccountBkash($accountBkash)
+        {
+                $this->accountBkash = $accountBkash;
+        }
+
+        /**
+         * @return string
+         */
+        public function getBkashMobile()
+        {
+                return $this->bkashMobile;
+        }
+
+        /**
+         * @param string $bkashMobile
+         */
+        public function setBkashMobile($bkashMobile)
+        {
+                $this->bkashMobile = $bkashMobile;
+        }
+
+        /**
+         * @return string
+         */
+        public function getBkashTransactionId()
+        {
+                return $this->bkashTransactionId;
+        }
+
+        /**
+         * @param string $bkashTransactionId
+         */
+        public function setBkashTransactionId($bkashTransactionId)
+        {
+                $this->bkashTransactionId = $bkashTransactionId;
         }
 
 

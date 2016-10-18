@@ -1,0 +1,158 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Account of Bank Cash
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="#">Account of Bank Cash</a>
+                    </li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Account Bank Cash</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <i class="icon-cogs"></i>&nbsp;Tools
+                                    <i class="icon-tasks"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="{{ path('account_transaction_cash') }}"><i class="icon-plus-sign"></i>&nbsp;Account of Cash</a></li>
+                                    <li><a href="{{ path('account_transaction_bank') }}"><i class="icon-th-list"></i>&nbsp;Account of Bank</a></li>
+                                    <li><a href="{{ path('account_transaction_bkash') }}"><i class="icon-th-list"></i>&nbsp;Account of bKash</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="portlet-body">
+                        <div class="portlet-body flip-scroll">
+                            {% include('flash-message.html.twig') %}
+                            <div class="portlet search-portlet box grey">
+                                <form class="search-form" action="" method="get" name="itemSearch">
+                                    <div class="row-fluid">
+                                        <div class="span3">
+                                            <input type="text" id="accountRefNo" name="accountRefNo"  class="span12 search-input  " value="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% else %}Enter Ref No{% endif %} ">
+                                        </div>
+                                        <div class="span2">
+                                            <input type="text" id="tillDate" name="tillDate"  class="span12 search-input  date-picker" value="{% if searchForm.tillDate is defined %}{{ searchForm.tillDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.tillDate is defined %}{{ searchForm.tillDate }}{% else %}Enter Till Date{% endif %} ">
+
+                                        </div>
+                                        <div class="span3">
+                                            <select name="accountBank" id="accountBank" class="select2 span12 leftMargin">
+                                                <option value="" >--Select Bank Account--</option>
+                                                {% for account in accountBanks %}
+                                                    <option {% if searchForm.accountBank is defined and searchForm.accountBank == account.id %} selected="selected" {% endif %} value="{{ account.id }}" >{{ account.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="span3">
+                                            <select name="processHead" id="processHead" class="leftMargin select2 span12">
+                                                <option value="" >--Select Process--</option>
+                                                {% for process in processHeads %}
+                                                    <option {% if searchForm.processHead is defined and searchForm.processHead == process.slug %} selected="selected" {% endif %} value="{{ process.slug }}" >{{ process.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="span1">
+                                            <button class="btn blue" type="submit" ><i class="icon-search"></i></button>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                <thead class="flip-content ">
+                                <tr>
+                                    <th class="numeric" colspan="5" style="text-align: right"><strong>Grand Total</strong></th>
+                                    <td class="numeric" ><strong>{{ overview.debit|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ overview.credit|number_format }}</strong></td>
+                                    <td class="numeric" ><strong><strong>{{  (overview.debit - overview.credit)|number_format }}</strong></strong></td>
+                                </tr>
+                                <tr class="head-grey">
+                                    <th class="numeric" >Created</th>
+                                    <th class="numeric" >Bank</th>
+                                    <th class="numeric" >Account Head</th>
+                                    <th class="numeric" >Process</th>
+                                    <th class="numeric" >Ref no.</th>
+                                    <th class="numeric" >Debit</th>
+                                    <th class="numeric" >Credit</th>
+                                    <th class="numeric" >Balance</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for entity in entities %}
+                                    <tr id="remove-{{ entity.id }}">
+                                        <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{% if entity.accountBank is not empty %}{{ entity.accountBank.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.accountHead is not empty %}{{ entity.accountHead.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.processHead }}</td>
+                                        <td class="numeric" >{{ entity.accountRefNo }}</td>
+                                        <td class="numeric" >{{ entity.debit|number_format }}</td>
+                                        <td class="numeric" >{{ entity.credit|number_format }}</td>
+                                        <td class="numeric" >{{ entity.balance|number_format }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="pagination pull-center"  >
+                                {{ knp_pagination_render(entities) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <style>
+        .leftMargin {
+            margin-left: 0!important;
+        }
+    </style>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@AccountingBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@AccountingBundle/Resources/public/js/editable.js'
+    '@AccountingBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    EditableInit();
+    AccountingApproveProcess();
+{% endblock %}
+
+
+

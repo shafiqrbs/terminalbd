@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -34,17 +35,16 @@ class PurchaseReturn
      **/
     private  $vendor;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseReturnItem", mappedBy="purchaseReturn" , cascade={"remove"}    )
      **/
     private  $purchaseReturnItems;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="purchaseReturn" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn", mappedBy="purchaseReturn" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
-    private  $accountPurchase;
+    private  $accountPurchaseReturn;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="purchaseReturn" )
@@ -83,6 +83,13 @@ class PurchaseReturn
      * @ORM\Column(name="code", type="string", length=100, nullable=true)
      */
     private $code;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="adjustmentInvoice", type="string", length=100, nullable=true)
+     */
+    private $adjustmentInvoice;
 
     /**
      * @var string
@@ -327,12 +334,29 @@ class PurchaseReturn
         $this->invoice = $invoice;
     }
 
+
     /**
-     * @return mixed
+     * @return AccountPurchaseReturn
      */
-    public function getAccountPurchase()
+    public function getAccountPurchaseReturn()
     {
-        return $this->accountPurchase;
+        return $this->accountPurchaseReturn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdjustmentInvoice()
+    {
+        return $this->adjustmentInvoice;
+    }
+
+    /**
+     * @param string $adjustmentInvoice
+     */
+    public function setAdjustmentInvoice($adjustmentInvoice)
+    {
+        $this->adjustmentInvoice = $adjustmentInvoice;
     }
 
 

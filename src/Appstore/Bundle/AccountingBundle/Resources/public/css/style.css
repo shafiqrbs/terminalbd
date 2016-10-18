@@ -5,6 +5,9 @@
 .cashPayment{
     display: none;
 }
+.bankHide , .bkashHide{
+    display: none;
+}
 .form .control-group .controls ul{
     margin-left: 0;
     margin-top: -10px;
@@ -49,12 +52,8 @@
     margin-left: 0!important;
 }
 
-.leftMargin{
-    margin-left: -23px!important;
-}
-
-.left-margin{
-    margin-left: -23px!important;
+.leftMargin {
+    margin-left: 0!important;
 }
 .popover .popover-title {
     padding: 10px;

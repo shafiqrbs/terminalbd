@@ -113,9 +113,9 @@ class PurchaseVendorItem
     private  $tag;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="purchaseVendorItems" )
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="purchaseVendorItem" )
      **/
-    private  $promotions;
+    private  $promotion;
 
     /**
      * @var string
@@ -948,22 +948,6 @@ class PurchaseVendorItem
     }
 
     /**
-     * @return mixed
-     */
-    public function getPromotions()
-    {
-        return $this->promotions;
-    }
-
-    /**
-     * @param mixed $promotions
-     */
-    public function setPromotions($promotions)
-    {
-        $this->promotions = $promotions;
-    }
-
-    /**
      * @return Discount
      */
     public function getDiscount()
@@ -1025,6 +1009,22 @@ class PurchaseVendorItem
     public function setDiscountPrice($discountPrice)
     {
         $this->discountPrice = $discountPrice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPromotion()
+    {
+        return $this->promotion;
+    }
+
+    /**
+     * @param mixed $promotion
+     */
+    public function setPromotion($promotion)
+    {
+        $this->promotion = $promotion;
     }
 
 

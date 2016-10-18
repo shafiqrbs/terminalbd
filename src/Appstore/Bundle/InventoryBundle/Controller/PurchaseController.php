@@ -253,8 +253,9 @@ class PurchaseController extends Controller
 
         $em->getRepository('InventoryBundle:Item')->getItemUpdatePriceQnt($purchase);
         $em->getRepository('InventoryBundle:StockItem')->insertPurchaseStockItem($purchase);
-        $em->getRepository('AccountingBundle:Transaction')->purchaseTransaction($purchase,$purchase->getInventoryConfig(),'Purchase');
-        $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($purchase,$purchase->getInventoryConfig());
+        $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($purchase,$purchase->getInventoryConfig());
+        //$accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->find(35);
+        $em->getRepository('AccountingBundle:Transaction')->purchaseTransaction($purchase,$accountPurchase,'Purchase');
         return new Response(json_encode(array('success'=>'success')));
 
     }

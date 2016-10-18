@@ -112,8 +112,8 @@
                                             <thead class="flip-content ">
                                             <tr class="head-green">
                                                 <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
-                                                <th class="numeric" >Item</th>
-                                                <th class="numeric" >Item Code</th>
+                                                {#<th class="numeric" >Item</th>#}
+                                                <th class="numeric" >Barcode</th>
                                                 <th class="numeric" >Qnt</th>
                                                 <th class="numeric" >Purchase price</th>
                                                 <th class="numeric" >Sales price</th>
@@ -129,13 +129,13 @@
                                                 {% for salesItem in entity.salesItems %}
                                                     <tr>
                                                         <td class="numeric" >{{ loop.index }}</td>
-                                                        <td class="numeric" >{{ salesItem.item.name }}</td>
-                                                        <td class="numeric" >{{ salesItem.item.vendor.vendorCode }}-{{ salesItem.item.code }}</td>
+                        {#                                <td class="numeric" >{{ salesItem.item.name }}</td>#}
+                                                        <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
                                                         <td class="numeric" ><input type="hidden" name="salesQuantity" id="salesQuantity-{{ salesItem.id }}" value="{{ salesItem.quantity }}">{{ salesItem.quantity }}</td>
                                                         <td class="numeric" >{{ salesItem.purchaseItem.purchasePrice|number_format() }}</td>
                                                         <td class="numeric" ><input type="hidden" name="salesPrice" id="salesPrice-{{ salesItem.id }}" value="{{ salesItem.salesPrice }}">{{ salesItem.salesPrice|default|number_format() }}</td>
                                                         <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
-                                                        {% if( salesItem.salesReturnItem is not empty) %}
+                                                        {% if( salesItem.salesReturnItem is defined and salesItem.salesReturnItem is not empty) %}
                                                             <td class="numeric" >{{ salesItem.salesReturnItem.quantity }}</td>
                                                             <td class="numeric" >{{ salesItem.salesReturnItem.price }}</td>
                                                         {% else %}
@@ -144,14 +144,14 @@
                                                         {% endif %}
 
                                                         <td class="numeric" >
-                                                            {% if( salesItem.salesReturnItem is not empty) %}
+                                                            {% if( salesItem.salesReturnItem is defined and salesItem.salesReturnItem is not empty) %}
                                                             <input type="hidden" name="salesReturnId" id="salesReturn-{{ salesItem.id }}" value="{{ entity.id }}"><span id="returnSubTotal-{{ salesItem.id }}">{{ salesItem.salesReturnItem.subTotal|number_format() }}</span>
                                                             {% else %}
                                                             <span id="returnSubTotal-{{ salesItem.id }}"></span>
                                                             {% endif %}
                                                         </td>
                                                         <td class="numeric" id="action-{{ salesItem.id }}">
-                                                            {% if( salesItem.salesReturnItem is not empty) %}
+                                                            {% if( salesItem.salesReturnItem is defined and salesItem.salesReturnItem is not empty) %}
                                                                 <button title="" disabled="disabled" type="button"  class="btn purple mini returnItem" >&nbsp;Returned</button>
                                                                 <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_salesreturn_item_delete', { 'id': salesItem.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i>&nbsp;Cancel</a>
                                                             {% else %}

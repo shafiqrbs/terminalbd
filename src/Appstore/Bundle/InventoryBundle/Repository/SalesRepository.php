@@ -93,10 +93,9 @@ class SalesRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findBySalesReturn($inventory, $barcode ='',$saleId = 0)
+    public function findBySalesReturn($saleId = 0)
     {
 
-        //echo $saleId;
         return $query = $this->findOneBy(array('invoice'=>$saleId));
         exit;
         echo $query->getId();

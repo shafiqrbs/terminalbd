@@ -6,4 +6,20 @@ account_transaction_show:
     path:     /{id}/show
     defaults: { _controller: "AccountingBundle:Transaction:show" }
 
+account_transaction_cash_overview:
+    path:     /cash-overview
+    defaults: { _controller: "AccountingBundle:Transaction:transactionCashOverview" }
+
+account_transaction_cash:
+    path:     /hand-cash
+    defaults: { _controller: "AccountingBundle:Transaction:cash" }
+
+account_transaction_bank:
+    path:     /bank-cash
+    defaults: { _controller: "AccountingBundle:Transaction:bank" }
+
+account_transaction_bkash:
+    path:     /bkash-cash
+    defaults: { _controller: "AccountingBundle:Transaction:bkash" }
+
 

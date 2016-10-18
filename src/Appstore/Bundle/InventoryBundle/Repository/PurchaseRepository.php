@@ -33,15 +33,15 @@ class PurchaseRepository extends EntityRepository
             $qb->setParameter('memo', $memo);
         }
         if (!empty($grn)) {
-            $qb->andWhere("purchase.grn = :grn");
-            $qb->setParameter('grn', $grn);
+            $qb->andWhere("purchase.grn LIKE :grn");
+            $qb->setParameter('grn', $grn.'%');
         }
         if (!empty($vendor)) {
             $qb->join('purchase.vendor', 'v');
             $qb->andWhere("v.companyName = :companyName");
             $qb->setParameter('companyName', $vendor);
         }
-        $qb->orderBy('purchase.grn','DESC');
+        $qb->orderBy('purchase.updated','DESC');
         $qb->getQuery();
         return  $qb;
 
@@ -75,8 +75,8 @@ class PurchaseRepository extends EntityRepository
             $qb->setParameter('memo', $memo);
         }
         if (!empty($grn)) {
-            $qb->andWhere("purchase.grn = :grn");
-            $qb->setParameter('grn', $grn);
+            $qb->andWhere("purchase.grn LIKE :grn");
+            $qb->setParameter('grn', $grn.'%');
         }
         if (!empty($vendor)) {
             $qb->join('purchase.vendor', 'v');

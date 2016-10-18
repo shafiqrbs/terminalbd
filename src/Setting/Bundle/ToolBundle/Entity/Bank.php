@@ -2,6 +2,8 @@
 
 namespace Setting\Bundle\ToolBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
+use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,24 +29,9 @@ class Bank
     protected $portalBankAccount;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="bank")
-     */
-    protected $sales;
-
-    /**
      * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\Profile", mappedBy="bank")
      */
     protected $profile;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="bank")
-     */
-    protected $accountPurchases;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="bank")
-     */
-    protected $accountSales;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", mappedBy="bank")
@@ -52,19 +39,14 @@ class Bank
     protected $accountBanks;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="bank")
-     */
-    protected $expenditures;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PaymentSalary", mappedBy="bank")
      */
     protected $paymentSalaries;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\BankAccount", mappedBy="bank")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="bank")
      */
-    protected $bankAccount;
+    protected $sales;
 
 
     /**
@@ -109,13 +91,6 @@ class Bank
         return $this->name;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getSales()
-    {
-        return $this->sales;
-    }
 
     /**
      * @return mixed
@@ -125,13 +100,6 @@ class Bank
         return $this->accountBanks;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getExpenditures()
-    {
-        return $this->expenditures;
-    }
 
     /**
      * @return mixed
@@ -139,6 +107,22 @@ class Bank
     public function getPortalBankAccount()
     {
         return $this->portalBankAccount;
+    }
+
+    /**
+     * @return Sales
+     */
+    public function getSales()
+    {
+        return $this->sales;
+    }
+
+    /**
+     * @return PaymentSalary
+     */
+    public function getPaymentSalaries()
+    {
+        return $this->paymentSalaries;
     }
 }
 

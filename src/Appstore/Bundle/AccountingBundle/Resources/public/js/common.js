@@ -2,21 +2,29 @@ function CommonJs(){
 
 
     $( ".date-picker" ).datepicker({
-        dateFormat: "yy-mm-dd"
+        dateFormat: "yy-mm"
     });
     // Getter
     var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
 
     // Setter
-    $( ".date-picker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+    $( ".date-picker" ).datepicker( "option", "dateFormat", "yy-mm" );
 
-    $(document).on('change', '.paymentMethod', function() {
+    // Setter
+    $( ".date-picker-month" ).datepicker( "option", "dateFormat", "mm-YY" );
 
-        var paymentMethod = $(this).val();
-        if(paymentMethod == 'Cheque'){
-            $('.hide').show();
+    $(document).on('change', '.transactionMethod', function() {
+
+        var transactionMethod = $(this).val();
+        if(transactionMethod == 2 ){
+            $('.bankHide').show();
+            $('.bkashHide').hide();
+        }else if(transactionMethod == 3 ){
+            $('.bankHide').hide();
+            $('.bkashHide').show();
         }else{
-            $('.hide').hide();
+            $('.bankHide').hide();
+            $('.bkashHide').hide();
         }
 
     })

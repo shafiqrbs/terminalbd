@@ -39,9 +39,9 @@ class SalesItem
     private  $purchaseItem;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesReturnItem", mappedBy="salesItem" )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesReturnItem", mappedBy="salesItem" )
      **/
-    private  $salesReturnItems;
+    private  $salesReturnItem;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="salesItems" )
@@ -264,11 +264,11 @@ class SalesItem
     }
 
     /**
-     * @return mixed
+     * @return SalesItem
      */
-    public function getSalesReturnItems()
+    public function getSalesReturnItem()
     {
-        return $this->salesReturnItems;
+        return $this->salesReturnItem;
     }
 
 

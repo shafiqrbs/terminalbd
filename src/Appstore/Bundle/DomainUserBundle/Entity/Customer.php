@@ -33,6 +33,14 @@ class Customer
      **/
     private  $accountSales;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn", mappedBy="customer" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $accountSalesReturn;
+
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerInbox", mappedBy="customer")
      **/
@@ -378,11 +386,10 @@ class Customer
     /**
      * @return mixed
      */
-    public function getCustomerInboxs()
+    public function getAccountSalesReturn()
     {
-        return $this->customerInboxs;
+        return $this->accountSalesReturn;
     }
-
 
 }
 

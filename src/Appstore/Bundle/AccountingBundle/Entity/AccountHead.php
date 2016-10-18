@@ -33,41 +33,36 @@ class AccountHead
      **/
     private $children;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="accountHead" )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $accountPurchases;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="accountHead" )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $accountSales;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PettyCash", mappedBy="accountHead" )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $pettyCash;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="accountHead" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
-    private  $expenditure;
+    private  $expendituries;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", mappedBy="accountHead" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountHead" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
-    private  $accountBank;
+    private  $accountCashes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="accountHeadDebit" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $accountJournalDebits;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="accountHeadCredit" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $accountJournalCredits;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PaymentSalary", mappedBy="accountHead" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
-    private  $paymentSalary;
+    private  $paymentSalaries;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Transaction", mappedBy="accountHead" )
@@ -111,7 +106,6 @@ class AccountHead
      * @ORM\Column(name="status", type="boolean")
      */
     private $status = true;
-
 
 
     /**
@@ -275,6 +269,46 @@ class AccountHead
     public function getAccountSales()
     {
         return $this->accountSales;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountCashes()
+    {
+        return $this->accountCashes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountJournalDebits()
+    {
+        return $this->accountJournalDebits;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountJournalCredits()
+    {
+        return $this->accountJournalCredits;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentSalaries()
+    {
+        return $this->paymentSalaries;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExpendituries()
+    {
+        return $this->expendituries;
     }
 
 }

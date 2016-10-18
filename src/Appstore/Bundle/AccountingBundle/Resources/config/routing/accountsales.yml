@@ -2,6 +2,10 @@ account_sales:
     path:     /
     defaults: { _controller: "AccountingBundle:AccountSales:index" }
 
+account_sales_return:
+    path:     /return
+    defaults: { _controller: "AccountingBundle:AccountSales:salesReturn" }
+
 account_sales_show:
     path:     /{id}/show
     defaults: { _controller: "AccountingBundle:AccountSales:show" }

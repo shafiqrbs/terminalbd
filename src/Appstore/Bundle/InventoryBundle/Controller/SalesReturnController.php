@@ -38,11 +38,10 @@ class SalesReturnController extends Controller
      */
     public function searchAction(Request $request)
     {
-        $barcode = $request->request->get('barcode');
-        $salesId = $request->request->get('salesId');
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBySalesReturn($inventory,$barcode,$salesId);
-
+        $invoiceDate = $request->request->get('invoiceDate');
+        $invoice = date('Ymd',strtotime($invoiceDate));
+        $salesId = $invoice.''.$request->request->get('salesId');
+        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBySalesReturn($salesId);
         if(!empty($sales)){
             $em = $this->getDoctrine()->getManager();
             $entity = new SalesReturn();
@@ -135,8 +134,8 @@ class SalesReturnController extends Controller
             $this->getDoctrine()->getRepository('InventoryBundle:SalesReturn')->updateSalesReturn($entity);
             $em->getRepository('InventoryBundle:Item')->getItemSalesReturnUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesReturnStockItem($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesReturnTransaction($entity,$entity->getInventoryConfig(),'SalesReturn');
-            $em->getRepository('AccountingBundle:AccountSales')->insertAccountSalesReturn($entity);
+            $accountSalesReturn = $em->getRepository('AccountingBundle:AccountSalesReturn')->insertAccountSalesReturn($entity);
+            $em->getRepository('AccountingBundle:Transaction')->salesReturnTransaction($entity,$accountSalesReturn);
             return $this->redirect($this->generateUrl('inventory_salesreturn_edit', array('id' => $entity->getId())));
         }
 
@@ -180,6 +179,23 @@ class SalesReturnController extends Controller
 
         exit;
 
+
+    }
+
+    /**
+     * Deletes a SalesReturnItem entity.
+     *
+     */
+    public function deleteAction(SalesReturn $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Sales Return entity.');
+        }
+        $em->remove($entity);
+        $em->flush();
+        return new Response(json_encode(array('success'=>'success','message'=>'Cancel done')));
+        exit;
 
     }
 

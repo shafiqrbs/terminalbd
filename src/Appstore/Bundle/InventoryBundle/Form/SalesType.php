@@ -33,21 +33,25 @@ class SalesType extends AbstractType
     {
         $builder
 
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add your customer mobile no','data-original-title'=>'Please start typing code/name for suggestions or just scan barcode','autocomplete'=>'off'),
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add your customer mobile no','data-original-title'=>'Please start typing code/name for suggestions or just scan barcode','autocomplete'=>'off'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')))
             ))
-            ->add('paymentMethod', 'choice', array(
+            ->add('transactionMethod', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
+                'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
-                'choices' => array(
-                    'Cash' => 'Cash',
-                    'Cheque' => 'Cheque',
-                    'Gift card' => 'Gift card',
-                    'Bkash' => 'Bkash',
-                    'Payment Card' => 'Payment Card',
-                    'Other' => 'Other'
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
                 ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->orderBy("e.id","ASC");
+                }
             ))
+
         ;
 
     }

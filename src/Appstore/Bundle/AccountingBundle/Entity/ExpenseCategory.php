@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * ExpenseCategory
@@ -33,7 +34,7 @@ class ExpenseCategory
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="expenseCategory" )
      **/
-    private  $expenditures;
+    private  $expendituries;
 
 
     /**
@@ -387,11 +388,19 @@ class ExpenseCategory
     }
 
     /**
-     * @param mixed $globalOption
+     * @param GlobalOption $globalOption
      */
     public function setGlobalOption($globalOption)
     {
         $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return Expenditure
+     */
+    public function getExpendituries()
+    {
+        return $this->expendituries;
     }
 }
 

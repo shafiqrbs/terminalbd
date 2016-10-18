@@ -58,24 +58,55 @@
                                                         </div>#}
                             <div class="cashPayment box">
                                 <form class="search-form" action="" method="" name="itemSearch">
-                                    <div class="span12 pull-right">
-                                        <select id="accountHead" name="accountHead" class="span3 select2">
-                                            <option value="Cash">--Select account head--</option>
-                                            {% for account in accountHead %}
-                                                <option value="{{ account.id }}">{{ account.name }}</option>
-                                            {% endfor %}
-
-                                        </select>
-                                        <input type="text" id="remark" name="remark"  class=" span6 m-wrap"   placeholder="Remark...">
-                                        <div class="input-append">
-                                            <input  class="" type="hidden" name="parent" id="parent" value="">
-                                            <input  class="" type="hidden" name="parentAmount" id="parentAmount" value="">
-                                            <input  class="" type="hidden" name="receivedAmount" id="receivedAmount" value="">
-                                            <input class="m-wrap small numeric" type="text" name="amount" id="amount" placeholder="amount">
-                                            <div class="btn-group"><button id="payment-button" type="button" class="btn green" >Submit</button></div>
+                                    <div class="row-fluid">
+                                        <div class="span6">
+                                            <div class="row-fluid">
+                                                <div class="span12"><input type="text" id="remark" name="remark"  class=" span12 m-wrap"   placeholder="Remark..."></div>
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="row-fluid">
+                                                <div class="span12">
+                                                    <select id="transactionMethod" name="transactionMethod" class="transactionMethod span12 m-wrap">
+                                                        {% for method in transactionMethods %}
+                                                        <option value="{{ method.id }}">{{ method.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid bankHide">
+                                                <div class="span12">
+                                                    <select id="accountBank" name="accountBank" class="span12 m-wrap">
+                                                        {% for bank in accountBanks %}
+                                                            <option value="{{ bank.id }}">{{ bank.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid bkashHide">
+                                                <div class="span12">
+                                                      <select id="accountBkash" name="accountBkash" class="span12 m-wrap">
+                                                        {% for bkash in accountBkash %}
+                                                            <option value="{{ bkash.id }}">{{ bkash.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="row-fluid">
+                                                <div class="span12 pull-right">
+                                                    <div class="input-append">
+                                                        <input  class="" type="hidden" name="parent" id="parent" value="">
+                                                        <input  class="" type="hidden" name="parentAmount" id="parentAmount" value="">
+                                                        <input  class="" type="hidden" name="receivedAmount" id="receivedAmount" value="">
+                                                        <input class="m-wrap small numeric" type="text" name="amount" id="amount" placeholder="amount">
+                                                        <div class="btn-group"><button id="payment-button" type="button" class="btn green" >Received</button></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-
                                 </form>
                                 <div class="clearfix"></div>
                             </div>
@@ -87,10 +118,9 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >From user</th>
                                     <th class="numeric" >To user</th>
-                                    <th class="numeric" >Account head</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Received</th>
-                                    <th class="numeric" >Due</th>
+                                    <th class="numeric" >Balance</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -101,7 +131,6 @@
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.toUser is not empty %}{{ entity.toUser }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.accountHead.name }}</td>
                                         <td class="numeric" >
                                             {% if entity.process == 'approved'  %}
                                                 {{ entity.amount|number_format }}
@@ -131,9 +160,9 @@
                                                     <thead class="flip-content ">
                                                     <tr class="head-grey">
                                                         <th class="numeric" >Created</th>
-                                                        <th class="numeric" >From user</th>
-                                                        <th class="numeric" >To user</th>
-                                                        <th class="numeric" >Account head</th>
+                                                        <th class="numeric" >Trans. Method</th>
+                                                        <th class="numeric" >Received Account</th>
+                                                        <th class="numeric" >Remark</th>
                                                         <th class="numeric" >Amount</th>
                                                     </tr>
                                                     </thead>
@@ -141,9 +170,15 @@
                                                     {% for subPayment in entity.children %}
                                                         <tr class="remove-{{ subPayment.id }}">
                                                             <td class="numeric" >{{ subPayment.updated|date('d-m-Y') }}</td>
-                                                            <td class="numeric" >{% if subPayment.createdBy is not empty %}{{ subPayment.createdBy }}{% endif %}</td>
-                                                            <td class="numeric" >{% if subPayment.toUser is not empty %}{{ subPayment.toUser }}{% endif %}</td>
-                                                            <td class="numeric" >{% if subPayment.accountHead %}{{ subPayment.accountHead.name }}{% endif %}</td>
+                                                            <td class="numeric" >{% if subPayment.transactionMethod %}{{ subPayment.transactionMethod.name }}{% endif %}</td>
+                                                            <td class="numeric" >
+                                                                {% if subPayment.transactionMethod.id == 2 %}
+                                                                    {{ subPayment.accountBank.name }}
+                                                                {% elseif subPayment.transactionMethod.id == 3 %}
+                                                                    {{ subPayment.accountBkash.name }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td class="numeric" >{{ subPayment.remark|raw }}</td>
                                                             <td class="numeric" >{{ subPayment.amount|number_format }}</td>
                                                         </tr>
                                                     {% endfor %}
@@ -178,7 +213,9 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@AccountingBundle/Resources/public/js/pettycash.js' %}
+    '@AccountingBundle/Resources/public/js/common.js'
+    '@AccountingBundle/Resources/public/js/pettycash.js'
+    %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}

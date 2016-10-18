@@ -31,10 +31,9 @@ class PaymentSalaryType extends AbstractType
             ->add('paidAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Pay amount')))
             ->add('otherAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Other amount')))
             ->add('totalAmount','hidden')
-            ->add('sendBank')
             ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Remark')))
             ->add('salaryMonth', 'choice', array(
-                'attr'=>array('class'=>'span12'),
+                'attr'=>array('class'=>'span8 select2'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please choose required'))
                 ),
@@ -53,34 +52,61 @@ class PaymentSalaryType extends AbstractType
                     'December'      => 'December',
                 ),
             ))
-            ->add('bank', 'entity', array(
-                'required'    => true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\Bank',
-                'empty_value' => '---Choose a bank---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('b')
-                        ->orderBy("b.name", "ASC");
-                },
-            ))
-            ->add('paymentMethod', 'choice', array(
-                'attr'=>array('class'=>'span12'),
+            ->add('salaryYear', 'choice', array(
+                'attr'=>array('class'=>'span4 select2'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please choose required'))
+                ),
                 'choices' => array(
-                    'Cash' => 'Cash',
-                    'Cheque' => 'Cheque',
+                    '2016'       => '2016',
+                    '2017'      => '2017',
+                    '2018'      => '2018',
+                    '2019'      => '2019',
+                    '2020'      => '2020',
+                    '2021'      => '2021',
+                    '2022'      => '2022',
+                    '2023'      => '2023',
+                    '2024'      => '2024',
+                    '2025'      => '2025',
+
                 ),
             ))
-            ->add('accountNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'add your account no')))
+            ->add('transactionMethod', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
+                'empty_value' => '---Choose a transaction method---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2 transactionMethod'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->orderBy("e.name");
+                }
+            ))
+            ->add('accountBank', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
+                'empty_value' => '---Choose a bank---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+            ))
+
+            ->add('accountBkash', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBkash',
+                'empty_value' => '---Choose a mobile banking---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+            ))
             ->add('salarySetting', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\SalarySetting',
                 'empty_value' => '---Choose a payment amount---',
                 'property' => 'salaryInfo',
-                'attr'=>array('class'=>'span12'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
+                'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.user  =".$this->user->getId());

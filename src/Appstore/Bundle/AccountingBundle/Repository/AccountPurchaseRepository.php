@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
@@ -21,7 +22,7 @@ class AccountPurchaseRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.updated','DESC');
+        $qb->orderBy('e.id','DESC');
         $result = $qb->getQuery();
         return $result;
 
@@ -30,14 +31,14 @@ class AccountPurchaseRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS amount, SUM(e.dueAmount) AS dueAmount');
+        $qb->select('SUM(e.purchaseAmount) AS purchaseAmount, SUM(e.payment) AS payment');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         $qb->andWhere("e.process = :process");
         $qb->setParameter('process', 'approved');
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getSingleResult();
-        $data =  array('totalAmount'=> $result['totalAmount'],'amount'=> $result['amount'],'dueAmount'=> $result['dueAmount']);
+        $data =  array('purchaseAmount'=> $result['purchaseAmount'],'payment'=> $result['payment']);
         return $data;
 
     }
@@ -55,16 +56,18 @@ class AccountPurchaseRepository extends EntityRepository
                 $startDate = $datetime->format('Y-m-d 00:00:00');
                 $endDate = $datetime->format('Y-m-d 23:59:59');
 
+                /*
                 $qb->andWhere("e.updated >= :startDate");
                 $qb->setParameter('startDate', $startDate);
                 $qb->andWhere("e.updated <= :endDate");
-                $qb->setParameter('endDate', $endDate);
+                $qb->setParameter('endDate', $endDate);*/
 
         }else{
 
                 $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
                 $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
                 $vendor =    isset($data['vendor'])? $data['vendor'] :'';
+                $transactionMethod =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
 
                 if (!empty($data['startDate']) and !empty($data['endDate']) ) {
 
@@ -82,83 +85,52 @@ class AccountPurchaseRepository extends EntityRepository
                     $qb->andWhere("v.companyName = :vendor");
                     $qb->setParameter('vendor', $vendor);
                 }
+                if (!empty($transactionMethod)) {
+                    $qb->andWhere("e.transactionMethod = :transactionMethod");
+                    $qb->setParameter('transactionMethod', $transactionMethod);
+                }
         }
 
     }
 
+    public function lastInsertPurchase($globalOption,$vendor)
+    {
+        $em = $this->_em;
+        $entity = $em->getRepository('AccountingBundle:AccountPurchase')->findOneBy(
+            array('globalOption'=>$globalOption,'vendor'=>$vendor,'process'=>'approved'),
+            array('id' => 'DESC')
+        );
+
+        if (empty($entity)) {
+            return 0;
+        }
+        return $entity->getBalance();
+    }
+
+
     public function insertAccountPurchase(Purchase $entity,$inventory)
     {
 
+        $balance = $this->lastInsertPurchase($inventory->getGlobalOption(),$entity->getVendor());
         $em = $this->_em;
-       // $receiveDate = $entity->getReceiveDate();
-        //$receiveDate->format('Y-m-d 00:00:00');
 
         $accountPurchase = new AccountPurchase();
-        $accountPurchase->setInventoryConfig($inventory);
         $accountPurchase->setGlobalOption($inventory->getGlobalOption());
         $accountPurchase->setPurchase($entity);
         $accountPurchase->setVendor($entity->getVendor());
-        /* Cash - Cash Credit */
-        $accountPurchase->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->find(31));
-        $accountPurchase->setToIncrease('Debit');
         $accountPurchase->setProcess('approved');
-        $accountPurchase->setApprovedBy($entity->getCreatedBy());
-        $accountPurchase->setTotalAmount($entity->getTotalAmount());
-        $accountPurchase->setAmount($entity->getPaymentAmount());
-        $accountPurchase->setDueAmount($entity->getDueAmount());
-        $accountPurchase->setProcessType('Purchase');
+        $accountPurchase->setTransactionMethod($this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
+        $accountPurchase->setApprovedBy($entity->getApprovedBy());
+        $accountPurchase->setPurchaseAmount($entity->getTotalAmount());
+        $accountPurchase->setTotalAmount($entity->getTotalAmount() + $balance);
+        $accountPurchase->setPayment($entity->getPaymentAmount());
+        $accountPurchase->setBalance($accountPurchase->getTotalAmount() - $accountPurchase->getPayment() );
+        $accountPurchase->setProcessHead('Purchase');
         $accountPurchase->setReceiveDate($entity->getReceiveDate());
         $em->persist($accountPurchase);
-
         $em->flush();
+        return $accountPurchase;
 
     }
-
-    public function insertAccountPurchaseReturn(PurchaseReturn $entity)
-    {
-        $em = $this->_em;
-
-        $accountPurchase = new AccountPurchase();
-        $accountPurchase->setInventoryConfig($entity->getInventoryConfig());
-        $accountPurchase->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
-        $accountPurchase->setPurchaseReturn($entity);
-        $accountPurchase->setVendor($entity->getVendor());
-        /* Current assets - Account Receivable */
-        $accountPurchase->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->find(4));
-        $accountPurchase->setToIncrease('Debit');
-        $accountPurchase->setProcess('approved');
-        $accountPurchase->setApprovedBy($entity->getCreatedBy());
-        $accountPurchase->setAmount($entity->getTotal());
-        $accountPurchase->setProcessType('Purchase Return');
-        $accountPurchase->setReceiveDate($entity->getUpdated());
-        $em->persist($accountPurchase);
-        $em->flush();
-
-    }
-
-    public function insertAccountPurchaseReplace(PurchaseReturn $entity,$replaceAmount)
-    {
-        $em = $this->_em;
-        $accountPurchase = new AccountPurchase();
-        $accountPurchase->setInventoryConfig($entity->getInventoryConfig());
-        $accountPurchase->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
-        $accountPurchase->setPurchaseReturn($entity);
-        $accountPurchase->setVendor($entity->getVendor());
-        /* Current Liabilities	- Accounts Payable */
-        $accountPurchase->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->find(13));
-        $accountPurchase->setToIncrease('Credit');
-        $accountPurchase->setProcess('approved');
-        $accountPurchase->setApprovedBy($entity->getCreatedBy());
-        $accountPurchase->setTotalAmount($replaceAmount);
-        $accountPurchase->setDueAmount($replaceAmount);
-        $accountPurchase->setProcessType('Purchase Replace');
-        $accountPurchase->setReceiveDate($entity->getUpdated());
-        $em->persist($accountPurchase);
-        $em->flush();
-
-    }
-
-
-
 
 }

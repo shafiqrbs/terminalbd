@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Account of bank
+                    Account of Bank
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +15,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('account_bank') }}">Account of bank</a>
+                        <a href="{{ path('account_bank') }}">Account of Bank</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="javascript:">Account of bank lists</a></li>
+                    <li><a href="javascript:">Account of Bank</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -92,19 +92,20 @@
                                 <thead class="flip-content ">
                                 <tr>
                                     <th class="numeric" colspan="5" style="text-align: right"><strong>Grand Total</strong></th>
-                                    <td class="numeric" ><strong>{{ overview.received|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ overview.payment|number_format }}</strong></td>
-                                    <td class="numeric" ></td>
+                                    <td class="numeric" >{{ overview.debit|number_format }}</td>
+                                    <td class="numeric" >{{ overview.credit|number_format }}</td>
+                                    <td class="numeric" ><strong>{{ (overview.debit - overview.credit)|number_format }}</strong></td>
                                 </tr>
-
                                 <tr class="head-grey">
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Ref No</th>
                                     <th class="numeric" >Bank</th>
-                                    <th class="numeric" >Account no</th>
-                                    <th class="numeric" >To user</th>
+                                    {#<th class="numeric" >Account no</th>#}
+                                    <th class="numeric" >Received From</th>
                                     <th class="numeric" >Account Head</th>
-                                    <th class="numeric" >Received</th>
-                                    <th class="numeric" >Payment</th>
+                                    <th class="numeric" >Debit</th>
+                                    <th class="numeric" >Credit</th>
+                                    <th class="numeric" >Balance</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -112,29 +113,36 @@
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.accountRefNo }}</td>
                                         <td class="numeric" >{% if entity.bank %}{{ entity.bank.name }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.accountNo }}</td>
-                                        <td class="numeric" >{% if entity.toUser is not empty %}{{ entity.toUser }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.accountHead.name }}/{{ entity.accountHead.code }}</td>
+                                       {# <td class="numeric" >{{ entity.accountNo }}</td>#}
+                                        <td class="numeric" >
+                                            {% if entity.purchase is defined and entity.purchase is not empty %}
+                                                Purchase/{{ entity.purchaseAccount.accountRefNo }}
+                                            {% elseif entity.journal is defined and entity.journal is not empty %}
+                                                Journal/{{ entity.journal.accountRefNo }}
+                                            {% elseif entity.sales is defined and entity.sales is not empty %}
+                                                Sales/{{ entity.sales.accountRefNo }}
+                                            {% else %}
+                                            {% endif %}
 
+                                        </td>
+                                        <td class="numeric" >{{ entity.accountHead.name }}</td>
                                         <td class="numeric" >
-                                            {% if entity.toIncrease == 'Debit' %}
                                                 {% if entity.process == 'approved'  %}
-                                                    {{ entity.amount|number_format }}
+                                                    {{ entity.debit|number_format }}
                                                 {% else %}
-                                                    <a data-mode="inline" class="editable" data-name="amount" href="#"  data-url="{{ path('account_bank_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>
+                                                    <a data-mode="inline" class="editable" data-name="amount" href="#"  data-url="{{ path('account_bank_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.debit }}</a>
                                                 {% endif %}
-                                            {% endif %}
                                         </td>
                                         <td class="numeric" >
-                                            {% if entity.toIncrease == 'Credit' %}
                                                 {% if entity.process == 'approved'  %}
-                                                    {{ entity.amount|number_format }}
+                                                    {{ entity.credit|number_format }}
                                                 {% else %}
-                                                    <a data-mode="inline" class="editable" data-name="amount" href="#"  data-url="{{ path('account_bank_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>
+                                                    <a data-mode="inline" class="editable" data-name="amount" href="#"  data-url="{{ path('account_bank_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.credit }}</a>
                                                 {% endif %}
-                                            {% endif %}
                                         </td>
+                                        <td>{{ entity.balance }}</td>
                                         <td class="numeric" >
                                             {% if entity.process != 'approved'  %}
                                                 <a href="javascript:" id="" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('account_bank_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>

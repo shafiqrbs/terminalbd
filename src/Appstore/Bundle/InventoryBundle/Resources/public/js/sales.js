@@ -208,13 +208,18 @@ var InventorySales = function(sales) {
     })
 
 
-    $(document).on('change', '#sales_paymentMethod', function() {
+    $(document).on('change', '#sales_transactionMethod', function() {
 
         var paymentMethod = $(this).val();
-        if( paymentMethod == 'Payment Card'){
+        if( paymentMethod == 2){
             $('#cartMethod').show();
+            $('#bkashMethod').hide();
+        }else if( paymentMethod == 3){
+            $('#bkashMethod').show();
+            $('#cartMethod').hide();
         }else{
             $('#cartMethod').hide();
+            $('#bkashMethod').hide();
         }
 
     })

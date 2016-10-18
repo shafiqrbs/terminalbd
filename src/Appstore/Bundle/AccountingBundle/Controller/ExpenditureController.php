@@ -41,13 +41,14 @@ class ExpenditureController extends Controller
         $entities = $em->getRepository('AccountingBundle:Expenditure')->findBy(array('globalOption'=>$globalOption),array('updated'=>'desc'));
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($globalOption,$data);
-        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead(23);
-        //$getFlatExpenseCategoryTree = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->getCategoryOptions();
+        //$flatExpenseCategoryTree = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->getCategoryOptions();
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
 
         return $this->render('AccountingBundle:Expenditure:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
-            'accountHead' => $accountHead,
+            'flatExpenseCategoryTree' => '',
+            'transactionMethods' => $transactionMethods,
             'overview' => $overview,
         ));
     }
@@ -60,10 +61,12 @@ class ExpenditureController extends Controller
         $entity = new Expenditure();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
         if ($form->isValid()) {
-
+            $lastBalance = $em->getRepository('AccountingBundle:Expenditure')->lastInsertExpenditure($entity);
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption( $this->getUser()->getGlobalOption());
+            $entity->setBalance($lastBalance + $entity->getAmount());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -232,24 +235,6 @@ class ExpenditureController extends Controller
         ;
     }
 
-    public function paymentAction(Request $request)
-    {
-        $data = $request->request->all();
-        $entity = new Expenditure();
-        $em = $this->getDoctrine()->getManager();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entity->setInventoryConfig($inventory);
-        $parent = $em->getRepository('AccountingBundle:Expenditure')->find($data['parent']);
-        $entity->setParent($parent);
-        $entity->setToUser($parent->getCreatedBy());
-        $entity->setAmount($data['amount']);
-        $entity->setRemark($data['remark']);
-        $entity->setPaymentMethod($data['paymentMethod']);
-        $em->persist($entity);
-        $em->flush();
-        exit;
-    }
-
     /**
      * Displays a form to edit an existing Expenditure entity.
      *
@@ -270,6 +255,8 @@ class ExpenditureController extends Controller
     public function approveAction(Expenditure $expenditure)
     {
         if (!empty($expenditure)) {
+            $em = $this->getDoctrine()->getManager();
+            $lastBalance = $em->getRepository('AccountingBundle:Expenditure')->lastInsertExpenditure($expenditure);
             $em = $this->getDoctrine()->getManager();
             $expenditure->setProcess('approved');
             $expenditure->setApprovedBy($this->getUser());

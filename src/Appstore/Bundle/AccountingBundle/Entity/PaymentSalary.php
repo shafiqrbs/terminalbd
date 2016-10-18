@@ -4,11 +4,14 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\Bank;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**
  * PaymentSalary
  *
- * @ORM\Table()
+ * @ORM\Table(name="payment_salary")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\PaymentSalaryRepository")
  */
 class PaymentSalary
@@ -29,19 +32,35 @@ class PaymentSalary
     protected $globalOption;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="paymentSalary" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="paymentSalaries" )
      **/
     private  $accountHead;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Transaction", mappedBy="paymentSalary" )
-     **/
-    private  $transactions;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="paymentSalaries" )
      **/
     private  $bank;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="paymentSalaries" )
+     **/
+    private  $accountBank;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="paymentSalaries" )
+     **/
+    private  $accountBkash;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="paymentSalary" )
+     **/
+    private  $accountCash;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="paymentSalaries" )
+     **/
+    private  $transactionMethod;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\SalarySetting", inversedBy="paymentSalaries" )
@@ -50,6 +69,7 @@ class PaymentSalary
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="paymentSalaries" )
+     * @ORM\OrderBy({"updated" = "DESC"})
      **/
     private  $user;
 
@@ -63,6 +83,21 @@ class PaymentSalary
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="paymentSalaryApprove" )
      **/
     private  $approvedBy;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountRefNo", type="string", length=50, nullable=true)
+     */
+    private $accountRefNo;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="code", type="integer",  nullable=true)
+     */
+    private $code;
+
 
 
     /**
@@ -87,6 +122,12 @@ class PaymentSalary
      */
     private $salaryMonth;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="salaryYear", type="string", length=255 , nullable=true)
+     */
+    private $salaryYear;
 
 
     /**
@@ -134,29 +175,6 @@ class PaymentSalary
 
 
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="accountNo", type="string", length=255, nullable = true)
-     */
-    private $accountNo;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="sendBank", type="boolean")
-     */
-    private $sendBank;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="paymentMethod", type="string", length=50, nullable=true)
-     */
-    private $paymentMethod;
-
-
     /**
      * @var string
      *
@@ -184,7 +202,7 @@ class PaymentSalary
     }
 
     /**
-     * @return mixed
+     * @return GlobalOption
      */
     public function getGlobalOption()
     {
@@ -192,7 +210,7 @@ class PaymentSalary
     }
 
     /**
-     * @param mixed $globalOption
+     * @param GlobalOption $globalOption
      */
     public function setGlobalOption($globalOption)
     {
@@ -456,7 +474,71 @@ class PaymentSalary
     }
 
     /**
-     * @return mixed
+     * @return AccountBank
+     */
+    public function getAccountBank()
+    {
+        return $this->accountBank;
+    }
+
+    /**
+     * @param AccountBank $accountBank
+     */
+    public function setAccountBank($accountBank)
+    {
+        $this->accountBank = $accountBank;
+    }
+
+    /**
+     * @return AccountBkash
+     */
+    public function getAccountBkash()
+    {
+        return $this->accountBkash;
+    }
+
+    /**
+     * @param AccountBkash $accountBkash
+     */
+    public function setAccountBkash($accountBkash)
+    {
+        $this->accountBkash = $accountBkash;
+    }
+
+    /**
+     * @return AccountCash
+     */
+    public function getAccountCash()
+    {
+        return $this->accountCash;
+    }
+
+    /**
+     * @param AccountCash $accountCash
+     */
+    public function setAccountCash($accountCash)
+    {
+        $this->accountCash = $accountCash;
+    }
+
+    /**
+     * @return TransactionMethod
+     */
+    public function getTransactionMethod()
+    {
+        return $this->transactionMethod;
+    }
+
+    /**
+     * @param TransactionMethod $transactionMethod
+     */
+    public function setTransactionMethod($transactionMethod)
+    {
+        $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
+     * @return Bank
      */
     public function getBank()
     {
@@ -464,7 +546,7 @@ class PaymentSalary
     }
 
     /**
-     * @param mixed $bank
+     * @param Bank $bank
      */
     public function setBank($bank)
     {
@@ -474,61 +556,49 @@ class PaymentSalary
     /**
      * @return string
      */
-    public function getAccountNo()
+    public function getAccountRefNo()
     {
-        return $this->accountNo;
+        return $this->accountRefNo;
     }
 
     /**
-     * @param string $accountNo
+     * @param string $accountRefNo
      */
-    public function setAccountNo($accountNo)
+    public function setAccountRefNo($accountRefNo)
     {
-        $this->accountNo = $accountNo;
+        $this->accountRefNo = $accountRefNo;
     }
 
     /**
-     * @return boolean
+     * @return int
      */
-    public function getSendBank()
+    public function getCode()
     {
-        return $this->sendBank;
+        return $this->code;
     }
 
     /**
-     * @param boolean $sendBank
+     * @param int $code
      */
-    public function setSendBank($sendBank)
+    public function setCode($code)
     {
-        $this->sendBank = $sendBank;
+        $this->code = $code;
     }
 
     /**
      * @return string
      */
-    public function getPaymentMethod()
+    public function getSalaryYear()
     {
-        return $this->paymentMethod;
+        return $this->salaryYear;
     }
 
     /**
-     * @param string $paymentMethod
-     * Cash
-     * Cheque
-     * Payment Card
-     * Other
+     * @param string $salaryYear
      */
-    public function setPaymentMethod($paymentMethod)
+    public function setSalaryYear($salaryYear)
     {
-        $this->paymentMethod = $paymentMethod;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTransactions()
-    {
-        return $this->transactions;
+        $this->salaryYear = $salaryYear;
     }
 
 }

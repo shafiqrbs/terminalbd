@@ -119,11 +119,6 @@ class InventoryConfig
     private  $accountSales;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PettyCash", mappedBy="inventoryConfig", cascade={"persist", "remove"} )
-     **/
-    private  $pettyCash;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
      */
     protected $damages;

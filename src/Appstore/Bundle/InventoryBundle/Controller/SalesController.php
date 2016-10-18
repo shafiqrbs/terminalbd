@@ -157,7 +157,9 @@ class SalesController extends Controller
         $editForm = $this->createEditForm($entity);
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
-        $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
+        $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findAll();
+        $banks = $em->getRepository('AccountingBundle:AccountBank')->findBy(array('globalOption'=>$this->getUser()->getGlobalOption(),'status'=>1),array('name'=>'asc'));
+        $bkashs = $em->getRepository('AccountingBundle:AccountBkash')->findBy(array('globalOption'=>$this->getUser()->getGlobalOption(),'status'=>1),array('name'=>'asc'));
         $paymentCards = $em->getRepository('SettingToolBundle:PaymentCard')->findAll();
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
         $salesUsers = $this->getUser()->getGlobalOption()->getUsers();
@@ -165,6 +167,8 @@ class SalesController extends Controller
             'entity'      => $entity,
             'salesUsers'      => $salesUsers,
             'banks'      => $banks,
+            'bkashs'      => $bkashs,
+            'transactionMethods'      => $transactionMethods,
             'paymentCards'      => $paymentCards,
             'todaySales'      => $todaySales,
             'todaySalesOverview'      => $todaySalesOverview,
@@ -173,7 +177,7 @@ class SalesController extends Controller
     }
 
     /**
-     * Creates a form to edit a Sales entity.
+     * Creates a form to edit a Sales entity.wq
      *
      * @param Sales $entity The entity
      *
@@ -209,16 +213,13 @@ class SalesController extends Controller
 
         if ($data['paymentAmount'] > 0 ) {
 
-            $bank = $this->getDoctrine()->getRepository('SettingToolBundle:Bank')->find($data['bank']);
-            if($bank){
-                $entity->setBank($bank);
-            }
-            $paymentCard = $this->getDoctrine()->getRepository('SettingToolBundle:PaymentCard')->find($data['paymentCard']);
-            if($paymentCard){
-                $entity->setPaymentCard($paymentCard);
-            }
+
             if(!empty($data['sales']['mobile'])){
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity,$data['sales']['mobile']);
+                $entity->setCustomer($customer);
+            }else{
+                $globalOption = $this->getUser()->getGlobalOption();
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$globalOption,'name'=>'Defult'));
                 $entity->setCustomer($customer);
             }
             if(!empty($data['salesBy'])){
@@ -226,7 +227,32 @@ class SalesController extends Controller
                 $salesBy = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('id' => $data['salesBy']));
                 $entity->setSalesBy($salesBy);
             }
-            $entity->setPaymentMethod($data['sales']['paymentMethod']);
+            $transactionMethod = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find($data['sales']['transactionMethod']);
+            $entity->setTransactionMethod($transactionMethod);
+            if($entity->getTransactionMethod()->getId() == 2 ){
+
+                $bank = $this->getDoctrine()->getRepository('AccountingBundle:AccountBank')->find($data['bank']);
+                if($bank){
+                    $entity->setAccountBank($bank);
+                }
+                $paymentCard = $this->getDoctrine()->getRepository('SettingToolBundle:PaymentCard')->find($data['paymentCard']);
+                if($paymentCard){
+                    $entity->setPaymentCard($paymentCard);
+                }
+
+            }else if($entity->getTransactionMethod()->getId() == 3 ){
+
+                $bank = $this->getDoctrine()->getRepository('AccountingBundle:AccountBkash')->find($data['bKash']);
+                if($bank){
+                    $entity->setAccountBkash($bank);
+                }
+                if($data['bkashMobile']){
+                    $entity->setBkashMobile($data['bkashMobile']);
+                }
+                if($data['bkashTransactionId']){
+                    $entity->setBkashTransactionId($data['bkashTransactionId']);
+                }
+            }
             $entity->setSubTotal($data['paymentSubTotal']);
             $entity->setVat($data['vat']);
             $entity->setDue($data['dueAmount']);
@@ -241,10 +267,11 @@ class SalesController extends Controller
             $entity->setApprovedBy($this->getUser());
             $em->persist($entity);
             $em->flush();
+
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
-            $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity,$entity->getInventoryConfig(),'Sales');
+            $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
+            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity,$accountSales);
             return $this->redirect($this->generateUrl('inventory_sales_new'));
         }
 
@@ -268,8 +295,8 @@ class SalesController extends Controller
             $em->flush();
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
-            $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity,$entity->getInventoryConfig(),'Sales');
+            $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
+            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity,$accountSales);
             return new Response('success');
         } else {
             return new Response('failed');

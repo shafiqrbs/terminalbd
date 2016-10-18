@@ -33,18 +33,6 @@ class PaymentMethod
 
     private $paymentType;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="paymentMethod" , cascade={"persist", "remove"})
-     */
-    protected $orders;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="paymentMethod" , cascade={"persist", "remove"})
-     */
-    protected $preOrders;
-
-
     /**
      * @var string
      *
@@ -274,20 +262,5 @@ class PaymentMethod
         $this->paymentType = $paymentType;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getOrders()
-    {
-        return $this->orders;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPreOrders()
-    {
-        return $this->preOrders;
-    }
 }
 

@@ -4,6 +4,8 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**
  * PettyCash
@@ -23,22 +25,16 @@ class PettyCash
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PettyCash", inversedBy="children", cascade={"detach","merge"})
+     * @ORM\ManyToOne(targetEntity="PettyCash", inversedBy="children", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="parent", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="PettyCash" , mappedBy="parent")
-     * @ORM\OrderBy({"updated" = "ASC"})
+     * @ORM\OneToMany(targetEntity="PettyCash" , mappedBy="parent" , cascade={"persist", "remove"} )
+     * @ORM\OrderBy({"updated" = "DESC"})
      **/
     private $children;
-
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="pettyCash" )
-     **/
-    private  $inventoryConfig;
 
 
     /**
@@ -48,22 +44,25 @@ class PettyCash
     protected $globalOption;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="pettyCash" )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="pettyCash" )
      **/
-    private  $accountHead;
+    private  $accountCash;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Transaction", mappedBy="pettyCash" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="pettyCash" )
      **/
-    private  $transactions;
-
+    private  $accountBank;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="paymentMethod", type="string", length=50, nullable=true)
-     */
-    private $paymentMethod;
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="pettyCash" )
+     **/
+    private  $accountBkash;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="pettyCash" )
+     **/
+    private  $transactionMethod;
+
 
     /**
      * @var string
@@ -78,6 +77,13 @@ class PettyCash
      * @ORM\Column(name="amount", type="float", nullable=true)
      */
     private $amount;
+
+ /**
+     * @var float
+     *
+     * @ORM\Column(name="returnAmount", type="float", nullable=true)
+     */
+    private $returnAmount;
 
 
     /**
@@ -113,6 +119,22 @@ class PettyCash
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="accountRefNo", type="string", length=50, nullable=true)
+     */
+    private $accountRefNo;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="code", type="integer",  nullable=true)
+     */
+    private $code;
+
+
+
+    /**
      * @var datetime
      *
      * @ORM\Column(name="receiveDate", type="datetime", nullable=true)
@@ -142,29 +164,6 @@ class PettyCash
     public function getId()
     {
         return $this->id;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getPaymentMethod()
-    {
-        return $this->paymentMethod;
-    }
-
-    /**
-     * @param string $paymentMethod
-     * Cash
-     * Cheque
-     * bkash
-     * Payment Card
-     * Invoice
-     * Other
-     */
-    public function setPaymentMethod($paymentMethod)
-    {
-        $this->paymentMethod = $paymentMethod;
     }
 
 
@@ -223,54 +222,6 @@ class PettyCash
     public function setUpdated($updated)
     {
         $this->updated = $updated;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getInventoryConfig()
-    {
-        return $this->inventoryConfig;
-    }
-
-    /**
-     * @param mixed $inventoryConfig
-     */
-    public function setInventoryConfig($inventoryConfig)
-    {
-        $this->inventoryConfig = $inventoryConfig;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTransaction()
-    {
-        return $this->transaction;
-    }
-
-    /**
-     * @param mixed $transaction
-     */
-    public function setTransaction($transaction)
-    {
-        $this->transaction = $transaction;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBank()
-    {
-        return $this->bank;
-    }
-
-    /**
-     * @param mixed $bank
-     */
-    public function setBank($bank)
-    {
-        $this->bank = $bank;
     }
 
     /**
@@ -356,38 +307,6 @@ class PettyCash
 
 
     /**
-     * @return string
-     */
-    public function getToIncrease()
-    {
-        return $this->toIncrease;
-    }
-
-    /**
-     * @param string $toIncrease
-     */
-    public function setToIncrease($toIncrease)
-    {
-        $this->toIncrease = $toIncrease;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAccountHead()
-    {
-        return $this->accountHead;
-    }
-
-    /**
-     * @param mixed $accountHead
-     */
-    public function setAccountHead($accountHead)
-    {
-        $this->accountHead = $accountHead;
-    }
-
-    /**
      * @return PattyCash
      */
     public function getChildren()
@@ -395,7 +314,7 @@ class PettyCash
         return $this->children;
     }
 
-    public function  getReturnAmount()
+    /*public function  getReturnAmount()
     {
         $getReturnAmount = 0;
         foreach($this->children AS $child) {
@@ -405,7 +324,7 @@ class PettyCash
 
         }
         return $getReturnAmount ;
-    }
+    }*/
 
     /**
      * @return mixed
@@ -440,7 +359,7 @@ class PettyCash
     }
 
     /**
-     * @return mixed
+     * @return GlobalOption
      */
     public function getGlobalOption()
     {
@@ -448,7 +367,7 @@ class PettyCash
     }
 
     /**
-     * @param mixed $globalOption
+     * @param GlobalOption $globalOption
      */
     public function setGlobalOption($globalOption)
     {
@@ -456,11 +375,115 @@ class PettyCash
     }
 
     /**
+     * @return AccountBank
+     */
+    public function getAccountBank()
+    {
+        return $this->accountBank;
+    }
+
+    /**
+     * @param AccountBank $accountBank
+     */
+    public function setAccountBank($accountBank)
+    {
+        $this->accountBank = $accountBank;
+    }
+
+    /**
+     * @return AccountBkash
+     */
+    public function getAccountBkash()
+    {
+        return $this->accountBkash;
+    }
+
+    /**
+     * @param AccountBkash $accountBkash
+     */
+    public function setAccountBkash($accountBkash)
+    {
+        $this->accountBkash = $accountBkash;
+    }
+
+    /**
+     * @return AccountCash
+     */
+    public function getAccountCash()
+    {
+        return $this->accountCash;
+    }
+
+    /**
+     * @param AccountCash $accountCash
+     */
+    public function setAccountCash($accountCash)
+    {
+        $this->accountCash = $accountCash;
+    }
+
+    /**
      * @return mixed
      */
-    public function getTransactions()
+    public function getTransactionMethod()
     {
-        return $this->transactions;
+        return $this->transactionMethod;
+    }
+
+    /**
+     * @param TransactionMethod $transactionMethod
+     */
+    public function setTransactionMethod($transactionMethod)
+    {
+        $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
+     * @return float
+     */
+    public function getReturnAmount()
+    {
+        return $this->returnAmount;
+    }
+
+    /**
+     * @param float $returnAmount
+     */
+    public function setReturnAmount($returnAmount)
+    {
+        $this->returnAmount = $returnAmount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountRefNo()
+    {
+        return $this->accountRefNo;
+    }
+
+    /**
+     * @param string $accountRefNo
+     */
+    public function setAccountRefNo($accountRefNo)
+    {
+        $this->accountRefNo = $accountRefNo;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param int $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
     }
 
 

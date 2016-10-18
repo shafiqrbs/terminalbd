@@ -2,10 +2,14 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
+use Appstore\Bundle\AccountingBundle\Entity\AccountBkash;
+use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\PaymentType;
+use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**
  * PreOrder
@@ -53,26 +57,27 @@ class PreOrder
      **/
     private  $preOrderItems;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PaymentMethod", inversedBy="preOrders")
-     */
-    protected $paymentMethod;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PaymentType", inversedBy="preOrders")
-     */
-    protected $paymentType;
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="preOrder" )
+     **/
+    private  $accountCash;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\BankAccount", inversedBy="preOrders")
-     */
-    protected $bankAccount;
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="preOrders" )
+     **/
+    private  $accountBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\BkashAccount", inversedBy="preOrders")
-     */
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="preOrders" )
+     **/
+    private  $accountBkash;
 
-    protected $bkashAccount;
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="preOrders" )
+     **/
+    private  $transactionMethod;
+
 
     /**
      * @var integer
@@ -394,20 +399,6 @@ class PreOrder
     }
 
     /**
-     * @return mixed
-     */
-    public function getPaymentMethod()
-    {
-        return $this->paymentMethod;
-    }
-
-    /**
-     * @param mixed $paymentMethod
-     */
-    public function setPaymentMethod($paymentMethod)
-    {
-        $this->paymentMethod = $paymentMethod;
-    }
 
     /**
      * @return \DateTime
@@ -655,54 +646,6 @@ class PreOrder
     }
 
     /**
-     * @return BankAccount
-     */
-    public function getBankAccount()
-    {
-        return $this->bankAccount;
-    }
-
-    /**
-     * @param BankAccount $bankAccount
-     */
-    public function setBankAccount($bankAccount)
-    {
-        $this->bankAccount = $bankAccount;
-    }
-
-    /**
-     * @return BkashAccount
-     */
-    public function getBkashAccount()
-    {
-        return $this->bkashAccount;
-    }
-
-    /**
-     * @param BkashAccount $bkashAccount
-     */
-    public function setBkashAccount($bkashAccount)
-    {
-        $this->bkashAccount = $bkashAccount;
-    }
-
-    /**
-     * @return PaymentType
-     */
-    public function getPaymentType()
-    {
-        return $this->paymentType;
-    }
-
-    /**
-     * @param PaymentType $paymentType
-     */
-    public function setPaymentType($paymentType)
-    {
-        $this->paymentType = $paymentType;
-    }
-
-    /**
      * @return mixed
      */
     public function getDeliveryDate()
@@ -717,6 +660,72 @@ class PreOrder
     {
         $this->deliveryDate = $deliveryDate;
     }
+
+    /**
+     * @return AccountCash
+     */
+    public function getAccountCash()
+    {
+        return $this->accountCash;
+    }
+
+    /**
+     * @param AccountCash $accountCash
+     */
+    public function setAccountCash($accountCash)
+    {
+        $this->accountCash = $accountCash;
+    }
+
+    /**
+     * @return AccountBank
+     */
+    public function getAccountBank()
+    {
+        return $this->accountBank;
+    }
+
+    /**
+     * @param AccountBank $accountBank
+     */
+    public function setAccountBank($accountBank)
+    {
+        $this->accountBank = $accountBank;
+    }
+
+    /**
+     * @return AccountBkash
+     */
+    public function getAccountBkash()
+    {
+        return $this->accountBkash;
+    }
+
+    /**
+     * @param AccountBkash $accountBkash
+     */
+    public function setAccountBkash($accountBkash)
+    {
+        $this->accountBkash = $accountBkash;
+    }
+
+    /**
+     * @return TransactionMethod
+     */
+    public function getTransactionMethod()
+    {
+        return $this->transactionMethod;
+    }
+
+    /**
+     * @param TransactionMethod $transactionMethod
+     */
+    public function setTransactionMethod($transactionMethod)
+    {
+        $this->transactionMethod = $transactionMethod;
+    }
+
+
 
 }
 

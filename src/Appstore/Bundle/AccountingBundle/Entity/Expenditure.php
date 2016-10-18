@@ -4,6 +4,8 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**
  * Expenditure
@@ -30,35 +32,36 @@ class Expenditure
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="expenditure" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="expendituries" )
      **/
     private  $accountHead;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory", inversedBy="expenditures" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory", inversedBy="expendituries" )
      **/
     private  $expenseCategory;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="expenditures" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="expendituries" )
      **/
-    private  $bank;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="accountNo", type="string", length=255, nullable = true)
-     */
-    private $accountNo;
-
+    private  $accountBank;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="paymentMethod", type="string", length=50, nullable=true)
-     */
-    private $paymentMethod;
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="expendituries" )
+     **/
+    private  $accountBkash;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="expenditure" )
+     **/
+    private  $accountCash;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="expendituries" )
+     **/
+    private  $transactionMethod;
+
+
 
     /**
      * @var float
@@ -66,6 +69,28 @@ class Expenditure
      * @ORM\Column(name="amount", type="float")
      */
     private $amount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="balance", type="float", nullable=true)
+     */
+    private $balance = 0;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountRefNo", type="string", length=50, nullable=true)
+     */
+    private $accountRefNo;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="code", type="integer",  nullable=true)
+     */
+    private $code;
 
 
     /**
@@ -128,29 +153,6 @@ class Expenditure
 
 
     /**
-     * @return string
-     */
-    public function getPaymentMethod()
-    {
-        return $this->paymentMethod;
-    }
-
-    /**
-     * @param string $paymentMethod
-     * Cash
-     * Cheque
-     * bkash
-     * Payment Card
-     * Invoice
-     * Other
-     */
-    public function setPaymentMethod($paymentMethod)
-    {
-        $this->paymentMethod = $paymentMethod;
-    }
-
-
-    /**
      * Set amount
      *
      * @param float $amount
@@ -205,22 +207,6 @@ class Expenditure
     public function setUpdated($updated)
     {
         $this->updated = $updated;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTransaction()
-    {
-        return $this->transaction;
-    }
-
-    /**
-     * @param mixed $transaction
-     */
-    public function setTransaction($transaction)
-    {
-        $this->transaction = $transaction;
     }
 
     /**
@@ -324,7 +310,7 @@ class Expenditure
     }
 
     /**
-     * @return mixed
+     * @return GlobalOption
      */
     public function getGlobalOption()
     {
@@ -332,7 +318,7 @@ class Expenditure
     }
 
     /**
-     * @param mixed $globalOption
+     * @param GlobalOption $globalOption
      */
     public function setGlobalOption($globalOption)
     {
@@ -340,7 +326,7 @@ class Expenditure
     }
 
     /**
-     * @return mixed
+     * @return ExpenseCategory
      */
     public function getExpenseCategory()
     {
@@ -348,43 +334,116 @@ class Expenditure
     }
 
     /**
-     * @param mixed $expenseCategory
+     * @param ExpenseCategory $expenseCategory
      */
     public function setExpenseCategory($expenseCategory)
     {
         $this->expenseCategory = $expenseCategory;
     }
 
+
     /**
-     * @return mixed
+     * @return AccountBank
      */
-    public function getBank()
+    public function getAccountBank()
     {
-        return $this->bank;
+        return $this->accountBank;
     }
 
     /**
-     * @param mixed $bank
+     * @param AccountBank $accountBank
      */
-    public function setBank($bank)
+    public function setAccountBank($accountBank)
     {
-        $this->bank = $bank;
+        $this->accountBank = $accountBank;
+    }
+
+    /**
+     * @return AccountBkash
+     */
+    public function getAccountBkash()
+    {
+        return $this->accountBkash;
+    }
+
+    /**
+     * @param AccountBkash $accountBkash
+     */
+    public function setAccountBkash($accountBkash)
+    {
+        $this->accountBkash = $accountBkash;
+    }
+
+    /**
+     * @return AccountCash
+     */
+    public function getAccountCash()
+    {
+        return $this->accountCash;
+    }
+
+    /**
+     * @return TransactionMethod
+     */
+    public function getTransactionMethod()
+    {
+        return $this->transactionMethod;
+    }
+
+    /**
+     * @param TransactionMethod $transactionMethod
+     */
+    public function setTransactionMethod($transactionMethod)
+    {
+        $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * @param float $balance
+     */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
     }
 
     /**
      * @return string
      */
-    public function getAccountNo()
+    public function getAccountRefNo()
     {
-        return $this->accountNo;
+        return $this->accountRefNo;
     }
 
     /**
-     * @param string $accountNo
+     * @param string $accountRefNo
      */
-    public function setAccountNo($accountNo)
+    public function setAccountRefNo($accountRefNo)
     {
-        $this->accountNo = $accountNo;
+        $this->accountRefNo = $accountRefNo;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param int $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
     }
 
 

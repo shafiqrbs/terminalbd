@@ -76,9 +76,23 @@ class SalesItemRepository extends EntityRepository
                  $readonly = '';
             }
 
+            $color ='';
+            $size ='';
+
+            $masterItem = $entity->getItem()->getMasterItem()->getName();
+            if(!empty($entity->getItem()->getColor())){
+                $color = '-'.$entity->getItem()->getColor()->getName();
+            }
+            if(!empty($entity->getItem()->getSize())){
+                $size = '-'.$entity->getItem()->getSize()->getName();
+            }
+            $itemName = $masterItem.$color.$size;
+
             $data .=' <tr id="remove-'.$entity->getId().'">';
             $data .='<td class="numeric" >'.$i.'</td>';
-            $data .='<td class="numeric" >'.$entity->getPurchaseItem()->getBarcode().'</td>';
+            $data .='<td class="numeric" >'.$entity->getPurchaseItem()->getBarcode();
+            $data .='</br><span>'.$itemName.'</span>';
+            $data .='</td>';
             $data .='<td class="numeric" ><input type="text" name="quantity[]" rel="'.$entity->getId().'"  id="quantity-'.$entity->getId().'" class="m-wrap span10 quantity" value="'.$entity->getQuantity().'" placeholder="'.$entity->getItem()->getQuantity().'"></td>';
             $data .='<td class="" ><div class="input-prepend">';
             $data .='<span class="add-on">';

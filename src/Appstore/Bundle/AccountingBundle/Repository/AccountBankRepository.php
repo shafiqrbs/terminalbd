@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
+use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Doctrine\ORM\EntityRepository;
@@ -32,9 +34,13 @@ class AccountBankRepository extends EntityRepository
 
     public function entityOverview($globalOption,$data)
     {
-        $received = $this->getBankOverview($globalOption,'Debit',$data);
-        $payment = $this->getBankOverview($globalOption,'Credit',$data);
-        $data =  array('received' => $received , 'payment'=> $payment);
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getSingleResult();
+        $data =  array('debit'=> $result['debit'],'credit'=> $result['credit']);
         return $data;
     }
 
@@ -104,7 +110,91 @@ class AccountBankRepository extends EntityRepository
 
     }
 
+    public function lastInsertCash($entity,$processHead)
+    {
+        $em = $this->_em;
+        $entity = $em->getRepository('AccountingBundle:AccountBank')->findOneBy(
+            array(
+                'globalOption' => $entity->getGlobalOption(),
+                'bank' => $entity->getBank(),
+                'processHead' => $processHead
+            ),
+            array('id' => 'DESC')
+        );
 
+        if (empty($entity)) {
+            return 0;
+        }
+        return $entity->getBalance();
+    }
+
+    public function insertJournalBank(AccountJournal $journal)
+    {
+
+        $balance = $this->lastInsertCash($journal,$journal->getProcessHead());
+        $em = $this->_em;
+        $cash = new AccountBank();
+        $cash->setGlobalOption($journal->getGlobalOption());
+        $cash->setProcessHead('Journal');
+        $cash->setBankBranch($journal->getBankBranch());
+        $cash->setJournal($journal);
+        if($journal->getTransactionType()  == 'Debit' ){
+            $cash->setAccountHead($journal->getAccountHeadDebit());
+            $cash->setDebit($journal->getAmount());
+            $cash->setBalance($balance + $journal->getAmount());
+        }else{
+            $cash->setAccountHead($journal->getAccountHeadCredit());
+            $cash->setBalance($balance - $journal->getAmount() );
+            $cash->setCredit($journal->getAmount());
+        }
+        $cash->setApprovedBy($journal->getApprovedBy());
+        $cash->setProcess('approved');
+        $em->persist($cash);
+        $em->flush();
+
+    }
+
+    public function insertJournalBankCredit(AccountJournal $journal)
+    {
+
+        $balance = $this->lastInsertCash($journal,$journal->getProcessHead());
+        $em = $this->_em;
+        $cash = new AccountBank();
+        $cash->setGlobalOption($journal->getGlobalOption());
+        $cash->setProcessHead('Journal');
+        $cash->setBankBranch($journal->getBankBranch());
+        $cash->setJournal($journal);
+        $cash->setAccountHead($journal->getAccountHeadCredit());
+        $cash->setBalance($balance - $journal->getAmount() );
+        $cash->setCredit($journal->getAmount());
+        $cash->setApprovedBy($journal->getApprovedBy());
+        $cash->setProcess('approved');
+        $em->persist($cash);
+        $em->flush();
+
+    }
+
+
+
+    public function insertPurchaseBank(AccountPurchase $entity)
+    {
+
+        $balance = $this->lastInsertCash($entity,'Purchase');
+        $em = $this->_em;
+        $cash = new AccountBank();
+        $cash->setGlobalOption($entity->getGlobalOption());
+        $cash->setProcessHead('Purchase');
+        $cash->setAccountRefNo($entity->getAccountRefNo());
+        $cash->setUpdated($entity->getUpdated());
+        $cash->setBank($entity->getBank());
+        $cash->setAccountNo($entity->getAccountNo());
+        $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(32));
+        $cash->setBalance($balance - $entity->getPayment() );
+        $cash->setCredit($entity->getPayment());
+        $em->persist($cash);
+        $em->flush();
+
+    }
 
 
     public function insertAccountBank(Sales $entity)

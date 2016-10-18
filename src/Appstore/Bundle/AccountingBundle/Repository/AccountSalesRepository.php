@@ -20,7 +20,7 @@ class AccountSalesRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS receiveAmount, SUM(e.dueAmount) AS dueAmount,SUM(e.returnAmount) AS returnAmount ');
+        $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS receiveAmount, SUM(e.amount) AS dueAmount,SUM(e.amount) AS returnAmount ');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         $this->handleSearchBetween($qb,$data);
@@ -55,10 +55,11 @@ class AccountSalesRepository extends EntityRepository
              $startDate = $datetime->format('Y-m-d 00:00:00');
              $endDate = $datetime->format('Y-m-d 23:59:59');
 
+            /*
              $qb->andWhere("e.updated >= :startDate");
              $qb->setParameter('startDate', $startDate);
              $qb->andWhere("e.updated <= :endDate");
-             $qb->setParameter('endDate', $endDate);
+             $qb->setParameter('endDate', $endDate);*/
 
         }else{
 
@@ -91,9 +92,19 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
+    public function lastInsertSales($globalOption,$entity)
+    {
+        $em = $this->_em;
+        $entity = $em->getRepository('AccountingBundle:AccountSales')->findOneBy(
+            array('globalOption'=>$globalOption,'customer'=> $entity->getCustomer(),'process'=>'approved'),
+            array('id' => 'DESC')
+        );
 
-
-
+        if (empty($entity)) {
+            return 0;
+        }
+        return $entity->getBalance();
+    }
 
     public function insertAccountSales(Sales $entity)
     {
@@ -101,20 +112,30 @@ class AccountSalesRepository extends EntityRepository
         $em = $this->_em;
         $accountSales = new AccountSales();
 
-        $accountSales->setInventoryConfig($entity->getInventoryConfig());
+        if($entity->getTransactionMethod()->getId() == 2 ){
+            $accountSales->setAccountBank($entity->getAccountBank());
+        }if($entity->getTransactionMethod() ->getId()== 3 ){
+            $accountSales->setAccountBkash($entity->getAccountBkash());
+        }
+
         $accountSales->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
         $accountSales->setSales($entity);
         $accountSales->setCustomer($entity->getCustomer());
-        /* Cash - Sales Receive Cash Account */
-        $accountSales->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(36));
-        $accountSales->setToIncrease('Sales');
+        $accountSales->setTransactionMethod($entity->getTransactionMethod());
         $accountSales->setTotalAmount($entity->getTotal());
         $accountSales->setAmount($entity->getPayment());
-        $accountSales->setDueAmount($entity->getDue());
+
+        $balance = $this->lastInsertSales($entity->getInventoryConfig()->getGlobalOption(),$entity);
+        $lastBalance = ($balance + $entity->getDue());
+        $accountSales->setBalance($lastBalance);
+
         $accountSales->setApprovedBy($entity->getCreatedBy());
+        $accountSales->setProcessHead('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
         $em->flush();
+
+        return $accountSales;
 
     }
 

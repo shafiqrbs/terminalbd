@@ -72,40 +72,40 @@
                                             <a class="btn mini red-stripe btn-action delete" href="javascript:" rel="{{ path('domain_delete', { 'id': entity.id }) }}" >Delete</a>
                                         </td>
                                     </tr>
-                                    {% if entity.customerInboxs is not empty %}
-                                    <tr id="show-{{ entity.id }}" class="showing-overview">
-                                        <td colspan="5">
-                                            <div class="row-fluid">
-                                                <div class="span12">
-                                                    <br/>
-                                                    <ul class="timeline">
+                                        {#{% if entity.customerInboxs is not empty %}
+                                        <tr id="show-{{ entity.id }}" class="showing-overview">
+                                            <td colspan="5">
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <br/>
+                                                        <ul class="timeline">
 
-                                                        {% for key,sms in entity.customerInboxs %}
-                                                            <li  class="{{ cycle(['timeline-blue', 'timeline-green'], key) }}" >
-                                                                <div class="timeline-time">
-                                                                    <span class="date">{{ sms.updated|date('d F, Y') }}</span>
-                                                                    <span class="time">{{ sms.updated|date('h:i') }}</span>
-                                                                </div>
-                                                                <div class="timeline-icon"><i class="{{ cycle(['icon-comments', 'icon-comments-alt'], key) }}"></i></div>
-                                                                <div class="timeline-body">
-                                                                    <h2>{{ entity.name }}</h2>
-                                                                    <div class="timeline-content">
-                                                                        {{ sms.content }}
+                                                            {% for key,sms in entity.customerInboxs %}
+                                                                <li  class="{{ cycle(['timeline-blue', 'timeline-green'], key) }}" >
+                                                                    <div class="timeline-time">
+                                                                        <span class="date">{{ sms.updated|date('d F, Y') }}</span>
+                                                                        <span class="time">{{ sms.updated|date('h:i') }}</span>
                                                                     </div>
+                                                                    <div class="timeline-icon"><i class="{{ cycle(['icon-comments', 'icon-comments-alt'], key) }}"></i></div>
+                                                                    <div class="timeline-body">
+                                                                        <h2>{{ entity.name }}</h2>
+                                                                        <div class="timeline-content">
+                                                                            {{ sms.content }}
+                                                                        </div>
 
-                                                                </div>
-                                                            </li>
-                                                        {% endfor %}
+                                                                    </div>
+                                                                </li>
+                                                            {% endfor %}
 
-                                                    </ul>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                             <table class="inner-table">
+                                                 <table class="inner-table">
 
-                                             </table>
-                                        </td>
-                                    </tr>
-                                {% endif %}
+                                                 </table>
+                                            </td>
+                                        </tr>
+                                        {% endif %}#}
                                 {% endfor %}
                                 </tbody>
                             </table>

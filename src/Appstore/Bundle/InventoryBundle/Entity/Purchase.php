@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -38,8 +39,7 @@ class Purchase
     private  $purchaseVendorItems;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="purchase" )
-     * @ORM\OrderBy({"id" = "DESC"})
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="purchase" )
      **/
     private  $accountPurchase;
 
@@ -821,7 +821,7 @@ class Purchase
     }
 
     /**
-     * @return mixed
+     * @return AccountPurchase
      */
     public function getAccountPurchase()
     {

@@ -42,9 +42,14 @@ class PettyCashController extends Controller
         $pagination = $this->paginate($entities);
         //$overview = $this->getDoctrine()->getRepository('AccountingBundle:PettyCash')->salesOverview($inventory,$data);
         $accountHead = $em->getRepository('AccountingBundle:AccountHead')->findBy(array('status'=>1),array('name'=>'asc'));
+        $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1));
+        $accountBanks = $em->getRepository('AccountingBundle:AccountBank')->findBy(array('globalOption'=>$globalOption,'status'=>1));
+        $accountBkash = $em->getRepository('AccountingBundle:AccountBkash')->findBy(array('globalOption'=>$globalOption,'status'=>1));
         return $this->render('AccountingBundle:PettyCash:index.html.twig', array(
             'entities' => $pagination,
-            'accountHead' => $accountHead,
+            'transactionMethods' => $transactionMethods,
+            'accountBanks' => $accountBanks,
+            'accountBkash' => $accountBkash,
             'overview' => '',
         ));
     }
@@ -60,11 +65,9 @@ class PettyCashController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
-            $entity->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->find(40));
-            $entity->setToIncrease('Debit');
             $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('account_pettycash', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('account_pettycash'));
         }
         return $this->render('AccountingBundle:PettyCash:new.html.twig', array(
             'entity' => $entity,
@@ -164,21 +167,27 @@ class PettyCashController extends Controller
     public function paymentAction(Request $request)
     {
         $data = $request->request->all();
-
         $entity = new PettyCash();
         $em = $this->getDoctrine()->getManager();
         $entity->setGlobalOption($this->getUser()->getGlobalOption());
         $parent = $em->getRepository('AccountingBundle:PettyCash')->find($data['parent']);
+        $returnAmount = ($parent->getReturnAmount() + $data['amount']);
+        $parent->setReturnAmount($returnAmount);
         $entity->setParent($parent);
         $entity->setToUser($parent->getCreatedBy());
-        $entity->setAccountHead($em->getRepository('AccountingBundle:AccountHead')->find($data['accountHead']));
-        $entity->setToIncrease('Credit');
         $entity->setAmount($data['amount']);
         $entity->setRemark($data['remark']);
-        $entity->setPaymentMethod('Cash');
+        if($data['transactionMethod'] == 2){
+            $entity->setAccountBank($em->getRepository('AccountingBundle:AccountBank')->find($data['accountBank']));
+            $entity->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find($data['transactionMethod']));
+        }elseif($data['transactionMethod'] == 3 ){
+            $entity->setAccountBkash($em->getRepository('AccountingBundle:AccountBkash')->find($data['accountBkash']));
+            $entity->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find($data['transactionMethod']));
+        }else{
+            $entity->setTransactionMethod($em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
+        }
         $em->persist($entity);
         $em->flush();
-
         $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->returnPettyCashTransaction($entity);
         return new Response('success');
         exit;

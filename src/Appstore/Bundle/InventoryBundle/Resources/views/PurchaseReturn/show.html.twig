@@ -62,7 +62,8 @@
                                 <div class="span4">
                                     <h4>About:</h4>
                                     <ul class="unstyled">
-                                        <li><strong>Purchase Return ID:</strong>&nbsp;{{ entity.code }}</li>
+                                        <li><strong>Adjustment GRN:</strong>&nbsp;{{ entity.adjustmentInvoice }}</li>
+                                        <li><strong>Invoice:</strong>&nbsp;{{ entity.invoice }}</li>
                                         <li><strong>Created:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
                                         <li><strong>Created By:</strong>&nbsp;{% if entity.createdBy  is not empty %}{{ entity.createdBy.profile.name }}{% endif %}</li>
                                     </ul>
@@ -91,8 +92,8 @@
                             </div>
                             {% include('flash-message.html.twig')  %}
 
-                            <form>
-                                <div class="row-fluid box green" id="replaceItem">
+                            <form class="replaceItem">
+                                <div class="row-fluid box green" id="">
                                     {% if entity.purchaseReturnItems is defined and  entity.purchaseReturnItems is not empty  %}
                                         <table class="table table-bordered table-striped table-condensed flip-content ">
 
@@ -102,15 +103,11 @@
                                                 <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
                                                 <th class="numeric" >Item</th>
                                                 <th class="numeric" >Barcode</th>
+                                                <th class="numeric" >GRN</th>
                                                 <th class="numeric" >Date/Memo</th>
                                                 <th class="numeric" >Purchase price</th>
                                                 <th class="numeric" >Qnt</th>
-                                                {% if entity.process == 'approved' %}
-                                                    <th class="numeric" >Replace remaining Qnt</th>
-                                                    <th class="numeric" >ReplaceQnt</th>
-                                                {% endif %}
                                                 <th class="numeric" >Sub-total</th>
-                                                <th class="numeric" >Replace Sub-total</th>
                                                 <th><i class="icon-cogs"></i></th>
                                             </tr>
                                             </thead>
@@ -118,25 +115,25 @@
                                             {% for subList in entity.purchaseReturnItems %}
                                                 <tr id="subItem-{{ subList.id }}">
                                                     <td class="numeric" >{{ loop.index }}</td>
-                                                    <td class="numeric" >{{ subList.purchaseItem.item.name }}</td>
+                                                    <td class="numeric" >{{ subList.purchaseItem.item.name }}
+                                                        {% if subList.purchaseItem.item.size is not empty %}{{ subList.purchaseItem.item.size.name }}{% endif %}
+                                                        {% if subList.purchaseItem.item.color is not empty %}{{ subList.purchaseItem.item.color.name }}{% endif %}
+                                                        {% if subList.purchaseItem.item.vendor is not empty %}{{ subList.purchaseItem.item.vendor.name }}{% endif %}
+                                                    </td>
                                                     <td class="numeric" >{{ subList.purchaseItem.barCode }}</td>
+                                                    <td class="numeric" >{{ subList.purchaseItem.purchase.grn }}</td>
                                                     <td class="numeric" >{{ subList.purchaseItem.purchase.receiveDate|date('d-m-Y') }}/{{ subList.purchaseItem.purchase.memo }}</td>
                                                     <td class="numeric" ><input type="hidden" name="price" id="price-{{ subList.id }}" value="{{ subList.price }}">{{ subList.price }}</td>
                                                     <td class="numeric" ><input type="hidden" name="curQuantity" id="curQuantity-{{ subList.id }}" value="{{ subList.quantity }}"><span id="curQnt-{{ subList.id }}">{{ subList.quantity }}</span></td>
-                                                    {% if entity.process == 'approved' %}
-                                                        <td class="numeric" ><input type="text" class="m-wrap span5 numeric td-inline-input"  id="quantity-{{ subList.id }}" name="quantity" value="{{ subList.quantity - subList.replaceQuantity }}"></td>
-                                                        <td class="numeric" >{{ subList.replaceQuantity }}</td>
-                                                    {% endif %}
                                                     <td class="numeric" ><span id="subTotal-{{ subList.id }}">{{ subList.subTotal }}</span></td>
-                                                    <td class="numeric" >{{ subList.replaceQuantity * subList.price }}</td>
                                                     <td class="numeric" id="action-{{ subList.id }}">
-                                                        {% if subList.quantity > subList.replaceQuantity  %}<a title="Are you sure went to replace item?" id="{{ subList.id }}" rel="{{ subList.id }}" href="javascript:" class="btn green mini replace" ><i class="icon-retweet"></i></a>{% endif %}
                                                         {% if entity.process != 'approved' %}
-                                                        <a title="Are you sure went to delete ?" id="{{ subList.id }}" rel="{{ path('inventory_purchasereturn_delete', { 'id': subList.id }) }}" href="javascrireplaceQuantitypt:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                                        <a title="Are you sure went to delete ?" id="{{ subList.id }}" rel="{{ path('inventory_purchasereturnitem_delete', { 'purchaseReturn': entity.id,'purchaseReturnItem':subList.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                                         {% endif %}
                                                     </td>
                                                 </tr>
                                             {% endfor %}
+                                            <tr><th colspan="6"><span class="pull-right">Grand Total</span></th><th>{{ entity.totalQuantity }}</th><th>{{ entity.total|number_format() }}</th><td></td></tr>
                                             </tbody>
 
                                         </table>
@@ -145,15 +142,13 @@
                                 <div class="clearfix">&nbsp;</div>
                                 <div class="form-actions portlet box grey">
                                     <div class="span8" id="message"></div>
-
                                     <div class="pull-right" id="action-{{ entity.id }}">
-                                    {#
-                                        <a type="reset" class="btn"><i class="icon-print"></i>&nbsp;Print</a>
-                                        <a type="reset" class="btn blue"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>
-                                   #}     {% if entity.process != 'approved' %}
-                                            <span  class="btn green"><i class="icon-ok"></i>&nbsp;Pending</span>
-                                        {% else %}
+                                        {% if entity.total > 0  and entity.process != 'approved' %}
+                                            <input name="adjustmentInvoice" id="adjustmentInvoice" placeholder="Enter your Adjustment invoice no" class="m-wrap numeric">&nbsp;&nbsp;<span  class="btn green approvePurchaseReturn" rel="{{ path('inventory_purchasereturn_approve', { 'id': entity.id }) }}" data-title="{{ entity.id }}"><i class="icon-ok"></i>&nbsp;Confirm</span>
+                                        {% elseif entity.process == 'approved' and entity.total > 0  %}
                                             <span  class="btn green"><i class="icon-ok"></i>&nbsp;Approved</span>
+                                        {% else %}
+                                            <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_purchasereturn_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red purchaseReturnDelete" ><i class="icon-trash"></i>&nbsp;Delete</a>
                                         {% endif %}
                                     </div>
 
@@ -181,7 +176,9 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@InventoryBundle/Resources/public/js/puschaseReturn.js' %}
+    '@InventoryBundle/Resources/public/js/*'
+    '@InventoryBundle/Resources/public/js/puschaseReturn.js'
+    %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}

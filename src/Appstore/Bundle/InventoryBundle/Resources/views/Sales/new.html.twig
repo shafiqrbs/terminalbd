@@ -74,9 +74,7 @@
                                             <th class="numeric" >Sales price</th>
                                         </tr>
                                         </thead>
-                                        <tbody id="itemDetails">
-
-                                        </tbody>
+                                        <tbody id="itemDetails"></tbody>
                                     </table>
                                 </div>
                                 <div class="clearfix"></div>
@@ -134,7 +132,7 @@
 
                                                     <thead class="">
                                                     <tr class="head-blue">
-                                                        <th class="numeric" >Sl</th>
+                                                        <th class="numeric" >S/N</th>
                                                         <th class="numeric span3">Barcode</th>
                                                         <th  class="numeric span2">Qnt</th>
                                                         <th>Price</th>
@@ -146,7 +144,13 @@
                                                         {% for salesitem in entity.salesItems %}
                                                         <tr id="remove-{{ salesitem.id }}">
                                                             <td class="numeric" > {{ loop.index }}</td>
-                                                            <td  class="numeric">{{ salesitem.purchaseItem.barcode }}</td>
+                                                            <td  class="numeric">
+                                                                {{ salesitem.purchaseItem.barcode }}<br/>
+                                                                <span>{{ salesitem.item.masterItem.name }}
+                                                                    {% if salesitem.item.color  %}-{{ salesitem.item.color.name }}{% endif %}
+                                                                    {% if salesitem.item.size  %}-{{ salesitem.item.size.name }}{% endif %}
+                                                                </span>
+                                                            </td>
                                                             <td class="numeric" ><input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="m-wrap span10 quantity" placeholder="{{ salesitem.item.quantity }}"></td>
                                                             <td>
                                                                 <div class="input-prepend">
@@ -175,8 +179,8 @@
                                     <div class="span4">
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                <div class="input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom">Sub-Total TK.</span><input class="m-wrap span8 center-input numeric salesTotal" readonly="readonly" type="text" value="{{ entity.total }}"><span class="add-on">.00</span>
+                                                <div class="span12 input-prepend input-append input-append-border">
+                                                    <span class="add-on add-on-custom">Sub-Total TK.</span><input class="m-wrap span12  center-input numeric salesTotal" readonly="readonly" type="text" value="{{ entity.total }}"><span class="add-on">.00</span>
                                                     <input class="m-wrap span8 center-input numeric" name="vat" id="vat" type="hidden">
                                                 </div>
                                             </div>
@@ -190,36 +194,36 @@
                                         </div>
                                         #}<div class="row-fluid">
                                             <div class="span12">
-                                                <div class="input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom">Discount TK.</span><input class="m-wrap span8 center-input numeric" name="discount" id="discount" type="text"><span class="add-on">.00</span>
+                                                <div class="span12 input-prepend input-append input-append-border">
+                                                    <span class="add-on add-on-custom">Discount TK.</span><input class="m-wrap span12  center-input numeric" name="discount" id="discount" type="text"><span class="add-on">.00</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                <div class="input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom">Due TK.</span><input class="m-wrap span8 center-input numeric" type="text" name="dueAmount" readonly="readonly" id="dueAmount"><span class="add-on">.00</span>
+                                                <div class="input-prepend input-append input-append-border span12">
+                                                    <span class="add-on add-on-custom">Due TK.</span><input class="m-wrap span12 center-input numeric" type="text" name="dueAmount" readonly="readonly" id="dueAmount"><span class="add-on">.00</span>
                                                 </div>
                                             </div>
 
                                         </div>
                                         <div class="row-fluid">
                                                <div class="span12 input-append-border">
-                                               {{ form_widget(form.paymentMethod) }}
-                                               {{ form_errors(form.paymentMethod) }}
+                                               {{ form_widget(form.transactionMethod) }}
+                                               {{ form_errors(form.transactionMethod) }}
                                                </div>
                                         </div>
                                         <div id="cartMethod">
                                             <div class="row-fluid">
                                                 <div class="span12">
                                                     <div class="input-prepend input-append input-append-border span12">
-                                                        <input type="text" id="chequeCardNo" name="chequeCardNo"  class="m-wrap span12" placeholder="Add your card no"  autocomplete="off">
+                                                        <input type="text" id="chequeCardNo" name="chequeCardNo"  class="m-wrap center-input span12" placeholder="Add your card no"  autocomplete="off">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row-fluid">
                                                 <div class="span12 input-append-border">
-                                                    <select class="span12 select2" name="paymentCard" id="paymentCard" >
+                                                    <select class="span12 select2 center-input" name="paymentCard" id="paymentCard" >
                                                         <option>--Payment Card--</option>
                                                         {% for paymentCard in paymentCards %}
                                                             <option value="{{ paymentCard.id }}">{{ paymentCard.name }}</option>
@@ -238,18 +242,43 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="row-fluid">
-                                            <div class="span7">
-                                                <div class="input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom">Receive TK.</span><input class="m-wrap span8 center-input numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder=""><span class="add-on">.00</span>
+                                        <div id="bkashMethod">
+                                            <div class="row-fluid">
+                                                <div class="span12 input-append-border">
+                                                    <select class="select2 span12" name="bKash" id="bKash" >
+                                                        <option>--Payment bKash Name--</option>
+                                                        {% for bkash in bkashs %}
+                                                            <option value="{{ bkash.id }}">{{ bkash.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span12">
+                                                    <div class="input-prepend input-append input-append-border span12">
+                                                        <input type="text" id="bkashMobile" name="bkashMobile"  class="m-wrap  span12 mobile" placeholder="Add your bkash mobile no"  autocomplete="off">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span12">
+                                                    <div class="input-prepend input-append input-append-border span12">
+                                                        <input type="text" id="bkashTransactionId" name="bkashTransactionId"  class="m-wrap  span12" placeholder="Add your bkash transaction"  autocomplete="off">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row-fluid">
-                                            <div class="span7">
-                                                <div class="input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom">Return TK.</span><input class="m-wrap span8 center-input numeric" readonly="readonly" type="text" id="returnAmount" name="returnAmount"><span class="add-on">.00</span>
+                                            <div class="span12">
+                                                <div class="input-prepend input-append input-append-border span12">
+                                                    <span class="add-on add-on-custom">Receive TK.</span><input class="m-wrap span12 center-input numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder=""><span class="add-on">.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="input-prepend input-append input-append-border span12">
+                                                    <span class="add-on add-on-custom">Return TK.</span><input class="m-wrap span12 center-input numeric" readonly="readonly" type="text" id="returnAmount" name="returnAmount"><span class="add-on">.00</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -345,11 +374,8 @@
                                     <td class="numeric" >{{ dailySales.paymentMethod }}</td>
                                     <td class="numeric" >{{ dailySales.salesBy }}</td>
                                     <td class="numeric" >
-                                        {% if dailySales.paymentStatus == "Pending" %}
-                                        <a href="{{ path('inventory_sales_edit', { 'code': dailySales.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
-                                        {% endif %}
                                         {% if dailySales.paymentStatus == "Due" %}
-                                        <a href="{{ path('inventory_sales_due', { 'code': dailySales.invoice }) }}" class="btn mini blue" ><i class="icon-money"></i></a>
+                                        <a href="{{ path('inventory_sales_due', { 'code': dailySales.invoice }) }}" class="btn mini purple" ><i class="icon-money"></i>&nbsp;Due</a>
                                         {% endif %}
                                         {% if dailySales.salesItems is defined and  dailySales.salesItems is empty  %}
                                         <a data-title="Add purchase item" href="{{ path('inventory_sales_edit', { 'code': dailySales.invoice }) }}" class="btn blue mini" ><i class="icon-plus-sign"></i></a>
@@ -406,10 +432,18 @@
             </div>
         </div>
     </div>
-
+<style>
+    .input-append .add-on, .input-prepend input[class*="numeric"]{
+        font-size: 16px !important;
+    }
+    .center-input{
+        min-width: 46.5% !important;
+    }
+</style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
+    '@InventoryBundle/Resources/public/css/print.css'
     '@InventoryBundle/Resources/public/css/style.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
@@ -418,6 +452,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@InventoryBundle/Resources/public/js/*'
     '@InventoryBundle/Resources/public/js/editable.js'
     '@InventoryBundle/Resources/public/js/sales.js'
     %}

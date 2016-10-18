@@ -22,6 +22,8 @@ inventory_purchasereturn_edit:
 inventory_purchasereturn_approve:
     path:     /{id}/approve
     defaults: { _controller: "InventoryBundle:PurchaseReturn:approve" }
+    options:
+           expose: true
 
 inventory_purchasereturn_update:
     path:     /{id}/update
@@ -35,7 +37,7 @@ inventory_purchasereturn_delete:
             expose: true
 
 inventory_purchasereturnitem_delete:
-    path:     /{purchaseReturn}/{purchaseReturnItem}/delete
+    path:     /{purchaseReturn}/{purchaseReturnItem}/item-delete
     defaults: { _controller: "InventoryBundle:PurchaseReturn:deleteItem" }
     options:
             expose: true

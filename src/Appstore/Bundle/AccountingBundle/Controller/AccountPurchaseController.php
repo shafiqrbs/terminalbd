@@ -42,13 +42,34 @@ class AccountPurchaseController extends Controller
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($globalOption,$data);
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(5));
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
         return $this->render('AccountingBundle:AccountPurchase:index.html.twig', array(
             'entities' => $pagination,
             'overview' => $overview,
             'accountHead' => $accountHead,
+            'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
         ));
     }
+    /**
+     * Lists all AccountPurchase entities.
+     *
+     */
+    public function purchaseReturnAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchaseReturn')->findWithSearch($globalOption,$data);
+        $pagination = $this->paginate($entities);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchaseReturn')->accountPurchaseOverview($globalOption,$data);
+        return $this->render('AccountingBundle:AccountPurchase:purchaseReturn.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'searchForm' => $data,
+        ));
+    }
+
     /**
      * Creates a new AccountPurchase entity.
      *
@@ -60,24 +81,12 @@ class AccountPurchaseController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
 
-            $toIncrease = $entity->getProcessType();
-
             $em = $this->getDoctrine()->getManager();
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $entity->setInventoryConfig($inventory);
+            $lastBalance = $em->getRepository('AccountingBundle:AccountPurchase')->lastInsertPurchase($this->getUser()->getGlobalOption(),$entity->getVendor());
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
-
-            if($toIncrease == "Debit"){
-                $entity->setAccountHead($this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->find(31));
-                $entity->setAmount($entity->getAmount());
-            }else{
-                $entity->setAccountHead($this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->find(13));
-                $entity->setTotalAmount($entity->getAmount());
-                $entity->setDueAmount($entity->getAmount());
-                $entity->setAmount(0);
-            }
-
-            $entity->setToIncrease($toIncrease);
+            $entity->setTotalAmount($lastBalance);
+            $entity->setProcessHead('Account Purchase');
+            $entity->setBalance($lastBalance - $entity->getPayment());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -227,12 +236,18 @@ class AccountPurchaseController extends Controller
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('AccountingBundle:AccountPurchase')->find($data['pk']);
+
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
+            throw $this->createNotFoundException('Unable to find Account Purchase entity.');
         }
-        $entity->setAmount($data['value']);
+
+        $currentBalance = $entity->getBalance() + $entity->getPayment();
+        $entity->setPayment($data['value']);
+        $entity->setBalance($currentBalance - floatval($data['value']));
         $em->flush();
+
         exit;
+
     }
 
     public function approveAction(AccountPurchase $entity)
@@ -242,12 +257,7 @@ class AccountPurchaseController extends Controller
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            if($entity->getProcess() == "Debit"){
-                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertVendorTransaction($entity);
-            }else{
-                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertVendorReturnTransaction($entity);
-            }
-
+            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($entity);
             return new Response('success');
         } else {
             return new Response('failed');
@@ -255,7 +265,7 @@ class AccountPurchaseController extends Controller
         exit;
     }
 
-    /**
+    /**6
      * Deletes a Expenditure entity.
      *
      */

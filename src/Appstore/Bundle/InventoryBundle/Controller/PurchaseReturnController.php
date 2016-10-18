@@ -227,8 +227,6 @@ class PurchaseReturnController extends Controller
     }
 
 
-
-
     public function searchAction(Request $request)
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
@@ -281,18 +279,19 @@ class PurchaseReturnController extends Controller
     }
 
 
-    public function approveAction(PurchaseReturn $purchaseReturn)
+    public function approveAction(Request $request,PurchaseReturn $purchaseReturn)
     {
 
+        $adjustmentInvoice = $_REQUEST['adjustmentInvoice'];
         $em = $this->getDoctrine()->getManager();
+        $purchaseReturn->setAdjustmentInvoice($adjustmentInvoice);
         $purchaseReturn->setProcess('approved');
         $em->persist($purchaseReturn);
         $em->flush();
-
         $em->getRepository('InventoryBundle:Item')->getItemPurchaseReturn($purchaseReturn);
         $em->getRepository('InventoryBundle:StockItem')->insertPurchaseReturnStockItem($purchaseReturn);
-        $em->getRepository('AccountingBundle:Transaction')->purchaseReturnTransaction($purchaseReturn,$purchaseReturn->getInventoryConfig(),'PurchaseReturn');
-        $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchaseReturn($purchaseReturn);
+        $accountPurchaseReturn = $em->getRepository('AccountingBundle:AccountPurchaseReturn')->insertAccountPurchaseReturn($purchaseReturn);
+        $em->getRepository('AccountingBundle:Transaction')->purchaseReturnTransaction($purchaseReturn,$accountPurchaseReturn);
         return new Response(json_encode(array('success'=>'success')));
 
     }
@@ -318,7 +317,7 @@ class PurchaseReturnController extends Controller
             $em->getRepository('InventoryBundle:Item')->getItemPurchaseReplace($item);
             $em->getRepository('InventoryBundle:StockItem')->insertPurchaseReturnReplaceStockItem($item->getPurchaseReturn(),$item,$curQuantity);
 
-            $em->getRepository('AccountingBundle:Transaction')->insertPurchaseReturnReplaceTransaction($item->getPurchaseReturn(),$item->getReplaceSubTotal(),'PurchaseReturnReplace');
+            $em->getRepository('AccountingBundle:Transaction')->insertPurchaseReturnReplaceTransaction($item->getPurchaseReturn()->getInventoryConfig(),$item->getPurchaseReturn(),$item->getReplaceSubTotal(),'PurchaseReturnReplace');
             $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchaseReplace($item->getPurchaseReturn(),$item->getReplaceSubTotal(),'PurchaseReturn');
             return new Response(json_encode(array('success'=>'success')));
 

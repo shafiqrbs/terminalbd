@@ -28,32 +28,25 @@ class AccountPurchaseType extends AbstractType
     {
         $builder
 
-            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'add payment amount BDT'),
+            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'add payment amount BDT'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add payment amount BDT'))
-                )))
 
-            ->add('accountNo','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'add your account no')))
-            ->add('paymentMethod', 'choice', array(
+            )))
+            ->add('transactionMethod', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
+                'empty_value' => '---Choose a transaction method---',
+                'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please choose required'))
+                    new NotBlank(array('message'=>'Please input required'))
                 ),
-                'choices' => array(
-                    'Cash' => 'Cash',
-                    'Cheque' => 'Cheque',
-                    'Gift card' => 'Gift card',
-                    'Bkash' => 'Bkash',
-                    'Payment Card' => 'Payment Card',
-                    'Other' => 'Other'
-                ),
-            ))
-            ->add('processType', 'choice', array(
-                'attr'=>array('class'=>'span12 select2'),
-                'choices' => array(
-                    'Debit' => 'Purchase Due Payment',
-                    'Credit' => 'Purchase Return Cash Receive'
-                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->orderBy("e.id");
+                }
             ))
             ->add('vendor', 'entity', array(
                 'required'    => true,
@@ -82,9 +75,9 @@ class AccountPurchaseType extends AbstractType
                 },
             ))
              */
-            ->add('bank', 'entity', array(
+            ->add('accountBank', 'entity', array(
                 'required'    => true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\Bank',
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'empty_value' => '---Choose a bank---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
@@ -93,7 +86,18 @@ class AccountPurchaseType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 },
             ))
-
+            ->add('accountBkash', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBkash',
+                'empty_value' => '---Choose a mobile banking---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->orderBy("b.name", "ASC");
+                },
+            ))
+            ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
 
         ;
     }

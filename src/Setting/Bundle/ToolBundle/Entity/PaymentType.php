@@ -23,20 +23,12 @@ class PaymentType
      */
     private $id;
 
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PaymentMethod", mappedBy="paymentType" , cascade={"persist", "remove"})
      */
     protected $paymentMethods;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="paymentType" , cascade={"persist", "remove"})
-     */
-    protected $orders;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="paymentType" , cascade={"persist", "remove"})
-     */
-    protected $preOrders;
 
     /**
      * @var string
@@ -119,13 +111,6 @@ class PaymentType
         return $this->status;
     }
 
-    /**
-     * @return PreOrder
-     */
-    public function getPreOrders()
-    {
-        return $this->preOrders;
-    }
 
     /**
      * @return mixed
@@ -143,12 +128,6 @@ class PaymentType
         $this->slug = $slug;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getOrders()
-    {
-        return $this->orders;
-    }
+
 }
 

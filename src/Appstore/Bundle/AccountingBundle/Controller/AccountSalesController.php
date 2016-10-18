@@ -42,9 +42,30 @@ class AccountSalesController extends Controller
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->salesOverview($globalOption,$data);
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(20,29));
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
         return $this->render('AccountingBundle:AccountSales:index.html.twig', array(
             'entities' => $pagination,
             'accountHead' => $accountHead,
+            'transactionMethods' => $transactionMethods,
+            'searchForm' => $data,
+            'overview' => $overview,
+        ));
+    }
+
+    /**
+     * Lists all AccountSalesReturn entities.
+     *
+     */
+    public function salesReturnAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('AccountingBundle:AccountSalesReturn')->findWithSearch($globalOption,$data);
+        $pagination = $this->paginate($entities);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSalesReturn')->salesOverview($globalOption,$data);
+        return $this->render('AccountingBundle:AccountSales:salesReturn.html.twig', array(
+            'entities' => $pagination,
             'searchForm' => $data,
             'overview' => $overview,
         ));
@@ -59,13 +80,13 @@ class AccountSalesController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $toIncrease = $entity->getAccountHead()->getToIncrease();
 
             $em = $this->getDoctrine()->getManager();
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $entity->setInventoryConfig($inventory);
+            $lastBalance = $em->getRepository('AccountingBundle:AccountSales')->lastInsertSales($this->getUser()->getGlobalOption(),$entity);
+            $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption( $this->getUser()->getGlobalOption());
-            $entity->setToIncrease($toIncrease);
+            $entity->setProcessHead('Account Sales');
+            $entity->setBalance($lastBalance - $entity->getAmount());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -219,7 +240,9 @@ class AccountSalesController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
         }
+        $lastBalance = $em->getRepository('AccountingBundle:AccountSales')->lastInsertSales($this->getUser()->getGlobalOption(),$entity);
         $entity->setAmount($data['value']);
+        $entity->setBalance($lastBalance - floatval($data['value']));
         $em->flush();
         exit;
     }

@@ -22,16 +22,6 @@ class BkashAccount
      */
     private $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="bkashAccount"  )
-     **/
-    private  $orders;
-
-/**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="bkashAccount"  )
-     **/
-    private  $preOrders;
-
 
     /**
      * @var string
@@ -162,36 +152,7 @@ class BkashAccount
         $this->name = $name;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getInvoiceSmsEmails()
-    {
-        return $this->invoiceSmsEmails;
-    }
 
-    /**
-     * @return InvoiceModule
-     */
-    public function getInvoiceModules()
-    {
-        return $this->invoiceModules;
-    }
 
-    /**
-     * @return PreOrder
-     */
-    public function getPreOrders()
-    {
-        return $this->preOrders;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOrders()
-    {
-        return $this->orders;
-    }
 }
 

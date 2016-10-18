@@ -89,9 +89,11 @@ class PaymentSalaryController extends Controller
 
             return $this->redirect($this->generateUrl('account_paymentsalary_show', array('user' => $user->getId())));
         }
-
+        $totalAmount = $this->getDoctrine()->getRepository('AccountingBundle:PaymentSalary')->totalAmount($user);
         return $this->render('AccountingBundle:PaymentSalary:new.html.twig', array(
             'entity' => $entity,
+            'user'      => $user,
+            'totalAmount'      => $totalAmount,
             'form'   => $form->createView(),
         ));
     }
@@ -125,10 +127,12 @@ class PaymentSalaryController extends Controller
     {
         $entity = new PaymentSalary();
         $form   = $this->createCreateForm($entity,$user);
-
+        $totalAmount = $this->getDoctrine()->getRepository('AccountingBundle:PaymentSalary')->totalAmount($user);
         return $this->render('AccountingBundle:PaymentSalary:new.html.twig', array(
             'user' => $user,
             'entity' => $entity,
+            'user'      => $user,
+            'totalAmount'      => $totalAmount,
             'form'   => $form->createView(),
         ));
     }
@@ -170,11 +174,6 @@ class PaymentSalaryController extends Controller
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            if ($entity->getPaymentMethod() == 'Cheque'){
-                $this->getDoctrine()->getRepository('AccountingBundle:AccountBank')->insertSalaryBank($entity);
-            }else{
-                $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->insertSalaryExpenditure($entity);
-            }
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertSalaryTransaction($entity);
             return new \Symfony\Component\HttpFoundation\Response('success');
         } else {

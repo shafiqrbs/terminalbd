@@ -2,6 +2,10 @@ account_purchase:
     path:     /
     defaults: { _controller: "AccountingBundle:AccountPurchase:index" }
 
+account_purchase_return:
+    path:     /purchase-return
+    defaults: { _controller: "AccountingBundle:AccountPurchase:purchaseReturn" }
+
 account_purchase_show:
     path:     /{id}/show
     defaults: { _controller: "AccountingBundle:AccountPurchase:show" }

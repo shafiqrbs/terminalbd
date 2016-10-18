@@ -53,6 +53,9 @@ function AccountingPettyCashPage(){
         var accountHead =  $('#accountHead').val();
         var remark =  $('#remark').val();
         var payment =  $('#amount').val();
+        var transactionMethod =  $('#transactionMethod').val();
+        var accountBank =  $('#accountBank').val();
+        var accountBkash =  $('#accountBkash').val();
         var amount = (payment != '') ? parseInt(payment) : 0;
         var parentAmount =  $('#parentAmount').val();
         var receivedAmount =  $('#receivedAmount').val();
@@ -75,7 +78,7 @@ function AccountingPettyCashPage(){
             $.ajax({
                 url: Routing.generate('account_pettycash_payment_return'),
                 type: 'POST',
-                data:'parent='+parent+'&accountHead='+accountHead+'&remark='+remark+'&amount='+ amount,
+                data:'parent='+parent+'&transactionMethod='+transactionMethod+'&remark='+remark+'&amount='+ amount+'&accountBank='+ accountBank+'&accountBkash='+ accountBkash,
                 success: function (response) {
                     if (response == 'success'){
                         location.reload();

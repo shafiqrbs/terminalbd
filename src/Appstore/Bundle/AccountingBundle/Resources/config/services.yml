@@ -2,3 +2,54 @@ services:
 #    accounting.example:
 #        class: Appstore\Bundle\AccountingBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
+
+    appstore.account.sales.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\AccountSalesListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.account.purchase.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\AccountPurchaseListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.account.journal.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\AccountJournalListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.account.bank.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\AccountBankListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.account.bkash.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\AccountBkashListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.account.sales.return.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\AccountSalesReturnListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.account.purchase.return.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\AccountPurchaseReturnListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.account.expenditure.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\ExpenditureListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.account.pettycash.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\PettyCashListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.account.salary.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\PaymentSalaryListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+

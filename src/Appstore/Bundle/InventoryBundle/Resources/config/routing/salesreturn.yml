@@ -3,7 +3,7 @@ inventory_salesreturn:
     defaults: { _controller: "InventoryBundle:SalesReturn:index" }
 
 inventory_salesreturn_search:
-    path:     /create
+    path:     /serach-with-edit
     defaults: { _controller: "InventoryBundle:SalesReturn:search" }
     methods:  POST
 
@@ -11,14 +11,6 @@ inventory_salesreturn_show:
     path:     /{id}/show
     defaults: { _controller: "InventoryBundle:SalesReturn:show" }
 
-inventory_salesreturn_new:
-    path:     /new
-    defaults: { _controller: "InventoryBundle:SalesReturn:new" }
-
-inventory_salesreturn_create:
-    path:     /create
-    defaults: { _controller: "InventoryBundle:SalesReturn:create" }
-    methods:  POST
 
 inventory_salesreturn_edit:
     path:     /{id}/edit

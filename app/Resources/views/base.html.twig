@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="utf-8"/>
-    <title>{{ app.user.globaloption.name }} | ADMIN PANEL</title>
+    <title>{% if app.user.globaloption.name is not empty %}{{ app.user.globaloption.name }}{% endif %} | ADMIN PANEL</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta content="" name="description"/>
@@ -202,6 +202,7 @@
         $('.selectbox select').selectBox();
         $(".numeric").numeric();
         $(".mask_number").numeric();
+        $(".invoice-no").inputmask("mask", {"mask": "9999"}); //specifying fn & options
         $(".mobile").inputmask("mask", {"mask": "99999-999-999"}); //specifying fn & options
         $(".phone").inputmask("mask", {"mask": "99-999999"}); //specifying fn & options
         $( ".date-picker" ).datepicker({

@@ -117,7 +117,7 @@
                                                 <td class="numeric" >{{ payment.updated|date('d-m-Y') }}</td>
                                                 <td class="numeric" >{{ payment.salaryMonth }}</td>
                                                 <td class="numeric" >{{ payment.salarySetting.name }}/{{ payment.salarySetting.updated|date('d-m-Y') }}</td>
-                                                <td class="numeric" >{{ payment.paymentMethod }}</td>
+                                                <td class="numeric" >{{ payment.transactionMethod.name }}</td>
                                                 <td class="numeric" >{{ payment.salarySetting.totalAmount }}</td>
                                                 <td class="numeric" >{{ payment.otherAmount }}</td>
                                                 <td class="numeric" >{{ payment.totalAmount }}</td>
@@ -135,9 +135,11 @@
                                                 <td colspan="9">
                                                     <table class="table">
                                                         <tr><td>Remark</td><td>{{ payment.remark }}</td></tr>
-                                                        {% if payment.bank is not empty %}
-                                                        <tr><td>Bank name</td><td>{{ payment.bank.name }}</td></tr>
-                                                        <tr><td>Account no.</td><td>{{ payment.accountNo }}</td></tr>
+                                                        {% if payment.accountBank is not empty %}
+                                                        <tr><td>Bank name</td><td>{{ payment.accountBank.name }}</td></tr>
+                                                        {% endif %}
+                                                        {% if payment.accountBkash is not empty %}
+                                                        <tr><td>Bank name</td><td>{{ payment.accountBkash.name }}</td></tr>
                                                         {% endif %}
                                                     </table>
                                                 </td>

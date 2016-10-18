@@ -63,86 +63,98 @@
                             {{ form_row(form._token) }}
 
                             <div class="row-fluid">
-
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <label class="control-label" for="Expenditure">To user</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.toUser) }}
-                                            {{ form_errors(form.toUser) }}
+                                <div class="span4">
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="Expenditure">To user</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.toUser) }}
+                                                    {{ form_errors(form.toUser) }}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <label class="control-label" for="firstName">Account Head </label>
-                                        <div class="controls">
-                                            {{ form_widget(form.accountHead) }}
-                                            {{ form_errors(form.accountHead) }}
+                                <div class="span4">
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Expense Category</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.expenseCategory) }}
+                                                    {{ form_errors(form.expenseCategory) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Transaction Method</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.transactionMethod) }}
+                                                    {{ form_errors(form.transactionMethod) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid bankHide">
+                                        <div class="span12">
+                                            <div class="control-group ">
+                                                <label class="control-label" for="accountBank">
+                                                    {{ form_widget(form.accountBank) }}
+                                                    {{ form_errors(form.accountBank) }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid bkashHide">
+                                        <div class="span12">
+                                            <div class="control-group ">
+                                                <label class="control-label" for="accountBkash">
+                                                    {{ form_widget(form.accountBkash) }}
+                                                    {{ form_errors(form.accountBkash) }}
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <label class="control-label" for="firstName">Expense Category</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.expenseCategory) }}
-                                            {{ form_errors(form.expenseCategory) }}
+                                <div class="span4">
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Account Head </label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.accountHead) }}
+                                                    {{ form_errors(form.accountHead) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Amount </label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.amount) }}
+                                                    {{ form_errors(form.amount) }}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <label class="control-label" for="firstName">Payment method</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.paymentMethod) }}
-                                            {{ form_errors(form.paymentMethod) }}
-                                        </div>
-                                    </div>
-                                </div>
-
                             </div>
                             <div class="row-fluid">
-                                <div class="span6">
-
-                                    <div class="control-group hide">
-                                        <label class="control-label" for="bank">
-                                            {{ form_widget(form.bank) }}
-                                            {{ form_errors(form.bank) }}
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="span3">
-                                    <div class="control-group hide">
-                                        <label class="control-label" for="accountNo">
-                                            {{ form_widget(form.accountNo) }}
-                                            {{ form_errors(form.accountNo) }}
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <label class="control-label" for="firstName"> {{ form_widget(form.amount) }}
-                                            {{ form_errors(form.amount) }}</label>
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row-fluid">
-
                                 <div class="span12">
                                     <div class="control-group">
-                                        <label class="control-label" for="firstName">
+                                        <label class="control-label" for="remark">
                                             {{ form_widget(form.remark) }}
                                             {{ form_errors(form.remark) }}
                                         </label>
 
                                     </div>
                                 </div>
-
                             </div>
 
                             <!--/span-->
@@ -167,6 +179,7 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
+    '@AccountingBundle/Resources/public/css/*'
     '@AccountingBundle/Resources/public/css/style.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>

@@ -664,14 +664,19 @@ class Builder extends ContainerAware
             ->setAttribute('icon','fa fa-cog')
             ->setAttribute('dropdown', true);
         $menu['Finance']->addChild('Transaction Overview', array('route' => 'account_transaction'));
+        $menu['Finance']->addChild('Cash Overview', array('route' => 'account_transaction_cash_overview'));
+        $menu['Finance']->addChild('Cash Transaction', array('route' => 'account_transaction_cash'));
+        $menu['Finance']->addChild('Bank Transaction', array('route' => 'account_transaction_bank'));
+        $menu['Finance']->addChild('Mobile Transaction', array('route' => 'account_transaction_bkash'));
         $menu['Finance']->addChild('Expenditure', array('route' => 'account_expenditure'))
             ->setAttribute('icon','fa fa-bookmark')
             ->setAttribute('dropdown', true);
         $menu['Finance']['Expenditure']->addChild('Expense',        array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');;
         $menu['Finance']['Expenditure']->addChild('Expense Category',        array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');;
         $menu['Finance']->addChild('Sales', array('route' => 'account_sales'));
+        $menu['Finance']->addChild('Sales Return', array('route' => 'account_sales_return'));
         $menu['Finance']->addChild('Purchase', array('route' => 'account_purchase'));
-        $menu['Finance']->addChild('Bank Transaction', array('route' => 'account_bank'));
+        $menu['Finance']->addChild('Purchase Return', array('route' => 'account_purchase_return'));
         $menu['Finance']->addChild('Petty Cash', array('route' => 'account_pettycash'));
         $menu['Finance']->addChild('Journal', array('route' => 'account_journal'));
         $menu['Finance']->addChild('Account Head',        array('route' => 'accounthead'));
@@ -741,8 +746,8 @@ class Builder extends ContainerAware
         $menu['HR & Payroll']['Human Resource']->addChild('Employee',        array('route' => 'domain_user'))->setAttribute('icon', 'icon-user');
 
         $menu['HR & Payroll']->addChild('Payroll') ->setAttribute('icon', 'icon-group')->setAttribute('dropdown', true);
-        $menu['HR & Payroll']['Payroll']->addChild('Payment Salary',        array('route' => 'account_paymentsalary'))->setAttribute('icon', 'icon-th-list');
-        $menu['HR & Payroll']['Payroll']->addChild('Salary Employee',        array('route' => 'account_paymentsalary_employee'))->setAttribute('icon', 'icon-th-list');
+        $menu['HR & Payroll']['Payroll']->addChild('Salary Transaction',        array('route' => 'account_paymentsalary'))->setAttribute('icon', 'icon-th-list');
+        $menu['HR & Payroll']['Payroll']->addChild('Payment Salary',        array('route' => 'account_paymentsalary_employee'))->setAttribute('icon', 'icon-th-list');
         $menu['HR & Payroll']['Payroll']->addChild('Payment Type',        array('route' => 'account_salarysetting'))->setAttribute('icon', 'icon-th-list');
 
 

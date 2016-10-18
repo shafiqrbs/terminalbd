@@ -26,18 +26,6 @@ class BankAccount
      **/
     private  $bank;
 
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="bankAccount"  )
-     **/
-    private  $preOrders;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="bankAccount"  )
-     **/
-    private  $orders;
-
-
     /**
      * @var string
      *
@@ -173,22 +161,5 @@ class BankAccount
         $this->name = $name;
     }
 
-
-
-    /**
-     * @return PreOrder
-     */
-    public function getPreOrders()
-    {
-        return $this->preOrders;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOrders()
-    {
-        return $this->orders;
-    }
 }
 

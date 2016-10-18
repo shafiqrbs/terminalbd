@@ -3,25 +3,11 @@
  * Created by rbs on 2/9/16.
  */
 
+
+
 var InventorySalesReturnItem = function(salesReturn) {
 
     $('#paymentBtn').attr("disabled", false);
-
-    $(document).on("click", ".delete", function () {
-
-        var url = $(this).attr("rel");
-        var id = $(this).attr("id");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                obj = JSON.parse(response);
-                if ('success' == obj['success']) {
-                    location.reload();
-                }
-            }
-        })
-    })
 
     $(document).on('change', '.quantity , .price ', function () {
 
@@ -80,6 +66,22 @@ var InventorySalesReturnItem = function(salesReturn) {
 
                 }
             },
+        })
+    })
+
+    $(document).on("click", ".delete", function () {
+
+        var url = $(this).attr("rel");
+        var id = $(this).attr("id");
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (response) {
+                obj = JSON.parse(response);
+                if ('success' == obj['success']) {
+                    location.reload();
+                }
+            }
         })
     })
 }

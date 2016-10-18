@@ -53,37 +53,34 @@
                             {% include('flash-message.html.twig')  %}
                             <div class="portlet search-portlet box grey">
                                 <form class="search-form" action="" method="get" name="itemSearch">
-                                    <div class="span4">
-                                        <div class="controls">
-                                            <input type="text" id="startDate" name="startDate"  class="span6 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}start date{% endif %} ">
-                                            <input type="text" id="endDate" name="endDate"  class="span6 search-input  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}end date{% endif %} ">
+                                    <div class="row-fluid">
+                                        <div class="span2">
+                                            <input type="text" id="accountRefNo" name="accountRefNo"  class="span12 search-input  " value="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% else %}Enter Ref No{% endif %} ">
+                                        </div>
+                                        <div class="span2">
+                                            <input type="text" id="startDate" name="startDate"  class="span12 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        </div>
+                                        <div class="span2">
+                                            <input type="text" id="endDate" name="endDate"  class="span12 search-input  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="toUser" name="toUser"  class="leftMargin span12 select2Customer" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Select customer mobile no">
+                                        </div>
+                                        <div class="span2">
+                                            <select name="transactionMethod" id="transactionMethod" class="select2 leftMargin span12">
+                                                <option value="" >--Transaction--</option>
+                                                {% for method in transactionMethods %}
+                                                    <option {% if searchForm.transactionMethod is defined and searchForm.transactionMethod == method.id %} selected="selected" {% endif %} value="{{ method.id }}" >{{ method.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="span1">
+                                            <button class="btn blue" type="submit" >
+                                                <i class="icon-search"></i></button>
                                         </div>
                                     </div>
-                                    <div class="span3">
-                                        <select class="search-input span12 select2" id="accountHead" name="accountHead">
-                                            <option value="">Select account head</option>
-                                            {% for account in accountHead %}
-                                                {% set accountId = searchForm.accountHead is defined ? searchForm.accountHead : '' %}
-                                                <option value="{{ account.id }}" {% if accountId == account.id %} selected="selected" {% endif %} >{{ account.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="span4">
-                                        <input type="text" id="toUser" name="toUser"  class="span11 select2Customer" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="select user">
-                                    </div>
-                                    <div class="1">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <div class="input-append">
-                                                    <div class="btn-group">
-                                                        <button class="btn" type="submit" >
-                                                            <i class="icon-search"></i>&nbsp;Go</button>
 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </form>
 
                             </div>
@@ -97,22 +94,21 @@
 
                                 <thead class="flip-content ">
                                 <tr>
-                                    <th class="numeric" colspan="4" style="text-align: right"><strong>Grand Total</strong></th>
+                                    <th class="numeric" colspan="5" style="text-align: right"><strong>Grand Total</strong></th>
                                     <td class="numeric" ><strong>{{ overview.totalAmount|number_format }}</strong></td>
                                     <td class="numeric" ><strong>{{ overview.receiveAmount|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ overview.dueAmount|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{ overview.returnAmount|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ (overview.totalAmount - overview.receiveAmount)|number_format }}</strong></td>
                                     <td class="numeric" ></td>
                                 </tr>
                                 <tr class="head-grey">
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Customer</th>
                                     <th class="numeric" >Invoice</th>
-                                    <th class="numeric" >Account Head</th>
-                                    <th class="numeric" >Method</th>
-                                    <th class="numeric" >Total</th>
+                                    <th class="numeric" >Ref No.</th>
+                                    <th class="numeric" >Transaction Method</th>
+                                    <th class="numeric" >Sales</th>
                                     <th class="numeric" >Received</th>
-                                    <th class="numeric" >Due</th>
-                                    <th class="numeric" >Return</th>
+                                    <th class="numeric" >Balance</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -120,13 +116,12 @@
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.sales is not empty %}{{ entity.sales.invoice }} {% endif %}
-                                            {% if entity.salesReturn is not empty %}{{ entity.salesReturn.invoice }} {% endif %}
                                         </td>
-
-                                        <td class="numeric" >{{ entity.accountHead.name }}/{{ entity.accountHead.code }}</td>
-                                        <td class="numeric" >{{ entity.sales.paymentMethod }}</td>
+                                        <td class="numeric" >{{ entity.accountRefNo }}</td>
+                                         <td class="numeric" >{% if entity.transactionMethod is defined and entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
                                         <td class="numeric" >
                                                 {% if entity.process == 'approved'  %}
@@ -135,8 +130,7 @@
                                                     <a data-mode="inline" class="editable" data-name="amount" href="#"  data-url="{{ path('account_sales_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.amount }}</a>
                                                 {% endif %}
                                         </td>
-                                        <td class="numeric" >{{ entity.dueAmount|number_format }}</td>
-                                        <td class="numeric" >{{ entity.returnAmount|number_format }}</td>
+                                        <td class="numeric" >{{ entity.balance|number_format }}</td>
                                         <td class="numeric" >
                                             {% if entity.process != 'approved'  %}
                                                 <a href="javascript:" id="" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('account_sales_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
@@ -159,6 +153,7 @@
             </div>
         </div>
     </div>
+
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -170,10 +165,12 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@AccountingBundle/Resources/public/js/*'
     '@AccountingBundle/Resources/public/js/approveProcess.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
+
 {% block documentready %}
     {{ parent() }}
     $(".editable").editable();

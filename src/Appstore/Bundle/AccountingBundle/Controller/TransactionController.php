@@ -61,7 +61,7 @@ class TransactionController extends Controller
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->specificAccountHead($globalOption,$entity->getId());
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->transactionOverview($globalOption,$entity->getId());
-        $accountHead = $em->getRepository('AccountingBundle:AccountHead')->findBy(array('status'=>1),array('name'=>'asc'));
+        $accountHead = $em->getRepository('AccountingBundle:AccountHead')->findBy(array('status'=> 1),array('name'=>'asc'));
         return $this->render('AccountingBundle:Transaction:show.html.twig', array(
             'entity' => $entity,
             'entities' => $pagination,
@@ -71,7 +71,104 @@ class TransactionController extends Controller
 
     }
 
-   
-   
+    /**
+     * Lists all Transaction entities.
+     *
+     */
+    public function transactionCashOverviewAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $globalOption = $this->getUser()->getGlobalOption();
+        $overviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionCashOverview($globalOption,$data);
+        $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview($globalOption,$data);
+        $transactionBkashCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBkashCashOverview($globalOption,$data);
+        $transactionAccountHeadCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionAccountHeadCashOverview($globalOption,$data);
+        return $this->render('AccountingBundle:Transaction:cashoverview.html.twig', array(
+            'overviews'                             => $overviews,
+            'transactionBankCashOverviews'          => $transactionBankCashOverviews,
+            'transactionBkashCashOverviews'         => $transactionBkashCashOverviews,
+            'transactionAccountHeadCashOverviews'   => $transactionAccountHeadCashOverviews,
+        ));
+
+    }
+
+   /**
+     * Lists all Transaction entities.
+     *
+     */
+    public function cashAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($globalOption,1,$data);
+        $pagination = $this->paginate($entities);
+
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->accountCashOverview($globalOption,1,$data);
+        $processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
+        return $this->render('AccountingBundle:Transaction:cash.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'processHeads' => $processHeads,
+            'searchForm' => $data,
+        ));
+
+    }
+
+    /**
+     * Lists all Transaction entities.
+     *
+     */
+    public function bankAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($globalOption,2,$data);
+        $pagination = $this->paginate($entities);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->accountCashOverview($globalOption,2,$data);
+        $processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
+        $accountBanks = $this->getDoctrine()->getRepository('AccountingBundle:AccountBank')->findBy(array('globalOption'=>$globalOption,'status'=>1));
+
+        return $this->render('AccountingBundle:Transaction:bank.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'processHeads' => $processHeads,
+            'accountBanks' => $accountBanks,
+            'searchForm' => $data,
+        ));
+
+    }
+
+    /**
+     * Lists all Transaction entities.
+     *
+     */
+    public function bkashAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($globalOption,3,$data);
+        $pagination = $this->paginate($entities);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->accountCashOverview($globalOption,3,$data);
+        $processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
+        $accountBkashs = $this->getDoctrine()->getRepository('AccountingBundle:AccountBkash')->findBy(array('globalOption'=>$globalOption,'status'=>1));
+        return $this->render('AccountingBundle:Transaction:bkash.html.twig', array(
+            'entities' => $pagination,
+            'overview' => $overview,
+            'processHeads' => $processHeads,
+            'accountBkashs' => $accountBkashs,
+            'searchForm' => $data,
+        ));
+
+    }
+
+
+
+
 
 }

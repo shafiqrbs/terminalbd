@@ -48,10 +48,10 @@ class SalesReturn implements CodeAwareEntity
     private  $sales;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="salesReturn" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn", mappedBy="salesReturn" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
-    private  $accountSales;
+    private  $accountSalesReturn;
 
 
     /**
@@ -304,9 +304,9 @@ class SalesReturn implements CodeAwareEntity
     /**
      * @return mixed
      */
-    public function getAccountSales()
+    public function getAccountSalesReturn()
     {
-        return $this->accountSales;
+        return $this->accountSalesReturn;
     }
 
 

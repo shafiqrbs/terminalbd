@@ -1,3 +1,4 @@
+
 var InventoryPurchaseReturnPage = function(purchaseReturn) {
 
     $('input[name=barcode]').focus();
@@ -18,19 +19,17 @@ var InventoryPurchaseReturnPage = function(purchaseReturn) {
         })
     })
 
-    $(document).on("click", ".approve", function () {
+    $(document).on("click", ".approvePurchaseReturn", function () {
 
         var url = $(this).attr("rel");
         var id = $(this).attr("data-title");
+        var adjustmentInvoice = $('#adjustmentInvoice').val();
         $.ajax({
             url: url,
+            data: 'adjustmentInvoice=' + adjustmentInvoice,
             type: 'GET',
             success: function (response) {
-                obj = JSON.parse(response);
-                if ('success' == obj['success']) {
-                    $('#action-' + id).append('<a title="Approve" href="javascript:" class="btn green mini" ><i class="icon-check"></i>&nbsp;Approved</a>');
-                    $('#approved-' + id).remove();
-                }
+                location.reload();
             },
         })
     })
@@ -128,19 +127,29 @@ var InventoryPurchaseReturnPage = function(purchaseReturn) {
         })
     })
 
-    $('#subItems').on("click", ".delete", function () {
+    $('.replaceItem').on("click", ".delete", function () {
         var url = $(this).attr("rel");
         var id = $(this).attr("id");
         $.ajax({
             url: url,
             type: 'GET',
             success: function (response) {
-                obj = JSON.parse(response);
-                if ('success' == obj['success']) {
-                    $('#subItem-' + id).hide();
-                    $('.total').html(obj['total']);
-                }
+                location.reload();
             },
         })
     })
+
+    $('.replaceItem').on("click", ".purchaseReturnDelete", function () {
+
+        var url = $(this).attr("rel");
+        var id = $(this).attr("id");
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (response) {
+                window.location.replace("/inventory/purchase/return");
+            },
+        })
+    })
+
 }

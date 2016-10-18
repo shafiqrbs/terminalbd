@@ -25,6 +25,13 @@ class Transaction
     /**
      * @var string
      *
+     * @ORM\Column(name="processHead", type="string", length=50 , nullable = true)
+     */
+    private $processHead;
+
+     /**
+     * @var string
+     *
      * @ORM\Column(name="process", type="string", length=50 , nullable = true)
      */
     private $process;
@@ -33,6 +40,7 @@ class Transaction
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="transactions" )
      **/
      private $accountHead;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="transactions")
@@ -43,31 +51,6 @@ class Transaction
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="transaction" )
      **/
     private  $inventoryConfig;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", inversedBy="transactions" )
-     **/
-    private $accountPurchase;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", inversedBy="transactions" )
-     **/
-    private $accountSales;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PettyCash", inversedBy="transactions" )
-     **/
-    private $pettyCash;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="transactions" )
-     **/
-    private $accountBank;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PaymentSalary", inversedBy="transactions" )
-     **/
-    private $paymentSalary;
 
 
     /**
@@ -113,6 +96,13 @@ class Transaction
      */
     private $content;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountRefNo", type="string", length=50, nullable=true)
+     */
+    private $accountRefNo;
+
 
     /**
      * @var \DateTime
@@ -138,23 +128,6 @@ class Transaction
         return $this->id;
     }
 
-    /**
-     * Set process
-     * @param string $process
-     * CashReceivable
-     * CashPayable
-     * CashReceived
-     * Goods
-     * AccountPayable
-     * AccountReceivable
-     * Cash
-     * Notes Payable
-     * Advertising Expense
-     * Land
-     * Capital Stock
-     * Utilities Expense
-     * @return Transaction
-     */
 
     public function setProcess($process)
     {
@@ -337,7 +310,7 @@ class Transaction
 
 
     /**
-     * @return mixed
+     * @return AccountHead
      */
     public function getAccountHead()
     {
@@ -345,7 +318,7 @@ class Transaction
     }
 
     /**
-     * @param mixed $accountHead
+     * @param AccountHead $accountHead
      */
     public function setAccountHead($accountHead)
     {
@@ -384,84 +357,50 @@ class Transaction
         $this->globalOption = $globalOption;
     }
 
+
     /**
-     * @return mixed
+     * @return string
      */
-    public function getAccountPurchase()
+    public function getAccountRefNo()
     {
-        return $this->accountPurchase;
+        return $this->accountRefNo;
     }
 
     /**
-     * @param mixed $accountPurchase
+     * @param string $accountRefNo
      */
-    public function setAccountPurchase($accountPurchase)
+    public function setAccountRefNo($accountRefNo)
     {
-        $this->accountPurchase = $accountPurchase;
+        $this->accountRefNo = $accountRefNo;
     }
 
     /**
-     * @return mixed
+      * Set processHead
+     * @param string $processHead
+     * Purchase
+     * Purchase Return
+     * Sales
+     * Sales Return
+     * Journal
+     * Bank
+     * Expenditure
+     * Payroll
+     * Petty Cash
+     * @return Transaction
      */
-    public function getAccountSales()
+
+
+    public function getProcessHead()
     {
-        return $this->accountSales;
+        return $this->processHead;
     }
 
     /**
-     * @param mixed $accountSales
+     * @param string $processHead
      */
-    public function setAccountSales($accountSales)
+    public function setProcessHead($processHead)
     {
-        $this->accountSales = $accountSales;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPettyCash()
-    {
-        return $this->pettyCash;
-    }
-
-    /**
-     * @param mixed $pettyCash
-     */
-    public function setPettyCash($pettyCash)
-    {
-        $this->pettyCash = $pettyCash;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAccountBank()
-    {
-        return $this->accountBank;
-    }
-
-    /**
-     * @param mixed $accountBank
-     */
-    public function setAccountBank($accountBank)
-    {
-        $this->accountBank = $accountBank;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPaymentSalary()
-    {
-        return $this->paymentSalary;
-    }
-
-    /**
-     * @param mixed $paymentSalary
-     */
-    public function setPaymentSalary($paymentSalary)
-    {
-        $this->paymentSalary = $paymentSalary;
+        $this->processHead = $processHead;
     }
 
 }

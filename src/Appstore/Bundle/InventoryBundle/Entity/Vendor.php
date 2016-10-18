@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
+use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 /**
@@ -46,6 +48,11 @@ class Vendor implements CodeAwareEntity
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn", mappedBy="vendor")
      */
     protected $purchaseReturns;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn", mappedBy="vendor")
+     */
+    protected $accountPurchaseReturns;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="vendor")
@@ -365,6 +372,15 @@ class Vendor implements CodeAwareEntity
     public function setSlug($slug)
     {
         $this->slug = $slug;
+    }
+
+
+    /**
+     * @return AccountPurchaseReturn
+     */
+    public function getAccountPurchaseReturns()
+    {
+        return $this->accountPurchaseReturns;
     }
 }
 

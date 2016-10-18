@@ -51,6 +51,23 @@ class ExpenditureRepository extends EntityRepository
 
     }
 
+    public function lastInsertExpenditure(Expenditure $entity)
+    {
+
+        $em = $this->_em;
+        $entity = $em->getRepository('AccountingBundle:Expenditure')->findOneBy(
+            array('globalOption' => $entity->getGlobalOption(),'expenseCategory'=>$entity->getExpenseCategory(),'process'=>'approved'),
+            array('id' => 'DESC')
+        );
+
+        if (empty($entity)) {
+            return 0;
+        }
+        return $entity->getBalance();
+    }
+
+
+
     public function insertSalaryExpenditure(PaymentSalary $paymentSalary)
     {
         $entity = new Expenditure();

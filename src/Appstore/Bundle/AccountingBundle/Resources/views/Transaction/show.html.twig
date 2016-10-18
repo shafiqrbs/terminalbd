@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('account_transaction') }}">Account of transaction details</a>
+                        <a href="{{ path('account_transaction') }}">Account of Transaction Details</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="javascript:">{{ entity.name }}&nbsp;|&nbsp;{{ entity.code }}</a></li>
@@ -66,6 +66,7 @@
                                 </tr>
                                 <tr class="head-grey">
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Remark</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Amount</th>
                                 </tr>
@@ -74,6 +75,7 @@
                                 {% for row in entities %}
                                 <tr>
                                         <td class="numeric" >{{ row.updated|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ row.content }}</td>
                                         <td class="numeric" >{{ row.process }}</td>
                                         <td class="numeric" >
                                             {% if entity.toIncrease == 'Debit' %}
