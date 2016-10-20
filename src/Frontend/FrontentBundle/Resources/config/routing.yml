@@ -4,5 +4,5 @@ home:
 
 kintethako:
     pattern: /
-    defaults: { _controller: FrontendBundle:Default:index}
+    defaults: { _controller: FrontendBundle:Ecommerce:index}
 

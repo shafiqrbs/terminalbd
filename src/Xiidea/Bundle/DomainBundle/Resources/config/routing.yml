@@ -1,6 +1,6 @@
 _main_domain:
     prefix: /
-    resource: "@BinduBundle/Resources/config/routing.yml"
+    resource: "@BinduBundle/Resources/config/main.yml"
     host: "www.%domain.main%"
 
 _xiidea_main_domain_app:
@@ -10,11 +10,6 @@ _xiidea_main_domain_app:
     name_prefix: "main_"
     defaults:
         subdomain: ""
-
-#main_mobile_home:
-#    prefix: /
-#    resource: "@BinduBundle/Resources/config/routing.yml"
-#    host: "m.%domain.main%"
 
 _xiidea_ecommerce_domain:
     prefix: /
@@ -27,6 +22,7 @@ _xiidea_ecommerce_domain_app:
     resource: "@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml"
     defaults:
         subdomain: ""
+
 
 #xiidea_education_domain_homepage:
 #    path:     /
