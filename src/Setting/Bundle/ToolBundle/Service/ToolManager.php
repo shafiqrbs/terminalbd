@@ -41,7 +41,8 @@ class ToolManager
 
     public function createDirectory($globalOption, $dir = null)
     {
-        $assets_dir = __DIR__.'/../../../../../web/uploads/domain/';
+
+        $assets_dir = $_SERVER['DOCUMENT_ROOT'].'/uploads/domain/';
         if(!file_exists($assets_dir.$globalOption)){
             if(mkdir($assets_dir.$globalOption, 0777)){
                 //return $path;
