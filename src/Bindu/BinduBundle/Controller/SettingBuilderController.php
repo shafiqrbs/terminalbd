@@ -39,7 +39,7 @@ class SettingBuilderController extends Controller
         if($entity->getStatus() == 1){
             return $this->redirect($this->generateUrl('homepage'));
         }
-        $detect = new MobileDetect();
+        $detect = new \Frontend\FrontentBundle\Service\MobileDetect();
         if( $detect->isMobile() OR  $detect->isTablet() ) {
             $theme = 'Frontend/Mobile';
         }else{

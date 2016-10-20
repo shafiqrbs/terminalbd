@@ -34,7 +34,7 @@ class DomainController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('SettingToolBundle:GlobalOption')->findAll();
+        $entities = $em->getRepository('SettingToolBundle:GlobalOption')->getList();
         $entities = $this->paginate($entities);
         return $this->render('SettingToolBundle:Domain:index.html.twig', array(
             'entities' => $entities,

@@ -26,6 +26,12 @@ use Setting\Bundle\ToolBundle\Entity\TemplateCustomize;
 class GlobalOptionRepository extends EntityRepository
 {
 
+    function getList() {
+       return  $this->createQueryBuilder('g')
+           ->orderBy('g.name', 'ASC')
+           ->getQuery();
+    }
+
     function urlSlug($str, $options = array()) {
 
         // Make sure string is in UTF-8 and strip invalid UTF-8 characters
@@ -200,12 +206,11 @@ class GlobalOptionRepository extends EntityRepository
         $em->persist($ecommerce);
 
         $about = new Page();
-        $aboutus = $globalOption->getSlug().'-about-us';
         $about->setGlobalOption($globalOption);
         $about->setUser($entity);
         $about->setName('About us');
         $about->setMenu('About us');
-        $about->setSlug($aboutus);
+        $about->setSlug('about-us');
         $em->persist($about);
 
         $menu = new Menu();

@@ -135,11 +135,26 @@ class BinduController extends Controller
 
     }
 
+    public function userCheckingAction(Request $request)
+    {
+
+        $intlMobile = $request->query->get('Core_userbundle_user[profile][mobile]',NULL,true);
+        $em = $this->getDoctrine()->getManager();
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $entity = $em->getRepository('UserBundle:User')->findBy(array('username'=>$mobile));
+
+        if( count($entity) > 0 ){
+            return new Response('failed');
+
+        }else{
+            return new Response('success');
+        }
+        exit;
+    }
+
     public function checkUserNameAction(Request $request)
     {
 
-        var_dump($request);
-        exit;
         $mobile = $request->request->get('mobile');
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
 
@@ -154,6 +169,8 @@ class BinduController extends Controller
         }
         exit;
     }
+
+
 
     public function confirmAction()
     {

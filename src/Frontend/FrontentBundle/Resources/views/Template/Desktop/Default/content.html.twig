@@ -1,126 +1,99 @@
 {% extends ':template:base.html.twig' %}
 {% block body %}
-    <div class="clearfix"></div>
-
-    <div class="page_title">
-
-        <div class="container">
-            <div class="title"><h1>{{ page.name }}</h1></div>
-            {% if page.parent is not empty %}
-                <div class="pagenation">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i> <a href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'slug': page.parent.nav.slug}) }}">{{ page.parent.name }}</a> <i>/</i> {{ page.name }}</div>
-            {% else %}
-                <div class="pagenation">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i> {{ page.name }}</div>
-            {% endif %}
-
-        </div>
-    </div><!-- end page title -->
-    <!-- Contant
-    ======================================= -->
-
+<div class="clearfix"></div>
+<section id="breadcrumb">
     <div class="container">
-
-        <div class="content_left">
-
-            <h2>{{ page.name }}</h2>
-            {% if page.webPath %}
-            <img class="image_left1" src="{{ image(page.webPath()).resize(810,360) }}" alt="" />
-            {% endif %}
-            <p>{{ page.content|raw }}</p>
-            <div class="clearfix mar_top2"></div>
-            <div class="sharepost">
-                <h4><i>Share this Post</i></h4>
-                <ul>
-                    <li><a href="#">&nbsp;<i class="fa fa-facebook fa-lg"></i>&nbsp;</a></li>
-                    <li><a href="#"><i class="fa fa-google-plus fa-lg"></i></a></li>
-                    <li><a href="#"><i class="fa fa-skype fa-lg"></i></a></li>
-                    <li><a href="#"><i class="fa fa-youtube fa-lg"></i></a></li>
-                </ul>
-
-            </div>
-
-        </div><!-- end content left side area -->
-        <!-- right sidebar starts -->
-        <div class="right_sidebar">
-
-            <div class="sidebar_widget">
+        <div class="row">
+            <div class="col-md-12">
                 {% if page.parent is not empty %}
-                <div class="sidebar_title"><h3>More <i>{{ page.parent.name }}</i></h3></div>
+                    <div class="crumb">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i> <a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module': page.parent.nav.slug}) }}">{{ page.parent.name }}</a> <i>/</i> {{ page.name }}</div>
                 {% else %}
-                <div class="sidebar_title"><h3>More <i>{{ page.name }}</i></h3></div>
+                    <div class="crumb">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i> {{ page.name }}</div>
                 {% endif %}
-                <ul class="arrows_list1">
-                    {% if page.children is not empty %}
-                        {% for subPage in page.children %}
-                              <li><a href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'slug': subPage.nav.slug}) }}"><i class="fa fa-angle-right"></i>{{ subPage.name }}</a></li>
-                        {% endfor %}
-                    {% elseif page.parent.children is defined and page.parent.children is not empty %}
-                        {% for subPage in page.parent.children %}
-                            <li><a href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'slug': subPage.nav.slug}) }}"><i class="fa fa-angle-right"></i>{{ subPage.name }}</a></li>
-                        {% endfor %}
-                    {% endif %}
-
-                </ul>
-            </div><!-- end section -->
-            {% if globalOption.newses is not empty %}
-            <div class="clearfix mar_top4"></div>
-
-            <div class="sidebar_widget">
-                <div class="sidebar_title"><h3>Recent <i>News</i></h3></div>
-                <ul class="recent_posts_list">
-                    {% for news in  globalOption.newses %}
-                    <li>
-                        <span><a href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':'news','slug': news.slug}) }}"><img src="{{ image(news.webPath()).resize(50,50) }}" alt="" /></a></span>
-                        <a href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':'news','slug': news.slug}) }}">{{ news.name }}</a>
-                        <i> {{ news.startDate|date("d-F-Y") }} To  {{ news.endDate|date("d-F-Y") }}</i>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div><!-- end section -->
-            {% endif %}
-            {% if globalOption.blogs is not empty %}
-            <div class="clearfix mar_top4"></div>
-
-            <div class="sidebar_widget">
-                <div class="sidebar_title"><h3>Recent <i>Blogs</i></h3></div>
-                <ul class="recent_posts_list">
-                    {% for blog in  globalOption.blogs %}
-                    <li>
-                        {% if blog.webPath() %}<span><a href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':'blog','slug': blog.slug}) }}"><img src="{{ image(blog.webPath()).resize(50,50) }}" alt="" /></a></span>{% endif %}
-                        <a href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':'blog','slug': blog.slug}) }}">{{ blog.name }}</a>
-                        <i>{{ blog.created|date('d-m-Y') }}</i>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div><!-- end section -->
-            {% endif %}
-
+            </div>
         </div>
-        {% if page.children is not empty and page.isSubPage == true %}
-        <div class="content_fullwidth">
-            <div id="tabs">
 
-                <ul class="tabs">
-                    {% for key,subPage in page.children %}
-                    <li  {% if key == 0 %} class="active" {% endif %} ><a href="#tab{{ key }}">{{ subPage.name }}</a></li>
-                   {% endfor %}
-                </ul><!-- /# end tab links -->
+    </div>
+</section>
+<div class="container blog">
+        <div class="row js-equal-height">
+            <article class="col-md-8 ">
+                <div class="page-header sidebar-title"><h2>{{ page.name }}</h2></div>
+                {% if page.webPath is not empty %}
+                <img class="img-responsive displayed" src="{{ image(page.webPath).resize() }}" alt="" />
+                {% endif %}
+                <p>{{ page.content|raw }}</p>
 
-                <div class="tab-container">
-                    {% for key,subPage in page.children %}
-                    <div id="tab{{ key }}" class="tab-content">
-                        <img src="{{ image(subPage.webPath()).resize(275,250) }}" class="image_left1" alt="" />
-                        <h4>{{ subPage.name }}</h4>
-                        <p>{{ subPage.content|raw }}</p>
-                        <div class="clearfix"></div>
-                    </div><!-- end tab single section -->
-                    {% endfor %}
+                <div class="mysharing">
+                    <!-- Twitter -->
+                    <a href="http://twitter.com/home?status=" title="Share on Twitter" target="_blank" class="btn btn-twitter"><i class="fa fa-twitter"></i> Twitter</a>
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=" title="Share on Facebook" target="_blank" class="btn btn-facebook"><i class="fa fa-facebook"></i> Facebook</a>
+                    <!-- Google+ -->
+                    <a href="https://plus.google.com/share?url=" title="Share on Google+" target="_blank" class="btn btn-googleplus"><i class="fa fa-google-plus"></i> Google+</a>
+                    <!-- LinkedIn -->
+                    <a href="http://www.linkedin.com/shareArticle?mini=true" title="Share on LinkedIn" target="_blank" class="btn btn-linkedin"><i class="fa fa-linkedin"></i> LinkedIn</a>
                 </div>
+            </article>
+            <!-- Blog Sidebar Column -->
+            <aside class="col-md-4 sidebar-padding js-equal-height" style="background: #FBFCFE">
+                <!-- Blog Categories -->
+                <div class="blog-sidebar">
+                    {% if page.parent is not empty %}
+                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;&nbsp;{{ page.parent.name }}</h4>
+                    {% else %}
+                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;&nbsp;{{ page.name }}</h4>
+                    {% endif %}
+                    <hr>
+                    <ul class="sidebar-list">
+                        {% if page.children is not empty %}
+                            {% for subPage in page.children %}
+                                <li><a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':subPage.nav.slug}) }}">{{ subPage.name }}</a></li>
+                            {% endfor %}
+                        {% elseif page.parent.children is defined and page.parent.children is not empty %}
+                            {% for subPage in page.parent.children %}
+                                <li><a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':subPage.nav.slug}) }}">{{ subPage.name }}</a></li>
+                            {% endfor %}
+                        {% endif %}
 
-            </div><!-- end tab -->
-
+                    </ul>
+                </div>
+                <!-- Recent Posts -->
+                {% if featurePages is not empty %}
+                    <div class="blog-sidebar">
+                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i> Recent News</h4>
+                        <hr style="margin-bottom: 5px;">
+                        {% for feature in featurePages %}
+                            {% if feature.module.name == 'News' %}
+                                <div class="media">
+                                    <a class="pull-left" href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':feature.slug }) }}">
+                                        <img class="img-responsive media-object" src="{{ image(feature.webPath).resize(100,100) }}" alt="Media Object">
+                                    </a>
+                                    <div class="media-body">
+                                        <h4 class="media-heading"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':feature.slug }) }}">{{ feature.name }}</a></h4>
+                                        {{ feature.content|raw|truncate(100) }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </aside>
         </div>
-        {% endif %}
-    </div><!-- end content area -->
-    <div class="clearfix mar_top5"></div>
-
+    </div>
+ {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/desktop/css/common.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/js/common.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

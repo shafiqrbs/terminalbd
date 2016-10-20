@@ -105,7 +105,7 @@
                                 <div class="iphone_bg">
                                     <div class="mobile_wrap">
                                         {% if(entity.subDomain is not empty) %}
-                                            <iframe id="frame" frameborder="no" border="0" scrolling="no" width="320px" height="568px;" src="{{ path('bindu_mobile_home',{'subdomain':entity.subDomain}) }}"></iframe>
+                                            <iframe id="frame" frameborder="no" border="0" scrolling="no" width="320px" height="568px;" src="{{ path('mobile_home',{'subdomain':entity.subDomain}) }}"></iframe>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -206,17 +206,10 @@
     });
 
     $('.checkbox :checkbox').rcSwitcher({
-
-        // reverse: true,
         inputs:false,
-        // width: 70,
-        // height: 24,
-        // blobOffset: 2,
         onText: 'Yes',
         offText: 'No',
         theme: 'modern',
-        // autoFontSize: true,
-
     });
 
 
@@ -275,30 +268,6 @@
 
     });
 
-    $('#Core_userbundle_user_profile_mobile').change(function(){
-
-        var mobile = $(this).val();
-        $.ajax({
-        url:'{{ path('bindu_user_check') }}',
-        type: "POST",
-        beforeSend: function() {
-        $('#checking').html('<img class="loadingImg" src="{{ asset('assets/img/loader-red.gif') }}" alt="" >');
-        },
-        data: 'mobile='+ mobile,
-        success: function(response) {
-        if(response == 'failed'){
-        $('#checking').html('Someone already has that mobile no. Try another?').css({'top':0, 'right':0,'width':'auto'});
-        $('#Core_userbundle_user_profile_mobile').val('');
-        $('#Core_userbundle_user_profile_mobile').css('border','1px solid red');
-        }else{
-        $('#checking img').fadeOut(3000);
-        $('#Core_userbundle_user_profile_mobile').css('border','1px solid #2dbae7');
-        }
-
-        }
-        });
-    });
-
 
     $('.option').validate({
         rules: {
@@ -317,7 +286,6 @@
                     }
                 }
             },
-
 
         },
         messages:{

@@ -106,6 +106,35 @@ class MenuTreeManager
         return $value;
 
     }
+    public function getMobileMenuTree($arr,$subdomain,$device ='')
+    {
+
+        $value ='';
+        $value .='<ul>';
+        $prefix = '/web-builder/mobile/'.$subdomain.'/';
+        $value .= '<li><a href="/web-builder/mobile/'.$subdomain.'">Home</a>';
+        foreach ($arr as $val) {
+
+            $menu = $val->getMenu()->getMenu();
+            if (!empty($menu)) {
+                $subIcon = (count($val->getChildren()) > 0 ) ? 1 : 2 ;
+                if($subIcon == 1){
+                    $value .= '<li><a href="'.$prefix.$val->getMenu()->getSlug().'">' . $val->getMenu()->getMenu().'</a>';
+                    $value .= $this->getMenuTree($val->getChildren(),$subdomain,$device);
+                }else{
+                    $value .= '<li><a href="'.$prefix.$val->getMenu()->getSlug().'">' . $val->getMenu()->getMenu().'</a>';
+                }
+
+                $value .= '</li>';
+            } else {
+                $value .= '<li><a href="'.$prefix.$val->getMenu()->getSlug().'">'.$val->getMenu()->getMenu() . '</a></li>';
+            }
+        }
+        $value .='</ul>';
+
+        return $value;
+
+    }
 
     public function getFooterMenu($menus,$subdomain,$device ='')
     {

@@ -1,0 +1,97 @@
+<!-- Footer
+======================================= -->
+<div class="copyright_info">
+
+    <div class="container">
+
+        <div class="one_third">
+
+            <b>Copyright © {{ "now"|date('Y') }} {{ globalOption.domain }}. All rights reserved.</b>
+
+        </div>
+
+        <div class="one_third">
+
+            {{ footerMenu|raw }}
+
+        </div>
+        <div class="one_third last">
+
+            <ul class="footer_social_links">
+                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                <li><a href="#"><i class="fa fa-skype"></i></a></li>
+                <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+            </ul>
+
+        </div>
+
+    </div>
+
+</div><!-- end copyright info -->
+
+<a href="#" class="scrollup">Scroll</a><!-- end scroll to top of the page-->
+{% javascripts
+'assets/template/desktop/default/js/universal/jquery.js'
+'assets/template/desktop/default/js/style-switcher/jquery-1.js'
+'assets/template/desktop/default/js/style-switcher/styleselector.js'
+'assets/template/desktop/default/js/mainmenu/ddsmoothmenu.js'
+'assets/template/desktop/default/js/mainmenu/selectnav.js'
+'assets/template/desktop/default/js/jcarousel/jquery.jcarousel.min.js'
+'assets/template/desktop/default/js/revolutionslider/rs-plugin/js/jquery.themepunch.plugins.min.js'
+'assets/template/desktop/default/js/mainmenu/scripts.js'
+'assets/template/desktop/default/js/sticky-menu/core.js'
+'assets/template/desktop/default/js/tabs/tabs.js'
+'assets/template/desktop/default/js/tabs/tabs-style2.js'
+'assets/template/desktop/default/js/sticky-menu/modernizr.custom.75180.js'
+'assets/template/desktop/default/js/accordion/custom.js'
+'assets/module/capSlide/js/jquery.capSlide.js'
+%}
+
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+
+        $(window).scroll(function(){
+
+            if ($(this).scrollTop() > 100) {
+                $('.scrollup').fadeIn();
+            } else {
+                $('.scrollup').fadeOut();
+            }
+        });
+
+        $('.scrollup').click(function(){
+            $("html, body").animate({ scrollTop: 0 }, 500);
+            return false;
+        });
+        jQuery('#mycarousel').jcarousel();
+        jQuery('#mycarouseltwo').jcarousel();
+        jQuery('#mycarouselthree').jcarousel();
+        jQuery('#mycarouselfour').jcarousel();
+
+
+
+        var quotes = $(".quotes");
+        var quoteIndex = -1;
+
+        function showNextQuote() {
+            ++quoteIndex;
+            quotes.eq(quoteIndex % quotes.length)
+                    .fadeIn(1000)
+                    .delay(4000)
+                    .fadeOut(1000, showNextQuote);
+        }
+
+        showNextQuote();
+        {% block documentready %}{% endblock %}
+    });
+
+
+</script>
+<!-- ######### JS FILES ######### -->
+</div>
+</body>
+</html>

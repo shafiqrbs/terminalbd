@@ -72,7 +72,6 @@ class WebServiceCustomerController extends Controller
 
     public function userCheckingAction(Request $request)
     {
-
         $intlMobile = $request->query->get('Core_userbundle_user[profile][mobile]',NULL,true);
         $em = $this->getDoctrine()->getManager();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);

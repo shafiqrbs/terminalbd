@@ -1,6 +1,10 @@
 core_user_bundle:
     resource: "@UserBundle/Resources/config/routing.yml"
 
+bindu:
+    resource: "@BinduBundle/Resources/config/routing.yml"
+    prefix:   /
+
 customer:
     resource: "@CustomerBundle/Resources/config/routing.yml"
     prefix:   /customer

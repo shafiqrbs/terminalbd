@@ -181,41 +181,35 @@ var validator =  $("#signup").validate({
 
     rules: {
 
-        "Core_userbundle_user[profile][name]": {required: true},
+        "Core_userbundle_user[globalOption][name]": {required: true},
         "Core_userbundle_user[profile][mobile]": {
             required: true,
-            remote: Routing.generate('webservice_customer_checking',{'subdomain':subdomain})
+            remote: Routing.generate('bindu_signup_check')
         },
-        "Core_userbundle_user[email]": {required: false , email:true,},
-        "Core_userbundle_user[profile][location]": {required: true},
-        "Core_userbundle_user[profile][address]": {required: true},
-        "Core_userbundle_user[profile][termsConditionAccept]": {required: true},
+        "Core_userbundle_user[globalOption][syndicate]": {required: true},
+        "Core_userbundle_user[globalOption][location]": {required: true},
+        "Core_userbundle_user[globalOption][status]": {required: true}
     },
 
     messages: {
 
-        "Core_userbundle_user[profile][name]":"Enter your full name",
+        "Core_userbundle_user[globalOption][name]":"Enter your organization name",
         "Core_userbundle_user[profile][mobile]":{
             required: "Enter valid mobile no",
             remote: "This mobile no is already registered. Please try to login."
         },
-         "Core_userbundle_user[email]":{
-            required: "Enter valid email address",
-            remote: "This username is already taken! Try another."
-        },
+        "Core_userbundle_user[profile][syndicate]": "Enter your professional",
         "Core_userbundle_user[profile][location]": "Enter your location",
-        "Core_userbundle_user[profile][address]": "Enter your present address",
-        "Core_userbundle_user[profile][termsConditionAccept]": "Please read terms & condition and agree",
+        "Core_userbundle_user[globalOption][status]": "Please read terms & condition and agree",
     },
 
     tooltip_options: {
 
-        "Core_userbundle_user[profile][name]": {placement:'top',html:true},
+        "Core_userbundle_user[globalOption][name]": {placement:'top',html:true},
         "Core_userbundle_user[profile][mobile]": {placement:'top',html:true},
-        "Core_userbundle_user[email]": {placement:'top',html:true},
-        "Core_userbundle_user[profile][location]": {placement:'top',html:true},
-        "Core_userbundle_user[profile][address]": {placement:'top',html:true},
-        "Core_userbundle_user[profile][termsConditionAccept]":{placement:'right',html:true},
+        "Core_userbundle_user[globalOption][syndicate]": {placement:'top',html:true},
+        "Core_userbundle_user[globalOption][location]": {placement:'top',html:true},
+        "Core_userbundle_user[globalOption][status]":{placement:'right',html:true},
     },
     submitHandler: function(form) {
 

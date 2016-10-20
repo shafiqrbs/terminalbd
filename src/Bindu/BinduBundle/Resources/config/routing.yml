@@ -40,9 +40,9 @@ bindu_confirm:
     path:     /web-builder/confirm
     defaults: { _controller: BinduBundle:Bindu:confirm }
 
-bindu_user_check:
-    path:     /web-builder/user-check-availability
-    defaults: { _controller: FrontendBundle:WebServiceCustomer:userChecking }
+bindu_signup_check:
+    path:     /web-builder/signup-user-availability
+    defaults: { _controller: BinduBundle:Bindu:userChecking }
     methods:  GET
     options:
             expose: true
@@ -117,6 +117,10 @@ bindu_email_receive:
 BinduBundle_build:
     resource: "@BinduBundle/Resources/config/routing/build.yml"
     prefix:   /web-builder/build
+
+BinduBundle_mobile:
+    resource: "@BinduBundle/Resources/config/routing/mobile.yml"
+    prefix:    /web-builder/mobile/
 
 
 

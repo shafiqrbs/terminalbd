@@ -17,7 +17,7 @@ class WidgetController extends Controller
 
         $globalOption = $this->getUser()->getGlobalOption();
         $aboutus = $globalOption->getSlug().'-about-us';
-        $about                     = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'slug'=>$aboutus));
+        $about                     = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'menu'=>'About us'));
         return $this->render('@Bindu/Widget/aboutus.html.twig', array(
             'about'           => $about,
         ));

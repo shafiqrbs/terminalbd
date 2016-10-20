@@ -1,130 +1,159 @@
 {% extends ':template:base.html.twig' %}
 {% block body %}
-    {% if entity.homesliders is not empty %}
-        <div class="container_full">
-            <div id="sequence" class="seq">
-
-                <div class="seq-screen">
-                    <ul class="seq-canvas">
-                        {% for slide in globalOption.homeSliders %}
-                            <li class="seq-in" style="background: url('{{ image(slide.webPath()) }}'); background-repeat: no-repeat; background-position: center center; background-size: 100%">
-                                <div class="seq-title">
-                                    <h5 data-seq >{{ slide.name }}</h5>
-                                    <div class="clearfix"></div>
-                                    <p data-seq style="width: 70%" >{{ slide.content|raw }}</p>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <ul role="navigation" aria-label="Pagination" class="seq-pagination">
-                    {% for slide in globalOption.homeSliders %}
-                        <li><a href="#step{{ loop.index  }}" rel="step{{ loop.index  }}" title="{{ slide.name }}"><img src="{{ image(slide.webPath()).resize(80,80) }}" /></a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-
-        </div><!-- end slider -->
-        <div class="clearfix"></div>
-    {% endif %}
-
-    <div class="joosa fusectio2">
-        <div class="container">
-
-            <h1><i>Welcome To</i>
-                <strong>{{ globalOption.name }}</strong>
-            </h1>
-            <div  {% if globalOption.homePage.webPath is not empty %} class="two_third" {% endif %} style="color: #ffffff; text-align: justify">
-                {{ globalOption.homePage.content|raw }}
-            </div><!-- end section -->
-            {% if globalOption.homePage.webPath is not empty %}
-                <div class="one_third last"><img src="{{ image(globalOption.homePage.webPath()).resize(360,380) }}" alt="" /></div>
-            {% endif %}
-
-            <div class="clearfix mar_top2"></div>
-
-        </div>
-    </div><!-- end features section 3 -->
-    <div class="clearfix mar_top2"></div>
-    {% if globalOption.homePage.homeBlocks is not empty %}
-        <div class="clearfix"></div>
-        <div class="joosa fusectio1">
-            <div class="container">
-                {% for key ,block in globalOption.homePage.homeBlocks|slice(0,3) %}
-                {% if selectedBlockBg is not empty %}
-                    <div class="one_third  {% if key == 2 %}last{% endif %}" >
-                        <div class="left">
-                            <h5>{{ block.name }}</h5>
-                            <p>{{ block.content|raw|truncate(80) }}</p>
-                            {% if block.menu is not empty %}
-                                {% if block.menu.module is not empty %}
-                                    <a href="{{ path('desktop_module',{'subdomain':globalOption.subDomain,'module': block.menu.module.slug ,'slug': block.menu.slug}) }}"><i class="fa fa-plus-square"></i>&nbsp; Read More</a>
-                                {% else %}
-                                    <a href="{{ path('desktop_content',{'subdomain':globalOption.subDomain,'slug': block.menu.slug}) }}"><i class="fa fa-plus-square"></i>&nbsp; Read More</a>
-                                {% endif %}
-                            {% endif %}
-
+    <!-- Header Carousel -->
+    <header id="home" class="carousel slide">
+        <ul class="cb-slideshow">
+            {% set sec = 9 %}
+            {% set foo = 0 %}
+            {% for slide in globalOption.homeSliders|slice(0,6) %}
+                <li><span style="background-image: url({{ image(slide.webPath).resize() }});animation-delay: {{ foo }}s;"></span>
+                    <div class="container" style="animation-delay:{{ foo }}s; ">
+                        <div class="row" style="animation-delay:{{ foo }}s; ">
+                            <div class="col-lg-12" style="animation-delay:{{ foo }}s; ">
+                                <div  class="text-center" style="animation-delay:{{ foo }}s; "><h3>{{ slide.name }}</h3></div>
+                            </div>
                         </div>
-                        {% if selectedBlockBg is not empty %}
-                        {%  set image =  random(selectedBlockBg) %}
-                        <div class="right one" style="background:url('/{{ image }}');" ></div>
-                        {% endif %}
-                    {% endif %}
-                    </div><!-- end section -->
-
-                {% endfor %}
-            </div>
+                        <h4>{{ slide.content|truncate(100)|raw }}</h4>
+                    </div>
+                </li>
+                {% set foo = foo + sec %}
+            {% endfor %}
+        </ul>
+        <div class="intro-scroller">
+            <a class="inner-link" href="#about">
+                <div class="mouse-icon" style="opacity: 1;">
+                    <div class="wheel"></div>
+                </div>
+            </a>
         </div>
-        <div class="clearfix mar_top2"></div>
-    {% endif %}
-    <div class="container">
-        {% if globalOption.testimonials is not empty %}
-            <div class="people_says_main">
-                <div class="testimonials">
-                    <h3>Our Messages</h3>
-                    <div class="people_says">
-
-                        <ul id="mycarousel" class="jcarousel-skin-tango">
-                            {% for key ,message in globalOption.testimonials %}
-                                {% if globalOption.homePage.webPath() %}
-                                <li>
-                                    <div class="picture"><img src="{{ image(globalOption.homePage.webPath()).resize(160,160) }}" alt="{{ message.name }}" /></div>
-                                    <div class="who_pic">
-                                        <p>" {{ message.content|raw|truncate(120) }}" <a href="{{ path('desktop',{'subdomain':globalOption.subDomain}) }}">More</a></p>
-                                        <div class="name"><strong>- {{ message.name }}</strong>
-                                            <i>{{ message.designation }}, {{ message.title }}</i></div>
-                                    </div>
-                                </li>
-                            {% endif %}
-                            {% endfor %}
-                        </ul>
-
+    </header>
+    {% if homeEntity.content is not empty %}
+        <section id="dashboard">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-10">
+                        <div class="text-center">
+                            {% if homeEntity.name is not empty %}<h2>{{ homeEntity.name }}</h2>{% endif %}
+                            <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="short" />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p>
+                                        {{ homeEntity.content|raw }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div><!-- end testimonials section -->
-        {% endif %}
-        {% if globalOption.faqs is not empty %}
-            <div class="partners">
+            </div>
+        </section>
+    {% endif %}
+    {#<section id="about">
+        <div class="container">
+            <div class="text-center"><h2>About us</h2></div>
+            <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="short" />
+            <div class="row">
+                <div class="row">
+                    {% render controller("FrontendBundle:TemplateWidget:aboutus",{'globalOption':globalOption.id,'wordlimit':400}) %}
+                </div>
+            </div>
+        </div>
+    </section>#}
+    <!-- Page Content -->
+{#    {% for mod in  homeEntity.pageModules %}
+        {% render controller("FrontendBundle:TemplateWidget:moduleBaseContent",{'globalOption':globalOption.id,'pageModule':mod.id}) %}
 
-                <div class="one_third">
-                    <h3><strong>FAQs</strong></h3>
-                    <div class="accrodation">
-                        {%  for faq in globalOption.faqs|slice(0,3) %}
-                            <!-- section 1 -->
-                            <span class="acc-trigger active"><a href="#">{{ faq.name }}</a></span>
-                            <div class="acc-container"><div class="content">{{ faq.content }}</div></div>
-                        {% endfor %}
+  &#123;&#35;      {% include 'FrontendBundle:Template/Desktop/Widget:'~ mod.module.moduleClass ~'.html.twig' with {'module':mod.module , 'title' : mod.name ,'limit': 5,'cloumn': 2 } %}
+&#35;&#125;
+    {% endfor %}#}
+
+    <section id="contact" style="margin-top:40px">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-lg-12">
+                        <div class="text-center color-elements">
+                            <h2>Contact Us</h2>
+                        </div>
                     </div>
-                </div><!-- end faqs section -->
-            </div><!-- end section -->
-        {% endif %}
-
-    </div><!-- end two sections -->
-    <div class="clearfix mar_top2"></div>
+                    <div class="col-lg-6 col-md-8">
+                        <form class="inline" id="contactForm" method="post" novalidate >
+                            <div class="row">
+                                <div class="col-sm-6 height-contact-element">
+                                    <div class="form-group">
+                                        <i class="fa fa-user"></i>
+                                        <input type="text" id="name" name="name" required class="form-control custom-labels" placeholder="FULL NAME"  data-trigger="hover" value="">
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 height-contact-element">
+                                    <div class="form-group">
+                                        <i class="fa fa-phone"></i>
+                                        <input type="text" name="mobile" class="form-control custom-labels mobile" id="mobile" placeholder="MOBILE" required />
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 height-contact-element">
+                                    <div class="form-group">
+                                        <i class="fa fa-comments"></i>
+                                        <input type="text" name="message" class="form-control custom-labels" id="message" placeholder="WHAT'S ON YOUR MIND" required />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-6 height-contact-element">
+                                    <div class="form-group">
+                                        <input type="submit" class="btn btn-md btn-custom btn-noborder-radius" value="Send It"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-6 height-contact-element">
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-md btn-noborder-radius btn-custom" name="reset">RESET
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-xs-6 height-contact-element">
+                                    <div class="form-group">
+                                        <div id="response_holder"></div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 contact-msg">
+                                    <div id="success"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-5 col-md-3 col-lg-offset-1 col-md-offset-1">
+                        <div class="row">
+                            <div class="col-md-12 height-contact-element">
+                                <div class="form-group">
+                                    <i class="fa fa-2x fa-map-marker"></i>
+                                    <span class="text">{{ globalOption.contactPage.address1 }} {% if globalOption.contactPage.thana is defined and globalOption.contactPage.thana %}
+                                            ,{{ globalOption.contactPage.thana.name }}<br>
+                                        {% endif %}
+                                        {% if globalOption.contactPage.district is defined and globalOption.contactPage.district %}
+                                            {{ globalOption.contactPage.district.name }} {% endif %}-{{ globalOption.contactPage.postalCode }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 height-contact-element">
+                                <div class="form-group">
+                                    <i class="fa fa-2x fa-phone"></i>
+                                    <span class="text">{{ globalOption.mobile }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 height-contact-element">
+                                <div class="form-group">
+                                    <i class="fa fa-2x fa-envelope"></i>
+                                    <span class="text"><a href="malito:{{ globalOption.email }}">{{ globalOption.email }}</a></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@FrontendBundle/Resources/public/modern-slide/css/sequence-theme.modern-slide-in.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -132,13 +161,15 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@FrontendBundle/Resources/public/modern-slide/scripts/imagesloaded.pkgd.min.js'
-    '@FrontendBundle/Resources/public/modern-slide/scripts/hammer.min.js'
-    '@FrontendBundle/Resources/public/modern-slide/scripts/sequence.min.js'
-    '@FrontendBundle/Resources/public/modern-slide/scripts/sequence-theme.modern-slide-in.js'
+    '@FrontendBundle/Resources/public/template/js/common.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+
+
 {% endblock %}
 
 
