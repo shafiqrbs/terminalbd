@@ -4,7 +4,7 @@ namespace Frontend\FrontentBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 
-class EcommerceController extends Controller
+class FrontendEcommerceController extends Controller
 {
 
 
