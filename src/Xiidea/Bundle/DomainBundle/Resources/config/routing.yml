@@ -18,7 +18,7 @@ _xiidea_main_domain_app:
 
 _xiidea_ecommerce_domain:
     prefix: /
-    resource: "@BinduBundle/Resources/config/routing.yml"
+    resource: "@FrontendBundle/Resources/config/routing/ecommerce.yml"
     host: "www.%domain.ecommerce%"
 
 _xiidea_ecommerce_domain_app:
