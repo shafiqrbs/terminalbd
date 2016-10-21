@@ -118,24 +118,15 @@
 'assets/template/mobile/default/js/slider/camera.min.js'
 'assets/template/mobile/default/js/photoswipe/klass.min.js'
 'assets/template/mobile/default/js/photoswipe/code.photoswipe.jquery-3.0.4.min.js'
-'assets/bindu/3rd/select2/select2.js'
-'assets/bindu/3rd/mask/js/jquery.maskedinput.min.js'
-'assets/module/accordion/js/jquery.cookie.js'
-'assets/module/accordion/js/jquery.accordion.js'
-'assets/module/remodal/js/jquery.remodal.js'
-'assets/bindu/3rd/tooltip/js/iml.js'
-'assets/bindu/3rd/simple-editor/js/jquery.classyedit.js'
-'assets/bindu/3rd/rcswitcher/js/rcswitcher.min.js'
-'assets/bindu/3rd/time-picker/js/jquery.ptTimeSelect.js'
-'assets/bindu/3rd/jquery-validation/jquery.validate.min.js'
-'assets/module/capSlide/js/jquery.capSlide.js'
 'assets/template/mobile/default/js/o-script.js'
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 <script type="text/javascript">
+
+    $ = jQuery;
     jQuery(document).ready(function () {
-        $ = jQuery;
+
         jQuery('#camera_wrap_4').camera({
             height: 'auto',
             loader: 'bar',
@@ -145,66 +136,9 @@
             opacityOnGrid: false
         });
 
-        /*jQuery(".mobile").mask("(99999) 999-999");*/
-        jQuery('.select2').select2({
-
-            placeholder: "Select a institute level",
-            allowClear: true,
-            theme: "classic"
-
-
-        });
-        //  The second way to initialize:
-        $('[data-remodal-id=modal2]').remodal({
-            modifier: 'with-red-theme'
-        });
-
-        $('.scrollToTop').click(function(){
+        jQuery('.scrollToTop').click(function(){
             $('html, body').animate({scrollTop : 0},800);
             return false;
-        });
-
-        $('.plainText').bind('keyup blur',function(){
-                    var node = $(this);
-                    node.val(node.val().replace(/[^a-z]/g,'') ); }
-        );
-        var acc_wrapper = $('.tm-accordion');
-        $('.tm-accordion .accordion-container').hide();
-        $.each(acc_wrapper, function(index, item){
-            $(this).find($('.accordion-title')).first().addClass('active').next().show();
-
-        });
-        $('.accordion-title').on('click', function(e) {
-            if( $(this).next().is(':hidden') ) {
-                $(this).parent().find($('.active')).removeClass('active').next().slideUp(300);
-                $(this).toggleClass('active').next().slideDown(300);
-            }
-            e.preventDefault();
-        });
-
-        $(".classy-editor").ClassyEdit();
-        $(".aboutus-editor").ClassyEdit();
-
-        var checkCookie = $.cookie("nav-item");
-        if (checkCookie != "") {
-            $('#nav > li > a:eq('+checkCookie+')').addClass('active').next().show();
-        }
-        $('#nav > li > a').click(function(){
-            var navIndex = $('#nav > li > a').index(this);
-            $.cookie("nav-item", navIndex);
-            $('#nav li div').slideUp();
-            if ($(this).next().is(":visible")){
-                $(this).next().slideUp();
-            } else {
-                $(this).next().slideDown();
-            }
-            $('#nav li a').removeClass('active');
-            $(this).addClass('active');
-        });
-
-        $('.gallery').click(function(){
-            alert('test');
-            $("#Gallery a").photoSwipe();
         });
 
         {% block documentready %}
