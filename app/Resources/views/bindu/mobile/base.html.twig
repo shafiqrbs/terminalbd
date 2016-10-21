@@ -75,9 +75,10 @@
 {% endjavascripts %}
 
 <script type="text/javascript">
-    jQuery(document).ready(function () {
 
-        jQuery('#camera_wrap_4').camera({
+    $(document).ready(function () {
+
+        $('#camera_wrap_4').camera({
             height: 'auto',
             loader: 'bar',
             pagination: false,
@@ -86,7 +87,7 @@
             opacityOnGrid: false
         });
         $(".mobile").mask("(99999) 999-999");
-        jQuery('.select2').select2({
+        $('.select2').select2({
 
             placeholder: "Select a institute level",
             allowClear: true,
