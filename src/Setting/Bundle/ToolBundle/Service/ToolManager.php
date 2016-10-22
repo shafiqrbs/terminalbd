@@ -44,24 +44,25 @@ class ToolManager
 
         $assets_dir = $_SERVER['DOCUMENT_ROOT'].'/uploads/domain/';
         if(!file_exists($assets_dir.$globalOption)){
-            if(mkdir($assets_dir.$globalOption, 0777, true)){
+            //if(chmod($assets_dir.$globalOption, 0777)){
                 //return $path;
-                mkdir($assets_dir.$globalOption.'/setting', 0777, true);
-                mkdir($assets_dir.$globalOption.'/setting/customize_template', 0777, true);
-                mkdir($assets_dir.$globalOption.'/content', 0777, true);
-                mkdir($assets_dir.$globalOption.'/inventory', 0777, true);
-                mkdir($assets_dir.$globalOption.'/inventory/item/', 0777, true);
-                mkdir($assets_dir.$globalOption.'/domain_user', 0777, true);
-                mkdir($assets_dir.$globalOption.'/media', 0777, true);
-            }else{
+                chmod($assets_dir.$globalOption, 0777);
+                chmod($assets_dir.$globalOption.'/setting', 0777);
+               /* mkdir($assets_dir.$globalOption.'/setting/customize_template', 0777);
+                mkdir($assets_dir.$globalOption.'/content', 0777);
+                mkdir($assets_dir.$globalOption.'/inventory', 0777);
+                mkdir($assets_dir.$globalOption.'/inventory/item/', 0777);
+                mkdir($assets_dir.$globalOption.'/domain_user', 0777);
+                mkdir($assets_dir.$globalOption.'/media', 0777);*/
+           /* }else{
                 return false;
-            }
+            }*/
         }
         if(!empty($dir)){
 
             $path = $globalOption.'/'.$dir;
             if(!file_exists($assets_dir.$path)){
-                if(mkdir($assets_dir.$path, 0777, true)){
+                if(mkdir($assets_dir.$path, 0777)){
                     return $path;
                 }else{
                     return false;
@@ -76,9 +77,9 @@ class ToolManager
     {
         $assets_dir = __DIR__.'/../../../../../web/uploads/domain/';
         if(!file_exists($assets_dir.$globalOption)){
-            if(mkdir($assets_dir.$globalOption, 0777, true)){
-                mkdir($assets_dir.$globalOption.'/thumbs', 0777, true);
-                mkdir($assets_dir.$globalOption.'/larges', 0777, true);
+            if(mkdir($assets_dir.$globalOption, 0777)){
+                mkdir($assets_dir.$globalOption.'/thumbs', 0777);
+                mkdir($assets_dir.$globalOption.'/larges', 0777);
                 //return $path;
             }else{
                 return false;
