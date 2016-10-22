@@ -1,6 +1,7 @@
-{% extends ':template:base.html.twig' %}
+{% extends ':frontend/template:base.html.twig' %}
 {% block body %}
     <!-- Header Carousel -->
+    {% if globalOption.homeSliders is defined and globalOption.homeSliders is not empty %}
     <header id="home" class="carousel slide">
         <ul class="cb-slideshow">
             {% set sec = 9 %}
@@ -27,6 +28,9 @@
             </a>
         </div>
     </header>
+    {% else %}
+       <div style="margin-top:130px" ></div>
+    {% endif %}
     {% if homeEntity.content is not empty %}
         <section id="dashboard">
             <div class="container">
@@ -168,8 +172,6 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-
-
 {% endblock %}
 
 

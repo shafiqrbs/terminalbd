@@ -23,7 +23,7 @@ class BinduController extends Controller
         $entity = new User();
         $form   = $this->createCreateForm($entity);
         $detect = new MobileDetect();
-        if( $detect->isMobile() OR  $detect->isTablet() ) {
+        if( ! $detect->isMobile() OR  $detect->isTablet() ) {
             $theme = 'Frontend/Mobile';
         }else{
             $theme = 'Frontend/Desktop';

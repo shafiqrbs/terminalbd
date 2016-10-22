@@ -1,14 +1,14 @@
-{% extends ':template:mobile.html.twig' %}
+{% extends ':frontend/template/mobile:base.html.twig' %}
 {% block body %}
-    <div class="bannerPane bannerPane-business-locaton"  {% if page.webPath() is not empty %} style="background:url('{{ image(page.webPath()).resize() }}')" {% endif %}  >
-        <div class="overlay"></div>
-        <div class="s-banner-content">
-            <div><img width="100" src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" /></div>
-            {{ page.name }}
+    <!--/welcome-->
+    <div class="w3agile welcome">
+        <div class="b-bottom">
+            <div class="col-md-12">
+                <h3>{{ page.name }}</h3>
+                <p><i>{{ page.content|raw }}</p>
+            </div>
+            <div class="clearfix"></div>
         </div>
     </div>
-    <div id="content" class="content-margin">
-        {{ page.content|raw }}
-        <div class="clear"></div>
-    </div>
+    <!--//welcome-->
 {% endblock %}

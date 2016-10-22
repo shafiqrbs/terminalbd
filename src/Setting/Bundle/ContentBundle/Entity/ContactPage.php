@@ -210,6 +210,20 @@ class ContactPage
     private $googleMap;
 
     /**
+     * @var text
+     *
+     * @ORM\Column(name="latitude",type="string", length=100, type="text", nullable=true )
+     */
+    private $latitude;
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="longitude", type="string", length=100, type="text", nullable=true )
+     */
+    private $longitude;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -663,5 +677,37 @@ class ContactPage
     public function setGoogleMap($googleMap)
     {
         $this->googleMap = $googleMap;
+    }
+
+    /**
+     * @return text
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * @param text $latitude
+     */
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
+    }
+
+    /**
+     * @return text
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+    /**
+     * @param text $longitude
+     */
+    public function setLongitude($longitude)
+    {
+        $this->longitude = $longitude;
     }
 }

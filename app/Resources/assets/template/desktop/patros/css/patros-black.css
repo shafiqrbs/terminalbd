@@ -529,9 +529,12 @@ ul.cb-slideshow h4{
     background-color:#1C1C1C;
     border-top:1px #151515 solid;
 }
-
+.navbar-brand{
+    height: auto;
+    min-height: 50px;
+}
 #menu-bar{
-    background-color:#151515;
+    background-color:#888;
     box-shadow: 0px 2px 0px #151515;
 }
 

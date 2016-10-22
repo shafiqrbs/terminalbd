@@ -25,9 +25,11 @@ class WidgetController extends Controller
 
    public function businessAction($directory = NULL )
     {
+
+        exit;
         $entities                     = $this->getDoctrine()->getRepository('SettingToolBundle:Syndicate')->findBy(array('status'=>1),array('name'=>'ASC'));
-        $detect = new MobileDetect();
-        if($detect->isMobile() OR  $detect->isTablet() ) {
+        $detect = new \Frontend\FrontentBundle\Service\MobileDetect();
+        /*if($detect->isMobile() OR  $detect->isTablet() ) {
             return $this->render('@Bindu/Frontend/Mobile/businessContent.html.twig', array(
                 'entities'           => $entities,
             ));
@@ -35,7 +37,7 @@ class WidgetController extends Controller
             return $this->render('@Bindu/Frontend/Desktop/businessContent.html.twig', array(
                 'entities'           => $entities,
             ));
-        }
+        }*/
 
     }
 

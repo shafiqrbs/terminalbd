@@ -111,11 +111,46 @@ class ContactPageRepository extends EntityRepository
         $displayEmail = isset($data['displayEmail']) ? 1:0 ;
         $entity->setAskForSms($displayEmail);
 
+        if(isset($data['address1']) and $data['address1'] != '') {
+
+            $address1   = $data['address1'];
+            $thana      = !empty($entity->getThana()) ? $entity->getThana()->getName() : '' ;
+            $district   = !empty($entity->getDistrict()) ? $entity->getDistrict()->getName() : '' ;
+            $address    = $address1.' '.$thana.' '.$district.' Bangladesh';
+            $latLong = $this->getLatLong($address);
+            $entity->setLatitude($latLong['latitude']);
+            $entity->setLongitude($latLong['longitude']);
+
+        }
 
         $em->persist($entity);
         $em->flush();
 
 
+    }
+
+
+
+    public function getLatLong($address){
+
+        if(!empty($address)){
+            //Formatted address
+            $formattedAddr = str_replace(' ','+',$address);
+            //Send request and receive json data by address
+            $geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.$formattedAddr.'&sensor=false&key=AIzaSyD-cXbJSbrIgV5FngnhXTI5LO9PFWaVH0A');
+            $output = json_decode($geocodeFromAddr);
+            //Get latitude and longitute from json data
+            $data['latitude']  = $output->results[0]->geometry->location->lat;
+            $data['longitude'] = $output->results[0]->geometry->location->lng;
+            //Return latitude and longitude of the given address
+            if(!empty($data)){
+                return $data;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
     }
 
 }
