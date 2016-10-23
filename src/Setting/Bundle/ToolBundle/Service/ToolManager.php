@@ -44,19 +44,21 @@ class ToolManager
 
         $assets_dir = $_SERVER['DOCUMENT_ROOT'].'/uploads/domain/';
         if(!file_exists($assets_dir.$globalOption)){
-            //if(chmod($assets_dir.$globalOption, 0777)){
+            if(mkdir($assets_dir.$globalOption, 0777, true)){
                 //return $path;
-                chmod($assets_dir.$globalOption, 0777);
-                chmod($assets_dir.$globalOption.'/setting', 0777);
-               /* mkdir($assets_dir.$globalOption.'/setting/customize_template', 0777);
-                mkdir($assets_dir.$globalOption.'/content', 0777);
-                mkdir($assets_dir.$globalOption.'/inventory', 0777);
-                mkdir($assets_dir.$globalOption.'/inventory/item/', 0777);
-                mkdir($assets_dir.$globalOption.'/domain_user', 0777);
-                mkdir($assets_dir.$globalOption.'/media', 0777);*/
-           /* }else{
+                mkdir($assets_dir.$globalOption, 0777, true);
+                mkdir($assets_dir.$globalOption.'/setting', 0777, true);
+                mkdir($assets_dir.$globalOption.'/setting/customize_template', 0777, true);
+                mkdir($assets_dir.$globalOption.'/content', 0777, true);
+                mkdir($assets_dir.$globalOption.'/inventory', 0777, true);
+                mkdir($assets_dir.$globalOption.'/inventory/item/', 0777, true);
+                mkdir($assets_dir.$globalOption.'/domain_user', 0777, true);
+                mkdir($assets_dir.$globalOption.'/media', 0777, true);
+
+            }else{
+
                 return false;
-            }*/
+            }
         }
         if(!empty($dir)){
 
