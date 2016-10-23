@@ -46,7 +46,6 @@ class ToolManager
         if(!file_exists($assets_dir.$globalOption)){
             if(mkdir($assets_dir.$globalOption, 0777, true)){
                 //return $path;
-                mkdir($assets_dir.$globalOption, 0777, true);
                 mkdir($assets_dir.$globalOption.'/setting', 0777, true);
                 mkdir($assets_dir.$globalOption.'/setting/customize_template', 0777, true);
                 mkdir($assets_dir.$globalOption.'/content', 0777, true);
