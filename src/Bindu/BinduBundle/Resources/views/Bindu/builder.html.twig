@@ -260,7 +260,7 @@
                 $('.ajax-loading').fadeOut(3000);
             },
             complete: function(){
-                document.location.reload();
+                    window.location = "/domain";
             }
         })
         e.preventDefault();

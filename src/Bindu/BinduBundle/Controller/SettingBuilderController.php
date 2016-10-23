@@ -60,6 +60,7 @@ class SettingBuilderController extends Controller
     public function finishAction(Request $request)
     {
         //echo $subDomain = $request->request->all('status');
+
         $user = $this->getUser();
         $entity = $user->getGlobalOption();
         $entity->setStatus(true);
@@ -96,7 +97,7 @@ class SettingBuilderController extends Controller
     {
 
         $data= $request->request->all();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $entity = $user->getSiteSetting();
         $theme = $this->getDoctrine()->getRepository('SettingToolBundle:Theme')->find($data['themeId']);
         $entity->setTheme($theme);
@@ -155,7 +156,7 @@ class SettingBuilderController extends Controller
     {
 
         $data= $request->request->all();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->getUser();
         $globalOption = $user->getGlobalOption()->getId();
 
         $entity = $this->getDoctrine()->getRepository('SettingToolBundle:FooterSetting')->findOneBy(array('globalOption'=>$globalOption));

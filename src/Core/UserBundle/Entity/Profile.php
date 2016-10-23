@@ -20,17 +20,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
  * @ORM\Table(name="user_profiles")
  * @ORM\Entity(repositoryClass="Core\UserBundle\Repository\ProfileRepository")
- * @UniqueEntity(
- *     fields={"mobile"},
- *     errorPath="mobile",
- *     message="This mobile no must be unique.",
- *     fields={"email"},
- *     errorPath="email",
- *     message="This email address must be unique.",
- *     fields={"nid"},
- *     errorPath="nid",
- *     message="This national id must be unique."
- * )
+ * @UniqueEntity(fields="mobile",message="User mobile no already existing,Please try again.")
  * @ORM\HasLifecycleCallbacks
  */
 class Profile

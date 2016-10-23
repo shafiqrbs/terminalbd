@@ -66,7 +66,7 @@ class Excel
 
     private function getItem($item)
     {
-        $key = $item['Item Name'] . "_" . $item['Color'] . "_" . $item['Size'] . "_" . $item['Vendor Name'] . "_" . $item['Category'];
+        $key = $item['Item Name'] . "_" . $item['Color'] . "_" . $item['Size'] . "_" . $item['Vendor'] . "_" . $item['Category'];
 
         $itemObj = $this->getCachedData('Item', $key);
 
@@ -154,7 +154,7 @@ class Excel
 
     private function getPurchaseVendorItem($item)
         {
-            $key = $item['Item Name'] . "_" . $item['Vendor Name'] . "_" . $item['Purchase Price']. "_" . $item['Memo'] ;
+            $key = $item['Item Name'] . "_" . $item['Vendor'] . "_" . $item['Purchase Price']. "_" . $item['Memo'] ;
 
            /* if($item['Item Name'] =='Ladies Tops'){
                var_dump($item); die();
@@ -281,7 +281,7 @@ class Excel
 
     private function getPurchase($item)
     {
-        $key = $item['Vendor Name'] . "_" . $item['Memo'] ;
+        $key = $item['Vendor'] . "_" . $item['Memo'] ;
 
         $purchase = $this->getCachedData('Purchase', $key);
 
@@ -352,25 +352,25 @@ class Excel
 
     private function getVendor($item)
     {
-        $vendor = $this->getCachedData('Vendor Name', $item['Vendor Name']);
+        $vendor = $this->getCachedData('Vendor', $item['Vendor']);
 
         $vendorRepository = $this->getVendorRepository();
 
         if($vendor == NULL) {
             $vendor = $vendorRepository->findOneBy(array(
                 'inventoryConfig'   => $this->getInventoryConfig(),
-                'name'              => $item['Vendor Name']
+                'name'              => $item['Vendor']
             ));
             if($vendor == NULL)  {
                 $vendor = new Vendor();
-                $vendor->setName($item['Vendor Name']);
-                $vendor->setCompanyName($item['Vendor Name']);
-                $vendor->setVendorCode($item['Vendor Name']);
+                $vendor->setName($item['Vendor']);
+                $vendor->setCompanyName($item['Vendor']);
+                $vendor->setVendorCode($item['Vendor']);
                 $vendor->setInventoryConfig($this->getInventoryConfig());
                 $vendor = $this->save($vendor);
             }
 
-            $this->setCachedData('Vendor Name', $item['Vendor Name'], $vendor);
+            $this->setCachedData('Vendor', $item['Vendor'], $vendor);
         }
 
         return $vendor;
@@ -519,8 +519,8 @@ class Excel
             $item['Color'] = $defaultStr;
         }
 
-        if (empty($item['Vendor Name'])) {
-            $item['Vendor Name'] = $defaultStr;
+        if (empty($item['Vendor'])) {
+            $item['Vendor'] = $defaultStr;
         }
 
         if (empty($item['Brand'])) {

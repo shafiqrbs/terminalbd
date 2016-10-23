@@ -38,7 +38,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * GlobalOption
  * @UniqueEntity(fields="domain",message="This data is already in use.")
- * @UniqueEntity(fields="mobile",message="This mobile no is already in use.")
+ * @UniqueEntity(fields="mobile",message="This mobile is already in use.")
  * @UniqueEntity(fields="subDomain",message="This data is already in use.")
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Setting\Bundle\ToolBundle\Repository\GlobalOptionRepository")

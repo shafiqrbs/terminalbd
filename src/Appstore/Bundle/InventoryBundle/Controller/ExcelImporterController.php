@@ -206,9 +206,9 @@ class ExcelImporterController extends Controller
         if($varified == 'verified'){
             $entities = $em->getRepository('InventoryBundle:Purchase')->findBy(array('inventoryConfig' => $inventory),array('created'=>'asc'));
             foreach($entities as $entity ){
-                $em->getRepository('AccountingBundle:Transaction')->purchaseTransaction($entity,$inventory,'Purchase');
-                //$em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($entity,$inventory);
-                $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($entity,$inventory);
+                $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($entity,$inventory);
+                $em->getRepository('AccountingBundle:Transaction')->purchaseTransaction($entity,$accountPurchase,'Purchase');
+
             }
         }
         $excelImporter->setProgress('updated');
