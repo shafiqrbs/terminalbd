@@ -111,5 +111,42 @@ class SalesItemRepository extends EntityRepository
         return $data;
     }
 
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
+    {
+
+            $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+            $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+
+            if (!empty($data['startDate']) ) {
+
+                $qb->andWhere("sales.updated >= :startDate");
+                $qb->setParameter('startDate', $startDate.' 00:00:00');
+            }
+            if (!empty($data['endDate'])) {
+
+                $qb->andWhere("sales.updated <= :endDate");
+                $qb->setParameter('endDate', $endDate.' 23:59:59');
+            }
+    }
+
+
+    public function reportPurchasePrice($globalOption,$data)
+    {
+        $qb = $this->createQueryBuilder('si');
+        $qb->join('si.sales','sales');
+        $qb->select('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
+        $qb->where("sales.inventoryConfig = :inventoryConfig");
+        $qb->setParameter('inventoryConfig', $globalOption->getInventoryConfig());
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getSingleResult();
+        return $data = $result['totalPurchaseAmount'] ;
+    }
+
+
 
 }

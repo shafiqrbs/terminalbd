@@ -1,0 +1,24 @@
+report_balance:
+    path:     /balance-sheet
+    defaults: { _controller: "AccountingBundle:Report:balance" }
+
+report_balance_pdf:
+    path:     /balance-sheet
+    defaults: { _controller: "AccountingBundle:Report:balance" }
+
+report_income:
+    path:     /income
+    defaults: { _controller: "AccountingBundle:Report:income" }
+
+report_income_pdf:
+    path:     /income-pdf
+    defaults: { _controller: "AccountingBundle:Report:pdfIncome" }
+
+report_income_print:
+    path:     /income-print
+    defaults: { _controller: "AccountingBundle:Report:printIncome" }
+
+account_bank_show:
+    path:     /{id}/show
+    defaults: { _controller: "AccountingBundle:AccountBank:show" }
+

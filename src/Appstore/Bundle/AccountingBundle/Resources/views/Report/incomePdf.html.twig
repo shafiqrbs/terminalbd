@@ -1,0 +1,52 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <table class="table table-bordered table-striped table-condensed flip-content ">
+                    <thead>
+                    <tr class="head-grey">
+                        <th class="pull-center" colspan="2"><h3>Income Statement Sheet</h3></th>
+                    </tr>
+                    <tr>
+                        {% set startDate = searchForm.startDate is defined ? searchForm.startDate :'' %}
+                        {% set endDate = searchForm.endDate is defined ? searchForm.endDate :'' %}
+                        <th colspan="2">
+                            <span class="pull-right">&nbsp;&nbsp;<i class="icon-calender"></i>&nbsp;Period&nbsp;&nbsp;{{ startDate }} To {{ endDate }}</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="head-grey">
+                        <th>Particular</th>
+                        <th class="numeric" >Amount</th>
+                    </tr>
+                    <tr><th colspan="2">Income</th></tr>
+                    <tr><th>Sales</th><th class="numeric" >{{ overview.salesAmount|number_format }}</th></tr>
+                    <tr><th>Goods Purchase</th><th class="numeric" >({{ overview.purchasePrice|number_format }})</th></tr>
+                    <tr><th colspan="2">Expenses</th></tr>
+                    {% set sum = 0 %}
+                    {% for expense in overview.expenditures %}
+                        {% set sum = sum + expense.amount  %}
+                        <tr><td>{{ expense.name }}</td><td class="numeric" >({{ expense.amount|number_format }})</td></tr>
+                    {% endfor %}
+                    <tr><th>Grand Total Expense</th><th class="numeric" >({{ sum|number_format }})</th></tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@AccountingBundle/Resources/public/css/print.css'
+    '@AccountingBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+
+
+
+

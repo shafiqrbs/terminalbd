@@ -16,7 +16,7 @@ class CustomerRepository extends EntityRepository
     public function findExistingCustomer($sales, $mobile)
     {
         $em = $this->_em;
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('mobile'=>$mobile));
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$sales->getInventoryConfig()->getGlobalOption(),'mobile'=>$mobile));
         if($entity){
             return $entity;
         }else{
@@ -41,16 +41,17 @@ class CustomerRepository extends EntityRepository
 
     }
 
-    public function insertContactCustomer($data,$mobile='')
+    public function insertContactCustomer($globalOption,$data,$mobile='')
     {
         $em = $this->_em;
         $entity  ='';
         if(isset($data['mobile']) && $data['mobile'] !=""){
-            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $data['globalOption'], 'mobile' => $mobile, 'name' => $data['name']));
+            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
         }elseif(isset($data['email']) && $data['email'] !=""){
-            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $data['globalOption'], 'email' => $data['email'], 'name' => $data['name']));
+            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $data['globalOption'], 'email' => $data['email']));
 
         }
+
         if(!empty($entity)){
             return $entity;
         }else {

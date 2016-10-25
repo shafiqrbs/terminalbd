@@ -117,9 +117,9 @@ class ContactPageRepository extends EntityRepository
             $thana      = !empty($entity->getThana()) ? $entity->getThana()->getName() : '' ;
             $district   = !empty($entity->getDistrict()) ? $entity->getDistrict()->getName() : '' ;
             $address    = $address1.' '.$thana.' '.$district.' Bangladesh';
-            $latLong = $this->getLatLong($address);
-            $entity->setLatitude($latLong['latitude']);
-            $entity->setLongitude($latLong['longitude']);
+           // $latLong = $this->getLatLong($address);
+            //$entity->setLatitude($latLong['latitude']);
+            //$entity->setLongitude($latLong['longitude']);
 
         }
 

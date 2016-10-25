@@ -232,7 +232,7 @@ class SalesItem
     }
 
     /**
-     * @return mixed
+     * @return Sales
      */
     public function getSales()
     {
@@ -240,7 +240,7 @@ class SalesItem
     }
 
     /**
-     * @param mixed $sales
+     * @param Sales $sales
      */
     public function setSales($sales)
     {

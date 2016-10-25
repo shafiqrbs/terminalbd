@@ -1,3 +1,7 @@
+accounting_report:
+    resource: "@AccountingBundle/Resources/config/routing/accountreport.yml"
+    prefix:   /finance/report
+
 accounting_expensecategory:
     resource: "@AccountingBundle/Resources/config/routing/expensecategory.yml"
     prefix:   /finance/expensecategory

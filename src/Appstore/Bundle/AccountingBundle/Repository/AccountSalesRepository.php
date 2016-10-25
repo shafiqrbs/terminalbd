@@ -158,5 +158,32 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
+    public function reportIncome($globalOption,$data)
+    {
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+        }
+
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.totalAmount) AS salesAmount');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getSingleResult();
+        $purchasePrice = $this->_em->getRepository('InventoryBundle:SalesItem')->reportPurchasePrice($globalOption,$data);
+        $Expenditures = $this->_em->getRepository('AccountingBundle:Expenditure')->reportExpenditure($globalOption,$data);
+
+        $data =  array('salesAmount' => $result['salesAmount'],'purchasePrice' => $purchasePrice,'expenditures' => $Expenditures);
+        return $data;
+
+    }
+
+
 
 }

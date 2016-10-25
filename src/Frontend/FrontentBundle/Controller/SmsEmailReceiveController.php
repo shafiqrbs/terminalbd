@@ -1,0 +1,56 @@
+<?php
+
+namespace Frontend\FrontentBundle\Controller;
+use Frontend\FrontentBundle\Service\MobileDetect;
+use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ToolBundle\Entity\Branding;
+use Product\Bundle\ProductBundle\Entity\Product;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Entity\SubscribeEmail;
+use Setting\Bundle\ToolBundle\Event\ReceiveEmailEvent;
+use Setting\Bundle\ToolBundle\Event\ReceiveSmsEvent;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Syndicate\Bundle\ComponentBundle\Entity\Education;
+use Syndicate\Bundle\ComponentBundle\Entity\Vendor;
+
+class SmsEmailReceiveController extends Controller
+{
+
+    public function smsReceiveAction(Request $request,$subdomain)
+    {
+
+        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('status'=>1,'subDomain' => $subdomain));
+
+        $data = $request->request->all();
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->insertContactCustomer($globalOption,$data,$mobile);
+        $customerInbox = $this->getDoctrine()->getRepository('DomainUserBundle:CustomerInbox')->sendCustomerMessage($customer,$data,'sms');
+        if( $globalOption ->isSmsIntegration() AND !empty($globalOption->getMobile()))
+        {
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.sms_receive', new ReceiveSmsEvent($customer->getGlobalOption(),$customerInbox));
+
+        }        return new Response($customer->getMobile());
+    }
+
+    public function emailReceiveAction(Request $request,$subdomain)
+    {
+
+        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('status'=>1,'subDomain' => $subdomain));
+        $data = $request->request->all();
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->insertContactCustomer($globalOption,$data);
+        $customerInbox = $this->getDoctrine()->getRepository('DomainUserBundle:CustomerInbox')->sendCustomerMessage($customer,$data,'email');
+
+        if(!empty($globalOption->getEmail())) {
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.email_receive', new ReceiveEmailEvent($customer->getGlobalOption(), $customerInbox));
+
+        }
+        return new Response($customer->getEmail());
+
+
+    }
+
+}

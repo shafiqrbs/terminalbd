@@ -1,17 +1,26 @@
+$( ".date-picker" ).datepicker({
+    dateFormat: "yy-mm-dd"
+});
+// Getter
+
+var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
+
+// Setter
+$( ".date-picker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+
 function CommonJs(){
 
 
     $( ".date-picker" ).datepicker({
-        dateFormat: "yy-mm"
+        dateFormat: "yy-mm-dd"
     });
     // Getter
+
     var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
 
     // Setter
-    $( ".date-picker" ).datepicker( "option", "dateFormat", "yy-mm" );
+    $( ".date-picker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
 
-    // Setter
-    $( ".date-picker-month" ).datepicker( "option", "dateFormat", "mm-YY" );
 
     $(document).on('change', '.transactionMethod', function() {
 

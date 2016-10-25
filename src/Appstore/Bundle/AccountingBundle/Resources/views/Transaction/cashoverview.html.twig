@@ -36,26 +36,11 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig') %}
-                            {#<form class="search-form" action="" method="get" name="itemSearch">
-                                <div class="row-fluid">
-                                    <div class="span2">
-                                        <input type="text" id="tillDate" name="tillDate"  class="span12 search-input  date-picker" value="{% if searchForm.tillDate is defined %}{{ searchForm.tillDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.tillDate is defined %}{{ searchForm.tillDate }}{% else %}Enter Till Date{% endif %} ">
-                                    </div>
-                                    <div class="span3">
-                                    </div>
-                                    <div class="span3">
-                                    </div>
-                                    <div class="span1">
-                                        <button class="btn blue" type="submit" ><i class="icon-search"></i></button>
-                                    </div>
-                                </div>
 
-                            </form>
-#}
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
-                                    <th class="numeric" >Transaction Method</th>
+                                    <th>Transaction Method</th>
                                     <th class="numeric" >Debit</th>
                                     <th class="numeric" >Credit</th>
                                     <th class="numeric" >Balance</th>
@@ -66,7 +51,7 @@
                                     {% for row in overviews %}
                                     <tr>
                                         {% set sum = sum + (row.debit-row.credit) %}
-                                        <th class="numeric" >{{ row.name }}</th>
+                                        <th>{{ row.name }}</th>
                                         <td class="numeric" >{{ row.debit|number_format }}</td>
                                         <td class="numeric" >{{ row.credit|number_format }}</td>
                                         <td class="numeric" >{{ (row.debit-row.credit)|number_format }}</td>
@@ -81,7 +66,7 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
-                                    <th class="numeric" >Bank Account Name</th>
+                                    <th>Bank Account Name</th>
                                     <th class="numeric" >Debit</th>
                                     <th class="numeric" >Credit</th>
                                     <th class="numeric" >Balance</th>
@@ -92,7 +77,7 @@
                                 {% for row in transactionBankCashOverviews %}
                                     <tr>
                                         {% set sumBank = sumBank + (row.debit-row.credit) %}
-                                        <th class="numeric" >{{ row.name }}</th>
+                                        <th >{{ row.name }}</th>
                                         <td class="numeric" >{{ row.debit|number_format }}</td>
                                         <td class="numeric" >{{ row.credit|number_format }}</td>
                                         <td class="numeric" >{{ (row.debit-row.credit)|number_format }}</td>
@@ -107,7 +92,7 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
-                                    <th class="numeric" >Mobile Account Name</th>
+                                    <th>Mobile Account Name</th>
                                     <th class="" >Debit</th>
                                     <th class="" >Credit</th>
                                     <th class="" >Balance</th>
@@ -118,10 +103,10 @@
                                 {% for row in transactionBkashCashOverviews %}
                                     <tr>
                                         {% set sumBkash = sumBkash + (row.debit-row.credit) %}
-                                        <th class="numeric" >{{ row.name }}</th>
-                                        <td class="" >{{ row.debit|number_format }}</td>
-                                        <td class="" >{{ row.credit|number_format }}</td>
-                                        <td class="" >{{ (row.debit-row.credit)|number_format }}</td>
+                                        <th  >{{ row.name }}</th>
+                                        <td class="numeric" >{{ row.debit|number_format }}</td>
+                                        <td class="numeric" >{{ row.credit|number_format }}</td>
+                                        <td class="numeric" >{{ (row.debit-row.credit)|number_format }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -133,10 +118,10 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
-                                    <th class="numeric" >Account Head</th>
-                                    <th class="" >Debit</th>
-                                    <th class="" >Credit</th>
-                                    <th class="" >Balance</th>
+                                    <th>Account Head</th>
+                                    <th class="numeric"  >Debit</th>
+                                    <th class="numeric"  >Credit</th>
+                                    <th class="numeric"  >Balance</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -144,10 +129,10 @@
                                 {% for row in transactionAccountHeadCashOverviews %}
                                     <tr>
                                         {% set sumCash = sumCash + (row.debit-row.credit) %}
-                                        <th class="numeric" >{{ row.name }}</th>
-                                        <td class="" >{{ row.debit|number_format }}</td>
-                                        <td class="" >{{ row.credit|number_format }}</td>
-                                        <td class="" >{{ (row.debit-row.credit)|number_format }}</td>
+                                        <th >{{ row.name }}</th>
+                                        <td class="numeric"  >{{ row.debit|number_format }}</td>
+                                        <td cclass="numeric"  >{{ row.credit|number_format }}</td>
+                                        <td class="numeric"  >{{ (row.debit-row.credit)|number_format }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

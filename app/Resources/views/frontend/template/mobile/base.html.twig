@@ -18,7 +18,7 @@
     <meta property="og:type" content="website">
     <meta property="og:image" content="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"><!-- link to image for socio -->
     <meta property="og:url" content="{{ globalOption.domain }}">
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}">
     <script type="application/x-javascript"> addEventListener("load", function() {setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
     {% stylesheets filter='cssrewrite'
     'assets/template/mobile/css/bootstrap.min.css'
@@ -43,9 +43,7 @@
                     <a href="#mm-menu" class="main-menu"><i class="fa fa-list-ul"></i></a>
                 </div>
                 <div class="Profile-mid">
-                    <h5 class="pro-link"><a
-                                href="{{ path('mobile_home',{'subdomain':globalOption.subDomain}) }}">{{ globalOption.name }}</a>
-                    </h5>
+                    <h5 class="pro-link"><a href="{{ path('mobile_home',{'subdomain':globalOption.subDomain}) }}">{{ globalOption.name }}</a></h5>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -64,6 +62,54 @@
             {% block body %}{% endblock %}
             <!--/footer-->
             <div class="w3agile">
+                <!-- modal -->
+                <div id="email-modal" class="mfp-hide">
+                    <div class="login-modal">
+                        <div class="booking-info">
+                            <h3><a href="{{ path('mobile_home',{'subdomain':globalOption.subDomain}) }}">{{ globalOption.name }}</a></h3>
+                        </div>
+                        <div class="login-form">
+                            <form action="{{ path('webservice_email_receive',{'subdomain':globalOption.subDomain}) }}" id="send-email" name="send-email" method="post">
+                                <div class="input-group ">
+                                    <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name" aria-describedby="basic-addon1">
+                                </div>
+                                <div class="input-group ">
+                                    <span class="input-group-addon" id="basic-addon1"><i class="fa fa-mobile"></i></span>
+                                    <input type="text" class="form-control mobile" id="mobile" name="mobile" placeholder="Enter your mobile no" aria-describedby="basic-addon1">
+                                </div>
+                                <div class="input-group ">
+                                    <span class="input-group-addon" id="basic-addon1"><i class="fa fa-envelope"></i></span>
+                                    <input type="text" class="form-control" id="email" name="email" placeholder="Enter your mobile no" aria-describedby="basic-addon1">
+                                </div>
+                                <p>
+                                    <textarea class="col-md-12 comment" name="comment" id="comment" placeholder="Enter any comment"></textarea>
+                                </p>
+                                <p class="text-center"><button class="btn comment col-md-12 label-primary"  type="submit" value="Sign In"><i class="fa fa-send"></i>&nbsp;Send</button></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div id="sms-modal" class="mfp-hide">
+                    <div class="login-modal">
+                        <div class="booking-info">
+                            <h3><a href="{{ path('mobile_home',{'subdomain':globalOption.subDomain}) }}">{{ globalOption.name }}</a></h3>
+                        </div>
+                        <div class="login-form">
+                            <form action="{{ path('webservice_sms_receive',{'subdomain':globalOption.subDomain}) }}" id="send-sms" name="send-sms" method="post">
+                                <div class="input-group ">
+                                    <span class="input-group-addon" id="basic-addon1"><i class="fa fa-mobile"></i></span>
+                                    <input type="text" class="form-control mobile" name="mobile" id="mobile" placeholder="Enter your mobile no" aria-describedby="basic-addon1">
+                                </div>
+                                <p>
+                                    <textarea class="col-md-12 comment" name="comment" id="comment" placeholder="Enter any comment"></textarea>
+                                </p>
+                                <p class="text-center"><button class="comment btn col-md-12 label-primary"  type="submit" value="Sign In"><i class="fa fa-send"></i>&nbsp;Send</button></p>
+                            </form>
+                          </div>
+                    </div>
+                </div>
+                <!-- //modal -->
                 <div class="" id="mobile-footer">
                     <ul class="footer-icon">
 
@@ -73,7 +119,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#sms-modal" class="hvr-radial-out" data-title="">
+                            <a href="#sms-modal" class="sign-in popup-top-anim" data-title="">
                                 <i class="fa fa-comment"></i>
                             </a>
                         </li>
@@ -83,13 +129,13 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#email-modal" class="hvr-radial-out" data-title="">
+                            <a href="#email-modal" class="sign-in popup-top-anim">
                                 <i class="fa fa-envelope"></i>
                             </a>
                         </li>
                         <li>
                             <a class="last hvr-radial-out"
-                               href="{{ path('webservice_contact',{'contact':'contact'}) }}" data-title="">
+                               href="{{ path('mobile_contact',{"subdomain":globalOption.subDomain}) }}" data-title="">
                                 <i class="fa fa-map-marker"></i>
                             </a>
                         </li>
@@ -104,10 +150,13 @@
 <nav id="mm-menu">
     {{ menuTree|raw }}
 </nav>
-{% block javascriptBlock %}{% endblock %}
 {% javascripts
 'assets/template/mobile/js/jquery-2.1.4.min.js'
 'assets/template/mobile/js/bootstrap.min.js'
+'assets/template/plugin/jquery-inputmask/jquery.inputmask.bundle.min.js'
+'assets/template/plugin/numeric/jquery.numeric.js'
+'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
+'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
 'assets/template/mobile/js/bigSlide.js'
 'assets/template/mobile/js/jquery.magnific-popup.js'
 'assets/template/mobile/js/modernizr.custom.js'
@@ -117,6 +166,8 @@
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
+{% block javascriptBlock %}{% endblock %}
+<script src="//maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDmior4xLqsriysUeQhtdSawc8yjDyaWaw"></script>
 <script type="text/javascript">
 
     $(document).ready(function () {
@@ -136,6 +187,90 @@
         $('.scrollToTop').click(function(){
             $('html, body').animate({scrollTop : 0},800);
             return false;
+        });
+        $(window).load(function() {
+            $('#gmap_canvas').show();
+        });
+        $(".numeric").numeric();
+        $(".mobile").inputmask("mask", {"mask": "99999-999-999"}); //specifying fn & options
+        var validator =  $("#send-email").validate({
+
+            rules: {
+
+                "name": {required: true},
+                "mobile": {required: true},
+                "comment": {required: true},
+            },
+
+            messages: {
+
+                "name":"Enter your full name",
+                "mobile":"Enter valid mobile no",
+                "comment": "Enter your professional",
+            },
+
+            tooltip_options: {
+
+                "name": {placement:'top',html:true},
+                "mobile": {placement:'top',html:true},
+                "comment": {placement:'top',html:true},
+
+            },
+            submitHandler: function(form) {
+
+                $.ajax({
+
+                    url         : $(form).attr( 'action' ),
+                    type        : $(form).attr( 'method' ),
+                    data        : new FormData(form),
+                    processData : false,
+                    contentType : false,
+                    success: function(response) {
+                        if(response == 'valid'){
+
+                        }
+                    },
+                    complete: function(){
+
+                    }
+                });
+            }
+
+        });
+        var validator =  $("#send-sms").validate({
+
+            rules: {
+                "mobile": {required: true},
+                "comment": {required: true},
+            },
+
+            messages: {
+                "mobile":"Enter valid mobile no",
+                "comment": "Enter your sms text only 160 characters",
+            },
+
+            tooltip_options: {
+                "mobile": {placement:'top',html:true},
+                "comment": {placement:'top',html:true},
+            },
+            submitHandler: function(form) {
+
+                $.ajax({
+
+                    url         : '{{ path('webservice_sms_receive',{'subdomain':globalOption.subDomain}) }}',
+                    type        : $(form).attr( 'method' ),
+                    data        : new FormData(form),
+                    processData : false,
+                    contentType : false,
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    complete: function(){
+
+                    }
+                });
+            }
+
         });
 
         {% block documentready %}
@@ -200,6 +335,15 @@
     }
     #mobile-footer ul.footer-icon li a i {
         line-height: 31px;
+    }
+
+    .comment{
+        width: 100%;
+    }
+
+    #gmap_canvas{
+        min-height:420px;
+        min-width: 320px;
     }
 
 

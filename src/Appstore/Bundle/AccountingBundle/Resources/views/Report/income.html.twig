@@ -1,0 +1,122 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Income Statement
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="javascript:">Income Statement</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Income Statement</div>
+                         <div class="actions">
+                            <div class="btn-group">
+                                {% set startDate = searchForm.startDate is defined ? searchForm.startDate :'' %}
+                                {% set endDate = searchForm.endDate is defined ? searchForm.endDate :'' %}
+                                <a class="btn purple" href="{{ path('report_income_pdf',{'startDate':startDate,'endDate':endDate,}) }}" >
+                                    <i class=" icon-download"></i>&nbsp;PDF
+                                </a>
+                                <a class="btn blue" href="{{ path('report_income_print') }}" >
+                                    <i class=" icon-print"></i>&nbsp;Print
+                                </a>
+                                <a class="btn" href="#" >
+                                    <i class="icon-cogs"></i>&nbsp;Tools
+                                    <i class="icon-tasks"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="{{ path('report_income_pdf') }}"><i class="icon-plus-sign"></i>&nbsp; Balance Sheet</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="portlet-body">
+                        <div class="portlet-body flip-scroll">
+                            {% include('flash-message.html.twig')  %}
+                            <div class="portlet search-portlet box grey">
+                                <form class="search-form" action="" method="get" name="itemSearch">
+
+                                    <div class="row-fluid">
+                                        <div class="span5">
+                                            <input type="text" id="startDate" name="startDate"  class="span12 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        </div>
+                                        <div class="span6">
+                                            <input type="text" id="endDate" name="endDate"  class="span12 search-input date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                        </div>
+
+                                        <div class="span1">
+                                            <button class="btn blue" type="submit" ><i class="icon-search"></i></button>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                            </div>
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                <thead class="flip-content ">
+                                <tr class="head-grey">
+                                    <td>&nbsp;&nbsp;<i class="icon-list"></i>&nbsp;Particular</td>
+                                    <th class="numeric" >Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr><th colspan="2">Income</th></tr>
+                                <tr><th>Sales</th><th class="numeric" >{{ overview.salesAmount|number_format }}</th></tr>
+                                <tr><th>Goods Purchase</th><th class="numeric" >({{ overview.purchasePrice|number_format }})</th></tr>
+                                <tr><th colspan="2">Expenses</th></tr>
+                                {% set sum = 0 %}
+                                {% for expense in overview.expenditures %}
+                                    {% set sum = sum + expense.amount  %}
+                                    <tr><td>{{ expense.name }}</td><td class="numeric" >({{ expense.amount|number_format }})</td></tr>
+                                {% endfor %}
+                                <tr><th>Grand Total Expense</th><th class="numeric" >({{ sum|number_format }})</th></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@AccountingBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@AccountingBundle/Resources/public/js/common.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+
+
+

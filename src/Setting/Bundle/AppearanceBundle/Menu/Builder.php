@@ -176,8 +176,6 @@ class Builder extends ContainerAware
 
     }
 
-
-
     public function toolsMenu($menu)
     {
         $menu
@@ -201,9 +199,6 @@ class Builder extends ContainerAware
         return $menu;
     }
 
-
-
-
     public function syndicateMenu($menu)
     {
         $menu
@@ -215,7 +210,6 @@ class Builder extends ContainerAware
         $menu['Syndicate']->addChild('Vendor', array('route' => 'vendor'));
         return $menu;
     }
-
 
     public function productCategoryMenu($menu)
     {
@@ -309,8 +303,6 @@ class Builder extends ContainerAware
         return $menu;
     }
 
-
-
     public function vendorMenu($menu)
     {
 
@@ -328,7 +320,6 @@ class Builder extends ContainerAware
 
     }
 
-
     public function manageAdvertismentMenu($menu)
     {
         $menu
@@ -341,8 +332,6 @@ class Builder extends ContainerAware
         return $menu;
 
     }
-
-
 
     public function footerMenu(FactoryInterface $factory, array $options)
     {
@@ -663,11 +652,20 @@ class Builder extends ContainerAware
             ->addChild('Finance')
             ->setAttribute('icon','fa fa-cog')
             ->setAttribute('dropdown', true);
-        $menu['Finance']->addChild('Transaction Overview', array('route' => 'account_transaction'));
-        $menu['Finance']->addChild('Cash Overview', array('route' => 'account_transaction_cash_overview'));
-        $menu['Finance']->addChild('Cash Transaction', array('route' => 'account_transaction_cash'));
-        $menu['Finance']->addChild('Bank Transaction', array('route' => 'account_transaction_bank'));
-        $menu['Finance']->addChild('Mobile Transaction', array('route' => 'account_transaction_bkash'));
+        $menu['Finance']->addChild('Transaction & Report', array('route' => 'account_transaction'))
+            ->setAttribute('icon','fa fa-money')
+            ->setAttribute('dropdown', true);
+        $menu['Finance']['Transaction & Report']->addChild('Transaction Overview',        array('route' => 'account_transaction'))->setAttribute('icon', 'icon-th-list');;
+        $menu['Finance']['Transaction & Report']->addChild('Income',        array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');;
+
+        $menu['Finance']->addChild('Cash', array('route' => 'account_transaction'))
+            ->setAttribute('icon','fa fa-money')
+            ->setAttribute('dropdown', true);
+        $menu['Finance']['Cash']->addChild('Cash Overview',        array('route' => 'account_transaction_cash_overview'))->setAttribute('icon', 'icon-th-list');;
+        $menu['Finance']['Cash']->addChild('Cash Transaction',        array('route' => 'account_transaction_cash'))->setAttribute('icon', 'icon-th-list');;
+        $menu['Finance']['Cash']->addChild('Bank Transaction',        array('route' => 'account_transaction_bank'))->setAttribute('icon', 'icon-th-list');;
+        $menu['Finance']['Cash']->addChild('Mobile Transaction',        array('route' => 'account_transaction_bkash'))->setAttribute('icon', 'icon-th-list');;
+
         $menu['Finance']->addChild('Expenditure', array('route' => 'account_expenditure'))
             ->setAttribute('icon','fa fa-bookmark')
             ->setAttribute('dropdown', true);
@@ -755,8 +753,6 @@ class Builder extends ContainerAware
 
     }
 
-
-
     public function manageAccountingSettingMenu($menu)
     {
         $menu
@@ -808,6 +804,7 @@ class Builder extends ContainerAware
             ;
         }
     }
+
     private function buildCollectionMenu(ItemInterface $menu, $collections)
     {
 
