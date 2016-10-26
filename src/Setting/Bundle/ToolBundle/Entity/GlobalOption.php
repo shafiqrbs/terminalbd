@@ -277,6 +277,7 @@ class GlobalOption
      **/
 
     private $templateCustomize;
+
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\MobileIcon", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/

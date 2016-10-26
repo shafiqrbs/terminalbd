@@ -15,7 +15,6 @@ class WebServiceModuleController extends Controller
     public function moduleAction($subdomain,$module)
     {
 
-
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         if(!empty($globalOption)){
@@ -42,9 +41,9 @@ class WebServiceModuleController extends Controller
 
                 }else{
 
-                    $page = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'slug' => $module));
+                    $page = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=>$globalOption,'slug' => $module));
                     $twigName = "content";
-                    $featurePages = $em->getRepository('SettingContentBundle:Page')->getListForModule($globalOption,$page);
+                    $featurePages = $em->getRepository('SettingContentBundle:Page')->getListForModule($globalOption,$page->getPage());
                 }
             }
 
@@ -55,7 +54,7 @@ class WebServiceModuleController extends Controller
 
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();
-        if( $detect->isMobile() &&  $detect->isTablet() ) {
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/'.$themeName;
         }else{
             $theme = 'Template/Desktop/'.$themeName;
@@ -68,7 +67,7 @@ class WebServiceModuleController extends Controller
                 'categories'    => $categories,
                 'title'         => $moduleName,
                 'pagination'    => $pagination,
-                'page'          => $page,
+                'page'          => $page->getPage(),
                 'featurePages'  => $featurePages,
             )
         );
@@ -119,7 +118,7 @@ class WebServiceModuleController extends Controller
         /* Device Detection code desktop or mobile */
 
         $detect = new MobileDetect();
-        if( $detect->isMobile() &&  $detect->isTablet() ) {
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/'.$themeName;
         }else{
             $theme = 'Template/Desktop/'.$themeName;
@@ -188,7 +187,7 @@ class WebServiceModuleController extends Controller
         $categories = ($categories) ? $categories :'';
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();
-        if( $detect->isMobile() && $detect->isTablet() ) {
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/'.$themeName;
         }else{
             $theme = 'Template/Desktop/'.$themeName;
@@ -212,49 +211,26 @@ class WebServiceModuleController extends Controller
 
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=>$globalOption ,'slug' => 'contact'));
             $page ='';
-            $moduleName ='';
-
             if(!empty($menu)){
-
                 $siteEntity = $globalOption->getSiteSetting();
-
-                if(!empty($siteEntity)){
-                    $themeName = $siteEntity->getTheme()->getFolderName();
-                }else{
-                    $themeName ='Default';
-                }
-
-                $menus = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
-                $menusTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$subdomain,'desktop');
-
-                $moduleTheme = $this->get('setting.menuTreeSettingRepo')->getModuleTheme($menu);
-                if($moduleTheme){
-
-                    $moduleName = $this->get('setting.menuTreeSettingRepo')->getModuleTheme($menu);
-                }else{
-                    $page = $em->getRepository('SettingContentBundle:Content')->findOneBy(array('globalOption'=>$globalOption,'slug' => $module));
-
-                }
+                $themeName = $siteEntity->getTheme()->getFolderName();
             }
 
         }
 
-        $page = ($page) ? $page :'';
+        $branches = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findBy(array('status'=>1,'globalOption'=>$globalOption,'module'=>6),array('name'=>'ASC'));
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();
-        if( $detect->isMobile() &&  $detect->isTablet() ) {
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/'.$themeName;
         }else{
             $theme = 'Template/Desktop/'.$themeName;
         }
         return $this->render('FrontendBundle:'.$theme.':contact.html.twig',
             array(
-
-                'menu'          => $menusTree,
                 'globalOption'        => $globalOption,
-                'page'          => $page,
-                'moduleName'    => $moduleName
-            )
+                'branches'        => $branches,
+              )
         );
 
     }
@@ -263,6 +239,7 @@ class WebServiceModuleController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+
         if(!empty($globalOption)){
 
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=>$globalOption ,'slug' => 'contact'));
@@ -294,10 +271,10 @@ class WebServiceModuleController extends Controller
         /* Device Detection code desktop or mobile */
 
         $detect = new MobileDetect();
-        if($detect->isMobile() && $detect->isTablet() ) {
-            $theme = 'Mobile/'.$themeName;
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName;
         }else{
-            $theme = 'Desktop/'.$themeName;
+            $theme = 'Template/Desktop/'.$themeName;
         }
         return $this->render('FrontendBundle:'.$theme.':content.html.twig',
             array(

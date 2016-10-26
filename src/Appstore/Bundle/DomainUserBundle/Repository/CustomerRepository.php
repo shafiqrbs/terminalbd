@@ -45,25 +45,26 @@ class CustomerRepository extends EntityRepository
     {
         $em = $this->_em;
         $entity  ='';
-        if(isset($data['mobile']) && $data['mobile'] !=""){
+
+        if(!empty($mobile)){
             $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
         }elseif(isset($data['email']) && $data['email'] !=""){
-            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $data['globalOption'], 'email' => $data['email']));
-
+            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' =>$globalOption, 'email' => $data['email']));
         }
 
         if(!empty($entity)){
             return $entity;
         }else {
             $entity = new Customer();
-            $globalOption = $this->_em->getRepository('SettingToolBundle:GlobalOption')->find($data['globalOption']);
             if(isset($data['email']) && $data['email'] !=""){
                 $entity->setEmail($data['email']);
             }
-            if(isset($data['mobile']) && $data['mobile'] !="") {
+            if(!empty($mobile)) {
                 $entity->setMobile($mobile);
             }
-            $entity->setName($data['name']);
+            if(isset($data['name']) && $data['name'] !=""){
+                $entity->setName($data['name']);
+            }
             $entity->setGlobalOption($globalOption);
             $entity->setCustomerType('contact');
             $em->persist($entity);
@@ -76,10 +77,10 @@ class CustomerRepository extends EntityRepository
     public function insertSMSCustomer($data)
     {
         $em = $this->_em;
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$data['globalOption'],'mobile'=>$data['mobile'],'name'=>$data['name']));
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$data['globalOption'],'mobile' => $data['mobile']));
         if($entity){
             return $entity;
-        }else {
+        }else{
             $entity = new Customer();
             $globalOption = $this->_em->getRepository('SettingToolBundle:GlobalOption')->find($data['globalOption']);
             $entity->setMobile($data['mobile']);

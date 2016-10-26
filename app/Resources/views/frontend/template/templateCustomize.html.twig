@@ -1,0 +1,44 @@
+<style>
+
+    /* Customize Template for Customer demand*/
+    {% if globalOption.templateCustomize.siteBgColor is not empty %}
+    .siteBgColor{
+        background-color: {{ globalOption.templateCustomize.siteBgColor }}!important;
+    }
+    {% endif %}
+    .mm-ismenu{
+        background-color: {{ globalOption.templateCustomize.headerBgColor }}!important;
+    }
+    .mm-list a{
+        background-color: {{ globalOption.templateCustomize.menuLia }}!important;
+    }
+    .mm-list a:hover{
+        background-color: {{ globalOption.templateCustomize.menuLiHovera }}!important;
+    }
+    #top-bar, #menu-bar{
+        background-color: {{ globalOption.templateCustomize.menuBgColor }}!important;
+    }
+    .site-name{
+        color: {{ globalOption.templateCustomize.siteNameColor }}!important;
+        font-size: 20px!important;
+        font-weight: bold!important;
+        text-transform: uppercase;
+    }
+    .details-grid{
+        background: url("{{ image(globalOption.templateCustomize.webPath('bgImage')).resize() }}")!important;
+        background-position: center center;
+    }
+    #header{
+        background-color: {{ globalOption.templateCustomize.headerBgColor }}!important;
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+    #mobile-footer ul.footer-icon li a{
+        color: {{ globalOption.templateCustomize.footerTextColor }}!important;
+        background: {{ globalOption.templateCustomize.footerBgColor }}!important;
+    }
+    #gmap_canvas{
+        min-height:520px;
+        min-width: 320px;
+    }
+</style>

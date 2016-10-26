@@ -19,9 +19,9 @@
     <meta property="og:image" content="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"><!-- link to image for socio -->
     <meta property="og:url" content="{{ globalOption.domain }}">
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}">
-    <script type="application/x-javascript"> addEventListener("load", function() {setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    <script type="application/x-javascript"> addEventListener("load", function() {setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
     {% stylesheets filter='cssrewrite'
     'assets/template/mobile/css/bootstrap.min.css'
     'assets/template/mobile/css/font-awesome.min.css'

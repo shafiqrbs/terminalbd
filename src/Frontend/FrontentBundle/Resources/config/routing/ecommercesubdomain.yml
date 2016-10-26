@@ -5,7 +5,6 @@ ecommercesubdomain:
 webservice_sms_receive:
     path:     /receive/sms
     defaults: { _controller: FrontendBundle:SmsEmailReceive:smsReceive}
-    methods:  POST
 
 webservice_email_receive:
     path:     /receive/email

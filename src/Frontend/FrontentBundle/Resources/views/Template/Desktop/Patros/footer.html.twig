@@ -34,6 +34,8 @@
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
+{% block javascriptBlock %}{% endblock %}
+<script src="//maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDmior4xLqsriysUeQhtdSawc8yjDyaWaw"></script>
 <script>
     var subdomain ="{{ globalOption.subDomain }}" ;
     $(document).ready(function(){

@@ -48,8 +48,8 @@ class WebServiceProductController extends Controller
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
-            if( $detect->isMobile() && $detect->isTablet() ) {
-                $theme = 'Template/Mobile/'.$themeName;
+            if( $detect->isMobile() || $detect->isTablet() ) {
+                $theme = 'Template/Mobile/Default';
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
@@ -102,7 +102,7 @@ class WebServiceProductController extends Controller
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
-            if($detect->isMobile() && $detect->isTablet() ) {
+            if($detect->isMobile() || $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
@@ -135,7 +135,7 @@ class WebServiceProductController extends Controller
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
-            if($detect->isMobile() && $detect->isTablet() ) {
+            if($detect->isMobile() || $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
@@ -163,7 +163,7 @@ class WebServiceProductController extends Controller
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
-            if($detect->isMobile() && $detect->isTablet() ) {
+            if($detect->isMobile() || $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
@@ -191,7 +191,7 @@ class WebServiceProductController extends Controller
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
-            if($detect->isMobile() && $detect->isTablet() ) {
+            if($detect->isMobile() || $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $theme = 'Template/Desktop/'.$themeName;

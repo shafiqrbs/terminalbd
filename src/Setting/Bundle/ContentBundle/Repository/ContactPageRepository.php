@@ -99,6 +99,18 @@ class ContactPageRepository extends EntityRepository
             $entity->setContent($data['content']);
         }
 
+        if(isset($data['googleMap']) and $data['googleMap'] != '') {
+            $entity->setGoogleMap($data['googleMap']);
+        }
+
+        if(isset($data['latitude']) and $data['latitude'] != '') {
+            $entity->setLatitude($data['latitude']);
+        }
+
+        if(isset($data['longitude']) and $data['longitude'] != '') {
+            $entity->setLongitude($data['longitude']);
+        }
+
         $askForEmail = isset($data['askForEmail']) ? 1:0 ;
         $entity->setAskForEmail($askForEmail);
 

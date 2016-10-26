@@ -95,8 +95,8 @@
         </form>
         <div class="brclear"></div>
     </div>
-    {% if(entity.customizeDesign == 1 ) %}
-{#    <div class="accordion-title">
+    {% if(entity.customizeDesign != 1 ) %}
+    <div class="accordion-title">
         <h3><a href="javascript:">Customize Template</a></h3>
     </div>
     <div class="accordion-container">
@@ -108,6 +108,15 @@
         <!-- simple file uploading form -->
         <div id="preview" style="display:none"></div>
         <form class="design-form customize-submitted" id="" action="" method="post" >
+            <label>Site Name Color<a class="small-text align-right"  href="#"
+                                     data-interface="tooltip"
+                                     data-position="top"
+                                     data-content="Enter the name of your company. This name will appear at the top of every page of your mobile site."
+                                     data-shift="10"
+                                     data-defineClass = "bord"
+                                     data-radius = "0px"
+                        >help</a></label>
+            <p><span class="fa-icon"><i class="fa  fa-paint-brush"></i></span><input class="cpButton" name="siteNameColor" value="{{ entity.templateCustomize.siteNameColor }}" /></p>
             <label>Site Background Color<a class="small-text align-right"  href="#"
                                            data-interface="tooltip"
                                            data-position="top"
@@ -116,7 +125,8 @@
                                            data-defineClass = "bord"
                                            data-radius = "0px"
                         >help</a></label>
-            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input class="cpButton" name="siteBgColor" value="{{ entity.templateCustomize.siteBgColor }}" /></p>
+            <p><span class="fa-icon"><i class="fa  fa-paint-brush"></i></span><input class="cpButton" name="siteBgColor" value="{{ entity.templateCustomize.siteBgColor }}" /></p>
+            <label>Feature Image</label>
             <div class="img-preview"><img id="bgImagePreview" {%  if(entity.templateCustomize.webPath('bgImage') is not null )  %} style="display: inline-block" {% endif %}  src="{{ image(entity.templateCustomize.webPath('bgImage')).resize() }} "> </div>
             <p><input id="bgImage" type="file" accept="image/*" name="bgImage" /></p>
             <div class="brclear"></div>
@@ -129,8 +139,7 @@
                                              data-defineClass = "bord"
                                              data-radius = "0px"
                         >help</a></label>
-            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input class="cpButton" name="headerBgColor" value="{{ entity.templateCustomize.headerBgColor }}" /></p>
-
+            <p><span class="fa-icon"><i class="fa  fa-paint-brush"></i></span><input class="cpButton" name="headerBgColor" value="{{ entity.templateCustomize.headerBgColor }}" /></p>
             <label>Menu Background Color<a class="small-text align-right"  href="#"
                                            data-interface="tooltip"
                                            data-position="top"
@@ -139,12 +148,16 @@
                                            data-defineClass = "bord"
                                            data-radius = "0px"
                         >help</a></label>
-            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input class="cpButton" name="menuBgColor" value="{{ entity.templateCustomize.menuBgColor }}" /></p>
-
+            <p><span class="fa-icon"><i class="fa  fa-paint-brush"></i></span><input class="cpButton" name="menuBgColor" value="{{ entity.templateCustomize.menuBgColor }}" /></p>
+            <label>Menu Text</label>
+            <p><span class="fa-icon"><i class="fa  fa-paint-brush"></i></span><input class="cpButton" name="menuLia" value="{{ entity.templateCustomize.menuLia }}" /></p>
+            <label>Menu Text:hover</label>
+            <p><span class="fa-icon"><i class="fa  fa-paint-brush"></i></span><input class="cpButton" name="menuLiHovera" value="{{ entity.templateCustomize.menuLiHovera }}" /></p>
+{#
             <div class="img-preview"><img id="headerBgImagePreview" {%  if(entity.templateCustomize.webPath('headerBgImage') is not null )  %} style="display: inline-block" {% endif %}  src="{{ image(entity.templateCustomize.webPath('headerBgImage')).resize() }} "></div>
             <p><input id="headerBgImage" type="file" accept="image/*" name="headerBgImage" /></p>
-            <h3><strong>Body</strong></h3>
-            <label>Menu Background Color<a class="small-text align-right"  href="#"
+         #}   <h3><strong>Body</strong></h3>
+            <label>Body Color<a class="small-text align-right"  href="#"
                                            data-interface="tooltip"
                                            data-position="top"
                                            data-content="Enter the name of your company. This name will appear at the top of every page of your mobile site."
@@ -152,7 +165,7 @@
                                            data-defineClass = "bord"
                                            data-radius = "0px"
                         >help</a></label>
-            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input class="cpButton" name="bodyColor" value="{{ entity.templateCustomize.bodyColor }}" /></p>
+            <p><span class="fa-icon"><i class="fa  fa-paint-brush"></i></span><input class="cpButton" name="bodyColor" value="{{ entity.templateCustomize.bodyColor }}" /></p>
 
             <div class="brclear"></div>
             <h3><strong>Footer</strong></h3>
@@ -164,7 +177,7 @@
                                              data-defineClass = "bord"
                                              data-radius = "0px"
                         >help</a></label>
-            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input class="cpButton" name="footerBgColor" value="{{ entity.templateCustomize.footerBgColor }}" /></p>
+            <p><span class="fa-icon"><i class="fa  fa-paint-brush"></i></span><input class="cpButton" name="footerBgColor" value="{{ entity.templateCustomize.footerBgColor }}" /></p>
 
             <label>Footer Text Color<a class="small-text align-right"  href="#"
                                        data-interface="tooltip"
@@ -174,12 +187,12 @@
                                        data-defineClass = "bord"
                                        data-radius = "0px"
                         >help</a></label>
-            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input class="cpButton" name="footerTextColor" value="{{ entity.templateCustomize.footerTextColor }}" /></p>
+            <p><span class="fa-icon"><i class="fa  fa-paint-brush"></i></span><input class="cpButton" name="footerTextColor" value="{{ entity.templateCustomize.footerTextColor }}" /></p>
             <div class="brclear"></div>
             <p class="align-right" >To keep these changes, click 'Update'&nbsp;&nbsp;&nbsp;<input id="button" type="submit" class="tm-btn mini" value="Upload"></p>
         </form>
         <div class="brclear"></div>
-    </div>#}
+    </div>
     {% endif %}
     <div class="accordion-title">
         <h3><a href="#">Site Footer</a></h3>
@@ -195,7 +208,7 @@
                                 data-defineClass = "bord"
                                 data-radius = "0px"
                         >help</a></label>
-            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="copyRight" type="text" value="" placeholder="Enter your copy right text" name="copyRight"></p>
+            <p><span class="fa-icon"><i class="fa  fa-paint-brush"></i></span><input id="copyRight" type="text" value="" placeholder="Enter your copy right text" name="copyRight"></p>
             {#<div class="checkbox block">
                 <label >Display only on website</label><input type="checkbox" name="displayWebsite"  {% if(entity.footerSetting.displayWebsite == 1) %} checked {% endif %} value="1" />
                 <label >Turn off footer branding</label><input type="checkbox" name="turnOffBranding"  {% if(entity.footerSetting.turnOffBranding == 1) %} checked {% endif %} value="1" />

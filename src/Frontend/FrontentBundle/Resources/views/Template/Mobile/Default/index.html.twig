@@ -1,27 +1,21 @@
-{% extends ':template:mobile.html.twig' %}
+{% extends ':frontend/template/mobile:base.html.twig' %}
 {% block body %}
-    <div id="content" style="margin-top: 0 !important;">
-        <div class="home-content">
-		<span id="Logo" class="svg">
-			<img width="200" src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" />
-		</span>
-        </div>
-        <div class="fluid_container">
-            <div class="camera_wrap camera_black_skin camera_emboss pattern_1" id="camera_wrap_4">
-                {% for slide in globalOption.homeSliders  %}
-                <div data-thumb="{{ image(slide.webPath).resize(150,150) }}" data-src="{{ image(slide.webPath).resize() }}">
-                    <div class="bannerContent fadeFromBottom">
-                        <div class="b-c-textpane">
-                            <a href="http://facebook.com/terminalbd" class="home-scl-icon facebook">
-                                <i class="fa fa-facebook"></i>
-                                <div>{{ slide.name }}</div>
-                            </a>
-                        </div>
-                    </div>
+    <!--/welcome-->
+    <div class="w3agile welcome">
+        <div class="b-bottom">
+            <div class="col-md-12">
+                <h3>{{ globalOption.homePage.name }}</h3>
+
+                <p><i>{{ globalOption.homePage.content|raw }}</p>
+
+                <div class="wthree_more wthree_more1">
+                    <a href="{{ path('mobile_content_page',{'subdomain':globalOption.subDomain,'slug':'about-us'}) }}"
+                       class="button--wayra button--border-thick button--text-upper button--size-s">More About
+                    </a>
                 </div>
-                {% endfor %}
-            </div><!-- #camera_wrap_3 -->
-        </div><!-- .fluid_container -->
+            </div>
+            <div class="clearfix"></div>
+        </div>
     </div>
-</div>
+    <!--//welcome-->
 {% endblock %}

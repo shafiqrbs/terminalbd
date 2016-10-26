@@ -10,11 +10,12 @@ namespace Setting\Bundle\ToolBundle\Repository;
 
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\TemplateCustomize;
 
 class TemplateCustomizeRepository extends EntityRepository {
 
 
-    public function updateTemplateCustomize($entity , $data , $file){
+    public function updateTemplateCustomize(TemplateCustomize $entity , $data , $file){
 
         $em = $this->_em;
 
@@ -22,6 +23,9 @@ class TemplateCustomizeRepository extends EntityRepository {
 
         if(isset($data['logoDisplayWebsite']) and $data['logoDisplayWebsite'] != '') {
             $entity->setLogoDisplayWebsite($data['logoDisplayWebsite']);
+        }
+        if(isset($data['siteNameColor']) and $data['siteNameColor'] != '') {
+            $entity->setSiteNameColor($data['siteNameColor']);
         }
         if(isset($data['siteBgColor']) and $data['siteBgColor'] != '') {
             $entity->setSiteBgColor($data['siteBgColor']);
@@ -31,6 +35,13 @@ class TemplateCustomizeRepository extends EntityRepository {
         }
         if(isset($data['menuBgColor']) and $data['menuBgColor'] != '') {
             $entity->setMenuBgColor($data['menuBgColor']);
+        }
+        if(isset($data['menuLia']) and $data['menuLia'] != '') {
+            $entity->setMenuLia($data['menuLia']);
+        }
+
+        if(isset($data['menuLiHovera']) and $data['menuLiHovera'] != '') {
+            $entity->setMenuLiHovera($data['menuLiHovera']);
         }
         if(isset($data['bodyColor']) and $data['bodyColor'] != '') {
             $entity->setBodyColor($data['bodyColor']);

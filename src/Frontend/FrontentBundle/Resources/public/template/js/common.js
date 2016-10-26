@@ -1,4 +1,3 @@
-
     var owlProduct = $(".product-slider");
     owlProduct.owlCarousel({
         items: 6,
@@ -40,10 +39,7 @@ $(".viewed-prev").click(function(){
     owlProduct.trigger('owl.prev');
 })
 
-
-
 function commonJs(){
-
     $('#contactForm').on('submit', function(e){
         e.preventDefault();
         e.stopPropagation();
@@ -177,6 +173,7 @@ $("#commentform").submit(function (e) {
 });
 
 
+
 var validator =  $("#signup").validate({
 
     rules: {
@@ -184,7 +181,7 @@ var validator =  $("#signup").validate({
         "Core_userbundle_user[globalOption][name]": {required: true},
         "Core_userbundle_user[profile][mobile]": {
             required: true,
-            remote: Routing.generate('bindu_signup_check')
+            remote: Routing.generate('webservice_customer_checking',{'subdomain':subdomain})
         },
         "Core_userbundle_user[globalOption][syndicate]": {required: true},
         "Core_userbundle_user[globalOption][location]": {required: true},
@@ -196,11 +193,11 @@ var validator =  $("#signup").validate({
         "Core_userbundle_user[globalOption][name]":"Enter your organization name",
         "Core_userbundle_user[profile][mobile]":{
             required: "Enter valid mobile no",
-            remote: "This mobile no is already registered. Please try to login."
+            remote: "This mobile no is already registered. Please try to another no."
         },
         "Core_userbundle_user[profile][syndicate]": "Enter your professional",
         "Core_userbundle_user[profile][location]": "Enter your location",
-        "Core_userbundle_user[globalOption][status]": "Please read terms & condition and agree",
+        "Core_userbundle_user[globalOption][status]": "Please read terms & condition and agree"
     },
 
     tooltip_options: {

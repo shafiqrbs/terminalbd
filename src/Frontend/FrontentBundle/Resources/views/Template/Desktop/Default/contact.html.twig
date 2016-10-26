@@ -1,229 +1,203 @@
-{% extends ':template:base.html.twig' %}
+{% extends ':frontend/template:base.html.twig' %}
 {% block body %}
-    <div class="container">
-
-        <div class="content_fullwidth">
-            {% if(globalOption.contactPage.isMap) %}
-            <h3>Find the <strong>Address</strong></h3>
-            <iframe class="google-map" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14606.826205939857!2d90.35883561641566!3d23.75784164620104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755bf5125907689%3A0xb55fb5b3c082f1b2!2sLalmatia+Mohila+College!5e0!3m2!1sen!2sbd!4v1450783065460"></iframe><br /><small><a href="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14606.826205939857!2d90.35883561641566!3d23.75784164620104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755bf5125907689%3A0xb55fb5b3c082f1b2!2sLalmatia+Mohila+College!5e0!3m2!1sen!2sbd!4v1450783065460">View Larger Map</a></small>
-            <div class="clearfix"></div>
-            {% endif %}
-            {% if(globalOption.contactPage.isBranch) %}
-                <h2>Our<strong> Branches</strong></h2>
-                {% for  details in globalOption.branches %}
-                    <div class="one_third {% if loop.index is divisible by(3) %} last {% endif %}">
-                        <div class="framed-box">
-                            <div class="framed-box-wrap">
-                                <div class="pricing-title">
-                                    <h3>{{ details.name }}</h3>
-                                </div>
-                                <div class="pricing-text-list">
-                                    <ul class="list1">
-                                        <li><i class="fa fa-home"></i>Address: {{ details.address|raw }}</li>
-                                        <li><i class="fa fa-user"></i><strong>{{ details.contactPerson }}</strong>, {{ details.designation }}</li>
-                                        <li><i class="fa fa-mobile"></i> <a href="tel:+ 088 {{ details.mobile|raw }}" class="contact-call">Mobile: + 088 {{ details.mobile|raw }}</a></li>
-                                        {% if(details.phone) %}<li><i class="fa fa-phone-square"></i></i><a href="javascript:" class="contact-call">Phone: + {{ details.phone|raw }}</a></li>{% endif %}
-                                        {% if(details.fax) %}<li><i class="fa fa-phone"></i>Fax: + {{ details.fax|raw }}</a></li>{% endif %}
-                                        {% if(details.email) %}<li><i class="fa fa-envelope-o"></i>Email: {{ details.email|raw }}</li>{% endif %}
-                                    </ul>
-                                    <br />
-                                    <p><a href="#" class="but_download"><i class="fa fa-map-marker"></i> Direction</a></p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div><!-- end section -->
-                {% endfor %}
-            {% endif %}
-            <div class="clearfix"></div>
-            <div  {% if(globalOption.contactPage.isContactForm == true) %} class="one_half" {% endif %}>
-                <div class="clearfix mar_top3"></div>
-                <h3> {{ globalOption.contactPage.name }}</h3>
-                <p>{{ globalOption.contactPage.content }}</p>
-                <br />
-                <div class="address-info">
-                    <h3>Address <strong>Info</strong></h3>
-                    <div class="one_half">
-                        <ul>
-                            <li>
-                                <p>
-                                    <strong>Office</strong><br>
-                                    Address: {{ globalOption.contactPage.address1 }}
+    <div class="clearfix"></div>
+    <section id="breadcrumb">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="crumb">&nbsp;<a href="{{ path('ecommercesubdomain') }}">Home</a> <i>/</i>Contact us</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container blog">
+        <div class="row js-equal-height">
+            <article style="padding-bottom: 20px; padding-top: 20px" class="{% if branches is not empty and branches is defined %} col-md-8 {% else %}col-md-12 {% endif %}">
+                {% if globalOption.contactPage.latitude is not empty and globalOption.contactPage.longitude is not empty %}
+                    <div id="gmap_canvas" class="gmap">
+                        <div class="Lat">{{ globalOption.contactPage.latitude }}</div>
+                        <div class="Lng">{{ globalOption.contactPage.longitude }}</div>
+                        <div class="imgMap">{{ asset('assets/img/placeholder.png') }}</div>
+                        <address>Address Here</address>
+                        <div class="infoWindow">
+                            <span>{% if globalOption.contactPage.address1 is not empty %}
+                                    <i class="fa fa-home"></i>&nbsp;{{ globalOption.contactPage.address1 }}<br>
                                     {% if globalOption.contactPage.thana is defined and globalOption.contactPage.thana %}
-                                        ,{{ globalOption.contactPage.thana.name }}<br>
+                                        {{ globalOption.contactPage.thana.name }},
                                     {% endif %}
                                     {% if globalOption.contactPage.district is defined and globalOption.contactPage.district %}
-                                        {{ globalOption.contactPage.district.name }} {% endif %}-{{ globalOption.contactPage.postalCode }}<br>
-                                </p>
-
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="one_half last">
-                        <ul>
-                            <li>
-
-                                {% if globalOption.contactPage.startHour %}
-                                    <p>
-                                        <strong>Office hour</strong><br>
-                                        {{ globalOption.contactPage.startHour }} To {{ globalOption.contactPage.endHour }}
-                                    </p>
+                                        {{ globalOption.contactPage.district.name }} {% endif %}-{{ globalOption.contactPage.postalCode }}
                                 {% endif %}
-                                <p><strong>Weekly off day</strong><br>{{ globalOption.contactPage.weeklyOffDay }}</p>
-                                <p>
-                                    <strong>Contact Information</strong><br>
-                                    <em>{{ globalOption.contactPage.contactPerson|raw }}</em><br/>
-                                    {% if globalOption.contactPage.designation %}{{ globalOption.contactPage.designation|raw }}{% endif %}</br>
-                                    {% if(globalOption.contactPage.displayPhone == 1) %}
-                                        <a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">Mobile: + 088 {{ globalOption.mobile }}</a></br>
-                                    {% endif %}
-                                    {% if(globalOption.contactPage.displayEmail == 1) %}
-                                        <a href="mailto:{{ globalOption.contactPage.email }}" class="contact-email">{{ globalOption.contactPage.email }}</a></br>
-                                    {% endif %}
-                                    {% if(globalOption.contactPage.additionalPhone) %}<a href="javascript:" >Additional Phone: + 02 {{ globalOption.contactPage.additionalPhone|raw }}</a></br>{% endif %}
-                                    {% if(globalOption.contactPage.additionalEmail) %}<a href="javascript:" >{{ globalOption.contactPage.additionalEmail|raw }}</a></br>{% endif %}
-                                    {% if(globalOption.contactPage.fax) %}<a href="javascript:">Fax: + 02{{ globalOption.contactPage.fax|raw }}</a>{% endif %}
-                                </p>
-                            </li>
-                        </ul>
+                                {% if globalOption.contactPage.startHour %}
+                                    <br><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ globalOption.contactPage.startHour }} To {{ globalOption.contactPage.endHour }}</strong>
+                                {% endif %}
+                                <br>
+                                <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
+                                <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=23.801422,90.352599">Direction</a>
+
+                            </span>
+                        </div>
+                {% elseif globalOption.contactPage.googleMap is not empty %}
+                    {{ globalOption.contactPage.googleMap|raw }}
+                {% endif %}
+                {# <div class="row">
+                     <div class="col-md-12">
+                         <h3> {{ globalOption.contactPage.name }}</h3>
+                         <p>{{ globalOption.contactPage.content }}</p>
+                     </div>
+
+                 </div>
+                 #}
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong><i class="fa fa-home"></i>&nbsp;Office</strong><br>
+                        {{ globalOption.contactPage.address1 }}
+                        {% if globalOption.contactPage.thana is defined and globalOption.contactPage.thana %}
+                            ,{{ globalOption.contactPage.thana.name }}<br>
+                        {% endif %}
+                        {% if globalOption.contactPage.district is defined and globalOption.contactPage.district %}
+                            {{ globalOption.contactPage.district.name }} {% endif %}-{{ globalOption.contactPage.postalCode }}<br>
+                    </div>
+                    <div class="col-md-4">
+                        <strong><i class="fa fa-hand-o-right"></i>&nbsp;Communication</strong><br>
+                        {% if globalOption.contactPage.startHour %}
+                            <strong><i class="fa fa-clock-o"></i></strong>&nbsp;{{ globalOption.contactPage.startHour }} To {{ globalOption.contactPage.endHour }}
+                        {% endif %}
+                        {% if globalOption.contactPage.weeklyOffDay %}
+                        <br/>
+                        <strong><i class="fa fa-power-off"></i></strong>&nbsp;{{ globalOption.contactPage.weeklyOffDay }}<br>
+                        {% endif %}
+                        {% if(globalOption.contactPage.displayPhone == 1) %}
+                        <strong><i class="fa fa-mobile"></i></strong>&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">+ 088 {{ globalOption.mobile }}</a></br>
+                        {% endif %}
+                        {% if(globalOption.contactPage.displayEmail == 1) %}
+                        <strong><i class="fa fa-envelope"></i></strong>&nbsp;<a href="mailto:{{ globalOption.contactPage.email }}" class="contact-email">{{ globalOption.contactPage.email }}</a></br>
+                        {% endif %}
+                        {% if globalOption.contactPage.fax %}
+                        <strong><i class="fa fa-fax"></i></strong>&nbsp;{% if(globalOption.contactPage.fax) %}<a href="javascript:">Fax: + 02{{ globalOption.contactPage.fax|raw }}</a>{% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <strong><i class="fa fa-user"></i>&nbsp;Contact Information</strong><br>
+                        <em>{{ globalOption.contactPage.contactPerson|raw }}</em><br/>
+                        {% if globalOption.contactPage.designation %}{{ globalOption.contactPage.designation }}{% endif %}</br>
+                        {% if(globalOption.contactPage.additionalPhone) %}<a href="javascript:" ><strong><i class="fa fa-phone"></i></strong>&nbsp;{{ globalOption.contactPage.additionalPhone|raw }}</a></br>{% endif %}
+                        {% if(globalOption.contactPage.additionalEmail) %}<a href="javascript:" ><strong><i class="fa fa-envelope"></i></strong>&nbsp;{{ globalOption.contactPage.additionalEmail|raw }}</a></br>{% endif %}
+
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {% if(globalOption.contactPage.isContactForm == true) %}
+                            <h3>Contact <strong>Form</strong></h3>
+                            <form action="" method="post">
 
-           </div>
-            {% if(globalOption.contactPage.isContactForm == true) %}
-            <div class="one_half last">
-                <h3>Contact <strong>Form</strong></h3>
+                                <fieldset>
 
-                <form action="" method="post">
+                                    <label for="name" class="blocklabel">Your Name*</label>
+                                    <p class="" ><input name="yourname" class="input_bg" type="text" id="name" value=''/></p>
+                                    <label for="mobile" class="blocklabel">Mobile</label>
+                                    <p><input name="mobile" class="input_bg" type="text" id="mobile" value=""/></p>
+                                    {% if(globalOption.contactPage.askForEmail == 1) %}
+                                        <label for="email" class="blocklabel">E-Mail</label>
+                                        <p class="" ><input name="email" class="input_bg" type="text" id="email" value='' /></p>
+                                    {% endif %}
+                                    <label for="message" class="blocklabel">Your Message*</label>
+                                    <p class=""><textarea name="message" class="textarea_bg" id="message" cols="20" rows="" ></textarea></p>
+                                    <p>
+                                        <input type="hidden" id="myemail" name="myemail" value="" />
+                                        <input type="hidden" id="myblogname" name="myblogname" value="" />
+                                    <div class="clearfix"></div>
+                                    <input name="Send" type="submit" value="SUBMIT" class="comment_submit" id="send"/></p>
 
-                    <fieldset>
+                                    {#           <div class="success">
+                                                   <div class="message-box-wrap">
+                                                       Your message has been <strong>Received Successfully!</strong> Thank you!</div>
+                                               </div>
+                       #}
 
-                        <label for="name" class="blocklabel">Your Name*</label>
-                        <p class="" ><input name="yourname" class="input_bg" type="text" id="name" value=''/></p>
-                        <label for="mobile" class="blocklabel">Mobile</label>
-                        <p><input name="mobile" class="input_bg" type="text" id="mobile" value=""/></p>
-                        {% if(globalOption.contactPage.askForEmail == 1) %}
-                            <label for="email" class="blocklabel">E-Mail</label>
-                            <p class="" ><input name="email" class="input_bg" type="text" id="email" value='' /></p>
+                                </fieldset>
+
+                            </form>
                         {% endif %}
-                        <label for="message" class="blocklabel">Your Message*</label>
-                        <p class=""><textarea name="message" class="textarea_bg" id="message" cols="20" rows="" ></textarea></p>
-                        <p>
-                            <input type="hidden" id="myemail" name="myemail" value="" />
-                            <input type="hidden" id="myblogname" name="myblogname" value="" />
-                        <div class="clearfix"></div>
-                        <input name="Send" type="submit" value="SUBMIT" class="comment_submit" id="send"/></p>
+                    </div>
+                </div>
+            </article>
 
-                        {#           <div class="success">
-                                       <div class="message-box-wrap">
-                                           Your message has been <strong>Received Successfully!</strong> Thank you!</div>
-                                   </div>
-           #}
+            {% if branches is not empty and branches is defined %}
+                <!-- Blog Sidebar Column -->
+                <aside class="col-md-4 sidebar-padding js-equal-height" style="background: #FBFCFE">
+                    <div class="blog-sidebar">
+                        <h4 class="sidebar-title"><i class="fa fa-home"></i>&nbsp;&nbsp;Our Branches</h4>
+                        <hr>
+                        {% for  details in branches %}
+                            <div class="">
+                                <h4>{{ details.name }}</h4>
+                                <dl>
+                                    <dd><i class="fa fa-home"></i>&nbsp;{{ details.address|raw }}</dd>
+                                    <dd><i class="fa fa-user"></i>&nbsp;<strong>{{ details.contactPerson }}</strong>, {{ details.designation }}</dd>
+                                    <dd><i class="fa fa-mobile"></i>&nbsp;<a href="tel:+ 088 {{ details.mobile|raw }}" class="contact-call">+ 088 {{ details.mobile|raw }}</a></dd>
+                                    {% if(details.phone) %}<dd><i class="fa fa-phone-square"></i></i>&nbsp;<a href="javascript:" class="contact-call">+ {{ details.phone|raw }}</a></dd>{% endif %}
+                                    {% if(details.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ details.fax|raw }}</a></dd>{% endif %}
+                                    {% if(details.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ details.email|raw }}</dd>{% endif %}
 
-                    </fieldset>
+                                    <dt><a href="#" class="but_download"><i class="fa fa-map-marker"></i> Direction</a></dt>
+                                </dl>
+                            </div>
+                            <hr>
+                            <div class="">
+                                <h4>{{ details.name }}</h4>
+                                <dl>
+                                    <dd><i class="fa fa-home"></i>&nbsp;{{ details.address|raw }}</dd>
+                                    <dd><i class="fa fa-user"></i>&nbsp;<strong>{{ details.contactPerson }}</strong>, {{ details.designation }}</dd>
+                                    <dd><i class="fa fa-mobile"></i>&nbsp;<a href="tel:+ 088 {{ details.mobile|raw }}" class="contact-call">+ 088 {{ details.mobile|raw }}</a></dd>
+                                    {% if(details.phone) %}<dd><i class="fa fa-phone-square"></i></i>&nbsp;<a href="javascript:" class="contact-call">+ {{ details.phone|raw }}</a></dd>{% endif %}
+                                    {% if(details.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ details.fax|raw }}</a></dd>{% endif %}
+                                    {% if(details.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ details.email|raw }}</dd>{% endif %}
 
-                </form>
-
-            </div>
+                                    <dt><a href="#" class="but_download"><i class="fa fa-map-marker"></i> Direction</a></dt>
+                                </dl>
+                            </div>
+                            <hr>
+                            <div class="">
+                                <h4>{{ details.name }}</h4>
+                                <dl>
+                                    <dd><i class="fa fa-home"></i>&nbsp;{{ details.address|raw }}</dd>
+                                    <dd><i class="fa fa-user"></i>&nbsp;<strong>{{ details.contactPerson }}</strong>, {{ details.designation }}</dd>
+                                    <dd><i class="fa fa-mobile"></i>&nbsp;<a href="tel:+ 088 {{ details.mobile|raw }}" class="contact-call">+ 088 {{ details.mobile|raw }}</a></dd>
+                                    {% if(details.phone) %}<dd><i class="fa fa-phone-square"></i></i>&nbsp;<a href="javascript:" class="contact-call">+ {{ details.phone|raw }}</a></dd>{% endif %}
+                                    {% if(details.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ details.fax|raw }}</a></dd>{% endif %}
+                                    {% if(details.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ details.email|raw }}</dd>{% endif %}
+                                    <dt><a href="#" class="but_download"><i class="fa fa-map-marker"></i> Direction</a></dt>
+                                </dl>
+                            </div>
+                            <hr>
+                        {% endfor %}
+                    </div>
+                </aside>
             {% endif %}
-            <div class="clearfix mar_top2"></div>
         </div>
-
-    </div><!-- end content area -->
-
-    <style>
-
-        .address-info{
-            width: 97%;
-        }
-        .contact-person{
-            color: #000033;
-            cursor: none;
-        }
-        .blue-notification{
-            display: none;
-        }
-
-    </style>
-
+    </div>
 {% endblock %}
-
-{% block documentready %}
-
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/desktop/css/common.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
     {{ parent() }}
-
-
-    {#<script>#}
-
-    function isValidEmailAddress(emailAddress) {
-    var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
-    return pattern.test(emailAddress);
-    };
-
-    $('#email').focusout(function(){
-
-        var emil=$('#email').val();
-
-        if( ! isValidEmailAddress( emil ) ) {
-        $('.contactEmailField span').val('').addClass('error-input');
-        $('.contactEmailField span').html(emil+' is not valid e-mail address.');
-        }else{
-        $('.contactEmailField span').removeClass('error-input');
-        $('.contactEmailField span').html('');
-        }
-
-    });
-
-
-    $('#contactForm').validate({
-
-    rules: {
-    name: {
-    required: true
-    },
-    mobile: {
-    required: true
-    },
-    content: {
-    required: true
-    },
-    },
-    messages:{
-    name:{
-    required: "Please enter your name"
-    },
-    mobile:{
-    required: "Please enter your cell phone number"
-    },
-    content:{
-    required: "Please enter your comments"
-    }
-    },
-    submitHandler: function(form) {
-
-    $.ajax({
-    url:'{{ path('mobile_email_receive',{'subdomain': globalOption.subDomain }) }}',
-    type: "POST",
-    beforeSend: function() {
-    $('.loading').show();
-    },
-    data: $('form#contactForm').serialize(),
-    success: function(response) {
-    if(response == 'success'){
-        $('.loading').fadeOut(3000);
-        $('#formSuccessMessageWrap').show();
-        $('.blue-notification').fadeOut(5000);
-        $('fieldset').closest('form').find("input[type=text], textarea").val("");
-    }
-
-    }
-    });
-    }
-
-    });
-
-
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/js/common.js'
+    '@FrontendBundle/Resources/public/js/kmaps.min.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDmior4xLqsriysUeQhtdSawc8yjDyaWaw"></script>
 {% endblock %}
-
-
+{% block documentready %}
+    {{ parent() }}
+    $('#gmap_canvas').kmaps();
+{% endblock %}

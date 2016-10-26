@@ -79,15 +79,52 @@
         <div class="clear"></div>
     </div>#}
     <div class="accordion-title">
-        <h3><a href="#">About us</a></h3>
+        <h3><a href="#"><i class="fa  fa-tasks"></i>&nbsp;About us</a></h3>
     </div>
     <div class="accordion-container">
         Enter a description for your business. This text will appear above/below the logo on the home page of your mobile site only.
         {% render controller("BinduBundle:Widget:aboutus") %}
         <div class="clear"></div>
     </div>
-
     <div class="accordion-title">
+        <h3><a href="#"><i class="fa  fa-home"></i>&nbsp;Contact us</a></h3>
+    </div>
+    <div class="accordion-container">
+        Add Your Address & Contact Person Details.
+        <form class="design-form contact" action="" method="post" enctype="multipart/form-data" >
+            <div class="brclear"></div>
+            <label>Address</label>
+            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="address1" class="" type="text" value="{{ entity.contactPage.address1 }}" placeholder="Enter your communication address" name="address1"></p>
+            <label>District</label>
+            <p>
+                <select name="district" id="district" class="select2" >
+                    <option>Select district </option>
+                    {% for location in locations %}
+                        <option {% if entity.contactPage.district is defined and entity.contactPage.district.id|default('') == location.id %} selected="selected" {% endif %} value="{{ location.id }}">{{ location.name }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <div id="child">{% if(child) %}{{ child|raw }}{% endif %}</div>
+            <label>Zip/Postal Code</label>
+            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="postalCode" class="" type="text" value="{{ entity.contactPage.postalCode }}" placeholder="Enter your postal code" name="postalCode"></p>
+            <label>Additional Phone & Mobile</label>
+            <p><span class="fa-icon"><i class="fa  fa-mobile"></i></span><input id="additionalPhone" class="" type="text" value="{{ entity.contactPage.additionalPhone }}" placeholder="Enter your others contact no" name="additionalPhone"></p>
+            <label>Email address</label>
+            <p><span class="fa-icon"><i class="fa  fa-envelope-o"></i></span><input id="additionalEmail" class="" type="text" value="{{ entity.contactPage.additionalEmail }}" placeholder="Enter your others email address" name="additionalEmail"></p>
+
+            <label>Fax</label>
+            <p><span class="fa-icon"><i class="fa  fa-phone"></i></span><input id="fax" class="" type="text" value="{{ entity.contactPage.fax }}" placeholder="Enter your fax no" name="fax"></p>
+
+            <label>Contact Person</label>
+            <p><span class="fa-icon"><i class="fa  fa-user"></i></span><input id="contactPerson" class="" type="text" value="{{ entity.contactPage.contactPerson }}" placeholder="Enter your others email address" name="contactPerson"></p>
+            <label>Designation</label>
+            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="designation" class="" type="text" value="{{ entity.contactPage.designation }}" placeholder="Enter your others email address" name="designation"></p>
+
+            <p class="align-right" >To keep these changes, click 'Update'&nbsp;&nbsp;&nbsp;<button id="contact" class="tm-btn mini"  name="submit">update</button></p>
+        </form>
+        <div class="clear"></div>
+    </div>
+    {#<div class="accordion-title">
         <h3><a href="#">Contact us</a></h3>
     </div>
     <div class="accordion-container">
@@ -118,7 +155,7 @@
         </form>
         <div class="clear"></div>
     </div>
-    <div class="accordion-title">
+#}    <div class="accordion-title">
         <h3><a href="#"><i class="fa  fa-phone"></i>&nbsp;Call & Email us</a></h3>
     </div>
     <div class="accordion-container">
@@ -139,7 +176,7 @@
         <div class="clear"></div>
     </div>
     <div class="accordion-title">
-        <h3><a href="#"><i class="fa  fa-mobile"></i>&nbsp;Opening Hour</a></h3>
+        <h3><a href="#"><i class="fa  fa-clock-o"></i>&nbsp;Opening Hour</a></h3>
     </div>
     <div class="accordion-container">
         <form class="design-form contact" action="" method="post" enctype="multipart/form-data" >
@@ -164,46 +201,20 @@
         </form>
         <div class="clear"></div>
     </div>
+
     <div class="accordion-title">
-        <h3><a href="#"><i class="fa  fa-map-marker"></i>&nbsp;Find us</a></h3>
+        <h3><a href="#"><i class="fa  fa-map-marker"></i>&nbsp;Google Map</a></h3>
     </div>
     <div class="accordion-container">
-        Add your address(es) so visitors can find you on Google maps.
+        Add your address(es) so visitors can find you on Google maps.<a target="_blank" href="http://www.latlong.net/">Click here</a>
         <form class="design-form contact" action="" method="post" enctype="multipart/form-data" >
             <div class="brclear"></div>
-            <label>Location name</label>
-            <p>
-
-            </p>
-            <label>Address1</label>
-            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="address1" class="" type="text" value="{{ entity.contactPage.address1 }}" placeholder="Enter your communication address1" name="address1"></p>
-            <label>Address2</label>
-            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="address2" class="" type="text" value="{{ entity.contactPage.address2 }}" placeholder="Enter your communication address1" name="address2"></p>
-            <label>Town/District</label>
-            <p>
-                <select name="district" id="district" class="select2" >
-                    <option>Select district </option>
-                    {% for location in locations %}
-                        <option {% if entity.contactPage.district is defined and entity.contactPage.district.id|default('') == location.id %} selected="selected" {% endif %} value="{{ location.id }}">{{ location.name }}</option>
-                    {% endfor %}
-                </select>
-            </p>
-            <div id="child">{% if(child) %}{{ child|raw }}{% endif %}</div>
-            <label>Zip code/Postal Code</label>
-            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="postalCode" class="" type="text" value="{{ entity.contactPage.postalCode }}" placeholder="Enter your postal code" name="postalCode"></p>
-            <label>Additional Phone & Mobile</label>
-            <p><span class="fa-icon"><i class="fa  fa-mobile"></i></span><input id="additionalPhone" class="" type="text" value="{{ entity.contactPage.additionalPhone }}" placeholder="Enter your others contact no" name="additionalPhone"></p>
-            <label>Email address</label>
-            <p><span class="fa-icon"><i class="fa  fa-envelope-o"></i></span><input id="additionalEmail" class="" type="text" value="{{ entity.contactPage.additionalEmail }}" placeholder="Enter your others email address" name="additionalEmail"></p>
-
-            <label>Fax</label>
-            <p><span class="fa-icon"><i class="fa  fa-phone"></i></span><input id="fax" class="" type="text" value="{{ entity.contactPage.fax }}" placeholder="Enter your fax no" name="fax"></p>
-
-            <label>Contact Person</label>
-            <p><span class="fa-icon"><i class="fa  fa-user"></i></span><input id="contactPerson" class="" type="text" value="{{ entity.contactPage.contactPerson }}" placeholder="Enter your others email address" name="contactPerson"></p>
-            <label>Designation</label>
-            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="designation" class="" type="text" value="{{ entity.contactPage.designation }}" placeholder="Enter your others email address" name="designation"></p>
-
+            <label>Latitude</label>
+            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="latitude" class="" type="text" value="{{ entity.contactPage.latitude }}" placeholder="Enter latitude" name="latitude"></p>
+            <label>Longitude</label>
+            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="longitude" class="" type="text" value="{{ entity.contactPage.longitude }}" placeholder="Enter longitude" name="longitude"></p>
+            <label>Google Map Embed Code</label>
+            <p><textarea class="" id="googleMap" name="googleMap" placeholder="Enter google map embed code" >{{ entity.contactPage.googleMap }}</textarea></p>
             <p class="align-right" >To keep these changes, click 'Update'&nbsp;&nbsp;&nbsp;<button id="contact" class="tm-btn mini"  name="submit">update</button></p>
         </form>
         <div class="clear"></div>

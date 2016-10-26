@@ -21,31 +21,34 @@ class SmsEmailReceiveController extends Controller
     public function smsReceiveAction(Request $request,$subdomain)
     {
 
-        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('status'=>1,'subDomain' => $subdomain));
+        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' =>'shoshi'));
 
         $data = $request->request->all();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->insertContactCustomer($globalOption,$data,$mobile);
         $customerInbox = $this->getDoctrine()->getRepository('DomainUserBundle:CustomerInbox')->sendCustomerMessage($customer,$data,'sms');
-        if( $globalOption ->isSmsIntegration() AND !empty($globalOption->getMobile()))
-        {
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.sms_receive', new ReceiveSmsEvent($customer->getGlobalOption(),$customerInbox));
 
-        }        return new Response($customer->getMobile());
+        if( $globalOption ->isSmsIntegration() == 1 AND !empty($globalOption->getMobile())){
+        $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.sms_receive', new ReceiveSmsEvent($globalOption,$customerInbox));
+
+        }
+        return new Response($customer->getMobile());
     }
 
     public function emailReceiveAction(Request $request,$subdomain)
     {
 
-        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('status'=>1,'subDomain' => $subdomain));
+        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('status' => 1,'subDomain' => $subdomain));
         $data = $request->request->all();
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+        $data['mobile'] = $mobile;
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->insertContactCustomer($globalOption,$data);
         $customerInbox = $this->getDoctrine()->getRepository('DomainUserBundle:CustomerInbox')->sendCustomerMessage($customer,$data,'email');
 
         if(!empty($globalOption->getEmail())) {
             $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.email_receive', new ReceiveEmailEvent($customer->getGlobalOption(), $customerInbox));
+            $dispatcher->dispatch('setting_tool.post.email_receive', new ReceiveEmailEvent($globalOption , $customerInbox));
 
         }
         return new Response($customer->getEmail());

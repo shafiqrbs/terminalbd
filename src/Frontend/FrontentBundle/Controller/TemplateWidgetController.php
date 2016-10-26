@@ -21,43 +21,31 @@ class TemplateWidgetController extends Controller
 {
 
 
-    public function headerAction(GlobalOption $globalOption)
+    public function mobileMenuAction(GlobalOption $globalOption)
     {
+        $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
+        $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
+        return $this->render('@Frontend/Template/Mobile/menu.html.twig', array(
+            'menuTree'           => $menuTree,
+        ));
+    }
 
-        $siteEntity = $globalOption->getSiteSetting();
-        $themeName = $siteEntity->getTheme()->getFolderName();
-
+    public function headerAction(GlobalOption $globalOption,Request $request)
+    {
         /* Device Detection code desktop or mobile */
 
-        $detect = new MobileDetect();
         $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
         $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
 
-        if($detect->isMobile() && $detect->isTablet()) {
-            $theme = 'Mobile/'.$themeName;
-        }else{
-            $theme = 'Desktop/'.$themeName;
-        }
-
-        return $this->render('@Frontend/Template/'.$theme.'/header.html.twig', array(
+        return $this->render('@Frontend/Template/Desktop/menu.html.twig', array(
             'menuTree'           => $menuTree,
-            'globalOption'             => $globalOption,
+
         ));
     }
 
     public function footerAction(GlobalOption $globalOption,Request $request)
     {
-        $siteEntity = $globalOption->getSiteSetting();
-        $themeName = $siteEntity->getTheme()->getFolderName();
 
-        /* Device Detection code desktop or mobile */
-
-        $detect = new MobileDetect();
-        if($detect->isMobile() && $detect->isTablet() ) {
-            $theme = 'Mobile/'.$themeName;
-        }else{
-            $theme = 'Desktop/'.$themeName;
-        }
         $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
         $footerMenu = $this->get('setting.menuTreeSettingRepo')->getFooterMenu($menus,$globalOption->getSubDomain(),'desktop');
 
@@ -70,7 +58,7 @@ class TemplateWidgetController extends Controller
         $totalItems = $cart->total_items();
         $cartResult = $cartTotal.'('.$totalItems.')';
 
-        return $this->render('@Frontend/Template/'.$theme.'/footer.html.twig', array(
+        return $this->render('@Frontend/Template/Desktop/footer.html.twig', array(
             'globalOption'             => $globalOption,
             'footerMenu'               => $footerMenu,
             'cartResult'               => $cartResult,
@@ -78,6 +66,33 @@ class TemplateWidgetController extends Controller
             'form'   => $form->createView(),
         ));
     }
+
+    public function modalLoginAction(GlobalOption $globalOption)
+    {
+
+        $csrfToken = $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue();
+        $user = new User();
+        $form   = $this->createCreateForm($globalOption->getSubDomain(),$user);
+        return $this->render('@Frontend/Template/Desktop/Widget/modalLogin.html.twig', array(
+            'globalOption'             => $globalOption,
+            'csrfToken'   => $csrfToken,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    public function sidebarAction(GlobalOption $globalOption,Request $request)
+    {
+
+        $cart = new Cart($request->getSession());
+        $cartTotal = $cart->total();
+        $totalItems = $cart->total_items();
+        $cartResult = $cartTotal.'('.$totalItems.')';
+        return $this->render('@Frontend/Template/Desktop/sidebar.html.twig', array(
+            'globalOption'             => $globalOption,
+            'cartResult'               => $cartResult,
+        ));
+    }
+
 
     /**
      * Creates a form to create a User entity.

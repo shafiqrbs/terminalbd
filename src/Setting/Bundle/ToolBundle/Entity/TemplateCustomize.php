@@ -42,7 +42,7 @@ class TemplateCustomize
      *
      * @ORM\Column(name="showSidebar", type="boolean", nullable=true)
      */
-    private $showSidebar = true;
+    private $showSidebar = false;
 
     /**
      * @var boolean
@@ -87,6 +87,13 @@ class TemplateCustomize
      */
     private $logoDisplayWebsite=true;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="siteNameColor", type="string", length=255, nullable=true)
+     */
+    private $siteNameColor;
 
     /**
      * @var string
@@ -209,9 +216,25 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="menuLia", type="string", length=50, nullable=true)
+     */
+    private $menuLia;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="menuLiHovera", type="string", length=50, nullable=true)
+     */
+    private $menuLiHovera;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="menuLiAColor", type="string", length=50, nullable=true)
      */
     private $menuLiAColor;
+
+
 
     /**
      * @var string
@@ -285,7 +308,7 @@ class TemplateCustomize
 
 
     /**
-     * @param mixed $globalOption
+     * @param GlobalOption $globalOption
      */
     public function setGlobalOption($globalOption)
     {
@@ -293,7 +316,7 @@ class TemplateCustomize
     }
 
     /**
-     * @return mixed
+     * @return GlobalOption
      */
     public function getGlobalOption()
     {
@@ -926,6 +949,54 @@ class TemplateCustomize
     public function setShowMobile($showMobile)
     {
         $this->showMobile = $showMobile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSiteNameColor()
+    {
+        return $this->siteNameColor;
+    }
+
+    /**
+     * @param string $siteNameColor
+     */
+    public function setSiteNameColor($siteNameColor)
+    {
+        $this->siteNameColor = $siteNameColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenuLia()
+    {
+        return $this->menuLia;
+    }
+
+    /**
+     * @param string $menuLia
+     */
+    public function setMenuLia($menuLia)
+    {
+        $this->menuLia = $menuLia;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenuLiHovera()
+    {
+        return $this->menuLiHovera;
+    }
+
+    /**
+     * @param string $menuLiHovera
+     */
+    public function setMenuLiHovera($menuLiHovera)
+    {
+        $this->menuLiHovera = $menuLiHovera;
     }
 
 

@@ -76,14 +76,12 @@ class MenuTreeManager
 
     }
 
-
     public function getMenuTree($arr,$subdomain,$device ='')
     {
 
         $value ='';
             $value .='<ul>';
             $prefix = '';
-
         foreach ($arr as $val) {
 
             $menu = $val->getMenu()->getMenu();
@@ -112,7 +110,6 @@ class MenuTreeManager
         $value ='';
         $value .='<ul>';
         $prefix = '/web-builder/mobile/'.$subdomain.'/';
-        $value .= '<li><a href="/web-builder/mobile/'.$subdomain.'">Home</a>';
         foreach ($arr as $val) {
 
             $menu = $val->getMenu()->getMenu();
