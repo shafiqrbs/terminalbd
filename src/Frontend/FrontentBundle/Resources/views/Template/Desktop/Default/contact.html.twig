@@ -37,17 +37,10 @@
 
                             </span>
                         </div>
-                {% elseif globalOption.contactPage.googleMap is not empty %}
-                    {{ globalOption.contactPage.googleMap|raw }}
-                {% endif %}
-                {# <div class="row">
-                     <div class="col-md-12">
-                         <h3> {{ globalOption.contactPage.name }}</h3>
-                         <p>{{ globalOption.contactPage.content }}</p>
-                     </div>
-
-                 </div>
-                 #}
+                    </div>
+                    {% elseif globalOption.contactPage.googleMap is not empty %}
+                        {{ globalOption.contactPage.googleMap|raw }}
+                    {% endif %}
                 <hr>
                 <div class="row">
                     <div class="col-md-4">
@@ -124,7 +117,6 @@
                     </div>
                 </div>
             </article>
-
             {% if branches is not empty and branches is defined %}
                 <!-- Blog Sidebar Column -->
                 <aside class="col-md-4 sidebar-padding js-equal-height" style="background: #FBFCFE">
