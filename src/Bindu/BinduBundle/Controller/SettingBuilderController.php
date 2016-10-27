@@ -210,7 +210,8 @@ class SettingBuilderController extends Controller
 
         $data= $request->request->all();
         $user = $this->getUser();
-        $this->getDoctrine()->getRepository('SettingToolBundle:SiteSetting')->moduleUpdate($user,$data);
+        $globalOption = $user->getGlobalOption();
+        $this->getDoctrine()->getRepository('SettingToolBundle:SiteSetting')->moduleUpdate($globalOption,$data);
         exit;
     }
 

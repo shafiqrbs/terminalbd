@@ -19,11 +19,14 @@ class PasswordChangeDomainSmsEvent extends Event
 
     protected $option;
 
+    protected $username;
+
     protected $password;
 
-    public function __construct(GlobalOption $option, $password)
+    public function __construct(GlobalOption $option,$username, $password)
     {
         $this->option = $option;
+        $this->username = $username;
         $this->password = $password;
 
     }
@@ -34,6 +37,11 @@ class PasswordChangeDomainSmsEvent extends Event
     public function getOption()
     {
         return $this->option;
+    }
+
+    public function getUsername()
+    {
+        return $this->username;
     }
 
     public function getPassword()

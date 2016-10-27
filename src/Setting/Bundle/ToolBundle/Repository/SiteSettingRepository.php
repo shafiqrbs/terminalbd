@@ -31,10 +31,10 @@ class SiteSettingRepository extends EntityRepository
 
     }
 
-    public function moduleUpdate($user,$data)
+    public function moduleUpdate(GlobalOption $globalOption,$data)
     {
         $em = $this->_em;
-        $entity = $user->getSiteSetting();
+        $entity = $globalOption->getSiteSetting();
         if(!empty($data['module'])){
 
             $modules = array();
@@ -43,8 +43,8 @@ class SiteSettingRepository extends EntityRepository
             }
             if (!empty($modules)) {
                 $entity->setModules($modules);
-                $this->removeModuleMenu($user,$modules,'module');
-                $this->addModuleMenu($user, $modules,'module');
+                $this->removeModuleMenu($globalOption);
+                $this->addModuleMenu($globalOption, $modules,'module');
             }
 
         }
@@ -73,10 +73,10 @@ class SiteSettingRepository extends EntityRepository
 
     }
 
-    public function removeModuleMenu($user,$modules,$type)
+    public function removeModuleMenu($globalOption)
     {
             $em = $this->_em;
-            $remove = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('user' => $user,'siteSetting'=>$user->getSiteSetting()));
+            $remove = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('siteSetting' => $globalOption->getSiteSetting()));
             if(!empty($remove)){
                 $em->remove($remove);
             }
@@ -84,7 +84,7 @@ class SiteSettingRepository extends EntityRepository
 
     }
 
-    public function addModuleMenu($user,$modules,$type)
+    public function addModuleMenu($globalOption,$modules,$type)
     {
         $em = $this->_em;
 
@@ -96,11 +96,10 @@ class SiteSettingRepository extends EntityRepository
                 $entity->setSyndicateModule($module);
             }
             $slug = $module->getSlug();
-            $entity->setGlobalOption($user->getGlobalOption());
+            $entity->setGlobalOption($globalOption);
             $entity->setMenu($module->getMenu());
             $entity->setSlug($slug);
-            $entity->setUser($user);
-            $entity->setSiteSetting( $user->getSiteSetting());
+            $entity->setSiteSetting( $globalOption->getSiteSetting());
             $em->persist($entity);
 
         }
@@ -130,7 +129,6 @@ class SiteSettingRepository extends EntityRepository
                     $entity->setSyndicate($syndicate);
                     $entity->setMenu($menu);
                     $entity->setSlug($menuSlug);
-                    $entity->setUser($user);
                     $entity->setSiteSetting($reEntity->getId());
                     $em->persist($entity);
 

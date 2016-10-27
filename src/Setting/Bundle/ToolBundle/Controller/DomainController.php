@@ -68,7 +68,6 @@ class DomainController extends Controller
             $dispatcher = $this->container->get('event_dispatcher');
             $dispatcher->dispatch('setting_tool.post.domain_notification', new \Setting\Bundle\ToolBundle\Event\DomainNotification($entity));
         }
-
         exit;
     }
 
@@ -76,14 +75,16 @@ class DomainController extends Controller
     {
         $entity = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('globalOption'=> $option,'domainOwner'=>1));
         if(!empty($entity)){
-            echo $a = mt_rand(1000,9999);
+            $a = mt_rand(1000,9999);
             $entity->setPlainPassword($a);
             $this->get('fos_user.user_manager')->updateUser($entity);
             $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.change_domain_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeDomainSmsEvent($option,$a));
+            $dispatcher->dispatch('setting_tool.post.change_domain_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeDomainSmsEvent($option,$entity->getUsername(),$a));
+            $this->get('session')->getFlashBag()->add(
+                'success',"Change password successfully"
+            );
         }
-        exit;
-
+        return $this->redirect($this->generateUrl('tools_domain'));
 
     }
 

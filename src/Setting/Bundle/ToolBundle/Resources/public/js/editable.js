@@ -10,19 +10,17 @@ var EditableInit = function () {
     }
     $(".editable").editable(initEditables());
 
-    $(document).on("click", ".resetPass", function() {
+    /*$(document).on("click", ".resetPass", function() {
 
         var url = $(this).attr("data-url");
-        alert(url);
         $.ajax({
             url: url,
             type: 'GET',
             success: function (response) {
-                window.onload();
             },
         })
 
-    })
+    })*/
 
 }
 
