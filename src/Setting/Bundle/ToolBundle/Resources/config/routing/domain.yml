@@ -14,6 +14,10 @@ tools_domain_module:
     path:     /
     defaults: { _controller: "SettingToolBundle:Domain:module" }
 
+tools_domain_reset_password:
+    path:     /{option}/domain-reset-password
+    defaults: { _controller: "SettingToolBundle:Domain:resetDomainPassword" }
+
 tools_option_status:
     path:     /domain/option-status
     defaults: { _controller: "SettingToolBundle:Domain:optionStatus" }

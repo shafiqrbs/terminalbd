@@ -68,6 +68,12 @@ services:
       tags:
         - { name: kernel.event_listener, event: setting_tool.post.change_password, method: sendSms }
 
+  setting_tool.listener.changepassword.domain:
+      class: Setting\Bundle\ToolBundle\EventListener\PasswordChangeDomainSmsListener
+      arguments: [@setting_tool.sms_gateWay]
+      tags:
+        - { name: kernel.event_listener, event: setting_tool.post.change_domain_password, method: sendSms }
+
   setting_tool.listener.domain_notification:
       class: Setting\Bundle\ToolBundle\EventListener\DomainNotificationListener
       arguments: [@setting_tool.sms_gateWay]

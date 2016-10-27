@@ -25,7 +25,7 @@ class ReportController extends Controller
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportIncome($globalOption,$data);
-        return $this->render('AccountingBundle:Report:incomePdf.html.twig', array(
+        return $this->render('AccountingBundle:Report:income.html.twig', array(
             'overview' => $overview,
             'searchForm' => $data,
         ));
@@ -40,6 +40,7 @@ class ReportController extends Controller
         $html = $this->renderView(
             'AccountingBundle:Report:incomePdf.html.twig', array(
                 'overview' => $overview,
+                'print' => ''
             )
         );
         $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
@@ -57,20 +58,11 @@ class ReportController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $data = $_REQUEST;
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportIncome($globalOption,$data);
-        $html = $this->renderView(
-            'AccountingBundle:Report:incomePdf.html.twig', array(
-                'overview' => $overview,
-            )
-        );
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
+        return $this->render('AccountingBundle:Report:incomePdf.html.twig', array(
+            'overview' => $overview,
+            'print' => '<script>window.print();</script>'
+        ));
 
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="incomePdf.pdf"');
-        echo $pdf;
-
-        return new Response('');
     }
 
 }

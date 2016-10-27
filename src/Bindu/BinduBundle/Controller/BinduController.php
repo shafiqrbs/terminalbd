@@ -102,6 +102,7 @@ class BinduController extends Controller
             $entity->setPlainPassword("1234");
             $entity->setGlobalOption($globalOption);
             $entity->setEnabled(true);
+            $entity->setDomainOwner(true);
             $entity->setUsername($mobile);
             $entity->setEmail($mobile.'@gmail.com');
             $entity->setRoles(array('ROLE_DOMAIN'));

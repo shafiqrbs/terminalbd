@@ -28,7 +28,7 @@ class GlobalOptionRepository extends EntityRepository
 
     function getList() {
        return  $this->createQueryBuilder('g')
-           ->orderBy('g.name', 'ASC')
+           ->orderBy('g.updated', 'DESC')
            ->getQuery();
     }
 

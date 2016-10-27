@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ToolBundle\Controller;
 
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -60,13 +61,30 @@ class DomainController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
-
         $entity->setStatus($data['value']);
         $em->flush();
-        $dispatcher = $this->container->get('event_dispatcher');
-        $dispatcher->dispatch('setting_tool.post.domain_notification', new \Setting\Bundle\ToolBundle\Event\DomainNotification($entity));
+
+        if($entity->getStatus() != 1){
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.domain_notification', new \Setting\Bundle\ToolBundle\Event\DomainNotification($entity));
+        }
 
         exit;
+    }
+
+    public function resetDomainPasswordAction(GlobalOption $option)
+    {
+        $entity = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('globalOption'=> $option,'domainOwner'=>1));
+        if(!empty($entity)){
+            echo $a = mt_rand(1000,9999);
+            $entity->setPlainPassword($a);
+            $this->get('fos_user.user_manager')->updateUser($entity);
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.change_domain_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeDomainSmsEvent($option,$a));
+        }
+        exit;
+
+
     }
 
 

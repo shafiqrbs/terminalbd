@@ -87,8 +87,7 @@
                                                 <tr>
                                                     <th class="numeric" >Change Password</th>
                                                     <td class="numeric" >
-                                                        <a href="{{ path('invoicemodule_new',{option:entity.id}) }}" class="btn blue mini" ><i class="icon-key"></i>&nbsp;Generate new password</a>
-
+                                                        <a href="{{ path('tools_domain_reset_password',{option: entity.id}) }}" data-url="{{ path('tools_domain_reset_password',{option: entity.id}) }}" class="btn blue mini resetPass" ><i class="icon-key"></i>&nbsp;Generate new password</a>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -115,7 +114,7 @@
                                                     <th class="numeric" >Customer Payment invoice for sms or email</th>
                                                     <td class="numeric" >
                                                         {% if entity.invoiceSmsEmails is not empty %}
-                                                            <a href="javascript" class="btn blue mini badge badge-warning toggle badge-custom" id="{{ entity.id }}" ><i class="icon-phone"></i>&nbsp;Requested</a>
+                                                            <a href="javascript:" class="btn blue mini badge badge-warning toggle badge-custom" id="{{ entity.id }}" ><i class="icon-phone"></i>&nbsp;Requested</a>
                                                         {% endif %}
                                                     </td>
                                                 </tr>

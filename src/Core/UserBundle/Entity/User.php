@@ -46,6 +46,14 @@ class User extends BaseUser
     private $isDelete=false;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="domainOwner", type="boolean", nullable=true)
+     */
+    private $domainOwner = false;
+
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $avatar;
@@ -919,6 +927,22 @@ class User extends BaseUser
     public function getOrderApproved()
     {
         return $this->orderApproved;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDomainOwner()
+    {
+        return $this->domainOwner;
+    }
+
+    /**
+     * @param boolean $domainOwner
+     */
+    public function setDomainOwner($domainOwner)
+    {
+        $this->domainOwner = $domainOwner;
     }
 
 
