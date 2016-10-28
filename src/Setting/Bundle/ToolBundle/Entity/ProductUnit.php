@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ToolBundle\Entity;
 
+use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ContentBundle\Entity\TradeItem;
@@ -23,6 +24,11 @@ class ProductUnit
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="productUnit")
+     */
+    protected $masterProducts;
 
     /**
      * @var string
@@ -130,12 +136,14 @@ class ProductUnit
         return $this->status;
     }
 
+
+
     /**
-     * @return TradeItem
+     * @return Product
      */
-    public function getTradeItem()
+    public function getMasterProducts()
     {
-        return $this->tradeItem;
+        return $this->masterProducts;
     }
 
 

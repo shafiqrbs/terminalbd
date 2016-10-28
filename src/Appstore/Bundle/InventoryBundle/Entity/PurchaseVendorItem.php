@@ -33,11 +33,6 @@ class PurchaseVendorItem
     private  $inventoryConfig;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="purchaseVendorItems" )
-     **/
-    private  $category;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="purchaseVendorItems" )
      **/
     private  $purchase;
@@ -76,11 +71,6 @@ class PurchaseVendorItem
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemGallery", mappedBy="purchaseVendorItem")
      */
     protected $itemGalleries;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemUnit", inversedBy="purchaseVendorItems" )
-     **/
-    private  $unit;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="purchaseVendorItems")
@@ -131,12 +121,10 @@ class PurchaseVendorItem
      */
     private $webName;
 
-
-
     /**
      * @Gedmo\Slug(handlers={
      *      @Gedmo\SlugHandler(class="Gedmo\Sluggable\Handler\TreeSlugHandler", options={
-     *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="category"),
+     *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="masterItem"),
      *          @Gedmo\SlugHandlerOption(name="separator", value="-")
      *      })
      * }, fields={"name"})
@@ -151,6 +139,13 @@ class PurchaseVendorItem
      * @ORM\Column(name="quantity", type="integer", nullable = true)
      */
     private $quantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="masterQuantity", type="integer", nullable = true)
+     */
+    private $masterQuantity;
 
     /**
      * @var string
@@ -194,6 +189,13 @@ class PurchaseVendorItem
      * @ORM\Column(name="webPrice", type="decimal", nullable = true)
      */
     private $webPrice;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="overHeadCost", type="decimal", nullable = true)
+     */
+    private $overHeadCost;
 
     /**
      * @var boolean
@@ -844,38 +846,6 @@ class PurchaseVendorItem
     }
 
     /**
-     * @return Category
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * @param Category $category
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUnit()
-    {
-        return $this->unit;
-    }
-
-    /**
-     * @param mixed $unit
-     */
-    public function setUnit($unit)
-    {
-        $this->unit = $unit;
-    }
-
-    /**
      * @return boolean
      */
     public function getSubProduct()
@@ -1025,6 +995,38 @@ class PurchaseVendorItem
     public function setPromotion($promotion)
     {
         $this->promotion = $promotion;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOverHeadCost()
+    {
+        return $this->overHeadCost;
+    }
+
+    /**
+     * @param string $overHeadCost
+     */
+    public function setOverHeadCost($overHeadCost)
+    {
+        $this->overHeadCost = $overHeadCost;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMasterQuantity()
+    {
+        return $this->masterQuantity;
+    }
+
+    /**
+     * @param int $masterQuantity
+     */
+    public function setMasterQuantity($masterQuantity)
+    {
+        $this->masterQuantity = $masterQuantity;
     }
 
 

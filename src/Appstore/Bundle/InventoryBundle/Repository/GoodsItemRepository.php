@@ -67,17 +67,16 @@ class GoodsItemRepository extends EntityRepository
     {
 
         $em = $this->_em;
-
-        $goods = $this->_em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem' => $reEntity, 'masterItem' => 1));
+        $goods = new GoodsItem();
         $goods->setSalesPrice($reEntity->getSalesPrice());
         $goods->setPurchasePrice($reEntity->getPurchasePrice());
-        $goods->setQuantity($reEntity->getQuantity());
+        $goods->setQuantity($reEntity->getMasterQuantity());
         if($reEntity->getSize()){
             $goods->setSize($reEntity->getSize());
         }
-        /*if($reEntity->getItemColors()){
+        if($reEntity->getItemColors()){
             $goods->setColors($reEntity->getItemColors());
-        }*/
+        }
         $goods->setPurchaseVendorItem($reEntity);
         $goods->setMasterItem(1);
         $em->flush();
@@ -91,19 +90,21 @@ class GoodsItemRepository extends EntityRepository
         $goods = $this->_em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem' => $reEntity, 'masterItem' => 1));
         if(empty($goods)){
             $this->initialInsertSubProduct($reEntity);
+        }else{
+            $goods->setSalesPrice($reEntity->getSalesPrice());
+            $goods->setPurchasePrice($reEntity->getPurchasePrice());
+            $goods->setQuantity($reEntity->getQuantity());
+            if($reEntity->getSize()){
+                $goods->setSize($reEntity->getSize());
+            }
+            if($reEntity->getItemColors()){
+                $goods->setColors($reEntity->getItemColors());
+            }
+            $goods->setPurchaseVendorItem($reEntity);
+            $em->persist($goods);
+            $em->flush();
         }
-        $goods->setSalesPrice($reEntity->getSalesPrice());
-        $goods->setPurchasePrice($reEntity->getPurchasePrice());
-        $goods->setQuantity($reEntity->getQuantity());
-        if($reEntity->getSize()){
-            $goods->setSize($reEntity->getSize());
-        }
-        if($reEntity->getItemColors()){
-            $goods->setColors($reEntity->getItemColors());
-        }
-        $goods->setPurchaseVendorItem($reEntity);
-        $em->persist($goods);
-        $em->flush();
+
 
     }
 

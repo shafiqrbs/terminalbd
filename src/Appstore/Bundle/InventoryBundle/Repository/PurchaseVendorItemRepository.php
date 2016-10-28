@@ -127,7 +127,8 @@ class PurchaseVendorItemRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('item');
         $qb->where("item.source = 'goods'");
-        $qb->where("item.inventoryConfig = :inventory");
+        $qb->andWhere("item.isWeb = 1");
+        $qb->andWhere("item.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
         if (!empty($cat)) {
             $qb->andWhere("item.category = :category");

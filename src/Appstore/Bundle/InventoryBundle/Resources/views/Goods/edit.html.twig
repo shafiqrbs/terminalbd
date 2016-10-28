@@ -63,65 +63,13 @@
                         {{ form_row(form._token) }}
                         <div class="row-fluid">
                             <div class="span4">
-                                <div class="control-group">
-                                    <label class="control-label" for="firstName">Master Product</label>
-                                    <div class="controls">
-                                            {{ form_widget(form.masterItem) }}
-                                            {{ form_errors(form.masterItem) }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span4">
-                                <div class="control-group">
-                                    <label class="control-label" for="firstName">Product Name</label>
-                                    <div class="controls">
-                                        <div class="input-icon left">
-                                            <i class="icon-font"></i>
-                                            {{ form_widget(form.name) }}
-                                            {{ form_errors(form.name) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span2 ">
-                                <div class="control-group">
-                                    <label class="control-label" for="isWeb">Size</label>
-
-                                    <div class="controls">
-                                        <div class="input-icon left">
-                                            {{ form_widget(form.size) }}
-                                            {{ form_errors(form.size) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/span-->
-                        {% if ecommerceConfig.isColor == 1 %}
-                        <div class="row-fluid">
-                            <div class="span12 ">
-                                <div class="control-group">
-                                    <label class="control-label" >Colors</label>
-                                    <div class="clearfix" style="height:5px"></div>
-                                    <div class="controls">
-                                        {{ form_widget(form.itemColors) }}
-                                        {{ form_errors(form.itemColors) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                        <!--/span-->
-                        <div class="row-fluid">
-                            <div class="span8">
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="firstName">Product Category</label>
-
+                                            <label class="control-label" for="firstName">Master Product</label>
                                             <div class="controls">
-                                                {{ form_widget(form.category) }}
-                                                {{ form_errors(form.category) }}
+                                                {{ form_widget(form.masterItem) }}
+                                                {{ form_errors(form.masterItem) }}
                                             </div>
                                         </div>
                                     </div>
@@ -130,7 +78,6 @@
                                     <div class="span12">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName">Country</label>
-
                                             <div class="controls">
                                                 {{ form_widget(form.country) }}
                                                 {{ form_errors(form.country) }}
@@ -141,8 +88,7 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="unit">Brand</label>
-
+                                            <label class="control-label" for="firstName">Brand</label>
                                             <div class="controls">
                                                 {{ form_widget(form.brand) }}
                                                 {{ form_errors(form.brand) }}
@@ -150,70 +96,89 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                             <div class="span4">
                                 <div class="row-fluid">
-                                    <div class="span6">
+                                    <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="salesPrice">Unit</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.unit) }}
-                                                {{ form_errors(form.unit) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="salesPrice">Quantity</label>
+                                            <label class="control-label" for="name">Item name</label>
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-font"></i>
-                                                    {{ form_widget(form.quantity) }}
-                                                    {{ form_errors(form.quantity) }}
+                                                    {{ form_widget(form.name) }}
+                                                    {{ form_errors(form.name) }}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
-                                    <div class="span6">
+                                    <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="salesPrice">Purchase</label>
+                                            <label class="control-label" for="size">Size/Weight/Dimension</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.size) }}
+                                                {{ form_errors(form.size) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="masterQuantity">Quantity</label>
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-font"></i>
+                                                    {{ form_widget(form.masterQuantity) }}
+                                                    {{ form_errors(form.masterQuantity) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="purchasePrice">Purchase Price</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-money"></i>
                                                     {{ form_widget(form.purchasePrice) }}
                                                     {{ form_errors(form.purchasePrice) }}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="span6">
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="salesPrice">Sales price</label>
+                                            <label class="control-label" for="overHeadCost">Overhead Cost</label>
                                             <div class="controls">
                                                 <div class="input-icon left">
-                                                    <i class="icon-font"></i>
-                                                    {{ form_widget(form.salesPrice) }}
-                                                    {{ form_errors(form.salesPrice) }}
+                                                    <i class="icon-money"></i>
+                                                    {{ form_widget(form.overHeadCost) }}
+                                                    {{ form_errors(form.overHeadCost) }}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row-fluid">
-                                    <div class="span6">
+                                    <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="salesPrice">Is
-                                                web {{ form_widget(form.isWeb) }}
-                                                {{ form_errors(form.isWeb) }}</label>
-                                        </div>
-                                    </div>
-                                    <div class="span6">
-                                        <div class="control-group">
-                                            <label class="control-label" for="salesPrice">Is Sub
-                                                Product {{ form_widget(form.subProduct) }}
-                                                {{ form_errors(form.subProduct) }}</label>
+                                            <label class="control-label" for="salesPrice">Sales Price</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-money"></i>
+                                                    {{ form_widget(form.salesPrice) }}
+                                                    {{ form_errors(form.salesPrice) }}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -222,50 +187,69 @@
                         <!--/span-->
                         <div class="row-fluid">
 
-                            <div class="span9">
-                                <div class="control-group">
-                                    <label class="control-label">Description</label>
-
-                                    <div class="controls">
-                                        {{ form_widget(form.content) }}
-                                        {{ form_errors(form.content) }}
-
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/span-->
-                            <div class="span3">
-                                <div class="control-group">
-                                    <label class="control-label">Feature image</label>
-
-                                    <div class="controls">
-
-                                    </div>
-                                    <div class="controls">
-                                        <div data-provides="fileupload" class="fileupload fileupload-new">
-                                            <div class="fileupload-new thumbnail">
-                                                {% if(entity.webPath) %}
-                                                    <img class="fileupload-preview fileupload-exists thumbnail" alt=""
-                                                         src="{{ image(entity.webPath).resize(100,100) }}">
-                                                {% else %}
-                                                    <img alt=""
-                                                         src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
-                                                {% endif %}
-                                            </div>
-                                            <div class="fileupload-preview fileupload-exists thumbnail"></div>
-                                            <div>
-													<span class="btn btn-file">
-                                                        <span class="fileupload-new">Select image</span>
-													    <span class="fileupload-exists">Change</span>
-                                                        {{ form_widget(form.file) }}
-                                                        {{ form_errors(form.file) }}
-                                                    </span>
-                                                <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                            <div class="span8">
+                                {% if ecommerceConfig.isColor == 1 %}
+                                    <div class="row-fluid">
+                                        <div class="span12 ">
+                                            <div class="control-group">
+                                                <label class="control-label" >Colors</label>
+                                                <div class="clearfix" style="height:5px"></div>
+                                                <div class="controls">
+                                                    {{ form_widget(form.itemColors) }}
+                                                    {{ form_errors(form.itemColors) }}
+                                                </div>
                                             </div>
                                         </div>
+                                    </div>
+                                {% endif %}
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" >Description</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.content) }}
+                                                {{ form_errors(form.content) }}
 
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+
+                            </div>
+                            <div class="span4">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" >Feature image</label>
+                                            <div class="controls">
+
+                                            </div>
+                                            <div class="controls">
+                                                <div data-provides="fileupload" class="fileupload fileupload-new">
+                                                    <div  class="fileupload-new thumbnail">
+                                                        {% if(entity.webPath) %}
+                                                            <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="{{ image(entity.webPath).resize(100,100) }}">
+                                                        {% else %}
+                                                            <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                                    <div>
+                                                        <span class="btn btn-file">
+                                                            <span class="fileupload-new">Select image</span>
+                                                            <span class="fileupload-exists">Change</span>
+                                                            {{ form_widget(form.file) }}
+                                                            {{ form_errors(form.file) }}
+                                                        </span>
+                                                        <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                         {% if entity.subProduct == 1 %}
@@ -284,38 +268,44 @@
                                     <div class="clone-block trash" id="clone-sub-product">
                                         <div class="row-fluid clone  box blue">
                                             <div class="span11">
-                                                <div class="span4"><input type="hidden" id="" name="goodsItem[]"
-                                                                          class="" value="">
-                                                    <select class="span12" name="size[]">
-                                                        <option value="">Select size/dimension/weight/pic</option>
-                                                        {% for size in sizes %}
-                                                            <option value="{{ size.id }}">{{ size.name }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                                {% if ecommerceConfig.isColor == 1 %}
-                                                <div class="span2">
-                                                    <select class="span12" multiple="multiple" name="color[]">
-                                                        {% for color in colors %}
-                                                            <option value="{{ color.id }}">{{ color.name }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                                {% endif %}
-                                                <div class="span6">
-                                                    <input type="text" id="" name="quantity[]"
-                                                           class="m-wrap span4 tooltips" placeholder="quantity" value=""
-                                                           data-original-title="Please add item quantity"
-                                                           data-trigger="hover">
-                                                    <input type="text" id="" name="purchasePrice[]"
-                                                           class="m-wrap span4 tooltips" placeholder="purchase" value=""
-                                                           data-original-title="Please add purchase price"
-                                                           data-trigger="hover">
-                                                    <input type="text" id="" name="salesPrice[]"
-                                                           class="m-wrap span4 tooltips" placeholder="sales" value=""
-                                                           data-original-title="Please add sales price"
-                                                           data-trigger="hover">
-                                                </div>
+                                                <div class="row-fluid">
+                                                    <div class="{% if ecommerceConfig.isColor == 1 %} span4 {% else %}span6 {% endif %}">
+                                                        <input type="hidden" id="" name="goodsItem[]" class="" value="">
+                                                        <select class="span12" name="size[]">
+                                                            <option value="">Select size/dimension/weight</option>
+                                                            {% for size in sizes %}
+                                                                <option value="{{ size.id }}">{{ size.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    {% if ecommerceConfig.isColor == 1 %}
+                                                        <div class="span2">
+                                                            <select class="span12" multiple="multiple" name="color[]">
+                                                                {% for color in colors %}
+                                                                    <option value="{{ color.id }}">{{ color.name }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="span2">
+                                                        <input type="text" id="" name="quantity[]"
+                                                               class="m-wrap span12 tooltips" placeholder="quantity" value=""
+                                                               data-original-title="Please add item quantity"
+                                                               data-trigger="hover">
+                                                    </div>
+                                                    <div class="span2">
+                                                        <input type="text" id="" name="purchasePrice[]"
+                                                               class="m-wrap span12 tooltips" placeholder="purchase" value=""
+                                                               data-original-title="Please add purchase price"
+                                                               data-trigger="hover">
+                                                    </div>
+                                                    <div class="span2">
+                                                        <input type="text" id="" name="salesPrice[]"
+                                                               class="m-wrap span12 tooltips" placeholder="sales" value=""
+                                                               data-original-title="Please add sales price"
+                                                               data-trigger="hover">
+                                                    </div>
+                                               </div>
                                             </div>
                                             <div class="span1"><a href="javascript:" data-id="" data-url=""
                                                                   class="btn red mini hidden  remove"><i
@@ -326,54 +316,52 @@
                                         {% for goodsItem in  entity.goodsItems %}
                                             {% if goodsItem.masterItem != 1 %}
                                                 <div class="clone-block trash">
-                                                    <div class="row-fluid  box blue">
-                                                        <div class="span11">
-                                                            <div class="span3"><input type="hidden" id=""
-                                                                                      name="goodsItem[]" class=""
-                                                                                      value="{{ goodsItem.id }}">
-                                                                <select class="span12" name="size[]">
-                                                                    <option value="">Select size/dimension/weight/pic
-                                                                    </option>
-                                                                    {% for size in sizes %}
-                                                                        <option value="{{ size.id }}" {% if goodsItem.size is not empty and  goodsItem.size.id == size.id %} selected="selected" {% endif %}>{{ size.name }}</option>
-                                                                    {% endfor %}
-                                                                </select>
-                                                            </div>
-                                                            {% if ecommerceConfig.isColor == 1 %}
-                                                            <div class="span2">
-                                                                <select class="span12" multiple="multiple" name="color[]">
-                                                                    <option value="">Color</option>
-                                                                    {% for color in colors %}
-                                                                        <option value="{{ color.id }}" >{{ color.name }}</option>
-                                                                    {% endfor %}
-                                                                </select>
-                                                            </div>
-                                                            {% endif %}
-                                                           <div class="span6">
-                                                                <input type="text" id="" name="quantity[]"
-                                                                       class="m-wrap span4 tooltips"
-                                                                       placeholder="quantity"
-                                                                       value="{{ goodsItem.quantity }}"
-                                                                       data-original-title="Please add item quantity"
-                                                                       data-trigger="hover">
-                                                               <input type="text" id="" name="purchasePrice[]"
-                                                                      class="m-wrap span4 tooltips" placeholder="Paurchase"
-                                                                      value="{{ goodsItem.purchasePrice }}"
-                                                                      data-original-title="Please add paurchase price"
-                                                                      data-trigger="hover">
-                                                                <input type="text" id="" name="salesPrice[]"
-                                                                       class="m-wrap span4 tooltips" placeholder="sales"
-                                                                       value="{{ goodsItem.salesPrice }}"
-                                                                       data-original-title="Please add sales price"
-                                                                       data-trigger="hover">
-                                                            </div>
-                                                        </div>
-                                                        <div class="span1"><a href="javascript:"
-                                                                              data-id="{{ goodsItem.id }}"
-                                                                              data-url="{{ path('inventory_goods_subItem_delete',{'id':goodsItem.id} ) }}"
-                                                                              class="btn red mini  remove"><i
-                                                                        class="icon-trash m-icon-white"></i></a></div>
+                                                <div class="row-fluid  box blue">
+                                                <div class="span11">
+                                                <div class="row-fluid">
+                                                <div class="{% if ecommerceConfig.isColor == 1 %} span4 {% else %}span6 {% endif %}">
+                                                <input type="hidden" id="" name="goodsItem[]" class="" value="{{ goodsItem.id }}">
+                                                <select class="span12" name="size[]">
+                                                    <option value="">Select size/dimension/weight
+                                                    </option>
+                                                    {% for size in sizes %}
+                                                        <option value="{{ size.id }}" {% if goodsItem.size is not empty and  goodsItem.size.id == size.id %} selected="selected" {% endif %}>{{ size.name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                                </div>
+                                                {% if ecommerceConfig.isColor == 1 %}
+                                                    <div class="span2">
+                                                        <select class="span12" multiple="multiple" name="color[]">
+                                                            {% for color in colors %}
+                                                                <option value="{{ color.id }}">{{ color.name }}</option>
+                                                            {% endfor %}
+                                                        </select>
                                                     </div>
+                                                {% endif %}
+                                                <div class="span2">
+                                                    <input type="text" id="" name="quantity[]"
+                                                           class="m-wrap span12 tooltips" placeholder="quantity" value="{{ goodsItem.quantity }}"
+                                                           data-original-title="Please add item quantity"
+                                                           data-trigger="hover">
+                                                </div>
+                                                <div class="span2">
+                                                    <input type="text" id="" name="purchasePrice[]"
+                                                           class="m-wrap span12 tooltips" placeholder="purchase" value="{{ goodsItem.purchasePrice }}"
+                                                           data-original-title="Please add purchase price"
+                                                           data-trigger="hover">
+                                                </div>
+                                                <div class="span2">
+                                                    <input type="text" id="" name="salesPrice[]"
+                                                           class="m-wrap span12 tooltips" placeholder="sales" value="{{ goodsItem.salesPrice }}"
+                                                           data-original-title="Please add sales price"
+                                                           data-trigger="hover">
+                                                </div>
+                                                </div>
+                                                </div>
+                                                <div class="span1">
+                                                    <a href="javascript:" data-id="{{ goodsItem.id }}" data-url="{{ path('inventory_goods_subItem_delete',{'id':goodsItem.id} ) }}" class="btn red mini  remove">
+                                                        <i class="icon-trash m-icon-white"></i></a></div>
+                                                </div>
                                                 </div>
                                             {% endif %}
                                         {% endfor %}
@@ -411,7 +399,7 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                        {% elseif  entity.category is not empty and entity.category is not empty and entity.category.itemAttributes is  not empty %}
+                        {% elseif  entity.masterItem.category is not empty and entity.masterItem.category is not empty and entity.masterItem.category.itemAttributes is  not empty %}
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
@@ -419,7 +407,7 @@
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
-                            {% for itemAttributes in entity.category.itemAttributes %}
+                            {% for itemAttributes in entity.masterItem.category.itemAttributes %}
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">

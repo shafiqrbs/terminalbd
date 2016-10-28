@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\InventoryBundle\Form;
 
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Doctrine\ORM\EntityRepository;
 use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -38,7 +39,23 @@ class ProductType extends AbstractType
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add  item name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add your item name')))))
-            ->add('unit', 'choice', array(
+            ->add('productUnit', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
+                'property' => 'name',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please select required'))
+                ),
+                'empty_value' => '---Choose a item unit ---',
+                'attr'=>array('class'=>'span12'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('p')
+                        ->where("p.status = 1")
+                        ->orderBy("p.name","ASC");
+                },
+            ))
+
+/*            ->add('unit', 'choice', array(
                 'attr'=>array('class'=>'span6 select2'),
                 'choices' => array(
                     'Bag'       => 'Bag',
@@ -73,7 +90,7 @@ class ProductType extends AbstractType
                     'Sft' => 'Sft',
                     'Yard' => 'Yard',
                 ),
-            ))
+            ))*/
             ->add('category', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select parent category---',

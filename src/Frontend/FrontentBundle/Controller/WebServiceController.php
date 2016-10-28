@@ -15,7 +15,7 @@ class WebServiceController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('status'=>1,'subDomain'=>$subdomain));
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
 
         if(!empty($globalOption)){
 

@@ -210,8 +210,9 @@ class ProductController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-
-            $entity->removeUpload();
+            if(!empty( $entity->upload())){
+                $entity->removeUpload();
+            }
             $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(

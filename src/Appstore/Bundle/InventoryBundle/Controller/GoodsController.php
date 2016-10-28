@@ -67,6 +67,8 @@ class GoodsController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setInventoryConfig($inventory);
             $entity->setSource('goods');
+            $entity->setSubProduct(true);
+            $entity->setIsWeb(true);
             $entity->upload();
             $em->persist($entity);
             $em->flush();

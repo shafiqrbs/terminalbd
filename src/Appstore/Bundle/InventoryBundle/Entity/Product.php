@@ -4,6 +4,7 @@ namespace Appstore\Bundle\InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 /**
@@ -43,6 +44,11 @@ class Product implements CodeAwareEntity
      * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="masterProducts" )
      **/
     private  $category;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="masterProducts" )
+     **/
+    private  $productUnit;
 
 
     /**
@@ -397,7 +403,21 @@ class Product implements CodeAwareEntity
         $this->file = null;
     }
 
+    /**
+     * @return ProductUnit
+     */
+    public function getProductUnit()
+    {
+        return $this->productUnit;
+    }
 
+    /**
+     * @param ProductUnit $productUnit
+     */
+    public function setProductUnit($productUnit)
+    {
+        $this->productUnit = $productUnit;
+    }
 
 
 }

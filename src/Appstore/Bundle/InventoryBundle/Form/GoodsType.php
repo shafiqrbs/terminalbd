@@ -35,17 +35,17 @@ class GoodsType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Product name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'product name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add your Product name'))
                 )))
 
             ->add('masterItem', 'entity', array(
                 'required'    => true,
-                'empty_value' => '-Choose a master product-',
+                'empty_value' => '---Choose a master product---',
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Product',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 '),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -62,19 +62,6 @@ class GoodsType extends AbstractType
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',
                 'property' => 'name',
                 'empty_value' => '-Choose a brand-',
-                'attr'=>array('class'=>'span12'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('p')
-                        ->where("p.status = 1")
-                        ->andWhere("p.inventoryConfig =".$this->inventoryConfig->getId())
-                        ->orderBy("p.name","ASC");
-                },
-            ))
-
-            ->add('unit', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemUnit',
-                'property' => 'name',
                 'attr'=>array('class'=>'span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
@@ -105,33 +92,21 @@ class GoodsType extends AbstractType
                 'class' => 'Setting\Bundle\LocationBundle\Entity\Country',
                 'empty_value' => '---Choose a country ---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 '),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->orderBy("p.name","ASC");
 
                 },
             ))
-
-            ->add('category', 'entity', array(
-
-                'required'    => true,
-                'empty_value' => '---Select parent category---',
-                'attr'=>array('class'=>'category m-wrap span12 select2'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
-                'class' => 'ProductProductBundle:Category',
-                'property' => 'nestedLabel',
-                'choices'=> $this->categoryChoiceList()
-            ))
-
-            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'quantity')))
+            ->add('masterQuantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'quantity')))
 
             ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'purchase price'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add purchase price'))
             )))
+
+            ->add('overHeadCost','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'over head cost')))
 
             ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'sales price'),
                 'constraints' =>array(
@@ -142,9 +117,7 @@ class GoodsType extends AbstractType
                     new NotBlank(array('message'=>'Please add web price'))
                 )))
             */->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
-            ->add('subProduct')
-            ->add('file')
-            ->add('isWeb');
+            ->add('file');
         if($this->inventoryConfig->getGlobalOption()->getEcommerceConfig()->getIsColor() == 1){
             $builder->add('itemColors', 'entity', array(
                 'required'    => true,

@@ -11,6 +11,7 @@
 
         </div>
     </section>
+    <div class="clearfix"></div>
     <section>
         <div class="container" style="background: #464646">
             <div class="row-fuiid">
@@ -46,6 +47,7 @@
             </div>
         </div>
     </section>
+    <div class="clearfix"></div>
     <section id="products">
         <div class="container">
             <div class="col-md-12">
@@ -56,7 +58,7 @@
                                {% if product.discount is not empty %} <div class="offer-tag"><h6> {{ product.discount.name }}{% if product.discount.type == 'percentage' %} % {% endif %} <br> Off</h6></div>{% endif %}
                                 {% if product.tag is not empty %}<div class="new-tag"><h6>{{ product.tag.name }}</h6></div>{% endif %}
                                 <div class="product-preview group list-group-image "  >
-                                    <img class="img-responsive" src="{{ image(product.webPath).scaleResize(400,400) }}" data-key="sameHeights" alt="">
+                                    <img class="img-responsive" src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% else %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" data-key="sameHeights" alt="">
                                     <div class="team-content" >
                                         <h5 class="team-prof">
                                             <a class="btn btn-sm blue preview"  data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" >Preview<i class="fa fa-link"></i></a>
@@ -68,7 +70,7 @@
                                     <div class="row">
                                         <div class="row-fluid">
                                             <div class="col-xs-6 col-md-6"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<strike>{{ product.salesPrice|number_format }}</strike>&nbsp;<strong>{{ product.salesPrice|number_format }}</strong></div>
-                                            <div class="col-xs-6 col-md-6 text-right"><strong>Stock in</strong>&nbsp;{{ product.quantity }}&nbsp;{% if  product.unit is not empty %}{{ product.unit.name }}{% endif %}</div>
+                                            <div class="col-xs-6 col-md-6 text-right"><strong>Stock in</strong>&nbsp;{{ product.quantity }}&nbsp;{% if  product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</div>
                                         </div>
                                         <div class="row-fluid separator-margin" >
                                             <div class="col-xs-12 col-md-12  separator separator-absolute" >
@@ -110,11 +112,11 @@
                         <div class="col-md-12">
                             <div class="thumbnail" data-key="sameHeights" style="position: relative" >
                                 <div class="product-preview group list-group-image" >
-                                    <img class="img-responsive" src="{{ image(product.webPath).scaleResize(400,400) }}" data-key="featureHeights" alt="">
+                                    <img class="img-responsive" src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% else %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" data-key="featureHeights" alt="">
                                     <div class="team-content">
                                         <h3 class="team-prof">
                                             <a class="preview"  data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" >Preview</a>
-                                            <small><strong>Stock in</strong>&nbsp;{{ product.quantity }}&nbsp;{% if  product.unit is not empty %}{{ product.unit.name }}{% endif %}</small>
+                                            <small><strong>Stock in</strong>&nbsp;{{ product.quantity }}&nbsp;{% if  product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</small>
                                         </h3>
                                     </div>
                                 </div>

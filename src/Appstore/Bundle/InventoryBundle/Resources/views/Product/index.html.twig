@@ -71,7 +71,7 @@
                                         <td class="numeric" ><a href="{{ path('inventory_product_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</td>
                                         <td class="numeric">{{ entity.getSTRPadCode }}</td>
-                                        <td class="numeric">{{ entity.unit }}</td>
+                                        <td class="numeric">{% if entity.productUnit is not empty %}{{ entity.productUnit.name }}{% endif %}</td>
                                         <td class="numeric" >
                                             <a href="{{ path('inventory_product_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                             <a href="{{ path('inventory_product_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>

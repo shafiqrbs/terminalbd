@@ -46,10 +46,6 @@ class Category
      **/
     protected $masterProducts;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="category" )
-     **/
-    protected $purchaseVendorItems;
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", mappedBy="category" )
@@ -499,14 +495,6 @@ class Category
     public function getMallConnects()
     {
         return $this->mallConnects;
-    }
-
-    /**
-     * @return PurchaseVendorItem
-     */
-    public function getPurchaseVendorItems()
-    {
-        return $this->purchaseVendorItems;
     }
 
     /**

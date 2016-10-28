@@ -11,7 +11,7 @@
             <div class="col-xs-3 col-md-3" >
                 <table>
                     <tr><td>Price</td><td class="left-text"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ subItem.salesPrice|number_format }}</strong></td></tr>
-                    <tr><td>Stock in</td><td class="left-text">&nbsp;:&nbsp;<strong>{{ subItem.quantity  }}</strong>&nbsp;{% if product.unit is not empty %}{{ product.unit.name }}{% endif %}</td></tr>
+                    <tr><td>Stock in</td><td class="left-text">&nbsp;:&nbsp;<strong>{{ subItem.quantity  }}</strong>&nbsp;{% if product.masterItem is not empty and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</td></tr>
                     {% if product.category is not empty %}<tr><td>Category</td><td class="left-text">&nbsp;:&nbsp;{{ product.category.name }}</td></tr>{% endif %}
                     {% if product.gender is not empty %}<tr><td>Gender</td><td class="left-text">&nbsp;:&nbsp;{{ product.gender }}</td></tr>{% endif %}
                     {% if product.ageGroup is not empty %}<tr><td>Age Group</td><td class="left-text">&nbsp;:&nbsp;{{ product.ageGroup }}</td></tr>{% endif %}

@@ -217,7 +217,6 @@ class SiteSettingRepository extends EntityRepository
                 $entity->setSyndicate($synEntity);
                 $entity->setMenu($menu);
                 $entity->setMenuSlug($menuSlug);
-                $entity->setUser($reEntity->getUser());
                 $entity->setSiteSetting($reEntity);
                 $em->persist($entity);
 
@@ -264,7 +263,6 @@ class SiteSettingRepository extends EntityRepository
                 $entity->setModule($modEntity);
                 $entity->setMenu($menu);
                 $entity->setSlug($modEntity->getSlug());
-                $entity->setUser($reEntity->getUser());
                 $entity->setGlobalOption($reEntity->getUser()->getGlobalOption());
                 $entity->setSiteSetting($reEntity);
                 $em->persist($entity);
@@ -310,7 +308,6 @@ class SiteSettingRepository extends EntityRepository
                 $entity = New Menu();
                 $entity->setSyndicateModule($synEntity);
                 $entity->setMenu($synEntity->getName());
-                $entity->setUser($reEntity->getUser());
                 $entity->setSlug($synEntity->getSlug());
                 $entity->setGlobalOption($reEntity->getUser()->getGlobalOption());
                 $entity->setSiteSetting($reEntity);
