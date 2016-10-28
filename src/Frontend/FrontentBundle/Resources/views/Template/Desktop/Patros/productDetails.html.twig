@@ -1,4 +1,4 @@
-{% extends ':template:base.html.twig' %}
+{% extends ':frontend/template:base.html.twig' %}
 {% block body %}
     <div class="clearfix"></div>
     <section id="breadcrumb">
@@ -279,6 +279,7 @@
     </div>
     <script>
         var item = {{ globalOption.ecommerceConfig.owlProductColumn }};
+        var subdomain = {{ globalOption.subDomain }};
     </script>
 {% endblock %}
 
@@ -290,7 +291,7 @@
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
-{% block javascriptBlock %}zs
+{% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
     '@FrontendBundle/Resources/public/template/js/product.js'
@@ -301,8 +302,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    searchSubItemConfig({{ subdomain }},{{ product.id }});
-
+    searchSubItemConfig({{ globalOption.subDomain }},{{ product.id }});
 {% endblock %}
 
 

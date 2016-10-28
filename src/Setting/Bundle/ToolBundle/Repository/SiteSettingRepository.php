@@ -39,7 +39,7 @@ class SiteSettingRepository extends EntityRepository
 
             $modules = array();
             foreach($data['module'] as $sid ){
-                $modules[] = $em->getRepository('SettingToolBundle:Module')->findOneBy(array('id'=>$sid));
+                $modules[] = $em->getRepository('SettingToolBundle:Module')->find($sid);
             }
             if (!empty($modules)) {
                 $entity->setModules($modules);
@@ -51,7 +51,7 @@ class SiteSettingRepository extends EntityRepository
         if(!empty($data['syndicateModule'])){
             $synarr = array();
             foreach($data['syndicateModule'] as $sid ){
-                $synarr[] = $em->getRepository('SettingToolBundle:SyndicateModule')->findOneBy(array('id'=>$sid));
+                $synarr[] = $em->getRepository('SettingToolBundle:SyndicateModule')->find($sid);
             }
             if (!empty($synarr)) {
                 $entity->setSyndicateModules($synarr);
@@ -61,7 +61,7 @@ class SiteSettingRepository extends EntityRepository
         if(!empty($data['appModule'])){
             $synarr = array();
             foreach($data['appModule'] as $sid ){
-                $synarr[] = $em->getRepository('SettingToolBundle:AppModule')->findOneBy(array('id'=>$sid));
+                $synarr[] = $em->getRepository('SettingToolBundle:AppModule')->find($sid);
             }
             if (!empty($synarr)) {
                 $entity->setAppModules($synarr);
@@ -99,7 +99,7 @@ class SiteSettingRepository extends EntityRepository
             $entity->setGlobalOption($globalOption);
             $entity->setMenu($module->getMenu());
             $entity->setSlug($slug);
-            $entity->setSiteSetting( $globalOption->getSiteSetting());
+            $entity->setSiteSetting($globalOption->getSiteSetting());
             $em->persist($entity);
 
         }
