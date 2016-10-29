@@ -55,43 +55,7 @@ class ProductType extends AbstractType
                 },
             ))
 
-/*            ->add('unit', 'choice', array(
-                'attr'=>array('class'=>'span6 select2'),
-                'choices' => array(
-                    'Bag'       => 'Bag',
-                    'Bottle'    => 'Bottle',
-                    'Box'       => 'Box',
-                    'Can'       => 'Can',
-                    'Cft'       => 'Cft',
-                    'Coil'      => 'Coil',
-                    'Cylinder'  => 'Cylinder',
-                    'Carton'    => 'Carton',
-                    'Feet'      => 'Feet',
-                    'Gallon'    => 'Gallon',
-                    'Jar'       => 'Jar',
-                    'Job'       => 'Job',
-                    'Kg'        => 'Kg',
-                    'Liter'     => 'Liter',
-                    'Meter'     => 'Meter',
-                    'ML'        => 'ML',
-                    'MM'        => 'MM',
-                    'Nos'       => 'Nos',
-                    'Pail'      => 'Pail',
-                    'Pair'      => 'Pair',
-                    'Pcs' => 'Pcs',
-                    'Packet' => 'Packet',
-                    'Pound' => 'Pound',
-                    'Prs' => 'Prs',
-                    'Refile' => 'Refile',
-                    'Rft' => 'Rft',
-                    'Rim' => 'Rim',
-                    'Roll' => 'Roll',
-                    'Set' => 'Set',
-                    'Sft' => 'Sft',
-                    'Yard' => 'Yard',
-                ),
-            ))*/
-            ->add('category', 'entity', array(
+           ->add('category', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select parent category---',
                 'attr'=>array('class'=>'category m-wrap span12 select2'),
@@ -103,8 +67,7 @@ class ProductType extends AbstractType
                 'choices'=> $this->categoryChoiceList()
             ))
             ->add('file')
-            ->add('status')
-        ;
+            ->add('status');
     }
     
     /**

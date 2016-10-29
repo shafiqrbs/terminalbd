@@ -91,13 +91,13 @@ class WebServiceProductController extends Controller
 
             /*==========Related Product===============================*/
 
-           // if(!empty($entity->getMasterItem())){
+            if(!empty($entity->getMasterItem())){
 
-                $cat = $entity->getCategory()->getId();
+                $cat = $entity->getMasterItem()->getCategory()->getId();
                 $data = array('cat' => $cat);
                 $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
                 $products = $this->paginate($entities,$limit=12);
-            //}
+            }
 
             /* Device Detection code desktop or mobile */
 

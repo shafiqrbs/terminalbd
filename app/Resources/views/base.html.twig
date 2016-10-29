@@ -67,7 +67,7 @@
     'assets/css/pages/profile.css'#}
 
 </head>
-<body class="page-header-fixed {{ app.request.locale }}{% block bodyClass %}{% endblock bodyClass %}">
+<body class="page-header-fixed  page-sidebar-fixed page-footer-fixed {{ app.request.locale }}{% block bodyClass %}{% endblock bodyClass %}">
 <div class="modal fade" id="ajax" tabindex="-1" role="basic" aria-hidden="true">
     {% image 'assets/img/ajax-modal-loading.gif'
     filter='' output='/img/ajax-modal-loading.gif' %}

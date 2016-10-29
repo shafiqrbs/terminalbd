@@ -19,7 +19,7 @@
         </div>
     </section>
     <div class="clearfix"></div>
-    {% if product.category is not empty and product.category is defined %}
+    {% if product.masterItem.category is not empty and product.masterItem.category is defined %}
         {#<section id="viewed-item" style="display: none;">
             <div class="container">
                 <div class="text-right owl-thumb-carousel-next-prev">
@@ -80,8 +80,8 @@
                         <div >
                             <table class="list-table">
                                 <tr><td>Price</td><td class="left-text"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.salesPrice|number_format }}</strong></td></tr>
-                                <tr><td>Stock in</td><td class="left-text">&nbsp;:&nbsp;<strong>{{ product.quantity  }}</strong>&nbsp;{% if product.unit is not empty %}{{ product.unit.name }}{% endif %}</td></tr>
-                                {% if product.category is not empty %}<tr><td>Category</td><td class="left-text">&nbsp;:&nbsp;{{ product.category.name }}</td></tr>{% endif %}
+                                <tr><td>Stock in</td><td class="left-text">&nbsp;:&nbsp;<strong>{{ product.quantity  }}</strong>&nbsp;{% if product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</td></tr>
+                                {% if product.masterItem.category is not empty %}<tr><td>Category</td><td class="left-text">&nbsp;:&nbsp;{{ product.masterItem.category.name }}</td></tr>{% endif %}
                                 {% if product.gender is not empty %}<tr><td>Gender</td><td class="left-text">&nbsp;:&nbsp;{{ product.gender }}</td></tr>{% endif %}
                                 {% if product.ageGroup is not empty %}<tr><td>Age Group</td><td class="left-text">&nbsp;:&nbsp;{{ product.ageGroup }}</td></tr>{% endif %}
                                 {% if product.brand is not empty %}<tr><td>Brand</td><td class="left-text">&nbsp;:&nbsp;{{ product.brand.name }}</td></tr>{% endif %}
@@ -133,7 +133,7 @@
                                                 <div class="input-group input-group-sm">
                                                     <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-sort-by-order"></span></span>
                                                     <input type="text" class="form-control" id="quantity" name="quantity" min="1" max="{{ product.quantity }}" value="{{ product.quantity }}" aria-label="Text input with multiple buttons">
-                                                    <div class="input-group-btn"> <button type="button" class="btn btn-default">{{ product.unit.name }}</button> </div> </div>
+                                                    <div class="input-group-btn"> <button type="button" class="btn btn-default">{{ product.masterItem.productUnit.name }}</button> </div> </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="input-group input-group-sm">
@@ -216,10 +216,10 @@
         </div>
     </section>
 
-    {% if product.category is not empty and product.category is defined %}
+    {% if product.masterItem.category is not empty and product.masterItem.category is defined %}
     <section id="products">
         <div class="container">
-            <div class="text-center"><h2>{{ product.category.name }} Product</h2></div>
+            <div class="text-center"><h2>{{ product.masterItem.category.name }} Product</h2></div>
             <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="short" />
             <div class="text-right owl-thumb-carousel-next-prev">
                 <div class="customNavigation" >
@@ -237,7 +237,7 @@
                                     <div class="team-content">
                                         <h3 class="team-prof">
                                             <a class="preview"  data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" >Preview</a>
-                                            <small><strong>Stock in</strong>&nbsp;{{ product.quantity }}&nbsp;{% if  product.unit is not empty %}{{ product.unit.name }}{% endif %}</small>
+                                            <small><strong>Stock in</strong>&nbsp;{{ product.quantity }}&nbsp;{% if  product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</small>
                                         </h3>
                                     </div>
                                 </div>
@@ -290,7 +290,7 @@
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
-{% block javascriptBlock %}zs
+{% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
     '@FrontendBundle/Resources/public/template/js/product.js'
@@ -301,8 +301,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    searchSubItemConfig({{ subdomain }},{{ product.id }});
-
+    searchSubItemConfig({{ globalOption.subdomain }},{{ product.id }});
 {% endblock %}
 
 

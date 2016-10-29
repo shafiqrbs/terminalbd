@@ -126,12 +126,13 @@ class PurchaseVendorItemRepository extends EntityRepository
         $order = isset($data['order'])? $data['order'] :'ASC';
 
         $qb = $this->createQueryBuilder('item');
+        $qb->join("item.masterItem",'masterItem' );
         $qb->where("item.source = 'goods'");
         $qb->andWhere("item.isWeb = 1");
         $qb->andWhere("item.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
         if (!empty($cat)) {
-            $qb->andWhere("item.category = :category");
+            $qb->andWhere("masterItem.category = :category");
             $qb->setParameter('category', $cat);
         }
          if (!empty($brand)) {

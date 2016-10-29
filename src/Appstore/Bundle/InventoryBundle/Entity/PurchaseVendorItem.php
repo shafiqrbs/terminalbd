@@ -32,6 +32,7 @@ class PurchaseVendorItem
      **/
     private  $inventoryConfig;
 
+
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="purchaseVendorItems" )
      **/
