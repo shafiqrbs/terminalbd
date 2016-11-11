@@ -108,28 +108,38 @@ class AccountPurchaseRepository extends EntityRepository
     }
 
 
-    public function insertAccountPurchase(Purchase $entity,$inventory)
+    public function insertAccountPurchase(Purchase $entity)
     {
 
-        $balance = $this->lastInsertPurchase($inventory->getGlobalOption(),$entity->getVendor());
+        $balance = $this->lastInsertPurchase($entity->getInventoryConfig()->getGlobalOption(),$entity->getVendor());
         $em = $this->_em;
 
         $accountPurchase = new AccountPurchase();
-        $accountPurchase->setGlobalOption($inventory->getGlobalOption());
+        $accountPurchase->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
         $accountPurchase->setPurchase($entity);
         $accountPurchase->setVendor($entity->getVendor());
-        $accountPurchase->setProcess('approved');
-        $accountPurchase->setTransactionMethod($this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
-        $accountPurchase->setApprovedBy($entity->getApprovedBy());
+        $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
         $accountPurchase->setPurchaseAmount($entity->getTotalAmount());
         $accountPurchase->setTotalAmount($entity->getTotalAmount() + $balance);
         $accountPurchase->setPayment($entity->getPaymentAmount());
         $accountPurchase->setBalance($accountPurchase->getTotalAmount() - $accountPurchase->getPayment() );
         $accountPurchase->setProcessHead('Purchase');
         $accountPurchase->setReceiveDate($entity->getReceiveDate());
+        if($entity->getInventoryConfig()->getGlobalOption()->getAccountingConfig()->getAutoPurchase() == 1){
+            $accountPurchase->setProcess('approved');
+            $accountPurchase->setApprovedBy($entity->getApprovedBy());
+        }else{
+            $accountPurchase->setProcess('pending');
+        }
+
         $em->persist($accountPurchase);
         $em->flush();
+        if($entity->getInventoryConfig()->getGlobalOption()->getAccountingConfig()->getAutoPurchase() == 1){
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+        }
         return $accountPurchase;
+
+
 
     }
 

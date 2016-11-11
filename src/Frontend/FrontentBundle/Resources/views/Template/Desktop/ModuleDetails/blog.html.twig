@@ -1,65 +1,84 @@
-<div class="blog_post">
-    <div class="blog_postcontent">
-        <div  class="image_frame" ><a href="#"><img src="{{ image(details.webPath()).resize(810,360) }}" alt="" /></a></div>
-        <a href="blog-archive.html" class="date"><strong>{{ details.created|date('j') }}</strong><i>{{ details.created|date('F') }}</i></a>
-        <h3>{{ details.title }}</h3>
-        <ul class="post_meta_links">
-            <li class="post_by"><a href="#">{{ details.name }}</a></li>
-            <li class="post_categoty"><a href="#">Web tutorials</a></li>
-            <li class="post_comments"><a href="#">18 Comments</a></li>
-        </ul>
-        <div class="clearfix"></div>
-        <div class="post_info_content">
-            <p>{{ details.content|raw }}</p>
-        </div>
-
-    </div>
+<div class="page-header sidebar-title">
+    <h3>{{ details.name }}</h3>
+    <span>
+        <i class="fa fa-user"></i>&nbsp;{{ details.authorName }}, <i class="fa fa-calendar"></i>&nbsp;{{ details.updated|date('d-F-Y') }}
+        <i class="fa fa-tags"></i>
+        {% for cat in details.moduleCategory %}
+            <a href="{{ path('webservice_module_category',{'subdomain': globalOption.subDomain,'module':module.name|lower ,'slug':cat.slug }) }}">{{ cat.name }}</a>
+        {% endfor %}
+    </span>
 </div>
-<div class="clearfix divider_line2"></div>
-<div class="sharepost">
-    <h4><i>Share this Post</i></h4>
-    <ul>
-        <li><a href="#">&nbsp;<i class="fa fa-facebook fa-lg"></i>&nbsp;</a></li>
-        <li><a href="#"><i class="fa fa-google-plus fa-lg"></i></a></li>
-        <li><a href="#"><i class="fa fa-skype fa-lg"></i></a></li>
-        <li><a href="#"><i class="fa fa-youtube fa-lg"></i></a></li>
-    </ul>
+{% if details.webPath is not empty %}
+    <img class="img-responsive displayed" src="{{ image(details.webPath).resize() }}" alt="" />
+{% endif %}
+<p>{{ details.content|raw }}</p>
+<div class="mysharing">
+    <div class="fb-follow" data-href="https://www.facebook.com/Umarit-150101098794148/?ref=bookmarks" data-layout="button_count" data-size="small" data-show-faces="true"></div>
+    <div class="fb-like" data-href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':details.slug }) }}" data-width="600px" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+    <div id="fb-root"></div>
+    <div class="fb-comments" data-href="http://www.umarlimited.com" data-width="750" data-numposts="10"></div>
 </div>
-<div class="clearfix divider_line"></div>
-<div class="blog_post">
-    <div class="popular-posts-area">
-        <h4><i>Recent Posts</i></h4>
-        <ul class="recent_posts_list">
-            {% for row in globalOption.blogs %}
-                <li>
-                    {% if row.webPath() %} <span><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': moduleName|lower,'slug':row.slug }) }}"><img src="{{ image(row.webPath()).resize(50,50) }}" alt=""></a></span>{% endif %}
-                    <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': moduleName|lower,'slug':row.slug }) }}">{{ row.title }}</a>
-                    <i>October 18, 2013</i>
-                </li>
+<br/>
 
-            {% endfor %}
+<script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.8";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 
 
-        </ul>
-
-    </div>
-</div>
-
-<div class="blog_post" >
+{#<div class="blog_post" >
     {% set commentID = globalOption.id~'-'~moduleName|lower~'-'~details.id %}
     {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': commentID } %}
-</div>
-
+    <br/>
+</div>#}
 
 <style>
-    #fos_comment_comment_body {
-        height: 120px;
+    .fb-follow{
+        top:-4px;
+    }
+    .page-header{
+        padding-bottom: 0!important;
+        margin-top: 20px !important;
+    }
+    .page-header span{
+        font-size: 11px;
+    }
+    .fos_comment_comment_metas{
+        background: #649458 !important;
+        padding:0;
+        color: #fff;
+        padding-left: 20px
+    }
+
+    .fos_comment_comment_show{
+       line-height: 30px;
+        border: 1px solid #ddddff;
+    }
+    .fos_comment_comment_replies .fos_comment_comment_show{
+        line-height: 30px;
+        border: none !important;
+    }
+
+    #fos_comment_comment_body{
+        border: 1px solid #ddddff;
+        min-height: 120px;
         width: 100%;
-        border: 1px solid #ccc;
-        padding: 5px;
+        padding: 20px;
+    }
+
+    .fos_comment_comment_body {
+        padding: 20px;
         font-family: 'Open Sans', sans-serif;
         font-size: 13px;
         line-height: 20px;
+
+    }
+    .fos_comment_comment_reply{
+        margin-left: 20px;
+        margin-bottom: 20px;
     }
 
     #fos_comment_thread h3{
@@ -76,32 +95,35 @@
         margin-bottom: 2px;
         margin-left: 2px;
         cursor: pointer;
-        background-color: #0896b8;
-        border: 1px solid #c1cbd0;
+        background-color: #479444;
+        border: 1px solid #888;
         color: #FFFFFF;
         font-weight: bold;
     }
     .fos_comment_comment_reply_show_form{
-
-        background-color: #e67e22;
         text-align: center;
-        color: #FFFFFF;
+        padding: 0 30px;
         display: inline-block;
         margin-bottom: 2px;
         margin-left: 2px;
         cursor: pointer;
+        background-color: #479444;
+        border: 1px solid #888;
+        color: #FFFFFF;
+        border-radius: 1px;
     }
     .fos_comment_comment_reply_cancel{
 
-        background-color: #c0392b;
         text-align: center;
-        color: #FFFFFF;
-        padding:5px 20px;
+        padding: 5px 50px;
         display: inline-block;
         margin-bottom: 2px;
         margin-left: 2px;
         cursor: pointer;
+        background-color:#B1070B;
         border: 1px solid #c1cbd0;
+        color: #FFFFFF;
+        font-weight: bold
     }
     .fos_comment_comment_replies{
         margin-left: 20px;

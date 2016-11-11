@@ -56,11 +56,6 @@ class SyndicateModuleController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
-            $menu = $entity ->getName();
-            $slug = $this->get('setting.menuSettingRepo')-> urlSlug($menu);
-            $entity ->setMenuSlug($slug);
-
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -197,8 +192,6 @@ class SyndicateModuleController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-
-            $entity ->setMenuSlug($entity ->getSlug());
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"

@@ -31,6 +31,11 @@ class PurchaseReturn
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="purchaseReturns" , cascade={"detach","merge"} )
+     **/
+    private  $purchase;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Vendor", inversedBy="purchaseReturns" , cascade={"detach","merge"} )
      **/
     private  $vendor;
@@ -83,13 +88,6 @@ class PurchaseReturn
      * @ORM\Column(name="code", type="string", length=100, nullable=true)
      */
     private $code;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="adjustmentInvoice", type="string", length=100, nullable=true)
-     */
-    private $adjustmentInvoice;
 
     /**
      * @var string
@@ -343,20 +341,21 @@ class PurchaseReturn
         return $this->accountPurchaseReturn;
     }
 
+
     /**
-     * @return string
+     * @return Purchase
      */
-    public function getAdjustmentInvoice()
+    public function getPurchase()
     {
-        return $this->adjustmentInvoice;
+        return $this->purchase;
     }
 
     /**
-     * @param string $adjustmentInvoice
+     * @param Purchase $purchase
      */
-    public function setAdjustmentInvoice($adjustmentInvoice)
+    public function setPurchase($purchase)
     {
-        $this->adjustmentInvoice = $adjustmentInvoice;
+        $this->purchase = $purchase;
     }
 
 

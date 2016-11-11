@@ -320,7 +320,7 @@ var InventoryItemEditPage = function (item) {
 
     }
 
-    $('.product').on("click", ".remove", function () {
+    $(document).on("click", ".remove", function () {
 
         var id = $(this).attr("data-id");
         var url = $(this).attr("data-url");
@@ -333,7 +333,7 @@ var InventoryItemEditPage = function (item) {
                 }
             },
         })
-    })
+    });
 
     $(document).on("click", ".barcode", function() {
 
@@ -346,13 +346,27 @@ var InventoryItemEditPage = function (item) {
                 if ('success' == response ) {
                     location.reload();
                 }
-            },
+            }
         })
 
-    })
+    });
+
+    $(document).on("click", ".addSubProduct", function() {
+
+        var url = $(this).attr("data-url");
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data:$('.action').serialize(),
+            success: function (response) {
+                $('#subProductLoad').html(response);
+            }
+        })
+
+    });
 
     var count = 0;
-    $('.addSubProduct').click(function(){
+    $('.addSubProductx').click(function(){
 
         var $el = $(this);
         var $cloneBlock = $('#clone-sub-product');
@@ -360,7 +374,7 @@ var InventoryItemEditPage = function (item) {
         $clone.find('[id]').each(function(){this.id+='someotherpart'});
         $clone.find(':text,textarea' ).val("");
         $clone.attr('id', "added"+(++count));
-        $clone.find('.remove').removeClass('hidden');
+        $clone.find('.remove, .update').removeClass('hidden');
         $cloneBlock.append($clone);
         $('.numeric').numeric();
 

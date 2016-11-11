@@ -37,6 +37,9 @@ class SalesType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')))
             ))
+            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
+            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
+            ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
@@ -49,6 +52,53 @@ class SalesType extends AbstractType
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
                         ->orderBy("e.id","ASC");
+                }
+            ))
+            ->add('paymentCard', 'entity', array(
+                'property' => 'name',
+                'class' => 'Setting\Bundle\ToolBundle\Entity\PaymentCard',
+                'attr'=>array('class'=>'span12 select2'),
+                'empty_value' => '---Choose payment card---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->orderBy("e.id","ASC");
+                }
+            ))
+            ->add('salesBy', 'entity', array(
+                'required'    => true,
+                'class' => 'Core\UserBundle\Entity\User',
+                'property' => 'username',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('u')
+                        ->where("u.isDelete IS NULL")
+                        ->andWhere("u.globalOption =".$this->globalOption->getId())
+                        ->orderBy("u.username", "ASC");
+                }
+            ))
+            ->add('accountBank', 'entity', array(
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'empty_value' => '---Choose receive bank account---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.globalOption =".$this->globalOption->getId())
+                        ->orderBy("b.name", "ASC");
+                }
+            ))
+            ->add('accountMobileBank', 'entity', array(
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'empty_value' => '---Choose receive mobile bank account---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.globalOption =".$this->globalOption->getId())
+                        ->orderBy("b.name", "ASC");
                 }
             ))
 

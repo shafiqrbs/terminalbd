@@ -1,13 +1,118 @@
-{% for  row in globalOption.testimonials %}
-<div class="testimonials-4">
-    <div class="content">
-        {% if row.webPath() %}<img src="{{ image(row.webPath()).resize(110,130) }}" class="image_left1" alt="">{% endif %}
-        <span><i class="fa fa-quote-left fa-2x"></i>&nbsp; {{ row.content|raw }}
-            <br><br>
-              <strong>- {{ row.name }}</strong>
-              <em>{{ row.designation }}</em>, {{ row.title }}
-        </span>
+
+    <div class="row">
+        <div class="col-md-12">
+            {% for  row in pagination %}
+                <div class="testimonial-default">
+                    <div class="pic">
+                        <img src="{{ image(row.webPath) }}" alt="">
+                    </div>
+                    <div class="testimonial-default-content">
+                        <h3 class="testimonial-default-title">{{ row.name }}
+                            <small class="post">{{ row.designation }}</small>
+                            <span class="clear"></span>
+                            <span class="web-url"><a href="http://{{ row.website }}">{{ row.website }}</a></span>
+                        </h3>
+                        <p class="description">
+                            {{ row.content|raw }}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-</div>
-<div class="clearfix divider_line2"></div>
-{% endfor %}
+<style>
+
+    .clear{
+        clear: both; display:block
+    }
+    .web-url{
+        font-size: 12px;
+    }
+
+    .testimonial-default{
+        padding: 20px;
+        margin: 20px 10px;
+    }
+    .testimonial-default .pic{
+        width: 122px;
+        height: 122px;
+        float: left;
+        margin-right: 50px;
+        position: relative;
+    }
+    .testimonial-default .pic:before,
+    .testimonial-default .pic:after{
+        content: "";
+        display: block;
+        height: 50%;
+        width: 50%;
+        position: absolute;
+    }
+    .testimonial-default .pic:before{
+        bottom: -10%;
+        left: -10%;
+        border-bottom: 3px solid #E16B47;
+        border-left: 3px solid #E16B47;
+    }
+    .testimonial-default .pic:after{
+        top: -10%;
+        right: -10%;
+        border-top: 3px solid #e16b47;
+        border-right: 3px solid #e16b47;
+    }
+    .testimonial-default .pic img{
+        width: 100%;
+        height: auto;
+    }
+    .testimonial-default .testimonial-default-content{
+        display: table;
+        position: relative;
+    }
+    .testimonial-default .testimonial-default-content:before{
+        content: "\f10d";
+        font-family: fontawesome;
+        position: absolute;
+        top: -30px;
+        left: -15px;
+        font-size: 60px;
+        color: #d8dad6;
+        z-index: -1;
+    }
+    .testimonial-default .testimonial-default-title{
+        font-size: 24px;
+        color: #e16b47;
+        text-transform: capitalize;
+    }
+    .testimonial-default .post{
+        font-size: 13px;
+        font-weight: 600;
+        color: #585f62;
+        border-left: 1px solid rgba(0, 0, 0, 0.1);
+        margin-left: 5px;
+        padding-left: 5px;
+    }
+    .testimonial-default .description{
+        font-size: 13px;
+        color: #7c7c7c;
+        line-height: 22px;
+        margin-top: 12px;
+        font-style: italic;
+    }
+    @media only screen and (max-width: 980px){
+        .testimonial-default{
+            padding: 20px 0;
+            margin: 20px 15px;
+        }
+        .testimonial-default .pic{
+            float: none;
+        }
+        .testimonial-default .testimonial-default-content{
+            display: block;
+            margin-top: 30px;
+        }
+        .testimonial-default .testimonial-default-content:before{
+            z-index: 1;
+            top: -200px;
+        }
+    }
+</style>

@@ -728,8 +728,13 @@ class TemplateCustomize
         return $this->file;
     }
 
+    /**
+     * @ORM\PostRemove()
+     */
+
     public function removeLogo()
     {
+
         if ($file = $this->getAbsolutePath()) {
             unlink($file);
         }

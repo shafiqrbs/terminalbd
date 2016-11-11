@@ -19,8 +19,8 @@ class InventoryConfigType extends AbstractType
     {
 
         $builder
-            ->add('salesReturnDayLimit','integer',array('attr'=>array('class'=>'m-wrap span4 numeric')))
-            ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap span4 numeric')))
+            ->add('salesReturnDayLimit','integer',array('attr'=>array('class'=>'numeric')))
+            ->add('vatPercentage','integer',array('attr'=>array('class'=>'numeric')))
             ->add('deliveryProcess',
 
                 'choice', array(
@@ -30,6 +30,7 @@ class InventoryConfigType extends AbstractType
                     'ManualPos' => 'Manual Sales System',
                     'Delivery' => 'Delivery',
                     'TemporaryDelivery' => 'Temporary Delivery',
+                    'BranchInvoice' => 'Branch Invoice',
                 ),
                 'required'    => true,
                 'multiple'    => true,
@@ -38,6 +39,7 @@ class InventoryConfigType extends AbstractType
             ))
             ->add('vatEnable')
             ->add('isColor')
+            ->add('isBranch')
             ->add('isSize')
         ;
     }

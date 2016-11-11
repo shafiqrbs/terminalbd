@@ -1,13 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#">
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
 <head>
+    {% set currentPath = path(app.request.attributes.get('_route'),
+    app.request.attributes.get('_route_params')) %}
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+   {# <meta property="og:url"           content="htpp://www.{{ globalOption.domain }}{{ currentPath }}" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="{{ globalOption.name }}" />
+    <meta property="og:description"   content="{{ globalOption.name }}" />
+    <meta property="og:image"         content="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" />
+#}
+
+    <meta property="og:title" content="Join the best company in the world!" />
+    <meta property="og:url" content="http://www.sharethis.com" />
+    <meta property="og:image" content="http://sharethis.com/images/logo.jpg" />
+    <meta property="og:description" content="ShareThis is its people. It's imperative that we hire smart,innovative people who can work intelligently as we continue to disrupt the very category we created. Come join us!" />
+    <meta property="og:site_name" content="ShareThis" />
+
     <title>{{ globalOption.name }}</title>
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}">
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
@@ -19,19 +35,22 @@
     <![endif]-->
     <!-- HEADER -->
     <!-- HEADER -->
+    {% set template = globalOption.siteSetting.theme.folderName|lower %}
+    {#{% set csstemplate = "assets/template/desktop/{{ template }}/css/style.css" %}#}
     {% stylesheets filter='cssrewrite'
-    'assets/template/desktop/patros/css/bootstrap.min.css'
-    'assets/template/desktop/patros/font-awesome/css/font-awesome.min.css'
+    'assets/template/desktop/css/bootstrap.min.css'
+    'assets/template/desktop/font-awesome/css/font-awesome.min.css'
     'assets/template/plugin/owl.carousel/owl.carousel.min.css'
     'assets/template/plugin/owl.carousel/owl.theme.min.css'
     'assets/template/plugin/side.toolbar/vcore.sidebar.css'
     'assets/template/plugin/pgslider/pgwslider.min.css'
     'assets/bindu/3rd/select2/select2.css'
     'assets/template/desktop/css/module.css'
-    'assets/template/desktop/patros/css/patros-black.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
+    <link href="/assets/template/desktop/{{ template }}/css/style.css" rel="stylesheet" />
+
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -41,63 +60,7 @@
 <body data-spy="scroll">
 {{ include('frontend/template/templateCustomize.html.twig')}}
 <!-- Navigation -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <section id="top-bar">
-        <div class="container" id="menu">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="col-md-6 text-left">
-                        <div class="box">
-                            <ul class="info-links">
-                                {% if globalOption.templateCustomize.showCalendar == 1 %}<li><i class="fa fa-calendar"></i>&nbsp;{{ "now"|date("F j, Y") }}</li>{% endif %}
-                                {% if globalOption.templateCustomize.showEmail == 1 %}<li><i class="fa fa-envelope"></i>&nbsp;{{ globalOption.email }}</li>{% endif %}
-                                {% if globalOption.templateCustomize.showMobile == 1 %}<li><i class="fa fa-mobile"></i>&nbsp;{{ globalOption.mobile }}</li>{% endif %}
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class=" col-md-6 text-right">
-                        <div class="box">
-                            <ul class="social-links">
-                                {% if globalOption.facebookPageUrl == 1 %}<li><a href="https://{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>{% endif %}
-                                {% if globalOption.templateCustomize.showSearch == 1 %}<li><a href="javascript:" id="searchEvent"><i class="fa fa-search"></i></a></li>{% endif %}
-                                {% if  globalOption.ecommerceConfig.cart == 1  %}<li><a href="{{ path('webservice_product_cart_details',{'subdomain':globalOption.subDomain}) }}" class="" ><i class="fa fa-shopping-cart"></i></a></li>{% endif %}
-                                <li><a href="javascript:" class="register-btn" ><i class="fa fa-sign-in"></i></a></li>
-                                {% if  app.user %}
-                                    <li><a href="{{ path('fos_user_security_logout') }}" class="" ><i class="fa fa-unlock-alt"></i></a></li>
-                                {% else %}
-                                    <li><a href="javascript:" class="login-preview" ><i class="fa fa-lock"></i></a></li>
-                                {% endif %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <div class="container" id="header">
-        <div class="navbar-header col-md-12" >
-            <a class="" href="{{ path('ecommercesubdomain') }}">{% if globalOption.templateCustomize.webPath('logo') is not empty %}<img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" alt="company logo" />{% else %}{{ globalOption.name }}{% endif %}</a>
-        </div>
-    </div>
-    <section id="menu-bar" >
-        <div class="container" id="menu">
-            <div class="row">
-                <div class="col-md-8">
-                    {% render controller("FrontendBundle:TemplateWidget:header",{'globalOption':globalOption.id}) %}
-                </div>
-                {% if globalOption.templateCustomize.showSearch == 1 %}
-                    <div class="input-group searchbar col-md-3" id="nav-search">
-                        <input type="text" class="form-control searchbar" placeholder="Search for...">
-		                        <span class="input-group-btn">
-		                        <button class="btn btn-default glyphicon glyphicon-search" type="button"></button>
-		                </span>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </section>
-</nav>
+{% render controller("FrontendBundle:TemplateWidget:header",{'globalOption':globalOption.id}) %}
 <div class="clearfix"></div>
 {% block body %}{% endblock %}
 <footer id="footer">
@@ -119,24 +82,26 @@
 <!-- jQuery -->
 <!--Jquery Smooth Scrolling-->
 {% javascripts
-'assets/template/desktop/patros/js/jquery.js'
-'assets/template/desktop/patros/js/bootstrap.min.js'
+
+'assets/template/desktop/js/jquery.js'
+'assets/template/desktop/js/bootstrap.min.js'
 'assets/template/plugin/jquery-inputmask/jquery.inputmask.bundle.min.js'
 'assets/template/plugin/numeric/jquery.numeric.js'
 'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
 'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
 'assets/template/plugin/owl.carousel/owl.carousel.min.js'
-'assets/bindu/3rd/select2/select2.js'
+'assets/template/plugin/select2/select2.min.js'
 'assets/template/plugin/side.toolbar/vcore.sidebar.js'
 'assets/template/plugin/pgslider/imagezoom.js'
 'assets/template/plugin/pgslider/pgwslider.js'
 'assets/template/plugin/side.toolbar/vcore.sidebar.js'
-'assets/template/desktop/patros/js/jquery.quicksand.js'
+'assets/template/desktop/js/jquery.quicksand.js'
 
 %}
+
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
-<script>  var subdomain ="{{ globalOption.subDomain }}" ; </script>
+<script>  subdomain ="{{ globalOption.subDomain }}"; </script>
 {% block javascriptBlock %}{% endblock %}
 <script>
  $(document).ready(function(){

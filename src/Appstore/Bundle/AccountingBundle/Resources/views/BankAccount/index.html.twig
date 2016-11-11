@@ -1,0 +1,140 @@
+
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Account of Bank
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('account_bank') }}">Account of Bank</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="javascript:">Account of Bank</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Account bank</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <i class="icon-cogs"></i>&nbsp;Tools
+                                    <i class="icon-tasks"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="{{ path('appsetting_bank_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                    <li><a href="{{ path('appsetting_bank') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="portlet-body">
+                        <div class="portlet-body flip-scroll">
+                            {% include('flash-message.html.twig')  %}
+                            <div class="portlet search-portlet box grey">
+                                {#<form class="search-form" action="" method="get" name="itemSearch">
+                                    <div class="span4">
+                                        <div class="controls">
+                                            <input type="text" id="startDate" name="startDate"  class="span6 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}start date{% endif %} ">
+                                            <input type="text" id="endDate" name="endDate"  class="span6 search-input  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}end date{% endif %} ">
+                                        </div>
+                                    </div>
+                                    <div class="span3">
+                                        <select class="search-input span12 select2" id="accountHead" name="accountHead">
+                                            <option value="">Select account head</option>
+                                            {% for account in accountHead %}
+                                                {% set accountId = searchForm.accountHead is defined ? searchForm.accountHead : '' %}
+                                                <option value="{{ account.id }}" {% if accountId == account.id %} selected="selected" {% endif %} >{{ account.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="span4">
+                                        <input type="text" id="toUser" name="toUser"  class="span11 select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="select user">
+                                    </div>
+                                    <div class="1">
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <div class="input-append">
+                                                    <div class="btn-group">
+                                                        <button class="btn" type="submit" >
+                                                            <i class="icon-search"></i>&nbsp;Go</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>#}
+
+                            </div>
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                <thead class="flip-content ">
+
+                                <tr class="head-grey">
+                                    <th class="numeric" >Bank</th>
+                                    <th class="numeric" >Branch</th>
+                                    <th class="numeric" >Account Owner</th>
+                                    <th class="numeric" >Account No</th>
+                                    <th class="numeric" >Account type</th>
+                                    <th class="numeric" >Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for entity in entities %}
+                                    <tr id="remove-{{ entity.id }}">
+                                        <td class="numeric" >{% if entity.bank %}{{ entity.bank.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.Branch }}</td>
+                                        <td class="numeric" >{{ entity.accountOwner }}</td>
+                                        <td class="numeric" >{{ entity.accountNo }}</td>
+                                        <td class="numeric" >{{ entity.accountType }}</td>
+                                        <td class="numeric" >
+                                            <a href="{{ path('appsetting_bank_edit',{'id':entity.id}) }}" id=""  class="btn blue mini"><i class="icon-pencil"></i></a>
+                                            <a href="javascript:" id="" data-id="{{ entity.id }}" class="btn red mini delete"  data-url="{{ path('appsetting_bank_delete',{'id':entity.id}) }}"><i class="icon-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="pagination pull-center"  >
+                                {{ knp_pagination_render(entities) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@AccountingBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+
+
+
+

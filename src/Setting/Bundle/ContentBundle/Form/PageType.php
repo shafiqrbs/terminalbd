@@ -56,6 +56,18 @@ class PageType extends AbstractType
                             ->orderBy('o.name','ASC');
                     },
             ))
+            ->add('icon', 'entity', array(
+                'required'    => false,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\Icon',
+                'empty_value' => '---Select Icon---',
+                'property' => 'name',
+                'attr'=>array('class'=>'select2 span12'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('o')
+                        ->where("o.status = 1")
+                        ->orderBy('o.name','ASC');
+                },
+            ))
 
             ->add('photo_gallery', 'entity', array(
                 'required'    => false,

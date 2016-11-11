@@ -301,7 +301,6 @@ class GoodsController extends Controller
             $this->getDoctrine()->getRepository('InventoryBundle:ItemKeyValue')->insertItemKeyValue($entity,$data);
             $this->getDoctrine()->getRepository('InventoryBundle:ItemGallery')->insertProductGallery($entity,$data);
             $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->initialUpdateSubProduct($entity);
-            $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertSubProduct($entity,$data);
             return $this->redirect($this->generateUrl('inventory_goods_edit', array('id' => $id)));
         }
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
@@ -315,6 +314,35 @@ class GoodsController extends Controller
             'colors'      => $colors,
             'form'   => $editForm->createView(),
         ));
+    }
+
+    public function addSubProductAction(Request $request, PurchaseVendorItem $entity)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $data = $request->request->all();
+        $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertSubProduct($entity,$data);
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $sizes = $em->getRepository('InventoryBundle:ItemSize')->findBy(array('inventoryConfig'=>$inventory, 'status'=>1),array('name'=>'ASC'));
+        $colors = $em->getRepository('InventoryBundle:ItemColor')->findBy(array('inventoryConfig'=>$inventory, 'status'=>1),array('name'=>'ASC'));
+        $subItem =  $this->render('@Inventory/Goods/subItem.html.twig', array(
+            'entity'           => $entity,
+            'ecommerceConfig'      => $ecommerceConfig,
+            'sizes'       => $sizes,
+            'colors'      => $colors,
+        ));
+        return new Response($subItem);
+
+    }
+
+    public function updateSubProductAction(Request $request, GoodsItem $entity)
+    {
+
+        $data = $request->request->all();
+        $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->updateSubProduct($entity,$data);
+        return new Response('success');
+
     }
 
 

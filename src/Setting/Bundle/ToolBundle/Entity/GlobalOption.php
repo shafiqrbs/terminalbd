@@ -3,8 +3,10 @@
 namespace Setting\Bundle\ToolBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBkash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
+use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
+use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\DomainUser;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Core\UserBundle\Entity\User;
@@ -63,10 +65,18 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MenuGrouping", mappedBy="globalOption" , cascade={"persist", "remove"} )
      */
     protected $menuGroupings;
+
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
     protected $pages;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SidebarWidget", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+
+    protected $sidebarWidgets;
+
    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\MediaBundle\Entity\PageFile", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
@@ -102,11 +112,17 @@ class GlobalOption
      */
     protected $advertisment;
 
-    /**/
+
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountingConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $accountingConfig;
+
+   /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Transaction", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $transactions;
+
    /**
     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="globalOption" , cascade={"persist", "remove"})
     */
@@ -149,11 +165,13 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $accountBank;
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $accountBkash;
+
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $accountMobileBank;
+
+ /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PaymentSalary", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $paymentSalary;
@@ -412,11 +430,19 @@ class GlobalOption
      * @ORM\Column(name="status", type="smallint", nullable=true)
      */
     private $status = 0;
+
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
 
     private $inventoryConfig;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $branches;
+
+
     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
@@ -526,40 +552,7 @@ class GlobalOption
         return $this;
     }
 
-    /**
-     * @param mixed $mobileTheme
-     */
-    public function setMobileTheme($mobileTheme)
-    {
-        $this->mobileTheme = $mobileTheme;
 
-        return $this;
-    }
-
-    /**
-     * @param mixed $mobileTheme
-     */
-    public function getMobileTheme()
-    {
-        return $this->mobileTheme;
-    }
-
-
-    /**
-     * @param mixed $webTheme
-     */
-    public function setWebTheme($webTheme)
-    {
-        $this->webTheme = $webTheme;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getWebTheme()
-    {
-        return $this->webTheme;
-    }
 
     /**
      * Get customizeDesign
@@ -1271,13 +1264,6 @@ class GlobalOption
     return $this->accountCashes;
    }
 
- /**
-  * @return AccountBkash
-  */
- public function getAccountBkash()
- {
-  return $this->accountBkash;
- }
 
  /**
   * @return mixed
@@ -1294,6 +1280,32 @@ class GlobalOption
  {
   return $this->accountPurchaseReturn;
  }
+
+ /**
+  * @return AccountingConfig
+  */
+  public function getAccountingConfig()
+  {
+   return $this->accountingConfig;
+  }
+
+
+
+    /**
+     * @return Branches
+     */
+    public function getBranches()
+    {
+        return $this->branches;
+    }
+
+    /**
+     * @return SidebarWidget
+     */
+    public function getSidebarWidgets()
+    {
+        return $this->sidebarWidgets;
+    }
 
 
 }

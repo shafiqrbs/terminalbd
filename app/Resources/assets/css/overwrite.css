@@ -393,3 +393,7 @@ label.error {
     float: right;
     display: inline-block;
 }
+
+.add-on-height{
+    height: 24px !important;
+}

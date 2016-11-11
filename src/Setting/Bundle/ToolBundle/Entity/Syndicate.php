@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ToolBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -158,6 +159,10 @@ class Syndicate
      */
     protected $syndicateContent;
 
+
+    public function __construct(){
+        $this->syndicateModules = new ArrayCollection();
+    }
 
     public function setId($id)
     {
@@ -428,5 +433,23 @@ class Syndicate
     public function getThemes()
     {
         return $this->themes;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSyndicateModules()
+    {
+        return $this->syndicateModules;
+    }
+
+    /**
+     * @param SyndicateModule $syndicateModule
+     */
+    public function addSyndicateModules($syndicateModule)
+    {
+        if($this->syndicateModules->contains($syndicateModule)) {
+            $this->syndicateModules->add($syndicateModule);
+        }
     }
 }

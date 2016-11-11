@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class MenuGroupingRepository extends EntityRepository
 {
 
-    public function insertMenuGrouping($posts,$user,$menuGroup)
+    public function insertMenuGrouping($posts,$globalOption,$menuGroup)
     {
 
         $i = 1;
@@ -24,12 +24,11 @@ class MenuGroupingRepository extends EntityRepository
                 $menu = $em->getRepository('SettingAppearanceBundle:Menu')->find($post);
                 $menuGroup = $em->getRepository('SettingAppearanceBundle:MenuGroup')->find($menuGroup);
 
-                $menuGroups = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$user->getGlobalOption(),'menuGroup'=>$menuGroup,'menu'=>$post));
+                $menuGroups = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'menuGroup'=>$menuGroup,'menu'=>$post));
                 if(empty($menuGroups)){
                     $entity = new MenuGrouping();
                     $entity ->setMenu($menu);
-                    $entity ->setUser($user);
-                    $entity ->setGlobalOption($user->getGlobalOption());
+                    $entity ->setGlobalOption($globalOption);
                     $entity ->setMenuGroup($menuGroup);
                     $entity ->setSorting($i);
                     $em->persist($entity);
@@ -38,18 +37,18 @@ class MenuGroupingRepository extends EntityRepository
             }
             $em->flush();
         }
-        $this->removeMenuGrouping($posts,$user,$menuGroup);
+        $this->removeMenuGrouping($posts,$globalOption,$menuGroup);
 
     }
 
 
-    public function removeMenuGrouping($posts,$user,$menuGroup)
+    public function removeMenuGrouping($posts,$globalOption,$menuGroup)
     {
         $em = $this->_em;
         if(!empty($posts['delete'])){
             foreach ($posts['delete'] as $post ){
 
-                $menuGroups = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('user'=>$user,'menuGroup'=>$menuGroup,'menu'=>$post));
+                $menuGroups = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'menuGroup'=>$menuGroup,'menu'=>$post));
                 if(!empty($menuGroups)){
 
                     foreach($menuGroups as $menu){

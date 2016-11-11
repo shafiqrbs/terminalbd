@@ -59,6 +59,11 @@ class PurchaseItem
     private  $salesItems;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\BranchInvoiceItem", mappedBy="purchaseItem" )
+     **/
+    private  $branchInvoiceItems;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="purchaseItem" )
      **/
     private  $damages;

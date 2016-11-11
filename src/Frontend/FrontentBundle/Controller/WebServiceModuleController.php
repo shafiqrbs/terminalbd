@@ -50,7 +50,7 @@ class WebServiceModuleController extends Controller
         }
 
         $pagination = ($pagination) ? $pagination :'';
-        $page = ($page) ? $page :'';
+        $page = ($page) ? $page->getPage() :'';
 
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();
@@ -67,7 +67,7 @@ class WebServiceModuleController extends Controller
                 'categories'    => $categories,
                 'title'         => $moduleName,
                 'pagination'    => $pagination,
-                'page'          => $page->getPage(),
+                'page'          => $page,
                 'featurePages'  => $featurePages,
             )
         );
@@ -159,7 +159,7 @@ class WebServiceModuleController extends Controller
                 $moduleName = $this->get('setting.menuTreeSettingRepo')->getModuleTheme($menu);
                 if($moduleName){
 
-                    $details = $em->getRepository('SettingContentBundle:'.$moduleName)->findOneBy(array('globalOption'=>$globalOption,'slug' => $slug));
+                    $details = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'slug' => $slug));
                     $twigName = "moduleDetails";
                     if(!empty($menu->getModule())){
                         $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
@@ -170,11 +170,6 @@ class WebServiceModuleController extends Controller
                     /** @pram $page Page */
                     $page = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'slug' => $module));
                     $featurePages = $em->getRepository('SettingContentBundle:Page')->getListForModule($globalOption,$page);
-
-                    if(!empty($featurePages)){
-                        echo "Test";
-                    }
-
                     $twigName = "content";
 
                 }

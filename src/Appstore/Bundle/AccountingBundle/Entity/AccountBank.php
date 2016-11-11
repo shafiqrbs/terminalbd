@@ -4,6 +4,8 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\InventoryBundle\Entity\Purchase;
+use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\Bank;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -39,6 +41,11 @@ class AccountBank
     private  $bank;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", mappedBy="accountBank" )
+     **/
+    private  $purchases;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="accountBank" )
      **/
     private  $sales;
@@ -62,6 +69,13 @@ class AccountBank
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="accountBank"  )
      **/
     private  $accountSales;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="accountBank" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $serviceSales;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="accountBank"  )
@@ -100,6 +114,13 @@ class AccountBank
     /**
      * @var string
      *
+     * @ORM\Column(name="accountOwner", type="string", length=255, nullable=true)
+     */
+    private $accountOwner;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="branch", type="string", length=255, nullable=true)
      */
     private $branch;
@@ -119,6 +140,13 @@ class AccountBank
      * @ORM\Column(name="accountNo", type="string", length=255)
      */
     private $accountNo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountType", type="string", length=100)
+     */
+    private $accountType;
 
     /**
      * @var boolean
@@ -155,7 +183,7 @@ class AccountBank
     /**
      * Get accountNo
      *
-     * @return stringmixed
+     * @return string mixed
      */
     public function getAccountNo()
     {
@@ -361,6 +389,54 @@ class AccountBank
     public function getPreOrders()
     {
         return $this->preOrders;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountType()
+    {
+        return $this->accountType;
+    }
+
+    /**
+     * @param string $accountType
+     */
+    public function setAccountType($accountType)
+    {
+        $this->accountType = $accountType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountOwner()
+    {
+        return $this->accountOwner;
+    }
+
+    /**
+     * @param string $accountOwner
+     */
+    public function setAccountOwner($accountOwner)
+    {
+        $this->accountOwner = $accountOwner;
+    }
+
+    /**
+     * @return ServiceSales
+     */
+    public function getServiceSales()
+    {
+        return $this->serviceSales;
+    }
+
+    /**
+     * @return Purchase
+     */
+    public function getPurchases()
+    {
+        return $this->purchases;
     }
 
 }

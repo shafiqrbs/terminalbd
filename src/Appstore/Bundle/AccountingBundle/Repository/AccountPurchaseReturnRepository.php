@@ -120,6 +120,9 @@ class AccountPurchaseReturnRepository extends EntityRepository
         $accountPurchase->setTransactionMethod($this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
         $em->persist($accountPurchase);
         $em->flush();
+
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertAccountPurchaseReturnCash($accountPurchase);
+
         return $accountPurchase;
 
     }

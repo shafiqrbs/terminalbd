@@ -67,8 +67,8 @@
                                 <tr class="head-grey">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Vendor Name</th>
-                                    <th class="numeric" >Purchase Return Invoice</th>
-                                    <th class="numeric" >Adjustment GRN</th>
+                                    <th class="numeric" >PurRtn Invoice</th>
+                                    <th class="numeric" >Adj Purchase GRN</th>
                                     <th class="numeric" >Ref no.</th>
                                     <th class="numeric" >Return</th>
                                     <th class="numeric" >Received</th>
@@ -82,7 +82,7 @@
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.vendor.name }}</td>
                                         <td class="numeric" >{{ entity.purchaseReturn.invoice }}</td>
-                                        <td class="numeric" >{{ entity.purchaseReturn.adjustmentInvoice }}</td>
+                                        <td class="numeric" >{{ entity.purchaseReturn.purchase.grn }}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                         <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
                                         <td class="numeric" >{{ entity.amount|number_format }}</td>

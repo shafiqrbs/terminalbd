@@ -12,6 +12,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class SalesRepository extends EntityRepository
 {
+
+    public function salesLists($config,$data)
+    {
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->leftJoin('s.customer','c');
+        $qb->where("s.inventoryConfig = :config");
+        $qb->setParameter('config', $config);
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('s.updated','DESC');
+        $result = $qb->getQuery();
+        return $result;
+
+    }
+
     public function getSalesLastId($inventory)
     {
         $qb = $this->_em->createQueryBuilder();
@@ -73,7 +88,6 @@ class SalesRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-
     public function todaySales($inventory)
     {
         $qb = $this->_em->createQueryBuilder();
@@ -119,6 +133,59 @@ class SalesRepository extends EntityRepository
 
 
     }
+
+
+
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
+    {
+        if(!empty($data))
+        {
+
+            $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+            $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
+            $invoice =    isset($data['invoice'])? $data['invoice'] :'';
+            $amount =    isset($data['amount'])? $data['amount'] :'';
+            $customer =    isset($data['customer'])? $data['customer'] :'';
+
+
+            if (!empty($startDate)) {
+                $start = date('Y-m-d',strtotime($data['startDate']));
+                $qb->andWhere("s.updated >= :startDate");
+                $qb->setParameter('startDate',$start);
+            }
+
+            if (!empty($endDate)) {
+                $end = date('Y-m-d',strtotime($data['endDate']));
+                $qb->andWhere("s.updated <= :endDate");
+                $qb->setParameter('endDate',$end);
+            }
+
+            if (!empty($invoice)) {
+
+                $qb->andWhere("s.invoice LIKE :invoice");
+                $qb->setParameter('invoice', $invoice);
+            }
+
+            if (!empty($amount)) {
+
+                $qb->andWhere("s.payment = :payment");
+                $qb->setParameter('payment', $amount);
+            }
+
+            if (!empty($customer)) {
+
+                $qb->andWhere("c.mobile = :mobile");
+                $qb->setParameter('mobile', $customer);
+            }
+        }
+
+    }
+
 
 
 }

@@ -16,9 +16,17 @@
     </div>
 </div>
 {% for child in about.children|slice(0,limit)  %}
-<div class="col-md-3">
-    <h4>{{ child.name }}</h4>
-   <p> {{ child.content|truncate(wordlimit/2)|raw }}</p>
-</div>
+    <div class="col-md-3">
+        <div class="serviceBox">
+            <div class="service-icon">
+                <i class="fa fa-globe"></i>
+            </div>
+            <div class="service-content">
+                <h3>{{ child.name }}</h3>
+                <div class="line"></div>
+                <p>{{ child.content|truncate(wordlimit/3)|raw }}</p>
+            </div>
+        </div>
+    </div>
 {% endfor %}
 {% endif %}

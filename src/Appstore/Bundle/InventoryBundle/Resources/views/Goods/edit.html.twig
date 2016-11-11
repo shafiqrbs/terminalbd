@@ -228,7 +228,7 @@
                                                 <div data-provides="fileupload" class="fileupload fileupload-new">
                                                     <div  class="fileupload-new thumbnail">
                                                         {% if(entity.webPath) %}
-                                                            <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="{{ image(entity.webPath).resize(100,100) }}">
+                                                            <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="{{ image(entity.webPath).resize(250,200) }}">
                                                         {% else %}
                                                             <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
                                                         {% endif %}
@@ -256,10 +256,10 @@
                             <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>Sub item</div>
-                                    <a href="javascript:" data-ref-id="1"
+                                   {# <a href="javascript:" data-ref-id="1"
                                        class="btn black pull-right mini addSubProduct"><i
-                                                class="icon-plus m-icon-white"></i></a>
-
+                                       class="icon-plus m-icon-white"></i>&nbsp;Add</a>
+#}
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
@@ -267,11 +267,11 @@
                                 <div class="span12">
                                     <div class="clone-block trash" id="clone-sub-product">
                                         <div class="row-fluid clone  box blue">
-                                            <div class="span11">
+                                            <div class="span10">
                                                 <div class="row-fluid">
                                                     <div class="{% if ecommerceConfig.isColor == 1 %} span4 {% else %}span6 {% endif %}">
                                                         <input type="hidden" id="" name="goodsItem[]" class="" value="">
-                                                        <select class="span12" name="size[]">
+                                                        <select class="span12" id="subSize" name="subSize">
                                                             <option value="">Select size/dimension/weight</option>
                                                             {% for size in sizes %}
                                                                 <option value="{{ size.id }}">{{ size.name }}</option>
@@ -280,7 +280,7 @@
                                                     </div>
                                                     {% if ecommerceConfig.isColor == 1 %}
                                                         <div class="span2">
-                                                            <select class="span12" multiple="multiple" name="color[]">
+                                                            <select class="span12" multiple="multiple" id="subColor" name="subColor[]">
                                                                 {% for color in colors %}
                                                                     <option value="{{ color.id }}">{{ color.name }}</option>
                                                                 {% endfor %}
@@ -288,86 +288,84 @@
                                                         </div>
                                                     {% endif %}
                                                     <div class="span2">
-                                                        <input type="text" id="" name="quantity[]"
+                                                        <input type="number" id="subQuantity" name="subQuantity"
                                                                class="m-wrap span12 tooltips" placeholder="quantity" value=""
                                                                data-original-title="Please add item quantity"
                                                                data-trigger="hover">
                                                     </div>
                                                     <div class="span2">
-                                                        <input type="text" id="" name="purchasePrice[]"
+                                                        <input type="number" id="subPurchasePrice" name="subPurchasePrice"
                                                                class="m-wrap span12 tooltips" placeholder="purchase" value=""
                                                                data-original-title="Please add purchase price"
                                                                data-trigger="hover">
                                                     </div>
                                                     <div class="span2">
-                                                        <input type="text" id="" name="salesPrice[]"
+                                                        <input type="number" id="subSalesPrice" name="subSalesPrice"
                                                                class="m-wrap span12 tooltips" placeholder="sales" value=""
                                                                data-original-title="Please add sales price"
                                                                data-trigger="hover">
                                                     </div>
                                                </div>
                                             </div>
-                                            <div class="span1"><a href="javascript:" data-id="" data-url=""
-                                                                  class="btn red mini hidden  remove"><i
-                                                            class="icon-trash m-icon-white"></i></a></div>
+                                            <div class="span2">
+                                                <a href="javascript:" data-id="" id="addSubProduct" data-url="{{ path('inventory_vendoritem_subproduct',{'id':entity.id} ) }}" class="btn blue mini"><i class="icon-save m-icon-white"></i>&nbsp;Save</a>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="trash " id="subProductLoad">
                                     {% if entity.goodsItems is not empty and entity.goodsItems is defined %}
                                         {% for goodsItem in  entity.goodsItems %}
                                             {% if goodsItem.masterItem != 1 %}
-                                                <div class="clone-block trash">
                                                 <div class="row-fluid  box blue">
-                                                <div class="span11">
-                                                <div class="row-fluid">
-                                                <div class="{% if ecommerceConfig.isColor == 1 %} span4 {% else %}span6 {% endif %}">
-                                                <input type="hidden" id="" name="goodsItem[]" class="" value="{{ goodsItem.id }}">
-                                                <select class="span12" name="size[]">
-                                                    <option value="">Select size/dimension/weight
-                                                    </option>
-                                                    {% for size in sizes %}
-                                                        <option value="{{ size.id }}" {% if goodsItem.size is not empty and  goodsItem.size.id == size.id %} selected="selected" {% endif %}>{{ size.name }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                                </div>
-                                                {% if ecommerceConfig.isColor == 1 %}
-                                                    <div class="span2">
-                                                        <select class="span12" multiple="multiple" name="color[]">
-                                                            {% for color in colors %}
-                                                                <option value="{{ color.id }}">{{ color.name }}</option>
-                                                            {% endfor %}
-                                                        </select>
+                                                    <div class="span10">
+                                                        <div class="row-fluid">
+                                                            <div class="{% if ecommerceConfig.isColor == 1 %} span4 {% else %}span6 {% endif %}">
+                                                                <select class="span12" name="subSize{{ goodsItem.id }}" id="subSize{{ goodsItem.id }}" >
+                                                                    <option value="">Select size/dimension/weight
+                                                                    </option>
+                                                                    {% for size in sizes %}
+                                                                        <option value="{{ size.id }}" {% if goodsItem.size is not empty and  goodsItem.size.id == size.id %} selected="selected" {% endif %}>{{ size.name }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            {% if ecommerceConfig.isColor == 1 %}
+                                                                <div class="span2">
+                                                                    <select class="span12" multiple="multiple" id="subColor{{ goodsItem.id }}" name="subColor{{ goodsItem.id }}">
+                                                                        {% for color in colors %}
+                                                                            <option {% if goodsItem.colors.contains(color) %} selected {% endif %}   value="{{ color.id }}">{{ color.name }}</option>
+                                                                        {% endfor %}
+                                                                    </select>
+                                                                </div>
+                                                            {% endif %}
+                                                            <div class="span2">
+                                                                <input type="number" id="subQuantity{{ goodsItem.id }}" name="subQuantity{{ goodsItem.id }}"
+                                                                       class="m-wrap span12 tooltips" placeholder="quantity" value="{{ goodsItem.quantity }}"
+                                                                       data-original-title="Please add item quantity"
+                                                                       data-trigger="hover">
+                                                            </div>
+                                                            <div class="span2">
+                                                                <input type="number" id="subPurchasePrice{{ goodsItem.id }}" name="subPurchasePrice{{ goodsItem.id }}"
+                                                                       class="m-wrap span12 tooltips" placeholder="purchase" value="{{ goodsItem.purchasePrice }}"
+                                                                       data-original-title="Please add purchase price"
+                                                                       data-trigger="hover">
+                                                            </div>
+                                                            <div class="span2">
+                                                                <input type="number" id="subSalesPrice{{ goodsItem.id }}" name="subSalesPrice{{ goodsItem.id }}"
+                                                                       class="m-wrap span12 tooltips" placeholder="sales" value="{{ goodsItem.salesPrice }}"
+                                                                       data-original-title="Please add sales price"
+                                                                       data-trigger="hover">
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                {% endif %}
-                                                <div class="span2">
-                                                    <input type="text" id="" name="quantity[]"
-                                                           class="m-wrap span12 tooltips" placeholder="quantity" value="{{ goodsItem.quantity }}"
-                                                           data-original-title="Please add item quantity"
-                                                           data-trigger="hover">
-                                                </div>
-                                                <div class="span2">
-                                                    <input type="text" id="" name="purchasePrice[]"
-                                                           class="m-wrap span12 tooltips" placeholder="purchase" value="{{ goodsItem.purchasePrice }}"
-                                                           data-original-title="Please add purchase price"
-                                                           data-trigger="hover">
-                                                </div>
-                                                <div class="span2">
-                                                    <input type="text" id="" name="salesPrice[]"
-                                                           class="m-wrap span12 tooltips" placeholder="sales" value="{{ goodsItem.salesPrice }}"
-                                                           data-original-title="Please add sales price"
-                                                           data-trigger="hover">
-                                                </div>
-                                                </div>
-                                                </div>
-                                                <div class="span1">
-                                                    <a href="javascript:" data-id="{{ goodsItem.id }}" data-url="{{ path('inventory_goods_subItem_delete',{'id':goodsItem.id} ) }}" class="btn red mini  remove">
-                                                        <i class="icon-trash m-icon-white"></i></a></div>
-                                                </div>
+                                                    <div class="span2">
+                                                        <a href="javascript:" data-id="{{ goodsItem.id }}" data-url="{{ path('inventory_goods_subItem_update',{'id':goodsItem.id} ) }}" class="btn blue mini updateSubProduct"><i class="icon-save m-icon-white"></i></a>
+                                                        <a href="javascript:" data-id="{{ goodsItem.id }}" data-url="{{ path('inventory_goods_subItem_delete',{'id':goodsItem.id} ) }}" class="btn red mini  remove"><i class="icon-trash m-icon-white"></i></a>
+                                                    </div>
                                                 </div>
                                             {% endif %}
                                         {% endfor %}
                                     {% endif %}
-
-
+                                    </div>
                                 </div>
                             </div>
                         {% endif %}
@@ -553,5 +551,48 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+
+    $(document).on("click", "#addSubProduct", function() {
+
+        var url = $(this).attr("data-url");
+        var size = $('#subSize').val();
+        var colors = $('#subColor').val();
+        var salesPrice = $('#subSalesPrice').val();
+        var purchasePrice = $('#subPurchasePrice').val();
+        var quantity = $('#subQuantity').val();
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data:'size='+size+"&colors="+colors+'&salesPrice='+salesPrice+'&purchasePrice='+purchasePrice+'&quantity='+quantity,
+            success: function (response) {
+                $('#subSize, #subColor').find('option').prop("selected", false);
+                $('#subSalesPrice,#subPurchasePrice,#subQuantity').val('');
+                $('#subProductLoad').html(response);
+            }
+        })
+
+    });
+
+    $(document).on("click", ".updateSubProduct", function() {
+
+        var url = $(this).attr("data-url");
+        var subItem = $(this).attr("data-id");
+
+        var size = $('#subSize'+subItem).val();
+        var colors = $('#subColor'+subItem).val();
+        var salesPrice = $('#subSalesPrice'+subItem).val();
+        var purchasePrice = $('#subPurchasePrice'+subItem).val();
+        var quantity = $('#subQuantity'+subItem).val();
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data:'size='+size+"&colors="+colors+'&salesPrice='+salesPrice+'&purchasePrice='+purchasePrice+'&quantity='+quantity,
+            success: function (response) {
+            }
+        })
+
+    });
+
+
     InventoryItemEditPage({{ entity.id ? entity.id : 0 }});
 {% endblock %}

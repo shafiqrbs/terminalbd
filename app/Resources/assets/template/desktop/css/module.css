@@ -54,6 +54,48 @@
     border-left:none ;
 }
 
+/*      css for sub page */
+
+.sub-page{
+    border: 2px solid hsl(0, 0%, 27%);
+    color: hsl(0, 0%, 27%);
+    padding: 37px 18px;
+    text-align:center;
+}
+.sub-page .sub-page-icon i{
+    position: relative;
+    bottom: 0;
+    color: hsl(0, 0%, 27%);
+    display: inline-block;
+    font-size: 46px;
+    transition: all 0.2s ease 0s;
+}
+.sub-page:hover i{
+    bottom:5px;
+}
+.sub-page .sub-page-content h3{
+    font-size:14px;
+    text-transform: uppercase;
+    font-weight:600;hsl(0, 0%, 60%)
+}
+.sub-page .sub-page-content p{
+    color:hsl(0, 0%, 60%);
+}
+.sub-page .sub-page-content .line{
+    background:#000;
+    height: 2px;
+    margin: 22px auto;
+    opacity: 0.2;
+    width: 40px;
+}
+@media screen and (max-width: 990px){
+    .sub-page{
+        margin-bottom: 20px;
+    }
+}
+
+/*      css for sub page */
+
 .paginate {
     margin-top:10px !important;
 }

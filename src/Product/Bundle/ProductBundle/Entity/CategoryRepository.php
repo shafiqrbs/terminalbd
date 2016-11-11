@@ -540,10 +540,10 @@ class CategoryRepository extends MaterializedPathRepository
             ->setParameter('parent', $arr)
             ->getQuery();
 
-
         $categories = $this->childrenHierarchy($query->getArrayResult());
         $this->buildFlatCategoryTree($categories , $array);
 
         return $array == null ? array() : $array;
+
     }
 }

@@ -27,6 +27,12 @@ class PaymentCard
     protected $sales;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="paymentCard" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $serviceSales;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
@@ -100,11 +106,19 @@ class PaymentCard
     }
 
     /**
-     * @return mixed
+     * @return Sales
      */
     public function getSales()
     {
         return $this->sales;
+    }
+
+    /**
+     * @return ServiceSales
+     */
+    public function getServiceSales()
+    {
+        return $this->serviceSales;
     }
 }
 

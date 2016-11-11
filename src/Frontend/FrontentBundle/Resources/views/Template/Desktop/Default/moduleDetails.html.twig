@@ -1,6 +1,7 @@
 {% extends ':frontend/template:base.html.twig' %}
 {% block body %}
     <div class="clearfix"></div>
+
     <section id="breadcrumb">
         <div class="container">
             <div class="row">
@@ -8,10 +9,9 @@
                     <div class="crumb">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i><a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':moduleName|lower }) }}"> {{ moduleName }}</a><i>/</i>{{ details.name }}</div>
                 </div>
             </div>
-
         </div>
     </section>
-    <div class="container blog singlepost">
+    <div class="container blog">
         <div class="row">
             <article class="col-md-8">
                 {% if ( moduleName == 'News') %}
@@ -54,7 +54,7 @@
                 </div>
                 <!-- Recent Posts -->
                 <div class="blog-sidebar">
-                    <h4 class="sidebar-title"><i class="fa fa-align-left"></i> Recent News</h4>
+                    {#<h4 class="sidebar-title"><i class="fa fa-align-left"></i> Recent News</h4>
                     <hr style="margin-bottom: 5px;">
                     {% for news in globalOption.newses|slice(0,5)  %}
                         <div class="media">
@@ -66,7 +66,7 @@
                                 {{ news.content|raw|truncate(100) }}
                             </div>
                         </div>
-                    {% endfor %}
+                    {% endfor %}#}
                 </div>
 
             </aside>
@@ -74,4 +74,6 @@
     </div>
 {% endblock %}
 
-
+{% block documentready %}
+    {{ parent() }}
+{% endblock %}

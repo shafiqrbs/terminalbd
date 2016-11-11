@@ -2,9 +2,12 @@
 
 namespace Core\UserBundle\Entity;
 
+use Appstore\Bundle\DomainUserBundle\Entity\Branch;
+use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
+use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
@@ -188,6 +191,12 @@ class User extends BaseUser
 
     protected $userInbox;
 
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", mappedBy="branchManager"  , cascade={"persist", "remove"})
+     */
+    protected $branches;
+
     /* ----------------------------------inventory------------------*/
 
 
@@ -257,6 +266,19 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="approvedBy" , cascade={"persist", "remove"} )
      */
     protected $damageApprovedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\BranchInvoice", mappedBy="createdBy" , cascade={"persist", "remove"} )
+     */
+    protected $branchInvoice;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\BranchInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"} )
+     */
+    protected $branchInvoiceApprovedBy;
+
+
 
 
 
@@ -434,9 +456,24 @@ class User extends BaseUser
     private  $preOrderApproved;
 
 
+    /**
+     *  =========================================== Service Sales System============================================
+     */
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="createdBy"  )
+     **/
+    private  $serviceSales;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="assignTo"  )
+     **/
+    private  $serviceSalesBy;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="approvedBy"  )
+     **/
+    private  $serviceApprovedBy;
 
 
 
@@ -943,6 +980,54 @@ class User extends BaseUser
     public function setDomainOwner($domainOwner)
     {
         $this->domainOwner = $domainOwner;
+    }
+
+    /**
+     * @return ServiceSales
+     */
+    public function getServiceSales()
+    {
+        return $this->serviceSales;
+    }
+
+    /**
+     * @return ServiceSales
+     */
+    public function getServiceSalesBy()
+    {
+        return $this->serviceSalesBy;
+    }
+
+    /**
+     * @return ServiceSales
+     */
+    public function getServiceApprovedBy()
+    {
+        return $this->serviceApprovedBy;
+    }
+
+    /**
+     * @return Branches
+     */
+    public function getBranches()
+    {
+        return $this->branches;
+    }
+
+    /**
+     * @return BranchInvoice
+     */
+    public function getBranchInvoice()
+    {
+        return $this->branchInvoice;
+    }
+
+    /**
+     * @return BranchInvoice
+     */
+    public function getBranchInvoiceApprovedBy()
+    {
+        return $this->branchInvoiceApprovedBy;
     }
 
 

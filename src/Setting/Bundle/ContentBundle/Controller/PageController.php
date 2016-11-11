@@ -65,6 +65,7 @@ class PageController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(12));
             $entity ->upload();
             $em->persist($entity);
             $em->flush();

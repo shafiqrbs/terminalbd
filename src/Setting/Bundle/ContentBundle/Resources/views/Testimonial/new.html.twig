@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Form Components
+                    Testimonial Components
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -17,7 +17,7 @@
                         <a href="{{ path('testimonial') }}">Testimonial</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Testimonial Form Components</a></li>
+                    <li><a href="#">Testimonial Components</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -87,7 +87,7 @@
                                         <label class="control-label" >Organization  <span class="required">*</span></label>
                                         <div class="controls">
                                             <div class="input-icon left">
-                                                <i class="icon-font"></i>
+                                                <i class="icon-building"></i>
                                                 {{ form_widget(form.organization) }}
                                                 {{ form_errors(form.organization) }}
                                             </div>
@@ -95,12 +95,21 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <!--/row-->
-
                             <div class="row-fluid">
                                 <div class="span8">
+                                    <div class="control-group">
+                                        <label class="control-label" >Website</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-link"></i>
+                                                {{ form_widget(form.website) }}
+                                                {{ form_errors(form.website) }}
+                                                <p>i.e www.terminalbd.com,www.google.com</p>
+                                                </div>
+                                        </div>
+                                    </div>
                                     <div class="control-group">
                                         <label class="control-label" >Content</label>
                                         <div class="controls">
@@ -112,12 +121,11 @@
                                 <div class="span4">
                                     <div class="control-group">
                                         <label class="control-label" >Feature image</label>
-
                                         <div class="controls">
                                             <div data-provides="fileupload" class="fileupload fileupload-new">
                                                 <div class="fileupload-new thumbnail">
                                                     {% if(entity.webPath is not empty) %}
-                                                        <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="{{ image(entity.webPath).resize(100,100) }}">
+                                                        <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="{{ image(entity.webPath).resize(200,200) }}">
                                                     {% else %}
                                                         <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
                                                     {% endif %}

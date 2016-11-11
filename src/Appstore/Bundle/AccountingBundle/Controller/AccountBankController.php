@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -16,60 +18,47 @@ use Symfony\Component\HttpFoundation\Response;
 class AccountBankController extends Controller
 {
 
-    public function paginate($entities)
-    {
-
-        $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $entities,
-            $this->get('request')->query->get('page', 1)/*page number*/,
-            25  /*limit per page*/
-        );
-        return $pagination;
-    }
-
 
     /**
-     * Lists all AccountBank entities.
-     *
+     * @Secure(roles="ROLE_DOMAIN")
      */
+
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('AccountingBundle:AccountBank')->findWithSearch($globalOption,$data);
-        $pagination = $this->paginate($entities);
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountBank')->entityOverview($globalOption,$data);
-        $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(1));
         return $this->render('AccountingBundle:AccountBank:index.html.twig', array(
-            'entities' => $pagination,
+            'entities' => $entities,
             'searchForm' => $data,
-            'accountHead' => $accountHead,
-            'overview' => $overview,
+           // 'overview' => $overview,
         ));
     }
+
     /**
      * Creates a new AccountBank entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN")
      */
+
     public function createAction(Request $request)
     {
         $entity = new AccountBank();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $toIncrease = $entity->getAccountHead()->getToIncrease();
 
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
-            $entity->setToIncrease($toIncrease);
+            $name = $entity->getBank()->getName().','.$entity->getBranch();
+            $entity->setName($name);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('account_bank'));
+            return $this->redirect($this->generateUrl('appsetting_bank'));
         }
 
         return $this->render('AccountingBundle:AccountBank:new.html.twig', array(
@@ -89,10 +78,10 @@ class AccountBankController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new AccountBankType($globalOption), $entity, array(
-            'action' => $this->generateUrl('account_bank_create'),
+            'action' => $this->generateUrl('appsetting_bank_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form purchase',
+                'class' => 'horizontal-form',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -101,43 +90,45 @@ class AccountBankController extends Controller
 
     /**
      * Displays a form to create a new AccountBank entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN")
      */
+
     public function newAction()
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new AccountBank();
         $form   = $this->createCreateForm($entity);
-        $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
         return $this->render('AccountingBundle:AccountBank:new.html.twig', array(
             'entity' => $entity,
-            'banks' => $banks,
             'form'   => $form->createView(),
         ));
     }
 
     /**
      * Finds and displays a AccountBank entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN")
      */
+
     public function showAction($id)
     {
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('AccountingBundle:AccountBank')->find($id);
-       if (!$entity) {
+        if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountBank entity.');
         }
-
         return $this->render('AccountingBundle:AccountBank:show.html.twig', array(
             'entity'      => $entity,
         ));
+
     }
 
     /**
      * Displays a form to edit an existing AccountBank entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN")
      */
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -149,11 +140,12 @@ class AccountBankController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        return $this->render('AccountingBundle:AccountBank:edit.html.twig', array(
+        return $this->render('AccountingBundle:AccountBank:new.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
         ));
     }
+
 
     /**
     * Creates a form to edit a AccountBank entity.
@@ -166,7 +158,7 @@ class AccountBankController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new AccountBankType($globalOption), $entity, array(
-            'action' => $this->generateUrl('account_bank_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('appsetting_bank_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form purchase',
@@ -175,10 +167,14 @@ class AccountBankController extends Controller
         ));
         return $form;
     }
+
+
     /**
      * Edits an existing AccountBank entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN")
      */
+
+
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -193,54 +189,23 @@ class AccountBankController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $name = $entity->getBank()->getName().','.$entity->getBranch();
+            $entity->setName($name);
             $em->flush();
-
-            return $this->redirect($this->generateUrl('account_bank_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('appsetting_bank_edit', array('id' => $id)));
         }
 
-        return $this->render('AccountingBundle:AccountBank:edit.html.twig', array(
+        return $this->render('AccountingBundle:AccountBank:new.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
         ));
     }
 
-
-    /**
-     * Displays a form to edit an existing Expenditure entity.
-     *
-     */
-    public function inlineUpdateAction(Request $request)
-    {
-        $data = $request->request->all();
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('AccountingBundle:AccountBank')->find($data['pk']);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
-        }
-        $entity->setAmount($data['value']);
-        $em->flush();
-        exit;
-    }
-
-    public function approveAction(AccountBank $entity)
-    {
-        if (!empty($entity)) {
-            $em = $this->getDoctrine()->getManager();
-            $entity->setProcess('approved');
-            $entity->setApprovedBy($this->getUser());
-            $em->flush();
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountBankTransaction($entity);
-            return new Response('success');
-        } else {
-            return new Response('failed');
-        }
-        exit;
-    }
-
     /**
      * Deletes a Expenditure entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN")
      */
+
     public function deleteAction(AccountBank $entity)
     {
         $em = $this->getDoctrine()->getManager();

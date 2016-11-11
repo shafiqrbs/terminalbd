@@ -35,6 +35,7 @@ class PurchaseVendorItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="purchaseVendorItems" )
+     * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $purchase;
 
@@ -44,12 +45,19 @@ class PurchaseVendorItem
     private  $purchaseItems;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSalesItem", mappedBy="purchaseVendorItem" , cascade={"remove"} )
+     **/
+    private  $serviceSalesItems;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="purchaseVendorItem" , cascade={"remove"} )
+     * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $goodsItems;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="purchaseVendorItem" )
+     * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $orderItems;
 
@@ -222,11 +230,12 @@ class PurchaseVendorItem
     private $subTotalWebPrice;
 
     /**
-     * @var string
+     * @var array()
      *
-     * @ORM\Column(name="ageGroup", type="string", length=255 , nullable = true)
+     * @ORM\Column(name="ageGroup", type="array", nullable = true)
      */
     private $ageGroup;
+
 
     /**
      * @var string
@@ -283,6 +292,12 @@ class PurchaseVendorItem
     public function getId()
     {
         return $this->id;
+    }
+
+    public function removeGoodsItems($group)
+    {
+        //optionally add a check here to see that $group exists before removing it.
+        return $this->goodsItems->removeElement($group);
     }
 
     /**
@@ -508,22 +523,6 @@ class PurchaseVendorItem
     public function setMasterItem($masterItem)
     {
         $this->masterItem = $masterItem;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAgeGroup()
-    {
-        return $this->ageGroup;
-    }
-
-    /**
-     * @param string $ageGroup
-     */
-    public function setAgeGroup($ageGroup)
-    {
-        $this->ageGroup = $ageGroup;
     }
 
     /**
@@ -1028,6 +1027,30 @@ class PurchaseVendorItem
     public function setMasterQuantity($masterQuantity)
     {
         $this->masterQuantity = $masterQuantity;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAgeGroup()
+    {
+        return $this->ageGroup;
+    }
+
+    /**
+     * @param array $ageGroup
+     */
+    public function setAgeGroup($ageGroup)
+    {
+        $this->ageGroup = $ageGroup;
+    }
+
+    /**
+     * @return ServiceSalesItem
+     */
+    public function getServiceSalesItems()
+    {
+        return $this->serviceSalesItems;
     }
 
 

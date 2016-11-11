@@ -83,9 +83,6 @@ class BarcodeController extends Controller
     public function printAction()
     {
 
-        //$data = $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->find(2);
-        //Debug::dump($data);
-
         $barCoder = $this->get('session')->get('barcodeQ');
         return $this->render('InventoryBundle:Barcode:print.html.twig', array(
             'barCoder'      => $barCoder

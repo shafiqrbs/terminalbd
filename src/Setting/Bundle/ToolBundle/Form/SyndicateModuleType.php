@@ -46,13 +46,13 @@ class SyndicateModuleType extends AbstractType
                 'multiple'      =>true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\Syndicate',
                 'property' => 'name',
-                'attr'=>array('class'=>''),
+                'attr'=>array('class'=>'span4 check-list'),
                 'query_builder' => function(EntityRepository $er){
                         return $er->createQueryBuilder('s')
                             ->andWhere("s.status = 1")
-                            ->andWhere("s.level = 1")
+                            ->andWhere("s.level = 2")
                             ->orderBy('s.name','ASC');
-                    },
+                },
             ))
             ->add('isHome')
             ->add('status')

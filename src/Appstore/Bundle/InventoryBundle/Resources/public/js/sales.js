@@ -1,4 +1,3 @@
-
 /**
  * Created by rbs on 2/9/16.
  */
@@ -9,7 +8,7 @@ var InventorySales = function(sales) {
     $(document).on('change', '#barcode', function() {
         var barcode = $('#barcode').val();
         if(barcode == ''){
-            $('#wrongBarcode').html('Using wrong barcode, please try again correct barcode.');
+            $('#wrongBarcode').html('<strong>Error!: </strong>Invalid barcode, Please try again.');
             return false;
         }
         $.ajax({
@@ -200,9 +199,9 @@ var InventorySales = function(sales) {
 
 
         if(payment > 0 && total > 0  ){
-            $("#paymentBtn").attr("disabled", false);
+            $(".paymentBtn").attr("disabled", false);
         }else{
-            $("#paymentBtn").attr("disabled", true);
+            $(".paymentBtn").attr("disabled", true);
         }
 
     })

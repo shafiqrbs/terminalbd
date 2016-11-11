@@ -138,33 +138,7 @@
                                 </dl>
                             </div>
                             <hr>
-                            <div class="">
-                                <h4>{{ details.name }}</h4>
-                                <dl>
-                                    <dd><i class="fa fa-home"></i>&nbsp;{{ details.address|raw }}</dd>
-                                    <dd><i class="fa fa-user"></i>&nbsp;<strong>{{ details.contactPerson }}</strong>, {{ details.designation }}</dd>
-                                    <dd><i class="fa fa-mobile"></i>&nbsp;<a href="tel:+ 088 {{ details.mobile|raw }}" class="contact-call">+ 088 {{ details.mobile|raw }}</a></dd>
-                                    {% if(details.phone) %}<dd><i class="fa fa-phone-square"></i></i>&nbsp;<a href="javascript:" class="contact-call">+ {{ details.phone|raw }}</a></dd>{% endif %}
-                                    {% if(details.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ details.fax|raw }}</a></dd>{% endif %}
-                                    {% if(details.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ details.email|raw }}</dd>{% endif %}
 
-                                    <dt><a href="#" class="but_download"><i class="fa fa-map-marker"></i> Direction</a></dt>
-                                </dl>
-                            </div>
-                            <hr>
-                            <div class="">
-                                <h4>{{ details.name }}</h4>
-                                <dl>
-                                    <dd><i class="fa fa-home"></i>&nbsp;{{ details.address|raw }}</dd>
-                                    <dd><i class="fa fa-user"></i>&nbsp;<strong>{{ details.contactPerson }}</strong>, {{ details.designation }}</dd>
-                                    <dd><i class="fa fa-mobile"></i>&nbsp;<a href="tel:+ 088 {{ details.mobile|raw }}" class="contact-call">+ 088 {{ details.mobile|raw }}</a></dd>
-                                    {% if(details.phone) %}<dd><i class="fa fa-phone-square"></i></i>&nbsp;<a href="javascript:" class="contact-call">+ {{ details.phone|raw }}</a></dd>{% endif %}
-                                    {% if(details.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ details.fax|raw }}</a></dd>{% endif %}
-                                    {% if(details.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ details.email|raw }}</dd>{% endif %}
-                                    <dt><a href="#" class="but_download"><i class="fa fa-map-marker"></i> Direction</a></dt>
-                                </dl>
-                            </div>
-                            <hr>
                         {% endfor %}
                     </div>
                 </aside>

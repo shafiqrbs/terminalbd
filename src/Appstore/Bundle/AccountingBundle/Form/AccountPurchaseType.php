@@ -83,12 +83,14 @@ class AccountPurchaseType extends AbstractType
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.globalOption =".$this->inventoryConfig->getGlobalOption()->getId())
                         ->orderBy("b.name", "ASC");
                 },
             ))
-            ->add('accountBkash', 'entity', array(
+            ->add('accountMobileBank', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBkash',
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'empty_value' => '---Choose a mobile banking---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),

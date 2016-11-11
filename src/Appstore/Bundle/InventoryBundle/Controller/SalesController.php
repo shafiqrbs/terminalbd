@@ -41,11 +41,13 @@ class SalesController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig'=>$inventory),array('updated'=>'desc'));
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory,$data);
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:Sales:index.html.twig', array(
             'entities' => $pagination,
+            'searchForm' => $data,
         ));
     }
 
@@ -158,18 +160,10 @@ class SalesController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findAll();
-        $banks = $em->getRepository('AccountingBundle:AccountBank')->findBy(array('globalOption'=>$this->getUser()->getGlobalOption(),'status'=>1),array('name'=>'asc'));
-        $bkashs = $em->getRepository('AccountingBundle:AccountBkash')->findBy(array('globalOption'=>$this->getUser()->getGlobalOption(),'status'=>1),array('name'=>'asc'));
-        $paymentCards = $em->getRepository('SettingToolBundle:PaymentCard')->findAll();
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
-        $salesUsers = $this->getUser()->getGlobalOption()->getUsers();
         return $this->render('InventoryBundle:Sales:new.html.twig', array(
             'entity'      => $entity,
-            'salesUsers'      => $salesUsers,
-            'banks'      => $banks,
-            'bkashs'      => $bkashs,
             'transactionMethods'      => $transactionMethods,
-            'paymentCards'      => $paymentCards,
             'todaySales'      => $todaySales,
             'todaySalesOverview'      => $todaySalesOverview,
             'form'   => $editForm->createView(),
@@ -208,71 +202,42 @@ class SalesController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
         }
+
         $editForm = $this->createEditForm($entity);
-        $data = $request->request->all();
+        $editForm->handleRequest($request);
+        if ($editForm->isValid()) {
 
-        if ($data['paymentAmount'] > 0 ) {
+            $data = $request->request->all();
+            if ($data['paymentAmount'] > 0) {
 
+                if (!empty($data['sales']['mobile'])) {
+                    $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity, $data['sales']['mobile']);
+                    $entity->setCustomer($customer);
+                } else {
+                    $globalOption = $this->getUser()->getGlobalOption();
+                    $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
+                    $entity->setCustomer($customer);
+                }
+                $entity->setSubTotal($data['paymentSubTotal']);
+                $entity->setVat($data['vat']);
+                $entity->setDue($data['dueAmount']);
+                $entity->setDiscount($data['discount']);
+                $entity->setTotal($data['paymentTotal']);
+                $entity->setPayment($data['paymentTotal'] - $data['dueAmount']);
+                if ($data['paymentTotal'] <= $data['paymentAmount']) {
+                    $entity->setPaymentStatus('Paid');
+                } else if ($data['paymentTotal'] > $data['paymentAmount']) {
+                    $entity->setPaymentStatus('Due');
+                }
+                $entity->setApprovedBy($this->getUser());
+                $em->flush();
 
-            if(!empty($data['sales']['mobile'])){
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity,$data['sales']['mobile']);
-                $entity->setCustomer($customer);
-            }else{
-                $globalOption = $this->getUser()->getGlobalOption();
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$globalOption,'name'=>'Defult'));
-                $entity->setCustomer($customer);
+                $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
+                $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+                $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
+                $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+                return $this->redirect($this->generateUrl('inventory_sales_new'));
             }
-            if(!empty($data['salesBy'])){
-
-                $salesBy = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('id' => $data['salesBy']));
-                $entity->setSalesBy($salesBy);
-            }
-            $transactionMethod = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find($data['sales']['transactionMethod']);
-            $entity->setTransactionMethod($transactionMethod);
-            if($entity->getTransactionMethod()->getId() == 2 ){
-
-                $bank = $this->getDoctrine()->getRepository('AccountingBundle:AccountBank')->find($data['bank']);
-                if($bank){
-                    $entity->setAccountBank($bank);
-                }
-                $paymentCard = $this->getDoctrine()->getRepository('SettingToolBundle:PaymentCard')->find($data['paymentCard']);
-                if($paymentCard){
-                    $entity->setPaymentCard($paymentCard);
-                }
-
-            }else if($entity->getTransactionMethod()->getId() == 3 ){
-
-                $bank = $this->getDoctrine()->getRepository('AccountingBundle:AccountBkash')->find($data['bKash']);
-                if($bank){
-                    $entity->setAccountBkash($bank);
-                }
-                if($data['bkashMobile']){
-                    $entity->setBkashMobile($data['bkashMobile']);
-                }
-                if($data['bkashTransactionId']){
-                    $entity->setBkashTransactionId($data['bkashTransactionId']);
-                }
-            }
-            $entity->setSubTotal($data['paymentSubTotal']);
-            $entity->setVat($data['vat']);
-            $entity->setDue($data['dueAmount']);
-            $entity->setDiscount($data['discount']);
-            $entity->setTotal($data['paymentTotal']);
-            $entity->setPayment($data['paymentTotal']-$data['dueAmount']);
-            if($data['paymentTotal'] <= $data['paymentAmount'] ){
-                $entity->setPaymentStatus('Paid');
-            }else if($data['paymentTotal'] > $data['paymentAmount'] ){
-                $entity->setPaymentStatus('Due');
-            }
-            $entity->setApprovedBy($this->getUser());
-            $em->persist($entity);
-            $em->flush();
-
-            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
-            $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
-            $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity,$accountSales);
-            return $this->redirect($this->generateUrl('inventory_sales_new'));
         }
 
         return $this->render('InventoryBundle:Sales:edit.html.twig', array(
@@ -413,12 +378,25 @@ EOD;
 
     public function invoicePrintAction(Sales $entity)
     {
+
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
         }
         return $this->render('InventoryBundle:Sales:invoice.html.twig', array(
             'entity'      => $entity,
         ));
+    }
+
+    public function deleteEmptyInvoiceAction()
+    {
+        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('paymentStatus' => 'Pending'));
+        $em = $this->getDoctrine()->getManager();
+        foreach ($entities as $entity){
+            $em->remove($entity);
+            $em->flush();
+        }
+        return $this->redirect($this->generateUrl('inventory_sales'));
     }
 
 }

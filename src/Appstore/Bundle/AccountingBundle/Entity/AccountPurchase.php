@@ -54,9 +54,9 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         private  $accountBank;
 
         /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="accountPurchases" )
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="accountPurchases" )
          **/
-        private  $accountBkash;
+        private  $accountMobileBank;
 
         /**
          * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="accountPurchases" )
@@ -570,22 +570,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 
         /**
-         * @return mixed
-         */
-        public function getAccountBkash()
-        {
-            return $this->accountBkash;
-        }
-
-        /**
-         * @param mixed $accountBkash
-         */
-        public function setAccountBkash($accountBkash)
-        {
-            $this->accountBkash = $accountBkash;
-        }
-
-        /**
          * @return string
          */
         public function getRemark()
@@ -607,6 +591,22 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function getAccountCash()
         {
             return $this->accountCash;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getAccountMobileBank()
+        {
+            return $this->accountMobileBank;
+        }
+
+        /**
+         * @param mixed $accountMobileBank
+         */
+        public function setAccountMobileBank($accountMobileBank)
+        {
+            $this->accountMobileBank = $accountMobileBank;
         }
 
     }

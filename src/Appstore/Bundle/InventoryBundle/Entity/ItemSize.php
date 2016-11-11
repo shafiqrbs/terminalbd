@@ -24,7 +24,7 @@ class ItemSize  implements CodeAwareEntity
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="items" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="size" )
      **/
     private  $inventoryConfig;
 

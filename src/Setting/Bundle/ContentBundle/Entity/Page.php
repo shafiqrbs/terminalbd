@@ -262,7 +262,6 @@ class Page
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Module", inversedBy="pages")
      **/
-
     protected $module;
 
     /**
@@ -275,6 +274,16 @@ class Page
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\PageModule", mappedBy="page" )
      **/
     protected $pageModules;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SidebarWidget", mappedBy="page" )
+     **/
+    protected $sidebarWidgets;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeSlider", mappedBy="page" )
+     **/
+    protected $homeSliders;
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", inversedBy="pages")
@@ -1083,6 +1092,14 @@ class Page
     public function setFax($fax)
     {
         $this->fax = $fax;
+    }
+
+    /**
+     * @return HomeSlider
+     */
+    public function getHomeSliders()
+    {
+        return $this->homeSliders;
     }
 
 

@@ -39,10 +39,10 @@ class TeamType extends AbstractType
 
                 )
             ))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 phone','placeholder'=>'Enter mobile no')))
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Enter mobile no')))
             ->add('facebook','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter facebook ID')))
             ->add('twitter','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter twitter ID')))
-            ->add('gmail','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter gmail ID')))
+            ->add('gmail','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter email address')))
             ->add('youtube','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter youtube subscribe ID')))
             ->add('file','file', array('attr'=>array('class'=>'default')))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap','rows'=>10)))

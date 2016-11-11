@@ -102,7 +102,7 @@ class InventoryConfigController extends Controller
             'action' => $this->generateUrl('inventoryconfig_create'),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'form-horizontal',
+                'class' => 'horizontal-form',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -140,9 +140,6 @@ class InventoryConfigController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find InventoryConfig entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('InventoryBundle:InventoryConfig:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
@@ -177,7 +174,7 @@ class InventoryConfigController extends Controller
             'action' => $this->generateUrl('inventoryconfig_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'form-horizontal',
+                'class' => 'horizontal-form',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -198,7 +195,6 @@ class InventoryConfigController extends Controller
             throw $this->createNotFoundException('Unable to find InventoryConfig entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
@@ -224,20 +220,5 @@ class InventoryConfigController extends Controller
         ));
     }
 
-    /**
-     * Creates a form to delete a InventoryConfig entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('inventoryconfig_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
-    }
+
 }

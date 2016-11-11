@@ -6,7 +6,7 @@
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
-                Form Components
+                Contact us
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -15,7 +15,7 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('page') }}">Contact page</a>
+                    <a href="{{ path('contactpage_modify') }}">Contact us</a>
                     <span class="icon-angle-right"></span>
                 </li>
                 <li><a href="#">Form Components</a></li>
@@ -214,55 +214,17 @@
                                 <div class="row-fluid">
                                     <div class="span6 ">
                                         <div class="control-group">
-                                            <label class="control-label" >Is Base Information</label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-                                                    {{ form_widget(form.isBaseInformation) }}
-                                                    {{ form_errors(form.isBaseInformation) }}
-                                                </div>
+                                            <label class="control-label" >Is Base Information&nbsp;  {{ form_widget(form.isBaseInformation) }}
+                                                {{ form_errors(form.isBaseInformation) }}</label>
 
-                                            </div>
                                         </div>
                                     </div>
                                     <!--/span-->
                                     <div class="span6 ">
                                         <div class="control-group">
-                                            <label class="control-label" >Is Branch</label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-                                                    {{ form_widget(form.isBranch) }}
-                                                    {{ form_errors(form.isBranch) }}
-                                                </div>
+                                            <label class="control-label" >Is Branch &nbsp; {{ form_widget(form.isBranch) }}
+                                                {{ form_errors(form.isBranch) }}</label>
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                </div>
-                                <!--/row-->
-                                <div class="row-fluid">
-                                    <div class="span6 ">
-                                        <div class="control-group">
-                                            <label class="control-label" >Is Contact Form</label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-                                                    {{ form_widget(form.isContactForm) }}
-                                                    {{ form_errors(form.isContactForm) }}
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                    <div class="span6 ">
-                                        <div class="control-group">
-                                            <label class="control-label" >Is map</label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-                                                    {{ form_widget(form.isMap) }}
-                                                    {{ form_errors(form.isMap) }}
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                     <!--/span-->
@@ -288,7 +250,7 @@
                                                 <div class="">
                                                     {{ form_widget(form.startHour) }}
                                                     {{ form_errors(form.startHour) }}
-                                                   {{ form_widget(form.endHour) }}
+                                                    {{ form_widget(form.endHour) }}
                                                     {{ form_errors(form.endHour) }}
                                                 </div>
                                             </div>
@@ -297,8 +259,58 @@
                                     </div>
                                     <!--/span-->
                                 </div>
-                                <!--/row-->
                                 <div class="row-fluid">
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Is Contact Form&nbsp; {{ form_widget(form.isContactForm) }}
+                                                {{ form_errors(form.isContactForm) }}</label>
+                                                            </div>
+                                    </div>
+                                    <!--/span-->
+                                    <div class="span6 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Is map &nbsp; {{ form_widget(form.isMap) }}
+                                                {{ form_errors(form.isMap) }}</label>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                    <!--/row-->
+                                    <div class="row-fluid">
+                                        <div class="span6 ">
+                                            <div class="control-group">
+                                                <label class="control-label" >Latitude</label>
+                                                <div class="controls">
+                                                    <div class="input-icon left">
+                                                        <i class="icon-map-marker"></i>
+                                                        {{ form_widget(form.latitude) }}
+                                                        {{ form_errors(form.latitude) }}
+                                                        <p class="help-block">Google latitude & longitude <a target="_blank" href="http://www.latlong.net/">Click here</a></p>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                        <div class="span6 ">
+                                            <div class="control-group">
+                                                <label class="control-label" >Longitude</label>
+                                                <div class="controls">
+                                                    <div class="input-icon left">
+                                                        <i class="icon-map-marker"></i>
+                                                        {{ form_widget(form.longitude) }}
+                                                        {{ form_errors(form.longitude) }}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--/span-->
+                                    </div>
+                                </div>
+                                <!--/row-->
+
+                                <!--/row-->
+                                {#<div class="row-fluid">
                                     <div class="span12 ">
                                         <div class="control-group">
                                             <label class="control-label" >Content</label>
@@ -321,7 +333,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>#}
                                 <div class="form-actions portlet box grey">
                                     <div class="pull-center">
                                         <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>

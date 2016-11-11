@@ -32,23 +32,20 @@ class HomeSliderType extends AbstractType
                 )
             ))
             ->add('file','file', array('attr'=>array('class'=>'default')))
-            ->add('content','textarea', array('attr'=>array('class'=>'span12 wysihtml5 m-wrap','rows'=>10)))
+            ->add('text','textarea', array('attr'=>array('class'=>'span12 m-wrap')))
             ->add('page', 'entity', array(
                 'required'    => false,
                 'class' => 'Setting\Bundle\ContentBundle\Entity\Page',
                 'empty_value' => '---Select Target Page---',
                 'property' => 'name',
-                'attr'=>array('class'=>'selectbox'),
+                'attr'=>array('class'=>'select2 span12 '),
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                         return $er->createQueryBuilder('p')
                             ->where("p.status = 1")
                             ->andWhere("p.user = $this->user ")
                             ->orderBy('p.name','ASC');
                     },
-            ))
-            ->add('status')
-
-        ;
+            ));
     }
     
     /**

@@ -23,7 +23,7 @@ class ItemBrand  implements CodeAwareEntity
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="items" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="brand" )
      **/
     private  $inventoryConfig;
 

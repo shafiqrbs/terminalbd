@@ -99,6 +99,10 @@ input[class*="span"].m-wrap {
     margin: 0!important;
 }
 
+.search-form .search-input{
+    height: 34px !important;
+    min-height: 34px!important;
+}
 
 .search-portlet.box{
     margin-bottom: 0!important;
@@ -107,8 +111,9 @@ input[class*="span"].m-wrap {
     border-top: 1px solid #555555!important;
 }
 
+
 .select2-container .select2-choice {
-    height: 30px!important;
+    height: 34px!important;
 }
 
 #message {

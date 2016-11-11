@@ -78,7 +78,7 @@ class PurchaseVendorItemDetailsType extends AbstractType
             ))
 
             ->add('ageGroup', 'choice', array(
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span6 select2'),
                 'choices' => array(
                     'Kids' => 'Kids',
                     'Adult' => 'Adult'

@@ -102,8 +102,8 @@ class SyndicateModule
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\Syndicate", inversedBy="syndicateModules")
      * @ORM\OrderBy({"name" = "ASC"})
      **/
-
     private $syndicates;
+
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SiteSetting", mappedBy="syndicateModules")
@@ -131,6 +131,9 @@ class SyndicateModule
 
     private $invoiceModuleItems;
 
+    public function __construct(){
+        $this->syndicates = new ArrayCollection();
+    }
 
    /**
      * Get id
@@ -189,11 +192,15 @@ class SyndicateModule
     }
 
     /**
-     * @param Syndicate $syndicates
+     * @param Syndicate $syndicate
      */
-    public function setSyndicates($syndicates)
+    public function addSyndicate($syndicate)
     {
-        $this->syndicates = $syndicates;
+        if(!$this->syndicates->contains($syndicate)){
+            $this->syndicates->add($syndicate);
+        }
+
+        $syndicate->addSyndicateModules($this);
     }
 
     /**

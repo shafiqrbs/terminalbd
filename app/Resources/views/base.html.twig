@@ -189,6 +189,8 @@
 {#'http://bp.yahooapis.com/2.4.21/browserplus-min.js'#}
 <script type="text/javascript">
     jQuery(document).ready(function () {
+
+
         {% block documentready %}
             App.init();
             //FormValidation.init();
@@ -225,6 +227,25 @@
         });
         $('.current_ancestor').addClass('active');
 
+        $('.mobileBankHide').hide();
+        $('.bankHide').hide();
+        $(document).on('change', '.transactionMethod', function() {
+
+            var transactionMethod = $(this).val();
+            if(transactionMethod == 2 ){
+                $('.bankHide').show();
+                $('.mobileBankHide').hide();
+            }else if(transactionMethod == 3 ){
+                $('.bankHide').hide();
+                $('.mobileBankHide').show();
+            }else{
+                $('.bankHide').hide();
+                $('.mobileBankHide').hide();
+            }
+
+        });
+
+
         {% endblock %}
     });
 </script>
@@ -236,7 +257,7 @@
 {% block footer %}
     <div class="footer">
         <div class="footer-inner">
-            {{ "now"|date("Y") }} &copy; Created By Umar IT Limited.
+            {{ "now"|date("Y") }} &copy; Created By UMAR IT Limited.
         </div>
         <div class="footer-tools">
         <span class="go-top">

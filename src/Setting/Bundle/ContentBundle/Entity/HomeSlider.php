@@ -86,6 +86,12 @@ class HomeSlider
     protected $globalOption;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", inversedBy="homeSliders")
+     **/
+
+    protected $page;
+
+    /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="homeSliders" )
      **/
@@ -324,5 +330,21 @@ class HomeSlider
     public function setUpdated($updated)
     {
         $this->updated = $updated;
+    }
+
+    /**
+     * @return Page
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * @param Page $page
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
     }
 }

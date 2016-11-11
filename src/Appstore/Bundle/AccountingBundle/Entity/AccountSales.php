@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\DomainUserBundle\Entity\Branches;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -24,11 +26,6 @@ class AccountSales
      */
     private $id;
 
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="accountSales" )
-     **/
-    private  $inventoryConfig;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="accountSales")
@@ -67,6 +64,11 @@ class AccountSales
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="accountSales" )
      **/
     private  $sales;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="accountSales" )
+     **/
+    private  $branches;
 
     /**
      * @Gedmo\Blameable(on="create")
@@ -232,23 +234,7 @@ class AccountSales
     }
 
     /**
-     * @return mixed
-     */
-    public function getInventoryConfig()
-    {
-        return $this->inventoryConfig;
-    }
-
-    /**
-     * @param mixed $inventoryConfig
-     */
-    public function setInventoryConfig($inventoryConfig)
-    {
-        $this->inventoryConfig = $inventoryConfig;
-    }
-
-    /**
-     * @return mixed
+     * @return User
      */
     public function getCreatedBy()
     {
@@ -256,7 +242,7 @@ class AccountSales
     }
 
     /**
-     * @param mixed $createdBy
+     * @param User $createdBy
      */
     public function setCreatedBy($createdBy)
     {
@@ -519,6 +505,22 @@ class AccountSales
     public function setRemark($remark)
     {
         $this->remark = $remark;
+    }
+
+    /**
+     * @return Branches
+     */
+    public function getBranches()
+    {
+        return $this->branches;
+    }
+
+    /**
+     * @param Branches $branches
+     */
+    public function setBranches($branches)
+    {
+        $this->branches = $branches;
     }
 }
 

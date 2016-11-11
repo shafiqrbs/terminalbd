@@ -23,7 +23,7 @@ class DomainSignType extends AbstractType
     {
         $builder
             ->add('roles', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12 select2'),
+                'attr'=>array('class'=>'m-wrap span12 check-list'),
                 'required'=>true,
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))

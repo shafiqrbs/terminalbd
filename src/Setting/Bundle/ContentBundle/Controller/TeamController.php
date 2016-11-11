@@ -59,7 +59,7 @@ class TeamController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setUser($user);
             $entity->setGlobalOption($user->getGlobalOption());
-            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(14));
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(13));
             $entity->upload();
             $em->persist($entity);
             $em->flush();

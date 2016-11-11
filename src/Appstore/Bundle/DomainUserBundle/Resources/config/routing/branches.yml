@@ -1,0 +1,32 @@
+domain_branches:
+    path:     /
+    defaults: { _controller: "DomainUserBundle:Branches:index" }
+
+domain_branches_show:
+    path:     /{id}/show
+    defaults: { _controller: "DomainUserBundle:Branches:show" }
+
+domain_branches_new:
+    path:     /new
+    defaults: { _controller: "DomainUserBundle:Branches:new" }
+
+domain_branches_create:
+    path:     /create
+    defaults: { _controller: "DomainUserBundle:Branches:create" }
+    methods:  POST
+
+domain_branches_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "DomainUserBundle:Branches:edit" }
+
+domain_branches_update:
+    path:     /{id}/update
+    defaults: { _controller: "DomainUserBundle:Branches:update" }
+    methods:  [POST, PUT]
+
+domain_branches_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "DomainUserBundle:Branches:delete" }
+
+
+

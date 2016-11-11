@@ -36,9 +36,12 @@ class TemplateWidgetController extends Controller
 
         $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
         $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
+        $siteEntity = $globalOption->getSiteSetting();
+        $themeName = $siteEntity->getTheme()->getFolderName();
 
-        return $this->render('@Frontend/Template/Desktop/menu.html.twig', array(
+        return $this->render('@Frontend/Template/Desktop/'.$themeName.'/header.html.twig', array(
             'menuTree'           => $menuTree,
+            'globalOption'           => $globalOption,
 
         ));
     }
@@ -119,11 +122,10 @@ class TemplateWidgetController extends Controller
 
     public function aboutusAction(GlobalOption $globalOption,$wordlimit)
     {
-        echo $slug = $globalOption->getSlug().'-about-us';
-        exit;
-        $about                     = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption' => $globalOption,'slug' => $slug));
+
+        $about                     = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption,'slug' => 'about-us'));
         return $this->render('@Frontend/Widget/aboutus.html.twig', array(
-            'about'           => $about,
+            'about'           => $about->getPage(),
             'wordlimit'           => $wordlimit,
         ));
     }

@@ -218,7 +218,7 @@ class GoodsItem
     }
 
     /**
-     * @return mixed
+     * @return Color
      */
     public function getColors()
     {
@@ -226,7 +226,7 @@ class GoodsItem
     }
 
     /**
-     * @param mixed $colors
+     * @param Color $colors
      */
     public function setColors($colors)
     {

@@ -67,7 +67,7 @@ class HomePageController extends Controller
             'entity'      => $entity,
             'menus'      => $menus,
             'globalOption' => $this->getUser()->getGlobalOption(),
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
             'pageFeature' => $pageArr
         ));
     }
@@ -169,7 +169,7 @@ class HomePageController extends Controller
 
         return $this->render('SettingContentBundle:HomePage:edit.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView()
+            'form'   => $editForm->createView()
 
         ));
     }

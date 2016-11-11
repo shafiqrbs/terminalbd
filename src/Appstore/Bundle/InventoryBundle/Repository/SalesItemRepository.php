@@ -142,6 +142,8 @@ class SalesItemRepository extends EntityRepository
         $qb->select('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
         $qb->where("sales.inventoryConfig = :inventoryConfig");
         $qb->setParameter('inventoryConfig', $globalOption->getInventoryConfig());
+        $qb->andWhere("sales.paymentStatus != :paymentStatus");
+        $qb->setParameter('paymentStatus', 'Pending');
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getSingleResult();
         return $data = $result['totalPurchaseAmount'] ;

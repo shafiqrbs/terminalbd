@@ -27,12 +27,6 @@ class AccountBkash
      */
     private $id;
 
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="accountBkash")
-     **/
-    protected $globalOption;
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="accountBkash"  )
      **/
@@ -44,19 +38,10 @@ class AccountBkash
     private  $accountCashes;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="accountBkash"  )
-     **/
-    private  $accountPurchases;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="accountBkash"  )
      **/
     private  $accountSales;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="accountBkash"  )
-     **/
-    private  $sales;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PaymentSalary", mappedBy="accountBkash"  )
@@ -83,6 +68,27 @@ class AccountBkash
      **/
     private  $preOrders;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountOwner", type="string", length=255, nullable=true)
+     */
+    private $accountOwner;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="authorised", type="string", length=255, nullable=true)
+     */
+    private $authorised;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="serviceName", type="string", length=255, nullable=true)
+     */
+    private $serviceName;
 
 
     /**
@@ -91,6 +97,13 @@ class AccountBkash
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobile", type="string", length=255, nullable=true)
+     */
+    private $mobile;
 
 
     /**
@@ -271,12 +284,69 @@ class AccountBkash
         return $this->preOrders;
     }
 
+
     /**
-     * @return Sales
+     * @return string
      */
-    public function getSales()
+    public function getAccountOwner()
     {
-        return $this->sales;
+        return $this->accountOwner;
+    }
+
+    /**
+     * @param string $accountOwner
+     */
+    public function setAccountOwner($accountOwner)
+    {
+        $this->accountOwner = $accountOwner;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAuthorised()
+    {
+        return $this->authorised;
+    }
+
+    /**
+     * @param string $authorised
+     */
+    public function setAuthorised($authorised)
+    {
+        $this->authorised = $authorised;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceName()
+    {
+        return $this->serviceName;
+    }
+
+    /**
+     * @param string $serviceName
+     */
+    public function setServiceName($serviceName)
+    {
+        $this->serviceName = $serviceName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobile()
+    {
+        return $this->mobile;
+    }
+
+    /**
+     * @param string $mobile
+     */
+    public function setMobile($mobile)
+    {
+        $this->mobile = $mobile;
     }
 
 

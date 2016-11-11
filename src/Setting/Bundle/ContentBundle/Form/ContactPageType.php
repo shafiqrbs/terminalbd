@@ -19,14 +19,14 @@ class ContactPageType extends AbstractType
         $builder
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter contact title')
             ))
-            ->add('content','textarea', array('attr'=>array('class'=>'span12 wysihtml5 m-wrap','rows'=>10)))
-            ->add('googleMap','textarea', array('attr'=>array('class'=>'span12 m-wrap','rows'=>10)))
             ->add('address1','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
 
                 )
             ))
+            ->add('latitude','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter latitude')))
+            ->add('longitude','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter longitude')))
             ->add('address2','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address 2')))
             ->add('postalCode','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter postal code')))
             ->add('fax','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter fax no')))

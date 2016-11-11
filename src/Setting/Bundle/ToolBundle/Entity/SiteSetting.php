@@ -209,7 +209,7 @@ class SiteSetting
     }
 
     /**
-     * @param mixed $modules
+     * @param Module $modules
      */
     public function setModules($modules)
     {
@@ -217,7 +217,7 @@ class SiteSetting
     }
 
     /**
-     * @return mixed
+     * @return Module
      */
     public function getModules()
     {

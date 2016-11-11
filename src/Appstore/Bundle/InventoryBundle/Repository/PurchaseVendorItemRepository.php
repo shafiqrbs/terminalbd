@@ -159,6 +159,67 @@ class PurchaseVendorItemRepository extends EntityRepository
 
     }
 
+    public function findItemWithSearch($inventory,$data,$limit=0)
+    {
+
+        $qb = $this->createQueryBuilder('item');
+        $qb->join("item.masterItem",'masterItem' );
+        $qb->where("item.source = 'service'");
+        $qb->andWhere("item.isWeb = 1");
+        $qb->andWhere("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $this->handleSearchBetween($qb,$data);
+        if(!empty($order)){
+
+            if($order == "ASC"){
+                $qb->orderBy('item.salesPrice','ASC');
+            }else{
+                $qb->orderBy('item.salesPrice','DESC');
+            }
+
+        }else{
+
+            $qb->orderBy('item.updated','DESC');
+        }
+        $qb->getQuery();
+        return  $qb;
+
+    }
+
+    public function salesItemWithSearch($inventory)
+    {
+
+        $qb = $this->createQueryBuilder('item');
+        $qb->join("item.masterItem",'masterItem' );
+        $qb->where("item.source = 'service'");
+        $qb->andWhere("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->groupBy('item.masterItem');
+        $qb->orderBy('item.name','ASC');
+        $qb->getQuery()->getResult();
+        return  $qb;
+
+    }
+
+    public function handleSearchBetween($qb,$data){
+
+        $name = isset($data['name'])? $data['name'] :'';
+        $cat = isset($data['category'])? $data['category'] :'';
+        $brand = isset($data['brand'])? $data['brand'] :'';
+
+        if (!empty($cat)) {
+            $qb->andWhere("masterItem.category = :category");
+            $qb->setParameter('category', $cat);
+        }
+        if (!empty($brand)) {
+            $qb->andWhere("item.brand = :brand");
+            $qb->setParameter('brand', $brand);
+        }
+        if (!empty($name)) {
+            $qb->andWhere($qb->expr()->like("item.name", "'$name%'"  ));
+        }
+    }
+
     public function getPurchaseVendorQuantitySum($purchase)
     {
         $qb = $this->_em->createQueryBuilder();

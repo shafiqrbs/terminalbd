@@ -24,10 +24,12 @@
         font-weight: bold!important;
         text-transform: uppercase;
     }
+    {% if globalOption.templateCustomize.webPath('bgImage') %}
     .details-grid{
         background: url("{{ image(globalOption.templateCustomize.webPath('bgImage')).resize() }}")!important;
         background-position: center center;
     }
+    {% endif %}
     .footer-bg{
         background-color: {{ globalOption.templateCustomize.headerBgColor }}!important;
     }

@@ -28,22 +28,119 @@
             </a>
         </div>
     </header>
+        <style>
+            .section-divide{
+                margin-top:20px ;
+            }
+            .block{
+                background: hsl(0, 0%, 100%) none repeat scroll 0 0;
+                border: 1px solid hsl(0, 0%, 82%);
+                box-shadow: 5px 5px 0 hsla(0, 0%, 0%, 0.07);
+                padding: 20px;
+            }
+            .block .block-icon{
+                float: left;
+            }
+            .block .block-content h3{
+                margin: 11px 0 30px 67px;
+                color: #000;
+                font-size: 16px;
+                font-weight: 600;
+            }
+            .block .block-content p{
+                font-size: 13px;
+                line-height: 22px;
+                margin: 0;
+            }
+            .block .block-icon i{
+                background: #e74c3c;
+                box-shadow: 5px 5px 0 hsla(0, 0%, 0%, 0.1);
+                color: hsl(0, 0%, 100%);
+                font-size: 26px;
+                font-weight: 600;
+                height: 50px;
+                line-height: 50px;
+                text-align: center;
+                width: 50px;
+                transition:all 0.2s ease-in-out;
+            }
+            .block:hover .block-icon i{
+                background: hsl(208, 17%, 20%) none repeat scroll 0 0;
+                border-radius: 50%;
+                transform: translate(0px, 3px);
+                transition:all 0.5s ease-in-out;
+            }
+            @media only screen and (max-width: 990px){
+                .block{
+                    margin-bottom: 20px;
+                }
+            }
+            .home-feature{
+                font-size: 18px;
+                background: #2a2a2a;
+                padding: 10px;
+                color: #FFD700;
+            }
+
+            .header-double-line-right {
+                overflow: hidden;
+            }
+            .header-double-line-right h1, .header-double-line-right h2, .header-double-line-right h3, .header-double-line-right h4, .header-double-line-right h5, .header-double-line-right h6 {
+                position: relative;
+                display: inline-block;
+                text-transform: uppercase;
+                margin: 0 0 15px 0;
+            }
+
+            .header-double-line-right h1:after, .header-double-line-right h2:after, .header-double-line-right h3:after, .header-double-line-right h4:after, .header-double-line-right h5:after, .header-double-line-right h6:after {
+                border-bottom: 1px solid #FFD700;
+                border-top: 1px solid rgba(0, 0, 0, 0.1);
+                height: 6px;
+                position: absolute;
+                content: "";
+                top: 50%;
+                margin-top: -3px;
+                left: 105%;
+                width: 9999em;
+            }
+
+        </style>
     {% else %}
        <div style="margin-top:130px" ></div>
     {% endif %}
+    {% if homeEntity.homeBlocks is not empty %}
+
+        <section class="section-divide" id="">
+            <hr>
+            <div class="container">
+                <div class="row">
+                    {% set length =  homeEntity.homeBlocks|length %}
+                    {% for block in homeEntity.homeBlocks|slice(0,4) %}
+                        <div class=" col-md-{% if length == 3 %}4{% else %}3{% endif %}">
+                            <div class="block js-equal-height">
+                                <div class="block-icon">
+                                    <i class="fa {{ block.icon.className }}"></i>
+                                </div>
+                                <div class="block-content">
+                                    <h3>{{ block.name }}</h3>
+                                    <p>{{ block.content|raw }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
     {% if homeEntity.content is not empty %}
-        <section id="dashboard">
+        <section class="section-divide" id="dashboard">
             <div class="container">
                 <div class="row">
                     <div class="col-md-offset-1 col-md-10">
                         <div class="text-center">
-                            {% if homeEntity.name is not empty %}<h2>{{ homeEntity.name }}</h2>{% endif %}
-                            <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="short" />
                             <div class="row">
                                 <div class="col-md-12">
-                                    <p>
-                                        {{ homeEntity.content|raw }}
-                                    </p>
+                                    <p class="home-feature">{{ homeEntity.content|raw }}</p>
                                 </div>
                             </div>
                         </div>
@@ -52,26 +149,28 @@
             </div>
         </section>
     {% endif %}
-    {#<section id="about">
+    <section class="section-divide">
         <div class="container">
-            <div class="text-center"><h2>About us</h2></div>
-            <img class="img-responsive displayed" src="{{ asset('assets/template/desktop/patros/images/short.png') }}" alt="short" />
+            <div class="header-double-line-right">
+                <h3>About Us</h3>
+            </div>
             <div class="row">
                 <div class="row">
                     {% render controller("FrontendBundle:TemplateWidget:aboutus",{'globalOption':globalOption.id,'wordlimit':400}) %}
                 </div>
             </div>
         </div>
-    </section>#}
+    </section>
     <!-- Page Content -->
     {% for mod in  homeEntity.pageModules %}
-        {% render controller("FrontendBundle:TemplateWidget:moduleBaseContent",{'globalOption':globalOption.id,'pageModule':mod.id}) %}
+            {% if globalOption.siteSetting.modules.contains(mod.module) %}
+                {% render controller("FrontendBundle:TemplateWidget:moduleBaseContent",{'globalOption':globalOption.id,'pageModule':mod.id}) %}
+            {% endif %}
 
   {#      {% include 'FrontendBundle:Template/Desktop/Widget:'~ mod.module.moduleClass ~'.html.twig' with {'module':mod.module , 'title' : mod.name ,'limit': 5,'cloumn': 2 } %}
 #}
     {% endfor %}
-
-    <section id="contact" style="margin-top:40px">
+    <section class="section-divide" id="contact">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -172,6 +271,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    commonJs();
 {% endblock %}
 
 

@@ -2,9 +2,12 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
+use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -35,8 +38,14 @@ class Purchase
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="purchase" , cascade={"remove"})
      * @ORM\OrderBy({"id" = "DESC"})
      **/
-
     private  $purchaseVendorItems;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn", mappedBy="purchase" , cascade={"remove"})
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $purchaseReturns;
+
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="purchase" )
@@ -67,6 +76,24 @@ class Purchase
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $purchaseItems;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="purchase" )
+     **/
+    private  $transactionMethod;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="purchases" )
+     **/
+    private  $accountBank;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="purchases" )
+     **/
+    private  $accountMobileBank;
+
+
+
 
     /**
      * @var string
@@ -264,30 +291,6 @@ class Purchase
     public function getInvoice()
     {
         return $this->invoice;
-    }
-
-    /**
-     * Set challan
-     *
-     * @param string $challan
-     *
-     * @return Purchase
-     */
-    public function setChallan($challan)
-    {
-        $this->challan = $challan;
-
-        return $this;
-    }
-
-    /**
-     * Get challan
-     *
-     * @return string
-     */
-    public function getChallan()
-    {
-        return $this->challan;
     }
 
     /**
@@ -729,7 +732,7 @@ class Purchase
     }
 
     /**
-     * @return mixed
+     * @return PurchaseVendorItem
      */
     public function getPurchaseVendorItems()
     {
@@ -737,7 +740,7 @@ class Purchase
     }
 
     /**
-     * @param mixed $purchaseVendorItems
+     * @param PurchaseVendorItem $purchaseVendorItems
      */
     public function setPurchaseVendorItems($purchaseVendorItems)
     {
@@ -826,6 +829,62 @@ class Purchase
     public function getAccountPurchase()
     {
         return $this->accountPurchase;
+    }
+
+    /**
+     * @return TransactionMethod
+     */
+    public function getTransactionMethod()
+    {
+        return $this->transactionMethod;
+    }
+
+    /**
+     * @param TransactionMethod $transactionMethod
+     */
+    public function setTransactionMethod($transactionMethod)
+    {
+        $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
+     * @return AccountBank
+     */
+    public function getAccountBank()
+    {
+        return $this->accountBank;
+    }
+
+    /**
+     * @param AccountBank $accountBank
+     */
+    public function setAccountBank($accountBank)
+    {
+        $this->accountBank = $accountBank;
+    }
+
+    /**
+     * @return AccountMobileBank
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param AccountMobileBank $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
+    }
+
+    /**
+     * @return PurchaseReturn
+     */
+    public function getPurchaseReturns()
+    {
+        return $this->purchaseReturns;
     }
 
 }

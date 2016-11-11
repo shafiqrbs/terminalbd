@@ -1,6 +1,18 @@
+app_setting_bank:
+    resource: "@InventoryBundle/Resources/config/routing/appsetting/bankaccount.yml"
+    prefix:   /appsetting/bank-account
+
+app_setting_mobile:
+    resource: "@InventoryBundle/Resources/config/routing/appsetting/mobileaccount.yml"
+    prefix:   /appsetting/mobile-account
+
 inventory_excelimproter:
     resource: "@InventoryBundle/Resources/config/routing/excelimporter.yml"
     prefix:   /inventory/excelimproter
+
+inventory_branch_invoice:
+    resource: "@InventoryBundle/Resources/config/routing/branchinvoice.yml"
+    prefix:   /inventory/branch-invoice
 
 inventory_salesimport:
     resource: "@InventoryBundle/Resources/config/routing/salesimport.yml"
@@ -9,6 +21,14 @@ inventory_salesimport:
 inventory_food_product:
     resource: "@InventoryBundle/Resources/config/routing/foodproduct.yml"
     prefix:   /food/product
+
+inventory_service_item:
+    resource: "@InventoryBundle/Resources/config/routing/serviceitem.yml"
+    prefix:   /service/item
+
+inventory_service_sales:
+    resource: "@InventoryBundle/Resources/config/routing/servicesales.yml"
+    prefix:   /service/sales
 
 inventory_goods:
     resource: "@InventoryBundle/Resources/config/routing/goods.yml"

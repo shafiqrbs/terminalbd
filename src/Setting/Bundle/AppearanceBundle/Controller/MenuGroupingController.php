@@ -39,7 +39,7 @@ class MenuGroupingController extends Controller
     public function createAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
+        $globalOption = $this->getUser()->getGlobalOption();
 
         $posts = $request->request->all();
 
@@ -51,7 +51,7 @@ class MenuGroupingController extends Controller
 
             $menuGroup = $request->request->get('menuGroup');
 
-            $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->insertMenuGrouping($posts,$user,$menuGroup);
+            $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->insertMenuGrouping($posts,$globalOption,$menuGroup);
             return $this->redirect($this->generateUrl('menugrouping_sorting', array('menuGroup' => $menuGroup )));
         }
 

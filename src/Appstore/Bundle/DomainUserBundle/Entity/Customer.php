@@ -40,6 +40,12 @@ class Customer
      **/
     private  $accountSalesReturn;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="customer" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $serviceSales;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerInbox", mappedBy="customer")
@@ -119,6 +125,22 @@ class Customer
      * @ORM\Column(name="dob", type="datetime", nullable =true)
      */
     private $dob;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ageGroup", type="string", nullable = true)
+     */
+    private $ageGroup;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=255 , nullable = true)
+     */
+    private $gender;
+
 
     /**
      * @var boolean
@@ -389,6 +411,46 @@ class Customer
     public function getAccountSalesReturn()
     {
         return $this->accountSalesReturn;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getServiceSales()
+    {
+        return $this->serviceSales;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAgeGroup()
+    {
+        return $this->ageGroup;
+    }
+
+    /**
+     * @param string $ageGroup
+     */
+    public function setAgeGroup($ageGroup)
+    {
+        $this->ageGroup = $ageGroup;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param string $gender
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
     }
 
 }

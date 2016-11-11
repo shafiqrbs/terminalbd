@@ -42,6 +42,7 @@
                                     <ul class="dropdown-menu pull-right">
                                         <li><a href="{{ path('inventory_sales_new') }}"><i class="icon-plus-sign"></i>&nbsp;POS</a></li>
                                         <li><a href="{{ path('inventory_sales') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                        <li><a href="{{ path('inventory_sales_empty_delete') }}"><i class="icon-th-list"></i>&nbsp;Delete Empty Invoice</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -50,6 +51,34 @@
                         <div class="portlet-body">
                             <div class="portlet-body flip-scroll">
                                 {% include('flash-message.html.twig')  %}
+                                <div class="portlet search-portlet box grey">
+                                    <form class="search-form" action="" method="get" name="itemSearch">
+                                        <div class="row-fluid">
+                                            <div class="span2">
+                                                <input type="text" id="startDate" name="startDate"  class="span12 search-input date-picker " value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Enter start date{% endif %} ">
+                                            </div>
+                                            <div class="span2">
+                                                <input type="text" id="endDate" name="endDate"  class="span12 search-input date-picker " value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}Enter end date{% endif %} ">
+                                            </div>
+                                            <div class="span3">
+                                                <input type="text" id="toUser" name="toUser"  class="span12 select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="select user">
+                                            </div>
+                                            <div class="span2">
+                                                <input type="text" id="amount" name="amount"  class="span12 search-input  " value="{% if searchForm.amount is defined %}{{ searchForm.amount }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.amount is defined %}{{ searchForm.amount }}{% else %}Enter amount{% endif %} ">
+                                            </div>
+                                            <div class="span3">
+                                                <div class="controls">
+                                                    <div class="input-append span9">
+                                                        <input type="text" id="invoice" name="invoice"  class="span12 search-input" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Enter invoice no{% endif %} ">
+                                                        <div class="btn-group">
+                                                            <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                                 <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                     <thead class="flip-content ">
@@ -90,7 +119,7 @@
                                                     <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                                 {% endif %}
                                                 {% if entity.paymentStatus == "Due" %}
-                                                    <a href="{{ path('inventory_sales_due', { 'code': entity.invoice }) }}" class="btn mini blue" ><i class="icon-money"></i></a>
+                                                    <a href="{{ path('account_sales_new') }}" class="btn mini blue" ><i class="icon-money"></i></a>
                                                 {% endif %}
                                             </td>
                                         </tr>
@@ -147,6 +176,13 @@
         </div>
     </div>
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@InventoryBundle/Resources/public/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
 {% block documentready %}
     {{ parent() }}
     $('#sales').on("click", ".delete", function() {

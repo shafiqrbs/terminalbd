@@ -64,6 +64,11 @@ class Item
      */
     protected $salesItems;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\BranchInvoiceItem", mappedBy="item")
+     */
+    protected $branchInvoiceItems;
+
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="item")
      */
@@ -1119,6 +1124,14 @@ class Item
     public function getDamages()
     {
         return $this->damages;
+    }
+
+    /**
+     * @return BranchInvoiceItem
+     */
+    public function getBranchInvoiceItems()
+    {
+        return $this->branchInvoiceItems;
     }
 
 

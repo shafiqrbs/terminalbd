@@ -152,21 +152,17 @@ class TransactionRepository extends EntityRepository
     }
 
 
-    public function purchaseTransaction($purchase,$accountPurchase,$source='')
+    public function purchaseTransaction(Purchase $purchase,$accountPurchase,$source='')
     {
-
         $this->insertInventoryAsset($purchase,$accountPurchase);
         $this->insertPurchaseCash($purchase,$accountPurchase);
         $this->insertPurchaseAccountPayable($purchase,$accountPurchase);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
-
     }
 
     private function insertInventoryAsset($purchase,$accountPurchase)
     {
 
-
-        $amount = ( $purchase->getPaymentAmount() + $purchase->getDueAmount());
+        $amount = $purchase->getTotalAmount();
         $transaction = new Transaction();
         $transaction->setGlobalOption($purchase->getInventoryConfig()->getGlobalOption());
         $transaction->setProcessHead('Purchase');
@@ -285,7 +281,7 @@ class TransactionRepository extends EntityRepository
 
         $this->insertPurchaseReturn($entity,$accountPurchaseReturn);
         $this->insertPurchaseReturnAccountReceivable($entity,$accountPurchaseReturn);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertAccountPurchaseReturnCash($accountPurchaseReturn);
+
 
     }
 
@@ -326,14 +322,10 @@ class TransactionRepository extends EntityRepository
 
     public function salesTransaction($entity,$accountSales)
     {
-
         $this->insertSalesItem($entity,$accountSales);
         $this->insertSalesCash($entity,$accountSales);
         $this->insertSalesAccountReceivable($entity,$accountSales);
         $this->insertSalesVatAccountPayable($entity,$accountSales);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
-
-
     }
 
     private function insertSalesItem($entity,AccountSales $accountSales)

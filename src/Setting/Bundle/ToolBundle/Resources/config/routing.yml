@@ -2,6 +2,10 @@ setting_tool_invoicemodule:
     resource: "@SettingToolBundle/Resources/config/routing/invoicemodule.yml"
     prefix:   /domain/invoicemodule
 
+setting_tool_sidebar:
+    resource: "@SettingToolBundle/Resources/config/routing/sidebar.yml"
+    prefix:   /domain/invoicemodule
+
 setting_tool_invoicesmsemail:
     resource: "@SettingToolBundle/Resources/config/routing/invoicesmsemail.yml"
     prefix:   /domain/invoicesmsemail

@@ -49,6 +49,21 @@ class InventoryConfig
      */
     protected $items;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $brand;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $color;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $size;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
@@ -75,6 +90,16 @@ class InventoryConfig
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
      */
     protected $sales;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\BranchInvoice", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $branchInvoices;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $serviceSales;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesImport", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
@@ -113,10 +138,6 @@ class InventoryConfig
      **/
     private  $accountPurchase;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="inventoryConfig", cascade={"persist", "remove"} )
-     **/
-    private  $accountSales;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
@@ -151,11 +172,25 @@ class InventoryConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="isBranch", type="boolean",  nullable=true)
+     */
+    private $isBranch = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isBranchInvoice", type="boolean",  nullable=true)
+     */
+    private $isBranchInvoice = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="vatEnable", type="boolean",  nullable=true)
      */
     private $vatEnable = false;
 
-/**
+    /**
      * @var boolean
      *
      * @ORM\Column(name="isItem", type="boolean",  nullable=true)
@@ -337,21 +372,6 @@ class InventoryConfig
         return $this->accountPurchase;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getAccountSales()
-    {
-        return $this->accountSales;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPettyCash()
-    {
-        return $this->pettyCash;
-    }
 
     /**
      * @return boolean
@@ -491,11 +511,51 @@ class InventoryConfig
     }
 
     /**
-     * @return mixed
+     * @return PurchaseVendorItem
      */
     public function getPurchaseVendorItems()
     {
         return $this->purchaseVendorItems;
+    }
+
+    /**
+     * @return ServiceSales
+     */
+    public function getServiceSales()
+    {
+        return $this->serviceSales;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsBranchInvoice()
+    {
+        return $this->isBranchInvoice;
+    }
+
+    /**
+     * @param boolean $isBranchInvoice
+     */
+    public function setIsBranchInvoice($isBranchInvoice)
+    {
+        $this->isBranchInvoice = $isBranchInvoice;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsBranch()
+    {
+        return $this->isBranch;
+    }
+
+    /**
+     * @param boolean $isBranch
+     */
+    public function setIsBranch($isBranch)
+    {
+        $this->isBranch = $isBranch;
     }
 
 

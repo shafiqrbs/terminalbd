@@ -254,8 +254,10 @@ class PurchaseReturnController extends Controller
 
             $total = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseReturn')->updatePurchaseReturnTotalPrice($purchaseReturn);
             $purchaseReturnItems = $em->getRepository('InventoryBundle:PurchaseReturnItem')->getPurchaseReturnItems($purchaseReturn);
+            return new Response(json_encode(array('message' => $message, 'total'=> $total , 'purchaseReturnItem' => $purchaseReturnItems)));
+        }else{
+            return new Response(json_encode(array('message' => 'failed')));
         }
-        return new Response(json_encode(array('message' => $message, 'total'=> $total , 'purchaseReturnItem' => $purchaseReturnItems)));
         exit;
     }
 
@@ -282,50 +284,26 @@ class PurchaseReturnController extends Controller
     public function approveAction(Request $request,PurchaseReturn $purchaseReturn)
     {
 
+        $em = $this->getDoctrine()->getManager();
         $adjustmentInvoice = $_REQUEST['adjustmentInvoice'];
-        $em = $this->getDoctrine()->getManager();
-        $purchaseReturn->setAdjustmentInvoice($adjustmentInvoice);
-        $purchaseReturn->setProcess('approved');
-        $em->persist($purchaseReturn);
-        $em->flush();
-        $em->getRepository('InventoryBundle:Item')->getItemPurchaseReturn($purchaseReturn);
-        $em->getRepository('InventoryBundle:StockItem')->insertPurchaseReturnStockItem($purchaseReturn);
-        $accountPurchaseReturn = $em->getRepository('AccountingBundle:AccountPurchaseReturn')->insertAccountPurchaseReturn($purchaseReturn);
-        $em->getRepository('AccountingBundle:Transaction')->purchaseReturnTransaction($purchaseReturn,$accountPurchaseReturn);
-        return new Response(json_encode(array('success'=>'success')));
-
-    }
-
-    public function replaceAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $itemId = $request->request->get('itemId');
-        $curQuantity = $request->request->get('quantity');
-
-        $item = $em->getRepository('InventoryBundle:PurchaseReturnItem')->find($itemId);
-        $quantity = $item->getQuantity();
-        if( $quantity > 0 && $quantity >=  $curQuantity ){
-
-            $replaceQuantity = $item->getReplaceQuantity();
-            $item->setReplaceQuantity($replaceQuantity+$curQuantity);
-            $price = $item->getPrice();
-            $item->setReplaceSubTotal($item->getReplaceQuantity() * $price);
-            $em->persist($item);
+        $purchase = $em->getRepository('InventoryBundle:Purchase')->findOneBy(array('grn'=>$adjustmentInvoice));
+        if(!empty($purchase))
+        {
+            $purchaseReturn->setPurchase($purchase);
+            $purchaseReturn->setProcess('approved');
+            $em->persist($purchaseReturn);
             $em->flush();
-            $this->getDoctrine()->getRepository('InventoryBundle:PurchaseReturn')->updatePurchaseReturnTotalPrice($item->getPurchaseReturn());
-
-            $em->getRepository('InventoryBundle:Item')->getItemPurchaseReplace($item);
-            $em->getRepository('InventoryBundle:StockItem')->insertPurchaseReturnReplaceStockItem($item->getPurchaseReturn(),$item,$curQuantity);
-
-            $em->getRepository('AccountingBundle:Transaction')->insertPurchaseReturnReplaceTransaction($item->getPurchaseReturn()->getInventoryConfig(),$item->getPurchaseReturn(),$item->getReplaceSubTotal(),'PurchaseReturnReplace');
-            $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchaseReplace($item->getPurchaseReturn(),$item->getReplaceSubTotal(),'PurchaseReturn');
-            return new Response(json_encode(array('success'=>'success')));
-
+            $em->getRepository('InventoryBundle:Item')->getItemPurchaseReturn($purchaseReturn);
+            $em->getRepository('InventoryBundle:StockItem')->insertPurchaseReturnStockItem($purchaseReturn);
+            $accountPurchaseReturn = $em->getRepository('AccountingBundle:AccountPurchaseReturn')->insertAccountPurchaseReturn($purchaseReturn);
+            $em->getRepository('AccountingBundle:Transaction')->purchaseReturnTransaction($purchaseReturn,$accountPurchaseReturn);
+            return new Response('success');
+        }else{
+            return new Response('failed');
         }
-            return new Response(json_encode(array('success'=>'failed')));
-
-        exit;
 
     }
+
+
 
 }

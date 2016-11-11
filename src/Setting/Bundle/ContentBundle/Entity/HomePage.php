@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ContentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -336,22 +337,6 @@ class HomePage
     }
 
     /**
-     * @return mixed
-     */
-    public function getHomeBlock()
-    {
-        return $this->homeBlock;
-    }
-
-    /**
-     * @param mixed $homeBlock
-     */
-    public function setHomeBlock($homeBlock)
-    {
-        $this->homeBlock = $homeBlock;
-    }
-
-    /**
      * @return int
      */
     public function getShowingListing()
@@ -368,7 +353,7 @@ class HomePage
     }
 
     /**
-     * @return mixed
+     * @return GlobalOption
      */
     public function getGlobalOption()
     {
@@ -376,7 +361,7 @@ class HomePage
     }
 
     /**
-     * @param mixed $globalOption
+     * @param GlobalOption $globalOption
      */
     public function setGlobalOption($globalOption)
     {
@@ -398,11 +383,24 @@ class HomePage
             $arrayModule[]= $module->getModule()->getModuleClass();
         }
         if(in_array($val,$arrayModule)){
-
             return true;
         }
 
     }
+
+    public function getCheckSettingModule($val ='')
+    {
+        $arrayModule =array();
+        foreach ($this->pageModules as $module){
+            $arrayModule[]= $module->getId();
+        }
+        if(in_array($val,$arrayModule)){
+            return $arrayModule;
+        }
+
+    }
+
+
 
 
 }

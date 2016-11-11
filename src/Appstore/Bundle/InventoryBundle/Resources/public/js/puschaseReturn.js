@@ -3,7 +3,7 @@ var InventoryPurchaseReturnPage = function(purchaseReturn) {
 
     $('input[name=barcode]').focus();
 
-    $('#purchase').on("click", ".delete", function () {
+    $('.purchase').on("click", ".delete", function () {
 
         var url = $(this).attr("rel");
         var id = $(this).attr("id");
@@ -11,10 +11,7 @@ var InventoryPurchaseReturnPage = function(purchaseReturn) {
             url: url,
             type: 'GET',
             success: function (response) {
-                obj = JSON.parse(response);
-                if ('success' == obj['success']) {
-                    $('#PurchaseRemove-' + id).hide();
-                }
+                location.reload();
             }
         })
     })
@@ -29,7 +26,12 @@ var InventoryPurchaseReturnPage = function(purchaseReturn) {
             data: 'adjustmentInvoice=' + adjustmentInvoice,
             type: 'GET',
             success: function (response) {
-                location.reload();
+                if(response == 'success'){
+                    location.reload();
+                }else{
+                    alert('Your adjustment GRN no not found');
+                }
+
             },
         })
     })
@@ -71,9 +73,14 @@ var InventoryPurchaseReturnPage = function(purchaseReturn) {
             success: function (response) {
                 $('#barcodeNo').focus().val('');
                 obj = JSON.parse(response);
-                $('.total').html(obj['total']);
-                $('#message').html(obj['message']);
-                $('#subItems').html(obj['purchaseReturnItem']);
+                if(obj['message'] == 'failed'){
+                    $('#message').html('This barcode is not found in this system');
+                }else{
+                    $('#message').html(obj['message']);
+                    $('.total').html(obj['total']);
+                    $('#subItems').html(obj['purchaseReturnItem']);
+                }
+
             },
 
         })

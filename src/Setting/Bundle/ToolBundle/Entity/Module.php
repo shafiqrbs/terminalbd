@@ -138,6 +138,20 @@ class Module
     private $pages;
 
     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SidebarWidget", mappedBy="module")
+     * @ORM\OrderBy({"name" = "DESC"})
+     **/
+
+    private $sidebarModule;
+
+     /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SidebarWidget", mappedBy="modules")
+     * @ORM\OrderBy({"name" = "DESC"})
+     **/
+
+    private $sidebarModules;
+
+    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="module")
      **/
 
@@ -449,6 +463,38 @@ class Module
     public function getPages()
     {
         return $this->pages;
+    }
+
+    /**
+     * @return SidebarWidget
+     */
+    public function getSidebarModule()
+    {
+        return $this->sidebarModule;
+    }
+
+    /**
+     * @param SidebarWidget $sidebarModule
+     */
+    public function setSidebarModule($sidebarModule)
+    {
+        $this->sidebarModule = $sidebarModule;
+    }
+
+    /**
+     * @return SidebarWidget
+     */
+    public function getSidebarModules()
+    {
+        return $this->sidebarModules;
+    }
+
+    /**
+     * @param SidebarWidget $sidebarModules
+     */
+    public function setSidebarModules($sidebarModules)
+    {
+        $this->sidebarModules = $sidebarModules;
     }
 
 

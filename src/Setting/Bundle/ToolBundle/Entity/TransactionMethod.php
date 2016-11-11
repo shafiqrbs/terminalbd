@@ -9,7 +9,9 @@ use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -35,6 +37,18 @@ class TransactionMethod
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="transactionMethod" , cascade={"persist", "remove"})
      */
     protected $sales;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", mappedBy="transactionMethod" , cascade={"persist", "remove"})
+     */
+    protected $purchase;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="transactionMethod" , cascade={"persist", "remove"} )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $serviceSales;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="transactionMethod" , cascade={"persist", "remove"})
@@ -294,6 +308,22 @@ class TransactionMethod
     public function getAccountPurchaseReturns()
     {
         return $this->accountPurchaseReturns;
+    }
+
+    /**
+     * @return ServiceSales
+     */
+    public function getServiceSales()
+    {
+        return $this->serviceSales;
+    }
+
+    /**
+     * @return Purchase
+     */
+    public function getPurchase()
+    {
+        return $this->purchase;
     }
 }
 

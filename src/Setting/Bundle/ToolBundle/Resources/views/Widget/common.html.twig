@@ -1,7 +1,7 @@
 <ul class="nav pull-right">
     <!-- BEGIN USER LOGIN DROPDOWN -->
 
-    <!-- BEGIN NOTIFICATION DROPDOWN -->
+   {# <!-- BEGIN NOTIFICATION DROPDOWN -->
     <li class="dropdown" id="header_notification_bar">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
             <i class="icon-phone"></i>
@@ -62,29 +62,30 @@
             </li>
         </ul>
     </li>
-    <!-- END INBOX DROPDOWN -->
+#}    <!-- END INBOX DROPDOWN -->
     <li class="" id="header_notification_bar">
         <a href="{{ path('globaloption_modify') }}" class=""><i class="icon-cogs"></i></a>
 
     </li>
     {% if(app.user and app.user.globaloption.webmail is not empty) %}
     <li class="" id="header_notification_bar">
-        <a href="{{ app.user.globaloption.webmail }}" target="_blank" class=""><i class="icon-envelope-alt"></i>Webmail</a>
+        <a href="{{ app.user.globaloption.webmail }}" target="_blank" class=""><i class="icon-envelope-alt"></i>&nbsp;Webmail</a>
     </li>
     {% endif %}
     <li class="dropdown user">
-        <a href="index.html#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+        <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
            data-close-others="true">
             {#{% image 'assets/img/avatar1.png'
             filter='' output='/img/avatar1.png' %}
-            <img src="{{ asset_url }}"/>
+            <img src="{{ asset('assets/admin/layout/img/avatar.png') }}"/>
             {% endimage %}#}
+            <img src="{{ asset('assets/img/avatar1.png') }}"/>
             <span class="username">{{ app.user }}</span>
             <i class="fa fa-angle-down"></i>
         </a>
         <ul class="dropdown-menu">
             <li><a href="{{ path('domain_edit_profile') }}"><i class="icon-user"></i> My Profile</a></li>
-            <li><a href="inbox.html"><i class="icon-envelope"></i> My Inbox <span class="badge badge-important">3</span></a></li>
+            <li><a href="javascript:"><i class="icon-envelope"></i> My Inbox <span class="badge badge-important">3</span></a></li>
             <li class="divider"></li>
             {#<li><a href="javascript:;" id="trigger_fullscreen"><i class="icon-move"></i> Full Screen</a></li>
             <li><a href="{{ path('user_lock') }}"><i class="icon-lock"></i> Lock Screen</a></li>

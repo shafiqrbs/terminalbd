@@ -62,7 +62,7 @@
                                 <div class="span4">
                                     <h4>About:</h4>
                                     <ul class="unstyled">
-                                        <li><strong>Adjustment GRN:</strong>&nbsp;{{ entity.adjustmentInvoice }}</li>
+                                        <li><strong>Adjustment GRN:</strong>&nbsp;{% if entity.purchase is not empty %}{{ entity.purchase.grn }}{% endif %}</li>
                                         <li><strong>Invoice:</strong>&nbsp;{{ entity.invoice }}</li>
                                         <li><strong>Created:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
                                         <li><strong>Created By:</strong>&nbsp;{% if entity.createdBy  is not empty %}{{ entity.createdBy.profile.name }}{% endif %}</li>
@@ -111,7 +111,7 @@
                                                 <th><i class="icon-cogs"></i></th>
                                             </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody class="purchase">
                                             {% for subList in entity.purchaseReturnItems %}
                                                 <tr id="subItem-{{ subList.id }}">
                                                     <td class="numeric" >{{ loop.index }}</td>
@@ -146,7 +146,7 @@
                                         {% if entity.total > 0  and entity.process != 'approved' %}
                                             <input name="adjustmentInvoice" id="adjustmentInvoice" placeholder="Enter your Adjustment invoice no" class="m-wrap numeric">&nbsp;&nbsp;<span  class="btn green approvePurchaseReturn" rel="{{ path('inventory_purchasereturn_approve', { 'id': entity.id }) }}" data-title="{{ entity.id }}"><i class="icon-ok"></i>&nbsp;Confirm</span>
                                         {% elseif entity.process == 'approved' and entity.total > 0  %}
-                                            <span  class="btn green"><i class="icon-ok"></i>&nbsp;Approved</span>
+                                            <span  class="btn purple"><i class="icon-ok"></i>&nbsp;Approved</span>
                                         {% else %}
                                             <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_purchasereturn_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red purchaseReturnDelete" ><i class="icon-trash"></i>&nbsp;Delete</a>
                                         {% endif %}

@@ -108,6 +108,8 @@ class GoodsItemRepository extends EntityRepository
 
     }
 
+
+
      public function insertSubProduct(PurchaseVendorItem $reEntity,$data)
     {
 
@@ -116,45 +118,39 @@ class GoodsItemRepository extends EntityRepository
 
         if($reEntity->getSubProduct() == 1 and isset($data['salesPrice']) ) {
 
-            if (isset($data['salesPrice'])) {
+            $colors = isset($data['colors']) ? $data['colors'] :'';
+            $sizeId = isset($data['size']) ? $data['size'] :'';
+            $quantity = isset($data['quantity']) ? $data['quantity'] :1;
+            $purchasePrice = isset($data['purchasePrice']) ? $data['purchasePrice'] :1;
+            $salesPrice = isset($data['salesPrice']) ? $data['salesPrice'] :1;
 
-                foreach ($data['salesPrice'] as $value) {
+            if (isset($data['salesPrice']) and !empty($data['salesPrice']) ) {
 
-                    $goodsItem = isset($data['goodsItem'][$i]) ? $data['goodsItem'][$i] : 0;
-                    $goods = $this->_em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem' => $reEntity, 'id' => $goodsItem));
-                    if (!empty($goods)) {
-                        $this->updateItemGoods($goods, $data['size'][$i],$data['color'][$i], $data['name'][$i],$data['quantity'][$i], $data['salesPrice'][$i], $data['purchasePrice'][$i]);
-                    } else {
-                        if (isset($data['salesPrice'][$i]) and !empty($data['salesPrice'][$i]) ) {
-
-                            $goods = new GoodsItem();
-                            $goods->setSalesPrice($data['salesPrice'][$i]);
-                            $goods->setPurchasePrice($data['purchasePrice'][$i]);
-                            $goods->setQuantity($data['quantity'][$i]);
-                            if(isset($data['color'][$i]) and !empty($data['color'][$i])){
-                                $colorId = $data['color'][$i];
-                                $color = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('inventoryConfig' => $reEntity->getInventoryConfig(),'id'=> $colorId));
-                                $goods->setColors(array($color));
-                            }
-                            if(isset($data['size'][$i]) and !empty($data['size'][$i])){
-                                $sizeId = $data['size'][$i];
-                                $size = $this->_em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('inventoryConfig' => $reEntity->getInventoryConfig(),'id'=> $sizeId));
-                                $goods->setSize($size);
-                            }else{
-                                $goods->setName($data['name'][$i]);
-                            }
-                            $goods->setPurchaseVendorItem($reEntity);
-                            $em->persist($goods);
-
-                        }
-
+                //$updateSubProduct = array('size' => ,'colors'=> $colors , 'quantity' => $quantity,'purchasePrice' => $purchasePrice,'salesPrice' => $salesPrice);
+                $goods = new GoodsItem();
+                $goods->setSalesPrice($salesPrice);
+                $goods->setPurchasePrice($purchasePrice);
+                $goods->setQuantity($quantity);
+                if(isset($colors) and !empty($colors)){
+                    $colorIds = explode(',',$colors);
+                    foreach ($colorIds as $color ){
+                        $colorObj[] = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('inventoryConfig' => $reEntity->getInventoryConfig(),'id'=> $color));
                     }
-
-                    $i++;
+                    $goods->setColors($colorObj);
                 }
+                if(isset($sizeId) and !empty($sizeId)){
+                    $size = $this->_em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('inventoryConfig' => $reEntity->getInventoryConfig(),'id'=> $sizeId));
+                    $goods->setSize($size);
+                }
+                $goods->setPurchaseVendorItem($reEntity);
+                $em->persist($goods);
                 $em->flush();
+
             }
+
+
         }
+
     }
 
     public function insertInventorySubProduct(PurchaseVendorItem $entity)
@@ -204,22 +200,56 @@ class GoodsItemRepository extends EntityRepository
 
     }
 
-    public function updateItemGoods(GoodsItem $goods,$size,$color,$name,$quantity,$salesPrice,$purchasePrice)
+    public function updateSubProduct(GoodsItem $goods,$data)
     {
         $em = $this->_em;
-        $goods->setSalesPrice($salesPrice);
-        $goods->setPurchasePrice($purchasePrice);
-        $goods->setQuantity($quantity);
-        if(isset($size) and !empty($size) ){
+        $colors         = isset($data['colors']) ? $data['colors'] :'';
+        $sizeId         = isset($data['size']) ? $data['size'] :'';
+        $quantity       = isset($data['quantity']) ? $data['quantity'] :1;
+        $purchasePrice  = isset($data['purchasePrice']) ? $data['purchasePrice'] :'';
+        $salesPrice     = isset($data['salesPrice']) ? $data['salesPrice'] :'';
+
+        if (isset($data['salesPrice']) and !empty($data['salesPrice']) ) {
+
+            $goods->setSalesPrice($salesPrice);
+            $goods->setPurchasePrice($purchasePrice);
+            $goods->setQuantity($quantity);
+            if(isset($colors) and !empty($colors)){
+
+                $colorIds = explode(',',$colors);
+                foreach ($colorIds as $color ){
+                    $colorObj[] = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('inventoryConfig' => $goods->getPurchaseVendorItem()->getInventoryConfig(),'id'=> $color));
+                }
+                $goods->setColors($colorObj);
+            }
+            if(isset($sizeId) and !empty($sizeId)){
+                $size = $this->_em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('inventoryConfig' => $goods->getPurchaseVendorItem()->getInventoryConfig(),'id'=> $sizeId));
+                $goods->setSize($size);
+            }
+            $em->flush();
+
+        }
+    }
+
+    public function updateItemGoods(GoodsItem $goods,$updateSubProduct)
+    {
+        $em = $this->_em;
+        $goods->setSalesPrice($updateSubProduct['salesPrice']);
+        $goods->setPurchasePrice($updateSubProduct['purchasePrice']);
+        $goods->setQuantity($updateSubProduct['quantity']);
+        if(isset($updateSubProduct['size']) and !empty($updateSubProduct['size']) ){
             $size = $this->_em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('inventoryConfig' => $goods->getPurchaseVendorItem()->getInventoryConfig(),'id'=> $size));
             $goods->setSize($size);
             $goods->setName(null);
         }else{
-            $goods->setName($name);
+            $goods->setName($updateSubProduct['name']);
         }
-        if(isset($color) and !empty($color)){
-            $color = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('inventoryConfig' => $goods->getPurchaseVendorItem()->getInventoryConfig(),'id'=> $color));
-            $goods->setColors(array($color));
+        if(isset($updateSubProduct['colors']) and !empty($updateSubProduct['colors'])) {
+            foreach ($updateSubProduct['colors'] as $color){
+                $colors[] = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('inventoryConfig' => $goods->getPurchaseVendorItem()->getInventoryConfig(), 'id' => $color));
+            }
+            $goods->setColors($colors);
+
         }
         $em->flush();
     }
@@ -247,5 +277,7 @@ class GoodsItemRepository extends EntityRepository
         return $discountPrice;
 
     }
+
+
 
 }

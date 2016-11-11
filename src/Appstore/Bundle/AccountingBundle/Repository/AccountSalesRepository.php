@@ -115,7 +115,7 @@ class AccountSalesRepository extends EntityRepository
         if($entity->getTransactionMethod()->getId() == 2 ){
             $accountSales->setAccountBank($entity->getAccountBank());
         }if($entity->getTransactionMethod() ->getId()== 3 ){
-            $accountSales->setAccountBkash($entity->getAccountBkash());
+            $accountSales->setAccountBkash($entity->getAccountMobileBank());
         }
 
         $accountSales->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
@@ -134,7 +134,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
         $em->flush();
-
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         return $accountSales;
 
     }

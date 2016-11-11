@@ -21,7 +21,7 @@ class SmsEmailReceiveController extends Controller
     public function smsReceiveAction(Request $request,$subdomain)
     {
 
-        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' =>'shoshi'));
+        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' =>$subdomain));
 
         $data = $request->request->all();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);

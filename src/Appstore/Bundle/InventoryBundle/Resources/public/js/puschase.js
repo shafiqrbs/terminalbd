@@ -1,5 +1,6 @@
 function InventoryPurchasePage(){
 
+
     $('#purchase').on("click", ".delete", function() {
 
         var url = $(this).attr("rel");
@@ -53,11 +54,7 @@ function InventoryPurchasePage(){
             url: url,
             type: 'GET',
             success: function (response) {
-                obj = JSON.parse(response);
-                if ('success' == obj['success']) {
-                    $('#action-' + id).append('<a title="Approve" href="javascript:" class="btn green mini" ><i class="icon-check"></i>&nbsp;Approved</a>');
-                    $('.approved-' + id).remove();
-                }
+                location.reload();
             },
         })
 
@@ -91,9 +88,49 @@ function InventoryPurchasePage(){
         var subTotal = ( purchasePrice * quantity );
         alert(subTotal);
         $(this).closest('.subTotalPurchase').val(subTotal);
-    })
+    });
 
-    $('#action-button').click( function( e ) {
+    var validator =  $("from.purchase").validate({
+
+        rules: {
+
+            "appstore_bundle_inventorybundle_purchase[vendor]": {required: true},
+            "appstore_bundle_inventorybundle_purchase[memo]": {required: true},
+            "appstore_bundle_inventorybundle_purchase[totalItem]": {required: true},
+            "appstore_bundle_inventorybundle_purchase[totalQnt]": {required: true},
+            "appstore_bundle_inventorybundle_purchase[totalAmount]": {required: true},
+            "appstore_bundle_inventorybundle_purchase[paymentAmount]": {required: true}
+        },
+
+        messages: {
+
+            "appstore_bundle_inventorybundle_purchase[vendor]":"Enter your vendor name",
+            "appstore_bundle_inventorybundle_purchase[memo]":"Enter your vendor name",
+            "appstore_bundle_inventorybundle_purchase[totalItem]":"Enter your vendor name",
+            "appstore_bundle_inventorybundle_purchase[totalQnt]":"Enter your vendor name",
+            "appstore_bundle_inventorybundle_purchase[totalAmount]":"Enter your vendor name",
+            "appstore_bundle_inventorybundle_purchase[paymentAmount]":"Enter your vendor name"
+        },
+
+        tooltip_options: {
+
+            "appstore_bundle_inventorybundle_purchase[vendor]": {placement:'top',html:true},
+            "appstore_bundle_inventorybundle_purchase[memo]": {placement:'top',html:true},
+            "appstore_bundle_inventorybundle_purchase[totalItem]": {placement:'top',html:true},
+            "appstore_bundle_inventorybundle_purchase[totalQnt]": {placement:'top',html:true},
+            "appstore_bundle_inventorybundle_purchase[totalAmount]": {placement:'top',html:true},
+            "appstore_bundle_inventorybundle_purchase[paymentAmount]": {placement:'top',html:true}
+
+        },
+        submitHandler: function() {
+
+            $(this).submit();
+
+        }
+
+    });
+
+   /* $('#action-buttonxx').click( function( e ) {
 
         var name_regex = /^[a-zA-Z]+$/;
         var number_regex = /^[0-9]+$/;
@@ -110,14 +147,6 @@ function InventoryPurchasePage(){
             $('#error-msg').text("Please add your vendor name"); //this segment displays the validation rule for selection
             $("#appstore_bundle_inventorybundle_purchase_vendor").focus();
             return false;
-        }else if(!totalAmount.match(number_regex) || totalAmount.length == 0){
-            $('#error-msg').text("Please add purchase total amount"); //this segment displays the validation rule for selection
-            $("#appstore_bundle_inventorybundle_purchase_totalAmount").focus();
-            return false;
-        }else if(!paymentAmount.match(number_regex) || paymentAmount.length == 0){
-            $('#error-msg').text("Please add payment amount"); //this segment displays the validation rule for selection
-            $("#appstore_bundle_inventorybundle_purchase_paymentAmount").focus();
-            return false;
         }else if(memo ==""){
             $('#error-msg').text("Please add purchase memo no"); //this segment displays the validation rule for selection
             $("#appstore_bundle_inventorybundle_purchase_memo").focus();
@@ -130,12 +159,21 @@ function InventoryPurchasePage(){
             $('#error-msg').text("Please add purchase total quantity"); //this segment displays the validation rule for selection
             $("#appstore_bundle_inventorybundle_purchase_totalQnt").focus();
             return false;
+
+        }else if(!totalAmount.match(number_regex) || totalAmount.length == 0){
+            $('#error-msg').text("Please add purchase total amount"); //this segment displays the validation rule for selection
+            $("#appstore_bundle_inventorybundle_purchase_totalAmount").focus();
+            return false;
+        }else if(!paymentAmount.match(number_regex) || paymentAmount.length == 0){
+            $('#error-msg').text("Please add payment amount"); //this segment displays the validation rule for selection
+            $("#appstore_bundle_inventorybundle_purchase_paymentAmount").focus();
+            return false;
         }else{
             $('.purchase').submit();
         }
         e.preventDefault();
 
-    });
+    });*/
 
     var count = 0;
     $('.addmore').click(function(){

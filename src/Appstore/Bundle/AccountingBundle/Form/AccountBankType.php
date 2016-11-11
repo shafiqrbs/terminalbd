@@ -29,55 +29,41 @@ class AccountBankType extends AbstractType
     {
         $builder
 
-            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'add payment amount BDT'),
+            ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'add bank address'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add payment amount BDT'))
+                    new NotBlank(array('message'=>'Please add bank address details'))
                 )))
 
-            ->add('accountNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'add your account no'),
-                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
-            ))
-            ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'remark')))
-            ->add('paymentMethod', 'choice', array(
-                'attr'=>array('class'=>'span12 select2'),
-                'choices' => array(
-                    'Cash' => 'Cash',
-                    'Cheque' => 'Cheque',
-                    'Payment Card' => 'Payment Card',
-                    'Other' => 'Other'
-                ),
-            ))
-            ->add('accountHead', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
-                'empty_value' => '---Choose a acount head---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+            ->add('accountNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'add account no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.parent = 1 ");
-                },
             ))
-            ->add('toUser', 'entity', array(
-                'required'    => true,
-                'class' => 'Core\UserBundle\Entity\User',
-                'empty_value' => '---Choose a user---',
-                'property' => 'username',
+            ->add('accountOwner','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'add account ownership'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+            ))
+            ->add('branch','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'add branch name'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+            ))
+            ->add('accountType', 'choice', array(
                 'attr'=>array('class'=>'span12 select2'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.globalOption =".$this->globalOption->getId());
-                },
+                'choices' => array(
+                    'Savings' => 'Savings',
+                    'Current' => 'Current',
+                    'Other' => 'Other'
+                ),
             ))
             ->add('bank', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\Bank',
                 'empty_value' => '---Choose a bank---',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
@@ -86,7 +72,7 @@ class AccountBankType extends AbstractType
                 },
             ));
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

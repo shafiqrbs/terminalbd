@@ -56,15 +56,18 @@
                                 <form class="search-form" action="" method="get" name="itemSearch">
 
                                     <div class="row-fluid">
-                                        <div class="span5">
+                                        <div class="span6">
                                             <input type="text" id="startDate" name="startDate"  class="span12 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                         </div>
                                         <div class="span6">
-                                            <input type="text" id="endDate" name="endDate"  class="span12 search-input date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
-                                        </div>
-
-                                        <div class="span1">
-                                            <button class="btn blue" type="submit" ><i class="icon-search"></i></button>
+                                            <div class="controls">
+                                                <div class="input-append span11">
+                                                    <input type="text" id="endDate" name="endDate"  class="span12 search-input date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                                    <div class="btn-group">
+                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 

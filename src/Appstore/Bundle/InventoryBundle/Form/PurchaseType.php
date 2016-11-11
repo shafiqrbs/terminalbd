@@ -34,10 +34,52 @@ class PurchaseType extends AbstractType
                 'empty_value' => '---Choose a vendor ---',
                 'property' => 'companyName',
                 'attr'=>array('class'=>'span12 select2'),
+                'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('wt')
                         ->where("wt.status = 1")
                         ->andWhere("wt.inventoryConfig =".$this->inventoryConfig->getId());
+                },
+            ))
+            ->add('transactionMethod', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2 transactionMethod'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->orderBy("e.id","ASC");
+                }
+            ))
+
+            ->add('accountBank', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
+                'empty_value' => '---Choose a bank---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.globalOption =".$this->inventoryConfig->getGlobalOption()->getId())
+                        ->orderBy("b.name", "ASC");
+                },
+            ))
+            ->add('accountMobileBank', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
+                'empty_value' => '---Choose a mobile banking---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.globalOption =".$this->inventoryConfig->getGlobalOption()->getId())
+                        ->orderBy("b.name", "ASC");
                 },
             ))
 
@@ -48,7 +90,7 @@ class PurchaseType extends AbstractType
                     new NotBlank(array('message'=>'Please add  memo no'))
                 )))
             /*->add('chalan','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))*/
-            ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span6','placeholder'=>''),
+            ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>''),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -67,7 +109,6 @@ class PurchaseType extends AbstractType
                     new NotBlank(array('message'=>'Please add payment amount BDT'))
                 )))
             ->add('dueAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Due amount BDT')))
-            ->add('commissionAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Commission amount BDT')))
             ->add('totalQnt','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'No of Qnt'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add total qnt'))

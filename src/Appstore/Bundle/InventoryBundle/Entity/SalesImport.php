@@ -37,6 +37,11 @@ class SalesImport
      **/
     private  $sales;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\BranchInvoice", mappedBy="branchInvoiceImport" , cascade={"remove"} )
+     **/
+    private  $branchInvoice;
+
 
     /**
      * @Gedmo\Blameable(on="create")
@@ -298,6 +303,14 @@ class SalesImport
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return BranchInvoice
+     */
+    public function getBranchInvoice()
+    {
+        return $this->branchInvoice;
     }
 
 

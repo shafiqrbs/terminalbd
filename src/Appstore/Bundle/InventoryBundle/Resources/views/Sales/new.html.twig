@@ -31,14 +31,13 @@
         <!-- BEGIN purchase_order CONTENT-->
         <div class="row-fluid">
             <div class="span12">
-
                 <div class="portlet box green tabbable">
-
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>POS Information</div>
-                        <div id="wrongBarcode"></div>
+
                         <div class="actions">
                             <div class="btn-group">
+                                <a class="btn blue" id="searchToggole" href="javascript:"><i class="icon-search"></i>&nbsp;Search</a>
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                     <i class="icon-cogs"></i>&nbsp;Tools
                                     <i class="icon-tasks"></i>
@@ -51,64 +50,64 @@
                         </div>
 
                     </div>
-
-
                     <div class="portlet-body">
 
                             <div class="portlet-body form">
                                 <!-- END purchase_order HEADER-->
-                                <div class="row-fluid" style="margin-bottom: 5px">
-                                    <form class="search-form" >
-                                        <input type="text" id="item" name="item" required="required"  class="m-wrap span12 select2Item " >
-                                    </form>
-                                </div>
-                                <div class="row-fluid">
-                                    <table class="table table-bordered table-striped table-condensed flip-conten" id="stockItemDetails">
+                                <div id="search-product">
+                                    <div class="row-fluid" style="margin-bottom: 5px">
+                                        <form class="search-form" >
+                                            <input type="text" id="item" name="item" required="required"  class="m-wrap span12 select2Item " >
+                                        </form>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <table class="table table-bordered table-striped table-condensed flip-conten" id="stockItemDetails">
 
-                                        <thead class="flip-content ">
-                                        <tr class="head-green">
-                                            <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
-                                            <th class="numeric" >Received/Memo</th>
-                                            <th class="numeric" >Qnt</th>
-                                            <th class="numeric" >Purchase price</th>
-                                            <th class="numeric" >Sales price</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="itemDetails"></tbody>
-                                    </table>
+                                            <thead class="flip-content ">
+                                            <tr class="head-green">
+                                                <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
+                                                <th class="numeric" >Received/Memo</th>
+                                                <th class="numeric" >Qnt</th>
+                                                <th class="numeric" >Purchase price</th>
+                                                <th class="numeric" >Sales price</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="itemDetails"></tbody>
+                                        </table>
+                                    </div>
                                 </div>
+
+                                <div class="row-fluid " id="purchaseItemx">
+                                    <div class="span4"><ul class="unstyled"><li><strong>Estimate Amount #:</strong>&nbsp; {{ todaySalesOverview[0]["subTotal"] }}</li><li><strong>Sales Amount:</strong>&nbsp; {{ todaySalesOverview[0]["total"] }}</li></ul></div>
+                                    <div class="span4"><ul class="unstyled"><li><strong>Due Amount:</strong> &nbsp; {{ todaySalesOverview[0]["totalDue"] }}</li><li><strong>Discount Amount:</strong>&nbsp; {{ todaySalesOverview[0]["totalDiscount"] }}</li></ul></div>
+                                    <div class="span4"><ul class="unstyled"><li><strong>Receive Amount:</strong> &nbsp; {{ todaySalesOverview[0]["total"]-todaySalesOverview[0]["totalDue"] }}</li><li><strong>Total Voucher:</strong>&nbsp;{{ todaySalesOverview[0]["totalVoucher"] }}</li></ul></div>
+                                </div>
+
                                 <div class="clearfix"></div>
                                 <div class="row-fluid">
-                                    <div class="span8">
+                                    <div class="span8" id="barcode-box">
 
                                         <div class="row-fluid">
-                                            <div class="span12 ">
-                                                <div class="control-group">
-                                                    <div class="controls">
-                                                        <div class="span6">
-                                                            <div class="input-icon left" style="float: left; width: 100%">
-                                                                <i class="icon-barcode" style="color: #000"></i>
-                                                                <input type="text" id="barcode" name="barcode" required="required" class="m-wrap span12"  autocomplete="off">
-                                                            </div>
-                                                        </div>
-                                                        <div class="span1" style="line-height:33px; font-weight: bold; text-align: center">OR</div>
-                                                        <div class="span5" style="margin-left:0">
-                                                            <input type="text" id="barcodeNo" name="barcodeNo" required="required" class="m-wrap span12"  autocomplete="off">
+                                            <div class="span12">
+                                                <div class="row-fluid">
+                                                    <div class="span6">
+                                                        <div class="input-prepend input-append span12">
+                                                            <span class="add-on add-on-height"><i class="icon-barcode"></i></span>
+                                                            <input type="text" id="barcode" name="barcode" required="required" class="m-wrap span11" placeholder="Enter product barcode" autocomplete="off">
+                                                            <span class="add-on add-on-height"><i class="icon-search"></i></span>
                                                         </div>
                                                     </div>
-
+                                                    <div class="span6" style="margin-left:10px; margin-top:10px ">
+                                                        <input type="text" id="barcodeNo" name="barcodeNo" required="required" class="m-wrap span12"  autocomplete="off">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row-fluid " id="purchaseItemx">
-                                            <div class="span4"><ul class="unstyled"><li><strong>Estimate Amount #:</strong>&nbsp; {{ todaySalesOverview[0]["subTotal"] }}</li><li><strong>Sales Amount:</strong>&nbsp; {{ todaySalesOverview[0]["total"] }}</li></ul></div>
-                                            <div class="span4"><ul class="unstyled"><li><strong>Due Amount:</strong> &nbsp; {{ todaySalesOverview[0]["totalDue"] }}</li><li><strong>Discount Amount:</strong>&nbsp; {{ todaySalesOverview[0]["totalDiscount"] }}</li></ul></div>
-                                            <div class="span4"><ul class="unstyled"><li><strong>Receive Amount:</strong> &nbsp; {{ todaySalesOverview[0]["total"]-todaySalesOverview[0]["totalDue"] }}</li><li><strong>Total Voucher:</strong>&nbsp;{{ todaySalesOverview[0]["totalVoucher"] }}</li></ul></div></div>
-                                        </div>
+                                    </div>
                                     <div class="span4">
                                         <div class="row-fluid">
                                             <div class="span12 responsive" data-tablet="span6" data-desktop="span3">
-                                                <div class="dashboard-stat green" style="margin-bottom: 0; padding-bottom: 13px">
+                                                <div class="dashboard-stat" style="margin-bottom: 0; padding-bottom: 13px; background: #222">
                                                     <div class="details">
                                                         <div class="number">TK.<span class="salesTotal">{{ entity.total }}</span></div>
                                                         <div class="desc">Order no. {{ entity.invoice }}</div>
@@ -126,9 +125,12 @@
                                     <div class="span8">
 
                                         <div class="row-fluid">
+                                            <div class="span12 alert-error" id="wrongBarcode"></div>
+                                        </div>
+                                        <div class="row-fluid">
                                             <div class="span12">
 
-                                                <table class="table table-bordered ">
+                                                <table class="table table-bordered table-hover">
 
                                                     <thead class="">
                                                     <tr class="head-blue">
@@ -161,7 +163,7 @@
                                                                     <input class="m-wrap span8 numeric salesPrice" {% if salesitem.customPrice != 1 and salesitem.salesPrice == salesitem.estimatePrice %} readonly="readonly" {% endif %} rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
                                                                 </div>
                                                             </td>
-                                                            <td><span id="subTotalShow-{{ salesitem.id }}" >{{ salesitem.subTotal }}</span></td>
+                                                            <td><span id="subTotalShow-{{ salesitem.id }}" ><strong>{{ salesitem.subTotal }}</strong></span></td>
                                                             <td>
                                                                 <a title="Are you sure went to delete ?" id="{{ salesitem.id }}" rel="{{ path('inventory_salesitem_delete',{'sales':entity.id,'salesItem':salesitem.id}) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                                             </td>
@@ -180,29 +182,29 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="span12 input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom">Sub-Total TK.</span><input class="m-wrap span12  center-input numeric salesTotal" readonly="readonly" type="text" value="{{ entity.total }}"><span class="add-on">.00</span>
+                                                    <span class="add-on add-on-custom span3">Sub-Total TK.</span><input class="m-wrap span8  center-input numeric salesTotal disabled-field" readonly="readonly" type="text" value="{{ entity.total }}"><span class="add-on">.00</span>
                                                     <input class="m-wrap span8 center-input numeric" name="vat" id="vat" type="hidden">
-                                                </div>
-                                            </div>
-                                        </div>
-                                       {# <div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom">VAT/TAX TK.</span><input class="m-wrap span8 center-input numeric" name="vat" id="vat" type="text"><span class="add-on">.00</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        #}<div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="span12 input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom">Discount TK.</span><input class="m-wrap span12  center-input numeric" name="discount" id="discount" type="text"><span class="add-on">.00</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                <div class="input-prepend input-append input-append-border span12">
-                                                    <span class="add-on add-on-custom">Due TK.</span><input class="m-wrap span12 center-input numeric" type="text" name="dueAmount" readonly="readonly" id="dueAmount"><span class="add-on">.00</span>
+                                                <div class="span12 input-prepend input-append input-append-border">
+                                                    <span class="add-on add-on-custom span3">VAT/TAX TK.</span><input class="m-wrap span8 center-input numeric disabled-field" readonly="readonly" name="vat" id="vat" type="text"><span class="add-on">.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="span12 input-prepend input-append input-append-border">
+                                                    <span class="add-on add-on-custom span3">Discount TK.</span><input class="m-wrap span8  center-input numeric" name="discount" id="discount" type="text"><span class="add-on">.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="span12 input-prepend input-append input-append-border span12">
+                                                    <span class="add-on add-on-custom span3">Due TK.</span><input class="m-wrap span8 center-input numeric disabled-field" type="text" name="dueAmount" readonly="readonly" id="dueAmount"><span class="add-on">.00</span>
                                                 </div>
                                             </div>
 
@@ -217,53 +219,44 @@
                                             <div class="row-fluid">
                                                 <div class="span12">
                                                     <div class="input-prepend input-append input-append-border span12">
-                                                        <input type="text" id="chequeCardNo" name="chequeCardNo"  class="m-wrap center-input span12" placeholder="Add your card no"  autocomplete="off">
+                                                        {{ form_widget(form.cardNo) }}
+                                                        {{ form_errors(form.cardNo) }}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row-fluid">
                                                 <div class="span12 input-append-border">
-                                                    <select class="span12 select2 center-input" name="paymentCard" id="paymentCard" >
-                                                        <option>--Payment Card--</option>
-                                                        {% for paymentCard in paymentCards %}
-                                                            <option value="{{ paymentCard.id }}">{{ paymentCard.name }}</option>
-                                                        {% endfor %}
-                                                    </select>
+                                                    {{ form_widget(form.paymentCard) }}
+                                                    {{ form_errors(form.paymentCard) }}
                                                 </div>
                                             </div>
                                             <div class="row-fluid">
                                                 <div class="span12 input-append-border">
-                                                    <select class="select2 span12" name="bank" id="bank" >
-                                                        <option>--Payment Bank Name--</option>
-                                                        {% for bank in banks %}
-                                                            <option value="{{ bank.id }}">{{ bank.name }}</option>
-                                                        {% endfor %}
-                                                    </select>
+                                                    {{ form_widget(form.accountBank) }}
+                                                    {{ form_errors(form.accountBank) }}
                                                 </div>
                                             </div>
                                         </div>
                                         <div id="bkashMethod">
                                             <div class="row-fluid">
                                                 <div class="span12 input-append-border">
-                                                    <select class="select2 span12" name="bKash" id="bKash" >
-                                                        <option>--Payment bKash Name--</option>
-                                                        {% for bkash in bkashs %}
-                                                            <option value="{{ bkash.id }}">{{ bkash.name }}</option>
-                                                        {% endfor %}
-                                                    </select>
+                                                    {{ form_widget(form.accountMobileBank) }}
+                                                    {{ form_errors(form.accountMobileBank) }}
                                                 </div>
                                             </div>
                                             <div class="row-fluid">
                                                 <div class="span12">
                                                     <div class="input-prepend input-append input-append-border span12">
-                                                        <input type="text" id="bkashMobile" name="bkashMobile"  class="m-wrap  span12 mobile" placeholder="Add your bkash mobile no"  autocomplete="off">
+                                                        {{ form_widget(form.paymentMobile) }}
+                                                        {{ form_errors(form.paymentMobile) }}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row-fluid">
                                                 <div class="span12">
                                                     <div class="input-prepend input-append input-append-border span12">
-                                                        <input type="text" id="bkashTransactionId" name="bkashTransactionId"  class="m-wrap  span12" placeholder="Add your bkash transaction"  autocomplete="off">
+                                                        {{ form_widget(form.transactionId) }}
+                                                        {{ form_errors(form.transactionId) }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -271,14 +264,14 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="input-prepend input-append input-append-border span12">
-                                                    <span class="add-on add-on-custom">Receive TK.</span><input class="m-wrap span12 center-input numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder=""><span class="add-on">.00</span>
+                                                    <span class="add-on add-on-custom span3">Receive TK.</span><input class="m-wrap span8 center-input numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder=""><span class="add-on">.00</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="input-prepend input-append input-append-border span12">
-                                                    <span class="add-on add-on-custom">Return TK.</span><input class="m-wrap span12 center-input numeric" readonly="readonly" type="text" id="returnAmount" name="returnAmount"><span class="add-on">.00</span>
+                                                    <span class="add-on add-on-custom span3">Return TK.</span><input class="m-wrap span8 center-input numeric disabled-field" readonly="readonly" type="text" id="returnAmount" name="returnAmount"><span class="add-on">.00</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -293,12 +286,8 @@
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12 input-append-border">
-                                                <select class="select2 span12" name="salesBy" id="salesBY"  >
-                                                    <option>--Sales user--</option>
-                                                    {% for user in salesUsers %}
-                                                        <option value="{{ user.id }}">{{ user.username }}</option>
-                                                    {% endfor %}
-                                                </select>
+                                                {{ form_widget(form.salesBy) }}
+                                                {{ form_errors(form.salesBy) }}
                                             </div>
                                         </div>
                                         <div class="clearfix"></div>
@@ -308,10 +297,13 @@
                                                     <div class="pull-right">
                                                         <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                                         <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
-                                                        <button disabled="disabled" id="paymentBtn" type="submit" class="btn green"><i class="m-icon-swapright m-icon-white"></i>&nbsp;Payment</button>
+                                                        <button disabled="disabled" type="submit" class="btn blue paymentBtn"><i class="icon-print"></i>&nbsp;Print</button>
+                                                        <button disabled="disabled"  type="submit" class="btn green paymentBtn"><i class="icon-print m-icon-white"></i>&nbsp;Pos Print</button>
                                                         <a href="{{ path('inventory_sales_edit',{'code':entity.code}) }}"  class="btn purple"><i class="icon-refresh"></i>&nbsp;Reset</a>
-                                                        <a href="{{ path('inventory_sales') }}"  class="btn yellow"><i class="m-icon-swapleft m-icon-white"></i>&nbsp;Back</a>
-                                           {#             <button type="submit" class="btn blue"><i class="icon-print"></i></button>
+
+                                           {#
+                                            <a href="{{ path('inventory_sales') }}"  class="btn yellow"><i class="m-icon-swapleft m-icon-white"></i>&nbsp;Back</a>
+                                           <button type="submit" class="btn blue"><i class="icon-print"></i></button>
                                                         <button type="reset" class="btn purple"><i class="icon-refresh"></i> </button>
                                                         <button type="submit" class="btn yellow"><i class="icon-pushpin"></i></button>
                                            #}         </div>
@@ -332,16 +324,9 @@
                         </div>
 
                     </div>
-                </div>
-                <style>
-
-                </style>
-                <div class="portlet box blue tabbable">
-
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>List of sales</div>
                     </div>
-
                     <div class="portlet-body">
                         <table class="table table-bordered table-striped table-condensed flip-content ">
 
@@ -375,54 +360,58 @@
                                     <td class="numeric" >{{ dailySales.salesBy }}</td>
                                     <td class="numeric" >
                                         {% if dailySales.paymentStatus == "Due" %}
-                                        <a href="{{ path('inventory_sales_due', { 'code': dailySales.invoice }) }}" class="btn mini purple" ><i class="icon-money"></i>&nbsp;Due</a>
+                                            <a href="{{ path('account_sales_new') }}" class="btn mini purple" ><i class="icon-money"></i>&nbsp;Due</a>
                                         {% endif %}
                                         {% if dailySales.salesItems is defined and  dailySales.salesItems is empty  %}
-                                        <a data-title="Add purchase item" href="{{ path('inventory_sales_edit', { 'code': dailySales.invoice }) }}" class="btn blue mini" ><i class="icon-plus-sign"></i></a>
-                                        {% if dailySales.id != entity.id  %}
-                                            <a title="Are you sure went to delete ?" id="{{ dailySales.id }}" rel="{{ path('inventory_sales_delete', { 'id': dailySales.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                            <a data-title="Add purchase item" href="{{ path('inventory_sales_edit', { 'code': dailySales.invoice }) }}" class="btn blue mini" ><i class="icon-plus-sign"></i></a>
+                                            {% if dailySales.id != entity.id  %}
+                                                <a title="Are you sure went to delete ?" id="{{ dailySales.id }}" rel="{{ path('inventory_sales_delete', { 'id': dailySales.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                            {% endif %}
                                         {% endif %}
+                                        {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}
+                                            <a data-title="Add purchase item" href="{{ path('inventory_sales_edit', { 'code': dailySales.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
+                                            <a title="Are you sure went to delete ?" id="{{ dailySales.id }}" rel="{{ path('inventory_sales_delete', { 'id': dailySales.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                         {% endif %}
                                     </td>
                                 </tr>
-                                 <tr id="show-{{ dailySales.id }}" class="showing-overview">
-                                     <td colspan="10">
-                                         {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}
-                                             <table class="table table-bordered table-striped table-condensed flip-content ">
+                                <tr id="show-{{ dailySales.id }}" class="showing-overview">
+                                    <td colspan="10">
+                                        {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}
+                                            <table class="table table-bordered table-striped table-condensed flip-content ">
 
-                                                 <thead class="flip-content ">
-                                                 <tr class="head-green">
-                                                     <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
-                                                     <th class="numeric" >Item</th>
-                                                     <th class="numeric" >Barcode</th>
-                                                     <th class="numeric" >Qnt</th>
-                                                     <th class="numeric" >Estimate price</th>
-                                                     <th class="numeric" >Sales price</th>
-                                                     <th class="numeric" >Sub-total</th>
-                                                 </tr>
-                                                 </thead>
-                                                 <tbody>
-                                                 {% for salesItem in dailySales.salesItems %}
-                                                     <tr>
-                                                         <td class="numeric" >{{ loop.index }}</td>
-                                                         <td class="numeric" >{{ salesItem.item.masterItem.name }}
-                                                             {% if salesItem.item.color  %}-{{ salesItem.item.color.name }}{% endif %}
-                                                             {% if salesItem.item.size  %}-{{ salesItem.item.size.name }}{% endif %}
-                                                             {% if salesItem.item.vendor  %}-{{ salesItem.item.vendor.vendorCode }}{% endif %}
-                                                         </td>
-                                                         <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
-                                                         <td class="numeric" >{{ salesItem.quantity }}</td>
-                                                         <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
-                                                         <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
-                                                         <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
+                                                <thead class="flip-content ">
+                                                <tr class="head-green">
+                                                    <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
+                                                    <th class="numeric" >Item</th>
+                                                    <th class="numeric" >Barcode</th>
+                                                    <th class="numeric" >Qnt</th>
+                                                    <th class="numeric" >Estimate price</th>
+                                                    <th class="numeric" >Sales price</th>
+                                                    <th class="numeric" >Sub-total</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for salesItem in dailySales.salesItems %}
+                                                    <tr>
+                                                        <td class="numeric" >{{ loop.index }}</td>
+                                                        <td class="numeric" >{{ salesItem.item.masterItem.name }}
+                                                            {% if salesItem.item.color  %}-{{ salesItem.item.color.name }}{% endif %}
+                                                            {% if salesItem.item.size  %}-{{ salesItem.item.size.name }}{% endif %}
+                                                            {% if salesItem.item.vendor  %}-{{ salesItem.item.vendor.vendorCode }}{% endif %}
+                                                        </td>
+                                                        <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
+                                                        <td class="numeric" >{{ salesItem.quantity }}</td>
+                                                        <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
+                                                        <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
+                                                        <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
 
-                                                     </tr>
-                                                 {% endfor %}
-                                                 </tbody>
-                                             </table>
-                                         {% endif %}
-                                     </td>
-                                 </tr>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        {% endif %}
+                                    </td>
+                                </tr>
                             {% endfor %}
 
                             </tbody>
@@ -435,15 +424,48 @@
 <style>
     .input-append .add-on, .input-prepend input[class*="numeric"]{
         font-size: 16px !important;
+        font-weight: bold;
     }
     .center-input{
         min-width: 46.5% !important;
     }
+    #wrongBarcode{
+        line-height: 30px;
+        text-align: left;
+        padding-left:10px;
+    }
+    #barcode-box{
+        background-color:#1C1C1A;
+        min-height: 88px;
+        padding:19px;
+    }
+    #search-product{
+        display: none;
+    }
+    .input-append .add-on-height, .input-prepend .add-on-height{
+        height: 40px;
+        min-height: 40px;
+        line-height: 40px;
+    }
+    #barcode{
+        border: 5px solid #fff;
+        height: 50px !important;
+        font-size: 30px;
+        color: #fff;
+    }
+    .add-on-custom{
+        font-weight: bold!important;
+    }
+    .input-prepend input.disabled-field{
+        background: #1C1C1A!important;
+        color: #fff!important;
+
+    }
+
 </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/print.css'
     '@InventoryBundle/Resources/public/css/style.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
@@ -452,7 +474,6 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@InventoryBundle/Resources/public/js/*'
     '@InventoryBundle/Resources/public/js/editable.js'
     '@InventoryBundle/Resources/public/js/sales.js'
     %}
@@ -461,6 +482,10 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    $('body').addClass('page-sidebar-closed');
+    $( "#searchToggole" ).click(function() {
+        $( "#search-product" ).slideToggle( "slow" );
+    });
     EditableInit();
     InventorySales({{ entity.id ? entity.id : 0 }});
 {% endblock %}

@@ -40,6 +40,8 @@ $(".viewed-prev").click(function(){
 })
 
 function commonJs(){
+
+
     $('#contactForm').on('submit', function(e){
         e.preventDefault();
         e.stopPropagation();
