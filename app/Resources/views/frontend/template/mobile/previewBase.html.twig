@@ -54,7 +54,7 @@
             <div class="details-grid">
                 <div class="details-shade">
                     <div class="details-right">
-                       {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" alt=" ">{% endif %}
+                       {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
                         <h3>Welcome To</h3>
                      </div>
                 </div>
@@ -113,12 +113,13 @@
                 <!-- //modal -->
                 <div class="footer-bg" id="mobile-footer">
                     <ul class="footer-icon">
-
+                        {% if globalOption.mobile is not empty %}
                         <li>
-                            <a href="#" class="hvr-radial-out" data-title="Phone">
+                            <a href="callto://088{{ globalOption.mobile }}" class="hvr-radial-out" data-title="Phone">
                                 <i area-hidden=true class="fa fa-phone"></i>
                             </a>
                         </li>
+                        {% endif %}
                         <li>
                             <a href="#sms-modal" class="hvr-radial-out sign-in popup-top-anim" data-title="">
                                 <i class="fa fa-comment"></i>
@@ -129,11 +130,13 @@
                                 <i class="fa fa-hand-o-up"></i>
                             </a>
                         </li>
+                        {% if globalOption.mobile is not empty %}
                         <li>
                             <a href="#email-modal" class="hvr-radial-out sign-in popup-top-anim">
                                 <i class="fa fa-envelope"></i>
                             </a>
                         </li>
+                        {% endif %}
                         <li>
                             <a class="last hvr-radial-out"
                                href="{{ path('mobile_contact',{"subdomain":globalOption.subDomain}) }}" data-title="">

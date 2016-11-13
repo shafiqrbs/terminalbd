@@ -47,6 +47,34 @@ bindu_signup_check:
     options:
             expose: true
 
+bindu_signup_check_doamin:
+    path:     /web-builder/check-domain-availability
+    defaults: { _controller: BinduBundle:Bindu:doaminChecking }
+    methods:  GET
+    options:
+            expose: true
+
+bindu_signup_check_subdoamin:
+    path:     /web-builder/check-subdomain-availability
+    defaults: { _controller: BinduBundle:Bindu:subdomainChecking }
+    methods:  GET
+    options:
+            expose: true
+
+bindu_option_check_mobile:
+    path:     /web-builder/check-mobile-availability
+    defaults: { _controller: BinduBundle:Bindu:mobileChecking }
+    methods:  GET
+    options:
+            expose: true
+
+bindu_option_check_email:
+    path:     /web-builder/check-email-availability
+    defaults: { _controller: BinduBundle:Bindu:emailChecking }
+    methods:  GET
+    options:
+            expose: true
+
 bindu_check:
     path:     /web-builder/check
     defaults: { _controller: BinduBundle:Bindu:check }

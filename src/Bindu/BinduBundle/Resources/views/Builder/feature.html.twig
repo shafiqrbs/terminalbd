@@ -159,19 +159,19 @@
         <h3><a href="#"><i class="fa  fa-phone"></i>&nbsp;Call & Email us</a></h3>
     </div>
     <div class="accordion-container">
-        <form class="design-form option" action="" method="post"  >
+        <form class="design-form option callEmail" action="" method="post"  >
             <div class="brclear"></div>
             <label>Add a number for one-click calling.</label>
-            <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="name" class="mobile" type="text" value="{{ entity.mobile }}" placeholder="enter your avabilable contact mobile no " name="mobile"></p>
+            <p><span class="fa-icon"><i class="fa  fa-phone"></i></span><input id="mobile" class="mobile" type="text" value="{{ entity.mobile }}" placeholder="enter your avabilable contact mobile no " name="mobile"></p>
             <div class="clear"></div>
             <label>Add a email for any information 24 hours.</label>
-            <p><span class="fa-icon"><i class="fa  fa-envelope"></i></span><input id="name" class="email" type="text" value="{{ entity.email }}" placeholder="enter your valid email address" name="email"></p>
+            <p><span class="fa-icon"><i class="fa  fa-envelope"></i></span><input id="email" class="email" type="text" value="{{ entity.email }}" placeholder="enter your valid email address" name="email"></p>
             <div class="clear"></div>
             <div class="checkbox block" >
                 <label style="width: 250px" >This is the primary business number</label><input type="checkbox" name="primaryNumber" {% if(entity.primaryNumber == 1) %} checked {% endif %} value="1" />
             </div>
             <div class="clear"></div>
-            <p class="align-right" >To keep these changes, click 'Update'&nbsp;&nbsp;&nbsp;<button id="signup" class="tm-btn mini"  name="submit">update</button></p>
+            <p class="align-right" >To keep these changes, click 'Update'&nbsp;&nbsp;&nbsp;<button type="submit" id="signup" class="tm-btn mini"  name="submit">update</button></p>
         </form>
         <div class="clear"></div>
     </div>
@@ -213,8 +213,6 @@
             <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="latitude" class="" type="text" value="{{ entity.contactPage.latitude }}" placeholder="Enter latitude" name="latitude"></p>
             <label>Longitude</label>
             <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="longitude" class="" type="text" value="{{ entity.contactPage.longitude }}" placeholder="Enter longitude" name="longitude"></p>
-            <label>Google Map Embed Code</label>
-            <p><textarea class="" id="googleMap" name="googleMap" placeholder="Enter google map embed code" >{{ entity.contactPage.googleMap }}</textarea></p>
             <p class="align-right" >To keep these changes, click 'Update'&nbsp;&nbsp;&nbsp;<button id="contact" class="tm-btn mini"  name="submit">update</button></p>
         </form>
         <div class="clear"></div>

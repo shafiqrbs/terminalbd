@@ -208,7 +208,7 @@
                                 data-defineClass = "bord"
                                 data-radius = "0px"
                         >help</a></label>
-            <p><span class="fa-icon"><i class="fa  fa-paint-brush"></i></span><input id="copyRight" type="text" value="" placeholder="Enter your copy right text" name="copyRight"></p>
+            <p><span class="fa-icon"><i class="fa  fa-copyright"></i></span><input id="copyRight" type="text" value="{{ entity.footerSetting.copyRight }}" placeholder="Enter your copy right text" name="copyRight"></p>
             {#<div class="checkbox block">
                 <label >Display only on website</label><input type="checkbox" name="displayWebsite"  {% if(entity.footerSetting.displayWebsite == 1) %} checked {% endif %} value="1" />
                 <label >Turn off footer branding</label><input type="checkbox" name="turnOffBranding"  {% if(entity.footerSetting.turnOffBranding == 1) %} checked {% endif %} value="1" />

@@ -686,6 +686,16 @@ table#colors-swatchs div.swatch {
   background-position: center center;
 }
 
+.inner-load {
+  margin:0;
+  height: 100%;
+  width: 100%;
+  background-image: url('../img/loader-red.gif');
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
 
 .main-setting {
   transition: all 0.3s;
@@ -893,6 +903,13 @@ ul.social-networks li a.last{
 }
 .signupForm p {
     margin-bottom: 20px;
+}
+
+#logoPreview{
+  max-height:120px;
+}
+#bgImagePreview{
+  max-height: 300px;
 }
 
 

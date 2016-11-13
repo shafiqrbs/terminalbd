@@ -283,6 +283,7 @@ class GlobalOptionRepository extends EntityRepository
         $em = $this->_em;
        // $entity->setStatus(true);
         if(isset($data['domain']) and $data['domain'] != '') {
+
             $entity->setDomain($this->remove_http($data['domain']));
         }
 
@@ -374,6 +375,29 @@ class GlobalOptionRepository extends EntityRepository
         }
         return $url;
     }
+
+    public function removeDomainPrefix($input) {
+
+
+        //$input = 'www.google.co.uk/';
+
+        // in case scheme relative URI is passed, e.g., //www.google.com/
+        $input = trim($input, '/');
+
+        // If scheme not included, prepend it
+        if (!preg_match('#^http(s)?://#', $input)) {
+            $input = 'http://' . $input;
+        }
+
+        $urlParts = parse_url($input);
+
+        // remove www
+        $domain = preg_replace('/^www\./', '', $urlParts['host']);
+
+        return $domain;
+
+    }
+
 
 
     public function getGlobalOptionGroup()

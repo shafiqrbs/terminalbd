@@ -78,9 +78,9 @@ class WebServiceCustomerController extends Controller
         $entity = $em->getRepository('UserBundle:User')->findBy(array('username'=>$mobile));
 
         if( count($entity) > 0 ){
-            $valid = 'true';
-        }else{
             $valid = 'false';
+        }else{
+            $valid = 'true';
         }
         echo $valid;
         exit;

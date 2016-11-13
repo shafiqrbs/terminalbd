@@ -70,7 +70,7 @@ class BinduController extends Controller
             'method' => 'POST',
             'attr' => array(
                 'id' => 'signup',
-                'class' => 'signupForm',
+                'class' => ' registration signupForm',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -140,18 +140,79 @@ class BinduController extends Controller
     {
 
         $intlMobile = $request->query->get('Core_userbundle_user[profile][mobile]',NULL,true);
-        $em = $this->getDoctrine()->getManager();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
-        $entity = $em->getRepository('UserBundle:User')->findBy(array('username'=>$mobile));
+        $username = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('username' => $mobile));
+        $profileMobile = $this->getDoctrine()->getRepository('UserBundle:Profile')->findOneBy(array('mobile'=>$mobile));
+        $optionMobile = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('mobile'=>$mobile));
 
-        if( count($entity) > 0 ){
-            return new Response('failed');
-
+        if(empty($username) && empty($profileMobile) && empty($optionMobile)){
+            $valid = 'true';
         }else{
-            return new Response('success');
+            $valid = 'false';
         }
+        echo $valid;
         exit;
     }
+
+    public function doaminCheckingAction(Request $request)
+    {
+
+        $intdoamin = $request->query->get('domain',NULL,true);
+        $doamin = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('domain'=>$intdoamin));
+
+        if(empty($doamin)){
+            $valid = 'true';
+        }else{
+            $valid = 'false';
+        }
+        echo $valid;
+        exit;
+    }
+
+    public function subdomainCheckingAction(Request $request)
+    {
+
+        $intdoamin = $request->query->get('subDomain',NULL,true);
+        $doamin = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$intdoamin));
+        if(empty($doamin)){
+            $valid = 'true';
+        }else{
+            $valid = 'false';
+        }
+        echo $valid;
+        exit;
+    }
+
+    public function mobileCheckingAction(Request $request)
+    {
+
+        $intmobile = $request->query->get('mobile',NULL,true);
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intmobile);
+        $mobile = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('mobile' => $mobile));
+
+        if(empty($mobile)){
+            $valid = 'true';
+        }else{
+            $valid = 'false';
+        }
+        echo $valid;
+        exit;
+    }
+
+    public function emailCheckingAction(Request $request)
+    {
+
+        $intemail = $request->query->get('email',NULL,true);
+        $email = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('email'=>$intemail));
+        if(empty($email)){
+            $valid = 'true';
+        }else{
+            $valid = 'false';
+        }
+        echo $valid;
+        exit;
+    }
+
 
     public function checkUserNameAction(Request $request)
     {
