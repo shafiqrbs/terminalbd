@@ -30,6 +30,11 @@ class EcommerceConfig
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="ecommerceConfig"  , cascade={"persist", "remove"} )
+     **/
+    private  $templates;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="ecommerceConfig"  , cascade={"persist", "remove"} )
      **/
     private  $preOrders;
@@ -49,13 +54,19 @@ class EcommerceConfig
      */
     protected $promotions;
 
-
     /**
      * @var string
      *
      * @ORM\Column(name="pickupLocation", type="text", nullable = true)
      */
     private $pickupLocation;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="shippingCharge", type="float", nullable = true)
+     */
+    private $shippingCharge;
 
     /**
      * @var integer
@@ -113,6 +124,21 @@ class EcommerceConfig
      * @ORM\Column(name="promotion", type="boolean")
      */
     private $promotion = false;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="vat", type="float", nullable = true)
+     */
+    private $vat;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="vatEnable", type="boolean",  nullable=true)
+     */
+    private $vatEnable = false;
+
 
 
     /**
@@ -345,6 +371,69 @@ class EcommerceConfig
         $this->currency = $currency;
     }
 
+    /**
+     * @return float
+     */
+    public function getShippingCharge()
+    {
+        return $this->shippingCharge;
+    }
+
+    /**
+     * @param float $shippingCharge
+     */
+    public function setShippingCharge($shippingCharge)
+    {
+        $this->shippingCharge = $shippingCharge;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVat()
+    {
+        return $this->vat;
+    }
+
+    /**
+     * @param float $vat
+     */
+    public function setVat($vat)
+    {
+        $this->vat = $vat;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isVatEnable()
+    {
+        return $this->vatEnable;
+    }
+
+    /**
+     * @param boolean $vatEnable
+     */
+    public function setVatEnable($vatEnable)
+    {
+        $this->vatEnable = $vatEnable;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTemplates()
+    {
+        return $this->templates;
+    }
+
+    /**
+     * @param mixed $templates
+     */
+    public function setTemplates($templates)
+    {
+        $this->templates = $templates;
+    }
 
 }
 

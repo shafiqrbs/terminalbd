@@ -45,6 +45,7 @@
         "mike42/escpos-php": "dev-master",
         "divi/ajax-login-bundle": "dev-master",
         "moltin/cart": "dev-master"
+
     },
     "scripts": {
         "post-install-cmd": [

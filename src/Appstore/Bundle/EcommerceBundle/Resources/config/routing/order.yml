@@ -2,6 +2,45 @@ customer_order:
     path:     /
     defaults: { _controller: "EcommerceBundle:Order:index" }
 
+customer_order_payment:
+    path:     /payment/{id}
+    defaults: { _controller: "EcommerceBundle:Order:payment" }
+
+customer_order_update_inline:
+    path:     /order-process-inline
+    defaults: { _controller: "EcommerceBundle:Order:inlineProcessUpdate" }
+
+customer_order_data_source:
+    path:     /order-process-sourcess
+    defaults: { _controller: "EcommerceBundle:Order:orderProcesSource" }
+
+
+customer_order_add_item:
+    path:     /item-add-inline/{id}
+    defaults: { _controller: "EcommerceBundle:Order:inlineItemAdd" }
+
+customer_order_item_disable:
+    path:     /item-disable-inline/{id}
+    defaults: { _controller: "EcommerceBundle:Order:inlineDisable" }
+
+customer_order_shipping_charge:
+    path:     /order-shiping-charge-inline/{id}
+    defaults: { _controller: "EcommerceBundle:Order:shippingCharge" }
+
+
+customer_order_confirm:
+    path:     /order-confirm/{id}
+    defaults: { _controller: "EcommerceBundle:Order:confirm" }
+
+
+customer_order_print_invoice:
+    path:     /invoice-print/{id}
+    defaults: { _controller: "EcommerceBundle:Order:print" }
+
+customer_order_pdf_invoice:
+    path:     /invoice-print/{id}
+    defaults: { _controller: "EcommerceBundle:Order:pdf" }
+
 customer_order_show:
     path:     /{id}/show
     defaults: { _controller: "EcommerceBundle:Order:show" }
@@ -24,7 +63,3 @@ customer_order_update:
     defaults: { _controller: "EcommerceBundle:Order:update" }
     methods:  [POST, PUT]
 
-customer_order_delete:
-    path:     /{id}/delete
-    defaults: { _controller: "EcommerceBundle:Order:delete" }
-    methods:  [POST, DELETE]

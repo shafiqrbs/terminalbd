@@ -127,8 +127,9 @@ class WidgetController extends Controller
 
     private function createCreateForm(GlobalOption $entity)
     {
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $em = $this->getDoctrine()->getRepository('SettingToolBundle:Syndicate');
-        $form = $this->createForm(new \Setting\Bundle\ToolBundle\Form\SearchType($em), $entity, array(
+        $form = $this->createForm(new \Setting\Bundle\ToolBundle\Form\DomainSearchType($em,$location), $entity, array(
             'action' => $this->generateUrl('bindu_search', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -140,13 +141,7 @@ class WidgetController extends Controller
         return $form;
     }
 
-    public function searchingAction(Request $request)
-    {
-        $data = $request->request->all();
-        var_dump($data);
-        exit;
-        return $this->redirect($this->generateUrl('bindu_confirm'));
-    }
+
 
 
 

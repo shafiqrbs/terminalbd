@@ -36,6 +36,12 @@ class Discount
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="discount"  , cascade={"persist", "remove"} )
+     **/
+    private  $template;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="decimal", nullable = true)
@@ -187,6 +193,23 @@ class Discount
     public function setEcommerceConfig($ecommerceConfig)
     {
         $this->ecommerceConfig = $ecommerceConfig;
+    }
+
+
+    /**
+     * @return Template
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param Template $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
     }
 
 

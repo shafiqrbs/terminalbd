@@ -28,10 +28,7 @@ class PromotionType extends AbstractType
                     'Tag'       => 'Tag',
                     'Promotion'       => 'Promotion'
                 ),
-            ))
-            ->add('feature')
-            ->add('file')
-        ;
+            ));
     }
     
     /**

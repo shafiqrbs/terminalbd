@@ -4,6 +4,7 @@ namespace Setting\Bundle\ToolBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ContentBundle\Form\ContactOpeningType;
+use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Symfony\Component\Form\AbstractType;
 use Setting\Bundle\ToolBundle\Form\SiteSettingType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,7 +14,19 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class GlobalOptionType extends AbstractType
 {
-     /**
+
+
+    /** @var  LocationRepository */
+
+    private $location;
+
+    function __construct(LocationRepository $location)
+    {
+        $this->location = $location;
+    }
+
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -32,21 +45,17 @@ class GlobalOptionType extends AbstractType
                         new Length(array('max'=>200))
                     )
                 ))
+
                 ->add('location', 'entity', array(
-                    'constraints' =>array(
-                        new NotBlank(array('message'=>'Please your location name required'))
-                    ),
                     'required'    => false,
+                    'empty_value' => '---Select Location---',
+                    'attr'=>array('class'=>'select2 span12'),
                     'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
-                    'empty_value' => '---Select Location ---',
-                    'property' => 'name',
-                    'attr'     =>array('id' => '' , 'class' => 'm-wrap placeholder-no-fix select2 span12'),
-                    'query_builder' => function(EntityRepository $er){
-                        return $er->createQueryBuilder('l')
-                            ->andWhere("l.level = 2")
-                            ->orderBy('l.name','ASC');
-                    }
+                    'choices'=> $this->LocationChoiceList(),
+                    'choices_as_values' => true,
+                    'choice_label' => 'nestedLabel',
                 ))
+
 
                 ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Please enter public relational mobile no' , 'data-original-title' =>'Please enter public relational mobile no' , 'data-trigger' => 'hover'),
                     'constraints' =>array(
@@ -160,5 +169,11 @@ class GlobalOptionType extends AbstractType
     public function getName()
     {
         return 'setting_bundle_toolbundle_globaloption';
+    }
+
+    protected function LocationChoiceList()
+    {
+        return $syndicateTree = $this->location->getLocationOptionGroup();
+
     }
 }

@@ -373,7 +373,7 @@ class PurchaseItem
 
 
     /**
-     * @return mixed
+     * @return StockItem
      */
     public function getStockItem()
     {
@@ -381,7 +381,7 @@ class PurchaseItem
     }
 
     /**
-     * @return mixed
+     * @return SalesItem
      */
     public function getSalesItems()
     {
@@ -389,7 +389,7 @@ class PurchaseItem
     }
 
     /**
-     * @return mixed
+     * @return PurchaseVendorItem
      */
     public function getPurchaseVendorItem()
     {
@@ -397,7 +397,7 @@ class PurchaseItem
     }
 
     /**
-     * @param mixed $purchaseVendorItem
+     * @param PurchaseVendorItem $purchaseVendorItem
      */
     public function setPurchaseVendorItem($purchaseVendorItem)
     {
@@ -405,7 +405,7 @@ class PurchaseItem
     }
 
     /**
-     * @return mixed
+     * @return PurchaseReturnItem
      */
     public function getPurchaseReturnItem()
     {
@@ -448,6 +448,31 @@ class PurchaseItem
     public function getDamages()
     {
         return $this->damages;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBranchInvoiceItems()
+    {
+        return $this->branchInvoiceItems;
+    }
+
+    /**
+     * @param mixed $branchInvoiceItems
+     */
+    public function setBranchInvoiceItems($branchInvoiceItems)
+    {
+        $this->branchInvoiceItems = $branchInvoiceItems;
+    }
+
+    public function getStockItemQuantity()
+    {
+        $stockQnt = 0;
+        foreach ($this->getStockItem() as $stock){
+            $stockQnt += $stock->getQuantity();
+        }
+        return $stockQnt;
     }
 
 

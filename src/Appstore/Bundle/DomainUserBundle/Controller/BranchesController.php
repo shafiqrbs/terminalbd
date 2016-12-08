@@ -5,7 +5,8 @@ namespace Appstore\Bundle\DomainUserBundle\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Form\BranchesType;
 
@@ -16,10 +17,12 @@ use Appstore\Bundle\DomainUserBundle\Form\BranchesType;
 class BranchesController extends Controller
 {
 
+
     /**
      * Lists all Branches entities.
-     *
+     * @Secure(roles="ROLE_DOMAIN_HR_EMPLOYEE_MANAGER")
      */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -30,6 +33,25 @@ class BranchesController extends Controller
             'entities' => $entities,
         ));
     }
+
+    /**
+     * Lists all Branches entities.
+     *
+     */
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HR_EMPLOYEE_MANAGER")
+     */
+
+    public function branchesEmployeeAction(Branches $branches)
+    {
+        $em = $this->getDoctrine()->getManager();
+        return $this->render('DomainUserBundle:Branches:employee.html.twig', array(
+            'branches' => $branches,
+        ));
+    }
+
+
     /**
      * Creates a new Branches entity.
      *
@@ -83,6 +105,11 @@ class BranchesController extends Controller
      * Displays a form to create a new Branches entity.
      *
      */
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HR_EMPLOYEE_MANAGER")
+     */
+
     public function newAction()
     {
         $entity = new Branches();
@@ -98,6 +125,10 @@ class BranchesController extends Controller
      * Finds and displays a Branches entity.
      *
      */
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HR_EMPLOYEE_MANAGER")
+     */
+
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -116,6 +147,11 @@ class BranchesController extends Controller
      * Displays a form to edit an existing Branches entity.
      *
      */
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HR_EMPLOYEE_MANAGER")
+     */
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -187,6 +223,11 @@ class BranchesController extends Controller
      * Deletes a Branches entity.
      *
      */
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_HR_EMPLOYEE_MANAGER")
+     */
+
     public function deleteAction(Branches $entity)
     {
         $em = $this->getDoctrine()->getManager();

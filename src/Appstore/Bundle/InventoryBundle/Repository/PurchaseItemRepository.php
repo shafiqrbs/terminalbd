@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class PurchaseItemRepository extends EntityRepository
 {
+
     public function getPurchaseItemCount($item)
     {
         $qb = $this->_em->createQueryBuilder();
@@ -25,8 +26,6 @@ class PurchaseItemRepository extends EntityRepository
         }else{
             return 1;
         }
-
-
         return $item;
     }
 
@@ -38,8 +37,8 @@ class PurchaseItemRepository extends EntityRepository
         $qb->from('InventoryBundle:PurchaseItem','e');
         $qb->where("e.purchase = :purchase");
         $qb->setParameter('purchase', $purchase->getId());
-        $query = $qb->getQuery()->getSingleResult();
-        return $query;
+        $qb = $qb->getQuery()->getSingleResult();
+        return $qb;
     }
 
     public function findBarcode($item)
@@ -70,7 +69,7 @@ class PurchaseItemRepository extends EntityRepository
 
     public function getItemAveragePrice($item)
     {
-             return $queryAvg = $this->createQueryBuilder('pi')
+             return $qbAvg = $this->createQueryBuilder('pi')
             ->select("avg(pi.salesPrice) as salesAvg, avg(pi.purchasePrice) as purchaseAvg")
             ->where('pi.item = :item')
             ->setParameter('item', $item->getId())
@@ -104,27 +103,27 @@ class PurchaseItemRepository extends EntityRepository
     public function getBarcodeForPrint($inventory,$data)
     {
 
-        $query = $this->createQueryBuilder('pi');
-        $query->join('pi.purchase', 'purchase');
-        $query->join('purchase.inventoryConfig', 'ic');
-        $query->select('pi');
-        $query->where($query->expr()->in("pi.id", $data ));
-        $query->andWhere("ic.id = :inventory");
-        $query->setParameter('inventory', $inventory->getId());
-        return $query->getQuery()->getResult();
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.purchase', 'purchase');
+        $qb->join('purchase.inventoryConfig', 'ic');
+        $qb->select('pi');
+        $qb->where($qb->expr()->in("pi.id", $data ));
+        $qb->andWhere("ic.id = :inventory");
+        $qb->setParameter('inventory', $inventory->getId());
+        return $qb->getQuery()->getResult();
     }
 
     public function returnPurchaseItemDetails($inventory,$barcode)
     {
 
-        $query = $this->createQueryBuilder('i');
-        $query->join('i.purchase', 'p');
-        $query->select('i');
-        $query->where("i.barcode = :barcode" );;
-        $query->setParameter('barcode', $barcode);
-        $query->andWhere("p.inventoryConfig = :inventory");
-        $query->setParameter('inventory', $inventory->getId());
-        return $query->getQuery()->getSingleResult();
+        $qb = $this->createQueryBuilder('i');
+        $qb->join('i.purchase', 'p');
+        $qb->select('i');
+        $qb->where("i.barcode = :barcode" );;
+        $qb->setParameter('barcode', $barcode);
+        $qb->andWhere("p.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory->getId());
+        return $qb->getQuery()->getSingleResult();
 
     }
 
@@ -132,17 +131,17 @@ class PurchaseItemRepository extends EntityRepository
     public function searchAutoComplete($item, InventoryConfig $inventory)
     {
 
-        $query = $this->createQueryBuilder('i');
-        $query->join('i.purchase', 'p');
-        $query->select('i.barcode as id');
-        $query->addSelect('i.barcode as text');
-        $query->addSelect('i.quantity as item_name');
-        $query->where($query->expr()->like("i.barcode", "'%$item%'"  ));
-        $query->andWhere("p.inventoryConfig = :inventory");
-        $query->setParameter('inventory', $inventory->getId());
-        $query->orderBy('i.barcode', 'DESC');
-        $query->setMaxResults( '10' );
-        return $query->getQuery()->getResult();
+        $qb = $this->createQueryBuilder('i');
+        $qb->join('i.purchase', 'p');
+        $qb->select('i.barcode as id');
+        $qb->addSelect('i.barcode as text');
+        $qb->addSelect('i.quantity as item_name');
+        $qb->where($qb->expr()->like("i.barcode", "'%$item%'"  ));
+        $qb->andWhere("p.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory->getId());
+        $qb->orderBy('i.barcode', 'DESC');
+        $qb->setMaxResults( '10' );
+        return $qb->getQuery()->getResult();
 
     }
 

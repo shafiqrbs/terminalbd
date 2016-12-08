@@ -26,7 +26,9 @@ class ExpenditureRepository extends EntityRepository
 
         $qb->from('AccountingBundle:Expenditure','s');
         $qb->select('sum(s.amount) as amount');
-        $qb->where('s.globalOption = :globalOption');
+        $qb->where('s.process = :process');
+        $qb->setParameter('process', 'approved');
+        $qb->andWhere('s.globalOption = :globalOption');
         $qb->setParameter('globalOption', $globalOption);
         if (!empty($startDate) and $startDate !="") {
 
@@ -77,12 +79,14 @@ class ExpenditureRepository extends EntityRepository
         $accountHead = $em->getRepository('AccountingBundle:AccountHead')->find(25);
         $entity->setGlobalOption($globalOption);
         $entity->setAccountHead($accountHead);
+        $entity->setAccountMobileBank($paymentSalary->getAccountMobileBank());
+        $entity->setAccountBank($paymentSalary->getAccountBank());
         $entity->setToUser($paymentSalary->getUser());
         $entity->setCreatedBy($paymentSalary->getCreatedBy());
         $entity->setApprovedBy($paymentSalary->getApprovedBy());
         $entity->setAmount($paymentSalary->getTotalAmount());
         $entity->setRemark($paymentSalary->getRemark());
-        $entity->setPaymentMethod('Cash');
+        $entity->setTransactionMethod($paymentSalary->getTransactionMethod());
         $entity->setProcess('approved');
         $em->persist($entity);
         $em->flush();
@@ -117,7 +121,8 @@ class ExpenditureRepository extends EntityRepository
         $qb = $this->createQueryBuilder('ex');
         $qb->join('ex.accountHead','accountHead');
         $qb->select('sum(ex.amount) as amount, accountHead.name as name');
-        $qb->where('ex.globalOption = :globalOption');
+        $qb->where('ex.accountHead = 37');
+        $qb->andWhere('ex.globalOption = :globalOption');
         $qb->setParameter('globalOption', $globalOption);
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy('ex.accountHead');

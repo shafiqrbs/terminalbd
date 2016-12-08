@@ -58,6 +58,13 @@ class GoodsItem
      */
     private $quantity;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="salesQuantity", type="integer", nullable = true)
+     */
+    private $salesQuantity;
+
      /**
      * @var string
      *
@@ -247,6 +254,22 @@ class GoodsItem
     public function setDiscountPrice($discountPrice)
     {
         $this->discountPrice = $discountPrice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalesQuantity()
+    {
+        return $this->salesQuantity;
+    }
+
+    /**
+     * @param string $salesQuantity
+     */
+    public function setSalesQuantity($salesQuantity)
+    {
+        $this->salesQuantity = $salesQuantity;
     }
 
 

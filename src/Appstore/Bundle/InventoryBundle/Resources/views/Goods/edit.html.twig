@@ -188,7 +188,7 @@
                         <div class="row-fluid">
 
                             <div class="span8">
-                                {% if ecommerceConfig.isColor == 1 %}
+                                {% if  entity.inventoryConfig.isColor == 1 %}
                                     <div class="row-fluid">
                                         <div class="span12 ">
                                             <div class="control-group">
@@ -265,6 +265,7 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
                                 <div class="span12">
+                                    {% if entity.source != 'inventory'  %}
                                     <div class="clone-block trash" id="clone-sub-product">
                                         <div class="row-fluid clone  box blue">
                                             <div class="span10">
@@ -278,7 +279,7 @@
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-                                                    {% if ecommerceConfig.isColor == 1 %}
+                                                    {% if entity.inventoryConfig.isColor == 1 %}
                                                         <div class="span2">
                                                             <select class="span12" multiple="multiple" id="subColor" name="subColor[]">
                                                                 {% for color in colors %}
@@ -312,6 +313,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {% endif %}
                                     <div class="trash " id="subProductLoad">
                                     {% if entity.goodsItems is not empty and entity.goodsItems is defined %}
                                         {% for goodsItem in  entity.goodsItems %}
@@ -319,7 +321,7 @@
                                                 <div class="row-fluid  box blue">
                                                     <div class="span10">
                                                         <div class="row-fluid">
-                                                            <div class="{% if ecommerceConfig.isColor == 1 %} span4 {% else %}span6 {% endif %}">
+                                                            <div class="{% if entity.inventoryConfig.isColor == 1 %} span4 {% else %}span6 {% endif %}">
                                                                 <select class="span12" name="subSize{{ goodsItem.id }}" id="subSize{{ goodsItem.id }}" >
                                                                     <option value="">Select size/dimension/weight
                                                                     </option>
@@ -328,7 +330,7 @@
                                                                     {% endfor %}
                                                                 </select>
                                                             </div>
-                                                            {% if ecommerceConfig.isColor == 1 %}
+                                                            {% if entity.inventoryConfig.isColor == 1 %}
                                                                 <div class="span2">
                                                                     <select class="span12" multiple="multiple" id="subColor{{ goodsItem.id }}" name="subColor{{ goodsItem.id }}">
                                                                         {% for color in colors %}
@@ -357,10 +359,12 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    {% if entity.source != 'inventory'  %}
                                                     <div class="span2">
                                                         <a href="javascript:" data-id="{{ goodsItem.id }}" data-url="{{ path('inventory_goods_subItem_update',{'id':goodsItem.id} ) }}" class="btn blue mini updateSubProduct"><i class="icon-save m-icon-white"></i></a>
                                                         <a href="javascript:" data-id="{{ goodsItem.id }}" data-url="{{ path('inventory_goods_subItem_delete',{'id':goodsItem.id} ) }}" class="btn red mini  remove"><i class="icon-trash m-icon-white"></i></a>
                                                     </div>
+                                                    {% endif %}
                                                 </div>
                                             {% endif %}
                                         {% endfor %}

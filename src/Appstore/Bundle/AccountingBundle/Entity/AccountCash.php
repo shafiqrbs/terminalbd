@@ -41,9 +41,10 @@ class AccountCash
     private  $accountBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="accountCashes" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="accountCashes" )
      **/
-    private  $accountBkash;
+    private  $accountMobileBank;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="accountCashes" )
@@ -430,22 +431,6 @@ class AccountCash
     }
 
     /**
-     * @return AccountBkash
-     */
-    public function getAccountBkash()
-    {
-        return $this->accountBkash;
-    }
-
-    /**
-     * @param AccountBkash $accountBkash
-     */
-    public function setAccountBkash($accountBkash)
-    {
-        $this->accountBkash = $accountBkash;
-    }
-
-    /**
      * @return Expenditure
      */
     public function getExpenditure()
@@ -571,6 +556,22 @@ class AccountCash
     public function setPaymentSalary($paymentSalary)
     {
         $this->paymentSalary = $paymentSalary;
+    }
+
+    /**
+     * @return AccountMobileBank
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param AccountMobileBank $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
     }
 
 }

@@ -1,29 +1,23 @@
+customer_domain_product:
+    resource: "@CustomerBundle/Resources/config/routing/product.yml"
+    prefix:   /product
+
+customer_domain:
+    resource: "@CustomerBundle/Resources/config/routing/domain.yml"
+    prefix:   /domain
+
+customer_order_process:
+    resource: "@CustomerBundle/Resources/config/routing/order.yml"
+    prefix:   /order
+
+customer_pre_order_process:
+    resource: "@CustomerBundle/Resources/config/routing/preorder.yml"
+    prefix:   /pre-order
+
 domain_customer_homepage:
     path:     /dashboard
-    defaults: { _controller: CustomerBundle:Customer:index }
+    defaults: { _controller: "CustomerBundle:Customer:index" }
 
-customer_order_cart:
-    path:     /order-cart
-    defaults: { _controller: CustomerBundle:Customer:cart }
 
-domain_customer_order:
-    path:     /order
-    defaults: { _controller: CustomerBundle:Customer:order }
 
-domain_customer_payment:
-    path:     /payment/{id}
-    defaults: { _controller: CustomerBundle:Customer:payment }
 
-domain_customer_order_process:
-    path:      /{id}/{process}/order-process
-    defaults: { _controller: CustomerBundle:Customer:process }
-    methods:  [GET, PUT]
-
-domain_order_ajax_payment:
-    path:      /{id}/order-payment
-    defaults: { _controller: "CustomerBundle:Customer:pay" }
-    methods:  [POST]
-
-domain_order_invoice:
-    path:      /{id}/preorder-invoice
-    defaults: { _controller: "EcommerceBundle:PreOrder:invoice" }

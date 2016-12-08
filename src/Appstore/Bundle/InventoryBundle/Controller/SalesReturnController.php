@@ -38,14 +38,15 @@ class SalesReturnController extends Controller
      */
     public function searchAction(Request $request)
     {
-        $invoiceDate = $request->request->get('invoiceDate');
-        $invoice = date('Ymd',strtotime($invoiceDate));
-        $salesId = $invoice.''.$request->request->get('salesId');
-        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBySalesReturn($salesId);
+
+        $salesId = $request->request->get('invoice');
+        $invoice = $this->get('settong.toolManageRepo')->specialExpClean($salesId);
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array( 'inventoryConfig'=>$inventory,'invoice' => $invoice));
         if(!empty($sales)){
             $em = $this->getDoctrine()->getManager();
             $entity = new SalesReturn();
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+
             $entity->setSales($sales);
             $entity->setInventoryConfig($inventory);
             $entity->setCreatedBy($this->getUser());
@@ -134,6 +135,7 @@ class SalesReturnController extends Controller
             $this->getDoctrine()->getRepository('InventoryBundle:SalesReturn')->updateSalesReturn($entity);
             $em->getRepository('InventoryBundle:Item')->getItemSalesReturnUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesReturnStockItem($entity);
+            $em->getRepository('InventoryBundle:GoodsItem')->updateInventorySalesReturnItem($entity);
             $accountSalesReturn = $em->getRepository('AccountingBundle:AccountSalesReturn')->insertAccountSalesReturn($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesReturnTransaction($entity,$accountSalesReturn);
             return $this->redirect($this->generateUrl('inventory_salesreturn_edit', array('id' => $entity->getId())));

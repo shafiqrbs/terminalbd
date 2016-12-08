@@ -1,3 +1,16 @@
+
+ecommerce_ecommercetemplate:
+    resource: "@EcommerceBundle/Resources/config/routing/template.yml"
+    prefix:   /ecommerce/template
+
+ecommerce_ecommercehome:
+    resource: "@EcommerceBundle/Resources/config/routing/ecommercehome.yml"
+    prefix:   /ecommerce/home
+
+ecommerce_ecommerceslider:
+    resource: "@EcommerceBundle/Resources/config/routing/ecommerceslider.yml"
+    prefix:   /ecommerce/slider
+
 ecommerce_promotion:
     resource: "@EcommerceBundle/Resources/config/routing/promotion.yml"
     prefix:   /ecommerce/promotion

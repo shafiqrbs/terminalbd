@@ -64,8 +64,9 @@ class BinduController extends Controller
 
     private function createCreateForm(User $entity)
     {
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $em = $this->getDoctrine()->getRepository('SettingToolBundle:Syndicate');
-        $form = $this->createForm(new SignupType($em), $entity, array(
+        $form = $this->createForm(new SignupType($em,$location), $entity, array(
             'action' => $this->generateUrl('bindu_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -92,13 +93,14 @@ class BinduController extends Controller
         $form->handleRequest($request);
         $intlMobile = $entity->getProfile()->getMobile();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
-
+        $entity->getProfile()->setMobile($mobile);
         $data = $request->request->all();
 
 
         if ($form->isValid()) {
 
             $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->createGlobalOption($mobile,$data);
+            //$a = mt_rand(1000,9999);
             $entity->setPlainPassword("1234");
             $entity->setGlobalOption($globalOption);
             $entity->setEnabled(true);
@@ -296,7 +298,13 @@ class BinduController extends Controller
 
     public function findAction()
     {
-        $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBy(array('status'=>1),array('id'=>'desc'));
+        $data = array();
+        $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain($data);
+        if(!empty($entities)){
+            $pagination = $this->paginate($entities);
+        }else{
+            $pagination = '';
+        }
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();
         if( $detect->isMobile() OR  $detect->isTablet() ) {
@@ -305,9 +313,31 @@ class BinduController extends Controller
             $theme = 'Frontend/Desktop';
         }
         return $this->render('BinduBundle:'.$theme.':find.html.twig', array(
-            'entities' => $entities,
+            'entities' => $pagination,
         ));
 
+
+    }
+
+    public function searchingAction(Request $request)
+    {
+        $data = $request->request->all();
+        $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain($data['setting_bundle_toolbundle_globaloption']);
+        if(!empty($entities)){
+            $pagination = $this->paginate($entities);
+        }else{
+            $pagination = '';
+        }
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        if( $detect->isMobile() OR  $detect->isTablet() ) {
+            $theme = 'Frontend/Mobile';
+        }else{
+            $theme = 'Frontend/Desktop';
+        }
+        return $this->render('BinduBundle:'.$theme.':find.html.twig', array(
+            'entities' => $pagination,
+        ));
     }
 
 
@@ -339,7 +369,8 @@ class BinduController extends Controller
     {
 
         $syndicate = $this->getDoctrine()->getRepository('SettingToolBundle:Syndicate')->findOneBy(array('slug'=>$directory));
-        $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBy(array('status'=>1,'syndicate'=>$syndicate),array('name'=>'ASC'));
+        $data = array('syndicate'=>$syndicate);
+        $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain($data);
         $detect = new MobileDetect();
         if( $detect->isMobile() OR  $detect->isTablet() ) {
             $theme = 'Frontend/Mobile';
@@ -368,6 +399,7 @@ class BinduController extends Controller
     {
 
         $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBy(array('status'=>1,'location'=>$location),array('name'=>'ASC'));
+
         $detect = new MobileDetect();
         if( $detect->isMobile() OR  $detect->isTablet() ) {
             $theme = 'Frontend/Mobile';
@@ -398,14 +430,14 @@ class BinduController extends Controller
 
     public function pageContentAction($slug)
     {
-        $entity =$this->getDoctrine()->getRepository('SettingContentBundle:SiteContent')->findOneBy(array('slug'=>$slug));
+        $entity =$this->getDoctrine()->getRepository('SettingContentBundle:SiteContent')->findOneBy(array('slug' => $slug));
         $detect = new MobileDetect();
         if( $detect->isMobile() OR  $detect->isTablet() ) {
             $theme = 'Frontend/Mobile';
         }else{
             $theme = 'Frontend/Desktop';
         }
-        return $this->render('BinduBundle:'.$theme.':content.html.twig', array(
+        return $this->render('BinduBundle:'.$theme.':page.html.twig', array(
             'entity' => $entity,
         ));
     }
@@ -478,6 +510,19 @@ class BinduController extends Controller
 
 
     }
+
+    public function paginate($entities)
+    {
+
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            20  /*limit per page*/
+        );
+        return $pagination;
+    }
+
 
 
 

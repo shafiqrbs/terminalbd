@@ -5,6 +5,7 @@ namespace Appstore\Bundle\DomainUserBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -38,6 +39,11 @@ class Branches
      * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="branches" )
      **/
     private  $branchManager;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\profile", mappedBy="branches" )
+     **/
+    private  $profiles;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="branches" )
@@ -287,6 +293,16 @@ class Branches
     {
         return $this->branchInvoice;
     }
+
+    /**
+     * @return Profile
+     */
+    public function getProfiles()
+    {
+        return $this->profiles;
+    }
+
+
 
 
 }

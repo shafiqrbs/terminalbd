@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;
@@ -43,6 +44,12 @@ class ItemSize  implements CodeAwareEntity
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="size")
      */
     protected $goodsItems;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="size")
+     */
+    protected $orderItem;
+
 
     /**
      * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="size" )
@@ -245,6 +252,14 @@ class ItemSize  implements CodeAwareEntity
     public function setCategory($category)
     {
         $this->category = $category;
+    }
+
+    /**
+     * @return OrderItem
+     */
+    public function getOrderItem()
+    {
+        return $this->orderItem;
     }
 }
 

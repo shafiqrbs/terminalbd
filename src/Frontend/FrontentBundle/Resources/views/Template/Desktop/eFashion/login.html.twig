@@ -1,0 +1,62 @@
+{% extends ':frontend/template:base.html.twig' %}
+{% block body %}
+    <div class="clearfix"></div>
+    <section id="breadcrumb">
+        <div class="container">
+            <div class="col-md-12">
+                <div class="crumb">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i>Login</div>
+            </div>
+        </div>
+    </section>
+    <section id="">
+        <div class="container">
+            <div class=" col-xs-6 col-md-6 col-md-offset-3 margin-top">
+                <form class="register" id="commentform" action="{{ path("fos_user_security_check") }}" method="post" novalidate="novalidate">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-info">
+                        <h4 class="text-left"><strong>LOGIN</strong></h4>
+                    </div>
+                    <div class="panel-body">
+                        {% if(error) %}
+                            <p class="error">{{ error }}</p>
+                        {% endif  %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                <input type="text" id="_username" name="_username" required="required" class="form-control" placeholder="Enter your mobile no">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                <input type="password" id="_password" name="_password" required="required" class="form-control secured" placeholder="Enter your password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer clearfix" >
+                        <button type="submit"  class="btn btn-sm btn-primary pull-right" role="button">Login</button>
+                    </div>
+                </div>
+                </form>
+
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/desktop/css/common.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/js/common.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

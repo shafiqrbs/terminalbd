@@ -55,12 +55,12 @@ class AccountCashRepository extends EntityRepository
     public function transactionBkashCashOverview($globalOption,$data = '')
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.accountBkash','accountBkash');
-        $qb->select('accountBkash.name , SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->join('e.accountMobileBank','accountMobileBank');
+        $qb->select('accountMobileBank.name , SUM(e.debit) AS debit, SUM(e.credit) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         $this->handleSearchBetween($qb,$data);
-        $qb->groupBy("e.accountBkash");
+        $qb->groupBy("e.accountMobileBank");
         $result = $qb->getQuery()->getArrayResult();
         return $result;
 
@@ -124,7 +124,7 @@ class AccountCashRepository extends EntityRepository
             $tillDate = isset($data['tillDate'])  ? $data['tillDate'] : '';
             $process =    isset($data['processHead'])? $data['processHead'] :'';
             $accountBank =    isset($data['accountBank'])? $data['accountBank'] :'';
-            $accountBkash =    isset($data['accountBkash'])? $data['accountBkash'] :'';
+            $accountMobileBank =    isset($data['accountMobileBank'])? $data['accountMobileBank'] :'';
 
 
             if (!empty($accountRefNo)) {
@@ -150,10 +150,10 @@ class AccountCashRepository extends EntityRepository
                 $qb->setParameter('accountBank', $accountBank);
             }
 
-            if (!empty($accountBkash)) {
+            if (!empty($accountMobileBank)) {
 
-                $qb->andWhere("e.accountBkash = :accountBkash");
-                $qb->setParameter('accountBkash', $accountBkash);
+                $qb->andWhere("e.accountMobileBank = :accountMobileBank");
+                $qb->setParameter('accountMobileBank', $accountMobileBank);
             }
         }
 
@@ -171,7 +171,7 @@ class AccountCashRepository extends EntityRepository
 
         }elseif($entity->getTransactionMethod()->getId() == 3 ){
 
-            $array = array('globalOption' => $entity->getGlobalOption(),'transactionMethod' => $entity->getTransactionMethod(),'accountBkash' => $entity->getAccountBkash(), 'processHead' => $processHead );
+            $array = array('globalOption' => $entity->getGlobalOption(),'transactionMethod' => $entity->getTransactionMethod(),'accountBkash' => $entity->getAccountMobileBank(), 'processHead' => $processHead );
 
         }else{
 
@@ -196,7 +196,7 @@ class AccountCashRepository extends EntityRepository
         if($entity->getTransactionMethod()->getId() == 2){
             $cash->setAccountBank($entity->getAccountBank());
         }elseif($entity->getTransactionMethod()->getId() == 3 ){
-            $cash->setAccountBkash($entity->getAccountBkash());
+            $cash->setAccountMobileBank($entity->getAccountMobileBank());
         }
 
         $cash->setGlobalOption($entity->getGlobalOption());
@@ -230,7 +230,7 @@ class AccountCashRepository extends EntityRepository
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setAccountPurchase($entity);
         $cash->setTransactionMethod($entity->getTransactionMethod());
-        $cash->setAccountBkash($entity->getAccountBkash());
+        $cash->setAccountMobileBank($entity->getAccountMobileBank());
         $cash->setAccountBank($entity->getAccountBank());
         $cash->setProcessHead('Purchase');
         $cash->setAccountRefNo($entity->getAccountRefNo());
@@ -255,7 +255,7 @@ class AccountCashRepository extends EntityRepository
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(39));
         }elseif($entity->getTransactionMethod()->getId() == 3 ){
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(39));
-            $cash->setAccountBkash($entity->getAccountBkash());
+            $cash->setAccountMobileBank($entity->getAccountMobileBank());
         }else{
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(36));
         }
@@ -327,8 +327,8 @@ class AccountCashRepository extends EntityRepository
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setExpenditure($entity);
         $cash->setTransactionMethod($entity->getTransactionMethod());
-        $cash->setAccountBkash($entity->getAccountBkash());
         $cash->setAccountBank($entity->getAccountBank());
+        $cash->setAccountMobileBank($entity->getAccountMobileBank());
         $cash->setProcessHead('Expenditure');
         $cash->setAccountRefNo($entity->getAccountRefNo());
         $cash->setUpdated($entity->getUpdated());
@@ -350,7 +350,7 @@ class AccountCashRepository extends EntityRepository
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setPettyCash($entity);
         $cash->setTransactionMethod($entity->getTransactionMethod());
-        $cash->setAccountBkash($entity->getAccountBkash());
+        $cash->setAccountMobileBank($entity->getAccountMobileBank());
         $cash->setAccountBank($entity->getAccountBank());
         $cash->setProcessHead('PettyCash');
         $cash->setAccountRefNo($entity->getAccountRefNo());
@@ -373,7 +373,7 @@ class AccountCashRepository extends EntityRepository
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setPettyCash($entity);
         $cash->setTransactionMethod($entity->getTransactionMethod());
-        $cash->setAccountBkash($entity->getAccountBkash());
+        $cash->setAccountMobileBank($entity->getAccountMobileBank());
         $cash->setAccountBank($entity->getAccountBank());
         $cash->setProcessHead('PettyCash');
         $cash->setAccountRefNo($entity->getAccountRefNo());
@@ -397,7 +397,7 @@ class AccountCashRepository extends EntityRepository
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setPaymentSalary($entity);
         $cash->setTransactionMethod($entity->getTransactionMethod());
-        $cash->setAccountBkash($entity->getAccountBkash());
+        $cash->setAccountMobileBank($entity->getAccountMobileBank());
         $cash->setAccountBank($entity->getAccountBank());
         $cash->setProcessHead('PaymentSalary');
         $cash->setAccountRefNo($entity->getAccountRefNo());

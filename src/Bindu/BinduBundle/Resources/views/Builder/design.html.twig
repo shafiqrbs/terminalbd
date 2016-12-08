@@ -200,6 +200,14 @@
     <div class="accordion-container">
         <p>Customize the footer of your site. To display the Phone number and Address in the site footer, the 'Call Us' and 'Find Us' features must be added to the site.</p>
         <form class="design-form footer-submitted" id="footerSetting" action="" method="post" >
+            <div class="checkbox block">
+                <label >Display Icon</label><input type="checkbox" name="addressIconPage" {% if(entity.footerSetting.addressIconPage == 1) %} checked {% endif %} value="1" />
+            </div>
+            <div class="brclear"></div>
+            <div class="checkbox block">
+                <label >SocialMedia Icon</label><input type="checkbox" name="socialMedia" {% if(entity.footerSetting.socialMedia == 1) %} checked {% endif %} value="1" />
+            </div>
+            <div class="brclear"></div>
             <label>Copy Right<a class="small-text align-right"  href="#"
                                 data-interface="tooltip"
                                 data-position="top"
@@ -235,7 +243,7 @@
                 <label >Display on sub pages</label><input type="checkbox" name="phoneSubPage"  {% if(entity.footerSetting.phoneSubPage == 1) %} checked {% endif %} value="1" />
                 <label >Display Icon</label><input type="checkbox" name="phoneDisplay" {% if(entity.footerSetting.phoneDisplay == 1) %}  checked {% endif %} value="1" />
             </div>#}
-            <p class="align-right" >To keep these changes, click 'Update'&nbsp;&nbsp;&nbsp;<input id="footerSettingID" class="tm-btn mini" type="button" value="update" name="homepage"></p>
+            <p class="align-right" >To keep these changes, click 'Update'&nbsp;&nbsp;&nbsp;<input id="footerSettingID" class="tm-btn mini" type="submit" value="update" name="homepage"></p>
         </form>
 
         <div class="clear"></div>

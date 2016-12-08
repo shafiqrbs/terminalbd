@@ -42,6 +42,10 @@ customer_preorder_process:
     defaults: { _controller: "EcommerceBundle:PreOrder:process" }
     methods:  [GET, PUT]
 
+customer_preorder_confirm:
+    path:     /{id}/preorder-confirm
+    defaults: { _controller: "EcommerceBundle:PreOrder:confirm" }
+
 customer_preorder_item_delete:
     path:     /{preOrder}/{id}/delete-item
     defaults: { _controller: "EcommerceBundle:PreOrder:deleteItem" }

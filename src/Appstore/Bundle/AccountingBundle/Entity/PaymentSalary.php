@@ -47,9 +47,9 @@ class PaymentSalary
     private  $accountBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="paymentSalaries" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="paymentSalaries" )
      **/
-    private  $accountBkash;
+    private  $accountMobileBank;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="paymentSalary" )
@@ -155,9 +155,9 @@ class PaymentSalary
     /**
      * @var float
      *
-     * @ORM\Column(name="advanceAmount", type="float", nullable=true)
+     * @ORM\Column(name="adjustmentAmount", type="float", nullable=true)
      */
-    private $advanceAmount;
+    private $adjustmentAmount;
 
     /**
      * @var float
@@ -172,8 +172,6 @@ class PaymentSalary
      * @ORM\Column(name="totalAmount", type="float", nullable=true)
      */
     private $totalAmount = 0;
-
-
 
     /**
      * @var string
@@ -362,22 +360,6 @@ class PaymentSalary
     }
 
     /**
-     * @return float
-     */
-    public function getAdvanceAmount()
-    {
-        return $this->advanceAmount;
-    }
-
-    /**
-     * @param float $advanceAmount
-     */
-    public function setAdvanceAmount($advanceAmount)
-    {
-        $this->advanceAmount = $advanceAmount;
-    }
-
-    /**
      * @return mixed
      */
     public function getSalarySetting()
@@ -490,22 +472,6 @@ class PaymentSalary
     }
 
     /**
-     * @return AccountBkash
-     */
-    public function getAccountBkash()
-    {
-        return $this->accountBkash;
-    }
-
-    /**
-     * @param AccountBkash $accountBkash
-     */
-    public function setAccountBkash($accountBkash)
-    {
-        $this->accountBkash = $accountBkash;
-    }
-
-    /**
      * @return AccountCash
      */
     public function getAccountCash()
@@ -599,6 +565,38 @@ class PaymentSalary
     public function setSalaryYear($salaryYear)
     {
         $this->salaryYear = $salaryYear;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param mixed $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAdjustmentAmount()
+    {
+        return $this->adjustmentAmount;
+    }
+
+    /**
+     * @param float $adjustmentAmount
+     */
+    public function setAdjustmentAmount($adjustmentAmount)
+    {
+        $this->adjustmentAmount = $adjustmentAmount;
     }
 
 }

@@ -59,28 +59,31 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
-                            <div class="portlet search-portlet box grey">
-                                <div class="row-fluid">
-                                    <form class="search-form" action="" method="get" name="itemSearch">
-                                        <div class="span11">
+                            <div class="row-fluid">
+                                <form class="search-form" action="" method="get" name="itemSearch">
+                                    <div class="row-fluid">
+                                        <div class="span3">
+                                            <input type="text" id="item" name="item"  class="span12 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name ">
+                                        </div>
+                                        <div class="span2">
+                                            <input type="text" id="size" name="size"  class="span12 select2Size" value="{% if searchForm.size is defined %}{{ searchForm.size }}{% endif %}"  autocomplete="off" placeholder="Enter size name ">
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="color" name="color"  class="span12 select2Color" value="{% if searchForm.color is defined %}{{ searchForm.color }}{% endif %}"  autocomplete="off" placeholder="Enter color name ">
+                                        </div>
+                                        <div class="span4">
                                             <div class="controls">
-                                                <input type="text" id="item" name="item"  class="span3 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name ">
-                                                <input type="text" id="color" name="color"  class="span2 select2Color" value="{% if searchForm.color is defined %}{{ searchForm.color }}{% endif %}"  autocomplete="off" placeholder="Enter color name ">
-                                                <input type="text" id="size" name="size"  class="span2 select2Size" value="{% if searchForm.size is defined %}{{ searchForm.size }}{% endif %}"  autocomplete="off" placeholder="Enter size name ">
-                                         {#       <input type="text" id="brand" name="brand"  class="span3 select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}" autocomplete="off" placeholder="Enter brand name ">
-                                         #}       <input type="text" id="vendor" name="vendor"  class="span3 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}" autocomplete="off" placeholder="Enter vendor name ">
+                                                <div class="input-append span11">
+                                                    <input type="text" id="vendor" name="vendor"  class="span11 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
+                                                    <div class="btn-group">
+                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <div class="btn-group">
-                                                <button class="btn default " type="submit" >
-                                                    <i class="icon-search"></i>&nbsp;Go</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                </form>
                             </div>
-
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead>
@@ -106,16 +109,16 @@
                                         <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                         <td class="numeric" >
                                             {{ entity.masterItem.name }}
-                                            {% if entity.inventoryConfig.isColor == 1 %}-{{ entity.color.name }} {% endif %}
-                                            {% if entity.inventoryConfig.isSize == 1  %}-{{ entity.size.name }} {% endif %}
-                                            {% if entity.inventoryConfig.isBrand == 1  %}-{{ entity.brand.name }} {% endif %}
-                                            {% if entity.inventoryConfig.isVendor == 1  %}-{{ entity.vendor.name }} {% endif %}
+                                            {% if entity.inventoryConfig.isColor == 1 and  entity.color is not empty %}-{{ entity.color.name }} {% endif %}
+                                            {% if entity.inventoryConfig.isSize == 1 and  entity.size is not empty %}-{{ entity.size.name }} {% endif %}
+                                            {% if entity.inventoryConfig.isBrand == 1 and  entity.brand is not empty  %}-{{ entity.brand.name }} {% endif %}
+                                            {% if entity.inventoryConfig.isVendor == 1 and  entity.vendor is not empty %}-{{ entity.vendor.name }} {% endif %}
                                         </td>
                                         <td class="numeric" >{{ entity.sku }}</td>
-                                        <td class="numeric" >{{ entity.purchaseQuantity + entity.purchaseQuantityReplace + entity.salesQuantityReturn }}</td>
-                                        <td class="numeric" >{{ entity.salesQuantity + entity.purchaseQuantityReturn }}</td>
+                                        <td class="numeric" >{{ entity.purchaseQuantity }}</td>
+                                        <td class="numeric" >{{ entity.salesQuantity + entity.purchaseQuantityReturn - entity.salesQuantityReturn  }}</td>
                                         <td class="numeric" >{{ entity.damageQuantity  }}</td>
-                                        <td class="numeric" >{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.purchaseQuantityReplace ) - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity )  }}</td>
+                                        <td class="numeric" >{{ entity.purchaseQuantity  - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity - entity.salesQuantityReturn  )  }}</td>
                                         <td class="numeric" >{{ entity.avgPurchasePrice }}</td>
                                         <td class="numeric" >{{ entity.avgSalesPrice }}</td>
                                         <td class="numeric" >
@@ -154,7 +157,6 @@
                                                             <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.memo }}{% endif %}</td>
                                                             <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.created|date('d-m-Y') }}{% endif %}</td>
                                                             <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.grn }}{% endif %}</td>
-
                                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                                             <td class="numeric" >{{ purchaseItem.itemStock }}</td>
                                                             <td class="numeric" >{{ purchaseItem.purchasePrice|number_format(2, '.', ',') }}</td>
@@ -184,6 +186,13 @@
 <style>
     .disabled{
         opacity: 0.5;
+    }
+    .select2-container {
+        margin-left: 0px!important;
+        margin-bottom: 5px;
+    }
+    .input-append, .input-prepend{
+        font-size: 13px!important;
     }
 </style>
 {% endblock %}

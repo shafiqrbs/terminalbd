@@ -54,9 +54,10 @@ class PettyCash
     private  $accountBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="pettyCash" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="pettyCash" )
      **/
-    private  $accountBkash;
+    private  $accountMobileBank;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="pettyCash" )
@@ -78,7 +79,14 @@ class PettyCash
      */
     private $amount;
 
- /**
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="balance", type="float", nullable=true)
+     */
+    private $balance;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="returnAmount", type="float", nullable=true)
@@ -391,22 +399,6 @@ class PettyCash
     }
 
     /**
-     * @return AccountBkash
-     */
-    public function getAccountBkash()
-    {
-        return $this->accountBkash;
-    }
-
-    /**
-     * @param AccountBkash $accountBkash
-     */
-    public function setAccountBkash($accountBkash)
-    {
-        $this->accountBkash = $accountBkash;
-    }
-
-    /**
      * @return AccountCash
      */
     public function getAccountCash()
@@ -484,6 +476,38 @@ class PettyCash
     public function setCode($code)
     {
         $this->code = $code;
+    }
+
+    /**
+     * @return AccountMobileBank
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param AccountMobileBank $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBalance()
+    {
+        return $this->balance;
+    }
+
+    /**
+     * @param float $balance
+     */
+    public function setBalance($balance)
+    {
+        $this->balance = $balance;
     }
 
 

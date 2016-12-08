@@ -2,6 +2,10 @@ domain_branches:
     path:     /
     defaults: { _controller: "DomainUserBundle:Branches:index" }
 
+domain_branches_employee:
+    path:     /{id}/branches-employee
+    defaults: { _controller: "DomainUserBundle:Branches:branchesEmployee" }
+
 domain_branches_show:
     path:     /{id}/show
     defaults: { _controller: "DomainUserBundle:Branches:show" }

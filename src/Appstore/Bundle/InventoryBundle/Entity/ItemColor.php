@@ -38,6 +38,11 @@ class ItemColor implements CodeAwareEntity
     protected $goodsItem;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="color")
+     */
+    protected $orderItem;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="itemColors")
      */
     protected $purchaseVendorItems;
@@ -234,6 +239,14 @@ class ItemColor implements CodeAwareEntity
     public function getPurchaseVendorItem()
     {
         return $this->purchaseVendorItem;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderItem()
+    {
+        return $this->orderItem;
     }
 }
 

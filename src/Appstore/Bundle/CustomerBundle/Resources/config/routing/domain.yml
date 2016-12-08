@@ -1,0 +1,7 @@
+customer_domain:
+    path:     /
+    defaults: { _controller: "CustomerBundle:Domain:index" }
+
+customer_domain_bookmark:
+    path:     /bookmark
+    defaults: { _controller: "CustomerBundle:Domain:domainBookmark" }

@@ -295,6 +295,7 @@ class PurchaseReturnController extends Controller
             $em->flush();
             $em->getRepository('InventoryBundle:Item')->getItemPurchaseReturn($purchaseReturn);
             $em->getRepository('InventoryBundle:StockItem')->insertPurchaseReturnStockItem($purchaseReturn);
+            $em->getRepository('InventoryBundle:GoodsItem')->updateInventoryPurchaseReturnItem($purchaseReturn);
             $accountPurchaseReturn = $em->getRepository('AccountingBundle:AccountPurchaseReturn')->insertAccountPurchaseReturn($purchaseReturn);
             $em->getRepository('AccountingBundle:Transaction')->purchaseReturnTransaction($purchaseReturn,$accountPurchaseReturn);
             return new Response('success');

@@ -87,7 +87,7 @@
                                         <li><strong>Payment status</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
                                         <li><strong>Payment method:</strong>&nbsp;{{ entity.paymentMethod }}</li>
                                         {% if entity.paymentCard is not empty %}<li><strong>Payment Card:</strong>&nbsp;{{ entity.paymentCard.name }}{% endif %}</li>
-                                        {% if entity.chequeCardNo is not empty %}<li><strong>Cheque/Card no:</strong>&nbsp;{{ entity.chequeCardNo }}</li>{% endif %}
+                                        {% if entity.cardNo is not empty %}<li><strong>Cheque/Card no:</strong>&nbsp;{{ entity.cardNo }}</li>{% endif %}
                                         {% if entity.bank is not empty %}<li><strong>Bank:</strong>&nbsp;{{ entity.bank.name  }}</li>{% endif %}
 
                                     </ul>
@@ -175,7 +175,7 @@
                             {{ form_row(form._token) }}
 
                             <div class="form-actions portlet box grey">
-                                <div class="span4" id="message"></div>
+                                <div class="span9" id="message"></div>
 
                                 <div class="pull-right" id="action-{{ entity.id }}">
 

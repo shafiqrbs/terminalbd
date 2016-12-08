@@ -50,6 +50,7 @@
                                 <tr class="head-grey">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric">Name</th>
+                                    <th class="numeric">User</th>
                                     <th class="numeric">Joining date</th>
                                     <th class="numeric">Designation</th>
                                     <th class="numeric">Mobile</th>
@@ -62,6 +63,7 @@
                                         <tr>
                                             <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                             <td>{{ entity.profile.name }}</td>
+                                            <td>{{ entity.username }}</td>
                                             <td>{{ entity.profile.joiningDate|date("d-F-Y") }}</td>
                                             <td>{{ entity.profile.designation }}</td>
                                             <td class="numeric"><a href="tel:+88 {{ entity.profile.mobile }}"> {{ entity.profile.mobile }}</a></td>

@@ -38,12 +38,17 @@ class PaymentSalaryController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
+        if(!empty($data['toUser'])){
+            $data['toUser'] = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('username'=> $data['toUser']));
+        }
         $entities = $em->getRepository('AccountingBundle:PaymentSalary')->findWithSearch($globalOption,$data);
         $pagination = $this->paginate($entities);
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:PaymentSalary')->entityOverview($globalOption,$data);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:PaymentSalary')->paymentAmountOverview($globalOption,$data);
+        $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'ASC'));
         return $this->render('AccountingBundle:PaymentSalary:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
+            'transactionMethods' => $transactionMethods,
             'overview' => $overview
         ));
 
@@ -80,9 +85,7 @@ class PaymentSalaryController extends Controller
             $entity->setUser($user);
             $entity->setGlobalOption($user->getGlobalOption());
             if($entity->getTotalAmount() > $entity->getPaidAmount() ){
-                $entity->setDueAmount($entity->getTotalAmount() - $entity->getPaidAmount());
-            }else{
-                $entity->setAdvanceAmount($entity->getPaidAmount() - $entity->getTotalAmount());
+                $entity->setDueAmount($entity->getTotalAmount() + $entity->getAdjustmentAmount() - $entity->getPaidAmount());
             }
             $em->persist($entity);
             $em->flush();
@@ -127,12 +130,16 @@ class PaymentSalaryController extends Controller
     {
         $entity = new PaymentSalary();
         $form   = $this->createCreateForm($entity,$user);
-        $totalAmount = $this->getDoctrine()->getRepository('AccountingBundle:PaymentSalary')->totalAmount($user);
+        $globalOption = $user->getGlobalOption();
+        $data = array('toUser' => $user);
+        $invoiceAmountOverview = $this->getDoctrine()->getRepository('AccountingBundle:SalarySetting')->invoiceAmountOverview($globalOption,$data);
+        $paymentAmountOverview = $this->getDoctrine()->getRepository('AccountingBundle:PaymentSalary')->paymentAmountOverview($globalOption,$data);
         return $this->render('AccountingBundle:PaymentSalary:new.html.twig', array(
             'user' => $user,
             'entity' => $entity,
             'user'      => $user,
-            'totalAmount'      => $totalAmount,
+            'invoiceAmountOverview'      => $invoiceAmountOverview,
+            'paymentAmountOverview'      => $paymentAmountOverview,
             'form'   => $form->createView(),
         ));
     }
@@ -144,10 +151,14 @@ class PaymentSalaryController extends Controller
     public function showAction(User $user)
     {
         $em = $this->getDoctrine()->getManager();
-        $totalAmount = $this->getDoctrine()->getRepository('AccountingBundle:PaymentSalary')->totalAmount($user);
+        $globalOption = $user->getGlobalOption();
+        $data = array('toUser' => $user);
+        $invoiceAmountOverview = $this->getDoctrine()->getRepository('AccountingBundle:SalarySetting')->invoiceAmountOverview($globalOption,$data);
+        $paymentAmountOverview = $this->getDoctrine()->getRepository('AccountingBundle:PaymentSalary')->paymentAmountOverview($globalOption,$data);
         return $this->render('AccountingBundle:PaymentSalary:show.html.twig', array(
             'entity'      => $user,
-            'totalAmount'      => $totalAmount,
+            'invoiceAmountOverview'      => $invoiceAmountOverview,
+            'paymentAmountOverview'      => $paymentAmountOverview,
         ));
     }
 
@@ -174,6 +185,8 @@ class PaymentSalaryController extends Controller
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
+            $this->getDoctrine()->getRepository('AccountingBundle:SalarySetting')->invoiceUpdate($entity);
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertSalaryCash($entity);
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertSalaryTransaction($entity);
             return new \Symfony\Component\HttpFoundation\Response('success');
         } else {

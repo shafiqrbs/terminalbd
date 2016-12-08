@@ -1,0 +1,125 @@
+{% extends ':frontend/template:base.html.twig' %}
+{% block body %}
+    <!-- Header Carousel -->
+    {% if globalOption.homeSliders is defined and globalOption.homeSliders is not empty %}
+    <header id="home" class="carousel slide">
+        <ul class="cb-slideshow">
+            {% set sec = 9 %}
+            {% set foo = 0 %}
+            {% for slide in globalOption.homeSliders|slice(0,6) %}
+                <li><span style="background-image: url({{ image(slide.webPath).resize() }});animation-delay: {{ foo }}s;"></span>
+                    <div class="container" style="animation-delay:{{ foo }}s; ">
+                        <div class="row" style="animation-delay:{{ foo }}s; ">
+                            <div class="col-lg-12" style="animation-delay:{{ foo }}s; ">
+                                <div  class="text-center" style="animation-delay:{{ foo }}s; "><h3>{{ slide.name }}</h3></div>
+                            </div>
+                        </div>
+                        <h4>{{ slide.content|truncate(100)|raw }}</h4>
+                    </div>
+                </li>
+                {% set foo = foo + sec %}
+            {% endfor %}
+        </ul>
+        <div class="intro-scroller">
+            <a class="inner-link" href="#about">
+                <div class="mouse-icon" style="opacity: 1;">
+                    <div class="wheel"></div>
+                </div>
+            </a>
+        </div>
+    </header>
+
+    {% else %}
+       <div id="no-slider"></div>
+    {% endif %}
+    {% if homeEntity.homeBlocks is not empty %}
+
+        <section class="section-divide" id="">
+            <hr>
+            <div class="container">
+                <div class="row">
+                    {% set length =  homeEntity.homeBlocks|length %}
+                    {% for block in homeEntity.homeBlocks|slice(0,4) %}
+                        <div class=" col-md-{% if length == 3 %}4{% else %}3{% endif %}">
+                            <div class="block js-equal-height">
+                                <div class="block-icon">
+                                    <i class="fa {{ block.icon.className }}"></i>
+                                </div>
+                                <div class="block-content">
+                                    <h3>{{ block.name }}</h3>
+                                    <p>{{ block.content|raw }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+    {% if homeEntity.content is not empty %}
+        <section class="section-divide" id="dashboard">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-10">
+                        <div class="text-center">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p class="home-feature">{{ homeEntity.content|raw }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+    <section class="section-divide">
+        <div class="container">
+            <div class="header-double-line-right">
+                <h3>About Us</h3>
+            </div>
+            <div class="row">
+                <div class="row">
+                    {% render controller("FrontendBundle:TemplateWidget:aboutus",{'globalOption':globalOption.id,'wordlimit':400}) %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Page Content -->
+    {% for mod in  homeEntity.pageModules %}
+            {% if globalOption.siteSetting.modules.contains(mod.module) %}
+                {% render controller("FrontendBundle:TemplateWidget:moduleBaseContent",{'globalOption':globalOption.id,'pageModule':mod.id}) %}
+            {% endif %}
+
+  {#      {% include 'FrontendBundle:Template/Desktop/Widget:'~ mod.module.moduleClass ~'.html.twig' with {'module':mod.module , 'title' : mod.name ,'limit': 5,'cloumn': 2 } %}
+#}
+    {% endfor %}
+
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/js/common.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    commonJs();
+{% endblock %}
+
+
+
+
+
+
+
+
+

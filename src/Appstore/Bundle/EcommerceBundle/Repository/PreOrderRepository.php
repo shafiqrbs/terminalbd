@@ -24,13 +24,35 @@ class PreOrderRepository extends EntityRepository
             ->setParameter('status', 1)
             ->getQuery()->getSingleResult();
 
-        $entity->setTotal($total['total']);
+        $entity->setTotalAmount($total['total']);
         $entity->setDollar($total['dollar']);
-        $entity->setShippingCharge($total['shippingCharge']);
+        $entity->setTotalShippingCharge($total['shippingCharge']);
         $entity->setItem($total['item']);
         $entity->setQuantity($total['quantity']);
-        $entity->setGrandTotal($total['total'] + $total['shippingCharge']);
+        $vat = $this->getCulculationVat($entity->getGlobalOption(),$total['total']);
+        $entity->setVat($vat);
+        $entity->setGrandTotalAmount($total['total'] + $total['shippingCharge'] + $vat + $entity->getDeliveryCharge() - $entity->getDiscountAmount());
+        $grandTotal = $entity->getGrandTotalAmount();
+        $payment = $entity->getAdvanceAmount() + $entity->getPaidAmount();
+
+        if($payment > $grandTotal ){
+            $entity->setReturnAmount( $payment - $grandTotal);
+            $entity->setDueAmount(0);
+        }elseif($payment < $grandTotal ){
+            $entity->setReturnAmount(0);
+            $entity->setDueAmount($grandTotal - $payment);
+        }
         $em->persist($entity);
         $em->flush();
     }
+
+    public function getCulculationVat($globalOption,$total)
+    {
+
+        $vat = $globalOption->getEcommerceConfig()->getVat();
+        $totalVat = round(($total  * $vat )/100);
+        return $totalVat;
+
+    }
+
 }

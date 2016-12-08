@@ -12,5 +12,35 @@ use Doctrine\ORM\EntityRepository;
  */
 class PettyCashRepository extends EntityRepository
 {
+    public function lastInsertCash(PettyCash $entity){
+
+        $em = $this->_em;
+        if( $entity->getTransactionMethod()->getId() == 2 ){
+
+            $entity = $em->getRepository('AccountingBundle:PettyCash')->findOneBy(
+                array('globalOption'=>$entity->getGlobalOption(),'toUser' => $entity->getToUser(),'transactionMethod' => $entity->getTransactionMethod(),'process'=>'approved'),
+                array('id' => 'DESC')
+            );
+
+        }elseif( $entity->getTransactionMethod()->getId() == 3 ) {
+
+            $entity = $em->getRepository('AccountingBundle:PettyCash')->findOneBy(
+                array('globalOption'=>$entity->getGlobalOption(),'toUser' => $entity->getToUser(),'transactionMethod' => $entity->getTransactionMethod(),'process'=>'approved'),
+                array('id' => 'DESC')
+            );
+
+        }else{
+
+            $entity = $em->getRepository('AccountingBundle:PettyCash')->findOneBy(
+                array('globalOption'=>$entity->getGlobalOption(),'toUser' => $entity->getToUser(),'transactionMethod' => $entity->getTransactionMethod(),'process'=>'approved'),
+                array('id' => 'DESC')
+            );
+        }
+
+        if (empty($entity)) {
+            return 0;
+        }
+        return $entity->getBalance();
+    }
 
 }

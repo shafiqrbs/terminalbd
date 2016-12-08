@@ -64,7 +64,9 @@ ul.page-sidebar-menu > li > ul.sub-menu > li > a {
     background: none;
 }
 
-
+ul.page-sidebar-menu > li > ul.sub-menu > li > ul.sub-menu > li > ul.sub-menu > li > a {
+    padding-left: 35px;
+}
 
 .head-green {
     border-top-left-radius: 4px;

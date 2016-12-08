@@ -1,0 +1,170 @@
+{% extends ':frontend/template:base.html.twig' %}
+{% block body %}
+    <div class="clearfix"></div>
+    <section id="breadcrumb">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="crumb">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i>Products</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <style>
+
+        #products .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{
+        }
+        .media-left, .media>.pull-left{
+            margin-right: 10px;
+        }
+        .media{
+            border-bottom: none;
+        }
+
+    </style>
+    <section>
+        <div class="container">
+            <div class="col-sm-12 col-md-12">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th class="text-center">Price</th>
+                        <th class="text-center">Total</th>
+                        <th> </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for product in cart.contents %}
+                    <tr>
+                        <td class="col-sm-8 col-md-6">
+                            <div class="media">
+                                {% if product.productImg is not empty %}
+                                <a class="thumbnail pull-left" href="#"> <img class="media-object" src="{{ product.productImg }}" style="width: 72px; height: 72px;"> </a>
+                                {% else %}
+                                <a class="thumbnail pull-left" href="#"> <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" style="width: 72px; height: 72px;"> </a>
+                                {% endif %}
+                                <div class="media-body">
+                                    <h4 class="media-heading">{{ product.name }}</h4>
+                                    <h5 class="media-heading">Size of Product: {{ product.size }}</h5>
+                                    {% if product.color is not empty %}<h5 class="media-heading">Color: {{ product.color }}</h5>{% endif %}
+                                    {% if product.brand is not empty %}<h5 class="media-heading"> by {{ product.brand }}</h5>{% endif %}
+                                    <span>Status: </span><span class="text-success"><strong>In Stock</strong></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-sm-1 col-md-1" style="text-align: center">
+                            <input type="text"  class="form-control" data-url="" id="{{ product.rowid }}" value="{{ product.quantity }}">
+                        </td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.price }}</strong></td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.price * product.quantity |number_format  }}</strong></td>
+                        <td class="col-sm-1 col-md-1">
+                            <a  class="btn btn-info update-cart" id="{{ product.rowid }}" data-url="{{ path('webservice_product_cart_update',{'cartid':product.rowid}) }}" data-id="{{ product.price }}" data-value="{{ product.quantity }}" >
+                                <span class="glyphicon glyphicon-pencil " ></span>&nbsp;
+                            </a>
+                            <a  class="btn btn-danger remove-cart" data-url="{{ path('webservice_product_cart_remove',{'cartid':product.rowid}) }}">
+                                <span class="glyphicon glyphicon-trash " ></span>&nbsp;
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td><h5>Subtotal</h5></td>
+                        <td class="text-right"><h5><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cart.total }}</strong></h5></td>
+                    </tr>
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td><h3>Grand Total</h3></td>
+                        <td class="text-right"><h3><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cart.total }}</strong></h3></td>
+                    </tr>
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>
+                            <a href="{{ path('webservice_product') }}" class="btn btn-default">
+                                <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
+                            </a>
+                        </td>
+                        <td>
+                            {% if  app.user %}
+                            <a href="{{ path('customer_order_to_cart',{'shop':globalOption.uniqueCode}) }}" type="button" class="btn btn-success">
+                                Checkout <span class="glyphicon glyphicon-play"></span>
+                            </a>
+                            {% else %}
+                                <button type="button" class="btn btn-success login-preview">
+                                   Login & Checkout <span class="glyphicon glyphicon-play"></span>
+                                </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <div class="clearfix"></div>
+    {#{% if product.category is not empty and product.category is defined %}
+        <section id="viewed-item" style="display: none;">
+            <div class="container">
+                <div class="text-right owl-thumb-carousel-next-prev">
+                    <div class="customNavigation" >
+                        <a class="btn viewed-prev glyphicon glyphicon-chevron-left"></a>
+                        <a class="btn viewed-next glyphicon glyphicon-chevron-right"></a>
+                    </div>
+                </div>
+                <div id="product" class="row">
+                    <div id="" class="owl-thumb-carousel viewed-product-slider">
+                        {% for product in products  %}
+                            <div class="item  col-xs-12 col-lg-12 ">
+                                <div class="thumbnail " data-key="viewHeights" style="min-height: 205px">
+                                    <div class="product-preview group list-group-image"  >
+                                        <img src="{{ image(product.webPath).scaleResize(200,200) }}"   alt="">
+                                        <div class="team-content">
+                                            <h5 class="team-prof">
+                                                <a class="btn btn-sm blue preview"  data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" >Preview<i class="fa fa-link"></i></a>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                    <div class="caption">
+                                        <div class="row">
+                                            <div class="row-fluid">
+                                                <div class="col-xs-12 col-md-12"><strike>৳&nbsp;{{ product.salesPrice|number_format }}</strike>&nbsp;<strong>৳&nbsp;{{ product.salesPrice|number_format }}</strong></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}#}
+    <!-- Modal -->
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/desktop/css/common.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/js/product.js'
+    '@FrontendBundle/Resources/public/template/js/common.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

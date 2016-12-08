@@ -1,0 +1,45 @@
+ecommercehome:
+    path:     /
+    defaults: { _controller: "EcommerceBundle:Ehome:index" }
+
+ecommercehome_show:
+    path:     /{id}/show
+    defaults: { _controller: "EcommerceBundle:Ehome:show" }
+
+ecommercehome_new:
+    path:     /new
+    defaults: { _controller: "EcommerceBundle:Ehome:new" }
+
+ecommercehome_create:
+    path:     /create
+    defaults: { _controller: "EcommerceBundle:Ehome:create" }
+    methods:  POST
+
+ecommercehome_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "EcommerceBundle:Ehome:edit" }
+
+ecommercehome_update:
+    path:     /{id}/update
+    defaults: { _controller: "EcommerceBundle:Ehome:update" }
+    methods:  [POST, PUT]
+
+ecommercehome_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "EcommerceBundle:Ehome:delete" }
+
+ecommercehome_status:
+    path:     /{id}/status
+    defaults: { _controller: "EcommerceBundle:Ehome:status" }
+
+ecommercehome_resized:
+    path:     /resize
+    defaults: { _controller: "EcommerceBundle:Ehome:resize" }
+
+ecommercehome_sorting:
+    path:     /sorting
+    defaults: { _controller: "EcommerceBundle:Ehome:sorting" }
+
+ecommercehome_sorted:
+    path:     /sorted
+    defaults: { _controller: "EcommerceBundle:Ehome:sorted" }

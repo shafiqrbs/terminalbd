@@ -63,14 +63,22 @@ class ExpenditureType extends AbstractType
                 'empty_value' => '---Choose a bank---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.globalOption =".$this->globalOption->getId());
+                },
             ))
 
-            ->add('accountBkash', 'entity', array(
+            ->add('accountMobileBank', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBkash',
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'empty_value' => '---Choose a bkash---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.globalOption =".$this->globalOption->getId());
+                },
             ))
 
             ->add('accountHead', 'entity', array(
@@ -84,7 +92,8 @@ class ExpenditureType extends AbstractType
                 ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
-                        ->where("e.parent = 23")
+                        ->where("e.parent IN(:parents)")
+                        ->setParameter('parents', array(23,37))
                         ->andWhere("e.status = 1");
                 },
             ))

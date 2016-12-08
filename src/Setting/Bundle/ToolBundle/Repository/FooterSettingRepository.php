@@ -10,17 +10,21 @@ namespace Setting\Bundle\ToolBundle\Repository;
 
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\FooterSetting;
 
 class FooterSettingRepository extends EntityRepository {
 
 
-    public function updateFooterSetting($entity , $data ){
+    public function updateFooterSetting(FooterSetting $entity , $data ){
 
         $em = $this->_em;
 
         if(isset($data['copyRight']) and $data['copyRight'] != '') {
             $entity->setCopyRight($data['copyRight']);
         }
+
+        $socialMedia = isset($data['socialMedia']) ? 1:0 ;
+        $entity->setSocialMedia($socialMedia);
 
         $displayWebsite = isset($data['displayWebsite']) ? 1:0 ;
         $entity->setDisplayWebsite($displayWebsite);

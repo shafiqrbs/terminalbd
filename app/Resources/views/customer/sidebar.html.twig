@@ -1,52 +1,80 @@
-<div class="page-sidebar nav-collapse collapse">
-    <!-- BEGIN SIDEBAR MENU -->
-    <ul class="page-sidebar-menu">
-        <li>
-            <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-            <div class="sidebar-toggler hidden-phone"></div>
-            <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-        </li>
-        <li class="start ">
-            <a href="index.html">
-                <i class="icon-home"></i>
-                <span class="title">Dashboard</span>
-            </a>
-        </li>
-        <li >
-            <a href="javascript:;">
-                <i class="icon-cogs"></i>
-                <span class="title">Inbox</span>
-                <span class="arrow "></span>
-            </a>
-            <ul class="sub-menu">
-                 <li >
-                    <a href="layout_horizontal_sidebar_menu.html">SMS</a>
-                </li>
-                <li >
-                    <a href="layout_horizontal_sidebar_menu.html">Email</a>
-                </li>
+<ul class="page-sidebar-menu">
+    <li>
+        <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+        <div class="sidebar-toggler hidden-phone"></div>
+        <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+    </li>
+    <li class="start ">
+        <a href="{{ path('customer') }}">
+            <i class="icon-home"></i>
+            <span class="title">Dashboard</span>
+        </a>
+    </li>
+    <li >
+        <a href="javascript:">
+            <i class="icon-umbrella"></i>
+            <span class="title">All Domain</span>
+            <span class="arrow "></span>
+        </a>
+        <ul class="sub-menu">
+            <li >
+                <a href="{{ path('customer_domain') }}">
+                    <i class="icon-cloud"></i>
+                    <span class="title">All Domain</span>
+                </a>
+            </li>
+            <li >
+                <a href="{{ path('customer_domain_bookmark') }}">
+                    <i class="icon-bookmark"></i>
+                    <span class="title">Bookmark Domain</span>
+                </a>
+            </li>
 
-            </ul>
-        </li>
-        <!-- BEGIN FRONT DEMO -->
-        <li class="tooltips" data-placement="right" data-original-title="Frontend&nbsp;Theme&nbsp;For&nbsp;Metronic&nbsp;Admin">
-            <a href="http://keenthemes.com/preview/index.php?theme=metronic_frontend" target="_blank">
-                <i class="icon-gift"></i>
-                <span class="title">Transaction</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{ path('domain_customer_order') }}">
-                <i class="icon-bar-chart"></i>
-                <span class="title">Order</span>
-            </a>
-        </li>
-        <li class="last ">
-            <a href="charts.html">
-                <i class="icon-bar-chart"></i>
-                <span class="title">Visual Charts</span>
-            </a>
-        </li>
-    </ul>
-    <!-- END SIDEBAR MENU -->
-</div>
+        </ul>
+    </li>
+    <li >
+        <a href="javascript:">
+            <i class="icon-inbox"></i>
+            <span class="title">Inbox</span>
+            <span class="arrow "></span>
+        </a>
+        <ul class="sub-menu">
+            <li >
+                <a href="layout_horizontal_sidebar_menu.html">SMS</a>
+            </li>
+            <li >
+                <a href="layout_horizontal_sidebar_menu.html">Email</a>
+            </li>
+
+        </ul>
+    </li>
+    <!-- BEGIN FRONT DEMO -->
+    <li>
+        <a href="{{ path('allproduct') }}">
+            <i class="icon-shopping-cart"></i>
+            <span class="title">All Product</span>
+        </a>
+    </li>
+    <li >
+        <a href="javascript:">
+            <i class=" icon-shopping-cart"></i>
+            <span class="title">Order</span>
+            <span class="arrow "></span>
+        </a>
+        <ul class="sub-menu">
+            <li >
+                <a href="{{ path('order') }}">
+                    <i class=" icon-shopping-cart"></i>
+                    <span class="title">Order</span>
+                </a>
+            </li>
+            <li >
+                <a href="{{ path('preorder') }}">
+                    <i class="icon-shopping-cart"></i>
+                    <span class="title">Pre-order</span>
+                </a>
+            </li>
+
+        </ul>
+    </li>
+</ul>

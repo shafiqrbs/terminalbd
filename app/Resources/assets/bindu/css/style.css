@@ -1374,7 +1374,7 @@ body.blog-masonry-full #tm-blog .page-content .tm-content.blog-masonry article {
   content: attr(data-title);
   background: #000000;
   padding: 5px 10px;
-  width: 100px;
+  width: 150px;
   text-align: center;
   position: absolute;
   color: #ffffff;

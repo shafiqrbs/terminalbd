@@ -5,9 +5,12 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBkash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
+use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\LocationBundle\Entity\Location;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\PaymentType;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
@@ -27,6 +30,16 @@ class PreOrder
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="preOrders" , cascade={"persist", "remove"} )
+     **/
+    protected $location;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="preOrders")
+     */
+    protected $globalOption;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="preOrders")
@@ -64,19 +77,67 @@ class PreOrder
     private  $accountCash;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="preOrders" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="preOrder" )
      **/
     private  $accountBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="preOrders" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="preOrder" )
      **/
-    private  $accountBkash;
+    private  $accountMobileBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="preOrders" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="preOrder" )
      **/
     private  $transactionMethod;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobileAccount", type="string", length=50 , nullable = true)
+     */
+    private $mobileAccount;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountType", type="string", length=255 , nullable = true)
+     */
+    private $accountType;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="transaction", type="string", length=255 , nullable = true)
+     */
+    private $transaction;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountName", type="string", length=50 , nullable = true)
+     */
+    private $accountName;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountNo", type="string", length=255 , nullable = true)
+     */
+    private $accountNo;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="bankBranch", type="string", length=255 , nullable = true)
+     */
+    private $bankBranch;
+
 
 
     /**
@@ -104,24 +165,16 @@ class PreOrder
     /**
      * @var float
      *
-     * @ORM\Column(name="total", type="float",  nullable=true)
+     * @ORM\Column(name="deliveryCharge", type="float",  nullable=true)
      */
-    private $total;
-
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="grandTotal", type="float",  nullable=true)
-     */
-    private $grandTotal;
+    private $deliveryCharge;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="shippingCharge", type="float",  nullable=true)
+     * @ORM\Column(name="totalShippingCharge", type="float",  nullable=true)
      */
-    private $shippingCharge;
+    private $totalShippingCharge;
 
 
     /**
@@ -134,6 +187,13 @@ class PreOrder
     /**
      * @var float
      *
+     * @ORM\Column(name="prePaidAmount", type="float",  nullable=true)
+     */
+    private $prePaidAmount;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="advanceAmount", type="float",  nullable=true)
      */
     private $advanceAmount;
@@ -141,9 +201,45 @@ class PreOrder
     /**
      * @var float
      *
-     * @ORM\Column(name="dueAmount", type="float",  nullable=true)
+     * @ORM\Column(name="vat", type="float", nullable = true)
+     */
+    private $vat;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="totalAmount", type="float", nullable = true)
+     */
+    private $totalAmount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="grandTotalAmount", type="float", nullable = true)
+     */
+    private $grandTotalAmount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="dueAmount", type="float" , nullable = true)
      */
     private $dueAmount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="returnAmount", type="float" , nullable = true)
+     */
+    private $returnAmount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="discountAmount", type="float" , nullable = true)
+     */
+    private $discountAmount;
+
 
 
     /**
@@ -167,6 +263,13 @@ class PreOrder
      */
     private $address;
 
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="comment", type="text", nullable=true)
+     */
+    private $comment;
+
 
     /**
      * @var integer
@@ -181,6 +284,13 @@ class PreOrder
      * @ORM\Column(name="status", type="boolean")
      */
     private $status = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cashOnDelivery", type="boolean")
+     */
+    private $cashOnDelivery = false;
 
     /**
      * @var \DateTime
@@ -513,21 +623,6 @@ class PreOrder
         $this->approvedBy = $approvedBy;
     }
 
-    /**
-     * @return float
-     */
-    public function getShippingCharge()
-    {
-        return $this->shippingCharge;
-    }
-
-    /**
-     * @param float $shippingCharge
-     */
-    public function setShippingCharge($shippingCharge)
-    {
-        $this->shippingCharge = $shippingCharge;
-    }
 
     /**
      * @return float
@@ -545,37 +640,6 @@ class PreOrder
         $this->dollar = $dollar;
     }
 
-    /**
-     * @return float
-     */
-    public function getTotal()
-    {
-        return $this->total;
-    }
-
-    /**
-     * @param float $total
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total;
-    }
-
-    /**
-     * @return float
-     */
-    public function getGrandTotal()
-    {
-        return $this->grandTotal;
-    }
-
-    /**
-     * @param float $grandTotal
-     */
-    public function setGrandTotal($grandTotal)
-    {
-        $this->grandTotal = $grandTotal;
-    }
 
     /**
      * @return EcommerceConfig
@@ -694,22 +758,6 @@ class PreOrder
     }
 
     /**
-     * @return AccountBkash
-     */
-    public function getAccountBkash()
-    {
-        return $this->accountBkash;
-    }
-
-    /**
-     * @param AccountBkash $accountBkash
-     */
-    public function setAccountBkash($accountBkash)
-    {
-        $this->accountBkash = $accountBkash;
-    }
-
-    /**
      * @return TransactionMethod
      */
     public function getTransactionMethod()
@@ -725,6 +773,309 @@ class PreOrder
         $this->transactionMethod = $transactionMethod;
     }
 
+    /**
+     * @return Location
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param Location $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * @return GlobalOption
+     */
+    public function getGlobalOption()
+    {
+        return $this->globalOption;
+    }
+
+    /**
+     * @param GlobalOption $globalOption
+     */
+    public function setGlobalOption($globalOption)
+    {
+        $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return AccountMobileBank
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param AccountMobileBank $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileAccount()
+    {
+        return $this->mobileAccount;
+    }
+
+    /**
+     * @param string $mobileAccount
+     */
+    public function setMobileAccount($mobileAccount)
+    {
+        $this->mobileAccount = $mobileAccount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountType()
+    {
+        return $this->accountType;
+    }
+
+    /**
+     * @param string $accountType
+     */
+    public function setAccountType($accountType)
+    {
+        $this->accountType = $accountType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransaction()
+    {
+        return $this->transaction;
+    }
+
+    /**
+     * @param string $transaction
+     */
+    public function setTransaction($transaction)
+    {
+        $this->transaction = $transaction;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountName()
+    {
+        return $this->accountName;
+    }
+
+    /**
+     * @param string $accountName
+     */
+    public function setAccountName($accountName)
+    {
+        $this->accountName = $accountName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountNo()
+    {
+        return $this->accountNo;
+    }
+
+    /**
+     * @param string $accountNo
+     */
+    public function setAccountNo($accountNo)
+    {
+        $this->accountNo = $accountNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBankBranch()
+    {
+        return $this->bankBranch;
+    }
+
+    /**
+     * @param string $bankBranch
+     */
+    public function setBankBranch($bankBranch)
+    {
+        $this->bankBranch = $bankBranch;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getCashOnDelivery()
+    {
+        return $this->cashOnDelivery;
+    }
+
+    /**
+     * @param boolean $cashOnDelivery
+     */
+    public function setCashOnDelivery($cashOnDelivery)
+    {
+        $this->cashOnDelivery = $cashOnDelivery;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVat()
+    {
+        return $this->vat;
+    }
+
+    /**
+     * @param float $vat
+     */
+    public function setVat($vat)
+    {
+        $this->vat = $vat;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalAmount()
+    {
+        return $this->totalAmount;
+    }
+
+    /**
+     * @param float $totalAmount
+     */
+    public function setTotalAmount($totalAmount)
+    {
+        $this->totalAmount = $totalAmount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getReturnAmount()
+    {
+        return $this->returnAmount;
+    }
+
+    /**
+     * @param float $returnAmount
+     */
+    public function setReturnAmount($returnAmount)
+    {
+        $this->returnAmount = $returnAmount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getGrandTotalAmount()
+    {
+        return $this->grandTotalAmount;
+    }
+
+    /**
+     * @param float $grandTotalAmount
+     */
+    public function setGrandTotalAmount($grandTotalAmount)
+    {
+        $this->grandTotalAmount = $grandTotalAmount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountAmount()
+    {
+        return $this->discountAmount;
+    }
+
+    /**
+     * @param float $discountAmount
+     */
+    public function setDiscountAmount($discountAmount)
+    {
+        $this->discountAmount = $discountAmount;
+    }
+
+    /**
+     * @return text
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @param text $comment
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDeliveryCharge()
+    {
+        return $this->deliveryCharge;
+    }
+
+    /**
+     * @param float $deliveryCharge
+     */
+    public function setDeliveryCharge($deliveryCharge)
+    {
+        $this->deliveryCharge = $deliveryCharge;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalShippingCharge()
+    {
+        return $this->totalShippingCharge;
+    }
+
+    /**
+     * @param float $totalShippingCharge
+     */
+    public function setTotalShippingCharge($totalShippingCharge)
+    {
+        $this->totalShippingCharge = $totalShippingCharge;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrePaidAmount()
+    {
+        return $this->prePaidAmount;
+    }
+
+    /**
+     * @param float $prePaidAmount
+     */
+    public function setPrePaidAmount($prePaidAmount)
+    {
+        $this->prePaidAmount = $prePaidAmount;
+    }
 
 
 }

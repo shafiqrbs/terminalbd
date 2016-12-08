@@ -107,7 +107,7 @@
                                     <div class="span4">
                                         <div class="row-fluid">
                                             <div class="span12 responsive" data-tablet="span6" data-desktop="span3">
-                                                <div class="dashboard-stat" style="margin-bottom: 0; padding-bottom: 13px; background: #222">
+                                                <div class="dashboard-stat" id="payment-board">
                                                     <div class="details">
                                                         <div class="number">TK.<span class="salesTotal">{{ entity.total }}</span></div>
                                                         <div class="desc">Order no. {{ entity.invoice }}</div>
@@ -153,7 +153,7 @@
                                                                     {% if salesitem.item.size  %}-{{ salesitem.item.size.name }}{% endif %}
                                                                 </span>
                                                             </td>
-                                                            <td class="numeric" ><input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="m-wrap span10 quantity" placeholder="{{ salesitem.item.quantity }}"></td>
+                                                            <td class="numeric" ><input type="number" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="m-wrap span10 quantity" placeholder="{{ salesitem.purchaseItem.quantity }}" min="1" max="{{ salesitem.purchaseItem.quantity }}"></td>
                                                             <td>
                                                                 <div class="input-prepend">
                                                                     <span class="add-on">
@@ -178,33 +178,33 @@
 
                                         <div class="clearfix">&nbsp;</div>
                                     </div>
-                                    <div class="span4">
+                                    <div class="span4" id="payment-info">
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="span12 input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom span3">Sub-Total TK.</span><input class="m-wrap span8  center-input numeric salesTotal disabled-field" readonly="readonly" type="text" value="{{ entity.total }}"><span class="add-on">.00</span>
-                                                    <input class="m-wrap span8 center-input numeric" name="vat" id="vat" type="hidden">
+                                                    <span class="add-on add-on-custom span3">Sub-Total TK.</span><input class="m-wrap span7 numeric salesTotal disabled-field" readonly="readonly" type="text" value="{{ entity.total }}">
+                                                    <input class="m-wrap span9 numeric" name="vat" id="vat" type="hidden">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="span12 input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom span3">VAT/TAX TK.</span><input class="m-wrap span8 center-input numeric disabled-field" readonly="readonly" name="vat" id="vat" type="text"><span class="add-on">.00</span>
+                                                    <span class="add-on add-on-custom span3">VAT/TAX TK.</span><input class="m-wrap span7 numeric disabled-field" readonly="readonly" name="vat" id="vat" type="text">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="span12 input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom span3">Discount TK.</span><input class="m-wrap span8  center-input numeric" name="discount" id="discount" type="text"><span class="add-on">.00</span>
+                                                    <span class="add-on add-on-custom span3">Discount TK.</span><input class="m-wrap span7  center-input numeric" name="discount" id="discount" type="text">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="span12 input-prepend input-append input-append-border span12">
-                                                    <span class="add-on add-on-custom span3">Due TK.</span><input class="m-wrap span8 center-input numeric disabled-field" type="text" name="dueAmount" readonly="readonly" id="dueAmount"><span class="add-on">.00</span>
+                                                    <span class="add-on add-on-custom span3">Due TK.</span><input class="m-wrap span7 numeric disabled-field" type="text" name="dueAmount" readonly="readonly" id="dueAmount">
                                                 </div>
                                             </div>
 
@@ -264,14 +264,14 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="input-prepend input-append input-append-border span12">
-                                                    <span class="add-on add-on-custom span3">Receive TK.</span><input class="m-wrap span8 center-input numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder=""><span class="add-on">.00</span>
+                                                    <span class="add-on add-on-custom span3">Receive TK.</span><input class="m-wrap span7 numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder="">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="input-prepend input-append input-append-border span12">
-                                                    <span class="add-on add-on-custom span3">Return TK.</span><input class="m-wrap span8 center-input numeric disabled-field" readonly="readonly" type="text" id="returnAmount" name="returnAmount"><span class="add-on">.00</span>
+                                                    <span class="add-on add-on-custom span3">Return TK.</span><input class="m-wrap span7  numeric disabled-field" readonly="readonly" type="text" id="returnAmount" name="returnAmount">
                                                 </div>
                                             </div>
                                         </div>
@@ -293,8 +293,8 @@
                                         <div class="clearfix"></div>
                                         <div class="row-fluid">
                                             <div class="span12 ">
-                                                <div class="portlet box grey">
-                                                    <div class="pull-right">
+                                                <div class="box grey">
+                                                    <div class="pull-center">
                                                         <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                                         <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
                                                         <button disabled="disabled" type="submit" class="btn blue paymentBtn"><i class="icon-print"></i>&nbsp;Print</button>
@@ -307,7 +307,6 @@
                                                         <button type="reset" class="btn purple"><i class="icon-refresh"></i> </button>
                                                         <button type="submit" class="btn yellow"><i class="icon-pushpin"></i></button>
                                            #}         </div>
-                                                    <div class="clearfix">&nbsp;</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -435,7 +434,7 @@
         padding-left:10px;
     }
     #barcode-box{
-        background-color:#1C1C1A;
+        background-color:#2F373E;
         min-height: 88px;
         padding:19px;
     }
@@ -457,11 +456,21 @@
         font-weight: bold!important;
     }
     .input-prepend input.disabled-field{
-        background: #1C1C1A!important;
+        background: #2F373E!important;
         color: #fff!important;
 
     }
-
+    #payment-board{
+        margin-bottom: 0;
+        padding-bottom: 13px;
+        background: #222;
+    }
+    #payment-info{
+        border: 5px solid #2F373E;
+    }
+    .input-append-border {
+        border-bottom: 1px solid #2F373E;
+    }
 </style>
 {% endblock %}
 {% block cssBlock %}

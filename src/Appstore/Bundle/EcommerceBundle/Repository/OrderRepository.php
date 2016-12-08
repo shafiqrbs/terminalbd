@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -23,7 +25,87 @@ class OrderRepository extends EntityRepository
         $order->setEcommerceConfig($globalOption->getEcommerceConfig());
         $em->persist($order);
         $em->flush();
-
         return $order;
     }
+
+    public function insertNewCustomerOrder(User $user,$shop, $cart){
+
+
+        $em = $this->_em;
+        $order = new Order();
+        $globalOption = $this->_em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode'=>$shop));
+        $order->setGlobalOption($globalOption);
+        $order->setTransactionMethod($this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(3));
+        $order->setEcommerceConfig($globalOption->getEcommerceConfig());
+        $order->setShippingCharge($globalOption->getEcommerceConfig()->getShippingCharge());
+        $vat = $this->getCulculationVat($globalOption,$cart->total());
+        $order->setVat($vat);
+        $order->setCreatedBy($user);
+        $order->setTotalAmount($cart->total());
+        $grandTotal = $cart->total() + $globalOption->getEcommerceConfig()->getShippingCharge() + $vat;
+        $order->setGrandTotalAmount($grandTotal);
+        $order->setItem($cart->total_items());
+        $em->persist($order);
+        $em->flush();
+        $this->insertOrderItem($order,$cart);
+        return $order;
+
+    }
+
+    public function insertOrderItem(Order $order,$cart)
+    {
+
+        $em = $this->_em;
+        foreach ($cart->contents() as $row){
+
+            $goodsItem = $em->getRepository('InventoryBundle:GoodsItem')->find($row['id']);
+            if(!empty($goodsItem)) {
+
+                $orderItem = new OrderItem();
+                $orderItem->setOrder($order);
+                $orderItem->setPurchaseVendorItem($goodsItem->getPurchaseVendorItem());
+                $orderItem->setGoodsItem($goodsItem);
+                $orderItem->setPrice($goodsItem->getSalesPrice());
+                $orderItem->setQuantity($row['quantity']);
+                $orderItem->setSubTotal($row['quantity'] * $goodsItem->getSalesPrice());
+                if (!empty($row['colorId'])){
+                $orderItem->setColor($em->getRepository('InventoryBundle:ItemColor')->find($row['colorId']));
+                }
+                $em->persist($orderItem);
+                $em->flush();
+
+            }
+        }
+    }
+
+    public function getCulculationVat($globalOption,$total)
+    {
+
+        $vat = $globalOption->getEcommerceConfig()->getVat();
+        $totalVat = round(($total  * $vat )/100);
+        return $totalVat;
+
+    }
+
+    public function updateOrder(Order $order)
+    {
+        $em = $this->_em;
+        $totalAmount = $em->getRepository('EcommerceBundle:OrderItem')->totalItemAmount($order);
+        $order->setTotalAmount($totalAmount);
+        $vat = $this->getCulculationVat($order->getGlobalOption(),$totalAmount);
+        $grandTotal = $totalAmount + $order->getShippingCharge() + $vat;
+        $order->setVat($vat);
+        $order->setGrandTotalAmount($grandTotal);
+        if($order->getPaidAmount() > $grandTotal ){
+        $order->setReturnAmount(($order->getPaidAmount() + $order->getDiscountAmount()) - $grandTotal);
+        $order->setDueAmount(0);
+        }elseif($totalAmount < $grandTotal ){
+        $order->setReturnAmount(0);
+        $order->setDueAmount($grandTotal - ($totalAmount+$order->getDiscountAmount()));
+        }
+        $em->flush();
+    }
+
+
+
 }

@@ -8,6 +8,8 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\LocationBundle\Entity\Location;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\PaymentType;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
@@ -34,6 +36,16 @@ class Order
     protected $ecommerceConfig;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="orders" , cascade={"persist", "remove"} )
+     **/
+    protected $location;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="orders")
+     */
+    protected $globalOption;
+
+    /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="orders" )
      **/
@@ -41,7 +53,7 @@ class Order
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="order"  , cascade={"remove"} )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="order"  , cascade={"persist", "remove"} )
      **/
     private  $orderItems;
 
@@ -56,9 +68,9 @@ class Order
     private  $accountBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="orders" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="orders" )
      **/
-    private  $accountBkash;
+    private  $accountMobileBank;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="orders" )
@@ -82,9 +94,9 @@ class Order
     /**
      * @var string
      *
-     * @ORM\Column(name="process", type="string", length=255,  nullable=true)
+     * @ORM\Column(name="process", type="string", length=50,  nullable=true)
      */
-    private $process = 'created';
+    private $process = 'Created';
 
     /**
      * @var string
@@ -121,12 +133,67 @@ class Order
      */
     private $invoice;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobileAccount", type="string", length=50 , nullable = true)
+     */
+    private $mobileAccount;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountType", type="string", length=255 , nullable = true)
+     */
+    private $accountType;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="transaction", type="string", length=255 , nullable = true)
+     */
+    private $transaction;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountName", type="string", length=50 , nullable = true)
+     */
+    private $accountName;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountNo", type="string", length=255 , nullable = true)
+     */
+    private $accountNo;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="bankBranch", type="string", length=255 , nullable = true)
+     */
+    private $bankBranch;
+
     /**
      * @var float
      *
      * @ORM\Column(name="shippingCharge", type="float", nullable = true)
      */
     private $shippingCharge;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="vat", type="float", nullable = true)
+     */
+    private $vat;
 
     /**
      * @var float
@@ -159,9 +226,16 @@ class Order
     /**
      * @var float
      *
-     * @ORM\Column(name="commissionAmount", type="float" , nullable = true)
+     * @ORM\Column(name="returnAmount", type="float" , nullable = true)
      */
-    private $commissionAmount;
+    private $returnAmount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="discountAmount", type="float" , nullable = true)
+     */
+    private $discountAmount;
 
 
     /**
@@ -178,6 +252,22 @@ class Order
      * @ORM\Column(name="code", type="integer",  nullable=true)
      */
     private $code;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean")
+     */
+    private $status = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cashOnDelivery", type="boolean")
+     */
+    private $cashOnDelivery = false;
+
+
 
     /**
      * @var \DateTime
@@ -286,7 +376,7 @@ class Order
     }
 
     /**
-     * @return mixed
+     * @return OrderItem
      */
     public function getOrderItems()
     {
@@ -324,23 +414,6 @@ class Order
     {
         $this->dueAmount = $dueAmount;
     }
-
-    /**
-     * @return float
-     */
-    public function getCommissionAmount()
-    {
-        return $this->commissionAmount;
-    }
-
-    /**
-     * @param float $commissionAmount
-     */
-    public function setCommissionAmount($commissionAmount)
-    {
-        $this->commissionAmount = $commissionAmount;
-    }
-
 
     /**
      * @return User
@@ -583,22 +656,6 @@ class Order
     }
 
     /**
-     * @return AccountBkash
-     */
-    public function getAccountBkash()
-    {
-        return $this->accountBkash;
-    }
-
-    /**
-     * @param AccountBkash $accountBkash
-     */
-    public function setAccountBkash($accountBkash)
-    {
-        $this->accountBkash = $accountBkash;
-    }
-
-    /**
      * @return TransactionMethod
      */
     public function getTransactionMethod()
@@ -612,6 +669,230 @@ class Order
     public function setTransactionMethod($transactionMethod)
     {
         $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param mixed $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
+    }
+
+    /**
+     * @return GlobalOption
+     */
+    public function getGlobalOption()
+    {
+        return $this->globalOption;
+    }
+
+    /**
+     * @param GlobalOption $globalOption
+     */
+    public function setGlobalOption($globalOption)
+    {
+        $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVat()
+    {
+        return $this->vat;
+    }
+
+    /**
+     * @param float $vat
+     */
+    public function setVat($vat)
+    {
+        $this->vat = $vat;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileAccount()
+    {
+        return $this->mobileAccount;
+    }
+
+    /**
+     * @param string $mobileAccount
+     */
+    public function setMobileAccount($mobileAccount)
+    {
+        $this->mobileAccount = $mobileAccount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountType()
+    {
+        return $this->accountType;
+    }
+
+    /**
+     * @param string $accountType
+     */
+    public function setAccountType($accountType)
+    {
+        $this->accountType = $accountType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransaction()
+    {
+        return $this->transaction;
+    }
+
+    /**
+     * @param string $transaction
+     */
+    public function setTransaction($transaction)
+    {
+        $this->transaction = $transaction;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountName()
+    {
+        return $this->accountName;
+    }
+
+    /**
+     * @param string $accountName
+     */
+    public function setAccountName($accountName)
+    {
+        $this->accountName = $accountName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountNo()
+    {
+        return $this->accountNo;
+    }
+
+    /**
+     * @param string $accountNo
+     */
+    public function setAccountNo($accountNo)
+    {
+        $this->accountNo = $accountNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBankBranch()
+    {
+        return $this->bankBranch;
+    }
+
+    /**
+     * @param string $bankBranch
+     */
+    public function setBankBranch($bankBranch)
+    {
+        $this->bankBranch = $bankBranch;
+    }
+
+    /**
+     * @return float
+     */
+    public function getReturnAmount()
+    {
+        return $this->returnAmount;
+    }
+
+    /**
+     * @param float $returnAmount
+     */
+    public function setReturnAmount($returnAmount)
+    {
+        $this->returnAmount = $returnAmount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountAmount()
+    {
+        return $this->discountAmount;
+    }
+
+    /**
+     * @param float $discountAmount
+     */
+    public function setDiscountAmount($discountAmount)
+    {
+        $this->discountAmount = $discountAmount;
+    }
+
+    /**
+     * @return Location
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param Location $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param boolean $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isCashOnDelivery()
+    {
+        return $this->cashOnDelivery;
+    }
+
+    /**
+     * @param boolean $cashOnDelivery
+     */
+    public function setCashOnDelivery($cashOnDelivery)
+    {
+        $this->cashOnDelivery = $cashOnDelivery;
     }
 
 }

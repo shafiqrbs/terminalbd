@@ -118,7 +118,7 @@ class GoodsType extends AbstractType
                 )))
             */->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
             ->add('file');
-        if($this->inventoryConfig->getGlobalOption()->getEcommerceConfig()->getIsColor() == 1){
+        if($this->inventoryConfig->getIsColor() == 1){
             $builder->add('itemColors', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemColor',

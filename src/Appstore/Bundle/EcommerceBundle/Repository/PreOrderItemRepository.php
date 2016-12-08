@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
+use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -11,4 +12,24 @@ use Doctrine\ORM\EntityRepository;
  */
 class PreOrderItemRepository extends EntityRepository
 {
+
+    public function itemOrderUpdate($order,$data)
+    {
+        $em = $this->_em;
+        $i = 0;
+        foreach ($data['item'] as $row ){
+
+            $entity = $em->getRepository('EcommerceBundle:PreOrderItem')->find($data['item'][$i]);
+            if($entity->isStatus() == 1){
+                $entity->setPreOrder($order);
+                $entity->setPrice($data['price'][$i]);
+                $entity->setShippingCharge($data['shippingCharge'][$i]);
+                $total = ($entity->getQuantity() * $data['price'][$i]);
+                $entity->setTotal($total);
+                $em->persist($entity);
+                $em->flush();
+            }
+            $i++;
+        }
+    }
 }

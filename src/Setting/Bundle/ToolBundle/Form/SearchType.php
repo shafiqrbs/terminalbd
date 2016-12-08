@@ -33,14 +33,14 @@ class SearchType extends AbstractType
 
             $builder
 
-                ->add('name','text', array('attr'=>array('class'=>'m-wrap tooltips','placeholder'=>'search keyword....'),
+                ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'search keyword....'),
                     'constraints' =>array()
                 ))
 
                 ->add('syndicate', 'entity', array(
                     'required'    => true,
-                    'empty_value' => '---Select business sector---',
-                    'attr'=>array('class'=>'select2'),
+                    'empty_value' => '---Select Business Sector---',
+                    'attr'=>array('class'=>'select2 span12'),
                     'class' => 'Setting\Bundle\ToolBundle\Entity\Syndicate',
                     'choices'=> $this->SyndicateChoiceList(),
                     'choices_as_values' => true,
@@ -49,22 +49,13 @@ class SearchType extends AbstractType
 
 
                 ->add('location', 'entity', array(
-                    'constraints' =>array(
-                        new NotBlank(array('message'=>'Please your location name required'))
-                    ),
                     'required'    => false,
+                    'empty_value' => '---Select Business Sector---',
                     'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
-                    'empty_value' => '---Select Location ---',
-                    'property' => 'name',
-                    'attr'     =>array('id' => '' , 'class' => 'select2'),
-                    'query_builder' => function(EntityRepository $er){
-                            return $er->createQueryBuilder('l')
-                                ->andWhere("l.level = 2")
-                                ->orderBy('l.name','ASC');
-                        }
-                ))
-
-               ;
+                    'choices'=> $this->LocationChoiceList(),
+                    'choices_as_values' => true,
+                    'choice_label' => 'nestedLabel',
+                ));
 
     }
     
@@ -92,6 +83,12 @@ class SearchType extends AbstractType
     protected function SyndicateChoiceList()
     {
         return $syndicateTree = $this->em->getSyndicateOptionGroup();
+
+    }
+
+    protected function LocationChoiceList()
+    {
+        return $syndicateTree = $this->em->getLocationOptionGroup();
 
     }
 }

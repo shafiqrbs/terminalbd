@@ -42,7 +42,7 @@ class SalarySetting
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255 , nullable=true)
      */
     private $name;
 
@@ -90,12 +90,34 @@ class SalarySetting
      */
     private $otherAmount;
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="advanceAmount", type="float", nullable=true)
+     */
+    private $advanceAmount;
+
     /**
      * @var float
      *
      * @ORM\Column(name="totalAmount", type="float", nullable=true)
      */
     private $totalAmount = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="code", type="integer",  nullable=true)
+     */
+    private $code;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="invoice", type="integer",  nullable=true)
+     */
+    private $invoice;
+
 
     /**
      * @var boolean
@@ -130,7 +152,12 @@ class SalarySetting
      **/
     private  $approvedBy;
 
-
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remark", type="string", length=255 , nullable=true)
+     */
+    private $remark;
 
     /**
      * Get id
@@ -469,6 +496,70 @@ class SalarySetting
     public function setEffectedMonth($effectedMonth)
     {
         $this->effectedMonth = $effectedMonth;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAdvanceAmount()
+    {
+        return $this->advanceAmount;
+    }
+
+    /**
+     * @param float $advanceAmount
+     */
+    public function setAdvanceAmount($advanceAmount)
+    {
+        $this->advanceAmount = $advanceAmount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param int $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRemark()
+    {
+        return $this->remark;
+    }
+
+    /**
+     * @param string $remark
+     */
+    public function setRemark($remark)
+    {
+        $this->remark = $remark;
+    }
+
+    /**
+     * @return int
+     */
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
+
+    /**
+     * @param int $invoice
+     */
+    public function setInvoice($invoice)
+    {
+        $this->invoice = $invoice;
     }
 }
 

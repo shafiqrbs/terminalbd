@@ -45,6 +45,7 @@ class PurchaseVendorItemController extends Controller
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:PurchaseVendorItem:index.html.twig', array(
             'entities' => $pagination,
+            'searchForm' => $data,
         ));
     }
     /**
@@ -298,11 +299,13 @@ class PurchaseVendorItemController extends Controller
         if($status == 1){
             $entity->setIsWeb(0);
         } else{
+            $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertInventorySubProduct($entity);
+            $entity->setSubProduct(true);
             $entity->setIsWeb(1);
         }
         $em->flush();
         $this->get('session')->getFlashBag()->add(
-            'success',"Status has been changed successfully"
+            'success',"Data has been changed successfully"
         );
         return $this->redirect($this->generateUrl('inventory_purchasevendoritem'));
     }

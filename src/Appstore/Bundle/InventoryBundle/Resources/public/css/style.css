@@ -117,7 +117,7 @@ input[class*="span"].m-wrap {
 }
 
 #message {
-    line-height: 21px;
+    line-height: 33px;
     text-align: right;
     font-weight: bold;
     color: #ffffff;

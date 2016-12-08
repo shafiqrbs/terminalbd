@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
+use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\EntityRepository;
 
@@ -16,54 +17,62 @@ use Doctrine\ORM\EntityRepository;
 class PurchaseVendorItemRepository extends EntityRepository
 {
 
+
+    public function handleSearchBetween($qb,$data){
+
+        $name = isset($data['name'])? $data['name'] :'';
+        $cat = isset($data['category'])? $data['category'] :'';
+        $brand = isset($data['brand'])? $data['brand'] :'';
+        $vendor = isset($data['vendor'])? $data['vendor'] :'';
+        $grn = isset($data['grn'])? $data['grn'] :'';
+        $receiveDate = isset($data['receiveDate'])? $data['receiveDate'] :'';
+        $memo = isset($data['memo'])? $data['memo'] :'';
+
+        if (!empty($vendor)) {
+            $qb->join('purchase.vendor', 'v');
+            $qb->andWhere("v.name = :vendor");
+            $qb->setParameter('vendor', $vendor);
+        }
+
+        if (!empty($grn)) {
+            $qb->andWhere("purchase.grn = :grn");
+            $qb->setParameter('grn', $grn);
+        }
+
+        if (!empty($memo)) {
+            $qb->andWhere("purchase.memo = :memo");
+            $qb->setParameter('memo', $memo);
+        }
+
+        if (!empty($receiveDate)) {
+            $qb->andWhere("purchase.receiveDate = :receiveDate");
+            $qb->setParameter('receiveDate', $receiveDate);
+        }
+
+        if (!empty($cat)) {
+            $qb->andWhere("masterItem.category = :category");
+            $qb->setParameter('category', $cat);
+        }
+        if (!empty($brand)) {
+            $qb->andWhere("item.brand = :brand");
+            $qb->setParameter('brand', $brand);
+        }
+        if (!empty($name)) {
+            $qb->andWhere($qb->expr()->like("item.name", "'% $name %'"  ));
+        }
+    }
+
     public function findWithSearch($inventory,$data,$limit=0)
     {
 
-        $cat = isset($data['cat'])? $data['cat'] :'';
-
         $qb = $this->createQueryBuilder('item');
         $qb->join('item.purchase', 'purchase');
-        $qb->where("purchase.approvedBy is not null");
-        if (!empty($cat)) {
-            $qb->andWhere("item.category = :category");
-            $qb->setParameter('category', $cat);
-        }
-
-        /*
-        if (!empty($color)) {
-
-            $qb->join('item.color', 'c');
-
-            $qb->andWhere("c.name = :color");
-            $qb->setParameter('color', $color);
-        }
-        if (!empty($size)) {
-
-            $qb->join('item.size', 's');
-            $qb->andWhere("s.name = :size");
-            $qb->setParameter('size', $size);
-        }
-        if (!empty($vendor)) {
-
-            $qb->join('item.vendor', 'v');
-            $qb->andWhere("v.companyName = :vendor");
-            $qb->setParameter('vendor', $vendor);
-            $qb->orderBy('v.companyName','ASC');
-        }
-
-        if (!empty($brand)) {
-
-            $qb->andWhere("b.name = :brand");
-            $qb->setParameter('brand', $brand);
-            $qb->orderBy('brand.name','ASC');
-        }*/
+        $qb->where("item.source ='inventory' ");
+        $qb->andWhere("purchase.approvedBy is not null");
+        $qb->andWhere("purchase.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $this->handleSearchBetween($qb,$data);
         $qb->orderBy('item.updated','DESC');
-/*        if($limit > 0)
-        {
-            $qb->setMaxResults($limit);
-            $qb->setFirstResult(0);
-        }*/
-
         $qb->getQuery();
         return  $qb;
 
@@ -72,76 +81,26 @@ class PurchaseVendorItemRepository extends EntityRepository
     public function findFoodWithSearch($inventory,$data,$limit=0)
     {
 
-        $name = isset($data['name'])? $data['name'] :'';
-        $cat = isset($data['category'])? $data['category'] :'';
 
         $qb = $this->createQueryBuilder('item');
         $qb->where("item.source = 'food'");
         $qb->andWhere("item.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
-        if (!empty($cat)) {
-            $qb->andWhere("item.category = :category");
-            $qb->setParameter('category', $cat);
-        }
-        if (!empty($name)) {
-            $qb->andWhere($qb->expr()->like("item.name", "'$name%'"  ));
-        }
-
-        /*
-
-        if (!empty($size)) {
-
-            $qb->join('item.size', 's');
-            $qb->andWhere("s.name = :size");
-            $qb->setParameter('size', $size);
-        }
-        if (!empty($vendor)) {
-
-            $qb->join('item.vendor', 'v');
-            $qb->andWhere("v.companyName = :vendor");
-            $qb->setParameter('vendor', $vendor);
-            $qb->orderBy('v.companyName','ASC');
-        }
-
-        if (!empty($brand)) {
-
-            $qb->andWhere("b.name = :brand");
-            $qb->setParameter('brand', $brand);
-            $qb->orderBy('brand.name','ASC');
-        }*/
-
-
+        $this->handleSearchBetween($qb,$data);
         $qb->orderBy('item.updated','DESC');
         $qb->getQuery();
         return  $qb;
 
     }
-
-    public function findGoodsWithSearch($inventory,$data,$limit=0)
+    public function findAllProductWithSearch($data,$limit=0)
     {
 
-        $name = isset($data['name'])? $data['name'] :'';
-        $cat = isset($data['category'])? $data['category'] :'';
-        $brand = isset($data['brand'])? $data['brand'] :'';
-        $order = isset($data['order'])? $data['order'] :'ASC';
 
+        $order = isset($data['order'])? $data['order'] :'ASC';
         $qb = $this->createQueryBuilder('item');
-        $qb->join("item.masterItem",'masterItem' );
-        $qb->where("item.source = 'goods'");
-        $qb->andWhere("item.isWeb = 1");
-        $qb->andWhere("item.inventoryConfig = :inventory");
-        $qb->setParameter('inventory', $inventory);
-        if (!empty($cat)) {
-            $qb->andWhere("masterItem.category = :category");
-            $qb->setParameter('category', $cat);
-        }
-         if (!empty($brand)) {
-            $qb->andWhere("item.brand = :brand");
-            $qb->setParameter('brand', $brand);
-        }
-        if (!empty($name)) {
-            $qb->andWhere($qb->expr()->like("item.name", "'$name%'"  ));
-        }
+        $qb->leftJoin("item.masterItem",'masterItem' );
+        $qb->where("item.isWeb = 1");
+        $this->handleSearchBetween($qb,$data);
         if(!empty($order)){
 
             if($order == "ASC"){
@@ -158,6 +117,34 @@ class PurchaseVendorItemRepository extends EntityRepository
         return  $qb;
 
     }
+
+    public function findGoodsWithSearch($inventory,$data,$limit=0)
+    {
+
+        $order = isset($data['order'])? $data['order'] :'ASC';
+        $qb = $this->createQueryBuilder('item');
+        $qb->leftJoin("item.masterItem",'masterItem' );
+        $qb->where("item.isWeb = 1");
+        $qb->andWhere("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $this->handleSearchBetween($qb,$data);
+        if(!empty($order)){
+
+            if($order == "ASC"){
+                $qb->orderBy('item.salesPrice','ASC');
+            }else{
+                $qb->orderBy('item.salesPrice','DESC');
+            }
+
+        }else{
+
+            $qb->orderBy('item.updated','DESC');
+        }
+        $qb->getQuery();
+        return  $qb;
+
+    }
+
 
     public function findItemWithSearch($inventory,$data,$limit=0)
     {
@@ -201,24 +188,7 @@ class PurchaseVendorItemRepository extends EntityRepository
 
     }
 
-    public function handleSearchBetween($qb,$data){
 
-        $name = isset($data['name'])? $data['name'] :'';
-        $cat = isset($data['category'])? $data['category'] :'';
-        $brand = isset($data['brand'])? $data['brand'] :'';
-
-        if (!empty($cat)) {
-            $qb->andWhere("masterItem.category = :category");
-            $qb->setParameter('category', $cat);
-        }
-        if (!empty($brand)) {
-            $qb->andWhere("item.brand = :brand");
-            $qb->setParameter('brand', $brand);
-        }
-        if (!empty($name)) {
-            $qb->andWhere($qb->expr()->like("item.name", "'$name%'"  ));
-        }
-    }
 
     public function getPurchaseVendorQuantitySum($purchase)
     {

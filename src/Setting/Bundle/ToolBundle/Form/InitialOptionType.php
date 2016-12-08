@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ToolBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Repository\SyndicateRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,12 +15,14 @@ class InitialOptionType extends AbstractType
 {
 
     /** @var  SyndicateRepository */
-
     private $em;
+    /** @var  LocationRepository */
+    private $location;
 
-    function __construct(SyndicateRepository $em)
+    function __construct(SyndicateRepository $em , LocationRepository $location)
     {
         $this->em = $em;
+        $this->location = $location;
     }
 
 
@@ -54,20 +57,13 @@ class InitialOptionType extends AbstractType
 
 
                 ->add('location', 'entity', array(
-                    'constraints' =>array(
-                        new NotBlank(array('message'=>'Please your location name required'))
-                    ),
-                    'required'    => true,
+                    'required'    => false,
+                    'empty_value' => '---Select Location---',
+                    'attr'=>array('class'=>'select2 span12'),
                     'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
-                    'empty_value' => '---Select Location ---',
-                    'property' => 'name',
-                    'attr'     =>array('id' => '' , 'class' => 'select2'),
-                    'query_builder' => function(EntityRepository $er){
-                            return $er->createQueryBuilder('l')
-                                ->andWhere("l.parent = 8")
-                                ->andWhere("l.level = 3")
-                                ->orderBy('l.name','ASC');
-                        }
+                    'choices'=> $this->LocationChoiceList(),
+                    'choices_as_values' => true,
+                    'choice_label' => 'nestedLabel',
                 ))
 
                 ->add('status','checkbox', array(
@@ -104,6 +100,12 @@ class InitialOptionType extends AbstractType
     protected function SyndicateChoiceList()
     {
         return $syndicateTree = $this->em->getSyndicateOptionGroup();
+
+    }
+
+    protected function LocationChoiceList()
+    {
+        return $syndicateTree = $this->location->getLocationOptionGroup();
 
     }
 }

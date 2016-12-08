@@ -14,6 +14,15 @@ use Setting\Bundle\ToolBundle\Entity\Syndicate;
 class SyndicateRepository extends MaterializedPathRepository{
 
 
+    public function findGroupEntity(){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.id as id, e.entityName as name');
+        $qb->where("e.entityName != :entityName");
+        $qb->setParameter('entityName', 'null');
+        return $qb->getQuery()->getResult();
+    }
+
     public function getFlatTree()
     {
 
@@ -259,15 +268,15 @@ class SyndicateRepository extends MaterializedPathRepository{
 
         $data= '';
         $data .=' <select>
-  <optgroup label="Swedish Cars">
-    <option value="volvo">Volvo</option>
-    <option value="saab">Saab</option>
-  </optgroup>
-  <optgroup label="German Cars">
-    <option value="mercedes">Mercedes</option>
-    <option value="audi">Audi</option>
-  </optgroup>
-</select> ';
+      <optgroup label="Swedish Cars">
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+      </optgroup>
+      <optgroup label="German Cars">
+        <option value="mercedes">Mercedes</option>
+        <option value="audi">Audi</option>
+      </optgroup>
+    </select> ';
         return $data;
 
     }

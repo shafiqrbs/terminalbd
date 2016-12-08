@@ -2,6 +2,8 @@
 
 namespace Product\Bundle\ProductBundle\Entity;
 
+use Appstore\Bundle\EcommerceBundle\Entity\EcommerceSlider;
+use Appstore\Bundle\EcommerceBundle\Entity\Template;
 use Appstore\Bundle\InventoryBundle\Entity\ItemAttribute;
 use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
@@ -78,6 +80,12 @@ class Category
      * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\CategoryGrouping", mappedBy="categories" )
      **/
     protected $categoryGrouping;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="category" )
+     **/
+    protected $template;
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\Branding", mappedBy="categories" )
@@ -503,6 +511,22 @@ class Category
     public function getSize()
     {
         return $this->size;
+    }
+
+    /**
+     * @return Template
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
+     * @param Template $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
     }
 
 }

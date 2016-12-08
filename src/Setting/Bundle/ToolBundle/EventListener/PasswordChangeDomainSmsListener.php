@@ -25,7 +25,7 @@ class PasswordChangeDomainSmsListener extends BaseSmsAwareListener
         $username = $event->getUsername();
         $password = $event->getPassword();
 
-        $msg = "Your requesting new password is:".$password.'and user name'.$username;
+        $msg = "Requesting new password is: ".$password.' and user name: '.$username;
         //$mobile = "88".$user->getMobile();
         $mobile = "+88".$option->getMobile();
         $this->gateway->send($msg, $mobile);

@@ -93,7 +93,7 @@ class SalesItemRepository extends EntityRepository
             $data .='<td class="numeric" >'.$entity->getPurchaseItem()->getBarcode();
             $data .='</br><span>'.$itemName.'</span>';
             $data .='</td>';
-            $data .='<td class="numeric" ><input type="text" name="quantity[]" rel="'.$entity->getId().'"  id="quantity-'.$entity->getId().'" class="m-wrap span10 quantity" value="'.$entity->getQuantity().'" placeholder="'.$entity->getItem()->getQuantity().'"></td>';
+            $data .='<td class="numeric" ><input type="number" name="quantity[]" rel="'.$entity->getId().'"  id="quantity-'.$entity->getId().'" class="m-wrap span10 quantity" value="'.$entity->getQuantity().'" min="1" max="'.$entity->getPurchaseItem()->getQuantity().'" placeholder="'.$entity->getPurchaseItem()->getQuantity().'"></td>';
             $data .='<td class="" ><div class="input-prepend">';
             $data .='<span class="add-on">';
             $data .='<input type="hidden" name="estimatePrice" id="estimatePrice-'.$entity->getId().'" value="'.$entity->getEstimatePrice().'">';

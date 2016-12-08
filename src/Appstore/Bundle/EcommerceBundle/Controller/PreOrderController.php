@@ -4,6 +4,7 @@ namespace Appstore\Bundle\EcommerceBundle\Controller;
 
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderItem;
 use Appstore\Bundle\EcommerceBundle\Form\PreOrderItemType;
+use Appstore\Bundle\EcommerceBundle\Form\PreOrderProcessType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -39,8 +40,8 @@ class PreOrderController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $ecommerce = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        $entities = $em->getRepository('EcommerceBundle:PreOrder')->findBy(array('ecommerceConfig' => $ecommerce), array('updated' => 'desc'));
+        $ecommerce = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('EcommerceBundle:PreOrder')->findBy(array('globalOption' => $ecommerce), array('updated' => 'desc'));
         $pagination = $this->paginate($entities);
         return $this->render('EcommerceBundle:PreOrder:index.html.twig', array(
             'entities' => $pagination,
@@ -153,13 +154,14 @@ class PreOrderController extends Controller
      */
     private function createEditForm(PreOrder $entity)
     {
-        $form = $this->createForm(new PreOrderType(), $entity, array(
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new PreOrderProcessType($entity->getGlobalOption(),$location), $entity, array(
             'action' => $this->generateUrl('customer_preorder_update', array('id' => $entity->getId())),
             'method' => 'PUT',
+            'attr' => array(
+                'novalidate' => 'novalidate',
+            )
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
         return $form;
     }
 
@@ -171,45 +173,54 @@ class PreOrderController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        $data = $request->request->all();
+
         $entity = $em->getRepository('EcommerceBundle:PreOrder')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PreOrder entity.');
         }
-
-
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
-        if ($editForm->isValid()) {
+        if ($editForm->isValid() and $data['submitProcess'] == 'verified') {
+            $em->getRepository('EcommerceBundle:PreOrderItem')->itemOrderUpdate($entity,$data);
+            $em->getRepository('EcommerceBundle:PreOrder')->updatePreOder($entity);
+            $entity->setProcess('verified');
             $em->flush();
-
-            return $this->redirect($this->generateUrl('customer_preorder_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('customer_preorder_item', array('id' => $id)));
         }
 
-        return $this->render('EcommerceBundle:PreOrder:edit.html.twig', array(
-            'entity' => $entity,
-            'edit_form' => $editForm->createView(),
-        ));
+       /* if($data['submitProcess'] == 'verified'){
+
+            $this->get('session')->getFlashBag()->add('success',"Customer has been verified");
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.order_confirm', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderConfirmEvent($entity));
+
+        }else{
+
+            $this->get('session')->getFlashBag()->add('success',"Message has been sent successfully");
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.order_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($entity));
+
+        }*/
+
     }
 
     /**
      * Deletes a PreOrder entity.
      *
      */
+
     public function deleteAction(PreOrder $preOrder)
     {
-
         if ($preOrder) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($preOrder);
             $em->flush();
             return new Response('success');
-
         }else{
-
             return new Response('failed');
-
         }
     }
 
@@ -232,8 +243,7 @@ class PreOrderController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PreOrder entity.');
         }
-        $preOrderItem = new PreOrderItem();
-        $form = $this->createItemForm($preOrderItem,$entity->getId());
+        $form = $this->createEditForm($entity);
         $banks = $this->getDoctrine()->getRepository('EcommerceBundle:BankAccount')->findBy(array('status'=>1),array('name'=>'asc'));
         $bkashs = $this->getDoctrine()->getRepository('EcommerceBundle:BkashAccount')->findBy(array('status'=>1),array('name'=>'asc'));
         $paymentTypes = $this->getDoctrine()->getRepository('SettingToolBundle:PaymentType')->findBy(array('status'=>1),array('name'=>'asc'));
@@ -309,6 +319,42 @@ class PreOrderController extends Controller
         $em->persist($preOrder);
         $em->flush();
         return new Response('success');
+
+    }
+
+    public function confirmAction(Request $request ,PreOrder $entity)
+    {
+
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        if($data['submitProcess'] == 'confirm'){
+            $entity->setProcess('confirm');
+        }else{
+            $entity->setProcess($data['submitProcess']);
+        }
+        if(isset($data['comment']) and !empty($data['comment'])){
+            $entity->setComment($data['comment']);
+        }else{
+            $entity->setComment(null);
+        }
+        $em->persist($entity);
+        $em->flush();
+
+        if($data['submitProcess'] == 'confirm'){
+
+            $this->get('session')->getFlashBag()->add('success',"Customer has been confirmed");
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.preorder_confirm', new \Setting\Bundle\ToolBundle\Event\EcommercePreOrderConfirmEvent($entity));
+
+        }else{
+
+            $this->get('session')->getFlashBag()->add('success',"Message has been sent successfully");
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.preorder_sms', new \Setting\Bundle\ToolBundle\Event\EcommercePreOrderSmsEvent($entity));
+
+        }
+        return $this->redirect($this->generateUrl('customer_preorder'));
+
 
     }
 

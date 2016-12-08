@@ -82,15 +82,16 @@
                                 <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                     <thead class="flip-content ">
-                                    <tr class="head-grey">
+                                    <tr class="head-blue">
                                         <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                         <th class="numeric" >Invoice</th>
                                         <th class="numeric" >Date</th>
                                         <th class="numeric" >Item</th>
                                         <th class="numeric" >Sub-Total</th>
                                         <th class="numeric" >Discount</th>
+                                        <th class="numeric" >Net Total</th>
+                                        <th class="numeric" >Payment</th>
                                         <th class="numeric" >Due</th>
-                                        <th class="numeric" >Total</th>
                                         <th class="numeric" >Sales By</th>
                                         <th class="numeric" >Action</th>
                                     </tr>
@@ -104,10 +105,11 @@
                                             <td class="numeric" >{{ entity.invoice }}</td>
                                             <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                             <td class="numeric" >{{ entity.totalItem }}</td>
-                                            <td class="numeric" >{{ entity.subTotal|number_format(2, '.', ',')  }}</td>
-                                            <td class="numeric" >{{ entity.discount|number_format(2, '.', ',')  }}</td>
-                                            <td class="numeric" >{{ entity.due|number_format(2, '.', ',')  }}</td>
-                                            <td class="numeric" >{{ entity.total|number_format(2, '.', ',')  }}</td>
+                                            <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
+                                            <td class="numeric" >{{ entity.discount|number_format  }}</td>
+                                            <th class="numeric" >{{ entity.total|number_format  }}</th>
+                                            <th class="numeric" >{{ entity.payment|number_format }}</th>
+                                            <td class="numeric" >{{ entity.due|number_format }}</td>
                                             <td class="numeric" >{% if entity.salesBy %}{{ entity.salesBy.profile.name }}{% endif %}</td>
                                             <td class="numeric" >
                                                 {% if entity.salesItems is defined and  entity.salesItems is not empty  %}

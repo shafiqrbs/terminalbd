@@ -2,6 +2,9 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 
+use Appstore\Bundle\InventoryBundle\Entity\ItemColor;
+use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,19 +25,34 @@ class OrderItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="orderItems"  , cascade={"remove"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="orderItems"  )
      **/
     private  $order;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", inversedBy="orderItems"  , cascade={"remove"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", inversedBy="orderItems" )
      **/
     private  $purchaseVendorItem;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", inversedBy="orderItems"  , cascade={"remove"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="orderItems" )
+     **/
+    private  $purchaseItem;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", inversedBy="orderItems")
      **/
     private  $goodsItem;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", inversedBy="orderItem")
+     **/
+    private  $size;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="orderItem")
+     **/
+    private  $color;
 
     /**
      * @var integer
@@ -56,6 +74,13 @@ class OrderItem
      * @ORM\Column(name="subTotal", type="float")
      */
     private $subTotal;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean")
+     */
+    private $status = true;
 
 
     /**
@@ -186,6 +211,70 @@ class OrderItem
     public function setGoodsItem($goodsItem)
     {
         $this->goodsItem = $goodsItem;
+    }
+
+    /**
+     * @return ItemColor
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param ItemColor $color
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+    }
+
+    /**
+     * @return PurchaseItem
+     */
+    public function getPurchaseItem()
+    {
+        return $this->purchaseItem;
+    }
+
+    /**
+     * @param PurchaseItem $purchaseItem
+     */
+    public function setPurchaseItem($purchaseItem)
+    {
+        $this->purchaseItem = $purchaseItem;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param boolean $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return ItemSIze
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param ItemSIze $size
+     */
+    public function setSize($size)
+    {
+        $this->size = $size;
     }
 
 

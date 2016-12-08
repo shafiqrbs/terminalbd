@@ -62,6 +62,7 @@ class PurchaseRepository extends EntityRepository
         $qb->addSelect('SUM(purchase.dueAmount) AS due');
         $qb->addSelect('SUM(purchase.commissionAmount) AS discount');
         $qb->where("purchase.inventoryConfig = :inventory");
+        $qb->andWhere("purchase.process = 'approved'");
         $qb->setParameter('inventory', $inventory);
         if (!empty($receiveDate)) {
             $compareTo = new \DateTime($receiveDate);
@@ -97,26 +98,27 @@ class PurchaseRepository extends EntityRepository
         $qb->addSelect('SUM(pvi.quantity) AS quantity ');
         $qb->addSelect('COUNT(pvi.id) AS item ');
         $qb->addSelect('SUM(pvi.quantity * pvi.purchasePrice) AS total');
-        $qb->where("p.inventoryConfig = :inventory");
+        $qb->where("p.process = 'imported'");
+        $qb->andWhere("p.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
         $qb->groupBy('p.id');
         $result = $qb->getQuery()->getResult();
         foreach ($result as $row ){
 
             $entity = $this->find($row['id']);
-            $entity->setProcess('approved');
             $entity->setApprovedBy($user);
             $entity->setTotalQnt($row['quantity']);
             $entity->setTotalItem($row['item']);
             $entity->setTotalAmount($row['total']);
             $entity->setPaymentAmount($row['total']);
+            $entity->setTransactionMethod($this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
             $this->_em->persist($entity);
         }
 
         $this->_em->flush();
 
         if(!empty($result)){
-            return 'verified';
+            return 'imported';
         }
         return false;
 

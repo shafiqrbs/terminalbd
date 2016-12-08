@@ -42,6 +42,7 @@ SettingContentBundle_homeslider:
     resource: "@SettingContentBundle/Resources/config/routing/homeslider.yml"
     prefix:   /website/homeslider
 
+
 SettingContentBundle_homepage:
     resource: "@SettingContentBundle/Resources/config/routing/homepage.yml"
     prefix:   /website/homepage

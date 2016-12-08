@@ -38,18 +38,18 @@ class PettyCashController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('AccountingBundle:PettyCash')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL));
+        $entities = $em->getRepository('AccountingBundle:PettyCash')->findBy(array('globalOption' => $globalOption,'parent'=>NULL));
         $pagination = $this->paginate($entities);
         //$overview = $this->getDoctrine()->getRepository('AccountingBundle:PettyCash')->salesOverview($inventory,$data);
         $accountHead = $em->getRepository('AccountingBundle:AccountHead')->findBy(array('status'=>1),array('name'=>'asc'));
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1));
         $accountBanks = $em->getRepository('AccountingBundle:AccountBank')->findBy(array('globalOption'=>$globalOption,'status'=>1));
-        $accountBkash = $em->getRepository('AccountingBundle:AccountBkash')->findBy(array('globalOption'=>$globalOption,'status'=>1));
+        $accountMobileBank = $em->getRepository('AccountingBundle:AccountMobileBank')->findBy(array('globalOption'=>$globalOption,'status'=>1));
         return $this->render('AccountingBundle:PettyCash:index.html.twig', array(
             'entities' => $pagination,
             'transactionMethods' => $transactionMethods,
             'accountBanks' => $accountBanks,
-            'accountBkash' => $accountBkash,
+            'accountMobileBank' => $accountMobileBank,
             'overview' => '',
         ));
     }
@@ -59,11 +59,14 @@ class PettyCashController extends Controller
      */
     public function createAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $entity = new PettyCash();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $lastBalance = $em->getRepository('AccountingBundle:PettyCash')->lastInsertCash($entity);
             $em = $this->getDoctrine()->getManager();
+            $entity->setBalance($lastBalance + $entity->getAmount());
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
             $em->persist($entity);
             $em->flush();
@@ -201,6 +204,7 @@ class PettyCashController extends Controller
             $pettyCash->setProcess('approved');
             $pettyCash->setApprovedBy($this->getUser());
             $em->flush();
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPettyCash($pettyCash);
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPettyCashTransaction($pettyCash);
 
             return new Response('success');

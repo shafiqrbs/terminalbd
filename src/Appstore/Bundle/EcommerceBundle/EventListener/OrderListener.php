@@ -16,7 +16,7 @@ class OrderListener
     {
         $entity = $args->getEntity();
 
-        // perhaps you only want to act on some "Sales" entity
+        // perhaps you only want to act on some "Order" entity
         if ($entity instanceof Order) {
 
             $datetime = new \DateTime("now");

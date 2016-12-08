@@ -49,4 +49,41 @@ class AccountJournalRepository extends EntityRepository
         return  $amount ;
 
     }
+
+    public function reportOperatingRevenue($globalOption,$data){
+
+        $qb = $this->createQueryBuilder('ex');
+        $qb->join('ex.accountHeadCredit','accountHead');
+        $qb->select('sum(ex.amount) as amount, accountHead.name as name');
+        $qb->where('accountHead.parent = 20');
+        $qb->andWhere('ex.globalOption = :globalOption');
+        $qb->setParameter('globalOption', $globalOption);
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('accountHead.id');
+        return  $qb->getQuery()->getArrayResult();
+    }
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
+    {
+
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+
+        if (!empty($data['startDate']) ) {
+
+            $qb->andWhere("ex.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate.' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+
+            $qb->andWhere("ex.updated <= :endDate");
+            $qb->setParameter('endDate', $endDate.' 23:59:59');
+        }
+    }
+
+
 }

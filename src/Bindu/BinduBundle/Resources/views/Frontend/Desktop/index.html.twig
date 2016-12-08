@@ -161,7 +161,6 @@
     {% block javascriptBlock %}
         {{ parent() }}
         {% javascripts
-        '@BinduBundle/Resources/public/js/*'
         '@BinduBundle/Resources/public/js/common.js'
         %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

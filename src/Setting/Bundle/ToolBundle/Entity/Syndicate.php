@@ -213,7 +213,7 @@ class Syndicate
     }
 
     /**
-     * @param mixed $parent
+     * @param Syndicate $parent
      */
     public function setParent($parent)
     {

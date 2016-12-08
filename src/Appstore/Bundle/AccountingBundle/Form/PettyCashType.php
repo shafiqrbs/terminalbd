@@ -55,14 +55,23 @@ class PettyCashType extends AbstractType
                 'empty_value' => '---Choose a bank---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.globalOption =".$this->globalOption->getId());
+                },
             ))
 
-            ->add('accountBkash', 'entity', array(
+            ->add('accountMobileBank', 'entity', array(
+
                 'required'    => true,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBkash',
-                'empty_value' => '---Choose a bkash---',
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
+                'empty_value' => '---Choose a mobile account---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.globalOption =".$this->globalOption->getId());
+                },
             ))
 
             ->add('toUser', 'entity', array(

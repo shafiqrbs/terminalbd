@@ -29,7 +29,7 @@ class Excel
 
         foreach($this->data as $key => $item) {
 
-            $item = $this->senatizeItemData($key, $item, 'default');
+            $item = $this->senatizeItemData($key, $item, 'Default');
 
 //            if($item['Size'] != 16) {
 //                continue;
@@ -82,8 +82,8 @@ class Excel
 
             if($itemObj == NULL) {
                 $itemObj = new Item();
-                $itemObj->setName($item['Item Name']);
-                $itemObj->setWebName($item['Item Name']);
+                $itemObj->setName($this->sentence_case($item['Item Name']));
+                $itemObj->setWebName($this->sentence_case($item['Item Name']));
                 $itemObj->setMasterItem($masterItem);
                 if($this->getInventoryConfig()->getIsColor() == 1) {
                     $itemObj->setColor($itemColor);
@@ -140,7 +140,7 @@ class Excel
         }
 
         $itemObj = $repository->findOneBy(array(
-            'name'            => $item['Item Name'],
+            'name'            => $this->sentence_case($item['Item Name']),
             'masterItem'      => $masterItem,
             'size'            => $itemSize,
             'color'           => $itemColor,
@@ -169,15 +169,17 @@ class Excel
 
                 $purchase = $this->getPurchase($item);
                 $itemObj = $repository->findOneBy(array(
-                    'name' => $item['Item Name'],
+                    'name' => $this->sentence_case($item['Item Name']),
                     'purchasePrice' => $item['Purchase Price'],
                     'purchase' => $purchase
                 ));
 
                 if ($itemObj == NULL) {
                     $itemObj = new PurchaseVendorItem();
-                    $itemObj->setName($item['Item Name']);
+                    $itemObj->setName($this->sentence_case($item['Item Name']));
                     $itemObj->setPurchase($purchase);
+                    $itemObj->setSource('inventory');
+                    $itemObj->setInventoryConfig($purchase->getInventoryConfig());
                     $itemObj->setPurchasePrice($item['Purchase Price']);
                     $itemObj->setSalesPrice($item['Sales price']);
                     $itemObj->setWebPrice($item['Sales price']);
@@ -208,14 +210,14 @@ class Excel
 
         if($masterItem == NULL) {
             $masterItem = $masterItemRepository->findOneBy(array(
-                'name' => $item['Item Name'],
+                'name' => $this->sentence_case($item['Item Name']),
                 'category' => $category,
                 'inventoryConfig' => $this->getInventoryConfig()
             ));
 
             if($masterItem == NULL){
                 $masterItem = new Product();
-                $masterItem->setName($item['Item Name']);
+                $masterItem->setName($this->sentence_case($item['Item Name']));
                 $masterItem->setCategory($category);
                 $masterItem->setInventoryConfig($this->getInventoryConfig());
                 $masterItem = $this->save($masterItem);
@@ -300,6 +302,7 @@ class Excel
                 $purchase->setInventoryConfig($this->getInventoryConfig());
                 $purchase->setVendor($vendor);
                 $purchase->setChalan(1);
+                $purchase->setProcess('imported');
                 $purchase->setReceiveDate(new \DateTime());
                 $purchase->setMemo($item['Memo']);
                 $purchase = $this->save($purchase);
@@ -540,4 +543,17 @@ class Excel
 
         return $item;
     }
+
+    function sentence_case($string) {
+        $sentences = preg_split('/([.?!]+)/', $string, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+        $new_string = '';
+        foreach ($sentences as $key => $sentence) {
+            $new_string .= ($key & 1) == 0?
+                ucfirst(strtolower(trim($sentence))) :
+                $sentence.' ';
+        }
+        return trim($new_string);
+    }
+
+
 }

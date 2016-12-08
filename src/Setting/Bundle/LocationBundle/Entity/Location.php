@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\LocationBundle\Entity;
 
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Core\UserBundle\Entity\Profile;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -37,6 +38,11 @@ class Location
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", mappedBy="location")
      */
     protected $globalOptions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="location")
+     */
+    protected $orders;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ContactPage", mappedBy="thana")
@@ -309,5 +315,13 @@ class Location
     public function getCustomerThana()
     {
         return $this->customerThana;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrders()
+    {
+        return $this->orders;
     }
 }

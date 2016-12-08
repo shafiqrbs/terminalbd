@@ -13,21 +13,19 @@ use Doctrine\ORM\EntityRepository;
 class PaymentSalaryRepository extends EntityRepository
 {
 
-    public function totalAmount(User $user)
+    public function paymentAmountOverview($globalOption,$data)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.totalAmount) as total');
-        // $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.advanceAmount) AS advanceAmount, SUM(e.dueAmount) AS dueAmount');
-        $qb->where("e.user = :user");
-        $qb->setParameter('user', $user->getId());
-        $data = $qb->getQuery()->getSingleScalarResult();
-        // $data =  array('totalAmount'=>$result['totalAmount'],'advanceAmount'=>$result['advanceAmount'],'dueAmount'=>$result['dueAmount']);
+        $qb->select('SUM(e.totalAmount) AS totalAmount,SUM(e.paidAmount) AS paidAmount, SUM(e.adjustmentAmount) AS adjustmentAmount, SUM(e.dueAmount) AS dueAmount');
+        $qb->where("e.process = 'approved' ");
+        $qb->andWhere("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption->getId());
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getArrayResult();
+        $data =  array('totalAmount'=>$result[0]['totalAmount'],'paidAmount'=>$result[0]['paidAmount'],'adjustmentAmount'=>$result[0]['adjustmentAmount'],'dueAmount'=>$result[0]['dueAmount']);
         return $data;
 
     }
-
-
-
 
     public function findWithSearch($globalOption,$data = '')
     {
@@ -44,12 +42,12 @@ class PaymentSalaryRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.paidAmount) AS paidAmount,SUM(e.totalAmount) AS totalAmount, SUM(e.advanceAmount) AS advanceAmount, SUM(e.dueAmount) AS dueAmount, SUM(e.otherAmount) AS otherAmount');
+        $qb->select('SUM(e.paidAmount) AS paidAmount,SUM(e.totalAmount) AS totalAmount, SUM(e.adjustmentAmount) AS adjustmentAmount, SUM(e.dueAmount) AS dueAmount, SUM(e.otherAmount) AS otherAmount');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getSingleResult();
-        $data =  array('totalAmount'=>$result['totalAmount'],'paidAmount'=>$result['paidAmount'],'advanceAmount'=>$result['advanceAmount'],'dueAmount'=>$result['dueAmount'],'otherAmount'=>$result['otherAmount']);
+        $data =  array('totalAmount'=>$result['totalAmount'],'paidAmount'=>$result['paidAmount'],'adjustmentAmount'=>$result['adjustmentAmount'],'dueAmount'=>$result['dueAmount'],'otherAmount'=>$result['otherAmount']);
         return $data;
 
 
@@ -78,7 +76,7 @@ class PaymentSalaryRepository extends EntityRepository
             $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
             $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
             $toUser =    isset($data['toUser'])? $data['toUser'] :'';
-            $paymentMethod =    isset($data['paymentMethod'])? $data['paymentMethod'] :'';
+            $transactionMethod =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
 
             if (!empty($data['startDate']) and !empty($data['endDate']) ) {
 
@@ -92,12 +90,12 @@ class PaymentSalaryRepository extends EntityRepository
             }
             if (!empty($toUser)) {
                 $qb->join('e.user','u');
-                $qb->andWhere("u.username = :user");
+                $qb->andWhere("e.user = :user");
                 $qb->setParameter('user', $toUser);
             }
-            if (!empty($paymentMethod)) {
-                $qb->andWhere("e.paymentMethod = :paymentMethod");
-                $qb->setParameter('paymentMethod', $paymentMethod);
+            if (!empty($transactionMethod)) {
+                $qb->andWhere("e.transactionMethod = :transactionMethod");
+                $qb->setParameter('transactionMethod', $transactionMethod);
             }
         }
 

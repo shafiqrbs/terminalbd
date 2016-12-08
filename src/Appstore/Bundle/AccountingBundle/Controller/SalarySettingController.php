@@ -61,12 +61,12 @@ class SalarySettingController extends Controller
             $em = $this->getDoctrine()->getManager();
             $globalOption = $this->getUser()->getGlobalOption();
             $entity->setGlobalOption($globalOption);
-            $totalAmount = ($entity->getBasicAmount() + $entity->getBonusAmount() + $entity->getOtherAmount());
+            $totalAmount = ($entity->getBasicAmount() + $entity->getBonusAmount() + $entity->getOtherAmount() + $entity->getAdvanceAmount());
             $entity->setTotalAmount($totalAmount);
             $date = $entity->getCreated();
-            $effected =  date(strtotime($date),'m-Y');
-            $salaryInfo = $entity->getName().' Effected date: '.$effected.' Total amount: '.$entity->getTotalAmount();
-            $entity->setSalaryInfo($salaryInfo);
+            //$effected =  date(strtotime($date),'m-Y');
+            //$salaryInfo = $entity->getName().' Effected date: '.$effected.' Total amount: '.$entity->getTotalAmount();
+            //$entity->setSalaryInfo($salaryInfo);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -223,23 +223,14 @@ class SalarySettingController extends Controller
      * Deletes a SalarySetting entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(SalarySetting $entity)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('AccountingBundle:SalarySetting')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find SalarySetting entity.');
-            }
-
-            $em->remove($entity);
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+              $em->remove($entity);
             $em->flush();
         }
-
         return $this->redirect($this->generateUrl('account_salarysetting'));
     }
 

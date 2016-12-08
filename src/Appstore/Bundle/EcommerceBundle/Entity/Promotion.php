@@ -40,6 +40,16 @@ class Promotion
      */
     protected $itemTags;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="promotion"  , cascade={"persist", "remove"} )
+     **/
+    private  $templatePromotion;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="tag"  , cascade={"persist", "remove"} )
+     **/
+    private  $templateTag;
+
     /**
      * @var string
      *
@@ -392,6 +402,39 @@ class Promotion
     public function getItemTags()
     {
         return $this->itemTags;
+    }
+
+
+    /**
+     * @return Template
+     */
+    public function getTemplateTag()
+    {
+        return $this->templateTag;
+    }
+
+    /**
+     * @param Template $templateTag
+     */
+    public function setTemplateTag($templateTag)
+    {
+        $this->templateTag = $templateTag;
+    }
+
+    /**
+     * @return Template
+     */
+    public function getTemplatePromotion()
+    {
+        return $this->templatePromotion;
+    }
+
+    /**
+     * @param Template $templatePromotion
+     */
+    public function setTemplatePromotion($templatePromotion)
+    {
+        $this->templatePromotion = $templatePromotion;
     }
 
 

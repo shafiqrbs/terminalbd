@@ -20,7 +20,7 @@ bindu_build_syndicate:
 
 bindu_search:
     path:     /search
-    defaults: { _controller: BinduBundle:Widget:searching }
+    defaults: { _controller: BinduBundle:Bindu:searching }
     requirements: { _method: post }
 
 bindu_new:

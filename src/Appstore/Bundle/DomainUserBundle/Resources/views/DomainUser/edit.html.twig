@@ -36,6 +36,19 @@
                                     <i class="icon-lock"></i>
                                     Forget Password
                                 </a>
+                                <div class="btn-group">
+                                    <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                        Tools
+                                        <i class="icon-tasks"></i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="{{ path('domain_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                        <li><a href="{{ path('domain_user') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                        {% if(entity.id > 0 ) %}
+                                            <li><a href="{{ path('domain_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
 
                             </div>
                         </div>
@@ -98,12 +111,22 @@
                                     </div>
                                 </div>
                                 <!--/span-->
-                                <div class="span6 ">
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" >Joining date</label>
                                         <div class="controls">
                                             {{ form_widget(form.profile.joiningDate) }}
                                             {{ form_errors(form.profile.joiningDate) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" >Branch</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.profile.branches) }}
+                                            {{ form_errors(form.profile.branches) }}
                                         </div>
                                     </div>
                                 </div>
@@ -115,26 +138,22 @@
                             <!--/row-->
                             <div class="form-actions portlet box grey">
                                 <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>User & Email information</div>
+                                    <div class="caption"><i class="icon-reorder"></i>Email & ACL information</div>
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
                                 <div class="span6 ">
                                     <div class="control-group">
-                                        <label class="control-label" >User name<span class="required">*</span></label>
                                         <div class="controls">
                                             <div class="input-icon left">
-                                                <i class="icon-user"></i>
-                                                {{ form_widget(form.username) }}
-                                                {{ form_errors(form.username) }}
+                                                Enabled
+                                                {{ form_widget(form.enabled) }}
+                                                {{ form_errors(form.enabled) }}
                                             </div>
 
                                         </div>
                                     </div>
-                                </div>
-                                <!--/span-->
-                                <div class="span6 ">
                                     <div class="control-group">
                                         <label class="control-label" >Email</label>
                                         <div class="controls">
@@ -148,10 +167,6 @@
                                     </div>
                                 </div>
                                 <!--/span-->
-                            </div>
-
-                            <!--/row-->
-                            <div class="row-fluid">
                                 <div class="span6 ">
                                     <div class="control-group">
                                         <div class="controls">
@@ -162,20 +177,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--/span-->
-                                <div class="span6 ">
-                                    <div class="control-group">
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                Enabled
-                                                {{ form_widget(form.enabled) }}
-                                                {{ form_errors(form.enabled) }}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
                             </div>
                             <!--/row-->
                             <div class="clearfix">&nbsp;</div>
@@ -201,16 +202,22 @@
                                     </div>
                                 </div>
                                 <!--/span-->
-                                <div class="span6 ">
+                                <div class="span4">
                                     <div class="control-group">
-                                        <label class="control-label" >Date of birth & Blood group</label>
+                                        <label class="control-label" >Date of birth</label>
                                         <div class="controls">
-                                            <div class="input-icon left">
-                                                {{ form_widget(form.profile.dob) }}
-                                                {{ form_errors(form.profile.dob) }}
-                                                {{ form_widget(form.profile.bloodGroup) }}
-                                                {{ form_errors(form.profile.bloodGroup) }}
-                                            </div>
+                                            {{ form_widget(form.profile.dob) }}
+                                            {{ form_errors(form.profile.dob) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" >Blood group</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.profile.bloodGroup) }}
+                                            {{ form_errors(form.profile.bloodGroup) }}
                                         </div>
                                     </div>
                                 </div>
@@ -309,64 +316,7 @@
                             </div>
 
                             <!--/row-->
-                            <!--/row-->
-                            <div class="clearfix">&nbsp;</div>
-                            <!--/row-->
-                            <div class="form-actions portlet box grey">
-                                <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>Bank information</div>
-                                </div>
-                            </div>
-                            <div class="clearfix">&nbsp;</div>
-                            <div class="row-fluid">
-                                <div class="span6 ">
-                                    <div class="control-group">
-                                        <label class="control-label" >Bank name<span class="required">*</span></label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                {{ form_widget(form.profile.bank) }}
-                                                {{ form_errors(form.profile.bank) }}
-                                            </div>
 
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                                <div class="span6 ">
-                                    <div class="control-group">
-                                        <label class="control-label" >Account no</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-credit-card"></i>
-                                                {{ form_widget(form.profile.accountNo) }}
-                                                {{ form_errors(form.profile.accountNo) }}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                            </div>
-
-                            <!--/row-->
-                            <div class="row-fluid">
-
-                                <!--/span-->
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <div class="controls">
-
-                                                {{ form_widget(form.profile.branch) }}
-                                                {{ form_errors(form.profile.branch) }}
-
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                            </div>
-                            <!--/row-->
-                            <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>About</div>
@@ -377,7 +327,7 @@
 
                             </div>
                             <div class="row-fluid">
-                                <div class="span6 ">
+                                <div class="span9">
                                     <div class="control-group">
                                         <label class="control-label" >About me</label>
                                         <div class="controls">
@@ -386,7 +336,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span6 ">
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" >Profile Image</label>
                                         <div class="controls">
@@ -395,7 +345,7 @@
                                         <div class="controls">
                                             <div data-provides="fileupload" class="fileupload fileupload-new">
                                                 <div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
-                                                    {% if(entity.profile.webPath is defined ) %}
+                                                    {% if entity.profile is defined and entity.profile.webPath is defined %}
                                                         <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.profile.webPath }}">
                                                     {% else %}
                                                         <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
@@ -418,6 +368,50 @@
                                 </div>
 
                             </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <!--/row-->
+                            <div class="form-actions portlet box grey">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Bank information</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid">
+                                <div class="span6 ">
+                                    <div class="control-group">
+                                        <label class="control-label" >Bank name</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.profile.bank) }}
+                                            {{ form_errors(form.profile.bank) }}
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" >Account no</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-font"></i>
+                                                {{ form_widget(form.profile.accountNo) }}
+                                                {{ form_errors(form.profile.accountNo) }}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                                <div class="span6 ">
+                                    <div class="control-group">
+                                        <label class="control-label" >Branch Address</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                {{ form_widget(form.profile.branch) }}
+                                                {{ form_errors(form.profile.branch) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                            </div>
+                            <!--/row-->
                             <div class="form-actions portlet box grey">
                                 <div class="pull-center">
                                     <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>

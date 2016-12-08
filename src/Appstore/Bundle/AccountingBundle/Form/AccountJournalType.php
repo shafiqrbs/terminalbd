@@ -72,6 +72,7 @@ class AccountJournalType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.toIncrease ='Debit'")
+                        ->andWhere("e.parent > 0")
                         ->orderBy("e.name");
                 }
             ))
@@ -88,6 +89,7 @@ class AccountJournalType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.toIncrease = 'Credit'")
+                        ->andWhere("e.parent > 0")
                         ->orderBy("e.name");
                 }
             ))

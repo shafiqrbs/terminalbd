@@ -95,16 +95,24 @@ class SalesController extends Controller
         $customPrice = $request->request->get('customPrice');
 
         $salesItem = $em->getRepository('InventoryBundle:SalesItem')->find($salesItemId);
-        $salesItem->setQuantity($quantity);
-        $salesItem->setSalesPrice($salesPrice);
-        if (!empty($customPrice)){
-            $salesItem->setCustomPrice(1);
+        if ($salesItem->getPurchaseItem()->getQuantity() >= $quantity){
+
+            $salesItem->setQuantity($quantity);
+            $salesItem->setSalesPrice($salesPrice);
+            if (!empty($customPrice)) {
+                $salesItem->setCustomPrice($customPrice);
+            }
+            $salesItem->setSubTotal($quantity * $salesPrice);
+            $em->persist($salesItem);
+            $em->flush();
+            $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
+            return new Response(json_encode(array('salesTotal' => $salesTotal,'msg' => 'success')));
+
+        }else{
+
+            $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
+            return new Response(json_encode(array('salesTotal' => $salesTotal,'msg' => 'invalid')));
         }
-        $salesItem->setSubTotal($quantity * $salesPrice);
-        $em->persist($salesItem);
-        $em->flush();
-        $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
-        return new Response(json_encode(array('salesTotal'=>$salesTotal)));
         exit;
     }
 
@@ -150,7 +158,8 @@ class SalesController extends Controller
     public function editAction($code)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('invoice'=>$code));
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig'=>$inventory , 'invoice'=>$code));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
@@ -159,11 +168,9 @@ class SalesController extends Controller
         $editForm = $this->createEditForm($entity);
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
-        $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findAll();
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
         return $this->render('InventoryBundle:Sales:new.html.twig', array(
             'entity'      => $entity,
-            'transactionMethods'      => $transactionMethods,
             'todaySales'      => $todaySales,
             'todaySalesOverview'      => $todaySalesOverview,
             'form'   => $editForm->createView(),
@@ -219,7 +226,10 @@ class SalesController extends Controller
                     $entity->setCustomer($customer);
                 }
                 $entity->setSubTotal($data['paymentSubTotal']);
-                $entity->setVat($data['vat']);
+                if($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0 ){
+                    $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($data['paymentTotal']);
+                    $entity->setVat($vat);
+                }
                 $entity->setDue($data['dueAmount']);
                 $entity->setDiscount($data['discount']);
                 $entity->setTotal($data['paymentTotal']);
@@ -229,22 +239,30 @@ class SalesController extends Controller
                 } else if ($data['paymentTotal'] > $data['paymentAmount']) {
                     $entity->setPaymentStatus('Due');
                 }
+                if (empty($data['sales']['salesBy'])){
+                    $entity->setSalesBy($this->getUser());
+                }
                 $entity->setApprovedBy($this->getUser());
                 $em->flush();
 
                 $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+                $em->getRepository('InventoryBundle:GoodsItem')->updateInventorySalesItem($entity);
                 $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
                 $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
                 return $this->redirect($this->generateUrl('inventory_sales_new'));
             }
         }
-
-        return $this->render('InventoryBundle:Sales:edit.html.twig', array(
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
+        return $this->render('InventoryBundle:Sales:new.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-
+            'todaySales'      => $todaySales,
+            'todaySalesOverview'      => $todaySalesOverview,
+            'form'   => $editForm->createView(),
         ));
+
     }
 
     /**
@@ -258,6 +276,7 @@ class SalesController extends Controller
             $entity->setPaymentStatus('Paid');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
+            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);

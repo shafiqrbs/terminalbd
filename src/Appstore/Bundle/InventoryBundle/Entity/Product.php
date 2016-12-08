@@ -95,6 +95,23 @@ class Product implements CodeAwareEntity
     private $unit;
 
     /**
+     * @var array()
+     *
+     * @ORM\Column(name="ageGroup", type="array", nullable = true)
+     */
+    private $ageGroup;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=255 , nullable = true)
+     */
+    private $gender;
+
+
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean")
@@ -417,6 +434,38 @@ class Product implements CodeAwareEntity
     public function setProductUnit($productUnit)
     {
         $this->productUnit = $productUnit;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAgeGroup()
+    {
+        return $this->ageGroup;
+    }
+
+    /**
+     * @param array $ageGroup
+     */
+    public function setAgeGroup($ageGroup)
+    {
+        $this->ageGroup = $ageGroup;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param string $gender
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
     }
 
 

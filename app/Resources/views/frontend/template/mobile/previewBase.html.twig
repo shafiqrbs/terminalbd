@@ -111,6 +111,7 @@
                     </div>
                 </div>
                 <!-- //modal -->
+                {% if globalOption.footerSetting.addressIconPage is empty %}
                 <div class="footer-bg" id="mobile-footer">
                     <ul class="footer-icon">
                         {% if globalOption.mobile is not empty %}
@@ -145,8 +146,33 @@
                         </li>
                     </ul>
                 </div>
+                {% endif %}
+
             </div>
             <!--/footer-->
+            <div class="w3agile agileinfo_copy_right">
+                <div class="agileinfo_copy_right_left">
+                    <p>{{ "now"|date("Y") }} &copy; {{ globalOption.name }}. {{ globalOption.footerSetting.copyRight }} | Design by <a href="http:www.umarlimited.com/">UMAR IT LIMITED</a></p>
+                </div>
+                <div class="agileinfo_copy_right_right">
+                    <ul class="social">
+                        <li><a class="social-linkedin" target="_blank" href="https://facebook.com/{{ globalOption.facebookPageUrl }}">
+                                <i></i>
+                                <div class="tooltip"><span>Facebook</span></div>
+                            </a></li>
+                        <li><a class="social-twitter" target="_blank" href="https://twitter.com/{{ globalOption.twitterUrl }}">
+                                <i></i>
+                                <div class="tooltip"><span>Twitter</span></div>
+                            </a></li>
+                        <li><a class="social-google" target="_blank" href="https://plus.google.com/{{ globalOption.googlePlus }}">
+                                <i></i>
+                                <div class="tooltip"><span>Google+</span></div>
+                            </a></li>
+                    </ul>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+
 
         </div>
     </div>

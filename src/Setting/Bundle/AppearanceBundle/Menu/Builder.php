@@ -508,8 +508,8 @@ class Builder extends ContainerAware
             $menu['Inventory']['Manage Stock']->addChild('Stock Item', array('route' => 'inventory_stockitem'))
                 ->setAttribute('icon', 'icon-briefcase');
             $menu['Inventory']['Manage Stock']->addChild('Item', array('route' => 'item'))
-                ->setAttribute('icon', ' icon-glass');
-            $menu['Inventory']['Manage Stock']->addChild('Item Details', array('route' => 'inventory_purchasevendoritem'))
+                ->setAttribute('icon', ' icon-th-list');
+            $menu['Inventory']['Manage Stock']->addChild('Vendor Item', array('route' => 'inventory_purchasevendoritem'))
                 ->setAttribute('icon', 'icon-info-sign');
             $menu['Inventory']['Manage Stock']->addChild('Damage', array('route' => 'inventory_damage'))
                 ->setAttribute('icon', ' icon-trash');
@@ -519,8 +519,23 @@ class Builder extends ContainerAware
         }
 
         if($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_CONFIG')) {
+            $menu['Inventory']->addChild('Reports')
+                ->setAttribute('icon','icon-bar-chart')
+                ->setAttribute('dropdown', true);
+            $menu['Inventory']['Reports']->addChild('Stock Item', array('route' => ''))->setAttribute('icon','icon-bar-chart')->setAttribute('dropdown', true);;
+            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Overview', array('route' => 'inventory_report_overview'))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Item', array('route' => 'inventory_report_stock_item'))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Vendor', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'vendor')))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Brand', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'brand')))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Product', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'product')))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Category', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'category')))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Size', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'size')))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Color', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'color')))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']->addChild('Purchase', array('route' => 'inventory_report_purchase'))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']->addChild('Sales', array('route' => 'inventory_report_sales'))->setAttribute('icon','icon-bar-chart');
             $menu['Inventory']['System Setting']->addChild('Configuration', array('route' => 'inventoryconfig_edit'))
                 ->setAttribute('icon', 'icon-hdd');
+
         }
 
         /*$menu['Inventory']['System Setting']->addChild('Variant', array('route' => 'colorsize'))
@@ -575,26 +590,28 @@ class Builder extends ContainerAware
         $menu['E-commerce']->addChild('Product', array('route' => 'account_expenditure'))
             ->setAttribute('icon','fa fa-bookmark')
             ->setAttribute('dropdown', true);
-        $menu['E-commerce']['Product']->addChild('Add Product',    array('route' => 'inventory_goods_new'))->setAttribute('icon', 'icon-th-list');;
-        $menu['E-commerce']['Product']->addChild('Product',        array('route' => 'inventory_goods'))->setAttribute('icon', 'icon-th-list');;
-        $menu['E-commerce']['Product']->addChild('Product Home',   array('route' => 'ecommerce_home'))->setAttribute('icon', 'icon-th-list');;
-        $menu['E-commerce']['Product']->addChild('Promotion',      array('route' => 'ecommerce_promotion'))->setAttribute('icon', 'icon-th-list');;
+        $menu['E-commerce']['Product']->addChild('Add Product',    array('route' => 'inventory_goods_new'))->setAttribute('icon', 'icon-th-list');
+        $menu['E-commerce']['Product']->addChild('Product',        array('route' => 'inventory_goods'))->setAttribute('icon', 'icon-th-list');
+        $menu['E-commerce']['Product']->addChild('Product Home',   array('route' => 'ecommerce_home'))->setAttribute('icon', 'icon-th-list');
+        $menu['E-commerce']['Product']->addChild('Promotion',      array('route' => 'ecommerce_promotion'))->setAttribute('icon', 'icon-th-list');
         $menu['E-commerce']->addChild('Transaction', array('route' => 'account_expenditure'))
             ->setAttribute('icon','fa fa-bookmark')
             ->setAttribute('dropdown', true);
-        $menu['E-commerce']['Transaction']->addChild('Order',        array('route' => 'customer_order'))->setAttribute('icon', 'icon-th-list');;
-        $menu['E-commerce']['Transaction']->addChild('Pre-order',    array('route' => 'customer_preorder'))->setAttribute('icon', 'icon-th-list');;
+        $menu['E-commerce']['Transaction']->addChild('Order',        array('route' => 'customer_order'))->setAttribute('icon', 'icon-th-list');
+        $menu['E-commerce']['Transaction']->addChild('Pre-order',    array('route' => 'customer_preorder'))->setAttribute('icon', 'icon-th-list');
         $menu['E-commerce']->addChild('Order', array('route' => ''))
             ->setAttribute('icon','fa fa-bookmark')
             ->setAttribute('dropdown', true);
-        $menu['E-commerce']['Order']->addChild('Order',        array('route' => 'customer_order'))->setAttribute('icon', 'icon-th-list');;
-        $menu['E-commerce']['Order']->addChild('Pre-order',        array('route' => 'customer_preorder'))->setAttribute('icon', 'icon-th-list');;
+        $menu['E-commerce']['Order']->addChild('Order',        array('route' => 'customer_order'))->setAttribute('icon', 'icon-th-list');
+        $menu['E-commerce']['Order']->addChild('Pre-order',        array('route' => 'customer_preorder'))->setAttribute('icon', 'icon-th-list');
         $menu['E-commerce']->addChild('Setting', array('route' => ''))
             ->setAttribute('icon','fa fa-bookmark')
             ->setAttribute('dropdown', true);
         $menu['E-commerce']['Setting']->addChild('E-commerce Config', array('route' => 'ecommerce_config_modify'))->setAttribute('icon','fa fa-cog');
-        $menu['E-commerce']['Setting']->addChild('Promotion', array('route' => 'ecommerce_promotion'))->setAttribute('icon','fa fa-cog');
-        $menu['E-commerce']['Setting']->addChild('Discount', array('route' => 'ecommerce_discount'))->setAttribute('icon','fa fa-cog');
+        $menu['E-commerce']['Setting']->addChild('Home View', array('route' => 'ecommercehome'))->setAttribute('icon','fa fa-th-list');
+        $menu['E-commerce']['Setting']->addChild('Mange Template', array('route' => 'ecommercetemplate'))->setAttribute('icon','fa fa-th-list');
+        $menu['E-commerce']['Setting']->addChild('Promotion', array('route' => 'ecommerce_promotion'))->setAttribute('icon','fa fa-th-list');
+        $menu['E-commerce']['Setting']->addChild('Discount', array('route' => 'ecommerce_discount'))->setAttribute('icon','fa fa-th-list');
 
         return $menu;
     }
@@ -676,32 +693,36 @@ class Builder extends ContainerAware
     {
         $menu
             ->addChild('Finance')
-            ->setAttribute('icon','fa fa-cog')
+            ->setAttribute('icon','fa fa-money')
             ->setAttribute('dropdown', true);
         $menu['Finance']->addChild('Transaction & Report', array('route' => 'account_transaction'))
             ->setAttribute('icon','fa fa-money')
             ->setAttribute('dropdown', true);
-        $menu['Finance']['Transaction & Report']->addChild('Transaction Overview',        array('route' => 'account_transaction'))->setAttribute('icon', 'icon-th-list');;
-        $menu['Finance']['Transaction & Report']->addChild('Income',        array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');;
+        $menu['Finance']['Transaction & Report']->addChild('Transaction Overview',        array('route' => 'account_transaction'))->setAttribute('icon', 'icon-th-list');
+        $menu['Finance']['Transaction & Report']->addChild('Income',        array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
 
         $menu['Finance']->addChild('Cash', array('route' => 'account_transaction'))
             ->setAttribute('icon','fa fa-money')
             ->setAttribute('dropdown', true);
-        $menu['Finance']['Cash']->addChild('Cash Overview',        array('route' => 'account_transaction_cash_overview'))->setAttribute('icon', 'icon-th-list');;
-        $menu['Finance']['Cash']->addChild('Cash Transaction',        array('route' => 'account_transaction_cash'))->setAttribute('icon', 'icon-th-list');;
-        $menu['Finance']['Cash']->addChild('Bank Transaction',        array('route' => 'account_transaction_bank'))->setAttribute('icon', 'icon-th-list');;
-        $menu['Finance']['Cash']->addChild('Mobile Transaction',        array('route' => 'account_transaction_bkash'))->setAttribute('icon', 'icon-th-list');;
-
+        $menu['Finance']['Cash']->addChild('Cash Overview',        array('route' => 'account_transaction_cash_overview'))->setAttribute('icon', 'icon-th-list');
+        $menu['Finance']['Cash']->addChild('Cash Transaction',        array('route' => 'account_transaction_cash'))->setAttribute('icon', 'icon-th-list');
+        $menu['Finance']['Cash']->addChild('Bank Transaction',        array('route' => 'account_transaction_bank'))->setAttribute('icon', 'icon-th-list');
+        $menu['Finance']['Cash']->addChild('Mobile Transaction',        array('route' => 'account_transaction_bkash'))->setAttribute('icon', 'icon-th-list');
         $menu['Finance']->addChild('Expenditure', array('route' => 'account_expenditure'))
-            ->setAttribute('icon','fa fa-bookmark')
+              ->setAttribute('icon','fa fa-money')
+              ->setAttribute('dropdown', true);
+        $menu['Finance']['Expenditure']->addChild('Expense',        array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');
+        $menu['Finance']['Expenditure']->addChild('Expense Category',        array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');
+        /*$menu['Finance']->addChild('Petty Cash & Expense', array('route' => 'account_pettycash'))
+            ->setAttribute('icon','fa fa-money')
             ->setAttribute('dropdown', true);
-        $menu['Finance']['Expenditure']->addChild('Expense',        array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');;
-        $menu['Finance']['Expenditure']->addChild('Expense Category',        array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');;
+        $menu['Finance']['Petty Cash & Expense']->addChild('Petty Cash', array('route' => 'account_pettycash'))->setAttribute('icon', 'icon-th-list');
+        $menu['Finance']['Petty Cash & Expense']->addChild('Expense',        array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');
+        $menu['Finance']['Petty Cash & Expense']->addChild('Expense Category',        array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');*/
         $menu['Finance']->addChild('Sales', array('route' => 'account_sales'));
         $menu['Finance']->addChild('Sales Return', array('route' => 'account_sales_return'));
         $menu['Finance']->addChild('Purchase', array('route' => 'account_purchase'));
         $menu['Finance']->addChild('Purchase Return', array('route' => 'account_purchase_return'));
-        $menu['Finance']->addChild('Petty Cash', array('route' => 'account_pettycash'));
         $menu['Finance']->addChild('Journal', array('route' => 'account_journal'));
         return $menu;
 
@@ -763,17 +784,16 @@ class Builder extends ContainerAware
     {
         $menu
             ->addChild('HR & Payroll')
-            ->setAttribute('icon','fa fa-cog')
+            ->setAttribute('icon','fa fa-group')
             ->setAttribute('dropdown', true);
         $menu['HR & Payroll']->addChild('Human Resource') ->setAttribute('icon', 'icon-group')->setAttribute('dropdown', true);
-        $menu['HR & Payroll']['Human Resource']->addChild('Employee',        array('route' => 'domain_user'))->setAttribute('icon', 'icon-user');
+        $menu['HR & Payroll']['Human Resource']->addChild('Employee',    array('route' => 'domain_user'))->setAttribute('icon', 'icon-user');
         $menu['HR & Payroll']->addChild('Payroll') ->setAttribute('icon', 'icon-group')->setAttribute('dropdown', true);
-        $menu['HR & Payroll']['Payroll']->addChild('Salary Transaction',        array('route' => 'account_paymentsalary'))->setAttribute('icon', 'icon-th-list');
-        $menu['HR & Payroll']['Payroll']->addChild('Payment Salary',        array('route' => 'account_paymentsalary_employee'))->setAttribute('icon', 'icon-th-list');
-        $menu['HR & Payroll']['Payroll']->addChild('Payment Type',        array('route' => 'account_salarysetting'))->setAttribute('icon', 'icon-th-list');
+        $menu['HR & Payroll']['Payroll']->addChild('Salary Transaction',array('route' => 'account_paymentsalary'))->setAttribute('icon', 'icon-th-list');
+        $menu['HR & Payroll']['Payroll']->addChild('Payment Salary',array('route' => 'account_paymentsalary_employee'))->setAttribute('icon', 'icon-th-list');
+        $menu['HR & Payroll']['Payroll']->addChild('Salary Invoice',array('route' => 'account_salarysetting'))->setAttribute('icon', 'icon-th-list');
         $menu['HR & Payroll']->addChild('Branch') ->setAttribute('icon', 'icon-building')->setAttribute('dropdown', true);
-        $menu['HR & Payroll']['Branch']->addChild('Employee Branch',        array('route' => 'domain_employee_branch'))->setAttribute('icon', 'icon-user');
-        $menu['HR & Payroll']['Branch']->addChild('Branch',        array('route' => 'domain_branches'))->setAttribute('icon', 'icon-user');
+        $menu['HR & Payroll']['Branch']->addChild('Branch',array('route' => 'domain_branches'))->setAttribute('icon', 'icon-building');
 
 
         return $menu;

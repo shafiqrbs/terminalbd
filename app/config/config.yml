@@ -76,7 +76,6 @@ guzzle:
             headers:
                 Accept: "application/json"
 
-
 fos_js_routing:
     cache_control:
         # All are optional, defaults shown

@@ -65,6 +65,7 @@ class DamageController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+
             $em = $this->getDoctrine()->getManager();
             $data = $request->request->all();
             $barcode = $data['appstore_bundle_inventorybundle_Damage']['purchaseItem'];
@@ -81,6 +82,7 @@ class DamageController extends Controller
                 'success',"Data has been added successfully"
             );
             return $this->redirect($this->generateUrl('inventory_damage_new'));
+
         }
         $todayDamage = $this->todayDamage();
         return $this->render('InventoryBundle:Damage:new.html.twig', array(
@@ -292,6 +294,7 @@ class DamageController extends Controller
             $em->flush();
             $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemDamageUpdate($entity);
             $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->insertDamageItem($entity);
+            $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertInventoryDamageItem($entity);
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertDamageTransaction($entity);
 
             return new Response('success');

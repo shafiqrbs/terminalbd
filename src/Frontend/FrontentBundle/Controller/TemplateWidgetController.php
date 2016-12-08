@@ -124,10 +124,15 @@ class TemplateWidgetController extends Controller
     {
 
         $about                     = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption,'slug' => 'about-us'));
-        return $this->render('@Frontend/Widget/aboutus.html.twig', array(
-            'about'           => $about->getPage(),
-            'wordlimit'           => $wordlimit,
-        ));
+        if(!empty($about)){
+            return $this->render('@Frontend/Widget/aboutus.html.twig', array(
+                'about'           => $about->getPage(),
+                'wordlimit'           => $wordlimit,
+            ));
+        }else{
+            return new Response('');
+        }
+
     }
 
     public function moduleBaseContentAction(GlobalOption $globalOption , PageModule $pageModule )

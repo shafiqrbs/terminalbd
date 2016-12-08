@@ -1,0 +1,39 @@
+order:
+    path:     /
+    defaults: { _controller: "CustomerBundle:Order:index" }
+
+order_to_cart:
+    path:     /{shop}/cart-to-order
+    defaults: { _controller: "CustomerBundle:Order:cartToOrder" }
+
+order_checkout:
+    path:     /{shop}/cart-to-order
+    defaults: { _controller: "CustomerBundle:Order:cartToOrder" }
+
+order_cart:
+    path:     /order-cart
+    defaults: { _controller: "CustomerBundle:Order:cart" }
+
+order_payment:
+    path:     /payment/{id}
+    defaults: { _controller: "CustomerBundle:Order:payment" }
+
+order_process:
+    path:      /{id}/order-process
+    defaults: { _controller: "CustomerBundle:Order:process" }
+
+order_show:
+    path:      /{id}/order-show
+    defaults: { _controller: "CustomerBundle:Order:show" }
+
+order_delete:
+    path:      /{id}/order-delete
+    defaults: { _controller: "CustomerBundle:Order:delete" }
+
+order_item_delete:
+    path:      /{id}/order-item-delete
+    defaults: { _controller: "CustomerBundle:Order:itemDelete" }
+
+order_print_invoice:
+    path:     /{invoice}/invoice-print
+    defaults: { _controller: "CustomerBundle:Order:print" }

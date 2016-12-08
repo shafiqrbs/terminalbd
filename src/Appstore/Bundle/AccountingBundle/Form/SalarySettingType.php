@@ -26,24 +26,30 @@ class SalarySettingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'add payment amount BDT'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add payment amount BDT'))
-                )))
+
             ->add('basicAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'add payment amount BDT'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add payment amount BDT'))
                 )))
             ->add('bonusAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
             ->add('otherAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
+            ->add('advanceAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
+            ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
             ->add('status')
-            ->add('effectedMonth','date',
-                array('attr'=>array('class'=>'m-wrap span12','placeholder'=>''))
-            )
+            ->add('effectedMonth','date', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>''),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+                'years'=> array('2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'),
+                'widget' => 'choice',
+                // this is actually the default format for single_text
+                'format' => 'dd-MM-yyyy',
+
+            ))
             ->add('user', 'entity', array(
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
-                'empty_value' => '---Choose a user---',
+                'empty_value' => '---Choose a employee---',
                 'property' => 'username',
                 'attr'=>array('class'=>'span12 select2'),
                 'constraints' =>array(

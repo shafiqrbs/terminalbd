@@ -1053,6 +1053,28 @@ class PurchaseVendorItem
         return $this->serviceSalesItems;
     }
 
+    public function stockReminigQnt(){
+        $stockQnt = 0;
+        $purchaseItems = $this->purchaseItems;
+        foreach($purchaseItems as $item ){
+           foreach ($item->getStockItem() as $stock){
+               $stockQnt += $stock->getQuantity();
+           }
+        }
+
+        return $stockQnt;
+    }
+
+    public function getSubProductQuantity(){
+
+        $stockQnt = 0;
+        $goodsItems = $this->goodsItems;
+        foreach($goodsItems as $item ){
+            $stockQnt += $item->getQuantity();
+        }
+        return $stockQnt;
+    }
+
 
 }
 

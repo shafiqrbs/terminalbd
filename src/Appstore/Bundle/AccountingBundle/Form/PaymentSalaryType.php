@@ -29,7 +29,7 @@ class PaymentSalaryType extends AbstractType
         $builder
 
             ->add('paidAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Pay amount')))
-            ->add('otherAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Other amount')))
+            ->add('adjustmentAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Adjustment amount')))
             ->add('totalAmount','hidden')
             ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Remark')))
             ->add('salaryMonth', 'choice', array(
@@ -92,24 +92,35 @@ class PaymentSalaryType extends AbstractType
                 'empty_value' => '---Choose a bank---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.globalOption =".$this->user->getGlobalOption()->getId());
+                },
             ))
 
-            ->add('accountBkash', 'entity', array(
+            ->add('accountMobileBank', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBkash',
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'empty_value' => '---Choose a mobile banking---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.globalOption =".$this->user->getGlobalOption()->getId());
+                },
             ))
             ->add('salarySetting', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\SalarySetting',
-                'empty_value' => '---Choose a payment amount---',
-                'property' => 'salaryInfo',
+                'empty_value' => '---Select invoice---',
+                'property' => 'invoice',
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
-                        ->where("e.user  =".$this->user->getId());
+                        ->where("e.status  =1")
+                        ->andWhere("e.process = 'approved'")
+                        ->andWhere("e.process != 'done' ")
+                        ->andWhere("e.user  =".$this->user->getId());
                 },
             ));
     }

@@ -66,7 +66,7 @@ class HomeSliderController extends Controller
     private function createCreateForm(HomeSlider $entity)
     {
 
-        $form = $this->createForm(new HomeSliderType($this->getUser()->getId()), $entity, array(
+        $form = $this->createForm(new HomeSliderType($this->getUser()->getGlobalOption()->getId()), $entity, array(
             'action' => $this->generateUrl('homeslider_create'),
             'method' => 'POST',
             'attr' => array(
@@ -149,7 +149,7 @@ class HomeSliderController extends Controller
     private function createEditForm(HomeSlider $entity)
     {
 
-        $form = $this->createForm(new HomeSliderType($this->getUser()->getId()), $entity, array(
+        $form = $this->createForm(new HomeSliderType($this->getUser()->getGlobalOption()->getId()), $entity, array(
             'action' => $this->generateUrl('homeslider_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

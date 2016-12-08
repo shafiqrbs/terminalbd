@@ -125,18 +125,18 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setBalance($accountPurchase->getTotalAmount() - $accountPurchase->getPayment() );
         $accountPurchase->setProcessHead('Purchase');
         $accountPurchase->setReceiveDate($entity->getReceiveDate());
-        if($entity->getInventoryConfig()->getGlobalOption()->getAccountingConfig()->getAutoPurchase() == 1){
+        //if($entity->getInventoryConfig()->getGlobalOption()->getAccountingConfig()->getAutoPurchase() == 1){
             $accountPurchase->setProcess('approved');
             $accountPurchase->setApprovedBy($entity->getApprovedBy());
-        }else{
+        //}else{
             $accountPurchase->setProcess('pending');
-        }
+       // }
 
         $em->persist($accountPurchase);
         $em->flush();
-        if($entity->getInventoryConfig()->getGlobalOption()->getAccountingConfig()->getAutoPurchase() == 1){
+        //if($entity->getInventoryConfig()->getGlobalOption()->getAccountingConfig()->getAutoPurchase() == 1){
             $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
-        }
+        //}
         return $accountPurchase;
 
 

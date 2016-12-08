@@ -559,7 +559,7 @@ class TransactionRepository extends EntityRepository
 
         $this->insertPettyCashDebitTransaction($entity);
         $this->insertPettyCashCreditTransaction($entity);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertPettyCash($entity);
+
 
     }
 
@@ -686,7 +686,7 @@ class TransactionRepository extends EntityRepository
             $this->insertSalaryDebitBankTransaction($paymentSalary);
             $this->insertSalaryCreditBankTransaction($paymentSalary);
         }
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalaryCash($paymentSalary);
+
 
     }
 

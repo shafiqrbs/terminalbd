@@ -125,10 +125,13 @@ class WebServiceProductController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $masterItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=>$item->getId(),'masterItem'=>1));
-        $subItem = isset($_REQUEST['subItem']) ? $_REQUEST['subItem'] : $masterItem->getId() ;
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        if(empty($masterItem)){
+        $subItem ='';
+        }else{
+        $subItem = isset($_REQUEST['subItem']) ? $_REQUEST['subItem'] : $masterItem->getId() ;
         $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=>$item,'id'=>$subItem));
-
+        }
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
@@ -230,14 +233,14 @@ class WebServiceProductController extends Controller
             'id' => $subitem->getId(),
             'name'=> $masterItem.$product->getName(),
             'brand'=> !empty($product->getBrand()) ? $product->getBrand()->getName():'',
-            'category'=> !empty($product->getCategory()) ? $product->getCategory()->getName():'',
+            'category'=> !empty($product->getMasterItem()->getCategory()) ? $product->getMasterItem()->getCategory()->getName():'',
             'size'=>!empty($subitem->getSize()) ? $subitem->getSize()->getName():0 ,
             'color'=> $colorName ,
-            'price'=>$subitem->getSalesPrice(),
+            'colorId'=> $color,
+            'price'=> $subitem->getSalesPrice(),
             'quantity' => $quantity,
             'productImg' => $productImg
         );
-        $cart->destroy();
         $cart->insert($data);
         $cartTotal = $cart->total();
         $totalItems = $cart->total_items();

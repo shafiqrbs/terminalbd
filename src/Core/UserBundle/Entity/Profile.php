@@ -11,6 +11,7 @@
 
 namespace Core\UserBundle\Entity;
 
+use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -65,6 +66,11 @@ class Profile
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\DomainUser", inversedBy="profile" )
      */
     protected $domainUser;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="profiles" )
+     */
+    protected $branches;
 
     /**
      * @var string
@@ -766,6 +772,22 @@ class Profile
     public function setTermsConditionAccept($termsConditionAccept)
     {
         $this->termsConditionAccept = $termsConditionAccept;
+    }
+
+    /**
+     * @return Branches
+     */
+    public function getBranches()
+    {
+        return $this->branches;
+    }
+
+    /**
+     * @param Branches $branches
+     */
+    public function setBranches($branches)
+    {
+        $this->branches = $branches;
     }
 
 

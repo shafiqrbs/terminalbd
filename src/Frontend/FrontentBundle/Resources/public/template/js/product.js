@@ -37,6 +37,7 @@ $(document).on( "change", ".changeSize", function( e ) {
 });
 
 $(document).on( "change", ".changeCartSize", function( e ) {
+
     var subItem = $(this).val();
     var url = $(this).attr("data-url");
     $.ajax({
@@ -55,7 +56,24 @@ $(document).on( "change", ".changeCartSize", function( e ) {
 
 });
 
-$('.addCart').submit( function( e ) {
+$('.addCart').submit( function(e) {
+
+    var url = $('.cartSubmit').attr("data-url");
+    $.ajax({
+        url:url ,
+        type: 'POST',
+        data: new FormData( this ),
+        processData: false,
+        contentType: false,
+        success: function(response){
+            $('.vsidebar .txt').html('54000');
+        }
+    });
+    e.preventDefault();
+
+});
+
+$(document).on( "click", ".addCart", function(e){
 
     var url = $('.cartSubmit').attr("data-url");
     $.ajax({

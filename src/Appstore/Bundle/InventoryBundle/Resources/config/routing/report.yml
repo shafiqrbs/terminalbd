@@ -1,0 +1,21 @@
+
+inventory_report_overview:
+    path:     /overview
+    defaults: { _controller: "InventoryBundle:Report:overview" }
+
+inventory_report_stock:
+    path:     /{group}/stock
+    defaults: { _controller: "InventoryBundle:Report:stock" }
+
+inventory_report_stock_item:
+    path:     /stock-item
+    defaults: { _controller: "InventoryBundle:Report:stockItem" }
+
+inventory_report_purchase:
+    path:     /purchase
+    defaults: { _controller: "InventoryBundle:Report:purchase" }
+
+inventory_report_sales:
+    path:     /sales
+    defaults: { _controller: "InventoryBundle:Report:sales" }
+

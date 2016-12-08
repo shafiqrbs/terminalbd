@@ -47,7 +47,7 @@ class ProductType extends AbstractType
                     new NotBlank(array('message'=>'Please select required'))
                 ),
                 'empty_value' => '---Choose a item unit ---',
-                'attr'=>array('class'=>'span12'),
+                'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -66,6 +66,25 @@ class ProductType extends AbstractType
                 'property' => 'nestedLabel',
                 'choices'=> $this->categoryChoiceList()
             ))
+            ->add('ageGroup', 'choice', array(
+                'multiple'    => true,
+                'attr'=>array('class'=>'span12 select2'),
+                'choices' => array(
+                    'Kids' => 'Kids',
+                    'Adult' => 'Adult'
+                ),
+            ))
+
+            ->add('gender', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'span12 select2'),
+                'empty_value' => '---Choose a gender ---',
+                'choices' => array(
+                    'Male' => 'Male',
+                    'Female' => 'Female'
+                ),
+            ))
+
             ->add('file')
             ->add('status');
     }

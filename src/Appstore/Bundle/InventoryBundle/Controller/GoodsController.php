@@ -9,11 +9,14 @@ use Appstore\Bundle\InventoryBundle\Entity\ItemKeyValue;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Form\GoodsType;
+use Appstore\Bundle\InventoryBundle\Form\InventoryGoodsType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 
 /**
  * PurchaseVendorItem controller.
@@ -38,6 +41,12 @@ class GoodsController extends Controller
      * Lists all PurchaseVendorItem entities.
      *
      */
+
+    /**
+     * Lists all PurchaseVendorItem entities.
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_ECOMMERCE")
+     */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -127,16 +136,16 @@ class GoodsController extends Controller
 
     /**
      * Displays a form to create a new PurchaseVendorItem entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_ECOMMERCE")
      */
     public function newAction()
     {
         $entity = new PurchaseVendorItem();
         $form   = $this->createCreateForm($entity);
-        $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
         return $this->render('InventoryBundle:Goods:new.html.twig', array(
             'entity' => $entity,
-            'ecommerceConfig' => $ecommerceConfig,
+            'inventoryConfig' => $inventoryConfig,
             'form'   => $form->createView(),
         ));
     }
@@ -165,7 +174,7 @@ class GoodsController extends Controller
 
     /**
      * Displays a form to edit an existing PurchaseVendorItem entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_ECOMMERCE")
      */
     public function editAction(PurchaseVendorItem $entity)
     {
@@ -176,79 +185,21 @@ class GoodsController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseVendorItem entity.');
         }
-        //$this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertInventorySubProduct($entity);
-
-        /*$id =295;
-        $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->findBy(array('inventoryConfig'=>$entity->getInventoryConfig()));
-        foreach($entities as $en)
-        {
-            $size = $em->getRepository('InventoryBundle:ItemSize')->find(1);
-            $en->setSize($size);
-            $unit = $em->getRepository('InventoryBundle:ItemUnit')->find(1);
-            $en->setUnit($unit);
-            $category = $em->getRepository('ProductProductBundle:Category')->find(5);
-            $en->setCategory($category);
-            $en->setSlug($en->getName());
-            $color = $em->getRepository('InventoryBundle:ItemColor')->find(1);
-            $en->setItemColors(array($color));
-            $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->initialInsertSubProduct($en);
+        if($entity->getSource() != 'inventory'){
+            $editForm = $this->createEditForm($entity);
+            $twig = 'edit';
+        }else{
+            $editForm = $this->inventoryEditForm($entity);
+            $twig = 'inventoryEdit';
         }
-        $em->flush();
 
 
-        $val = '<ul>';     */
-        /** @param $item PurchaseItem */
-
-        /*$rows=array();
-        foreach($entity->getPurchaseItems() as $item )
-        {
-            $color = array();
-
-            if(!isset($rows[$item->getItem()->getSize()->getName()]['color'])) {
-                $rows[$item->getItem()->getSize()->getName()]['color'] = array();
-            }
-
-            $rows[$item->getItem()->getSize()->getName()]['color'][$item->getItem()->getColor()->getName()] = $item->getItem()->getColor()->getName();
-
-            if(!isset($rows[$item->getItem()->getSize()->getName()]['quantity'])){
-                $rows[$item->getItem()->getSize()->getName()]['quantity'] = 0;
-            }
-
-            $rows[$item->getItem()->getSize()->getName()]['quantity'] += $item->getQuantity();
-            $rows[$item->getItem()->getSize()->getName()]['price'] = $item->getSalesPrice();
-
-            $val .='<li>Item ID='.$item->getItem()->getId().'==Size=='.$item->getItem()->getSize()->getName().'=Color='.$item->getItem()->getColor()->getName().'===Quantity=='.$item->getQuantity().'===Price=='.$item->getSalesPrice().'</li>';
-        }
-        $val .='</ul>';
-
-        echo $val;
-
-
-        echo '<ul>';
-        /** @param $item PurchaseItem */
-       /* foreach($rows as $size => $row )
-        {
-
-            echo  '<li>==Size=='.$size.'=Color='.implode(', ', $row['color']).'===Quantity=='.$row['quantity'].'===Price=='.$row['price'].'</li>';
-        }
-        echo '</ul>';*/
-
-
-       /* $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->findBy(array('inventoryConfig'=>$entity->getInventoryConfig()));
-        foreach($entities as $entity)
-        {
-           $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertInventorySubProduct($entity);
-        }*/
-
-
-
-        $editForm = $this->createEditForm($entity);
-        $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        return $this->render('InventoryBundle:Goods:edit.html.twig', array(
+        $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        return $this->render('InventoryBundle:Goods:'.$twig.'.html.twig', array(
             'entity'        => $entity,
             'sizes'         => $sizes,
             'colors'         => $colors,
-            'ecommerceConfig' => $ecommerceConfig,
+            'inventoryConfig' => $inventoryConfig,
             'form'          => $editForm->createView(),
         ));
     }
@@ -274,6 +225,30 @@ class GoodsController extends Controller
         ));
         return $form;
     }
+
+    /**
+     * Creates a form to edit a PurchaseVendorItem entity.
+     *
+     * @param PurchaseVendorItem $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function inventoryEditForm(PurchaseVendorItem $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
+        $form = $this->createForm(new InventoryGoodsType($em,$inventory), $entity, array(
+            'action' => $this->generateUrl('inventory_goods_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'action',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+
     /**
      * Edits an existing PurchaseVendorItem entity.
      *
@@ -288,7 +263,13 @@ class GoodsController extends Controller
             throw $this->createNotFoundException('Unable to find PurchaseVendorItem entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
+        if($entity->getSource() != 'inventory'){
+            $editForm = $this->createEditForm($entity);
+            $twig = 'edit';
+        }else{
+            $editForm = $this->inventoryEditForm($entity);
+            $twig = 'inventoryEdit';
+        }
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -301,13 +282,17 @@ class GoodsController extends Controller
             $this->getDoctrine()->getRepository('InventoryBundle:ItemKeyValue')->insertItemKeyValue($entity,$data);
             $this->getDoctrine()->getRepository('InventoryBundle:ItemGallery')->insertProductGallery($entity,$data);
             $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->initialUpdateSubProduct($entity);
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been updated successfully"
+            );
             return $this->redirect($this->generateUrl('inventory_goods_edit', array('id' => $id)));
         }
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $sizes = $em->getRepository('InventoryBundle:ItemSize')->findBy(array('inventoryConfig'=>$inventory, 'status'=>1),array('name'=>'ASC'));
         $colors = $em->getRepository('InventoryBundle:ItemColor')->findBy(array('inventoryConfig'=>$inventory, 'status'=>1),array('name'=>'ASC'));
         $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        return $this->render('InventoryBundle:Goods:edit.html.twig', array(
+
+        return $this->render('InventoryBundle:Goods:'.$twig.'.html.twig', array(
             'entity'      => $entity,
             'ecommerceConfig'      => $ecommerceConfig,
             'sizes'       => $sizes,
@@ -348,7 +333,7 @@ class GoodsController extends Controller
 
     /**
      * Deletes a PurchaseVendorItem entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_ECOMMERCE")
      */
     public function deleteAction(PurchaseVendorItem $vendorItem)
     {

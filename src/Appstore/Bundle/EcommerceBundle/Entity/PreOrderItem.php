@@ -44,35 +44,35 @@ class PreOrderItem
     /**
      * @var text
      *
-     * @ORM\Column(name="url", type="text", length=255)
+     * @ORM\Column(name="url", type="text", length=255 , nullable = true)
      */
     private $url;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="quantity", type="integer")
+     * @ORM\Column(name="quantity", type="integer" , nullable = true)
      */
     private $quantity = 1;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="dollar", type="float")
+     * @ORM\Column(name="dollar", type="float" , nullable = true)
      */
     private $dollar;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="totalDollar", type="float")
+     * @ORM\Column(name="totalDollar", type="float" , nullable = true)
      */
     private $totalDollar;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="price", type="float")
+     * @ORM\Column(name="price", type="float" , nullable = true)
      */
     private $price;
 

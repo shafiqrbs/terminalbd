@@ -92,3 +92,27 @@ services:
       tags:
           - { name: doctrine.event_listener, event: prePersist }
 
+  setting_tool.listener.order_confirm.ecommerce:
+        class: Setting\Bundle\ToolBundle\EventListener\EcommerceOrderConfirmListener
+        arguments: [@setting_tool.sms_gateWay]
+        tags:
+          - { name: kernel.event_listener, event: setting_tool.post.order_confirm , method: sendSms }
+
+  setting_tool.listener.order_sms.ecommerce:
+        class: Setting\Bundle\ToolBundle\EventListener\EcommerceOrderSmsListener
+        arguments: [@setting_tool.sms_gateWay]
+        tags:
+          - { name: kernel.event_listener, event: setting_tool.post.order_sms , method: sendSms }
+
+  setting_tool.listener.pre_order_confirm.ecommerce:
+        class: Setting\Bundle\ToolBundle\EventListener\EcommercePreOrderConfirmListener
+        arguments: [@setting_tool.sms_gateWay]
+        tags:
+          - { name: kernel.event_listener, event: setting_tool.post.preorder_confirm , method: sendSms }
+
+  setting_tool.listener.pre_order_sms.ecommerce:
+        class: Setting\Bundle\ToolBundle\EventListener\EcommercePreOrderSmsListener
+        arguments: [@setting_tool.sms_gateWay]
+        tags:
+          - { name: kernel.event_listener, event: setting_tool.post.preorder_sms , method: sendSms }
+

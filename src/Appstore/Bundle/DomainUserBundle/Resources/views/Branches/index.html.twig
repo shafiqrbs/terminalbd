@@ -71,6 +71,7 @@
                                         <td class="numeric" >
                                             <a href="{{ path('domain_branches_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                             <a title="Are you sure went to delete ?" href="{{ path('domain_branches_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            <a title="" href="{{ path('domain_branches_employee', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-group"></i>&nbsp;Show Employee</a>
                                         </td>
                                     </tr>
                                 {% endfor %}

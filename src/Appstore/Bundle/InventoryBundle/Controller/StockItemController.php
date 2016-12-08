@@ -77,6 +77,4 @@ class StockItemController extends Controller
     }
 
 
-
-
 }

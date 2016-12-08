@@ -32,6 +32,59 @@ class GlobalOptionRepository extends EntityRepository
            ->getQuery();
     }
 
+    public function searchHandle($qb,$data)
+    {
+        if(!empty($data['location'])){
+            $qb->andWhere("e.location= :location");
+            $qb->setParameter('location', $data['location']);
+        }
+        if(!empty($data['syndicate'])){
+            $qb->andWhere("e.syndicate= :syndicate");
+            $qb->setParameter('syndicate', $data['syndicate']);
+        }
+        if(!empty($data['name'])){
+            $qb->andWhere("e.slug LIKE :slug");
+            $qb->setParameter('slug',  '%'.$data['name'].'%');
+        }
+        return $qb;
+    }
+
+    function findBySubdomain($data = array()) {
+
+        $syndicate = isset($data['syndicate'])  ? $data['syndicate']:'';
+        $location = isset($data['location']) ? $data['location']:'';
+        $name = isset($data['name']) ? $data['name']:'';
+        $data = array('location'=> $location ,'syndicate'=> $syndicate,'name' => $name);
+
+        $qb =  $this->createQueryBuilder('e');
+        $qb->orderBy('e.name', 'ASC');
+        $qb->where("e.status = 1");
+        $qb->andWhere("e.subDomain != :subDomain");
+        $qb->setParameter('subDomain', 'null');
+        $this->searchHandle($qb,$data);
+        $result = $qb->getQuery();
+        return $result;
+    }
+
+    function getActiveDomainList($form) {
+
+
+        $location = $form->get('location')->getData();
+        $syndicate = $form->get('syndicate')->getData();
+        $name = $form->get('name')->getData();
+        $data = array('location'=>$location,'syndicate'=>$syndicate,'name' => $name);
+        $qb  = $this->createQueryBuilder('e');
+            $qb->where("e.status = :status");
+            $qb->setParameter('status', 1);
+            $this->searchHandle($qb,$data);
+            $qb->orderBy('e.updated', 'DESC');
+            $result = $qb->getQuery();
+        return $result;
+
+
+    }
+
+
     function urlSlug($str, $options = array()) {
 
         // Make sure string is in UTF-8 and strip invalid UTF-8 characters
@@ -105,6 +158,14 @@ class GlobalOptionRepository extends EntityRepository
 
     }
 
+    public function getUniqueId(){
+
+        $passcode =substr(str_shuffle(str_repeat('0123456789',5)),0,4);
+        $t = microtime(true);
+        $micro = ($passcode + floor($t));
+        return $micro;
+    }
+
 
     public function createGlobalOption($mobile,$data)
     {
@@ -120,10 +181,12 @@ class GlobalOptionRepository extends EntityRepository
         $globalOption->setMobile($mobile);
         $globalOption->setSyndicate($syndicate);
         $globalOption->setLocation($location);
+        $globalOption->setUniqueCode($this->getUniqueId());
         $globalOption->setStatus(false);
         $em->persist($globalOption);
         $em->flush();
         return $globalOption;
+
     }
 
 

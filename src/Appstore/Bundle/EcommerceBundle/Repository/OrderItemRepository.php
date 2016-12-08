@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
 use Doctrine\ORM\EntityRepository;
@@ -13,6 +14,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class OrderItemRepository extends EntityRepository
 {
+
+    public function totalItemAmount(Order $order){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.subTotal) AS totalAmount');
+        $qb->where("e.order = :order");
+        $qb->andWhere("e.status = 1");
+        $qb->setParameter('order', $order->getId());
+        $result = $qb->getQuery()->getSingleResult();
+        $total = $result['totalAmount'];
+        return $total;
+
+    }
 
     public function insertOrderItem($order,$product,GoodsItem $subitem,$quantity)
     {
@@ -27,4 +41,64 @@ class OrderItemRepository extends EntityRepository
         $em->persist($entity);
         $em->flush();
     }
+
+    public function itemOrderUpdate($order,$data)
+    {
+        $em = $this->_em;
+        $i = 0;
+        foreach ($data['itemId'] as $row ){
+
+            $entity = $em->getRepository('EcommerceBundle:OrderItem')->find($data['itemId'][$i]);
+            $entity->setOrder($order);
+            $subitem = $em->getRepository('InventoryBundle:GoodsItem')->find($data['goodsId'][$i]);
+            $entity->setGoodsItem($subitem);
+            $entity->setQuantity($data['quantity'][$i]);
+            if(isset($data['color'][$i]) and !empty($data['color'][$i])){
+            $entity->setColor($em->getRepository('InventoryBundle:ItemColor')->find($data['color'][$i]));
+            }
+            $entity->setPrice($subitem->getSalesPrice());
+            $entity->setSubTotal($subitem->getSalesPrice() * $data['quantity'][$i]);
+            $em->persist($entity);
+            $em->flush();
+            $i++;
+        }
+    }
+
+    public function itemOrderUpdateBarcode(Order $order)
+    {
+        $em = $this->_em;
+        foreach ($order->getOrderItems() as $orderItem){
+
+            $orderPurchaseItem = $this->getOrderPurchaseItem($orderItem);
+            $orderItem->setPurchaseItem($orderPurchaseItem);
+            $em->persist($orderItem);
+            $em->flush();
+
+        }
+    }
+
+    public function getOrderPurchaseItem(OrderItem $orderItem)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.purchaseVendorItem','pvi');
+        $qb->join('pvi.purchaseItems','pi');
+        $qb->join('pi.item','i');
+        $qb->select('pi.id');
+        $qb->where("e.id = :orderItemId");
+        $qb->setParameter('orderItemId', $orderItem);
+        $qb->andWhere("i.size = :size");
+        $qb->setParameter('size', $orderItem->getSize());
+        $qb->andWhere("i.color = :color");
+        $qb->setParameter('color', $orderItem->getColor());
+        $result = $qb->getQuery()->getArrayResult();
+        if(!empty($result)){
+            return $this->_em->getRepository('InventoryBundle:PurchaseItem')->find($result[0]['id']);
+        }else{
+            return false;
+        }
+
+
+    }
+
+
 }

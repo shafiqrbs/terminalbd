@@ -43,6 +43,13 @@ class FooterSetting
      */
     private $displayWebsite = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="socialMedia", type="boolean")
+     */
+    private $socialMedia = false;
+
  /**
      * @var boolean
      *
@@ -270,6 +277,22 @@ class FooterSetting
     public function setGlobalOption($globalOption)
     {
         $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isSocialMedia()
+    {
+        return $this->socialMedia;
+    }
+
+    /**
+     * @param boolean $socialMedia
+     */
+    public function setSocialMedia($socialMedia)
+    {
+        $this->socialMedia = $socialMedia;
     }
 
 

@@ -38,7 +38,6 @@ account_sales_inline:
     path:     /inline-update
     defaults: { _controller: "AccountingBundle:AccountSales:inlineUpdate" }
 
-
 account_sales_delete:
     path:     /{id}/delete
     defaults: { _controller: "AccountingBundle:AccountSales:delete" }

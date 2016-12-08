@@ -1,4 +1,3 @@
-
 /**
  * Created by rbs on 2/9/16.
  */
@@ -26,17 +25,29 @@ var PaymentSalary = function() {
 
     $(document).on('change', ' #appstore_bundle_accountingBundle_paymentsalary_otherAmount', function() {
 
-        var payment     = parseInt($('#salaryAmount').val()  != '' ? $('#salaryAmount').val() : 0 );
-        var other    = parseInt($('#appstore_bundle_accountingBundle_paymentsalary_otherAmount').val() != '' ? $('#appstore_bundle_accountingBundle_paymentsalary_otherAmount').val() : 0);
-        var netAmount   = (payment + other);
+        var salary     = parseInt($('#salaryAmount').val()  != '' ? $('#salaryAmount').val() : 0 );
+        var adjustment    = parseInt($('#appstore_bundle_accountingBundle_paymentsalary_adjustmentAmount').val() != '' ? $('#appstore_bundle_accountingBundle_paymentsalary_adjustmentAmount').val() : 0);
+        var netAmount   = (salary - adjustment);
         $('#totalAmount').val(netAmount);
         $('#appstore_bundle_accountingBundle_paymentsalary_totalAmount').val(netAmount);
 
-    })
+    });
+
+    $(document).on("click", ".payment", function() {
+
+        var paidAmount      = parseInt($('#appstore_bundle_accountingBundle_paymentsalary_paidAmount').val()  != '' ? $('#appstore_bundle_accountingBundle_paymentsalary_paidAmount').val() : 0 );
+        var salary          = parseInt($('#salaryAmount').val()  != '' ? $('#salaryAmount').val() : 0 );
+        var adjustment      = parseInt($('#appstore_bundle_accountingBundle_paymentsalary_adjustmentAmount').val() != '' ? $('#appstore_bundle_accountingBundle_paymentsalary_adjustmentAmount').val() : 0);
+        var netAmount       = (salary - adjustment);
+        alert(netAmount);
+        if(netAmount < paidAmount){
+            alert('This is wrong payment amount: '+paidAmount+' Tk.');
+            return false;
+        }
+    });
 
     $('#payment').on("click", ".delete", function() {
 
-        alert('dfsdf');
         var url = $(this).attr("data-url");
         var id = $(this).attr("data-id");
         $.ajax({
@@ -48,7 +59,7 @@ var PaymentSalary = function() {
                 }
             },
         })
-    })
+    });
 
 
 

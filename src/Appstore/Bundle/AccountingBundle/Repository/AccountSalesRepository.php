@@ -178,8 +178,9 @@ class AccountSalesRepository extends EntityRepository
         $result = $qb->getQuery()->getSingleResult();
         $purchasePrice = $this->_em->getRepository('InventoryBundle:SalesItem')->reportPurchasePrice($globalOption,$data);
         $Expenditures = $this->_em->getRepository('AccountingBundle:Expenditure')->reportExpenditure($globalOption,$data);
+        $revenues = $this->_em->getRepository('AccountingBundle:AccountJournal')->reportOperatingRevenue($globalOption,$data);
 
-        $data =  array('salesAmount' => $result['salesAmount'],'purchasePrice' => $purchasePrice,'expenditures' => $Expenditures);
+        $data =  array('salesAmount' => $result['salesAmount'],'purchasePrice' => $purchasePrice,'revenues' => $revenues ,'expenditures' => $Expenditures);
         return $data;
 
     }

@@ -9,6 +9,7 @@ use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\DomainUser;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Setting\Bundle\ContentBundle\Entity\Admission;
@@ -105,8 +106,8 @@ class GlobalOption
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="globalOptions" , cascade={"persist", "remove"} )
      **/
-
     protected $location;
+
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AdvertismentBundle\Entity\Advertisment", mappedBy="globalOption" , cascade={"persist", "remove"} )
      */
@@ -201,6 +202,11 @@ class GlobalOption
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $ecommerceConfig;
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $orders;
+
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="mall" , cascade={"persist", "remove"})
      */
@@ -458,6 +464,13 @@ class GlobalOption
     private $updated;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="uniqueCode", type="string", length=255, nullable=true)
+     */
+    private $uniqueCode;
+
+    /**
      * Get id
      *
      * @return integer
@@ -466,6 +479,24 @@ class GlobalOption
     {
         return $this->id;
     }
+
+
+    /**
+     * @return string
+     */
+    public function getUniqueCode()
+    {
+        return $this->uniqueCode;
+    }
+
+    /**
+     * @param string $uniqueCode
+     */
+    public function setUniqueCode($uniqueCode)
+    {
+        $this->uniqueCode = $uniqueCode;
+    }
+
 
     /**
      * @return mixed
@@ -1306,6 +1337,15 @@ class GlobalOption
     {
         return $this->sidebarWidgets;
     }
+
+    /**
+     * @return Order
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
 
 
 }

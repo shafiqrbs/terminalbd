@@ -203,22 +203,20 @@ class ExcelImporterController extends Controller
 
         /*  This function is written for sum total item base.  */
         $varified = $em->getRepository('InventoryBundle:Purchase')->getSumPurchase( $this->getUser(),$inventory);
-        if($varified == 'verified'){
-            $entities = $em->getRepository('InventoryBundle:Purchase')->findBy(array('inventoryConfig' => $inventory),array('created'=>'asc'));
+        if($varified == 'imported'){
+            $entities = $em->getRepository('InventoryBundle:Purchase')->findBy(array('inventoryConfig' => $inventory,'process' => 'imported'),array('created'=>'asc'));
             foreach($entities as $entity ){
-                $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($entity,$inventory);
-                $em->getRepository('AccountingBundle:Transaction')->purchaseTransaction($entity,$accountPurchase,'Purchase');
-
+               $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($entity,$inventory);
+               $em->getRepository('AccountingBundle:Transaction')->purchaseTransaction($entity,$accountPurchase,'Purchase');
+               $em->getRepository('InventoryBundle:Purchase')->updateProcess($entity,'approved');
             }
         }
         $excelImporter->setProgress('updated');
         $em->persist($excelImporter);
         $em->flush();
-
         $this->get('session')->getFlashBag()->add(
             'success',"Data has been updated successfully"
         );
-
         return $this->redirect($this->generateUrl('inventory_excelimproter'));
 
     }

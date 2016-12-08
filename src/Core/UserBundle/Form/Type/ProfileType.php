@@ -50,10 +50,11 @@ class ProfileType extends AbstractType
                    'expanded'      =>false,
                    'class'         => 'SettingLocationBundle:Location',
                    'property'      => 'name',
-                   'attr'          =>array('class'=>'col-xs-12 select2 o-margin-padding required'),
+                   'attr'          =>array('class'=>'col-xs-12 form-control o-margin-padding required'),
                    'query_builder' => function(EntityRepository $er){
                        return $er->createQueryBuilder('d')
-                           ->where("d.level = 2")
+                           ->where("d.parent = 8")
+                           ->andWhere("d.level = 3")
                            ->orderBy('d.name','ASC');
                    }
                ))

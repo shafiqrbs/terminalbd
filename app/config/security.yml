@@ -36,7 +36,8 @@ security:
         # THIS IS PART OF HR and PAYROLL MANAGE
 
         ROLE_HR:                                    [ROLE_HR]
-        ROLE_DOMAIN_HR_EMPLOYEE_MANAGER:            [ROLE_HR,ROLE_DOMAIN_HR_EMPLOYEE_MANAGER]
+        ROLE_HR_BRANCH:                             [ROLE_HR_BRANCH]
+        ROLE_DOMAIN_HR_EMPLOYEE_MANAGER:            [ROLE_HR_BRANCH,ROLE_DOMAIN_HR_EMPLOYEE_MANAGER]
         ROLE_PAYROLL:                               [ROLE_PAYROLL]
         ROLE_PAYROLL_SALARY:                        [ROLE_PAYROLL,ROLE_PAYROLL_SALARY]
         ROLE_PAYROLL_SALARY_PAYMENT:                [ROLE_PAYROLL,ROLE_PAYROLL_SALARY_PAYMENT]
@@ -89,7 +90,7 @@ security:
 
         ROLE_APPROVAL_ADMIN:                        [ROLE_OPERATION_APPROVE]
         ROLE_ADMIN:                                 [ROLE_ADMIN,ROLE_DOMAIN]
-        ROLE_SUPER_ADMIN:                           [ROLE_CUSTOMER, ROLE_ADMIN]
+        ROLE_SUPER_ADMIN:                           [ROLE_ADMIN]
 
     providers:
         fos_userbundle:

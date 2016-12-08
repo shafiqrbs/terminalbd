@@ -49,50 +49,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="control-group">
-                                        <label class="control-label" for="firstName">Feature {{ form_widget(form.feature) }}
-                                            {{ form_errors(form.feature) }}
-                                        </label>
-                                    </div>
+                                </div>
+                                <div class="span4">
                                     <div class="control-group">
                                         <label class="control-label" for="">Type</label>
                                         <div class="controls">
                                             {{ form_widget(form.type) }}
                                             {{ form_errors(form.type) }}
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="span2">
-
-                                </div>
-                                <div class="span4">
-                                    <div class="control-group">
-                                        <label class="control-label" >Feature image</label>
-                                        <div class="controls">
-
-                                        </div>
-                                        <div class="controls">
-                                            <div data-provides="fileupload" class="fileupload fileupload-new">
-                                                <div  class="fileupload-new thumbnail">
-                                                    {% if(entity.webPath) %}
-                                                        <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="{{ image(entity.webPath).resize(100,100) }}">
-                                                    {% else %}
-                                                        <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
-                                                    {% endif %}
-                                                </div>
-                                                <div  class="fileupload-preview fileupload-exists thumbnail"></div>
-                                                <div>
-													<span class="btn btn-file">
-                                                        <span class="fileupload-new">Select image</span>
-													    <span class="fileupload-exists">Change</span>
-                                                        {{ form_widget(form.file) }}
-                                                        {{ form_errors(form.file) }}
-                                                    </span>
-                                                    <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
-                                                </div>
-                                            </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -129,8 +92,8 @@
                                 <tr class="head-grey">
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Created</th>
-                                    <th class="numeric" >Feature</th>
                                     <th class="numeric" >Type</th>
+                                    <th class="numeric" >Feature</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -138,7 +101,15 @@
 
                                 {% for entity in entities %}
                                     <tr>
-                                        <td class="numeric" ><a href="javascript:" data-url="{{ path('itemcolor_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric dropdown" >
+                                            <a href="javascript:" data-url="{{ path('itemcolor_edit',{'id': entity.id })}}" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                                {{ entity.name }}
+                                            </a>
+                                            <ul class="dropdown-menu extended inbox">
+                                                <li><p>{{ entity.name }}</p></li>
+                                                <li><img src="{% if entity.webPath is not empty  %}{{ image(entity.webPath).scaleResize(300,300) }}{% endif %}" alt="" /></li>
+                                            </ul>
+                                        </td>
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >
                                             {% if(entity.type is not empty) %}

@@ -32,11 +32,6 @@ class PreOrderItemType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add  item price as dollar'))
                 )))
-            ->add('price','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Unit price convert taka '),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add item price convert taka'))
-                )))
-            ->add('shippingCharge','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Shipping charge using taka ')))
             ->add('details','textarea', array('attr'=>array('class'=>'m-wrap span12','row'=>3,'placeholder'=>'Notes...')))
         ;
     }

@@ -99,7 +99,7 @@
                         </td>
                         <td>
                             {% if  app.user %}
-                            <a href="{{ path('customer_order_cart') }}" type="button" class="btn btn-success">
+                            <a href="{{ path('customer_order_to_cart',{'shop':globalOption.uniqueCode}) }}" type="button" class="btn btn-success">
                                 Checkout <span class="glyphicon glyphicon-play"></span>
                             </a>
                             {% else %}

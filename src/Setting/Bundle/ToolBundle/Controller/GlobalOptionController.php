@@ -171,8 +171,8 @@ class GlobalOptionController extends Controller
     */
     private function createEditForm(GlobalOption $entity)
     {
-
-        $form = $this->createForm(new GlobalOptionType(), $entity, array(
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new GlobalOptionType($location), $entity, array(
             'action' => $this->generateUrl('globaloption_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

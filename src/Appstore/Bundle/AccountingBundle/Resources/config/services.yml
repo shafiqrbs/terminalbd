@@ -43,3 +43,8 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.account.salary.invoice.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\PaymentSalaryInvoiceListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+

@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    View Purchase Lists
+                    Purchase Vendor Items
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -18,7 +18,7 @@
                         <a href="{{ path('purchase') }}">Purchase</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Purchase Lists</a></li>
+                    <li><a href="#">Purchase Vendor Items</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -33,7 +33,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Purchase Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Purchase Vendor Items Information</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -88,9 +88,10 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >GRN</th>
                                     <th class="numeric" >Qnt</th>
+                                    <th class="numeric" >Reminig Qnt</th>
                                     <th class="numeric" >Purchase</th>
                                     <th class="numeric" >Sales</th>
-                                    <th class="numeric" >Web price</th>
+{#                                    <th class="numeric" >Web price</th>#}
                                     <th class="numeric" >Is web</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -106,13 +107,17 @@
                                         <td class="numeric" >{% if entity.purchase is not empty %}{{ entity.purchase.created|date('d-m-Y') }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.purchase is not empty %}{{ entity.purchase.grn }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.quantity }}</td>
+                                        <td class="numeric" >{{ entity.stockReminigQnt }}</td>
                                         <td class="numeric" >{{ entity.purchasePrice |number_format() }}</td>
+
                                         <td class="numeric" >{{ entity.salesPrice|number_format() }}</td>
+{#
                                         <td class="numeric" >
                                             <a class="editable" href="#" data-name="WebPrice" data-type="text" data-url="{{ path('inventory_item_web_price') }}" data-pk="{{ entity.id }}" data-original-title="Enter web price">{{entity.webPrice}}</a>
                                         </td>
+#}
                                         <td class="numeric" >
-                                            {% if( entity.isWeb == 1) %}
+                                        {% if( entity.isWeb == 1) %}
                                                 <a href="{{ path('inventory_vendoritem_status', { 'id': entity.id}) }}" class="btn blue mini"><i class="icon-check"></i></a>
                                             {% else %}
                                                 <a  href="{{ path('inventory_vendoritem_status', { 'id': entity.id}) }}" class="btn blue mini" ><i class="icon-check-empty"></i></a>

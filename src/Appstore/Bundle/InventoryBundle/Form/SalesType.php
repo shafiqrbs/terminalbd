@@ -33,10 +33,7 @@ class SalesType extends AbstractType
     {
         $builder
 
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add your customer mobile no','data-original-title'=>'Please start typing code/name for suggestions or just scan barcode','autocomplete'=>'off'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')))
-            ))
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add your customer mobile no','data-original-title'=>'Please start typing code/name for suggestions or just scan barcode','autocomplete'=>'off')))
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
@@ -45,9 +42,6 @@ class SalesType extends AbstractType
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -55,6 +49,7 @@ class SalesType extends AbstractType
                 }
             ))
             ->add('paymentCard', 'entity', array(
+                'required'    => false,
                 'property' => 'name',
                 'class' => 'Setting\Bundle\ToolBundle\Entity\PaymentCard',
                 'attr'=>array('class'=>'span12 select2'),
@@ -78,6 +73,7 @@ class SalesType extends AbstractType
                 }
             ))
             ->add('accountBank', 'entity', array(
+                'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
@@ -90,6 +86,7 @@ class SalesType extends AbstractType
                 }
             ))
             ->add('accountMobileBank', 'entity', array(
+                'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),

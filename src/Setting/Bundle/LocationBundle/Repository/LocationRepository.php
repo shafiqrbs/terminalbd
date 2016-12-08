@@ -123,7 +123,7 @@ class LocationRepository extends MaterializedPathRepository{
     {
         $results = $this->createQueryBuilder('node')
             ->orderBy('node.level, node.name', 'ASC')
-            ->where('node.level > 1')
+            ->where('node.level < 4 ')
             ->getQuery()
             ->getResult()
         ;
@@ -134,9 +134,8 @@ class LocationRepository extends MaterializedPathRepository{
 
         foreach ($locations as $location) {
             switch($location->getLevel()) {
-                case 2: break;
-                default:
-                    $grouped[$locations[$location->getParentIdByLevel(2)]->getName()][$location->getId()] = $location;
+                 case 3:
+                    $grouped[$locations[$location->getParentIdByLevel(3)]->getName()][$location->getId()] = $location;
             }
         }
 
@@ -148,7 +147,7 @@ class LocationRepository extends MaterializedPathRepository{
      * @param int $level
      * @return Location
      */
-    public function getParentLocationByLevel(Location $location, $level = 1)
+    public function getParentLocationByLevel(Location $location, $level = 2)
     {
         return $this->find($location->getParentIdByLevel($level));
     }

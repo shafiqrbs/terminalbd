@@ -1,0 +1,31 @@
+allproduct:
+    path:      /all-products
+    defaults: { _controller: "CustomerBundle:Product:allProduct" }
+
+order_product:
+    path:      /{domain}/order-new
+    defaults: { _controller: "CustomerBundle:Product:index" }
+
+product_cart:
+    path:      /show-cart
+    defaults: { _controller: "CustomerBundle:Product:index" }
+
+order_product_show:
+    path:      /{slug}/order-show
+    defaults: { _controller: "CustomerBundle:Product:show" }
+
+order_cart_to_add:
+    path:      /{id}/item-add-to-cart
+    defaults: { _controller: "CustomerBundle:Product:productAddCart" }
+
+order_cart_to_remove:
+    path:      /{id}/order-item-remove
+    defaults: { _controller: "CustomerBundle:Order:delete" }
+
+order_delete:
+    path:      /{id}/order-delete
+    defaults: { _controller: "CustomerBundle:Order:delete" }
+
+order_item_delete:
+    path:      /{id}/order-item-delete
+    defaults: { _controller: "CustomerBundle:Order:itemDelete" }

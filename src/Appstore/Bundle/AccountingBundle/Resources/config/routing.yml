@@ -12,7 +12,7 @@ accounting_paymentsalary:
 
 accounting_salarysetting:
     resource: "@AccountingBundle/Resources/config/routing/salarysetting.yml"
-    prefix:   /finance/salarysetting
+    prefix:   /finance/salary-invoice
 
 accounting_journal:
     resource: "@AccountingBundle/Resources/config/routing/accountjournal.yml"

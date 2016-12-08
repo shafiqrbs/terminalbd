@@ -18,7 +18,26 @@ class BarcodeController extends Controller
 {
 
 
-    public function barCoder($barcoder){
+    public function barCoder($barcoder)
+    {
+
+        if (!empty($barcoder->getItem()->getColor()) and !empty($barcoder->getItem()->getSize())) {
+            $sizeColor = $barcoder->getItem()->getColor()->getName() . '-' . $barcoder->getItem()->getSize()->getName();
+        } elseif (!empty($barcoder->getItem()->getSize())) {
+            $sizeColor = $barcoder->getItem()->getSize()->getName();
+        } elseif (!empty($barcoder->getItem()->getColor())) {
+            $sizeColor = $barcoder->getItem()->getColor()->getName();
+        }else {
+            $sizeColor = '';
+        }
+
+        if (!empty($barcoder->getItem()->getVendor())){
+            $vendorBrand = $barcoder->getItem()->getVendor()->getVendorCode();
+        }elseif(!empty($barcoder->getItem()->getBrand())){
+            $vendorBrand = $barcoder->getItem()->getBrand()->getName();
+        }else{
+            $vendorBrand = '';
+        }
 
         $barcode = new BarcodeGenerator();
         $barcode->setText($barcoder->getBarcode());
@@ -30,10 +49,14 @@ class BarcodeController extends Controller
         $data = '';
         $data .='<div class="barcode-block">';
         $data .='<div class="centered">';
-        $data .='<p><span class="left">'.$barcoder->getItem()->getColor()->getName().'-'.$barcoder->getItem()->getSize()->getName().'</span><span class="right">'.$barcoder->getItem()->getVendor()->getVendorCode().'</span></p>';
+        $data .='<p><span class="left">'.$sizeColor.'</span><span class="right">'.$vendorBrand.'</span></p>';
         $data .='<div class="clearfix"></div>';
         $data .='<img src="data:image/png;base64,'.$code.'" />';
-        $data .='<p><span class="center">TK '.$barcoder->getSalesPrice().' including VAT</span></p>';
+        if($barcoder->getItem()->getInventoryConfig()->getVatEnable() != 1){
+            $data .='<p><span class="center">TK '.$barcoder->getSalesPrice().' including VAT</span></p>';
+        }else{
+            $data .='<p><span class="center">TK '.$barcoder->getSalesPrice().'</span></p>';
+        }
         $data .='</div>';
         $data .='</div>';
         return $data;

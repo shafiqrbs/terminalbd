@@ -27,7 +27,6 @@ account_salarysetting_update:
 account_salarysetting_delete:
     path:     /{id}/delete
     defaults: { _controller: "AccountingBundle:SalarySetting:delete" }
-    methods:  [POST, DELETE]
 
 account_salarysetting_inline:
     path:     /inline-update

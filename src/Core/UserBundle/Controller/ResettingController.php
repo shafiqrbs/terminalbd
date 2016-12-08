@@ -36,7 +36,7 @@ class ResettingController extends Controller
      */
     public function requestAction()
     {
-        $detect = new MobileDetect();
+        $detect = new \Frontend\FrontentBundle\Service\MobileDetect();
         if($detect->isMobile() OR  $detect->isTablet() ) {
             $theme = 'Resetting/Mobile';
         }else{
@@ -172,29 +172,36 @@ class ResettingController extends Controller
     public function forgetPasswordAction(Request $request)
     {
 
-        $username = $request->request->get('username');
-        $entity = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('username'=> $username));
-        if(empty($entity)){
+        $intlMobile = $request->request->get('username');
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $profile = $this->getDoctrine()->getRepository('UserBundle:Profile')->findOneBy(array('mobile' => $mobile));
+        if(empty($profile)){
 
-            $detect = new MobileDetect();
+            $detect = new \Frontend\FrontentBundle\Service\MobileDetect();
             if($detect->isMobile() OR  $detect->isTablet() ) {
                 $theme = 'Resetting/Mobile';
             }else{
                 $theme = 'Resetting';
             }
             return $this->render('UserBundle:'.$theme.':reset.html.twig', array(
-                'invalid_username' => $username
+                'invalid_username' => $mobile
             ));
-        }
-        $entity->setPlainPassword(123456);
-        $this->get('fos_user.user_manager')->updateUser($entity);
-        $this->get('session')->getFlashBag()->add(
-            'success',"Password reset successfully"
-        );
 
-        //$dispatcher = $this->container->get('event_dispatcher');
-       // $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,'123456'));
-        return $this->redirect($this->generateUrl('homepage'));
+        }else{
+
+            $entity = $profile->getUser();
+            $a = mt_rand(1000,9999);
+            $entity->setPlainPassword($a);
+            $this->get('fos_user.user_manager')->updateUser($entity);
+            $this->get('session')->getFlashBag()->add(
+                'success',"Send sms on your mobile"
+            );
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($entity,$a));
+            return $this->redirect($this->generateUrl('homepage'));
+
+        }
+
 
 
     }

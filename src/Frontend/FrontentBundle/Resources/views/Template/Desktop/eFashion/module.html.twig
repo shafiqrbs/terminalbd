@@ -1,0 +1,120 @@
+{% extends ':frontend/template:base.html.twig' %}
+{% block body %}
+<div class="clearfix"></div>
+<section id="breadcrumb">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="crumb">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i>{{ title }}</div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="container">
+    <div class="row js-equal-height">
+        <article class="col-md-8 ">
+            {% if ( module.moduleClass == 'News') %}
+                {{ include('@Frontend/Template/Desktop/Module/news.html.twig')}}
+            {% elseif( module.moduleClass == 'Blog' ) %}
+                {{ include('@Frontend/Template/Desktop/Module/blog.html.twig')}}
+            {% elseif( module.moduleClass == 'Testimonial' ) %}
+                {{ include('@Frontend/Template/Desktop/Module/testimonial.html.twig')}}
+            {% elseif( module.moduleClass == 'Timeline' ) %}
+                {{ include('@Frontend/Template/Desktop/Module/timeline.html.twig')}}
+            {% elseif( module.moduleClass == 'Branch' ) %}
+                {{ include('@Frontend/Template/Desktop/Module/branch.html.twig')}}
+            {% elseif( module.moduleClass == 'Event' ) %}
+                {{ include('@Frontend/Template/Desktop/Module/event.html.twig')}}
+            {% elseif( module.moduleClass == 'NoticeBoard' ) %}
+                {{ include('@Frontend/Template/Desktop/Module/noticeboard.html.twig')}}
+            {% elseif( module.moduleClass == 'Admission' ) %}
+                {{ include('@Frontend/Template/Desktop/Module/admission.html.twig')}}
+            {% elseif( module.moduleClass == 'Syndicate' ) %}
+                {{ include('@Frontend/Template/Desktop/Module/syndicate.html.twig')}}
+            {% else %}
+                {{ include('@Frontend/Template/Desktop/Module/default.html.twig')}}
+            {% endif %}
+        </article>
+        <!-- Blog Sidebar Column -->
+        <aside class="col-md-4 sidebar-padding js-equal-height" style="background: #FBFCFE">
+            {% if featurePages is not empty %}
+                <div class="blog-sidebar">
+                    <h4 class="sidebar-title"><i class="fa fa-align-left"></i>Recent News</h4>
+                    <hr style="margin-bottom: 5px;">
+                    {% for feature in featurePages %}
+                        {% if feature.module.name == 'News' %}
+                            <div class="media">
+                                <a class="pull-left" href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':feature.slug }) }}">
+                                    <img class="img-responsive media-object" src="{{ image(feature.webPath).resize(100,100) }}" alt="Media Object">
+                                </a>
+                                <div class="media-body">
+                                    <h4 class="media-heading"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':feature.slug }) }}">{{ feature.name }}</a></h4>
+                                    {{ feature.content|raw|truncate(100) }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </aside>
+    </div>
+</div>
+
+    <style>
+
+        .odd{
+            background-color: #ffffff;
+        }
+
+        .even{
+            background-color: #FAFAFA;
+        }
+
+        #catlist{
+            border-bottom:none;
+            margin:10px auto;
+        }
+
+        #catlist dl{
+            margin:0 auto;
+            border-bottom:1px solid #F5F5F5;
+            padding:10px;
+            overflow:hidden;
+        }
+
+        #catlist dd{
+            overflow:auto
+        }
+
+        #catlist dt strong{
+            float:right;
+            padding:0 0 0 20px;
+        }
+
+        #catlist dt img{
+            float:left;
+            margin:0 10px 0 0;
+            border:1px solid #FAFAFA;
+        }
+        * html dd{height:1%} /* 3px jog*/
+    </style>
+
+{% endblock %}
+
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/desktop/css/common.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/js/common.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+

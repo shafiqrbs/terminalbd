@@ -55,19 +55,16 @@
                                     <thead>
 
                                         <tr id="search-input">
-                                              <td colspan="5" class="numeric">
-                                                  <div class="input-icon left" >
-                                                    <i class="icon-calendar"></i>
-                                                      <input type="text" id="invoiceDate" name="invoiceDate"  class="m-wrap span12 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Enter invoice date{% endif %} ">
-                                                  </div>
+                                            <td colspan="8" class="numeric">
+                                                <div class="controls">
+                                                    <div class="input-append span12">
+                                                        <input type="text" id="invoice" name="invoice"  class="span11 m-wrap  invoice-no" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Enter invoice no{% endif %} ">
+                                                        <div class="btn-group">
+                                                            <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
-                                            <td colspan="2" class="numeric">
-                                                  <div class="input-icon left" >
-                                                      <i class="icon-eye-open"></i>
-                                                      <input type="text" id="salesId" name="salesId"  class="m-wrap span12 invoice-no" placeholder="Enter customer invoice last 4 digit"  autocomplete="off">
-                                                  </div>
-                                            </td>
-                                            <td class="numeric td-search-button" ><button class="btn blue mini"><i class="icon-search"></i>&nbsp;Go</button></td>
                                         </tr>
 
                                     </thead>

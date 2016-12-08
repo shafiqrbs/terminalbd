@@ -267,7 +267,7 @@ class StockItem
 
 
     /**
-     * @return mixed
+     * @return PurchaseItem
      */
     public function getPurchaseItem()
     {
@@ -275,7 +275,7 @@ class StockItem
     }
 
     /**
-     * @param mixed $purchaseItem
+     * @param PurchaseItem $purchaseItem
      */
     public function setPurchaseItem($purchaseItem)
     {

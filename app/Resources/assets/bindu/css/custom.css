@@ -728,6 +728,7 @@ table#colors-swatchs div.swatch {
   top: 3px;
   position: absolute;
   cursor: pointer;
+  left: 96%;
 }
 
 .design-form p label.error{

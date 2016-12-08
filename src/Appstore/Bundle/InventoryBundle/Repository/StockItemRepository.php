@@ -15,6 +15,233 @@ use Doctrine\ORM\EntityRepository;
 class StockItemRepository extends EntityRepository
 {
 
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
+    {
+        if(!empty($data))
+        {
+
+            $startDate = isset($data['startDate'])  ? date('Y-m-d',strtotime($data['startDate'])) : '';
+            $endDate =   isset($data['endDate'])  ? date('Y-m-d',strtotime($data['endDate'])) : '';
+            $item = isset($data['item'])? $data['item'] :'';
+            $color = isset($data['color'])? $data['color'] :'';
+            $size = isset($data['size'])? $data['size'] :'';
+            $vendor = isset($data['vendor'])? $data['vendor'] :'';
+            $brand = isset($data['brand'])? $data['brand'] :'';
+
+            if (!empty($data['startDate']) ) {
+                $qb->andWhere("pi.created >= :startDate");
+                $qb->setParameter('startDate', $startDate.' 00:00:00');
+            }
+            if (!empty($data['endDate'])) {
+                $qb->andWhere("pi.created <= :endDate");
+                $qb->setParameter('endDate', $endDate.' 23:59:59');
+            }
+
+            if (!empty($item)) {
+                $qb->andWhere("m.name = :name");
+                $qb->setParameter('name', $item);
+            }
+            if (!empty($color)) {
+
+                $qb->andWhere("c.name = :color");
+                $qb->setParameter('color', $color);
+            }
+            if (!empty($size)) {
+                $qb->andWhere("s.name = :size");
+                $qb->setParameter('size', $size);
+            }
+            if (!empty($vendor)) {
+                $qb->andWhere("v.companyName = :vendor");
+                $qb->setParameter('vendor', $vendor);
+            }
+
+            if (!empty($brand)) {
+                $qb->andWhere("b.name = :brand");
+                $qb->setParameter('brand', $brand);
+
+            }
+        }
+
+    }
+
+
+    public function getStockPriceOverview($inventory,$data)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.purchaseItem','pi');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->addSelect('SUM(e.quantity * pi.purchasePrice) AS purchasePrice');
+        $qb->addSelect('SUM(e.quantity * pi.salesPrice) AS salesPrice');
+        $qb->where("e.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+    public function getGroupStock($inventory,$group)
+    {
+
+        $vendor         = $group == 'vendor' ? $group :'';
+        $masterItem     = $group == 'product' ? $group :'';
+        $brand          = $group == 'brand' ? $group :'';
+        $color          = $group == 'color' ? $group :'';
+        $size           = $group == 'size' ? $group :'';
+        $category       = $group == 'category' ? $group :'';
+
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.purchaseItem','pi');
+        $qb->join('e.item','item');
+        $qb->select('SUM(e.quantity) AS quantity');
+        $qb->addSelect('SUM(pi.quantity) AS purchaseQuantity');
+        $qb->addSelect('SUM(e.quantity * pi.purchasePrice) AS purchasePrice');
+        $qb->addSelect('SUM(e.quantity * pi.salesPrice) AS salesPrice');
+        $qb->where("e.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        if (!empty($masterItem)) {
+            $qb->addSelect('m.name AS masterItem');
+            $qb->leftJoin('item.masterItem', 'm');
+            $qb->groupBy('item.masterItem');
+            $qb->orderBy('m.name','ASC');
+        }
+        if (!empty($brand)) {
+            $qb->addSelect('b.name AS brand');
+            $qb->join('item.brand', 'b');
+            $qb->groupBy('item.brand');
+            $qb->orderBy('b.name','ASC');
+        }
+        if (!empty($color)) {
+            $qb->addSelect('c.name AS color');
+            $qb->addSelect('s.name AS size');
+            $qb->join('item.size', 's');
+            $qb->join('item.color', 'c');
+            $qb->groupBy('item.color');
+            $qb->orderBy('c.name','ASC');
+        }
+        if (!empty($size)) {
+            $qb->addSelect('s.name AS size');
+            $qb->join('item.size', 's');
+            $qb->groupBy('item.size');
+            $qb->orderBy('s.name','ASC');
+        }
+        if (!empty($vendor)) {
+            $qb->addSelect('v.companyName AS vendor');
+            $qb->addSelect('v.mobile AS mobile');
+            $qb->join('item.vendor', 'v');
+            $qb->groupBy('item.vendor');
+            $qb->orderBy('v.companyName','ASC');
+        }
+        if (!empty($category)) {
+            $qb->addSelect('cat.name AS category');
+            $qb->join('item.masterItem', 'm');
+            $qb->join('m.category','cat');
+            $qb->groupBy("m.category");
+            $qb->orderBy('cat.name','ASC');
+        }
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+    public function getProcessStock($inventory,$data)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.item','item');
+        $qb->join('e.purchaseItem', 'pi');
+        $qb->join('item.masterItem','m');
+        $qb->leftJoin('item.size', 's');
+        $qb->leftJoin('item.color', 'c');
+        $qb->leftJoin('item.brand', 'b');
+        $qb->leftJoin('item.vendor', 'v');
+        $qb->select('item.id AS itemId');
+        $qb->addselect('m.name AS masterItem');
+        $qb->addselect('s.name AS size');
+        $qb->addselect('c.name AS color');
+        $qb->addselect('v.name AS vendor');
+        $qb->addselect('b.name AS brand');
+        $qb->addSelect('SUM(e.quantity) AS remainingQuantity');
+        $qb->addSelect('SUM(e.quantity * pi.purchasePrice) AS purchasePrice');
+        $qb->addSelect('SUM(e.quantity * pi.salesPrice) AS salesPrice');
+        $qb->where("e.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->groupBy('item.id');
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+
+    public function  getGroupPurchaseItemStock($inventory,$data)
+    {
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:PurchaseItem','pi');
+        $qb->join('pi.purchase', 'purchase');
+        $qb->leftJoin('pi.item', 'item');
+        $qb->leftJoin('item.masterItem','m');
+        $qb->leftJoin('item.size', 's');
+        $qb->leftJoin('item.color', 'c');
+        $qb->leftJoin('item.brand', 'b');
+        $qb->leftJoin('item.vendor', 'v');
+        $qb->select('item.id  as itemId');
+        $qb->addSelect('sum(pi.quantity)  as purchaseQuantity');
+        $qb->where("purchase.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('item.id');
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+
+        foreach($arrayResult as $row) {
+            $data[$row['itemId']] = $row['purchaseQuantity'];
+        }
+
+        return $data;
+    }
+
+
+    public function getSizeStock($inventory,$data)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:PurchaseItem','pi');
+        $qb->join('pi.stockItem','e');
+        $qb->join('pi.purchase','p');
+        $qb->join('pi.item','item');
+        $qb->join('item.masterItem','m');
+        $qb->join('item.size', 's');
+        $qb->leftJoin('item.color', 'c');
+        $qb->leftJoin('item.brand', 'b');
+        $qb->join('item.vendor', 'v');
+        $qb->select('m.name AS masterItem');
+        $qb->addselect('p.grn AS grn');
+        $qb->addselect('p.updated AS created');
+        $qb->addselect('s.name AS size');
+        $qb->addselect('c.name AS color');
+        $qb->addselect('v.companyName AS vendor');
+        $qb->addselect('b.name AS brand');
+        $qb->addSelect('SUM(pi.quantity) AS purchaseQuantity');
+        $qb->addSelect('SUM(e.quantity) AS remainingQuantity');
+        $qb->addSelect('SUM(e.quantity * pi.purchasePrice) AS purchasePrice');
+        $qb->addSelect('SUM(e.quantity * pi.salesPrice) AS salesPrice');
+        $qb->where("e.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->groupBy('item.id');
+        $qb->groupBy('pi.purchase');
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+
+
     public function getItemBaseStock($inventory)
     {
 
@@ -167,15 +394,15 @@ class StockItemRepository extends EntityRepository
         $salesReturn = $this->getSumStock($inventory,'salesReturn',$data);
         $damage = $this->getSumStock($inventory,'damage',$data);
 
-        $remaining = (($purchase + $salesReturn + $purchaseReplace ) + ($purchaseReturn + $sales + $damage ));
+        $remaining = (($purchase + $salesReturn ) + ($purchaseReturn + $sales + $damage ));
         $data = array(
-            'purchase'=>$purchase,
-            'purchaseReturn'=>$purchaseReturn,
-            'purchaseReplace'=>$purchaseReplace,
-            'sales'=>$sales,
-            'salesReturn'=>$salesReturn,
-            'damage'=>$damage,
-            'remaining'=> $remaining
+            'purchase'=>        $purchase,
+            'purchaseReturn'=>  $purchaseReturn,
+            'purchaseReplace'=> $purchaseReplace,
+            'sales'=>           $sales,
+            'salesReturn'=>     $salesReturn,
+            'damage'=>          $damage,
+            'remaining'=>       $remaining
         );
         return $data;
 

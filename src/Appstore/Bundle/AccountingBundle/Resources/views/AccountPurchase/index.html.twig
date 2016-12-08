@@ -53,10 +53,10 @@
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
                                         <div class="span2">
-                                            <input type="text" id="startDate" name="startDate"  class="span12 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start receive date{% endif %} ">
+                                            <input type="text" id="startDate" name="startDate"  class="span12 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start payment date{% endif %} ">
                                         </div>
                                         <div class="span2">
-                                            <input type="text" id="endDate" name="endDate"  class="span12 search-input date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End receive date{% endif %}  ">
+                                            <input type="text" id="endDate" name="endDate"  class="span12 search-input date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End payment date{% endif %}  ">
                                         </div>
                                         <div class="span4">
                                             <select name="transactionMethod" id="transactionMethod" class="select2 leftMargin span12">
@@ -77,7 +77,7 @@
 
                                 <thead class="flip-content ">
                                 <tr>
-                                    <th class="numeric" colspan="4" style="text-align: right"><strong>Grand Total</strong></th>
+                                    <th class="numeric" colspan="5" style="text-align: right"><strong>Grand Total</strong></th>
                                     <td class="numeric" ><strong>{{ overview.purchaseAmount|number_format }}</strong></td>
                                     <td class="numeric" ><strong>{{ overview.payment|number_format }}</strong></td>
                                     <td class="numeric" ><strong><strong>{{  (overview.purchaseAmount - overview.payment)|number_format }}</strong></strong></td>

@@ -186,6 +186,13 @@ class SalesRepository extends EntityRepository
 
     }
 
+    public function getCulculationVat(Sales $sales,$totalAmount)
+    {
+            $vat = ( ($totalAmount * (int)$sales->getInventoryConfig()->getVat())/100 );
+            return $vat;
+
+    }
+
 
 
 }
