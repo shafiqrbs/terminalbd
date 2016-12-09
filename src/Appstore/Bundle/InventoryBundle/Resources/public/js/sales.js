@@ -47,13 +47,36 @@ var InventorySales = function(sales) {
                 $('#purchaseItem').html(obj['purchaseItem']);
                 $('#salesItem').html(obj['salesItem']);
                 $('.salesTotal').html(obj['salesTotal']);
-                $('.salesTotal').val(obj['salesTotal']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 FormComponents.init();
             },
         })
-    })
+    });
+
+    $(document).on('click', '.addSales', function() {
+
+        var barcode = $(this).attr('id');
+        if(barcode == ''){
+            $('#wrongBarcode').html('Using wrong barcode, please try again correct barcode.');
+            return false;
+        }
+        $.ajax({
+            url: Routing.generate('inventory_sales_item_search'),
+            type: 'POST',
+            data:'barcode='+barcode+'&sales='+ sales,
+            success: function(response) {
+                $('#barcode').focus().val('');
+                obj = JSON.parse(response);
+                $('#purchaseItem').html(obj['purchaseItem']);
+                $('#salesItem').html(obj['salesItem']);
+                $('.salesTotal').html(obj['salesTotal']);
+                $('#paymentTotal').val(obj['salesTotal']);
+                $('#paymentSubTotal').val(obj['salesTotal']);
+                FormComponents.init();
+            },
+        })
+    });
 
     $(document).on('change', '#item', function() {
 
@@ -262,7 +285,11 @@ var InventorySales = function(sales) {
         escapeMarkup: function (m) {
             return m;
         },
-        formatResult: function(item){ return item.masterItemName +' - '+ item.colorName +' - '+ item.sizeName +' - '+ item.vendorName +' -> '+ ((item.purchaseQuantity + item.salesQuantityReturn + item.purchaseQuantityReplace ) - (item.purchaseQuantityReturn + item.salesQuantity ) ) }, // omitted for brevity, see the source of this page
+        formatResult: function(item){
+
+            return item.masterItemName +' - '+ item.colorName +' - '+ item.sizeName +' - '+ item.vendorName +' -> '+ ((item.purchaseQuantity) - (item.purchaseQuantityReturn + item.salesQuantity - item.salesQuantityReturn ) )
+
+        }, // omitted for brevity, see the source of this page
         formatSelection: function(item){return item.sku + ' - ' + item.text}, // omitted for brevity, see the source of this page
         initSelection: function(element, callback) {
             var id = $(element).val();

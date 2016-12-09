@@ -66,6 +66,7 @@ class PurchaseVendorItemController extends Controller
                 $entity->setInventoryConfig($purchase->getInventoryConfig());
                 $entity->setPurchase($purchase);
                 $entity->setSource('inventory');
+                $entity->setWebName($entity->getName());
                 $em->persist($entity);
                 $em->flush();
                 $item = $purchase->getTotalItem();
@@ -300,6 +301,7 @@ class PurchaseVendorItemController extends Controller
             $entity->setIsWeb(0);
         } else{
             $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertInventorySubProduct($entity);
+            $entity->setWebName($entity->getName());
             $entity->setSubProduct(true);
             $entity->setIsWeb(1);
         }

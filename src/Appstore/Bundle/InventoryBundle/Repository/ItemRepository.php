@@ -172,7 +172,6 @@ class ItemRepository extends EntityRepository
         $query->addSelect('i.purchaseQuantityReturn as purchaseQuantityReturn');
         $query->addSelect('i.salesQuantity as salesQuantity');
         $query->addSelect('i.salesQuantityReturn as salesQuantityReturn');
-        $query->addSelect('i.purchaseQuantityReplace as purchaseQuantityReplace');
         $query->where($query->expr()->like("i.skuSlug", "'%$item%'"  ));
         $query->andWhere("ic.id = :inventory");
         $query->setParameter('inventory', $inventory->getId());

@@ -83,7 +83,7 @@ class PurchaseItemRepository extends EntityRepository
         foreach( $entities as $entity){
            $data .=' <tr id="remove-'.$entity->getId().'">';
             $data .='<td class="numeric" >'.$entity->getName().'</td>';
-            $data .='<td class="numeric" >'.$entity->getItem()->getName().'</td>';
+            $data .='<td class="numeric" >'.$entity->getItem()->getSkuSlug().'</td>';
             $data .='<td class="numeric" >'.$entity->getQuantity().'</td>';
             $data .='<td class="numeric" >'.$entity->getPurchasePrice().'</td>';
             $data .='<td class="numeric" >'.$entity->getPurchaseSubTotal().'</td>';
@@ -145,11 +145,14 @@ class PurchaseItemRepository extends EntityRepository
 
     }
 
-    public function itemPurchaseDetails($inventory,$id)
+    public function itemPurchaseDetails($inventory,$invoice,$id)
     {
         $qb = $this->createQueryBuilder('purchaseItem');
+        $qb->join('purchaseItem.item','item');
         $qb->join('purchaseItem.purchase','p');
         $qb->select('p.receiveDate as receiveDate');
+        $qb->addSelect('item.sku as sku');
+        $qb->addSelect('item.skuSlug as skuSlug');
         $qb->addSelect('p.memo as memo');
         $qb->addSelect('purchaseItem.id as id');
         $qb->addSelect('purchaseItem.barcode as barcode');
@@ -168,10 +171,12 @@ class PurchaseItemRepository extends EntityRepository
             $received = $purchaseItem["receiveDate"]->format('d-m-Y');
             $data .= '<tr>';
             $data .= '<td class="numeric" >'.$purchaseItem["barcode"].'</td>';
+            $data .= '<td class="numeric" >'.$purchaseItem["sku"].'/'.$purchaseItem["skuSlug"].'</td>';
             $data .= '<td class="numeric" >'.$received.'/'.$purchaseItem["memo"] .'</td>';
             $data .= '<td class="numeric" >'.$purchaseItem["quantity"].'</td>';
             $data .= '<td class="numeric" >'.$purchaseItem["purchasePrice"].'</td>';
             $data .= '<td class="numeric" ><a class="editable" data-name="SalesPrice" href="#"  data-url="/inventory/purchaseitem/inline-update" data-type="text" data-pk="'.$purchaseItem["id"].'" data-original-title="Enter sales price">'.$purchaseItem["salesPrice"].'</a></td>';
+            $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="#" id="'.$purchaseItem["barcode"].'">Add Sales</a></td>';
             $data .= '</tr>';
         }
 

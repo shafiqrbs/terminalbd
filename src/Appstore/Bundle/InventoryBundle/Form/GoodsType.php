@@ -35,7 +35,7 @@ class GoodsType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'product name'),
+            ->add('webName','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'product name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add your Product name'))
                 )))

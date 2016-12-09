@@ -334,8 +334,9 @@ class SalesController extends Controller
     public function itemPurchaseDetailsAction(Request $request)
     {
         $item = $request->request->get('item');
+        $invoice = $request->request->get('invoice');
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $data = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->itemPurchaseDetails($inventory,$item);
+        $data = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->itemPurchaseDetails($inventory,$invoice,$item);
         return new Response($data);
     }
 

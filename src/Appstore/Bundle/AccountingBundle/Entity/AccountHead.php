@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AccountHead
  *
- * @ORM\Table()
+ * @ORM\Table(name="account_head")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\AccountHeadRepository")
  */
 class AccountHead

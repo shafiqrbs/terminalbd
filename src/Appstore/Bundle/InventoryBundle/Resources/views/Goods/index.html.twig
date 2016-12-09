@@ -93,7 +93,7 @@
                                     <tr class="remove-vendor-item-{{ entity.id }}">
                                         <td> {% if entity.goodsItems is defined and  entity.goodsItems is not empty  %}<span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{% if entity.masterItem %}{{ entity.masterItem.name }}-{% endif %}{{ entity.name }}</td>
+                                        <td class="numeric" >{% if entity.masterItem %}{{ entity.masterItem.name }}-{% endif %}{{ entity.webName }}</td>
                                         <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >{{ entity.subProductQuantity }}</td>
                                         <td class="numeric" >{{ entity.purchasePrice|number_format() }}</td>
