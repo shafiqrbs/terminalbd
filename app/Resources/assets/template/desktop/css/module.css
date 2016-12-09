@@ -1,5 +1,5 @@
 .img-logo img{
-    min-height: 120px;
+    max-height: 120px;
 }
 .section-divide{
     margin-top:20px ;
