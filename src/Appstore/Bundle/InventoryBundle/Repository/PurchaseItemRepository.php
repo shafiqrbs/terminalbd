@@ -175,8 +175,8 @@ class PurchaseItemRepository extends EntityRepository
             $data .= '<td class="numeric" >'.$received.'/'.$purchaseItem["memo"] .'</td>';
             $data .= '<td class="numeric" >'.$purchaseItem["quantity"].'</td>';
             $data .= '<td class="numeric" >'.$purchaseItem["purchasePrice"].'</td>';
-            $data .= '<td class="numeric" ><a class="editable" data-name="SalesPrice" href="#"  data-url="/inventory/purchaseitem/inline-update" data-type="text" data-pk="'.$purchaseItem["id"].'" data-original-title="Enter sales price">'.$purchaseItem["salesPrice"].'</a></td>';
-            $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="#" id="'.$purchaseItem["barcode"].'">Add Sales</a></td>';
+            $data .= '<td class="numeric" ><a class="editable" data-name="SalesPrice" href="javascript:"  data-url="/inventory/purchaseitem/inline-update" data-type="text" data-pk="'.$purchaseItem["id"].'" data-original-title="Enter sales price">'.$purchaseItem["salesPrice"].'</a></td>';
+            $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem["barcode"].'">Add Sales</a></td>';
             $data .= '</tr>';
         }
 
