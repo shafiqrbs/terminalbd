@@ -571,8 +571,5 @@ function builderJs(){
 
     });
 
-
-
-
 }
 
