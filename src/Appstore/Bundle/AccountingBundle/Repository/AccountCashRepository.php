@@ -254,7 +254,7 @@ class AccountCashRepository extends EntityRepository
             $cash->setAccountBank($entity->getAccountBank());
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
         }elseif($entity->getTransactionMethod()->getId() == 3 ){
-            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(43));
+            //$cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(43));
             $cash->setAccountMobileBank($entity->getAccountMobileBank());
         }else{
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(36));
