@@ -71,24 +71,6 @@ class PreOrderController extends Controller
         ));
     }
 
-    /**
-     * Creates a form to create a PreOrder entity.
-     *
-     * @param PreOrder $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(PreOrder $entity)
-    {
-        $form = $this->createForm(new PreOrderType(), $entity, array(
-            'action' => $this->generateUrl('preorder_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
-    }
 
     /**
      * Displays a form to create a new PreOrder entity.

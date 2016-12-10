@@ -592,8 +592,8 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
         $menu['E-commerce']['Product']->addChild('Add Product',    array('route' => 'inventory_goods_new'))->setAttribute('icon', 'icon-th-list');
         $menu['E-commerce']['Product']->addChild('Product',        array('route' => 'inventory_goods'))->setAttribute('icon', 'icon-th-list');
-        $menu['E-commerce']['Product']->addChild('Product Home',   array('route' => 'ecommerce_home'))->setAttribute('icon', 'icon-th-list');
         $menu['E-commerce']['Product']->addChild('Promotion',      array('route' => 'ecommerce_promotion'))->setAttribute('icon', 'icon-th-list');
+        $menu['E-commerce']['Product']->addChild('Discount',      array('route' => 'ecommerce_discount'))->setAttribute('icon', 'icon-th-list');
         $menu['E-commerce']->addChild('Transaction', array('route' => 'account_expenditure'))
             ->setAttribute('icon','fa fa-bookmark')
             ->setAttribute('dropdown', true);
@@ -604,14 +604,15 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
         $menu['E-commerce']['Order']->addChild('Order',        array('route' => 'customer_order'))->setAttribute('icon', 'icon-th-list');
         $menu['E-commerce']['Order']->addChild('Pre-order',        array('route' => 'customer_preorder'))->setAttribute('icon', 'icon-th-list');
+        $menu['E-commerce']->addChild('E-commerce Template', array('route' => ''))
+            ->setAttribute('icon','fa fa-bookmark')
+            ->setAttribute('dropdown', true);
+        $menu['E-commerce']['E-commerce Template']->addChild('Home View', array('route' => 'ecommercehome'))->setAttribute('icon','fa fa-th-list');
+        $menu['E-commerce']['E-commerce Template']->addChild('Mange Template', array('route' => 'ecommercetemplate'))->setAttribute('icon','fa fa-th-list');
         $menu['E-commerce']->addChild('Setting', array('route' => ''))
             ->setAttribute('icon','fa fa-bookmark')
             ->setAttribute('dropdown', true);
         $menu['E-commerce']['Setting']->addChild('E-commerce Config', array('route' => 'ecommerce_config_modify'))->setAttribute('icon','fa fa-cog');
-        $menu['E-commerce']['Setting']->addChild('Home View', array('route' => 'ecommercehome'))->setAttribute('icon','fa fa-th-list');
-        $menu['E-commerce']['Setting']->addChild('Mange Template', array('route' => 'ecommercetemplate'))->setAttribute('icon','fa fa-th-list');
-        $menu['E-commerce']['Setting']->addChild('Promotion', array('route' => 'ecommerce_promotion'))->setAttribute('icon','fa fa-th-list');
-        $menu['E-commerce']['Setting']->addChild('Discount', array('route' => 'ecommerce_discount'))->setAttribute('icon','fa fa-th-list');
 
         return $menu;
     }

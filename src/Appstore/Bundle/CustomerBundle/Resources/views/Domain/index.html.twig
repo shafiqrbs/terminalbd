@@ -88,7 +88,7 @@
                                         <a href="{{ path('customer_preorder_new', { 'domain': entity.slug }) }} " target="_blank" class="btn yellow mini" ><i class="icon-envelope"></i></a>
                                         {% if entity.syndicate.parent is not empty and entity.syndicate.parent.slug == 'retailer-e-commerce' %}
                                         <a href="{{ path('order_product', { 'domain': entity.slug}) }}" target="_blank" class="btn blue mini" ><i class="icon-shopping-cart"></i></a>
-                                        <a href="{{ path('customer_preorder_new', { 'domain': entity.slug }) }} " target="_blank" class="btn green mini" ><i class="icon-shopping-cart"></i></a>
+                                        <a href="{{ path('preorder_new', { 'domain': entity.slug }) }} " target="_blank" class="btn green mini" ><i class="icon-shopping-cart"></i></a>
                                         {% endif %}
                                         </td>
                                     </tr>
