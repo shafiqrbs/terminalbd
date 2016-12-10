@@ -144,7 +144,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setSalesReturn($entity);
         $accountSales->setCustomer($entity->getSales()->getCustomer());
         /* Cash - Sales Return Payment Account */
-        $accountSales->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(35));
+       /* $accountSales->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(35));*/
         $accountSales->setToIncrease('Sales Return');
         $accountSales->setReturnAmount($entity->getTotal());
         $accountSales->setApprovedBy($entity->getCreatedBy());
