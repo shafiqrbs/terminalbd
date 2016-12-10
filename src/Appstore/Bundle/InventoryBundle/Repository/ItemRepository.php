@@ -157,6 +157,7 @@ class ItemRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('i');
         $query->join('i.inventoryConfig', 'ic');
+        $query->leftJoin('i.stockItems', 'stockItem');
         $query->leftJoin('i.vendor', 'vendor');
         $query->leftJoin('i.masterItem', 'masterItem');
         $query->leftJoin('i.color', 'color');
@@ -168,10 +169,7 @@ class ItemRepository extends EntityRepository
         $query->addSelect('masterItem.name as masterItemName');
         $query->addSelect('color.name as colorName');
         $query->addSelect('size.name as sizeName');
-        $query->addSelect('i.purchaseQuantity as purchaseQuantity');
-        $query->addSelect('i.purchaseQuantityReturn as purchaseQuantityReturn');
-        $query->addSelect('i.salesQuantity as salesQuantity');
-        $query->addSelect('i.salesQuantityReturn as salesQuantityReturn');
+        $query->addSelect('SUM(stockItem.quantity) as remainingQuantity');
         $query->where($query->expr()->like("i.skuSlug", "'%$item%'"  ));
         $query->andWhere("ic.id = :inventory");
         $query->setParameter('inventory', $inventory->getId());

@@ -289,7 +289,7 @@ var InventorySales = function(sales) {
         },
         formatResult: function(item){
 
-            return item.masterItemName +' - '+ item.colorName +' - '+ item.sizeName +' - '+ item.vendorName +' -> '+ ((item.purchaseQuantity) - (item.purchaseQuantityReturn + item.salesQuantity - item.salesQuantityReturn ) )
+            return item.masterItemName +' - '+ item.colorName +' - '+ item.sizeName +' - '+ item.vendorName +' -> '+ (item.remainingQuantity)
 
         }, // omitted for brevity, see the source of this page
         formatSelection: function(item){return item.sku + ' - ' + item.text}, // omitted for brevity, see the source of this page
