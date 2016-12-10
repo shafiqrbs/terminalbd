@@ -275,8 +275,6 @@ div.radio-list label{
 
 label.error {
     color: red;
-    background-image: url("../assets/bindu/img/error.png");
-    background-repeat: no-repeat;
     background-color: #fff;
     background-position: 9px 5px;
     padding-left: 30px;
@@ -295,10 +293,8 @@ label.error {
     z-index: 9999;
     background: #000033;
     opacity: 0.5;
-    display: n;
-    background-image: url("../global/img/waiting.gif");
-    background-repeat: no-repeat;
-    background-position: center center;
+    display: block;
+
 }
 
 .loading {
@@ -311,9 +307,6 @@ label.error {
     background: #000033;
     opacity: 0.5;
     display: block;
-    background-image: url("../global/img/waiting.gif");
-    background-repeat: no-repeat;
-    background-position: center center;
 }
 
 .mini-loading {
@@ -326,9 +319,7 @@ label.error {
     background: #000033;
     opacity: 0.5;
     display: block;
-    background-image: url('../global/img/loading.gif');
-    background-repeat: no-repeat;
-    background-position: center center;
+
 }
 
 #message{

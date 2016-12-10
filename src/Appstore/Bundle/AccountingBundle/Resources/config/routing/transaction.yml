@@ -18,8 +18,8 @@ account_transaction_bank:
     path:     /bank-cash
     defaults: { _controller: "AccountingBundle:Transaction:bank" }
 
-account_transaction_bkash:
-    path:     /bkash-cash
-    defaults: { _controller: "AccountingBundle:Transaction:bkash" }
+account_transaction_mobilebank:
+    path:     /mobile-cash
+    defaults: { _controller: "AccountingBundle:Transaction:mobileBank" }
 
 

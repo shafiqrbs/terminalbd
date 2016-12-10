@@ -20,7 +20,7 @@
                     </li>
                     <li><a href="#">Add/Edit sales</a></li>
                     <li class="pull-right btn blue disabled mini">
-                        <i class="fa fa-calendar"></i>
+                        <i class="fa fa-calendar"></i>c
                         {{ "now"|date("d-F-Y") }}
                     </li>
                 </ul>
@@ -64,7 +64,7 @@
                                         <li><strong>Sales ID:</strong>&nbsp;{{ entity.invoice }}</li>
                                         <li><strong>Total item:</strong>&nbsp;{{ entity.totalItem }}</li>
                                         <li><strong>Created:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
-                                        <li><strong>Created By:</strong>&nbsp;{% if entity.salesBy is defined and entity.salesBy is not empty %}{{ entity.salesBy.user.username }}{% endif %}</li>
+                                        <li><strong>Created By:</strong>&nbsp;{% if entity.salesBy is defined and entity.salesBy is not empty %}{{ entity.salesBy }}{% endif %}</li>
                                     </ul>
                                 </div>
 
@@ -83,8 +83,8 @@
                                     <h4>Payment method:</h4>
                                     <ul class="unstyled">
                                         <li><strong>Payment method:</strong>&nbsp;{{ entity.paymentMethod }}</li>
+                                        {% if entity.cardNo is not empty %}<li><strong>Cheque/Card no:</strong>&nbsp;{{ entity.cardNo }}</li>{% endif %}
                                         {% if entity.paymentCard is not empty %}<li><strong>Payment Card:</strong>&nbsp;{{ entity.paymentCard.name }}{% endif %}</li>
-                                        {% if entity.chequeCardNo is not empty %}<li><strong>Cheque/Card no:</strong>&nbsp;{{ entity.chequeCardNo }}</li>{% endif %}
                                         {% if entity.bank is not empty %}<li><strong>Bank:</strong>&nbsp;{{ entity.bank.name  }}</li>{% endif %}
 
                                     </ul>

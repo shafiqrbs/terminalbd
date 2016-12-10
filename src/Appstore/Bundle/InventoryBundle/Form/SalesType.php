@@ -52,7 +52,7 @@ class SalesType extends AbstractType
                 'required'    => false,
                 'property' => 'name',
                 'class' => 'Setting\Bundle\ToolBundle\Entity\PaymentCard',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'empty_value' => '---Choose payment card---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')

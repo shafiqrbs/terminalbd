@@ -171,7 +171,7 @@ class AccountCashRepository extends EntityRepository
 
         }elseif($entity->getTransactionMethod()->getId() == 3 ){
 
-            $array = array('globalOption' => $entity->getGlobalOption(),'transactionMethod' => $entity->getTransactionMethod(),'accountBkash' => $entity->getAccountMobileBank(), 'processHead' => $processHead );
+            $array = array('globalOption' => $entity->getGlobalOption(),'transactionMethod' => $entity->getTransactionMethod(),'accountMobileBank' => $entity->getAccountMobileBank(), 'processHead' => $processHead );
 
         }else{
 

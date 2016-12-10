@@ -133,9 +133,10 @@ class PurchaseItemRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('i');
         $qb->join('i.purchase', 'p');
+        $qb->join('i.stockItem', 'stockitem');
         $qb->select('i.barcode as id');
         $qb->addSelect('i.barcode as text');
-        $qb->addSelect('i.quantity as item_name');
+        $qb->addSelect('SUM(stockitem.quantity) as item_name');
         $qb->where($qb->expr()->like("i.barcode", "'%$item%'"  ));
         $qb->andWhere("p.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory->getId());
@@ -145,12 +146,14 @@ class PurchaseItemRepository extends EntityRepository
 
     }
 
-    public function itemPurchaseDetails($inventory,$invoice,$id)
+    public function itemPurchaseDetails($inventory,$id)
     {
         $qb = $this->createQueryBuilder('purchaseItem');
         $qb->join('purchaseItem.item','item');
+        $qb->join('purchaseItem.stockItem','stockItem');
         $qb->join('purchaseItem.purchase','p');
         $qb->select('p.receiveDate as receiveDate');
+        $qb->addSelect('SUM(stockItem.quantity) as remainingQnt');
         $qb->addSelect('item.sku as sku');
         $qb->addSelect('item.skuSlug as skuSlug');
         $qb->addSelect('p.memo as memo');
@@ -174,6 +177,7 @@ class PurchaseItemRepository extends EntityRepository
             $data .= '<td class="numeric" >'.$purchaseItem["sku"].'/'.$purchaseItem["skuSlug"].'</td>';
             $data .= '<td class="numeric" >'.$received.'/'.$purchaseItem["memo"] .'</td>';
             $data .= '<td class="numeric" >'.$purchaseItem["quantity"].'</td>';
+            $data .= '<td class="numeric" >'.$purchaseItem["remainingQnt"].'</td>';
             $data .= '<td class="numeric" >'.$purchaseItem["purchasePrice"].'</td>';
             $data .= '<td class="numeric" ><a class="editable" data-name="SalesPrice" href="javascript:"  data-url="/inventory/purchaseitem/inline-update" data-type="text" data-pk="'.$purchaseItem["id"].'" data-original-title="Enter sales price">'.$purchaseItem["salesPrice"].'</a></td>';
             $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem["barcode"].'">Add Sales</a></td>';

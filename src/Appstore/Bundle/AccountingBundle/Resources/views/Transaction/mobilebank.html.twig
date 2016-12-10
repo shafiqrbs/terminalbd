@@ -39,7 +39,7 @@
                                 <ul class="dropdown-menu pull-right">
                                     <li><a href="{{ path('account_transaction_cash') }}"><i class="icon-plus-sign"></i>&nbsp;Account of Cash</a></li>
                                     <li><a href="{{ path('account_transaction_bank') }}"><i class="icon-th-list"></i>&nbsp;Account of Bank</a></li>
-                                    <li><a href="{{ path('account_transaction_bkash') }}"><i class="icon-th-list"></i>&nbsp;Account of mobile</a></li>
+                                    <li><a href="{{ path('account_transaction_mobilebank') }}"><i class="icon-th-list"></i>&nbsp;Account of mobile</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -59,10 +59,10 @@
 
                                         </div>
                                         <div class="span3">
-                                            <select name="accountBkash" id="accountBkash" class="select2 leftMargin span12">
+                                            <select name="accountMobileBank" id="accountMobileBank" class="select2 leftMargin span12">
                                                 <option value="" >--Select Mobile Account--</option>
-                                                {% for account in accountBkashs %}
-                                                    <option {% if searchForm.accountBkash is defined and searchForm.accountBkash == account.id %} selected="selected" {% endif %} value="{{ account.id }}" >{{ account.name }}</option>
+                                                {% for account in accountMobileBanks %}
+                                                    <option {% if searchForm.accountMobileBank is defined and searchForm.accountMobileBank == account.id %} selected="selected" {% endif %} value="{{ account.id }}" >{{ account.name }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -92,7 +92,7 @@
                                 </tr>
                                 <tr class="head-grey">
                                     <th class="numeric" >Created</th>
-                                    <th class="numeric" >Mobile</th>
+                                    <th class="numeric" >Mobile Account</th>
                                     <th class="numeric" >Account Head</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Ref no.</th>
@@ -105,7 +105,7 @@
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{% if entity.accountBkash is not empty %}{{ entity.accountBkash.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.accountMobileBank is not empty %}{{ entity.accountMobileBank.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.accountHead is not empty %}{{ entity.accountHead.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.processHead }}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>

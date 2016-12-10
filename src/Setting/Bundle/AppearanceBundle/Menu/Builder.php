@@ -707,7 +707,7 @@ class Builder extends ContainerAware
         $menu['Finance']['Cash']->addChild('Cash Overview',        array('route' => 'account_transaction_cash_overview'))->setAttribute('icon', 'icon-th-list');
         $menu['Finance']['Cash']->addChild('Cash Transaction',        array('route' => 'account_transaction_cash'))->setAttribute('icon', 'icon-th-list');
         $menu['Finance']['Cash']->addChild('Bank Transaction',        array('route' => 'account_transaction_bank'))->setAttribute('icon', 'icon-th-list');
-        $menu['Finance']['Cash']->addChild('Mobile Transaction',        array('route' => 'account_transaction_bkash'))->setAttribute('icon', 'icon-th-list');
+        $menu['Finance']['Cash']->addChild('Mobile Transaction',        array('route' => 'account_transaction_mobilebank'))->setAttribute('icon', 'icon-th-list');
         $menu['Finance']->addChild('Expenditure', array('route' => 'account_expenditure'))
               ->setAttribute('icon','fa fa-money')
               ->setAttribute('dropdown', true);

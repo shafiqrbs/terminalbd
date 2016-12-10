@@ -3,27 +3,28 @@
     <div class="container-fluid">
         <!-- BEGIN purchase_order HEADER-->
         <div class="row-fluid row-print">
-            <table class="table">
-                <tr>
-                    <td>
-                        <div class="span4  pull-left invoice-logo-space">
-                            <img src="/{{ entity.inventoryConfig.globalOption.templateCustomize.webPath('logo') }}">
-                        </div>
-                    </td>
-
-                    <td>
-                        <div class="span4 pull-right">
-                            <ul class="unstyled">
-                                <li><strong>{{ entity.inventoryConfig.globalOption.name }}</strong></li>
-                                <li><i class="icon-phone"></i>&nbsp;{{ entity.inventoryConfig.globalOption.mobile }}</li>
-                                {% if  entity.inventoryConfig.globalOption.email is not empty %}<li><i class="icon-envelope"></i>&nbsp;{{ entity.inventoryConfig.globalOption.email }}</li>{% endif %}
-                                {% if  entity.inventoryConfig.globalOption.contactPage.address1 %}<li><i class="icon-home"></i>&nbsp;{{ entity.inventoryConfig.globalOption.contactPage.address1 }}</li>{% endif %}
-                                {% if entity.inventoryConfig.globalOption.domain is not empty %}<li><i class="icon-link"></i>&nbsp;www.{{ entity.inventoryConfig.globalOption.domain }}</li>{% endif %}
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+            <div class="span12">
+                <table class="table">
+                    <tr>
+                        <td style="width: 60%">
+                            <div class="span4  pull-left invoice-logo-space">
+                                <img src="/{{ entity.inventoryConfig.globalOption.templateCustomize.webPath('logo') }}">
+                            </div>
+                        </td>
+                        <td style="width: 33%">
+                            <div class="span4 pull-right">
+                                <ul class="unstyled">
+                                    <li><strong>{{ entity.inventoryConfig.globalOption.name }}</strong></li>
+                                    <li><i class="icon-phone"></i>&nbsp;{{ entity.inventoryConfig.globalOption.mobile }}</li>
+                                    {% if  entity.inventoryConfig.globalOption.email is not empty %}<li><i class="icon-envelope"></i>&nbsp;{{ entity.inventoryConfig.globalOption.email }}</li>{% endif %}
+                                    {% if  entity.inventoryConfig.globalOption.contactPage.address1 %}<li><i class="icon-home"></i>&nbsp;{{ entity.inventoryConfig.globalOption.contactPage.address1 }}</li>{% endif %}
+                                    {% if entity.inventoryConfig.globalOption.domain is not empty %}<li><i class="icon-link"></i>&nbsp;www.{{ entity.inventoryConfig.globalOption.domain }}</li>{% endif %}
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
         <!-- END purchase_order HEADER-->
 
@@ -73,7 +74,7 @@
                                                 <ul class="unstyled">
                                                     <li><strong>Payment method:</strong>&nbsp;{{ entity.paymentMethod }}</li>
                                                     {% if entity.paymentCard is not empty %}<li><strong>Payment Card:</strong>&nbsp;{{ entity.paymentCard.name }}{% endif %}</li>
-                                                    {% if entity.chequeCardNo is not empty %}<li><strong>Cheque/Card no:</strong>&nbsp;{{ entity.chequeCardNo }}</li>{% endif %}
+                                                    {% if entity.cardNo is not empty %}<li><strong>Cheque/Card no:</strong>&nbsp;{{ entity.cardNo }}</li>{% endif %}
                                                     {% if entity.bank is not empty %}<li><strong>Bank:</strong>&nbsp;{{ entity.bank.name  }}</li>{% endif %}
 
                                                 </ul>

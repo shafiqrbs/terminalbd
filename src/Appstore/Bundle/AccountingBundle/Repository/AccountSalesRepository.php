@@ -112,12 +112,8 @@ class AccountSalesRepository extends EntityRepository
         $em = $this->_em;
         $accountSales = new AccountSales();
 
-        if($entity->getTransactionMethod()->getId() == 2 ){
-            $accountSales->setAccountBank($entity->getAccountBank());
-        }if($entity->getTransactionMethod() ->getId()== 3 ){
-            $accountSales->setAccountBkash($entity->getAccountMobileBank());
-        }
-
+        $accountSales->setAccountBank($entity->getAccountBank());
+        $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
         $accountSales->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
         $accountSales->setSales($entity);
         $accountSales->setCustomer($entity->getCustomer());

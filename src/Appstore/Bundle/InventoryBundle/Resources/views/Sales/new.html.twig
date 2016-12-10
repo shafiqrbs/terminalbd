@@ -68,7 +68,8 @@
                                                 <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
                                                 <th class="numeric" >SKU/SKU Slug</th>
                                                 <th class="numeric" >Received/Memo</th>
-                                                <th class="numeric" >Qnt</th>
+                                                <th class="numeric" >Purchase Qnt</th>
+                                                <th class="numeric" >Remaining Qnt</th>
                                                 <th class="numeric" >Purchase price</th>
                                                 <th class="numeric" >Sales price</th>
                                                 <th class="numeric" >Action</th>
@@ -184,7 +185,7 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="span12 input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom span3">Sub-Total TK.</span><input class="m-wrap span7 numeric salesTotal disabled-field" readonly="readonly" type="text" value="{{ entity.total }}">
+                                                    <span class="add-on add-on-custom span3">Sub-Total TK.</span><input class="m-wrap span7 numeric salesTotal disabled-field" readonly="readonly" id="subTotal" type="text" value="{{ entity.total }}">
                                                     <input class="m-wrap span9 numeric" name="vat" id="vat" type="hidden">
                                                 </div>
                                             </div>
@@ -209,13 +210,12 @@
                                                     <span class="add-on add-on-custom span3">Due TK.</span><input class="m-wrap span7 numeric disabled-field" type="text" name="dueAmount" readonly="readonly" id="dueAmount">
                                                 </div>
                                             </div>
-
                                         </div>
                                         <div class="row-fluid">
                                                <div class="span12 input-append-border">
                                                {{ form_widget(form.transactionMethod) }}
                                                {{ form_errors(form.transactionMethod) }}
-                                               </div>
+                                                </div>
                                         </div>
                                         <div id="cartMethod">
                                             <div class="row-fluid">
@@ -346,7 +346,6 @@
                             </tr>
                             </thead>
                             <tbody id="sales">
-
                             {% for dailySales in todaySales %}
                                 <tr id="salesRemove-{{ dailySales.id }}">
                                     <td> {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ dailySales.id  }}" ><span>[+]</span></span>{% endif %}</td>
@@ -357,7 +356,7 @@
                                     <td class="numeric" >{{ dailySales.discount|number_format(2, '.', ',')  }}</td>
                                     <td class="numeric" >{{ dailySales.due|number_format(2, '.', ',')  }}</td>
                                     <td class="numeric" >{{ dailySales.total|number_format(2, '.', ',')  }}</td>
-                                    <td class="numeric" >{{ dailySales.paymentMethod }}</td>
+                                    <td class="numeric" >{% if  dailySales.transactionMethod is not empty %}{{ dailySales.transactionMethod.name }}{% endif %}</td>
                                     <td class="numeric" >{{ dailySales.salesBy }}</td>
                                     <td class="numeric" >
                                         {% if dailySales.paymentStatus == "Due" %}

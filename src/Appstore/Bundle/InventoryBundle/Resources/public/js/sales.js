@@ -15,13 +15,13 @@ var InventorySales = function(sales) {
             url: Routing.generate('inventory_sales_item_search'),
             type: 'POST',
             data:'barcode='+barcode+'&sales='+ sales,
-            success: function(response) {
+            success: function(response){
                 $('#barcode').focus().val('');
                 obj = JSON.parse(response);
                 $('#purchaseItem').html(obj['purchaseItem']);
                 $('#salesItem').html(obj['salesItem']);
                 $('.salesTotal').html(obj['salesTotal']);
-                $('.salesTotal').val(obj['salesTotal']);
+                $('#subTotal').val(obj['salesTotal']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 FormComponents.init();
@@ -47,6 +47,7 @@ var InventorySales = function(sales) {
                 $('#purchaseItem').html(obj['purchaseItem']);
                 $('#salesItem').html(obj['salesItem']);
                 $('.salesTotal').html(obj['salesTotal']);
+                $('#subTotal').val(obj['salesTotal']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 FormComponents.init();
@@ -71,6 +72,7 @@ var InventorySales = function(sales) {
                 $('#purchaseItem').html(obj['purchaseItem']);
                 $('#salesItem').html(obj['salesItem']);
                 $('.salesTotal').html(obj['salesTotal']);
+                $('#subTotal').val(obj['salesTotal']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 FormComponents.init();

@@ -147,7 +147,7 @@ class TransactionController extends Controller
      * Lists all Transaction entities.
      *
      */
-    public function bkashAction()
+    public function mobileBankAction()
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
@@ -156,12 +156,12 @@ class TransactionController extends Controller
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->accountCashOverview($globalOption,3,$data);
         $processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
-        $accountBkashs = $this->getDoctrine()->getRepository('AccountingBundle:AccountBkash')->findBy(array('globalOption'=>$globalOption,'status'=>1));
-        return $this->render('AccountingBundle:Transaction:bkash.html.twig', array(
+        $accountMobileBanks = $this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->findBy(array('globalOption'=>$globalOption,'status'=>1));
+        return $this->render('AccountingBundle:Transaction:mobilebank.html.twig', array(
             'entities' => $pagination,
             'overview' => $overview,
             'processHeads' => $processHeads,
-            'accountBkashs' => $accountBkashs,
+            'accountMobileBanks' => $accountMobileBanks,
             'searchForm' => $data,
         ));
 

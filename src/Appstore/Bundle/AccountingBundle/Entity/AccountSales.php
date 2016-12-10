@@ -50,9 +50,9 @@ class AccountSales
     private  $accountCash;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="accountSales" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="accountSales" )
      **/
-    private  $accountBkash;
+    private  $accountMobileBank;
 
 
     /**
@@ -521,6 +521,22 @@ class AccountSales
     public function setBranches($branches)
     {
         $this->branches = $branches;
+    }
+
+    /**
+     * @return AccountMobileBank
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param AccountMobileBank $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
     }
 }
 
