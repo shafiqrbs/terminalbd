@@ -72,7 +72,7 @@ function builderJs(){
     });
 
 
-    jQuery.validator.addMethod("valDomain",function(nname){
+    jQuery.validator.addMethod("valDomain",function(name){
 
         var arr = new Array(
             '.com','.net','.org','.biz','.coop','.info','.museum','.name',
@@ -100,7 +100,7 @@ function builderJs(){
             '.us','.uy','.uz','.va','.vc','.ve','.vg','.vi','.vn','.vu','.ws',
             '.wf','.ye','.yt','.yu','.za','.zm','.zw');
 
-        var mai = nname;
+        var mai = name;
         var val = true;
 
         var dot = mai.lastIndexOf(".");
@@ -160,7 +160,7 @@ function builderJs(){
         {
             return false;
         }
-    }, 'Invalid sub-domain name, please only name without .com, .info, ,.org etc');
+    }, 'Invalid sub-domain name, please only name without .com, .info, .org etc');
 
 
 
@@ -208,7 +208,8 @@ function builderJs(){
                     $('.main-setting').fadeOut(3500);
                 },
                 complete: function(){
-                    console.log('ok');
+                    document.getElementById('frame').contentDocument.location.reload(true);
+                    $('.ajax-loading').fadeOut(3000);
                 }
             });
         }
@@ -526,7 +527,6 @@ function builderJs(){
             reader.onload = function (e) {
                 $('#bgImagePreview').show().attr('src', e.target.result);
             }
-
             reader.readAsDataURL(input.files[0]);
         }
     }
@@ -542,7 +542,6 @@ function builderJs(){
             reader.onload = function (e) {
                 $('#headerBgImagePreview').show().attr('src', e.target.result);
             }
-
             reader.readAsDataURL(input.files[0]);
         }
     }

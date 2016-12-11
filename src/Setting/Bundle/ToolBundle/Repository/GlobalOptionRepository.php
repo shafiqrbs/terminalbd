@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ToolBundle\Repository;
 
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Doctrine\ORM\EntityRepository;
@@ -264,6 +265,12 @@ class GlobalOptionRepository extends EntityRepository
         $inventory->setGlobalOption($globalOption);
         $em->persist($inventory);
 
+        $customer = new Customer();
+        $customer->setGlobalOption($globalOption);
+        $customer->setName('Default');
+        $em->persist($customer);
+
+
         $ecommerce = new EcommerceConfig();
         $ecommerce->setGlobalOption($globalOption);
         $em->persist($ecommerce);
@@ -347,7 +354,7 @@ class GlobalOptionRepository extends EntityRepository
        // $entity->setStatus(true);
         if(isset($data['domain']) and $data['domain'] != '') {
 
-            $entity->setDomain($this->remove_http($data['domain']));
+            $entity->setDomain($this->removeDomainPrefix($data['domain']));
         }
 
         if(isset($data['subDomain']) and $data['subDomain'] != '') {

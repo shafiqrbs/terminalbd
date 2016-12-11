@@ -25,6 +25,7 @@ class DefaultController extends Controller
         $routes = array();
 
         foreach ($domains as $data)
+
             $routes['_domain_app_' . strtolower(str_replace('.', '_', $data['domain']))] = array(
                 'resource' => $data['resource'],
                 'host' => $data['domain'],
