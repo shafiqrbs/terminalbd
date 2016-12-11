@@ -67,7 +67,7 @@ class SalesType extends AbstractType
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
-                        ->where("u.isDelete IS NULL")
+                        ->where("u.isDelete != 1")
                         ->andWhere("u.globalOption =".$this->globalOption->getId())
                         ->orderBy("u.username", "ASC");
                 }

@@ -41,7 +41,7 @@ class Customer
     private  $accountSalesReturn;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="customer" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="customer" , cascade={"persist", "remove"})
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $serviceSales;

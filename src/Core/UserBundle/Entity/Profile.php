@@ -44,7 +44,7 @@ class Profile
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="customers")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="profiles")
      **/
 
     protected $location;

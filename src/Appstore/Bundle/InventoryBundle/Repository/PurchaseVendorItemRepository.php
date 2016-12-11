@@ -175,14 +175,12 @@ class PurchaseVendorItemRepository extends EntityRepository
 
     public function salesItemWithSearch($inventory)
     {
-
-        $qb = $this->createQueryBuilder('item');
-        $qb->join("item.masterItem",'masterItem' );
-        $qb->where("item.source = 'service'");
-        $qb->andWhere("item.inventoryConfig = :inventory");
+        $qb = $this->createQueryBuilder('e');
+        $qb->join("e.masterItem",'masterItem' );
+        $qb->where("e.source = 'service'");
+        $qb->andWhere("e.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
-        $qb->groupBy('item.masterItem');
-        $qb->orderBy('item.name','ASC');
+        $qb->orderBy('e.name','ASC');
         $qb->getQuery()->getResult();
         return  $qb;
 

@@ -44,9 +44,9 @@ class ServiceSalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->salesItemWithSearch($inventory,$data);
+        $entities = $em->getRepository('InventoryBundle:ServiceSales')->findBy(array('inventoryConfig' => $inventory));
         $pagination = $this->paginate($entities);
-        return $this->render('InventoryBundle:SalesService:index.html.twig', array(
+        return $this->render('InventoryBundle:ServiceSales:index.html.twig', array(
             'entities' => $pagination,
         ));
     }
@@ -57,22 +57,20 @@ class ServiceSalesController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new PurchaseVendorItem();
+        $entity = new ServiceSales();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setInventoryConfig($inventory);
-            $entity->setSource('service');
-            $entity->setIsWeb(true);
-            $entity->upload();
+            $entity->setCustomer($entity->getCustomer());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
             );
-            return $this->redirect($this->generateUrl('inventory_serviceitem_edit',array('id'=>$entity->getId())));
+            return $this->redirect($this->generateUrl('inventory_servicesales_add',array('id'=>$entity->getId())));
         }
         $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
         return $this->render('InventoryBundle:ServiceItem:new.html.twig', array(
@@ -94,7 +92,7 @@ class ServiceSalesController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createForm(new ServiceSalesType($globalOption), $entity, array(
-            'action' => $this->generateUrl('inventory_serviceitem_create'),
+            'action' => $this->generateUrl('inventory_servicesales_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'action',
@@ -114,12 +112,11 @@ class ServiceSalesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new ServiceSales();
-        $form   = $this->createCreateForm($entity);
-
-        return $this->render('InventoryBundle:ServiceSales:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entity->setInventoryConfig($inventory);
+        $em->persist($entity);
+        $em->flush();
+        return $this->redirect($this->generateUrl('inventory_servicesales_add',array('id'=>$entity->getId())));
     }
 
     /**
@@ -145,42 +142,39 @@ class ServiceSalesController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing PurchaseVendorItem entity.
+     * Displays a form to edit an existing ServiceSales entity.
      * @Secure(roles="ROLE_DOMAIN_SERVICE_MANAGER")
      */
-    public function editAction(PurchaseVendorItem $entity)
+
+    public function editAction(ServiceSales $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        $sizes = $em->getRepository('InventoryBundle:ItemSize')->getCategoryBaseSize($entity);
-        $colors = $em->getRepository('InventoryBundle:ItemColor')->findBy(array('inventoryConfig'=>$entity->getInventoryConfig(), 'status'=>1),array('name'=>'ASC'));
-
+        $data = $_REQUEST;
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseVendorItem entity.');
         }
-        $editForm = $this->createEditForm($entity);
+        $editForm = $this->ServiceSalesType($entity);
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->salesItemWithSearch($inventory);
-        return $this->render('InventoryBundle:ServiceItem:edit.html.twig', array(
+        $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->findItemWithSearch($inventory,$data);
+        return $this->render('InventoryBundle:ServiceSales:new.html.twig', array(
             'entity'        => $entity,
-            'sizes'         => $sizes,
-            'colors'         => $colors,
+            'entities'      => $entities,
             'form'          => $editForm->createView(),
         ));
     }
 
     /**
-     * Creates a form to edit a PurchaseVendorItem entity.
+     * Creates a form to edit a ServiceSales entity.
      *
-     * @param PurchaseVendorItem $entity The entity
+     * @param ServiceSales $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(PurchaseVendorItem $entity)
+    private function createEditForm(ServiceSales $entity)
     {
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
-        $form = $this->createForm(new ServiceItemType($em,$inventory), $entity, array(
-            'action' => $this->generateUrl('inventory_serviceitem_update', array('id' => $entity->getId())),
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new ServiceSalesType($globalOption), $entity, array(
+            'action' => $this->generateUrl('inventory_servicesales_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'action',
@@ -400,6 +394,18 @@ class ServiceSalesController extends Controller
         $em->flush();
         exit;
 
+    }
+
+    public function addAction(ServiceSales $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->findItemWithSearch($inventory,$data);
+        return $this->render('InventoryBundle:ServiceSales:edit.html.twig', array(
+            'entity'      => $entity,
+            'entities'      => $entities,
+        ));
     }
 
 

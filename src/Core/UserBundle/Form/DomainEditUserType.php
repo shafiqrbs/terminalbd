@@ -4,6 +4,8 @@ namespace Core\UserBundle\Form;
 
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\LocationBundle\Repository\LocationRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -14,6 +16,18 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class DomainEditUserType extends AbstractType
 {
 
+    /** @var  GlobalOption */
+    private $globalOption;
+
+    /** @var  LocationRepository */
+    private $location;
+
+
+    function __construct(GlobalOption $globalOption, LocationRepository $location)
+    {
+        $this->globalOption = $globalOption;
+        $this->location = $location;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -29,7 +43,7 @@ class DomainEditUserType extends AbstractType
                     ))
             )
             ->add('roles', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12 check-list'),
+                'attr'=>array('class'=>'m-wrap check-list'),
                 'required'=>true,
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
@@ -40,7 +54,7 @@ class DomainEditUserType extends AbstractType
                 'choices' => array('ROLE_DOMAIN_USER' => 'User','ROLE_DOMAIN_INVENTORY_SALES' => 'Inventory Sales/Delivery','ROLE_DOMAIN_INVENTORY_PURCHASE' => 'Inventory Purchase/Receive',  'ROLE_DOMAIN_MANAGER' => 'Domain Manager', 'ROLE_DOMAIN_INVENTORY' => 'Inventory Manager')))
 
             ->add('enabled');
-            $builder->add('profile', new DomainProfileType());
+            $builder->add('profile', new DomainProfileType($this->globalOption,$this->location));
 
     }
 

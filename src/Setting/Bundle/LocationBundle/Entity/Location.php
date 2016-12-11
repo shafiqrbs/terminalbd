@@ -77,7 +77,7 @@ class Location
     /**
      * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\Profile", mappedBy="location")
      */
-    protected $customers;
+    protected $profiles;
 
     /**
      * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\Profile", mappedBy="district")
@@ -279,15 +279,6 @@ class Location
     /**
      * @return Profile
      */
-    public function getCustomers()
-    {
-        return $this->customers;
-    }
-
-
-    /**
-     * @return Profile
-     */
     public function getDistrictProfiles()
     {
         return $this->districtProfiles;
@@ -324,4 +315,13 @@ class Location
     {
         return $this->orders;
     }
+
+    /**
+     * @return Profile
+     */
+    public function getProfiles()
+    {
+        return $this->profiles;
+    }
+
 }

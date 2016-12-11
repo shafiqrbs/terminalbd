@@ -40,11 +40,11 @@ class ServiceSalesType extends AbstractType
                 'property' => 'username',
                 'attr'=>array('class'=>'span12 '),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
+                    new NotBlank(array('message'=>'Assign to any user'))
                 ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p' )
-                        ->where("p.isDelete IS NULL")
+                        ->where("p.isDelete != 1")
                         ->andWhere("p.globalOption =".$this->globalOption->getId())
                         ->orderBy("p.username","ASC");
                 },

@@ -78,7 +78,9 @@ class DomainUserController extends Controller
      */
     private function createCreateForm(User $entity)
     {
-        $form = $this->createForm(new DomainSignType(), $entity, array(
+        $globalOption = $this->getUser()->getGlobalOption();
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new DomainSignType($globalOption,$location), $entity, array(
             'action' => $this->generateUrl('domain_create'),
             'method' => 'POST',
             'attr' => array(
@@ -150,7 +152,9 @@ class DomainUserController extends Controller
     */
     private function createEditForm(User $entity)
     {
-        $form = $this->createForm(new \Core\UserBundle\Form\DomainEditUserType(), $entity, array(
+        $globalOption = $this->getUser()->getGlobalOption();
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new \Core\UserBundle\Form\DomainEditUserType($globalOption,$location), $entity, array(
             'action' => $this->generateUrl('domain_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

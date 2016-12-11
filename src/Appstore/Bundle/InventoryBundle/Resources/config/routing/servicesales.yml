@@ -6,6 +6,10 @@ inventory_servicesales_show:
     path:     /{id}/show
     defaults: { _controller: "InventoryBundle:ServiceSales:show" }
 
+inventory_servicesales_add:
+    path:     /{id}/item-add
+    defaults: { _controller: "InventoryBundle:ServiceSales:add" }
+
 inventory_servicesales_new:
     path:     /new
     defaults: { _controller: "InventoryBundle:ServiceSales:new" }

@@ -4,6 +4,8 @@ namespace Core\UserBundle\Form;
 
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\LocationBundle\Repository\LocationRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -15,6 +17,19 @@ class DomainSignType extends AbstractType
 {
 
 
+    /** @var  GlobalOption */
+    private $globalOption;
+
+    /** @var  LocationRepository */
+    private $location;
+
+
+    function __construct(GlobalOption $globalOption, LocationRepository $location)
+    {
+        $this->globalOption = $globalOption;
+        $this->location = $location;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -22,6 +37,7 @@ class DomainSignType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+
             ->add('roles', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12  check-list'),
                 'required'=>true,
@@ -44,6 +60,8 @@ class DomainSignType extends AbstractType
             ->add('plainPassword', 'repeated', array(
                 'attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off'),
                 'type' => 'password',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please enter user password'))),
                 'options' => array('translation_domain' => 'FOSUserBundle'),
                 'first_options' => array('label' => 'form.password'),
                 'second_options' => array('label' => 'form.password_confirmation'),
@@ -51,11 +69,11 @@ class DomainSignType extends AbstractType
             ))
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter your valid email address'),
                     'constraints' =>array(
-                        new NotBlank(array('message'=>'Please enter your email address')),
+                        new NotBlank(array('message'=>'Please enter user email address')),
                         new Length(array('max'=>200))
-                    ))
+            ))
             );
-            $builder->add('profile', new DomainProfileType());
+            $builder->add('profile', new DomainProfileType($this->globalOption,$this->location));
 
     }
 
