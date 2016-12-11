@@ -680,7 +680,7 @@
         type: "POST",
         data: 'district='+ district,
         beforeSend: function() {
-            $('#child').html("<img src='{{ asset('assets/global/img/waiting.gif') }}' />").fadeIn(30000);
+            $('#child').show().addClass('loading').fadeIn(3000);
         }
         }).done(function(child){
             $('#child').html(child);
