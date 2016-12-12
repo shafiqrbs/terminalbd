@@ -60,7 +60,7 @@ class Promotion
     /**
      * @var array
      *
-     * @ORM\Column(name="type", type="array",nullable=true)
+     * @ORM\Column(name="type", type="array", nullable=true)
      */
     private $type;
 

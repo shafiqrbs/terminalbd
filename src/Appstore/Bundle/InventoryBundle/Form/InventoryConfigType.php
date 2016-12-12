@@ -28,8 +28,6 @@ class InventoryConfigType extends AbstractType
                 'choices' => array(
                     'Pos' => 'Point of sales(POS)',
                     'ManualPos' => 'Manual Sales System',
-                    'Delivery' => 'Delivery',
-                    'TemporaryDelivery' => 'Temporary Delivery',
                     'BranchInvoice' => 'Branch Invoice',
                 ),
                 'required'    => true,

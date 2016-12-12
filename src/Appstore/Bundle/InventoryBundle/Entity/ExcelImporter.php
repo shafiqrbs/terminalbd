@@ -36,6 +36,12 @@ class ExcelImporter
      */
     private $name;
 
+    /**
+     * @Gedmo\Blameable(on="create")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="excelImporters" )
+     **/
+    private  $createdBy;
+
 
     /**
      * @var \DateTime
@@ -264,6 +270,22 @@ class ExcelImporter
     public function setProgress($progress)
     {
         $this->progress = $progress;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * @param mixed $createdBy
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
     }
 
 

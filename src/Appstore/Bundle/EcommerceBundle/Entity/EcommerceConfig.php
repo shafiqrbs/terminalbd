@@ -71,6 +71,13 @@ class EcommerceConfig
     /**
      * @var integer
      *
+     * @ORM\Column(name="perPage", type="smallint", nullable = true)
+     */
+     private $perPage = 15;
+
+     /**
+     * @var integer
+     *
      * @ORM\Column(name="perColumn", type="smallint", nullable = true)
      */
      private $perColumn = 4;
@@ -101,7 +108,7 @@ class EcommerceConfig
      *
      * @ORM\Column(name="cart", type="boolean")
      */
-    private $cart = false;
+    private $cart = true;
 
     /**
      * @var boolean
@@ -433,6 +440,22 @@ class EcommerceConfig
     public function setTemplates($templates)
     {
         $this->templates = $templates;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPerPage()
+    {
+        return $this->perPage;
+    }
+
+    /**
+     * @param int $perPage
+     */
+    public function setPerPage($perPage)
+    {
+        $this->perPage = $perPage;
     }
 
 }

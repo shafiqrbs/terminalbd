@@ -95,16 +95,6 @@
             <div class="brclear"></div>
             <label>Address</label>
             <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="address1" class="" type="text" value="{{ entity.contactPage.address1 }}" placeholder="Enter your communication address" name="address1"></p>
-            <label>District</label>
-            <p>
-                <select name="district" id="district" class="select2" >
-                    <option>Select district </option>
-                    {% for location in locations %}
-                        <option {% if entity.contactPage.district is defined and entity.contactPage.district.id|default('') == location.id %} selected="selected" {% endif %} value="{{ location.id }}">{{ location.name }}</option>
-                    {% endfor %}
-                </select>
-            </p>
-            <div id="child">{% if(child) %}{{ child|raw }}{% endif %}</div>
             <label>Zip/Postal Code</label>
             <p><span class="fa-icon"><i class="fa  fa-pencil"></i></span><input id="postalCode" class="" type="text" value="{{ entity.contactPage.postalCode }}" placeholder="Enter your postal code" name="postalCode"></p>
             <label>Additional Phone & Mobile</label>

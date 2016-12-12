@@ -359,7 +359,7 @@ class WebServiceProductController extends Controller
         $data = array(
 
             'id' => $subitem->getId(),
-            'name'=> $masterItem.$product->getName(),
+            'name'=> $masterItem.' '.$product->getWebName(),
             'brand'=> !empty($product->getBrand()) ? $product->getBrand()->getName():'',
             'category'=> !empty($product->getMasterItem()->getCategory()) ? $product->getMasterItem()->getCategory()->getName():'',
             'size'=>!empty($subitem->getSize()) ? $subitem->getSize()->getName():0 ,

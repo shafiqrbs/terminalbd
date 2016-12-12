@@ -19,9 +19,12 @@ class ContactOpeningType extends AbstractType
             ->add('startHour','text', array('attr'=>array('class'=>'m-wrap small clockface_1 span10', 'data-format' => 'hh:mm A','placeholder'=>'Start hour')))
             ->add('endHour','text', array('attr'=>array('class'=>'m-wrap small clockface_1 span10', 'data-format' => 'hh:mm A', 'placeholder'=>'End hour')))
             ->add('weeklyOffDay', 'choice', array(
-                'attr'=>array('class'=>'selectbox span12'),
-                'choices' => array('' => 'Weekly off day','Sunday' => 'Sunday',  'Monday' => 'Monday', 'Tuesday' => 'Tuesday', 'Wednesday' => 'Wednesday', 'Thursday' => 'Thursday', 'Friday' => 'Friday', 'Saturday' => 'Saturday'),
+                'attr'=>array('class'=>'check-list span12'),
+                'expanded'      =>true,
+                'multiple'      =>true,
+                'choices' => array('Sunday' => 'Sunday',  'Monday' => 'Monday', 'Tuesday' => 'Tuesday', 'Wednesday' => 'Wednesday', 'Thursday' => 'Thursday', 'Friday' => 'Friday', 'Saturday' => 'Saturday'),
             ))
+
         ;
     }
     

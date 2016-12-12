@@ -28,6 +28,36 @@ class OrderRepository extends EntityRepository
         return $order;
     }
 
+    /**
+     * @param $datetime
+     * @param $entity
+     * @return int|mixed
+     */
+    public function getLastCode($datetime, $entity)
+    {
+        $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
+        $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
+
+
+        $qb = $this->_em->getRepository('EcommerceBundle:Order')->createQueryBuilder('s');
+
+        $qb
+            ->select('MAX(s.code)')
+            ->where('s.globalOption = :option')
+            ->andWhere('s.updated >= :today_startdatetime')
+            ->andWhere('s.updated <= :today_enddatetime')
+            ->setParameter('option', $entity)
+            ->setParameter('today_startdatetime', $today_startdatetime)
+            ->setParameter('today_enddatetime', $today_enddatetime);
+        $lastCode = $qb->getQuery()->getSingleScalarResult();
+
+        if (empty($lastCode)) {
+            return 0;
+        }
+
+        return $lastCode;
+    }
+
     public function insertNewCustomerOrder(User $user,$shop, $cart){
 
 
@@ -39,6 +69,11 @@ class OrderRepository extends EntityRepository
         $order->setEcommerceConfig($globalOption->getEcommerceConfig());
         $order->setShippingCharge($globalOption->getEcommerceConfig()->getShippingCharge());
         $vat = $this->getCulculationVat($globalOption,$cart->total());
+
+        $datetime = new \DateTime("now");
+        $lastCode = $this->getLastCode($datetime, $globalOption);
+        $order->setCode($lastCode+1);
+        $order->setInvoice(sprintf("%s%s", $datetime->format('Ymd'), str_pad($order->getCode(),3, '0', STR_PAD_LEFT)));
         $order->setVat($vat);
         $order->setCreatedBy($user);
         $order->setTotalAmount($cart->total());

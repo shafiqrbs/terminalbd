@@ -83,7 +83,6 @@ class Excel
             if($itemObj == NULL) {
                 $itemObj = new Item();
                 $itemObj->setName($this->sentence_case($item['Item Name']));
-                $itemObj->setWebName($this->sentence_case($item['Item Name']));
                 $itemObj->setMasterItem($masterItem);
                 if($this->getInventoryConfig()->getIsColor() == 1) {
                     $itemObj->setColor($itemColor);
@@ -232,19 +231,17 @@ class Excel
     private function getColor($item)
     {
         $color = $this->getCachedData('Color', $item['Color']);
-
         $colorRepository = $this->getColorRepository();
-
         if($color == NULL) {
             $color = $colorRepository->findOneBy(array(
-                'inventoryConfig'   => $this->getInventoryConfig(),
+               // 'inventoryConfig'   => $this->getInventoryConfig(),
                 'name'              => $item['Color']
             ));
 
             if($color == NULL) {
                 $color = new ItemColor();
                 $color->setName($item['Color']);
-                $color->setInventoryConfig($this->getInventoryConfig());
+                //$color->setInventoryConfig($this->getInventoryConfig());
                 $color = $this->save($color);
             }
 
@@ -257,20 +254,18 @@ class Excel
     private function getSize($item)
     {
         $size = $this->getCachedData('Size', $item['Size']);
-
         $sizeRepository = $this->getSizeRepository();
-
         if($size == NULL) {
 
             $size = $sizeRepository->findOneBy(array(
-                'inventoryConfig'   => $this->getInventoryConfig(),
+                //'inventoryConfig'   => $this->getInventoryConfig(),
                 'name'              => $item['Size']
             ));
 
             if($size == null) {
                 $size = new ItemSize();
                 $size->setName($item['Size']);
-                $size->setInventoryConfig($this->getInventoryConfig());
+                //$size->setInventoryConfig($this->getInventoryConfig());
                 $size = $this->save($size);
             }
 

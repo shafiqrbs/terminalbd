@@ -5,6 +5,9 @@
 {% elseif count == 1  %}
     {% set limit = 1 %}
     {% set column = 9 %}
+{% else %}
+    {% set limit = 1 %}
+    {% set column = 12 %}
 {% endif %}
 
 {% if about is not null %}

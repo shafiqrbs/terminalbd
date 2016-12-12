@@ -63,10 +63,10 @@
                     <div class="row-fluid">
                         <div class="col-xs-12 col-md-12 o-margin-padding" style="width: 490px">
                             <ul id="pgwSlider" class="pgwSlider">
-                                <li><img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,650) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,650) }}{% endif %}" alt="" data-description="{{ product.name }}"></li>
+                                <li><img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,650) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,650) }}{% endif %}" alt="" data-description="{{ product.webName }}"></li>
                                 {% if(product.itemGalleries) %}
                                     {% for photo in product.itemGalleries %}
-                                        <li><img  src="{{ image(photo.getAbsolutePath(product.inventoryConfig.globalOption.id,product.id)).resize() }}" alt="" data-description="{{ product.name }}"></li>
+                                        <li><img  src="{{ image(photo.getAbsolutePath(product.inventoryConfig.globalOption.id,product.id)).resize() }}" alt="" data-description="{{ product.webName }}"></li>
                                     {% endfor %}
                                 {% endif %}
                             </ul>
@@ -75,7 +75,7 @@
                 </div>
                 <div class="col-xs-7 col-md-7" id="subItemDetails">
                     <div class="col-xs-6 col-md-6">
-                        <div style="height: 37px"><h5><strong>{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></h5></div>
+                        <div style="height: 37px"><h5><strong>{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;&nbsp;{% endif %}{{ product.webName }}</strong></h5></div>
                         <hr>
                         <div >
                             <table class="list-table">
@@ -224,7 +224,7 @@
                         <div class="col-md-12">
                             <div class="thumbnail" data-key="sameHeights" style="position:relative" >
                                 <div class="product-preview group list-group-image" >
-                                    <img class="img-responsive" src="{{ image(product.webPath).scaleResize(400,400) }}" data-key="featureHeights" alt="">
+                                    <img class="img-responsive" src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,650) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,650) }}{% endif %}" alt="" data-description="{{ product.webName }}" data-key="featureHeights" alt="">
                                     <div class="team-content">
                                         <h3 class="team-prof">
                                             <a class="preview"  data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" >Preview</a>
@@ -233,7 +233,7 @@
                                     </div>
                                 </div>
                                 <div class="caption">
-                                    <p class="group inner list-group-item-heading"><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}">{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</a></p>
+                                    <p class="group inner list-group-item-heading"><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}">{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;&nbsp;{% endif %}{{ product.webName }}</a></p>
                                     <div class="row">
                                         <div class="row-fluid">
                                             <div class="col-md-12"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<strike>{{ product.salesPrice|number_format }}</strike>&nbsp;<strong>{{ product.salesPrice|number_format }}</strong></div>

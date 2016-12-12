@@ -131,9 +131,9 @@ class ContactPage
     private $endHour;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="weeklyOffDay", type="string", length=255, nullable=true)
+     * @ORM\Column(name="weeklyOffDay", type="array", nullable=true)
      */
     private $weeklyOffDay;
 

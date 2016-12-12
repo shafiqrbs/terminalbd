@@ -56,6 +56,7 @@
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Created By</th>
                                     <th class="numeric" >Name </th>
                                     <th class="numeric" >Path</th>
                                     <th class="numeric" >Action</th>
@@ -68,6 +69,7 @@
 
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" ><a href="{{ path('inventory_excelimproter_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric" >{{ entity.createdBy }}</td>
                                         <td class="numeric" ><a href="/{{ entity.webPath }}">Dowmload File</a> </td>
                                         <td class="numeric" >
                                             {% if entity.progress == 'created' %}
@@ -75,10 +77,7 @@
                                             <a title="" href="{{ path('inventory_excelimproter_migration', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-upload-alt">&nbsp;Migration</i></a>
                                             {% elseif entity.progress == 'migrated'   %}
                                                 <a title="" href="{{ path('inventory_excelimproter_updated', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-ok-circle">&nbsp;Data Update</i></a>
-                                            {% elseif entity.progress == 'updated'   %}
-                                                <a title="" href="{{ path('inventory_excelimproter_restore', { 'ic': entity.inventoryConfig.id }) }}" class="btn blue mini" ><i class="icon-download">&nbsp;Data Restore</i></a>
                                             {% endif %}
-                                            <a title="" href="{{ path('inventory_excelimproter_reset', { 'ic': entity.inventoryConfig.id }) }}" class="btn blue mini" ><i class="icon-upload-alt">&nbsp;Data Reset</i></a>
                                             <a title="Are you sure went to delete ?" href="{{ path('inventory_excelimproter_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                         </td>
                                     </tr>

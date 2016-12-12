@@ -43,6 +43,10 @@ class EcommerceConfigController extends Controller
         $form = $this->createForm(new EcommerceConfigType(), $entity, array(
             'action' => $this->generateUrl('ecommerce_config_update', array('id' => $entity->getId())),
             'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
         ));
         return $form;
     }
@@ -71,6 +75,7 @@ class EcommerceConfigController extends Controller
         return $this->render('EcommerceBundle:EcommerceConfig:edit.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
+
         ));
     }
     /**

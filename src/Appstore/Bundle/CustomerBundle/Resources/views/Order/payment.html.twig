@@ -138,6 +138,7 @@
                                         <td>{{ loop.index }}.</td>
                                         <td class="numeric" >{{ item.purchaseVendorItem.masterItem.name }}-{{ item.purchaseVendorItem.name }}</td>
                                         <td class="numeric" >
+                                            {% if item.purchaseVendorItem.size is defined and item.purchaseVendorItem.size is not empty %}
                                             {% if entity.process == 'Confirm'  %}
                                                 {{ item.goodsItem.size.name }}
                                             {% else %}
@@ -146,6 +147,7 @@
                                                         <option {% if  item.goodsItem.id == goodsItem.id  %} selected="selected" {% endif %} value="{{ goodsItem.id  }}">{{ goodsItem.size.name }}</option>
                                                     {% endfor %}
                                                 </select>
+                                            {% endif %}
                                             {% endif %}
 
                                        </td>

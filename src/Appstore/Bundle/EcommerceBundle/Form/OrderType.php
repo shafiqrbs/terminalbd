@@ -35,7 +35,7 @@ class OrderType extends AbstractType
     {
         $builder
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12 tooltips', 'data-trigger' => 'hover','placeholder'=>'Enter  delivery address ie: Unit,Floor,House,Road,Area,Thana,District Etc','data-original-title'=>'Enter  delivery address ie: Unit,Floor,House,Road,Area,Thana,District Etc','autocomplete'=>'off')))
-            ->add('mobileAccount','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
+            ->add('mobileAccount','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('transaction','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paidAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Add payment amount','data-original-title'=>'Add payment amount','autocomplete'=>'off')))
 

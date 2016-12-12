@@ -6,7 +6,9 @@ use Appstore\Bundle\DomainUserBundle\Entity\Branch;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
+use Appstore\Bundle\InventoryBundle\Entity\ExcelImporter;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -199,6 +201,10 @@ class User extends BaseUser
 
     /* ----------------------------------inventory------------------*/
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ExcelImporter", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $excelImporters;
 
 
     /**
@@ -1028,6 +1034,14 @@ class User extends BaseUser
     public function getBranchInvoiceApprovedBy()
     {
         return $this->branchInvoiceApprovedBy;
+    }
+
+    /**
+     * @return ExcelImporter
+     */
+    public function getExcelImporters()
+    {
+        return $this->excelImporters;
     }
 
 

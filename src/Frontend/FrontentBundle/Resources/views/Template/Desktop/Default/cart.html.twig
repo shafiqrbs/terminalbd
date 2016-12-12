@@ -51,7 +51,7 @@
                                 {% endif %}
                                 <div class="media-body">
                                     <h4 class="media-heading">{{ product.name }}</h4>
-                                    <h5 class="media-heading">Size of Product: {{ product.size }}</h5>
+                                    {% if product.size is not empty and  product.size > 0 %}<h5 class="media-heading">Size of Product: {{ product.size }}</h5>{% endif %}
                                     {% if product.color is not empty %}<h5 class="media-heading">Color: {{ product.color }}</h5>{% endif %}
                                     {% if product.brand is not empty %}<h5 class="media-heading"> by {{ product.brand }}</h5>{% endif %}
                                     <span>Status: </span><span class="text-success"><strong>In Stock</strong></span>
@@ -99,7 +99,7 @@
                         </td>
                         <td>
                             {% if  app.user %}
-                            <a href="{{ path('customer_order_to_cart',{'shop':globalOption.uniqueCode}) }}" type="button" class="btn btn-success">
+                            <a href="{{ path('order_to_cart',{'shop':globalOption.uniqueCode}) }}" type="button" class="btn btn-success">
                                 Checkout <span class="glyphicon glyphicon-play"></span>
                             </a>
                             {% else %}

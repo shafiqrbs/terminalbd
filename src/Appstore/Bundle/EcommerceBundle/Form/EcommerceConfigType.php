@@ -16,12 +16,21 @@ class EcommerceConfigType extends AbstractType
     {
         $builder
 
-            ->add('pickupLocation','textarea', array('attr'=>array('class'=>'m-wrap span12','row'=>3,'placeholder'=>'Notes...')))
+            ->add('pickupLocation','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>8,'placeholder'=>'Please set address where customer product pickup')))
             ->add('currency', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(
                     '৳'       => 'Taka(৳)',
                     '$'       => 'Dollar($)'
+                ),
+            ))
+            ->add('perPage', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    '15'       => 'Per page-15',
+                    '16'       => 'Per page-16',
+                    '20'       => 'Per page-20',
+                    '21'       => 'Per page-21',
                 ),
             ))
             ->add('perColumn', 'choice', array(
@@ -43,9 +52,7 @@ class EcommerceConfigType extends AbstractType
             ->add('isColor')
             ->add('isPreorder')
             ->add('cart')
-            ->add('webProduct')
-            ->add('promotion')
-        ;
+            ->add('promotion');
     }
     
     /**
