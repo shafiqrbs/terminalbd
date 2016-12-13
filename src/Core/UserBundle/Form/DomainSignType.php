@@ -107,7 +107,20 @@ class DomainSignType extends AbstractType
               'ROLE_DOMAIN_INVENTORY_SALES' => 'Inventory Sales/Delivery',
               'ROLE_DOMAIN_INVENTORY_PURCHASE' => 'Inventory Purchase/Receive',
               'ROLE_DOMAIN_INVENTORY_MANAGER' => 'Inventory Manager',
-              ),
+              'ROLE_INVENTORY_REPORT' => 'Inventory Reports',
+            ),
+
+            'Finance'=> array(
+                'ROLE_DOMAIN_FINANCE_MANAGER' => 'Finance Manager',
+                'ROLE_DOMAIN_FINANCE_APPROVAL' => 'Finance Approval',
+                'ROLE_DOMAIN_FINANCE_REPORT' => 'Finance Reports',
+            ),
+            'Hr'=> array(
+                'ROLE_PAYROLL_MANAGER' => 'HR Manager',
+                'ROLE_PAYROLL_APPROVAL' => 'HR Approval',
+                'ROLE_PAYROLL_REPORT' => 'HR Reports',
+            ),
+
 
         );
 

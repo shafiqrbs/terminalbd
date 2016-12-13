@@ -55,9 +55,11 @@
                                 <tr class="head-grey">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric">Name</th>
+                                    <th class="numeric">Designation</th>
                                     <th class="numeric">User name</th>
-                                    <th class="numeric">Role</th>
                                     <th class="numeric">Mobile</th>
+                                    <th class="numeric">Enabled</th>
+                                    <th class="numeric">Delete</th>
                                     <th class="numeric">Last login</th>
                                     <th class="numeric">Action</th>
                                 </tr>
@@ -68,28 +70,47 @@
                                     <tr>
                                         <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                         <td>{{ entity.profile.name }}</td>
+                                        <td>{{ entity.profile.designation }}</td>
                                         <td>{{ entity.username }}</td>
-                                        <td>{{ entity.role }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.profile.mobile }}"> {{ entity.profile.mobile }}</a></td>
+                                        <td>{% if entity.enabled == 1 %}<span class="btn mini blue"><i class="icon-ok"></i></span>{% else %}<span class="btn mini red"><i class="icon-remove"></i></span>{% endif %}</td>
+                                        <td>{% if entity.isDelete == 1 %}<span class="btn mini red"><i class="icon-trash"></i></span>{% endif %}</td>
                                         <td class="numeric">{{ entity.lastLogin|date('d-m-Y') }}</td>
                                         <td class="numeric">
                                             {% if entity.role != 'ROLE_DOMAIN' %}
                                             <a href="{{ path('domain_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                            <a href="{{ path('domain_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                             <a title="Are you sure went to delete ?" href="{{ path('domain_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>
                                     <tr id="show-{{ entity.id }}" class="showing-overview">
-                                        <td colspan="7">
+                                        <td colspan="8">
                                              <table class="table">
-                                                 <tr><td>Joining Date</td><td>{{ entity.profile.joiningDate|date("d-F-Y") }}</td></tr>
-                                                 <tr><td>Designation</td><td>{{ entity.profile.designation }}</td></tr>
-                                                 <tr><td>Email</td><td>{{ entity.email }}</td></tr>
-                                                 <tr><td>Address</td><td>{{ entity.profile.address }}</td></tr>
-                                                 <tr><td>Thana/District</td><td>{% if entity.profile.thana is not empty %}{{ entity.profile.thana.name }}{% endif %}{% if entity.profile.district is not empty %} , {{ entity.profile.district.name }}{% endif %}</td></tr>
-                                                 <tr><td>Blood group </td><td>{{ entity.profile.bloodGroup }}</td></tr>
-                                                 <tr><td>Additional phone </td><td>{{ entity.profile.additionalPhone }}</td></tr>
+                                                 <tr><td>
+                                                         {% if entity.profile.webPath is not empty %}
+                                                         <img src="{{ image(entity.profile.webPath).resize(200,200) }}">
+                                                         {% endif %}
+                                                     </td>
+                                                     <td>
+                                                         <table class="table table-bordered table-striped table-condensed">
+                                                             <tr><td>Joining Date</td><td>{{ entity.profile.joiningDate|date("d-F-Y") }}</td></tr>
+                                                             <tr><td>Email</td><td>{{ entity.email }}</td></tr>
+                                                             <tr><td>Address</td><td>{{ entity.profile.address }}</td></tr>
+                                                             <tr><td>Thana/District</td><td>{% if entity.profile.location is not empty %}{{ entity.profile.location.name }}{% endif %}{% if entity.profile.location is not empty %} , {{ entity.profile.location.parent.name }}{% endif %}</td></tr>
+                                                             <tr><td>Blood group </td><td>{{ entity.profile.bloodGroup }}</td></tr>
+                                                             <tr><td>Additional phone </td><td>{{ entity.profile.additionalPhone }}</td></tr>
+                                                         </table>
+                                                     </td>
+                                                 </tr>
+
+                                                 <tr><td>Roles</td><td>
+                                                 <ol>
+                                                         {% for role in entity.roles %}
+                                                             <li>{{ role }}</li>
+                                                         {% endfor %}
+                                                 </ol>
+                                                 </td>
+                                                 </tr>
                                              </table>
                                         </td>
                                     </tr>

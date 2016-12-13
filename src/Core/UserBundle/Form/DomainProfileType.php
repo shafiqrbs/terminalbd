@@ -61,7 +61,11 @@ class DomainProfileType extends AbstractType
             ))
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')))
             ->add('permanentAddress','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter permanent address')))
-            ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter designation')))
+            ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Enter designation', 'data-original-title' =>'Must be use personal mobile number.' , 'data-trigger' => 'hover'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input user designation'))
+                )
+            ))
             ->add('postalCode','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter postal code')))
             ->add('additionalPhone','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your additional phone ')))
             ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no')))

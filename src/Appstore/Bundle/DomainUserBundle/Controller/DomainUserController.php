@@ -133,6 +133,7 @@ class DomainUserController extends Controller
      */
     public function editAction(User $user)
     {
+
         $em = $this->getDoctrine()->getManager();
         $editForm = $this->createEditForm($user);
         $globalOption = $user->getGlobalOption();
