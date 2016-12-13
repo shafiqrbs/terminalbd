@@ -92,8 +92,7 @@ class ItemType extends AbstractType
                     ),
                     'query_builder' => function (EntityRepository $er) {
                         return $er->createQueryBuilder('v')
-                            ->where("v.status = 1")
-                            ->andWhere("v.inventoryConfig =" . $this->inventoryConfig->getId());
+                            ->where("v.status = 1");
 
                     },
                 ));
@@ -113,8 +112,7 @@ class ItemType extends AbstractType
                     ),
                     'query_builder' => function(EntityRepository $er){
                         return $er->createQueryBuilder('v')
-                            ->where("v.status = 1")
-                            ->andWhere("v.inventoryConfig =".$this->inventoryConfig->getId());
+                            ->where("v.status = 1");
 
                     },
                 ));
@@ -135,8 +133,8 @@ class ItemType extends AbstractType
                         ),
                         'query_builder' => function(EntityRepository $er){
                             return $er->createQueryBuilder('v')
-                                ->where("v.status = 1");
-
+                                ->where("v.status = 1")
+                                ->andWhere("v.inventoryConfig =".$this->inventoryConfig->getId());
                         },
                     ));
 

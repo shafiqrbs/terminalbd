@@ -54,9 +54,9 @@ class EmployeeTransaction
     private  $accountBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="employeeTransaction" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="employeeTransaction" )
      **/
-    private  $accountBkash;
+    private  $accountMobileBank;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="employeeTransaction" )
@@ -484,6 +484,22 @@ class EmployeeTransaction
     public function setCode($code)
     {
         $this->code = $code;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
+    }
+
+    /**
+     * @param mixed $accountMobileBank
+     */
+    public function setAccountMobileBank($accountMobileBank)
+    {
+        $this->accountMobileBank = $accountMobileBank;
     }
 
 

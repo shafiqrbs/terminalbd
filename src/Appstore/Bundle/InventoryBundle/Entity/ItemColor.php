@@ -4,6 +4,7 @@ namespace Appstore\Bundle\InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * ItemColor
@@ -21,6 +22,12 @@ class ItemColor implements CodeAwareEntity
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="inventoryConfig" , cascade={"persist", "remove"})
+     **/
+
+    private  $globalOption;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="color" )
@@ -204,21 +211,6 @@ class ItemColor implements CodeAwareEntity
     /**
      * @return mixed
      */
-    public function getItemSize()
-    {
-        return $this->itemSize;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getItemColor()
-    {
-        return $this->itemColor;
-    }
-    /**
-     * @return mixed
-     */
     public function getSTRPadCode()
     {
         $code = str_pad($this->getCode(),2, '0', STR_PAD_LEFT);
@@ -234,7 +226,7 @@ class ItemColor implements CodeAwareEntity
     }
 
     /**
-     * @return mixed
+     * @return PurchaseVendorItem
      */
     public function getPurchaseVendorItem()
     {
@@ -247,6 +239,22 @@ class ItemColor implements CodeAwareEntity
     public function getOrderItem()
     {
         return $this->orderItem;
+    }
+
+    /**
+     * @return GlobalOption
+     */
+    public function getGlobalOption()
+    {
+        return $this->globalOption;
+    }
+
+    /**
+     * @param GlobalOption $globalOption
+     */
+    public function setGlobalOption($globalOption)
+    {
+        $this->globalOption = $globalOption;
     }
 }
 

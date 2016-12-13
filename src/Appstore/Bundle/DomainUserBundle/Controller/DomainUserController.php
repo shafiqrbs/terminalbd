@@ -220,7 +220,10 @@ class DomainUserController extends Controller
      */
     private function createEditProfileForm(User $entity)
     {
-        $form = $this->createForm(new DomainEditSignType(), $entity, array(
+
+        $globalOption = $this->getUser()->getGlobalOption();
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new DomainEditSignType($globalOption,$location), $entity, array(
             'action' => $this->generateUrl('domain_update_profile'),
             'method' => 'PUT',
             'attr' => array(

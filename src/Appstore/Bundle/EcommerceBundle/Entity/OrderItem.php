@@ -35,7 +35,7 @@ class OrderItem
     private  $purchaseVendorItem;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="orderItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="orderItem" )
      **/
     private  $purchaseItem;
 

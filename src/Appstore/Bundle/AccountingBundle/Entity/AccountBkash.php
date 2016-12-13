@@ -27,46 +27,6 @@ class AccountBkash
      */
     private $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="accountBkash"  )
-     **/
-    private  $accountJournals;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountBkash"  )
-     **/
-    private  $accountCashes;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="accountBkash"  )
-     **/
-    private  $accountSales;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PaymentSalary", mappedBy="accountBkash"  )
-     **/
-    private  $paymentSalaries;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="accountBkash"  )
-     **/
-    private  $expendituries;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PettyCash", mappedBy="accountBkash"  )
-     **/
-    private  $pettyCash;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="accountBkash"  )
-     **/
-    private  $orders;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="accountBkash"  )
-     **/
-    private  $preOrders;
 
     /**
      * @var string

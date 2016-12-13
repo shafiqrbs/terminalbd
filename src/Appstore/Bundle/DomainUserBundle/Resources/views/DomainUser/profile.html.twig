@@ -89,10 +89,21 @@
                                         <label class="control-label" >Mobile<span class="required">*</span></label>
                                         <div class="controls">
                                             <div class="input-icon left">
-                                                <i class="icon-font"></i>
+                                                <i class="icon-phone"></i>
                                                 {{ form_widget(form.profile.mobile) }}
                                                 {{ form_errors(form.profile.mobile) }}
                                             </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                                <div class="span6 ">
+                                    <div class="control-group">
+                                        <label class="control-label" >Branch</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.profile.branches) }}
+                                            {{ form_errors(form.profile.branches) }}
 
                                         </div>
                                     </div>
@@ -195,7 +206,19 @@
                                     </div>
                                 </div>
                                 <!--/span-->
-                                <div class="span6 ">
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" >Location</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                {{ form_widget(form.profile.location) }}
+                                                {{ form_errors(form.profile.location) }}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3 ">
                                     <div class="control-group">
                                         <label class="control-label" >Postal code</label>
                                         <div class="controls">
@@ -212,34 +235,6 @@
                             </div>
                             <!--/row-->
                             <!--/row-->
-                            <div class="row-fluid">
-                                <div class="span6 ">
-                                    <div class="control-group">
-                                        <label class="control-label" >Disrict</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                {{ form_widget(form.profile.district) }}
-                                                {{ form_errors(form.profile.district) }}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                                <div class="span6 ">
-                                    <div class="control-group">
-                                        <label class="control-label" >Thana</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                {{ form_widget(form.profile.thana) }}
-                                                {{ form_errors(form.profile.thana) }}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                            </div>
                             <!--/row-->
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">

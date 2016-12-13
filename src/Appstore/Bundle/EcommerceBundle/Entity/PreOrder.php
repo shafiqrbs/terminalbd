@@ -87,7 +87,7 @@ class PreOrder
     private  $accountMobileBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="preOrder" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="preOrders" )
      **/
     private  $transactionMethod;
 

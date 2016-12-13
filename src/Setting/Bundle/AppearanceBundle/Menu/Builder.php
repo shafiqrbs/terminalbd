@@ -558,21 +558,26 @@ class Builder extends ContainerAware
 
         if($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
 
-            $menu['App Setting']->addChild('Master Item', array('route' => 'inventory_product'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['App Setting']->addChild('Item category', array('route' => 'itemtypegrouping_edit', 'routeParameters' => array('id' => $inventory->getId())))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['App Setting']->addChild('Custom category', array('route' => 'inventory_category'))->setAttribute('icon', 'icon-th-list');
-            $menu['App Setting']->addChild('Vendor', array('route' => 'inventory_vendor'))->setAttribute('icon', 'icon-th-list');
-            $menu['App Setting']->addChild('Brand', array('route' => 'itembrand'))->setAttribute('icon', 'icon-th-list');
-            $menu['App Setting']->addChild('Color', array('route' => 'itemcolor'))->setAttribute('icon', 'icon-th-list');
-            $menu['App Setting']->addChild('Size', array('route' => 'itemsize'))->setAttribute('icon', 'icon-th-list');
-            $menu['App Setting']->addChild('Ware House', array('route' => 'inventory_warehouse'))->setAttribute('icon', 'icon-th-list');
-            $menu['App Setting']->addChild('Item Attribute', array('route' => 'itemattribute'))->setAttribute('icon', 'icon-th-list');
-            $menu['App Setting']->addChild('Bank Account', array('route' => 'appsetting_bank'))->setAttribute('icon','fa fa-money');
-            $menu['App Setting']->addChild('Mobile Account', array('route' => 'appsetting_mobile_bank'))->setAttribute('icon','fa fa-money');
-            $menu['App Setting']->addChild('Account Head', array('route' => 'accounthead'))->setAttribute('icon','fa fa-money');
+            $menu['App Setting']->addChild('Inventory Setting', array('route' => 'account_expenditure'))
+                ->setAttribute('icon','fa fa-bookmark')
+                ->setAttribute('dropdown', true);
+            $menu['App Setting']['Inventory Setting']->addChild('Master Item', array('route' => 'inventory_product'))->setAttribute('icon', 'icon-th-list');
+            $menu['App Setting']['Inventory Setting']->addChild('Item category', array('route' => 'itemtypegrouping_edit', 'routeParameters' => array('id' => $inventory->getId())))->setAttribute('icon', 'icon-th-list');
+            $menu['App Setting']['Inventory Setting']->addChild('Custom category', array('route' => 'inventory_category'))->setAttribute('icon', 'icon-th-list');
+            $menu['App Setting']['Inventory Setting']->addChild('Vendor', array('route' => 'inventory_vendor'))->setAttribute('icon', 'icon-th-list');
+            $menu['App Setting']['Inventory Setting']->addChild('Brand', array('route' => 'itembrand'))->setAttribute('icon', 'icon-th-list');
+            $menu['App Setting']['Inventory Setting']->addChild('Color', array('route' => 'itemcolor'))->setAttribute('icon', 'icon-th-list');
+            $menu['App Setting']['Inventory Setting']->addChild('Size', array('route' => 'itemsize'))->setAttribute('icon', 'icon-th-list');
+            $menu['App Setting']['Inventory Setting']->addChild('Ware House', array('route' => 'inventory_warehouse'))->setAttribute('icon', 'icon-th-list');
+            $menu['App Setting']['Inventory Setting']->addChild('Item Attribute', array('route' => 'itemattribute'))->setAttribute('icon', 'icon-th-list');
+            $menu['App Setting']->addChild('Accounting', array('route' => 'account_expenditure'))
+                ->setAttribute('icon','fa fa-money')
+                ->setAttribute('dropdown', true);
+            $menu['App Setting']['Accounting']->addChild('Bank Account', array('route' => 'appsetting_bank'))->setAttribute('icon','fa fa-money');
+            $menu['App Setting']['Accounting']->addChild('Mobile Account', array('route' => 'appsetting_mobile_bank'))->setAttribute('icon','fa fa-money');
+            $menu['App Setting']['Accounting']->addChild('Account Head', array('route' => 'accounthead'))->setAttribute('icon','fa fa-money');
         }
+
         /*$menu['Inventory']['System Setting']->addChild('Variant', array('route' => 'colorsize'))
             ->setAttribute('icon', 'icon-th-list');
         $menu['Inventory']['System Setting']->addChild('Ware House', array('route' => 'inventory_warehouse'))->setAttribute('icon', 'icon-th-list');*/

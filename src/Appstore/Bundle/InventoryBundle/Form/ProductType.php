@@ -39,6 +39,7 @@ class ProductType extends AbstractType
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add  item name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add your item name')))))
+
             ->add('productUnit', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
@@ -67,6 +68,7 @@ class ProductType extends AbstractType
                 'choices'=> $this->categoryChoiceList()
             ))
             ->add('ageGroup', 'choice', array(
+                'required'    => false,
                 'multiple'    => true,
                 'attr'=>array('class'=>'span12 select2'),
                 'choices' => array(

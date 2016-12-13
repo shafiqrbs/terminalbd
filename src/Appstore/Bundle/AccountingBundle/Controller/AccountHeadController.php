@@ -4,7 +4,8 @@ namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\AccountingBundle\Entity\AccountHead;
 use Appstore\Bundle\AccountingBundle\Form\AccountHeadType;
 
@@ -90,7 +91,7 @@ class AccountHeadController extends Controller
 
     /**
      * Displays a form to create a new AccountHead entity.
-     *
+     * @Secure(roles="ROLE_ADMIN")
      */
     public function newAction()
     {

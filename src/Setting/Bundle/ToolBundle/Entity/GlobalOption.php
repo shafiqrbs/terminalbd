@@ -205,6 +205,7 @@ class GlobalOption
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
+
     protected $orders;
 
     /**
@@ -442,6 +443,18 @@ class GlobalOption
      **/
 
     private $inventoryConfig;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+
+    private $color;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+
+    private $size;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", mappedBy="globalOption" , cascade={"persist", "remove"})

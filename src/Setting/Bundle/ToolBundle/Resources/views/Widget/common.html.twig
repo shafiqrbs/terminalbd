@@ -79,7 +79,11 @@
             filter='' output='/img/avatar1.png' %}
             <img src="{{ asset('assets/admin/layout/img/avatar.png') }}"/>
             {% endimage %}#}
+            {% if app.user.profile.webPath is not empty %}
+            <img src="{{ image(app.user.profile.webPath).resize(29,29)  }}"/>
+            {% else %}
             <img src="{{ asset('assets/img/avatar1.png') }}"/>
+            {% endif %}
             <span class="username">{{ app.user }}</span>
             <i class="fa fa-angle-down"></i>
         </a>

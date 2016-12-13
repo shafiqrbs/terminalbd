@@ -53,6 +53,7 @@ class AccountMobileBankType extends AbstractType
             ->add('accountType', 'choice', array(
                 'attr'=>array('class'=>'span12 select2'),
                 'choices' => array(
+                    'Personal' => 'Personal',
                     'General' => 'General',
                     'Merchant' => 'Merchant',
                 ),

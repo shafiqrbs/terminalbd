@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('account_bank') }}">Account of Mobile Bank</a>
+                        <a href="{{ path('appsetting_mobile_bank') }}">Account of Mobile Bank</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="javascript:">Account of Mobile Bank</a></li>
@@ -57,8 +57,9 @@
 
                                 <tr class="head-grey">
                                     <th class="numeric" >Mobile</th>
-                                    <th class="numeric" >Authorised Company</th>
                                     <th class="numeric" >Account Owner</th>
+                                    <th class="numeric" >Service Name</th>
+                                    <th class="numeric" >Authorised</th>
                                     <th class="numeric" >Account Type</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -67,8 +68,9 @@
                                 {% for entity in entities %}
                                     <tr id="remove-{{ entity.id }}">
                                         <td class="numeric" >{{   entity.mobile }}</td>
-                                        <td class="numeric" >{{ entity.authorised }}</td>
                                         <td class="numeric" >{{ entity.accountOwner }}</td>
+                                        <td class="numeric" >{{ entity.serviceName }}</td>
+                                        <td class="numeric" >{{ entity.authorised }}</td>
                                         <td class="numeric" >{{ entity.accountType }}</td>
                                         <td class="numeric" >
                                             <a href="{{ path('appsetting_mobile_bank_edit',{'id':entity.id}) }}" id=""  class="btn blue mini"><i class="icon-pencil"></i></a>

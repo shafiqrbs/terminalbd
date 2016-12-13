@@ -202,7 +202,7 @@
                                     </div>
                                 </div>
                                 <!--/span-->
-                                <div class="span4">
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" >Date of birth</label>
                                         <div class="controls">
@@ -212,7 +212,7 @@
                                     </div>
                                 </div>
                                 <!--/span-->
-                                <div class="span2">
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" >Blood group</label>
                                         <div class="controls">
@@ -239,7 +239,19 @@
                                     </div>
                                 </div>
                                 <!--/span-->
-                                <div class="span6 ">
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" >Location</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                {{ form_widget(form.profile.location) }}
+                                                {{ form_errors(form.profile.location) }}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3 ">
                                     <div class="control-group">
                                         <label class="control-label" >Postal code</label>
                                         <div class="controls">
@@ -247,36 +259,6 @@
                                                 <i class="icon-font"></i>
                                                 {{ form_widget(form.profile.postalCode) }}
                                                 {{ form_errors(form.profile.postalCode) }}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                            </div>
-                            <!--/row-->
-                            <!--/row-->
-                            <div class="row-fluid">
-                                <div class="span6 ">
-                                    <div class="control-group">
-                                        <label class="control-label" >Disrict</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                {{ form_widget(form.profile.district) }}
-                                                {{ form_errors(form.profile.district) }}
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                                <div class="span6 ">
-                                    <div class="control-group">
-                                        <label class="control-label" >Thana</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                {{ form_widget(form.profile.thana) }}
-                                                {{ form_errors(form.profile.thana) }}
                                             </div>
 
                                         </div>

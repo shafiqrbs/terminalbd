@@ -4,6 +4,8 @@ namespace Core\UserBundle\Form;
 
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\LocationBundle\Repository\LocationRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -14,6 +16,19 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class DomainEditSignType extends AbstractType
 {
 
+
+    /** @var  GlobalOption */
+    private $globalOption;
+
+    /** @var  LocationRepository */
+    private $location;
+
+
+    function __construct(GlobalOption $globalOption, LocationRepository $location)
+    {
+        $this->globalOption = $globalOption;
+        $this->location = $location;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -34,7 +49,7 @@ class DomainEditSignType extends AbstractType
                         new Length(array('max'=>200))
                     ))
             );
-            $builder->add('profile', new DomainEditProfileType());
+            $builder->add('profile', new DomainEditProfileType($this->globalOption ,$this->location));
 
     }
 

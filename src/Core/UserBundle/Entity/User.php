@@ -48,7 +48,7 @@ class User extends BaseUser
      *
      * @ORM\Column(name="isDelete", type="boolean", nullable=true)
      */
-    private $isDelete=false;
+    private $isDelete = 0;
 
     /**
      * @var boolean

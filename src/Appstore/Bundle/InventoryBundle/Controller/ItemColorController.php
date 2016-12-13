@@ -43,6 +43,7 @@ class ItemColorController extends Controller
             $em = $this->getDoctrine()->getManager();
             $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
             $entity->setInventoryConfig($inventory);
+            $entity->setStatus(false);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(

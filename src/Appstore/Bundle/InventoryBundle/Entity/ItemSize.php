@@ -6,6 +6,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * ItemSize
@@ -23,6 +24,12 @@ class ItemSize  implements CodeAwareEntity
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="size" , cascade={"persist", "remove"})
+     **/
+
+    private  $globalOption;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="size" )
@@ -260,6 +267,22 @@ class ItemSize  implements CodeAwareEntity
     public function getOrderItem()
     {
         return $this->orderItem;
+    }
+
+    /**
+     * @return GlobalOption
+     */
+    public function getGlobalOption()
+    {
+        return $this->globalOption;
+    }
+
+    /**
+     * @param GlobalOption $globalOption
+     */
+    public function setGlobalOption($globalOption)
+    {
+        $this->globalOption = $globalOption;
     }
 }
 

@@ -187,6 +187,10 @@ class ProductController extends Controller
         $form = $this->createForm(new ProductType($em,$inventory), $entity, array(
             'action' => $this->generateUrl('inventory_product_update', array('id' => $entity->getId())),
             'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
         ));
 
         return $form;

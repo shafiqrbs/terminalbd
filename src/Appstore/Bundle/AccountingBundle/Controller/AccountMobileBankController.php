@@ -188,6 +188,9 @@ class AccountMobileBankController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+
+            $name = $entity->getMobile().','.$entity->getServiceName();
+            $entity->setName($name);
             $em->flush();
             return $this->redirect($this->generateUrl('appsetting_mobile_bank_edit', array('id' => $id)));
         }

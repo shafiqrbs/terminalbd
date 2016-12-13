@@ -49,7 +49,7 @@ class AccountJournalType extends AbstractType
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'empty_value' => '---Choose a transaction method---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 select2 transactionMethod'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -99,14 +99,24 @@ class AccountJournalType extends AbstractType
                 'empty_value' => '---Choose a bank---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.globalOption =".$this->globalOption->getId());
+                },
             ))
 
-            ->add('accountBkash', 'entity', array(
+            ->add('accountMobileBank', 'entity', array(
                 'required'    => true,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBkash',
-                'empty_value' => '---Choose a bkash---',
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
+                'empty_value' => '---Choose a mobile account---',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.globalOption =".$this->globalOption->getId());
+                },
             ))
 
             ->add('toUser', 'entity', array(
@@ -117,7 +127,9 @@ class AccountJournalType extends AbstractType
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
-                        ->where("e.globalOption =".$this->globalOption->getId());
+                        ->where('e.isDelete !=  :delete')
+                        ->setParameter('delete', 1)
+                        ->andWhere("e.globalOption =".$this->globalOption->getId());
                 },
             ));
     }

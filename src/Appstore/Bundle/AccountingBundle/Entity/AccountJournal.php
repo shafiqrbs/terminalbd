@@ -74,6 +74,11 @@ class AccountJournal
     private  $accountBkash;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="accountCashes" )
+     **/
+    private  $accountMobileBank;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="accountJournalApprove" )
      **/
     private  $approvedBy;
@@ -467,20 +472,21 @@ class AccountJournal
         return $this->accountCash;
     }
 
+
     /**
      * @return mixed
      */
-    public function getAccountBkash()
+    public function getAccountMobileBank()
     {
-        return $this->accountBkash;
+        return $this->accountMobileBank;
     }
 
     /**
-     * @param mixed $accountBkash
+     * @param mixed $accountMobileBank
      */
-    public function setAccountBkash($accountBkash)
+    public function setAccountMobileBank($accountMobileBank)
     {
-        $this->accountBkash = $accountBkash;
+        $this->accountMobileBank = $accountMobileBank;
     }
 
 
