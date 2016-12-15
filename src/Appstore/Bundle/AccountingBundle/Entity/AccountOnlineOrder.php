@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -10,12 +11,12 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**
- * AccountSales
+ * AccountOnlineOrder
  *
- * @ORM\Table(name="account_sales")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\AccountSalesRepository")
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\AccountingBundle\Repository\AccountOnlineOrderRepository")
  */
-class AccountSales
+class AccountOnlineOrder
 {
     /**
      * @var integer
@@ -28,56 +29,52 @@ class AccountSales
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="accountSales")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="accountOnlineOrder")
      **/
 
     protected $globalOption;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="accountSales" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="accountOnlineOrder" )
      **/
     private  $transactionMethod;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountSales" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountOnlineOrder" )
      **/
     private  $accountBank;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountSales" )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountOnlineOrder" )
      **/
     private  $accountCash;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="accountSales" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="accountOnlineOrder" )
      **/
     private  $accountMobileBank;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="accountSales" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="accountOnlineOrder" , cascade={"detach","merge"} )
      **/
     private  $customer;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="accountSales" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="accountOnlineOrders" )
      **/
-    private  $sales;
+    private  $order;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="accountSales" )
-     **/
-    private  $branches;
 
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="accountSales" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="accountOnlineOrder" )
      **/
     private  $createdBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="salesApprove" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="accountOnlineOrderApprove" )
      **/
     private  $approvedBy;
 
@@ -182,7 +179,7 @@ class AccountSales
      *
      * @param float $amount
      *
-     * @return AccountSales
+     * @return AccountOnlineOrder
      */
     public function setAmount($amount)
     {
@@ -280,23 +277,6 @@ class AccountSales
     {
         $this->customer = $customer;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getSales()
-    {
-        return $this->sales;
-    }
-
-    /**
-     * @param mixed $sales
-     */
-    public function setSales($sales)
-    {
-        $this->sales = $sales;
-    }
-
 
     /**
      * @return string
@@ -435,6 +415,7 @@ class AccountSales
         $this->transactionMethod = $transactionMethod;
     }
 
+
     /**
      * @return float
      */
@@ -492,22 +473,6 @@ class AccountSales
     }
 
     /**
-     * @return Branches
-     */
-    public function getBranches()
-    {
-        return $this->branches;
-    }
-
-    /**
-     * @param Branches $branches
-     */
-    public function setBranches($branches)
-    {
-        $this->branches = $branches;
-    }
-
-    /**
      * @return AccountMobileBank
      */
     public function getAccountMobileBank()
@@ -521,6 +486,22 @@ class AccountSales
     public function setAccountMobileBank($accountMobileBank)
     {
         $this->accountMobileBank = $accountMobileBank;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param Order $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
     }
 }
 

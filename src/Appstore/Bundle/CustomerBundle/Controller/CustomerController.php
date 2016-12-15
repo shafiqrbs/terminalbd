@@ -25,38 +25,19 @@ class CustomerController extends Controller
         return $pagination;
     }
 
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
+        $shop = $request->request->get('shop');
+        if(!empty($globalOption)){
+            $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
+        }else{
+            $globalOption ='';
+        }
         return $this->render('CustomerBundle:Customer:dashboard.html.twig', array(
             'user' => $user,
-        ));
-    }
-
-
-    public function domainAction()
-    {
-        $user = $this->getUser();
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('EcommerceBundle:Order')->findBy(array('createdBy' => $user), array('updated' => 'desc'));
-        $pagination = $this->paginate($entities);
-        return $this->render('CustomerBundle:Customer:domain.html.twig', array(
-            'entities' => $pagination,
-        ));
-
-    }
-
-    public function domainBookmarkAction()
-    {
-        $user = $this->getUser();
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('EcommerceBundle:Order')->findBy(array('createdBy' => $user), array('updated' => 'desc'));
-        $pagination = $this->paginate($entities);
-        return $this->render('CustomerBundle:Customer:domainBookmark.html.twig', array(
-            'entities' => $pagination,
+            'globalOption' => $globalOption,
         ));
 
     }

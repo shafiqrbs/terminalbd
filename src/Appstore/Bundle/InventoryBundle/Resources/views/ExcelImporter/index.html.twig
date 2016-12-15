@@ -68,8 +68,8 @@
                                     <tr>
 
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                                        <td class="numeric" ><a href="{{ path('inventory_excelimproter_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >{{ entity.createdBy }}</td>
+                                        <td class="numeric" ><a href="{{ path('inventory_excelimproter_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" ><a href="/{{ entity.webPath }}">Dowmload File</a> </td>
                                         <td class="numeric" >
                                             {% if entity.progress == 'created' %}

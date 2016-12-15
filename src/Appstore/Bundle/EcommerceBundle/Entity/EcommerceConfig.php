@@ -66,7 +66,7 @@ class EcommerceConfig
      *
      * @ORM\Column(name="shippingCharge", type="float", nullable = true)
      */
-    private $shippingCharge;
+    private $shippingCharge = 100;
 
     /**
      * @var integer

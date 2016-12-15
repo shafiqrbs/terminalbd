@@ -5,22 +5,22 @@
         <!-- BEGIN purchase_order HEADER-->
         <div class="row-fluid row-print">
 
-                        <div class="span4  pull-left">
-                            {% if entity.globalOption.templateCustomize.webPath('logo') is not empty %}<img src="{{ image(entity.globalOption.templateCustomize.webPath('logo')).resize() }}" alt="company logo" />{% else %}{{ entity.globalOption.name }}{% endif %}
-                        </div>
-                        <div class="span4 ">
-                        </div>
-                        <div class="span4 pull-right">
-                            <ul class="unstyled">
-                                <li><strong>{{ entity.globalOption.name }}</strong></li>
-                                <li><i class="icon-phone"></i>&nbsp;{{ entity.globalOption.mobile }}</li>
-                                <li><i class="icon-envelope"></i>&nbsp;{{ entity.globalOption.email }}</li>
-                                <li><i class="icon-home"></i>&nbsp;{{ entity.globalOption.contactPage.address1 }}</li>
-                                <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% if  entity.globalOption.contactPage.thana is not empty %} {{ entity.globalOption.contactPage.thana.name }},{% endif %}
-                                    {% if  entity.globalOption.contactPage.district is not empty %}{{ entity.globalOption.contactPage.district.name }}{% endif %}{% if  entity.globalOption.contactPage.postalCode is not empty %} -{{ entity.globalOption.contactPage.postalCode }}{% endif %}.</li>
-                                <li><i class="icon-link"></i>&nbsp;www.{{ entity.globalOption.domain }}</li>
-                            </ul>
-                        </div>
+            <div class="span4  pull-left">
+                {% if entity.globalOption.templateCustomize.webPath('logo') is not empty %}<img src="{{ image(entity.globalOption.templateCustomize.webPath('logo')).resize() }}" alt="company logo" />{% else %}{{ entity.globalOption.name }}{% endif %}
+            </div>
+            <div class="span4 ">
+            </div>
+            <div class="span4 pull-right">
+                <ul class="unstyled">
+                    <li><strong>{{ entity.globalOption.name }}</strong></li>
+                    <li><i class="icon-phone"></i>&nbsp;{{ entity.globalOption.mobile }}</li>
+                    <li><i class="icon-envelope"></i>&nbsp;{{ entity.globalOption.email }}</li>
+                    <li><i class="icon-home"></i>&nbsp;{{ entity.globalOption.contactPage.address1 }}</li>
+                    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% if  entity.globalOption.contactPage.location is not empty %} {{ entity.globalOption.contactPage.location.name }},{% endif %}
+                    {% if  entity.globalOption.contactPage.location is not empty %}{{ entity.globalOption.contactPage.location.parent.name }}{% endif %}{% if  entity.globalOption.contactPage.postalCode is not empty %} -{{ entity.globalOption.contactPage.postalCode }}{% endif %}.</li>
+                    <li><i class="icon-link"></i>&nbsp;www.{{ entity.globalOption.domain }}</li>
+                </ul>
+            </div>
 
         </div>
         <!-- END purchase_order HEADER-->
@@ -105,7 +105,6 @@
                                     <th class="numeric" >Quantity</th>
                                     <th class="numeric" >Unit Price</th>
                                     <th class="numeric" >Total Price</th>
-                                    <th class="numeric" >Barcode</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -113,15 +112,12 @@
                                     <tr id="remove-{{ item.id }}">
                                         <td>{{ loop.index }}.</td>
                                         <td class="numeric" >{{ item.purchaseVendorItem.masterItem.name }}-{{ item.purchaseVendorItem.name }}</td>
-                                        <td class="numeric" >{{ item.goodsItem.size.name }}</td>
+                                        <td class="numeric" >{% if item.goodsItem.size %}{{ item.goodsItem.size.name }}{% endif %}</td>
                                         <td class="numeric" >{% if item.color is not empty %}{{ item.color.name }}{% endif %}</td>
                                         <td class="numeric" >
                                             {{ item.quantity }}&nbsp;{{ item.purchaseVendorItem.masterItem.productUnit.name }}</td>
                                         <td class="numeric" >{{ item.price }}</td>
                                         <td class="numeric" >=&nbsp;{{ item.subTotal }}</td>
-                                        <td class="numeric" >
-                                            <a data-mode="inline" class="editable"  href="#"  data-url="{{ path('customer_order_add_item',{'id':item.id}) }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Add Item Barcode">{% if item.purchaseItem is not empty %}{{ item.purchaseItem.barcode }}{% endif %}</a>
-                                        </td>
                                     </tr>
                                 {% endfor %}
                                 <tr>
@@ -188,6 +184,92 @@
             </div>
         </div>
     </div>
+ <style>
+     body{
+         background-color:#fff!important;
+     }
+     .header .navbar-inner{
+         display: none;
+     }
+     .page-sidebar{
+         display: none;
+     }
+
+     .page-content{
+         margin-left: 0 !important;
+     }
+     .table{
+         border: none!important;
+     }
+     .table th, .table td{
+         border-top: none;
+     }
+     .table th .span4, .table td .span4{
+         width: 100%;
+     }
+     .table-bordered th, .table-bordered td{
+         border-left:none;
+     }
+
+     .footer{
+         display: none!important;
+     }
+
+     /* This parent can be any width and height */
+     .barcode-block {
+         text-align: center;
+         white-space: nowrap;
+         width: 140px;
+         float: left;
+         height: 80px;
+         border: 1px solid #ccc;
+         border-right: none;
+         border-top: none;
+     }
+
+     /* The ghost, nudged to maintain perfect centering */
+     .barcode-block:before {
+         content: '';
+         display: inline-block;
+         height: 100%;
+         vertical-align: middle;
+         margin-right: -0.25em; /* Adjusts for spacing */
+     }
+
+     /* The element to be centered, can also be of any width and height */
+     .centered {
+         display: inline-block;
+         vertical-align: middle;
+         width: 113px;
+     }
+     .centered p{
+         padding: 0!important;
+         margin: 0!important;
+         display: block;
+         height: 14px;
+         font-size: 10px;
+         line-height: 14px;
+     }
+
+     .centered .left{
+         text-align: left;
+         float: left;
+         display: inline-block;
+         height: 14px;
+     }
+     .centered .center{
+         text-align: center;
+         display: inline-block;
+         height: 14px;
+     }
+     .centered .right{
+         text-align: right;
+         float: right;
+         display: inline-block;
+         height: 14px;
+     }
+
+ </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

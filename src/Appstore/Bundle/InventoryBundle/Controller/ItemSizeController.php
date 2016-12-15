@@ -240,8 +240,7 @@ class ItemSizeController extends Controller
     {
         $item = $_REQUEST['q'];
         if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $item = $this->getDoctrine()->getRepository('InventoryBundle:ItemSize')->searchAutoComplete($item,$inventory);
+            $item = $this->getDoctrine()->getRepository('InventoryBundle:ItemSize')->searchAutoComplete($item);
         }
         return new JsonResponse($item);
     }

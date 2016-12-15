@@ -40,12 +40,12 @@ class ProductController extends Controller
 
     }
 
-    public function indexAction(Request $request, $domain)
+    public function indexAction(Request $request, $shop)
     {
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug'=>$domain));
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
         $inventory = $globalOption->getInventoryConfig();
         $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
         $pagination = $this->paginate($entities);

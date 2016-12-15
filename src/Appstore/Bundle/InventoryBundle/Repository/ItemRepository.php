@@ -1,6 +1,8 @@
 <?php
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
@@ -40,10 +42,10 @@ class ItemRepository extends EntityRepository
 
 
         $masterItem = $data['appstore_bundle_inventorybundle_item']['masterItem'];
-        $vendor = isset($data['appstore_bundle_inventorybundle_item']['vendor']) ? $data['appstore_bundle_inventorybundle_item']['vendor'] :'';
-        $itemColor = isset ($data['appstore_bundle_inventorybundle_item']['color']) ? $data['appstore_bundle_inventorybundle_item']['color']:'';
-        $itemSize = isset($data['appstore_bundle_inventorybundle_item']['size']) ? $data['appstore_bundle_inventorybundle_item']['size'] : '';
-        $itemBrand = isset($data['appstore_bundle_inventorybundle_item']['brand'])?$data['appstore_bundle_inventorybundle_item']['brand']:'';
+        $vendor = isset($data['appstore_bundle_inventorybundle_item']['vendor']) ? $data['appstore_bundle_inventorybundle_item']['vendor'] :'NULL';
+        $itemColor = isset ($data['appstore_bundle_inventorybundle_item']['color']) ? $data['appstore_bundle_inventorybundle_item']['color']:'NULL';
+        $itemSize = isset($data['appstore_bundle_inventorybundle_item']['size']) ? $data['appstore_bundle_inventorybundle_item']['size'] : 'NULL';
+        $itemBrand = isset($data['appstore_bundle_inventorybundle_item']['brand'])?$data['appstore_bundle_inventorybundle_item']['brand']:'NULL';
 
 
         if($inventory->getIsSize() == 1){
@@ -66,19 +68,20 @@ class ItemRepository extends EntityRepository
         }
 
         if($inventory->getIsBrand() == 1){
-            $brand     = $itemBrand;
+            $itemBrand     = $itemBrand;
         }else{
-            $brand     = NULL;
+            $itemBrand     = NULL;
         }
 
 
         $item = $this->findOneBy(array(
-            'masterItem'      => $masterItem,
-            'size'      => $itemSize,
-            'color'      => $itemColor,
-            'vendor'      => $vendor,
-            'brand'      => $brand,
-            'inventoryConfig' => $inventory
+
+            'masterItem'        => $masterItem,
+            'size'              => $itemSize,
+            'color'             => $itemColor,
+            'vendor'            => $vendor,
+            'brand'             => $itemBrand,
+            'inventoryConfig'   => $inventory
         ));
 
         if(empty($item)){
@@ -250,6 +253,22 @@ class ItemRepository extends EntityRepository
         $em->flush();
 
     }
+
+    public function onlineOrderUpdate(Order $order){
+
+        $em = $this->_em;
+        foreach($order->getOrderItems() as $orderItem ) {
+
+            $entity = $orderItem->getPurchaseItem()->getItem();
+            $qnt = ($entity->getOnlineOrderQuantity() + $orderItem->getQuantity());
+            $entity->setOnlineOrderQuantity($qnt);
+            $em->persist($entity);
+            $em->flush();
+        }
+
+    }
+
+
 
     public function itemDamageUpdate(Damage $damage){
 

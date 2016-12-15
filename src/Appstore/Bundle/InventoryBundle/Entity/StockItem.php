@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -37,6 +38,12 @@ class StockItem
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="stockItem")
      */
     protected $purchaseItem;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", inversedBy="stockItem")
+     */
+    protected $orderItem;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseReturnItem", inversedBy="stockItems")
@@ -402,6 +409,21 @@ class StockItem
         $this->damage = $damage;
     }
 
+    /**
+     * @return OrderItem
+     */
+    public function getOrderItem()
+    {
+        return $this->orderItem;
+    }
+
+    /**
+     * @param OrderItem $orderItem
+     */
+    public function setOrderItem($orderItem)
+    {
+        $this->orderItem = $orderItem;
+    }
 
 }
 

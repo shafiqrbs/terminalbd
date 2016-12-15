@@ -1,9 +1,5 @@
-allproduct:
-    path:      /all-products
-    defaults: { _controller: "CustomerBundle:Product:allProduct" }
-
 order_product:
-    path:      /{domain}/order-new
+    path:      /order-new
     defaults: { _controller: "CustomerBundle:Product:index" }
 
 product_cart:

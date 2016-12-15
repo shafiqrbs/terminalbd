@@ -235,8 +235,7 @@ class ItemColorController extends Controller
     {
         $item = $_REQUEST['q'];
         if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $item = $this->getDoctrine()->getRepository('InventoryBundle:ItemColor')->searchAutoComplete($item,$inventory);
+            $item = $this->getDoctrine()->getRepository('InventoryBundle:ItemColor')->searchAutoComplete($item);
         }
         return new JsonResponse($item);
     }

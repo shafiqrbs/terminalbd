@@ -7,7 +7,7 @@ preorder_show:
     defaults: { _controller: "CustomerBundle:PreOrder:show" }
 
 preorder_new:
-    path:     /{domain}/new
+    path:     /new
     defaults: { _controller: "CustomerBundle:PreOrder:new" }
 
 preorder_create:

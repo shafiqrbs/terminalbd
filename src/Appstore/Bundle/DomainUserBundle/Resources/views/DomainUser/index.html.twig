@@ -102,13 +102,8 @@
                                                          </table>
                                                      </td>
                                                  </tr>
-
                                                  <tr><td>Roles</td><td>
-                                                 <ol>
-                                                         {% for role in entity.roles %}
-                                                             <li>{{ role }}</li>
-                                                         {% endfor %}
-                                                 </ol>
+                                                 <ol>{% for role in entity.roles %}<li>{{ role }}</li>{% endfor %}</ol>
                                                  </td>
                                                  </tr>
                                              </table>

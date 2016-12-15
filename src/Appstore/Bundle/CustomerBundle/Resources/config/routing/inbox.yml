@@ -1,0 +1,11 @@
+inbox:
+    path:     /
+    defaults: { _controller: "CustomerBundle:Order:index" }
+
+inbox_sms:
+    path:     /sms
+    defaults: { _controller: "CustomerBundle:Order:cartToOrder" }
+
+inbox_email:
+    path:     /email
+    defaults: { _controller: "CustomerBundle:Order:cartToOrder" }

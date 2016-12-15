@@ -1,39 +1,39 @@
-order:
+wishlist:
     path:     /
     defaults: { _controller: "CustomerBundle:Order:index" }
 
-order_to_cart:
+wishlist_to_cart:
     path:     /cart-to-order
     defaults: { _controller: "CustomerBundle:Order:cartToOrder" }
 
-order_checkout:
+wishlist_checkout:
     path:     /cart-to-order
     defaults: { _controller: "CustomerBundle:Order:cartToOrder" }
 
-order_cart:
+wishlist_cart:
     path:     /order-cart
     defaults: { _controller: "CustomerBundle:Order:cart" }
 
-order_payment:
+wishlist_payment:
     path:     /payment/{id}
     defaults: { _controller: "CustomerBundle:Order:payment" }
 
-order_process:
+wishlist_process:
     path:      /{id}/order-process
     defaults: { _controller: "CustomerBundle:Order:process" }
 
-order_show:
+wishlist_show:
     path:      /{id}/order-show
     defaults: { _controller: "CustomerBundle:Order:show" }
 
-order_delete:
+wishlist_delete:
     path:      /{id}/order-delete
     defaults: { _controller: "CustomerBundle:Order:delete" }
 
-order_item_delete:
+wishlist_item_delete:
     path:      /{id}/order-item-delete
     defaults: { _controller: "CustomerBundle:Order:itemDelete" }
 
-order_print_invoice:
+wishlist_print_invoice:
     path:     /{invoice}/invoice-print
     defaults: { _controller: "CustomerBundle:Order:print" }

@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('order') }}">Manage Order</a>
+                        <a href="{{ path('order',{'shop':globalOption.slug}) }}">Manage Order</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Manage Order Lists</a></li>
@@ -40,8 +40,8 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('order_print_invoice', { 'invoice': entity.invoice }) }} " target="_blank"><i class="icon-print"></i>&nbsp; Print</a></li>
-                                    <li><a href="{{ path('order') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('order_print_invoice', { 'shop':globalOption.slug,'invoice': entity.invoice }) }} " target="_blank"><i class="icon-print"></i>&nbsp; Print</a></li>
+                                    <li><a href="{{ path('order',{'shop':globalOption.slug}) }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -136,17 +136,19 @@
                                     <tr id="remove-{{ item.id }}">
                                         <input type="hidden" name="itemId[]" value="{{ item.id }}">
                                         <td>{{ loop.index }}.</td>
-                                        <td class="numeric" >{{ item.purchaseVendorItem.masterItem.name }}-{{ item.purchaseVendorItem.name }}</td>
+                                        <td class="numeric" >{{ item.purchaseVendorItem.masterItem.name }} {{ item.purchaseVendorItem.webName }}</td>
                                         <td class="numeric" >
                                             {% if item.purchaseVendorItem.size is defined and item.purchaseVendorItem.size is not empty %}
                                             {% if entity.process == 'Confirm'  %}
                                                 {{ item.goodsItem.size.name }}
                                             {% else %}
+                                                {% if item.purchaseVendorItem.size is not empty %}
                                                 <select class="m-wrap span12"  name="goodsId[]">
                                                     {% for goodsItem in item.purchaseVendorItem.goodsItems %}
                                                         <option {% if  item.goodsItem.id == goodsItem.id  %} selected="selected" {% endif %} value="{{ goodsItem.id  }}">{{ goodsItem.size.name }}</option>
                                                     {% endfor %}
                                                 </select>
+                                                {% endif %}
                                             {% endif %}
                                             {% endif %}
 
@@ -155,11 +157,14 @@
                                             {% if entity.process == 'Confirm'  %}
                                                 {% if item.color is not empty %}{{ item.color.name }}{% endif %}
                                             {% else %}
+                                            {% if item.goodsItem.colors is not empty  %}
                                                 <select class="m-wrap span12"  name="color[]">
+
                                                 {% for itemColor in item.goodsItem.colors %}
                                                    <option {% if item.color is not empty and item.color.id == itemColor.id  %} selected="selected" {% endif %} value="{{ itemColor.id }}">{{ itemColor.name }}</option>
                                                 {% endfor %}
                                                 </select>
+                                            {% endif %}
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
@@ -173,7 +178,7 @@
                                         <td class="numeric" >=&nbsp;{{ item.subTotal }}</td>
                                         <td class="numeric" >
                                             {% if entity.process == 'Created'  %}
-                                                <a title="Are you sure went to delete ?" data-id="{{ item.id }}" data-url="{{ path('order_item_delete',{'order':entity.id,'id':item.id}) }}" class="btn red mini remove" ><i class="icon-trash"></i></a>
+                                                <a title="Are you sure went to delete ?" data-id="{{ item.id }}" data-url="{{ path('order_item_delete',{'shop':globalOption.slug,'order':entity.id,'id':item.id}) }}" class="btn red mini remove" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -338,12 +343,9 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
-
                                 </div>
-
-                        </div>
+                            </div>
                         {{ form_end(form) }}
                     </div>
 

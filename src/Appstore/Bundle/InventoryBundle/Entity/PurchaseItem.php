@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -67,6 +68,11 @@ class PurchaseItem
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="purchaseItem" )
      **/
     private  $damages;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="purchaseItem" )
+     **/
+    private  $orderItem;
 
 
     /**
@@ -473,6 +479,22 @@ class PurchaseItem
             $stockQnt += $stock->getQuantity();
         }
         return $stockQnt;
+    }
+
+    /**
+     * @return OrderItem
+     */
+    public function getOrderItem()
+    {
+        return $this->orderItem;
+    }
+
+    /**
+     * @param OrderItem $orderItem
+     */
+    public function setOrderItem($orderItem)
+    {
+        $this->orderItem = $orderItem;
     }
 
 

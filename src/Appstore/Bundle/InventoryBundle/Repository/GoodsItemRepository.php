@@ -111,87 +111,6 @@ class GoodsItemRepository extends EntityRepository
 
     }
 
-    public function insertInventorySubProduct(PurchaseVendorItem $entity)
-    {
-        $em = $this->_em;
-        $rows=array();
-        $i = 0;
-        foreach($entity->getPurchaseItems() as $item ) {
-
-            if (!empty($item->getItem()->getSize())){
-
-                if (!isset($rows[$item->getItem()->getSize()->getId()]['color'])) {
-                    $rows[$item->getItem()->getSize()->getId()]['color'] = array();
-                }
-
-                $rows[$item->getItem()->getSize()->getId()]['color'][$item->getItem()->getColor()->getId()] = $item->getItem()->getColor()->getId();
-
-                if (!isset($rows[$item->getItem()->getSize()->getId()]['quantity'])) {
-                    $rows[$item->getItem()->getSize()->getId()]['quantity'] = 0;
-                }
-
-                $rows[$item->getItem()->getSize()->getId()]['quantity'] += $item->getStockItemQuantity();
-                $rows[$item->getItem()->getSize()->getId()]['purchasePrice'] = $item->getPurchasePrice();
-                $rows[$item->getItem()->getSize()->getId()]['salesPrice'] = $item->getSalesPrice();
-            }
-        }
-
-        if(!empty($rows)){
-
-            foreach($rows as $size => $row )
-            {
-                $colors = $row['color'];
-                $goods = new GoodsItem();
-                $goods->setSalesPrice($row['salesPrice']);
-                $goods->setPurchasePrice($row['purchasePrice']);
-                $goods->setQuantity($row['quantity']);
-
-                $sizeObj = $this->_em->getRepository('InventoryBundle:ItemSize')->find($size);
-                $goods->setSize($sizeObj);
-
-                $colorObjs =array();
-                foreach ($colors as $color){
-                    $colorObjs[] = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('id'=> $color));
-                }
-                if(!empty($colorObjs) && is_array($colorObjs)){
-                    $goods->setColors($colorObjs);
-                }
-                $goods->setPurchaseVendorItem($entity);
-                if($i == 0){
-                    $entity->setMasterQuantity($row['quantity']);
-                    $entity->setSize($sizeObj);
-                    if(!empty($colorObjs) && is_array($colorObjs)){
-                        $entity->setItemColors($colorObjs);
-                    }
-                    $goods->setMasterItem(1);
-                }
-                $em->persist($goods);
-                $em->flush();
-                $i ++ ;
-
-            }
-        }else{
-
-                $qunt=0;
-                $color = array();
-                foreach($entity->getPurchaseItems() as $item ) {
-                    $qunt += $item->getStockItemQuantity();
-                }
-                $goods = new GoodsItem();
-                $goods->setSalesPrice($entity->getSalesPrice());
-                $goods->setPurchasePrice($entity->getPurchasePrice());
-                $goods->setQuantity($qunt);
-                $goods->setPurchaseVendorItem($entity);
-                $goods->setMasterItem(1);
-                if($i == 0) {
-                    $entity->setMasterQuantity($qunt);
-                }
-                $em->persist($goods);
-                $em->flush();
-        }
-
-    }
-
     public function updateSubProduct(GoodsItem $goods,$data)
     {
         $em = $this->_em;
@@ -322,6 +241,176 @@ class GoodsItemRepository extends EntityRepository
             $em->flush();
         }
 
+    }
+
+    public function insertInventorySubProduct(PurchaseVendorItem $entity)
+    {
+
+        if($entity->getSubProduct() == true){
+            $this->updateProductToEcommerce($entity);
+        }else{
+            $this->insertProductToEcommerce($entity);
+        }
+    }
+
+    public function insertProductToEcommerce($entity){
+
+        $em = $this->_em;
+        $rows=array();
+        $i = 0;
+
+        foreach($entity->getPurchaseItems() as $item ) {
+
+            if (!empty($item->getItem()->getSize())){
+
+                if (!isset($rows[$item->getItem()->getSize()->getId()]['color'])) {
+                    $rows[$item->getItem()->getSize()->getId()]['color'] = array();
+                }
+
+                $rows[$item->getItem()->getSize()->getId()]['color'][$item->getItem()->getColor()->getId()] = $item->getItem()->getColor()->getId();
+
+                if (!isset($rows[$item->getItem()->getSize()->getId()]['quantity'])) {
+                    $rows[$item->getItem()->getSize()->getId()]['quantity'] = 0;
+                }
+
+                $rows[$item->getItem()->getSize()->getId()]['quantity'] += $item->getStockItemQuantity();
+                $rows[$item->getItem()->getSize()->getId()]['purchasePrice'] = $item->getPurchasePrice();
+                $rows[$item->getItem()->getSize()->getId()]['salesPrice'] = $item->getSalesPrice();
+            }
+        }
+        if(!empty($rows)){
+
+            foreach($rows as $size => $row )
+            {
+                $colors = $row['color'];
+                $goods = new GoodsItem();
+                $goods->setSalesPrice($row['salesPrice']);
+                $goods->setPurchasePrice($row['purchasePrice']);
+                $goods->setQuantity($row['quantity']);
+
+                $sizeObj = $this->_em->getRepository('InventoryBundle:ItemSize')->find($size);
+                $goods->setSize($sizeObj);
+
+                $colorObjs =array();
+                foreach ($colors as $color){
+                    $colorObjs[] = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('id'=> $color));
+                }
+                if(!empty($colorObjs) && is_array($colorObjs)){
+                    $goods->setColors($colorObjs);
+                }
+                $goods->setPurchaseVendorItem($entity);
+                if($i == 0){
+                    $entity->setMasterQuantity($row['quantity']);
+                    $entity->setSize($sizeObj);
+                    if(!empty($colorObjs) && is_array($colorObjs)){
+                        $entity->setItemColors($colorObjs);
+                    }
+                    $goods->setMasterItem(1);
+                }
+                $em->persist($goods);
+                $em->flush();
+                $i ++ ;
+
+            }
+        }else{
+
+            $qunt=0;
+            $color = array();
+            foreach($entity->getPurchaseItems() as $item ) {
+                $qunt += $item->getStockItemQuantity();
+            }
+            $goods = new GoodsItem();
+            $goods->setSalesPrice($entity->getSalesPrice());
+            $goods->setPurchasePrice($entity->getPurchasePrice());
+            $goods->setQuantity($qunt);
+            $goods->setPurchaseVendorItem($entity);
+            $goods->setMasterItem(1);
+            if($i == 0) {
+                $entity->setMasterQuantity($qunt);
+            }
+            $em->persist($goods);
+            $em->flush();
+        }
+    }
+
+    public function updateProductToEcommerce($entity){
+
+        $em = $this->_em;
+        $rows=array();
+        $i = 0;
+        foreach($entity->getPurchaseItems() as $item ) {
+
+            if (!empty($item->getItem()->getSize())){
+
+                if (!isset($rows[$item->getItem()->getSize()->getId()]['color'])) {
+                    $rows[$item->getItem()->getSize()->getId()]['color'] = array();
+                }
+
+                $rows[$item->getItem()->getSize()->getId()]['color'][$item->getItem()->getColor()->getId()] = $item->getItem()->getColor()->getId();
+
+                if (!isset($rows[$item->getItem()->getSize()->getId()]['quantity'])) {
+                    $rows[$item->getItem()->getSize()->getId()]['quantity'] = 0;
+                }
+
+                $rows[$item->getItem()->getSize()->getId()]['quantity'] += $item->getStockItemQuantity();
+                $rows[$item->getItem()->getSize()->getId()]['purchasePrice'] = $item->getPurchasePrice();
+                $rows[$item->getItem()->getSize()->getId()]['salesPrice'] = $item->getSalesPrice();
+            }
+        }
+
+        if(!empty($rows)){
+
+            foreach($rows as $size => $row )
+            {
+                $colors = $row['color'];
+                $goods = $this->_em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem' => $entity->getId(),'size' => $size));
+                $goods->setSalesPrice($row['salesPrice']);
+                $goods->setPurchasePrice($row['purchasePrice']);
+                $goods->setQuantity($row['quantity']);
+
+                $sizeObj = $this->_em->getRepository('InventoryBundle:ItemSize')->find($size);
+                $goods->setSize($sizeObj);
+
+                $colorObjs =array();
+                foreach ($colors as $color){
+                    $colorObjs[] = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('id'=> $color));
+                }
+                if(!empty($colorObjs) && is_array($colorObjs)){
+                    $goods->setColors($colorObjs);
+                }
+                $goods->setPurchaseVendorItem($entity);
+                if($i == 0){
+                    $entity->setMasterQuantity($row['quantity']);
+                    $entity->setSize($sizeObj);
+                    if(!empty($colorObjs) && is_array($colorObjs)){
+                        $entity->setItemColors($colorObjs);
+                    }
+                    $goods->setMasterItem(1);
+                }
+                $em->persist($goods);
+                $em->flush();
+                $i ++ ;
+
+            }
+        }else{
+
+            $qunt=0;
+            $color = array();
+            foreach($entity->getPurchaseItems() as $item ) {
+                $qunt += $item->getStockItemQuantity();
+            }
+            $goods = $this->_em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem' => $entity->getId(),'masterItem'=>1));
+            $goods->setSalesPrice($entity->getSalesPrice());
+            $goods->setPurchasePrice($entity->getPurchasePrice());
+            $goods->setQuantity($qunt);
+            $goods->setPurchaseVendorItem($entity);
+            $goods->setMasterItem(1);
+            if($i == 0) {
+                $entity->setMasterQuantity($qunt);
+            }
+            $em->persist($goods);
+            $em->flush();
+        }
     }
 
 

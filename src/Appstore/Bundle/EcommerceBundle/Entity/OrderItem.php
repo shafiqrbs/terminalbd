@@ -35,6 +35,11 @@ class OrderItem
     private  $purchaseVendorItem;
 
      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="orderItems" )
+     **/
+    private  $stockItem;
+
+     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="orderItem" )
      **/
     private  $purchaseItem;

@@ -46,3 +46,7 @@ accounting_account_sales:
     resource: "@AccountingBundle/Resources/config/routing/accountsales.yml"
     prefix:   /finance/sales
 
+accounting_account_online_order:
+    resource: "@AccountingBundle/Resources/config/routing/accountonlineorder.yml"
+    prefix:   /finance/online-order
+

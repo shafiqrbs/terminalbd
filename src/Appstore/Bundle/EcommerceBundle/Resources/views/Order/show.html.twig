@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('order') }}">Manage Order</a>
+                        <a href="{{ path('customer_order') }}">Manage Order</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Manage Order Lists</a></li>
@@ -133,7 +133,7 @@
                                     <tr id="remove-{{ item.id }}">
                                         <td>{{ loop.index }}.</td>
                                         <td class="numeric" >{{ item.purchaseVendorItem.masterItem.name }}-{{ item.purchaseVendorItem.name }}</td>
-                                        <td class="numeric" >{{ item.goodsItem.size.name }}</td>
+                                        <td class="numeric" >{% if  item.goodsItem.size %}{{ item.goodsItem.size.name }}{% endif %}</td>
                                         <td class="numeric" >{% if item.color is not empty %}{{ item.color.name }}{% endif %}</td>
                                         <td class="numeric" > {{ item.quantity }}
                                             &nbsp;{{ item.purchaseVendorItem.masterItem.productUnit.name }}</td>

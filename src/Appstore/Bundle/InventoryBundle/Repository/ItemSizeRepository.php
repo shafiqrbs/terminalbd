@@ -29,15 +29,13 @@ class ItemSizeRepository extends EntityRepository
 
     }
 
-    public function searchAutoComplete($q, InventoryConfig $inventory)
+    public function searchAutoComplete($q)
     {
         $query = $this->createQueryBuilder('e');
-        $query->join('e.inventoryConfig', 'ic');
         $query->select('e.name as id');
         $query->addSelect('e.name as text');
-        $query->where($query->expr()->like("e.name", "'$q%'"  ));
-        $query->andWhere("ic.id = :inventory");
-        $query->setParameter('inventory', $inventory->getId());
+        $query->where('e.status=1');
+        $query->andWhere($query->expr()->like("e.name", "'$q%'"  ));
         $query->groupBy('e.id');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '10' );

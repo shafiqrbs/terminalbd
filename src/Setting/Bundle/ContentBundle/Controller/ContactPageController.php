@@ -94,7 +94,8 @@ class ContactPageController extends Controller
     private function createEditForm(ContactPage $entity)
     {
 
-        $form = $this->createForm(new ContactPageType(), $entity, array(
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new ContactPageType($location), $entity, array(
             'action' => $this->generateUrl('contactpage_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

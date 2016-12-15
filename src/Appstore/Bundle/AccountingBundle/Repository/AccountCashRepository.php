@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
+use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
@@ -290,6 +291,37 @@ class AccountCashRepository extends EntityRepository
         $cash->setUpdated($entity->getUpdated());
         $cash->setBalance($balance - $entity->getAmount() );
         $cash->setCredit($entity->getAmount());
+        $em->persist($cash);
+        $em->flush();
+
+    }
+
+    public function insertOnlineOrderCash(AccountOnlineOrder $entity)
+    {
+
+        $balance = $this->lastInsertCash($entity,'Online');
+        $em = $this->_em;
+        $cash = new AccountCash();
+
+        if($entity->getTransactionMethod()->getId() == 2){
+            $cash->setAccountBank($entity->getAccountBank());
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+        }elseif($entity->getTransactionMethod()->getId() == 3 ){
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(43));
+            $cash->setAccountMobileBank($entity->getAccountMobileBank());
+        }else{
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(36));
+        }
+
+        $cash->setGlobalOption($entity->getGlobalOption());
+        $cash->setAccountOnlineOrder($entity);
+        $cash->setTransactionMethod($entity->getTransactionMethod());
+        $cash->setProcessHead('Online');
+        $cash->setAccountRefNo($entity->getAccountRefNo());
+        $cash->setUpdated($entity->getUpdated());
+
+        $cash->setBalance($balance + $entity->getAmount() );
+        $cash->setDebit($entity->getAmount());
         $em->persist($cash);
         $em->flush();
 

@@ -16,8 +16,8 @@
                                 <li><i class="icon-phone"></i>&nbsp;{{ entity.globalOption.mobile }}</li>
                                 <li><i class="icon-envelope"></i>&nbsp;{{ entity.globalOption.email }}</li>
                                 <li><i class="icon-home"></i>&nbsp;{{ entity.globalOption.contactPage.address1 }}</li>
-                                <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% if  entity.globalOption.contactPage.thana is not empty %} {{ entity.globalOption.contactPage.thana.name }},{% endif %}
-                                    {% if  entity.globalOption.contactPage.district is not empty %}{{ entity.globalOption.contactPage.district.name }}{% endif %}{% if  entity.globalOption.contactPage.postalCode is not empty %} -{{ entity.globalOption.contactPage.postalCode }}{% endif %}.</li>
+                                <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% if  entity.globalOption.contactPage.location is not empty %} {{ entity.globalOption.contactPage.location.name }},{% endif %}
+                                    {% if  entity.globalOption.contactPage.location is not empty %}{{ entity.globalOption.contactPage.location.parent.name }}{% endif %}{% if  entity.globalOption.contactPage.postalCode is not empty %} -{{ entity.globalOption.contactPage.postalCode }}{% endif %}.</li>
                                 <li><i class="icon-link"></i>&nbsp;www.{{ entity.globalOption.domain }}</li>
                             </ul>
                         </div>
@@ -113,7 +113,7 @@
                                     <tr id="remove-{{ item.id }}">
                                         <td>{{ loop.index }}.</td>
                                         <td class="numeric" >{{ item.purchaseVendorItem.masterItem.name }}-{{ item.purchaseVendorItem.name }}</td>
-                                        <td class="numeric" >{{ item.goodsItem.size.name }}</td>
+                                        <td class="numeric" >{% if item.goodsItem.size %}{{ item.goodsItem.size.name }}{% endif %}</td>
                                         <td class="numeric" >{% if item.color is not empty %}{{ item.color.name }}{% endif %}</td>
                                         <td class="numeric" >
                                             {{ item.quantity }}&nbsp;{{ item.purchaseVendorItem.masterItem.productUnit.name }}</td>

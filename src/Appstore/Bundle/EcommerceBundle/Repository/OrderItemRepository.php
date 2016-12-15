@@ -47,17 +47,14 @@ class OrderItemRepository extends EntityRepository
         $em = $this->_em;
         $i = 0;
         foreach ($data['itemId'] as $row ){
-
             $entity = $em->getRepository('EcommerceBundle:OrderItem')->find($data['itemId'][$i]);
             $entity->setOrder($order);
-            $subitem = $em->getRepository('InventoryBundle:GoodsItem')->find($data['goodsId'][$i]);
-            $entity->setGoodsItem($subitem);
             $entity->setQuantity($data['quantity'][$i]);
             if(isset($data['color'][$i]) and !empty($data['color'][$i])){
             $entity->setColor($em->getRepository('InventoryBundle:ItemColor')->find($data['color'][$i]));
             }
-            $entity->setPrice($subitem->getSalesPrice());
-            $entity->setSubTotal($subitem->getSalesPrice() * $data['quantity'][$i]);
+            $entity->setPrice($entity->getGoodsItem()->getSalesPrice());
+            $entity->setSubTotal($entity->getPrice() * $data['quantity'][$i]);
             $em->persist($entity);
             $em->flush();
             $i++;
@@ -70,10 +67,11 @@ class OrderItemRepository extends EntityRepository
         foreach ($order->getOrderItems() as $orderItem){
 
             $orderPurchaseItem = $this->getOrderPurchaseItem($orderItem);
+            if($orderPurchaseItem){
             $orderItem->setPurchaseItem($orderPurchaseItem);
             $em->persist($orderItem);
             $em->flush();
-
+            }
         }
     }
 
@@ -86,10 +84,14 @@ class OrderItemRepository extends EntityRepository
         $qb->select('pi.id');
         $qb->where("e.id = :orderItemId");
         $qb->setParameter('orderItemId', $orderItem);
-        $qb->andWhere("i.size = :size");
-        $qb->setParameter('size', $orderItem->getSize());
-        $qb->andWhere("i.color = :color");
-        $qb->setParameter('color', $orderItem->getColor());
+        if(!empty($orderItem->getSize())){
+            $qb->andWhere("i.size = :size");
+            $qb->setParameter('size', $orderItem->getSize());
+        }
+        if(!empty($orderItem->getColor())){
+            $qb->andWhere("i.color = :color");
+            $qb->setParameter('color', $orderItem->getColor());
+        }
         $result = $qb->getQuery()->getArrayResult();
         if(!empty($result)){
             return $this->_em->getRepository('InventoryBundle:PurchaseItem')->find($result[0]['id']);

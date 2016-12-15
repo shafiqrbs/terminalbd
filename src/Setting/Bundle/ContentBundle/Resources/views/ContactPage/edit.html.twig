@@ -77,6 +77,15 @@
                         <div class="row-fluid">
                             <div class="span6 ">
                                 <div class="control-group">
+                                    <label class="control-label" for="firstName">Location</label>
+                                    <div class="controls">
+                                        {{ form_widget(form.location) }}
+                                        {{ form_errors(form.location) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
                                     <label class="control-label" for="firstName">Postal Code</label>
                                     <div class="controls">
                                         <div class="input-icon left">
@@ -87,7 +96,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="span6 ">
+                            <div class="span3">
                                 <div class="control-group">
                                     <label class="control-label" for="firstName">Fax</label>
                                     <div class="controls">

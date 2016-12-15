@@ -36,10 +36,9 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('inventory_goods_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('inventory_goods') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('customer_domain') }}"><i class="icon-plus-sign"></i>&nbsp;All Domain</a></li>
                                 </ul>
-                                <a class="dropdown-toggle btn purple cart" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" href="{{ path('order_cart') }}">
+                                <a class="dropdown-toggle btn purple cart" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" href="{{ path('order_cart',{'shop':globalOption.slug}) }}">
                                     <i class="icon-shopping-cart"></i>&nbsp;BDT. (<span>{{ cart.total|number_format }}</span>)
                                 </a>
                                 <ul class="dropdown-menu extended inbox">
@@ -65,10 +64,10 @@
                                     </li>
                                     <li class="external">
                                         <span class="pull-left">
-                                           <a  href="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}">Views&nbsp;<i class="icon-shopping-cart"></i></a>
+                                           <a  href="{{ path('order_checkout',{'shop':globalOption.slug}) }}">Views&nbsp;<i class="icon-shopping-cart"></i></a>
                                         </span>
                                         <span class="pull-right">
-                                            <a  href="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}">Checkout&nbsp;<i class="m-icon-swapright"></i></a>
+                                            <a  href="{{ path('order_checkout',{'shop':globalOption.slug}) }}">Checkout&nbsp;<i class="m-icon-swapright"></i></a>
                                         </span>
                                     </li>
                                 </ul>
@@ -122,7 +121,7 @@
                                     <tr class="remove-vendor-item-{{ entity.id }}">
                                         <td class="numeric dropdown" >
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                                {% if entity.masterItem %}{{ entity.masterItem.name }}-{% endif %}{{ entity.name }}
+                                                {% if entity.masterItem %}{{ entity.masterItem.name }} {% endif %}{{ entity.webName }}
                                             </a>
                                             <ul class="dropdown-menu extended inbox">
                                                 <li>
@@ -138,7 +137,7 @@
                                         <td class="numeric" >{{ entity.subProductQuantity }}&nbsp;{% if entity.masterItem.productUnit is not empty %}{{ entity.masterItem.productUnit.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.discount is not empty  %}<strike>{% endif %}{{ entity.salesPrice|number_format() }}{% if entity.discount is not empty  %}</strike>{% endif %}{% if entity.discount is not empty  %}{{ entity.discountPrice|number_format() }}{% endif %}</td>
                                         <td class="numeric" >
-                                            <a href="{{ path('order_product_show',{'slug':entity.slug}) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                            <a href="{{ path('order_product_show',{'shop':globalOption.slug,'slug':entity.slug}) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                             <a href="javascript:" class="btn green mini toggle"  id="{{ entity.id  }}" ><i class="icon-shopping-cart"></i>&nbsp;Preview & Cart</a>
                                         </td>
                                     </tr>
@@ -177,8 +176,10 @@
                                                                 {% for purchaseItem in  entity.goodsItems %}
                                                                     <tr id="remove-purchase-item-{{ entity.id }}">
                                                                         <td class="numeric" >
+                                                                            {% if purchaseItem.size %}
                                                                             <input type="hidden" name="item" id="name-{{ purchaseItem.id }}">
-                                                                            {% if purchaseItem.size %}{{ purchaseItem.size.name }}{% endif %}&nbsp; & &nbsp;BDT. {{ purchaseItem.salesPrice }}
+                                                                                {{ purchaseItem.size.name }}&nbsp; & &nbsp;BDT. {{ purchaseItem.salesPrice }}
+                                                                            {% endif %}
                                                                         </td>
                                                                         <td class="numeric" >
                                                                             {% if purchaseItem.colors is not empty %}
@@ -191,7 +192,7 @@
                                                                         </td>
                                                                         <td class="numeric" ><input type="number" class="span12 m-wrap" name="quantity" id="quantity-{{ purchaseItem.id }}" value="{{ purchaseItem.quantity }}" max="{{ purchaseItem.quantity }}" min="1"></td>
                                                                        <td class="numeric" >
-                                                                            <a href="javascript:" data-url="{{ path('order_cart_to_add',{'id':purchaseItem.id}) }}" id="{{ purchaseItem.id }}" class="btn blue mini addCart" ><i class="icon-shopping-cart"></i></a>
+                                                                            <a href="javascript:" data-url="{{ path('order_cart_to_add',{'shop':globalOption.slug,'id':purchaseItem.id}) }}" id="{{ purchaseItem.id }}" class="btn blue mini addCart" ><i class="icon-shopping-cart"></i></a>
                                                                         </td>
                                                                     </tr>
                                                                 {% endfor %}

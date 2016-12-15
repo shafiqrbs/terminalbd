@@ -5,6 +5,7 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBkash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -89,6 +90,12 @@ class Order
      **/
 
     private $approvedBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="orders")
+     **/
+
+    private $customer;
 
 
     /**
@@ -893,6 +900,22 @@ class Order
     public function setCashOnDelivery($cashOnDelivery)
     {
         $this->cashOnDelivery = $cashOnDelivery;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param Customer $customer
+     */
+    public function setCustomer($customer)
+    {
+        $this->customer = $customer;
     }
 
 }

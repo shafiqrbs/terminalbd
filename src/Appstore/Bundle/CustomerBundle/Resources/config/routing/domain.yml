@@ -1,7 +1,11 @@
 customer_domain:
-    path:     /
+    path:     /domain
     defaults: { _controller: "CustomerBundle:Domain:index" }
 
 customer_domain_bookmark:
     path:     /bookmark
     defaults: { _controller: "CustomerBundle:Domain:domainBookmark" }
+
+allproduct:
+    path:      /all-products
+    defaults: { _controller: "CustomerBundle:Product:allProduct" }

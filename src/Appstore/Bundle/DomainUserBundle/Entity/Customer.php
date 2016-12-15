@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Entity;
 
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,6 +27,13 @@ class Customer
      **/
 
     protected $globalOption;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="customers")
+     * @ORM\OrderBy({"id" = "DESC"})
+     */
+    protected $orders;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="customer" )
@@ -74,8 +82,6 @@ class Customer
      **/
 
     protected $sales;
-
-
 
     /**
      * @var string
@@ -355,7 +361,7 @@ class Customer
      * @param string $customerType
      *
      * offline
-     * ecommerce
+     * online
      * wholesale
      * distributor
      * pos
@@ -451,6 +457,14 @@ class Customer
     public function setGender($gender)
     {
         $this->gender = $gender;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrders()
+    {
+        return $this->orders;
     }
 
 }

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
+use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
@@ -328,6 +329,8 @@ class TransactionRepository extends EntityRepository
         $this->insertSalesVatAccountPayable($entity,$accountSales);
     }
 
+
+
     private function insertSalesItem($entity,AccountSales $accountSales)
     {
 
@@ -459,6 +462,127 @@ class TransactionRepository extends EntityRepository
         $this->_em->flush();
 
     }
+
+    public function onlineOrderTransaction($entity,$onlineOrder)
+    {
+        $this->insertOnlineOrderItem($entity,$onlineOrder);
+        $this->insertOnlineOrderCash($entity,$onlineOrder);
+        $this->insertOnlineOrderAccountReceivable($entity,$onlineOrder);
+        $this->insertOnlineOrderAccountPayable($entity,$onlineOrder);
+        $this->insertOnlineOrderVatAccountPayable($entity,$onlineOrder);
+    }
+
+
+    private function insertOnlineOrderItem($entity , AccountOnlineOrder $onlineOrder)
+    {
+
+        $amount =  $entity->getGrandTotalAmount();
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($onlineOrder->getGlobalOption());
+        $transaction->setAccountRefNo($onlineOrder->getAccountRefNo());
+        $transaction->setProcessHead('Online');
+        $transaction->setProcess('Goods');
+        /* Sales Revenue - Sales goods account */
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(33));
+        $transaction->setAmount('-'.$amount);
+        $transaction->setCredit($amount);
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+
+    }
+
+    private function insertOnlineOrderCash($entity,$onlineOrder)
+    {
+        $amount = $entity->getPaidAmount();
+        if($amount > 0) {
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($onlineOrder->getGlobalOption());
+            $transaction->setAccountRefNo($onlineOrder->getAccountRefNo());
+            $transaction->setProcessHead('Online');
+
+            $transaction->setUpdated($entity->getUpdated());
+            if($entity->getTransactionMethod()->getId() == 2 || $entity->getTransactionMethod()->getId() == 3 ) {
+                /* Asset Accounts - Bank Cash Receive */
+                $transaction->setProcess('Current Asset');
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(39));
+            }else{
+                /* Cash - Sales Receive Cash Account */
+                $transaction->setProcess('Cash');
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(36));
+            }
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+        }
+    }
+
+    private function insertOnlineOrderAccountReceivable($entity,$accountSales)
+    {
+
+        $amount = $entity->getDueAmount();
+        if($amount > 0){
+
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountSales->getGlobalOption());
+            $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+            $transaction->setProcessHead('Sales');
+            $transaction->setProcess('AccountReceivable');
+            /* Assets Account - Account Receivable */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(4));
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+
+        }
+
+    }
+
+    private function insertOnlineOrderAccountPayable($entity,$onlineOrder)
+    {
+
+        $amount = $entity->getReturnAmount();
+        if($amount > 0){
+
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($onlineOrder->getGlobalOption());
+            $transaction->setAccountRefNo($onlineOrder->getAccountRefNo());
+            $transaction->setProcessHead('Online');
+            $transaction->setProcess('AccountPayable');
+            /* Assets Account - Account Receivable */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(12));
+            $transaction->setAmount('-'.$amount);
+            $transaction->setCredit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+
+        }
+
+    }
+
+    private function insertOnlineOrderVatAccountPayable($entity,$onlineOrder)
+    {
+
+        $amount = $entity->getVat();
+        if($amount > 0){
+
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($onlineOrder->getGlobalOption());
+            $transaction->setAccountRefNo($onlineOrder->getAccountRefNo());
+            $transaction->setProcessHead('Online');
+            $transaction->setProcess('AccountPayable');
+            /* Current Liabilities - Sales Tax */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(16));
+            $transaction->setAmount('-'.$amount);
+            $transaction->setCredit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+
+        }
+
+    }
+
 
     public function insertVendorReturnTransaction($entity)
     {

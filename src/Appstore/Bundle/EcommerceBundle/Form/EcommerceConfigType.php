@@ -16,6 +16,7 @@ class EcommerceConfigType extends AbstractType
     {
         $builder
 
+            ->add('shippingCharge','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Please set delivery charge')))
             ->add('pickupLocation','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>8,'placeholder'=>'Please set address where customer product pickup')))
             ->add('currency', 'choice', array(
                 'attr'=>array('class'=>'span12'),

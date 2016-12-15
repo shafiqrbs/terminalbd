@@ -40,7 +40,7 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('order') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('customer_order') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -132,8 +132,8 @@
                                 {% for item in entity.orderItems %}
                                     <tr id="remove-{{ item.id }}">
                                         <td>{{ loop.index }}.</td>
-                                        <td class="numeric" >{{ item.purchaseVendorItem.masterItem.name }}-{{ item.purchaseVendorItem.name }}</td>
-                                        <td class="numeric" >{{ item.goodsItem.size.name }}</td>
+                                        <td class="numeric" >{{ item.purchaseVendorItem.masterItem.name }} {{ item.purchaseVendorItem.webName }}</td>
+                                        <td class="numeric" >{% if item.goodsItem.size is not empty %}{{ item.goodsItem.size.name }}{% endif %}</td>
                                         <td class="numeric" >{% if item.color is not empty %}{{ item.color.name }}{% endif %}</td>
                                         <td class="numeric" >
                                         {{ item.quantity }}&nbsp;{{ item.purchaseVendorItem.masterItem.productUnit.name }}</td>
@@ -152,7 +152,7 @@
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Delivery Charge</span></td>
                                     <td class="numeric">=&nbsp;
-                                        {% if entity.process == 'wfc'  %}
+                                        {% if entity.process == 'WfC'  %}
                                             <a data-mode="inline" class="editable" data-name="amount" href="#"  data-url="{{ path('customer_order_shipping_charge',{'id':entity.id}) }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your delivery charge">{{ entity.shippingCharge }}</a>
                                         {% else %}
                                             {{ entity.shippingCharge }}
@@ -219,7 +219,7 @@
                                                             <div class="input-append">
                                                                 <input type="datetime" name="deliveryDate" id="deliveryDate" class="date-picker span6 m-wrap" value="{{ "now"|date("d-m-Y") }}" placeholder="{{ "now"|date("d-m-Y") }}" >
                                                                 <div class="btn-group">
-                                                                    <button class="green btn dropdown-toggle" data-toggle="dropdown">
+                                                                    <button class="blue btn dropdown-toggle" data-toggle="dropdown">
                                                                         Action <span class="caret"></span>
                                                                     </button>
                                                                     <ul class="dropdown-menu">

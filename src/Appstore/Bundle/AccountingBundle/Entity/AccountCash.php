@@ -72,6 +72,11 @@ class AccountCash
     protected $accountSales;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", inversedBy="accountCash")
+     */
+    protected $accountOnlineOrder;
+
+    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn", inversedBy="accountCash")
      */
     protected $accountSalesReturn;
@@ -572,6 +577,22 @@ class AccountCash
     public function setAccountMobileBank($accountMobileBank)
     {
         $this->accountMobileBank = $accountMobileBank;
+    }
+
+    /**
+     * @return AccountOnlineOrder
+     */
+    public function getAccountOnlineOrder()
+    {
+        return $this->accountOnlineOrder;
+    }
+
+    /**
+     * @param AccountOnlineOrder $accountOnlineOrder
+     */
+    public function setAccountOnlineOrder($accountOnlineOrder)
+    {
+        $this->accountOnlineOrder = $accountOnlineOrder;
     }
 
 }

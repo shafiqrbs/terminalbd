@@ -111,7 +111,7 @@ class ItemListener
         $skuWeb         = $skuSlug.'_'.$domainSlug;
 
 
-        $data = array('sku'=>$sku,'skuSlug'=>$skuSlug,'skuWeb'=>$skuWeb);
+        $data = array('sku'=> $sku,'skuSlug'=> $skuSlug,'skuWeb'=> $skuWeb);
         return $data;
     }
 

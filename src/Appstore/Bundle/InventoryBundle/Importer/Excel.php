@@ -84,18 +84,18 @@ class Excel
                 $itemObj = new Item();
                 $itemObj->setName($this->sentence_case($item['Item Name']));
                 $itemObj->setMasterItem($masterItem);
-                if($this->getInventoryConfig()->getIsColor() == 1) {
+               // if($this->getInventoryConfig()->getIsColor() == 1) {
                     $itemObj->setColor($itemColor);
-                }
-                if($this->getInventoryConfig()->getIsSize() == 1) {
+                //}
+                //if($this->getInventoryConfig()->getIsSize() == 1) {
                     $itemObj->setSize($itemSize);
-                }
-                if($this->getInventoryConfig()->getIsVendor() == 1) {
+                //}
+                //if($this->getInventoryConfig()->getIsVendor() == 1) {
                     $itemObj->setVendor($vendor);
-                }
-                if($this->getInventoryConfig()->getIsBrand() == 1) {
+                //}
+                //if($this->getInventoryConfig()->getIsBrand() == 1) {
                     $itemObj->setBrand($brand);
-                }
+                //}
                 $itemObj->setInventoryConfig($this->getInventoryConfig());
                 $itemObj = $this->save($itemObj);
             }
@@ -234,14 +234,14 @@ class Excel
         $colorRepository = $this->getColorRepository();
         if($color == NULL) {
             $color = $colorRepository->findOneBy(array(
-               // 'inventoryConfig'   => $this->getInventoryConfig(),
+                'status'              => 1,
                 'name'              => $item['Color']
             ));
 
             if($color == NULL) {
                 $color = new ItemColor();
                 $color->setName($item['Color']);
-                //$color->setInventoryConfig($this->getInventoryConfig());
+                $color->setInventoryConfig($this->getInventoryConfig());
                 $color = $this->save($color);
             }
 
@@ -258,14 +258,14 @@ class Excel
         if($size == NULL) {
 
             $size = $sizeRepository->findOneBy(array(
-                //'inventoryConfig'   => $this->getInventoryConfig(),
+                'status'              => 1,
                 'name'              => $item['Size']
             ));
 
             if($size == null) {
                 $size = new ItemSize();
                 $size->setName($item['Size']);
-                //$size->setInventoryConfig($this->getInventoryConfig());
+                $size->setInventoryConfig($this->getInventoryConfig());
                 $size = $this->save($size);
             }
 

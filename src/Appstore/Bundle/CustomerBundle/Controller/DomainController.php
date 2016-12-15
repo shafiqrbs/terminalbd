@@ -36,6 +36,12 @@ class DomainController extends Controller
         $form->handleRequest($request);
         $entities = $em->getRepository('SettingToolBundle:GlobalOption')->getActiveDomainList($form);
         $pagination = $this->paginate($entities);
+        $shop = $request->request->get('shop');
+        if(!empty($globalOption)){
+            $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
+        }else{
+            $globalOption ='';
+        }
 
 
         return $this->render('CustomerBundle:Domain:index.html.twig', array(
@@ -43,20 +49,23 @@ class DomainController extends Controller
             'user' => $this->getUser(),
             'form'   => $form->createView(),
             'entity' => $entity,
+            'globalOption' => $globalOption,
+
         ));
 
 
     }
 
-    public function domainBookmarkAction()
+    public function domainBookmarkAction($generated)
     {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
-
+        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode'=>$generated));
         $entities = $em->getRepository('EcommerceBundle:Order')->findBy(array('createdBy' => $user), array('updated' => 'desc'));
         $pagination = $this->paginate($entities);
         return $this->render('CustomerBundle:Customer:domainBookmark.html.twig', array(
             'entities' => $pagination,
+            'globalOption' => $globalOption,
         ));
 
     }

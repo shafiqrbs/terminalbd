@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('order') }}">Manage Order</a>
+                        <a href="{{ path('order',{'shop':globalOption.slug}) }}">Manage Order</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Manage Order Lists</a></li>
@@ -40,8 +40,8 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('order_print_invoice', { 'invoice': entity.invoice }) }} " target="_blank"><i class="icon-print"></i>&nbsp; Print</a></li>
-                                    <li><a href="{{ path('order') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('order_print_invoice', { 'shop':globalOption.slug,'invoice': entity.invoice }) }} " target="_blank"><i class="icon-print"></i>&nbsp; Print</a></li>
+                                    <li><a href="{{ path('order',{'shop':globalOption.slug}) }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -133,7 +133,7 @@
                                     <tr id="remove-{{ item.id }}">
                                         <td>{{ loop.index }}.</td>
                                         <td class="numeric" >{{ item.purchaseVendorItem.masterItem.name }}-{{ item.purchaseVendorItem.name }}</td>
-                                        <td class="numeric" >{{ item.goodsItem.size.name }}</td>
+                                        <td class="numeric" >{% if item.goodsItem.size %}{{ item.goodsItem.size.name }}{% endif %}</td>
                                         <td class="numeric" >{% if item.color is not empty %}{{ item.color.name }}{% endif %}</td>
                                         <td class="numeric" > {{ item.quantity }}
                                             &nbsp;{{ item.purchaseVendorItem.masterItem.productUnit.name }}</td>

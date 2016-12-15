@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ContentBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -10,7 +11,18 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ContactPageType extends AbstractType
 {
-        /**
+
+    /** @var  LocationRepository */
+
+    private $location;
+
+    function __construct(LocationRepository $location)
+    {
+        $this->location = $location;
+    }
+
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -22,6 +34,15 @@ class ContactPageType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
 
                 )
+            ))
+            ->add('location', 'entity', array(
+                'required'    => false,
+                'empty_value' => '---Select Location---',
+                'attr'=>array('class'=>'select2 span12'),
+                'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
+                'choices'=> $this->LocationChoiceList(),
+                'choices_as_values' => true,
+                'choice_label' => 'nestedLabel',
             ))
             ->add('latitude','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter latitude')))
             ->add('longitude','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter longitude')))
@@ -65,4 +86,11 @@ class ContactPageType extends AbstractType
     {
         return 'setting_bundle_contentbundle_contactpage';
     }
+
+    protected function LocationChoiceList()
+    {
+        return $syndicateTree = $this->location->getLocationOptionGroup();
+
+    }
+
 }

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\CustomerBundle\Controller;
 
+use Knp\Snappy\Pdf;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Form\OrderType;
 use Frontend\FrontentBundle\Service\Cart;
@@ -24,15 +25,19 @@ class OrderController extends Controller
         );
         return $pagination;
     }
-    public function indexAction()
+
+    public function indexAction($shop)
     {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('EcommerceBundle:Order')->findBy(array('createdBy' => $user), array('updated' => 'desc'));
+        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
+
         $pagination = $this->paginate($entities);
         return $this->render('CustomerBundle:Order:index.html.twig', array(
             'entities' => $pagination,
+            'globalOption' => $globalOption,
         ));
 
     }
@@ -79,6 +84,7 @@ class OrderController extends Controller
             throw $this->createNotFoundException('Unable to find Expenditure entity.');
         }
         return $this->render('CustomerBundle:Order:show.html.twig', array(
+            'globalOption' => $entity->getGlobalOption(),
             'entity' => $entity,
         ));
 
@@ -91,6 +97,7 @@ class OrderController extends Controller
         $entity = $em->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy' => $user,'id' => $id));
         $editForm = $this->createEditForm($entity);
         return $this->render('CustomerBundle:Order:payment.html.twig', array(
+            'globalOption' => $entity->getGlobalOption(),
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -109,7 +116,7 @@ class OrderController extends Controller
         $globalOption = $entity->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $form = $this->createForm(new OrderType($globalOption,$location), $entity, array(
-            'action' => $this->generateUrl('order_process', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('order_process', array('shop'=>$entity->getGlobalOption()->getSlug(),'id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -134,23 +141,26 @@ class OrderController extends Controller
             $totalAmount = $em->getRepository('EcommerceBundle:OrderItem')->totalItemAmount($order);
             $order->setTotalAmount($totalAmount);
             $vat = $em->getRepository('EcommerceBundle:Order')->getCulculationVat($order->getGlobalOption(),$totalAmount);
-            $grandTotal = $totalAmount + $order->getShippingCharge() + $vat;
+            $grandTotal = (int)$totalAmount + $order->getShippingCharge() + (int)$vat;
             $order->setVat($vat);
             $order->setGrandTotalAmount($grandTotal);
             if($order->getPaidAmount() > $grandTotal ){
                 $order->setReturnAmount(($order->getPaidAmount() + $order->getDiscountAmount()) - $grandTotal);
                 $order->setDueAmount(0);
             }elseif($order->getPaidAmount() < $grandTotal ){
+
                 $order->setReturnAmount(0);
-                $order->setDueAmount($grandTotal - ($totalAmount+$order->getDiscountAmount()));
+                $due = (int)$grandTotal - ((int) $order->getPaidAmount() + $order->getDiscountAmount());
+                $order->setDueAmount($due);
             }
-            $order->setProcess('wfc');
+
+            $order->setProcess('WfC');
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success', "Order has been process successfully"
             );
             }
-            return $this->redirect($this->generateUrl('order_payment',array('id' => $order->getId())));
+            return $this->redirect($this->generateUrl('order',array('shop'=>$order->getGlobalOption()->getSlug())));
 
     }
 
@@ -234,11 +244,30 @@ class OrderController extends Controller
     public function printAction($invoice)
     {
 
-        $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy'=>$this->getUser(),'invoice'=>$invoice));
+/*        $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy'=>$this->getUser(),'invoice'=>$invoice));
         return $this->render('CustomerBundle:Order:invoice.html.twig', array(
+            'globalOption' => $order->getGlobalOption(),
             'entity' => $order,
             'print' => '<script>window.print();</script>'
-        ));
+        ));*/
+
+        $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy'=>$this->getUser(),'invoice'=>$invoice));
+
+        $html = $this->renderView(
+            'CustomerBundle:Order:invoice.html.twig', array(
+                'globalOption' => $order->getGlobalOption(),
+                'entity' => $order,
+                'print' => ''
+            )
+        );
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="online-oredr-invoice-'.$invoice.'.pdf"');
+        echo $pdf;
+        return new Response('');
 
     }
 

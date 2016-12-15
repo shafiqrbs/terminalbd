@@ -179,6 +179,20 @@ class Item
      */
     private $damageQuantity;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="onlineOrderQuantity", type="float", length=20, nullable=true)
+     */
+    private $onlineOrderQuantity;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="onlineOrderQuantityReturn", type="float", length=20, nullable=true)
+     */
+    private $onlineOrderQuantityReturn;
+
 
     /**
      * @var integer
@@ -234,11 +248,6 @@ class Item
     private  $size;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="items")
-     */
-    protected $country;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="items")
      */
     protected $brand;
@@ -250,19 +259,6 @@ class Item
      */
     private $status=true;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="barcode", type="string", length=255 , nullable = true)
-     */
-    private $barcode;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="purchasePrice", type="float", nullable=true)
-     */
-    private $purchasePrice;
 
     /**
      * @var float
@@ -271,19 +267,6 @@ class Item
      */
     private $purchaseAvgPrice;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="salesPrice", type="float", nullable=true)
-     */
-    private $salesPrice;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="webPrice", type="float", nullable=true)
-     */
-    private $webPrice;
 
     /**
      * @var text
@@ -309,28 +292,6 @@ class Item
      * @Assert\File(maxSize="8388608")
      */
     protected $file;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="ageGroup", type="string", length=255 , nullable = true)
-     */
-    private $ageGroup;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="gender", type="string", length=255 , nullable = true)
-     */
-    private $gender;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="material", type="string", length=255 , nullable = true)
-     */
-    private $material;
-
 
 
     /**
@@ -514,39 +475,6 @@ class Item
     }
 
     /**
-     * @return string
-     */
-    public function getBarcode()
-    {
-        return $this->barcode;
-    }
-
-    /**
-     * @param string $barcode
-     * barcode generate with globaloption 4 digit & count id 8 digit
-     */
-    public function setBarcode($barcode)
-    {
-        $this->barcode = $barcode;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPurchasePrice()
-    {
-        return $this->purchasePrice;
-    }
-
-    /**
-     * @param float $purchasePrice
-     */
-    public function setPurchasePrice($purchasePrice)
-    {
-        $this->purchasePrice = $purchasePrice;
-    }
-
-    /**
      * @return float
      */
     public function getPurchaseAvgPrice()
@@ -562,40 +490,7 @@ class Item
         $this->purchaseAvgPrice = $purchaseAvgPrice;
     }
 
-    /**
-     * @return float
-     */
-    public function getSalesPrice()
-    {
-        return $this->salesPrice;
-    }
-
-    /**
-     * @param float $salesPrice
-     */
-    public function setSalesPrice($salesPrice)
-    {
-        $this->salesPrice = $salesPrice;
-    }
-
-
-    /**
-     * @return float
-     */
-    public function getWebPrice()
-    {
-        return $this->webPrice;
-    }
-
-    /**
-     * @param float $webPrice
-     */
-    public function setWebPrice($webPrice)
-    {
-        $this->webPrice = $webPrice;
-    }
-
-    /**
+     /**
      * @return string
      */
     public function getQuantity()
@@ -679,22 +574,6 @@ class Item
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
-     * @param mixed $country
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
     }
 
     /**
@@ -869,22 +748,6 @@ class Item
     }
 
     /**
-     * @return string
-     */
-    public function getWebName()
-    {
-        return $this->webName;
-    }
-
-    /**
-     * @param string $webName
-     */
-    public function setWebName($webName)
-    {
-        $this->webName = $webName;
-    }
-
-    /**
      * @return mixed
      */
     public function getSalesItems()
@@ -1007,13 +870,6 @@ class Item
         return $this->stockItems;
     }
 
-    /**
-     * @return boolean
-     */
-    public function getIsWeb()
-    {
-        return $this->isWeb;
-    }
 
     /**
      * @param boolean $isWeb
@@ -1055,54 +911,6 @@ class Item
     }
 
     /**
-     * @return string
-     */
-    public function getAgeGroup()
-    {
-        return $this->ageGroup;
-    }
-
-    /**
-     * @param string $ageGroup
-     */
-    public function setAgeGroup($ageGroup)
-    {
-        $this->ageGroup = $ageGroup;
-    }
-
-    /**
-     * @return string
-     */
-    public function getGender()
-    {
-        return $this->gender;
-    }
-
-    /**
-     * @param string $gender
-     */
-    public function setGender($gender)
-    {
-        $this->gender = $gender;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMaterial()
-    {
-        return $this->material;
-    }
-
-    /**
-     * @param string $material
-     */
-    public function setMaterial($material)
-    {
-        $this->material = $material;
-    }
-
-    /**
      * @return float
      */
     public function getDamageQuantity()
@@ -1132,6 +940,38 @@ class Item
     public function getBranchInvoiceItems()
     {
         return $this->branchInvoiceItems;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOnlineOrderQuantity()
+    {
+        return $this->onlineOrderQuantity;
+    }
+
+    /**
+     * @param float $onlineOrderQuantity
+     */
+    public function setOnlineOrderQuantity($onlineOrderQuantity)
+    {
+        $this->onlineOrderQuantity = $onlineOrderQuantity;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOnlineOrderQuantityReturn()
+    {
+        return $this->onlineOrderQuantityReturn;
+    }
+
+    /**
+     * @param float $onlineOrderQuantityReturn
+     */
+    public function setOnlineOrderQuantityReturn($onlineOrderQuantityReturn)
+    {
+        $this->onlineOrderQuantityReturn = $onlineOrderQuantityReturn;
     }
 
 

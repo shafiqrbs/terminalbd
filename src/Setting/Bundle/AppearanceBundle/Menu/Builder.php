@@ -728,6 +728,7 @@ class Builder extends ContainerAware
         $menu['Finance']['Petty Cash & Expense']->addChild('Expense Category',        array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');*/
         $menu['Finance']->addChild('Sales', array('route' => 'account_sales'));
         $menu['Finance']->addChild('Sales Return', array('route' => 'account_sales_return'));
+        $menu['Finance']->addChild('Online Order', array('route' => 'account_onlineorder'));
         $menu['Finance']->addChild('Purchase', array('route' => 'account_purchase'));
         $menu['Finance']->addChild('Purchase Return', array('route' => 'account_purchase_return'));
         $menu['Finance']->addChild('Journal', array('route' => 'account_journal'));

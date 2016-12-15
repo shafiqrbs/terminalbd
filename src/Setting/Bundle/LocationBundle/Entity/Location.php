@@ -45,6 +45,11 @@ class Location
     protected $orders;
 
     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ContactPage", mappedBy="location")
+     */
+    protected $contactPages;
+
+     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ContactPage", mappedBy="thana")
      */
     protected $contactPageThanas;

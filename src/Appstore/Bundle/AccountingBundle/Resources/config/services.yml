@@ -23,6 +23,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.account.online.order.event.listener:
+        class: Appstore\Bundle\AccountingBundle\EventListener\AccountOnlineOrderListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     appstore.account.purchase.return.event.listener:
         class: Appstore\Bundle\AccountingBundle\EventListener\AccountPurchaseReturnListener
         tags:

@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Core\UserBundle\Entity\User;
@@ -63,8 +64,10 @@ class OrderRepository extends EntityRepository
 
         $em = $this->_em;
         $order = new Order();
-        $globalOption = $this->_em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode'=>$shop));
+        $globalOption = $this->_em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
         $order->setGlobalOption($globalOption);
+        $customer = $this->getDomainCustomer($user,$globalOption);
+        $order->setCustomer($customer);
         $order->setTransactionMethod($this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(3));
         $order->setEcommerceConfig($globalOption->getEcommerceConfig());
         $order->setShippingCharge($globalOption->getEcommerceConfig()->getShippingCharge());
@@ -85,6 +88,30 @@ class OrderRepository extends EntityRepository
         $this->insertOrderItem($order,$cart);
         return $order;
 
+    }
+
+    public function getDomainCustomer(User $user,$globalOption)
+    {
+        $mobile = $user->getProfile()->getMobile();
+        $customer = $this->_em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption,'mobile' => $user));
+        if(!empty($customer)){
+
+            return $customer;
+
+        }else{
+
+            $em = $this->_em;
+            $entity = new Customer();
+            $entity->setGlobalOption($globalOption);
+            $entity->setMobile($mobile);
+            $entity->setEmail($user->getEmail());
+            $entity->setAddress($user->getProfile()->getAddress());
+            $entity->setName($user->getProfile()->getName());
+            $entity->setCustomerType('online');
+            $em->persist($entity);
+            $em->flush();
+            return $entity;
+        }
     }
 
     public function insertOrderItem(Order $order,$cart)
@@ -132,11 +159,12 @@ class OrderRepository extends EntityRepository
         $order->setVat($vat);
         $order->setGrandTotalAmount($grandTotal);
         if($order->getPaidAmount() > $grandTotal ){
-        $order->setReturnAmount(($order->getPaidAmount() + $order->getDiscountAmount()) - $grandTotal);
-        $order->setDueAmount(0);
+            $order->setReturnAmount(($order->getPaidAmount() + $order->getDiscountAmount()) - $grandTotal);
+            $order->setDueAmount(0);
         }elseif($totalAmount < $grandTotal ){
-        $order->setReturnAmount(0);
-        $order->setDueAmount($grandTotal - ($totalAmount+$order->getDiscountAmount()));
+            $order->setReturnAmount(0);
+            $due = (int)$grandTotal - ((int) $order->getPaidAmount() + $order->getDiscountAmount());
+            $order->setDueAmount($due);
         }
         $em->flush();
     }

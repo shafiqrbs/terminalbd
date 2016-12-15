@@ -72,80 +72,71 @@
                             </div>
                         </div>
                         <!--/span-->
-                        {% if inventory.isVendor == 1  %}
                         <div class="row-fluid">
-                            <div class="span6">
-                                <div class="control-group">
-                                    <label class="control-label" for="firstName">Vendor name <span class="required">*</span></label>
-                                    <div class="controls">
-                                        <div class="input-icon left">
-                                            {{ form_widget(form.vendor) }}
-                                            {{ form_errors(form.vendor) }}
+                            <div class="span4">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="">Color</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.color) }}
+                                                {{ form_errors(form.color) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="">Size/Weight</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.size) }}
+                                                {{ form_errors(form.size) }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="span4">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Vendor name</label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    {{ form_widget(form.vendor) }}
+                                                    {{ form_errors(form.vendor) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="">Brand</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.brand) }}
+                                                {{ form_errors(form.brand) }}
+                                            </div>
+                                        </div>
+                                    </div>
 
-                        </div>
-                        {% endif %}
-                        {% if inventory.isColor ==1  %}
-                        <div class="row-fluid">
-
-                            <div class="span6">
-                                <div class="control-group">
-                                    <label class="control-label" for="">Color<span class="required">*</span></label>
-                                    <div class="controls">
-                                        {{ form_widget(form.color) }}
-                                        {{ form_errors(form.color) }}
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="">Description</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.content) }}
+                                                {{ form_errors(form.content) }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        {% endif %}
-                        <div class="row-fluid">
-
-                            {% if inventory.isSize == 1  %}
-                            <div class="span6">
-                                <div class="control-group">
-                                    <label class="control-label" for="">Size/Weight<span class="required">*</span></label>
-                                    <div class="controls">
-                                        {{ form_widget(form.size) }}
-                                        {{ form_errors(form.size) }}
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %}
-
-                        </div>
-                        <!--/span-->
-                        {% if inventory.isBrand == 1  %}
-                        <div class="row-fluid">
-
-                            <div class="span6">
-                                <div class="control-group">
-                                    <label class="control-label" for="">Brand<span class="required">*</span></label>
-                                    <div class="controls">
-                                        {{ form_widget(form.brand) }}
-                                        {{ form_errors(form.brand) }}
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        {% endif %}
-                        <!--/span-->
-                        <div class="row-fluid">
-
-                            <div class="span12">
-                                <div class="control-group">
-                                    <label class="control-label" for="">Description</label>
-                                    <div class="controls">
-                                        {{ form_widget(form.content) }}
-                                        {{ form_errors(form.content) }}
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                         <!--/span-->
                         <div class="clearfix">&nbsp;</div>

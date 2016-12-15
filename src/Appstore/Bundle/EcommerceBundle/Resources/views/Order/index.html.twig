@@ -114,8 +114,8 @@
                                                 <tbody>
                                                 {% for item in entity.orderItems %}
                                                     <tr id="remove-{{ item.id }}">
-                                                        <td class="numeric" >{{ item.purchaseVendorItem.masterItem.name }}-{{ item.purchaseVendorItem.name }}</td>
-                                                        <td class="numeric" >{{ item.goodsItem.size.name }}</td>
+                                                        <td class="numeric" >{{ item.purchaseVendorItem.masterItem.name }} {{ item.purchaseVendorItem.webName }}</td>
+                                                        <td class="numeric" >{% if  item.goodsItem.size %}{{ item.goodsItem.size.name }}{% endif %}</td>
                                                         <td class="numeric" >{% if item.color is not empty %}{{ item.color.name }}{% endif %}</td>
                                                         <td class="numeric" >{{ item.quantity }}&nbsp;{% if item.purchaseVendorItem.masterItem.productUnit is not empty %}{{ item.purchaseVendorItem.masterItem.productUnit.name }}{% endif %}</td>
                                                         <td class="numeric" >{{ item.price }}</td>

@@ -1,21 +1,29 @@
 customer_domain_product:
     resource: "@CustomerBundle/Resources/config/routing/product.yml"
-    prefix:   /product
+    prefix:   /{shop}/product
 
 customer_domain:
     resource: "@CustomerBundle/Resources/config/routing/domain.yml"
-    prefix:   /domain
+    prefix:   /
 
 customer_order_process:
     resource: "@CustomerBundle/Resources/config/routing/order.yml"
-    prefix:   /order
+    prefix:   /{shop}/order
+
+customer_order_wishlist:
+    resource: "@CustomerBundle/Resources/config/routing/wishlist.yml"
+    prefix:   /{shop}/wishlist
+
+customer_order_inbox:
+    resource: "@CustomerBundle/Resources/config/routing/inbox.yml"
+    prefix:   /{shop}/inbox
 
 customer_pre_order_process:
     resource: "@CustomerBundle/Resources/config/routing/preorder.yml"
-    prefix:   /pre-order
+    prefix:   /{shop}/pre-order
 
 domain_customer_homepage:
-    path:     /dashboard
+    path:     /dashboard/
     defaults: { _controller: "CustomerBundle:Customer:index" }
 
 

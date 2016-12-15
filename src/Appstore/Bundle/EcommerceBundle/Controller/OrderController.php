@@ -117,12 +117,8 @@ class OrderController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Order entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('EcommerceBundle:Order:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -330,6 +326,12 @@ class OrderController extends Controller
         $em->flush();
 
         if($data['submitProcess'] == 'confirm'){
+
+            $em->getRepository('InventoryBundle:Item')->onlineOrderUpdate($order);
+            $em->getRepository('InventoryBundle:StockItem')->insertOnlineOrder($order);
+            $online = $em->getRepository('AccountingBundle:AccountOnlineOrder')->insertAccountOnlineOrder($order);
+            $em->getRepository('AccountingBundle:Transaction')->onlineOrderTransaction($order,$online);
+
             $this->get('session')->getFlashBag()->add(
                 'success',"Customer has been confirmed"
             );

@@ -1,6 +1,8 @@
 <?php
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
@@ -382,6 +384,42 @@ class StockItemRepository extends EntityRepository
             $em->flush();
 
     }
+
+    public function insertOnlineOrder(Order $order){
+
+        $em = $this->_em;
+        foreach ($order ->getOrderItems() as $orderItem ) {
+            $entity = new StockItem();
+            $entity->setInventoryConfig($orderItem->getPurchaseItem()->getPurchase()->getInventoryConfig());
+            $entity->setPurchaseItem($orderItem->getPurchaseItem());
+            $entity->setOrderItem($orderItem);
+            $entity->setItem($orderItem->getPurchaseItem()->getItem());
+            $quantity = $orderItem->getQuantity();
+            $entity->setQuantity('-' . $quantity);
+            $entity->setCreatedBy($orderItem->getOrder()->getCreatedBy());
+            $entity->setProcess('online');
+            $em->persist($entity);
+            $em->flush();
+        }
+
+    }
+
+    public function insertOnlineOrderItemReturn(OrderItem $entity){
+
+            $em = $this->_em;
+            $entity = new StockItem();
+            $entity->setInventoryConfig($entity->getInventoryConfig());
+            $entity->setPurchaseItem($entity->getPurchaseItem());
+            $entity->setDamage($entity);
+            $entity->setItem($entity->getItem());
+            $quantity = $entity->getQuantity();
+            $entity->setQuantity('-'.$quantity);
+            $entity->setCreatedBy($entity->getCreatedBy());
+            $entity->setProcess('online-return');
+            $em->persist($entity);
+            $em->flush();
+
+        }
 
 
 
