@@ -191,9 +191,6 @@ class ItemRepository extends EntityRepository
             $entity = $purchaseItem->getItem();
             $qnt = ($entity->getPurchaseQuantity() + $purchaseItem->getQuantity());
             $entity->setPurchaseQuantity($qnt);
-            $entity->setPurchasePrice($purchaseItem->getPurchasePrice());
-            $entity->setSalesPrice($purchaseItem->getSalesPrice());
-            $entity->setWebPrice($purchaseItem->getWebPrice());
             $entity->setUpdated($purchase->getCreated());
             $em->persist($entity);
         }
