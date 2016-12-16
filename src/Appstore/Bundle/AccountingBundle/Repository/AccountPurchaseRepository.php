@@ -129,7 +129,7 @@ class AccountPurchaseRepository extends EntityRepository
             $accountPurchase->setProcess('approved');
             $accountPurchase->setApprovedBy($entity->getApprovedBy());
         //}else{
-            $accountPurchase->setProcess('pending');
+            //$accountPurchase->setProcess('pending');
        // }
 
         $em->persist($accountPurchase);
