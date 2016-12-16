@@ -94,8 +94,6 @@
                                     <th class="numeric" >SKU Name </th>
                                     <th class="numeric" >SKU</th>
                                     <th class="numeric" >P.Qnt</th>
-                                    <th class="numeric" >S.Qnt</th>
-                                    <th class="numeric" >D.Qnt</th>
                                     <th class="numeric" >Rmn.Qnt</th>
                                     <th class="numeric" >Avg P.Price</th>
                                     <th class="numeric" >Avg S.Price</th>
@@ -115,24 +113,29 @@
                                             {% if entity.inventoryConfig.isVendor == 1 and  entity.vendor is not empty %}-{{ entity.vendor.name }} {% endif %}
                                         </td>
                                         <td class="numeric" >{{ entity.sku }}</td>
-                                        <td class="numeric" >{{ entity.purchaseQuantity }}</td>
-                                        <td class="numeric" >{{ entity.salesQuantity + entity.purchaseQuantityReturn - entity.salesQuantityReturn  }}</td>
-                                        <td class="numeric" >{{ entity.damageQuantity  }}</td>
-                                        <td class="numeric" >{{ entity.purchaseQuantity  - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity - entity.salesQuantityReturn  )  }}</td>
+                                        <td class="numeric" >{{ entity.purchaseQuantity }}&nbsp;{% if entity.masterItem.productUnit is not empty %}{{  entity.masterItem.productUnit.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.onlineOrderQuantityReturn)  - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity+ entity.onlineOrderQuantity) }}&nbsp;{% if entity.masterItem.productUnit is not empty %}{{  entity.masterItem.productUnit.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.avgPurchasePrice }}</td>
                                         <td class="numeric" >{{ entity.avgSalesPrice }}</td>
                                         <td class="numeric" >
                                             {% if entity.purchaseItems is empty %}
                                                 <a href="{{ path('item_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                                 <a title="Are you sure went to delete ?" href="{{ path('item_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
-                                            {% else  %}
-                                                <a href="{{ path('item_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                             {% endif  %}
-
                                         </td>
                                     </tr>
                                     <tr id="show-{{ entity.id }}" class="showing-overview">
                                         <td colspan="11">
+                                            <table>
+                                                <tr><th>Purchase Quantity</th><td>{{ entity.purchaseQuantity }}</td><th>Item Name</th><td>{{ entity.masterItem.name }}</td></tr>
+                                                <tr><th>Purchase Return Quantity</th><td>{{ entity.purchaseQuantityReturn }}</td><th>Category</th><td>{% if entity.masterItem.category is not empty %}{{ entity.masterItem.category.name }}</td>{% endif %}</tr>
+                                                <tr><th>Sales Quantity</th><td>{{ entity.salesQuantity }}</td><th>Size</th><td>{% if entity.size is not empty %}{{ entity.size.name }}{% endif %}</td></tr>
+                                                <tr><th>Sales Return Quantity</th><td>{{ entity.salesQuantityReturn }}</td><th>Color</th><td>{% if entity.color is not empty %}{{ entity.color.name }}{% endif %}</td></tr>
+                                                <tr><th>Online Sales Quantity</th><td>{{ entity.onlineOrderQuantity }}</td><th>Vendor</th><td>{% if entity.vendor is not empty %}{{ entity.vendor.name }}{% endif %}</td></tr>
+                                                <tr><th>Online Sales Return Quantity</th><td>{{ entity.onlineOrderQuantityReturn }}</td><th>Brand</th><td>{% if entity.brand is not empty %}{{ entity.brand.name }}{% endif %}</td></tr>
+                                                <tr><th>Damage Quantity</th><td>{{ entity.damageQuantity }}</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                                                <tr><th>Remaining Quantity</th><td><strong>{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.onlineOrderQuantityReturn)  - ( entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity + entity.onlineOrderQuantity) }}</strong></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                                            </table>
                                             {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}
                                                 <table class="table table-bordered table-striped table-condensed flip-content ">
 

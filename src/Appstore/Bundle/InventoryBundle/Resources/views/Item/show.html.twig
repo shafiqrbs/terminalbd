@@ -65,20 +65,14 @@
                                 <div class="span12">
                                     <div class="control-group">
                                         <label class="control-label" >Name</label>
-                                        <div class="controls control-custom">{{ entity.name }}</div>
+                                        <div class="controls control-custom">{{ entity.masterItem.name }}</div>
                                     </div>
                                 </div>
-                                <div class="span12">
-                                    <div class="control-group">
-                                        <label class="control-label" >Product code</label>
-                                        <div class="controls control-custom">{{ entity.productCode }}</div>
-                                    </div>
-                                </div>
-                                {% if entity.parentCategory is defined and entity.parentCategory %}
+                                {% if entity.masterItem.category is defined and entity.masterItem.category is not empty %}
                                 <div class="span12">
                                     <div class="control-group">
                                         <label class="control-label" >Item type</label>
-                                        <div class="controls control-custom">{{ entity.parentCategory.name }}</div>
+                                        <div class="controls control-custom">{{ entity.masterItem.category.name }}</div>
                                     </div>
                                 </div>
                                 {% endif %}

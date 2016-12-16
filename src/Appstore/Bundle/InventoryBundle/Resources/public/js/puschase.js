@@ -48,6 +48,7 @@ function InventoryPurchasePage(){
 
     $(document).on("click", ".approve", function() {
 
+        $(this).removeClass('approve');
         var url = $(this).attr("rel");
         var id = $(this).attr("data-title");
         $.ajax({

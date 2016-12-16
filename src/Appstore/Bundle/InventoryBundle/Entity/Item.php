@@ -45,6 +45,7 @@ class Item
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", mappedBy="item")
+     * @ORM\OrderBy({"id" = "DESC"})
      */
     protected $purchaseItems;
 
