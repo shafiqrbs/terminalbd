@@ -10,6 +10,10 @@ report_income:
     path:     /income
     defaults: { _controller: "AccountingBundle:Report:income" }
 
+report_monthly_income:
+    path:     /monthly-income
+    defaults: { _controller: "AccountingBundle:Report:monthlyIncome" }
+
 report_income_pdf:
     path:     /income-pdf
     defaults: { _controller: "AccountingBundle:Report:pdfIncome" }

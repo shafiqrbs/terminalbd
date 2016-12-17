@@ -53,6 +53,7 @@ class ReportController extends Controller
 
         return new Response('');
     }
+
     public function printIncomeAction()
     {
         $globalOption = $this->getUser()->getGlobalOption();
@@ -63,6 +64,18 @@ class ReportController extends Controller
             'print' => '<script>window.print();</script>'
         ));
 
+    }
+
+    public function monthlyIncomeAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMonthlyIncome($globalOption,$data);
+        return $this->render('AccountingBundle:Report:monthlyIncome.html.twig', array(
+            'overview' => $overview,
+            'searchForm' => $data,
+        ));
     }
 
 }

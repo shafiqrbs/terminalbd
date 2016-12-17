@@ -92,7 +92,7 @@ class TransactionRepository extends EntityRepository
         $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
 
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('e.amount as amount,e.debit as debit, e.credit as credit , e.updated, e.process, e.toIncrease, e.content');
+        $qb->select('e.amount as amount,e.debit as debit, e.credit as credit , e.updated,e.accountRefNo, e.processHead, e.toIncrease, e.content');
         $qb->from('AccountingBundle:Transaction','e');
         $qb->where('e.globalOption = :globalOption')
             ->andWhere("e.accountHead = :accountHead");
@@ -476,7 +476,7 @@ class TransactionRepository extends EntityRepository
     private function insertOnlineOrderItem($entity , AccountOnlineOrder $onlineOrder)
     {
 
-        $amount =  $entity->getGrandTotalAmount();
+        $amount =  $entity->getGrandTotal();
         $transaction = new Transaction();
         $transaction->setGlobalOption($onlineOrder->getGlobalOption());
         $transaction->setAccountRefNo($onlineOrder->getAccountRefNo());
@@ -782,7 +782,7 @@ class TransactionRepository extends EntityRepository
 
     }
 
-    public function insertExpenditureCreditTransaction($entity)
+    public function insertExpenditureCreditTransaction(Expenditure $entity)
     {
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
@@ -790,7 +790,13 @@ class TransactionRepository extends EntityRepository
         $transaction->setProcessHead('Expenditure');
         $transaction->setProcess('Cash');
         /* Cash - Cash various */
-        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(26));
+        if($entity->getTransactionMethod() == 1 ){
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+        }elseif($entity->getTransactionMethod() == 2 ){
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+        }if($entity->getTransactionMethod() == 3 ){
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+        }
         $transaction->setAmount('-'.$entity->getAmount());
         $transaction->setCredit($entity->getAmount());
         $this->_em->persist($transaction);

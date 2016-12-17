@@ -22,7 +22,8 @@ class ExpenseCategoryController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('AccountingBundle:ExpenseCategory')->findBy(array(),array( 'parent'=>'asc' , 'name' =>'asc' ));
+        $option = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('AccountingBundle:ExpenseCategory')->findBy(array('globalOption' => $option),array( 'parent'=>'asc' , 'name' =>'asc' ));
         $pagination = $this->paginate($entities);
         return $this->render('AccountingBundle:ExpenseCategory:index.html.twig', array(
             'entities' => $pagination,
@@ -58,7 +59,9 @@ class ExpenseCategoryController extends Controller
             $entity->setGlobalOption($globalOption);
             $em->persist($entity);
             $em->flush();
-
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
             return $this->redirect($this->generateUrl('expensecategory_new', array('id' => $entity->getId())));
         }
 
@@ -193,6 +196,10 @@ class ExpenseCategoryController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
+
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been updated successfully"
+            );
             return $this->redirect($this->generateUrl('expensecategory_edit', array('id' => $id)));
         }
 
@@ -222,7 +229,7 @@ class ExpenseCategoryController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('ExpenseCategory'));
+        return $this->redirect($this->generateUrl('expensecategory'));
     }
 
     /**

@@ -256,7 +256,6 @@ class ExpenditureController extends Controller
     {
         if (!empty($expenditure)) {
             $em = $this->getDoctrine()->getManager();
-            $lastBalance = $em->getRepository('AccountingBundle:Expenditure')->lastInsertExpenditure($expenditure);
             $em = $this->getDoctrine()->getManager();
             $expenditure->setProcess('approved');
             $expenditure->setApprovedBy($this->getUser());
