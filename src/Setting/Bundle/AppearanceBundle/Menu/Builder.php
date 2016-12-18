@@ -806,10 +806,13 @@ class Builder extends ContainerAware
     public function manageAccountingSettingMenu($menu)
     {
         $menu
-            ->addChild('Account Setting')
+            ->addChild('Application Setting')
             ->setAttribute('icon','fa fa-cog')
             ->setAttribute('dropdown', true);
-        $menu['Account Setting']->addChild('Account Head', array('route' => 'accounthead'));
+        $menu['Application Setting']->addChild('Account Head', array('route' => 'accounthead'))->setAttribute('icon', 'icon-th-list');
+        $menu['Application Setting']->addChild('Color', array('route' => 'itemcolor'))->setAttribute('icon', 'icon-th-list');
+        $menu['Application Setting']->addChild('Size', array('route' => 'itemsize'))->setAttribute('icon', 'icon-th-list');
+
         return $menu;
 
     }

@@ -15,7 +15,7 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('category') }}">Expense category</a>
+                    <a href="{{ path('expensecategory') }}">Expense category</a>
                     <span class="icon-angle-right"></span>
                 </li>
                 <li><a href="#">Expense category form</a></li>
@@ -44,11 +44,11 @@
                     </a>
                     <ul class="dropdown-menu pull-right">
 
-                        <li><a href="{{ path('category_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                        <li><a href="{{ path('category') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                        <li><a href="{{ path('expensecategory_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                        <li><a href="{{ path('expensecategory') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                         {% if(entity.id > 0 ) %}
-                        <li><a href="{{ path('category_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
-                        <li><a href="{{ path('category_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
+                        <li><a href="{{ path('expensecategory_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
+                        <li><a href="{{ path('expensecategory_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
                         {% endif %}
 
 

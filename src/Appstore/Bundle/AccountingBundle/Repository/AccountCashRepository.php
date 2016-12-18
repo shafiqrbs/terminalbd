@@ -354,8 +354,13 @@ class AccountCashRepository extends EntityRepository
         $balance = $this->lastInsertCash($entity,'Expenditure');
         $em = $this->_em;
         $cash = new AccountCash();
-
-        $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+        if($entity->getTransactionMethod() == 2){
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+        }elseif($entity->getTransactionMethod() == 3){
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+        }else{
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+        }
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setExpenditure($entity);
         $cash->setTransactionMethod($entity->getTransactionMethod());

@@ -256,7 +256,6 @@ class ExpenditureController extends Controller
     {
         if (!empty($expenditure)) {
             $em = $this->getDoctrine()->getManager();
-            $em = $this->getDoctrine()->getManager();
             $expenditure->setProcess('approved');
             $expenditure->setApprovedBy($this->getUser());
             $em->flush();
