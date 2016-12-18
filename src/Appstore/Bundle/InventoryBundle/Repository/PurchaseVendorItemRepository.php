@@ -242,8 +242,6 @@ class PurchaseVendorItemRepository extends EntityRepository
             $data .='<td class="numeric" >'.number_format ($entity->getQuantity() * $entity->getPurchasePrice() ).'</td>';
             $data .='<td class="numeric" >'.$entity->getSalesPrice().'</td>';
             $data .='<td class="numeric" >'.number_format ($entity->getQuantity() * $entity->getSalesPrice()).'</td>';
-            $data .='<td class="numeric" >'.$entity->getWebPrice().'</td>';
-            $data .='<td class="numeric" >'.number_format ($entity->getQuantity() * $entity->getWebPrice()).'</td>';
             $data .='<td class="numeric" >
                      <a id="'.$entity->getId().'" title="Are you sure went to delete ?" rel="/inventory/purchasevendoritem/'.$entity->getId().'/delete" href="javascript:" class="btn red mini removeVendorItem" ><i class="icon-trash"></i></a>
                      </td>';

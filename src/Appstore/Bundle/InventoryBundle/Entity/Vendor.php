@@ -382,5 +382,15 @@ class Vendor implements CodeAwareEntity
     {
         return $this->accountPurchaseReturns;
     }
+
+
+    /**
+     * @return mixed
+     */
+    public function getSTRPadCode()
+    {
+        $code = str_pad($this->getCode(),3, '0', STR_PAD_LEFT);
+        return $code;
+    }
 }
 

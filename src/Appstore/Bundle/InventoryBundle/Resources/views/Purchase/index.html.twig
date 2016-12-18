@@ -194,17 +194,7 @@
                                                                     <tbody id="purchaseItem" >
                                                                     {% for purchaseItem in vendorItem.purchaseItems %}
                                                                         <tr id="remove-purchase-item-{{ purchaseItem.id }}">
-                                                                            <td class="numeric" >
-{#                                                                                {% if entity.process != "approved" %}
-                                                                                    <a  data-type="select" class="editable" id="item" data-name="Item" href="#" data-source="{{ path('inventory_item_inline_update',{'vendor':entity.vendor.id}) }}"  data-url="{{ path('inventory_purchaseitem_inline_item_update') }}" data-pk="{{ purchaseItem.id }}" data-original-title="Enter SKU Item">{{ purchaseItem.item.masterItem.name }}-{{ purchaseItem.item.color.name }}-{{ purchaseItem.item.size.name }}-{{ purchaseItem.item.vendor.vendorCode }}</a>
-                                                                                {% else %}#}
-                                                                                    {{ purchaseItem.item.masterItem.name }}
-                                                                                    {% if purchaseItem.item.color and entity.inventoryConfig.isColor == 1  %}-{{ purchaseItem.item.color.name }} {% endif %}
-                                                                                    {% if purchaseItem.item.size  and entity.inventoryConfig.isSize == 1 %}-{{ purchaseItem.item.size.name }}{% endif %}
-                                                                                    {% if purchaseItem.item.brand  and entity.inventoryConfig.isBrand == 1 %}-{{ purchaseItem.item.brand.name }}{% endif %}
-                                                                                    {% if purchaseItem.item.vendor  and entity.inventoryConfig.isVendor == 1 %}-{{ purchaseItem.item.vendor.vendorCode }}{% endif %}
-                                                                               {# {% endif %}#}
-                                                                            </td>
+                                                                            <td class="numeric" >{{ purchaseItem.item.name }}/{{ purchaseItem.item.sku }}</td>
                                                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                                                             <td class="numeric" >
                                                                                 {% if entity.process != "approved" %}

@@ -134,11 +134,7 @@
                                            <select class="span12" name="item[]" style="height: 32px">
                                                {% for item in items %}
                                                <option value="{{ item.id }}">
-                                                   {{ item.masterItem.name }}
-                                                   {% if item.color and purchaseInfo.inventoryConfig.isColor == 1  %}-{{ item.color.name }} {% endif %}
-                                                   {% if item.size  and purchaseInfo.inventoryConfig.isSize == 1 %}-{{ item.size.name }}{% endif %}
-                                                   {% if item.brand  and purchaseInfo.inventoryConfig.isBrand == 1 %}-{{ item.brand.name }}{% endif %}
-                                                   {% if item.vendor  and purchaseInfo.inventoryConfig.isVendor == 1 %}-{{ item.vendor.vendorCode }}{% endif %}
+                                                   {{ item.name }}
                                                </option>
                                                {% endfor %}
                                            </select>

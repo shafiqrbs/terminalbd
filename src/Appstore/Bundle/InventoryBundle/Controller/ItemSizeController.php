@@ -5,7 +5,8 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
 use Appstore\Bundle\InventoryBundle\Form\ItemSizeType;
 
@@ -18,14 +19,12 @@ class ItemSizeController extends Controller
 
     /**
      * Lists all ItemSize entities.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_MANAGER")
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:ItemSize')->findBy(array('inventoryConfig'=>$inventory),array('name'=>'asc'));
-
+        $entities = $em->getRepository('InventoryBundle:ItemSize')->findBy(array('isValid'=>1),array('code'=>'asc'));
         return $this->render('InventoryBundle:ItemSize:index.html.twig', array(
             'entities' => $entities,
         ));
@@ -83,8 +82,9 @@ class ItemSizeController extends Controller
 
     /**
      * Displays a form to create a new ItemSize entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_MANAGER")
      */
+
     public function newAction()
     {
         $entity = new ItemSize();
@@ -120,7 +120,7 @@ class ItemSizeController extends Controller
 
     /**
      * Displays a form to edit an existing ItemSize entity.
-     *
+     * @Secure(roles="ROLE_ADMIN_OPERATION_USER")
      */
     public function editAction($id)
     {
@@ -165,7 +165,7 @@ class ItemSizeController extends Controller
     }
     /**
      * Edits an existing ItemSize entity.
-     *
+     * @Secure(roles="ROLE_ADMIN_OPERATION_USER")
      */
     public function updateAction(Request $request, $id)
     {
@@ -195,9 +195,10 @@ class ItemSizeController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
     /**
      * Deletes a ItemSize entity.
-     *
+     * @Secure(roles="ROLE_ADMIN_OPERATION_USER")
      */
     public function deleteAction(Request $request, $id)
     {
@@ -216,7 +217,7 @@ class ItemSizeController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('ItemSize'));
+        return $this->redirect($this->generateUrl('itemsize'));
     }
 
     /**

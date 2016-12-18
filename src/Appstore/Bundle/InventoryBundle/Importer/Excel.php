@@ -235,9 +235,9 @@ class Excel
         if($color == NULL) {
             $color = $colorRepository->findOneBy(array(
                 'status'              => 1,
-                'name'              => $item['Color']
+                'isValid'             => 1,
+                'name'                => $item['Color']
             ));
-
             if($color == NULL) {
                 $color = new ItemColor();
                 $color->setName($item['Color']);
@@ -259,16 +259,18 @@ class Excel
 
             $size = $sizeRepository->findOneBy(array(
                 'status'              => 1,
-                'name'              => $item['Size']
+                'isValid'             => 1,
+                'name'                => $item['Size']
             ));
 
             if($size == null) {
+
                 $size = new ItemSize();
                 $size->setName($item['Size']);
                 $size->setInventoryConfig($this->getInventoryConfig());
                 $size = $this->save($size);
-            }
 
+            }
             $this->setCachedData('Size', $item['Size'], $size);
         }
 

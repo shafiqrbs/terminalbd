@@ -19,6 +19,7 @@ item_edit:
     path:     /{id}/edit
     defaults: { _controller: "InventoryBundle:Item:edit" }
 
+
 item_edit_web:
     path:     /{id}/edit-web
     defaults: { _controller: "InventoryBundle:Item:editWeb" }
@@ -57,7 +58,6 @@ item_web_update:
 item_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:Item:delete" }
-    methods:  [POST, DELETE]
 
 item_search:
     path:     /search

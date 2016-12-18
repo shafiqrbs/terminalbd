@@ -151,9 +151,7 @@
                                                             <td class="numeric" > {{ loop.index }}</td>
                                                             <td  class="numeric">
                                                                 {{ salesitem.purchaseItem.barcode }}<br/>
-                                                                <span>{{ salesitem.item.masterItem.name }}
-                                                                    {% if salesitem.item.color  %}-{{ salesitem.item.color.name }}{% endif %}
-                                                                    {% if salesitem.item.size  %}-{{ salesitem.item.size.name }}{% endif %}
+                                                                <span>{{ salesitem.item.name }}
                                                                 </span>
                                                             </td>
                                                             <td class="numeric" ><input type="number" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="m-wrap span10 quantity" placeholder="{{ salesitem.purchaseItem.quantity }}" min="1" max="{{ salesitem.purchaseItem.quantity }}"></td>
@@ -394,12 +392,7 @@
                                                 {% for salesItem in dailySales.salesItems %}
                                                     <tr>
                                                         <td class="numeric" >{{ loop.index }}</td>
-                                                        <td class="numeric" >{{ salesItem.item.masterItem.name }}
-                                                            {% if salesItem.item.color  %}-{{ salesItem.item.color.name }}{% endif %}
-                                                            {% if salesItem.item.size  %}-{{ salesItem.item.size.name }}{% endif %}
-                                                            {% if salesItem.item.vendor  %}-{{ salesItem.item.vendor.vendorCode }}{% endif %}
-                                                            {% if salesItem.item.brand  %}-{{ salesItem.item.brand.name }}{% endif %}
-                                                        </td>
+                                                        <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
                                                         <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
                                                         <td class="numeric" >{{ salesItem.quantity }}</td>
                                                         <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>

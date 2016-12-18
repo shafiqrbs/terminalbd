@@ -5,7 +5,7 @@ namespace Appstore\Bundle\InventoryBundle\EventListener;
 use Appstore\Bundle\InventoryBundle\Entity\CodeAwareEntity;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-class SettingListener
+class SettingGenericListener
 {
     public function prePersist(LifecycleEventArgs $args)
     {
@@ -33,13 +33,12 @@ class SettingListener
     public function getLastCode(LifecycleEventArgs $args, $entity)
     {
 
-        $class = get_class($entity);
         $entityManager = $args->getEntityManager();
-        $qb = $entityManager->getRepository($class)->createQueryBuilder('s');
+        $qb = $entityManager->getRepository('InventoryBundle:ItemColor')->createQueryBuilder('s');
         $qb
             ->select('MAX(s.code)')
             ->where('s.inventoryConfig = :inventory')
-            ->setParameter('inventory', $entity->getInventoryConfig());
+            ->setParameter('inventory', 2);
             $lastCode = $qb->getQuery()->getSingleScalarResult();
 
         if (empty($lastCode)) {

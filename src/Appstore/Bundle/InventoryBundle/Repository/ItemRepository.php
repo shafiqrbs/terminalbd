@@ -47,47 +47,33 @@ class ItemRepository extends EntityRepository
         $itemSize = isset($data['appstore_bundle_inventorybundle_item']['size']) ? $data['appstore_bundle_inventorybundle_item']['size'] : 'NULL';
         $itemBrand = isset($data['appstore_bundle_inventorybundle_item']['brand'])?$data['appstore_bundle_inventorybundle_item']['brand']:'NULL';
 
+        $qb = $this->createQueryBuilder('item');
+        $qb->join('item.masterItem', 'm');
+        $qb->select('COUNT(item.id) AS totalNumber');
+        $qb->where("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
 
-        if($inventory->getIsSize() == 1){
-            $itemSize     = $itemSize;
-        }else{
-            $itemSize     = NULL;
+        $qb->andWhere('item.masterItem = :masterId');
+        $qb->setParameter('masterId', $masterItem);
+        if($inventory->getIsSize() == 1) {
+            $qb->andWhere('item.size = :itemSize');
+            $qb->setParameter('itemSize', $itemSize);
         }
-
-
-        if($inventory->getIsColor() == 1){
-            $itemColor     = $itemColor;
-        }else{
-            $itemColor     = NULL;
+        if($inventory->getIsColor() == 1) {
+            $qb->andWhere('item.color = :itemColor');
+            $qb->setParameter('itemColor', $itemColor);
         }
-
-        if($inventory->getIsVendor() == 1){
-            $vendor     = $vendor;
-        }else{
-            $vendor     = NULL;
+        if($inventory->getIsVendor() == 1) {
+            $qb->andWhere('item.vendor = :vendor');
+            $qb->setParameter('vendor', $vendor);
         }
-
-        if($inventory->getIsBrand() == 1){
-            $itemBrand     = $itemBrand;
-        }else{
-            $itemBrand     = NULL;
+        if($inventory->getIsBrand() == 1) {
+            $qb->andWhere('item.brand = :itemBrand');
+            $qb->setParameter('itemBrand', $itemBrand);
         }
-
-
-        $item = $this->findOneBy(array(
-
-            'masterItem'        => $masterItem,
-            'size'              => $itemSize,
-            'color'             => $itemColor,
-            'vendor'            => $vendor,
-            'brand'             => $itemBrand,
-            'inventoryConfig'   => $inventory
-        ));
-
-        if(empty($item)){
-            return true;
-        }
-        return false;
+        $count = $qb->getQuery()->getArrayResult();
+        $result = $count[0]['totalNumber'];
+        return $result;
 
     }
 

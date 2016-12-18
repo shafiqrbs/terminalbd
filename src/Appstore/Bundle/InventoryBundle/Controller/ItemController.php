@@ -87,7 +87,8 @@ class ItemController extends Controller
 
         if ($form->isValid()) {
             $checkData = $this->getDoctrine()->getRepository('InventoryBundle:Item')->checkDuplicateSKU($inventory,$data);
-            if($checkData == true) {
+            if($checkData == 0 ) {
+
                 $entity->setInventoryConfig($inventory);
                 $entity->setName($entity->getMasterItem()->getName());
                 $em->persist($entity);
@@ -335,24 +336,16 @@ class ItemController extends Controller
      * Deletes a Item entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Item $entity)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('InventoryBundle:Item')->find($id);
-
-            if (!$entity) {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Item entity.');
             }
 
             $em->remove($entity);
             $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('item'));
+            return $this->redirect($this->generateUrl('item'));
     }
 
     /**

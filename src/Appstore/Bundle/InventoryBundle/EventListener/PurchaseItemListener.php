@@ -63,17 +63,17 @@ class PurchaseItemListener
         $masterItemCode = $this->getStrPad($entity->getItem()->getMasterItem()->getCode(),3);
         if($entity->getPurchase()->getInventoryConfig()->getIsColor() == 1 )
         {
-            $masterItemColor =  $this->getStrPad($entity->getItem()->getColor()->getCode(),2);
+            $masterItemColor =  $this->getStrPad($entity->getItem()->getColor()->getCode(),3);
         }else{
             $masterItemColor ='';
         }
         if($entity->getPurchase()->getInventoryConfig()->getIsSize() == 1 )
         {
-            $masterItemSize =  $this->getStrPad($entity->getItem()->getSize()->getCode(),2);
+            $masterItemSize =  $this->getStrPad($entity->getItem()->getSize()->getCode(),3);
         }else{
             $masterItemSize ='';
         }
-        return $masterItemCode.$masterItemColor.$masterItemSize. $this->getStrPad($entity->getCode(),7);
+        return $masterItemCode.$masterItemColor.$masterItemSize. $this->getStrPad($entity->getCode(),6);
 
 
     }

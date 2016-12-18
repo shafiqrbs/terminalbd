@@ -28,6 +28,16 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.item.color.event.listener:
+        class: Appstore\Bundle\InventoryBundle\EventListener\ItemColorListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.item.size.event.listener:
+        class: Appstore\Bundle\InventoryBundle\EventListener\ItemSizeListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     appstore.item.event.listener:
         class: Appstore\Bundle\InventoryBundle\EventListener\ItemListener
         tags:

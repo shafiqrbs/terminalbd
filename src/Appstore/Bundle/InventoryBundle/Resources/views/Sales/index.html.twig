@@ -126,7 +126,7 @@
                                             </td>
                                         </tr>
                                         <tr id="show-{{ entity.id }}" class="showing-overview">
-                                            <td colspan="10">
+                                            <td colspan="11">
                                                 {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
                                                     <table class="table table-bordered table-striped table-condensed flip-content ">
 
@@ -145,11 +145,7 @@
                                                         {% for salesItem in entity.salesItems %}
                                                             <tr>
                                                                 <td class="numeric" >{{ loop.index }}</td>
-                                                                <td class="numeric" >{{ salesItem.item.masterItem.name }}
-                                                                    {% if salesItem.item.color  %}-{{ salesItem.item.color.name }}{% endif %}
-                                                                    {% if salesItem.item.size  %}-{{ salesItem.item.size.name }}{% endif %}
-                                                                    {% if salesItem.item.vendor  %}-{{ salesItem.item.vendor.vendorCode }}{% endif %}
-                                                                </td>
+                                                                <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
                                                                 <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
                                                                 <td class="numeric" >{{ salesItem.quantity }}</td>
                                                                 <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>

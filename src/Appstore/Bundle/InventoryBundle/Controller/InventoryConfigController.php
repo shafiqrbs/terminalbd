@@ -36,6 +36,10 @@ class InventoryConfigController extends Controller
     {
         //echo $inventoryConfig->getId();
         $em = $this->getDoctrine()->getManager();
+        $data = $em->getRepository('InventoryBundle:Item')->findBy(array());
+
+        exit;
+
         $data = $em->getRepository('InventoryBundle:ProductImport')->getMasterItem();
         $variant = $em->getRepository('InventoryBundle:ProductImport')->getColorSizeUnit('unit');
         $color = $em->getRepository('InventoryBundle:ProductImport')->getColor();
@@ -48,7 +52,7 @@ class InventoryConfigController extends Controller
          $em->getRepository('InventoryBundle:ProductImport')->insertColor($inventory,$color);
          $em->getRepository('InventoryBundle:ProductImport')->insertSize($inventory,$size);
         //$entities = $em->getRepository('InventoryBundle:ProductImport')->masterItemAdd($inventory,$data);
-        exit;
+
         return $this->render('InventoryBundle:InventoryConfig:dataImport.html.twig', array(
             'entities' => $data,
         ));
@@ -70,12 +74,16 @@ class InventoryConfigController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $data = $request->request->all();
+
             if($data['brandvendor'] == 'vendor'){
-                $entity->getIsVendor(true);
-                $entity->getIsBrand(false);
-            }elseif($data['brandvendor'] == 'vendor'){
-                $entity->getIsVendor(false);
-                $entity->getIsBrand(true);
+                $entity->setIsVendor(true);
+                $entity->setIsBrand(false);
+            }elseif($data['brandvendor'] == 'brand'){
+                $entity->setIsVendor(false);
+                $entity->setIsBrand(true);
+            }else{
+                $entity->setIsVendor(false);
+                $entity->setIsBrand(false);
             }
             $em->persist($entity);
             $em->flush();
@@ -134,16 +142,67 @@ class InventoryConfigController extends Controller
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
+        $data = $em->getRepository('InventoryBundle:Item')->findBy(array('inventoryConfig'=>$id),array('id'=>'ASC'));
 
-        $entity = $em->getRepository('InventoryBundle:InventoryConfig')->find($id);
+        echo "<ul>";
+        foreach($data as $entity){
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find InventoryConfig entity.');
+            $masterItem         = $entity->getMasterItem()->getSTRPadCode();
+            $masterName         = $entity->getMasterItem()->getName();
+
+
+            $color ='';
+            $colorSlug ='';
+            $colorName ='';
+
+            if(!empty($entity->getColor())){
+                $color              = '-C'.$entity->getColor()->getSTRPadCode();
+                $colorName          = '-'.$entity->getColor()->getName();
+            }
+
+            $size ='';
+            $sizeSlug = '';
+            $sizeName = '';
+
+            if(!empty($entity->getSize())){
+                $size               = '-S'.$entity->getSize()->getSTRPadCode();
+                $sizeName           = '-'.$entity->getSize()->getName();
+            }
+
+            $brand ='';
+            $brandSlug = '';
+            $brandName = '';
+
+            if(!empty($entity->getBrand())){
+                $brand               = '-B'.$entity->getBrand()->getSTRPadCode();
+                $brandName           = '-'.$entity->getBrand()->getName();
+            }
+
+
+            $vendor ='';
+            $vendorName ='';
+
+            if(!empty($entity->getVendor())){
+                $vendor             = '-V'.$entity->getVendor()->getSTRPadCode();
+                $vendorName         = '-'.$entity->getVendor()->getVendorCode();
+            }
+
+
+            $sku            = $masterItem.$color.$size.$brand.$vendor;
+            $name           = $masterName.$colorName.$sizeName.$brandName.$vendorName;
+
+            echo '<li>P'.$entity->getId().'==='.$name.'==='.$sku.'</li>';
+
+            $entity->setName($name);
+            $entity->setSku($sku);
+            $em->persist($entity);
+            $em->flush();
         }
-        return $this->render('InventoryBundle:InventoryConfig:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        echo "<ul>";
+        $this->get('session')->getFlashBag()->add(
+            'success', "Item has been added successfully"
+        );
+        exit;
     }
 
     /**
@@ -207,6 +266,9 @@ class InventoryConfigController extends Controller
             }elseif($data['brandvendor'] == 'brand'){
                 $entity->setIsVendor(false);
                 $entity->setIsBrand(true);
+            }else{
+                $entity->setIsVendor(false);
+                $entity->setIsBrand(false);
             }
             $em->flush();
 
@@ -216,7 +278,6 @@ class InventoryConfigController extends Controller
         return $this->render('InventoryBundle:InventoryConfig:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 

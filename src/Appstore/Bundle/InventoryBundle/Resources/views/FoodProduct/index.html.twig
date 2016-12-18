@@ -133,14 +133,7 @@
                                                     <tbody id="purchaseItem" >
                                                     {% for purchaseItem in entity.purchaseItems %}
                                                         <tr id="remove-purchase-item-{{ entity.id }}">
-                                                            <td class="numeric" >
-                                                                    {{ purchaseItem.item.masterItem.name }}
-                                                                    {% if purchaseItem.item.color and entity.purchase.inventoryConfig.isColor == 1  %}-{{ purchaseItem.item.color.name }} {% endif %}
-                                                                    {% if purchaseItem.item.size  and entity.purchase.inventoryConfig.isSize == 1 %}-{{ purchaseItem.item.size.name }}{% endif %}
-                                                                    {% if purchaseItem.item.brand  and entity.purchase.inventoryConfig.isBrand == 1 %}-{{ purchaseItem.item.brand.name }}{% endif %}
-                                                                    {% if purchaseItem.item.vendor  and entity.purchase.inventoryConfig.isVendor == 1 %}-{{ purchaseItem.item.vendor.vendorCode }}{% endif %}
-
-                                                            </td>
+                                                            <td class="numeric" >{{ purchaseItem.item.name }}/{{ purchaseItem.item.sku }}</td>
                                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                                             <td class="numeric" >
 

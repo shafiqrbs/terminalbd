@@ -975,6 +975,24 @@ class Item
         $this->onlineOrderQuantityReturn = $onlineOrderQuantityReturn;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getSTRPadCode()
+    {
+        $code = str_pad($this->getCode(),3, '0', STR_PAD_LEFT);
+        return $code;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMasterSTRPadCode()
+    {
+        $code = str_pad($this->getCode(),3, '0', STR_PAD_LEFT);
+        return $code;
+    }
+
 
 }
 

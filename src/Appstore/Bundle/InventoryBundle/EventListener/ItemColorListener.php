@@ -2,10 +2,11 @@
 
 namespace Appstore\Bundle\InventoryBundle\EventListener;
 
-use Appstore\Bundle\InventoryBundle\Entity\CodeAwareEntity;
+use Appstore\Bundle\InventoryBundle\Entity\ItemColor;
+use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-class SettingListener
+class ItemColorListener
 {
     public function prePersist(LifecycleEventArgs $args)
     {
@@ -14,10 +15,9 @@ class SettingListener
 
     public function createCode(LifecycleEventArgs $args)
     {
-
         $entity = $args->getEntity();
         // perhaps you only want to act on some "Purchase" entity
-        if ($entity instanceof CodeAwareEntity) {
+        if ($entity instanceof ItemColor) {
 
             $lastCode = $this->getLastCode($args,$entity);
             $entity->setCode((int)$lastCode+1);
@@ -30,22 +30,18 @@ class SettingListener
      * @param $entity
      * @return int|mixed
      */
-    public function getLastCode(LifecycleEventArgs $args, $entity)
+    public function getLastCode(LifecycleEventArgs $args)
     {
 
-        $class = get_class($entity);
         $entityManager = $args->getEntityManager();
-        $qb = $entityManager->getRepository($class)->createQueryBuilder('s');
+        $qb = $entityManager->getRepository('InventoryBundle:ItemColor')->createQueryBuilder('s');
         $qb
             ->select('MAX(s.code)')
-            ->where('s.inventoryConfig = :inventory')
-            ->setParameter('inventory', $entity->getInventoryConfig());
-            $lastCode = $qb->getQuery()->getSingleScalarResult();
-
+            ->where('s.isValid = 1');
+        $lastCode = $qb->getQuery()->getSingleScalarResult();
         if (empty($lastCode)) {
             return 0;
         }
-
         return $lastCode;
     }
 

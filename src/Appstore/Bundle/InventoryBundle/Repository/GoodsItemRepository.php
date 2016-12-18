@@ -266,8 +266,9 @@ class GoodsItemRepository extends EntityRepository
                 if (!isset($rows[$item->getItem()->getSize()->getId()]['color'])) {
                     $rows[$item->getItem()->getSize()->getId()]['color'] = array();
                 }
-
-                $rows[$item->getItem()->getSize()->getId()]['color'][$item->getItem()->getColor()->getId()] = $item->getItem()->getColor()->getId();
+                if (!empty($item->getItem()->getColor())){
+                    $rows[$item->getItem()->getSize()->getId()]['color'][$item->getItem()->getColor()->getId()] = $item->getItem()->getColor()->getId();
+                }
 
                 if (!isset($rows[$item->getItem()->getSize()->getId()]['quantity'])) {
                     $rows[$item->getItem()->getSize()->getId()]['quantity'] = 0;
@@ -278,6 +279,7 @@ class GoodsItemRepository extends EntityRepository
                 $rows[$item->getItem()->getSize()->getId()]['salesPrice'] = $item->getSalesPrice();
             }
         }
+
         if(!empty($rows)){
 
             foreach($rows as $size => $row )
@@ -312,6 +314,7 @@ class GoodsItemRepository extends EntityRepository
                 $i ++ ;
 
             }
+
         }else{
 
             $qunt=0;
@@ -345,8 +348,9 @@ class GoodsItemRepository extends EntityRepository
                 if (!isset($rows[$item->getItem()->getSize()->getId()]['color'])) {
                     $rows[$item->getItem()->getSize()->getId()]['color'] = array();
                 }
-
-                $rows[$item->getItem()->getSize()->getId()]['color'][$item->getItem()->getColor()->getId()] = $item->getItem()->getColor()->getId();
+                if (!empty($item->getItem()->getColor())){
+                    $rows[$item->getItem()->getSize()->getId()]['color'][$item->getItem()->getColor()->getId()] = $item->getItem()->getColor()->getId();
+                }
 
                 if (!isset($rows[$item->getItem()->getSize()->getId()]['quantity'])) {
                     $rows[$item->getItem()->getSize()->getId()]['quantity'] = 0;

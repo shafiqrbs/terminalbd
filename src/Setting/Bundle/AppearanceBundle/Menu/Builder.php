@@ -652,14 +652,14 @@ class Builder extends ContainerAware
         $menu['Service & Sales']->addChild('System Setting')
             ->setAttribute('icon','icon icon-cogs')
             ->setAttribute('dropdown', true);
-
-        if($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_CONFIG')) {
-            $menu['Service & Sales']['System Setting']->addChild('Configuration', array('route' => 'inventoryconfig_edit'))
-                ->setAttribute('icon', 'icon-hdd');
-        }
-        /*$menu['Inventory']['System Setting']->addChild('Variant', array('route' => 'colorsize'))
-            ->setAttribute('icon', 'icon-th-list');
-        $menu['Inventory']['System Setting']->addChild('Ware House', array('route' => 'inventory_warehouse'))->setAttribute('icon', 'icon-th-list');*/
+        /*
+                if($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_CONFIG')) {
+                    $menu['Service & Sales']['System Setting']->addChild('Configuration', array('route' => 'inventoryconfig_edit'))
+                        ->setAttribute('icon', 'icon-hdd');
+                }
+                $menu['Inventory']['System Setting']->addChild('Variant', array('route' => 'colorsize'))
+                    ->setAttribute('icon', 'icon-th-list');
+                $menu['Inventory']['System Setting']->addChild('Ware House', array('route' => 'inventory_warehouse'))->setAttribute('icon', 'icon-th-list');*/
         return $menu;
 
     }
@@ -686,12 +686,6 @@ class Builder extends ContainerAware
         $menu['Food Product']->addChild('System Setting')
             ->setAttribute('icon','icon icon-cogs')
             ->setAttribute('dropdown', true);
-
-        if($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_CONFIG')) {
-            $menu['Food Product']['System Setting']
-                ->addChild('Configuration', array('route' => 'inventoryconfig_edit'))
-                ->setAttribute('icon', 'icon-hdd');
-        }
         return $menu;
 
     }

@@ -106,13 +106,11 @@
                                     <tr>
                                         <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                         <td class="numeric" >
-                                            {{ entity.masterItem.name }}
-                                            {% if entity.inventoryConfig.isColor == 1 and  entity.color is not empty %}-{{ entity.color.name }} {% endif %}
-                                            {% if entity.inventoryConfig.isSize == 1 and  entity.size is not empty %}-{{ entity.size.name }} {% endif %}
-                                            {% if entity.inventoryConfig.isBrand == 1 and  entity.brand is not empty  %}-{{ entity.brand.name }} {% endif %}
-                                            {% if entity.inventoryConfig.isVendor == 1 and  entity.vendor is not empty %}-{{ entity.vendor.name }} {% endif %}
+                                            {{ entity.name }}
                                         </td>
-                                        <td class="numeric" >{{ entity.sku }}</td>
+                                        <td class="numeric" >
+                                            {{ entity.sku }}
+                                        </td>
                                         <td class="numeric" >{{ entity.purchaseQuantity }}&nbsp;{% if entity.masterItem.productUnit is not empty %}{{  entity.masterItem.productUnit.name }}{% endif %}</td>
                                         <td class="numeric" >{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.onlineOrderQuantityReturn)  - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity+ entity.onlineOrderQuantity) }}&nbsp;{% if entity.masterItem.productUnit is not empty %}{{  entity.masterItem.productUnit.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.avgPurchasePrice }}</td>
@@ -129,10 +127,10 @@
                                             <table>
                                                 <tr><th>Purchase Quantity</th><td>{{ entity.purchaseQuantity }}</td><th>Item Name</th><td>{{ entity.masterItem.name }}</td></tr>
                                                 <tr><th>Purchase Return Quantity</th><td>{{ entity.purchaseQuantityReturn }}</td><th>Category</th><td>{% if entity.masterItem.category is not empty %}{{ entity.masterItem.category.name }}</td>{% endif %}</tr>
-                                                <tr><th>Sales Quantity</th><td>{{ entity.salesQuantity }}</td><th>Size</th><td>{% if entity.size is not empty %}{{ entity.size.name }}{% endif %}</td></tr>
-                                                <tr><th>Sales Return Quantity</th><td>{{ entity.salesQuantityReturn }}</td><th>Color</th><td>{% if entity.color is not empty %}{{ entity.color.name }}{% endif %}</td></tr>
-                                                <tr><th>Online Sales Quantity</th><td>{{ entity.onlineOrderQuantity }}</td><th>Vendor</th><td>{% if entity.vendor is not empty %}{{ entity.vendor.name }}{% endif %}</td></tr>
-                                                <tr><th>Online Sales Return Quantity</th><td>{{ entity.onlineOrderQuantityReturn }}</td><th>Brand</th><td>{% if entity.brand is not empty %}{{ entity.brand.name }}{% endif %}</td></tr>
+                                                <tr><th>Sales Quantity</th><td>{{ entity.salesQuantity }}</td><th>Color</th><td>{% if entity.color is not empty %}{{ entity.color.name }}{% endif %}</td></tr>
+                                                <tr><th>Sales Return Quantity</th><td>{{ entity.salesQuantityReturn }}</td><th>Size</th><td>{% if entity.size is not empty %}{{ entity.size.name }}{% endif %}</td></tr>
+                                                <tr><th>Online Sales Quantity</th><td>{{ entity.onlineOrderQuantity }}</td><th>Brand</th><td>{% if entity.brand is not empty %}{{ entity.brand.name }}{% endif %}</td></tr>
+                                                <tr><th>Online Sales Return Quantity</th><td>{{ entity.onlineOrderQuantityReturn }}</td><th>Vendor</th><td>{% if entity.vendor is not empty %}{{ entity.vendor.name }}{% endif %}</td></tr>
                                                 <tr><th>Damage Quantity</th><td>{{ entity.damageQuantity }}</td><td>&nbsp;</td><td>&nbsp;</td></tr>
                                                 <tr><th>Remaining Quantity</th><td><strong>{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.onlineOrderQuantityReturn)  - ( entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity + entity.onlineOrderQuantity) }}</strong></td><td>&nbsp;</td><td>&nbsp;</td></tr>
                                             </table>

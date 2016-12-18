@@ -154,9 +154,9 @@
                                                             <tr id="remove-purchase-item-{{ purchaseItem.id }}">
                                                                 <td class="numeric span6" >
                                                                     {% if(entity.process != 'approved' ) %}
-                                                                    <a  data-type="select" class="editable" id="item" data-name="Item" href="#" data-source="{{ path('inventory_item_inline_update',{'vendor':entity.vendor.id}) }}"  data-url="{{ path('inventory_purchaseitem_inline_item_update') }}" data-pk="{{ purchaseItem.id }}" data-original-title="Enter sales price">{{ purchaseItem.item.masterItem.name }}-{{ purchaseItem.item.color.name }}-{{ purchaseItem.item.size.name }}-{{ purchaseItem.item.vendor.vendorCode }}</a>
+                                                                    <a  data-type="select" class="editable" id="item" data-name="Item" href="#" data-source="{{ path('inventory_item_inline_update',{'vendor':entity.vendor.id}) }}"  data-url="{{ path('inventory_purchaseitem_inline_item_update') }}" data-pk="{{ purchaseItem.id }}" data-original-title="Enter sales price">{{ purchaseItem.item.name }}/{{ purchaseItem.item.sku }}</a>
                                                                 {% else %}
-                                                                    {{ purchaseItem.item.masterItem.name }}-{{ purchaseItem.item.color.name }}-{{ purchaseItem.item.size.name }}-{{ purchaseItem.item.vendor.vendorCode }}
+                                                                    {{ purchaseItem.item.name }}/{{ purchaseItem.item.sku }}
                                                                 {% endif %}
                                                                 </td>
                                                                 <td class="numeric span2" ><input type="text" id="" name="quantity[]" class="m-wrap span12 tooltips" required="required" value="{{ purchaseItem.quantity }}" placeholder="no of quantity" , data-original-title ="no of quantity" , data-trigger = "hover" ></td>

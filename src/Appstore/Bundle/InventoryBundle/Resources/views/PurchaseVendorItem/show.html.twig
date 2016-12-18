@@ -139,10 +139,7 @@
 
                                             <tr>
                                                 <td class="numeric" >
-                                                    {{ purchaseItem.item.masterItem.name }}
-                                                    {% if purchaseItem.item.color  %}-{{ purchaseItem.item.color.name }}{% endif %}
-                                                    {% if purchaseItem.item.size  %}-{{ purchaseItem.item.size.name }}{% endif %}
-                                                    {% if purchaseItem.item.vendor  %}-{{ purchaseItem.item.vendor.vendorCode }}{% endif %}
+                                                    {{ purchaseItem.item.name }}/{{ purchaseItem.item.sku }}
                                                 </td>
                                                 <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                                 <td class="numeric" >{{ purchaseItem.purchasePrice |number_format() }}</td>

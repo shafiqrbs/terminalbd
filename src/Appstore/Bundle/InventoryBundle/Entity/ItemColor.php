@@ -12,7 +12,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Appstore\Bundle\InventoryBundle\Repository\ItemColorRepository")
  */
-class ItemColor implements CodeAwareEntity
+class ItemColor
 {
     /**
      * @var integer
@@ -81,6 +81,15 @@ class ItemColor implements CodeAwareEntity
      * @ORM\Column(name="status", type="boolean")
      */
     private $status=true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isValid", type="boolean")
+     */
+    private $isValid = true;
+
+
 
 
     /**
@@ -213,7 +222,7 @@ class ItemColor implements CodeAwareEntity
      */
     public function getSTRPadCode()
     {
-        $code = str_pad($this->getCode(),2, '0', STR_PAD_LEFT);
+        $code = str_pad($this->getCode(),3, '0', STR_PAD_LEFT);
         return $code;
     }
 
@@ -255,6 +264,22 @@ class ItemColor implements CodeAwareEntity
     public function setGlobalOption($globalOption)
     {
         $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsValid()
+    {
+        return $this->isValid;
+    }
+
+    /**
+     * @param boolean $isValid
+     */
+    public function setIsValid($isValid)
+    {
+        $this->isValid = $isValid;
     }
 }
 

@@ -14,7 +14,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Appstore\Bundle\InventoryBundle\Repository\ItemSizeRepository")
  */
-class ItemSize  implements CodeAwareEntity
+class ItemSize
 {
     /**
      * @var integer
@@ -92,6 +92,13 @@ class ItemSize  implements CodeAwareEntity
      * @ORM\Column(name="status", type="boolean")
      */
     private $status=true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isValid", type="boolean")
+     */
+    private $isValid=true;
 
 
     /**
@@ -283,6 +290,22 @@ class ItemSize  implements CodeAwareEntity
     public function setGlobalOption($globalOption)
     {
         $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsValid()
+    {
+        return $this->isValid;
+    }
+
+    /**
+     * @param boolean $isValid
+     */
+    public function setIsValid($isValid)
+    {
+        $this->isValid = $isValid;
     }
 }
 

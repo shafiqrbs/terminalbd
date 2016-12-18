@@ -39,7 +39,7 @@ class ProductController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Product')->findBy(array('inventoryConfig'=>$inventory),array('name'=>'ASC'));
+        $entities = $em->getRepository('InventoryBundle:Product')->findBy(array('inventoryConfig'=>$inventory),array('code'=>'ASC'));
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:Product:index.html.twig', array(
             'entities' => $pagination,

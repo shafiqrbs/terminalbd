@@ -82,22 +82,19 @@ class PurchaseType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 },
             ))
-
-            ->add('invoice','text', array('attr'=>array('class'=>'m-wrap span12','label' => 'form.invoice','required' => false ,'placeholder'=>'Invoice no')
-            ))
             ->add('memo','text', array('attr'=>array('class'=>'m-wrap span12 ','required' => true ,'label' => 'form.name','placeholder'=>'Memo no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add  memo no'))
-                )))
+            )))
             /*->add('chalan','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))*/
             ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>''),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
                 'years'=> array('2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'),
-                'widget' => 'choice',
+                'widget' => 'single_text',
                 // this is actually the default format for single_text
-                'format' => 'dd-MM-yyyy',
+                'format' => 'yyyy-MM-dd',
                 
                 ))
             ->add('totalAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Net total amount BDT'),

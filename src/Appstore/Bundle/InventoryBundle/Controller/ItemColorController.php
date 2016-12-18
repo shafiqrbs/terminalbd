@@ -5,7 +5,8 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\InventoryBundle\Entity\ItemColor;
 use Appstore\Bundle\InventoryBundle\Form\ItemColorType;
 
@@ -23,8 +24,7 @@ class ItemColorController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:ItemColor')->findBy(array('inventoryConfig'=>$inventory),array('name'=>'asc'));
+        $entities = $em->getRepository('InventoryBundle:ItemColor')->findBy(array('isValid'=> 1),array('code'=>'asc'));
         return $this->render('InventoryBundle:ItemColor:index.html.twig', array(
             'entities' => $entities,
         ));
@@ -33,6 +33,7 @@ class ItemColorController extends Controller
      * Creates a new ItemColor entity.
      *
      */
+
     public function createAction(Request $request)
     {
         $entity = new ItemColor();
@@ -117,7 +118,7 @@ class ItemColorController extends Controller
 
     /**
      * Displays a form to edit an existing ItemColor entity.
-     *
+     * @Secure(roles="ROLE_ADMIN_OPERATION_USER")
      */
     public function editAction($id)
     {
@@ -160,7 +161,7 @@ class ItemColorController extends Controller
     }
     /**
      * Edits an existing ItemColor entity.
-     *
+     * @Secure(roles="ROLE_ADMIN_OPERATION_USER")
      */
     public function updateAction(Request $request, $id)
     {
@@ -192,7 +193,7 @@ class ItemColorController extends Controller
     }
     /**
      * Deletes a ItemColor entity.
-     *
+     * @Secure(roles="ROLE_ADMIN_OPERATION_USER")
      */
     public function deleteAction(Request $request, $id)
     {

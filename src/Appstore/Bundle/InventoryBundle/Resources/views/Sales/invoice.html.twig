@@ -103,7 +103,7 @@
                                         {% for salesItem in entity.salesItems %}
                                             <tr>
                                                 <td class="numeric" >{{ loop.index }}</td>
-                                                <td class="numeric" >{{ salesItem.item.masterItem.name }}-{{ salesItem.item.color.name }}-{{ salesItem.item.size.name }}-{{ salesItem.item.vendor.vendorCode }}</td>
+                                                <td class="numeric" >{{ salesItem.item.name }}</td>
                                                 <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
                                                 <td class="numeric" >{{ salesItem.quantity }}</td>
                                                 <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
