@@ -235,11 +235,9 @@ class AccountJournalController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity->setGlobalOption($this->getUser()->getGlobalOption());
         $parent = $em->getRepository('AccountingBundle:AccountJournal')->find($data['parent']);
-        $entity->setParent($parent);
         $entity->setToUser($parent->getCreatedBy());
         $entity->setAmount($data['amount']);
         $entity->setRemark($data['remark']);
-        $entity->setPaymentMethod($data['paymentMethod']);
         $em->persist($entity);
         $em->flush();
         exit;
@@ -269,7 +267,9 @@ class AccountJournalController extends Controller
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity,'Journal');
+
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($entity,'Journal');
+            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($entity);
             return new Response('success');
         } else {
             return new Response('failed');

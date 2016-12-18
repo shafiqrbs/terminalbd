@@ -122,10 +122,7 @@
 
                                     <tr>
                                         <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
-                                        <td class="numeric" >{{ entity.masterItem.name }}
-                                            {% if entity.color  %}-{{ entity.color.name }}{% endif %}
-                                            {% if entity.size  %}-{{ entity.size.name }}{% endif %}
-                                            {% if entity.vendor  %}-{{ entity.vendor.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.purchaseQuantity }}</td>
                                         <td class="numeric" >{{ entity.purchaseQuantityReturn }}</td>
                                         <td class="numeric" >{{ entity.purchaseQuantityReplace }}</td>

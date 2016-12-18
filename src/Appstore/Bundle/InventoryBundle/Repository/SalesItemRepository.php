@@ -75,19 +75,7 @@ class SalesItemRepository extends EntityRepository
             } else{
                  $readonly = '';
             }
-
-            $color ='';
-            $size ='';
-
-            $masterItem = $entity->getItem()->getMasterItem()->getName();
-            if(!empty($entity->getItem()->getColor())){
-                $color = '-'.$entity->getItem()->getColor()->getName();
-            }
-            if(!empty($entity->getItem()->getSize())){
-                $size = '-'.$entity->getItem()->getSize()->getName();
-            }
-            $itemName = $masterItem.$color.$size;
-
+            $itemName = $entity->getItem()->getName();
             $data .=' <tr id="remove-'.$entity->getId().'">';
             $data .='<td class="numeric" >'.$i.'</td>';
             $data .='<td class="numeric" >'.$entity->getPurchaseItem()->getBarcode();

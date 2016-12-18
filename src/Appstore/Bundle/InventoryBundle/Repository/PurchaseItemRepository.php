@@ -155,7 +155,7 @@ class PurchaseItemRepository extends EntityRepository
         $qb->select('p.receiveDate as receiveDate');
         $qb->addSelect('SUM(stockItem.quantity) as remainingQnt');
         $qb->addSelect('item.sku as sku');
-        $qb->addSelect('item.skuSlug as skuSlug');
+        $qb->addSelect('item.name as name');
         $qb->addSelect('p.memo as memo');
         $qb->addSelect('purchaseItem.id as id');
         $qb->addSelect('purchaseItem.barcode as barcode');
@@ -174,7 +174,7 @@ class PurchaseItemRepository extends EntityRepository
             $received = $purchaseItem["receiveDate"]->format('d-m-Y');
             $data .= '<tr>';
             $data .= '<td class="numeric" >'.$purchaseItem["barcode"].'</td>';
-            $data .= '<td class="numeric" >'.$purchaseItem["sku"].'/'.$purchaseItem["skuSlug"].'</td>';
+            $data .= '<td class="numeric" >'.$purchaseItem["name"].' / '.$purchaseItem["sku"].'</td>';
             $data .= '<td class="numeric" >'.$received.'/'.$purchaseItem["memo"] .'</td>';
             $data .= '<td class="numeric" >'.$purchaseItem["quantity"].'</td>';
             $data .= '<td class="numeric" >'.$purchaseItem["remainingQnt"].'</td>';

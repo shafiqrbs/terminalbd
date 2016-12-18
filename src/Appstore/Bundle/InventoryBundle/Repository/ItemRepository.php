@@ -144,22 +144,17 @@ class ItemRepository extends EntityRepository
 
     public function searchAutoComplete($item, InventoryConfig $inventory)
     {
+
+        $search = strtolower($item);
         $query = $this->createQueryBuilder('i');
         $query->join('i.inventoryConfig', 'ic');
         $query->leftJoin('i.stockItems', 'stockItem');
-        $query->leftJoin('i.vendor', 'vendor');
-        $query->leftJoin('i.masterItem', 'masterItem');
-        $query->leftJoin('i.color', 'color');
-        $query->leftJoin('i.size', 'size');
         $query->select('i.id as id');
+        $query->addSelect('i.name as name');
         $query->addSelect('i.skuSlug as text');
         $query->addSelect('i.sku as sku');
-        $query->addSelect('vendor.name as vendorName');
-        $query->addSelect('masterItem.name as masterItemName');
-        $query->addSelect('color.name as colorName');
-        $query->addSelect('size.name as sizeName');
         $query->addSelect('SUM(stockItem.quantity) as remainingQuantity');
-        $query->where($query->expr()->like("i.skuSlug", "'%$item%'"  ));
+        $query->where($query->expr()->like("i.skuSlug", "'%$search%'"  ));
         $query->andWhere("ic.id = :inventory");
         $query->setParameter('inventory', $inventory->getId());
         $query->groupBy('i.id');

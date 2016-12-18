@@ -257,6 +257,7 @@ class AccountPurchaseController extends Controller
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($entity);
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($entity);
             return new Response('success');
         } else {

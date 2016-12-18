@@ -23,7 +23,7 @@ class AccountHeadController extends Controller
         $pagination = $paginator->paginate(
             $entities,
             $this->get('request')->query->get('page', 1)/*page number*/,
-            25  /*limit per page*/
+           100  /*limit per page*/
         );
         return $pagination;
     }

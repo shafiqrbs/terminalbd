@@ -289,10 +289,10 @@ var InventorySales = function(sales) {
         },
         formatResult: function(item){
 
-            return item.masterItemName +' - '+ item.colorName +' - '+ item.sizeName +' - '+ item.vendorName +' -> '+ (item.remainingQuantity)
+            return item.name +' => '+ (item.remainingQuantity)
 
         }, // omitted for brevity, see the source of this page
-        formatSelection: function(item){return item.sku + ' - ' + item.text}, // omitted for brevity, see the source of this page
+        formatSelection: function(item){return item.name + ' / ' + item.sku}, // omitted for brevity, see the source of this page
         initSelection: function(element, callback) {
             var id = $(element).val();
         },

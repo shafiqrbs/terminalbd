@@ -139,13 +139,27 @@ class InventoryConfigController extends Controller
      * Finds and displays a InventoryConfig entity.
      *
      */
+
+    public function paginate($entities)
+    {
+
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            50  /*limit per page*/
+        );
+        return $pagination;
+    }
+
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $data = $em->getRepository('InventoryBundle:Item')->findBy(array('inventoryConfig'=>$id),array('id'=>'ASC'));
+        $entities = $em->getRepository('InventoryBundle:Item')->findBy(array('inventoryConfig'=>$id),array('id'=>'ASC'));
+        $pagination = $this->paginate($entities);
 
         echo "<ul>";
-        foreach($data as $entity){
+        foreach($pagination as $entity){
 
             $masterItem         = $entity->getMasterItem()->getSTRPadCode();
             $masterName         = $entity->getMasterItem()->getName();

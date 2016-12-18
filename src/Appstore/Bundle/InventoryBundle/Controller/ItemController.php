@@ -477,7 +477,7 @@ class ItemController extends Controller
         );
         $items = array();
         foreach ($entities as $entity):
-            $item =$entity->getMasterItem()->getName().'-'.$entity->getColor()->getName().'-'.$entity->getSize()->getName() .'-'.$entity->getVendor()->getVendorCode();
+            $item =$entity->getName();
             $items[]=array('value' => $entity->getId(),'text'=> $item);
         endforeach;
         return new JsonResponse($items);
