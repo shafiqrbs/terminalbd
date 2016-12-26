@@ -147,9 +147,9 @@
                                                             <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_salesreturn_item_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                                         {% endif %}
                                                     </td>
-
                                                 </tr>
                                             {% endfor %}
+                                            <tr><td colspan="8"><span class="pull-right"><strong>Total Amount</strong></span></td><td><span class="pull-left"><strong id="totalAmount">{{ salesReturn.total|number_format }}</strong></span></td><td></td></tr>
                                         {% endif %}
                                         </tbody>
                                     </table>
@@ -161,7 +161,7 @@
                                     {% if entity.paymentStatus == 'pendig' %}
                                         <span  class="btn green"><i class="icon-random"></i>&nbsp;Pending</span>
                                     {% else %}
-                                        <span  class="btn green"><i class="icon-ok"></i>&nbsp;Complete</span>
+                                        <span  class="btn green"><i class="icon-ok"></i>&nbsp;Approved</span>
                                     {% endif %}
                                 </div>
                             </div>

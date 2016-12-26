@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ContentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -276,9 +277,15 @@ class Page
     protected $pageModules;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SidebarWidget", mappedBy="page" )
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidget", mappedBy="page" )
      **/
     protected $sidebarWidgets;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="page" )
+     **/
+    protected $featureWidgets;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeSlider", mappedBy="page" )
@@ -1100,6 +1107,14 @@ class Page
     public function getHomeSliders()
     {
         return $this->homeSliders;
+    }
+
+    /**
+     * @return FeatureWidget
+     */
+    public function getFeatureWidgets()
+    {
+        return $this->featureWidgets;
     }
 
 

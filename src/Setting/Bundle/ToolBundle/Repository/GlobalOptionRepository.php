@@ -50,6 +50,18 @@ class GlobalOptionRepository extends EntityRepository
         return $qb;
     }
 
+    function findByDomain($data = array()) {
+
+        $qb =  $this->createQueryBuilder('e');
+        $qb->orderBy('e.name', 'ASC');
+        $qb->where("e.status = 1");
+        $qb->andWhere("e.domain != :domain");
+        $qb->setParameter('domain', 'NULL');
+        $this->searchHandle($qb,$data);
+        $result = $qb->getQuery()->getResult();
+        return $result;
+    }
+
     function findBySubdomain($data = array()) {
 
         $syndicate = isset($data['syndicate'])  ? $data['syndicate']:'';
@@ -67,7 +79,7 @@ class GlobalOptionRepository extends EntityRepository
         return $result;
     }
 
-    function getActiveDomainList($form) {
+    function getActiveDomainList($form = array()) {
 
 
         $location = $form->get('location')->getData();

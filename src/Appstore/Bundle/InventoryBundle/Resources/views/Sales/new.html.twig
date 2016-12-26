@@ -357,19 +357,20 @@
                                     <td class="numeric" >{% if  dailySales.transactionMethod is not empty %}{{ dailySales.transactionMethod.name }}{% endif %}</td>
                                     <td class="numeric" >{{ dailySales.salesBy }}</td>
                                     <td class="numeric" >
-                                        {% if dailySales.paymentStatus == "Due" %}
-                                            <a href="{{ path('account_sales_new') }}" class="btn mini purple" ><i class="icon-money"></i>&nbsp;Due</a>
-                                        {% endif %}
-                                        {% if dailySales.salesItems is defined and  dailySales.salesItems is empty  %}
-                                            <a data-title="Add purchase item" href="{{ path('inventory_sales_edit', { 'code': dailySales.invoice }) }}" class="btn blue mini" ><i class="icon-plus-sign"></i></a>
-                                            {% if dailySales.id != entity.id  %}
-                                                <a title="Are you sure went to delete ?" id="{{ dailySales.id }}" rel="{{ path('inventory_sales_delete', { 'id': dailySales.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
-                                            {% endif %}
-                                        {% endif %}
                                         {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}
-                                            <a data-title="Add purchase item" href="{{ path('inventory_sales_edit', { 'code': dailySales.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
-                                            <a title="Are you sure went to delete ?" id="{{ dailySales.id }}" rel="{{ path('inventory_sales_delete', { 'id': dailySales.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                            <a href="{{ path('inventory_sales_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                            <a href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
                                         {% endif %}
+                                        {% if dailySales.paymentStatus == "Pending" %}
+                                            <a href="{{ path('inventory_sales_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
+                                        {% if dailySales.id != entity.id  %}
+                                            <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                        {% endif %}
+                                        {% endif %}
+                                        {% if dailySales.paymentStatus == "Due" %}
+                                            <a href="{{ path('account_sales_new') }}" class="btn mini blue" ><i class="icon-money"></i></a>
+                                        {% endif %}
+
                                     </td>
                                 </tr>
                                 <tr id="show-{{ dailySales.id }}" class="showing-overview">

@@ -304,7 +304,7 @@
 }
 .box .social-links li{
     display: inline-block;
-    margin-right: 10px;
+    margin-left: 10px;
 }
 .box .social-links li a{
     display: block;

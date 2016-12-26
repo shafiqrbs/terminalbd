@@ -40,7 +40,8 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('domain') }}"><i class="icon-th-list"></i>&nbsp;List</a></li>
+                                    <li><a href="{{ path('inventory_customer_new') }}"><i class="icon-th-list"></i>&nbsp;New Customer</a></li>
+                                    <li><a href="{{ path('inventory_customer') }}"><i class="icon-th-list"></i>&nbsp;List</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -56,6 +57,7 @@
                                     <th class="numeric">Name</th>
                                     <th class="numeric">Mobile</th>
                                     <th class="numeric">Email</th>
+                                    <th class="numeric">Location</th>
                                     <th class="numeric">Action</th>
                                 </tr>
                                 </thead>
@@ -66,10 +68,13 @@
                                         <td>{{ entity.name }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
                                         <td class="numeric"><a href="mailto:{{ entity.email }}"> {{ entity.email }}</a></td>
+                                        <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}</td>
                                         <td class="numeric">
-                                            <a class="btn mini green-stripe btn-action" href="{{ path('domain_edit', { 'id': entity.id }) }}">Edit</a>
-                                            <a class="btn mini blue-stripe btn-action" href="{{ path('domain_show', { 'id': entity.id }) }}">View</a>
-                                            <a class="btn mini red-stripe btn-action delete" href="javascript:" rel="{{ path('domain_delete', { 'id': entity.id }) }}" >Delete</a>
+                                            <a class="btn mini green-stripe btn-action" href="{{ path('inventory_customer_edit', { 'id': entity.id }) }}">Edit</a>
+                                            <a class="btn mini blue-stripe btn-action" href="{{ path('inventory_customer_show', { 'id': entity.id }) }}">View</a>
+                                            <a class="btn mini blue-stripe btn-action" href="{{ path('inventory_sales_new', { 'customer': entity.id }) }}">Add Sales</a>
+                                            <a class="btn mini blue-stripe btn-action" href="{{ path('inventory_sales', { 'customer': entity.id }) }}">Orders</a>
+                                            <a class="btn mini red-stripe btn-action delete" href="javascript:" rel="{{ path('inventory_customer_delete', { 'id': entity.id }) }}" >Delete</a>
                                         </td>
                                     </tr>
                                         {#{% if entity.customerInboxs is not empty %}

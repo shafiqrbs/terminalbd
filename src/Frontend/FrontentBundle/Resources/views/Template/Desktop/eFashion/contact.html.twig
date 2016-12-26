@@ -46,11 +46,11 @@
                     <div class="col-md-4">
                         <strong><i class="fa fa-home"></i>&nbsp;Office</strong><br>
                         {{ globalOption.contactPage.address1 }}
-                        {% if globalOption.contactPage.thana is defined and globalOption.contactPage.thana %}
-                            ,{{ globalOption.contactPage.thana.name }}<br>
+                        {% if globalOption.contactPage.location is defined and globalOption.contactPage.location %}
+                            ,{{ globalOption.contactPage.location.name }}<br>
                         {% endif %}
-                        {% if globalOption.contactPage.district is defined and globalOption.contactPage.district %}
-                            {{ globalOption.contactPage.district.name }} {% endif %}-{{ globalOption.contactPage.postalCode }}<br>
+                        {% if globalOption.contactPage.location is defined and globalOption.contactPage.location %}
+                            {{ globalOption.contactPage.location.parent.name }} {% endif %}-{{ globalOption.contactPage.postalCode }}<br>
                     </div>
                     <div class="col-md-4">
                         <strong><i class="fa fa-hand-o-right"></i>&nbsp;Communication</strong><br>
@@ -59,7 +59,7 @@
                         {% endif %}
                         {% if globalOption.contactPage.weeklyOffDay %}
                         <br/>
-                        <strong><i class="fa fa-power-off"></i></strong>&nbsp;{{ globalOption.contactPage.weeklyOffDay }}<br>
+                        <strong><i class="fa fa-power-off"></i></strong>&nbsp;{% for day in globalOption.contactPage.weeklyOffDay %}{{ day }}{{ loop.last ? '' : ', ' }}{% endfor %}<br>
                         {% endif %}
                         {% if(globalOption.contactPage.displayPhone == 1) %}
                         <strong><i class="fa fa-mobile"></i></strong>&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">+ 088 {{ globalOption.mobile }}</a></br>

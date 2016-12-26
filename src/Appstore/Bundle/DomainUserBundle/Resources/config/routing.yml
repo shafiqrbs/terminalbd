@@ -11,6 +11,10 @@ domain_branch:
     resource: "@DomainUserBundle/Resources/config/routing/branches.yml"
     prefix:   /hr/branch
 
+domain_store:
+    resource: "@DomainUserBundle/Resources/config/routing/store.yml"
+    prefix:   /hr/store
+
 domain_user_customer:
     resource: "@DomainUserBundle/Resources/config/routing/customer.yml"
     prefix:   /crm

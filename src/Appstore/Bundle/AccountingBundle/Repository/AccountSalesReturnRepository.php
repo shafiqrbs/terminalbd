@@ -24,6 +24,7 @@ class AccountSalesReturnRepository extends EntityRepository
         $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS receiveAmount, SUM(e.amount) AS dueAmount,SUM(e.amount) AS returnAmount ');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.process = 'approved'");
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getSingleResult();
         $data =  array('totalAmount'=>$result['totalAmount'],'receiveAmount'=>$result['receiveAmount'],'dueAmount'=>$result['dueAmount']);
@@ -65,8 +66,7 @@ class AccountSalesReturnRepository extends EntityRepository
 
             $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
             $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-            $toUser =    isset($data['toUser'])? $data['toUser'] :'';
-            $account =    isset($data['accountHead'])? $data['accountHead'] :'';
+            $customer =    isset($data['mobile'])? $data['mobile'] :'';
 
             if (!empty($data['startDate']) ) {
 
@@ -78,10 +78,10 @@ class AccountSalesReturnRepository extends EntityRepository
                 $qb->andWhere("e.updated <= :endDate");
                 $qb->setParameter('endDate', $endDate.' 23:59:59');
             }
-            if (!empty($toUser)) {
+            if (!empty($customer)) {
                 $qb->join('e.customer','c');
-                $qb->andWhere("c.name = :user");
-                $qb->setParameter('user', $toUser);
+                $qb->andWhere("c.mobile = :mobile");
+                $qb->setParameter('mobile', $customer);
             }
         }
 
@@ -108,10 +108,6 @@ class AccountSalesReturnRepository extends EntityRepository
         $accountSales->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
         $accountSales->setSalesReturn($entity);
         $accountSales->setCustomer($entity->getSales()->getCustomer());
-
-        $balance = $this->lastInsertSales($entity->getInventoryConfig()->getGlobalOption(),$entity);
-        $lastBalance = ($balance + $entity->getTotal());
-        $accountSales->setBalance($lastBalance);
         $accountSales->setTotalAmount($entity->getTotal());
         $accountSales->setAmount($entity->getTotal());
         $accountSales->setProcess('approved');

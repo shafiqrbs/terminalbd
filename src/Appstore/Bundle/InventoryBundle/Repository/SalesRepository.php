@@ -50,7 +50,7 @@ class SalesRepository extends EntityRepository
         $em = $this->_em;
         $total = $em->createQueryBuilder()
             ->from('InventoryBundle:SalesItem','si')
-            ->select('sum(si.subTotal) as total , count(si.id) as totalItem')
+            ->select('sum(si.subTotal) as total , sum(si.quantity) as totalItem')
             ->where('si.sales = :sales')
             ->setParameter('sales', $sales ->getId())
             ->getQuery()->getSingleResult();

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -31,12 +32,13 @@ class Promotion
 
 
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="promotion")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="promotion")
+     * @ORM\OrderBy({"updated" = "DESC"})
      */
-    protected $purchaseVendorItem;
+    protected $purchaseVendorItems;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="tag")
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="tag")
      */
     protected $itemTags;
 
@@ -215,7 +217,7 @@ class Promotion
     }
 
     /**
-     * @return mixed
+     * @return PurchaseVendorItem
      */
     public function getPurchaseVendorItems()
     {
@@ -436,7 +438,6 @@ class Promotion
     {
         $this->templatePromotion = $templatePromotion;
     }
-
 
 }
 

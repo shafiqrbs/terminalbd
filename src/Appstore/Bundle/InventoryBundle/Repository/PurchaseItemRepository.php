@@ -146,47 +146,4 @@ class PurchaseItemRepository extends EntityRepository
 
     }
 
-    public function itemPurchaseDetails($inventory,$id)
-    {
-        $qb = $this->createQueryBuilder('purchaseItem');
-        $qb->join('purchaseItem.item','item');
-        $qb->join('purchaseItem.stockItem','stockItem');
-        $qb->join('purchaseItem.purchase','p');
-        $qb->select('p.receiveDate as receiveDate');
-        $qb->addSelect('SUM(stockItem.quantity) as remainingQnt');
-        $qb->addSelect('item.sku as sku');
-        $qb->addSelect('item.name as name');
-        $qb->addSelect('p.memo as memo');
-        $qb->addSelect('purchaseItem.id as id');
-        $qb->addSelect('purchaseItem.barcode as barcode');
-        $qb->addSelect('purchaseItem.quantity as quantity');
-        $qb->addSelect('purchaseItem.purchasePrice as purchasePrice');
-        $qb->addSelect('purchaseItem.salesPrice as salesPrice');
-        $qb->where("p.inventoryConfig = :inventory");
-        $qb->setParameter('inventory', $inventory);
-        $qb->andWhere("purchaseItem.item = :item");
-        $qb->setParameter('item', $id);
-        $result = $qb->getQuery()->getResult();
-        $data ='';
-
-        foreach($result as $purchaseItem ) {
-            //$strDate = strtotime($purchaseItem["receiveDate"]);
-            $received = $purchaseItem["receiveDate"]->format('d-m-Y');
-            $data .= '<tr>';
-            $data .= '<td class="numeric" >'.$purchaseItem["barcode"].'</td>';
-            $data .= '<td class="numeric" >'.$purchaseItem["name"].' / '.$purchaseItem["sku"].'</td>';
-            $data .= '<td class="numeric" >'.$received.'/'.$purchaseItem["memo"] .'</td>';
-            $data .= '<td class="numeric" >'.$purchaseItem["quantity"].'</td>';
-            $data .= '<td class="numeric" >'.$purchaseItem["remainingQnt"].'</td>';
-            $data .= '<td class="numeric" >'.$purchaseItem["purchasePrice"].'</td>';
-            $data .= '<td class="numeric" ><a class="editable" data-name="SalesPrice" href="javascript:"  data-url="/inventory/purchaseitem/inline-update" data-type="text" data-pk="'.$purchaseItem["id"].'" data-original-title="Enter sales price">'.$purchaseItem["salesPrice"].'</a></td>';
-            $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem["barcode"].'">Add Sales</a></td>';
-            $data .= '</tr>';
-        }
-
-        return $data;
-
-    }
-
-
 }

@@ -179,26 +179,59 @@ class GoodsItemRepository extends EntityRepository
     public function updateInventorySalesItem(Sales $entity ,$calculation ='minus')
     {
         foreach ($entity->getSalesItems() as $row){
-
             $purchaseVendorItem = $row->getPurchaseItem()->getPurchaseVendorItem();
             if($purchaseVendorItem->getIsWeb() == 1 ){
                 $qnt = $row->getQuantity();
-                if(!empty($row->getSalesItem()->getItem()->getSize())){
-                    $size = $row->getSalesItem()->getItem()->getSize();
-                    $this->inventoryItemQuantityUpdate($calculation,$purchaseVendorItem,$size,$qnt);
+                if(!empty($row->getItem()->getSize())){
+                    $size = $row->getItem()->getSize();
+                    $this->webItemQuantityUpdate($calculation , $purchaseVendorItem , $size , $qnt);
+                }else{
+                    $this->webItemQuantityUpdate($calculation , $purchaseVendorItem , $size = 0 , $qnt);
                 }
             }
         }
     }
 
+
+    public function webItemQuantityUpdate($calculation, PurchaseVendorItem $purchaseVendorItem , $size, $qnt)
+    {
+        $em = $this->_em;
+
+        /** @var GoodsItem $item */
+
+        $subItemWithSize = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem' => $purchaseVendorItem,'size' => $size));
+        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem' => $purchaseVendorItem));
+        if(!empty($subItemWithSize)){
+            $subGood = $subItemWithSize;
+        }elseif(!empty($subItem)){
+            $subGood = $subItem;
+        }
+
+        if(!empty($subGood)){
+            if($calculation == 'minus'){
+                $subItem->setQuantity($subGood->getQuantity() - $qnt);
+            }else{
+                $subItem->setQuantity($subGood->getQuantity() + $qnt);
+            }
+            $em->flush();
+        }
+
+    }
+
+
     public function updateInventorySalesReturnItem(SalesReturn $entity ,$calculation ='plus')
     {
         foreach ($entity->getSalesReturnItems() as $row){
             $purchaseVendorItem = $row->getSalesItem()->getPurchaseItem()->getPurchaseVendorItem();
-            $qnt =  $row->getQuantity();
-            $size = $row->getSalesItem()->getItem()->getSize();
-            $this->inventoryItemQuantityUpdate($calculation,$purchaseVendorItem,$size,$qnt);
-
+            if($purchaseVendorItem->getIsWeb() == 1 ){
+                $qnt = $row->getQuantity();
+                if(!empty($size = $row->getSalesItem()->getItem()->getSize())){
+                    $size = $row->getSalesItem()->getItem()->getSize();
+                    $this->webItemQuantityUpdate($calculation , $purchaseVendorItem , $size , $qnt);
+                }else{
+                    $this->webItemQuantityUpdate($calculation , $purchaseVendorItem , $size = 0 , $qnt);
+                }
+            }
         }
     }
 
@@ -208,10 +241,15 @@ class GoodsItemRepository extends EntityRepository
         foreach($entity->getPurchaseReturnItems() as $row ){
 
             $purchaseVendorItem = $row->getPurchaseItem()->getPurchaseVendorItem();
-            $qnt =  $row->getQuantity();
-            $size = $row->getPurchaseItem()->getItem()->getSize();
-            $this->inventoryItemQuantityUpdate($calculation,$purchaseVendorItem,$size,$qnt);
-
+            if($purchaseVendorItem->getIsWeb() == 1 ){
+                $qnt = $row->getQuantity();
+                if(!empty($size = $row->getPurchaseItem()->getItem()->getSize())){
+                    $size = $row->getPurchaseItem()->getItem()->getSize();
+                    $this->webItemQuantityUpdate($calculation , $purchaseVendorItem , $size , $qnt);
+                }else{
+                    $this->webItemQuantityUpdate($calculation , $purchaseVendorItem , $size = 0 , $qnt);
+                }
+            }
         }
 
     }
@@ -219,27 +257,15 @@ class GoodsItemRepository extends EntityRepository
     public function insertInventoryDamageItem(Damage $entity,$calculation ='minus')
     {
             $purchaseVendorItem = $entity->getPurchaseItem()->getPurchaseVendorItem();
-            $qnt                = $entity->getQuantity();
-            $size               = $entity->getItem()->getSize();
-            $this->inventoryItemQuantityUpdate($calculation,$purchaseVendorItem,$size,$qnt);
-    }
-
-    public function inventoryItemQuantityUpdate($calculation, PurchaseVendorItem $purchaseVendorItem , ItemSize $size, $qnt)
-    {
-        $em = $this->_em;
-
-        /** @var GoodsItem $item */
-
-        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem' => $purchaseVendorItem,'size' => $size));
-        if(!empty($subItem)){
-
-            if($calculation == 'minus'){
-                $subItem->setQuantity($subItem->getQuantity() - $qnt);
-            }else{
-                $subItem->setQuantity($subItem->getQuantity() + $qnt);
+            if($purchaseVendorItem->getIsWeb() == 1 ){
+                $qnt = $entity->getQuantity();
+                if(!empty($size = $entity->getPurchaseItem()->getItem()->getSize())){
+                    $size = $entity->getPurchaseItem()->getItem()->getSize();
+                    $this->webItemQuantityUpdate($calculation , $purchaseVendorItem , $size , $qnt);
+                }else{
+                    $this->webItemQuantityUpdate($calculation , $purchaseVendorItem , $size = 0 , $qnt);
+                }
             }
-            $em->flush();
-        }
 
     }
 

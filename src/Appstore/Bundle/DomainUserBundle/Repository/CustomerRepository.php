@@ -13,6 +13,18 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class CustomerRepository extends EntityRepository
 {
+    public function checkDuplicateCustomer(GlobalOption $globalOption, $mobile)
+    {
+        $em = $this->_em;
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$globalOption,'mobile'=>$mobile));
+        if($entity) {
+            return false;
+        }else{
+            return true;
+        }
+
+    }
+
     public function findExistingCustomer($sales, $mobile)
     {
         $em = $this->_em;
@@ -98,15 +110,11 @@ class CustomerRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('e');
 
-        $query->select('e.name as id');
-        $query->addSelect('e.name as text');
-        $query->where($query->expr()->like("e.name", "'$q%'"  ));
+        $query->select('e.mobile as id');
+        $query->addSelect('e.mobile as text');
+        $query->where($query->expr()->like("e.mobile", "'$q%'"  ));
         $query->andWhere("e.globalOption = :globalOption");
         $query->setParameter('globalOption', $globalOption->getId());
-        if(!empty($type)){
-            $query->andWhere("e.customerType = :customerType");
-            $query->setParameter('customerType', $type );
-        }
         $query->groupBy('e.id');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '10' );

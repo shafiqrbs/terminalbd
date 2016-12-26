@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\LocationBundle\Entity;
 
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Core\UserBundle\Entity\Profile;
 use Doctrine\ORM\Mapping as ORM;
@@ -85,24 +86,14 @@ class Location
     protected $profiles;
 
     /**
-     * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\Profile", mappedBy="district")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="location")
      */
-    protected $districtProfiles;
+    protected $customers;
 
     /**
-     * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\Profile", mappedBy="thana")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", mappedBy="location")
      */
-    protected $thanaProfiles;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="district")
-     */
-    protected $customerDistrict;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", mappedBy="thana")
-     */
-    protected $customerThana;
+    protected $branches;
 
 
     /**
@@ -260,14 +251,6 @@ class Location
     /**
      * @return mixed
      */
-    public function getStudyAbroad()
-    {
-        return $this->studyAbroad;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getTutors()
     {
         return $this->tutors;
@@ -279,38 +262,6 @@ class Location
     public function getGlobalOptions()
     {
         return $this->globalOptions;
-    }
-
-    /**
-     * @return Profile
-     */
-    public function getDistrictProfiles()
-    {
-        return $this->districtProfiles;
-    }
-
-    /**
-     * @return Profile
-     */
-    public function getThanaProfiles()
-    {
-        return $this->thanaProfiles;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCustomerDistrict()
-    {
-        return $this->customerDistrict;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCustomerThana()
-    {
-        return $this->customerThana;
     }
 
     /**
@@ -327,6 +278,14 @@ class Location
     public function getProfiles()
     {
         return $this->profiles;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomers()
+    {
+        return $this->customers;
     }
 
 }

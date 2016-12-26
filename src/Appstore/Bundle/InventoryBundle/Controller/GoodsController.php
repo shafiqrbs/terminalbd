@@ -433,13 +433,11 @@ class GoodsController extends Controller
         $entity = new PurchaseVendorItem();
         $entity->setInventoryConfig($item->getInventoryConfig());
         $entity->setName($item->getName());
-        $entity->setCategory($item->getCategory());
         $entity->setSubProduct(true);
         $entity->setQuantity($item->getQuantity());
         $entity->setPurchasePrice($item->getPurchase());
         $entity->setSalesPrice($item->getSalesPrice());
         $entity->setSize($item->getSize());
-        $entity->setColor($item->getColor());
         $entity->setCountry($item->getCountry());
         $entity->setSource('goods');
         $em->persist($entity);
@@ -457,7 +455,7 @@ class GoodsController extends Controller
         );
         $items = array();
         foreach ($entities as $entity):
-            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName().'-'. ucfirst($entity->getType()));
+            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName().ucfirst($entity->getType()));
         endforeach;
         return new JsonResponse($items);
 
@@ -467,7 +465,7 @@ class GoodsController extends Controller
     public function tagSelectAction()
     {
         $getEcommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->getTypeBasePromotion($getEcommerceConfig->getId(),'Tag');
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Promotion')->getTypeBasePromotion($getEcommerceConfig->getId(),'Promotion');
         $items = array();
         foreach ($entities as $entity):
             $items[]=array('value' => $entity->getId(),'text'=> $entity->getName());

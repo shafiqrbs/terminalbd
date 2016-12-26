@@ -6,7 +6,7 @@ use Doctrine\Common\Util\Debug;
 use Doctrine\ORM\EntityRepository;
 use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Product\Bundle\ProductBundle\Entity\CollectionRepository;
-use Setting\Bundle\ToolBundle\Entity\GlobalOptionRepository;
+use Setting\Bundle\ToolBundle\Repository\GlobalOptionRepository;
 use Setting\Bundle\ToolBundle\Repository\SyndicateRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
@@ -41,6 +41,7 @@ class MegaMenuType extends AbstractType
         $this->em = $em;
         $this->sr = $sr;
         $this->cr = $cr;
+        $this->go = $go;
     }
 
     /**

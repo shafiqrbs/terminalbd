@@ -201,7 +201,6 @@ class StockItemRepository extends EntityRepository
         $qb->groupBy('item.id');
         $arrayResult = $qb->getQuery()->getArrayResult();
         $data = array();
-
         foreach($arrayResult as $row) {
             $data[$row['itemId']] = $row['purchaseQuantity'];
         }

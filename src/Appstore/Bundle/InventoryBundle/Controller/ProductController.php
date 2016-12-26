@@ -208,8 +208,6 @@ class ProductController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Product entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
@@ -222,13 +220,12 @@ class ProductController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('inventory_product_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('inventory_product'));
         }
 
         return $this->render('InventoryBundle:Product:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
     /**

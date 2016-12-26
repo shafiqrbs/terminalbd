@@ -4,6 +4,7 @@ namespace Appstore\Bundle\DomainUserBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\LocationBundle\Entity\Location;
 
 /**
  * Customer
@@ -27,6 +28,7 @@ class Customer
      **/
 
     protected $globalOption;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="customers")
@@ -54,7 +56,6 @@ class Customer
      **/
     private  $serviceSales;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\CustomerInbox", mappedBy="customer")
      **/
@@ -66,20 +67,11 @@ class Customer
     protected $userInbox;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="customerDistrict")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="customers")
      **/
 
-    protected $district;
+    protected $location;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="customerThana")
-     **/
-
-    protected $thana;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="customer")
-     **/
 
     protected $sales;
 
@@ -465,6 +457,22 @@ class Customer
     public function getOrders()
     {
         return $this->orders;
+    }
+
+    /**
+     * @return Location
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param Location $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
     }
 
 }

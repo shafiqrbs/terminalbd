@@ -49,7 +49,7 @@
                                             <input type="text" id="endDate" name="endDate"  class="span12 search-input  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
                                         </div>
                                         <div class="span3">
-                                            <input type="text" id="toUser" name="toUser"  class="leftMargin span12 select2Customer" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Select customer mobile no">
+                                            <input type="text" id="mobile" name="mobile"  class="leftMargin span12 select2Customer" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="Select customer mobile no">
                                         </div>
                                         <div class="span1"><button class="btn blue" type="submit" ><i class="icon-search"></i></button></div>
                                     </div>
@@ -129,7 +129,6 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@AccountingBundle/Resources/public/js/*'
     '@AccountingBundle/Resources/public/js/approveProcess.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

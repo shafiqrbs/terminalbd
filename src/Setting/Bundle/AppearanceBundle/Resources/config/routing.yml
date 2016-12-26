@@ -1,6 +1,18 @@
-setting_appearance_menucustom:
-    resource: "@SettingAppearanceBundle/Resources/config/routing/menucustom.yml"
-    prefix:   /admin/menucustom
+setting_appearance_feature:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/appearancefeature.yml"
+    prefix:   /domain/feature
+
+setting_appearance_featurewidget:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/appearancefeaturewidget.yml"
+    prefix:   /domain/feature-widget
+
+setting_appearance_featurewidgetitem:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/appearancefeaturewidgetitem.yml"
+    prefix:   /domain/sidebar-widget-item
+
+setting_appearance_sidebarwidget:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/appearancesidebarwidget.yml"
+    prefix:   /domain/sidebar-widget
 
 setting_appearance_megamenu:
     resource: "@SettingAppearanceBundle/Resources/config/routing/megamenu.yml"
@@ -18,3 +30,7 @@ SettingAppearanceBundle_menugroup:
 SettingAppearanceBundle_menugrouping:
     resource: "@SettingAppearanceBundle/Resources/config/routing/menugrouping.yml"
     prefix:   /domain/menugrouping
+
+setting_appearance_menucustom:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/menucustom.yml"
+    prefix:   /admin/menucustom

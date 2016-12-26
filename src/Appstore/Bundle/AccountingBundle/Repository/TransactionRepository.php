@@ -443,12 +443,9 @@ class TransactionRepository extends EntityRepository
 
     public function salesReturnTransaction($entity,$accountSalesReturn)
     {
-
         $this->insertSalesReturnDebit($entity,$accountSalesReturn);
         $this->insertSalesReturnCredit($entity,$accountSalesReturn);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCashReturn($accountSalesReturn);
-
-    }
+      }
 
 
     private function insertSalesReturnDebit($entity,$accountSalesReturn)

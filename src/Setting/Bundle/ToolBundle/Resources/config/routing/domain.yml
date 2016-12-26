@@ -2,6 +2,10 @@ tools_domain:
     path:     /
     defaults: { _controller: "SettingToolBundle:Domain:index" }
 
+tools_domain_generate_path:
+    path:     /generate-path
+    defaults: { _controller: "SettingToolBundle:Domain:generateDomainPath" }
+
 tools_domain_application:
     path:     /
     defaults: { _controller: "SettingToolBundle:Domain:application" }

@@ -614,22 +614,6 @@ class Profile
     }
 
     /**
-     * @return mixed
-     */
-    public function getThana()
-    {
-        return $this->thana;
-    }
-
-    /**
-     * @param mixed $thana
-     */
-    public function setThana($thana)
-    {
-        $this->thana = $thana;
-    }
-
-    /**
      * @return string
      */
     public function getPostalCode()

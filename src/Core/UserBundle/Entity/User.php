@@ -8,6 +8,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
+use Appstore\Bundle\InventoryBundle\Entity\Delivery;
 use Appstore\Bundle\InventoryBundle\Entity\ExcelImporter;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
@@ -266,6 +267,16 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="createdBy" , cascade={"persist", "remove"} )
      */
     protected $damage;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Delivery", mappedBy="createdBy" , cascade={"persist", "remove"} )
+     */
+    protected $delivery;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Delivery", mappedBy="approvedBy" , cascade={"persist", "remove"} )
+     */
+    protected $deliveryApprovedBy;
 
 
     /**
@@ -1042,6 +1053,22 @@ class User extends BaseUser
     public function getExcelImporters()
     {
         return $this->excelImporters;
+    }
+
+    /**
+     * @return Delivery
+     */
+    public function getDelivery()
+    {
+        return $this->delivery;
+    }
+
+    /**
+     * @return Delivery
+     */
+    public function getDeliveryApprovedBy()
+    {
+        return $this->deliveryApprovedBy;
     }
 
 

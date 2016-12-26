@@ -127,9 +127,12 @@ class SalesReturnController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
+        $data = $request->request->get('salesAdjustmentInvoice');
         if ($editForm->isValid()) {
-
+            $invoice = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('invoice' => $data));
+            if(!empty($invoice)){
+                $entity->setSalesAdjustmentInvoice($invoice);
+            }
             $entity->setProcess('complete');
             $em->flush();
             $this->getDoctrine()->getRepository('InventoryBundle:SalesReturn')->updateSalesReturn($entity);
@@ -137,6 +140,7 @@ class SalesReturnController extends Controller
             $em->getRepository('InventoryBundle:StockItem')->insertSalesReturnStockItem($entity);
             $em->getRepository('InventoryBundle:GoodsItem')->updateInventorySalesReturnItem($entity);
             $accountSalesReturn = $em->getRepository('AccountingBundle:AccountSalesReturn')->insertAccountSalesReturn($entity);
+            $em->getRepository('AccountingBundle:AccountCash')->insertSalesCashReturn($accountSalesReturn);
             $em->getRepository('AccountingBundle:Transaction')->salesReturnTransaction($entity,$accountSalesReturn);
             return $this->redirect($this->generateUrl('inventory_salesreturn_edit', array('id' => $entity->getId())));
         }
@@ -176,7 +180,8 @@ class SalesReturnController extends Controller
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('InventoryBundle:SalesReturn')->updateSalesReturn($salesReturn);
-            return new Response(json_encode(array('success'=>'success','message'=>'Sales return item added successfully')));
+            $totalAmount = number_format($entity->getSalesReturn()->getTotal());
+            return new Response(json_encode(array('success'=>'success','totalAmount'=> $totalAmount ,'message'=>'Sales return item added successfully')));
         }
 
         exit;

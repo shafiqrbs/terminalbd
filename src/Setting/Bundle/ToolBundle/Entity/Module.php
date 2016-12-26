@@ -138,14 +138,14 @@ class Module
     private $pages;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SidebarWidget", mappedBy="module")
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidget", mappedBy="module")
      * @ORM\OrderBy({"name" = "DESC"})
      **/
 
     private $sidebarModule;
 
      /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SidebarWidget", mappedBy="modules")
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidget", mappedBy="modules")
      * @ORM\OrderBy({"name" = "DESC"})
      **/
 

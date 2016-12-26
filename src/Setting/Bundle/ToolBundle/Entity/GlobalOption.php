@@ -12,6 +12,9 @@ use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Setting\Bundle\AppearanceBundle\Entity\Feature;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
+use Setting\Bundle\AppearanceBundle\Entity\SidebarWidget;
 use Setting\Bundle\ContentBundle\Entity\Admission;
 use Setting\Bundle\ContentBundle\Entity\Blog;
 use Setting\Bundle\ContentBundle\Entity\Branch;
@@ -73,10 +76,19 @@ class GlobalOption
     protected $pages;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SidebarWidget", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidget", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
-
     protected $sidebarWidgets;
+
+   /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $featureWidgets;
+
+   /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $features;
 
    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\MediaBundle\Entity\PageFile", mappedBy="globalOption" , cascade={"persist", "remove"} )
@@ -205,7 +217,6 @@ class GlobalOption
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
-
     protected $orders;
 
     /**
@@ -1343,13 +1354,7 @@ class GlobalOption
         return $this->branches;
     }
 
-    /**
-     * @return SidebarWidget
-     */
-    public function getSidebarWidgets()
-    {
-        return $this->sidebarWidgets;
-    }
+
 
     /**
      * @return Order
@@ -1359,6 +1364,28 @@ class GlobalOption
         return $this->orders;
     }
 
+    /**
+     * @return SidebarWidget
+     */
+    public function getSidebarWidgets()
+    {
+        return $this->sidebarWidgets;
+    }
+    /**
+     * @return FeatureWidget
+     */
+    public function getFeatureWidgets()
+    {
+        return $this->featureWidgets;
+    }
+
+    /**
+     * @return Feature
+     */
+    public function getFeatures()
+    {
+        return $this->features;
+    }
 
 
 }

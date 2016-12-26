@@ -107,12 +107,12 @@ class PurchaseVendorItem
     private  $discount;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="itemTags" )
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="itemTag" )
      **/
     private  $tag;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="purchaseVendorItem" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="purchaseVendorItems" )
      **/
     private  $promotion;
 

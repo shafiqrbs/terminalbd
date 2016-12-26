@@ -43,6 +43,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.delivery.event.listener:
+        class: Appstore\Bundle\InventoryBundle\EventListener\DeliveryListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     appstore.setting.event.listener:
         class: Appstore\Bundle\InventoryBundle\EventListener\SettingListener
         tags:

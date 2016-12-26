@@ -260,7 +260,52 @@ class ItemRepository extends EntityRepository
 
     }
 
+    public function itemPurchaseDetails($inventory,$id)
+    {
 
+        $data ='';
+        $result = $this->findOneBy(array('inventoryConfig' => $inventory,'id' => $id));
+        foreach($result->getPurchaseItems() as $purchaseItem  ) {
 
+            $received = $purchaseItem->getPurchase()->getReceiveDate()->format('d-m-Y');
+            $memo = $purchaseItem->getPurchase()->getMemo();
+            $data .= '<tr>';
+            $data .= '<td class="numeric" >' . $purchaseItem->getBarcode() .'</td>';
+            $data .= '<td class="numeric" >' . $result->getName() . ' / ' . $result->getSku() . '</td>';
+            $data .= '<td class="numeric" >' . $received . '/' . $memo . '</td>';
+            $data .= '<td class="numeric" >' . $purchaseItem->getQuantity() . '</td>';
+            $data .= '<td class="numeric" >' . $purchaseItem->getItemStock() . '</td>';
+            $data .= '<td class="numeric" >' . $purchaseItem->getPurchasePrice() . '</td>';
+            $data .= '<td class="numeric" ><a class="editable" data-name="SalesPrice" href="javascript:"  data-url="/inventory/purchaseitem/inline-update" data-type="text" data-pk="' . $purchaseItem->getId() . '" data-original-title="Enter sales price">' . $purchaseItem->getSalesPrice() . '</a></td>';
+            $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem->getBarcode().'"><i class="icon-shopping-cart"></i>  Add Sales</a></td>';
+            $data .= '</tr>';
+        }
+        return $data;
+
+    }
+
+    public function itemDeliveryPurchaseDetails($inventory,$id)
+    {
+
+        $data ='';
+        $result = $this->findOneBy(array('inventoryConfig' => $inventory,'id'=>$id));
+        foreach($result->getPurchaseItems() as $purchaseItem  ) {
+
+            $received = $purchaseItem->getPurchase()->getReceiveDate()->format('d-m-Y');
+            $memo = $purchaseItem->getPurchase()->getMemo();
+            $data .= '<tr>';
+            $data .= '<td class="numeric" >'.$purchaseItem->getBarcode().'</td>';
+            $data .= '<td class="numeric" >'.$result->getName().' / '.$result->getSku().'</td>';
+            $data .= '<td class="numeric" >'.$received.'/'.$memo.'</td>';
+            $data .= '<td class="numeric" >'.$purchaseItem->getQuantity().'</td>';
+            $data .= '<td class="numeric" >'.$purchaseItem->getItemStock().'</td>';
+            $data .= '<td class="numeric" >'.$purchaseItem->getPurchasePrice().'</td>';
+            $data .= '<td class="numeric" >'.$purchaseItem->getSalesPrice().'</td>';
+            $data .= '<td class="numeric" ><input type="number" id="'.$purchaseItem->getBarcode().'" name="quantity" max="'.$purchaseItem->getItemStock().'" min="1" value="'.$purchaseItem->getItemStock().'" >';
+            $data .= '<a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem->getBarcode().'"><i class="icon-plus"></i> Add</a></td>';
+            $data .= '</tr>';
+        }
+        return $data;
+    }
 
 }

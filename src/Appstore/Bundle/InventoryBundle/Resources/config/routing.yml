@@ -10,9 +10,17 @@ app_setting_mobile:
     resource: "@InventoryBundle/Resources/config/routing/appsetting/mobileaccount.yml"
     prefix:   /appsetting/mobile-account
 
+app_setting_barnch_shop:
+    resource: "@InventoryBundle/Resources/config/routing/appsetting/branchshop.yml"
+    prefix:   /appsetting/branch-shop
+
 inventory_excelimproter:
     resource: "@InventoryBundle/Resources/config/routing/excelimporter.yml"
     prefix:   /inventory/excelimproter
+
+inventory_delivery:
+    resource: "@InventoryBundle/Resources/config/routing/delivery.yml"
+    prefix:   /inventory/delivery
 
 inventory_branch_invoice:
     resource: "@InventoryBundle/Resources/config/routing/branchinvoice.yml"

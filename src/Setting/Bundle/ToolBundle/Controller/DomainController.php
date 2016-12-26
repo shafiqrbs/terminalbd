@@ -6,6 +6,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Yaml\Yaml;
 
 
 /**
@@ -14,6 +15,45 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 class DomainController extends Controller
 {
+
+
+    public function generateDomainPathAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('SettingToolBundle:GlobalOption')->findByDomain();
+
+        $domains = array(
+            array(
+                'resource' => '@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml',
+                'domain' => 'www.tlsbd.org',
+                'subdomain' => 'tlsbd'
+            )
+        );
+
+
+        $resource = '@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml';
+        $routes = array();
+
+        foreach ($entities as $data){
+
+            $routes['_domain_app_' . strtolower(str_replace('.', '_', $data->getDomain()))] = array(
+                'resource' => $resource ,
+                'host' => $data->getDomain(),
+                'name_prefix' => $data->getSubDomain() . "_",
+                'defaults' => array(
+                    'subdomain' => $data->getSubDomain()
+                )
+            );
+
+        }
+        print_r($routes); exit;
+        $routesString = Yaml::dump($routes);
+
+        file_put_contents(realpath(WEB_PATH . "../app/config/dynamic/sites.yml"), $routesString);
+
+        return $this->redirect($this->generateUrl('tools_domain'));
+    }
+
 
     public function paginate($entities)
     {

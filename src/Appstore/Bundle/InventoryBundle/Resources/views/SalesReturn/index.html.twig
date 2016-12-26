@@ -82,7 +82,6 @@
                                     </tr>
                                     </tbody>
                                     <tbody id="sales">
-
                                     {% for entity in entities %}
                                         <tr id="salesRemove-{{ entity.id }}">
                                             <td> {% if entity.salesReturnItems is defined and  entity.salesReturnItems is not empty  %}<span  class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>

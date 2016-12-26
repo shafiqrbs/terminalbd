@@ -54,6 +54,7 @@ var InventorySalesReturnItem = function(salesReturn) {
                     $('#paymentBtn').attr("disabled", false);
                     $("#returnbtn-" + item).hide();
                     $("#message").html(obj['message']);
+                    $("#totalAmount").html(obj['totalAmount']);
                     $('#action-' + item).append('<a  href="javascript:" disabled="disabled" class="btn purple mini" ><i class="icon-check"></i>&nbsp;Returned</a>');
 
                 }else{

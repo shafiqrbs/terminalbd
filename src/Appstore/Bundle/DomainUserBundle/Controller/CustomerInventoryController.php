@@ -55,13 +55,31 @@ class CustomerInventoryController extends Controller
         $entity = new Customer();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
+        $em = $this->getDoctrine()->getManager();
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+            $globalOption  = $this->getUser()->getGlobalOption();
+            $mobile = $entity->getMobile();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
+            if ($em->getRepository('DomainUserBundle:Customer')->checkDuplicateCustomer($globalOption,$mobile) == true){
+                $entity->setGlobalOption($this->getUser()->getGlobalOption());
+                $entity->setMobile($mobile);
+                $em->persist($entity);
+                $em->flush();
+                $this->get('session')->getFlashBag()->add(
+                    'success', "Customer has been created successfully"
+                );
+                return $this->redirect($this->generateUrl('inventory_customer'));
 
-            return $this->redirect($this->generateUrl('customer_show', array('id' => $entity->getId())));
+            }else {
+
+                $this->get('session')->getFlashBag()->add(
+                    'error', "Customer mobile no already existing"
+                );
+                return $this->render('DomainUserBundle:Customer:new.html.twig', array(
+                    'entity' => $entity,
+                    'form'   => $form->createView(),
+                ));
+            }
         }
 
         return $this->render('DomainUserBundle:Customer:new.html.twig', array(
@@ -79,13 +97,15 @@ class CustomerInventoryController extends Controller
      */
     private function createCreateForm(Customer $entity)
     {
-        $form = $this->createForm(new CustomerType(), $entity, array(
-            'action' => $this->generateUrl('customer_create'),
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new CustomerType($location), $entity, array(
+            'action' => $this->generateUrl('inventory_customer_create'),
             'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
         return $form;
     }
 
@@ -97,10 +117,9 @@ class CustomerInventoryController extends Controller
     {
         $entity = new Customer();
         $form   = $this->createCreateForm($entity);
-
         return $this->render('DomainUserBundle:Customer:new.html.twig', array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form'   => $form->createView()
         ));
     }
 
@@ -143,9 +162,9 @@ class CustomerInventoryController extends Controller
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('DomainUserBundle:Customer:edit.html.twig', array(
+        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -159,13 +178,15 @@ class CustomerInventoryController extends Controller
     */
     private function createEditForm(Customer $entity)
     {
-        $form = $this->createForm(new CustomerType(), $entity, array(
-            'action' => $this->generateUrl('customer_update', array('id' => $entity->getId())),
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new CustomerType($location), $entity, array(
+            'action' => $this->generateUrl('inventory_customer_update', array('id' => $entity->getId())),
             'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
         return $form;
     }
     /**
@@ -177,7 +198,6 @@ class CustomerInventoryController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
         }
@@ -187,14 +207,19 @@ class CustomerInventoryController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $mobile = $entity->getMobile();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
+            $entity->setMobile($mobile);
             $em->flush();
-
-            return $this->redirect($this->generateUrl('customer_edit', array('id' => $id)));
+            $this->get('session')->getFlashBag()->add(
+                'success', "Customer has been updated successfully"
+            );
+            return $this->redirect($this->generateUrl('inventory_customer'));
         }
 
-        return $this->render('DomainUserBundle:Customer:edit.html.twig', array(
+        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -232,7 +257,7 @@ class CustomerInventoryController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('customer_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('inventory_customer_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

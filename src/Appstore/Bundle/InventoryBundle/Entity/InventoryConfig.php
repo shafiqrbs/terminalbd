@@ -92,6 +92,11 @@ class InventoryConfig
     protected $sales;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Delivery", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $deliveries;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\BranchInvoice", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
      */
     protected $branchInvoices;
@@ -556,6 +561,14 @@ class InventoryConfig
     public function setIsBranch($isBranch)
     {
         $this->isBranch = $isBranch;
+    }
+
+    /**
+     * @return Delivery
+     */
+    public function getDeliveries()
+    {
+        return $this->deliveries;
     }
 
 

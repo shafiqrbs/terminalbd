@@ -158,6 +158,7 @@ class CustomerController extends Controller
     */
     private function createEditForm(Customer $entity)
     {
+
         $form = $this->createForm(new CustomerType(), $entity, array(
             'action' => $this->generateUrl('customer_update', array('id' => $entity->getId())),
             'method' => 'PUT',
@@ -252,9 +253,11 @@ class CustomerController extends Controller
     public function searchUserNameAction($user)
     {
         return new JsonResponse(array(
-            'id'=>$user,
-            'text'=>$user
+            'id'=> $user,
+            'text' => $user
         ));
     }
+
+
 
 }

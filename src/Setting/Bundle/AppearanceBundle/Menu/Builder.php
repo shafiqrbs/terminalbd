@@ -264,7 +264,10 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
 
         $menu['Manage Appearance']->addChild('Customize Template', array('route' => 'templatecustomize_edit','routeParameters'=> array('id' => $globalOption->getId())));
-        $menu['Manage Appearance']->addChild('Sidebar Widget', array('route' => 'sidebar_widget'));
+        $menu['Manage Appearance']->addChild('Feature & Widget') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
+        $menu['Manage Appearance']['Feature & Widget']->addChild('Sidebar Widget', array('route' => 'appearancesidebarwidget'));
+        $menu['Manage Appearance']['Feature & Widget']->addChild('Feature Widget', array('route' => 'appearancefeaturewidget'));
+        $menu['Manage Appearance']['Feature & Widget']->addChild('Manage Feature', array('route' => 'appearancefeature'));
         $menu['Manage Appearance']->addChild('Menu', array('route' => 'menu_manage'));
         $menu['Manage Appearance']->addChild('Menu Grouping', array('route' => 'menugrouping'));
         $menu['Manage Appearance']->addChild('Settings', array('route' => 'globaloption_modify'));
@@ -477,13 +480,13 @@ class Builder extends ContainerAware
                         ->setAttribute('dropdown', true);
                     $menu['Inventory']['Temporary Delivery Item']->addChild('Pos', array('route' => 'inventory_sales_new'))->setAttribute('icon','icon-shopping-cart');
                 }
-                if(in_array('BranchInvoice',$deliveryProcess) && $inventory->getIsBranch() == 1 ){
+                if($inventory->getIsBranch() == 1 ){
 
                     $menu['Inventory']
-                        ->addChild('Branch Invoice')
+                        ->addChild('Delivery')
                         ->setAttribute('icon','icon icon-truck')
                         ->setAttribute('dropdown', true);
-                    $menu['Inventory']['Branch Invoice']->addChild('Branch Invoice', array('route' => 'inventory_branchinvoice'))->setAttribute('icon','icon-shopping-cart');
+                    $menu['Inventory']['Delivery']->addChild('Delivery Invoice', array('route' => 'inventory_delivery'))->setAttribute('icon','icon-shopping-cart');
 
                 }
 
@@ -570,9 +573,13 @@ class Builder extends ContainerAware
             $menu['App Setting']['Inventory Setting']->addChild('Size', array('route' => 'itemsize'))->setAttribute('icon', 'icon-th-list');
             $menu['App Setting']['Inventory Setting']->addChild('Ware House', array('route' => 'inventory_warehouse'))->setAttribute('icon', 'icon-th-list');
             $menu['App Setting']['Inventory Setting']->addChild('Item Attribute', array('route' => 'itemattribute'))->setAttribute('icon', 'icon-th-list');
+            if($inventory->getIsBranch() == 1) {
+            $menu['App Setting']->addChild('Branch')->setAttribute('icon', 'icon-building')->setAttribute('dropdown', true);
+            $menu['App Setting']['Branch']->addChild('Branch Shop', array('route' => 'appsetting_branchshop'))->setAttribute('icon', 'icon-building');
+            }
             $menu['App Setting']->addChild('Accounting', array('route' => 'account_expenditure'))
-                ->setAttribute('icon','fa fa-money')
-                ->setAttribute('dropdown', true);
+            ->setAttribute('icon','fa fa-money')
+            ->setAttribute('dropdown', true);
             $menu['App Setting']['Accounting']->addChild('Bank Account', array('route' => 'appsetting_bank'))->setAttribute('icon','fa fa-money');
             $menu['App Setting']['Accounting']->addChild('Mobile Account', array('route' => 'appsetting_mobile_bank'))->setAttribute('icon','fa fa-money');
             $menu['App Setting']['Accounting']->addChild('Account Head', array('route' => 'accounthead'))->setAttribute('icon','fa fa-money');
@@ -795,10 +802,6 @@ class Builder extends ContainerAware
         $menu['HR & Payroll']['Payroll']->addChild('Salary Transaction',array('route' => 'account_paymentsalary'))->setAttribute('icon', 'icon-th-list');
         $menu['HR & Payroll']['Payroll']->addChild('Payment Salary',array('route' => 'account_paymentsalary_employee'))->setAttribute('icon', 'icon-th-list');
         $menu['HR & Payroll']['Payroll']->addChild('Salary Invoice',array('route' => 'account_salarysetting'))->setAttribute('icon', 'icon-th-list');
-        $menu['HR & Payroll']->addChild('Branch') ->setAttribute('icon', 'icon-building')->setAttribute('dropdown', true);
-        $menu['HR & Payroll']['Branch']->addChild('Branch',array('route' => 'domain_branches'))->setAttribute('icon', 'icon-building');
-
-
         return $menu;
 
     }

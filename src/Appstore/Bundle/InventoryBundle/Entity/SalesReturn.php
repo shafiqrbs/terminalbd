@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -27,7 +28,6 @@ class SalesReturn implements CodeAwareEntity
      **/
     private  $inventoryConfig;
 
-
     /**
      * @var integer
      *
@@ -46,6 +46,11 @@ class SalesReturn implements CodeAwareEntity
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="salesReturn" )
      **/
     private  $sales;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="salesReturnAdjustment" )
+     **/
+    private  $salesAdjustmentInvoice;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn", mappedBy="salesReturn" )
@@ -118,7 +123,7 @@ class SalesReturn implements CodeAwareEntity
     }
 
     /**
-     * @return mixed
+     * @return Sales
      */
     public function getSales()
     {
@@ -126,7 +131,7 @@ class SalesReturn implements CodeAwareEntity
     }
 
     /**
-     * @param mixed $sales
+     * @param Sales $sales
      */
     public function setSales($sales)
     {
@@ -302,11 +307,28 @@ class SalesReturn implements CodeAwareEntity
     }
 
     /**
-     * @return mixed
+     * @return AccountSalesReturn
      */
     public function getAccountSalesReturn()
     {
         return $this->accountSalesReturn;
+    }
+
+
+    /**
+     * @return Sales
+     */
+    public function getSalesAdjustmentInvoice()
+    {
+        return $this->salesAdjustmentInvoice;
+    }
+
+    /**
+     * @param Sales $salesAdjustmentInvoice
+     */
+    public function setSalesAdjustmentInvoice($salesAdjustmentInvoice)
+    {
+        $this->salesAdjustmentInvoice = $salesAdjustmentInvoice;
     }
 
 

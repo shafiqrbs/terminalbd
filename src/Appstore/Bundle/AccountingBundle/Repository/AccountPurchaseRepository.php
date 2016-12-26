@@ -22,7 +22,7 @@ class AccountPurchaseRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.id','DESC');
+        $qb->orderBy('e.updated','DESC');
         $result = $qb->getQuery();
         return $result;
 
@@ -97,7 +97,7 @@ class AccountPurchaseRepository extends EntityRepository
     {
         $em = $this->_em;
         $entity = $em->getRepository('AccountingBundle:AccountPurchase')->findOneBy(
-            array('globalOption'=>$globalOption,'vendor'=>$vendor,'process'=>'approved'),
+            array('globalOption' => $globalOption,'vendor' => $vendor,'process'=>'approved'),
             array('id' => 'DESC')
         );
 
@@ -111,8 +111,12 @@ class AccountPurchaseRepository extends EntityRepository
     public function insertAccountPurchase(Purchase $entity)
     {
 
-        $balance = $this->lastInsertPurchase($entity->getInventoryConfig()->getGlobalOption(),$entity->getVendor());
+        $data = array('vendor' => $entity->getVendor()->getCompanyName());
+        $result = $this->accountPurchaseOverview($entity->getInventoryConfig()->getGlobalOption(),$data);
+        $balance = ( $result['purchaseAmount'] - $result['payment']);
+
         $em = $this->_em;
+
 
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
@@ -120,18 +124,12 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setVendor($entity->getVendor());
         $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
         $accountPurchase->setPurchaseAmount($entity->getTotalAmount());
-        $accountPurchase->setTotalAmount($entity->getTotalAmount() + $balance);
         $accountPurchase->setPayment($entity->getPaymentAmount());
-        $accountPurchase->setBalance($accountPurchase->getTotalAmount() - $accountPurchase->getPayment() );
+        $accountPurchase->setBalance(($balance + $entity->getTotalAmount()) - $accountPurchase->getPayment() );
         $accountPurchase->setProcessHead('Purchase');
         $accountPurchase->setReceiveDate($entity->getReceiveDate());
-        //if($entity->getInventoryConfig()->getGlobalOption()->getAccountingConfig()->getAutoPurchase() == 1){
-            $accountPurchase->setProcess('approved');
-            $accountPurchase->setApprovedBy($entity->getApprovedBy());
-        //}else{
-            //$accountPurchase->setProcess('pending');
-       // }
-
+        $accountPurchase->setProcess('approved');
+        $accountPurchase->setApprovedBy($entity->getApprovedBy());
         $em->persist($accountPurchase);
         $em->flush();
         //if($entity->getInventoryConfig()->getGlobalOption()->getAccountingConfig()->getAutoPurchase() == 1){

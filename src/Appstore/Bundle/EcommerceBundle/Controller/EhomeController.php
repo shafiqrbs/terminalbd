@@ -10,14 +10,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 
 /**
- * Ehome controller.
+ * FeatureWidget controller.
  *
  */
 class EhomeController extends Controller
 {
 
     /**
-     * Lists all Ehome entities.
+     * Lists all FeatureWidget entities.
      *
      */
     public function indexAction()
@@ -26,12 +26,12 @@ class EhomeController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('EcommerceBundle:Template')->findBy(array('ecommerceConfig'=> $globalOption->getEcommerceConfig()),array('sorting'=>'asc'));
 
-        return $this->render('EcommerceBundle:Ehome:index.html.twig', array(
+        return $this->render('EcommerceBundle:FeatureWidget:index.html.twig', array(
             'entities' => $entities,
         ));
     }
     /**
-     * Creates a new Ehome entity.
+     * Creates a new FeatureWidget entity.
      *
      */
     public function createAction(Request $request)
@@ -51,16 +51,16 @@ class EhomeController extends Controller
             return $this->redirect($this->generateUrl('ecommerceslider'));
         }
 
-        return $this->render('EcommerceBundle:Ehome:new.html.twig', array(
+        return $this->render('EcommerceBundle:FeatureWidget:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Creates a form to create a Ehome entity.
+     * Creates a form to create a FeatureWidget entity.
      *
-     * @param Ehome $entity The entity
+     * @param FeatureWidget $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
@@ -81,7 +81,7 @@ class EhomeController extends Controller
     }
 
     /**
-     * Displays a form to create a new Ehome entity.
+     * Displays a form to create a new FeatureWidget entity.
      *
      */
     public function newAction()
@@ -89,52 +89,52 @@ class EhomeController extends Controller
         $entity = new Ehome();
         $form   = $this->createCreateForm($entity);
 
-        return $this->render('EcommerceBundle:Ehome:new.html.twig', array(
+        return $this->render('EcommerceBundle:FeatureWidget:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Finds and displays a Ehome entity.
+     * Finds and displays a FeatureWidget entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('EcommerceBundle:Ehome')->find($id);
+        $entity = $em->getRepository('EcommerceBundle:FeatureWidget')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Ehome entity.');
+            throw $this->createNotFoundException('Unable to find FeatureWidget entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('EcommerceBundle:Ehome:show.html.twig', array(
+        return $this->render('EcommerceBundle:FeatureWidget:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing Ehome entity.
+     * Displays a form to edit an existing FeatureWidget entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('EcommerceBundle:Ehome')->find($id);
+        $entity = $em->getRepository('EcommerceBundle:FeatureWidget')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Ehome entity.');
+            throw $this->createNotFoundException('Unable to find FeatureWidget entity.');
         }
 
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('EcommerceBundle:Ehome:new.html.twig', array(
+        return $this->render('EcommerceBundle:FeatureWidget:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -143,9 +143,9 @@ class EhomeController extends Controller
 
 
     /**
-     * Creates a form to edit a Ehome entity.
+     * Creates a form to edit a FeatureWidget entity.
      *
-     * @param Ehome $entity The entity
+     * @param FeatureWidget $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
@@ -164,16 +164,16 @@ class EhomeController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Ehome entity.
+     * Edits an existing FeatureWidget entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('EcommerceBundle:Ehome')->find($id);
+        $entity = $em->getRepository('EcommerceBundle:FeatureWidget')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Ehome entity.');
+            throw $this->createNotFoundException('Unable to find FeatureWidget entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -191,7 +191,7 @@ class EhomeController extends Controller
             return $this->redirect($this->generateUrl('ecommerceslider_edit', array('id' => $id)));
         }
 
-        return $this->render('EcommerceBundle:Ehome:edit.html.twig', array(
+        return $this->render('EcommerceBundle:FeatureWidget:edit.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -200,14 +200,14 @@ class EhomeController extends Controller
 
 
     /**
-     * Deletes a Ehome entity.
+     * Deletes a FeatureWidget entity.
      *
      */
     public function deleteAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entity = $em->getRepository('EcommerceBundle:Ehome')->findOneBy(array('globalOption'=>$globalOption,'id'=>$id));
+        $entity = $em->getRepository('EcommerceBundle:FeatureWidget')->findOneBy(array('globalOption'=>$globalOption,'id'=>$id));
         if (!empty($entity)) {
 
             $entity->removeUpload();
@@ -225,7 +225,7 @@ class EhomeController extends Controller
     }
 
     /**
-     * Creates a form to delete a Ehome entity by id.
+     * Creates a form to delete a FeatureWidget entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -251,7 +251,7 @@ class EhomeController extends Controller
         $form->handleRequest($request);
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('EcommerceBundle:Ehome')->find($id);
+        $entity = $em->getRepository('EcommerceBundle:FeatureWidget')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find District entity.');
@@ -275,9 +275,9 @@ class EhomeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
 
-        $entities = $em->getRepository('EcommerceBundle:Ehome')->findBy(array('user'=>$user),array('sorting'=>'asc'));
+        $entities = $em->getRepository('EcommerceBundle:FeatureWidget')->findBy(array('user'=>$user),array('sorting'=>'asc'));
 
-        return $this->render('EcommerceBundle:Ehome:sorting.html.twig', array(
+        return $this->render('EcommerceBundle:FeatureWidget:sorting.html.twig', array(
             'entities' => $entities,
 
         ));
@@ -287,7 +287,7 @@ class EhomeController extends Controller
     public function sortedAction(Request $request)
     {
         $data = $request ->request->get('item');
-        $this->getDoctrine()->getRepository('EcommerceBundle:Ehome')->setDivOrdering($data);
+        $this->getDoctrine()->getRepository('EcommerceBundle:FeatureWidget')->setDivOrdering($data);
         exit;
 
     }

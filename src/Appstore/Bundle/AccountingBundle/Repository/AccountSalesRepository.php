@@ -18,14 +18,14 @@ class AccountSalesRepository extends EntityRepository
 
     public function salesOverview($globalOption,$data)
     {
-
         $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS receiveAmount, SUM(e.amount) AS dueAmount,SUM(e.amount) AS returnAmount ');
+        $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS receiveAmount, SUM(e.amount) AS dueAmount, SUM(e.amount) AS returnAmount ');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.process = 'approved'");
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getSingleResult();
-        $data =  array('totalAmount'=>$result['totalAmount'],'receiveAmount'=>$result['receiveAmount'],'dueAmount'=>$result['dueAmount'],'returnAmount'=>$result['returnAmount']);
+        $data =  array('totalAmount'=> $result['totalAmount'],'receiveAmount'=>$result['receiveAmount'],'dueAmount'=>$result['dueAmount'],'returnAmount'=>$result['returnAmount']);
         return $data;
 
     }
@@ -65,7 +65,7 @@ class AccountSalesRepository extends EntityRepository
 
             $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
             $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-            $toUser =    isset($data['toUser'])? $data['toUser'] :'';
+            $mobile =    isset($data['mobile'])? $data['mobile'] :'';
             $account =    isset($data['accountHead'])? $data['accountHead'] :'';
 
             if (!empty($data['startDate']) ) {
@@ -78,10 +78,10 @@ class AccountSalesRepository extends EntityRepository
                 $qb->andWhere("e.updated <= :endDate");
                 $qb->setParameter('endDate', $endDate.' 23:59:59');
             }
-            if (!empty($toUser)) {
+            if (!empty($mobile)) {
                 $qb->join('e.customer','c');
-                $qb->andWhere("c.name = :user");
-                $qb->setParameter('user', $toUser);
+                $qb->andWhere("c.mobile = :mobile");
+                $qb->setParameter('mobile', $mobile);
             }
             if (!empty($account)) {
                 $qb->join('e.accountHead','a');
@@ -121,7 +121,9 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setTotalAmount($entity->getTotal());
         $accountSales->setAmount($entity->getPayment());
 
-        $balance = $this->lastInsertSales($entity->getInventoryConfig()->getGlobalOption(),$entity);
+        $data = array('mobile'=> $entity->getCustomer()->getMobile());
+        $result = $this->salesOverview($entity->getInventoryConfig()->getGlobalOption(),$data);
+        $balance = ($result['totalAmount'] -  $result['receiveAmount']);
         $lastBalance = ($balance + $entity->getDue());
         $accountSales->setBalance($lastBalance);
 
@@ -132,25 +134,6 @@ class AccountSalesRepository extends EntityRepository
         $em->flush();
         $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
         return $accountSales;
-
-    }
-
-    public function insertAccountSalesReturn(SalesReturn $entity)
-    {
-        $em = $this->_em;
-        $accountSales = new AccountSales();
-        $accountSales->setInventoryConfig($entity->getInventoryConfig());
-        $accountSales->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
-        $accountSales->setSalesReturn($entity);
-        $accountSales->setCustomer($entity->getSales()->getCustomer());
-        /* Cash - Sales Return Payment Account */
-       /* $accountSales->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(35));*/
-        $accountSales->setToIncrease('Sales Return');
-        $accountSales->setReturnAmount($entity->getTotal());
-        $accountSales->setApprovedBy($entity->getCreatedBy());
-        $accountSales->setProcess('approved');
-        $em->persist($accountSales);
-        $em->flush();
 
     }
 

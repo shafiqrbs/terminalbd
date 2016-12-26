@@ -80,13 +80,9 @@ class AccountSalesController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         if ($form->isValid()) {
-
-            $em = $this->getDoctrine()->getManager();
-            $lastBalance = $em->getRepository('AccountingBundle:AccountSales')->lastInsertSales($this->getUser()->getGlobalOption(),$entity);
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption( $this->getUser()->getGlobalOption());
             $entity->setProcessHead('Account Sales');
-            $entity->setBalance($lastBalance - $entity->getAmount());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -251,6 +247,11 @@ class AccountSalesController extends Controller
     {
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
+
+            $data = array('mobile'=> $entity->getCustomer()->getMobile());
+            $result = $em->getRepository('AccountingBundle:AccountSales')->salesOverview($this->getUser()->getGlobalOption(),$data);
+            $balance = $result['totalAmount'] - ($result['receiveAmount'] + $entity->getAmount());
+            $entity->setBalance($balance);
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\DomainUserBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,12 +14,15 @@ class BranchesType extends AbstractType
 {
 
     /** @var GlobalOption */
-
     public  $globalOption;
 
-    function __construct(GlobalOption $globalOption)
+    /** @var  LocationRepository */
+    private $location;
+
+    function __construct(GlobalOption $globalOption, LocationRepository $location)
     {
         $this->globalOption = $globalOption;
+        $this->location = $location;
     }
 
     /**
@@ -54,10 +58,22 @@ class BranchesType extends AbstractType
                 ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
-                        ->where("u.isDelete IS NULL")
+
                         ->andWhere("u.globalOption =".$this->globalOption->getId())
                         ->orderBy("u.username", "ASC");
                 }
+            ))
+            ->add('location', 'entity', array(
+                'required'    => false,
+                'empty_value' => '---Select Location---',
+                'attr'=>array('class'=>'select2 span12'),
+                'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select user location'))
+                ),
+                'choices'=> $this->LocationChoiceList(),
+                'choices_as_values' => true,
+                'choice_label' => 'nestedLabel',
             ))
             ->add('status');
     }
@@ -78,5 +94,11 @@ class BranchesType extends AbstractType
     public function getName()
     {
         return 'appstore_bundle_domainUserbundle_branches';
+    }
+
+    protected function LocationChoiceList()
+    {
+        return $syndicateTree = $this->location->getLocationOptionGroup();
+
     }
 }

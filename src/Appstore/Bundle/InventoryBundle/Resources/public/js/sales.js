@@ -265,6 +265,7 @@ var InventorySales = function(sales) {
     })
 
     $(".select2Item").select2({
+
         placeholder: "Search item, color, size & vendor name",
         allowClear: true,
         ajax: {

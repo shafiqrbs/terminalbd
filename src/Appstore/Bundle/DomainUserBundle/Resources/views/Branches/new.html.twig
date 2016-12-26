@@ -2,11 +2,11 @@
 
 {% block body %}
     <div class="container-fluid">
-        <!-- BEGIN domain_branches HEADER-->
+        <!-- BEGIN appsetting_branchshop HEADER-->
         <div class="row-fluid">
             <div class="span12">
-                <h3 class="domain_branches-title">
-                    Branch Details
+                <h3 class="appsetting_branchshop-title">
+                    Branch Shop Details
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('domain_branches') }}">Branch</a>
+                        <a href="{{ path('appsetting_branchshop') }}">Branch Shop</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Branch new/edit</a></li>
@@ -26,15 +26,15 @@
                 </ul>
             </div>
         </div>
-        <!-- END domain_branches HEADER-->
-        <!-- BEGIN domain_branches CONTENT-->
+        <!-- END appsetting_branchshop HEADER-->
+        <!-- BEGIN appsetting_branchshop CONTENT-->
         <div class="row-fluid">
             <div class="span12">
 
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Branch Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Branch Shop Information</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -42,8 +42,8 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('domain_branches_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('domain_branches') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('appsetting_branchshop_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                    <li><a href="{{ path('appsetting_branchshop') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -60,9 +60,9 @@
                             <div class="row-fluid">
                                 <div class="span8">
                                     <div class="row-fluid">
-                                        <div class="span12">
+                                        <div class="span6">
                                             <div class="control-group">
-                                                <label class="control-label" for="firstName">Name</label>
+                                                <label class="control-label" for="firstName">Name<span class="required">*</span></label>
                                                 <div class="controls">
                                                     <div class="input-icon left">
                                                         <i class="icon-font"></i>
@@ -72,13 +72,22 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="span6">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Location<span class="required">*</span></label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.location) }}
+                                                    {{ form_errors(form.location) }}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="span4">
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="firstName">Mobile no.</label>
+                                                <label class="control-label" for="firstName">Mobile no.<span class="required">*</span></label>
                                                 <div class="controls">
                                                     <div class="input-icon left">
                                                         <i class="icon-phone"></i>
@@ -96,7 +105,7 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="branchManager">Assign to Employee</label>
+                                                <label class="control-label" for="branchManager">Assign to Employee<span class="required">*</span></label>
                                                 <div class="controls">
                                                     {{ form_widget(form.branchManager) }}
                                                     {{ form_errors(form.branchManager) }}
@@ -136,7 +145,7 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
-                                                <label class="control-label" for="firstName">Address</label>
+                                                <label class="control-label" for="firstName">Address<span class="required">*</span></label>
                                                 <div class="controls">
                                                     <div class="input-icon left">
                                                         <i class="icon-font"></i>
@@ -156,7 +165,7 @@
                                     <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
                                     <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
                                     {% if(entity.id > 0 ) %}
-                                        <a href="{{ path('domain_branches_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
+                                        <a href="{{ path('appsetting_branchshop_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
                                     {% endif %}
                                 </div>
                             </div>

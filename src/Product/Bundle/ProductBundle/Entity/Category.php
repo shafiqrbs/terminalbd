@@ -2,8 +2,7 @@
 
 namespace Product\Bundle\ProductBundle\Entity;
 
-use Appstore\Bundle\EcommerceBundle\Entity\EcommerceSlider;
-use Appstore\Bundle\EcommerceBundle\Entity\Template;
+use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Appstore\Bundle\InventoryBundle\Entity\ItemAttribute;
 use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
@@ -514,19 +513,11 @@ class Category
     }
 
     /**
-     * @return Template
+     * @return Product
      */
-    public function getTemplate()
+    public function getMasterProducts()
     {
-        return $this->template;
-    }
-
-    /**
-     * @param Template $template
-     */
-    public function setTemplate($template)
-    {
-        $this->template = $template;
+        return $this->masterProducts;
     }
 
 }

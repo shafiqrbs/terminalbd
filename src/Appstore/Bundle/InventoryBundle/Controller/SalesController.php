@@ -122,9 +122,17 @@ class SalesController extends Controller
 
     public function newAction()
     {
+        $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer'] : '';
         $em = $this->getDoctrine()->getManager();
         $entity = new Sales();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        if($customer > 0 ){
+            $customer = $em->getRepository('DomainUserBundle:Customer')->find($customer);
+            if(!empty($customer)){
+                $entity->setCustomer($customer);
+                $entity->setMobile($customer->getMobile());
+            }
+        }
         $entity->setInventoryConfig($inventory);
         $entity->setSalesBy($this->getUser());
         $em->persist($entity);
@@ -218,8 +226,11 @@ class SalesController extends Controller
             if ($data['paymentAmount'] > 0) {
 
                 if (!empty($data['sales']['mobile'])) {
-                    $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity, $data['sales']['mobile']);
+
+                    $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales']['mobile']);
+                    $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity,$mobile);
                     $entity->setCustomer($customer);
+                    $entity->setMobile($mobile);
                 } else {
                     $globalOption = $this->getUser()->getGlobalOption();
                     $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
@@ -334,7 +345,7 @@ class SalesController extends Controller
     {
         $item = $request->request->get('item');
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $data = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->itemPurchaseDetails($inventory,$item);
+        $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemPurchaseDetails($inventory,$item);
         return new Response($data);
     }
 
@@ -396,8 +407,6 @@ EOD;
 
     public function invoicePrintAction(Sales $entity)
     {
-
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
         }

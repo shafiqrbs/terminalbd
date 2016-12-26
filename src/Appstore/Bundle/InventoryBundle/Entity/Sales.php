@@ -55,6 +55,11 @@ class Sales
         private  $salesReturn;
 
         /**
+         * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesReturn", mappedBy="salesAdjustmentInvoice" , cascade={"remove"} )
+         **/
+        private  $salesReturnAdjustment;
+
+        /**
          * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="sales" )
          * @ORM\OrderBy({"id" = "DESC"})
          **/
@@ -785,6 +790,14 @@ class Sales
         public function setBranches($branches)
         {
                 $this->branches = $branches;
+        }
+
+        /**
+         * @return mixed
+         */
+        public function getSalesReturnAdjustment()
+        {
+                return $this->salesReturnAdjustment;
         }
 
 

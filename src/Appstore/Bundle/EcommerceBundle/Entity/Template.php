@@ -229,7 +229,7 @@ class Template
     /**
      * Sets file.
      *
-     * @param Page $file
+     * @param Template $file
      */
     public function setFile(UploadedFile $file = null)
     {
@@ -239,7 +239,7 @@ class Template
     /**
      * Get file.
      *
-     * @return Page
+     * @return Template
      */
     public function getFile()
     {
@@ -487,36 +487,14 @@ class Template
         $this->featureFor = $featureFor;
     }
 
-    /**
-     * @return int
-     */
-    public function getDivWidth()
-    {
-        return $this->divWidth;
-    }
+  
 
     /**
-     * @param int $divWidth
+     * @return mixed
      */
-    public function setDivWidth($divWidth)
+    public function getEhomeItems()
     {
-        $this->divWidth = $divWidth;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDivHeight()
-    {
-        return $this->divHeight;
-    }
-
-    /**
-     * @param int $divHeight
-     */
-    public function setDivHeight($divHeight)
-    {
-        $this->divHeight = $divHeight;
+        return $this->ehomeItems;
     }
 
 

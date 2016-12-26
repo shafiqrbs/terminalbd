@@ -4,11 +4,13 @@ namespace Appstore\Bundle\DomainUserBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
+use Appstore\Bundle\InventoryBundle\Entity\Delivery;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\LocationBundle\Entity\Location;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -41,6 +43,11 @@ class Branches
     private  $branchManager;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Delivery", mappedBy="branches" )
+     **/
+    private  $deliveries;
+
+    /**
      * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\profile", mappedBy="branches" )
      **/
     private  $profiles;
@@ -54,6 +61,11 @@ class Branches
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\BranchInvoice", mappedBy="branches" )
      **/
     private  $branchInvoice;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="branches")
+     **/
+    protected $location;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="branches" )
@@ -302,7 +314,29 @@ class Branches
         return $this->profiles;
     }
 
+    /**
+     * @return Location
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
 
+    /**
+     * @param Location $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * @return Delivery
+     */
+    public function getDeliveries()
+    {
+        return $this->deliveries;
+    }
 
 
 }

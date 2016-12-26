@@ -80,13 +80,9 @@ class AccountPurchaseController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         if ($form->isValid()) {
-
             $em = $this->getDoctrine()->getManager();
-            $lastBalance = $em->getRepository('AccountingBundle:AccountPurchase')->lastInsertPurchase($this->getUser()->getGlobalOption(),$entity->getVendor());
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
-            $entity->setTotalAmount($lastBalance);
             $entity->setProcessHead('Account Purchase');
-            $entity->setBalance($lastBalance - $entity->getPayment());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -254,6 +250,11 @@ class AccountPurchaseController extends Controller
     {
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
+
+            $data = array('vendor' => $entity->getVendor()->getCompanyName());
+            $result = $em->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($this->getUser()->getGlobalOption(),$data);
+            $lastBalance = ( $result['purchaseAmount'] - $result['payment']);
+            $entity->setBalance($lastBalance - $entity->getPayment());
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();

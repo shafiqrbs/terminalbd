@@ -136,9 +136,9 @@ class PurchaseItemController extends Controller
 
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         if($inventory->getIsVendor() == 1 ){
-            $items = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findBy(array('inventoryConfig'=>$inventory,'vendor'=>$purchaseInfo->getVendor()));
+            $items = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findBy(array('inventoryConfig'=>$inventory,'vendor'=>$purchaseInfo->getVendor()),array('name'=>'ASC'));
         }else{
-            $items = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findBy(array('inventoryConfig'=>$inventory));
+            $items = $this->getDoctrine()->getRepository('InventoryBundle:Item')->findBy(array('inventoryConfig'=>$inventory),array('name'=>'ASC'));
         }
 
 

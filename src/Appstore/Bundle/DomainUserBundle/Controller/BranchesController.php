@@ -1,12 +1,9 @@
 <?php
 
 namespace Appstore\Bundle\DomainUserBundle\Controller;
-
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Form\BranchesType;
 
@@ -20,15 +17,14 @@ class BranchesController extends Controller
 
     /**
      * Lists all Branches entities.
-     * @Secure(roles="ROLE_DOMAIN_HR_EMPLOYEE_MANAGER")
      */
 
     public function indexAction()
     {
+
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('DomainUserBundle:Branches')->findBy(array('globalOption' => $globalOption),array('name'=>'asc'));
-
         return $this->render('DomainUserBundle:Branches:index.html.twig', array(
             'entities' => $entities,
         ));
@@ -37,10 +33,6 @@ class BranchesController extends Controller
     /**
      * Lists all Branches entities.
      *
-     */
-
-    /**
-     * @Secure(roles="ROLE_DOMAIN_HR_EMPLOYEE_MANAGER")
      */
 
     public function branchesEmployeeAction(Branches $branches)
@@ -106,10 +98,6 @@ class BranchesController extends Controller
      *
      */
 
-    /**
-     * @Secure(roles="ROLE_DOMAIN_HR_EMPLOYEE_MANAGER")
-     */
-
     public function newAction()
     {
         $entity = new Branches();
@@ -124,9 +112,6 @@ class BranchesController extends Controller
     /**
      * Finds and displays a Branches entity.
      *
-     */
-    /**
-     * @Secure(roles="ROLE_DOMAIN_HR_EMPLOYEE_MANAGER")
      */
 
     public function showAction($id)
@@ -146,10 +131,6 @@ class BranchesController extends Controller
     /**
      * Displays a form to edit an existing Branches entity.
      *
-     */
-
-    /**
-     * @Secure(roles="ROLE_DOMAIN_HR_EMPLOYEE_MANAGER")
      */
 
     public function editAction($id)
@@ -222,10 +203,6 @@ class BranchesController extends Controller
     /**
      * Deletes a Branches entity.
      *
-     */
-
-    /**
-     * @Secure(roles="ROLE_DOMAIN_HR_EMPLOYEE_MANAGER")
      */
 
     public function deleteAction(Branches $entity)

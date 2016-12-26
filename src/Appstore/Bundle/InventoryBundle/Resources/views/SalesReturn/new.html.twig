@@ -164,6 +164,7 @@
 
                                                     </tr>
                                                 {% endfor %}
+                                                <tr><td colspan="8"><span class="pull-right"><strong>Total Amount</strong></span></td><td><span class="pull-left"><strong id="totalAmount">{{ salesReturn.total|number_format }}</strong></span></td><td></td></tr>
                                             {% endif %}
                                             </tbody>
                                         </table>
@@ -174,17 +175,24 @@
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
 
-                            <div class="form-actions portlet box grey">
-                                <div class="span9" id="message"></div>
+                            <div class="form-actions portlet grey box">
+                                <div class="span6" id="message"></div>
 
-                                <div class="pull-right" id="action-{{ entity.id }}">
+                                <div class="span6 pull-right" id="action-{{ entity.id }}">
 
                                   {#  <a href="" class="btn"><i class="icon-print"></i>&nbsp;Print</a>
                                     <a href="" class="btn blue"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>#}
                                     {% if salesReturn.process == 'created' %}
-                                        <a href="{{ path('inventory_salesreturn_delete',{id : salesReturn.id}) }}" class="btn red"><i class="icon-remove"></i>&nbsp;Cancel</a>
-                                        <button type="submit" disabled="disabled" id="paymentBtn"  class="btn green"><i class="icon-ok"></i>&nbsp;Submit</button>
-                                    {% else %}
+                                        <div class="controls" style="margin-top: 10px">
+                                            <div class="input-append span11">
+                                                <input style="height: 34px!important; border:1px solid #fff; color: #fff" type="text" id="salesAdjustmentInvoice" name="salesAdjustmentInvoice"  class="span8 m-wrap" value=""  autocomplete="off" placeholder="Sales adjustment invoice">
+                                                <div class="btn-group">
+                                                    <button class="btn blue" type="submit" disabled="disabled" id="paymentBtn"  type="submit"><i class="icon-ok"></i>&nbsp;Submit</button>
+                                                    <a href="{{ path('inventory_salesreturn_delete',{id : salesReturn.id}) }}" class="btn red"><i class="icon-remove"></i>&nbsp;Cancel</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                     {% else %}
                                         <span  class="btn green"><i class="icon-ok"></i>&nbsp;Complete</span>
                                     {% endif %}
                                 </div>
@@ -197,6 +205,11 @@
             </div>
         </div>
     </div>
+    <style>
+        #message{
+            line-height: 50px;
+        }
+    </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

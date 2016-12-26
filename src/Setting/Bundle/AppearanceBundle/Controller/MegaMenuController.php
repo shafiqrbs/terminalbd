@@ -72,7 +72,7 @@ class MegaMenuController extends Controller
         $sr = $this->getDoctrine()->getRepository('SettingToolBundle:Syndicate');
         $go = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption');
 
-        $form = $this->createForm(new MegaMenuType($em, $cr , $sr,$go), $entity, array(
+        $form = $this->createForm(new MegaMenuType($em, $cr , $sr, $go), $entity, array(
             'action' => $this->generateUrl('megamenu_create'),
             'method' => 'POST',
             'attr' => array(

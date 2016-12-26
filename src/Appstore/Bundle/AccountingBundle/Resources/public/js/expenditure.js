@@ -12,7 +12,7 @@ function AccountingExpenditurePage(){
 
         ajax: {
 
-            url: Routing.generate('domain_user_search'),
+            url: Routing.generate('domain_customer_name'),
             dataType: 'json',
             delay: 250,
             data: function (params, page) {
