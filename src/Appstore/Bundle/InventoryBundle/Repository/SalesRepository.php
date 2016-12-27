@@ -104,6 +104,7 @@ class SalesRepository extends EntityRepository
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
         $qb->orderBy("s.invoice", 'DESC');
+
         return $qb->getQuery()->getResult();
     }
 

@@ -44,7 +44,7 @@ class Sales
         private  $salesImport;
 
         /**
-         * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", mappedBy="sales"  , cascade={"remove"} )
+         * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", mappedBy="sales" , cascade={"remove"} )
          * @ORM\OrderBy({"id" = "DESC"})
          **/
         private  $salesItems;

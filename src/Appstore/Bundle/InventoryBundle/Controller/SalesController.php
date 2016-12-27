@@ -145,18 +145,17 @@ class SalesController extends Controller
      * Finds and displays a Sales entity.
      *
      */
-    public function showAction($id)
+    public function showAction(Sales $entity)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('InventoryBundle:Sales')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Sales entity.');
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
+        if($inventory == $entity->getInventoryConfig()->getId() ){
+            return $this->render('InventoryBundle:Sales:show.html.twig', array(
+                'entity'      => $entity,
+            ));
+        }else{
+            return $this->redirect($this->generateUrl('inventory_sales'));
         }
-        return $this->render('InventoryBundle:Sales:show.html.twig', array(
-            'entity'      => $entity,
-        ));
+
     }
 
     /**
@@ -167,21 +166,21 @@ class SalesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig'=>$inventory , 'invoice'=>$code));
+        $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory , 'invoice' => $code));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
+        $editForm           = $this->createEditForm($entity);
+        $inventory          = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $todaySales         = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
         return $this->render('InventoryBundle:Sales:new.html.twig', array(
-            'entity'      => $entity,
-            'todaySales'      => $todaySales,
-            'todaySalesOverview'      => $todaySalesOverview,
-            'form'   => $editForm->createView(),
+            'entity'                    => $entity,
+            'todaySales'                => $todaySales,
+            'todaySalesOverview'        => $todaySalesOverview,
+            'form'                      => $editForm->createView(),
         ));
     }
 

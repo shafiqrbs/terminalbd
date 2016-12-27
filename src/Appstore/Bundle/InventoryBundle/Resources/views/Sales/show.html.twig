@@ -62,8 +62,8 @@
                                     <ul class="unstyled">
                                         {% if entity.customer is not empty %}<li><strong>Customer #:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
                                         {% if entity.customer is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
-                                        {% if entity.customer.address is not empty %}<li><strong>Address #:</strong>&nbsp;{{ entity.customer.address }}, {{ entity.customer.address }}</li>{% endif %}
-                                        {% if entity.customer.location is not empty %}<li><strong>Location #:</strong>&nbsp;{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
+                                        {% if entity.customer is not empty %}<li><strong>Address #:</strong>&nbsp;{{ entity.customer.address }}, {{ entity.customer.address }}</li>{% endif %}
+                                        {% if entity.customer is not empty and entity.customer.location is not empty   %}<li><strong>Location #:</strong>&nbsp;{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
                                         <li><strong>Invoice:</strong>&nbsp;{{ entity.invoice }}</li>
                                         <li><strong>Created:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
                                     </ul>
@@ -96,12 +96,9 @@
                                 </div>
                             </div>
                             {% include('flash-message.html.twig')  %}
-
-
                             <div class="row-fluid box green">
                                 {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
                                     <table class="table table-bordered table-striped table-condensed flip-content ">
-
                                         <thead class="flip-content ">
                                         <tr class="head-green">
                                             <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
@@ -128,7 +125,8 @@
                                         {% endfor %}
                                         </tbody>
                                     </table>
-                                {% endif %}                            </div>
+                                {% endif %}
+                            </div>
                             <div class="clearfix">&nbsp;</div>
                            <div class="form-actions portlet box grey">
                                 <div class="span8" id="message"></div>

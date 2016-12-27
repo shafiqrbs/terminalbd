@@ -256,12 +256,8 @@ class DeliveryController extends Controller
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
             $entity->setApprovedBy($this->getUser());
+            $entity->setProcess('approved');
             $em->flush();
-            $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemDeliveryUpdate($entity);
-            $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->insertDeliveryItem($entity);
-            $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertInventoryDeliveryItem($entity);
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertDeliveryTransaction($entity);
-
             return new Response('success');
         } else {
             return new Response('failed');
