@@ -330,16 +330,19 @@
                         <table class="table table-bordered table-striped table-condensed flip-content ">
 
                             <thead class="flip-content ">
-                            <tr class="head-grey">
+                            <tr class="head-blue">
                                 <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                 <th class="numeric" >Invoice</th>
+                                <th class="numeric" >Date</th>
                                 <th class="numeric" >Item</th>
                                 <th class="numeric" >Sub-Total</th>
                                 <th class="numeric" >Discount</th>
+                                <th class="numeric" >Net Total</th>
+                                <th class="numeric" >Payment</th>
                                 <th class="numeric" >Due</th>
-                                <th class="numeric" >Total</th>
-                                <th class="numeric" >Method</th>
                                 <th class="numeric" >Sales By</th>
+                                <th class="numeric" >Sales By</th>
+                                <th class="numeric" >Transaction</th>
                                 <th class="numeric" >Action</th>
                             </tr>
                             </thead>
@@ -348,14 +351,15 @@
                                 <tr id="salesRemove-{{ dailySales.id }}">
                                     <td> {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ dailySales.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                     <td class="numeric" >{{ dailySales.invoice }}</td>
-
+                                    <td class="numeric" >{{ dailySales.updated|date('d-m-Y') }}</td>
                                     <td class="numeric" >{{ dailySales.totalItem }}</td>
-                                    <td class="numeric" >{{ dailySales.subTotal|number_format(2, '.', ',')  }}</td>
-                                    <td class="numeric" >{{ dailySales.discount|number_format(2, '.', ',')  }}</td>
-                                    <td class="numeric" >{{ dailySales.due|number_format(2, '.', ',')  }}</td>
-                                    <td class="numeric" >{{ dailySales.total|number_format(2, '.', ',')  }}</td>
-                                    <td class="numeric" >{% if  dailySales.transactionMethod is not empty %}{{ dailySales.transactionMethod.name }}{% endif %}</td>
-                                    <td class="numeric" >{{ dailySales.salesBy }}</td>
+                                    <td class="numeric" >{{ dailySales.subTotal|number_format  }}</td>
+                                    <td class="numeric" >{{ dailySales.discount|number_format  }}</td>
+                                    <th class="numeric" >{{ dailySales.total|number_format  }}</th>
+                                    <th class="numeric" >{{ dailySales.payment|number_format }}</th>
+                                    <td class="numeric" >{{ dailySales.due|number_format }}</td>
+                                    <td class="numeric" >{% if dailySales.salesBy %}{{ dailySales.salesBy.profile.name }}{% endif %}</td>
+                                    <td class="numeric" >{% if dailySales.transactionMethod is not empty %}{{ dailySales.transactionMethod.name }}{% endif %}</td>
                                     <td class="numeric" >
                                         {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}
                                             <a href="{{ path('inventory_sales_show', { 'id': dailySales.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
@@ -370,11 +374,10 @@
                                         {% if dailySales.paymentStatus == "Due" %}
                                             <a href="{{ path('account_sales_new') }}" class="btn mini blue" ><i class="icon-money"></i></a>
                                         {% endif %}
-
                                     </td>
                                 </tr>
                                 <tr id="show-{{ dailySales.id }}" class="showing-overview">
-                                    <td colspan="10">
+                                    <td colspan="11">
                                         {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}
                                             <table class="table table-bordered table-striped table-condensed flip-content ">
 

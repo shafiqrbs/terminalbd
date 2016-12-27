@@ -386,7 +386,7 @@ class TransactionRepository extends EntityRepository
                 $transaction->setProcess('Current Assets');
             }if($entity->getTransactionMethod()->getId() == 3 ){
                 /* Current Asset Mobile Account Debit */
-                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(43));
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
                 $transaction->setProcess('Current Assets');
             }
 

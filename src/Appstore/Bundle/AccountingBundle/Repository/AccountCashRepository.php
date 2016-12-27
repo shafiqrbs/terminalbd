@@ -262,9 +262,12 @@ class AccountCashRepository extends EntityRepository
         }elseif($entity->getTransactionMethod()->getId() == 2 ){
             /* Current Asset Bank Cash Debit */
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+            $cash->setAccountBank($entity->getAccountBank());
         }if($entity->getTransactionMethod()->getId() == 3 ){
             /* Current Asset Mobile Account Debit */
-            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(43));
+            $cash->setAccountMobileBank($entity->getAccountMobileBank());
+            $account = $this->_em->getRepository('AccountingBundle:AccountHead')->find(10);
+            $cash->setAccountHead($account);
         }
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setAccountSales($entity);
@@ -277,7 +280,6 @@ class AccountCashRepository extends EntityRepository
         $cash->setDebit($entity->getAmount());
         $em->persist($cash);
         $em->flush();
-
     }
 
     public function insertSalesCashReturn(AccountSalesReturn $entity)
