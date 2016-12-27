@@ -8,6 +8,7 @@ use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Mike42\Escpos\Printer;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
@@ -424,5 +425,48 @@ EOD;
         }
         return $this->redirect($this->generateUrl('inventory_sales'));
     }
+
+
+    public function salesInlineUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('InventoryBundle:Sales')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        $entity->setCourierInvoice($data['value']);
+        $em->flush();
+        exit;
+
+    }
+
+    public function salesInlineProcessUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('InventoryBundle:Sales')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        $entity->setProcess($data['value']);
+        $em->flush();
+        exit;
+
+    }
+
+    public function salesSelectAction()
+    {
+
+        $items  = array();
+        $items[]= array('value' => 'Done','text'=>'Done');
+        $items[]= array('value' => 'In-progress','text'=>'In-progress');
+        $items[]= array('value' => 'Waiting Delivery','text'=>'Waiting Delivery');
+        $items[]= array('value' => 'Return & Cancel','text'=>'Return & Cancel');
+        return new JsonResponse($items);
+
+
+    }
+
 
 }

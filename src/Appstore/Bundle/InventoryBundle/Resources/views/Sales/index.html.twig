@@ -80,7 +80,6 @@
                                     </form>
                                 </div>
                                 <table class="table table-bordered table-striped table-condensed flip-content ">
-
                                     <thead class="flip-content ">
                                     <tr class="head-blue">
                                         <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
@@ -97,70 +96,67 @@
                                     </tr>
                                     </thead>
                                     <tbody id="sales">
+                                        {% for entity in entities %}
+                                            <tr id="salesRemove-{{ entity.id }}">
+                                                <td> {% if entity.salesItems is defined and  entity.salesItems is not empty  %}<span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
+                                                <td class="numeric" >{{ entity.invoice }}</td>
+                                                <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                                <td class="numeric" >{{ entity.totalItem }}</td>
+                                                <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
+                                                <td class="numeric" >{{ entity.discount|number_format  }}</td>
+                                                <th class="numeric" >{{ entity.total|number_format  }}</th>
+                                                <th class="numeric" >{{ entity.payment|number_format }}</th>
+                                                <td class="numeric" >{{ entity.due|number_format }}</td>
+                                                <td class="numeric" >{% if entity.salesBy %}{{ entity.salesBy.profile.name }}{% endif %}</td>
+                                                <td class="numeric" >
+                                                    {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
+                                                        <a href="{{ path('inventory_sales_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
+                                                        <a href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
+                                                    {% endif %}
+                                                    {% if entity.paymentStatus == "Pending" %}
+                                                        <a href="{{ path('inventory_sales_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
+                                                        <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                                    {% endif %}
+                                                    {% if entity.paymentStatus == "Due" %}
+                                                        <a href="{{ path('account_sales_new') }}" class="btn mini blue" ><i class="icon-money"></i></a>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr id="show-{{ entity.id }}" class="showing-overview">
+                                                <td colspan="11">
+                                                    {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
+                                                        <table class="table table-bordered table-striped table-condensed flip-content ">
 
-                                    {% for entity in entities %}
-
-                                        <tr id="salesRemove-{{ entity.id }}">
-                                            <td> {% if entity.salesItems is defined and  entity.salesItems is not empty  %}<span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
-                                            <td class="numeric" >{{ entity.invoice }}</td>
-                                            <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
-                                            <td class="numeric" >{{ entity.totalItem }}</td>
-                                            <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
-                                            <td class="numeric" >{{ entity.discount|number_format  }}</td>
-                                            <th class="numeric" >{{ entity.total|number_format  }}</th>
-                                            <th class="numeric" >{{ entity.payment|number_format }}</th>
-                                            <td class="numeric" >{{ entity.due|number_format }}</td>
-                                            <td class="numeric" >{% if entity.salesBy %}{{ entity.salesBy.profile.name }}{% endif %}</td>
-                                            <td class="numeric" >
-                                                {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
-                                                    <a href="{{ path('inventory_sales_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                                    <a href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
-                                                {% endif %}
-                                                {% if entity.paymentStatus == "Pending" %}
-                                                    <a href="{{ path('inventory_sales_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
-                                                    <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
-                                                {% endif %}
-                                                {% if entity.paymentStatus == "Due" %}
-                                                    <a href="{{ path('account_sales_new') }}" class="btn mini blue" ><i class="icon-money"></i></a>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                        <tr id="show-{{ entity.id }}" class="showing-overview">
-                                            <td colspan="11">
-                                                {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
-                                                    <table class="table table-bordered table-striped table-condensed flip-content ">
-
-                                                        <thead class="flip-content ">
-                                                        <tr class="head-green">
-                                                            <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
-                                                            <th class="numeric" >Item</th>
-                                                            <th class="numeric" >Barcode</th>
-                                                            <th class="numeric" >Qnt</th>
-                                                            <th class="numeric" >Estimate price</th>
-                                                            <th class="numeric" >Sales price</th>
-                                                            <th class="numeric" >Sub-total</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        {% for salesItem in entity.salesItems %}
-                                                            <tr>
-                                                                <td class="numeric" >{{ loop.index }}</td>
-                                                                <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
-                                                                <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
-                                                                <td class="numeric" >{{ salesItem.quantity }}</td>
-                                                                <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
-                                                                <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
-                                                                <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
-
+                                                            <thead class="flip-content ">
+                                                            <tr class="head-green">
+                                                                <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
+                                                                <th class="numeric" >Item</th>
+                                                                <th class="numeric" >Barcode</th>
+                                                                <th class="numeric" >Qnt</th>
+                                                                <th class="numeric" >Estimate price</th>
+                                                                <th class="numeric" >Sales price</th>
+                                                                <th class="numeric" >Sub-total</th>
                                                             </tr>
-                                                        {% endfor %}
-                                                        </tbody>
-                                                    </table>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for salesItem in entity.salesItems %}
+                                                                <tr>
+                                                                    <td class="numeric" >{{ loop.index }}</td>
+                                                                    <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
+                                                                    <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
+                                                                    <td class="numeric" >{{ salesItem.quantity }}</td>
+                                                                    <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
+                                                                    <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
+                                                                    <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
 
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                                 <div class="pagination pull-center"  >

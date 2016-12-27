@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\DomainUserBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\LocationBundle\Entity\Location;
 
@@ -51,6 +52,12 @@ class Customer
     private  $accountSalesReturn;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="customer" , cascade={"persist", "remove"})
+     * @ORM\OrderBy({"updated" = "DESC"})
+     **/
+    protected $sales;
+
+     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", mappedBy="customer" , cascade={"persist", "remove"})
      * @ORM\OrderBy({"id" = "DESC"})
      **/
@@ -73,7 +80,7 @@ class Customer
     protected $location;
 
 
-    protected $sales;
+
 
     /**
      * @var string
@@ -473,6 +480,14 @@ class Customer
     public function setLocation($location)
     {
         $this->location = $location;
+    }
+
+    /**
+     * @return Sales
+     */
+    public function getSales()
+    {
+        return $this->sales;
     }
 
 }

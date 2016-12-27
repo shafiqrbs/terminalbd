@@ -138,6 +138,20 @@ class Sales
         /**
          * @var string
          *
+         * @ORM\Column(name="courierInvoice", type="string", length=50, nullable=true)
+         */
+        private $courierInvoice;
+
+        /**
+         * @var string
+         *
+         * @ORM\Column(name="process", type="string", length=50, nullable=true)
+         */
+        private $process;
+
+        /**
+         * @var string
+         *
          * @ORM\Column(name="transactionId", type="string", length=100, nullable=true)
          */
         private $transactionId;
@@ -798,6 +812,38 @@ class Sales
         public function getSalesReturnAdjustment()
         {
                 return $this->salesReturnAdjustment;
+        }
+
+        /**
+         * @return string
+         */
+        public function getCourierInvoice()
+        {
+                return $this->courierInvoice;
+        }
+
+        /**
+         * @param string $courierInvoice
+         */
+        public function setCourierInvoice($courierInvoice)
+        {
+                $this->courierInvoice = $courierInvoice;
+        }
+
+        /**
+         * @return string
+         */
+        public function getProcess()
+        {
+                return $this->process;
+        }
+
+        /**
+         * @param string $process
+         */
+        public function setProcess($process)
+        {
+                $this->process = $process;
         }
 
 

@@ -74,3 +74,23 @@ inventory_sales_empty_delete:
 inventory_salesitem_delete:
     path:     /{sales}/{salesItem}/delete
     defaults: { _controller: "InventoryBundle:Sales:itemDelete" }
+
+inventory_sales_inline_update:
+    path:     /sales/inline-update
+    defaults: { _controller: "InventoryBundle:Sales:salesInlineUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+inventory_sales_inline_process_update:
+    path:     /sales/inline-process-update
+    defaults: { _controller: "InventoryBundle:Sales:salesInlineProcessUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+inventory_sales_inline_status_select:
+    path:     /inline-status-select
+    defaults: { _controller: "InventoryBundle:Sales:salesSelect" }
+    options:
+           expose: true
