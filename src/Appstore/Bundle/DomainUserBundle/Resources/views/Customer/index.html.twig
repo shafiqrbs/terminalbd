@@ -66,6 +66,7 @@
                                     <tr>
                                         <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                         <td>{{ entity.name }}</td>
+                                        <td>{{ entity.name }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
                                         <td class="numeric"><a href="mailto:{{ entity.email }}"> {{ entity.email }}</a></td>
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}</td>
@@ -118,7 +119,6 @@
                                                                 {% endif %}
                                                                 <a target="_blank" class="btn mini purple" href="{{ path('inventory_sales_show', { 'id': sales.id }) }}">View</a>
                                                             </td>
-
                                                         </tr>
                                                         <tr id="show-{{ sales.id }}" class="showing-overview">
                                                             <td colspan="9">

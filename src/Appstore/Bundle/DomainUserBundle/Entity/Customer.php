@@ -6,7 +6,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\LocationBundle\Entity\Location;
-
+use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Customer
  *
@@ -160,6 +160,13 @@ class Customer
      * @ORM\Column(name="isNew", type="boolean")
      */
     private $isNew = true;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created", type="datetime")
+     */
+    private $created;
 
 
     /**
@@ -488,6 +495,22 @@ class Customer
     public function getSales()
     {
         return $this->sales;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
     }
 
 }
