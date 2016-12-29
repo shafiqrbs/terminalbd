@@ -36,11 +36,6 @@ function AccountingApproveProcess(){
             type: 'GET',
             success: function (response) {
                 location.reload();
-               /* if ('success' == response ) {
-                     location.reload();
-                    //$('#action-' + id).append('<a title="Approve" href="javascript:" class="btn blue mini" ><i class="icon-check"></i>&nbsp;Approved</a>');
-                    //$('.approved-' + id).remove();
-                }*/
             },
         })
 

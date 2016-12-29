@@ -65,6 +65,11 @@ class PurchaseItem
     private  $branchInvoiceItems;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn", mappedBy="purchaseItem")
+     */
+    protected $deliveryReturns;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="purchaseItem" )
      **/
     private  $damages;
@@ -495,6 +500,14 @@ class PurchaseItem
     public function setOrderItem($orderItem)
     {
         $this->orderItem = $orderItem;
+    }
+
+    /**
+     * @return DeliveryReturn
+     */
+    public function getDeliveryReturns()
+    {
+        return $this->deliveryReturns;
     }
 
 

@@ -73,7 +73,6 @@
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}</td>
                                         <td class="numeric">
                                             <a class="btn mini green-stripe btn-action" href="{{ path('inventory_customer_edit', { 'id': entity.id }) }}">Edit</a>
-                                            <a class="btn mini blue-stripe btn-action" href="{{ path('inventory_customer_show', { 'id': entity.id }) }}">View</a>
                                             <a class="btn mini blue-stripe btn-action" target="_blank" href="{{ path('inventory_sales_new', { 'customer': entity.id }) }}">Add Sales</a>
                                             <a class="btn mini blue-stripe btn-action" target="_blank" href="{{ path('inventory_sales', { 'customer': entity.id }) }}">Orders</a>
                                             <a class="btn mini red-stripe btn-action delete" href="javascript:" rel="{{ path('inventory_customer_delete', { 'id': entity.id }) }}" >Delete</a>

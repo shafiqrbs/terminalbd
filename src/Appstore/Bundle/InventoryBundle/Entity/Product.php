@@ -332,7 +332,7 @@ class Product implements CodeAwareEntity
     }
 
     /**
-     * @return mixed
+     * @return PurchaseVendorItem
      */
     public function getPurchaseVendorItem()
     {

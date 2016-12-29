@@ -61,15 +61,19 @@ webservice_module_category:
 
 
 webservice_product_promotion:
-    path:     /{slug}/product-promotion
+    path:     /product/promotion/{id}
     defaults: { _controller: FrontendBundle:WebServiceProduct:promotion }
 
 webservice_product_tag:
-    path:     /{slug}/product-tag
+    path:     /product/tag/{id}
     defaults: { _controller: FrontendBundle:WebServiceProduct:tag }
 
 webservice_product_discount:
-    path:     /{slug}/product-discount
+    path:     /product/discount/{id}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:discount }
+
+webservice_product_brand:
+    path:     /product/brand/{id}
     defaults: { _controller: FrontendBundle:WebServiceProduct:discount }
 
 webservice_contact:
@@ -83,8 +87,6 @@ webservice_product_cart_details:
 webservice_product:
     path:     /product
     defaults: { _controller: FrontendBundle:WebServiceProduct:product }
-
-
 
 webservice_customer_register:
     path:     /register

@@ -64,7 +64,7 @@
                                                 <input type="text" id="toUser" name="toUser"  class="span12 select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="select user">
                                             </div>
                                             <div class="span2">
-                                                <input type="text" id="amount" name="amount"  class="span12 search-input  " value="{% if searchForm.amount is defined %}{{ searchForm.amount }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.amount is defined %}{{ searchForm.amount }}{% else %}Enter amount{% endif %} ">
+                                                <input type="text" id="mobile" name="mobile"  class="leftMargin span12 select2Customer" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Customer mobile">
                                             </div>
                                             <div class="span3">
                                                 <div class="controls">
@@ -148,7 +148,6 @@
                                                                     <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
                                                                     <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
                                                                     <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
-
                                                                 </tr>
                                                             {% endfor %}
                                                             </tbody>
@@ -164,7 +163,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
             </div>
         </div>
@@ -177,6 +175,14 @@
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@InventoryBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
 {% block documentready %}
     {{ parent() }}
     $('#sales').on("click", ".delete", function() {

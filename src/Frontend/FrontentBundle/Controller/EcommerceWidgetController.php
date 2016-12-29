@@ -102,10 +102,10 @@ class EcommerceWidgetController extends Controller
     public function featureWidgetAction(GlobalOption $globalOption , $position ='' )
     {
 
-        $globalOption = $globalOption->getId();
-        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption),array('id'=>'DESC'));
+        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption,'positionPage' => $position ),array('sorting'=>'ASC'));
         return $this->render('@Frontend/Template/Desktop/EcommerceWidget/FeatureWidget.html.twig', array(
             'features'           => $features,
+            'globalOption'           => $globalOption,
         ));
     }
 

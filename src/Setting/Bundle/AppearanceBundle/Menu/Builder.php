@@ -487,6 +487,7 @@ class Builder extends ContainerAware
                         ->setAttribute('icon','icon icon-truck')
                         ->setAttribute('dropdown', true);
                     $menu['Inventory']['Delivery']->addChild('Delivery Invoice', array('route' => 'inventory_delivery'))->setAttribute('icon','icon-shopping-cart');
+                    $menu['Inventory']['Delivery']->addChild('Return Invoice', array('route' => 'inventory_deliveryreturn'))->setAttribute('icon','icon-retweet');
 
                 }
 

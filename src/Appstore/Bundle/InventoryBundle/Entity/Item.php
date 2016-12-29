@@ -76,6 +76,11 @@ class Item
     protected $damages;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn", mappedBy="item")
+     */
+    protected $deliveryReturns;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255,nullable = true)
@@ -991,6 +996,14 @@ class Item
     {
         $code = str_pad($this->getCode(),3, '0', STR_PAD_LEFT);
         return $code;
+    }
+
+    /**
+     * @return DeliveryReturn
+     */
+    public function getDeliveryReturns()
+    {
+        return $this->deliveryReturns;
     }
 
 

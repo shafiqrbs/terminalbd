@@ -1,0 +1,304 @@
+<?php
+
+namespace Appstore\Bundle\InventoryBundle\Controller;
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn;
+use Appstore\Bundle\InventoryBundle\Form\DeliveryReturnType;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * DeliveryReturn controller.
+ *
+ */
+class DeliveryReturnController extends Controller
+{
+
+
+    public function paginate($entities)
+    {
+
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        return $pagination;
+    }
+
+    /**
+     * Lists all DeliveryReturn entities.
+     *
+     */
+    public function indexAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $branch = $this->getUser()->getBranches();
+        $entities = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:DeliveryReturn')->findWithSearch($branch,$data);
+        $paginate = $this->paginate($entities);
+        return $this->render('InventoryBundle:DeliveryReturn:index.html.twig', array(
+            'entities' => $paginate,
+        ));
+    }
+
+    public function todayDeliveryReturn()
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $data = array('startDate'=> date('Y-m-d'),'endDate'=> date('Y-m-d'));
+        $entities = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:DeliveryReturn')->findWithSearch($inventory,$data);
+        return $entities;
+    }
+
+    /**
+     * Creates a new DeliveryReturn entity.
+     *
+     */
+    public function createAction(Request $request)
+    {
+        $entity = new DeliveryReturn();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+            $data = $request->request->all();
+            $barcode = $data['appstore_bundle_inventorybundle_delivery_return']['purchaseItem'];
+            $purchaseItem = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('barcode' => $barcode));
+            $branch = $this->getUser()->getBranches();
+            $entity->setBranch($branch);
+            $entity->setItem($purchaseItem->getItem());
+            $entity->setPurchaseItem($purchaseItem);
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+            return $this->redirect($this->generateUrl('inventory_deliveryreturn_new'));
+
+        }
+        $todayDeliveryReturn = $this->todayDeliveryReturn();
+        return $this->render('InventoryBundle:DeliveryReturn:new.html.twig', array(
+            'entity' => $entity,
+            'entities' => $todayDeliveryReturn,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    /**
+     * Creates a form to create a DeliveryReturn entity.
+     *
+     * @param DeliveryReturn $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(DeliveryReturn $entity)
+    {
+        $form = $this->createForm(new DeliveryReturnType(), $entity, array(
+            'action' => $this->generateUrl('inventory_deliveryreturn_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    /**
+     * Displays a form to create a new DeliveryReturn entity.
+     *
+     */
+    public function newAction()
+    {
+        $entity = new DeliveryReturn();
+        $form   = $this->createCreateForm($entity);
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $data = array('startDate'=> date('Y-m-d'),'endDate'=> date('Y-m-d'));
+        $entities = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:DeliveryReturn')->findWithSearch($inventory,$data);
+
+        $paginate = $this->paginate($entities);
+        return $this->render('InventoryBundle:DeliveryReturn:new.html.twig', array(
+            'entity' => $entity,
+            'entities' => $paginate,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    /**
+     * Finds and displays a DeliveryReturn entity.
+     *
+     */
+    public function showAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('InventoryBundle:DeliveryReturn')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find DeliveryReturn entity.');
+        }
+
+        $deleteForm = $this->createDeleteForm($id);
+
+        return $this->render('InventoryBundle:DeliveryReturn:show.html.twig', array(
+            'entity'      => $entity,
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
+    /**
+     * Displays a form to edit an existing DeliveryReturn entity.
+     *
+     */
+    public function editAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('InventoryBundle:DeliveryReturn')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find DeliveryReturn entity.');
+        }
+
+        $editForm = $this->createEditForm($entity);
+        $deleteForm = $this->createDeleteForm($id);
+        $todayDeliveryReturn = $this->todayDeliveryReturn();
+        return $this->render('InventoryBundle:DeliveryReturn:new.html.twig', array(
+            'entity'      => $entity,
+            'entities'      => $todayDeliveryReturn,
+            'form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
+    /**
+    * Creates a form to edit a DeliveryReturn entity.
+    *
+    * @param DeliveryReturn $entity The entity
+    *
+    * @return \Symfony\Component\Form\Form The form
+    */
+    private function createEditForm(DeliveryReturn $entity)
+    {
+        $form = $this->createForm(new DeliveryReturnType(), $entity, array(
+            'action' => $this->generateUrl('inventory_deliveryreturn_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+         return $form;
+    }
+    /**
+     * Edits an existing DeliveryReturn entity.
+     *
+     */
+    public function updateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('InventoryBundle:DeliveryReturn')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find DeliveryReturn entity.');
+        }
+
+        $deleteForm = $this->createDeleteForm($id);
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been updated successfully"
+            );
+            return $this->redirect($this->generateUrl('inventory_deliveryreturn_edit', array('id' => $id)));
+        }
+        $todayDeliveryReturn = $this->todayDeliveryReturn();
+        return $this->render('InventoryBundle:DeliveryReturn:new.html.twig', array(
+            'entity'      => $entity,
+            'entities'      => $todayDeliveryReturn,
+            'form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
+    /**
+     * Deletes a DeliveryReturn entity.
+     *
+     */
+    public function deleteAction($id)
+    {
+
+            $em = $this->getDoctrine()->getManager();
+            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $entity = $em->getRepository('InventoryBundle:DeliveryReturn')->findOneBy(array('inventoryConfig'=>$inventory,'id' => $id));
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find DeliveryReturn entity.');
+            }
+
+            $em->remove($entity);
+            $em->flush();
+
+           return $this->redirect($this->generateUrl('inventory_deliveryreturn'));
+    }
+
+    /**
+     * Creates a form to delete a DeliveryReturn entity by id.
+     *
+     * @param mixed $id The entity id
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('inventory_deliveryreturn_delete', array('id' => $id)))
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->getForm()
+        ;
+    }
+
+    public function autoSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $item = $this->getDoctrine()->getRepository('InventoryBundle:DeliveryReturn')->searchAutoComplete($item,$inventory);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchDeliveryReturnNameAction($size)
+    {
+        return new JsonResponse(array(
+            'id'=>$size,
+            'text'=>$size
+        ));
+    }
+
+    public function approveAction(DeliveryReturn $entity)
+    {
+        if (!empty($entity)) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setApprovedBy($this->getUser());
+            $em->flush();
+            $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemDeliveryReturnUpdate($entity);
+            $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->insertDeliveryReturnItem($entity);
+            $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertInventoryDeliveryReturnItem($entity);
+            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertDeliveryReturnTransaction($entity);
+
+            return new Response('success');
+        } else {
+            return new Response('failed');
+        }
+        exit;
+    }
+}

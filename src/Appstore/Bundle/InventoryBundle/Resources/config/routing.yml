@@ -94,6 +94,10 @@ inventory_stockitem:
     resource: "@InventoryBundle/Resources/config/routing/stockitem.yml"
     prefix:   /inventory/stockitem
 
+inventory_delivery_return:
+    resource: "@InventoryBundle/Resources/config/routing/deliveryreturn.yml"
+    prefix:   /inventory/delivery-return
+
 inventory_damage:
     resource: "@InventoryBundle/Resources/config/routing/damage.yml"
     prefix:   /inventory/damage

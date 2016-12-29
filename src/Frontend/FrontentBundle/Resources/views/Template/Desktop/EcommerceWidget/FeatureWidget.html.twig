@@ -157,7 +157,15 @@
                                     <h4>{{ slide.feature.name }}</h4>
                                     <span>{{ slide.feature.content|raw }}</span>
                                     <br/>
-                                    <a class="btn btn-mini" href="">Shop Now</a>
+                                    {% if slide.feature.targetTo == 'Promotion' %}
+                                    <a class="btn btn-mini" href="{{ path('webservice_product_promotion',{'id':slide.feature.promotion.id}) }}">Shop Now</a>
+                                    {% elseif slide.feature.targetTo == 'Tag' %}
+                                    <a class="btn btn-mini" href="{{ path('webservice_product_tag',{'id':slide.feature.tag.id}) }}">Shop Now</a>
+                                    {% elseif slide.feature.targetTo == 'Discount' %}
+                                    <a class="btn btn-mini" href="{{ path('webservice_product_discount',{'id':slide.feature.discount.id}) }}">Shop Now</a>
+                                    {% elseif slide.feature.targetTo == 'Brand' %}
+                                    <a class="btn btn-mini" href="{{ path('webservice_product_brand',{'id':slide.feature.barnd.id}) }}">Shop Now</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endfor %}
@@ -167,13 +175,23 @@
         </div>
     </div>
     {% endif %}
+    <br/>
     {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'feature' %}
         <div class="container">
             <div class="row">
-            {% for entity in widget.featureWidgetItems %}
-                {% if(entity.feature.webPath) %}
-                    <div  style="overflow: hidden;height: {{ entity.divHeight }}px; width: {{ entity.divWidth }}%; margin-bottom: 15px;"  class="col-xs-12 col-md-12 ">
-                        <a href=""> <img class="img-responsive" alt="" src="{{ entity.feature.webPath }}"></a>
+            {% for slide in widget.featureWidgetItems %}
+                {% if(slide.feature.webPath) %}
+                    {% if slide.feature.targetTo == 'Promotion' %}
+                        {% set path = path('webservice_product_promotion',{'id':slide.feature.promotion.id}) %}
+                        {% elseif slide.feature.targetTo == 'Tag' %}
+                        {% set path = path('webservice_product_tag',{'id':slide.feature.tag.id}) %}
+                        {% elseif slide.feature.targetTo == 'Discount' %}
+                        {% set path = path('webservice_product_tag',{'id':slide.feature.discount.id}) %}
+                        {% elseif slide.feature.targetTo == 'Brand' %}
+                        {% set path = path('webservice_product_tag',{'id':slide.feature.brand.id}) %}
+                    {% endif %}
+                    <div  style="overflow: hidden;height: {{ slide.divHeight }}px; width: {{ slide.divWidth }}%; margin-bottom: 15px;"  class="col-xs-12 col-md-12 ">
+                        <a href="{{ path }}"> <img class="img-responsive" alt="" src="{{ slide.feature.webPath }}"></a>
                     </div>
                 {% endif %}
             {% endfor %}
@@ -181,7 +199,7 @@
         </div>
     {% endif %}
     {% if widget.featureFor == 'Carousel' %}
-        {% if widget.category is defined and widget.category is not empty %}
+        {#{% if widget.category is defined and widget.category is not empty %}
             <div class="container">
                 <div class="header-double-line-right">
                     <h3>{{ widget.category.name }}</h3>
@@ -194,15 +212,15 @@
                 </div>
                 <div id="product" class="row">
                     <div id="category-slider" class="owl-carousel">
-                        {% for product in  widget.category.masterProducts |slice(0,12)  %}
+                        {% for product in  widget.category.masterProducts.purchaseVendorItem |slice(0,12)  %}
                             <div class="col-md-12">
                                 <div class="thumbnail js-equal-height">
-                                    <div class="product-preview group list-group-image" >
-                                        <img class="img-responsive" src="{{ image(product.webPath).resize(250.250) }}" alt="">
+                                    <div class="product-preview group list-group-image product-equal-height" >
+                                        <img class="img-responsive" src="{{ image(product.webPath).resize(400,400) }}" alt="">
                                         <div class="team-content">
                                             <h3 class="team-prof">
                                                 <a href="#">{{ product.name }}</a>
-                                                <small>{#{{ product.price|number_format }}#}</small>
+                                                <small>&#123;&#35;{{ product.price|number_format }}&#35;&#125;</small>
                                             </h3>
                                             <ul class="social-link">
                                                 <li><a href="#" class="fa fa-facebook"></a></li>
@@ -212,16 +230,11 @@
                                         </div>
                                     </div>
                                     <div class="caption">
-                                        <h4 class="group inner list-group-item-heading">
-                                            {{ product.name }}</h4>
-                                        <p class="group inner list-group-item-text">
-                                            {#{{ product.content|raw|truncate(100) }}#}</p>
+                                        <p class="group inner list-group-item-heading text-center" ><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}"><strong>{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></a> </p>
                                         <div class="row">
-                                            <div class="col-xs-12 col-md-6">
-                                                <span class="lead">{#{{ product.price|number_format }}#}</span>
-                                            </div>
-                                            <div class="col-xs-12 col-md-5 text-right">
-                                                <a href="" class="btn btn-sm orange">Details<i class="fa fa-link"></i></a>
+                                            <div class="row-fluid">
+                                                <div class="col-xs-6 col-md-6 text-right"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}{{ product.discountPrice|number_format() }}{% endif %}</div>
+                                                <div class="col-xs-6 col-md-6 text-left"><strong>{{ product.quantity }}&nbsp;{% if  product.masterItem.productUnit is defined and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</strong></div>
                                             </div>
                                         </div>
                                     </div>
@@ -232,7 +245,7 @@
 
                 </div>
             </div>
-        {% endif %}
+        {% endif %}#}
         {% if widget.promotion is defined and widget.promotion is not empty %}
             <div class="container">
                 <div class="header-double-line-right">
@@ -249,34 +262,25 @@
                         {% for product in  widget.promotion.purchaseVendorItems |slice(0,12)  %}
                             <div class="col-md-12">
                                 <div class="thumbnail js-equal-height">
-                                    <div class="product-preview group list-group-image" >
-                                        <img class="img-responsive" src="{{ image(product.masterItem.webPath).resize(250.250) }}" alt="">
+                                    <div class="product-preview group list-group-image product-equal-height" >
+                                        <img class="img-responsive" src="{{ image(product.masterItem.webPath).resize(400,400) }}" alt="">
                                         <div class="team-content">
-                                            <h3 class="team-prof">
-                                                <a href="#">{{ product.name }}</a>
-                                                <small>{#{{ product.price|number_format }}#}</small>
-                                            </h3>
-                                            <ul class="social-link">
-                                                <li><a href="#" class="fa fa-facebook"></a></li>
-                                                <li><a href="#" class="fa fa-google"></a></li>
-                                                <li><a href="#" class="fa fa-twitter"></a></li>
+                                            <ul class="view-link">
+                                                <li><a href="#" class="fa fa-shopping-cart"></a></li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="caption">
-                                        <h4 class="group inner list-group-item-heading">
-                                            {{ product.name }}</h4>
-                                        <p class="group inner list-group-item-text">
-                                            {#{{ product.content|raw|truncate(100) }}#}</p>
                                         <div class="row">
-                                            <div class="col-xs-12 col-md-6">
-                                                <span class="lead">{#{{ product.price|number_format }}#}</span>
+                                            <div class="row-fluid">
+                                                <div class="col-xs-12 col-md-12 text-center"><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}"><strong>{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></a></div>
                                             </div>
-                                            <div class="col-xs-12 col-md-5 text-right">
-                                                <a href="" class="btn btn-sm orange">Details<i class="fa fa-link"></i></a>
+                                            <div class="row-fluid">
+                                                <div class="col-xs-12 col-md-12 text-center"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</strong></div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         {% endfor %}

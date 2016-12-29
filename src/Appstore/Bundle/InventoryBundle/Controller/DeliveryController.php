@@ -6,7 +6,8 @@ use Appstore\Bundle\InventoryBundle\Entity\DeliveryItem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\InventoryBundle\Entity\Delivery;
 use Appstore\Bundle\InventoryBundle\Form\DeliveryType;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,9 +33,9 @@ class DeliveryController extends Controller
     }
 
     /**
-     * Lists all Delivery entities.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER,ROLE_DOMAIN_INVENTORY_MANAGER,ROLE_DOMAIN_INVENTORY_APPROVE")
      */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();

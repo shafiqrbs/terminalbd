@@ -5,6 +5,7 @@ namespace Appstore\Bundle\DomainUserBundle\Entity;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Delivery;
+use Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
@@ -43,9 +44,14 @@ class Branches
     private  $branchManager;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Delivery", mappedBy="branches" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Delivery", mappedBy="branch" )
      **/
     private  $deliveries;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn", mappedBy="branch" )
+     **/
+    private  $deliveryReturns;
 
     /**
      * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\profile", mappedBy="branches" )
@@ -336,6 +342,14 @@ class Branches
     public function getDeliveries()
     {
         return $this->deliveries;
+    }
+
+    /**
+     * @return DeliveryReturn
+     */
+    public function getDeliveryReturns()
+    {
+        return $this->deliveryReturns;
     }
 
 

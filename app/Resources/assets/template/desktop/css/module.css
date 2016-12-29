@@ -1019,6 +1019,31 @@
     text-decoration:none;
 }
 
+.product-preview .view-link{
+    padding:0;
+    margin:0;
+    position:relative;
+    top:40%;
+}
+.product-preview .view-link li{
+    list-style:none;
+    margin-right:5px;
+    display:inline-block;
+}
+.product-preview .view-link li a{
+    width: 35px;
+    height: 35px;
+    line-height:35px;
+    border-radius:50%;
+    color:#fff;
+    background:rgba(0, 0, 0, 0.3);
+}
+.product-preview .view-link li a:hover{
+    background:#333;
+    text-decoration:none;
+}
+
+
 .thumbnail .product-caption{
     min-height: 125px;
     padding: 10px;

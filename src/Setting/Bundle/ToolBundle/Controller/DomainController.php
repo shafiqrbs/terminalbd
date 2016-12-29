@@ -46,10 +46,10 @@ class DomainController extends Controller
             );
 
         }
-        print_r($routes); exit;
+
         $routesString = Yaml::dump($routes);
 
-        file_put_contents(realpath(WEB_PATH . "../app/config/dynamic/sites.yml"), $routesString);
+        file_put_contents(realpath(WEB_PATH . "/../app/config/dynamic/sites.yml"), $routesString);
 
         return $this->redirect($this->generateUrl('tools_domain'));
     }

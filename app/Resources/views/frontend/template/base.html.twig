@@ -309,6 +309,20 @@
          }, 1000);
 
 
+         if (document.addEventListener) {
+             document.addEventListener('DOMContentLoaded', function() {
+                 heightsEqualizer('.product-equal-height');
+             });
+             window.addEventListener('resize', function(){
+                 heightsEqualizer('.product-equal-height');
+             });
+         }
+
+         setTimeout(function () { // set 1 second timeout for having all fonts loaded
+             heightsEqualizer('.product-equal-height');
+         }, 1000);
+
+
      {% block documentready %}{% endblock %}
 
     });

@@ -163,7 +163,6 @@
             endW = Math.round(($(this).outerWidth() / parentwidth) * 100);
             endH = $(this).outerHeight();
             id = $(this).attr('data-id');
-            alert(endW);
             $.ajax({
             url: '{{ path('appearancefeaturewidget_resizing') }}',
             type: "POST",

@@ -87,6 +87,7 @@ class DomainEditUserType extends AbstractType
             ),
             'Inventory'=> array(
                 'ROLE_DOMAIN_INVENTORY_SALES' => 'Inventory Sales/Delivery',
+                'ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER' => 'Branch Manager',
                 'ROLE_DOMAIN_INVENTORY_PURCHASE' => 'Inventory Purchase/Receive',
                 'ROLE_DOMAIN_INVENTORY_MANAGER' => 'Inventory Manager',
                 'ROLE_INVENTORY_REPORT' => 'Inventory Reports',

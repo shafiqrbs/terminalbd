@@ -160,7 +160,6 @@
         endW = $(this).outerWidth();
         endH = $(this).outerHeight();
         id = $(this).attr('data-id');
-        console.log($(this).attr('id'));
         $.ajax({
         url: '{{ path('ecommercetemplate_resizing') }}',
         type: "POST",

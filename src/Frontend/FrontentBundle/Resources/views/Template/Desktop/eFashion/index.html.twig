@@ -3,7 +3,7 @@
     <!-- Header Carousel -->
     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
         <section class="section-white top-nav-margin" >
-            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'position':'Header'}) %}
+            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'position':'Home'}) %}
         </section>
     {% endif %}
 
@@ -16,28 +16,6 @@
             </div>
         </section>
     {% endif %}#}
-    <section class="section-divide">
-        <div class="container">
-            <div class="header-double-line-right">
-                <h3>About Us</h3>
-            </div>
-            <div class="row">
-                <div class="row">
-                    {% render controller("FrontendBundle:TemplateWidget:aboutus",{'globalOption':globalOption.id,'wordlimit':400}) %}
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Page Content -->
-    {% for mod in  homeEntity.pageModules %}
-            {% if globalOption.siteSetting.modules.contains(mod.module) %}
-                {% render controller("FrontendBundle:TemplateWidget:moduleBaseContent",{'globalOption':globalOption.id,'pageModule':mod.id}) %}
-            {% endif %}
-
-  {#      {% include 'FrontendBundle:Template/Desktop/Widget:'~ mod.module.moduleClass ~'.html.twig' with {'module':mod.module , 'title' : mod.name ,'limit': 5,'cloumn': 2 } %}
-#}
-    {% endfor %}
-
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

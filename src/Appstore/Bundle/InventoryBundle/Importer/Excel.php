@@ -84,12 +84,12 @@ class Excel
                 $itemObj = new Item();
                 $itemObj->setName($this->sentence_case($item['Item Name']));
                 $itemObj->setMasterItem($masterItem);
-               // if($this->getInventoryConfig()->getIsColor() == 1) {
+                if($this->getInventoryConfig()->getIsColor() == 1) {
                     $itemObj->setColor($itemColor);
-                //}
-                //if($this->getInventoryConfig()->getIsSize() == 1) {
+                }
+                if($this->getInventoryConfig()->getIsSize() == 1) {
                     $itemObj->setSize($itemSize);
-                //}
+                }
                 //if($this->getInventoryConfig()->getIsVendor() == 1) {
                     $itemObj->setVendor($vendor);
                 //}

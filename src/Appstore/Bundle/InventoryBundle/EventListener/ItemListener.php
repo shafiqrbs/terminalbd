@@ -73,49 +73,58 @@ class ItemListener
         $masterSlug         = $entity->getMasterItem()->getSlug();
         $masterName         = $entity->getMasterItem()->getName();
 
-
-
         $color ='';
-        $colorSlug ='';
         $colorName ='';
 
         if(!empty($entity->getInventoryConfig()->getIsColor()) and $entity->getInventoryConfig()->getIsColor() == 1 ){
             $color              = '-C'.$this->getStrPad($entity->getColor()->getCode(),3);
-            $colorSlug          = '_'.$entity->getColor()->getSlug();
+            $colorSlug          = $entity->getColor()->getSlug();
             $colorName          = '-'.$entity->getColor()->getName();
+        }elseif(!empty($entity->getColor())){
+            $colorSlug          =$entity->getColor()->getSlug();
+        }else{
+            $colorSlug ='';
         }
 
         $size ='';
-        $sizeSlug = '';
         $sizeName = '';
 
         if(!empty($entity->getInventoryConfig()->getIsSize()) and $entity->getInventoryConfig()->getIsSize() == 1){
             $size               = '-S'.$this->getStrPad($entity->getSize()->getCode(),3);
-            $sizeSlug           = '_'.$entity->getSize()->getSlug();
+            $sizeSlug           = $entity->getSize()->getSlug();
             $sizeName           = '-'.$entity->getSize()->getName();
+        }elseif(!empty($entity->getSize())){
+            $sizeSlug           = $entity->getSize()->getSlug();
+        }else{
+            $sizeSlug = '';
         }
 
         $brand ='';
-        $brandSlug = '';
         $brandName = '';
 
         if(!empty($entity->getInventoryConfig()->getIsBrand()) and $entity->getInventoryConfig()->getIsBrand() == 1){
             $brand               = '-B'.$this->getStrPad($entity->getBrand()->getCode(),2);
-            $brandSlug           = '_'.$entity->getBrand()->getSlug();
+            $brandSlug           = $entity->getBrand()->getSlug();
             $brandName           = '-'.$entity->getBrand()->getName();
+        }elseif(!empty($entity->getBrand())){
+            $brandSlug           = $entity->getBrand()->getSlug();
+        }else{
+            $brandSlug = '';
         }
 
 
         $vendor ='';
-        $vendorSlug ='';
         $vendorName ='';
 
         if(!empty($entity->getInventoryConfig()->getIsVendor()) and $entity->getInventoryConfig()->getIsVendor() == 1 ){
             $vendor             = '-V'.$this->getStrPad($entity->getVendor()->getCode(),3);
-            $vendorSlug         = '_'.strtolower($entity->getVendor()->getSlug());
+            $vendorSlug         =  $entity->getVendor()->getSlug();
             $vendorName         = '-'.$entity->getVendor()->getVendorCode();
+        }elseif(!empty($entity->getVendor())){
+            $vendorSlug           = $entity->getVendor()->getSlug();
+        }else{
+            $vendorSlug = '';
         }
-
 
         $sku            = $masterItem.$color.$size.$brand.$vendor;
         $name           = $masterName.$colorName.$sizeName.$brandName.$vendorName;

@@ -221,10 +221,6 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('InventoryBundle:Purchase')->find($id);
-        $data = $request->request->all();
-        if( $entity->getVendor()->getId() == $data['appstore_bundle_inventorybundle_purchase']['vendor']){
-            $em->remove($entity->getPurchaseVendorItems());
-        }
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
