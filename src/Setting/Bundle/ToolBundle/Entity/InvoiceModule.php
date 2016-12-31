@@ -39,9 +39,9 @@ class InvoiceModule
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PortalBkashAccount", inversedBy="invoiceModules" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PortalMobileBankAccount", inversedBy="invoiceModules" )
      **/
-    private  $portalBkash;
+    private  $portalMobileBankAccount;
 
     /**
      * @Gedmo\Blameable(on="create")
@@ -294,27 +294,11 @@ class InvoiceModule
     }
 
     /**
-     * @param mixed $globalOption
+     * @param GlobalOption $globalOption
      */
     public function setGlobalOption($globalOption)
     {
         $this->globalOption = $globalOption;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPortalBkash()
-    {
-        return $this->portalBkash;
-    }
-
-    /**
-     * @param mixed $portalBkash
-     */
-    public function setPortalBkash($portalBkash)
-    {
-        $this->portalBkash = $portalBkash;
     }
 
     /**
@@ -350,7 +334,7 @@ class InvoiceModule
     }
 
     /**
-     * @return mixed
+     * @return PortalBankAccount
      */
     public function getPortalBankAccount()
     {
@@ -358,7 +342,7 @@ class InvoiceModule
     }
 
     /**
-     * @param mixed $portalBankAccount
+     * @param PortalBankAccount $portalBankAccount
      */
     public function setPortalBankAccount($portalBankAccount)
     {
@@ -451,6 +435,22 @@ class InvoiceModule
     public function setBillMonth($billMonth)
     {
         $this->billMonth = $billMonth;
+    }
+
+    /**
+     * @return PortalMobileBankAccount
+     */
+    public function getPortalMobileBankAccount()
+    {
+        return $this->portalMobileBankAccount;
+    }
+
+    /**
+     * @param PortalMobileBankAccount $portalMobileBankAccount
+     */
+    public function setPortalMobileBankAccount($portalMobileBankAccount)
+    {
+        $this->portalMobileBankAccount = $portalMobileBankAccount;
     }
 }
 

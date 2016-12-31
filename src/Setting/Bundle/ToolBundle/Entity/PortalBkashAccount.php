@@ -22,16 +22,6 @@ class PortalBkashAccount
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceSmsEmail", mappedBy="portalBkash" )
-     **/
-    private  $invoiceSmsEmails;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceModule", mappedBy="portalBkash" )
-     **/
-    private  $invoiceModules;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
@@ -160,20 +150,5 @@ class PortalBkashAccount
         $this->name = $name;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getInvoiceSmsEmails()
-    {
-        return $this->invoiceSmsEmails;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getInvoiceModules()
-    {
-        return $this->invoiceModules;
-    }
 }
 

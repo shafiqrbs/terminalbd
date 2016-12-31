@@ -31,14 +31,24 @@ class PortalBankAccountType extends AbstractType
                         ->orderBy('wt.name','ASC');
                 },
             ))
+            ->add('contactPerson','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter contact person'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Enter contact person'))
+                )
+            ))
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Enter mobile no'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Enter mobile no'))
+                )
+            ))
             ->add('branch','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter branch name'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
+                    new NotBlank(array('message'=>'Enter branch name'))
                 )
             ))
             ->add('accountNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter account no'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
+                    new NotBlank(array('message'=>'Enter account no'))
                 )
             ))
         ;

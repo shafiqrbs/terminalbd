@@ -532,16 +532,15 @@ class CategoryRepository extends MaterializedPathRepository
 
         $arr =array();
         foreach($categories as $category){
-            $arr[] = $category->getId();
+            $arr[] = array(
+                'id' => $category->getId(),
+                'name' => $category->getName(),
+                'level' => $category->getLevel(),
+                '__children' => $this->childrenHierarchy($category)
+            );
         }
 
-        $query = $this->createQueryBuilder("node")
-            ->where('node.parent IN (:parent)')
-            ->setParameter('parent', $arr)
-            ->getQuery();
-
-        $categories = $this->childrenHierarchy($query->getArrayResult());
-        $this->buildFlatCategoryTree($categories , $array);
+        $this->buildFlatCategoryTree($arr , $array);
 
         return $array == null ? array() : $array;
 

@@ -199,7 +199,7 @@
         </div>
     {% endif %}
     {% if widget.featureFor == 'Carousel' %}
-        {#{% if widget.category is defined and widget.category is not empty %}
+        {% if widget.category is defined and widget.category is not empty %}
             <div class="container">
                 <div class="header-double-line-right">
                     <h3>{{ widget.category.name }}</h3>
@@ -212,15 +212,16 @@
                 </div>
                 <div id="product" class="row">
                     <div id="category-slider" class="owl-carousel">
-                        {% for product in  widget.category.masterProducts.purchaseVendorItem |slice(0,12)  %}
+                        {% for masterProduct in  widget.category.masterProducts  %}
+                        {% for product in  masterProduct.purchaseVendorItem |slice(0,12)  %}
                             <div class="col-md-12">
                                 <div class="thumbnail js-equal-height">
                                     <div class="product-preview group list-group-image product-equal-height" >
-                                        <img class="img-responsive" src="{{ image(product.webPath).resize(400,400) }}" alt="">
+                                        <img class="img-responsive" src="{{ image(product.webPath).resize(400,400, 'purple') }}" alt="">
                                         <div class="team-content">
                                             <h3 class="team-prof">
                                                 <a href="#">{{ product.name }}</a>
-                                                <small>&#123;&#35;{{ product.price|number_format }}&#35;&#125;</small>
+                                                <small>{#{{ product.price|number_format }}#}</small>
                                             </h3>
                                             <ul class="social-link">
                                                 <li><a href="#" class="fa fa-facebook"></a></li>
@@ -241,11 +242,12 @@
                                 </div>
                             </div>
                         {% endfor %}
+                        {% endfor %}
                     </div>
 
                 </div>
             </div>
-        {% endif %}#}
+        {% endif %}
         {% if widget.promotion is defined and widget.promotion is not empty %}
             <div class="container">
                 <div class="header-double-line-right">
@@ -261,9 +263,9 @@
                     <div id="promotion-slider" class="owl-carousel">
                         {% for product in  widget.promotion.purchaseVendorItems |slice(0,12)  %}
                             <div class="col-md-12">
-                                <div class="thumbnail js-equal-height">
-                                    <div class="product-preview group list-group-image product-equal-height" >
-                                        <img class="img-responsive" src="{{ image(product.masterItem.webPath).resize(400,400) }}" alt="">
+                                <div class="thumbnail">
+                                    <div class="product-preview group list-group-image" >
+                                        <img class="img-responsive" src="{{ image(product.masterItem.webPath).resize(400,400, 'purple') }}" alt="">
                                         <div class="team-content">
                                             <ul class="view-link">
                                                 <li><a href="#" class="fa fa-shopping-cart"></a></li>

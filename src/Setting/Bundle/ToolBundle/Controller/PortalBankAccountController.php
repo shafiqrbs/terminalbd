@@ -41,7 +41,7 @@ class PortalBankAccountController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $name = $entity->getBank()->getName().','.$entity->getBranch();
+            $name = $entity->getBank()->getName().','.$entity->getAccountNo().','.$entity->getBranch();
             $entity->setName($name);
             $em->persist($entity);
             $em->flush();
@@ -159,7 +159,7 @@ class PortalBankAccountController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $name = $entity->getBank()->getName().','.$entity->getBranch();
+            $name = $entity->getBank()->getName().','.$entity->getAccountNo().','.$entity->getBranch();
             $entity->setName($name);
             $em->flush();
             $this->get('session')->getFlashBag()->add(

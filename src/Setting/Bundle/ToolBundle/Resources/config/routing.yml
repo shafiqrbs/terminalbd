@@ -1,22 +1,26 @@
+setting_tool_sms:
+    resource: "@SettingToolBundle/Resources/config/routing/smssender.yml"
+    prefix:   /domain/sender-sms
+
 setting_tool_invoicemodule:
     resource: "@SettingToolBundle/Resources/config/routing/invoicemodule.yml"
     prefix:   /domain/invoicemodule
 
 setting_tool_sidebar:
     resource: "@SettingToolBundle/Resources/config/routing/sidebar.yml"
-    prefix:   /domain/invoicemodule
+    prefix:   /domain/sidebar
 
 setting_tool_invoicesmsemail:
     resource: "@SettingToolBundle/Resources/config/routing/invoicesmsemail.yml"
-    prefix:   /domain/invoicesmsemail
+    prefix:   /domain/invoice-sms-email
 
 setting_tool_bankaccount:
     resource: "@SettingToolBundle/Resources/config/routing/portalbankaccount.yml"
-    prefix:   /admin/bankaccount
+    prefix:   /admin/bank
 
 setting_tool_bkash:
-    resource: "@SettingToolBundle/Resources/config/routing/portalbkashaccount.yml"
-    prefix:   /admin/bkash
+    resource: "@SettingToolBundle/Resources/config/routing/portalmobilebankaccount.yml"
+    prefix:   /admin/mobile-bank
 
 setting_tool_applicationpricing:
     resource: "@SettingToolBundle/Resources/config/routing/applicationpricing.yml"

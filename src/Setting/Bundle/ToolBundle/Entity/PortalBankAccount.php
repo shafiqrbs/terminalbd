@@ -58,6 +58,21 @@ class PortalBankAccount
     private $accountNo;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="contactPerson", type="string", length=255)
+     */
+    private $contactPerson;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobile", type="string", length=255)
+     */
+    private $mobile;
+
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean")
@@ -185,6 +200,38 @@ class PortalBankAccount
     public function getInvoiceModules()
     {
         return $this->invoiceModules;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContactPerson()
+    {
+        return $this->contactPerson;
+    }
+
+    /**
+     * @param string $contactPerson
+     */
+    public function setContactPerson($contactPerson)
+    {
+        $this->contactPerson = $contactPerson;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobile()
+    {
+        return $this->mobile;
+    }
+
+    /**
+     * @param string $mobile
+     */
+    public function setMobile($mobile)
+    {
+        $this->mobile = $mobile;
     }
 }
 

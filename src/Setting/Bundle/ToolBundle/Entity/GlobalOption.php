@@ -56,6 +56,17 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Core\UserBundle\Entity\User", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
     protected $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SmsSender", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $smsSenders;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\SmsSenderTotal", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $smsSenderTotal;
+
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\MediaBundle\Entity\PhotoGallery", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
@@ -1385,6 +1396,22 @@ class GlobalOption
     public function getFeatures()
     {
         return $this->features;
+    }
+
+    /**
+     * @return SmsSender
+     */
+    public function getSmsSenders()
+    {
+        return $this->smsSenders;
+    }
+
+    /**
+     * @return SmsSenderTotal
+     */
+    public function getSmsSenderTotal()
+    {
+        return $this->smsSenderTotal;
     }
 
 

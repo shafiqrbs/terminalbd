@@ -1,0 +1,7 @@
+smssender:
+    path:     /
+    defaults: { _controller: "SettingToolBundle:SmsSender:index" }
+
+smssender_delete:
+    path:     /delete
+    defaults: { _controller: "SettingToolBundle:SmsSender:delete" }

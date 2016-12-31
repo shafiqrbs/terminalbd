@@ -47,7 +47,7 @@ class SmsEmailPricingController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been inserted successfully"
             );
-            return $this->redirect($this->generateUrl('tools_smspricing'));
+            return $this->redirect($this->generateUrl('smspricing'));
         }
 
         return $this->render('SettingToolBundle:SmsEmailPricing:new.html.twig', array(
@@ -66,7 +66,7 @@ class SmsEmailPricingController extends Controller
     private function createCreateForm(SmsEmailPricing $entity)
     {
         $form = $this->createForm(new SmsEmailPricingType(), $entity, array(
-            'action' => $this->generateUrl('tools_smspricing_create'),
+            'action' => $this->generateUrl('smspricing_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -126,7 +126,7 @@ class SmsEmailPricingController extends Controller
 
         $editForm = $this->createEditForm($entity);
 
-        return $this->render('SettingToolBundle:SmsEmailPricing:edit.html.twig', array(
+        return $this->render('SettingToolBundle:SmsEmailPricing:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -142,7 +142,7 @@ class SmsEmailPricingController extends Controller
     private function createEditForm(SmsEmailPricing $entity)
     {
         $form = $this->createForm(new SmsEmailPricingType(), $entity, array(
-            'action' => $this->generateUrl('tools_smspricing_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('smspricing_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -169,14 +169,15 @@ class SmsEmailPricingController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+
+            $entity->setAmount($entity->getQuantity() * $entity->getPrice());
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
             );
-            return $this->redirect($this->generateUrl('tools_smspricing_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('smspricing'));
         }
-
-        return $this->render('SettingToolBundle:SmsEmailPricing:edit.html.twig', array(
+        return $this->render('SettingToolBundle:SmsEmailPricing:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -198,7 +199,7 @@ class SmsEmailPricingController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'error',"Data has been deleted successfully"
             );
-            return $this->redirect($this->generateUrl('tools_smspricing'));
+            return $this->redirect($this->generateUrl('smspricing'));
     }
 
 
@@ -221,7 +222,7 @@ class SmsEmailPricingController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('tools_smspricing'));
+        return $this->redirect($this->generateUrl('smspricing'));
     }
 
 }

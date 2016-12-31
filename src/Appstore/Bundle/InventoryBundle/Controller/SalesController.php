@@ -451,21 +451,21 @@ EOD;
         }
         $entity->setProcess($data['value']);
         $em->flush();
+
+        $dispatcher = $this->container->get('event_dispatcher');
+        $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
         exit;
 
     }
 
     public function salesSelectAction()
     {
-
         $items  = array();
         $items[]= array('value' => 'Done','text'=>'Done');
         $items[]= array('value' => 'In-progress','text'=>'In-progress');
         $items[]= array('value' => 'Waiting Delivery','text'=>'Waiting Delivery');
         $items[]= array('value' => 'Return & Cancel','text'=>'Return & Cancel');
         return new JsonResponse($items);
-
-
     }
 
 

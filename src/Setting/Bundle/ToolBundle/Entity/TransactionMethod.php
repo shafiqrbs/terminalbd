@@ -32,6 +32,11 @@ class TransactionMethod
      */
     private $id;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceSmsEmail", mappedBy="portalMobileBankAccount" )
+     **/
+    private  $invoiceSmsEmails;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="transactionMethod" , cascade={"persist", "remove"})
@@ -324,6 +329,14 @@ class TransactionMethod
     public function getPurchase()
     {
         return $this->purchase;
+    }
+
+    /**
+     * @return InvoiceSmsEmail
+     */
+    public function getInvoiceSmsEmails()
+    {
+        return $this->invoiceSmsEmails;
     }
 }
 

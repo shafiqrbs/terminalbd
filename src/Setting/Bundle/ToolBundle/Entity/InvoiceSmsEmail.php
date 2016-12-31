@@ -39,9 +39,15 @@ class InvoiceSmsEmail
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PortalBkashAccount", inversedBy="invoiceSmsEmails" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PortalMobileBankAccount", inversedBy="invoiceSmsEmails" )
      **/
-    private  $portalBkash;
+    private  $portalMobileBankAccount;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="invoiceSmsEmails" )
+     **/
+    private  $transactionMethod;
+
 
     /**
      * @Gedmo\Blameable(on="create")
@@ -54,6 +60,26 @@ class InvoiceSmsEmail
      **/
     private  $receivedBy;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="paymentMobile", type="string", length=50, nullable=true)
+     */
+    private $paymentMobile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="accountNo", type="string", length=100, nullable=true)
+     */
+    private $accountNo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="transactionId", type="string", length=100, nullable=true)
+     */
+    private $transactionId;
 
     /**
      * @var integer
@@ -289,21 +315,6 @@ class InvoiceSmsEmail
         $this->globalOption = $globalOption;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPortalBkash()
-    {
-        return $this->portalBkash;
-    }
-
-    /**
-     * @param mixed $portalBkash
-     */
-    public function setPortalBkash($portalBkash)
-    {
-        $this->portalBkash = $portalBkash;
-    }
 
     /**
      * @return \DateTime
@@ -338,7 +349,7 @@ class InvoiceSmsEmail
     }
 
     /**
-     * @return mixed
+     * @return PortalBankAccount
      */
     public function getPortalBankAccount()
     {
@@ -346,7 +357,7 @@ class InvoiceSmsEmail
     }
 
     /**
-     * @param mixed $portalBankAccount
+     * @param PortalBankAccount $portalBankAccount
      */
     public function setPortalBankAccount($portalBankAccount)
     {
@@ -362,7 +373,7 @@ class InvoiceSmsEmail
     }
 
     /**
-     * @param mixed $createdBy
+     * @param CreatedBy $createdBy
      */
     public function setCreatedBy($createdBy)
     {
@@ -370,7 +381,7 @@ class InvoiceSmsEmail
     }
 
     /**
-     * @return mixed
+     * @return ReceivedBy
      */
     public function getReceivedBy()
     {
@@ -407,6 +418,86 @@ class InvoiceSmsEmail
     public function getInvoiceSmsEmailItems()
     {
         return $this->invoiceSmsEmailItems;
+    }
+
+    /**
+     * @return PortalMobileBankAccount
+     */
+    public function getPortalMobileBankAccount()
+    {
+        return $this->portalMobileBankAccount;
+    }
+
+    /**
+     * @param PortalMobileBankAccount $portalMobileBankAccount
+     */
+    public function setPortalMobileBankAccount($portalMobileBankAccount)
+    {
+        $this->portalMobileBankAccount = $portalMobileBankAccount;
+    }
+
+    /**
+     * @return TransactionMethod
+     */
+    public function getTransactionMethod()
+    {
+        return $this->transactionMethod;
+    }
+
+    /**
+     * @param TransactionMethod $transactionMethod
+     */
+    public function setTransactionMethod($transactionMethod)
+    {
+        $this->transactionMethod = $transactionMethod;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentMobile()
+    {
+        return $this->paymentMobile;
+    }
+
+    /**
+     * @param string $paymentMobile
+     */
+    public function setPaymentMobile($paymentMobile)
+    {
+        $this->paymentMobile = $paymentMobile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountNo()
+    {
+        return $this->accountNo;
+    }
+
+    /**
+     * @param string $accountNo
+     */
+    public function setAccountNo($accountNo)
+    {
+        $this->accountNo = $accountNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransactionId()
+    {
+        return $this->transactionId;
+    }
+
+    /**
+     * @param string $transactionId
+     */
+    public function setTransactionId($transactionId)
+    {
+        $this->transactionId = $transactionId;
     }
 }
 
