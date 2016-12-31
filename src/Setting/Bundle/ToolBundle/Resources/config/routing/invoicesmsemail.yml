@@ -14,11 +14,6 @@ invoicesmsemail_new:
     path:      /{option}/new
     defaults: { _controller: "SettingToolBundle:InvoiceSmsEmail:new" }
 
-invoicesmsemail_create:
-    path:     /create
-    defaults: { _controller: "SettingToolBundle:InvoiceSmsEmail:create" }
-    methods:  POST
-
 invoicesmsemail_edit:
     path:     /{invoice}/edit
     defaults: { _controller: "SettingToolBundle:InvoiceSmsEmail:edit" }

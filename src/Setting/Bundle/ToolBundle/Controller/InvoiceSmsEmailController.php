@@ -2,6 +2,8 @@
 
 namespace Setting\Bundle\ToolBundle\Controller;
 
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\InvoiceSmsEmailItem;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,19 +34,27 @@ class InvoiceSmsEmailController extends Controller
 
 
     /**
-     * Lists all InvoiceSmsEmail entities.
-     *
+     * @Secure(roles="ROLE_DOMAIN")
      */
+
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('SettingToolBundle:InvoiceSmsEmail')->findBy(array(),array('updated'=>'DESC'));
+        $globalOption = $this->getUser()->getGlobalOption();
+        $option = '';
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
+            $entities = $em->getRepository('SettingToolBundle:InvoiceSmsEmail')->findBy(array(), array('updated' => 'DESC'));
+        }else{
+            $option = $globalOption;
+            $entities = $em->getRepository('SettingToolBundle:InvoiceSmsEmail')->findBy(array('globalOption'=>$globalOption),array('updated'=>'desc'));
+        }
         $entities = $this->paginate($entities);
         return $this->render('SettingToolBundle:InvoiceSmsEmail:index.html.twig', array(
             'entities' => $entities,
+            'globalOption' => $option,
         ));
     }
+
     /**
      * Lists all InvoiceSmsEmail entities.
      *
@@ -59,50 +69,9 @@ class InvoiceSmsEmailController extends Controller
             'entities' => $entities,
         ));
     }
-    /**
-     * Creates a new InvoiceSmsEmail entity.
-     *
-     */
-    public function createAction(Request $request)
-    {
-        $entity = new InvoiceSmsEmail();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
 
-            return $this->redirect($this->generateUrl('invoicesmsemail_show', array('invoice' => $entity->getInvoice())));
-        }
-
-        return $this->render('SettingToolBundle:InvoiceSmsEmail:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
-    }
-
-    /**
-     * Creates a form to create a InvoiceSmsEmail entity.
-     *
-     * @param InvoiceSmsEmail $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(InvoiceSmsEmail $entity)
-    {
-        $form = $this->createForm(new InvoiceSmsEmailType(), $entity, array(
-            'action' => $this->generateUrl('invoicesmsemail_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
-    }
-
-    /**
+     /**
      * Displays a form to create a new InvoiceSmsEmail entity.
      *
      */
@@ -126,17 +95,11 @@ class InvoiceSmsEmailController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('SettingToolBundle:InvoiceSmsEmail')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find InvoiceSmsEmail entity.');
         }
-        $banks = $em->getRepository('SettingToolBundle:PortalBankAccount')->findBy(array('status'=>1));
-        $bkashs = $em->getRepository('SettingToolBundle:PortalBkashAccount')->findBy(array('status'=>1));
         return $this->render('SettingToolBundle:InvoiceSmsEmail:show.html.twig', array(
             'entity'      => $entity,
-            'banks'      => $banks,
-            'bkashs'      => $bkashs,
-
         ));
     }
 
@@ -173,6 +136,10 @@ class InvoiceSmsEmailController extends Controller
         $form = $this->createForm(new InvoiceSmsEmailType(), $entity, array(
             'action' => $this->generateUrl('invoicesmsemail_update', array('id' => $entity->getId())),
             'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
         ));
         return $form;
     }
@@ -195,13 +162,18 @@ class InvoiceSmsEmailController extends Controller
 
         if ($editForm->isValid()) {
             $data = $request->request->all();
+            $intlMobile = $entity->getPaymentMobile();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+            $entity->setPaymentMobile($mobile);
+            $entity->setProcess('Pending');
             $em->flush();
             $this->getDoctrine()->getRepository('SettingToolBundle:InvoiceSmsEmailItem')->insertItem($entity,$data);
             $this->getDoctrine()->getRepository('SettingToolBundle:InvoiceSmsEmail')->updateInvoice($entity);
+
             return $this->redirect($this->generateUrl('invoicesmsemail_show', array('id' => $id)));
         }
 
-        return $this->render('SettingToolBundle:InvoiceSmsEmail:edit.html.twig', array(
+        return $this->render('SettingToolBundle:InvoiceSmsEmail:show.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -255,26 +227,20 @@ class InvoiceSmsEmailController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find InvoiceSmsEmail entity.');
         }
-        $data = $request->request->all();
-        if( ($data['paymentMethod'] != "" && $data['bank'] != "") || ( $data['paymentMethod'] != "" && $data['bkash'] != "") ){
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
 
-            $entity->setPaymentMethod($data['paymentMethod']);
-            if($entity->getPaymentMethod() == 'Bank')
-            {
-                $bank = $this->getDoctrine()->getRepository('SettingToolBundle:PortalBankAccount')->find($data['bank']);
-                $entity->setPortalBankAccount($bank);
-
-            }else{
-
-                $bkash = $this->getDoctrine()->getRepository('SettingToolBundle:PortalBkashAccount')->find($data['bkash']);
-                $entity->setPortalBkash($bkash);
-            }
+        if ($editForm->isValid()) {
+            $intlMobile = $entity->getPaymentMobile();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+            $entity->setPaymentMobile($mobile);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
-                'success',"Data has been updated successfully"
+                'success', "Data has been updated successfully"
             );
-            $this->getDoctrine()->getRepository('SettingToolBundle:InvoiceSmsEmail')->updateInvoice($entity);
         }
+        $this->getDoctrine()->getRepository('SettingToolBundle:InvoiceSmsEmail')->updateInvoice($entity);
+
 
         exit;
 

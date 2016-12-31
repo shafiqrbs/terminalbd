@@ -77,9 +77,9 @@ class InvoiceSmsEmail
     /**
      * @var string
      *
-     * @ORM\Column(name="transactionId", type="string", length=100, nullable=true)
+     * @ORM\Column(name="transaction", type="string", length=100, nullable=true)
      */
-    private $transactionId;
+    private $transaction;
 
     /**
      * @var integer
@@ -487,17 +487,19 @@ class InvoiceSmsEmail
     /**
      * @return string
      */
-    public function getTransactionId()
+    public function getTransaction()
     {
-        return $this->transactionId;
+        return $this->transaction;
     }
 
     /**
-     * @param string $transactionId
+     * @param string $transaction
      */
-    public function setTransactionId($transactionId)
+    public function setTransaction($transaction)
     {
-        $this->transactionId = $transactionId;
+        $this->transaction = $transaction;
     }
+
+
 }
 

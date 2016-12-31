@@ -21,11 +21,9 @@ class InvoiceSmsEmailListener
         if ($entity instanceof InvoiceSmsEmail) {
 
             $datetime = new \DateTime("now");
-
             $lastCode = $this->getLastCode($args, $datetime, $entity);
-
             $entity->setCode($lastCode+1);
-            $entity->setInvoice(sprintf("%s%s%s",$entity->getGlobalOption()->getId(), $datetime->format('Ymd'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
+            $entity->setInvoice(sprintf("%s%s%s",$entity->getGlobalOption()->getId(), $datetime->format('mY'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
         }
     }
 
@@ -37,8 +35,8 @@ class InvoiceSmsEmailListener
      */
     public function getLastCode(LifecycleEventArgs $args, $datetime, $entity)
     {
-        $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
-        $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
+        $today_startdatetime = $datetime->format('Y-m-01 00:00:00');
+        $today_enddatetime = $datetime->format('Y-m-t 23:59:59');
 
 
         $entityManager = $args->getEntityManager();

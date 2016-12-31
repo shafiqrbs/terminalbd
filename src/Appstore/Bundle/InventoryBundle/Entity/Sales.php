@@ -138,6 +138,13 @@ class Sales
         /**
          * @var string
          *
+         * @ORM\Column(name="paymentInWord", type="string", length=255, nullable=true)
+         */
+        private $paymentInWord;
+
+        /**
+         * @var string
+         *
          * @ORM\Column(name="courierInvoice", type="string", length=50, nullable=true)
          */
         private $courierInvoice;
@@ -844,6 +851,22 @@ class Sales
         public function setProcess($process)
         {
                 $this->process = $process;
+        }
+
+        /**
+         * @return string
+         */
+        public function getPaymentInWord()
+        {
+                return $this->paymentInWord;
+        }
+
+        /**
+         * @param string $paymentInWord
+         */
+        public function setPaymentInWord($paymentInWord)
+        {
+                $this->paymentInWord = $paymentInWord;
         }
 
 

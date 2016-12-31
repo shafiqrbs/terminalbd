@@ -162,7 +162,7 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
         $menu['Manage Invoice']->addChild('Domain Invoice') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
         $menu['Manage Invoice']['Domain Invoice']->addChild('Send SMS',              array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
-        $menu['Manage Invoice']['Domain Invoice']->addChild('Sms/Email',              array('route' => 'invoicesmsemail_domain'))->setAttribute('icon', 'icon-money');
+        $menu['Manage Invoice']['Domain Invoice']->addChild('Sms/Email',              array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
         $menu['Manage Invoice']['Domain Invoice']->addChild('New Invoice',         array('route' => 'invoicesmsemail_new','routeParameters'=> array('option' => $globalOption->getId())))->setAttribute('icon', 'icon-money');
         $menu['Manage Invoice']->addChild('Application Invoice') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
         $menu['Manage Invoice']['Application Invoice']->addChild('Invoice Module',         array('route' => 'invoicemodule_domain'))->setAttribute('icon', 'icon-money');

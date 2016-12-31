@@ -245,6 +245,9 @@ class SalesController extends Controller
                 $entity->setDiscount($data['discount']);
                 $entity->setTotal($data['paymentTotal']);
                 $entity->setPayment($data['paymentTotal'] - $data['dueAmount']);
+                $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+                $entity->setPaymentInWord($amountInWords);
+
                 if ($data['paymentTotal'] <= $data['paymentAmount']) {
                     $entity->setPaymentStatus('Paid');
                 } else if ($data['paymentTotal'] > $data['paymentAmount']) {
@@ -407,9 +410,6 @@ EOD;
 
     public function invoicePrintAction(Sales $entity)
     {
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Sales entity.');
-        }
         return $this->render('InventoryBundle:Sales:invoice.html.twig', array(
             'entity'      => $entity,
         ));
@@ -467,6 +467,9 @@ EOD;
         $items[]= array('value' => 'Return & Cancel','text'=>'Return & Cancel');
         return new JsonResponse($items);
     }
+
+
+
 
 
 }
