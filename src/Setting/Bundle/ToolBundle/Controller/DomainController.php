@@ -124,6 +124,7 @@ class DomainController extends Controller
                 'success',"Change password successfully"
             );
         }
+        exit;
         return $this->redirect($this->generateUrl('tools_domain'));
 
     }

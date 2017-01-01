@@ -702,40 +702,40 @@ class Builder extends ContainerAware
     public function AccountingMenu($menu)
     {
         $menu
-            ->addChild('Finance')
+            ->addChild('Accounting')
             ->setAttribute('icon','fa fa-money')
             ->setAttribute('dropdown', true);
-        $menu['Finance']->addChild('Transaction & Report', array('route' => 'account_transaction'))
+        $menu['Accounting']->addChild('Transaction & Report', array('route' => 'account_transaction'))
             ->setAttribute('icon','fa fa-money')
             ->setAttribute('dropdown', true);
-        $menu['Finance']['Transaction & Report']->addChild('Transaction Overview',        array('route' => 'account_transaction'))->setAttribute('icon', 'icon-th-list');
-        $menu['Finance']['Transaction & Report']->addChild('Income',        array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
-        $menu['Finance']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');
+        $menu['Accounting']['Transaction & Report']->addChild('Transaction Overview',        array('route' => 'account_transaction'))->setAttribute('icon', 'icon-th-list');
+        $menu['Accounting']['Transaction & Report']->addChild('Income',        array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
+        $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');
 
-        $menu['Finance']->addChild('Cash', array('route' => ''))
+        $menu['Accounting']->addChild('Cash', array('route' => ''))
             ->setAttribute('icon','fa fa-money')
             ->setAttribute('dropdown', true);
-        $menu['Finance']['Cash']->addChild('Cash Overview',        array('route' => 'account_transaction_cash_overview'))->setAttribute('icon', 'icon-th-list');
-        $menu['Finance']['Cash']->addChild('Cash Transaction',        array('route' => 'account_transaction_cash'))->setAttribute('icon', 'icon-th-list');
-        $menu['Finance']['Cash']->addChild('Bank Transaction',        array('route' => 'account_transaction_bank'))->setAttribute('icon', 'icon-th-list');
-        $menu['Finance']['Cash']->addChild('Mobile Transaction',        array('route' => 'account_transaction_mobilebank'))->setAttribute('icon', 'icon-th-list');
-        $menu['Finance']->addChild('Expenditure', array('route' => 'account_expenditure'))
+        $menu['Accounting']['Cash']->addChild('Cash Overview',        array('route' => 'account_transaction_cash_overview'))->setAttribute('icon', 'icon-th-list');
+        $menu['Accounting']['Cash']->addChild('Cash Transaction',        array('route' => 'account_transaction_cash'))->setAttribute('icon', 'icon-th-list');
+        $menu['Accounting']['Cash']->addChild('Bank Transaction',        array('route' => 'account_transaction_bank'))->setAttribute('icon', 'icon-th-list');
+        $menu['Accounting']['Cash']->addChild('Mobile Transaction',        array('route' => 'account_transaction_mobilebank'))->setAttribute('icon', 'icon-th-list');
+        $menu['Accounting']->addChild('Expenditure', array('route' => 'account_expenditure'))
               ->setAttribute('icon','fa fa-money')
               ->setAttribute('dropdown', true);
-        $menu['Finance']['Expenditure']->addChild('Expense',        array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');
-        $menu['Finance']['Expenditure']->addChild('Expense Category',        array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');
+        $menu['Accounting']['Expenditure']->addChild('Expense',        array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');
+        $menu['Accounting']['Expenditure']->addChild('Expense Category',        array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');
         /*$menu['Finance']->addChild('Petty Cash & Expense', array('route' => 'account_pettycash'))
             ->setAttribute('icon','fa fa-money')
             ->setAttribute('dropdown', true);
         $menu['Finance']['Petty Cash & Expense']->addChild('Petty Cash', array('route' => 'account_pettycash'))->setAttribute('icon', 'icon-th-list');
         $menu['Finance']['Petty Cash & Expense']->addChild('Expense',        array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');
         $menu['Finance']['Petty Cash & Expense']->addChild('Expense Category',        array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');*/
-        $menu['Finance']->addChild('Sales', array('route' => 'account_sales'));
-        $menu['Finance']->addChild('Sales Return', array('route' => 'account_sales_return'));
-        $menu['Finance']->addChild('Online Order', array('route' => 'account_onlineorder'));
-        $menu['Finance']->addChild('Purchase', array('route' => 'account_purchase'));
-        $menu['Finance']->addChild('Purchase Return', array('route' => 'account_purchase_return'));
-        $menu['Finance']->addChild('Journal', array('route' => 'account_journal'));
+        $menu['Accounting']->addChild('Sales', array('route' => 'account_sales'));
+        $menu['Accounting']->addChild('Sales Return', array('route' => 'account_sales_return'));
+        $menu['Accounting']->addChild('Online Order', array('route' => 'account_onlineorder'));
+        $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase'));
+        $menu['Accounting']->addChild('Purchase Return', array('route' => 'account_purchase_return'));
+        $menu['Accounting']->addChild('Journal', array('route' => 'account_journal'));
         return $menu;
 
     }
