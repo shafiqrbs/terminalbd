@@ -124,8 +124,21 @@ class DomainController extends Controller
                 'success',"Change password successfully"
             );
         }
-        exit;
         return $this->redirect($this->generateUrl('tools_domain'));
+
+    }
+
+    public function resetManualDomainPasswordAction(Request $request, GlobalOption $option)
+    {
+        $entity = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('globalOption'=> $option,'domainOwner'=>1));
+        if(!empty($entity)){
+            $a = $request->request->get('password');
+            $entity->setPlainPassword($a);
+            $this->get('fos_user.user_manager')->updateUser($entity);
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.change_domain_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeDomainSmsEvent($option,$entity->getUsername(),$a));
+        }
+        exit;
 
     }
 
