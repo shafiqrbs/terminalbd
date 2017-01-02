@@ -38,7 +38,8 @@ class ItemSizeListener
         $qb = $entityManager->getRepository('InventoryBundle:ItemSize')->createQueryBuilder('s');
         $qb
             ->select('MAX(s.code)')
-            ->where('s.isValid = 1');
+            ->where('s.isValid = 1')
+            ->andWhere('s.inventoryConfig_id = 2');
         $lastCode = $qb->getQuery()->getSingleScalarResult();
         if (empty($lastCode)) {
             return 0;

@@ -184,7 +184,7 @@ class ToolManager
                 }
             }
         }
-        $textAmount = ucwords($w).'Taka Only';
+        $textAmount = ucwords($w);
         return $textAmount;
     }
 

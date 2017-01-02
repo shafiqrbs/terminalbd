@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
@@ -14,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Form\SalesType;
 use Symfony\Component\HttpFoundation\Response;
-
+use Hackzilla\BarcodeBundle\Utility\Barcode;
 /**
  * Sales controller.
  *
@@ -408,10 +409,26 @@ EOD;
 
     }
 
+    public function getBarcode($invoice)
+    {
+        $barcode = new BarcodeGenerator();
+        $barcode->setText($invoice);
+        $barcode->setType(BarcodeGenerator::Code128);
+        $barcode->setScale(1);
+        $barcode->setThickness(34);
+        $barcode->setFontSize(8);
+        $code = $barcode->generate();
+        $data = '';
+        $data .='<img src="data:image/png;base64,'.$code.'" />';
+        return $data;
+    }
+
     public function invoicePrintAction(Sales $entity)
     {
+        $barcode = $this->getBarcode($entity->getInvoice());
         return $this->render('InventoryBundle:Sales:invoice.html.twig', array(
             'entity'      => $entity,
+            'barcode'     => $barcode,
         ));
     }
 

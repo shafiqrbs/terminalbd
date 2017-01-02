@@ -4,6 +4,8 @@ namespace Appstore\Bundle\InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * ItemBrand
@@ -60,13 +62,38 @@ class ItemBrand  implements CodeAwareEntity
      */
     private $code;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="brandCode", type="string", length=50,nullable = true )
+     */
+    private $brandCode;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean")
      */
-    private $status=true;
+    private $status = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isWeb", type="boolean")
+     */
+    private $isWeb = false;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $path;
+
+    /**
+     * @Assert\File(maxSize="8388608")
+     */
+    protected $file;
+
+
 
 
     /**
@@ -211,5 +238,92 @@ class ItemBrand  implements CodeAwareEntity
     {
         return $this->items;
     }
+
+    /**
+     * @return string
+     */
+    public function getBrandCode()
+    {
+        return $this->brandCode;
+    }
+
+    /**
+     * @param string $brandCode
+     */
+    public function setBrandCode($brandCode)
+    {
+        $this->brandCode = $brandCode;
+    }
+
+    /**
+     * Sets file.
+     *
+     * @param WebTheme $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return WebTheme
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadRootDir().'/'.$this->path;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->path
+            ? null
+            : $this->getUploadDir().'/'.$this->path;
+    }
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        //return 'uploads/files/inventory/purchase/'.$this->getPurchasePrice().'item/';
+        return 'uploads/domain/'.$this->getInventoryConfig()->getGlobalOption()->getId().'/inventory/item/';
+    }
+
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+        $this->getFile()->move(
+            $this->getUploadRootDir(),
+            $this->getFile()->getClientOriginalName()
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->path = $this->getFile()->getClientOriginalName();
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
+    }
+
+
 }
 

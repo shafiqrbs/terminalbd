@@ -84,12 +84,12 @@ class Excel
                 $itemObj = new Item();
                 $itemObj->setName($this->sentence_case($item['Item Name']));
                 $itemObj->setMasterItem($masterItem);
-                if($this->getInventoryConfig()->getIsColor() == 1) {
+                //if($this->getInventoryConfig()->getIsColor() == 1) {
                     $itemObj->setColor($itemColor);
-                }
-                if($this->getInventoryConfig()->getIsSize() == 1) {
+                //}
+                //if($this->getInventoryConfig()->getIsSize() == 1) {
                     $itemObj->setSize($itemSize);
-                }
+                //}
                 //if($this->getInventoryConfig()->getIsVendor() == 1) {
                     $itemObj->setVendor($vendor);
                 //}
@@ -236,6 +236,7 @@ class Excel
             $color = $colorRepository->findOneBy(array(
                 'status'              => 1,
                 'isValid'             => 1,
+                'inventoryConfig_id'  => 2,
                 'name'                => $item['Color']
             ));
             if($color == NULL) {
@@ -260,6 +261,7 @@ class Excel
             $size = $sizeRepository->findOneBy(array(
                 'status'              => 1,
                 'isValid'             => 1,
+                'inventoryConfig_id'  => 2,
                 'name'                => $item['Size']
             ));
 

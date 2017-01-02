@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>{% if app.user.globaloption is not empty and app.user.globaloption is defined %}{{ app.user.globaloption.name }}{% endif %} | ADMIN PANEL</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}">
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    {% stylesheets filter='cssrewrite'
+        'assets/plugins/font-awesome/css/font-awesome.min.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+
+    {% block cssBlock %}
+
+    {% endblock %}
+    <link rel="shortcut icon" href="favicon.ico"/>
+</head>
+<body>
+<div class="page-container row-fluid">
+    <div class="page-content">
+        {% block body %}{% endblock %}
+    </div>
+</div>
+<style>
+    body{
+        background-color:#fff!important;
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 11px;
+    }
+
+    ul{
+        list-style: none;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    ul li {
+        list-style: none;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    table.table {
+        clear: both;
+        margin-bottom: 6px !important;
+        max-width: none !important;
+        font-family: Helvetica, Arial, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ddd;
+        width: 100%;
+    }
+
+    .table th, .table td {
+        padding: 8px;
+        line-height: 20px;
+        text-align: left;
+        vertical-align: top;
+        font-size: 11px;
+    }
+
+    .table thead th {
+        vertical-align: bottom;
+    }
+    .table thead tr th {
+        font-size: 11px;
+        font-weight: normal;
+    }
+    .table-bordered tr td{
+        border: 1px solid #444 !important;
+    }
+    .table-striped tbody>tr:nth-child(odd)>td,
+    .table-striped tbody>tr:nth-child(odd)>th {
+        background-color: #f9f9f9;
+    }
+    .head-black{
+        background:#444!important;
+        height: 30px;
+        color: #ffffff;
+    }
+
+
+    .header .navbar-inner{
+        display: none;
+    }
+    .page-sidebar{
+        display: none;
+    }
+
+    .page-content{
+        margin-left: 0 !important;
+    }
+    .table{
+        border: none!important;
+    }
+    .table th, .table td{
+        border-top: none;
+    }
+    .table th .span4, .table td .span4{
+        width: 100%;
+    }
+    .table-bordered th, .table-bordered td{
+        border-left:none;
+    }
+
+    .footer{
+        display: none!important;
+    }
+   .page-content{
+        margin-left:0;
+        margin: 0 auto !important;
+        width: 100%;
+    }
+
+</style>
+{#'http://bp.yahooapis.com/2.4.21/browserplus-min.js'#}
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        {% block documentready %}
+        {% endblock %}
+    });
+</script>
+
+{% block footer %}
+    <div class="footer">
+        <div class="footer-inner">
+            {{ "now"|date("Y") }} &copy; Created By UMAR BIZ LIMITED.
+        </div>
+        <div class="footer-tools">
+        <span class="go-top">
+            <i class="fa fa-angle-up"></i>
+        </span>
+        </div>
+    </div>
+{% endblock footer %}
+</body>
+</html>

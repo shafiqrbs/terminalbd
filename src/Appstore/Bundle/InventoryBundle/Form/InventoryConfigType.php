@@ -27,6 +27,7 @@ class InventoryConfigType extends AbstractType
                 'attr'=>array('class'=>'check-list  span12'),
                 'choices' => array(
                     'Pos' => 'Point of sales(POS)',
+                    'Customer Sales' => 'Customer Sales',
                     'ManualPos' => 'Manual Sales System',
                     'BranchInvoice' => 'Branch Invoice',
                 ),
@@ -36,9 +37,75 @@ class InventoryConfigType extends AbstractType
                 'empty_data'  => null,
             ))
             ->add('vatEnable')
-            ->add('isColor')
             ->add('isBranch')
+            ->add('isColor')
             ->add('isSize')
+            ->add('barcodeColor')
+            ->add('barcodeSize')
+            ->add('barcodeBrandVendor',
+                'choice', array(
+                    'attr'=>array('class'=>'span12'),
+                    'choices' => array(
+                        '' => '--Select one--',
+                        '1' => 'Brand',
+                        '2' => 'Vendor',
+                    ),
+                    'required'    => true,
+                    'multiple'    => false,
+                    'expanded'  => false,
+                    'empty_data'  => null,
+            ))
+            ->add('barcodeThickness',
+                'choice', array(
+                    'attr'=>array('class'=>'span12'),
+                    'choices' => array(
+                        '30' => '30',
+                        '32' => '32',
+                        '34' => '34',
+                        '36' => '36',
+                        '38' => '38',
+                        '40' => '40',
+                    ),
+                    'required'    => true,
+                    'multiple'    => false,
+                    'expanded'  => false,
+                    'empty_data'  => 30,
+            ))
+            ->add('barcodeFontSize',
+                'choice', array(
+                    'attr'=>array('class'=>'span12'),
+                    'choices' => array(
+                        '8' => '8',
+                        '9' => '9',
+                        '10' => '10',
+                        '11' => '11',
+                        '12' => '12',
+                        '13' => '13',
+                    ),
+                    'required'    => true,
+                    'multiple'    => false,
+                    'expanded'  => false,
+                    'empty_data'  => 8,
+            ))
+            ->add('barcodeScale',
+                'choice', array(
+                    'attr'=>array('class'=>'span12'),
+                    'choices' => array(
+                        '1' => '1',
+                        '2' => '2',
+                        '3' => '3',
+                        '4' => '4',
+                    ),
+                    'required'    => true,
+                    'multiple'    => false,
+                    'expanded'  => false,
+                    'empty_data'  =>1,
+            ))
+            ->add('barcodeText','text',array('attr'=>array('class'=>'span12')))
+            ->add('barcodeHeight','integer',array('attr'=>array('class'=>'numeric span8')))
+            ->add('barcodeWidth','integer',array('attr'=>array('class'=>'numeric span8')))
+            ->add('barcodeMargin','integer',array('attr'=>array('class'=>'numeric span8')))
+            ->add('barcodePadding','integer',array('attr'=>array('class'=>'numeric span8')))
         ;
     }
 

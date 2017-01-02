@@ -164,8 +164,6 @@ class InventoryConfig
      */
     private $vatPercentage;
 
-
-
     /**
      * @var array
      *
@@ -232,6 +230,85 @@ class InventoryConfig
      * @ORM\Column(name="isBrand", type="boolean",  nullable=true)
      */
     private $isBrand;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="barcodeColor", type="boolean" ,  nullable=true)
+     */
+    private $barcodeColor;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="barcodeSize", type="boolean",  nullable=true)
+     */
+    private $barcodeSize;
+
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="barcodeBrandVendor", type="smallint",  nullable=true)
+     */
+    private $barcodeBrandVendor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="barcodeText", type="string", length=255,nullable = true)
+     */
+    private $barcodeText;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="barcodeWidth", type="smallint", nullable = true)
+     */
+    private $barcodeWidth = 140;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="barcodeMargin", type="smallint", nullable = true)
+     */
+    private $barcodeMargin = 0;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="barcodePadding", type="smallint", nullable = true)
+     */
+    private $barcodePadding = 0;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="barcodeHeight", type="smallint", nullable = true)
+     */
+    private $barcodeHeight = 80;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="barcodeThickness", type="smallint", nullable = true)
+     */
+    private $barcodeThickness = 30;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="barcodeFontSize", type="smallint", nullable = true)
+     */
+    private $barcodeFontSize = 8;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="barcodeScale", type="smallint", nullable = true)
+     */
+    private $barcodeScale = 1;
 
 
     /**
@@ -569,6 +646,183 @@ class InventoryConfig
     public function getDeliveries()
     {
         return $this->deliveries;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getBarcodeColor()
+    {
+        return $this->barcodeColor;
+    }
+
+    /**
+     * @param boolean $barcodeColor
+     */
+    public function setBarcodeColor($barcodeColor)
+    {
+        $this->barcodeColor = $barcodeColor;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getBarcodeSize()
+    {
+        return $this->barcodeSize;
+    }
+
+    /**
+     * @param boolean $barcodeSize
+     */
+    public function setBarcodeSize($barcodeSize)
+    {
+        $this->barcodeSize = $barcodeSize;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getBarcodeText()
+    {
+        return $this->barcodeText;
+    }
+
+    /**
+     * @param string $barcodeText
+     */
+    public function setBarcodeText($barcodeText)
+    {
+        $this->barcodeText = $barcodeText;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getBarcodeWidth()
+    {
+        return $this->barcodeWidth;
+    }
+
+    /**
+     * @param smallint $barcodeWidth
+     */
+    public function setBarcodeWidth($barcodeWidth)
+    {
+        $this->barcodeWidth = $barcodeWidth;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getBarcodeHeight()
+    {
+        return $this->barcodeHeight;
+    }
+
+    /**
+     * @param smallint $barcodeHeight
+     */
+    public function setBarcodeHeight($barcodeHeight)
+    {
+        $this->barcodeHeight = $barcodeHeight;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getBarcodeBrandVendor()
+    {
+        return $this->barcodeBrandVendor;
+    }
+
+    /**
+     * @param smallint $barcodeBrandVendor
+     */
+    public function setBarcodeBrandVendor($barcodeBrandVendor)
+    {
+        $this->barcodeBrandVendor = $barcodeBrandVendor;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getBarcodeThickness()
+    {
+        return $this->barcodeThickness;
+    }
+
+    /**
+     * @param smallint $barcodeThickness
+     */
+    public function setBarcodeThickness($barcodeThickness)
+    {
+        $this->barcodeThickness = $barcodeThickness;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getBarcodeFontSize()
+    {
+        return $this->barcodeFontSize;
+    }
+
+    /**
+     * @param smallint $barcodeFontSize
+     */
+    public function setBarcodeFontSize($barcodeFontSize)
+    {
+        $this->barcodeFontSize = $barcodeFontSize;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getBarcodeScale()
+    {
+        return $this->barcodeScale;
+    }
+
+    /**
+     * @param smallint $barcodeScale
+     */
+    public function setBarcodeScale($barcodeScale)
+    {
+        $this->barcodeScale = $barcodeScale;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getBarcodeMargin()
+    {
+        return $this->barcodeMargin;
+    }
+
+    /**
+     * @param smallint $barcodeMargin
+     */
+    public function setBarcodeMargin($barcodeMargin)
+    {
+        $this->barcodeMargin = $barcodeMargin;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getBarcodePadding()
+    {
+        return $this->barcodePadding;
+    }
+
+    /**
+     * @param smallint $barcodePadding
+     */
+    public function setBarcodePadding($barcodePadding)
+    {
+        $this->barcodePadding = $barcodePadding;
     }
 
 

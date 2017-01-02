@@ -111,7 +111,7 @@
                                                 <td class="numeric" >
                                                     {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
                                                         <a href="{{ path('inventory_sales_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                                        <a href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
+                                                        <a  href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
                                                     {% endif %}
                                                     {% if entity.paymentStatus == "Pending" %}
                                                         <a href="{{ path('inventory_sales_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>

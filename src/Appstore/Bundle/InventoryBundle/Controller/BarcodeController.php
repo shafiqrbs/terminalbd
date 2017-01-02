@@ -21,30 +21,32 @@ class BarcodeController extends Controller
     public function barCoder($barcoder)
     {
 
-        if (!empty($barcoder->getItem()->getColor()) and !empty($barcoder->getItem()->getSize())) {
+        if ((!empty($barcoder->getItem()->getColor()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeColor() == 1) and (!empty($barcoder->getItem()->getSize()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeSize() == 1)) {
             $sizeColor = $barcoder->getItem()->getColor()->getName() . '-' . $barcoder->getItem()->getSize()->getName();
-        } elseif (!empty($barcoder->getItem()->getSize())) {
+        } elseif (!empty($barcoder->getItem()->getSize()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeSize() == 1) {
             $sizeColor = $barcoder->getItem()->getSize()->getName();
-        } elseif (!empty($barcoder->getItem()->getColor())) {
+        } elseif (!empty($barcoder->getItem()->getColor()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeColor() == 1) {
             $sizeColor = $barcoder->getItem()->getColor()->getName();
         }else {
             $sizeColor = '';
         }
 
-        if (!empty($barcoder->getItem()->getVendor())){
+        if (!empty($barcoder->getItem()->getVendor()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeBrandVendor() == 2 ){
             $vendorBrand = $barcoder->getItem()->getVendor()->getVendorCode();
-        }elseif(!empty($barcoder->getItem()->getBrand())){
-            $vendorBrand = $barcoder->getItem()->getBrand()->getName();
+        }elseif(!empty($barcoder->getItem()->getBrand()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeBrandVendor() == 1){
+            $vendorBrand = $barcoder->getItem()->getBrand()->getBrandCode();
         }else{
             $vendorBrand = '';
         }
-
+        $scale = $barcoder->getItem()->getInventoryConfig()->getBarcodeScale();
+        $fontsize = $barcoder->getItem()->getInventoryConfig()->getBarcodeFontSize();
+        $thickness = $barcoder->getItem()->getInventoryConfig()->getBarcodeThickness();
         $barcode = new BarcodeGenerator();
         $barcode->setText($barcoder->getBarcode());
         $barcode->setType(BarcodeGenerator::Code128);
-        $barcode->setScale(1);
-        $barcode->setThickness(30);
-        $barcode->setFontSize(8);
+        $barcode->setScale($scale);
+        $barcode->setThickness($thickness);
+        $barcode->setFontSize($fontsize);
         $code = $barcode->generate();
         $data = '';
         $data .='<div class="barcode-block">';
@@ -52,11 +54,8 @@ class BarcodeController extends Controller
         $data .='<p><span class="left">'.$sizeColor.'</span><span class="right">'.$vendorBrand.'</span></p>';
         $data .='<div class="clearfix"></div>';
         $data .='<img src="data:image/png;base64,'.$code.'" />';
-        if($barcoder->getItem()->getInventoryConfig()->getVatEnable() != 1){
-            $data .='<p><span class="center">TK '.$barcoder->getSalesPrice().' including VAT</span></p>';
-        }else{
-            $data .='<p><span class="center">TK '.$barcoder->getSalesPrice().'</span></p>';
-        }
+        $data .='<p><span class="center">TK '.$barcoder->getSalesPrice().' '.$barcoder->getItem()->getInventoryConfig()->getBarcodeText().'</span></p>';
+
         $data .='</div>';
         $data .='</div>';
         return $data;

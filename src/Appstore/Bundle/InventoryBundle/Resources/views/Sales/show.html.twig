@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Sales
+                    Sales Invoice # {{ entity.invoice }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -62,7 +62,7 @@
                                     <ul class="unstyled">
                                         {% if entity.customer is not empty %}<li><strong>Customer #:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
                                         {% if entity.customer is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
-                                        {% if entity.customer is not empty %}<li><strong>Address #:</strong>&nbsp;{{ entity.customer.address }}, {{ entity.customer.address }}</li>{% endif %}
+                                        {% if entity.customer is not empty %}<li><strong>Address #:</strong>&nbsp;{{ entity.customer.address }}</li>{% endif %}
                                         {% if entity.customer is not empty and entity.customer.location is not empty   %}<li><strong>Location #:</strong>&nbsp;{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
                                         <li><strong>Invoice:</strong>&nbsp;{{ entity.invoice }}</li>
                                         <li><strong>Created:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
@@ -132,9 +132,8 @@
                                 <div class="span8" id="message"></div>
 
                                 <div class="pull-right" id="action-{{ entity.id }}">
-
-                                    <a  href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" class="btn"><i class="icon-print"></i>&nbsp;Print</a>
-                                    <a type="reset" class="btn blue"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>
+                                    <a target="_blank"  href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" class="btn"><i class="icon-print"></i>&nbsp;Print</a>
+                                    {#<a type="reset" class="btn blue"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>#}
                                     {% if entity.paymentStatus == 'pendig' %}
                                         <span  class="btn green"><i class="icon-ok"></i>&nbsp;Pending</span>
                                     {% else %}

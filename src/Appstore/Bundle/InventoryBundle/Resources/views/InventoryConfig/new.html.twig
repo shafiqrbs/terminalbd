@@ -42,7 +42,6 @@
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
                             <div class="row-fluid box green">
-
                                 <div class="row-fluid">
                                     <div class="span4">
                                         <div class="row-fluid">
@@ -57,8 +56,39 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="span4">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="vatEnable"><span class="span5">Is Branch</span><span class="span5">{{ form_widget(form.isBranch) }}
+                                                    {{ form_errors(form.isBranch) }}</span></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span4">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label " for="salesReturnDayLimit">Sales return day &nbsp;</label>
+                                                    <div class="control">
+                                                        {{ form_widget(form.salesReturnDayLimit) }}
+                                                        {{ form_errors(form.salesReturnDayLimit) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="form-actions portlet box blue">
+                                    <div class="portlet-title">
+                                        <div class="caption"><i class="icon-reorder"></i>Stock Keeping Unit(SKU) Format</div>
+                                    </div>
+                                </div>
+                                <div class="clearfix">&nbsp;</div>
+                                <div class="row-fluid">
+                                   <div class="span4">
                                         <h5><strong>Stock Keeping Unit(SKU) Format</strong></h5>
                                         <div class="row-fluid">
                                             <div class="span12">
@@ -68,8 +98,6 @@
                                                         {{ form_errors(form.isColor) }}</span></label>
                                                     <label class="control-label" for="vatEnable"><span class="span5">Size/Weight</span><span class="span5">  {{ form_widget(form.isSize) }}
                                                         {{ form_errors(form.isSize) }}</span></label>
-                                                    <label class="control-label" for="vatEnable"><span class="span5">Is Branch</span><span class="span5">{{ form_widget(form.isBranch) }}
-                                                        {{ form_errors(form.isBranch) }}</span></label>
 
                                                 </div>
                                             </div>
@@ -94,17 +122,6 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="control-group">
-                                                    <label class="control-label " for="salesReturnDayLimit">Sales return day &nbsp;</label>
-                                                    <div class="control">
-                                                        {{ form_widget(form.salesReturnDayLimit) }}
-                                                        {{ form_errors(form.salesReturnDayLimit) }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="control-group">
                                                     <label class="control-label" for="vatEnable"><span class="span5">Vat Enable</span><span class="span5">{{ form_widget(form.vatEnable) }}
                                                             {{ form_errors(form.vatEnable) }}</span></label>
                                                 </div>
@@ -117,6 +134,137 @@
                                                     <div class="control">
                                                         {{ form_widget(form.vatPercentage) }}
                                                         {{ form_errors(form.vatPercentage) }}%
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span4">
+                                        <h5><strong>Barcode Print</strong></h5>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+
+                                                <div class="control-group">
+                                                    <label class="control-label" for="vatEnable"><span class="span5">Color/Shape</span><span class="span5">{{ form_widget(form.barcodeColor) }}
+                                                            {{ form_errors(form.barcodeColor) }}</span></label>
+                                                    <label class="control-label" for="vatEnable"><span class="span5">Size/Weight</span><span class="span5">  {{ form_widget(form.barcodeSize) }}
+                                                            {{ form_errors(form.barcodeSize) }}</span></label>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName">Brand/Vendor</label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.barcodeBrandVendor) }}
+                                                        {{ form_errors(form.barcodeBrandVendor) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions portlet box blue">
+                                    <div class="portlet-title">
+                                        <div class="caption"><i class="icon-reorder"></i>Barcode Setup</div>
+                                    </div>
+                                </div>
+                                <div class="clearfix">&nbsp;</div>
+                                <div class="row-fluid">
+                                    <div class="span4">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName">Thickness</label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.barcodeThickness) }}
+                                                        {{ form_errors(form.barcodeThickness) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName">Font Size</label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.barcodeFontSize) }}
+                                                        {{ form_errors(form.barcodeFontSize) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName">Scale</label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.barcodeScale) }}
+                                                        {{ form_errors(form.barcodeScale) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span2">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName">Height</label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.barcodeHeight) }}
+                                                        {{ form_errors(form.barcodeHeight) }}.px
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName">Width</label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.barcodeWidth) }}
+                                                        {{ form_errors(form.barcodeWidth) }}.px
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span2">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName">Margin</label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.barcodeMargin) }}
+                                                        {{ form_errors(form.barcodeMargin) }}.px
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName">Padding</label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.barcodePadding) }}
+                                                        {{ form_errors(form.barcodePadding) }}.px
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span4">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="firstName">Text</label>
+                                                    <div class="controls">
+                                                        {{ form_widget(form.barcodeText) }}
+                                                        {{ form_errors(form.barcodeText) }}
+                                                        <p>Only two or three words.ie:including vat,with out vat etc</p>
                                                     </div>
                                                 </div>
                                             </div>
