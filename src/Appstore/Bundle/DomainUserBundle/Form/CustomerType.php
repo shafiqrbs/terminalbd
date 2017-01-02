@@ -59,8 +59,8 @@ class CustomerType extends AbstractType
             ->add('ageGroup', 'choice', array(
             'attr'=>array('class'=>'span12 select2'),
             'choices' => array(
+                'Adult' => 'Adult',
                 'Kids' => 'Kids',
-                'Adult' => 'Adult'
             ),
             'required'    => true,
             'empty_data'  => null,

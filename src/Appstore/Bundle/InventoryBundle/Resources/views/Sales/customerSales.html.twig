@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Point of sale
+                    Sales for customer: {{ entity.customer.name }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -18,7 +18,7 @@
                         <a href="{{ path('inventory_sales') }}">Sales</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#"> Point of sales</a></li>
+                    <li><a href="#">Sales for customer</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -43,7 +43,6 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('inventory_sales_new') }}"><i class="icon-plus-sign"></i>&nbsp;POS</a></li>
                                     <li><a href="{{ path('inventory_sales') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
@@ -300,13 +299,7 @@
                                                         <button disabled="disabled" type="submit" class="btn blue paymentBtn"><i class="icon-print"></i>&nbsp;Print</button>
                                                         <button disabled="disabled"  type="submit" class="btn green paymentBtn"><i class="icon-print m-icon-white"></i>&nbsp;Pos Print</button>
                                                         <a href="{{ path('inventory_sales_edit',{'code':entity.code}) }}"  class="btn purple"><i class="icon-refresh"></i>&nbsp;Reset</a>
-
-                                           {#
-                                            <a href="{{ path('inventory_sales') }}"  class="btn yellow"><i class="m-icon-swapleft m-icon-white"></i>&nbsp;Back</a>
-                                           <button type="submit" class="btn blue"><i class="icon-print"></i></button>
-                                                        <button type="reset" class="btn purple"><i class="icon-refresh"></i> </button>
-                                                        <button type="submit" class="btn yellow"><i class="icon-pushpin"></i></button>
-                                           #}         </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -334,6 +327,7 @@
                                 <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                 <th class="numeric" >Invoice</th>
                                 <th class="numeric" >Date</th>
+                                <th class="numeric" >Customer</th>
                                 <th class="numeric" >Item</th>
                                 <th class="numeric" >Sub-Total</th>
                                 <th class="numeric" >Discount</th>
@@ -351,6 +345,7 @@
                                     <td> {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ dailySales.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                     <td class="numeric" >{{ dailySales.invoice }}</td>
                                     <td class="numeric" >{{ dailySales.updated|date('d-m-Y') }}</td>
+                                    <td class="numeric" >{{ dailySales.customer.mobile }}</td>
                                     <td class="numeric" >{{ dailySales.totalItem }}</td>
                                     <td class="numeric" >{{ dailySales.subTotal|number_format  }}</td>
                                     <td class="numeric" >{{ dailySales.discount|number_format  }}</td>
