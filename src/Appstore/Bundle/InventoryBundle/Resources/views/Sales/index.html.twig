@@ -194,7 +194,6 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@InventoryBundle/Resources/public/js/*'
     '@InventoryBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -202,6 +201,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    ApproveProcess();
     $('#sales').on("click", ".delete", function() {
 
     var url = $(this).attr("rel");
