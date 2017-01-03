@@ -49,11 +49,11 @@ class SalesController extends Controller
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'ASC'));
         if(in_array('CustomerSales',$inventory->getDeliveryProcess())){
-            $twig = 'index';
-        }else{
             $twig = 'customerSales';
+        }else{
+            $twig = 'index';
         }
-        return $this->render('InventoryBundle:Sales:customerSales.html.twig', array(
+        return $this->render('InventoryBundle:Sales:'.$twig.'.html.twig', array(
             'entities' => $pagination,
             'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
