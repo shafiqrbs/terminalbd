@@ -11,7 +11,7 @@ use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Appstore\Bundle\InventoryBundle\Entity\Vendor;
-use Setting\Bundle\ToolBundle\Entity\Branding;
+use Product\Bundle\ProductBundle\Entity\Category;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
 
@@ -39,9 +39,8 @@ class Excel
             $purchaseItem->setItem($this->getItem($item));
             $purchaseItem->setPurchase($this->getPurchase($item));
             $purchaseItem->setQuantity($item['Quantity']);
-            $purchaseItem->setPurchasePrice($item['Purchase Price']);
-            $purchaseItem->setSalesPrice($item['Sales price']);
-            $purchaseItem->setWebPrice($item['Sales price']);
+            $purchaseItem->setPurchasePrice($item['PurchasePrice']);
+            $purchaseItem->setSalesPrice($item['SalesPrice']);
             $purchaseItem->setPurchaseVendorItem($this->getPurchaseVendorItem($item));
             $this->persist($purchaseItem);
 
@@ -66,7 +65,7 @@ class Excel
 
     private function getItem($item)
     {
-        $key = $item['Item Name'] . "_" . $item['Color'] . "_" . $item['Size'] . "_" . $item['Vendor'] . "_" . $item['Category'];
+        $key = $item['ProductName'] . "_" . $item['Color'] . "_" . $item['Size'] . "_" . $item['Vendor'] . "_" . $item['Category'];
 
         $itemObj = $this->getCachedData('Item', $key);
 
@@ -82,7 +81,7 @@ class Excel
 
             if($itemObj == NULL) {
                 $itemObj = new Item();
-                $itemObj->setName($this->sentence_case($item['Item Name']));
+                $itemObj->setName($this->sentence_case($item['ProductName']));
                 $itemObj->setMasterItem($masterItem);
                 //if($this->getInventoryConfig()->getIsColor() == 1) {
                     $itemObj->setColor($itemColor);
@@ -139,7 +138,7 @@ class Excel
         }
 
         $itemObj = $repository->findOneBy(array(
-            'name'            => $this->sentence_case($item['Item Name']),
+            'name'            => $this->sentence_case($item['ProductName']),
             'masterItem'      => $masterItem,
             'size'            => $itemSize,
             'color'           => $itemColor,
@@ -153,9 +152,9 @@ class Excel
 
     private function getPurchaseVendorItem($item)
         {
-            $key = $item['Item Name'] . "_" . $item['Vendor'] . "_" . $item['Purchase Price']. "_" . $item['Memo'] ;
+            $key = $item['ProductName'] . "_" . $item['Vendor'] . "_" . $item['PurchasePrice']. "_" . $item['Memo'] ;
 
-           /* if($item['Item Name'] =='Ladies Tops'){
+           /* if($item['ProductName'] =='Ladies Tops'){
                var_dump($item); die();
             }*/
 
@@ -168,20 +167,20 @@ class Excel
 
                 $purchase = $this->getPurchase($item);
                 $itemObj = $repository->findOneBy(array(
-                    'name' => $this->sentence_case($item['Item Name']),
-                    'purchasePrice' => $item['Purchase Price'],
+                    'name' => $this->sentence_case($item['ProductName']),
+                    'purchasePrice' => $item['PurchasePrice'],
                     'purchase' => $purchase
                 ));
 
                 if ($itemObj == NULL) {
                     $itemObj = new PurchaseVendorItem();
-                    $itemObj->setName($this->sentence_case($item['Item Name']));
+                    $itemObj->setName($this->sentence_case($item['ProductName']));
                     $itemObj->setPurchase($purchase);
                     $itemObj->setSource('inventory');
                     $itemObj->setInventoryConfig($purchase->getInventoryConfig());
-                    $itemObj->setPurchasePrice($item['Purchase Price']);
-                    $itemObj->setSalesPrice($item['Sales price']);
-                    $itemObj->setWebPrice($item['Sales price']);
+                    $itemObj->setPurchasePrice($item['PurchasePrice']);
+                    $itemObj->setSalesPrice($item['SalesPrice']);
+                    $itemObj->setWebPrice($item['SalesPrice']);
                     $itemObj->setQuantity((int)$item['Quantity']);
                     $itemObj = $this->save($itemObj);
                 } else {
@@ -201,27 +200,26 @@ class Excel
 
     private function getMasterItem($item)
     {
-        $key = $item['Item Name'] . "_" . $item['Category'];
+        $key = $item['ProductName'] . "_" . $item['Category'];
         $masterItem = $this->getCachedData('MasterItem', $key);
-        $category = $this->getCategory($item['Category']);
+        $category = $this->getCategory($item);
 
         $masterItemRepository = $this->getMasterItemRepository();
 
         if($masterItem == NULL) {
             $masterItem = $masterItemRepository->findOneBy(array(
-                'name' => $this->sentence_case($item['Item Name']),
+                'name' => $this->sentence_case($item['ProductName']),
                 'category' => $category,
                 'inventoryConfig' => $this->getInventoryConfig()
             ));
 
             if($masterItem == NULL){
                 $masterItem = new Product();
-                $masterItem->setName($this->sentence_case($item['Item Name']));
+                $masterItem->setName($this->sentence_case($item['ProductName']));
                 $masterItem->setCategory($category);
                 $masterItem->setInventoryConfig($this->getInventoryConfig());
                 $masterItem = $this->save($masterItem);
             }
-
             $this->setCachedData('MasterItem', $key, $masterItem);
         }
 
@@ -234,18 +232,14 @@ class Excel
         $colorRepository = $this->getColorRepository();
         if($color == NULL) {
             $color = $colorRepository->findOneBy(array(
-                'status'              => 1,
                 'isValid'             => 1,
-                'inventoryConfig_id'  => 2,
                 'name'                => $item['Color']
             ));
             if($color == NULL) {
                 $color = new ItemColor();
                 $color->setName($item['Color']);
-                $color->setInventoryConfig($this->getInventoryConfig());
                 $color = $this->save($color);
             }
-
             $this->setCachedData('Color', $item['Color'], $color);
         }
 
@@ -259,17 +253,13 @@ class Excel
         if($size == NULL) {
 
             $size = $sizeRepository->findOneBy(array(
-                'status'              => 1,
                 'isValid'             => 1,
-                'inventoryConfig_id'  => 2,
                 'name'                => $item['Size']
             ));
 
             if($size == null) {
-
                 $size = new ItemSize();
                 $size->setName($item['Size']);
-                $size->setInventoryConfig($this->getInventoryConfig());
                 $size = $this->save($size);
 
             }
@@ -314,16 +304,26 @@ class Excel
     }
 
 
-    private function getCategory($categoryName)
+    private function getCategory($item)
     {
-        $category = $this->getCachedData('Category', $categoryName);
-
+        $category = $this->getCachedData('Category', $item['Category']);
+        $categoryRepository = $this->getCategoryRepository();
         if($category == NULL) {
-            $category = $this->getDoctrain()->getRepository('ProductProductBundle:Category')->findOneByName($categoryName);
-            $this->setCachedData('Category', $categoryName, $category);
+            $category = $categoryRepository->findOneByName($item['Category']);
+            $this->setCachedData('Category', $item['Category'], $category);
+
+            if($category == null) {
+                $category = new Category();
+                $category->setName($item['Category']);
+                $category->setInventoryConfig($this->getInventoryConfig());
+                $category->setPermission('private');
+                $category = $this->save($category);
+            }
+            $this->setCachedData('Category',  $item['Category'] , $category);
         }
 
         return $category;
+
     }
 
     private function getBrand($item)
@@ -342,6 +342,7 @@ class Excel
             if($brand == null) {
                 $brand = new ItemBrand();
                 $brand->setName($item['Brand']);
+                $brand->setBrandCode($item['BrandCode']);
                 $brand->setInventoryConfig($this->getInventoryConfig());
                 $brand = $this->save($brand);
             }
@@ -367,7 +368,7 @@ class Excel
                 $vendor = new Vendor();
                 $vendor->setName($item['Vendor']);
                 $vendor->setCompanyName($item['Vendor']);
-                $vendor->setVendorCode($item['Vendor']);
+                $vendor->setVendorCode($item['VendorCode']);
                 $vendor->setInventoryConfig($this->getInventoryConfig());
                 $vendor = $this->save($vendor);
             }
@@ -467,6 +468,14 @@ class Excel
         return $this->getDoctrain()->getRepository('InventoryBundle:ItemBrand');
     }
 
+    /**
+     * @return  @return \Product\Bundle\ProductBundle\Entity\CategoryRepository
+     */
+    private function getCategoryRepository()
+    {
+        return $this->getDoctrain()->getRepository('ProductProductBundle:Category');
+    }
+
     private function getInventoryConfig()
     {
         $inventoryConfig = $this->getCachedData('InventoryConfig', $this->inventoryConfig);
@@ -527,6 +536,10 @@ class Excel
 
         if (empty($item['Brand'])) {
             $item['Brand'] = $defaultStr;
+        }
+
+        if (empty($item['Category'])) {
+            $item['Category'] = $defaultStr;
         }
 
         if (empty($item['Memo'])) {

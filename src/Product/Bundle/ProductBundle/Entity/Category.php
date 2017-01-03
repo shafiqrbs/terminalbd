@@ -461,6 +461,15 @@ class Category
         return $this->inventoryConfig;
     }
 
+    /**
+     * @param mixed $inventoryConfig
+     */
+    public function setInventoryConfig($inventoryConfig)
+    {
+        $this->inventoryConfig = $inventoryConfig;
+    }
+
+
 
     /**
      * @return mixed
@@ -519,5 +528,6 @@ class Category
     {
         return $this->masterProducts;
     }
+
 
 }

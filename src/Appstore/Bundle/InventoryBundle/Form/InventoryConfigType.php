@@ -26,8 +26,8 @@ class InventoryConfigType extends AbstractType
                 'choice', array(
                 'attr'=>array('class'=>'check-list  span12'),
                 'choices' => array(
-                    'Pos' => 'Point of sales(POS)',
-                    'Customer Sales' => 'Customer Sales',
+                    'Pos' => 'Point of Sales(POS)',
+                    'CustomerSales' => 'Customer Base Sales',
                     'ManualPos' => 'Manual Sales System',
                     'BranchInvoice' => 'Branch Invoice',
                 ),

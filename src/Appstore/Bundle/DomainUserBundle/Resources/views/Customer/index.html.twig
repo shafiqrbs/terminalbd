@@ -50,9 +50,29 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
+                            <form class="search-form" action="" method="get" name="itemSearch">
+                                <div class="row-fluid">
+                                    <div class="span4">
+                                        <input type="text" id="mobile" name="mobile"  class="leftMargin span12 select2Customer" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Customer mobile">
+                                    </div>
+                                    <div class="span4">
+                                        <input type="text" id="location" name="location"  class="leftMargin span12 select2Location" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Customer mobile">
+                                    </div>
+                                    <div class="span4">
+                                        <div class="controls">
+                                            <div class="input-append span9">
+                                                <input type="text" id="name" name="name"  class="m-wrap span12 search-input" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Enter invoice no{% endif %} ">
+                                                <div class="btn-group">
+                                                    <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
-                                <tr class="head-grey">
+                                <tr class="head-green">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric">Created</th>
                                     <th class="numeric">Name</th>
@@ -212,6 +232,7 @@
     {{ parent() }}
     {% javascripts
     '@InventoryBundle/Resources/public/js/editable.js'
+    '@InventoryBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -219,4 +240,5 @@
 {% block documentready %}
     {{ parent() }}
     EditableInit();
+    ApproveProcess();
 {% endblock %}

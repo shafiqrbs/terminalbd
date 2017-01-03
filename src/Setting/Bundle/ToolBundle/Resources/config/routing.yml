@@ -109,3 +109,7 @@ SettingToolBundle_syndicatemodule:
 SettingToolBundle_module:
         resource: "@SettingToolBundle/Resources/config/routing/module.yml"
         prefix:   /admin/module
+
+SettingToolBundle_transaction_method:
+        resource: "@SettingToolBundle/Resources/config/routing/transactionmethod.yml"
+        prefix:   /admin/transaction-method

@@ -58,7 +58,7 @@ class ExcelDataReader
                     $dataArray[$columnHeading] = $dataRow[$row][$columnKey];
                 }
 
-                $key = $dataArray['Item Name'].$dataArray['Vendor']. $dataArray['Purchase Price'].$dataArray['Color'].$dataArray['Size'].$dataArray['Memo'];
+                $key = $dataArray['ProductName'].$dataArray['Vendor']. $dataArray['PurchasePrice'].$dataArray['Color'].$dataArray['Size'].$dataArray['Memo'];
 
                 if (empty($dataArray['Quantity'])) {
                     $dataArray['Quantity'] = 1;

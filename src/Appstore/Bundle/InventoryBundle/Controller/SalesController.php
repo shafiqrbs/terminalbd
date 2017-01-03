@@ -47,11 +47,15 @@ class SalesController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory,$data);
         $pagination = $this->paginate($entities);
-        return $this->render('InventoryBundle:Sales:index.html.twig', array(
+        $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'ASC'));
+        return $this->render('InventoryBundle:Sales:customerSales.html.twig', array(
             'entities' => $pagination,
+            'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
         ));
     }
+
+
 
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
@@ -434,7 +438,8 @@ EOD;
 
     public function deleteEmptyInvoiceAction()
     {
-        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('paymentStatus' => 'Pending'));
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig' => $inventory, 'paymentStatus' => 'Pending'));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity){
             $em->remove($entity);
@@ -480,7 +485,7 @@ EOD;
         $items  = array();
         $items[]= array('value' => 'Done','text'=>'Done');
         $items[]= array('value' => 'In-progress','text'=>'In-progress');
-        $items[]= array('value' => 'Waiting Delivery','text'=>'Waiting Delivery');
+        $items[]= array('value' => 'Waiting for Delivery','text'=>'Waiting for Delivery');
         $items[]= array('value' => 'Return & Cancel','text'=>'Return & Cancel');
         return new JsonResponse($items);
     }

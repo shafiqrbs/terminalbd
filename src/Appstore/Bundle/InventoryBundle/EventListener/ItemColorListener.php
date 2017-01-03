@@ -37,8 +37,7 @@ class ItemColorListener
         $qb = $entityManager->getRepository('InventoryBundle:ItemColor')->createQueryBuilder('s');
         $qb
             ->select('MAX(s.code)')
-            ->where('s.isValid = 1')
-            ->andWhere('s.inventoryConfig_id = 2');
+            ->where('s.isValid = 1');
         $lastCode = $qb->getQuery()->getSingleScalarResult();
         if (empty($lastCode)) {
             return 0;

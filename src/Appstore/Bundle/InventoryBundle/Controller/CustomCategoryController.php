@@ -64,8 +64,6 @@ class CustomCategoryController extends Controller
             $entity->upload();
             $em->persist($entity);
             $em->flush();
-           // die("ok");
-
             return $this->redirect($this->generateUrl('inventory_category_show', array('id' => $entity->getId())));
         }
 

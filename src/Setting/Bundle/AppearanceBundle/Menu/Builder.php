@@ -451,6 +451,7 @@ class Builder extends ContainerAware
                     $menu['Inventory']['Point of Sales']->addChild('Sales', array('route' => 'inventory_sales'))->setAttribute('icon',' icon-th-list');
                     $menu['Inventory']['Point of Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon','icon-share-alt');
                     $menu['Inventory']['Point of Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon','icon-upload');
+                    $menu['Inventory']->addChild('Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
 
                 }
 
@@ -463,13 +464,14 @@ class Builder extends ContainerAware
 
                 }
 
-                if(in_array('Delivery',$deliveryProcess)){
+                if(in_array('CustomerSales',$deliveryProcess)){
 
-                    $menu['Inventory']
-                        ->addChild('Delivery Item')
+                    $menu['Inventory']->addChild('Customer Sales')
                         ->setAttribute('icon','icon icon-truck')
                         ->setAttribute('dropdown', true);
-                    $menu['Inventory']['Delivery Item']->addChild('Pos', array('route' => 'inventory_sales_new'))->setAttribute('icon','icon-shopping-cart');
+                    $menu['Inventory']['Customer Sales']->addChild('Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
+                    $menu['Inventory']['Customer Sales']->addChild('Sales', array('route' => 'inventory_sales'))->setAttribute('icon',' icon-th-list');
+                    $menu['Inventory']['Customer Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon','icon-share-alt');
 
                 }
 
@@ -481,6 +483,7 @@ class Builder extends ContainerAware
                         ->setAttribute('dropdown', true);
                     $menu['Inventory']['Temporary Delivery Item']->addChild('Pos', array('route' => 'inventory_sales_new'))->setAttribute('icon','icon-shopping-cart');
                 }
+
                 if($inventory->getIsBranch() == 1 ){
 
                     $menu['Inventory']
@@ -493,10 +496,9 @@ class Builder extends ContainerAware
                 }
 
             }
-            $menu['Inventory']->addChild('Customer', array('route' => 'inventory_customer'))
-                ->setAttribute('icon', 'icon icon-user');
         }
         if($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
+
             $menu['Inventory']->addChild('Purchase', array('route' => 'purchase'))
                 ->setAttribute('icon', 'icon icon-shopping-cart')
                 ->setAttribute('dropdown', true);
@@ -815,6 +817,7 @@ class Builder extends ContainerAware
             ->setAttribute('icon','fa fa-cog')
             ->setAttribute('dropdown', true);
         $menu['Application Setting']->addChild('Account Head', array('route' => 'accounthead'))->setAttribute('icon', 'icon-th-list');
+        $menu['Application Setting']->addChild('Transaction Method', array('route' => 'transactionmethod_new'))->setAttribute('icon', 'icon-th-list');
         $menu['Application Setting']->addChild('Color', array('route' => 'itemcolor'))->setAttribute('icon', 'icon-th-list');
         $menu['Application Setting']->addChild('Size', array('route' => 'itemsize'))->setAttribute('icon', 'icon-th-list');
 

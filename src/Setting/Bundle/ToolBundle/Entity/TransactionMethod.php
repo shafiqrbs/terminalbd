@@ -136,7 +136,7 @@ class TransactionMethod
      *
      * @ORM\Column(name="status", type="boolean")
      */
-    private $status;
+    private $status = true;
 
 
     /**

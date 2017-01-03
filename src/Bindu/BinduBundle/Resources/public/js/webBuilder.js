@@ -258,8 +258,7 @@ function builderJs(){
                     $('.ajax-loading').show().addClass('loading').fadeIn(3000);
                 },
                 success: function(response) {
-                    document.getElementById('frame').contentDocument.location.reload(true);
-                    $('.ajax-loading').fadeOut(3000);
+                    location.reload();
                 }
             });
         }
