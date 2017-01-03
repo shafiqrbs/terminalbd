@@ -154,7 +154,7 @@ class Sales
          *
          * @ORM\Column(name="process", type="string", length=50, nullable=true)
          */
-        private $process;
+        private $process ='In-progress';
 
         /**
          * @var string

@@ -274,9 +274,11 @@ class SalesController extends Controller
                 if (empty($data['sales']['salesBy'])){
                     $entity->setSalesBy($this->getUser());
                 }
-                $entity->setApprovedBy($this->getUser());
+                if($entity->getTransactionMethod()->getId() != 4) {
+                    $entity->setApprovedBy($this->getUser());
+                }
                 $em->flush();
-                if($entity->getTransactionMethod()->getId() == 4 ){
+                if($entity->getTransactionMethod()->getId() == 4){
 
                     return $this->redirect($this->generateUrl('inventory_sales_show',array('id' => $entity->getId())));
 
@@ -494,8 +496,8 @@ EOD;
         $entity->setProcess($data['value']);
         $em->flush();
 
-        $dispatcher = $this->container->get('event_dispatcher');
-        $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+        //$dispatcher = $this->container->get('event_dispatcher');
+       // $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
         exit;
 
     }
