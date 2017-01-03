@@ -104,6 +104,7 @@
                                     <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Date</th>
                                     <th class="numeric" >Sub-Total</th>
+                                    <th class="numeric" >Discount</th>
                                     <th class="numeric" >Net Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
@@ -119,6 +120,7 @@
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
+                                        <th class="numeric" >{{ entity.discount|number_format  }}</th>
                                         <th class="numeric" >{{ entity.total|number_format  }}</th>
                                         <th class="numeric" >{{ entity.payment|number_format }}</th>
                                         <td class="numeric" >{{ entity.due|number_format }}</td>

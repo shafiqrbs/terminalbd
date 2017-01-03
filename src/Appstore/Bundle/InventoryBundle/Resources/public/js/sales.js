@@ -21,6 +21,7 @@ var InventorySales = function(sales) {
                 $('#purchaseItem').html(obj['purchaseItem']);
                 $('#salesItem').html(obj['salesItem']);
                 $('.salesTotal').html(obj['salesTotal']);
+                $('#dueAmount').val(obj['salesTotal']);
                 $('#subTotal').val(obj['salesTotal']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
@@ -50,6 +51,7 @@ var InventorySales = function(sales) {
                 $('#subTotal').val(obj['salesTotal']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
+                $('#dueAmount').val(obj['salesTotal']);
                 FormComponents.init();
             },
         })
@@ -75,6 +77,7 @@ var InventorySales = function(sales) {
                 $('#subTotal').val(obj['salesTotal']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
+                $('#dueAmount').val(obj['salesTotal']);
                 FormComponents.init();
             },
         })
@@ -129,6 +132,7 @@ var InventorySales = function(sales) {
                     $('.salesTotal').val(obj['salesTotal']);
                     $('#paymentTotal').val(obj['salesTotal']);
                     $('#paymentSubTotal').val(obj['salesTotal']);
+                    $('#dueAmount').val(obj['salesTotal']);
                 },
 
             })
@@ -161,6 +165,7 @@ var InventorySales = function(sales) {
                 $('.salesTotal').val(obj['salesTotal']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
+                $('#dueAmount').val(obj['salesTotal']);
             },
 
         })
@@ -181,6 +186,7 @@ var InventorySales = function(sales) {
                     $('.salesTotal').val(obj['salesTotal']);
                     $('#paymentTotal').val(obj['salesTotal']);
                     $('#paymentSubTotal').val(obj['salesTotal']);
+                    $('#dueAmount').val(obj['salesTotal']);
                 }
 
 

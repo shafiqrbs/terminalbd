@@ -136,6 +136,8 @@ class SalesController extends Controller
             $customer = $em->getRepository('DomainUserBundle:Customer')->find($customer);
             if(!empty($customer)){
                 $entity->setCustomer($customer);
+                $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(4);
+                $entity->setTransactionMethod($transactionMethod);
                 $entity->setMobile($customer->getMobile());
             }
         }
@@ -182,7 +184,13 @@ class SalesController extends Controller
         $inventory          = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $todaySales         = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
-        return $this->render('InventoryBundle:Sales:new.html.twig', array(
+
+        if(in_array('CustomerSales',$inventory->getDeliveryProcess())){
+            $twig = 'customerpos';
+        }else{
+            $twig = 'pos';
+        }
+        return $this->render('InventoryBundle:Sales:'.$twig.'.html.twig', array(
             'entity'                    => $entity,
             'todaySales'                => $todaySales,
             'todaySalesOverview'        => $todaySalesOverview,
@@ -228,7 +236,6 @@ class SalesController extends Controller
         if ($editForm->isValid()) {
 
             $data = $request->request->all();
-            if ($data['paymentAmount'] > 0) {
 
                 if (!empty($data['sales']['mobile'])) {
 
@@ -241,6 +248,7 @@ class SalesController extends Controller
                     $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
                     $entity->setCustomer($customer);
                 }
+
                 $entity->setSubTotal($data['paymentSubTotal']);
                 if($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0 ){
                     $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($data['paymentTotal']);
@@ -263,15 +271,22 @@ class SalesController extends Controller
                 }
                 $entity->setApprovedBy($this->getUser());
                 $em->flush();
+                if($entity->getTransactionMethod()->getId() == 4 ){
 
-                $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
-                $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
-                $em->getRepository('InventoryBundle:GoodsItem')->updateInventorySalesItem($entity);
-                $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-                $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
-                return $this->redirect($this->generateUrl('inventory_sales_new'));
-            }
+                    return $this->redirect($this->generateUrl('inventory_sales_show',array('id' => $entity->getId())));
+
+                }else{
+
+                    $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
+                    $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+                    $em->getRepository('InventoryBundle:GoodsItem')->updateInventorySalesItem($entity);
+                    $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
+                    $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+                    return $this->redirect($this->generateUrl('inventory_sales_new'));
+                }
+
         }
+
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);

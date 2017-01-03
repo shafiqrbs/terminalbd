@@ -45,7 +45,7 @@
             <td style="text-align: right">
                 <ul class="unstyled">
                     <li><strong><i class="icon-calendar"></i>&nbsp;</strong>{{ entity.created|date('d-m-Y') }}</li>
-                    <li><strong><i class="icon-money"></i>&nbsp;</strong>{{ entity.transactionMethod.name }}</li>
+                    {% if entity.transactionMethod is not empty %}<li><strong><i class="icon-money"></i>&nbsp;</strong>{{ entity.transactionMethod.name }}</li>{% endif %}
                     {% if entity.paymentMobile is not empty %}<li><strong><i class="icon-money"></i></strong>&nbsp;{{ entity.paymentMobile }}/{{ entity.transactionId }}</li>{% endif %}
                     {% if entity.cardNo is not empty %}<li><strong><i class="icon-money"></i>&nbsp;</strong>&nbsp;{{ entity.bank.name  }}/{{ entity.cardNo }}</li>{% endif %}
                     <li>{{ barcode|raw }}</li>
@@ -91,5 +91,5 @@
 
         </table>
     {% endif %}
-<script> window.print(); </script>
+<script> window.print();</script>
 {% endblock %}

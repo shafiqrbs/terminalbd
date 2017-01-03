@@ -60,6 +60,7 @@ class SalesRepository extends EntityRepository
         }
         $sales->setSubTotal($total['total']);
         $sales->setTotal($total['total']);
+        $sales->setDue($total['total']);
         $sales->setTotalItem($total['totalItem']);
         $em->persist($sales);
         $em->flush();
