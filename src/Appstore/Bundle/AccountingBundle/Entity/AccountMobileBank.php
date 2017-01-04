@@ -87,6 +87,11 @@ class AccountMobileBank
     private  $pettyCash;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="accountMobileBank"  )
+     **/
+    private  $accountOnlineOrders;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="accountMobileBank"  )
      **/
     private  $orders;
@@ -398,6 +403,14 @@ class AccountMobileBank
     public function getPurchases()
     {
         return $this->purchases;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountOnlineOrders()
+    {
+        return $this->accountOnlineOrders;
     }
 
 

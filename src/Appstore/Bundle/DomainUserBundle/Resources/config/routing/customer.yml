@@ -42,13 +42,25 @@ domain_customer_delete:
     methods:  [POST, DELETE]
 
 domain_customer_search:
-    path:     /search
+    path:     /customer-search
     defaults: { _controller: "DomainUserBundle:Customer:autoSearch" }
     options:
             expose: true
 
 domain_customer_name:
     path:      /{customer}/customer-name
-    defaults: { _controller: "DomainUserBundle:Customer:searchUserName" }
+    defaults: { _controller: "DomainUserBundle:Customer:searchCustomerName" }
+    options:
+           expose: true
+
+domain_location_search:
+    path:     /location-search
+    defaults: { _controller: "DomainUserBundle:Customer:autoLocationSearch" }
+    options:
+            expose: true
+
+domain_location_name:
+    path:      /{location}/location-name
+    defaults: { _controller: "DomainUserBundle:Customer:searchLocationName" }
     options:
            expose: true

@@ -2,6 +2,8 @@
 
 namespace Setting\Bundle\AppearanceBundle\Entity;
 
+use Appstore\Bundle\EcommerceBundle\Entity\Discount;
+use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Doctrine\ORM\Mapping as ORM;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ContentBundle\Entity\Page;
@@ -50,17 +52,17 @@ class FeatureWidget
     private  $featureWidgetItems;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="featureWidget" )
+     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="featureWidgets" )
      **/
     private  $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="featureWidgetPromotion" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="featureWidgetPromotions" )
      **/
     private  $promotion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="featureWidgetTag" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="featureWidgetTags" )
      **/
     private  $tag;
 
@@ -351,7 +353,7 @@ class FeatureWidget
     }
 
     /**
-     * @return mixed
+     * @return Category
      */
     public function getCategory()
     {
@@ -359,7 +361,7 @@ class FeatureWidget
     }
 
     /**
-     * @param mixed $category
+     * @param Category $category
      */
     public function setCategory($category)
     {
@@ -375,7 +377,7 @@ class FeatureWidget
     }
 
     /**
-     * @param mixed $promotion
+     * @param Promotion $promotion
      */
     public function setPromotion($promotion)
     {
@@ -383,7 +385,7 @@ class FeatureWidget
     }
 
     /**
-     * @return mixed
+     * @return Promotion
      */
     public function getTag()
     {
@@ -391,7 +393,7 @@ class FeatureWidget
     }
 
     /**
-     * @param mixed $tag
+     * @param Promotion $tag
      */
     public function setTag($tag)
     {
@@ -399,7 +401,7 @@ class FeatureWidget
     }
 
     /**
-     * @return mixed
+     * @return Discount
      */
     public function getDiscount()
     {

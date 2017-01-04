@@ -21,7 +21,7 @@ class ItemTypeGroupingRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('e');
         $query->join('e.categories', 'categories');
-        $query->select('categories.id as id');
+        $query->select('categories.name as id');
         $query->addSelect('categories.name as text');
         $query->where($query->expr()->like("categories.name", "'$q%'"  ));
         $query->andWhere("e.inventoryConfig = :inventory");

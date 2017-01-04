@@ -25,7 +25,7 @@ class DeliveryReturn
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="deliveryReturn")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="deliveryReturns")
      **/
     private  $branch;
 
@@ -35,7 +35,7 @@ class DeliveryReturn
     private  $item;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="deliveryReturn" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="deliveryReturns" )
      **/
     private  $purchaseItem;
 

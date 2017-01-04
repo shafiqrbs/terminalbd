@@ -49,19 +49,6 @@ class Profile
 
     protected $location;
 
-
-     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="districtProfiles")
-     **/
-
-    protected $district;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="thanaProfiles")
-     **/
-
-    protected $thana;
-
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\DomainUser", inversedBy="profile" )
      */

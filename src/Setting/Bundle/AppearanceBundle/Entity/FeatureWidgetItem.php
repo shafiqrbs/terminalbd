@@ -31,7 +31,7 @@ class FeatureWidgetItem
     private  $featureWidget;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", inversedBy="FeatureWidgetItems" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", inversedBy="featureWidgetItems" )
      **/
     private  $feature;
 

@@ -5,6 +5,8 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\AppearanceBundle\Entity\Feature;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 /**
@@ -51,6 +53,27 @@ class Promotion
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="tag"  , cascade={"persist", "remove"} )
      **/
     private  $templateTag;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="promotion" , cascade={"remove"})
+     **/
+    private  $featureWidgetPromotions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="tag" , cascade={"remove"})
+     **/
+    private  $featureWidgetTags;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="promotion" , cascade={"remove"})
+     **/
+    private  $featurePromotions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="tag" , cascade={"remove"})
+     **/
+    private  $featureTags;
+
 
     /**
      * @var string
@@ -437,6 +460,38 @@ class Promotion
     public function setTemplatePromotion($templatePromotion)
     {
         $this->templatePromotion = $templatePromotion;
+    }
+
+    /**
+     * @return FeatureWidget
+     */
+    public function getFeatureWidgetPromotions()
+    {
+        return $this->featureWidgetPromotions;
+    }
+
+    /**
+     * @return FeatureWidget
+     */
+    public function getFeatureWidgetTags()
+    {
+        return $this->featureWidgetTags;
+    }
+
+    /**
+     * @return Feature
+     */
+    public function getFeaturePromotions()
+    {
+        return $this->featurePromotions;
+    }
+
+    /**
+     * @return Feature
+     */
+    public function getFeatureTags()
+    {
+        return $this->featureTags;
     }
 
 }

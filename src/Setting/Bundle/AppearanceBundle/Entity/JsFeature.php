@@ -28,7 +28,7 @@ class JsFeature
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\featureWidget", mappedBy="featureWidget" , cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="jsFeature" , cascade={"remove"})
      **/
     private  $featureWidgets;
 

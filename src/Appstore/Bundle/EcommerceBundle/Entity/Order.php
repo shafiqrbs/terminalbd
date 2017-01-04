@@ -59,6 +59,11 @@ class Order
     private  $orderItems;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="order" )
+     **/
+    private  $accountOnlineOrder;
+
+     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="order" )
      **/
     private  $accountCash;
@@ -94,7 +99,6 @@ class Order
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="orders")
      **/
-
     private $customer;
 
 
@@ -916,6 +920,14 @@ class Order
     public function setCustomer($customer)
     {
         $this->customer = $customer;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountOnlineOrder()
+    {
+        return $this->accountOnlineOrder;
     }
 
 }

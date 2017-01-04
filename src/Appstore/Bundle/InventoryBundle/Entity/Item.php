@@ -76,6 +76,12 @@ class Item
     protected $damages;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\DeliveryItem", mappedBy="item")
+     */
+    protected $deliveryItems;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn", mappedBy="item")
      */
     protected $deliveryReturns;
@@ -1004,6 +1010,14 @@ class Item
     public function getDeliveryReturns()
     {
         return $this->deliveryReturns;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDeliveryItems()
+    {
+        return $this->deliveryItems;
     }
 
 

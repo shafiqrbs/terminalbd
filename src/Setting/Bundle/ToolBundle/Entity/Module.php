@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ToolBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Setting\Bundle\AppearanceBundle\Entity\SidebarWidget;
 use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
@@ -141,15 +142,13 @@ class Module
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidget", mappedBy="module")
      * @ORM\OrderBy({"name" = "DESC"})
      **/
-
     private $sidebarModule;
 
      /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidget", mappedBy="modules")
      * @ORM\OrderBy({"name" = "DESC"})
      **/
-
-    private $sidebarModules;
+    private $sidebarWidgets;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="module")
@@ -473,29 +472,15 @@ class Module
         return $this->sidebarModule;
     }
 
-    /**
-     * @param SidebarWidget $sidebarModule
-     */
-    public function setSidebarModule($sidebarModule)
-    {
-        $this->sidebarModule = $sidebarModule;
-    }
 
     /**
      * @return SidebarWidget
      */
-    public function getSidebarModules()
+    public function getSidebarWidgets()
     {
-        return $this->sidebarModules;
+        return $this->sidebarWidgets;
     }
 
-    /**
-     * @param SidebarWidget $sidebarModules
-     */
-    public function setSidebarModules($sidebarModules)
-    {
-        $this->sidebarModules = $sidebarModules;
-    }
 
 
 }

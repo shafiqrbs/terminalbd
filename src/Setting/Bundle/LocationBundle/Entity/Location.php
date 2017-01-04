@@ -4,6 +4,7 @@ namespace Setting\Bundle\LocationBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Core\UserBundle\Entity\Profile;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -44,6 +45,11 @@ class Location
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="location")
      */
     protected $orders;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="location")
+     */
+    protected $preOrders;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ContactPage", mappedBy="location")
@@ -286,6 +292,14 @@ class Location
     public function getCustomers()
     {
         return $this->customers;
+    }
+
+    /**
+     * @return PreOrder
+     */
+    public function getPreOrders()
+    {
+        return $this->preOrders;
     }
 
 }

@@ -8,6 +8,8 @@ use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\AppearanceBundle\Entity\Feature;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\ContentBundle\Entity\MallConnect;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -69,7 +71,6 @@ class Category
      **/
     protected $mallConnects;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Product", mappedBy="parentCategory" )
      **/
@@ -85,6 +86,16 @@ class Category
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="category" )
      **/
     protected $template;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="category" )
+     **/
+    protected $featureWidgets;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="category" )
+     **/
+    protected $features;
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\Branding", mappedBy="categories" )
@@ -527,6 +538,22 @@ class Category
     public function getMasterProducts()
     {
         return $this->masterProducts;
+    }
+
+    /**
+     * @return FeatureWidget
+     */
+    public function getFeatureWidgets()
+    {
+        return $this->featureWidgets;
+    }
+
+    /**
+     * @return Feature
+     */
+    public function getFeatures()
+    {
+        return $this->features;
     }
 
 

@@ -19,10 +19,6 @@ inventory_category_edit:
     path:     /{id}/edit
     defaults: { _controller: "InventoryBundle:CustomCategory:edit" }
 
-inventory_category_status:
-    path:     /{id}/status
-    defaults: { _controller: "InventoryBundle:CustomCategory:status" }
-
 inventory_category_update:
     path:     /{id}/update
     defaults: { _controller: "InventoryBundle:CustomCategory:update" }
@@ -32,3 +28,4 @@ inventory_category_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:CustomCategory:delete" }
     methods:  [POST, DELETE]
+

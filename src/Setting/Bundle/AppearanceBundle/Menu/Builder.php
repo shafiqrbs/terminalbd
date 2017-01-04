@@ -336,12 +336,12 @@ class Builder extends ContainerAware
         $userObj = ($securityContext->getToken()->getUser());
         $domain = $userObj->getGlobalOption()->getSubDomain();
         $menu
-            ->addChild('Domain '.$domain)
+            ->addChild($domain)
             ->setAttribute('icon','fa fa-bookmark')
             ->setAttribute('dropdown', true);
 
-        $menu['Domain '.$domain]->addChild('Home',      array('route' => 'homepage_modify'));
-        $menu['Domain '.$domain]->addChild('Contact',   array('route' => 'contactpage_modify'));
+        $menu[$domain]->addChild('Home',      array('route' => 'homepage_modify'));
+        $menu[$domain]->addChild('Contact',   array('route' => 'contactpage_modify'));
         return $menu;
 
     }

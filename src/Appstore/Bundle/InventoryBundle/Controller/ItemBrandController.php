@@ -241,11 +241,11 @@ class ItemBrandController extends Controller
         return new JsonResponse($item);
     }
 
-    public function searchItemBrandNameAction($size)
+    public function searchItemBrandNameAction($brand)
     {
         return new JsonResponse(array(
-            'id'=>$size,
-            'text'=>$size
+            'id'=> $brand,
+            'text'=> $brand
         ));
     }
 }

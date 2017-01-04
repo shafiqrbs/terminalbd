@@ -4,6 +4,7 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 
 /**
  * Discount
@@ -30,10 +31,19 @@ class Discount
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="discount")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="discount" )
      */
     protected $purchaseVendorItems;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="discount" , cascade={"remove"})
+     **/
+    private  $featureWidgets;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="discount" , cascade={"remove"})
+     **/
+    private  $features;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="discount"  , cascade={"persist", "remove"} )
@@ -210,6 +220,22 @@ class Discount
     public function setTemplate($template)
     {
         $this->template = $template;
+    }
+
+    /**
+     * @return FeatureWidget
+     */
+    public function getFeatureWidgets()
+    {
+        return $this->featureWidgets;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFeatures()
+    {
+        return $this->features;
     }
 
 

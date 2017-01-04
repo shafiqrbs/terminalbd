@@ -287,6 +287,23 @@ class ProductController extends Controller
         ));
     }
 
+    public function autoCategorySearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $item = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->searchAutoComplete($item);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchCategoryNameAction($category)
+    {
+        return new JsonResponse(array(
+            'id'=> $category,
+            'text'=> $category
+        ));
+    }
+
     public function masterItemSelectAction()
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
@@ -298,7 +315,6 @@ class ProductController extends Controller
             $items[]=array('value' => $entity->getId(),'text'=> $entity->getName());
         endforeach;
         return new JsonResponse($items);
-
 
     }
 

@@ -123,4 +123,6 @@ class CustomerRepository extends EntityRepository
         return $query->getQuery()->getResult();
 
     }
+
+
 }

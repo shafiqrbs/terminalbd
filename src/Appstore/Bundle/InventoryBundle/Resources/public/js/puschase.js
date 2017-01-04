@@ -194,50 +194,5 @@ function InventoryPurchasePage(){
     $('form.purchase').on('click', '.remove', function(){
         $(this).closest('.clone').remove();
     });
-
-
-    $(".select2Vendor").select2({
-
-        placeholder: "Search vendor name",
-        ajax: {
-            url: Routing.generate('inventory_vendor_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        formatSelection: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        initSelection: function (element, callback) {
-
-            var id = $(element).val();
-            $.ajax(Routing.generate('inventory_vendor_name', { vendor : id}), {
-                dataType: "json"
-            }).done(function (data) {
-                return  callback(data);
-            });
-
-
-        },
-        allowClear: true,
-        minimumInputLength: 1
-    });
 }
 

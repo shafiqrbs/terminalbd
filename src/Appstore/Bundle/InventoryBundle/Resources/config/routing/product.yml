@@ -6,17 +6,6 @@ inventory_product_show:
     path:     /{id}/show
     defaults: { _controller: "InventoryBundle:Product:show" }
 
-inventory_product_search:
-    path:     /search
-    defaults: { _controller: "InventoryBundle:Product:autoSearch" }
-    options:
-            expose: true
-
-inventory_product_name:
-    path:      /{product}/product-name
-    defaults: { _controller: "InventoryBundle:Product:searchProductName" }
-    options:
-            expose: true
 
 inventory_product_new:
     path:     /new
@@ -46,3 +35,16 @@ inventory_product_inline_search:
     defaults: { _controller: "InventoryBundle:Product:masterItemSelect" }
     options:
            expose: true
+
+
+inventory_product_search:
+    path:     /search
+    defaults: { _controller: "InventoryBundle:Product:autoSearch" }
+    options:
+            expose: true
+
+inventory_product_name:
+    path:      /{product}/product-name
+    defaults: { _controller: "InventoryBundle:Product:searchProductName" }
+    options:
+            expose: true

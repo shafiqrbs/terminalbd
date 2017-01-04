@@ -45,7 +45,7 @@ class SidebarWidget
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="sidebarWidget")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="sidebarWidgets")
      **/
     private $globalOption;
 

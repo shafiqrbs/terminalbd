@@ -418,6 +418,16 @@ class User extends BaseUser
      */
     protected $salarySettingApproved;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="createdBy" , cascade={"persist", "remove"} )
+     */
+    protected $accountOnlineOrder;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="approvedBy" , cascade={"persist", "remove"} )
+     */
+    protected $accountOnlineOrderApprove;
+
 
     /*------------------------------------------------ Domain ---------------------------------*/
 

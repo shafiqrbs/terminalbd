@@ -512,8 +512,4 @@ EOD;
         return new JsonResponse($items);
     }
 
-
-
-
-
 }

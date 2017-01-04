@@ -35,13 +35,13 @@ class AccountOnlineOrder
     protected $globalOption;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="accountOnlineOrder" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="accountOnlineOrders" )
      **/
     private  $transactionMethod;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountOnlineOrder" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountOnlineOrders" )
      **/
     private  $accountBank;
 
@@ -51,18 +51,18 @@ class AccountOnlineOrder
     private  $accountCash;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="accountOnlineOrder" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="accountOnlineOrders" )
      **/
     private  $accountMobileBank;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="accountOnlineOrder" , cascade={"detach","merge"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="accountOnlineOrders" , cascade={"detach","merge"} )
      **/
     private  $customer;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="accountOnlineOrders" )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="accountOnlineOrder" )
      **/
     private  $order;
 

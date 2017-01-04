@@ -65,16 +65,27 @@
                                         <div class="span3">
                                             <input type="text" id="item" name="item"  class="span12 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name ">
                                         </div>
-                                        <div class="span2">
+                                        <div class="span3">
+                                            <input type="text" id="category" name="category"  class="leftMargin span12 select2Category" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Product category">
+                                        </div>
+                                        <div class="span3">
                                             <input type="text" id="size" name="size"  class="span12 select2Size" value="{% if searchForm.size is defined %}{{ searchForm.size }}{% endif %}"  autocomplete="off" placeholder="Enter size name ">
                                         </div>
                                         <div class="span3">
                                             <input type="text" id="color" name="color"  class="span12 select2Color" value="{% if searchForm.color is defined %}{{ searchForm.color }}{% endif %}"  autocomplete="off" placeholder="Enter color name ">
                                         </div>
-                                        <div class="span4">
+                                    </div>
+                                    <br>
+                                    <div class="row-fluid">
+                                        <div class="span6">
+                                            <input type="text" id="brand" name="brand"  class="leftMargin span12 select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}"  autocomplete="off" placeholder="Product brand name">
+                                        </div>
+                                        <div class="span5">
+                                            <input type="text" id="vendor" name="vendor"  class="span12 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
+                                        </div>
+                                        <div class="span1">
                                             <div class="controls">
                                                 <div class="input-append span11">
-                                                    <input type="text" id="vendor" name="vendor"  class="span11 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
                                                     <div class="btn-group">
                                                         <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>
@@ -85,11 +96,8 @@
                                 </form>
                             </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
-
                                 <thead>
-
-
-                                <tr class="head-blue">
+                                <tr class="head-green">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric" >SKU Name </th>
                                     <th class="numeric" >SKU</th>
@@ -138,7 +146,7 @@
                                                 <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                                     <thead class="flip-content ">
-                                                    <tr class="head-green">
+                                                    <tr class="head-grey">
                                                         <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
                                                         <th class="numeric" >Received</th>
                                                         <th class="numeric" >Memo</th>
@@ -188,27 +196,14 @@
     .disabled{
         opacity: 0.5;
     }
-    .select2-container {
-        margin-left: 0px!important;
-        margin-bottom: 5px;
-    }
-    .input-append, .input-prepend{
-        font-size: 13px!important;
-    }
 </style>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/style.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
     '@InventoryBundle/Resources/public/js/editable.js'
     '@InventoryBundle/Resources/public/js/item.js'
+    '@InventoryBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -217,4 +212,5 @@
     {{ parent() }}
     EditableInit();
     InventoryItemListPage();
+    ApproveProcess();
 {% endblock %}

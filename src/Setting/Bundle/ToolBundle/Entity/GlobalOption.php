@@ -10,6 +10,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\DomainUser;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Setting\Bundle\AppearanceBundle\Entity\Feature;
@@ -199,10 +200,17 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PaymentSalary", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $paymentSalary;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\SalarySetting", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $salarySetting;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="globalOption" , cascade={"persist", "remove"})
+     */
+    protected $accountOnlineOrder;
+
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceSmsEmail", mappedBy="globalOption" , cascade={"persist", "remove"})
      * @ORM\OrderBy({"updated" = "DESC"})
@@ -225,10 +233,18 @@ class GlobalOption
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $ecommerceConfig;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="globalOption" , cascade={"persist", "remove"})
+     * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $orders;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="globalOption" , cascade={"persist", "remove"})
+     * @ORM\OrderBy({"updated" = "DESC"})
+     */
+    protected $preOrders;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="mall" , cascade={"persist", "remove"})
@@ -465,18 +481,6 @@ class GlobalOption
      **/
 
     private $inventoryConfig;
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", mappedBy="globalOption" , cascade={"persist", "remove"})
-     **/
-
-    private $color;
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", mappedBy="globalOption" , cascade={"persist", "remove"})
-     **/
-
-    private $size;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", mappedBy="globalOption" , cascade={"persist", "remove"})
@@ -1412,6 +1416,14 @@ class GlobalOption
     public function getSmsSenderTotal()
     {
         return $this->smsSenderTotal;
+    }
+
+    /**
+     * @return PreOrder
+     */
+    public function getPreOrders()
+    {
+        return $this->preOrders;
     }
 
 

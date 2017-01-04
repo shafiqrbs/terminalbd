@@ -9,7 +9,7 @@ inventory_itembrand_search:
             expose: true
 
 inventory_itembrand_name:
-    path:      /{size}/size-name
+    path:      /{brand}/brand-name
     defaults: { _controller: "InventoryBundle:ItemBrand:searchItemBrandName" }
     options:
             expose: true

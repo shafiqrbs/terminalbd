@@ -33,7 +33,7 @@ class TransactionMethod
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceSmsEmail", mappedBy="portalMobileBankAccount" )
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InvoiceSmsEmail", mappedBy="transactionMethod" )
      **/
     private  $invoiceSmsEmails;
 
@@ -84,6 +84,11 @@ class TransactionMethod
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn", mappedBy="transactionMethod" , cascade={"persist", "remove"})
      */
     protected $accountSalesReturns;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="transactionMethod" , cascade={"persist", "remove"})
+     */
+    protected $accountOnlineOrders;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="transactionMethod" , cascade={"persist", "remove"})

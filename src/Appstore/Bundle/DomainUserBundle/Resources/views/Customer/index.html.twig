@@ -53,15 +53,15 @@
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
                                     <div class="span4">
-                                        <input type="text" id="mobile" name="mobile"  class="leftMargin span12 select2Customer" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Customer mobile">
+                                        <input type="text" id="mobile" name="mobile"  class="span12 select2Customer" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Customer mobile">
                                     </div>
                                     <div class="span4">
-                                        <input type="text" id="location" name="location"  class="leftMargin span12 select2Location" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Customer mobile">
+                                        <input type="text" id="location" name="location"  class="span12 select2Location" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="Customer location">
                                     </div>
                                     <div class="span4">
                                         <div class="controls">
                                             <div class="input-append span9">
-                                                <input type="text" id="name" name="name"  class="m-wrap span12 search-input" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Enter invoice no{% endif %} ">
+                                                <input type="text" id="name" name="name"  class="m-wrap span12 search-input" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Enter customer name{% endif %} ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>

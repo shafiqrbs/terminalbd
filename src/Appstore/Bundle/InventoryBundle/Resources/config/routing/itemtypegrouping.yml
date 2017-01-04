@@ -2,14 +2,6 @@ itemtypegrouping:
     path:     /
     defaults: { _controller: "InventoryBundle:ItemTypeGrouping:index" }
 
-itemtypegrouping_show:
-    path:     /{id}/show
-    defaults: { _controller: "InventoryBundle:ItemTypeGrouping:show" }
-
-itemtypegrouping_new:
-    path:     /new
-    defaults: { _controller: "InventoryBundle:ItemTypeGrouping:new" }
-
 itemtypegrouping_create:
     path:     /create
     defaults: { _controller: "InventoryBundle:ItemTypeGrouping:create" }

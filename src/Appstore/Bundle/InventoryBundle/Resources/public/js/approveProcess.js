@@ -1,13 +1,13 @@
 function ApproveProcess(){
 
     $( ".date-picker" ).datepicker({
-        dateFormat: "yy-mm-dd"
+        dateFormat: "dd-mm-yy"
     });
     // Getter
     var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
 
     // Setter
-    $( ".date-picker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+    $( ".date-picker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
 
     $(document).on("click", ".delete", function() {
 
@@ -17,9 +17,7 @@ function ApproveProcess(){
             url: url,
             type: 'GET',
             success: function (response) {
-                if ('success' == response ) {
-                    $('#remove-' + id).remove();
-                }
+                location.reload();
             },
         })
 
@@ -35,12 +33,54 @@ function ApproveProcess(){
             url: url,
             type: 'GET',
             success: function (response) {
-                if ('success' == response ) {
-                    location.reload();
-                }
+                location.reload();
             },
         })
     })
+
+    $(".select2Product").select2({
+
+        placeholder: "Search product name",
+        ajax: {
+
+            url: Routing.generate('inventory_product_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        initSelection: function (element, callback) {
+            var id = $(element).val();
+            $.ajax(Routing.generate('inventory_product_name', { product : id}), {
+                dataType: "json"
+            }).done(function (data) {
+                return  callback(data);
+            });
+
+
+        },
+        allowClear: true,
+        minimumInputLength: 1
+    });
 
     $(".select2Category").select2({
 
@@ -86,49 +126,7 @@ function ApproveProcess(){
         minimumInputLength: 1
     });
 
-    $(".select2Product").select2({
 
-        placeholder: "Search product name",
-        ajax: {
-
-            url: Routing.generate('inventory_product_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        formatSelection: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        initSelection: function (element, callback) {
-            var id = $(element).val();
-            $.ajax(Routing.generate('inventory_product_name', { product : id}), {
-                dataType: "json"
-            }).done(function (data) {
-                return  callback(data);
-            });
-
-
-        },
-        allowClear: true,
-        minimumInputLength: 1
-    });
 
     $(".select2Color").select2({
 
@@ -261,13 +259,13 @@ function ApproveProcess(){
         placeholder: "Search brand name",
         ajax: {
 
-            url: Routing.generate('branding_search'),
+            url: Routing.generate('inventory_itembrand_search'),
             dataType: 'json',
             delay: 250,
             data: function (params, page) {
                 return {
                     q: params,
-                    page_limit: 100 ,
+                    page_limit: 100,
 
                 };
             },
@@ -289,13 +287,11 @@ function ApproveProcess(){
         }, // omitted for brevity, see the source of this page
         initSelection: function (element, callback) {
             var id = $(element).val();
-            $.ajax(Routing.generate('branding_search_name', { brand : id}), {
+            $.ajax(Routing.generate('inventory_itembrand_name', { brand : id}), {
                 dataType: "json"
             }).done(function (data) {
                 return  callback(data);
             });
-
-
         },
         allowClear: true,
         minimumInputLength: 1
@@ -373,8 +369,8 @@ function ApproveProcess(){
             return item.text
         }, // omitted for brevity, see the source of this page
         initSelection: function (element, callback) {
-            var id = $(element).val();
-            $.ajax(Routing.generate('domain_customer_name', { user : id}), {
+            var customer = $(element).val();
+            $.ajax(Routing.generate('domain_customer_name', { customer : customer}), {
                 dataType: "json"
             }).done(function (data) {
                 return  callback(data);
@@ -388,7 +384,7 @@ function ApproveProcess(){
 
         ajax: {
 
-            url: Routing.generate('customer_location_search'),
+            url: Routing.generate('domain_location_search'),
             dataType: 'json',
             delay: 250,
             data: function (params, page) {
@@ -414,8 +410,8 @@ function ApproveProcess(){
             return item.text
         }, // omitted for brevity, see the source of this page
         initSelection: function (element, callback) {
-            var id = $(element).val();
-            $.ajax(Routing.generate('customer_location_name', { user : id}), {
+            var location = $(element).val();
+            $.ajax(Routing.generate('domain_location_name', { location : location}), {
                 dataType: "json"
             }).done(function (data) {
                 return  callback(data);

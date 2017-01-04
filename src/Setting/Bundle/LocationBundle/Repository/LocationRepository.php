@@ -184,6 +184,20 @@ class LocationRepository extends MaterializedPathRepository{
 
     }
 
+    public function searchAutoComplete($q)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->select('e.name as id');
+        $query->addSelect('e.name as text');
+        $query->where("e.level=3");
+        $query->andWhere($query->expr()->like("e.name", "'$q%'"  ));
+        $query->groupBy('e.id');
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '10' );
+        return $query->getQuery()->getResult();
+
+
+    }
 
 
 }

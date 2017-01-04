@@ -24,12 +24,6 @@ class ItemColor
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="inventoryConfig" , cascade={"persist", "remove"})
-     **/
-
-    private  $globalOption;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="color" )
      **/
     private  $inventoryConfig;
@@ -227,22 +221,6 @@ class ItemColor
     }
 
     /**
-     * @return GoodsItem
-     */
-    public function getGoodsItems()
-    {
-        return $this->goodsItems;
-    }
-
-    /**
-     * @return PurchaseVendorItem
-     */
-    public function getPurchaseVendorItem()
-    {
-        return $this->purchaseVendorItem;
-    }
-
-    /**
      * @return mixed
      */
     public function getOrderItem()
@@ -250,21 +228,6 @@ class ItemColor
         return $this->orderItem;
     }
 
-    /**
-     * @return GlobalOption
-     */
-    public function getGlobalOption()
-    {
-        return $this->globalOption;
-    }
-
-    /**
-     * @param GlobalOption $globalOption
-     */
-    public function setGlobalOption($globalOption)
-    {
-        $this->globalOption = $globalOption;
-    }
 
     /**
      * @return boolean
@@ -280,6 +243,22 @@ class ItemColor
     public function setIsValid($isValid)
     {
         $this->isValid = $isValid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGoodsItem()
+    {
+        return $this->goodsItem;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPurchaseVendorItems()
+    {
+        return $this->purchaseVendorItems;
     }
 }
 

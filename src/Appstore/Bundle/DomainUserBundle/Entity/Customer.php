@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,7 +33,7 @@ class Customer
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="customers")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="customer")
      * @ORM\OrderBy({"id" = "DESC"})
      */
     protected $orders;
@@ -43,6 +44,12 @@ class Customer
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $accountSales;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", mappedBy="customer" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $accountOnlineOrders;
 
 
     /**
@@ -511,6 +518,14 @@ class Customer
     public function setCreated($created)
     {
         $this->created = $created;
+    }
+
+    /**
+     * @return AccountOnlineOrder
+     */
+    public function getAccountOnlineOrders()
+    {
+        return $this->accountOnlineOrders;
     }
 
 }

@@ -35,9 +35,9 @@ class OrderItem
     private  $purchaseVendorItem;
 
      /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="orderItems" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="orderItem" )
      **/
-    private  $stockItem;
+    private  $stockItems;
 
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="orderItem" )
@@ -280,6 +280,14 @@ class OrderItem
     public function setSize($size)
     {
         $this->size = $size;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
     }
 
 

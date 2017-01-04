@@ -60,10 +60,11 @@
                                     </div>
                                     <div class="span3">
                                         <select name="process" id="process" class="span12 m-wrap">
-                                            <option value="Done">Done</option>
-                                            <option value="In-progress">Sales Process</option>
-                                            <option value="Waiting for Delivery">Waiting for Delivery</option>
-                                            <option value="Return & Cancel">Return & Cancel</option>
+                                            <option  value="">Select Process</option>
+                                            <option {% if searchForm.process is defined and searchForm.process == 'Done' %} selected="selected" {% endif %} value="Done">Done</option>
+                                            <option {% if searchForm.process is defined and searchForm.process == 'In-progress' %} selected="selected" {% endif %} value="In-progress">In-progress</option>
+                                            <option {% if searchForm.process is defined and searchForm.process == 'Waiting for Delivery' %} selected="selected" {% endif %} value="Waiting for Delivery">Waiting for Delivery</option>
+                                            <option {% if searchForm.process is defined and searchForm.process == 'Return & Cancel' %} selected="selected" {% endif %} value="Return & Cancel">Return & Cancel</option>
                                         </select>
                                     </div>
                                     <div class="span3">
@@ -88,7 +89,7 @@
                                     <div class="span3">
                                         <div class="controls">
                                             <div class="input-append span10">
-                                                <input type="text" id="endDate" name="endDate"  class="span12 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                                <input type="text" id="endDate"  name="endDate"  class="span12 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off"  placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -209,6 +210,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+
     EditableInit();
     ApproveProcess();
 {% endblock %}

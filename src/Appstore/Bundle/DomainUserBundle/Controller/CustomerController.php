@@ -250,11 +250,29 @@ class CustomerController extends Controller
         return new JsonResponse($item);
     }
 
-    public function searchUserNameAction($user)
+    public function searchCustomerNameAction($customer)
     {
         return new JsonResponse(array(
-            'id'=> $user,
-            'text' => $user
+            'id'=> $customer,
+            'text' => $customer
+        ));
+    }
+
+
+    public function autoLocationSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $item = $this->getDoctrine()->getRepository('SettingLocationBundle:Location')->searchAutoComplete($item);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchLocationNameAction($location)
+    {
+        return new JsonResponse(array(
+            'id'=> $location,
+            'text' => $location
         ));
     }
 

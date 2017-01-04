@@ -25,11 +25,6 @@ class ItemSize
      */
     private $id;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="size" , cascade={"persist", "remove"})
-     **/
-
-    private  $globalOption;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="size" )
@@ -274,22 +269,6 @@ class ItemSize
     public function getOrderItem()
     {
         return $this->orderItem;
-    }
-
-    /**
-     * @return GlobalOption
-     */
-    public function getGlobalOption()
-    {
-        return $this->globalOption;
-    }
-
-    /**
-     * @param GlobalOption $globalOption
-     */
-    public function setGlobalOption($globalOption)
-    {
-        $this->globalOption = $globalOption;
     }
 
     /**

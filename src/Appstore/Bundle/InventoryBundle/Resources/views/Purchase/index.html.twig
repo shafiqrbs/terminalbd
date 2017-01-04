@@ -78,38 +78,37 @@
                                 <div class="span4">
                                     <ul class="unstyled">
                                         <li><strong>Purhase Qnt:</strong> &nbsp;{{ purchaseOverview.quantity }}</li>
-
                                     </ul>
                                 </div>
 
                             </div>
-                            <div class="portlet search-portlet box grey">
-                                <div class="row-fluid" >
-                                    <form class="search-form" action="" method="get" name="itemSearch">
-                                        <div class="span7">
+                            <form class="search-form" action="" method="get" name="itemSearch">
+                                <div class="row-fluid">
+                                    <div class="span3">
+                                        <input type="text" id="grn" name="grn"  class="span12 m-wrap" value="{% if searchForm.grn is defined %}{{ searchForm.grn }}{% endif %}"  autocomplete="off" placeholder="goods receive no">
+                                    </div>
+                                    <div class="span3">
+                                        <input type="text" id="receiveDate" name="receiveDate"  class="span12 m-wrap date-picker" value="{% if searchForm.receiveDate is defined %}{{ searchForm.receiveDate }}{% endif %}"  autocomplete="off" placeholder="received date ">
+                                    </div>
+                                    <div class="span3">
+                                        <input type="text" id="vendor" name="vendor"  class="span12 m-wrap select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name ">
+                                    </div>
+                                    <div class="span3">
+                                        <div class="input-append span10">
                                             <div class="controls">
-                                                <input type="text" id="grn" name="grn"  class="span4 search-input" value="{% if searchForm.grn is defined %}{{ searchForm.grn }}{% endif %}"  autocomplete="off" placeholder="goods receive no">
-                                                <input type="text" id="receiveDate" name="receiveDate"  class="span4 search-input  m-ctrl-medium date-picker" value="{% if searchForm.receiveDate is defined %}{{ searchForm.receiveDate }}{% endif %}"  autocomplete="off" placeholder="received date ">
-                                                <input type="text" id="memo" name="memo"  class="span4 search-input" value="{% if searchForm.memo is defined %}{{ searchForm.memo }}{% endif %}"  autocomplete="off" placeholder="memo no">
-                                           </div>
-                                        </div>
-                                        <div class="span4 left-margin">
-                                            <input type="text" id="vendor" name="vendor"  class="span11 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name ">
-                                        </div>
-                                        <div class="span1">
-                                            <div class="btn-group">
-                                                <button class="btn" type="submit" >
-                                                    <i class="icon-search"></i>&nbsp;Go</button>
+                                                <input type="text" id="memo" name="memo"  class="span12 m-wrap" value="{% if searchForm.memo is defined %}{{ searchForm.memo }}{% endif %}"  autocomplete="off" placeholder="memo no">
+                                                <div class="btn-group">
+                                                <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
 
-                            </div>
+                            </form>
                             <table class="table table-bordered table-striped table-condensed flip-content">
 
                                 <thead>
-                                <tr class="head-blue">
+                                <tr class="head-green">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric" >GRN</th>
                                     <th class="numeric" >Received date</th>
@@ -242,18 +241,12 @@
         </div>
     </div>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/style.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
     '@InventoryBundle/Resources/public/js/editable.js'
     '@InventoryBundle/Resources/public/js/puschase.js'
+    '@InventoryBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -262,5 +255,6 @@
     {{ parent() }}
     EditableInit();
     InventoryPurchasePage();
+    ApproveProcess();
 {% endblock %}
 

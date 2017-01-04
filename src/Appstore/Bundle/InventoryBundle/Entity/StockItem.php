@@ -40,7 +40,7 @@ class StockItem
     protected $purchaseItem;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", inversedBy="stockItem")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", inversedBy="stockItems")
      */
     protected $orderItem;
 
