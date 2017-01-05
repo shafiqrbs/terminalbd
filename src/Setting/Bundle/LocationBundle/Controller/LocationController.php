@@ -58,7 +58,7 @@ class LocationController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('location_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('location'));
         }
 
         return $this->render('SettingLocationBundle:Location:new.html.twig', array(

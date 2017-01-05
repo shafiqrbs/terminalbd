@@ -40,9 +40,12 @@ class LocationType extends AbstractType
         ))
         ->add('parent', 'entity', array(
             'required'    => true,
-            'empty_value' => '---Select parent location---',
-            'attr'=>array('class'=>'location m-wrap span10 selectbox'),
+            'empty_value' => '---Select Parent Location---',
+            'attr'=>array('class'=>'location m-wrap span10 select2'),
             'class' => 'SettingLocationBundle:Location',
+            'constraints' =>array(
+                new NotBlank(array('message'=>'Select Parent Location'))
+            ),
             'property' => 'nestedLabel',
             'choices'=> $this->LocationChoiceList()
         ));
@@ -72,7 +75,7 @@ class LocationType extends AbstractType
      */
     protected function LocationChoiceList()
     {
-        return $locationTree = $this->em->getFlatLocationTree();
+        return $locationTree = $this->em->getDistrictOptionGroup();
 
     }
 

@@ -26,7 +26,7 @@ class CustomCategoryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('ProductProductBundle:Category')->findBy(array('inventoryConfig' => $inventoryConfig),array( 'parent'=>'asc' , 'name' =>'asc' ));
+        $entities = $em->getRepository('ProductProductBundle:Category')->findBy(array('inventoryConfig' => $inventoryConfig ),array( 'parent'=>'asc' , 'name' =>'asc' ));
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:CustomCategory:index.html.twig', array(
             'entities' => $pagination,

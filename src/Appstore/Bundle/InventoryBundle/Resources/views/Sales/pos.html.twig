@@ -355,7 +355,7 @@
                                     <th class="numeric" >{{ dailySales.total|number_format  }}</th>
                                     <th class="numeric" >{{ dailySales.payment|number_format }}</th>
                                     <td class="numeric" >{{ dailySales.due|number_format }}</td>
-                                    <td class="numeric" >{% if dailySales.salesBy %}{{ dailySales.salesBy.profile.name }}{% endif %}</td>
+                                    <td class="numeric" >{% if dailySales.salesBy %}{{ dailySales.salesBy }}{% endif %}</td>
                                     <td class="numeric" >{% if dailySales.transactionMethod is not empty %}{{ dailySales.transactionMethod.name }}{% endif %}</td>
                                     <td class="numeric" >
                                         {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}

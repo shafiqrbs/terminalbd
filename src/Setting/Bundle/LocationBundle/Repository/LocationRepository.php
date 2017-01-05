@@ -123,10 +123,9 @@ class LocationRepository extends MaterializedPathRepository{
     {
         $results = $this->createQueryBuilder('node')
             ->orderBy('node.level, node.name', 'ASC')
-            ->where('node.level < 4 ')
+            ->where('node.level < 4')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
 
         $locations = $this->getLocationsIndexedById($results);
 
@@ -134,8 +133,31 @@ class LocationRepository extends MaterializedPathRepository{
 
         foreach ($locations as $location) {
             switch($location->getLevel()) {
+
                  case 3:
                     $grouped[$locations[$location->getParentIdByLevel(3)]->getName()][$location->getId()] = $location;
+            }
+        }
+
+        return $grouped;
+    }
+
+    public function getDistrictOptionGroup()
+    {
+        $results = $this->createQueryBuilder('node')
+            ->orderBy('node.level, node.name', 'ASC')
+            ->where('node.level < 3')
+            ->getQuery()
+            ->getResult();
+
+        $locations = $this->getLocationsIndexedById($results);
+
+        $grouped = array();
+
+        foreach ($locations as $location) {
+            switch($location->getLevel()) {
+                case 2:
+                    $grouped[$locations[$location->getParentIdByLevel(2)]->getName()][$location->getId()] = $location;
             }
         }
 

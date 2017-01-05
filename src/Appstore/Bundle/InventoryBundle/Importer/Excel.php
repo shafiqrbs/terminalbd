@@ -317,6 +317,7 @@ class Excel
                 $category->setName($item['Category']);
                 $category->setInventoryConfig($this->getInventoryConfig());
                 $category->setPermission('private');
+                $category->setStatus(false);
                 $category = $this->save($category);
             }
             $this->setCachedData('Category',  $item['Category'] , $category);

@@ -279,9 +279,7 @@ class SalesController extends Controller
                 }
                 $em->flush();
                 if($entity->getTransactionMethod()->getId() == 4){
-
                     return $this->redirect($this->generateUrl('inventory_sales_show',array('id' => $entity->getId())));
-
                 }else{
 
                     $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);

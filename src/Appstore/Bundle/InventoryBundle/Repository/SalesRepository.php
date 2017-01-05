@@ -49,13 +49,13 @@ class SalesRepository extends EntityRepository
             if (!empty($invoice)) {
 
                 $qb->andWhere("s.invoice LIKE :invoice");
-                $qb->setParameter('invoice', $invoice);
-            }
+                $qb->setParameter('invoice', $invoice.'%');
+              }
 
             if (!empty($courierInvoice)) {
 
                 $qb->andWhere("s.courierInvoice LIKE :courierInvoice");
-                $qb->setParameter('courierInvoice', $courierInvoice);
+                $qb->setParameter('invoice','%'. $courierInvoice.'%');
             }
 
             if (!empty($process)) {

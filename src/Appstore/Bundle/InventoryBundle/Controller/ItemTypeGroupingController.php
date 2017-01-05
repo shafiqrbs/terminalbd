@@ -119,7 +119,7 @@ class ItemTypeGroupingController extends Controller
             $em->flush();
         }
 
-        $categories = $em->getRepository('ProductProductBundle:Category')->findBy(array('status'=>1,'parent'=>NULL),array('name'=>'asc'));
+        $categories = $em->getRepository('ProductProductBundle:Category')->findBy(array('status' => 1,'inventoryConfig'=>NULL,'parent'=>NULL),array('name'=>'asc'));
         if($categories)
 
         $entities = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getGroupCategories($categories,$array);

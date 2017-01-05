@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="span3">
                                         <select name="transactionMethod" id="transactionMethod" class="span12 m-wrap">
-                                            <option>Transaction Method</option>
+                                            <option value="">Transaction Method</option>
                                             {% for method in transactionMethods %}
                                                 <option {% if searchForm.method is defined and searchForm.method == method.id %} selected="selected" {% endif %} value="{{ method.id }}" >{{ method.name }}</option>
                                             {% endfor %}
@@ -210,7 +210,6 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-
     EditableInit();
     ApproveProcess();
 {% endblock %}

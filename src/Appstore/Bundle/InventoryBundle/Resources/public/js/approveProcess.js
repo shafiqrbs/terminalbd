@@ -9,6 +9,13 @@ function ApproveProcess(){
     // Setter
     $( ".date-picker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
 
+    $(document).on("click", ".editable-submit", function() {
+        setTimeout(pageReload, 3000);
+    });
+    function pageReload() {
+        location.reload();
+    }
+
     $(document).on("click", ".delete", function() {
 
         var id = $(this).attr("data-id");
