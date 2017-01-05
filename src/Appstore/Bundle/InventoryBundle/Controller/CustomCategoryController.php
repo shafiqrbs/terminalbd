@@ -84,8 +84,9 @@ class CustomCategoryController extends Controller
     private function createCreateForm(Category $entity)
     {
 
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
-        $form = $this->createForm(new CustomCategoryType($em), $entity, array(
+        $form = $this->createForm(new CustomCategoryType($inventory,$em), $entity, array(
             'action' => $this->generateUrl('inventory_category_create'),
             'method' => 'POST',
             'attr' => array(
@@ -166,9 +167,10 @@ class CustomCategoryController extends Controller
      */
     private function createEditForm(Category $entity)
     {
-        $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
 
-        $form = $this->createForm(new CustomCategoryType($em), $entity, array(
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
+        $form = $this->createForm(new CustomCategoryType($inventory,$em), $entity, array(
             'action' => $this->generateUrl('inventory_category_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

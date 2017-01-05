@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Form;
 
+use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Product\Bundle\ProductBundle\Entity\CategoryRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -11,11 +12,16 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class CustomCategoryType extends AbstractType
 {
 
+    /** @var  InventoryConfig */
+
+    private $inventoryConfig;
+
     /** @var  CategoryRepository */
     private $em;
 
-    function __construct(CategoryRepository $em)
+    function __construct(InventoryConfig $inventoryConfig , CategoryRepository $em)
     {
+        $this->inventoryConfig = $inventoryConfig;
         $this->em = $em;
     }
 
@@ -31,9 +37,9 @@ class CustomCategoryType extends AbstractType
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter category name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
-
                 )
             ))
+
             ->add('parent', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select parent category---',
@@ -69,7 +75,8 @@ class CustomCategoryType extends AbstractType
      */
     protected function categoryChoiceList()
     {
-        return $categoryTree = $this->em->getFlatCategoryTree();
+
+        return $categoryTree = $this->em->getUseInventoryItemCategory($this->inventoryConfig);
 
     }
 
