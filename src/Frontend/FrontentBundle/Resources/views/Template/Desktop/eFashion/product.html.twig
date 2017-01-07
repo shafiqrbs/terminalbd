@@ -71,7 +71,7 @@
                                         <div class="row">
                                             <div class="row-fluid">
                                                 <div class="col-xs-6 col-md-6"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}{{ product.discountPrice|number_format() }}{% endif %}</div>
-                                                <div class="col-xs-6 col-md-6 text-right"><strong>Stock in</strong>&nbsp;{{ product.quantity }}&nbsp;{% if  product.masterItem.productUnit is defined and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</div>
+                                                <div class="col-xs-6 col-md-6 text-right"><strong>Stock in</strong>&nbsp;{{ product.masterQuantity }}&nbsp;{% if  product.masterItem.productUnit is defined and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</div>
                                             </div>
                                             <div class="row-fluid separator-margin" >
                                                 <div class="col-xs-12 col-md-12  separator separator-absolute" >

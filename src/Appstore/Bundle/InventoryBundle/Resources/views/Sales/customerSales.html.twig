@@ -125,9 +125,9 @@
                                         <th class="numeric" >{{ entity.total|number_format  }}</th>
                                         <th class="numeric" >{{ entity.payment|number_format }}</th>
                                         <td class="numeric" >{{ entity.due|number_format }}</td>
-                                        <td class="numeric" >{% if entity.customer %}<a href="{{ path('inventory_customer_show',{'id':entity.customer.id}) }}" target="_blank"  class="btn mini blue"><i class="icon-user"></i>&nbsp;{{ entity.customer.mobile }}</a>{% endif %}</td>
+                                        <td class="numeric" >{% if entity.customer %}<a href="{{ path('inventory_customer_show',{'id':entity.customer.id}) }}" target="_blank"  class="btn mini blue">{{ entity.customer.mobile }}</a>{% endif %}</td>
                                         <td class="numeric" >
-                                            {% if entity.process == 'Done' %}
+                                            {% if entity.process == 'Paid' %}
                                                 <a  class="btn mini purple">{% if entity.process is not empty %}{{ entity.process }}{% endif %}</a>
                                                 <a class="btn mini green" >{{entity.courierInvoice}}</a>
                                             {% elseif entity.process == 'Return & Cancel' %}
@@ -143,11 +143,11 @@
                                                 <a href="{{ path('inventory_sales_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                                 <a  href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
                                             {% endif %}
-                                            {% if entity.paymentStatus == "Pending" %}
+                                            {% if entity.paymentStatus == "Pending" or entity.process == "In-progress" %}
                                                 <a href="{{ path('inventory_sales_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
                                                 <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
-                                            {% if entity.paymentStatus == "Due" %}
+                                            {% if entity.paymentStatus == "Due" and entity.process != "Return & Cancel" %}
                                                 <a href="{{ path('account_sales_new') }}" class="btn mini blue" ><i class="icon-money"></i></a>
                                             {% endif %}
                                         </td>

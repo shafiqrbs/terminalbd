@@ -195,6 +195,9 @@ class SalesController extends Controller
         }else{
             $twig = 'pos';
         }
+        if ($entity->getProcess() != "In-progress"){
+             return $this->redirect($this->generateUrl('inventory_sales_show',array('id' => $entity->getId())));
+        }
         return $this->render('InventoryBundle:Sales:'.$twig.'.html.twig', array(
             'entity'                    => $entity,
             'todaySales'                => $todaySales,
@@ -276,6 +279,9 @@ class SalesController extends Controller
                 }
                 if($entity->getTransactionMethod()->getId() != 4) {
                     $entity->setApprovedBy($this->getUser());
+                }else if($entity->getTransactionMethod()->getId() == 4) {
+                    $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+                    $entity->setPaymentInWord($amountInWords);
                 }
                 $em->flush();
                 if($entity->getTransactionMethod()->getId() == 4){
@@ -284,7 +290,7 @@ class SalesController extends Controller
 
                     $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                     $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
-                    $em->getRepository('InventoryBundle:GoodsItem')->updateInventorySalesItem($entity);
+                    $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
                     $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
                     $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
                     return $this->redirect($this->generateUrl('inventory_sales_new'));
@@ -468,7 +474,6 @@ EOD;
         return $this->redirect($this->generateUrl('inventory_sales'));
     }
 
-
     public function salesInlineUpdateAction(Request $request)
     {
         $data = $request->request->all();
@@ -492,18 +497,75 @@ EOD;
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
         $entity->setProcess($data['value']);
+        if($entity->getProcess() == 'Waiting for Delivery'){
+            $this->approvedOrder($entity);
+            //$dispatcher = $this->container->get('event_dispatcher');
+            // $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+            // $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+
+        }
         $em->flush();
 
-        //$dispatcher = $this->container->get('event_dispatcher');
-       // $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+        if($entity->getProcess() == 'Paid'){
+            $this->approvedOrder($entity);
+            //$dispatcher = $this->container->get('event_dispatcher');
+            // $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+
+        }elseif($entity->getProcess() == 'Return & Cancel'){
+            $this->returnCancelOrder($entity);
+            //$dispatcher = $this->container->get('event_dispatcher');
+            // $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+
+        }
+
         exit;
 
     }
 
+
+    public function approvedOrder(Sales $entity)
+    {
+        if (!empty($entity)) {
+
+            $em = $this->getDoctrine()->getManager();
+            $entity->setPaymentStatus('Paid');
+            $entity->setPayment($entity->getPayment() + $entity->getDue());
+            $entity->setDue($entity->getTotal() - $entity->getPayment());
+            $entity->setApprovedBy($this->getUser());
+            $em->flush();
+            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
+            $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+            $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
+            $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
+            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+            return new Response('success');
+        } else {
+            return new Response('failed');
+        }
+        exit;
+    }
+
+
+    public function returnCancelOrder(Sales $entity)
+    {
+        if (!empty($entity)) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setPaymentStatus('Cancel');
+            $entity->setApprovedBy($this->getUser());
+            $em->flush();
+            return new Response('success');
+        } else {
+            return new Response('failed');
+        }
+        exit;
+    }
+
+
+
     public function salesSelectAction()
     {
         $items  = array();
-        $items[]= array('value' => 'Done','text'=>'Done');
+        $items[]= array('value' => 'Paid','text'=>'Paid');
         $items[]= array('value' => 'In-progress','text'=>'In-progress');
         $items[]= array('value' => 'Waiting for Delivery','text'=>'Waiting for Delivery');
         $items[]= array('value' => 'Return & Cancel','text'=>'Return & Cancel');

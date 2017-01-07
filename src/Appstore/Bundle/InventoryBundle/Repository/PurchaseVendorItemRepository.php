@@ -128,18 +128,7 @@ class PurchaseVendorItemRepository extends EntityRepository
         $qb->andWhere("item.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
         $this->handleSearchBetween($qb,$data);
-        if(!empty($order)){
-
-            if($order == "ASC"){
-                $qb->orderBy('item.salesPrice','ASC');
-            }else{
-                $qb->orderBy('item.salesPrice','DESC');
-            }
-
-        }else{
-
-            $qb->orderBy('item.updated','DESC');
-        }
+        $qb->orderBy('item.updated','DESC');
         $qb->getQuery();
         return  $qb;
 

@@ -122,6 +122,7 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setAmount($entity->getPayment());
 
         $data = array('mobile'=> $entity->getCustomer()->getMobile());
+
         $result = $this->salesOverview($entity->getInventoryConfig()->getGlobalOption(),$data);
         $balance = ($result['totalAmount'] -  $result['receiveAmount']);
         $lastBalance = ($balance + $entity->getDue());

@@ -59,6 +59,11 @@ class InventoryConfigType extends AbstractType
                 'choice', array(
                     'attr'=>array('class'=>'span12'),
                     'choices' => array(
+                        '20' => '20',
+                        '22' => '22',
+                        '24' => '24',
+                        '26' => '26',
+                        '28' => '28',
                         '30' => '30',
                         '32' => '32',
                         '34' => '34',
@@ -75,6 +80,7 @@ class InventoryConfigType extends AbstractType
                 'choice', array(
                     'attr'=>array('class'=>'span12'),
                     'choices' => array(
+                        '7' => '7',
                         '8' => '8',
                         '9' => '9',
                         '10' => '10',
@@ -101,6 +107,7 @@ class InventoryConfigType extends AbstractType
                     'expanded'  => false,
                     'empty_data'  =>1,
             ))
+            ->add('printLeftMargin','text',array('attr'=>array('class'=>'numeric span8')))
             ->add('barcodeText','text',array('attr'=>array('class'=>'span12')))
             ->add('barcodeHeight','integer',array('attr'=>array('class'=>'numeric span8')))
             ->add('barcodeWidth','integer',array('attr'=>array('class'=>'numeric span8')))

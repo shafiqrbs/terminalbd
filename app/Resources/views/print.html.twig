@@ -55,7 +55,28 @@
         width: 100%;
     }
 
-    .table th, .table td {
+    table.table-border{
+        border: 1px solid #777777!important;
+    }
+
+    .print-header{
+        height: 50px;
+        border: 1px solid #777777;
+    }
+    .print-header .title{
+        float: left;
+        padding-left: 10px;
+        line-height: 50px;
+        font-size: 18px;
+
+    }
+    .print-header .barcode{
+        float: right;
+        padding-right: 10px;
+    }
+
+
+    .table td {
         padding:1px;
         line-height: 20px;
         text-align: left;
@@ -70,21 +91,26 @@
     }
     .table thead tr th {
         font-size: 11px;
-        font-weight: normal;
+        line-height: 30px;
+        text-align: left!important;
     }
     .table-bordered tr td{
         border: 1px solid #444 !important;
+        text-align: left!important;
     }
     .table-striped tbody>tr:nth-child(odd)>td,
     .table-striped tbody>tr:nth-child(odd)>th {
         background-color: #f9f9f9;
     }
     .head-black{
-        background:#444!important;
+        background:#ddd!important;
         height: 30px;
-        color: #ffffff;
+        color: #000;
+        line-height: 30px;
+        border:1px solid #777;
+        text-align: left;
+        padding-left:10px;
     }
-
 
     .header .navbar-inner{
         display: none;

@@ -41,10 +41,6 @@ inventory_sales_print_invoice:
     path:     /{invoice}/invoice
     defaults: { _controller: "InventoryBundle:Sales:invoicePrint" }
 
-inventory_sales_due:
-    path:     /{code}/due-payment
-    defaults: { _controller: "InventoryBundle:Sales:duePayment" }
-
 inventory_sales_item_update:
     path:     /sales/item/update
     defaults: { _controller: "InventoryBundle:Sales:salesItemUpdate" }

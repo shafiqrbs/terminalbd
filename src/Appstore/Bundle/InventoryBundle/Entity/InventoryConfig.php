@@ -278,9 +278,23 @@ class InventoryConfig
     /**
      * @var smallint
      *
+     * @ORM\Column(name="barcodeBorder", type="smallint", nullable = true)
+     */
+    private $barcodeBorder = 0;
+
+    /**
+     * @var smallint
+     *
      * @ORM\Column(name="barcodePadding", type="smallint", nullable = true)
      */
     private $barcodePadding = 0;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="printLeftMargin", type="smallint", nullable = true)
+     */
+    private $printLeftMargin = 0;
 
     /**
      * @var smallint
@@ -823,6 +837,38 @@ class InventoryConfig
     public function setBarcodePadding($barcodePadding)
     {
         $this->barcodePadding = $barcodePadding;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getBarcodeBorder()
+    {
+        return $this->barcodeBorder;
+    }
+
+    /**
+     * @param smallint $barcodeBorder
+     */
+    public function setBarcodeBorder($barcodeBorder)
+    {
+        $this->barcodeBorder = $barcodeBorder;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getPrintLeftMargin()
+    {
+        return $this->printLeftMargin;
+    }
+
+    /**
+     * @param smallint $printLeftMargin
+     */
+    public function setPrintLeftMargin($printLeftMargin)
+    {
+        $this->printLeftMargin = $printLeftMargin;
     }
 
 

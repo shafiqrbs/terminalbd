@@ -96,7 +96,7 @@
                                                     <td class="numeric" >{{ sales.due|number_format }}</td>
                                                     <td class="numeric" >{% if sales.salesBy %}{{ sales.salesBy.profile.name }}{% endif %}</td>
                                                     <td class="numeric" >
-                                                        {% if sales.process == 'Done' %}
+                                                        {% if sales.process == 'Paid' %}
                                                             <a  class="btn mini blue">{% if sales.process is not empty %}{{ sales.process }}{% endif %}</a>
                                                             <a class="btn mini green" >{{sales.courierInvoice}}</a>
                                                         {% elseif sales.process == 'Return & Cancel' %}

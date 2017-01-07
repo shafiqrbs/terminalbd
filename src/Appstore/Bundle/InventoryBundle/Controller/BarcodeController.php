@@ -17,15 +17,31 @@ use Hackzilla\BarcodeBundle\Utility\Barcode;
 class BarcodeController extends Controller
 {
 
+    public function  indexAction(){
+
+    }
 
     public function barCoder($barcoder)
     {
 
         if ((!empty($barcoder->getItem()->getColor()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeColor() == 1) and (!empty($barcoder->getItem()->getSize()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeSize() == 1)) {
-            $sizeColor = $barcoder->getItem()->getColor()->getName() . '-' . $barcoder->getItem()->getSize()->getName();
-        } elseif (!empty($barcoder->getItem()->getSize()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeSize() == 1) {
+
+            if ($barcoder->getItem()->getColor()->getName() != 'Default'){
+                $color = $barcoder->getItem()->getColor()->getName();
+            }else{
+                $color ='';
+            }
+            if ($barcoder->getItem()->getSize()->getName() != 'Default'){
+                $size = '-'.$barcoder->getItem()->getSize()->getName();
+            }else{
+                $size ='';
+            }
+
+            $sizeColor =  $color.$size;
+
+        } elseif (!empty($barcoder->getItem()->getSize()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeSize() == 1 and $barcoder->getItem()->getSize()->getName() != 'Default') {
             $sizeColor = $barcoder->getItem()->getSize()->getName();
-        } elseif (!empty($barcoder->getItem()->getColor()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeColor() == 1) {
+        } elseif (!empty($barcoder->getItem()->getColor()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeColor() == 1 and $barcoder->getItem()->getColor()->getName() != 'Default') {
             $sizeColor = $barcoder->getItem()->getColor()->getName();
         }else {
             $sizeColor = '';
@@ -38,6 +54,26 @@ class BarcodeController extends Controller
         }else{
             $vendorBrand = '';
         }
+        $barcodeWidth = $barcoder->getItem()->getInventoryConfig()->getBarcodeWidth().'px';
+        $barcodeHeight = $barcoder->getItem()->getInventoryConfig()->getBarcodeHeight().'px';
+        $barcodeMargin = $barcoder->getItem()->getInventoryConfig()->getBarcodeMargin();
+        if($barcodeMargin == 0 ){
+            $margin = 0;
+        }else{
+            $margin = $barcodeMargin.'px';
+        }
+        $barcodePadding = $barcoder->getItem()->getInventoryConfig()->getBarcodePadding();
+        if($barcodePadding == 0 ){
+            $padding = 0;
+        }else{
+            $padding = $barcodePadding.'px';
+        }
+        $barcodeBorder = $barcoder->getItem()->getInventoryConfig()->getBarcodeBorder();
+        if($barcodeBorder > 0 ){
+            $border = $barcodeBorder.'px';
+        }else{
+            $border = 0;
+        }
         $scale = $barcoder->getItem()->getInventoryConfig()->getBarcodeScale();
         $fontsize = $barcoder->getItem()->getInventoryConfig()->getBarcodeFontSize();
         $thickness = $barcoder->getItem()->getInventoryConfig()->getBarcodeThickness();
@@ -49,7 +85,7 @@ class BarcodeController extends Controller
         $barcode->setFontSize($fontsize);
         $code = $barcode->generate();
         $data = '';
-        $data .='<div class="barcode-block">';
+        $data .='<div class="barcode-block" style="width:'.$barcodeWidth.'; height:'.$barcodeHeight.'; border:'.$border.'; margin-top:'.$margin.'; padding:'.$padding.'; ">';
         $data .='<div class="centered">';
         $data .='<p><span class="left">'.$sizeColor.'</span><span class="right">'.$vendorBrand.'</span></p>';
         $data .='<div class="clearfix"></div>';
@@ -104,9 +140,16 @@ class BarcodeController extends Controller
 
     public function printAction()
     {
-
+        $printLeftMargin = $this->getUser()->getGlobalOption()->getInventoryConfig()->getPrintLeftMargin();
         $barCoder = $this->get('session')->get('barcodeQ');
+        if($printLeftMargin == 0){
+            $leftMargin = 0;
+        }else{
+            $leftMargin = $printLeftMargin;
+        }
+
         return $this->render('InventoryBundle:Barcode:print.html.twig', array(
+            'printLeftMargin'      => $leftMargin,
             'barCoder'      => $barCoder
         ));
     }

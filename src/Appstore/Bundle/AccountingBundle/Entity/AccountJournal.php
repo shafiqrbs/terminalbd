@@ -69,6 +69,11 @@ class AccountJournal
     private  $accountBank;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBkash", inversedBy="accountJournals" )
+     **/
+    private  $accountBkash;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="accountJournals" )
      **/
     private  $accountMobileBank;

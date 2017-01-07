@@ -227,7 +227,7 @@ class Item
      *
      * @ORM\Column(name="remainingQnt", type="integer", nullable=true)
      */
-    private $remainingQnt;
+    private $remainingQnt = 0;
 
 
     /**

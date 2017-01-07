@@ -155,18 +155,9 @@
         </div>
     </div>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@AccountingBundle/Resources/public/css/*'
-    '@AccountingBundle/Resources/public/css/style.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@AccountingBundle/Resources/public/js/*'
     '@AccountingBundle/Resources/public/js/common.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

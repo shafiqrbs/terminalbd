@@ -4,6 +4,7 @@ namespace Appstore\Bundle\InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -235,7 +236,7 @@ class Product implements CodeAwareEntity
     }
 
     /**
-     * @return mixed
+     * @return Category
      */
     public function getCategory()
     {
@@ -243,7 +244,7 @@ class Product implements CodeAwareEntity
     }
 
     /**
-     * @param mixed $category
+     * @param Category $category
      */
     public function setCategory($category)
     {

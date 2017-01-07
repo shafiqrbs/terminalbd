@@ -1,9 +1,11 @@
 <script>
     window.print();
 </script>
-{% for barcode in barCoder %}
-    {{ barcode|raw }}
-{% endfor %}
+<div style="margin-left:{{ printLeftMargin }}">
+    {% for barcode in barCoder %}
+        {{ barcode|raw }}
+    {% endfor %}
+</div>
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
     '@InventoryBundle/Resources/public/css/print.css' %}

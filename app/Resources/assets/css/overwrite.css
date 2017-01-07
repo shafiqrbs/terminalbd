@@ -1,7 +1,12 @@
 body {
     background-color: #263238 !important;
 }
-
+input.m-wrap {
+    border: 1px solid #999 !important;
+}
+select.m-wrap, input[type="file"].m-wrap{
+    border: 1px solid #999 !important;
+}
 .page-sidebar {
     background-color: #263238;
 }

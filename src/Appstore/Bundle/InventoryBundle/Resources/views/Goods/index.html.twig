@@ -95,7 +95,7 @@
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.masterItem %}{{ entity.masterItem.name }}-{% endif %}{{ entity.webName }}</td>
                                         <td class="numeric" >{{ entity.quantity }}</td>
-                                        <td class="numeric" >{{ entity.subProductQuantity }}</td>
+                                        <td class="numeric" >{{ entity.masterQuantity }}</td>
                                         <td class="numeric" >{{ entity.purchasePrice|number_format() }}</td>
                                         <td class="numeric" >{% if entity.discount is not empty  %}<strike>{% endif %}{{ entity.salesPrice|number_format() }}{% if entity.discount is not empty  %}</strike>{% endif %} {% if entity.discount is not empty  %}{{ entity.discountPrice|number_format() }}{% endif %}</td>
                                         <td class="numeric" >

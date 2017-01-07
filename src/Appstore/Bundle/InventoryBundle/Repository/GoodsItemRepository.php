@@ -176,7 +176,7 @@ class GoodsItemRepository extends EntityRepository
         $em->flush();
     }
 
-    public function updateInventorySalesItem(Sales $entity ,$calculation ='minus')
+    public function updateEcommerceItem(Sales $entity ,$calculation ='minus')
     {
         foreach ($entity->getSalesItems() as $row){
             $purchaseVendorItem = $row->getPurchaseItem()->getPurchaseVendorItem();
@@ -213,8 +213,11 @@ class GoodsItemRepository extends EntityRepository
             }else{
                 $subItem->setQuantity($subGood->getQuantity() + $qnt);
             }
+            $subProductQuantity = $purchaseVendorItem->getSubProductQuantity();
+            $purchaseVendorItem->setMasterQuantity($subProductQuantity);
             $em->flush();
         }
+
 
     }
 
