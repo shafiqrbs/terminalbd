@@ -116,8 +116,15 @@ class InvoiceSmsEmailController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $sePricing = $this->getDoctrine()->getRepository('SettingToolBundle:SmsEmailPricing')->findBy(array('status'=>1),array('name'=>'asc'));
+
+        $itemIds = array();
+        foreach ($entity->getInvoiceSmsEmailItems() as $row ){
+            $itemIds[] = $row->getSmsEmailPricing()->getId();;
+        }
+
         return $this->render('SettingToolBundle:InvoiceSmsEmail:new.html.twig', array(
             'entity'      => $entity,
+            'itemIds'      => $itemIds,
             'packagePricing'      => $sePricing,
             'form'   => $editForm->createView(),
 
@@ -165,7 +172,9 @@ class InvoiceSmsEmailController extends Controller
             $intlMobile = $entity->getPaymentMobile();
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
             $entity->setPaymentMobile($mobile);
-            $entity->setProcess('Pending');
+            if($entity->getTransactionMethod()->getId() > 0){
+                $entity->setProcess('In-progress');
+            }
             $em->flush();
             $this->getDoctrine()->getRepository('SettingToolBundle:InvoiceSmsEmailItem')->insertItem($entity,$data);
             $this->getDoctrine()->getRepository('SettingToolBundle:InvoiceSmsEmail')->updateInvoice($entity);
@@ -199,13 +208,11 @@ class InvoiceSmsEmailController extends Controller
      * Deletes a InvoiceSmsEmailItem entity.
      *
      */
-    public function deleteItemAction(InvoiceSmsEmailItem $entity)
+    public function deleteItemAction($invoice ,$package)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find InvoiceSmsEmail entity.');
-        }
 
+        $entity = $em->getRepository('SettingToolBundle:InvoiceSmsEmailItem')->findOneBy(array('invoiceSmsEmail'=> $invoice,'smsEmailPricing' => $package));
         $em->remove($entity);
         $em->flush();
         $this->get('session')->getFlashBag()->add(
@@ -261,7 +268,13 @@ class InvoiceSmsEmailController extends Controller
         }elseif($entity->getProcess() == 'In-progress'){
             $entity->setProcess('Done');
             $entity->setReceivedBy($this->getUser());
+        } if($entity->getProcess() == 'Pending') {
+            $entity->setProcess('Done');
+            $entity->setReceivedBy($this->getUser());
         }
+
+        $em->getRepository('SettingToolBundle:SmsSenderTotal')->updateSmsBundle($entity);
+
         $em->flush();
         $this->get('session')->getFlashBag()->add(
             'success',"Data has been updated successfully"

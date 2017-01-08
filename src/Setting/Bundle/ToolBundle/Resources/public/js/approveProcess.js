@@ -23,23 +23,6 @@ function ApproveProcessInt(){
     // Setter
     $( ".date-picker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
 
-    $(document).on("change", "#paymentMethod", function() {
-
-        var paymentMethod = $('#paymentMethod').val();
-
-        if(paymentMethod == 'Bank'){
-
-            $('#bankbox').show();
-            $('#bkashbox').hide();
-        }
-        if(paymentMethod == 'bKash'){
-            $('#bankbox').hide();
-            $('#bkashbox').show();
-        }
-
-
-    })
-
     $('#payment').submit( function( e ) {
 
         var url = $('#submitted').attr("data-url");
@@ -102,9 +85,7 @@ function ApproveProcessInt(){
             url: url,
             type: 'GET',
             success: function (response) {
-                if ('success' == response ) {
-                    location.reload();
-                }
+               location.reload();
             },
         })
 

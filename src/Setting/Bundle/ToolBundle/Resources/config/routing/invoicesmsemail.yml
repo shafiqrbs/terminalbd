@@ -33,7 +33,7 @@ invoicesmsemail_delete:
     defaults: { _controller: "SettingToolBundle:InvoiceSmsEmail:delete" }
 
 invoicesmsemail_item_delete:
-    path:     /{id}/item-delete
+    path:     /{invoice}/{package}/item-delete
     defaults: { _controller: "SettingToolBundle:InvoiceSmsEmail:deleteItem" }
 
 invoicesmsemail_approve:

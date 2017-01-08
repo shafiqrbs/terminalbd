@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="bankaccount-title">
-                    Invoice Sms & Email Components
+                    Invoice Sms Bundle
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +15,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('invoicesmsemail') }}">Invoice Sms & Email</a>
+                        <a href="{{ path('invoicesmsemail') }}">Invoice Sms Bundle</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Invoice Sms & Email new/edit</a></li>
+                    <li><a href="#">Invoice Sms Bundle new/edit</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -34,7 +34,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Invoice Sms & Email Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Invoice Sms Bundle</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -54,6 +54,47 @@
 
                         <div class="portlet-body form">
                             {% include('flash-message.html.twig')  %}
+                            <div class="row-fluid">
+
+                                <div class="span4">
+                                    <h4>About:</h4>
+                                    <ul class="unstyled">
+                                        <li><strong>Company name  #:</strong>&nbsp;{{ entity.getGlobalOption.name }}</li>
+                                        <li><strong>Mobile:</strong>&nbsp;{{ entity.getGlobalOption.mobile }}</li>
+                                        <li><strong>Email:</strong>&nbsp;{{ entity.getGlobalOption.email }}</li>
+                                        <li><strong>Address:</strong>&nbsp;</li>
+                                        <li><strong>Created By:</strong>&nbsp;{{ entity.createdBy }}</li>
+                                    </ul>
+                                </div>
+
+                                <div class="span4 invoice-payment">
+                                    <h4>Payment Details:</h4>
+                                    <ul class="unstyled">
+                                        <li><strong>Total BDT:</strong>&nbsp;{{ entity.totalAmount|number_format() }}</li>
+                                        <li><strong>Payment BDT:</strong>&nbsp;{{ entity.paidAmount|number_format() }}</li>
+                                        <li><strong>Due BDT:</strong>&nbsp;{{ entity.dueAmount|number_format() }}</li>
+                                        <li><strong>Payment Progress</strong>&nbsp;{{  entity.process|capitalize }}</li>
+                                    </ul>
+                                </div>
+                                <div class="span4">
+                                    <h4>Payment method:</h4>
+                                    <ul class="unstyled">
+                                        {% if entity.transactionMethod is not empty %}
+                                            <li><strong>Payment method:</strong>&nbsp;{{ entity.transactionMethod.name }}</li>
+                                            {% if entity.transactionMethod.id == '2' %}
+                                                {% if entity.portalBankAccount is not empty %}<li><strong>Bank Account:</strong>&nbsp;{{ entity.portalBankAccount.name }}{% endif %}</li>
+                                                {% if entity.portalBankAccount is not empty %}<li><strong>Account no:</strong>&nbsp;{{ entity.portalBankAccount.accountNo }}{% endif %}</li>
+                                                {% if entity.portalBankAccount is not empty %}<li><strong>Transaction no:</strong>&nbsp;{{ entity.transaction }}{% endif %}</li>
+                                            {% endif %}
+                                            {% if entity.transactionMethod.id == '3' %}
+                                                {% if entity.portalMobileBankAccount is not empty %}<li><strong>Mobile Account:</strong>&nbsp;{{ entity.portalMobileBankAccount.name }}</li>{% endif %}
+                                                {% if entity.portalMobileBankAccount is not empty %}<li><strong>Payment Mobile no:</strong>&nbsp;{{ entity.paymentMobile }}</li>{% endif %}
+                                                {% if entity.portalMobileBankAccount is not empty %}<li><strong>Transaction no:</strong>&nbsp;{{ entity.transaction  }}</li>{% endif %}
+                                            {% endif %}
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
                             <!-- BEGIN FORM-->
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
@@ -67,19 +108,24 @@
                                         <th class="numeric" >Quantity</th>
                                         <th class="numeric" >Unit Price</th>
                                         <th class="numeric" >Total</th>
+                                        <th class="numeric" >Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                {% for entity in packagePricing %}
+                                {% for package in packagePricing %}
                                     <tr>
-
-                                        <td class="" ><input value="{{ entity.id }}" type="checkbox" name="check[]"></td>
-                                        <td class="numeric" >{{ entity.name }}</td>
-                                        <td class="numeric" >{{ entity.type }}</td>
-                                        <td class="numeric" >{{ entity.quantity }}</td>
-                                        <td class="numeric" >{{ entity.price }}</td>
-                                        <td class="numeric" >{{ entity.amount }}</td>
+                                        <td class="" ><input value="{{ package.id }}" {% if package.id in itemIds %} checked="checked" {% endif %} type="checkbox" name="check[]"></td>
+                                        <td class="numeric" >{{ package.name }}</td>
+                                        <td class="numeric" >{{ package.type }}</td>
+                                        <td class="numeric" >{{ package.quantity }}</td>
+                                        <td class="numeric" >{{ package.price }}</td>
+                                        <td class="numeric" >{{ package.amount }}</td>
+                                        <td class="numeric" >
+                                            {% if entity.process == 'Pending' and package.id in itemIds    %}
+                                                <a  class="btn red mini delete" data-id="{{ package.id }}" data-url="{{ path('invoicesmsemail_item_delete',{invoice:entity.id, package:package.id}) }}" ><i class="icon-trash"></i>&nbsp;</a>
+                                            {% endif %}
+                                        </td>
 
                                     </tr>
                                 {% endfor %}

@@ -9,6 +9,7 @@
 namespace Setting\Bundle\ToolBundle\Repository;
 
 
+use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\SmsSender;
 
@@ -24,8 +25,8 @@ class SmsSenderRepository extends EntityRepository {
         $entity->setStatus($status);
         $entity->setProcess('Sales');
         $entity->setRemark($sales->getInvoice());
-        $this->em->persist($entity);
-        $this->em->flush();
+        $this->_em->persist($entity);
+        $this->_em->flush();
         if($status == 'success'){
             $this->totalSendSms($globalOption);
         }
@@ -33,10 +34,10 @@ class SmsSenderRepository extends EntityRepository {
 
     public function totalSendSms($globalOption){
 
-        $totalSms = $this->em->getRepository('SettingToolBundle:SmsSenderTotal')->findOneBy(array('globalOption' => $globalOption));
+        $totalSms = $this->_em->getRepository('SettingToolBundle:SmsSenderTotal')->findOneBy(array('globalOption' => $globalOption));
         $totalSms->setRemaining($totalSms->getRemaining()-1);
         $totalSms->setSending($totalSms->getSending()+1);
-        $this->em->persist($totalSms);
-        $this->em->flush();
+        $this->_em->persist($totalSms);
+        $this->_em->flush();
     }
 } 

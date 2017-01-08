@@ -117,6 +117,13 @@ class InvoiceSmsEmail
     private $paidAmount;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="smsQuantity", type="integer", nullable = true)
+     */
+    private $smsQuantity;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="dueAmount", type="float", nullable = true)
@@ -498,6 +505,22 @@ class InvoiceSmsEmail
     public function setTransaction($transaction)
     {
         $this->transaction = $transaction;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSmsQuantity()
+    {
+        return $this->smsQuantity;
+    }
+
+    /**
+     * @param int $smsQuantity
+     */
+    public function setSmsQuantity($smsQuantity)
+    {
+        $this->smsQuantity = $smsQuantity;
     }
 
 

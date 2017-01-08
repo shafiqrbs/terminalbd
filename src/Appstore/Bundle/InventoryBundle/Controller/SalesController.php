@@ -500,21 +500,19 @@ EOD;
         if($entity->getProcess() == 'Waiting for Delivery'){
             $this->approvedOrder($entity);
             //$dispatcher = $this->container->get('event_dispatcher');
-            // $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
-            // $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
-
+           // $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
         }
         $em->flush();
 
         if($entity->getProcess() == 'Paid'){
             $this->approvedOrder($entity);
             //$dispatcher = $this->container->get('event_dispatcher');
-            // $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+            //$dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
 
         }elseif($entity->getProcess() == 'Return & Cancel'){
             $this->returnCancelOrder($entity);
             //$dispatcher = $this->container->get('event_dispatcher');
-            // $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+            //$dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
 
         }
 

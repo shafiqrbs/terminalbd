@@ -147,7 +147,7 @@ class Builder extends ContainerAware
         $menu['Manage Domain']->addChild('Manage Operation') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
         $menu['Manage Domain']['Manage Operation']->addChild('Domain',              array('route' => 'tools_domain'))->setAttribute('icon', 'icon-money');
         $menu['Manage Domain']->addChild('Manage Invoice') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
-        $menu['Manage Domain']['Manage Invoice']->addChild('Sms/Email',              array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
+        $menu['Manage Domain']['Manage Invoice']->addChild('Sms Bundle',              array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
         $menu['Manage Domain']['Manage Invoice']->addChild('Module Invoice',         array('route' => 'invoicemodule'))->setAttribute('icon', 'icon-money');
 
         return $menu;
@@ -161,9 +161,8 @@ class Builder extends ContainerAware
             ->addChild('Manage Invoice')
             ->setAttribute('dropdown', true);
         $menu['Manage Invoice']->addChild('Domain Invoice') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
-        $menu['Manage Invoice']['Domain Invoice']->addChild('Send SMS',              array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
-        $menu['Manage Invoice']['Domain Invoice']->addChild('Sms/Email',              array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
-        $menu['Manage Invoice']['Domain Invoice']->addChild('New Invoice',         array('route' => 'invoicesmsemail_new','routeParameters'=> array('option' => $globalOption->getId())))->setAttribute('icon', 'icon-money');
+        $menu['Manage Invoice']['Domain Invoice']->addChild('Sms Logs',              array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
+        $menu['Manage Invoice']['Domain Invoice']->addChild('Sms Bundle',              array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
         $menu['Manage Invoice']->addChild('Application Invoice') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
         $menu['Manage Invoice']['Application Invoice']->addChild('Invoice Module',         array('route' => 'invoicemodule_domain'))->setAttribute('icon', 'icon-money');
 

@@ -27,23 +27,23 @@ class SmsSenderTotal
     protected $globalOption;
 
     /**
-     * @var float
+     * @var integer
      *
-     * @ORM\Column(name="purchase", type="float", nullable= true)
+     * @ORM\Column(name="purchase", type="integer", nullable= true)
      */
     private $purchase;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="sending", type="float", nullable= true)
+     * @ORM\Column(name="sending", type="integer", nullable= true)
      */
     private $sending;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="remaining", type="float", nullable= true)
+     * @ORM\Column(name="remaining", type="integer", nullable= true)
      */
     private $remaining;
 
@@ -75,7 +75,7 @@ class SmsSenderTotal
     }
 
     /**
-     * @return float
+     * @return int
      */
     public function getPurchase()
     {
@@ -83,7 +83,7 @@ class SmsSenderTotal
     }
 
     /**
-     * @param float $purchase
+     * @param int $purchase
      */
     public function setPurchase($purchase)
     {
@@ -91,7 +91,7 @@ class SmsSenderTotal
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getSending()
     {
@@ -99,7 +99,7 @@ class SmsSenderTotal
     }
 
     /**
-     * @param string $sending
+     * @param int $sending
      */
     public function setSending($sending)
     {
@@ -107,7 +107,7 @@ class SmsSenderTotal
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getRemaining()
     {
@@ -115,7 +115,7 @@ class SmsSenderTotal
     }
 
     /**
-     * @param string $remaining
+     * @param int $remaining
      */
     public function setRemaining($remaining)
     {

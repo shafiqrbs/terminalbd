@@ -22,11 +22,11 @@ class SmsSenderController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('SettingToolBundle:SmsSender')->findAll();
-
+        $global = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('SettingToolBundle:SmsSender')->findBy(array('globalOption' => $global),array('created'=>'DESC'));
         return $this->render('SettingToolBundle:SmsSender:index.html.twig', array(
             'entities' => $entities,
+            'globalOption' => $global,
         ));
     }
 
@@ -36,10 +36,14 @@ class SmsSenderController extends Controller
      */
     public function deleteAction()
     {
-        $globalOption  = $this->getUser()->getGlobalOption()->getSenderSms();
+
+        $global = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('SettingToolBundle:SmsSender')->findBy(array('globalOption' => $global),array('created'=>'DESC'));
         $em = $this->getDoctrine()->getManager();
-        $em->remove($globalOption);
-        $em->flush();
+        foreach($entities as $send){
+            $em->remove($send);
+            $em->flush();
+        }
         return $this->redirect($this->generateUrl('smssender'));
     }
 

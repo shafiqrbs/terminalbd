@@ -119,7 +119,7 @@ services:
 
   setting_tool.listener.pos_order_sms:
         class: Setting\Bundle\ToolBundle\EventListener\PosOrderSmsListener
-        arguments: [@setting_tool.sms_gateWay]
+        arguments: [@doctrine ,@setting_tool.sms_gateWay]
         tags:
           - { name: kernel.event_listener, event: setting_tool.post.posorder_sms , method: sendSms }
 

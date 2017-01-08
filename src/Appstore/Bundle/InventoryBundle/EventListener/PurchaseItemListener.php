@@ -60,20 +60,28 @@ class PurchaseItemListener
 
     public function getBarcode(PurchaseItem $entity){
 
-        $masterItemCode = $this->getStrPad($entity->getItem()->getMasterItem()->getCode(),3);
+        $masterItemCode = $entity->getItem()->getMasterItem()->getSTRPadCode();
         if($entity->getPurchase()->getInventoryConfig()->getIsColor() == 1 )
         {
-            $masterItemColor =  $this->getStrPad($entity->getItem()->getColor()->getCode(),3);
+            $masterItemColor =  $entity->getItem()->getColor()->getSTRPadCode();
         }else{
             $masterItemColor ='';
         }
+
         if($entity->getPurchase()->getInventoryConfig()->getIsSize() == 1 )
         {
-            $masterItemSize =  $this->getStrPad($entity->getItem()->getSize()->getCode(),3);
+            $masterItemSize =  $entity->getItem()->getSize()->getSTRPadCode();
         }else{
             $masterItemSize ='';
         }
-        return $masterItemCode.$masterItemColor.$masterItemSize. $this->getStrPad($entity->getCode(),6);
+
+        if($entity->getPurchase()->getInventoryConfig()->getIsBrand() == 1 )
+        {
+            $masterItemBrand = $entity->getItem()->getBrand()->getSTRPadCode();
+        }else{
+            $masterItemBrand ='';
+        }
+        return $masterItemCode.$masterItemColor.$masterItemSize.$masterItemBrand.$this->getStrPad($entity->getCode(),6);
 
 
     }
