@@ -17,6 +17,7 @@ class CustomerType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('facebookId')
             ->add('mobile')
             ->add('district', 'entity', array(
                 'required'      => true,

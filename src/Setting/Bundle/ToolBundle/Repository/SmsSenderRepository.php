@@ -24,7 +24,7 @@ class SmsSenderRepository extends EntityRepository {
         $entity->setGlobalOption($globalOption);
         $entity->setStatus($status);
         $entity->setProcess('Sales');
-        $entity->setRemark($sales->getInvoice());
+        $entity->setRemark($sales->getInvoice().','.$sales->getTotal());
         $this->_em->persist($entity);
         $this->_em->flush();
         if($status == 'success'){

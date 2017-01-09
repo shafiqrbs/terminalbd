@@ -61,6 +61,7 @@
                                         <th class="numeric">Date</th>
                                         <th class="numeric">Mobile</th>
                                         <th class="numeric">Process</th>
+                                        <th class="numeric">Process</th>
                                         <th class="numeric">Status</th>
                                     </tr>
                                     </thead>
@@ -70,6 +71,7 @@
                                             <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                             <td class="numeric" >{{ entity.mobile }}</td>
                                             <td class="numeric" >{{ entity.process }}</td>
+                                            <td class="numeric" >{{ entity.remark }}</td>
                                             <td class="numeric" >{{ entity.status }}</td>
                                         </tr>
                                     {% endfor %}

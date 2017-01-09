@@ -101,7 +101,7 @@
                                     <th class="numeric">Created</th>
                                     <th class="numeric">Name</th>
                                     <th class="numeric">Mobile</th>
-                                    <th class="numeric">Email</th>
+                                    <th class="numeric">Facebook Id</th>
                                     <th class="numeric">Location</th>
                                     <th class="numeric">Action</th>
                                 </tr>
@@ -113,7 +113,7 @@
                                         <td>{{ entity.created|date('d-m-Y') }}</td>
                                         <td>{{ entity.name }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
-                                        <td class="numeric"><a href="mailto:{{ entity.email }}"> {{ entity.email }}</a></td>
+                                        <td class="numeric"><a href="mailto:{{ entity.facebookId }}"> {{ entity.facebookId }}</a></td>
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}</td>
                                         <td class="numeric">
                                             <a class="btn mini green" href="{{ path('inventory_customer_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>

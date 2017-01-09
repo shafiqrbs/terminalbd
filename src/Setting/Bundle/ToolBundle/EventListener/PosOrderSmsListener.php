@@ -42,12 +42,23 @@ class PosOrderSmsListener extends BaseSmsAwareListener
          * @var PosOrderSmsEvent $event
          */
 
+
         $sales = $event->getSales();
-        $msg = "Dear Custmer your invoice no is".$sales->getInvoice().'and status is'.$sales->getProcess();
-        $mobile = "+88".$sales->getCustomer()->getMobile();
-        if($sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 ){
-            $status = $this->gateway->send($msg, $mobile);
-            $this->em->getRepository('SettingToolBundle:SmsSender')->insertSenderSms($sales,$status);
+        $customer = "Dear Customer your order is processing and you will get your product within 3 working days.";
+        $administrator = "You get new order, invoice no ".$sales->getInvoice();
+
+        $customerMobile = "+88".$sales->getCustomer()->getMobile();
+        $administratorMobile = "+88".$sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getMobile();
+
+        if($sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1){
+            if(!empty($customerMobile)){
+                $status = $this->gateway->send($customer , $customerMobile);
+                $this->em->getRepository('SettingToolBundle:SmsSender')->insertSenderSms($sales,$status);
+            }
+            if(!empty($administratorMobile)) {
+                $status = $this->gateway->send($administrator, $administratorMobile);
+                $this->em->getRepository('SettingToolBundle:SmsSender')->insertSenderSms($sales,$status);
+            }
         }
 
     }

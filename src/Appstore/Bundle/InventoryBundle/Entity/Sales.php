@@ -95,6 +95,13 @@ class Sales
         private $paymentMethod='Cash';
 
         /**
+         * @var string
+         *
+         * @ORM\Column(name="salesMode", type="string", length=50, nullable=true)
+         */
+        private $salesMode = 'pos';
+
+        /**
          * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="sales" )
          **/
         private  $transactionMethod;
@@ -867,6 +874,22 @@ class Sales
         public function setPaymentInWord($paymentInWord)
         {
                 $this->paymentInWord = $paymentInWord;
+        }
+
+        /**
+         * @return string
+         */
+        public function getSalesMode()
+        {
+                return $this->salesMode;
+        }
+
+        /**
+         * @param string $salesMode
+         */
+        public function setSalesMode($salesMode)
+        {
+                $this->salesMode = $salesMode;
         }
 
 

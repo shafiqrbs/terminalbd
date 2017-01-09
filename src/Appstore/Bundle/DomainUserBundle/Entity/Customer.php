@@ -120,6 +120,13 @@ class Customer
     /**
      * @var string
      *
+     * @ORM\Column(name="facebookId", type="string", length=255, nullable =true)
+     */
+    private $facebookId;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="address", type="text", nullable =true)
      */
     private $address;
@@ -526,6 +533,22 @@ class Customer
     public function getAccountOnlineOrders()
     {
         return $this->accountOnlineOrders;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacebookId()
+    {
+        return $this->facebookId;
+    }
+
+    /**
+     * @param string $facebookId
+     */
+    public function setFacebookId($facebookId)
+    {
+        $this->facebookId = $facebookId;
     }
 
 }

@@ -62,6 +62,8 @@
                                     <div class="row-fluid">
                                         <div class="span12">
                                             <div class="control-group">
+                                                <label class="control-label" for="firstName">Sms Active&nbsp; {{ form_widget(form.smsActive) }}
+                                                    {{ form_errors(form.smsActive) }}</label>
                                                 <label class="control-label" for="firstName">Customer Order&nbsp; {{ form_widget(form.customerBaseOrder) }}
                                                     {{ form_errors(form.customerBaseOrder) }}</label>
                                                 <label class="control-label" for="firstName">Online Order&nbsp; {{ form_widget(form.onlineOrder) }}

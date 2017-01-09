@@ -140,12 +140,15 @@ class SalesController extends Controller
         if($customer > 0 ){
             $customer = $em->getRepository('DomainUserBundle:Customer')->find($customer);
             if(!empty($customer)){
+
                 $entity->setCustomer($customer);
+                $entity->setSalesMode('customer');
                 $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(4);
                 $entity->setTransactionMethod($transactionMethod);
                 $entity->setMobile($customer->getMobile());
             }
         }
+        $entity->setSalesMode('pos');
         $entity->setInventoryConfig($inventory);
         $entity->setSalesBy($this->getUser());
         $em->persist($entity);
@@ -284,8 +287,15 @@ class SalesController extends Controller
                     $entity->setPaymentInWord($amountInWords);
                 }
                 $em->flush();
+
+                if($entity->getSalesMode() !='pos'){
+                    $dispatcher = $this->container->get('event_dispatcher');
+                    $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+                }
                 if($entity->getTransactionMethod()->getId() == 4){
+
                     return $this->redirect($this->generateUrl('inventory_sales_show',array('id' => $entity->getId())));
+
                 }else{
 
                     $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
@@ -456,6 +466,7 @@ EOD;
 
     public function invoicePrintAction(Sales $entity)
     {
+
         $barcode = $this->getBarcode($entity->getInvoice());
         return $this->render('InventoryBundle:Sales:invoice.html.twig', array(
             'entity'      => $entity,

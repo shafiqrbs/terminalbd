@@ -53,6 +53,13 @@ class NotificationConfig
     private $customerBaseOrder = true;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="smsActive", type="boolean")
+     */
+    private $smsActive = true;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="mobile", type="text", nullable = true)
@@ -133,6 +140,22 @@ class NotificationConfig
     public function setMobile($mobile)
     {
         $this->mobile = $mobile;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getSmsActive()
+    {
+        return $this->smsActive;
+    }
+
+    /**
+     * @param boolean $smsActive
+     */
+    public function setSmsActive($smsActive)
+    {
+        $this->smsActive = $smsActive;
     }
 
 

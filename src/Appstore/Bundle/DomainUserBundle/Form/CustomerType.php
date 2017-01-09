@@ -34,6 +34,11 @@ class CustomerType extends AbstractType
                         new NotBlank(array('message'=>'Please enter customer name'))
                     ))
             )
+             ->add('facebookId','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Customer facebook ID'),
+                    'constraints' =>array(
+                        new NotBlank(array('message'=>'Please enter customer facebook ID'))
+                    ))
+            )
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Mobile no'),
                     'constraints' =>array(
                         new NotBlank(array('message'=>'Please enter mobile no'))
