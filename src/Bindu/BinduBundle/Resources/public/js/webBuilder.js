@@ -208,8 +208,7 @@ function builderJs(){
                     $('.main-setting').fadeOut(3500);
                 },
                 complete: function(){
-                    document.getElementById('frame').contentDocument.location.reload(true);
-                    $('.ajax-loading').fadeOut(3000);
+                    location.reload();
                 }
             });
         }
