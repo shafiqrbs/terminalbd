@@ -44,6 +44,7 @@ class CustomerInventoryController extends Controller
         $pagination = $this->paginate($entities);
         return $this->render('DomainUserBundle:Customer:index.html.twig', array(
             'entities' => $pagination,
+            'searchForm' => $data,
         ));
     }
     /**

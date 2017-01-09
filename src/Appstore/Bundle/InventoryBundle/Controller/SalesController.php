@@ -379,7 +379,8 @@ class SalesController extends Controller
     {
         $item = $request->request->get('item');
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemPurchaseDetails($inventory,$item);
+        $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer']:'';
+        $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemPurchaseDetails($inventory,$item,$customer);
         return new Response($data);
     }
 

@@ -17,7 +17,30 @@ use Hackzilla\BarcodeBundle\Utility\Barcode;
 class BarcodeController extends Controller
 {
 
+    public function paginate($entities)
+    {
+
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        return $pagination;
+    }
+
+
     public function  indexAction(){
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('InventoryBundle:PurchaseItem')->findWithSearch($inventory,$data);
+        $pagination = $this->paginate($entities);
+        return $this->render('InventoryBundle:Barcode:index.html.twig', array(
+            'entities' => $pagination,
+            'searchForm' => $data
+        ));
 
     }
 
@@ -109,7 +132,7 @@ class BarcodeController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         if(is_null($data)) {
-            return $this->redirect($this->generateUrl('item'));
+            return $this->redirect($this->generateUrl('inventory_barcode'));
         }
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->getBarcodeForPrint($inventory,$data);

@@ -158,13 +158,14 @@ class Builder extends ContainerAware
         $securityContext = $this->container->get('security.context');
         $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
         $menu
-            ->addChild('Manage Invoice')
+            ->addChild('Invoice Sms & Email')
+            ->setAttribute('icon', 'icon-money')
             ->setAttribute('dropdown', true);
-        $menu['Manage Invoice']->addChild('Domain Invoice') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
-        $menu['Manage Invoice']['Domain Invoice']->addChild('Sms Logs',              array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
-        $menu['Manage Invoice']['Domain Invoice']->addChild('Sms Bundle',              array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
-        $menu['Manage Invoice']->addChild('Application Invoice') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
-        $menu['Manage Invoice']['Application Invoice']->addChild('Invoice Module',         array('route' => 'invoicemodule_domain'))->setAttribute('icon', 'icon-money');
+        $menu['Invoice Sms & Email']->addChild('Manage Sms') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
+        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Logs',              array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
+        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Bundle',            array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
+        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Notification Setup',    array('route' => 'domain_notificationconfig'))->setAttribute('icon', 'icon-info-sign');
+        $menu['Invoice Sms & Email']->addChild('Invoice Application',         array('route' => 'invoicemodule_domain'))->setAttribute('icon', 'icon-money');
 
         return $menu;
     }
@@ -493,7 +494,6 @@ class Builder extends ContainerAware
                     $menu['Inventory']['Delivery']->addChild('Return Invoice', array('route' => 'inventory_deliveryreturn'))->setAttribute('icon','icon-retweet');
 
                 }
-
             }
         }
         if($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
@@ -507,7 +507,7 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', ' icon-reply');
             $menu['Inventory']['Purchase']->addChild('Purchase Import', array('route' => 'inventory_excelimproter'))
                 ->setAttribute('icon', 'icon-upload');
-
+            $menu['Inventory']->addChild('Barcode Print', array('route' => 'inventory_barcode'))->setAttribute('icon', 'icon-barcode');
             $menu['Inventory']->addChild('Manage Stock')
                 ->setAttribute('icon','icon icon-reorder')
                 ->setAttribute('dropdown', true);

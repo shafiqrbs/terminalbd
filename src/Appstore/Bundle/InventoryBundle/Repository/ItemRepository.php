@@ -155,6 +155,7 @@ class ItemRepository extends EntityRepository
         $query->addSelect('i.sku as sku');
         $query->addSelect('SUM(stockItem.quantity) as remainingQuantity');
         $query->where($query->expr()->like("i.skuSlug", "'%$search%'"  ));
+        $query->andWhere("i.purchaseQuantity > 0 ");
         $query->andWhere("ic.id = :inventory");
         $query->setParameter('inventory', $inventory->getId());
         $query->groupBy('i.id');
@@ -260,7 +261,7 @@ class ItemRepository extends EntityRepository
 
     }
 
-    public function itemPurchaseDetails($inventory,$id)
+    public function itemPurchaseDetails($inventory,$id,$customer='')
     {
 
         $data ='';
@@ -276,8 +277,12 @@ class ItemRepository extends EntityRepository
             $data .= '<td class="numeric" >' . $purchaseItem->getQuantity() . '</td>';
             $data .= '<td class="numeric" >' . $purchaseItem->getItemStock() . '</td>';
             $data .= '<td class="numeric" >' . $purchaseItem->getPurchasePrice() . '</td>';
-            $data .= '<td class="numeric" ><a class="editable" data-name="SalesPrice" href="javascript:"  data-url="/inventory/purchaseitem/inline-update" data-type="text" data-pk="' . $purchaseItem->getId() . '" data-original-title="Enter sales price">' . $purchaseItem->getSalesPrice() . '</a></td>';
-            $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem->getBarcode().'"><i class="icon-shopping-cart"></i>  Add Sales</a></td>';
+            if($customer == ""){
+                $data .= '<td class="numeric" ><a class="editable" data-name="SalesPrice" href="javascript:"  data-url="/inventory/purchaseitem/inline-update" data-type="text" data-pk="' . $purchaseItem->getId() . '" data-original-title="Enter sales price">' . $purchaseItem->getSalesPrice() . '</a></td>';
+                $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem->getBarcode().'"><i class="icon-shopping-cart"></i>  Add Sales</a></td>';
+            }else{
+                $data .= '<td class="numeric" >'.$purchaseItem->getSalesPrice().'</td>';
+            }
             $data .= '</tr>';
         }
         return $data;

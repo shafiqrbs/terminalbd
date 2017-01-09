@@ -13,6 +13,42 @@ use Doctrine\ORM\EntityRepository;
 class PurchaseItemRepository extends EntityRepository
 {
 
+
+    public function findWithSearch($inventory,$data)
+    {
+        $item = isset($data['item'])? $data['item'] :'';
+        $grn = isset($data['grn'])? $data['grn'] :'';
+        $brand = isset($data['brand'])? $data['brand'] :'';
+
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join("pi.purchase",'purchase');
+        $qb->join("pi.item",'item');
+        $qb->where("purchase.inventoryConfig = :inventoryConfig");
+        $qb->setParameter('inventoryConfig', $inventory);
+
+        if (!empty($item)) {
+
+            $qb->join('item.masterItem', 'm');
+            $qb->andWhere("m.name = :name");
+            $qb->setParameter('name', $item);
+        }
+        if (!empty($brand)) {
+
+            $qb->join('item.brand', 'b');
+            $qb->andWhere("b.name = :brand");
+            $qb->setParameter('brand', $brand);
+        }
+
+        if (!empty($grn)) {
+            $qb->andWhere("purchase.grn = :grn");
+            $qb->setParameter('grn', $grn);
+        }
+        $qb->orderBy('item.updated','DESC');
+        $sql = $qb->getQuery();
+        return $sql;
+
+    }
+
     public function getPurchaseItemCount($item)
     {
         $qb = $this->_em->createQueryBuilder();

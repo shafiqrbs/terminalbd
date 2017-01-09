@@ -8,6 +8,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\DomainUser;
+use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
@@ -486,6 +487,11 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
     private $branches;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $notificationConfig;
 
 
     /**
@@ -1424,6 +1430,14 @@ class GlobalOption
     public function getPreOrders()
     {
         return $this->preOrders;
+    }
+
+    /**
+     * @return NotificationConfig
+     */
+    public function getNotificationConfig()
+    {
+        return $this->notificationConfig;
     }
 
 

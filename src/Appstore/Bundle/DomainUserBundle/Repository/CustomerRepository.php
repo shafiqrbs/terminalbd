@@ -50,10 +50,42 @@ class CustomerRepository extends EntityRepository
         $qb->setParameter('globalOption', $globalOption);
         $qb->andWhere("customer.name != :name");
         $qb->setParameter('name', 'Default');
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('customer.created','DESC');
         $qb->getQuery();
         return  $qb;
 
     }
+
+    protected function handleSearchBetween($qb,$data)
+    {
+        if(!empty($data))
+        {
+
+            $mobile =    isset($data['mobile'])? $data['mobile'] :'';
+            $customer =    isset($data['name'])? $data['name'] :'';
+            $location =    isset($data['location'])? $data['location'] :'';
+
+            if (!empty($mobile)) {
+                $qb->andWhere("customer.mobile = :mobile");
+                $qb->setParameter('mobile', $mobile);
+            }
+            if (!empty($location)) {
+                $qb->leftJoin('customer.location','l');
+                $qb->andWhere("l.name = :location");
+                $qb->setParameter('location', $location);
+            }
+
+            if (!empty($customer)) {
+                $qb->andWhere("customer.name LIKE :name");
+                $qb->setParameter('name','%'. $customer.'%');
+            }
+
+
+        }
+
+    }
+
 
     public function insertContactCustomer($globalOption,$data,$mobile='')
     {

@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('item') }}">item</a>
+                        <a href="{{ path('inventory_barcode') }}">Barcode</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Barcode print list</a></li>
@@ -40,8 +40,7 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('item_new') }}"><i class="icon-plus-sign"></i>&nbsp;Create</a></li>
-                                    <li><a href="{{ path('item') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('inventory_barcode') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -72,20 +71,23 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    {% set quantity = 0 %}
                                     {% for entity in entities %}
+                                        {% set quantity = quantity + entity.quantity %}
                                         <tr>
                                             <td class="numeric" >{{ entity.item.name }}</td>
                                             <td class="numeric" >{{ entity.item.sku }}</td>
                                             <td class="numeric" >{{ entity.purchasePrice|number_format(2, '.', ',') }}</td>
                                             <td class="numeric" >{{ entity.salesPrice|number_format(2, '.', ',') }}</td>
                                             <td class="numeric" >{{ entity.barcode }}</td>
-                                            <td class="numeric" >{{ entity.quantity }}</td>
+                                            <td class="numeric" >{{ entity.itemStock }}</td>
                                             <td class="numeric" >
-                                                <input type="text" name="barcodeQnt[]" class="span4 numeric" id="" value="{{ entity.quantity }}" >
+                                                <input type="text" name="barcodeQnt[]" class="span4 numeric" id="" value="{{ entity.itemStock }}" >
                                                 <input type="hidden" name="item[]" value="{{ entity.id }}">
                                             </td>
                                         </tr>
                                     {% endfor %}
+                                    <tr><td colspan="5"><strong class="pull-right" >Total Barcode Print Quantity</strong></td><td><strong>{{ quantity }}</strong></td><td></td></tr>
                                 </tbody>
                             </table>
                             <!--/span-->

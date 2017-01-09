@@ -3,6 +3,10 @@ inventory_customer:
     resource: "@DomainUserBundle/Resources/config/routing/customerInventory.yml"
     prefix:   /inventory/customer
 
+domain_notification:
+    resource: "@DomainUserBundle/Resources/config/routing/notificationconfig.yml"
+    prefix:   /domain/notification
+
 domain_employee_branch:
     resource: "@DomainUserBundle/Resources/config/routing/employee_branch.yml"
     prefix:   /hr/branch-employee

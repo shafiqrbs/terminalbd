@@ -1,0 +1,168 @@
+
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="page-title">
+                    Item Lists
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li>
+                        <a href="{{ path('item') }}">Item</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Item Lists</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Item lists</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn blue" id="searchToggole" href="javascript:"><i class="icon-search"></i>&nbsp;Product Search</a>
+                                <a href="{{ path('barcode_new') }}" id="btn-create-barcode" class="btn"  onclick="return prepareBarCode()" >
+                                    Barcode
+                                    <i class="icon-barcode"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="portlet-body">
+                        <div class="portlet-body flip-scroll">
+                            {% include('flash-message.html.twig')  %}
+                            <div id="search-product">
+                                <div class="row-fluid" style="margin-bottom: 5px">
+                                    <form class="search-form" >
+                                        <input type="text" id="item" name="item" required="required"  class="m-wrap span12 select2Item " >
+                                    </form>
+                                </div>
+                                <div class="row-fluid">
+                                    <table class="table table-bordered table-striped table-condensed flip-conten" id="stockItemDetails">
+                                        <thead class="flip-content ">
+                                        <tr class="head-green">
+                                            <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
+                                            <th class="numeric" >SKU/SKU Slug</th>
+                                            <th class="numeric" >Received/Memo</th>
+                                            <th class="numeric" >P. Qnt</th>
+                                            <th class="numeric" >R. Qnt</th>
+                                            <th class="numeric" >Purchase price</th>
+                                            <th class="numeric" >Sales price</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="itemDetails"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <form class="search-form" action="" method="get" name="itemSearch">
+                                    <div class="row-fluid">
+                                        <div class="span3">
+                                            <input type="text" id="item" name="item"  class="span12 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name">
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="brand" name="brand"  class="leftMargin span12 select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}"  autocomplete="off" placeholder="Product brand name">
+                                        </div>
+
+                                        <div class="span3">
+                                            <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Select vendor name">
+                                        </div>
+
+                                        <div class="span3">
+                                            <div class="controls">
+                                                <div class="input-append span10">
+                                                    <input type="text" id="grn" name="grn"  class="m-wrap span12" value="{% if searchForm.grn is defined %}{{ searchForm.grn }}{% endif %}"  autocomplete="off" placeholder="Enter grn no">
+                                                    <div class="btn-group">
+                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                <thead class="flip-content ">
+                                <tr class="head-grey">
+                                    <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
+                                    <th class="numeric" >SKU Name </th>
+                                    <th class="numeric" >SKU</th>
+                                    <th class="numeric" >Received</th>
+                                    <th class="numeric" >GRN</th>
+                                    <th class="numeric" >Qnt</th>
+                                    <th class="numeric" >Reaming Qnt</th>
+                                    <th class="numeric" >Purchase price</th>
+                                    <th class="numeric" >Sales price</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for purchaseItem in entities %}
+                                    <tr {% if purchaseItem.itemStock == 0    %} class="disabled" aria-disabled="true" {% endif %}>
+                                        <td><input id="action-{{ purchaseItem.id }}" {% if purchaseItem.itemStock == 0    %} disabled="disabled" {% endif %} data-id="{{ purchaseItem.id }}" class="barcode"  data-url="{{ path('account_bank_approve',{'id':purchaseItem.id}) }}" type="checkbox" name="item[]" value="{{ purchaseItem.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="Barcode print"  >&nbsp;{{ purchaseItem.barcode }}</td>
+                                        <td class="numeric" >{{ purchaseItem.item.name }}</td>
+                                        <td class="numeric" >{{ purchaseItem.item.sku }}</td>
+                                        <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.created|date('d-m-Y') }}{% endif %}</td>
+                                        <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.grn }}{% endif %}</td>
+                                        <td class="numeric" >{{ purchaseItem.quantity }}</td>
+                                        <td class="numeric" >{{ purchaseItem.itemStock }}</td>
+                                        <td class="numeric" >{{ purchaseItem.purchasePrice|number_format(2, '.', ',') }}</td>
+                                        <td class="numeric" ><a class="editable" data-name="SalesPrice" href="#"  data-url="{{ path('inventory_purchaseitem_inline_update') }}" data-type="text" data-pk="{{ purchaseItem.id }}" data-original-title="Enter sales price">{{purchaseItem.salesPrice}}</a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot><tr><td colspan="9"></td></tr></tfoot>
+                            </table>
+
+                            <div class="pagination pull-center"  >
+                                {{ knp_pagination_render(entities) }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+<style>
+    .disabled{
+        opacity: 0.5;
+    }
+</style>
+{% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@InventoryBundle/Resources/public/js/editable.js'
+    '@InventoryBundle/Resources/public/js/item.js'
+    '@InventoryBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    $( "#search-product" ).hide();
+    $( "#searchToggole" ).click(function() {
+    $( "#search-product" ).slideToggle( "slow" );
+    });
+    EditableInit();
+    InventoryItemListPage();
+    ApproveProcess();
+{% endblock %}
