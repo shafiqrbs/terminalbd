@@ -38,7 +38,7 @@ class DomainController extends Controller
 
             $routes['_domain_app_' . strtolower(str_replace('.', '_', $data->getDomain()))] = array(
                 'resource' => $resource ,
-                'host' => 'www'.$data->getDomain(),
+                'host' => 'www.'.$data->getDomain(),
                 'name_prefix' => $data->getSubDomain() . "_",
                 'defaults' => array(
                     'subdomain' => $data->getSubDomain()
