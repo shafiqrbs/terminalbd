@@ -182,7 +182,7 @@ class BarcodeController extends Controller
     public function printAction()
     {
         $printLeftMargin = $this->getUser()->getGlobalOption()->getInventoryConfig()->getPrintLeftMargin();
-        $printTopMargin = $this->getUser()->getGlobalOption()->getInventoryConfig()->getPrintTopMargin();
+        $printTopMargin = $this->getUser()->getGlobalOption()->getInventoryConfig()->getBarcodeMargin();
         $barCoder = $this->get('session')->get('barcodeQ');
         if($printLeftMargin == 0){
             $leftMargin = 0;
