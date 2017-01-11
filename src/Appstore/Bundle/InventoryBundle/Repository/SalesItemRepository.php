@@ -32,7 +32,7 @@ class SalesItemRepository extends EntityRepository
         $qb->addSelect('item.onlineOrderQuantityReturn as onlineOrderQuantityReturn');
         $qb->addSelect('item.damageQuantity as damageQuantity');
         $qb->addSelect('SUM(salesItem.quantity) as salesOngoingQuantity ');
-        $qb->where("item.inventoryConfig = :inventoryConfig");
+        $qb->where("sales.inventoryConfig = :inventoryConfig");
         $qb->setParameter('inventoryConfig',$inventory);
         $qb->andWhere("sales.process != 'Return & Delete'");
         if (!empty($item)) {

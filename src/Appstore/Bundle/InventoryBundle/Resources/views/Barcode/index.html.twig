@@ -36,7 +36,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn blue" id="searchToggole" href="javascript:"><i class="icon-search"></i>&nbsp;Product Search</a>
-                                <a href="{{ path('barcode_new') }}" id="btn-create-barcode" class="btn"  onclick="return prepareBarCode()" >
+                                <a target="_blank" href="{{ path('barcode_new') }}" id="btn-create-barcode" class="btn" >
                                     Barcode
                                     <i class="icon-barcode"></i>
                                 </a>
@@ -115,7 +115,7 @@
                                 <tbody>
                                 {% for purchaseItem in entities %}
                                     <tr {% if purchaseItem.itemStock == 0    %} class="disabled" aria-disabled="true" {% endif %}>
-                                        <td><input id="action-{{ purchaseItem.id }}" {% if purchaseItem.itemStock == 0    %} disabled="disabled" {% endif %} data-id="{{ purchaseItem.id }}" class="barcode"  data-url="{{ path('account_bank_approve',{'id':purchaseItem.id}) }}" type="checkbox" name="item[]" value="{{ purchaseItem.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="Barcode print"  >&nbsp;{{ purchaseItem.barcode }}</td>
+                                        <td><input {% if purchaseItem.id in selected %}checked="checked"{% endif %} id="action-{{ purchaseItem.id }}" {% if purchaseItem.itemStock == 0    %} disabled="disabled" {% endif %} data-id="{{ purchaseItem.id }}" data-url="{{ path('account_bank_approve',{'id':purchaseItem.id}) }}" type="checkbox" name="item[]" value="{{ purchaseItem.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="Barcode print"  >&nbsp;{{ purchaseItem.barcode }}</td>
                                         <td class="numeric" >{{ purchaseItem.item.name }}</td>
                                         <td class="numeric" >{{ purchaseItem.item.sku }}</td>
                                         <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.created|date('d-m-Y') }}{% endif %}</td>

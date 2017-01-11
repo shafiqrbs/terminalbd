@@ -92,11 +92,11 @@
                                     </div>
                                 </form>
                                 <table class="table table-bordered table-striped table-condensed flip-content ">
-
                                     <thead class="flip-content ">
                                     <tr class="head-green">
                                         <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
-                                        <th class="numeric" >Item/SKU</th>
+                                        <th class="numeric" >Item</th>
+                                        <th class="numeric" >SKU</th>
                                         <th class="numeric" >Purchase</th>
                                         <th class="numeric" >Remaining</th>
                                         <th class="numeric" >Ongoing</th>
@@ -107,7 +107,8 @@
                                     {% for entity in entities %}
                                         <tr>
                                             <td class="numeric" >{{ loop.index }}</td>
-                                            <td class="numeric" >{{ entity.name }}/{{ entity.sku }}</td>
+                                            <td class="numeric" >{{ entity.name }}</td>
+                                            <td class="numeric" >{{ entity.sku }}</td>
                                             <td class="numeric" >{{ entity.purchaseQuantity }}</td>
                                             <td class="numeric" >{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.onlineOrderQuantityReturn)  - ( entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity + entity.onlineOrderQuantity) }}</td>
                                             <td class="numeric" >{{ entity.salesOngoingQuantity }}</td>

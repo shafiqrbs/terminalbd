@@ -1,14 +1,6 @@
-<script>
-    window.print();
-</script>
+{% extends '::print.html.twig' %}
 <div style="margin-left:{{ printLeftMargin }};margin-top:{{ printToptMargin }} ">
     {% for barcode in barCoder %}
         {{ barcode|raw }}
     {% endfor %}
 </div>
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/print.css' %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock %}

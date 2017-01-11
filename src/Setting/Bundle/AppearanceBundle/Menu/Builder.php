@@ -538,9 +538,9 @@ class Builder extends ContainerAware
             $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Size', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'size')))->setAttribute('icon','icon-bar-chart');
             $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Color', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'color')))->setAttribute('icon','icon-bar-chart');
             $menu['Inventory']['Reports']->addChild('Purchase', array('route' => 'inventory_report_purchase'))->setAttribute('icon','icon-bar-chart');
-            $menu['Inventory']['Reports']->addChild('Sales', array('route' => 'inventory_report_sales'))->setAttribute('icon','icon-bar-chart');
+/*            $menu['Inventory']['Reports']->addChild('Sales', array('route' => 'inventory_report_sales'))->setAttribute('icon','icon-bar-chart');
             $menu['Inventory']['System Setting']->addChild('Configuration', array('route' => 'inventoryconfig_edit'))
-                ->setAttribute('icon', 'icon-hdd');
+                ->setAttribute('icon', 'icon-hdd');*/
 
         }
 
@@ -711,7 +711,7 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
         $menu['Accounting']['Transaction & Report']->addChild('Transaction Overview',        array('route' => 'account_transaction'))->setAttribute('icon', 'icon-th-list');
         $menu['Accounting']['Transaction & Report']->addChild('Income',        array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
-        $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');
+     /*   $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');*/
 
         $menu['Accounting']->addChild('Cash', array('route' => ''))
             ->setAttribute('icon','fa fa-money')

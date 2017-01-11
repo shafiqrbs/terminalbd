@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Doctrine\Common\Util\Debug;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -30,8 +31,7 @@ class BarcodeController extends Controller
     }
 
 
-    public function  indexAction(){
-
+    public function  indexAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
@@ -39,6 +39,7 @@ class BarcodeController extends Controller
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:Barcode:index.html.twig', array(
             'entities' => $pagination,
+            'selected' => explode(',', $request->cookies->get('barcodes', '')),
             'searchForm' => $data
         ));
 
@@ -141,6 +142,23 @@ class BarcodeController extends Controller
         ));
 
     }
+
+    public function addedAction(PurchaseItem $purchaseItem)
+    {
+
+        $data = array();
+
+        $em = $this->getDoctrine()->getManager();
+        if(is_null($purchaseItem)) {
+            return $this->redirect($this->generateUrl('inventory_barcode'));
+        }else{
+            $data[] = $purchaseItem;
+        }
+
+
+
+    }
+
 
     public function createAction(Request $request)
     {

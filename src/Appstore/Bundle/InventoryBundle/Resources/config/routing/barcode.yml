@@ -17,6 +17,12 @@ barcode_create:
     options:
            expose: true
 
+barcode_added:
+    path:     /added
+    defaults: { _controller: "InventoryBundle:Barcode:added" }
+    options:
+           expose: true
+
 barcode_print:
     path:     /print
     defaults: { _controller: "InventoryBundle:Barcode:print" }

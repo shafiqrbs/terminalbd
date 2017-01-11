@@ -1,13 +1,21 @@
 var InventoryItemListPage = function () {
 
-    window.prepareBarCode = function () {
-        var itemArr = $('input.barcode:checked').map(function () {
-            return $(this).val();
-        }).get();
+    var itemArr = $.cookie('barcodes') ? $.cookie('barcodes').split(',') : [];
+
+    $('body').on('change', 'input.barcode', function(el) {
+        console.log(itemArr);
+        var val = $(this).val();
+        if($(this).prop('checked')) {
+            itemArr.push(val);
+        }else{
+            var index = itemArr.indexOf(val);
+            if (index > -1) {
+                itemArr.splice(index, 1);
+            }
+        }
         $.cookie('barcodes', itemArr, {path: '/'});
-        return true;
-    }
-}
+    });
+};
 
 var InventoryItemEditPage = function (item) {
     /**
