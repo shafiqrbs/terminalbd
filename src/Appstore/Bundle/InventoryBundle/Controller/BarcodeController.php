@@ -187,12 +187,12 @@ class BarcodeController extends Controller
         if($printLeftMargin == 0){
             $leftMargin = 0;
         }else{
-            $leftMargin = $printLeftMargin;
+            $leftMargin = $printLeftMargin.'px';
         }
         if($printTopMargin == 0){
             $topMargin = 0;
         }else{
-            $topMargin = $printTopMargin;
+            $topMargin = $printTopMargin.'px';
         }
 
         return $this->render('InventoryBundle:Barcode:print.html.twig', array(
