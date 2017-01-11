@@ -155,7 +155,7 @@
                                             {% if entity.process == 'Paid' %}
                                                 <a  class="btn mini purple">{% if entity.process is not empty %}{{ entity.process }}{% endif %}</a>
                                                 <a class="btn mini green" >{{entity.courierInvoice}}</a>
-                                            {% elseif entity.process == 'Return & Cancel' %}
+                                            {% elseif entity.process == 'Returned' %}
                                                 <a  class="btn mini red">{% if entity.process is not empty %}{{ entity.process }}{% endif %}</a>
                                                 <a class="btn mini green" >{{ entity.courierInvoice }}</a>
                                             {% elseif entity.total > 0 %}
@@ -172,7 +172,7 @@
                                                 <a href="{{ path('inventory_sales_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
                                                 <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
-                                            {% if entity.paymentStatus == "Due" and entity.process != "Return & Cancel" %}
+                                            {% if entity.paymentStatus == "Due" and entity.process != "Returned" %}
                                                 <a href="{{ path('account_sales_new') }}" class="btn mini blue" ><i class="icon-money"></i></a>
                                             {% endif %}
                                         </td>

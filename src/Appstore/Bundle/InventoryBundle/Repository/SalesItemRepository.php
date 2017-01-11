@@ -34,7 +34,8 @@ class SalesItemRepository extends EntityRepository
         $qb->addSelect('SUM(salesItem.quantity) as salesOngoingQuantity ');
         $qb->where("sales.inventoryConfig = :inventoryConfig");
         $qb->setParameter('inventoryConfig',$inventory);
-        $qb->andWhere("sales.process != 'Return & Delete'");
+        $qb->andWhere('sales.process IN(:process)');
+        $qb->setParameter('process',array_values(array('In-progress','Courier')));
         if (!empty($item)) {
             $qb->join('item.masterItem', 'm');
             $qb->andWhere("m.name = :name");
@@ -54,11 +55,13 @@ class SalesItemRepository extends EntityRepository
         $qb->addSelect('SUM(salesItem.quantity) as quantity ');
         $qb->where("salesItem.purchaseItem = :purchaseItem");
         $qb->setParameter('purchaseItem', $purchaseItem->getId());
+        $qb->andWhere('sales.process IN(:process)');
+        $qb->setParameter('process',array_values(array('In-progress','Courier')));
         $quantity =  $qb->getQuery()->getSingleResult();
-        if ($purchaseItem->getQuantity() == $quantity['quantity']){
-            return false;
+        if(!empty($quantity['quantity'])){
+            return $quantity['quantity'];
         }else{
-            return true;
+            return 0;
         }
 
     }

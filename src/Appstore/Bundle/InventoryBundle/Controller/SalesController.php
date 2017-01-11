@@ -93,21 +93,29 @@ class SalesController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory,$barcode);
         $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkPurchaseQuantity($purchaseItem);
+
+        $itemStock = $purchaseItem->getItemStock();
+        $purchaseQuantity = $purchaseItem->getPurchaseQuantity();
+
         $itemDetails= '';
         $salesItems = '';
         $salesTotal = '';
-        if($purchaseItem && $checkQuantity == true ){
-            //$itemDetails = $em->getRepository('InventoryBundle:PurchaseItem')->findBarcode($purchaseItem);
+        $salesTotalQuantity = ($itemStock + $checkQuantity) ;
+
+        if(!empty($purchaseItem) && $purchaseQuantity > $salesTotalQuantity ){
+
             $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales,$purchaseItem);
             $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
+
         }else{
+
             $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
         }
 
         //return new Response($salesItems);
-        return new Response(json_encode(array('salesTotal'=>$salesTotal,'purchaseItem' => $itemDetails ,'salesItem'=>$salesItems)));
+        return new Response(json_encode(array('salesTotal' => $salesTotal,'purchaseItem' => $itemDetails ,'salesItem' => $salesItems)));
         exit;
     }
 
@@ -595,8 +603,8 @@ EOD;
         $items  = array();
         $items[]= array('value' => 'Paid','text'=>'Paid');
         $items[]= array('value' => 'In-progress','text'=>'In-progress');
-        $items[]= array('value' => 'Waiting for Delivery','text'=>'Waiting for Delivery');
-        $items[]= array('value' => 'Return & Cancel','text'=>'Return & Cancel');
+        $items[]= array('value' => 'Courier','text'=>'Courier');
+        $items[]= array('value' => 'Returned','text'=>'Returned');
         return new JsonResponse($items);
     }
 
