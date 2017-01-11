@@ -2,6 +2,10 @@ inventory_sales:
     path:     /
     defaults: { _controller: "InventoryBundle:Sales:index" }
 
+inventory_sales_item:
+    path:     /sales-item
+    defaults: { _controller: "InventoryBundle:Sales:salesItem" }
+
 inventory_sales_item_search:
     path:     /search
     defaults: { _controller: "InventoryBundle:Sales:search" }

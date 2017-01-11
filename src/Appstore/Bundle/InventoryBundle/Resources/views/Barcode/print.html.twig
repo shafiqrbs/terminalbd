@@ -1,7 +1,7 @@
 <script>
     window.print();
 </script>
-<div style="margin-left:{{ printLeftMargin }}">
+<div style="margin-left:{{ printLeftMargin }};margin-top:{{ printToptMargin }} ">
     {% for barcode in barCoder %}
         {{ barcode|raw }}
     {% endfor %}

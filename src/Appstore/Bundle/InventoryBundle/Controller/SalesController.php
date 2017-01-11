@@ -60,6 +60,24 @@ class SalesController extends Controller
         ));
     }
 
+    /**
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
+     */
+
+    public function salesItemAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('InventoryBundle:SalesItem')->salesItems($inventory,$data);
+        $pagination = $this->paginate($entities);
+        return $this->render('InventoryBundle:Sales:salesItem.html.twig', array(
+            'entities' => $pagination,
+            'searchForm' => $data,
+        ));
+    }
+
 
 
     /**

@@ -14,6 +14,39 @@ use Doctrine\ORM\EntityRepository;
 class SalesItemRepository extends EntityRepository
 {
 
+
+    public function salesItems($inventory,$data)
+    {
+        $item = isset($data['item'])? $data['item'] :'';
+
+        $qb = $this->createQueryBuilder('salesItem');
+        $qb->join('salesItem.item','item');
+        $qb->join('salesItem.sales','sales');
+        $qb->select('item.sku as sku');
+        $qb->addSelect('item.name as name');
+        $qb->addSelect('item.purchaseQuantity as purchaseQuantity');
+        $qb->addSelect('item.salesQuantity as salesQuantity');
+        $qb->addSelect('item.purchaseQuantityReturn as purchaseQuantityReturn');
+        $qb->addSelect('item.salesQuantityReturn as salesQuantityReturn');
+        $qb->addSelect('item.onlineOrderQuantity as onlineOrderQuantity');
+        $qb->addSelect('item.onlineOrderQuantityReturn as onlineOrderQuantityReturn');
+        $qb->addSelect('item.damageQuantity as damageQuantity');
+        $qb->addSelect('SUM(salesItem.quantity) as salesOngoingQuantity ');
+        $qb->where("item.inventoryConfig = :inventoryConfig");
+        $qb->setParameter('inventoryConfig',$inventory);
+        $qb->andWhere("sales.process != 'Return & Delete'");
+        if (!empty($item)) {
+            $qb->join('item.masterItem', 'm');
+            $qb->andWhere("m.name = :name");
+            $qb->setParameter('name', $item);
+        }
+        $qb->groupBy("salesItem.item");
+        $result =  $qb->getQuery();
+        return $result;
+
+    }
+
+
     public function checkPurchaseQuantity(PurchaseItem $purchaseItem)
     {
 

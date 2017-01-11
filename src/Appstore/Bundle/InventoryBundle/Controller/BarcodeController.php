@@ -108,7 +108,7 @@ class BarcodeController extends Controller
         $barcode->setFontSize($fontsize);
         $code = $barcode->generate();
         $data = '';
-        $data .='<div class="barcode-block" style="width:'.$barcodeWidth.'; height:'.$barcodeHeight.'; border:'.$border.'; margin-top:'.$margin.'; padding:'.$padding.'; ">';
+        $data .='<div class="barcode-block" style="width:'.$barcodeWidth.'; height:'.$barcodeHeight.'; border:'.$border.'; padding:'.$padding.'; ">';
         $data .='<div class="centered">';
         $data .='<p><span class="left">'.$sizeColor.'</span><span class="right">'.$vendorBrand.'</span></p>';
         $data .='<div class="clearfix"></div>';
@@ -164,16 +164,23 @@ class BarcodeController extends Controller
     public function printAction()
     {
         $printLeftMargin = $this->getUser()->getGlobalOption()->getInventoryConfig()->getPrintLeftMargin();
+        $printTopMargin = $this->getUser()->getGlobalOption()->getInventoryConfig()->getPrintTopMargin();
         $barCoder = $this->get('session')->get('barcodeQ');
         if($printLeftMargin == 0){
             $leftMargin = 0;
         }else{
             $leftMargin = $printLeftMargin;
         }
+        if($printTopMargin == 0){
+            $topMargin = 0;
+        }else{
+            $topMargin = $printTopMargin;
+        }
 
         return $this->render('InventoryBundle:Barcode:print.html.twig', array(
-            'printLeftMargin'      => $leftMargin,
-            'barCoder'      => $barCoder
+            'printLeftMargin'       => $leftMargin,
+            'printTopMargin'        => $topMargin,
+            'barCoder'              => $barCoder
         ));
     }
 
