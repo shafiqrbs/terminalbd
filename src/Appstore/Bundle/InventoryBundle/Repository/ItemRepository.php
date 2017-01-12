@@ -268,14 +268,15 @@ class ItemRepository extends EntityRepository
         $result = $this->findOneBy(array('inventoryConfig' => $inventory,'id' => $id));
         foreach($result->getPurchaseItems() as $purchaseItem  ) {
 
-            $received = $purchaseItem->getPurchase()->getReceiveDate()->format('d-m-Y');
-            $memo = $purchaseItem->getPurchase()->getMemo();
+            $grn = $purchaseItem->getPurchase()->getGrn();
+            $ongoingSalesQnt = $this->_em->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
             $data .= '<tr>';
             $data .= '<td class="numeric" >' . $purchaseItem->getBarcode() .'</td>';
-            $data .= '<td class="numeric" >' . $result->getName() . ' / ' . $result->getSku() . '</td>';
-            $data .= '<td class="numeric" >' . $received . '/' . $memo . '</td>';
-            $data .= '<td class="numeric" >' . $purchaseItem->getQuantity() . '</td>';
+            $data .= '<td class="numeric" >' . $result->getSku() . '</td>';
+            $data .= '<td class="numeric" >' . $grn . '</td>';
             $data .= '<td class="numeric" >' . $purchaseItem->getItemStock() . '</td>';
+            $data .= '<td class="numeric" >' . $ongoingSalesQnt . '</td>';
+            $data .= '<td class="numeric" >' . ($purchaseItem->getItemStock() - $ongoingSalesQnt) . '</td>';
             $data .= '<td class="numeric" >' . $purchaseItem->getPurchasePrice() . '</td>';
             if($customer == ""){
                 $data .= '<td class="numeric" ><a class="editable" data-name="SalesPrice" href="javascript:"  data-url="/inventory/purchaseitem/inline-update" data-type="text" data-pk="' . $purchaseItem->getId() . '" data-original-title="Enter sales price">' . $purchaseItem->getSalesPrice() . '</a></td>';

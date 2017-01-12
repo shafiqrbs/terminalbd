@@ -167,16 +167,16 @@ class PurchaseItemRepository extends EntityRepository
     public function searchAutoComplete($item, InventoryConfig $inventory)
     {
 
-        $qb = $this->createQueryBuilder('i');
-        $qb->join('i.purchase', 'p');
-        $qb->join('i.stockItem', 'stockitem');
-        $qb->select('i.barcode as id');
-        $qb->addSelect('i.barcode as text');
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.purchase', 'p');
+        $qb->join('pi.stockItem', 'stockitem');
+        $qb->select('pi.barcode as id');
+        $qb->addSelect('pi.barcode as text');
         $qb->addSelect('SUM(stockitem.quantity) as item_name');
-        $qb->where($qb->expr()->like("i.barcode", "'%$item%'"  ));
+        $qb->where($qb->expr()->like("pi.barcode", "'$item%'"  ));
         $qb->andWhere("p.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory->getId());
-        $qb->orderBy('i.barcode', 'DESC');
+        $qb->orderBy('p.updated', 'ASC');
         $qb->setMaxResults( '10' );
         return $qb->getQuery()->getResult();
 

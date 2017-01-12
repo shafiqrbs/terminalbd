@@ -25,6 +25,7 @@ var InventorySales = function(sales) {
                 $('#subTotal').val(obj['salesTotal']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
+                $('#wrongBarcode').html(obj['msg']);
                 FormComponents.init();
             },
 
@@ -52,6 +53,7 @@ var InventorySales = function(sales) {
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('#dueAmount').val(obj['salesTotal']);
+                $('#wrongBarcode').html(obj['msg']);
                 FormComponents.init();
             },
         })
@@ -78,6 +80,7 @@ var InventorySales = function(sales) {
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('#dueAmount').val(obj['salesTotal']);
+                $('#wrongBarcode').html(obj['msg']);
                 FormComponents.init();
             },
         })
@@ -111,15 +114,12 @@ var InventorySales = function(sales) {
         var quantity = parseInt($('#quantity-'+rel).val());
         if($(this).is(':checked'))
         {
-            $("#salesPrice-"+rel).attr("readonly", false);
-            $("#salesPrice-"+rel).focus().val(estimatePrice);
-
+            $("#salesPrice-"+rel).attr("readonly", false).focus().val(estimatePrice);
 
         }else{
 
             var customPrice = 0;
-            $("#salesPrice-"+rel).attr("readonly", true);
-            $("#salesPrice-"+rel).focus().val(estimatePrice);
+            $("#salesPrice-"+rel).attr("readonly", true).focus().val(estimatePrice);
             var subTotal  = (quantity * estimatePrice);
             $("#subTotalShow-"+rel).html(subTotal);
             $.ajax({
@@ -129,10 +129,10 @@ var InventorySales = function(sales) {
                 success: function(response) {
                     obj = JSON.parse(response);
                     $('.salesTotal').html(obj['salesTotal']);
-                    $('.salesTotal').val(obj['salesTotal']);
+                    $('#subTotal').val(obj['salesTotal']);
                     $('#paymentTotal').val(obj['salesTotal']);
                     $('#paymentSubTotal').val(obj['salesTotal']);
-                    $('#dueAmount').val(obj['salesTotal']);
+                    $('#dueAmount').html(obj['salesTotal']);
                 },
 
             })
@@ -158,14 +158,15 @@ var InventorySales = function(sales) {
         $.ajax({
             url: Routing.generate('inventory_sales_item_update'),
             type: 'POST',
-            data:'salesItemId='+rel+'&quantity='+quantity+'&salesPrice='+price+'&customPrice='+customPrice,
+            data:'salesItemId='+rel+'&quantity='+ quantity +'&salesPrice='+price+'&customPrice='+customPrice,
             success: function(response) {
                 obj = JSON.parse(response);
                 $('.salesTotal').html(obj['salesTotal']);
-                $('.salesTotal').val(obj['salesTotal']);
+                $('#subTotal').val(obj['salesTotal']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('#dueAmount').val(obj['salesTotal']);
+                $('#wrongBarcode').html(obj['msg']);
             },
 
         })
@@ -183,7 +184,7 @@ var InventorySales = function(sales) {
                 if ('success' == obj['success']) {
                     $('#remove-' + id).hide();
                     $('.salesTotal').html(obj['salesTotal']);
-                    $('.salesTotal').val(obj['salesTotal']);
+                    $('#subTotal').val(obj['salesTotal']);
                     $('#paymentTotal').val(obj['salesTotal']);
                     $('#paymentSubTotal').val(obj['salesTotal']);
                     $('#dueAmount').val(obj['salesTotal']);
@@ -210,20 +211,16 @@ var InventorySales = function(sales) {
 
             var returnAmount = ( payment - total );
 
-            $('#returnAmount').val(returnAmount);
-            $('#returnAmount').addClass('payment-yellow');
-            $('#dueAmount').val('');
-            $('#dueAmount').removeClass('payment-red');
+            $('#returnAmount').val(returnAmount).addClass('payment-yellow');
+            $('#dueAmount').val('').removeClass('payment-red');
+
 
         }else{
 
             var dueAmount = (total-payment);
             if(dueAmount > 0){
-
-                $('#returnAmount').val('');
-                $('#returnAmount').removeClass('payment-yellow');
-                $('#dueAmount').val(dueAmount);
-                $('#dueAmount').addClass('payment-red');
+                $('#returnAmount').val('').removeClass('payment-yellow');
+                $('#dueAmount').val(dueAmount).addClass('payment-red');
             }
         }
 

@@ -80,19 +80,17 @@ class AccountCashRepository extends EntityRepository
 
     }
 
-    public function findWithSearch($globalOption,$transactionMethod,$data = '')
+    public function findWithSearch($globalOption,$transactionMethods,$data = '')
     {
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.transactionMethod','t');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        $qb->andWhere("t.id = :transactionMethod");
-        $qb->setParameter('transactionMethod',$transactionMethod);
+        $qb->andWhere("t.id IN(:transactionMethod)");
+        $qb->setParameter('transactionMethod',array_values($transactionMethods));
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
         $result = $qb->getQuery();
-
-
         return $result;
 
     }
@@ -256,18 +254,18 @@ class AccountCashRepository extends EntityRepository
         $cash = new AccountCash();
 
         /* Cash - Cash various */
-        if($entity->getTransactionMethod()->getId() == 1 ){
-            /* Cash - Cash Debit */
-            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
-        }elseif($entity->getTransactionMethod()->getId() == 2 ){
+        if($entity->getTransactionMethod()->getId() == 2 ){
             /* Current Asset Bank Cash Debit */
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
             $cash->setAccountBank($entity->getAccountBank());
-        }if($entity->getTransactionMethod()->getId() == 3 ){
+        }elseif($entity->getTransactionMethod()->getId() == 3 ){
             /* Current Asset Mobile Account Debit */
             $cash->setAccountMobileBank($entity->getAccountMobileBank());
             $account = $this->_em->getRepository('AccountingBundle:AccountHead')->find(10);
             $cash->setAccountHead($account);
+        }else{
+            /* Cash - Cash Debit */
+            $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
         }
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setAccountSales($entity);

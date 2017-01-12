@@ -455,7 +455,7 @@ class PurchaseItem
             }
             return $quantity;
         }
-        return false;
+        return 0;
     }
 
     /**

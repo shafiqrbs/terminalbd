@@ -92,32 +92,28 @@ class SalesController extends Controller
         $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory,$barcode);
-        $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkPurchaseQuantity($purchaseItem);
-
+        $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
         $itemStock = $purchaseItem->getItemStock();
-        $purchaseQuantity = $purchaseItem->getPurchaseQuantity();
 
-        $itemDetails= '';
-        $salesItems = '';
-        $salesTotal = '';
-        $salesTotalQuantity = ($itemStock + $checkQuantity) ;
 
-        if(!empty($purchaseItem) && $purchaseQuantity > $salesTotalQuantity ){
+        if(!empty($purchaseItem) && $itemStock > $checkQuantity ){
 
             $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales,$purchaseItem);
             $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
+            $msg = 'Product added successfully';
 
         }else{
 
             $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
+            $msg = 'There is no product in our inventory';
         }
 
-        //return new Response($salesItems);
-        return new Response(json_encode(array('salesTotal' => $salesTotal,'purchaseItem' => $itemDetails ,'salesItem' => $salesItems)));
+        return new Response(json_encode(array('salesTotal' => $salesTotal,'purchaseItem' => $purchaseItem ,'salesItem' => $salesItems,'salesItem' => $salesItems,'msg' => $msg)));
         exit;
     }
+
 
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
@@ -132,8 +128,11 @@ class SalesController extends Controller
         $customPrice = $request->request->get('customPrice');
 
         $salesItem = $em->getRepository('InventoryBundle:SalesItem')->find($salesItemId);
-        if ($salesItem->getPurchaseItem()->getQuantity() >= $quantity){
+        $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($salesItem->getPurchaseItem());
+        $itemStock = $salesItem->getPurchaseItem()->getItemStock();
 
+
+        if(!empty($salesItem) && $itemStock > $checkQuantity ){
             $salesItem->setQuantity($quantity);
             $salesItem->setSalesPrice($salesPrice);
             if (!empty($customPrice)) {
@@ -143,12 +142,12 @@ class SalesController extends Controller
             $em->persist($salesItem);
             $em->flush();
             $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
-            return new Response(json_encode(array('salesTotal' => $salesTotal,'msg' => 'success')));
+            return new Response(json_encode(array('salesTotal' => $salesTotal,'msg' => 'Product added successfully')));
 
         }else{
 
             $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
-            return new Response(json_encode(array('salesTotal' => $salesTotal,'msg' => 'invalid')));
+            return new Response(json_encode(array('salesTotal' => $salesTotal,'msg' => 'There is no product in our inventory')));
         }
         exit;
     }
@@ -420,61 +419,7 @@ class SalesController extends Controller
         return new Response($data);
     }
 
-    public function printAction($code)
-    {
-       // echo $code;
-        //$this->printWithOutEscPos();
-        //$connector = new FilePrintConnector("/dev/usb/lp1");
-        $connector = new NetworkPrintConnector("192.168.1.250", 9100);
-        $printer = new Printer($connector);
-        try {
-            $printer -> text("Hello World!\n");
-            $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
-            $printer -> cut();
-            $printer -> close();
 
-        } finally {
-            $printer -> close();
-        }
-        exit;
-    }
-
-    public function printWithOutEscPos(){
-
-
-
-        $texttoprint = <<<EOD
-        HEADER
-        --------------------
-          item: price
-        --------------------
-         Cup  : 100
-         Plate: 200
-        --------------------
-        Total:  300
-                   Thanks
-EOD;
-        //$texttoprint = "RECIPT TEXT \n NEXT LINE \n MORE STUFF";
-        $texttoprint = stripslashes($texttoprint);
-        $fp = fsockopen("192.168.1.250", 9100, $errno, $errstr, 10);
-        if (!$fp) {
-            echo "$errstr ($errno)<br />\n";
-        } else {
-            fwrite($fp, "\033\100");
-            $out = $texttoprint . "\r\n";
-            fwrite($fp, $out);
-            fwrite($fp, "\012\012\012\012\012\012\012\012\012\033\151\010\004\001");
-            fclose($fp);
-        }
-
-    }
 
     public function getBarcode($invoice)
     {
@@ -490,15 +435,6 @@ EOD;
         return $data;
     }
 
-    public function invoicePrintAction(Sales $entity)
-    {
-
-        $barcode = $this->getBarcode($entity->getInvoice());
-        return $this->render('InventoryBundle:Sales:invoice.html.twig', array(
-            'entity'      => $entity,
-            'barcode'     => $barcode,
-        ));
-    }
 
     public function deleteEmptyInvoiceAction()
     {
@@ -535,25 +471,23 @@ EOD;
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
         $entity->setProcess($data['value']);
-        if($entity->getProcess() == 'Waiting for Delivery'){
-            $this->approvedOrder($entity);
+        $em->flush();
+        if($entity->getProcess() == 'Courier'){
+            //$this->approvedOrder($entity);
             //$dispatcher = $this->container->get('event_dispatcher');
            // $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
         }
-        $em->flush();
-
         if($entity->getProcess() == 'Paid'){
             $this->approvedOrder($entity);
             //$dispatcher = $this->container->get('event_dispatcher');
             //$dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
 
-        }elseif($entity->getProcess() == 'Return & Cancel'){
+        }elseif($entity->getProcess() == 'Returned'){
             $this->returnCancelOrder($entity);
             //$dispatcher = $this->container->get('event_dispatcher');
             //$dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
 
         }
-
         exit;
 
     }
@@ -607,5 +541,72 @@ EOD;
         $items[]= array('value' => 'Returned','text'=>'Returned');
         return new JsonResponse($items);
     }
+
+    public function invoicePrintAction(Sales $entity)
+    {
+
+        $barcode = $this->getBarcode($entity->getInvoice());
+        return $this->render('InventoryBundle:Sales:invoice.html.twig', array(
+            'entity'      => $entity,
+            'barcode'     => $barcode,
+        ));
+    }
+
+    public function printAction($code)
+    {
+        // echo $code;
+        //$this->printWithOutEscPos();
+        //$connector = new FilePrintConnector("/dev/usb/lp1");
+        $connector = new NetworkPrintConnector("192.168.1.250", 9100);
+        $printer = new Printer($connector);
+        try {
+            $printer -> text("Hello World!\n");
+            $printer -> text("Hello World!\n");
+//            $printer -> text("Hello World!\n");
+//            $printer -> text("Hello World!\n");
+//            $printer -> text("Hello World!\n");
+//            $printer -> text("Hello World!\n");
+//            $printer -> text("Hello World!\n");
+//            $printer -> text("Hello World!\n");
+//            $printer -> text("Hello World!\n");
+            $printer -> cut();
+            $printer -> close();
+
+        } finally {
+            $printer -> close();
+        }
+        exit;
+    }
+
+    public function printWithOutEscPos(){
+
+
+
+        $texttoprint = <<<EOD
+        HEADER
+        --------------------
+          item: price
+        --------------------
+         Cup  : 100
+         Plate: 200
+        --------------------
+        Total:  300
+                   Thanks
+EOD;
+        //$texttoprint = "RECIPT TEXT \n NEXT LINE \n MORE STUFF";
+        $texttoprint = stripslashes($texttoprint);
+        $fp = fsockopen("192.168.1.250", 9100, $errno, $errstr, 10);
+        if (!$fp) {
+            echo "$errstr ($errno)<br />\n";
+        } else {
+            fwrite($fp, "\033\100");
+            $out = $texttoprint . "\r\n";
+            fwrite($fp, $out);
+            fwrite($fp, "\012\012\012\012\012\012\012\012\012\033\151\010\004\001");
+            fclose($fp);
+        }
+
+    }
+
 
 }

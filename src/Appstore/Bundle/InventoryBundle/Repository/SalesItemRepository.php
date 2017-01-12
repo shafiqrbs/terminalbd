@@ -48,10 +48,11 @@ class SalesItemRepository extends EntityRepository
     }
 
 
-    public function checkPurchaseQuantity(PurchaseItem $purchaseItem)
+    public function checkSalesQuantity(PurchaseItem $purchaseItem)
     {
 
         $qb = $this->createQueryBuilder('salesItem');
+        $qb->join('salesItem.sales','sales');
         $qb->addSelect('SUM(salesItem.quantity) as quantity ');
         $qb->where("salesItem.purchaseItem = :purchaseItem");
         $qb->setParameter('purchaseItem', $purchaseItem->getId());

@@ -65,10 +65,11 @@
                                             <thead class="flip-content ">
                                             <tr class="head-green">
                                                 <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
-                                                <th class="numeric" >SKU/SKU Slug</th>
-                                                <th class="numeric" >Received/Memo</th>
-                                                <th class="numeric" >Purchase Qnt</th>
+                                                <th class="numeric" >SKU</th>
+                                                <th class="numeric" >GRN</th>
                                                 <th class="numeric" >Remaining Qnt</th>
+                                                <th class="numeric" >Ongoing Qnt</th>
+                                                <th class="numeric" >Current Stock</th>
                                                 <th class="numeric" >Purchase price</th>
                                                 <th class="numeric" >Sales price</th>
                                                 <th class="numeric" >Action</th>
@@ -184,7 +185,7 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="span12 input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom span3">Sub-Total TK.</span><input class="m-wrap span7 numeric salesTotal disabled-field" readonly="readonly" id="subTotal" type="text" value="{{ entity.total }}">
+                                                    <span class="add-on add-on-custom span3">Sub-Total TK.</span><input class="m-wrap span7 numeric disabled-field" readonly="readonly" id="subTotal" type="text" value="{{ entity.total }}">
                                                     <input class="m-wrap span9 numeric" name="vat" id="vat" type="hidden">
                                                 </div>
                                             </div>

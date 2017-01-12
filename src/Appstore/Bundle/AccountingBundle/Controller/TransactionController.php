@@ -104,7 +104,8 @@ class TransactionController extends Controller
         $data = $_REQUEST;
 
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($globalOption,1,$data);
+        $transactionMethods = array(1,4);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($globalOption,$transactionMethods,$data);
         $pagination = $this->paginate($entities);
 
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->accountCashOverview($globalOption,1,$data);
@@ -127,7 +128,8 @@ class TransactionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($globalOption,2,$data);
+        $transactionMethods = array(2);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($globalOption,$transactionMethods,$data);
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->accountCashOverview($globalOption,2,$data);
         $processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
@@ -152,7 +154,8 @@ class TransactionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($globalOption,3,$data);
+        $transactionMethods = array(3);
+        $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($globalOption,$transactionMethods,$data);
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->accountCashOverview($globalOption,3,$data);
         $processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
