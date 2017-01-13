@@ -40,8 +40,8 @@ class CustomerListener
 
         $qb
             ->select('MAX(s.code)')
-            ->where('s.inventoryConfig = :inventory')
-            ->setParameter('inventory', $entity->getInventoryConfig());
+            ->where('s.globalOption = :globalOption')
+            ->setParameter('globalOption', $entity->getGlobalOption());
             $lastCode = $qb->getQuery()->getSingleScalarResult();
 
         if (empty($lastCode)) {
