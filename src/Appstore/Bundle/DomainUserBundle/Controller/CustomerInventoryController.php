@@ -24,7 +24,7 @@ class CustomerInventoryController extends Controller
         $pagination = $paginator->paginate(
             $entities,
             $this->get('request')->query->get('page', 1)/*page number*/,
-            500  /*limit per page*/
+            25  /*limit per page*/
         );
         return $pagination;
     }
@@ -41,18 +41,7 @@ class CustomerInventoryController extends Controller
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('DomainUserBundle:Customer')->findWithSearch($globalOption,$data);
-
-
         $pagination = $this->paginate($entities);
-        $i=1;
-        foreach ($pagination as $entity){
-            $code = str_pad($i,6,'0', STR_PAD_LEFT);
-            $entity->setCode($i);
-            $entity->setCustomerId($globalOption->getId().$code);
-            $em->persist($entity);
-            $em->flush();
-            $i++;
-        }
         return $this->render('DomainUserBundle:Customer:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
