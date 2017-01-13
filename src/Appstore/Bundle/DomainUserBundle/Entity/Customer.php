@@ -94,9 +94,9 @@ class Customer
     private $code;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="customerId", type="integer",  nullable=true)
+     * @ORM\Column(name="customerId", type="string",  nullable=true)
      */
     private $customerId;
 
@@ -563,21 +563,6 @@ class Customer
         $this->facebookId = $facebookId;
     }
 
-    /**
-     * @return int
-     */
-    public function getCustomerId()
-    {
-        return $this->customerId;
-    }
-
-    /**
-     * @param int $customerId
-     */
-    public function setCustomerId($customerId)
-    {
-        $this->customerId = $customerId;
-    }
 
     /**
      * @return int
@@ -593,6 +578,22 @@ class Customer
     public function setCode($code)
     {
         $this->code = $code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * @param string $customerId
+     */
+    public function setCustomerId($customerId)
+    {
+        $this->customerId = $customerId;
     }
 
 }

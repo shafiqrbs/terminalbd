@@ -51,7 +51,7 @@ class CustomerRepository extends EntityRepository
         $qb->andWhere("customer.name != :name");
         $qb->setParameter('name', 'Default');
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('customer.created','DESC');
+        $qb->orderBy('customer.id','ASC');
         $qb->getQuery();
         return  $qb;
 
