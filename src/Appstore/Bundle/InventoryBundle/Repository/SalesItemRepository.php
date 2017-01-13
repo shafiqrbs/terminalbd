@@ -19,7 +19,7 @@ class SalesItemRepository extends EntityRepository
     {
         $item = isset($data['item'])? $data['item'] :'';
 
-        $qb = $this->createQueryBuilder('salesItem');
+/*        $qb = $this->createQueryBuilder('salesItem');
         $qb->join('salesItem.item','item');
         $qb->join('salesItem.sales','sales');
         $qb->select('item.sku as sku');
@@ -43,6 +43,23 @@ class SalesItemRepository extends EntityRepository
         }
         $qb->groupBy("salesItem.item");
         $result =  $qb->getQuery();
+        return $result;*/
+
+        $sql = "SELECT SUM(SalesItem.quantity) as salesOngoingQuantity,
+                item.sku as sku,item.name as product,item.purchaseQuantity as purchaseQuantity,item.purchaseQuantityReturn as purchaseQuantityReturn,
+                item.salesQuantityReturn as salesQuantityReturn,item.onlineOrderQuantityReturn as onlineOrderQuantityReturn,
+                item.salesQuantity as salesQuantity,item.damageQuantity as damageQuantity,item.onlineOrderQuantity as onlineOrderQuantity
+                FROM SalesItem
+                INNER JOIN Sales ON SalesItem.sales_id = Sales.id
+                INNER JOIN Item as item ON SalesItem.item_id = item.id
+                WHERE Sales.inventoryConfig_id = :inventoryConfig AND Sales.process IN ('In-progress', 'Courier')
+                GROUP BY item_id";
+        $stmt = $this->getEntityManager()
+            ->getConnection()
+            ->prepare($sql);
+        $stmt->bindValue('inventoryConfig', $inventory->getId());
+        $stmt->execute();
+        $result =  $stmt->fetchAll();
         return $result;
 
     }

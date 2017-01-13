@@ -136,7 +136,7 @@
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due</th>
                                     <th class="numeric" >Customer</th>
-                                    <th class="numeric" >Process & Courier Invoice</th>
+                                    <th class="numeric" >Courier &  Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -160,8 +160,8 @@
                                                 <a  class="btn mini red">{% if entity.process is not empty %}{{ entity.process }}{% endif %}</a>
                                                 <a class="btn mini green" >{{ entity.courierInvoice }}</a>
                                             {% elseif entity.total > 0 %}
-                                                <a  data-type="select" class="btn mini purple-stripe btn-action editable" id="process" data-name="process" href="#" data-source="{{ path('inventory_sales_inline_status_select') }}"  data-url="{{ path('inventory_sales_inline_process_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.process is not empty %}{{ entity.process }}{% endif %}" data-original-title="Enter invoice process">{% if entity.process is not empty %}{{ entity.process }}{% endif %}</a>
                                                 <a class="btn mini green-stripe btn-action editable"  href="#"  data-url="{{ path('inventory_sales_inline_update') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter courier invoice">{{ entity.courierInvoice }}</a>
+                                                <a  data-type="select" class="btn mini purple-stripe btn-action editable" id="process" data-name="process" href="#" data-source="{{ path('inventory_sales_inline_status_select') }}"  data-url="{{ path('inventory_sales_inline_process_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.process is not empty %}{{ entity.process }}{% endif %}" data-original-title="Enter invoice process">{% if entity.process is not empty %}{{ entity.process }}{% endif %}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >

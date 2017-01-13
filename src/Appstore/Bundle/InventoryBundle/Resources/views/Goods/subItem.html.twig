@@ -5,7 +5,7 @@
                 <div class="row-fluid  box blue">
                     <div class="span10">
                         <div class="row-fluid">
-                            <div class="{% if ecommerceConfig.isColor == 1 %} span4 {% else %}span6 {% endif %}">
+                            <div class=" span4 ">
                                 <select class="span12" name="size">
                                     <option value="">Select size/dimension/weight
                                     </option>
@@ -14,16 +14,14 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            {% if ecommerceConfig.isColor == 1 %}
-                                <div class="span2">
+                            <div class="span2">
                                     <select class="span12" multiple="multiple" name="color">
                                         {% for color in colors %}
                                             <option {% if goodsItem.colors.contains(color) %} selected {% endif %}   value="{{ color.id }}">{{ color.name }}</option>
                                         {% endfor %}
                                     </select>
-                                </div>
-                            {% endif %}
-                            <div class="span2">
+                            </div>
+                           <div class="span2">
                                 <input type="number" id="" name="quantity"
                                        class="m-wrap span12 tooltips" placeholder="quantity" value="{{ goodsItem.quantity }}"
                                        data-original-title="Please add item quantity"

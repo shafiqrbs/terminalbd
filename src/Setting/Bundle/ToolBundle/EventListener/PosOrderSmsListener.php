@@ -42,22 +42,66 @@ class PosOrderSmsListener extends BaseSmsAwareListener
          * @var PosOrderSmsEvent $event
          */
 
-
         $sales = $event->getSales();
-        $customer = "Dear Customer your order is processing and you will get your product within 3 working days.";
+        if($sales->getCustomer()->getLocation()->getParent()->getName() == 'Dhaka'){
+            $customer = "Dear Customer your order is processing and you will get your product within 1 working days. Thanks ".$sales->getInventoryConfig()->getGlobalOption()->getName();
+        }else{
+            $customer = "Dear Customer your order is processing and you will get your product within 3 working days. Thanks ".$sales->getInventoryConfig()->getGlobalOption()->getName();
+        }
         $administrator = "You get new order, invoice no ".$sales->getInvoice();
 
         $customerMobile = "+88".$sales->getCustomer()->getMobile();
         $administratorMobile = "+88".$sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getMobile();
 
         if($sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1){
+
             if(!empty($customerMobile)){
                 $status = $this->gateway->send($customer , $customerMobile);
-                $this->em->getRepository('SettingToolBundle:SmsSender')->insertSenderSms($sales,$status);
+                $this->em->getRepository('SettingToolBundle:SmsSender')->insertSalesSenderSms($sales,$status);
             }
             if(!empty($administratorMobile)) {
+                $mobile = $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getMobile();
                 $status = $this->gateway->send($administrator, $administratorMobile);
-                $this->em->getRepository('SettingToolBundle:SmsSender')->insertSenderSms($sales,$status);
+                $this->em->getRepository('SettingToolBundle:SmsSender')->insertAdminSalesSenderSms($sales,$mobile,$status);
+            }
+        }
+
+    }
+
+    public function sendSalesConfirmSms(PosOrderSmsEvent $event)
+    {
+        /**
+         * @var PosOrderSmsEvent $event
+         */
+
+        $sales = $event->getSales();
+        $administrator = "You get invoice no ".$sales->getInvoice()." is ".$sales->getProcess();
+
+        $administratorMobile = "+88".$sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getPaymentNotification();
+
+        if($sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1){
+            if((!empty($administratorMobile) and $sales->getProcess() =='Paid') or (!empty($administratorMobile) and $sales->getProcess() =='Returned')) {
+                $mobile = $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getMobile();
+                $status = $this->gateway->send($administrator, $administratorMobile);
+                $this->em->getRepository('SettingToolBundle:SmsSender')->insertAdminSalesConfirmSms($sales,$mobile,$status);
+            }
+        }
+
+    }
+
+    public function sendSalesCourierSms(PosOrderSmsEvent $event)
+    {
+        /**
+         * @var PosOrderSmsEvent $event
+         */
+
+        $sales = $event->getSales();
+        echo $customer = "Dear Customer your invoice ID.".$sales->getInvoice().' and Courier Invoice.'.$sales->getCourierInvoice().". Thanks ".$sales->getInventoryConfig()->getGlobalOption()->getName();
+        $customerMobile = "+88".$sales->getCustomer()->getMobile();
+        if($sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1){
+            if(!empty($customerMobile)){
+               echo $status = $this->gateway->send($customer , $customerMobile);
+                $this->em->getRepository('SettingToolBundle:SmsSender')->insertSalesCourierSms($sales,$status);
             }
         }
 

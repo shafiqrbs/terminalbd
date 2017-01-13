@@ -319,22 +319,6 @@ var InventoryItemEditPage = function (item) {
         });
 
     }
-
-    $(document).on("click", ".remove", function () {
-
-        var id = $(this).attr("data-id");
-        var url = $(this).attr("data-url");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                if ('success' == response) {
-                    location.reload();
-                }
-            },
-        })
-    });
-
     $(document).on("click", ".barcode", function() {
 
         var id = $(this).attr("data-id");

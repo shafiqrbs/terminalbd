@@ -114,8 +114,7 @@ class GoodsType extends AbstractType
                 )))
             */->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
             ->add('file');
-        if($this->inventoryConfig->getIsColor() == 1){
-            $builder->add('itemColors', 'entity', array(
+             $builder->add('itemColors', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemColor',
                 'empty_value' => '-Choose a color-',
@@ -125,13 +124,10 @@ class GoodsType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
-                        ->andWhere("p.inventoryConfig =".$this->inventoryConfig->getId())
+                        ->andWhere("p.isValid = 1")
                         ->orderBy("p.name","ASC");
                 },
             ));
-        }
-
-
     }
     
     /**

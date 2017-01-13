@@ -107,7 +107,7 @@
                                     {% for entity in entities %}
                                         <tr>
                                             <td class="numeric" >{{ loop.index }}</td>
-                                            <td class="numeric" >{{ entity.name }}</td>
+                                            <td class="numeric" >{{ entity.product }}</td>
                                             <td class="numeric" >{{ entity.sku }}</td>
                                             <td class="numeric" >{{ entity.purchaseQuantity }}</td>
                                             <td class="numeric" >{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.onlineOrderQuantityReturn)  - ( entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity + entity.onlineOrderQuantity) }}</td>

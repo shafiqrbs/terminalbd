@@ -39,6 +39,13 @@ class SmsSender
      */
     private $process;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="receiver", type="string", length=50, nullable= true)
+     */
+    private $receiver;
+
      /**
      * @var string
      *
@@ -165,6 +172,22 @@ class SmsSender
     public function setRemark($remark)
     {
         $this->remark = $remark;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReceiver()
+    {
+        return $this->receiver;
+    }
+
+    /**
+     * @param string $receiver
+     */
+    public function setReceiver($receiver)
+    {
+        $this->receiver = $receiver;
     }
 
 

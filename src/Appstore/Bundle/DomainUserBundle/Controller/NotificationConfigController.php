@@ -74,6 +74,10 @@ class NotificationConfigController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($entity->getMobile());
+            $entity->setMobile($mobile);
+            $notification = $this->get('settong.toolManageRepo')->specialExpClean($entity->getPaymentNotification());
+            $entity->setPaymentNotification($notification);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

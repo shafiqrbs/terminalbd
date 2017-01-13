@@ -20,11 +20,9 @@ class NotificationConfigType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-           ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Mobile no'),
-                    'constraints' =>array(
-                        new NotBlank(array('message'=>'Please enter mobile no'))
-                    ))
-            )
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'System mobile notification ' )))
+            ->add('paymentNotification','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Payment mobile notification')))
+            ->add('smsActive')
             ->add('onlineOrder')
             ->add('customerBaseOrder');
     }

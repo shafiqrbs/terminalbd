@@ -86,7 +86,19 @@ class Customer
 
     protected $location;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="code", type="integer",  nullable=true)
+     */
+    private $code;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="customerId", type="integer",  nullable=true)
+     */
+    private $customerId;
 
 
     /**
@@ -549,6 +561,38 @@ class Customer
     public function setFacebookId($facebookId)
     {
         $this->facebookId = $facebookId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * @param int $customerId
+     */
+    public function setCustomerId($customerId)
+    {
+        $this->customerId = $customerId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param int $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
     }
 
 }

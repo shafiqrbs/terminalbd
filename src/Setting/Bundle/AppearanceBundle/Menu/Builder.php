@@ -159,7 +159,7 @@ class Builder extends ContainerAware
         $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
         $menu
             ->addChild('Invoice Sms & Email')
-            ->setAttribute('icon', 'icon-money')
+            ->setAttribute('icon', 'info-sign')
             ->setAttribute('dropdown', true);
         $menu['Invoice Sms & Email']->addChild('Manage Sms') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
         $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Logs',              array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
@@ -207,12 +207,12 @@ class Builder extends ContainerAware
         $menu['Tools']->addChild('Menu Custom', array('route' => 'menucustom'));
         $menu['Tools']->addChild('Menu Group', array('route' => 'menugroup'));
         $menu['Tools']->addChild('Manage Brand', array('route' => 'branding'));
-    /*    $menu['Tools']->addChild('Inventory&Accounting')
-            ->setAttribute('icon','icon icon-reorder')
-            ->setAttribute('dropdown', true);
-        $menu['Tools']['Inventory&Accounting']->addChild('Color', array('route' => 'color'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tools']['Inventory&Accounting']->addChild('Size', array('route' => 'size'))->setAttribute('icon', 'icon-th-list');
-        $menu['Tools']['Inventory&Accounting']->addChild('Account Head', array('route' => 'accounthead'))->setAttribute('icon','fa fa-money');*/
+        /*    $menu['Tools']->addChild('Inventory&Accounting')
+                ->setAttribute('icon','icon icon-reorder')
+                ->setAttribute('dropdown', true);
+            $menu['Tools']['Inventory&Accounting']->addChild('Color', array('route' => 'color'))->setAttribute('icon', 'icon-th-list');
+            $menu['Tools']['Inventory&Accounting']->addChild('Size', array('route' => 'size'))->setAttribute('icon', 'icon-th-list');
+            $menu['Tools']['Inventory&Accounting']->addChild('Account Head', array('route' => 'accounthead'))->setAttribute('icon','fa fa-money');*/
 
         return $menu;
     }
@@ -508,9 +508,7 @@ class Builder extends ContainerAware
             $menu['Inventory']['Purchase']->addChild('Purchase Import', array('route' => 'inventory_excelimproter'))
                 ->setAttribute('icon', 'icon-upload');
             $menu['Inventory']->addChild('Barcode Print', array('route' => 'inventory_barcode'))->setAttribute('icon', 'icon-barcode');
-            $menu['Inventory']->addChild('Manage Stock')
-                ->setAttribute('icon','icon icon-reorder')
-                ->setAttribute('dropdown', true);
+            $menu['Inventory']->addChild('Manage Stock')->setAttribute('icon','icon icon-reorder')->setAttribute('dropdown', true);
             $menu['Inventory']['Manage Stock']->addChild('Stock Item', array('route' => 'inventory_stockitem'))
                 ->setAttribute('icon', 'icon-briefcase');
             $menu['Inventory']['Manage Stock']->addChild('Item', array('route' => 'item'))
@@ -522,6 +520,9 @@ class Builder extends ContainerAware
             $menu['Inventory']->addChild('System Setting')
                 ->setAttribute('icon','icon icon-cogs')
                 ->setAttribute('dropdown', true);
+            $menu['Inventory']['System Setting']->addChild('Configuration', array('route' => 'inventoryconfig_edit'))
+                ->setAttribute('icon', 'icon-hdd');
+
         }
 
         if($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_CONFIG')) {
@@ -538,9 +539,7 @@ class Builder extends ContainerAware
             $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Size', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'size')))->setAttribute('icon','icon-bar-chart');
             $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Color', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'color')))->setAttribute('icon','icon-bar-chart');
             $menu['Inventory']['Reports']->addChild('Purchase', array('route' => 'inventory_report_purchase'))->setAttribute('icon','icon-bar-chart');
-/*            $menu['Inventory']['Reports']->addChild('Sales', array('route' => 'inventory_report_sales'))->setAttribute('icon','icon-bar-chart');
-            $menu['Inventory']['System Setting']->addChild('Configuration', array('route' => 'inventoryconfig_edit'))
-                ->setAttribute('icon', 'icon-hdd');*/
+            $menu['Inventory']['Reports']->addChild('Sales', array('route' => 'inventory_report_sales'))->setAttribute('icon','icon-bar-chart');
 
         }
 
@@ -577,12 +576,12 @@ class Builder extends ContainerAware
             $menu['App Setting']['Inventory Setting']->addChild('Ware House', array('route' => 'inventory_warehouse'))->setAttribute('icon', 'icon-th-list');
             $menu['App Setting']['Inventory Setting']->addChild('Item Attribute', array('route' => 'itemattribute'))->setAttribute('icon', 'icon-th-list');
             if($inventory->getIsBranch() == 1) {
-            $menu['App Setting']->addChild('Branch')->setAttribute('icon', 'icon-building')->setAttribute('dropdown', true);
-            $menu['App Setting']['Branch']->addChild('Branch Shop', array('route' => 'appsetting_branchshop'))->setAttribute('icon', 'icon-building');
+                $menu['App Setting']->addChild('Branch')->setAttribute('icon', 'icon-building')->setAttribute('dropdown', true);
+                $menu['App Setting']['Branch']->addChild('Branch Shop', array('route' => 'appsetting_branchshop'))->setAttribute('icon', 'icon-building');
             }
             $menu['App Setting']->addChild('Accounting', array('route' => 'account_expenditure'))
-            ->setAttribute('icon','fa fa-money')
-            ->setAttribute('dropdown', true);
+                ->setAttribute('icon','fa fa-money')
+                ->setAttribute('dropdown', true);
             $menu['App Setting']['Accounting']->addChild('Bank Account', array('route' => 'appsetting_bank'))->setAttribute('icon','fa fa-money');
             $menu['App Setting']['Accounting']->addChild('Mobile Account', array('route' => 'appsetting_mobile_bank'))->setAttribute('icon','fa fa-money');
             $menu['App Setting']['Accounting']->addChild('Account Head', array('route' => 'accounthead'))->setAttribute('icon','fa fa-money');
@@ -652,7 +651,7 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon-plus');
         $menu['Service & Sales']['Manage Service']->addChild('Service Item', array('route' => 'inventory_serviceitem'))
             ->setAttribute('icon', 'icon-th-list');
-         $menu['Service & Sales']->addChild('Manage Sales')
+        $menu['Service & Sales']->addChild('Manage Sales')
             ->setAttribute('icon','icon icon-reorder')
             ->setAttribute('dropdown', true);
         $menu['Service & Sales']['Manage Sales']->addChild('Create Invoice', array('route' => 'inventory_servicesales_new'))
@@ -711,7 +710,7 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
         $menu['Accounting']['Transaction & Report']->addChild('Transaction Overview',        array('route' => 'account_transaction'))->setAttribute('icon', 'icon-th-list');
         $menu['Accounting']['Transaction & Report']->addChild('Income',        array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
-     /*   $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');*/
+       /* $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');*/
 
         $menu['Accounting']->addChild('Cash', array('route' => ''))
             ->setAttribute('icon','fa fa-money')
@@ -721,8 +720,8 @@ class Builder extends ContainerAware
         $menu['Accounting']['Cash']->addChild('Bank Transaction',        array('route' => 'account_transaction_bank'))->setAttribute('icon', 'icon-th-list');
         $menu['Accounting']['Cash']->addChild('Mobile Transaction',        array('route' => 'account_transaction_mobilebank'))->setAttribute('icon', 'icon-th-list');
         $menu['Accounting']->addChild('Expenditure', array('route' => 'account_expenditure'))
-              ->setAttribute('icon','fa fa-money')
-              ->setAttribute('dropdown', true);
+            ->setAttribute('icon','fa fa-money')
+            ->setAttribute('dropdown', true);
         $menu['Accounting']['Expenditure']->addChild('Expense',        array('route' => 'account_expenditure'))->setAttribute('icon', 'icon-th-list');
         $menu['Accounting']['Expenditure']->addChild('Expense Category',        array('route' => 'expensecategory'))->setAttribute('icon', 'icon-th-list');
         /*$menu['Finance']->addChild('Petty Cash & Expense', array('route' => 'account_pettycash'))

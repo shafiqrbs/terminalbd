@@ -188,7 +188,7 @@
                         <div class="row-fluid">
 
                             <div class="span8">
-                                {% if  entity.inventoryConfig.isColor == 1 %}
+
                                     <div class="row-fluid">
                                         <div class="span12 ">
                                             <div class="control-group">
@@ -201,8 +201,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                {% endif %}
-                                <div class="row-fluid">
+                                    <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
                                             <label class="control-label" >Description</label>
@@ -270,7 +269,7 @@
                                         <div class="row-fluid clone  box blue">
                                             <div class="span10">
                                                 <div class="row-fluid">
-                                                    {#<div class="{% if ecommerceConfig.isColor == 1 %} span4 {% else %}span6 {% endif %}">
+                                                    <div class=" span4 ">
                                                         <input type="hidden" id="" name="goodsItem[]" class="" value="">
                                                         <select class="span12" id="subSize" name="subSize">
                                                             <option value="">Select size/dimension/weight</option>
@@ -279,15 +278,13 @@
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-                                                    {% if entity.inventoryConfig.isColor == 1 %}
-                                                        <div class="span2">
+                                                    <div class="span2">
                                                             <select class="span12" multiple="multiple" id="subColor" name="subColor[]">
                                                                 {% for color in colors %}
                                                                     <option value="{{ color.id }}">{{ color.name }}</option>
                                                                 {% endfor %}
                                                             </select>
-                                                        </div>
-                                                    {% endif %}#}
+                                                    </div>
                                                     <div class="span2">
                                                         <input type="number" id="subQuantity" name="subQuantity"
                                                                class="m-wrap span12 tooltips" placeholder="quantity" value=""
@@ -321,7 +318,7 @@
                                                 <div class="row-fluid  box blue">
                                                     <div class="span10">
                                                         <div class="row-fluid">
-                                                            <div class="{% if entity.inventoryConfig.isColor == 1 %} span4 {% else %}span6 {% endif %}">
+                                                            <div class=" span4">
                                                                 <select class="span12" name="subSize{{ goodsItem.id }}" id="subSize{{ goodsItem.id }}" >
                                                                     <option value="">Select size/dimension/weight
                                                                     </option>
@@ -330,7 +327,7 @@
                                                                     {% endfor %}
                                                                 </select>
                                                             </div>
-                                                            {% if entity.inventoryConfig.isColor == 1 %}
+
                                                                 <div class="span2">
                                                                     <select class="span12" multiple="multiple" id="subColor{{ goodsItem.id }}" name="subColor{{ goodsItem.id }}">
                                                                         {% for color in colors %}
@@ -338,8 +335,7 @@
                                                                         {% endfor %}
                                                                     </select>
                                                                 </div>
-                                                            {% endif %}
-                                                            <div class="span2">
+                                                                <div class="span2">
                                                                 <input type="number" id="subQuantity{{ goodsItem.id }}" name="subQuantity{{ goodsItem.id }}"
                                                                        class="m-wrap span12 tooltips" placeholder="quantity" value="{{ goodsItem.quantity }}"
                                                                        data-original-title="Please add item quantity"
@@ -572,6 +568,7 @@
                 $('#subSize, #subColor').find('option').prop("selected", false);
                 $('#subSalesPrice,#subPurchasePrice,#subQuantity').val('');
                 $('#subProductLoad').html(response);
+                FormComponents.init();
             }
         })
 
@@ -596,6 +593,7 @@
         })
 
     });
+
 
 
     InventoryItemEditPage({{ entity.id ? entity.id : 0 }});

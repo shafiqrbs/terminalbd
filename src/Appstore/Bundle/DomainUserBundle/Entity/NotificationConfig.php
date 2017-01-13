@@ -66,6 +66,13 @@ class NotificationConfig
      */
      private $mobile;
 
+   /**
+     * @var string
+     *
+     * @ORM\Column(name="paymentNotification", type="text", nullable = true)
+     */
+     private $paymentNotification;
+
       /**
      * Get id
      *
@@ -156,6 +163,22 @@ class NotificationConfig
     public function setSmsActive($smsActive)
     {
         $this->smsActive = $smsActive;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentNotification()
+    {
+        return $this->paymentNotification;
+    }
+
+    /**
+     * @param string $paymentNotification
+     */
+    public function setPaymentNotification($paymentNotification)
+    {
+        $this->paymentNotification = $paymentNotification;
     }
 
 

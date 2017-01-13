@@ -123,3 +123,15 @@ services:
         tags:
           - { name: kernel.event_listener, event: setting_tool.post.posorder_sms , method: sendSms }
 
+  setting_tool.listener.process_order_sms:
+          class: Setting\Bundle\ToolBundle\EventListener\PosOrderSmsListener
+          arguments: [@doctrine ,@setting_tool.sms_gateWay]
+          tags:
+            - { name: kernel.event_listener, event: setting_tool.post.process_sms , method: sendSalesConfirmSms }
+
+  setting_tool.listener.courier_order_sms:
+          class: Setting\Bundle\ToolBundle\EventListener\PosOrderSmsListener
+          arguments: [@doctrine ,@setting_tool.sms_gateWay]
+          tags:
+            - { name: kernel.event_listener, event: setting_tool.post.courier_sms , method: sendSalesCourierSms }
+

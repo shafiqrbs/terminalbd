@@ -15,22 +15,85 @@ use Setting\Bundle\ToolBundle\Entity\SmsSender;
 
 class SmsSenderRepository extends EntityRepository {
 
-    public function insertSenderSms(Sales $sales,$status)
+    public function insertSalesSenderSms(Sales $sales,$status)
     {
         $globalOption = $sales->getInventoryConfig()->getGlobalOption();
+        $remark = 'Invoice no '.$sales->getInvoice().', Amount BDT. '.$sales->getTotal().', Method- '.$sales->getTransactionMethod()->getName();
 
         $entity = new SmsSender();
         $entity->setMobile($sales->getCustomer()->getMobile());
         $entity->setGlobalOption($globalOption);
         $entity->setStatus($status);
         $entity->setProcess('Sales');
-        $entity->setRemark($sales->getInvoice().','.$sales->getTotal());
+        $entity->setReceiver('Customer');
+        $entity->setRemark($remark);
         $this->_em->persist($entity);
         $this->_em->flush();
         if($status == 'success'){
             $this->totalSendSms($globalOption);
         }
     }
+
+    public function insertAdminSalesSenderSms(Sales $sales,$administratorMobile,$status)
+    {
+        $globalOption = $sales->getInventoryConfig()->getGlobalOption();
+
+        $remark = 'Invoice no '.$sales->getInvoice().', Amount BDT. '.$sales->getTotal().', Process- '.$sales->getProcess();
+
+        $entity = new SmsSender();
+        $entity->setMobile($administratorMobile);
+        $entity->setGlobalOption($globalOption);
+        $entity->setStatus($status);
+        $entity->setProcess('Sales');
+        $entity->setReceiver('Admin');
+        $entity->setRemark($remark);
+        $this->_em->persist($entity);
+        $this->_em->flush();
+        if($status == 'success'){
+            $this->totalSendSms($globalOption);
+        }
+    }
+
+    public function insertAdminSalesConfirmSms(Sales $sales,$administratorMobile,$status)
+    {
+        $globalOption = $sales->getInventoryConfig()->getGlobalOption();
+
+        $remark = 'Invoice no '.$sales->getInvoice().', Amount BDT. '.$sales->getTotal().', Process- '.$sales->getProcess();
+
+        $entity = new SmsSender();
+        $entity->setMobile($administratorMobile);
+        $entity->setGlobalOption($globalOption);
+        $entity->setStatus($status);
+        $entity->setProcess('Sales');
+        $entity->setReceiver('Admin');
+        $entity->setRemark($remark);
+        $this->_em->persist($entity);
+        $this->_em->flush();
+        if($status == 'success'){
+            $this->totalSendSms($globalOption);
+        }
+    }
+
+    public function insertSalesCourierSms(Sales $sales,$status)
+    {
+        $globalOption = $sales->getInventoryConfig()->getGlobalOption();
+
+        $remark = 'Invoice no '.$sales->getInvoice().', Amount BDT. '.$sales->getTotal().', Process- '.$sales->getProcess().'/'.$sales->getCourierInvoice();
+
+        $entity = new SmsSender();
+        $entity->setMobile($sales->getCustomer()->getMobile());
+        $entity->setGlobalOption($globalOption);
+        $entity->setStatus($status);
+        $entity->setProcess('Sales');
+        $entity->setReceiver('Customer');
+        $entity->setRemark($remark);
+        $this->_em->persist($entity);
+        $this->_em->flush();
+        if($status == 'success'){
+            $this->totalSendSms($globalOption);
+        }
+    }
+
 
     public function totalSendSms($globalOption){
 

@@ -26,7 +26,7 @@ class SalesController extends Controller
     public function paginate($entities)
     {
 
-        $paginator  = $this->get('knp_paginator');
+        $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $entities,
             $this->get('request')->query->get('page', 1)/*page number*/,
@@ -45,15 +45,15 @@ class SalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory,$data);
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory, $data);
         $pagination = $this->paginate($entities);
-        $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'ASC'));
-        if(in_array('CustomerSales',$inventory->getDeliveryProcess())){
+        $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
+        if (in_array('CustomerSales', $inventory->getDeliveryProcess())) {
             $twig = 'customerSales';
-        }else{
+        } else {
             $twig = 'index';
         }
-        return $this->render('InventoryBundle:Sales:'.$twig.'.html.twig', array(
+        return $this->render('InventoryBundle:Sales:' . $twig . '.html.twig', array(
             'entities' => $pagination,
             'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
@@ -70,14 +70,13 @@ class SalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:SalesItem')->salesItems($inventory,$data);
+        $entities = $em->getRepository('InventoryBundle:SalesItem')->salesItems($inventory, $data);
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:Sales:salesItem.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
         ));
     }
-
 
 
     /**
@@ -91,26 +90,26 @@ class SalesController extends Controller
         $barcode = $request->request->get('barcode');
         $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory,$barcode);
+        $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory, $barcode);
         $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
         $itemStock = $purchaseItem->getItemStock();
 
 
-        if(!empty($purchaseItem) && $itemStock > $checkQuantity ){
+        if (!empty($purchaseItem) && $itemStock > $checkQuantity) {
 
-            $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales,$purchaseItem);
+            $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
             $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
             $msg = 'Product added successfully';
 
-        }else{
+        } else {
 
             $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
             $msg = 'There is no product in our inventory';
         }
 
-        return new Response(json_encode(array('salesTotal' => $salesTotal,'purchaseItem' => $purchaseItem ,'salesItem' => $salesItems,'salesItem' => $salesItems,'msg' => $msg)));
+        return new Response(json_encode(array('salesTotal' => $salesTotal, 'purchaseItem' => $purchaseItem, 'salesItem' => $salesItems, 'salesItem' => $salesItems, 'msg' => $msg)));
         exit;
     }
 
@@ -132,7 +131,7 @@ class SalesController extends Controller
         $itemStock = $salesItem->getPurchaseItem()->getItemStock();
 
 
-        if(!empty($salesItem) && $itemStock > $checkQuantity ){
+        if (!empty($salesItem) && $itemStock > $checkQuantity) {
             $salesItem->setQuantity($quantity);
             $salesItem->setSalesPrice($salesPrice);
             if (!empty($customPrice)) {
@@ -142,12 +141,12 @@ class SalesController extends Controller
             $em->persist($salesItem);
             $em->flush();
             $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
-            return new Response(json_encode(array('salesTotal' => $salesTotal,'msg' => 'Product added successfully')));
+            return new Response(json_encode(array('salesTotal' => $salesTotal, 'msg' => 'Product added successfully')));
 
-        }else{
+        } else {
 
             $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
-            return new Response(json_encode(array('salesTotal' => $salesTotal,'msg' => 'There is no product in our inventory')));
+            return new Response(json_encode(array('salesTotal' => $salesTotal, 'msg' => 'There is no product in our inventory')));
         }
         exit;
     }
@@ -162,9 +161,9 @@ class SalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new Sales();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        if($customer > 0 ){
+        if ($customer > 0) {
             $customer = $em->getRepository('DomainUserBundle:Customer')->find($customer);
-            if(!empty($customer)){
+            if (!empty($customer)) {
 
                 $entity->setCustomer($customer);
                 $entity->setSalesMode('customer');
@@ -189,11 +188,11 @@ class SalesController extends Controller
     public function showAction(Sales $entity)
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
-        if($inventory == $entity->getInventoryConfig()->getId() ){
+        if ($inventory == $entity->getInventoryConfig()->getId()) {
             return $this->render('InventoryBundle:Sales:show.html.twig', array(
-                'entity'      => $entity,
+                'entity' => $entity,
             ));
-        }else{
+        } else {
             return $this->redirect($this->generateUrl('inventory_sales'));
         }
 
@@ -207,30 +206,30 @@ class SalesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory , 'invoice' => $code));
+        $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
         }
 
-        $editForm           = $this->createEditForm($entity);
-        $inventory          = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todaySales         = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
+        $editForm = $this->createEditForm($entity);
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
 
-        if(in_array('CustomerSales',$inventory->getDeliveryProcess())){
+        if (in_array('CustomerSales', $inventory->getDeliveryProcess())) {
             $twig = 'customerpos';
-        }else{
+        } else {
             $twig = 'pos';
         }
-        if ($entity->getProcess() != "In-progress"){
-             return $this->redirect($this->generateUrl('inventory_sales_show',array('id' => $entity->getId())));
+        if ($entity->getProcess() != "In-progress") {
+            return $this->redirect($this->generateUrl('inventory_sales_show', array('id' => $entity->getId())));
         }
-        return $this->render('InventoryBundle:Sales:'.$twig.'.html.twig', array(
-            'entity'                    => $entity,
-            'todaySales'                => $todaySales,
-            'todaySalesOverview'        => $todaySalesOverview,
-            'form'                      => $editForm->createView(),
+        return $this->render('InventoryBundle:Sales:' . $twig . '.html.twig', array(
+            'entity' => $entity,
+            'todaySales' => $todaySales,
+            'todaySalesOverview' => $todaySalesOverview,
+            'form' => $editForm->createView(),
         ));
     }
 
@@ -273,63 +272,67 @@ class SalesController extends Controller
 
             $data = $request->request->all();
 
-                if (!empty($data['sales']['mobile'])) {
+            if (!empty($data['sales']['mobile'])) {
 
-                    $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales']['mobile']);
-                    $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity,$mobile);
-                    $entity->setCustomer($customer);
-                    $entity->setMobile($mobile);
-                } else {
-                    $globalOption = $this->getUser()->getGlobalOption();
-                    $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
-                    $entity->setCustomer($customer);
-                }
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales']['mobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity, $mobile);
+                $entity->setCustomer($customer);
+                $entity->setMobile($mobile);
+            } else {
+                $globalOption = $this->getUser()->getGlobalOption();
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
+                $entity->setCustomer($customer);
+            }
 
-                $entity->setSubTotal($data['paymentSubTotal']);
-                if($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0 ){
-                    $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($data['paymentTotal']);
-                    $entity->setVat($vat);
-                }
-                $entity->setDue($data['dueAmount']);
-                $entity->setDiscount($data['discount']);
-                $entity->setTotal($data['paymentTotal']);
-                $entity->setPayment($data['paymentTotal'] - $data['dueAmount']);
-                $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+            $entity->setSubTotal($data['paymentSubTotal']);
+            if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
+                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($data['paymentTotal']);
+                $entity->setVat($vat);
+            }
+            $entity->setDue($data['dueAmount']);
+            $entity->setDiscount($data['discount']);
+            $entity->setTotal($data['paymentTotal']);
+            $entity->setPayment($data['paymentTotal'] - $data['dueAmount']);
+            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+            $entity->setPaymentInWord($amountInWords);
+
+            if ($data['paymentTotal'] <= $data['paymentAmount']) {
+                $entity->setPaymentStatus('Paid');
+            } else if ($data['paymentTotal'] > $data['paymentAmount']) {
+                $entity->setPaymentStatus('Due');
+            }
+            if (empty($data['sales']['salesBy'])) {
+                $entity->setSalesBy($this->getUser());
+            }
+            if ($entity->getTransactionMethod()->getId() != 4) {
+                $entity->setApprovedBy($this->getUser());
+            } else if ($entity->getTransactionMethod()->getId() == 4) {
+                $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
                 $entity->setPaymentInWord($amountInWords);
+            }
+            $em->flush();
 
-                if ($data['paymentTotal'] <= $data['paymentAmount']) {
-                    $entity->setPaymentStatus('Paid');
-                } else if ($data['paymentTotal'] > $data['paymentAmount']) {
-                    $entity->setPaymentStatus('Due');
-                }
-                if (empty($data['sales']['salesBy'])){
-                    $entity->setSalesBy($this->getUser());
-                }
-                if($entity->getTransactionMethod()->getId() != 4) {
-                    $entity->setApprovedBy($this->getUser());
-                }else if($entity->getTransactionMethod()->getId() == 4) {
-                    $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-                    $entity->setPaymentInWord($amountInWords);
-                }
-                $em->flush();
+            if ($entity->getSalesMode() != 'pos') {
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+            }
+            if ($entity->getTransactionMethod()->getId() == 4) {
 
-                if($entity->getSalesMode() !='pos'){
-                    $dispatcher = $this->container->get('event_dispatcher');
-                    $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
-                }
-                if($entity->getTransactionMethod()->getId() == 4){
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
 
-                    return $this->redirect($this->generateUrl('inventory_sales_show',array('id' => $entity->getId())));
+                return $this->redirect($this->generateUrl('inventory_sales_show', array('id' => $entity->getId())));
 
-                }else{
 
-                    $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
-                    $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
-                    $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
-                    $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-                    $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
-                    return $this->redirect($this->generateUrl('inventory_sales_new'));
-                }
+            } else {
+
+                $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
+                $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+                $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
+                $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
+                $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+                return $this->redirect($this->generateUrl('inventory_sales_new'));
+            }
 
         }
 
@@ -337,10 +340,10 @@ class SalesController extends Controller
         $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
         return $this->render('InventoryBundle:Sales:new.html.twig', array(
-            'entity'      => $entity,
-            'todaySales'      => $todaySales,
-            'todaySalesOverview'      => $todaySalesOverview,
-            'form'   => $editForm->createView(),
+            'entity' => $entity,
+            'todaySales' => $todaySales,
+            'todaySalesOverview' => $todaySalesOverview,
+            'form' => $editForm->createView(),
         ));
 
     }
@@ -359,7 +362,7 @@ class SalesController extends Controller
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity,$accountSales);
+            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
             return new Response('success');
         } else {
             return new Response('failed');
@@ -378,14 +381,14 @@ class SalesController extends Controller
         if (!$sales) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
         }
-        if(!empty($sales->getSalesImport())){
+        if (!empty($sales->getSalesImport())) {
             $salesImport = $sales->getSalesImport();
             $em->remove($salesImport);
         }
         $sales->getSalesImport();
         $em->remove($sales);
         $em->flush();
-        return new Response(json_encode(array('success'=>'success')));
+        return new Response(json_encode(array('success' => 'success')));
         exit;
     }
 
@@ -393,7 +396,7 @@ class SalesController extends Controller
      * Deletes a SalesItem entity.
      *
      */
-    public function itemDeleteAction(Sales $sales , $salesItem)
+    public function itemDeleteAction(Sales $sales, $salesItem)
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('InventoryBundle:SalesItem')->find($salesItem);
@@ -405,7 +408,7 @@ class SalesController extends Controller
         $em->flush();
         $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
         $salesTotal = $salesTotal > 0 ? $salesTotal : 0;
-        return new Response(json_encode(array('salesTotal'=>$salesTotal,'success'=>'success')));
+        return new Response(json_encode(array('salesTotal' => $salesTotal, 'success' => 'success')));
         exit;
 
     }
@@ -414,11 +417,10 @@ class SalesController extends Controller
     {
         $item = $request->request->get('item');
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer']:'';
-        $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemPurchaseDetails($inventory,$item,$customer);
+        $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer'] : '';
+        $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemPurchaseDetails($inventory, $item, $customer);
         return new Response($data);
     }
-
 
 
     public function getBarcode($invoice)
@@ -431,7 +433,7 @@ class SalesController extends Controller
         $barcode->setFontSize(8);
         $code = $barcode->generate();
         $data = '';
-        $data .='<img src="data:image/png;base64,'.$code.'" />';
+        $data .= '<img src="data:image/png;base64,' . $code . '" />';
         return $data;
     }
 
@@ -441,7 +443,7 @@ class SalesController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig' => $inventory, 'paymentStatus' => 'Pending'));
         $em = $this->getDoctrine()->getManager();
-        foreach ($entities as $entity){
+        foreach ($entities as $entity) {
             $em->remove($entity);
             $em->flush();
         }
@@ -470,22 +472,25 @@ class SalesController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
-        $entity->setProcess($data['value']);
+        if ($data['value'] == 'Paid' or $data['value'] == 'Returned'){
+            $entity->setProcess($data['value']);
+        }elseif (!empty($entity->getCourierInvoice()) and $data['value'] == 'Courier'){
+            $entity->setProcess($data['value']);
+        }
         $em->flush();
         if($entity->getProcess() == 'Courier'){
-            //$this->approvedOrder($entity);
-            //$dispatcher = $this->container->get('event_dispatcher');
-           // $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.courier_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
         }
         if($entity->getProcess() == 'Paid'){
             $this->approvedOrder($entity);
-            //$dispatcher = $this->container->get('event_dispatcher');
-            //$dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.process_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
 
         }elseif($entity->getProcess() == 'Returned'){
             $this->returnCancelOrder($entity);
-            //$dispatcher = $this->container->get('event_dispatcher');
-            //$dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.process_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
 
         }
         exit;

@@ -65,7 +65,6 @@ class InventoryGoodsType extends AbstractType
                         ->orderBy("p.name","ASC");
                 },
             ))
-
             ->add('country', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\LocationBundle\Entity\Country',
