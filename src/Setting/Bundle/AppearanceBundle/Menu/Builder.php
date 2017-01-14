@@ -487,11 +487,11 @@ class Builder extends ContainerAware
                 if($inventory->getIsBranch() == 1 ){
 
                     $menu['Inventory']
-                        ->addChild('Delivery')
+                        ->addChild('Branch Delivery')
                         ->setAttribute('icon','icon icon-truck')
                         ->setAttribute('dropdown', true);
-                    $menu['Inventory']['Delivery']->addChild('Delivery Invoice', array('route' => 'inventory_delivery'))->setAttribute('icon','icon-shopping-cart');
-                    $menu['Inventory']['Delivery']->addChild('Return Invoice', array('route' => 'inventory_deliveryreturn'))->setAttribute('icon','icon-retweet');
+                    $menu['Inventory']['Branch Delivery']->addChild('Delivery Invoice', array('route' => 'inventory_delivery'))->setAttribute('icon','icon-shopping-cart');
+                    $menu['Inventory']['Branch Delivery']->addChild('Return Invoice', array('route' => 'inventory_deliveryreturn'))->setAttribute('icon','icon-retweet');
 
                 }
             }

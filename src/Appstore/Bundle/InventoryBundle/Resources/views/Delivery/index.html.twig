@@ -53,10 +53,42 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
+                            <div id="search-product">
+                                <div class="row-fluid" style="margin-bottom: 5px">
+                                    <form class="search-form" method="post" action="{{ path('inventory_delivery_grn') }}" >
+                                        <div class="row-fluid">
+                                            <div class="span8">
+                                                <div class="control-group">
+                                                    <label class="control-label" for="">Branch Name</label>
+                                                    <div class="controls">
+                                                        <select name="shop" id="shop" class="m-wrap span12 select2">
+                                                        <option value="">---Select Branch---</option>
+                                                        {% for shop in shops %}
+                                                        <option value="{{ shop.id }}" >{{ shop.name }}</option>
+                                                        {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="span4">
+                                                <div class="controls">
+                                                    <label class="control-label" for="">GRN No</label>
+                                                    <div class="input-append span11">
+                                                        <input type="text" id="grn" name="grn" required="required"  class="m-wrap span9 select2Item" >
+                                                        <div class="btn-group">
+                                                            <button class="btn blue" id="addDelivery" type="submit"><i class="icon-plus"></i>&nbsp;Add</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
-                                <tr class="head-grey">
+                                <tr class="head-green">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Branch Name</th>
                                     <th class="numeric" >Manager</th>

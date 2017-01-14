@@ -13,6 +13,11 @@ inventory_delivery_show:
     path:     /{id}/show
     defaults: { _controller: "InventoryBundle:Delivery:show" }
 
+inventory_delivery_grn:
+    path:     /delivery-grn
+    defaults: { _controller: "InventoryBundle:Delivery:initialProductBranchDelivery" }
+    methods:  POST
+
 inventory_delivery_new:
     path:     /new
     defaults: { _controller: "InventoryBundle:Delivery:new" }

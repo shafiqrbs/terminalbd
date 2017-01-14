@@ -63,7 +63,7 @@ class DeliveryController extends Controller
         $quantity = $request->request->get('quantity');
         $delivery = $request->request->get('delivery');
 
-        $purchaseItem = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('barcode'=>$barcode));
+        $purchaseItem = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('barcode' => $barcode));
         $delivery =  $em->getRepository('InventoryBundle:Delivery')->find($delivery);
         if ($purchaseItem->getQuantity() >= $quantity){
 
@@ -90,6 +90,44 @@ class DeliveryController extends Controller
 
     }
 
+    public function initialProductBranchDeliveryAction(Request $request)
+    {
+        $entity = new Delivery();
+
+        $shop = $request->request->get('shop');
+        $grn = $request->request->get('grn');
+
+        $em = $this->getDoctrine()->getManager();
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        if($shop > 0 ){
+            $shop = $em->getRepository('DomainUserBundle:Branches')->find($shop);
+            if(!empty($shop)){
+                $entity->setBranch($shop);
+            }
+        }
+        $entity->setInventoryConfig($inventory);
+        $em->persist($entity);
+        $em->flush();
+
+        $purchase = $em->getRepository('InventoryBundle:Purchase')->findOneBy(array('inventoryConfig' => $inventory,'grn' => $grn));
+
+        foreach ( $purchase->getPurchaseItems() as $item){
+
+            $delivery = new DeliveryItem();
+            $delivery->setPurchaseItem($item);
+            $delivery->setItem($item->getItem());
+            $delivery->setDelivery($entity);
+            $delivery->setQuantity($item->getQuantity());
+            $delivery->setSalesPrice($item->getSalesPrice());
+            $delivery->setSubTotal($item->getSalesPrice() * $item->getQuantity());
+            $em->persist($entity);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('inventory_delivery_edit', array( 'code' => $entity->getInvoice())));
+
+    }
+
     /**
      * Displays a form to create a new Delivery entity.
      *
@@ -100,6 +138,7 @@ class DeliveryController extends Controller
         $shop = isset($_REQUEST['shop']) ? $_REQUEST['shop'] : '';
         $em = $this->getDoctrine()->getManager();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+
         if($shop > 0 ){
             $shop = $em->getRepository('DomainUserBundle:Branches')->find($shop);
             if(!empty($shop)){

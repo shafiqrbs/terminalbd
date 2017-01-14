@@ -98,7 +98,6 @@
                                 <thead class="flip-content ">
                                 <tr class="head-green">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                    <th class="numeric">Created</th>
                                     <th class="numeric">Customer ID</th>
                                     <th class="numeric">Name</th>
                                     <th class="numeric">Mobile</th>
@@ -110,7 +109,6 @@
                                 {% for entity in entities %}
                                     <tr>
                                         <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
-                                        <td>{{ entity.created|date('d-m-Y') }}</td>
                                         <td>{{ entity.customerId }}</td>
                                         <td>{{ entity.name }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
