@@ -37,8 +37,8 @@ class GoodsItemRepository extends EntityRepository
         }
         $goods->setPurchaseVendorItem($reEntity);
         $goods->setMasterItem(1);
+        $em->persist($goods);
         $em->flush();
-
     }
 
     public function initialUpdateSubProduct(PurchaseVendorItem $reEntity)

@@ -71,9 +71,6 @@ class GoodsType extends AbstractType
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemSize',
                 'empty_value' => '-Choose a size-',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
                 'property' => 'name',
                 'attr'=>array('class'=>'span12'),
                 'query_builder' => function(EntityRepository $er){

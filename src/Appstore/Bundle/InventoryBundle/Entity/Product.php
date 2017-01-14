@@ -53,7 +53,7 @@ class Product implements CodeAwareEntity
 
 
     /**
-     * @Gedmo\Slug(fields={"name"}, updatable=false, separator="_")
+     * @Gedmo\Slug(fields={"name"}, updatable=false, separator="-")
      * @ORM\Column(length=255, unique=true)
      */
     private $slug;

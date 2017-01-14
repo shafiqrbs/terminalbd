@@ -63,7 +63,7 @@
                     <div class="row-fluid">
                         <div class="col-xs-12 col-md-12 o-margin-padding" style="width: 490px">
                             <ul id="pgwSlider" class="pgwSlider">
-                                <li><img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,650) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,650) }}{% endif %}" alt="" data-description="{{ product.name }}"></li>
+                                <li><img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="" data-description="{{ product.name }}"></li>
                                 {% if(product.itemGalleries) %}
                                     {% for photo in product.itemGalleries %}
                                         <li><img  src="{{ image(photo.getAbsolutePath(product.inventoryConfig.globalOption.id,product.id)).resize() }}" alt="" data-description="{{ product.name }}"></li>
@@ -102,11 +102,12 @@
                         </div>
 
                         <div class="col-xs-12 col-md-12 o-margin-padding"> <hr></div>
+                        <form class="addCart">
+                        {% if product.goodsItems is not empty and product.goodsItems is defined %}
                         <div class="col-xs-12 col-md-12 o-margin-padding">
                             <div class="panel panel-success">
                                 <div class="panel-body">
-                                    <form class="addCart">
-                                        {% if product.goodsItems is not empty and product.goodsItems is defined %}
+
                                             {% if product.size is defined and product.size is not empty %}
                                             <div class="form-group">
                                                 <div class="input-group input-group-sm">
@@ -145,17 +146,21 @@
                                                 </div>
                                             </div>
                                             {% if  globalOption.ecommerceConfig.cart == 1  %}
-                                            <div class="form-group pull-right">
-
-                                                <input type="hidden" name="productImg" value="{% if product.webPath is not empty  %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
-                                                <button type="submit" class="btn btn-default cartSubmit" data-url="{{ path('webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : subitem.id }) }}" ><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to cart</button>
-                                            </div>
+                                                <div class="form-group pull-right">
+                                                     <input type="hidden" name="productImg" value="{% if product.webPath is not empty  %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
+                                                    <button type="submit" class="btn btn-default cartSubmit" data-url="{{ path('webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : subitem.id }) }}" ><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to cart</button>
+                                                </div>
                                             {% endif %}
-                                        {% endif %}
-                                    </form>
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
+                            {% if  globalOption.ecommerceConfig.cart == 1  %}
+                                <div class="form-group pull-right">
+                                    <button type="submit" class="btn btn-default cartSubmit" data-url="{{ path('webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : product.id }) }}" ><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to cart</button>
+                                </div>
+                            {% endif %}
+                        </form>
                     </div>
                 </div>
             </div>

@@ -137,7 +137,7 @@ class PurchaseVendorItem
      *          @Gedmo\SlugHandlerOption(name="separator", value="-")
      *      })
      * }, fields={"name"})
-     * @Doctrine\ORM\Mapping\Column()
+     * @Doctrine\ORM\Mapping\Column(length=255, unique=true, nullable = true)
      */
     private $slug;
 
