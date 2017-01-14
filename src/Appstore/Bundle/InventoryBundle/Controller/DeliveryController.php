@@ -120,7 +120,7 @@ class DeliveryController extends Controller
             $delivery->setQuantity($item->getQuantity());
             $delivery->setSalesPrice($item->getSalesPrice());
             $delivery->setSubTotal($item->getSalesPrice() * $item->getQuantity());
-            $em->persist($entity);
+            $em->persist($delivery);
             $em->flush();
         }
 

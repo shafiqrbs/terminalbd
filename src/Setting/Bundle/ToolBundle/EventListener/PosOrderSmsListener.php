@@ -59,7 +59,7 @@ class PosOrderSmsListener extends BaseSmsAwareListener
                 $status = $this->gateway->send($customer , $customerMobile);
                 $this->em->getRepository('SettingToolBundle:SmsSender')->insertSalesSenderSms($sales,$status);
             }
-            if(!empty($administratorMobile)) {
+            if(!empty($sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getMobile())) {
                 $mobile = $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getMobile();
                 $status = $this->gateway->send($administrator, $administratorMobile);
                 $this->em->getRepository('SettingToolBundle:SmsSender')->insertAdminSalesSenderSms($sales,$mobile,$status);
@@ -80,8 +80,8 @@ class PosOrderSmsListener extends BaseSmsAwareListener
         $administratorMobile = "+88".$sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getPaymentNotification();
 
         if(!empty($sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()) and $sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1){
-            if((!empty($administratorMobile) and $sales->getProcess() =='Paid') or (!empty($administratorMobile) and $sales->getProcess() =='Returned')) {
-                $mobile = $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getMobile();
+            if((!empty($sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getMobile()) and $sales->getProcess() =='Paid') or (!empty($administratorMobile) and $sales->getProcess() =='Returned')) {
+                $mobile = $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getPaymentNotification();
                 $status = $this->gateway->send($administrator, $administratorMobile);
                 $this->em->getRepository('SettingToolBundle:SmsSender')->insertAdminSalesConfirmSms($sales,$mobile,$status);
             }
@@ -96,15 +96,15 @@ class PosOrderSmsListener extends BaseSmsAwareListener
          */
 
         $sales = $event->getSales();
-        echo $customer = "Dear Customer your invoice ID.".$sales->getInvoice().' and Courier Invoice.'.$sales->getCourierInvoice().". Thanks ".$sales->getInventoryConfig()->getGlobalOption()->getName();
+        $customer = "Dear Customer your invoice ID.".$sales->getInvoice().' and Courier Invoice.'.$sales->getCourierInvoice().". Thanks ".$sales->getInventoryConfig()->getGlobalOption()->getName();
         $customerMobile = "+88".$sales->getCustomer()->getMobile();
         if(!empty($sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()) and $sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1){
-            if(!empty($customerMobile)){
+            if(!empty($sales->getCustomer()->getMobile())){
                echo $status = $this->gateway->send($customer , $customerMobile);
                 $this->em->getRepository('SettingToolBundle:SmsSender')->insertSalesCourierSms($sales,$status);
             }
         }
+        }
 
-    }
 
 }

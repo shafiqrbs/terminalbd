@@ -313,19 +313,15 @@ class SalesController extends Controller
             $em->flush();
 
             if ($entity->getSalesMode() != 'pos') {
-                $dispatcher = $this->container->get('event_dispatcher');
-                $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+
+                if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+                    $dispatcher = $this->container->get('event_dispatcher');
+                    $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+                }
             }
             if ($entity->getTransactionMethod()->getId() == 4) {
-
-                $dispatcher = $this->container->get('event_dispatcher');
-                $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
-
                 return $this->redirect($this->generateUrl('inventory_sales_show', array('id' => $entity->getId())));
-
-
             } else {
-
                 $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
                 $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
@@ -479,19 +475,24 @@ class SalesController extends Controller
         }
         $em->flush();
         if($entity->getProcess() == 'Courier'){
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.courier_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+            if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.courier_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+            }
         }
         if($entity->getProcess() == 'Paid'){
             $this->approvedOrder($entity);
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.process_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
-
+            if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.process_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+            }
         }elseif($entity->getProcess() == 'Returned'){
             $this->returnCancelOrder($entity);
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.process_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+            if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
 
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.process_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+            }
         }
         exit;
 

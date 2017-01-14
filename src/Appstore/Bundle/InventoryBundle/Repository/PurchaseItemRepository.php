@@ -173,7 +173,7 @@ class PurchaseItemRepository extends EntityRepository
         $qb->select('pi.barcode as id');
         $qb->addSelect('pi.barcode as text');
         $qb->addSelect('SUM(stockitem.quantity) as item_name');
-        $qb->where($qb->expr()->like("pi.barcode", "'$item%'"  ));
+        $qb->where($qb->expr()->like("pi.barcode", "'%$item%'"  ));
         $qb->andWhere("p.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory->getId());
         $qb->orderBy('p.updated', 'ASC');
