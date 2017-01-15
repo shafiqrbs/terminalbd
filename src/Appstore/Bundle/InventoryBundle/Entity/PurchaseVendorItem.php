@@ -136,10 +136,24 @@ class PurchaseVendorItem
      *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="masterItem"),
      *          @Gedmo\SlugHandlerOption(name="separator", value="-")
      *      })
-     * }, fields={"name"})
+     * }, fields={"webName"})
      * @Doctrine\ORM\Mapping\Column(length=255, unique=true, nullable = true)
      */
     private $slug;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sku", type="string", length=50,nullable = true)
+     */
+    private $sku;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="code", type="integer", nullable=true)
+     */
+    private $code;
 
 
     /**
@@ -1073,6 +1087,47 @@ class PurchaseVendorItem
             $stockQnt += $item->getQuantity();
         }
         return $stockQnt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSku()
+    {
+        return $this->sku;
+    }
+
+    /**
+     * @param string $sku
+     */
+    public function setSku($sku)
+    {
+        $this->sku = $sku;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param int $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSTRPadCode()
+    {
+        $code = str_pad($this->getCode(),6, '0', STR_PAD_LEFT);
+        return $code;
     }
 
 

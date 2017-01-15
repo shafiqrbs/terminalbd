@@ -111,6 +111,13 @@ class Product implements CodeAwareEntity
     private $gender;
 
 
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="content", type="text", nullable=true)
+     */
+    private $content;
+
 
     /**
      * @var boolean
@@ -467,6 +474,22 @@ class Product implements CodeAwareEntity
     public function setGender($gender)
     {
         $this->gender = $gender;
+    }
+
+    /**
+     * @return text
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param text $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
     }
 
 

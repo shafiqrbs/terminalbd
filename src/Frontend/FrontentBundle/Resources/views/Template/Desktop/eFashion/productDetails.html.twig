@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10">
-                    <div class="crumb" style="line-height: 34px">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i><a href="{{ path('webservice_product',{'subdomain':globalOption.subdomain}) }}">Products</a><i>/</i>{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</div>
+                    <div class="crumb" style="line-height: 34px">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i><a href="{{ path('webservice_product',{'subdomain':globalOption.subdomain}) }}">Products</a><i>/</i>{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</div>
 
                 </div>
                 <div class="col-md-2 o-margin-padding pull-right">
@@ -63,7 +63,7 @@
                     <div class="row-fluid">
                         <div class="col-xs-12 col-md-12 o-margin-padding" style="width: 490px">
                             <ul id="pgwSlider" class="pgwSlider">
-                                <li><img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="" data-description="{{ product.name }}"></li>
+                                <li><img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,650) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,650) }}{% endif %}" alt="" data-description="{{ product.name }}"></li>
                                 {% if(product.itemGalleries) %}
                                     {% for photo in product.itemGalleries %}
                                         <li><img  src="{{ image(photo.getAbsolutePath(product.inventoryConfig.globalOption.id,product.id)).resize() }}" alt="" data-description="{{ product.name }}"></li>
@@ -75,12 +75,13 @@
                 </div>
                 <div class="col-xs-7 col-md-7" id="subItemDetails">
                     <div class="col-xs-6 col-md-6">
-                        <div style="height: 37px"><h5><strong>{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></h5></div>
+                        <div style="height: 37px"><h5><strong>{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</strong></h5></div>
                         <hr>
                         <div >
                             <table class="list-table">
+                                <tr><td>Product SKU:</td><td class="left-text"><strong>{{ product.sku }}</strong></td></tr>
                                 <tr><td>Price</td><td class="left-text"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.salesPrice|number_format }}</strong></td></tr>
-                                <tr><td>Stock in</td><td class="left-text">&nbsp;:&nbsp;<strong>{{ product.quantity  }}</strong>&nbsp;{% if product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</td></tr>
+                                <tr><td>Stock in</td><td class="left-text">&nbsp;:&nbsp;<strong>{{ product.masterQuantity  }}</strong>&nbsp;{% if product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</td></tr>
                                 {% if product.masterItem.category is defined and product.masterItem.category is not empty %}<tr><td>Category</td><td class="left-text">&nbsp;:&nbsp;{{ product.masterItem.category.name }}</td></tr>{% endif %}
                                 {% if product.gender is not empty %}<tr><td>Gender</td><td class="left-text">&nbsp;:&nbsp;{{ product.gender }}</td></tr>{% endif %}
                                 {% if product.ageGroup is not empty %}<tr><td>Age Group</td><td class="left-text">&nbsp;:&nbsp;{{ product.ageGroup }}</td></tr>{% endif %}
@@ -102,12 +103,11 @@
                         </div>
 
                         <div class="col-xs-12 col-md-12 o-margin-padding"> <hr></div>
-                        <form class="addCart">
                         {% if product.goodsItems is not empty and product.goodsItems is defined %}
                         <div class="col-xs-12 col-md-12 o-margin-padding">
                             <div class="panel panel-success">
                                 <div class="panel-body">
-
+                                    <form class="addCart">
                                             {% if product.size is defined and product.size is not empty %}
                                             <div class="form-group">
                                                 <div class="input-group input-group-sm">
@@ -120,7 +120,7 @@
                                                 </div>
                                             </div>
                                             {% endif %}
-                                            {% if globalOption.inventoryConfig.isColor == 1 and product.itemColors is not empty and product.itemColors is defined %}
+                                            {% if product.itemColors is not empty and product.itemColors is defined %}
                                             <div class="form-group">
                                                 <div class="input-group input-group-sm">
                                                     <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-text-background"></span></span>
@@ -136,7 +136,11 @@
                                                 <div class="input-group input-group-sm">
                                                     <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-sort-by-order"></span></span>
                                                     <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="{{ product.masterQuantity }}" value="1" placeholder="{{ product.masterQuantity }}" aria-label="Text input with multiple buttons">
-                                                    <div class="input-group-btn"> <button type="button" class="btn btn-default">{{ product.masterItem.productUnit.name }}</button> </div> </div>
+
+                                                    <div class="input-group-btn"> <button type="button" class="btn btn-default"> {% if product.masterItem is not empty and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}  {% endif %}</button>
+
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="input-group input-group-sm">
@@ -146,21 +150,18 @@
                                                 </div>
                                             </div>
                                             {% if  globalOption.ecommerceConfig.cart == 1  %}
-                                                <div class="form-group pull-right">
-                                                     <input type="hidden" name="productImg" value="{% if product.webPath is not empty  %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
-                                                    <button type="submit" class="btn btn-default cartSubmit" data-url="{{ path('webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : subitem.id }) }}" ><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to cart</button>
-                                                </div>
+                                            <div class="form-group pull-right">
+
+                                                <input type="hidden" name="productImg" value="{% if product.webPath is not empty  %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
+                                                <button type="submit" class="btn btn-default cartSubmit" data-url="{{ path('webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : subitem.id }) }}" ><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to cart</button>
+                                            </div>
                                             {% endif %}
+
+                                    </form>
                                 </div>
                             </div>
                         </div>
                         {% endif %}
-                            {% if  globalOption.ecommerceConfig.cart == 1  %}
-                                <div class="form-group pull-right">
-                                    <button type="submit" class="btn btn-default cartSubmit" data-url="{{ path('webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : product.id }) }}" ><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to cart</button>
-                                </div>
-                            {% endif %}
-                        </form>
                     </div>
                 </div>
             </div>
@@ -184,7 +185,11 @@
                         <div class="bhoechie-tab-content active">
                             <h3>Product information</h3>
                             <hr/>
-                            {{ product.content|raw  }}
+                            {% if product.content is not empty %}
+                            {{ product.content|raw }}
+                            {% elseif product.masterItem is not empty %}
+                            {{ product.masterItem.content|raw }}
+                            {% endif %}
                             <table class="list-table">
                                 {% if product.itemMetaAttributes is not empty or product.itemKeyValues is not empty %}<tr><td colspan="2" ><h4>Specification</h4></td></tr>{% endif %}
                                 {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
@@ -233,12 +238,12 @@
                                     <div class="team-content">
                                         <h3 class="team-prof">
                                             <a class="preview"  data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" >Preview</a>
-                                            <small><strong>Stock in</strong>&nbsp;{{ product.quantity }}&nbsp;{% if  product.masterItem.productUnit is defined and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</small>
+                                            <small><strong>Stock in</strong>&nbsp;{{ product.masterQuantity }}&nbsp;{% if  product.masterItem.productUnit is defined and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</small>
                                         </h3>
                                     </div>
                                 </div>
                                 <div class="caption">
-                                    <p class="group inner list-group-item-heading"><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}">{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</a></p>
+                                    <p class="group inner list-group-item-heading"><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></p>
                                     <div class="row">
                                         <div class="row-fluid">
                                             <div class="col-md-12"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<strike>{{ product.salesPrice|number_format }}</strike>&nbsp;<strong>{{ product.salesPrice|number_format }}</strong></div>

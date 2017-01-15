@@ -50,7 +50,8 @@ class EcommerceConfigType extends AbstractType
                     '6'       => 'Per Column-6',
                 ),
             ))
-            ->add('isColor')
+            ->add('showMasterName')
+/*            ->add('isColor')*/
             ->add('isPreorder')
             ->add('cart')
             ->add('promotion');

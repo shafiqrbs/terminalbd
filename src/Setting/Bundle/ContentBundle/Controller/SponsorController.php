@@ -6,14 +6,14 @@ use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Setting\Bundle\ContentBundle\Entity\Portfolio;
-use Setting\Bundle\ContentBundle\Form\PortfolioType;
+use Setting\Bundle\ContentBundle\Entity\Sponsor;
+use Setting\Bundle\ContentBundle\Form\SponsorType;
 
 /**
  * Page controller.
  *
  */
-class PortfolioController extends Controller
+class SponsorController extends Controller
 {
 
     /**
@@ -24,8 +24,9 @@ class PortfolioController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Page')->getPagesFor($globalOption , $module ='portfolio');
-        return $this->render('SettingContentBundle:Portfolio:index.html.twig', array(
+        $entities = $em->getRepository('SettingContentBundle:Page')->getPagesFor($globalOption,$module ='sponsor');
+
+        return $this->render('SettingContentBundle:Sponsor:index.html.twig', array(
             'entities' => $entities,
         ));
     }
@@ -38,20 +39,18 @@ class PortfolioController extends Controller
         $entity = new Page();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        $data = $request->request->all();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
-            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'portfolio')));
-            $entity->setGlobalOption($user->getGlobalOption());
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'sponsor')));
+            $entity ->setGlobalOption($user->getGlobalOption());
             $entity->upload();
             $em->persist($entity);
             $em->flush();
-            $this->getDoctrine()->getRepository('SettingContentBundle:PageMeta')->pageMeta($entity,$data);
-            return $this->redirect($this->generateUrl('portfolio'));
+            return $this->redirect($this->generateUrl('sponsor'));
         }
 
-        return $this->render('SettingContentBundle:Portfolio:new.html.twig', array(
+        return $this->render('SettingContentBundle:Sponsor:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -67,8 +66,8 @@ class PortfolioController extends Controller
     private function createCreateForm(Page $entity)
     {
 
-        $form = $this->createForm(new PortfolioType($this->getUser()->getGlobalOption()), $entity, array(
-            'action' => $this->generateUrl('portfolio_create'),
+        $form = $this->createForm(new SponsorType($this->getUser()->getGlobalOption()), $entity, array(
+            'action' => $this->generateUrl('sponsor_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -79,7 +78,7 @@ class PortfolioController extends Controller
     }
 
     /**
-     * Displays a form to create a new Portfolio entity.
+     * Displays a form to create a new Sponsor entity.
      *
      */
     public function newAction()
@@ -87,14 +86,14 @@ class PortfolioController extends Controller
         $entity = new Page();
         $form   = $this->createCreateForm($entity);
 
-        return $this->render('SettingContentBundle:Portfolio:new.html.twig', array(
+        return $this->render('SettingContentBundle:Sponsor:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
     }
 
     /**
-     * Finds and displays a Portfolio entity.
+     * Finds and displays a Sponsor entity.
      *
      */
     public function showAction($id)
@@ -104,15 +103,15 @@ class PortfolioController extends Controller
         $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Portfolio entity.');
+            throw $this->createNotFoundException('Unable to find Sponsor entity.');
         }
-        return $this->render('SettingContentBundle:Portfolio:show.html.twig', array(
+        return $this->render('SettingContentBundle:Sponsor:show.html.twig', array(
             'entity'      => $entity,
         ));
     }
 
     /**
-     * Displays a form to edit an existing Portfolio entity.
+     * Displays a form to edit an existing Sponsor entity.
      *
      */
     public function editAction($id)
@@ -122,12 +121,12 @@ class PortfolioController extends Controller
         $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Portfolio entity.');
+            throw $this->createNotFoundException('Unable to find Sponsor entity.');
         }
 
         $editForm = $this->createEditForm($entity);
 
-        return $this->render('SettingContentBundle:Portfolio:new.html.twig', array(
+        return $this->render('SettingContentBundle:Sponsor:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -135,17 +134,17 @@ class PortfolioController extends Controller
 
 
     /**
-     * Creates a form to edit a Portfolio entity.
+     * Creates a form to edit a Sponsor entity.
      *
-     * @param Portfolio $entity The entity
+     * @param Sponsor $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Page $entity)
+    private function createEditForm(Sponsor $entity)
     {
 
-        $form = $this->createForm(new PortfolioType($this->getUser()->getGlobalOption()), $entity, array(
-            'action' => $this->generateUrl('portfolio_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new SponsorType($this->getUser()->getGlobalOption()), $entity, array(
+            'action' => $this->generateUrl('sponsor_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -155,7 +154,7 @@ class PortfolioController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Portfolio entity.
+     * Edits an existing Sponsor entity.
      *
      */
     public function updateAction(Request $request, $id)
@@ -164,7 +163,7 @@ class PortfolioController extends Controller
         $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Portfolio entity.');
+            throw $this->createNotFoundException('Unable to find Sponsor entity.');
         }
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
@@ -176,11 +175,11 @@ class PortfolioController extends Controller
             }
             $entity->upload();
             $em->flush();
-            $this->getDoctrine()->getRepository('SettingContentBundle:PageMeta')->portfolioPageMeta($entity,$data);
-            return $this->redirect($this->generateUrl('portfolio_edit', array('id' => $id)));
+            $this->getDoctrine()->getRepository('SettingContentBundle:PageMeta')->sponsorPageMeta($entity,$data);
+            return $this->redirect($this->generateUrl('sponsor_edit', array('id' => $id)));
         }
 
-        return $this->render('SettingContentBundle:Portfolio:new.html.twig', array(
+        return $this->render('SettingContentBundle:Sponsor:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -209,7 +208,7 @@ class PortfolioController extends Controller
                 'error',"Sorry! Data not deleted"
             );
         }
-        return $this->redirect($this->generateUrl('portfolio'));
+        return $this->redirect($this->generateUrl('sponsor'));
     }
 
 
@@ -238,7 +237,7 @@ class PortfolioController extends Controller
         $this->get('session')->getFlashBag()->add(
             'error',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('portfolio'));
+        return $this->redirect($this->generateUrl('sponsor'));
     }
 
 

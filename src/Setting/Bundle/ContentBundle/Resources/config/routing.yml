@@ -1,3 +1,7 @@
+setting_content_sponsor:
+    resource: "@SettingContentBundle/Resources/config/routing/sponsor.yml"
+    prefix:    /website/sponsor
+
 setting_content_client:
     resource: "@SettingContentBundle/Resources/config/routing/client.yml"
     prefix:    /website/client

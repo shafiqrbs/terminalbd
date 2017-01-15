@@ -219,7 +219,7 @@ class WebServiceProductController extends Controller
 
             /*==========Related Product===============================*/
 
-            if(!empty($entity->getMasterItem())){
+            if(!empty($entity->getMasterItem()) && !empty ($entity->getMasterItem()->getCategory())){
 
                 $cat = $entity->getMasterItem()->getCategory()->getId();
                 $data = array('cat' => $cat);

@@ -25,7 +25,7 @@ class NewsController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption' => $globalOption,'module'=>1),array('name' => 'asc'));
+        $entities = $em->getRepository('SettingContentBundle:Page')->findWithSearch(array('globalOption' => $globalOption,'module'=>1),array('name' => 'asc'));
 
         return $this->render('SettingContentBundle:News:index.html.twig', array(
             'pagination' => $entities,
@@ -47,7 +47,7 @@ class NewsController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity ->setUser($user);
-            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(1));
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'news')));
             $entity ->setGlobalOption($user->getGlobalOption());
             $entity->upload();
             $em->persist($entity);

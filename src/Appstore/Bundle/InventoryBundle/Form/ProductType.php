@@ -40,6 +40,8 @@ class ProductType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add your item name')))))
 
+            ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> '6', 'placeholder'=>'Add  item description')))
+
             ->add('productUnit', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
@@ -79,7 +81,7 @@ class ProductType extends AbstractType
 
             ->add('gender', 'choice', array(
                 'required'    => false,
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12'),
                 'empty_value' => '---Choose a gender ---',
                 'choices' => array(
                     'Male' => 'Male',

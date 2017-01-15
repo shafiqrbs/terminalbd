@@ -13,6 +13,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.purchase.vendor.item.event.listener:
+        class: Appstore\Bundle\InventoryBundle\EventListener\PurchaseVendorItemListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     appstore.branchinvoice.event.listener:
         class: Appstore\Bundle\InventoryBundle\EventListener\BranchInvoiceListener
         tags:

@@ -93,12 +93,6 @@ class Item
      */
     private $name;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="webName", type="string", length=255,nullable = true)
-     */
-    private $webName;
 
     /**
      * @var string
@@ -281,24 +275,18 @@ class Item
 
 
     /**
-     * @var text
-     *
-     * @ORM\Column(name="content", type="text", nullable=true)
-     */
-    private $content;
-
-
-    /**
      * @var boolean
      *
      * @ORM\Column(name="isWeb", type="boolean")
      */
     private $isWeb = false;
 
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $path;
+
 
     /**
      * @Assert\File(maxSize="8388608")
@@ -602,22 +590,6 @@ class Item
     public function setBrand($brand)
     {
         $this->brand = $brand;
-    }
-
-    /**
-     * @return text
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * @param text $content
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
     }
 
     /**

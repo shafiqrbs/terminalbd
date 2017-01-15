@@ -154,6 +154,9 @@ class InventoryConfigController extends Controller
 
     public function showAction($id)
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
+
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('InventoryBundle:Item')->findBy(array('inventoryConfig'=> $id),array('id'=>'ASC'));
         $pagination = $this->paginate($entities);

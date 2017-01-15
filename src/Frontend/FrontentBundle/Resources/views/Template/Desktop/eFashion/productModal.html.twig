@@ -1,6 +1,6 @@
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <h4 class="modal-title">{% if product.masterItem is not empty %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</h4>
+    <h4 class="modal-title">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</h4>
 </div>
 <div class="modal-body">
     <div class="row">
@@ -10,9 +10,9 @@
             </div>
             <div class="col-xs-3 col-md-3" >
                 <table>
-                    <tr><td>Price</td><td class="left-text"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ subItem.salesPrice|number_format }}</strong></td></tr>
-                    <tr><td>Stock in</td><td class="left-text">&nbsp;:&nbsp;<strong>{{ subItem.quantity  }}</strong>&nbsp;{% if product.masterItem is not empty and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</td></tr>
-                    {% if product.masterItem is not empty %}<tr><td>Category</td><td class="left-text">&nbsp;:&nbsp;{{ product.masterItem.category.name }}</td></tr>{% endif %}
+                    <tr><td>Price</td><td class="left-text"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.salesPrice|number_format }}</strong></td></tr>
+                    <tr><td>Stock in</td><td class="left-text">&nbsp;:&nbsp;<strong>{{ product.masterQuantity  }}</strong>&nbsp;{% if product.masterItem is not empty and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</td></tr>
+                    {% if product.masterItem is not empty and product.masterItem.category is not empty %}<tr><td>Category</td><td class="left-text">&nbsp;:&nbsp;{{ product.masterItem.category.name }}</td></tr>{% endif %}
                     {% if product.gender is not empty %}<tr><td>Gender</td><td class="left-text">&nbsp;:&nbsp;{{ product.gender }}</td></tr>{% endif %}
                     {% if product.ageGroup is not empty %}<tr><td>Age Group</td><td class="left-text">&nbsp;:&nbsp;{{ product.ageGroup }}</td></tr>{% endif %}
                     {% if product.brand is not empty %}<tr><td>Brand</td><td class="left-text">&nbsp;:&nbsp;{{ product.brand.name }}</td></tr>{% endif %}
@@ -21,7 +21,13 @@
             </div>
             <div class="col-xs-5 col-md-5" style="height: 200px; overflow-y: scroll">
                 <table>
-                    <tr><td class="left-text" colspan="2">{{ product.content|raw }}</td></tr>
+                    <tr><td class="left-text" colspan="2">
+                            {% if product.content is not empty %}
+                            {{ product.content|raw }}
+                            {% elseif product.masterItem is not empty %}
+                            {{ product.masterItem.content|raw }}
+                            {% endif  %}
+                        </td></tr>
                     <tr><td colspan="2" ><strong>Specification</strong></td></tr>
                     {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
                         {%  for attribute in product.itemMetaAttributes %}
@@ -43,7 +49,7 @@
 <div class="modal-footer">
     <form class="addCart">
     <div class="col-xs-9 col-md-9" style="margin-top: 3px" >
-           {% if product.goodsItems is not empty and product.goodsItems is defined and subItem.size is not empty %}
+           {% if  product.goodsItems is defined and subItem.size is not empty %}
             <div class="col-xs-3 col-md-3" >
                 <div class="form-group">
                     <div class="input-group input-group-sm">
@@ -58,7 +64,7 @@
                 </div>
             </div>
            {% endif %}
-            {% if globalOption.inventoryConfig.isColor == 1  and subItem.colors is defined and subItem.colors is not empty %}
+           {% if product.itemColors is not empty and product.itemColors is defined %}
             <div class="col-xs-3 col-md-3">
                 <div class="form-group">
                     <div class="input-group input-group-sm">
@@ -77,7 +83,7 @@
                     <div class="input-group input-group-sm">
                         <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-sort-by-order"></span></span>
                         <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.masterQuantity }}" placeholder="{{ product.masterQuantity }}" class="form-control" aria-label="Text input with multiple buttons">
-                        <div class="input-group-btn"> <button type="button" class="btn btn-default">{{ product.masterItem.productUnit.name }}</button> </div> </div>
+                        <div class="input-group-btn"> <button type="button" class="btn btn-default">{% if product.masterItem is not empty and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}  {% endif %}</button> </div> </div>
                 </div>
             </div>
             <div class="col-xs-3 col-md-2">

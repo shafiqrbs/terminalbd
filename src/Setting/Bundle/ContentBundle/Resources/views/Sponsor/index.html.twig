@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Portfolio View Lists
+                    Sponsor View Lists
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('portfolio') }}">Portfolio</a>
+                        <a href="{{ path('sponsor') }}">Sponsor</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -41,8 +41,8 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('portfolio_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('portfolio') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('sponsor_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                    <li><a href="{{ path('sponsor') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -55,8 +55,8 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
-                                    <th class="numeric" >Name </th>
-                                    <th class="numeric" >Module Category</th>
+                                    <th class="numeric" >Logo</th>
+                                    <th class="numeric" >Company Name </th>
                                     <th class="numeric" >Website</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -66,21 +66,19 @@
                                 {% for entity in entities %}
 
                                     <tr>
-                                        <td class="numeric" ><a href="{{ path('portfolio_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric" ><img src="{{ image(entity.webPath).resize(60,60) }}"></td>
+                                        <td class="numeric" ><a href="{{ path('sponsor_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >
-                                            {% if(entity.moduleCategory is defined and entity.moduleCategory is not empty ) %}
-                                                {{ entity.moduleCategory.name }}
-                                            {% endif %}
+                                            {{ entity.website }}
                                         </td>
-                                        <td>{{ entity.website }}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
-                                                <a class="btn mini green-stripe btn-action" href="{{ path('portfolio_status', { 'id': entity.id}) }}"><span class="badge badge-success">x</span></a>
+                                                <a class="btn mini green-stripe btn-action" href="{{ path('sponsor_status', { 'id': entity.id}) }}"><span class="badge badge-success">x</span></a>
                                             {% else %}
-                                                <a class="btn mini green-stripe btn-action" href="{{ path('portfolio_status', { 'id': entity.id}) }}"><span class="badge badge-important">a</span>    </a>
+                                                <a class="btn mini green-stripe btn-action" href="{{ path('sponsor_status', { 'id': entity.id}) }}"><span class="badge badge-important">a</span>    </a>
                                             {% endif %}
-                                            <a class="btn mini green-stripe btn-action" href="{{ path('portfolio_edit', { 'id': entity.id }) }}">Edit</a>
-                                             <a class="btn mini red-stripe btn-action confirm" title="Are you sure went to delete ?" href="{{ path('portfolio_delete', { 'id': entity.id }) }}" >Delete</a>
+                                            <a class="btn mini green-stripe btn-action" href="{{ path('sponsor_edit', { 'id': entity.id }) }}">Edit</a>
+                                             <a class="btn mini red-stripe btn-action confirm" title="Are you sure went to delete ?" href="{{ path('sponsor_delete', { 'id': entity.id }) }}" >Delete</a>
                                         </td>
                                     </tr>
 

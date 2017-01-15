@@ -73,7 +73,7 @@ class EcommerceConfig
      *
      * @ORM\Column(name="perPage", type="smallint", nullable = true)
      */
-     private $perPage = 15;
+     private $perPage = 16;
 
      /**
      * @var integer
@@ -95,6 +95,13 @@ class EcommerceConfig
      * @ORM\Column(name="owlProductColumn", type="smallint", nullable = true)
      */
      private $owlProductColumn = 4;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="showMasterName", type="boolean")
+     */
+    private $showMasterName = true;
 
     /**
      * @var boolean
@@ -456,6 +463,22 @@ class EcommerceConfig
     public function setPerPage($perPage)
     {
         $this->perPage = $perPage;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getShowMasterName()
+    {
+        return $this->showMasterName;
+    }
+
+    /**
+     * @param boolean $showMasterName
+     */
+    public function setShowMasterName($showMasterName)
+    {
+        $this->showMasterName = $showMasterName;
     }
 
 }

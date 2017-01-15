@@ -288,24 +288,24 @@ class Builder extends ContainerAware
 
     public function contentMenu($menu)
     {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $option = $this->container->get('security.context')->getToken()->getUser()->getGlobalOption();
         $menu
             ->addChild('Manage Content')
             ->setAttribute('icon','fa fa-bookmark')
             ->setAttribute('dropdown', true);
 
         $menu['Manage Content']->addChild('Page', array('route' => 'page'));
-        if($user->getSiteSetting()) {
-            $syndicateModules = $user->getSiteSetting()->getSyndicateModules();
+        if($option->getSiteSetting()) {
+            $syndicateModules = $option->getSiteSetting()->getSyndicateModules();
             if (!empty($syndicateModules)){
-                foreach ($user->getSiteSetting()->getSyndicateModules() as $syndmod) {
+                foreach ($option->getSiteSetting()->getSyndicateModules() as $syndmod) {
                     $menu['Manage Content']->addChild($syndmod->getName(), array('route' => strtolower($syndmod->getModuleClass())));
                 }
             }
 
-            $modules = $user->getSiteSetting()->getModules();
+            $modules = $option->getSiteSetting()->getModules();
             if(!empty($modules)) {
-                foreach ($user->getSiteSetting()->getModules() as $mod) {
+                foreach ($option->getSiteSetting()->getModules() as $mod) {
                     $menu['Manage Content']->addChild($mod->getName(), array('route' => strtolower($mod->getModuleClass())));
                 }
             }

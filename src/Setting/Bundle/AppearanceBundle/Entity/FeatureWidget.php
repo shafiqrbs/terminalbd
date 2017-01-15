@@ -40,6 +40,11 @@ class FeatureWidget
     private $page;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", inversedBy="featureWidgetSponsors")
+     **/
+    private $sponsor;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\JsFeature", inversedBy="featureWidgets" )
      **/
     private  $jsFeature;
@@ -446,5 +451,21 @@ class FeatureWidget
     public function setSorting($sorting)
     {
         $this->sorting = $sorting;
+    }
+
+    /**
+     * @return Page
+     */
+    public function getSponsor()
+    {
+        return $this->sponsor;
+    }
+
+    /**
+     * @param Page $sponsor
+     */
+    public function setSponsor($sponsor)
+    {
+        $this->sponsor = $sponsor;
     }
 }

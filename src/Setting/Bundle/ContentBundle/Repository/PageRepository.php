@@ -15,6 +15,22 @@ use Setting\Bundle\ContentBundle\Entity\Page;
 class PageRepository extends EntityRepository
 {
 
+    public function getPagesFor($globalOption,$module = '')
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption->getId());
+        if(!empty($module)) {
+        $qb->join('e.module','module');
+        $qb->andWhere("module.slug = :slug");
+        $qb->setParameter('slug', $module);
+        }
+        $qb->orderBy('e.name', 'ASC');
+        return $qb->getQuery()->getResult();
+    }
+
+
     public  function insertPageMenu(Page $page)
     {
 
@@ -33,10 +49,6 @@ class PageRepository extends EntityRepository
 
     }
 
-    public function getPagesFor($globalOption)
-    {
-        return $this->findBy(array('globalOption'=> $globalOption),array('name' => 'asc'));
-    }
 
     public  function updatePageMenu(Page $page)
     {

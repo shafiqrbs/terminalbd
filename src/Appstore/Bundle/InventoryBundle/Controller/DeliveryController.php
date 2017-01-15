@@ -92,6 +92,8 @@ class DeliveryController extends Controller
 
     public function initialProductBranchDeliveryAction(Request $request)
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
         $entity = new Delivery();
 
         $shop = $request->request->get('shop');
@@ -122,6 +124,7 @@ class DeliveryController extends Controller
             $delivery->setSubTotal($item->getSalesPrice() * $item->getQuantity());
             $em->persist($delivery);
             $em->flush();
+
         }
 
         return $this->redirect($this->generateUrl('inventory_delivery_edit', array( 'code' => $entity->getInvoice())));
@@ -226,6 +229,7 @@ class DeliveryController extends Controller
         if($request->request->get('save') == 'save'){
             $entity->setProcess('completed');
             $em->flush();
+            $this->getDoctrine()->getRepository('InventoryBundle:Delivery')->updateDeliveryTotal($entity);
         }
         $this->get('session')->getFlashBag()->add(
             'success',"Data has been updated successfully"

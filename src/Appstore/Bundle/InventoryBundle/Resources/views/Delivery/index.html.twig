@@ -61,7 +61,7 @@
                                                 <div class="control-group">
                                                     <label class="control-label" for="">Branch Name</label>
                                                     <div class="controls">
-                                                        <select name="shop" id="shop" class="m-wrap span12 select2">
+                                                        <select name="shop" id="shop" class="m-wrap span12 select2 leftMargin">
                                                         <option value="">---Select Branch---</option>
                                                         {% for shop in shops %}
                                                         <option value="{{ shop.id }}" >{{ shop.name }}</option>
@@ -110,7 +110,7 @@
                                         <td class="numeric" >{{ entity.branch.branchManager }}</td>
                                         <td class="numeric" >{{ entity.totalItem }}</td>
                                         <td class="numeric" >{{ entity.totalQuantity }}</td>
-                                        <td class="numeric" >{{ entity.totalAmount }}</td>
+                                        <td class="numeric" >{{ entity.totalAmount|number_format }}</td>
                                         <td class="numeric" >
                                             {% if entity.approvedBy is empty %}
                                                 <a title="" href="{{ path('inventory_delivery_show', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-eye-open"></i></a>

@@ -110,7 +110,15 @@
                                     <div class="row-fluid">
                                         <div class="span12 ">
                                             <div class="control-group">
-                                            <label class="control-label" for="price">Is cart &nbsp; {{ form_widget(form.cart) }}
+                                            <label class="control-label" for="price">Show Master Name &nbsp; {{ form_widget(form.showMasterName) }}
+                                                {{ form_errors(form.showMasterName) }}</label>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12 ">
+                                            <div class="control-group">
+                                            <label class="control-label" for="price">Is Cart &nbsp; {{ form_widget(form.cart) }}
                                                 {{ form_errors(form.cart) }}</label>
                                                 </div>
                                         </div>
@@ -126,19 +134,19 @@
                                     <div class="row-fluid">
                                         <div class="span12 ">
                                             <div class="control-group">
-                                            <label class="control-label" for="price">Is promotion&nbsp; {{ form_widget(form.promotion) }}
+                                            <label class="control-label" for="price">Is Promotion&nbsp; {{ form_widget(form.promotion) }}
                                                 {{ form_errors(form.promotion) }}</label>
                                                 </div>
                                         </div>
                                     </div>
-                                    <div class="row-fluid">
+                                   {# <div class="row-fluid">
                                         <div class="span12 ">
                                             <div class="control-group">
-                                                <label class="control-label" for="price">Product using Color &nbsp; {{ form_widget(form.isColor) }}
+                                                <label class="control-label" for="price">Product Using Color &nbsp; {{ form_widget(form.isColor) }}
                                                     {{ form_errors(form.isColor) }}</label>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>#}
                                 </div>
 
                                 <div class="span5">

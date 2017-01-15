@@ -48,7 +48,7 @@ class PageMetaRepository extends EntityRepository
 
     }
 
-    public function portfolioPageMeta(Portfolio $portfolio, $data)
+    public function portfolioPageMeta(Page $portfolio, $data)
     {
 
         $em = $this->_em;
@@ -63,7 +63,7 @@ class PageMetaRepository extends EntityRepository
                         $entity = $em->getRepository('SettingContentBundle:PageMeta')->find($data['metaId'][$i]);
                     } elseif (!empty($data['metaValue'][$i])) {
                         $entity = new PageMeta();
-                        $entity->setPortfolio($portfolio);
+                        $entity->setPage($portfolio);
                     }
                     $entity->setMetaKey($data['metaKey'][$i]);
                     $entity->setMetaValue($data['metaValue'][$i]);

@@ -288,6 +288,11 @@ class Page
     protected $featureWidgets;
 
     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="sponsor" )
+     **/
+    protected $featureWidgetSponsors;
+
+    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeSlider", mappedBy="page" )
      **/
     protected $homeSliders;
@@ -1115,6 +1120,14 @@ class Page
     public function getFeatureWidgets()
     {
         return $this->featureWidgets;
+    }
+
+    /**
+     * @return FeatureWidget
+     */
+    public function getFeatureWidgetSponsors()
+    {
+        return $this->featureWidgetSponsors;
     }
 
 

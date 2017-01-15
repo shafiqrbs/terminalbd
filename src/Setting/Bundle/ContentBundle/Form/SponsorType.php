@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class PortfolioType extends AbstractType
+class SponsorType extends AbstractType
 {
 
     private $globalOption;
@@ -29,33 +29,15 @@ class PortfolioType extends AbstractType
 
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Enter portfolio name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Enter sponsor company name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                     new Length(array('max'=>200))
                 )
             ))
-            ->add('website','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Enter website name')))
-            ->add('file','file', array('attr'=>array('class'=>'default')))
-            ->add('content','textarea', array('attr'=>array('class'=>'span12 wysihtml5 m-wrap','rows' => 8)))
-            ->add('moduleCategory', 'entity', array(
-                'required'    => false,
-                'class' => 'Setting\Bundle\ContentBundle\Entity\ModuleCategory',
-                'empty_value' => '---Select parent page---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('o')
-                        ->where("o.status = 1")
-                        ->andWhere(':module MEMBER OF o.module')
-                        ->setParameter('module', 17)
-                        ->andWhere("o.globalOption =".$this->globalOption->getId())
-                        ->orderBy('o.name','ASC');
-                },
-            ));
-
-
-    }
+            ->add('website','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sponsor website name')))
+            ->add('file','file', array('attr'=>array('class'=>'default')));
+   }
     
     /**
      * @param OptionsResolverInterface $resolver
