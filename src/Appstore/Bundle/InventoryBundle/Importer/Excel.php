@@ -174,7 +174,10 @@ class Excel
 
                 if ($itemObj == NULL) {
                     $itemObj = new PurchaseVendorItem();
+                    $masterItem = $this->getMasterItem($item);
+                    $itemObj->setMasterItem($masterItem);
                     $itemObj->setName($this->sentence_case($item['ProductName']));
+                    $itemObj->setWebName($this->sentence_case($item['ProductName']));
                     $itemObj->setPurchase($purchase);
                     $itemObj->setSource('inventory');
                     $itemObj->setInventoryConfig($purchase->getInventoryConfig());

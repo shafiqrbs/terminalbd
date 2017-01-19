@@ -4,6 +4,8 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
+use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 
 /**
@@ -49,6 +51,11 @@ class Discount
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Template", mappedBy="discount"  , cascade={"persist", "remove"} )
      **/
     private  $template;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="discounts" , cascade={"remove"})
+     **/
+    private  $ecommerceMenu;
 
 
     /**
@@ -231,11 +238,19 @@ class Discount
     }
 
     /**
-     * @return mixed
+     * @return Feature
      */
     public function getFeatures()
     {
         return $this->features;
+    }
+
+    /**
+     * @return EcommerceMenu
+     */
+    public function getEcommerceMenu()
+    {
+        return $this->ecommerceMenu;
     }
 
 

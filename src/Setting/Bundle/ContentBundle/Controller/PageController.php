@@ -40,7 +40,7 @@ class PageController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('SettingContentBundle:Page')->getPagesFor($this->getUser()->getGlobalOption());
+        $entities = $em->getRepository('SettingContentBundle:Page')->getPagesFor($this->getUser()->getGlobalOption(),'page');
         $entities = $this->paginate($entities);
 
         return $this->render('SettingContentBundle:Page:index.html.twig', array(

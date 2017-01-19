@@ -4,6 +4,7 @@ namespace Appstore\Bundle\InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -38,6 +39,11 @@ class ItemBrand  implements CodeAwareEntity
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="brand")
      */
     protected $purchaseVendorItems;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="brands")
+     */
+    protected $ecommerceMenu;
 
 
     /**
@@ -322,6 +328,14 @@ class ItemBrand  implements CodeAwareEntity
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
+    }
+
+    /**
+     * @return EcommerceMenu
+     */
+    public function getEcommerceMenu()
+    {
+        return $this->ecommerceMenu;
     }
 
 

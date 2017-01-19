@@ -39,6 +39,11 @@ class Feature
     private  $featureWidgetItems;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel", mappedBy="feature" )
+     **/
+    private  $sidebarWidgetPanel;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="features" )
      **/
     private  $category;

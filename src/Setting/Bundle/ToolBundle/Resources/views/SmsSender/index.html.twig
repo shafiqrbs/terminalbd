@@ -7,7 +7,7 @@
             <div class="span12">
                 <h3 class="page-title">
                     View SMS Logs
-                    <span class="pull-right btn purple">Balance: {{ globalOption.smsSenderTotal.remaining }} sms</span>
+                    <span class="pull-right btn purple">Balance:{% if globalOption.smsSenderTotal is defined and globalOption.smsSenderTotal is not empty %} {{ globalOption.smsSenderTotal.remaining }} sms{% endif %}</span>
                 </h3>
                 <ul class="breadcrumb">
                     <li>

@@ -4,6 +4,7 @@ namespace Setting\Bundle\ContentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
+use Setting\Bundle\LocationBundle\Entity\Location;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -277,20 +278,14 @@ class Page
     protected $pageModules;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidget", mappedBy="page" )
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel", mappedBy="page" )
      **/
-    protected $sidebarWidgets;
-
+    protected $sidebarWidgetPanel;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="page" )
      **/
     protected $featureWidgets;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="sponsor" )
-     **/
-    protected $featureWidgetSponsors;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeSlider", mappedBy="page" )
@@ -327,8 +322,31 @@ class Page
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="page" , cascade={"persist", "remove"} )
      **/
-
     protected  $nav;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="page")
+     **/
+
+    protected $location;
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="latitude",type="string", length=100, type="text", nullable=true )
+     */
+    private $latitude;
+
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="longitude", type="string", length=100, type="text", nullable=true )
+     */
+    private $longitude;
+
+
+
+
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -1123,12 +1141,51 @@ class Page
     }
 
     /**
-     * @return FeatureWidget
+     * @return Location
      */
-    public function getFeatureWidgetSponsors()
+    public function getLocation()
     {
-        return $this->featureWidgetSponsors;
+        return $this->location;
     }
 
+    /**
+     * @param Location $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * @return text
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * @param text $latitude
+     */
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
+    }
+
+    /**
+     * @return text
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+    /**
+     * @param text $longitude
+     */
+    public function setLongitude($longitude)
+    {
+        $this->longitude = $longitude;
+    }
 
 }

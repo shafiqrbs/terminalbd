@@ -312,7 +312,7 @@ class SalesController extends Controller
             }
             $em->flush();
 
-            if ($entity->getSalesMode() != 'pos') {
+            if (in_array('CustomerSales', $entity->getInventoryConfig()->getDeliveryProcess())) {
 
                 if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                     $dispatcher = $this->container->get('event_dispatcher');

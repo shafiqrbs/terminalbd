@@ -39,6 +39,7 @@ $(".viewed-prev").click(function(){
     owlProduct.trigger('owl.prev');
 })
 
+
 function commonJs(){
 
 

@@ -58,6 +58,10 @@
                     </ul>
                 </div>
                 <!-- Recent Posts -->
+                {% for sidebar in sidebars %}
+                    {{ sidebar.module.id }}
+                    {% render controller("FrontendBundle:TemplateWidget:moduleBaseContent",{'globalOption':globalOption.id,'mdoule':sidebar.module.id}) %}
+                {% endfor %}
                 {% if featurePages is not empty %}
                     <div class="blog-sidebar">
                         <h4 class="sidebar-title"><i class="fa fa-align-left"></i> Recent News</h4>

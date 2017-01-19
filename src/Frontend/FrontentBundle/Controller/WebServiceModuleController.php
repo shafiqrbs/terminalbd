@@ -26,14 +26,17 @@ class WebServiceModuleController extends Controller
             $pagination ='';
             $moduleName ='';
             $featurePages ='';
+            $sidebars ='';
             if(!empty($menu)){
 
                 $siteEntity = $globalOption->getSiteSetting();
                 $themeName = $siteEntity->getTheme()->getFolderName();
                 $moduleName = $this->get('setting.menuTreeSettingRepo')->getCheckModule($menu);
+
                 if($moduleName){
+
                     $twigName = "module";
-                    $pagination = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=>$globalOption,'module'=>$menu->getModule()->getId(),'status'=>1),array('id'=>'desc'));
+                    $pagination = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption' => $globalOption,'module'=>$menu->getModule()->getId(),'status'=>1),array('id'=>'desc'));
                     $pagination = $this->paginate( $pagination,$limit= 10 );
                     if(!empty($menu->getModule())){
                         $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
@@ -41,9 +44,10 @@ class WebServiceModuleController extends Controller
 
                 }else{
 
-                    $page = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=>$globalOption,'slug' => $module));
+                    $page = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption,'slug' => $module));
                     $twigName = "content";
                     $featurePages = $em->getRepository('SettingContentBundle:Page')->getListForModule($globalOption,$page->getPage());
+                    $sidebar = $em->getRepository('SettingAppearanceBundle:SidebarWidgetPanel')->getSidebarPanel($globalOption,$sidebar = 2);
                 }
             }
 
@@ -59,7 +63,9 @@ class WebServiceModuleController extends Controller
         }else{
             $theme = 'Template/Desktop/'.$themeName;
         }
+
         return $this->render('FrontendBundle:'.$theme.':'.$twigName.'.html.twig',
+
             array(
 
                 'globalOption'  => $globalOption,
@@ -69,6 +75,7 @@ class WebServiceModuleController extends Controller
                 'pagination'    => $pagination,
                 'page'          => $page,
                 'featurePages'  => $featurePages,
+                'sidebar'      => $sidebar,
             )
         );
     }

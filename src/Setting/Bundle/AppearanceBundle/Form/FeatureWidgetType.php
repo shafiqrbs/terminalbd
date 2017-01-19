@@ -64,17 +64,16 @@ class FeatureWidgetType extends AbstractType
                         ->orderBy('e.name','ASC');
                 },
             ))
-            ->add('sponsor', 'entity', array(
+            ->add('module', 'entity', array(
                 'required'    => false,
-                'class' => 'Setting\Bundle\ContentBundle\Entity\Page',
-                'empty_value' => '---Select Page---',
+                'class' => 'Setting\Bundle\ToolBundle\Entity\Module',
+                'empty_value' => '---Select page module---',
                 'property' => 'name',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
-                        ->andWhere("e.module = 17")
-                        ->andWhere("e.globalOption = $this->globalId")
+                        ->andWhere("e.isSingle = 1")
                         ->orderBy('e.name','ASC');
                 },
             ))

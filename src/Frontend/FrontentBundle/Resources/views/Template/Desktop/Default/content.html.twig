@@ -21,7 +21,7 @@
                 {% if page.webPath is not empty %}
                 <img class="img-responsive displayed" src="{{ image(page.webPath).resize() }}" alt="" />
                 {% endif %}
-                <p>{{ page.content|raw }}</p>
+                <div class="page-content">{{ page.content|raw }}</div>
 
                 <div class="mysharing">
                     <!-- Twitter -->
@@ -44,39 +44,37 @@
                         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;&nbsp;{{ page.name }}</h4>
                     {% endif %}
                     <hr>
-                    <ul class="sidebar-list">
+                    <div class="list-group">
                         {% if page.children is not empty %}
                             {% for subPage in page.children %}
-                                <li><a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':subPage.nav.slug}) }}">{{ subPage.name }}</a></li>
+                                <a class="list-group-item" href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':subPage.nav.slug}) }}"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;{{ subPage.name }}</a>
                             {% endfor %}
                         {% elseif page.parent.children is defined and page.parent.children is not empty %}
                             {% for subPage in page.parent.children %}
-                                <li><a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':subPage.nav.slug}) }}">{{ subPage.name }}</a></li>
+                               <a class="list-group-item" href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':subPage.nav.slug}) }}"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;{{ subPage.name }}</a>
                             {% endfor %}
                         {% endif %}
 
-                    </ul>
+                    </div>
                 </div>
-                <!-- Recent Posts -->
-                {% if featurePages is not empty %}
+                {% if sidebar.page is not empty %}
                     <div class="blog-sidebar">
-                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i> Recent News</h4>
-                        <hr style="margin-bottom: 5px;">
-                        {% for feature in featurePages %}
-                            {% if feature.module.name == 'News' %}
-                                <div class="media">
-                                    <a class="pull-left" href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':feature.slug }) }}">
-                                        <img class="img-responsive media-object" src="{{ image(feature.webPath).resize(100,100) }}" alt="Media Object">
-                                    </a>
-                                    <div class="media-body">
-                                        <h4 class="media-heading"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':feature.slug }) }}">{{ feature.name }}</a></h4>
-                                        {{ feature.content|raw|truncate(100) }}
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
+                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;&nbsp;Our Pages</h4>
+                             <hr>
+                        <ul class="sidebar-list">
+                            {% for subPage in sidebar.page %}
+                                <li><a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':subPage.nav.slug}) }}">{{ subPage.name }}</a></li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 {% endif %}
+                {% if sidebar is not empty %}
+                {% for module in sidebar.module %}
+                    {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'module':module.id}) %}
+                {% endfor %}
+                {% endif %}
+
+
             </aside>
         </div>
     </div>
@@ -96,3 +94,49 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
+{% block documentready %}
+
+    {{ parent() }}
+    $("#testimonial-slider").owlCarousel({
+    items:1,
+    itemsDesktop:[1000,2],
+    itemsDesktopSmall:[979,1],
+    itemsTablet:[768,1],
+    pagination:false,
+    navigation:true,
+    slideSpeed:1000,
+    singleItem:true,
+    transitionStyle:"goDown",
+    navigationText:["",""],
+    autoPlay:false
+    });
+
+ $("#event-slider").owlCarousel({
+    items:1,
+    itemsDesktop:[1000,2],
+    itemsDesktopSmall:[979,1],
+    itemsTablet:[768,1],
+    pagination:false,
+    navigation:true,
+    slideSpeed:1000,
+    singleItem:true,
+    transitionStyle:"goDown",
+    navigationText:["",""],
+    autoPlay:false
+    });
+$("#service-slider").owlCarousel({
+    items:1,
+    itemsDesktop:[1000,2],
+    itemsDesktopSmall:[979,1],
+    itemsTablet:[768,1],
+    pagination:false,
+    navigation:true,
+    slideSpeed:1000,
+    singleItem:true,
+    transitionStyle:"goDown",
+    navigationText:["",""],
+    autoPlay:false
+    });
+
+{% endblock %}
+

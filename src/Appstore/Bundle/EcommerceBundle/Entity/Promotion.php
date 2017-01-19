@@ -5,6 +5,7 @@ namespace Appstore\Bundle\EcommerceBundle\Entity;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
 use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -73,6 +74,16 @@ class Promotion
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="tag" , cascade={"remove"})
      **/
     private  $featureTags;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="promotions" , cascade={"remove"})
+     **/
+    private  $ecommerceMenuPromotion;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="tags" , cascade={"remove"})
+     **/
+    private  $ecommerceMenuTag;
 
 
     /**
@@ -492,6 +503,23 @@ class Promotion
     public function getFeatureTags()
     {
         return $this->featureTags;
+    }
+
+
+    /**
+     * @return EcommerceMenu
+     */
+    public function getEcommerceMenuPromotion()
+    {
+        return $this->ecommerceMenuPromotion;
+    }
+
+    /**
+     * @return EcommerceMenu
+     */
+    public function getEcommerceMenuTag()
+    {
+        return $this->ecommerceMenuTag;
     }
 
 }

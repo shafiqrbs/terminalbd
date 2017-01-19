@@ -25,7 +25,7 @@ class NewsController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Page')->findWithSearch(array('globalOption' => $globalOption,'module'=>1),array('name' => 'asc'));
+        $entities = $em->getRepository('SettingContentBundle:Page')->getPagesFor($globalOption,'news');
 
         return $this->render('SettingContentBundle:News:index.html.twig', array(
             'pagination' => $entities,

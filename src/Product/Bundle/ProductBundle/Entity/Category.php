@@ -88,6 +88,11 @@ class Category
     protected $template;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="categories" )
+     **/
+    protected $ecommerceMenus;
+
+    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="category" )
      **/
     protected $featureWidgets;

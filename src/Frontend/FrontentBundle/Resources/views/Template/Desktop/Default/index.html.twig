@@ -39,11 +39,13 @@
                 <div class="row">
                     {% set length =  homeEntity.homeBlocks|length %}
                     {% for block in homeEntity.homeBlocks|slice(0,4) %}
-                        <div class=" col-md-{% if length == 3 %}4{% else %}3{% endif %}">
+                        <div class=" col-md-{% if length == 3 %}4{% elseif length == 4 %}3{% else %}6{% endif %}">
                             <div class="block js-equal-height">
+                                {% if block.icon is not empty %}
                                 <div class="block-icon">
                                     <i class="fa {{ block.icon.className }}"></i>
                                 </div>
+                                {% endif %}
                                 <div class="block-content">
                                     <h3>{{ block.name }}</h3>
                                     <p>{{ block.content|raw }}</p>

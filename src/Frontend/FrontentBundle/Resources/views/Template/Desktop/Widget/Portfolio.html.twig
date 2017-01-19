@@ -14,14 +14,14 @@
             </ul>
             <ul class="port2">
                 {% for key,portfolio in entities  %}
-                <li data-type="{{ portfolio.moduleCategory.slug }}" data-id="id-{{ portfolio.id }}" class="port3">
+                <li data-type="{% if portfolio.moduleCategory is not empty %}{{ portfolio.moduleCategory.slug }}{% endif %}" data-id="id-{{ portfolio.id }}" class="port3">
                     <div class="col-md-12 col-sm-12">
                         <div class="our-portfolio">
                             <img src="{{ image(portfolio.webPath).scaleResize(380,266) }}" alt="">
                             <div class="team-content">
                                 <h3 class="team-prof">
                                     <a href="#">{{ portfolio.name }}</a>
-                                    <small>{{ portfolio.moduleCategory.name }}</small>
+                                    {% if portfolio.moduleCategory is not empty %}<small>{{ portfolio.moduleCategory.name }}</small>{% endif %}
                                 </h3>
                             </div>
                         </div>

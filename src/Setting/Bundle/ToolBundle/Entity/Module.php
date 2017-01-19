@@ -3,7 +3,9 @@
 namespace Setting\Bundle\ToolBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidget;
+use Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel;
 use Setting\Bundle\ContentBundle\Entity\Page;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
@@ -138,17 +140,18 @@ class Module
 
     private $pages;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidget", mappedBy="module")
-     * @ORM\OrderBy({"name" = "DESC"})
-     **/
-    private $sidebarModule;
 
      /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidget", mappedBy="modules")
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel", mappedBy="module")
      * @ORM\OrderBy({"name" = "DESC"})
      **/
-    private $sidebarWidgets;
+    private $sidebarWidgetPanel;
+
+     /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="module")
+     * @ORM\OrderBy({"name" = "ASC"})
+     **/
+    private $featureWidgets;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="module")
@@ -465,22 +468,20 @@ class Module
     }
 
     /**
-     * @return SidebarWidget
+     * @return FeatureWidget
      */
-    public function getSidebarModule()
+    public function getFeatureWidgets()
     {
-        return $this->sidebarModule;
+        return $this->featureWidgets;
     }
-
 
     /**
-     * @return SidebarWidget
+     * @return SidebarWidgetPanel
      */
-    public function getSidebarWidgets()
+    public function getSidebarWidgetPanel()
     {
-        return $this->sidebarWidgets;
+        return $this->sidebarWidgetPanel;
     }
-
 
 
 }

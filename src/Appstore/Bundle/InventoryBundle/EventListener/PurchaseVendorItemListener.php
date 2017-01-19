@@ -68,5 +68,12 @@ class PurchaseVendorItemListener
     }
 
 
+    private  function getStrPad($lastCode,$limit)
+    {
+        $data = str_pad($lastCode,$limit, '0', STR_PAD_LEFT);
+        return $data;
+    }
+
+
 
 }

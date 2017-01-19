@@ -8,6 +8,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Core\UserBundle\Entity\Profile;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ContentBundle\Entity\Page;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -52,6 +53,11 @@ class Location
     protected $preOrders;
 
     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="location")
+     */
+    protected $page;
+
+     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ContactPage", mappedBy="location")
      */
     protected $contactPages;
@@ -300,6 +306,14 @@ class Location
     public function getPreOrders()
     {
         return $this->preOrders;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPage()
+    {
+        return $this->page;
     }
 
 }

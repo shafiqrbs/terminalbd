@@ -68,8 +68,8 @@ class BranchController extends Controller
      */
     private function createCreateForm(Page $entity)
     {
-
-        $form = $this->createForm(new BranchType(), $entity, array(
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new BranchType($location), $entity, array(
             'action' => $this->generateUrl('branch_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -150,8 +150,8 @@ class BranchController extends Controller
      */
     private function createEditForm(Page $entity)
     {
-
-        $form = $this->createForm(new BranchType(), $entity, array(
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new BranchType($location), $entity, array(
             'action' => $this->generateUrl('branch_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

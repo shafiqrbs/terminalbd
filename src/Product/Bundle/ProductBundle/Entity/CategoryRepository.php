@@ -482,8 +482,7 @@ class CategoryRepository extends MaterializedPathRepository
             ->orderBy('node.level, node.name', 'ASC')
             ->where('node.level > 1')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
 
         $categories = $this->getCategoriesIndexedById($results);
 

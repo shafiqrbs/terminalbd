@@ -11,13 +11,16 @@ setting_appearance_featurewidgetitem:
     prefix:   /domain/sidebar-widget-item
 
 setting_appearance_sidebarwidget:
-    resource: "@SettingAppearanceBundle/Resources/config/routing/appearancesidebarwidget.yml"
+    resource: "@SettingAppearanceBundle/Resources/config/routing/sidebarwidget.yml"
     prefix:   /domain/sidebar-widget
+
+setting_appearance_ecommercemenu:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/ecommercemenu.yml"
+    prefix:   /domain/ecommerce-menu
 
 setting_appearance_megamenu:
     resource: "@SettingAppearanceBundle/Resources/config/routing/megamenu.yml"
-    prefix:   /domain/megamenu
-
+    prefix:   /domain/mega-menu
 
 SettingAppearanceBundle_menu:
     resource: "@SettingAppearanceBundle/Resources/config/routing/menu.yml"

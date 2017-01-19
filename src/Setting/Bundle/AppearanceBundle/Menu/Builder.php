@@ -266,9 +266,10 @@ class Builder extends ContainerAware
 
         $menu['Manage Appearance']->addChild('Customize Template', array('route' => 'templatecustomize_edit','routeParameters'=> array('id' => $globalOption->getId())));
         $menu['Manage Appearance']->addChild('Feature & Widget') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
-        $menu['Manage Appearance']['Feature & Widget']->addChild('Sidebar Widget', array('route' => 'appearancesidebarwidget'));
+        $menu['Manage Appearance']['Feature & Widget']->addChild('Sidebar Widget', array('route' => 'sidebarwidget'));
         $menu['Manage Appearance']['Feature & Widget']->addChild('Feature Widget', array('route' => 'appearancefeaturewidget'));
         $menu['Manage Appearance']['Feature & Widget']->addChild('Manage Feature', array('route' => 'appearancefeature'));
+        $menu['Manage Appearance']->addChild('E-commerce Menu', array('route' => 'ecommercemenu'));
         $menu['Manage Appearance']->addChild('Menu', array('route' => 'menu_manage'));
         $menu['Manage Appearance']->addChild('Menu Grouping', array('route' => 'menugrouping'));
         $menu['Manage Appearance']->addChild('Settings', array('route' => 'globaloption_modify'));

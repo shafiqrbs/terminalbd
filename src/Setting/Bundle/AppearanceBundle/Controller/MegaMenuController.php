@@ -87,6 +87,21 @@ class MegaMenuController extends Controller
      * Displays a form to create a new MegaMenu entity.
      *
      */
+    public function ecommerceMenuAction()
+    {
+        $entity = new MegaMenu();
+        $form   = $this->createCreateForm($entity);
+        return $this->render('SettingAppearanceBundle:MegaMenu:ecommerce.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+
+    /**
+     * Displays a form to create a new MegaMenu entity.
+     *
+     */
     public function newAction()
     {
         $entity = new MegaMenu();

@@ -232,9 +232,26 @@ class SiteSetting
         if(empty($this->modules)) {
             return false;
         }
-
         return $this->modules->contains($module);
     }
+
+
+    /**
+     * @return mixed
+     */
+    public function getModuleIds()
+    {
+        $arr =array();
+        if(!empty($this->getModules())) {
+            foreach ($this->getModules() as $mod ){
+                $arr[]= $mod->getId();
+            }
+        }
+        return $arr;
+
+    }
+
+
 
     /**
      * @param mixed $syndicateModules

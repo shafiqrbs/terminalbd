@@ -1,0 +1,369 @@
+{% if entities is defined and entities is not empty  %}
+    <div class="blog-sidebar">
+    <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent News</h4>
+    <hr style="margin-bottom:2px;">
+    {% for entity in entities  %}
+        <div class="media">
+            <a class="pull-left" href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':entity.slug }) }}">
+                <img class="img-responsive media-object" src="{{ image(entity.webPath).resize(80,80) }}" alt="Media Object">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':entity.slug }) }}">{{ entity.name }}</a></h4>
+                {{ entity.content|raw|truncate(100) }}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}
+{% if entities is defined and entities is not empty  %}
+    <div class="blog-sidebar">
+        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent Events</h4>
+        <hr style="margin-bottom:2px;">
+            <div class="media">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="event-slider" class="owl-carousel">
+                            {% for entity in entities  %}
+                                <div class="post-slide">
+                                    <div class="post-img">
+                                        <img src="{{ image(entity.webPath).resize(320,200) }}" alt="" class="img-responsive">
+                                        <a href="#" class="overlay"><i class="fa fa-plus-square-o"></i></a>
+                                    </div>
+
+                                    <div class="post-review">
+                                        <ul class="post-comment">
+                                            <li>12<small>sep</small></li>
+                                            <li><i class="fa fa-comments-o"></i><a href="#"><small>2</small></a></li>
+                                        </ul>
+                                        <h3 class="post-title">
+                                            <a href="#">Latest News Post</a>
+                                        </h3>
+                                        <p class="post-description">
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi rhoncus orci elit, at iaculis dui.
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+{% endif %}
+{% if entities is defined and entities is not empty  %}
+    <div class="blog-sidebar">
+        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Our Services</h4>
+        <hr style="margin-bottom:2px;">
+        <div class="media">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="service-slider" class="owl-carousel">
+                        {% for entity in entities  %}
+                            <div class="sidebar-serviceBox">
+                                <div class="service-icon">
+                                    <i class="fa fa-globe"></i>
+                                </div>
+                                <div class="service-Content">
+                                    <h3 class="title">Web Design</h3>
+                                    <p class="description">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam architecto cum dolore dolores fuga libero magni placeat possimus sequi
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% if entities is defined and entities is not empty  %}
+    <div class="blog-sidebar">
+    <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Testimonials</h4>
+    <hr style="margin-bottom:2px;">
+
+        <div class="media">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="testimonial-slider" class="owl-carousel">
+                        {% for entity in entities  %}
+                        <div class="box-sidebar-testimonial">
+                            <div class="content">
+                                <div class="testimonial-pic">
+                                    <img src="{{ image(entity.webPath).resize(80,80) }}" alt="">
+                                </div>
+                                <div class="testimonial-prof">
+                                    <h3 class="testimonial-title">kristiana</h3>
+                                    <span class="testimonial-post">web developer</span>
+                                    <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestias, omnis!</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endif %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.theme.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.transitions.css">
+<style>
+
+
+    .box-sidebar-testimonial{
+        margin:0;
+        padding-top: 15px;
+    }
+    .box-sidebar-testimonial .content{
+        padding: 5px 5px;
+        border-radius:3px;
+        position: relative;
+        background:#e67e22;
+    }
+    #testimonial-slider div.owl-item:nth-child(2n) .content{
+        background: #1abc9c;
+    }
+    #testimonial-slider div.owl-item:nth-child(3n+1) .content{
+        background: #9b59b6;
+    }
+    .box-sidebar-testimonial .testimonial-pic{
+        width: 80px;
+        height: 80px;
+        border: 2px solid #e5e5e5;
+        float: left;
+        position: relative;
+        top:10px;
+        margin-right: 7px;
+        margin-left: 2px;
+    }
+    .box-sidebar-testimonial .testimonial-pic img{
+        width: 100%;
+        height: auto;
+    }
+    .box-sidebar-testimonial .testimonial-prof{
+        color: #fff;
+        margin-bottom: 10px;
+    }
+    .box-sidebar-testimonial .testimonial-title{
+        font-size:16px;
+        text-transform:capitalize;
+        font-weight: bold;
+        margin:0;
+    }
+    .box-sidebar-testimonial .testimonial-post{
+        font-size:12px;
+        color: #ebe9e9;
+    }
+    .box-sidebar-testimonial .description{
+        font-size: 14px;
+        padding: 0;
+        line-height: normal;
+    }
+    .owl-theme .owl-controls .owl-page.active span, .owl-theme .owl-controls.clickable .owl-page:hover span{
+        background: #e67e22;
+    }
+    .owl-theme .owl-controls .owl-page span{
+        background: #333;
+        opacity: 1;
+    }
+    .owl-theme .owl-controls .owl-page span{
+        width: 10px;
+        height:10px;
+        margin: 5px 6px;
+    }
+    .owl-theme .owl-controls {
+        text-align: right;
+        margin-top: -5px;
+        float: right;
+        top: 0;
+        position: absolute;
+        right: 0;
+    }
+    .owl-theme .owl-controls .owl-buttons div{
+        background: #e67e22;
+        border-radius: 0;
+        opacity: 1;
+        padding: 5px 10px;
+    }
+    .owl-prev:before,
+    .owl-next:before{
+        content: "\f053";
+        font-family: 'FontAwesome';
+        color: #fff;
+    }
+    .owl-next:before{
+        content: "\f054";
+    }
+    @media only screen and (max-width: 767px) {
+        .box-sidebar-testimonial{
+            text-align: center;
+        }
+        .box-sidebar-testimonial .testimonial-pic{
+            float: none;
+            margin: 0 auto;
+        }
+        .box-sidebar-testimonial .testimonial-prof{
+            padding-left: 0;
+        }
+    }
+
+    .post-slide{
+        position:relative;
+        padding-right:14px;
+    }
+    .post-slide .post-img{
+        position: relative;
+    }
+    .post-slide .overlay{
+        background: rgba(0, 0, 0, 0.6);
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        transition: opacity 0.2s ease 0s;
+    }
+    .post-slide  .post-img:hover .overlay{
+        opacity:1;
+    }
+    .post-slide .overlay > i{
+        position: absolute;
+        top:40%;
+        left: 45%;
+        opacity:0;
+        color:#e74c3c;
+        transform:translate(-50%, -50%) scale(8);
+        transition:transform 0.40s linear, opacity 0.40s linear;
+    }
+    .post-slide .overlay:hover i{
+        transform: translate(50%,50%) scale(2);
+        opacity:1;
+    }
+    .post-slide .post-review{
+        padding:17px 17px 17px 5px;
+        background: #fff;
+    }
+    .post-slide .post-comment{
+        float:left;
+        margin:0;
+        padding:7px 0 0 0;
+        line-height:1;
+        text-align:center;
+    }
+    .post-slide .post-comment li{
+        list-style:none;
+        margin-left: 15px;
+        font-size:26px;
+        color:darkgray;
+        font-weight:700;
+    }
+    .post-slide:hover .post-comment li{
+        color:#e74c3c;
+    }
+    .post-slide .post-comment li small{
+        display:block;
+        margin-bottom:10px;
+        font-size: 13px;
+        text-transform: capitalize;
+    }
+    .post-slide .post-comment li a,
+    .post-slide:hover .post-comment li small{
+        color:darkgray;
+    }
+    .post-slide .post-comment li:after{
+        content: "";
+        border-bottom:1px solid lightgray;
+        margin-bottom:10px;
+        display: block;
+    }
+    .post-slide .post-comment li:last-child:after{
+        border-bottom: 0px none;
+        margin-bottom: 0;
+    }
+    .post-slide .post-title{
+        margin: 0;
+        padding: 0 0 0 70px;
+    }
+    .post-slide .post-title > a{
+        font-size:17px;
+        color: #444;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+        display: block;
+        letter-spacing: 1px;
+        font-weight: bold;
+    }
+    .post-slide .post-title > a:hover{
+        color:#e74c3c;
+    }
+    .post-slide .post-description{
+        font-size:13px;
+        color:gray;
+        line-height:21px;
+        padding: 0 0 0 70px;
+    }
+
+    .sidebar-serviceBox{
+        border: 1px solid #ededed;
+        padding: 30px 30px 30px 90px;
+        position: relative;
+        transition: all 0.5s ease 0s;
+    }
+    .sidebar-serviceBox:hover{
+        border-color: #41d7f7;
+    }
+    .sidebar-serviceBox:before,
+    .sidebar-serviceBox:after{
+        content: "";
+        display: block;
+        width: 50px;
+        height: 5px;
+        background: #41d7f7;
+        position: absolute;
+        left: 0;
+        opacity: 0;
+        transition: all 0.5s ease 0s;
+    }
+    .sidebar-serviceBox:before{
+        top: -3px;
+    }
+    .sidebar-serviceBox:after{
+        bottom: -3px;
+    }
+    .sidebar-serviceBox:hover:before,
+    .sidebar-serviceBox:hover:after{
+        left: 40px;
+        opacity: 1;
+    }
+    .sidebar-serviceBox .service-icon{
+        display: inline-block;
+        position: absolute;
+        top: 33%;
+        left: 23px;
+        font-size: 45px;
+        color: #41d7f7;
+        opacity: 0.3;
+        transition: all 0.5s ease-in 0s;
+    }
+    .sidebar-serviceBox:hover .service-icon{
+        opacity: 1;
+    }
+    .sidebar-serviceBox .title{
+        font-size: 16px;
+        font-weight: 700;
+        color: #41d7f7;
+        margin-bottom: 15px;
+    }
+    .sidebar-serviceBox .description{
+        font-size: 13px;
+        color: #666;
+        line-height: 20px;
+    }
+    @media only screen and (max-width: 990px){
+        .sidebar-serviceBox{ margin-bottom: 30px; }
+    }
+
+</style>

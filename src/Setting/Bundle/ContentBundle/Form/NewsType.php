@@ -45,9 +45,6 @@ class NewsType extends AbstractType
                 'empty_value' => '---Select parent page---',
                 'property' => 'name',
                 'attr'=>array('class'=>'check-list span12'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('o')
                         ->where("o.status = 1")

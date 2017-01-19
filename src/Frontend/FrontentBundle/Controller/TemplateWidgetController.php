@@ -10,6 +10,7 @@ use Setting\Bundle\ContentBundle\Entity\PageModule;
 use Setting\Bundle\ToolBundle\Entity\Branding;
 use Product\Bundle\ProductBundle\Entity\Product;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Entity\Module;
 use Setting\Bundle\ToolBundle\Entity\SubscribeEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -146,6 +147,19 @@ class TemplateWidgetController extends Controller
             'globalOption'           => $globalOption,
         ));
     }
+
+    public function moduleSidebarBaseContentAction(GlobalOption $globalOption , Module $module )
+    {
+        $limit = 5;
+        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(),$module->getId(),$limit);
+
+        return $this->render('@Frontend/Template/Desktop/SidebarWidget/'.$module->getModuleClass().'.html.twig', array(
+            'entities'         => $entities,
+            'module'           => $module,
+            'globalOption'     => $globalOption,
+        ));
+    }
+
 
 
 }

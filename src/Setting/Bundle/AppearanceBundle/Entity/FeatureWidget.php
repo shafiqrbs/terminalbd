@@ -4,10 +4,12 @@ namespace Setting\Bundle\AppearanceBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
+use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
 use Doctrine\ORM\Mapping as ORM;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ContentBundle\Entity\Page;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Entity\Module;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -35,20 +37,19 @@ class FeatureWidget
     private  $globalOption;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Module", inversedBy="featureWidgets" )
+     **/
+    private  $module;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", inversedBy="featureWidgets")
      **/
     private $page;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", inversedBy="featureWidgetSponsors")
-     **/
-    private $sponsor;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\JsFeature", inversedBy="featureWidgets" )
      **/
     private  $jsFeature;
-
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidgetItem", mappedBy="featureWidget" , cascade={"remove"})
@@ -75,6 +76,12 @@ class FeatureWidget
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", inversedBy="featureWidgets" )
      **/
     private  $discount;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="featureWidgets")
+     */
+    protected $brand;
+
 
     /**
      * @var smallint
@@ -454,18 +461,34 @@ class FeatureWidget
     }
 
     /**
-     * @return Page
+     * @return Module
      */
-    public function getSponsor()
+    public function getModule()
     {
-        return $this->sponsor;
+        return $this->module;
     }
 
     /**
-     * @param Page $sponsor
+     * @param Module $module
      */
-    public function setSponsor($sponsor)
+    public function setModule($module)
     {
-        $this->sponsor = $sponsor;
+        $this->module = $module;
+    }
+
+    /**
+     * @return ItemBrand
+     */
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    /**
+     * @param ItemBrand $brand
+     */
+    public function setBrand($brand)
+    {
+        $this->brand = $brand;
     }
 }

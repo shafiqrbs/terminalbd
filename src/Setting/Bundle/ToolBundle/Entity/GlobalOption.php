@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidget;
+use Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel;
 use Setting\Bundle\ContentBundle\Entity\Admission;
 use Setting\Bundle\ContentBundle\Entity\Blog;
 use Setting\Bundle\ContentBundle\Entity\Branch;
@@ -89,9 +90,14 @@ class GlobalOption
     protected $pages;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidget", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
-    protected $sidebarWidgets;
+    protected $ecommerceMenus;
+
+   /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $sidebarWidgetPanels;
 
    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="globalOption" , cascade={"persist", "remove"} )
@@ -1438,6 +1444,14 @@ class GlobalOption
     public function getNotificationConfig()
     {
         return $this->notificationConfig;
+    }
+
+    /**
+     * @return SidebarWidgetPanel
+     */
+    public function getSidebarWidgetPanels()
+    {
+        return $this->sidebarWidgetPanels;
     }
 
 

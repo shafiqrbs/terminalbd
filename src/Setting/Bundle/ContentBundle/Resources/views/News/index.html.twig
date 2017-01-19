@@ -29,18 +29,20 @@
         <!-- BEGIN PAGE CONTENT-->
         <div class="row-fluid">
             <div class="span12">
-                <div class="btn-group pull-right">
-                    <span class="btn-group">
-                        {%  set keyword = app.request.query.get('keyword') %}
-                        {%  set direction = app.request.query.get('direction') %}
-                        {%  set sort = app.request.query.get('sort') %}
-                        <form name="search" class="search" method="get" action="">
-                            <input type="text" name="keyword" id="search" class="search-input" value="{{ keyword }}"><button type="submit" class="btn black icn-only" ><i class="halflings-icon white search"></i></button>
-                        </form>
-                    </span>
+                <div class="control-group">
+                    <div class="controls">
+                        <div class="input-append span11">
+                            {%  set keyword = app.request.query.get('keyword') %}
+                            {%  set direction = app.request.query.get('direction') %}
+                            {%  set sort = app.request.query.get('sort') %}
+                            <input class="m-wrap span12" name="keyword" id="search" value="{{ keyword }}" placeholder="Enter search keyword"  type="text">
+                            <div class="btn-group">
+                                <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="portlet box green tabbable">
-
+                <div class="portlet box green">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
                         <div class="actions">
@@ -50,7 +52,7 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('news_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                    <li><a href="{{ path('news_new') }}"><i class="icon-plus-sign"></i>&nbsp;Create</a></li>
                                     <li><a href="{{ path('news') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
@@ -61,7 +63,6 @@
                           <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
                             <table class="table table-bordered table-striped table-condensed flip-content ">
-
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
@@ -70,23 +71,20 @@
                                     <th class="numeric" >Category</th>
                                     <th class="numeric" >Date</th>
                                     <th class="numeric" >Action</th>
-
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 {% for entity in pagination %}
                                     <tr>
                                         <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
-
                                         <td class="numeric" ><a href="{{ path('news_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >{{ entity.authorName }}</td>
                                         <td class="numeric" >
                                             {% if entity.moduleCategory is defined and entity.moduleCategory is not empty %}
                                                 <ul>
-                                            {% for  cat in entity.moduleCategory %}
-                                            <li>{{ cat.name }}</li>
-                                            {% endfor %}
+                                                    {% for  cat in entity.moduleCategory %}
+                                                    <li>{{ cat.name }}</li>
+                                                    {% endfor %}
                                                 </ul>
                                             {% endif %}
                                         </td>
