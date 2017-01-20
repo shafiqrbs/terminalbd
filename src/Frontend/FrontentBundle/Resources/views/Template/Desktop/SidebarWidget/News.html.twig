@@ -17,6 +17,27 @@
 {% endif %}
 {% if entities is defined and entities is not empty  %}
     <div class="blog-sidebar">
+    <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent Notice</h4>
+    <hr style="margin-bottom:2px;">
+    {% for entity in entities  %}
+        <div class="media">
+            <div class="notice-list">
+                <div class="post-review">
+                    <div class="post-date">
+                        12
+                        <small>feb</small>
+                    </div>
+                    <h4 class="post-title">
+                        <a href="#">Lorem ipsum dolor sit amet, consectetur.</a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}
+{% if entities is defined and entities is not empty  %}
+    <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent Events</h4>
         <hr style="margin-bottom:2px;">
             <div class="media">
@@ -80,8 +101,6 @@
 {% if entities is defined and entities is not empty  %}
     <div class="blog-sidebar">
     <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Testimonials</h4>
-    <hr style="margin-bottom:2px;">
-
         <div class="media">
             <div class="row">
                 <div class="col-md-12">
@@ -100,6 +119,154 @@
                             </div>
                         </div>
                         {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endif %}
+{% if entities is defined and entities is not empty  %}
+    <div class="blog-sidebar">
+    <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Blog</h4>
+        <div class="media">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="blog-slider" class="owl-carousel">
+                        {% for entity in entities  %}
+                            <div class="blog-slide">
+                                <div class="post-img">
+                                    <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
+                                    <div class="over-layer">
+                                        <ul class="post-link">
+                                            <li><a href="#" class="fa fa-search"></a></li>
+                                            <li><a href="#" class="fa fa-link"></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="post-review">
+                                    <h3 class="post-title"><a href="#">Latest News Post</a></h3>
+                                    <ul class="post-info">
+                                        <li>Comment: 2</li>
+                                        <li>Date: Feb 21, 2016</li>
+                                        <li>Author:Williamson</li>
+                                    </ul>
+                                    <ul class="tag-info">
+                                        <li>Tags:</li>
+                                        <li><a href="">Mockups,</a></li>
+                                        <li><a href="">Graphics,</a></li>
+                                        <li><a href="">Web Projects</a></li>
+                                    </ul>
+                                    <p class="post-description">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eleifend a massa rhoncus gravida. Nullam in viverra sapien. Nunc bibendum nec lectus et vulputate. Nam.
+                                    </p>
+                                    <a href="#" class="read-more">read more</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endif %}
+{% if entities is defined and entities is not empty  %}
+    <div class="blog-sidebar">
+        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Sponsor</h4>
+        <hr style="margin-bottom:2px;">
+
+        <div class="media">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="sponsor-slider" class="owl-carousel">
+                        {% for entity in entities  %}
+                                <div class="box-sidebar-portfolio">
+                                    <a class="thumbnail"><img src="{{ image(entity.webPath).resize(171,180) }}" alt=""></a>
+                                    <ul class="social-links">
+                                        <li><a target="_blank" href="http://{{ entity.website }}" class="fa fa-link"></a></li>
+                                    </ul>
+                                </div>
+                                <div class="box-sidebar-portfolio">
+                                    <a class="thumbnail"><img src="{{ image(entity.webPath).resize(171,180) }}" alt=""></a>
+                                    <ul class="social-links">
+                                        <li><a target="_blank" href="http://{{ entity.website }}" class="fa fa-link"></a></li>
+                                    </ul>
+                                </div>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endif %}
+{% if entities is defined and entities is not empty  %}
+    <div class="blog-sidebar">
+        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;FAQ</h4>
+        <hr style="margin-bottom:2px;">
+
+        <div class="media">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel-group" id="sidebar-accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        SECTION 1
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia lacinia mauris, at ultricies leo ornare nec. Vivamus eu est vel felis dignissim tempor. Nulla facilisi. Duis molestie tortor ac tempor volutpat. Phasellus nec mi aliquet, sollicitudin neque eget, consectetur libero. Vestibulum sollicitudin sapien libero, egestas tempus eros scelerisque eu.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        SECTION 2
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="panel-body">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia lacinia mauris, at ultricies leo ornare nec. Vivamus eu est vel felis dignissim tempor. Nulla facilisi. Duis molestie tortor ac tempor volutpat. Phasellus nec mi aliquet, sollicitudin neque eget, consectetur libero. Vestibulum sollicitudin sapien libero, egestas tempus eros scelerisque eu.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingThree">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        SECTION 3
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                <div class="panel-body">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia lacinia mauris, at ultricies leo ornare nec. Vivamus eu est vel felis dignissim tempor. Nulla facilisi. Duis molestie tortor ac tempor volutpat. Phasellus nec mi aliquet, sollicitudin neque eget, consectetur libero. Vestibulum sollicitudin sapien libero, egestas tempus eros scelerisque eu.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingFour">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                        SECTION 4
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                                <div class="panel-body">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia lacinia mauris, at ultricies leo ornare nec. Vivamus eu est vel felis dignissim tempor. Nulla facilisi. Duis molestie tortor ac tempor volutpat. Phasellus nec mi aliquet, sollicitudin neque eget, consectetur libero. Vestibulum sollicitudin sapien libero, egestas tempus eros scelerisque eu.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -308,7 +475,7 @@
 
     .sidebar-serviceBox{
         border: 1px solid #ededed;
-        padding: 30px 30px 30px 90px;
+        padding: 25px;
         position: relative;
         transition: all 0.5s ease 0s;
     }
@@ -335,13 +502,13 @@
     }
     .sidebar-serviceBox:hover:before,
     .sidebar-serviceBox:hover:after{
-        left: 40px;
+        left: 25px;
         opacity: 1;
     }
     .sidebar-serviceBox .service-icon{
         display: inline-block;
         position: absolute;
-        top: 33%;
+        top: 11%;
         left: 23px;
         font-size: 45px;
         color: #41d7f7;
@@ -356,6 +523,7 @@
         font-weight: 700;
         color: #41d7f7;
         margin-bottom: 15px;
+        margin-left: 45px;
     }
     .sidebar-serviceBox .description{
         font-size: 13px;
@@ -364,6 +532,301 @@
     }
     @media only screen and (max-width: 990px){
         .sidebar-serviceBox{ margin-bottom: 30px; }
+    }
+    a:hover,a:focus{
+        text-decoration: none;
+        outline: none;
+    }
+
+    #sidebar-accordion .panel{
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        margin-bottom: -5px;
+    }
+    #sidebar-accordion .panel-heading{
+        padding: 0;
+        border-radius: 0;
+        border: none;
+        text-align: center;
+    }
+    #sidebar-accordion .panel-title a{
+        display: block;
+        padding: 10px 30px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #fff;
+        background: #333;
+        border-bottom: 1px solid #4a4a4a;
+        position: relative;
+        transition: all 0.5s ease 0s;
+    }
+    #sidebar-accordion .panel-title a:hover{
+        background: #4a4a4a;
+    }
+    #sidebar-accordion .panel-title a:after,
+    #sidebar-accordion .panel-title a.collapsed:after{
+        content: "\f067";
+        font-family: FontAwesome;
+        font-size: 10px;
+        font-weight: 200;
+        position: absolute;
+        top: 12px;
+        left: 15px;
+        transform: rotate(135deg);
+        transition: all 0.5s ease 0s;
+    }
+    #sidebar-accordion .panel-title a.collapsed:after{
+        transform: rotate(0deg);
+    }
+    #sidebar-accordion .panel-body{
+        background: #167ea0;
+        padding: 0 0 0 30px;
+        border: none;
+        position: relative;
+    }
+    #sidebar-accordion .panel-body p{
+        font-size: 14px;
+        color: #fff;
+        line-height: 25px;
+        background: #3296b7;
+        padding: 15px;
+        margin: 0;
+    }
+    #sidebar-accordion .panel-collapse .panel-body p{
+        opacity: 0;
+        transform: scale(0.9);
+        transition: all 0.5s ease-in-out 0s;
+    }
+    #sidebar-accordion .panel-collapse.in .panel-body p{
+        opacity: 1;
+        transform: scale(1);
+    }
+
+
+    .blog-slide{
+        margin: 0;
+        background: #fff;
+        border:1px solid #cccccc;
+    }
+    .blog-slide .post-img{
+        overflow: hidden;
+        position: relative;
+    }
+    .blog-slide .post-img img{
+        width: 100%;
+        height:auto;
+        transform: scale(1,1);
+        transition: all 0.30s ease 0s;
+    }
+    .blog-slide:hover .post-img img{
+        transform: scale(1.2,1.2);
+    }
+    .blog-slide .over-layer{
+        position: absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        opacity: 0;
+        text-align:center;
+        background:rgba(68, 67, 64,0.9);
+        transition: all 0.50s linear;
+    }
+    .blog-slide:hover .over-layer{
+        opacity:1;
+    }
+    .blog-slide .post-link{
+        padding:0;
+        margin:0;
+        list-style:none;
+        position: relative;
+        top:45%;
+    }
+    .blog-slide .post-link li{
+        display: inline-block;
+        margin-right:10px;
+    }
+    .blog-slide .post-link li a{
+        width: 60px;
+        height: 60px;
+        line-height: 59px;
+        border-radius: 50%;
+        color:#fff;
+        background:#333;
+        font-size:20px;
+        transform: scale(1,1);
+        transition: all 0.20s linear;
+    }
+    .blog-slide .post-link li a:hover{
+        text-decoration:none;
+        transform: scale(1.1,1.1);
+    }
+    .blog-slide .post-review{
+        padding: 15px 0;
+        overflow: hidden;
+    }
+    .blog-slide .post-title{
+        margin-top: 0;
+    }
+    .blog-slide .post-title a{
+        display: block;
+        color: #333;
+        font-size: 18px;
+        text-align:center;
+        font-weight: bold;
+        text-transform:uppercase;
+        transition: all 0.50s ease 0s;
+    }
+    .blog-slide .post-title a:hover{
+        text-decoration: none;
+        color:#1f80bb;
+    }
+    .blog-slide .post-info{
+        list-style:none;
+        padding:10px 0 0 0;
+        margin:0 0 7px 0;
+        text-align:center;
+        border-top:1px solid #d3d3d3;
+    }
+    .blog-slide .post-info li{
+        display: inline-block;
+        margin-right: 13px;
+    }
+    .blog-slide .tag-info{
+        margin:0;
+        padding:0 0 10px 0;
+        text-align:center;
+        border-bottom:1px solid #d3d3d3;
+    }
+    .blog-slide .tag-info li{
+        list-style:none;
+        display: inline-block;
+    }
+    .blog-slide .tag-info li a{
+        color:#808080;
+        text-transform:capitalize;
+    }
+    .blog-slide .tag-info li a:hover{
+        color:#1f80bb;
+        text-decoration:none;
+    }
+    .blog-slide .post-description{
+        color: #828282;
+        font-size: 14px;
+        padding:5px 25px;
+        line-height: 25px;
+    }
+    .blog-slide .read-more{
+        color:#333;
+        float: right;
+        font-weight: bold;
+        margin-right:25px;
+        text-transform:capitalize;
+    }
+    .blog-slide .read-more:hover{
+        color:#1f80bb;
+        text-decoration:none;
+    }
+    .owl-theme .owl-buttons div{
+        position:relative;
+        border-radius: 0;
+        background:#807b87;
+        padding: 7px 15px;
+        transition: all 0.5s ease 0s;
+    }
+    .owl-theme .owl-buttons .owl-prev{
+        position: absolute;
+        left: 0;
+        top: 50%;
+        opacity:0;
+        transition: all 0.50s linear;
+    }
+    .owl-carousel:hover .owl-buttons .owl-prev{
+        opacity: 1;
+        left:-30px;
+    }
+    .owl-theme .owl-buttons .owl-next{
+        position: absolute;
+        right: 0;
+        top: 50%;
+        opacity:0;
+        transition: all 0.50s linear;
+    }
+    .owl-carousel:hover .owl-buttons .owl-next{
+        opacity: 1;
+        right:-30px;
+    }
+    .owl-prev:before,
+    .owl-next:before{
+        content: "\f053";
+        font-family: 'FontAwesome';
+        color: #fff;
+    }
+    .owl-next:before{
+        content: "\f054";
+    }
+    @media only screen and (max-width: 990px) {
+        .blog-slide .post-info li { margin-right: 5px; }
+        .owl-theme .owl-buttons div{ display:none; }
+    }
+    @media only screen and (max-width: 767px) {
+        .blog-slide .post-link li a{
+            width: 40px;
+            height: 40px;
+            line-height: 39px;
+            font-size:13px;
+        }
+        .post-slide .post-title a{
+            font-size:14px;
+        }
+    }
+
+    .notice-list{
+        padding-right:20px;
+    }
+    .notice-list .post-date{
+        float:left;
+        margin-right: 10px;
+        padding: 8px 15px;
+        text-align:center;
+        background:#444;
+        font-size:26px;
+        color:#fff;
+        font-weight:700;
+        transition:background 0.20s linear 0s;
+    }
+    .notice-list:hover .post-date{
+        background:#078071;
+    }
+    .notice-list .post-date small{
+        display:block;
+        margin-bottom:10px;
+        font-size: 13px;
+        text-transform: capitalize;
+    }
+    .notice-list .post-date small:before{
+        content:"";
+        display:block;
+        margin-bottom:5px;
+        border-top:1px solid #fff;
+    }
+    .post-slide .post-title{
+        margin: 0;
+        padding-top: 15px;
+    }
+    .notice-list .post-title a{
+        font-size:15px;
+        color: #444;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        display: block;
+        line-height:20px;
+        font-weight: bold;
+    }
+    .notice-list:hover .post-title a{
+        color:#078071;
+        text-decoration:none;
     }
 
 </style>

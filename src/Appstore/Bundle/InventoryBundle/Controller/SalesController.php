@@ -164,17 +164,21 @@ class SalesController extends Controller
         if ($customer > 0) {
             $customer = $em->getRepository('DomainUserBundle:Customer')->find($customer);
             if (!empty($customer)) {
-
                 $entity->setCustomer($customer);
                 $entity->setSalesMode('customer');
                 $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(4);
                 $entity->setTransactionMethod($transactionMethod);
                 $entity->setMobile($customer->getMobile());
+            }else{
+                $entity->setSalesMode('pos');
             }
         }
-        $entity->setSalesMode('pos');
+        $entity->setPaymentStatus('Pending');
         $entity->setInventoryConfig($inventory);
         $entity->setSalesBy($this->getUser());
+        if(!empty($this->getUser()->getProfile()->getBranches())){
+            $entity->setBranches($this->getUser()->getProfile()->getBranches());
+        }
         $em->persist($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('inventory_sales_edit', array('code' => $entity->getInvoice())));
@@ -268,9 +272,8 @@ class SalesController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-        if ($editForm->isValid()) {
-
-            $data = $request->request->all();
+        $data = $request->request->all();
+        if ($editForm->isValid() and $data['paymentTotal'] > 0 ) {
 
             if (!empty($data['sales']['mobile'])) {
 
@@ -335,7 +338,12 @@ class SalesController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
-        return $this->render('InventoryBundle:Sales:new.html.twig', array(
+        if (in_array('CustomerSales', $inventory->getDeliveryProcess())) {
+            $twig = 'customerpos';
+        } else {
+            $twig = 'pos';
+        }
+        return $this->render('InventoryBundle:Sales:' . $twig . '.html.twig', array(
             'entity' => $entity,
             'todaySales' => $todaySales,
             'todaySalesOverview' => $todaySalesOverview,
@@ -437,7 +445,7 @@ class SalesController extends Controller
     public function deleteEmptyInvoiceAction()
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig' => $inventory, 'paymentStatus' => 'Pending'));
+        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig' => $inventory, 'total' => 0));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity) {
             $em->remove($entity);

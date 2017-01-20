@@ -7,6 +7,7 @@ use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Delivery;
 use Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -59,9 +60,16 @@ class Branches
     private  $profiles;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="branches" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="branches")
+     * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $sales;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesReturn", mappedBy="branches")
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $salesReturns;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\BranchInvoice", mappedBy="branches" )
@@ -350,6 +358,14 @@ class Branches
     public function getDeliveryReturns()
     {
         return $this->deliveryReturns;
+    }
+
+    /**
+     * @return SalesReturn
+     */
+    public function getSalesReturns()
+    {
+        return $this->salesReturns;
     }
 
 

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn;
+use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -27,6 +28,12 @@ class SalesReturn implements CodeAwareEntity
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="salesReturn" )
      **/
     private  $inventoryConfig;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="salesReturns" )
+     **/
+    private  $branches;
+
 
     /**
      * @var integer
@@ -329,6 +336,22 @@ class SalesReturn implements CodeAwareEntity
     public function setSalesAdjustmentInvoice($salesAdjustmentInvoice)
     {
         $this->salesAdjustmentInvoice = $salesAdjustmentInvoice;
+    }
+
+    /**
+     * @return Branches
+     */
+    public function getBranches()
+    {
+        return $this->branches;
+    }
+
+    /**
+     * @param Branches $branches
+     */
+    public function setBranches($branches)
+    {
+        $this->branches = $branches;
     }
 
 

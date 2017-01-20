@@ -22,7 +22,9 @@
                 <img class="img-responsive displayed" src="{{ image(page.webPath).resize() }}" alt="" />
                 {% endif %}
                 <div class="page-content">{{ page.content|raw }}</div>
-
+                <div class="header-double-line-right">
+                    <h3>About Us</h3>
+                </div>
                 <div class="mysharing">
                     <!-- Twitter -->
                     <a href="http://twitter.com/home?status=" title="Share on Twitter" target="_blank" class="btn btn-twitter"><i class="fa fa-twitter"></i> Twitter</a>
@@ -124,7 +126,7 @@
     navigationText:["",""],
     autoPlay:false
     });
-$("#service-slider").owlCarousel({
+ $("#service-slider").owlCarousel({
     items:1,
     itemsDesktop:[1000,2],
     itemsDesktopSmall:[979,1],
@@ -136,6 +138,28 @@ $("#service-slider").owlCarousel({
     transitionStyle:"goDown",
     navigationText:["",""],
     autoPlay:false
+ });
+ $("#sponsor-slider").owlCarousel({
+    items:3,
+    itemsDesktop:[1000,4],
+    itemsDesktopSmall:[979,1],
+    itemsTablet:[768,1],
+    pagination:false,
+    navigation:true,
+    slideSpeed:1000,
+    transitionStyle:"goDown",
+    navigationText:["",""],
+    autoPlay:false
+ });
+
+    $("#blog-slider").owlCarousel({
+    items : 1,
+    itemsDesktop:[1199,2],
+    itemsDesktopSmall:[980,2],
+    itemsTablet:[650,1],
+    pagination:false,
+    navigation:true,
+    navigationText:["",""]
     });
 
 {% endblock %}

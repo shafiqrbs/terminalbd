@@ -50,6 +50,9 @@ class SalesReturnController extends Controller
             $entity->setSales($sales);
             $entity->setInventoryConfig($inventory);
             $entity->setCreatedBy($this->getUser());
+            if(!empty($this->getUser()->getProfile()->getBranches())){
+                $entity->setBranches($this->getUser()->getProfile()->getBranches());
+            }
             $em->persist($entity);
             $em->flush();
             return $this->redirect($this->generateUrl('inventory_salesreturn_edit', array('id' => $entity->getId())));
