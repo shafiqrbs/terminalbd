@@ -23,8 +23,7 @@ class EventController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=> $globalOption,'module'=>7),array('name' => 'asc'));
-
+        $entities = $em->getRepository('SettingContentBundle:Page')->getPagesFor($globalOption,'event');
         return $this->render('SettingContentBundle:Event:index.html.twig', array(
             'entities' => $entities,
         ));
@@ -41,8 +40,11 @@ class EventController extends Controller
         $user = $this->getUser();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $mobile = $entity->getMobile();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
+            $entity->setMobile($mobile);
             $entity->setUser($user);
-            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(7));
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'event')));
             $entity->setGlobalOption($user->getGlobalOption());
             $entity->upload();
             $em->persist($entity);
@@ -67,8 +69,8 @@ class EventController extends Controller
     private function createCreateForm(Page $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption()->getId();
-
-        $form = $this->createForm(new EventType($globalOption), $entity, array(
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new EventType($globalOption,$location), $entity, array(
             'action' => $this->generateUrl('event_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -152,8 +154,8 @@ class EventController extends Controller
     {
 
         $globalOption = $this->getUser()->getGlobalOption()->getId();
-
-        $form = $this->createForm(new EventType($globalOption), $entity, array(
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new EventType($globalOption,$location), $entity, array(
             'action' => $this->generateUrl('event_update', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -184,6 +186,9 @@ class EventController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $mobile = $entity->getMobile();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
+            $entity->setMobile($mobile);
             if(!empty($entity->upload())){
                 $entity->removeUpload();
             }

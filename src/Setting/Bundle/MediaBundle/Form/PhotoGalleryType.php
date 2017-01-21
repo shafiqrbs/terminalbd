@@ -43,12 +43,11 @@ class PhotoGalleryType extends AbstractType
                 ),
                 'class' => 'Setting\Bundle\ToolBundle\Entity\Module',
                 'property' => 'name',
-                'attr'=>array('class'=>'check-list span12'),
+                'attr'=>array('class'=>'check-list span6'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('o')
                         ->join('o.siteSettings','m')
                         ->where("o.status = 1")
-                        ->andWhere("o.isSingle = 1")
                         ->andWhere("m.globalOption =".$this->globalOption->getId())
                         ->orderBy('o.name','ASC');
                 },

@@ -78,15 +78,13 @@ class ModuleController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
             $menu = $entity->getMenu();
-            $slug = $this->get('setting.menuSettingRepo')->urlSlug($menu);
-            $entity ->setMenuSlug($slug);
-
             $em->persist($entity);
             $em->flush();
-
-            return $this->redirect($this->generateUrl('module_show', array('id' => $entity->getId())));
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been inserted successfully"
+            );
+            return $this->redirect($this->generateUrl('module'));
         }
 
         return $this->render('SettingToolBundle:Module:new.html.twig', array(

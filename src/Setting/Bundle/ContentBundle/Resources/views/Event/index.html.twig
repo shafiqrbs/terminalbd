@@ -71,6 +71,7 @@
                             <tr class="head-grey">
                                 <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                 <th>Title</th>
+                                <th>Event Type</th>
                                 <th>Contact person</th>
                                 <th>Mobile no </th>
                                 <th>Email </th>
@@ -84,6 +85,7 @@
                                 <tr>
                                     <td class="numeric">{{ loop.index }}</td>
                                     <td class="numeric" ><a href="{{ path('event_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                    <td class="numeric" >{{ entity.eventType }}</td>
                                     <td class="numeric" >{{ entity.contactPerson }}</td>
                                     <td class="numeric"><a href="tel:+88 {{ entity.mobile }}"> {{ entity.mobile }}</a></td>
                                     <td class="numeric"><a href="mailto:{{ entity.email }}"> {{ entity.email }}</a></td>

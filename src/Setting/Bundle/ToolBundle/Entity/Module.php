@@ -37,7 +37,6 @@ class Module
      */
     private $name;
 
-
     /**
      * @var string
      *
@@ -53,9 +52,8 @@ class Module
     private $menu;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="menuSlug", type="string", length=255)
+     * @Gedmo\Slug(fields={"menu"})
+     * @ORM\Column(length=128, unique=true)
      */
     private $menuSlug;
 

@@ -18,7 +18,7 @@
                         </div>
                         <div id="collapseTwo{{ key  }}" class="panel-collapse collapse {% if key == 0 %}  in {% endif %}" role="tabpanel" aria-labelledby="headingTwo{{ key  }}">
                             <div class="panel-body">
-                                {{ faq.content }}
+                                {{ faq.content|raw }}
                             </div>
                         </div>
                     </div>

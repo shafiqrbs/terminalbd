@@ -38,7 +38,7 @@ class ClientController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=> $globalOption,'module'=>19),array('name' => 'asc'));
+        $entities = $em->getRepository('SettingContentBundle:Page')->getPagesFor($globalOption,'client');
         $entities = $this->paginate($entities);
 
         return $this->render('SettingContentBundle:Client:index.html.twig', array(
@@ -58,9 +58,12 @@ class ClientController extends Controller
         $user = $this->getUser();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $mobile = $entity->getMobile();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
+            $entity->setMobile($mobile);
             $entity->setUser($user);
             $entity->setGlobalOption($user->getGlobalOption());
-            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(19));
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'client')));
             $entity->upload();
             $em->persist($entity);
             $em->flush();

@@ -23,8 +23,7 @@ class ServiceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=>$globalOption,'module'=>16));
-
+        $entities = $em->getRepository('SettingContentBundle:Page')->getPagesFor($globalOption,'service');
         return $this->render('SettingContentBundle:Service:index.html.twig', array(
             'entities' => $entities,
         ));
@@ -43,7 +42,7 @@ class ServiceController extends Controller
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
             $entity->setGlobalOption($user->getGlobalOption());
-            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(16));
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'service')));
             $entity->upload();
             $em->persist($entity);
             $em->flush();

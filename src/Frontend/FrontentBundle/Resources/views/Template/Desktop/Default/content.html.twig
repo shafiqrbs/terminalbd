@@ -22,10 +22,12 @@
                 <img class="img-responsive displayed" src="{{ image(page.webPath).resize() }}" alt="" />
                 {% endif %}
                 <div class="page-content">{{ page.content|raw }}</div>
-                <div class="header-double-line-right">
-                    <h3>About Us</h3>
-                </div>
-                <div class="mysharing">
+                {#{% if sidebar is not empty %}
+                    {% for module in sidebar.module %}
+                        {% render controller("FrontendBundle:TemplateWidget:pageBaseModuleContent",{'globalOption':globalOption.id,'module':module.id}) %}
+                    {% endfor %}
+                {% endif %}
+                #}<div class="mysharing">
                     <!-- Twitter -->
                     <a href="http://twitter.com/home?status=" title="Share on Twitter" target="_blank" class="btn btn-twitter"><i class="fa fa-twitter"></i> Twitter</a>
                     <!-- Facebook -->
@@ -41,9 +43,9 @@
                 <!-- Blog Categories -->
                 <div class="blog-sidebar">
                     {% if page.parent is not empty %}
-                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;&nbsp;{{ page.parent.name }}</h4>
+                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;{{ page.parent.name }}</h4>
                     {% else %}
-                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;&nbsp;{{ page.name }}</h4>
+                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;{{ page.name }}</h4>
                     {% endif %}
                     <hr>
                     <div class="list-group">
@@ -56,13 +58,12 @@
                                <a class="list-group-item" href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':subPage.nav.slug}) }}"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;{{ subPage.name }}</a>
                             {% endfor %}
                         {% endif %}
-
                     </div>
                 </div>
                 {% if sidebar.page is not empty %}
                     <div class="blog-sidebar">
-                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;&nbsp;Our Pages</h4>
-                             <hr>
+                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Our Pages</h4>
+                        <hr>
                         <ul class="sidebar-list">
                             {% for subPage in sidebar.page %}
                                 <li><a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':subPage.nav.slug}) }}">{{ subPage.name }}</a></li>
@@ -71,19 +72,17 @@
                     </div>
                 {% endif %}
                 {% if sidebar is not empty %}
-                {% for module in sidebar.module %}
-                    {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'module':module.id}) %}
-                {% endfor %}
+                    {% for module in sidebar.module %}
+                        {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'module':module.id}) %}
+                    {% endfor %}
                 {% endif %}
-
-
             </aside>
         </div>
     </div>
  {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@FrontendBundle/Resources/public/template/desktop/css/common.css'
+    '@FrontendBundle/Resources/public/template/desktop/css/sidebar.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -91,76 +90,12 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@FrontendBundle/Resources/public/template/js/common.js'
+    '@FrontendBundle/Resources/public/template/js/sidebar.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 {% block documentready %}
-
-    {{ parent() }}
-    $("#testimonial-slider").owlCarousel({
-    items:1,
-    itemsDesktop:[1000,2],
-    itemsDesktopSmall:[979,1],
-    itemsTablet:[768,1],
-    pagination:false,
-    navigation:true,
-    slideSpeed:1000,
-    singleItem:true,
-    transitionStyle:"goDown",
-    navigationText:["",""],
-    autoPlay:false
-    });
-
- $("#event-slider").owlCarousel({
-    items:1,
-    itemsDesktop:[1000,2],
-    itemsDesktopSmall:[979,1],
-    itemsTablet:[768,1],
-    pagination:false,
-    navigation:true,
-    slideSpeed:1000,
-    singleItem:true,
-    transitionStyle:"goDown",
-    navigationText:["",""],
-    autoPlay:false
-    });
- $("#service-slider").owlCarousel({
-    items:1,
-    itemsDesktop:[1000,2],
-    itemsDesktopSmall:[979,1],
-    itemsTablet:[768,1],
-    pagination:false,
-    navigation:true,
-    slideSpeed:1000,
-    singleItem:true,
-    transitionStyle:"goDown",
-    navigationText:["",""],
-    autoPlay:false
- });
- $("#sponsor-slider").owlCarousel({
-    items:3,
-    itemsDesktop:[1000,4],
-    itemsDesktopSmall:[979,1],
-    itemsTablet:[768,1],
-    pagination:false,
-    navigation:true,
-    slideSpeed:1000,
-    transitionStyle:"goDown",
-    navigationText:["",""],
-    autoPlay:false
- });
-
-    $("#blog-slider").owlCarousel({
-    items : 1,
-    itemsDesktop:[1199,2],
-    itemsDesktopSmall:[980,2],
-    itemsTablet:[650,1],
-    pagination:false,
-    navigation:true,
-    navigationText:["",""]
-    });
-
+{{ parent() }}
 {% endblock %}
 

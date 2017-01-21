@@ -17,7 +17,7 @@
                                                 </div>
                                                 <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'noticeBoard','slug':notice.slug }) }}"> {{ notice.name }}</a></h5>
                                                 <p class="post-description">
-                                                    {{ notice.content|raw|truncate(200) }}
+                                                    {{ notice.content|truncate(200)|raw }}
                                                 </p>
                                             </div>
                                             <ul class="post-bar">

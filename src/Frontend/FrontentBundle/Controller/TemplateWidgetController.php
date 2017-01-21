@@ -125,6 +125,7 @@ class TemplateWidgetController extends Controller
     {
 
         $about                     = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption,'slug' => 'about-us'));
+
         if(!empty($about)){
             return $this->render('@Frontend/Widget/aboutus.html.twig', array(
                 'about'           => $about->getPage(),
@@ -150,10 +151,22 @@ class TemplateWidgetController extends Controller
 
     public function moduleSidebarBaseContentAction(GlobalOption $globalOption , Module $module )
     {
-        $limit = 5;
+        $limit = 6;
         $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(),$module->getId(),$limit);
 
-        return $this->render('@Frontend/Template/Desktop/SidebarWidget/'.$module->getModuleClass().'.html.twig', array(
+        return $this->render('@Frontend/Template/Desktop/Widget/sidebar.html.twig', array(
+            'entities'         => $entities,
+            'module'           => $module,
+            'globalOption'     => $globalOption,
+        ));
+    }
+
+    public function pageBaseModuleContentAction(GlobalOption $globalOption , Module $module )
+    {
+        $limit = 6;
+        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(),$module->getId(),$limit);
+
+        return $this->render('@Frontend/Template/Desktop/Widget/pageModule.html.twig', array(
             'entities'         => $entities,
             'module'           => $module,
             'globalOption'     => $globalOption,

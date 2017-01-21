@@ -22,7 +22,7 @@ class FaqType extends AbstractType
 
                 )
             ))
-            ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>6)))
+            ->add('content','textarea', array('attr'=>array('class'=>'m-wrap wysihtml5 span12','rows'=>6)))
         ;
     }
     

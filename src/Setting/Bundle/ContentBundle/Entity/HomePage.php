@@ -64,6 +64,21 @@ class HomePage
     private $content;
 
     /**
+     * @var text
+     *
+     * @ORM\Column(name="featureText", type="text", nullable=true)
+     */
+    private $featureText;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="showAbout", type="boolean", nullable=true)
+     */
+    private $showAbout = false;
+
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="showingListing", type="integer", nullable=true)
@@ -400,7 +415,37 @@ class HomePage
 
     }
 
+    /**
+     * @return boolean
+     */
+    public function getShowAbout()
+    {
+        return $this->showAbout;
+    }
 
+    /**
+     * @param boolean $showAbout
+     */
+    public function setShowAbout($showAbout)
+    {
+        $this->showAbout = $showAbout;
+    }
+
+    /**
+     * @return text
+     */
+    public function getFeatureText()
+    {
+        return $this->featureText;
+    }
+
+    /**
+     * @param text $featureText
+     */
+    public function setFeatureText($featureText)
+    {
+        $this->featureText = $featureText;
+    }
 
 
 }

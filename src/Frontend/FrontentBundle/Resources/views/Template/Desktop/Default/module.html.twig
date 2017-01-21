@@ -13,10 +13,10 @@
 <div class="container">
     <div class="row js-equal-height">
         <article class="col-md-8 ">
-            {% if ( module.moduleClass == 'News') %}
-                {{ include('@Frontend/Template/Desktop/Module/news.html.twig')}}
-            {% elseif( module.moduleClass == 'Blog' ) %}
+            {% if( module.moduleClass == 'Blog' ) %}
                 {{ include('@Frontend/Template/Desktop/Module/blog.html.twig')}}
+            {% elseif ( module.moduleClass == 'News') %}
+                {{ include('@Frontend/Template/Desktop/Module/news.html.twig')}}
             {% elseif( module.moduleClass == 'Testimonial' ) %}
                 {{ include('@Frontend/Template/Desktop/Module/testimonial.html.twig')}}
             {% elseif( module.moduleClass == 'Timeline' ) %}
@@ -37,24 +37,10 @@
         </article>
         <!-- Blog Sidebar Column -->
         <aside class="col-md-4 sidebar-padding js-equal-height" style="background: #FBFCFE">
-            {% if featurePages is not empty %}
-                <div class="blog-sidebar">
-                    <h4 class="sidebar-title"><i class="fa fa-align-left"></i>Recent News</h4>
-                    <hr style="margin-bottom: 5px;">
-                    {% for feature in featurePages %}
-                        {% if feature.module.name == 'News' %}
-                            <div class="media">
-                                <a class="pull-left" href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':feature.slug }) }}">
-                                    <img class="img-responsive media-object" src="{{ image(feature.webPath).resize(100,100) }}" alt="Media Object">
-                                </a>
-                                <div class="media-body">
-                                    <h4 class="media-heading"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':feature.slug }) }}">{{ feature.name }}</a></h4>
-                                    {{ feature.content|raw|truncate(100) }}
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
+            {% if sidebar is not empty %}
+                {% for module in sidebar.module %}
+                    {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'module':module.id}) %}
+                {% endfor %}
             {% endif %}
         </aside>
     </div>
@@ -104,6 +90,7 @@
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
     '@FrontendBundle/Resources/public/template/desktop/css/common.css'
+    '@FrontendBundle/Resources/public/template/desktop/css/sidebar.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -112,6 +99,7 @@
     {{ parent() }}
     {% javascripts
     '@FrontendBundle/Resources/public/template/js/common.js'
+    '@FrontendBundle/Resources/public/template/js/sidebar.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

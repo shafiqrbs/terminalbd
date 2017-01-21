@@ -26,7 +26,7 @@ class WebServiceModuleController extends Controller
             $pagination ='';
             $moduleName ='';
             $featurePages ='';
-            $sidebars ='';
+            $sidebar ='';
             if(!empty($menu)){
 
                 $siteEntity = $globalOption->getSiteSetting();
@@ -36,11 +36,12 @@ class WebServiceModuleController extends Controller
                 if($moduleName){
 
                     $twigName = "module";
-                    $pagination = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption' => $globalOption,'module'=>$menu->getModule()->getId(),'status'=>1),array('id'=>'desc'));
+                    $pagination = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption' => $globalOption,'module' => $menu->getModule()->getId()),array('id'=>'desc'));
                     $pagination = $this->paginate( $pagination,$limit= 10 );
                     if(!empty($menu->getModule())){
                         $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
                     }
+                    $sidebar = $em->getRepository('SettingAppearanceBundle:SidebarWidgetPanel')->getSidebarPanel($globalOption,$sidebar = 1);
 
                 }else{
 

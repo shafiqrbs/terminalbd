@@ -45,7 +45,7 @@ class ModuleCategoryType extends AbstractType
                     return $er->createQueryBuilder('o')
                         ->join('o.siteSettings','m')
                         ->where("o.status = 1")
-                        ->andWhere("o.isSingle = 1")
+                        ->andWhere("o.isSingle != 1")
                         ->andWhere("m.globalOption =".$this->globalOption->getId())
                         ->orderBy('o.name','ASC');
                 },

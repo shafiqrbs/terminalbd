@@ -30,67 +30,42 @@
         <!-- BEGIN PAGE CONTENT-->
         <div class="row-fluid">
             <div class="span12">
-                <div class="portlet box green tabbable">
-
+                <div class="portlet box green">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Gallery Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Photo Gallery Information</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <i class="icon-cogs"></i>&nbsp;Tools
+                                    <i class="icon-tasks"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="{{ path('gallery_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                    <li><a href="{{ path('gallery') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="portlet-body">
-
-                        <div class="tabbable portlet-tabs">
-                            <ul class="nav nav-tabs">
-                                <li class="active"><a  href="{{ path('gallery_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;View</a></li>
-                                <li class=""><a  href="{{ path('gallery') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                <li><a  href="{{ path('gallery_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Add/Edit</a></li>
-
-                            </ul>
-                            <div class="tab-content">
-                                <div class="portlet-body form form-horizontal">
-                                    {% include('flash-message.html.twig')  %}
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label" ><strong>Gallery Information</strong></label>
-                                            </div>
+                        <div class="portlet-body ">
+                        <div class="row-fluid">
+                            {% for entity in entity.galleryImages %}
+                            <div class="span3">
+                                <div class="item">
+                                    <a class="fancybox-button" data-rel="fancybox-button" title="Photo" href="{{ entity.getAbsolutePath(entity.photoGallery.globalOption.id,entity.photoGallery.id) }}">
+                                        <div class="zoom">
+                                            <img src="{{ image(entity.getAbsolutePath(entity.photoGallery.globalOption.id,entity.photoGallery.id)).resize(200,200) }}" alt="Photo" />
+                                            <div class="zoom-icon"></div>
                                         </div>
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label" >Title</label>
-                                                <div class="controls control-custom">{{ entity.name }}</div>
-                                            </div>
-                                        </div>
-                                        <div class="span11">
-                                            <div class="control-group">
-                                                <label class="control-label" >Content</label>
-                                                <div class="controls control-custom">{{ entity.description|raw }}</div>
-                                            </div>
-                                        </div>
-
-                                        {% if(entity.webPath) %}
-                                            <div class="span11">
-                                                <div class="control-group">
-                                                    <div class="controls control-custom">
-                                                        <div  class="fileupload-new thumbnail">
-                                                            {% if(entity.webPath) %}
-                                                                <img class="fileupload-preview thumbnail" alt="" src="{{ image(entity.webPath).resize(100,100) }}">
-                                                            {% else %}
-                                                                <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
-                                                            {% endif %}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        {% endif %}
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label" >Status</label>
-                                                <div class="controls control-custom">{% if entity.status == 1 %} Publish {% else %} Un-publish {% endif %}</div>
-                                            </div>
-                                        </div>
+                                    </a>
+                                    <div class="details">
+                                         <a href="#" class="icon"><i class="icon-remove"></i></a>
                                     </div>
                                 </div>
                             </div>
+                            {% endfor %}
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -98,4 +73,9 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block documentready %}
+    App.init();
+    Gallery.init();
+    $('.fancybox-video').fancybox({type: 'iframe'});
 {% endblock %}

@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ContentBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -13,9 +14,14 @@ class EventType extends AbstractType
 
     private $globalOption;
 
-    public function __construct($globalOption)
+    /** @var  LocationRepository */
+    private $location;
+
+
+    public function __construct($globalOption, LocationRepository $location)
     {
         $this->globalOption = $globalOption;
+        $this->location = $location;
 
     }
 
@@ -29,30 +35,21 @@ class EventType extends AbstractType
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter title'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
-
                 )
             ))
             ->add('contactPerson','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter contact person'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
-
                 )
             ))
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Enter mobile no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
-
                 )
             ))
-        
-            ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter email address'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-
-                )
-            ))
-            ->add('content','textarea', array('attr'=>array('class'=>'wysihtml5 m-wrap span12','rows'=>8)))
-            ->add('address','text', array('attr'=>array('class'=>'m-wrap span12')))
+            ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter email address')))
+            ->add('content','textarea', array('attr'=>array('class'=>'wysihtml5 m-wrap span12','rows' => 12)))
+            ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12','rows' => 9)))
             ->add('additionalPhone','text', array('attr'=>array('class'=>'m-wrap span12')))
             ->add('file','file', array('attr'=>array('class'=>'default')))
             ->add('startDate','date', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>''),
@@ -90,9 +87,43 @@ class EventType extends AbstractType
                             ->orderBy('o.name','ASC');
                     },
             ))
-
-            ->add('status')
-        ;
+            ->add('latitude','text', array('attr'=>array('class'=>'m-wrap span12')))
+            ->add('longitude','text', array('attr'=>array('class'=>'m-wrap span12')))
+            ->add('location', 'entity', array(
+                'required'    => false,
+                'empty_value' => '---Select Location---',
+                'attr'=>array('class'=>'select2 span12'),
+                'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select customer location'))
+                ),
+                'choices'=> $this->LocationChoiceList(),
+                'choices_as_values' => true,
+                'choice_label' => 'nestedLabel',
+            ))
+            ->add('eventType', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'empty_value' => '---Select Event Type ---',
+                'expanded'      =>false,
+                'required'    => false,
+                'multiple'      =>false,
+                'choices' => array('Ongoing' => 'Ongoing',  'Upcoming' => 'Upcoming'),
+            ))
+            ->add('category', 'entity', array(
+                'required'    => false,
+                'class' => 'Setting\Bundle\ContentBundle\Entity\ModuleCategory',
+                'empty_value' => '---Select Category ---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('o')
+                        ->where("o.status = 1")
+                        ->andWhere(':module MEMBER OF o.module')
+                        ->setParameter('module', 7)
+                        ->andWhere("o.globalOption =".$this->globalOption)
+                        ->orderBy('o.name','ASC');
+                },
+            ));
     }
     
     /**
@@ -111,5 +142,11 @@ class EventType extends AbstractType
     public function getName()
     {
         return 'setting_bundle_contentbundle_page';
+    }
+
+    protected function LocationChoiceList()
+    {
+        return $syndicateTree = $this->location->getLocationOptionGroup();
+
     }
 }

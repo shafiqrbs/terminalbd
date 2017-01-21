@@ -34,55 +34,53 @@
             <div class="portlet box green tabbable">
 
                 <div class="portlet-title">
-                    <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
+                    <div class="caption"><i class="icon-reorder"></i>Add Gallery Image</div>
+                    <div class="actions">
+                        <div class="btn-group">
+                            <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <i class="icon-cogs"></i>&nbsp;Tools
+                                <i class="icon-tasks"></i>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                {% if entity.id > 0  %}
+                                    <li><a  href="{{ path('gallery_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;View</a></li>
+                                {% endif %}
+                                <li><a href="{{ path('gallery') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-
                 <div class="portlet-body">
+                    <div class="portlet-body form">
+                        {% include('flash-message.html.twig')  %}
+                        <!-- BEGIN FORM-->
+                        {{ form_start(form) }}
+                        {{ form_row(form._token) }}
+                        <div class="row-fluid">
+                            <div class="span12 ">
+                                <div class="control-group">
+                                    <div id="pluploadUploader">
+                                        <p>You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5 support.</p>
+                                    </div>
 
-                    <div class="tabbable portlet-tabs">
-                        <ul class="nav nav-tabs">
-                            {% if entity.id > 0  %}
-                                <li><a  href="{{ path('gallery_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;View</a></li>
-                            {% endif %}
-                            <li class=""><a  href="{{ path('gallery') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                            <li class="active"><a  href="javascript:"><i class="icon-edit"></i>&nbsp;Add/Edit</a></li>
-
-
-                        </ul>
-                        <div class="tab-content">
-
-                            <div class="portlet-body form">
-                                {% include('flash-message.html.twig')  %}
-                                <!-- BEGIN FORM-->
-                                {{ form_start(form) }}
-                                {{ form_row(form._token) }}
-                                    <div class="row-fluid">
-                                        <div class="span12 ">
-                                            <div class="control-group">
-                                                    <div id="pluploadUploader">
-                                                        <p>You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5 support.</p>
-                                                    </div>
-
-                                                    <div class="form-actions">
-                                                        <label for="item_itemName"  class="control-label col-md-5 required"></label>
-                                                        <div class="col-md-3">
-                                                            {%  set galleryId = app.request.query.get('galleryId') %}
-                                                            <input type="hidden" name="galleryId" value="{{ galleryId }}">
-                                                        </div>
-                                                    </div>
-                                            </div>
+                                    <div class="form-actions">
+                                        <label for="item_itemName"  class="control-label col-md-5 required"></label>
+                                        <div class="col-md-3">
+                                            {%  set galleryId = app.request.query.get('galleryId') %}
+                                            <input type="hidden" name="galleryId" value="{{ galleryId }}">
                                         </div>
                                     </div>
-                                <div class="form-actions portlet box grey">
-                                    <div class="pull-center">
-                                        <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
-                                        <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
-                                    </div>
                                 </div>
-                                {{ form_end(form) }}
-                                <!-- END FORM-->
                             </div>
                         </div>
+                        <div class="form-actions portlet box grey">
+                            <div class="pull-center">
+                                <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
+                                <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                        <!-- END FORM-->
                     </div>
                 </div>
             </div>

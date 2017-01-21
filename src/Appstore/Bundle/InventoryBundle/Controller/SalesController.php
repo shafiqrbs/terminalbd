@@ -445,7 +445,7 @@ class SalesController extends Controller
     public function deleteEmptyInvoiceAction()
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig' => $inventory, 'total' => 0));
+        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig' => $inventory, 'paymentStatus' => 'Pending','total' => 0));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity) {
             $em->remove($entity);

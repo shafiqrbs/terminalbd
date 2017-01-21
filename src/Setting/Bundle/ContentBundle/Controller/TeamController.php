@@ -37,7 +37,7 @@ class TeamController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=> $globalOption,'module'=>14),array('name' => 'asc'));
+        $entities = $em->getRepository('SettingContentBundle:Page')->getPagesFor($globalOption,'team');
         $entities = $this->paginate($entities);
 
         return $this->render('SettingContentBundle:Team:index.html.twig', array(
@@ -59,7 +59,7 @@ class TeamController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setUser($user);
             $entity->setGlobalOption($user->getGlobalOption());
-            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(13));
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'team')));
             $entity->upload();
             $em->persist($entity);
             $em->flush();

@@ -37,65 +37,68 @@ class HomePageType extends AbstractType
                     new Length(array('max'=>200))
                 )
             ))
-            ->add('file','file', array('attr'=>array('class'=>'default')))
-            ->add('content','textarea', array('attr'=>array('class'=>'wysihtml5 m-wrap span12','rows'=>15)))
-            ->add('photo_gallery', 'entity', array(
-                'required'    => false,
-                'class' => 'Setting\Bundle\MediaBundle\Entity\PhotoGallery',
-                'empty_value' => '---Select Photo Gallery---',
-                'property' => 'name',
-                'attr'=>array('class'=>'m-wrap select2 span12'),
-                'query_builder' => function(EntityRepository $er){
-                        return $er->createQueryBuilder('o')
-                            ->andWhere("o.status = 1")
-                            ->andWhere("o.globalOption = $this->globalOption")
-                            ->orderBy('o.name','ASC');
-                    },
-            ))
+            ->add('showAbout')
+            ->add('featureText','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4)))
+            ->add('content','textarea', array('attr'=>array('class'=>'wysihtml5 m-wrap span12','rows'=>10)))
+            /*
+           ->add('file','file', array('attr'=>array('class'=>'default')))
+           ->add('photo_gallery', 'entity', array(
+               'required'    => false,
+               'class' => 'Setting\Bundle\MediaBundle\Entity\PhotoGallery',
+               'empty_value' => '---Select Photo Gallery---',
+               'property' => 'name',
+               'attr'=>array('class'=>'m-wrap select2 span12'),
+               'query_builder' => function(EntityRepository $er){
+                       return $er->createQueryBuilder('o')
+                           ->andWhere("o.status = 1")
+                           ->andWhere("o.globalOption = $this->globalOption")
+                           ->orderBy('o.name','ASC');
+                   },
+           ))
 
-            /*->add('syndicateModules', 'entity', array(
-                'required'      => true,
-                'expanded'      =>true,
-                'multiple'      =>true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\SyndicateModule',
-                'property' => 'name',
-                'attr'=>array('class'=>'check-list span12'),
-                'query_builder' => function(EntityRepository $er){
-                        return $er->createQueryBuilder('sm')
-                            ->where("sm.status = 1")
-                            ->andWhere("sm.isHome = 1")
-                            ->andWhere(':siteSetting MEMBER OF sm.siteSettings')
-                            ->setParameter('siteSetting',$this->siteSettingId)
-                            ->orderBy('sm.name','ASC');
+          ->add('syndicateModules', 'entity', array(
+               'required'      => true,
+               'expanded'      =>true,
+               'multiple'      =>true,
+               'class' => 'Setting\Bundle\ToolBundle\Entity\SyndicateModule',
+               'property' => 'name',
+               'attr'=>array('class'=>'check-list span12'),
+               'query_builder' => function(EntityRepository $er){
+                       return $er->createQueryBuilder('sm')
+                           ->where("sm.status = 1")
+                           ->andWhere("sm.isHome = 1")
+                           ->andWhere(':siteSetting MEMBER OF sm.siteSettings')
+                           ->setParameter('siteSetting',$this->siteSettingId)
+                           ->orderBy('sm.name','ASC');
 
-                    },
+                   },
 
-            ))
-            ->add('modules', 'entity', array(
-                'required'      => true,
-                'expanded'      =>true,
-                'multiple'      =>true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\Module',
-                'property' => 'name',
-                'attr'=>array('class'=>'check-list span12'),
-                'query_builder' => function(EntityRepository $er){
-                        return $er->createQueryBuilder('sm')
-                            ->where("sm.status = 1")
-                            ->andWhere("sm.isHome = 1")
-                            ->andWhere(':siteSetting MEMBER OF sm.siteSettings')
-                            ->setParameter('siteSetting',$this->siteSettingId)
-                            ->orderBy('sm.name','ASC');
-                    },
+           ))
+           ->add('modules', 'entity', array(
+               'required'      => true,
+               'expanded'      =>true,
+               'multiple'      =>true,
+               'class' => 'Setting\Bundle\ToolBundle\Entity\Module',
+               'property' => 'name',
+               'attr'=>array('class'=>'check-list span12'),
+               'query_builder' => function(EntityRepository $er){
+                       return $er->createQueryBuilder('sm')
+                           ->where("sm.status = 1")
+                           ->andWhere("sm.isHome = 1")
+                           ->andWhere(':siteSetting MEMBER OF sm.siteSettings')
+                           ->setParameter('siteSetting',$this->siteSettingId)
+                           ->orderBy('sm.name','ASC');
+                   },
 
-            ))
-            ->add('showingListing', 'choice', array(
-                'choices'  => array(3 => 3, 5 => 5),
-                'attr'=>array('class'=>'radio-list'),
-                'expanded' => true,
-                'multiple' => false,
-                'data'     => 1
+           ))
+           ->add('showingListing', 'choice', array(
+               'choices'  => array(3 => 3, 5 => 5),
+               'attr'=>array('class'=>'radio-list'),
+               'expanded' => true,
+               'multiple' => false,
+               'data'     => 1
 
-            ))*/
+           ))*/
 
         ;
 

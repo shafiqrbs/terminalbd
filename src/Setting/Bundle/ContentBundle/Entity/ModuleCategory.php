@@ -56,6 +56,11 @@ class ModuleCategory
     protected $pages;
 
     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", mappedBy="category" )
+     **/
+    protected $page;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="moduleCategories" )
      **/
     protected $globalOption;
@@ -171,6 +176,14 @@ class ModuleCategory
     public function getPages()
     {
         return $this->pages;
+    }
+
+    /**
+     * @return Page
+     */
+    public function getPage()
+    {
+        return $this->page;
     }
 
 }

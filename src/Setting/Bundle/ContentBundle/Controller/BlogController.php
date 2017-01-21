@@ -38,7 +38,7 @@ class BlogController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=> $globalOption,'module'=>2),array('name' => 'asc'));
+        $entities = $em->getRepository('SettingContentBundle:Page')->getPagesFor($globalOption,'blog');
         $entities = $this->paginate($entities);
 
         return $this->render('SettingContentBundle:Blog:index.html.twig', array(
@@ -58,7 +58,9 @@ class BlogController extends Controller
         $user = $this->getUser();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(2));
+
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'blog')));
+            $entity->setUser($user);
             $entity->setGlobalOption($user->getGlobalOption());
             $entity->upload();
             $em->persist($entity);
@@ -85,8 +87,9 @@ class BlogController extends Controller
     private function createCreateForm(Page $entity)
     {
 
-        $globalOption = $this->getUser()->getGlobalOption()->getId();
-        $form = $this->createForm(new BlogType($globalOption), $entity, array(
+        $globalOption = $this->getUser()->getGlobalOption();
+        $module = $this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'blog'));
+        $form = $this->createForm(new BlogType($globalOption,$module), $entity, array(
             'action' => $this->generateUrl('blog_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -160,8 +163,9 @@ class BlogController extends Controller
      */
     private function createEditForm(Page $entity)
     {
-        $globalOption = $this->getUser()->getGlobalOption()->getId();
-        $form = $this->createForm(new BlogType($globalOption), $entity, array(
+        $globalOption = $this->getUser()->getGlobalOption();
+        $module = $this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'blog'));
+        $form = $this->createForm(new BlogType($globalOption,$module), $entity, array(
             'action' => $this->generateUrl('blog_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

@@ -65,15 +65,21 @@
                         <div class="text-center">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <p class="home-feature">{{ homeEntity.content|raw }}</p>
+                                    <p class="home-feature">{{ homeEntity.featureText|raw }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        {{ homeEntity.content|raw }}
+                    </div>
+                </div>
             </div>
         </section>
     {% endif %}
+    {% if homeEntity.showAbout == 1 %}
     <section class="section-divide">
         <div class="container">
             <div class="header-double-line-right">
@@ -86,6 +92,7 @@
             </div>
         </div>
     </section>
+    {% endif %}
     <!-- Page Content -->
     {% for mod in  homeEntity.pageModules %}
             {% if globalOption.siteSetting.modules.contains(mod.module) %}

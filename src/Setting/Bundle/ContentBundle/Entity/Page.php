@@ -160,8 +160,6 @@ class Page
      */
     private $youtube;
 
-
-
     /**
      * @var string
      *
@@ -298,6 +296,11 @@ class Page
     protected $moduleCategory;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", inversedBy="page")
+     **/
+    protected $category;
+
+    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\PageMeta", mappedBy="page" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
@@ -344,10 +347,6 @@ class Page
      */
     private $longitude;
 
-
-
-
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -365,6 +364,12 @@ class Page
      */
     private $feature = false;
 
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="eventType",type="string", length=50, type="text", nullable=true )
+     */
+    private $eventType;
 
     /**
      * Get id
@@ -1186,6 +1191,40 @@ class Page
     public function setLongitude($longitude)
     {
         $this->longitude = $longitude;
+    }
+
+    /**
+     * @return text
+     */
+    public function getEventType()
+    {
+        return $this->eventType;
+    }
+
+    /**
+     * @param text $eventType
+     * Ongoing
+     * Upcoming
+     */
+    public function setEventType($eventType)
+    {
+        $this->eventType = $eventType;
+    }
+
+    /**
+     * @return ModuleCategory
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param ModuleCategory $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
     }
 
 }

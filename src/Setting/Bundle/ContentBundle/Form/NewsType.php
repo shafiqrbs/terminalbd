@@ -49,7 +49,7 @@ class NewsType extends AbstractType
                     return $er->createQueryBuilder('o')
                         ->where("o.status = 1")
                         ->andWhere(':module MEMBER OF o.module')
-                        ->setParameter('module', 1)
+                        ->setParameter('module', 4)
                         ->andWhere("o.globalOption =".$this->globalOption->getId())
                         ->orderBy('o.name','ASC');
                 },

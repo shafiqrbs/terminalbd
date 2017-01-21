@@ -3,6 +3,8 @@
 namespace Setting\Bundle\ContentBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Entity\Module;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -12,11 +14,13 @@ class BlogType extends AbstractType
 {
 
 
+    private $module;
     private $globalOption;
 
-    public function __construct($globalOption)
+    public function __construct(GlobalOption $globalOption, Module $module)
     {
-        $this->globalOption = $globalOption;
+        $this->globalOption = $globalOption->getId();
+        $this->module = $module->getId();
 
     }
 
@@ -38,6 +42,21 @@ class BlogType extends AbstractType
             ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter author designation')))
             ->add('file','file', array('attr'=>array('class'=>'default')))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 wysihtml5 m-wrap','rows'=>15)))
+            ->add('category', 'entity', array(
+                'required'    => false,
+                'class' => 'Setting\Bundle\ContentBundle\Entity\ModuleCategory',
+                'empty_value' => '---Select Category---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('o')
+                        ->where("o.status = 1")
+                        ->andWhere(':module MEMBER OF o.module')
+                        ->setParameter('module',  $this->module)
+                        ->andWhere("o.globalOption =".$this->globalOption)
+                        ->orderBy('o.name','ASC');
+                },
+            ))
             ->add('photo_gallery', 'entity', array(
                 'required'    => false,
                 'class' => 'Setting\Bundle\MediaBundle\Entity\PhotoGallery',
@@ -47,7 +66,7 @@ class BlogType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                         return $er->createQueryBuilder('o')
                             ->andWhere("o.status = 1")
-                            ->andWhere("o.globalOption = $this->globalOption ")
+                            ->andWhere("o.globalOption = $this->globalOption")
                             ->orderBy('o.name','ASC');
                     },
             ))

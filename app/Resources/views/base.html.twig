@@ -179,6 +179,7 @@
 'assets/plugins/jquery-easy-confirm/jquery.easy.confirm.js'
 'assets/plugins/plupload/js/plupload.full.js'
 'assets/plugins/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js'
+'assets/plugins/fancybox/source/jquery.fancybox.pack.js'
 'assets/plugins/jquery-ui/sortable.js'
 'assets/module/numeric/jquery.numeric.js'
 'assets/scripts/jquery.mjs.nestedSortable.js'
@@ -189,6 +190,7 @@
 'assets/scripts/ui-jqueryui.js'
 'assets/scripts/form-components.js'
 'assets/scripts/table-advanced.js'
+
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 
@@ -197,6 +199,17 @@
 {% endblock %}
 {#'http://bp.yahooapis.com/2.4.21/browserplus-min.js'#}
 <script type="text/javascript">
+
+    var Gallery = function () {
+        return {
+            //main function to initiate the module
+            init: function () {
+                App.initFancybox();
+            }
+        };
+
+    }();
+
     jQuery(document).ready(function () {
 
 
