@@ -136,7 +136,7 @@ class PurchaseVendorItem
      *          @Gedmo\SlugHandlerOption(name="parentRelationField", value="masterItem"),
      *          @Gedmo\SlugHandlerOption(name="separator", value="-")
      *      })
-     * }, fields={"webName"})
+     * }, fields={"webName","code"})
      * @Doctrine\ORM\Mapping\Column(length=255, unique=true, nullable = true)
      */
     private $slug;

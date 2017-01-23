@@ -6,6 +6,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Doctrine\ORM\Mapping as ORM;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ContentBundle\Entity\Page;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -37,6 +38,11 @@ class Feature
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidgetItem", mappedBy="feature" )
      **/
     private  $featureWidgetItems;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", inversedBy="sidebarFeature" )
+     **/
+    private  $page;
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel", mappedBy="feature" )
@@ -489,6 +495,22 @@ class Feature
     public function getFeatureWidgetItems()
     {
         return $this->featureWidgetItems;
+    }
+
+    /**
+     * @return Page
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * @param Page $page
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
     }
 
 }

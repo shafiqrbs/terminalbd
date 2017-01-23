@@ -1,7 +1,7 @@
 <div class="page-header sidebar-title">
     <h3>{{ details.name }}</h3>
     <span>
-        <i class="fa fa-user"></i>&nbsp;{{ details.authorName }}, <i class="fa fa-calendar"></i>&nbsp;{{ details.updated|date('d-F-Y') }}
+        <i class="fa fa-user"></i>&nbsp;{{ details.authorName }}&nbsp;&nbsp;&nbsp;<i class="fa fa-calendar"></i>&nbsp;{{ details.updated|date('d F, Y') }}
         <i class="fa fa-tags"></i>
         {% for cat in details.moduleCategory %}
             <a href="{{ path('webservice_module_category',{'subdomain': globalOption.subDomain,'module':module.name|lower ,'slug':cat.slug }) }}">{{ cat.name }}</a>
@@ -11,7 +11,7 @@
 {% if details.webPath is not empty %}
     <img class="img-responsive displayed" src="{{ image(details.webPath).resize() }}" alt="" />
 {% endif %}
-<p>{{ details.content|raw }}</p>
+<div class="page-content">{{ details.content|raw }}</div>
 <div class="mysharing">
     <div class="fb-follow" data-href="https://www.facebook.com/Umarit-150101098794148/?ref=bookmarks" data-layout="button_count" data-size="small" data-show-faces="true"></div>
     <div class="fb-like" data-href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':details.slug }) }}" data-width="600px" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>

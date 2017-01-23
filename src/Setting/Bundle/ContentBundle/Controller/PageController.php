@@ -64,8 +64,9 @@ class PageController extends Controller
         if ($form->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
+            $entity->setUser($this->getUser());
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
-            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(12));
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'page')));
             $entity ->upload();
             $em->persist($entity);
             $em->flush();

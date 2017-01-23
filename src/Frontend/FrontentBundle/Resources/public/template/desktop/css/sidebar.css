@@ -2,6 +2,16 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.theme.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.transitions.css");
 
+
+.mysharing{
+    margin-bottom: 40px;
+}
+.blog-sidebar{
+    padding: 0;
+}
+.thumbnail{
+    border-radius:0;
+}
 /** ##################################### Sidebar Pagination ####################################### */
 .owl-theme .owl-controls {
     text-align: right;
@@ -12,7 +22,7 @@
     right: 0;
 }
 .owl-theme .owl-controls .owl-buttons div{
-    background:#e74c3c;
+    background:#151515;
     border-radius: 0;
     opacity: 1;
     padding: 5px 10px;
@@ -26,8 +36,25 @@
 .owl-next:before{
     content: "\f054";
 }
+.media {
+    border-bottom: none!important;
+    padding-bottom: 12px;
+}
+.page-block{
+    position: relative;
+    clear: both;
+}
+
+.page-block .page-slide-box{
+    position: absolute; top:-4px; right: 15px
+}
+
+
+
+/** ##################################### Sidebar Page & Category  ####################################### */
 
 /** ##################################### Sidebar Blog ####################################### */
+
 
 .sidebar-blog{
     margin: 0;
@@ -78,7 +105,7 @@
     line-height: 59px;
     border-radius: 50%;
     color:#fff;
-    background:#333;
+    background:#e74c3c;
     font-size:20px;
     transform: scale(1,1);
     transition: all 0.20s linear;
@@ -96,7 +123,6 @@
 }
 .sidebar-blog .post-title a{
     display: block;
-    color: #333;
     text-align:center;
     font-weight: bold;
     transition: all 0.50s ease 0s;
@@ -104,7 +130,6 @@
 }
 .sidebar-blog .post-title a:hover{
     text-decoration: none;
-    color: #e74c3c;
 }
 
 .sidebar-blog .post-info{
@@ -128,13 +153,11 @@
     list-style:none;
     display: inline-block;
 }
-.blog-slide .tag-info li a{
-    color:#808080;
+.sidebar-blog .tag-info li a{
     text-transform:capitalize;
 }
-.blog-slide .tag-info li a:hover{
+.sidebar-blog .tag-info li a:hover{
     text-decoration:underline;
-    color: #e74c3c;
 }
 .sidebar-blog .post-description{
     color: #828282;
@@ -146,13 +169,364 @@
     float: right;
     margin-right:25px;
     text-transform:capitalize;
-    font-weight: bold;
 }
 .sidebar-blog .read-more:hover{
     text-decoration:underline;
-    color: #e74c3c;
 }
 
+/** ##################################### End Sidebar Blog ####################################### */
+
+/** ##################################### Sidebar Branch ####################################### */
+
+.sidebar-branch {
+    border: 1px solid #d3d3d3;
+    padding: 20px;
+    background: #fff;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+.sidebar-branch dl dd{
+    line-height: 30px;
+}
+.sidebar-branch dl dd i.fa{
+    width: 25px;
+
+}
+
+/** ##################################### End Sidebar Branch ####################################### */
+
+/** ##################################### Sidebar Feature ####################################### */
+
+.sidebar-feature{
+    position:relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.sidebar-feature img{
+    width:100%;
+    height: auto;
+}
+.sidebar-feature .over-layer{
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    transform:translateY(-100%);
+    transition:all 0.50s linear;
+}
+.sidebar-feature:hover .over-layer{
+    transform:translateY(0);
+}
+.sidebar-feature .social-links{
+    padding:0;
+    margin:0;
+    list-style:none;
+    text-align:center;
+    position:relative;
+    top:45%;
+}
+.sidebar-feature .social-links li{
+    display:inline-block;
+    margin-right:10px;
+}
+.sidebar-feature .social-links li a{
+    border:1px solid #808080;
+    padding:8px;
+    color:#fff;
+    font-size:20px;
+}
+.sidebar-feature .social-links li a.fa-link:hover
+{
+    background: #e74c3c;
+    text-decoration:none;
+}
+
+
+@media only screen and (max-width: 990px) {
+    .box{
+        margin-bottom:15px;
+    }
+}
+
+/** ##################################### End Sidebar Feature ####################################### */
+/** #####################################  Sidebar Client & Sponsor  ####################################### */
+
+.client-sidebar{
+    position: relative;
+    overflow: hidden;
+}
+.client-sidebar .social-links{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    top: 30%;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.40s linear 0s ;
+}
+.client-sidebar:hover .social-links{
+    opacity: 1;
+}
+.client-sidebar .social-links li{
+    display: inline-block;
+    margin: 0 5px;
+    border: none !important;
+}
+.client-sidebar .social-links li a{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    line-height: 30px;
+    color: #ffffff;
+    text-align: center;
+    background: #e74c3c;
+}
+.client-sidebar .social-links li a:hover {
+    text-decoration: none;
+}
+.client-sidebar .social-links li .fa-link:hover{
+    color: #ffffff;
+    text-underline: none;
+}
+.client-sidebar .over-layer{
+    width: 100%;
+    padding: 15px;
+    background: #e74c3c;
+    position: absolute;
+    bottom: -100%;
+    left: 0;
+    transition: bottom 0.40s linear 0s ;
+}
+
+@media only screen and (max-width: 990px) {
+    .client-sidebar{ margin-bottom:20px; }
+}
+
+/** #####################################  End Sidebar Client & Sponsor  ####################################### */
+/** #####################################  Sidebar Event  ####################################### */
+
+.event-sidebar{
+    position:relative;
+    border: 1px solid #d3d3d3;
+}
+.event-sidebar .post-img{
+    position: relative;
+}
+.event-sidebar .overlay{
+    background: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    transition: opacity 0.2s ease 0s;
+}
+.event-sidebar  .post-img:hover .overlay{
+    opacity:1;
+}
+.event-sidebar .overlay > i{
+    position: absolute;
+    top:40%;
+    left: 45%;
+    opacity:0;
+    color:#e74c3c;
+    transform:translate(-50%, -50%) scale(8);
+    transition:transform 0.40s linear, opacity 0.40s linear;
+}
+.event-sidebar .overlay:hover i{
+    transform: translate(50%,50%) scale(2);
+    opacity:1;
+}
+.event-sidebar .post-review{
+    padding:17px 17px 17px 5px;
+    background: #fff;
+}
+.event-sidebar .post-comment{
+    float:left;
+    margin:0;
+    padding:7px 0 0 0;
+    line-height:1;
+    text-align:center;
+}
+.event-sidebar .post-comment li{
+    list-style:none;
+    margin-left: 15px;
+    font-size:26px;
+    color:darkgray;
+    font-weight:700;
+}
+.event-sidebar:hover .post-comment li{
+    color:#e74c3c;
+}
+.event-sidebar .post-comment li small{
+    display:block;
+    margin-bottom:10px;
+    font-size: 13px;
+    text-transform: capitalize;
+}
+.event-sidebar .post-comment li a,
+.event-sidebar:hover .post-comment li small{
+    color:darkgray;
+}
+.event-sidebar .post-comment li:after{
+    content: "";
+    border-bottom:1px solid lightgray;
+    margin-bottom:10px;
+    display: block;
+}
+.event-sidebar .post-comment li:last-child:after{
+    border-bottom: 0 none;
+    margin-bottom: 0;
+}
+.event-sidebar .post-title{
+    margin: 0;
+    padding: 0 0 0 70px;
+}
+.event-sidebar .post-title > a{
+    color: #444;
+    text-transform: capitalize;
+    margin-bottom: 15px;
+    display: block;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+.event-sidebar .post-title > a:hover{
+    color:#e74c3c;
+}
+.event-sidebar .post-description{
+    font-size:13px;
+    color:gray;
+    line-height:21px;
+    padding: 0 0 0 70px;
+}
+
+/** #####################################  End Sidebar Event  ####################################### */
+/** #####################################  Sidebar faq  ####################################### */
+
+#sidebar-accordion .panel{
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    margin-bottom: -5px;
+}
+#sidebar-accordion .panel-heading{
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    text-align: center;
+}
+#sidebar-accordion .panel-title a{
+    display: block;
+    padding: 10px 30px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    background: #333;
+    border-bottom: 1px solid #4a4a4a;
+    position: relative;
+    transition: all 0.5s ease 0s;
+}
+#sidebar-accordion .panel-title a:hover{
+    background: #4a4a4a;
+}
+#sidebar-accordion .panel-title a:after,
+#sidebar-accordion .panel-title a.collapsed:after{
+    content: "\f067";
+    font-family: FontAwesome;
+    font-size: 10px;
+    font-weight: 200;
+    position: absolute;
+    top: 12px;
+    left: 15px;
+    transform: rotate(135deg);
+    transition: all 0.5s ease 0s;
+}
+#sidebar-accordion .panel-title a.collapsed:after{
+    transform: rotate(0deg);
+}
+#sidebar-accordion .panel-body{
+    background: #e74c3c;
+    padding: 0 0 0 30px;
+    border: none;
+    position: relative;
+}
+#sidebar-accordion .panel-body p{
+    font-size: 14px;
+    color: #4a4a4a;
+    line-height: 25px;
+    background: #F9DECD;
+    padding: 15px;
+    margin: 0;
+}
+#sidebar-accordion .panel-collapse .panel-body p{
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.5s ease-in-out 0s;
+}
+#sidebar-accordion .panel-collapse.in .panel-body p{
+    opacity: 1;
+    transform: scale(1);
+}
+
+
+/** #####################################  End Sidebar faq  ####################################### */
+/** #####################################  Sidebar Notice Board  ####################################### */
+
+.notice-list{
+    padding-right:20px;
+}
+.notice-list .post-date{
+    float:left;
+    margin-right: 10px;
+    padding: 8px 15px;
+    text-align:center;
+    background:#444;
+    font-size:26px;
+    color:#fff;
+    font-weight:700;
+    transition:background 0.20s linear 0s;
+}
+.notice-list:hover .post-date{
+    background:#078071;
+}
+.notice-list .post-date small{
+    display:block;
+    margin-bottom:10px;
+    font-size: 13px;
+    text-transform: capitalize;
+}
+.notice-list .post-date small:before{
+    content:"";
+    display:block;
+    margin-bottom:5px;
+    border-top:1px solid #fff;
+}
+
+.post-slide .post-title{
+    margin: 0;
+    padding-top: 15px;
+}
+
+.notice-list .post-title a{
+    font-size:15px;
+    color: #444;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+    line-height:20px;
+    font-weight: bold;
+}
+
+.notice-list:hover .post-title a{
+    color:#078071;
+    text-decoration:none;
+}
+
+/** #####################################  End Sidebar Notice Board  ####################################### */
 
 .box-sidebar-testimonial{
     margin:0;
@@ -229,101 +603,7 @@
     }
 }
 
-.post-slide{
-    position:relative;
-    padding-right:14px;
-}
-.post-slide .post-img{
-    position: relative;
-}
-.post-slide .overlay{
-    background: rgba(0, 0, 0, 0.6);
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    transition: opacity 0.2s ease 0s;
-}
-.post-slide  .post-img:hover .overlay{
-    opacity:1;
-}
-.post-slide .overlay > i{
-    position: absolute;
-    top:40%;
-    left: 45%;
-    opacity:0;
-    color:#e74c3c;
-    transform:translate(-50%, -50%) scale(8);
-    transition:transform 0.40s linear, opacity 0.40s linear;
-}
-.post-slide .overlay:hover i{
-    transform: translate(50%,50%) scale(2);
-    opacity:1;
-}
-.post-slide .post-review{
-    padding:17px 17px 17px 5px;
-    background: #fff;
-}
-.post-slide .post-comment{
-    float:left;
-    margin:0;
-    padding:7px 0 0 0;
-    line-height:1;
-    text-align:center;
-}
-.post-slide .post-comment li{
-    list-style:none;
-    margin-left: 15px;
-    font-size:26px;
-    color:darkgray;
-    font-weight:700;
-}
-.post-slide:hover .post-comment li{
-    color:#e74c3c;
-}
-.post-slide .post-comment li small{
-    display:block;
-    margin-bottom:10px;
-    font-size: 13px;
-    text-transform: capitalize;
-}
-.post-slide .post-comment li a,
-.post-slide:hover .post-comment li small{
-    color:darkgray;
-}
-.post-slide .post-comment li:after{
-    content: "";
-    border-bottom:1px solid lightgray;
-    margin-bottom:10px;
-    display: block;
-}
-.post-slide .post-comment li:last-child:after{
-    border-bottom: 0px none;
-    margin-bottom: 0;
-}
-.post-slide .post-title{
-    margin: 0;
-    padding: 0 0 0 70px;
-}
-.post-slide .post-title > a{
-    font-size:17px;
-    color: #444;
-    text-transform: uppercase;
-    margin-bottom: 15px;
-    display: block;
-    letter-spacing: 1px;
-    font-weight: bold;
-}
-.post-slide .post-title > a:hover{
-    color:#e74c3c;
-}
-.post-slide .post-description{
-    font-size:13px;
-    color:gray;
-    line-height:21px;
-    padding: 0 0 0 70px;
-}
+
 
 .sidebar-serviceBox{
     border: 1px solid #ededed;
@@ -390,70 +670,6 @@ a:hover,a:focus{
     outline: none;
 }
 
-#sidebar-accordion .panel{
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
-    margin-bottom: -5px;
-}
-#sidebar-accordion .panel-heading{
-    padding: 0;
-    border-radius: 0;
-    border: none;
-    text-align: center;
-}
-#sidebar-accordion .panel-title a{
-    display: block;
-    padding: 10px 30px;
-    font-size: 12px;
-    font-weight: bold;
-    color: #fff;
-    background: #333;
-    border-bottom: 1px solid #4a4a4a;
-    position: relative;
-    transition: all 0.5s ease 0s;
-}
-#sidebar-accordion .panel-title a:hover{
-    background: #4a4a4a;
-}
-#sidebar-accordion .panel-title a:after,
-#sidebar-accordion .panel-title a.collapsed:after{
-    content: "\f067";
-    font-family: FontAwesome;
-    font-size: 10px;
-    font-weight: 200;
-    position: absolute;
-    top: 12px;
-    left: 15px;
-    transform: rotate(135deg);
-    transition: all 0.5s ease 0s;
-}
-#sidebar-accordion .panel-title a.collapsed:after{
-    transform: rotate(0deg);
-}
-#sidebar-accordion .panel-body{
-    background: #167ea0;
-    padding: 0 0 0 30px;
-    border: none;
-    position: relative;
-}
-#sidebar-accordion .panel-body p{
-    font-size: 14px;
-    color: #fff;
-    line-height: 25px;
-    background: #3296b7;
-    padding: 15px;
-    margin: 0;
-}
-#sidebar-accordion .panel-collapse .panel-body p{
-    opacity: 0;
-    transform: scale(0.9);
-    transition: all 0.5s ease-in-out 0s;
-}
-#sidebar-accordion .panel-collapse.in .panel-body p{
-    opacity: 1;
-    transform: scale(1);
-}
 
 
 
@@ -481,52 +697,7 @@ a:hover,a:focus{
     }
 }
 
-.notice-list{
-    padding-right:20px;
-}
-.notice-list .post-date{
-    float:left;
-    margin-right: 10px;
-    padding: 8px 15px;
-    text-align:center;
-    background:#444;
-    font-size:26px;
-    color:#fff;
-    font-weight:700;
-    transition:background 0.20s linear 0s;
-}
-.notice-list:hover .post-date{
-    background:#078071;
-}
-.notice-list .post-date small{
-    display:block;
-    margin-bottom:10px;
-    font-size: 13px;
-    text-transform: capitalize;
-}
-.notice-list .post-date small:before{
-    content:"";
-    display:block;
-    margin-bottom:5px;
-    border-top:1px solid #fff;
-}
-.post-slide .post-title{
-    margin: 0;
-    padding-top: 15px;
-}
-.notice-list .post-title a{
-    font-size:15px;
-    color: #444;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-    display: block;
-    line-height:20px;
-    font-weight: bold;
-}
-.notice-list:hover .post-title a{
-    color:#078071;
-    text-decoration:none;
-}
+
 
 .box-sidebar-portfolio{
     position: relative;

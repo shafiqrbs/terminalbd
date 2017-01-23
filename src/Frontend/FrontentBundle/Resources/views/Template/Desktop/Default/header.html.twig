@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-inverse">
     <section id="top-bar">
         <div class="container" id="menu">
             <div class="row">
@@ -39,7 +39,7 @@
             <a class="img-logo" href="{{ path('ecommercesubdomain') }}">{% if globalOption.templateCustomize.webPath('logo') is not empty %}<img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" alt="company logo" />{% else %}{{ globalOption.name }}{% endif %}</a>
         </div>
     </div>
-    <section id="menu-bar" >
+    <section id="menu-bar" class="default" >
         <div class="container" id="menu">
             <div class="row">
                 <div class=" {% if globalOption.templateCustomize.showSearch == 1 %} col-md-8 {% else %}col-md-12 {% endif %}">

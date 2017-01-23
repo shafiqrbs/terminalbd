@@ -48,7 +48,6 @@ class PurchaseVendorItemListener
         if (empty($lastCode)) {
             return 0;
         }
-
         return $lastCode;
     }
 
@@ -64,13 +63,6 @@ class PurchaseVendorItemListener
         $sku            = $masterItem.$code;
 
         $data = array('sku'=> $sku);
-        return $data;
-    }
-
-
-    private  function getStrPad($lastCode,$limit)
-    {
-        $data = str_pad($lastCode,$limit, '0', STR_PAD_LEFT);
         return $data;
     }
 

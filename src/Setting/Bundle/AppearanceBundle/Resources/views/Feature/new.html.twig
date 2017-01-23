@@ -98,7 +98,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row-fluid hide" id="Category">
+                                <div class="row-fluid {% if entity.targetTo != 'Category' %}hide{% endif %}" id="Category">
                                     <div class="span12 ">
                                         <div class="control-group">
                                             <label class="control-label" >Category</label>
@@ -110,7 +110,19 @@
                                     </div>
 
                                 </div>
-                                <div class="row-fluid hide" id="Promotion">
+                                <div class="row-fluid {% if entity.targetTo != 'Page' %}hide{% endif %}" id="Page">
+                                    <div class="span12 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Page</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.page) }}
+                                                {{ form_errors(form.page) }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row-fluid {% if entity.targetTo != 'Promotion' %}hide{% endif %}" id="Promotion">
                                     <div class="span12 ">
                                         <div class="control-group">
                                             <label class="control-label" >Promotion</label>
@@ -122,7 +134,7 @@
                                     </div>
 
                                 </div>
-                                <div class="row-fluid hide" id="Tag">
+                                <div class="row-fluid {% if entity.targetTo != 'Tag' %}hide{% endif %}" id="Tag">
                                     <div class="span12 ">
                                         <div class="control-group">
                                             <label class="control-label" >Tag</label>
@@ -133,7 +145,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row-fluid hide" id="Discount">
+                                <div class="row-fluid {% if entity.targetTo != 'Discount' %}hide{% endif %}" id="Discount">
                                     <div class="span12 ">
                                         <div class="control-group">
                                             <label class="control-label" >Discount</label>

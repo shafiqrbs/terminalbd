@@ -95,6 +95,19 @@ class FeatureType extends AbstractType
                         ->orderBy('e.name','ASC');
                 },
             ))
+            ->add('page', 'entity', array(
+                'required'    => false,
+                'class' => 'Setting\Bundle\ContentBundle\Entity\Page',
+                'empty_value' => '---Select page---',
+                'property' => 'name',
+                'attr'=>array('class'=>'m-wrap span12 '),
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.globalOption =".$this->globalOption->getId())
+                        ->orderBy('e.name','ASC');
+                },
+            ))
             ->add('targetTo', 'choice', array(
                 'attr'=>array('class'=>'span12  m-wrap targetTo'),
                 'empty_value' => '---Select Target URL ---',
@@ -102,6 +115,7 @@ class FeatureType extends AbstractType
                 'multiple'      =>false,
                 'choices' => array(
                     'Category'          => 'Category',
+                    'Page'              => 'Page',
                     'Promotion'         => 'Promotion',
                     'Tag'               => 'Tag',
                     'Discount'          => 'Discount'

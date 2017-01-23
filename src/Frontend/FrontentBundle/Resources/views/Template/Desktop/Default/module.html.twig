@@ -37,6 +37,20 @@
         </article>
         <!-- Blog Sidebar Column -->
         <aside class="col-md-4 sidebar-padding js-equal-height" style="background: #FBFCFE">
+            {% if sidebar.feature is not empty %}
+                {% for entity in sidebar.feature %}
+                    <div class="sidebar-feature">
+                        <img src="{{ image(entity.webPath).resize() }}" alt="">
+                        <div class="over-layer">
+                            <ul class="social-links">
+                                {% if entity.targetTo == 'Page' %}
+                                    <li class=""><a  href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':entity.page.module.slug,'slug':entity.page.slug}) }}" class="fa fa-link"></a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
             {% if sidebar is not empty %}
                 {% for module in sidebar.module %}
                     {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'module':module.id}) %}

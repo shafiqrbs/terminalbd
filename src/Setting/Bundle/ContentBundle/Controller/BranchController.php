@@ -24,7 +24,7 @@ class BranchController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption' => $globalOption,'module'=>6),array('name' => 'asc'));
+        $entities = $em->getRepository('SettingContentBundle:Page')->getPagesFor($globalOption,'branch');
         return $this->render('SettingContentBundle:Branch:index.html.twig', array(
             'pagination' => $entities,
         ));
@@ -42,7 +42,7 @@ class BranchController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setUser($this->getUser());
-            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->find(6));
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug'=> 'branch')));
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
             $em->persist($entity);
             $em->flush();

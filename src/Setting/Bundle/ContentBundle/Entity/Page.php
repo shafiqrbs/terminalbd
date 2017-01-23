@@ -286,6 +286,11 @@ class Page
     protected $featureWidgets;
 
     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="page" , cascade={"persist", "remove"})
+     */
+    protected $sidebarFeature;
+
+    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\HomeSlider", mappedBy="page" )
      **/
     protected $homeSliders;
@@ -326,6 +331,7 @@ class Page
      * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="page" , cascade={"persist", "remove"} )
      **/
     protected  $nav;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="page")

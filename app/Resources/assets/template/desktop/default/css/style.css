@@ -48,7 +48,7 @@ body { color: #313131; font-family: 'Open Sans'; }
 ::-webkit-selection { background: #151515;color:#fff; }
 ::selection { background: #151515;color:#fff;}
 html, body { height: 100%; }
-a{color:#151515;text-decoration:none}
+a{color:#e74c3c;text-decoration:none}
 a:focus,a:hover{color:#313131;text-decoration:none;}
 .img-portfolio { margin-bottom: 30px; }
 .img-hover:hover { opacity: 0.8; }
@@ -577,9 +577,9 @@ ul.nav-pills  { text-align: center; margin: 25px auto 20px auto; width: auto; di
     z-index: -1;
     float: left;
     width: 100%;
-    margin-top: 130px;
+    margin-top:0;
     padding: 20px 0 20px;
-    background-color: #FAFAFA;
+    background-color: #F9DECD;
 }
 
 #breadcrumb .crumb i{

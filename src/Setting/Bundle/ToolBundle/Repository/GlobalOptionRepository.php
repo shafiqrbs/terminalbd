@@ -240,8 +240,8 @@ class GlobalOptionRepository extends EntityRepository
         $settingEntity->setGlobalOption($globalOption);
         $settingEntity->setUser($entity);
         $settingEntity->setTheme($theme);
-        $modules[] = $em->getRepository('SettingToolBundle:Module')->find(9);
-        $modules[] = $em->getRepository('SettingToolBundle:Module')->find(12);
+        $modules[] = $em->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'page'));
+        $modules[] = $em->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'contact'));
         $settingEntity->setModules($modules);
         $em->persist($settingEntity);
 
@@ -287,19 +287,23 @@ class GlobalOptionRepository extends EntityRepository
         $ecommerce->setGlobalOption($globalOption);
         $em->persist($ecommerce);
 
+        $module = $this->_em->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'page'));
         $about = new Page();
         $about->setGlobalOption($globalOption);
         $about->setUser($entity);
+        $about->setModule($module);
         $about->setName('About us');
         $about->setMenu('About us');
         $about->setSlug('about-us');
         $em->persist($about);
 
+
         $menu = new Menu();
         $menu->setGlobalOption($globalOption);
         $menu->setPage($about);
+        $menu->setModule($module);
         $menu->setMenu($about->getName());
-        $menu->setSlug($about->getSlug());
+        $menu->setSlug($about->getName());
         $em->persist($menu);
 
         $menu = new Menu();

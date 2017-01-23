@@ -41,37 +41,68 @@
                 {% endif %}
             </article>
             <!-- Blog Sidebar Column -->
-            <aside class="col-md-4 sidebar-padding">
+            <aside class="col-md-4 sidebar-padding js-equal-height" style="background: #FBFCFE">
                 <!-- Blog Categories -->
                 <div class="blog-sidebar">
                     <h4 class="sidebar-title"><i class="fa fa-list-ul"></i> Categories</h4>
                     <hr>
-                    <ul class="sidebar-list">
+                    <div class="list-group">
                         {% for cat in categories %}
-                        <li><a href="{{ path('webservice_module_category',{'subdomain': globalOption.subDomain,'module':moduleName|lower ,'slug':cat.slug }) }}">{{ cat.name }}</a></li>
-                       {% endfor %}
-                    </ul>
+                            <a class="list-group-item" href="{{ path('webservice_module_category',{'subdomain': globalOption.subDomain,'module':moduleName|lower ,'slug':cat.slug }) }}"><i class="fa fa-bookmark"></i>&nbsp;{{ cat.name }}</a>
+                        {% endfor %}
+                    </div>
+                    {% if sidebar.feature is not empty %}
+                        {% for entity in sidebar.feature %}
+                            <div class="sidebar-feature">
+                                <img src="{{ image(entity.webPath).resize() }}" alt="">
+                                <div class="over-layer">
+                                    <ul class="social-links">
+                                        <li><a href="#" class="fa fa-link"></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
-                <!-- Recent Posts -->
-                <div class="blog-sidebar">
-                    {#<h4 class="sidebar-title"><i class="fa fa-align-left"></i> Recent News</h4>
-                    <hr style="margin-bottom: 5px;">
-                    {% for news in globalOption.newses|slice(0,5)  %}
-                        <div class="media">
-                            <a class="pull-left" href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':news.slug }) }}">
-                                <img class="img-responsive media-object" src="{{ image(news.webPath).resize(100,100) }}" alt="Media Object">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="media-heading"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':news.slug }) }}">{{ news.name }}</a></h4>
-                                {{ news.content|raw|truncate(100) }}
+                {% if sidebar.feature is not empty %}
+                    {% for entity in sidebar.feature %}
+                        <div class="sidebar-feature">
+                            <img src="{{ image(entity.webPath).resize() }}" alt="">
+                            <div class="over-layer">
+                                <ul class="social-links">
+                                    {% if entity.targetTo == 'Page' %}
+                                        <li class=""><a  href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':entity.page.module.slug,'slug':entity.page.slug}) }}" class="fa fa-link"></a></li>
+                                    {% endif %}
+                                </ul>
                             </div>
                         </div>
-                    {% endfor %}#}
-                </div>
-
+                    {% endfor %}
+                {% endif %}
+                {% if sidebar is not empty %}
+                    {% for module in sidebar.module %}
+                        {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'module':module.id}) %}
+                    {% endfor %}
+                {% endif %}
             </aside>
         </div>
     </div>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/desktop/css/common.css'
+    '@FrontendBundle/Resources/public/template/desktop/css/sidebar.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/js/common.js'
+    '@FrontendBundle/Resources/public/template/js/sidebar.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}
 
 {% block documentready %}

@@ -141,7 +141,6 @@ class TemplateWidgetController extends Controller
     {
         $limit = $pageModule->getShowLimit() > 0 ? $pageModule->getShowLimit() : 5;
         $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(),$pageModule->getModule()->getId(),$limit);
-
         return $this->render('@Frontend/Template/Desktop/Widget/'.$pageModule->getModule()->getModuleClass().'.html.twig', array(
             'entities'           => $entities,
             'pageModule'           => $pageModule,
@@ -166,7 +165,7 @@ class TemplateWidgetController extends Controller
         $limit = 6;
         $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(),$module->getId(),$limit);
 
-        return $this->render('@Frontend/Template/Desktop/Widget/pageModule.html.twig', array(
+        return $this->render('@Frontend/Template/Desktop/Widget/page.html.twig', array(
             'entities'         => $entities,
             'module'           => $module,
             'globalOption'     => $globalOption,

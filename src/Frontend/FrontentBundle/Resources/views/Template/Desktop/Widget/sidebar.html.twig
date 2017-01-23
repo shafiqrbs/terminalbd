@@ -4,7 +4,7 @@
         <div class="media">
             <div class="row">
                 <div class="col-md-12">
-                    <div id="blog-slider" class="owl-carousel">
+                    <div id="sidebar-blog-slider" class="owl-carousel">
                         {% for entity in entities  %}
                             <div class="sidebar-blog">
                                 <div class="post-img">
@@ -18,17 +18,118 @@
                                 <div class="post-review">
                                     <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
                                     <ul class="post-info">
-                                        <li>Date: {{ entity.updated|date("d F, Y") }}</li>
-                                        <li>Author: {{ entity.authorName }}</li>
-                                    </ul>
-                                    <ul class="tag-info">
-                                        <li>Tag:</li>
+                                        <li><i class="fa fa-calendar"></i> {{ entity.updated|date("d F, Y") }}</li>
+                                        <li><i class="fa fa-user"></i> {{ entity.authorName }}</li>
+                                        <li><i class="fa fa-tags"></i></li>
                                         <li><a href="">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</a></li>
+
                                     </ul>
-                                    <p class="post-description">
-                                        {{ entity.content|truncate(120)|raw }}
-                                    </p>
-                                    <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="read-more">read more</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% if entities is defined and entities is not empty and module.slug == 'branch' %}
+    <div class="blog-sidebar">
+        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Branches</h4>
+        <div class="media">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="sidebar-branch-slider" class="owl-carousel">
+                        {% for  entity in entities %}
+                            <div class="sidebar-branch">
+                                <h5 class="text-center" ><strong>{{ entity.name }}</strong></h5>
+                                <dl>
+                                    <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
+                                    <dd><i class="fa fa-user"></i>&nbsp;{{ entity.contactPerson }} , <em>{{ entity.designation }}</em></dd>
+                                    <dd><i class="fa fa-mobile"></i>&nbsp;+ 088 {{ entity.mobile|raw }}</dd>
+                                    {% if(entity.phone) %}<dd><i class="fa fa-phone-square"></i></i>&nbsp;+ {{ entity.phone|raw }}</dd>{% endif %}
+                                    {% if(entity.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ entity.fax|raw }}</dd>{% endif %}
+                                    {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
+                                    <dd class="text-center"><a target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}"><i class="fa fa-map-marker"></i> Direction</a></dd>
+                                </dl>
+                            </div>
+                          {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% if entities is defined and entities is not empty  and module.slug == 'client' %}
+    <div class="blog-sidebar">
+        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Client</h4>
+        <div class="media">
+            <div class="row">
+                {% for key,entity in entities  %}
+                    <div class="col-md-6 col-sm-6" style="margin-bottom: 5px">
+                        <div class="client-sidebar">
+                            <a class="thumbnail"><img src="{{ image(entity.webPath).resize(171,180) }}" alt=""></a>
+                            <ul class="social-links">
+                                <li><a target="_blank" href="http://{{ entity.website }}" class="fa fa-link"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% if entities is defined and entities is not empty  and module.slug == 'event' %}
+    <div class="blog-sidebar">
+        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Events</h4>
+        <div class="media">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="sidebar-event-slider" class="owl-carousel">
+                        {% for entity in entities  %}
+                            <div class="event-sidebar">
+                                <div class="post-img">
+                                    <img src="{{ image(entity.webPath).resize() }}" alt="" class="img-responsive">
+                                    <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}" class="overlay"><i class="fa fa-plus-square-o"></i></a>
+                                </div>
+
+                                <div class="post-review">
+                                    <ul class="post-comment">
+                                        <li>{{ entity.created|date('d') }}<small>{{ entity.created|date('M') }}</small></li>
+                                        <li><i class="fa fa-map-marker"></i><small>{{ entity.location.name }}</small></li>
+                                    </ul>
+                                    <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                                    <p class="post-description">{{ entity.content|truncate(120)|raw }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% if entities is defined and entities is not empty  and module.slug == 'faq' %}
+    <div class="blog-sidebar">
+        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;FAQ</h4>
+        <div class="media">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel-group" id="sidebar-accordion" role="tablist" aria-multiselectable="true">
+                        {% for key,entity in entities  %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="heading{{ key  }}">
+                                    <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ key  }}" aria-expanded="{% if key == 0 %}true{% else %}false{% endif %}" aria-controls="collapse{{ key  }}">
+                                            {{ entity.name }}
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapse{{ key  }}" class="panel-collapse collapse {% if key == 0 %}in{% endif %}" role="tabpanel" aria-labelledby="heading{{ key  }}">
+                                    <div class="panel-body">
+                                        <p>  {{ entity.content|raw }}</p>
+                                    </div>
                                 </div>
                             </div>
                         {% endfor %}
@@ -39,80 +140,113 @@
 
     </div>
 {% endif %}
-
 {% if entities is defined and entities is not empty and module.slug == 'news' %}
     <div class="blog-sidebar">
-    <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent News</h4>
-    <hr style="margin-bottom:2px;">
-    {% for entity in entities  %}
-        <div class="media">
-            <a class="pull-left" href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':entity.slug }) }}">
-                <img class="img-responsive media-object" src="{{ image(entity.webPath).resize(80,80) }}" alt="Media Object">
-            </a>
-            <div class="media-body">
-                <h4 class="media-heading"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':entity.slug }) }}">{{ entity.name }}</a></h4>
-                {{ entity.content|raw|truncate(100) }}
-            </div>
-        </div>
-    {% endfor %}
-    </div>
-{% endif %}
-{% if entities is defined and entities is not empty and module.slug == 'notice-board' %}
-    <div class="blog-sidebar">
-    <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent Notice</h4>
-    <hr style="margin-bottom:2px;">
-    {% for entity in entities  %}
-        <div class="media">
-            <div class="notice-list">
-                <div class="post-review">
-                    <div class="post-date">
-                        12
-                        <small>feb</small>
-                    </div>
-                    <h4 class="post-title">
-                        <a href="#">Lorem ipsum dolor sit amet, consectetur.</a>
-                    </h4>
+        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent News</h4>
+        <hr style="margin-bottom:2px;">
+        {% for entity in entities  %}
+            <div class="media">
+                <a class="pull-left" href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':entity.slug }) }}">
+                    <img class="img-responsive media-object" src="{{ image(entity.webPath).resize(80,80) }}" alt="Media Object">
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':entity.slug }) }}">{{ entity.name }}</a></h4>
+                    {{ entity.content|raw|truncate(100) }}
                 </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty  and module.slug == 'event' %}
+{% if entities is defined and entities is not empty and module.slug == 'noticeboard' %}
     <div class="blog-sidebar">
-        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent Events</h4>
-        <hr style="margin-bottom:2px;">
-            <div class="media">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="event-slider" class="owl-carousel">
-                            {% for entity in entities  %}
-                                <div class="post-slide">
-                                    <div class="post-img">
-                                        <img src="{{ image(entity.webPath).resize(320,200) }}" alt="" class="img-responsive">
-                                        <a href="#" class="overlay"><i class="fa fa-plus-square-o"></i></a>
-                                    </div>
-
-                                    <div class="post-review">
-                                        <ul class="post-comment">
-                                            <li>12<small>sep</small></li>
-                                            <li><i class="fa fa-comments-o"></i><a href="#"><small>2</small></a></li>
-                                        </ul>
-                                        <h3 class="post-title">
-                                            <a href="#">Latest News Post</a>
-                                        </h3>
-                                        <p class="post-description">
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi rhoncus orci elit, at iaculis dui.
-                                        </p>
-                                    </div>
-                                </div>
-                            {% endfor %}
+        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent Notice</h4>
+           <div class="media">
+                {% for entity in entities  %}
+                <div class="notice-list">
+                    <div class="post-review">
+                        <div class="post-date">
+                            {{ entity.updated|date("d") }}
+                            <small>{{ entity.updated|date("M") }}</small>
+                        </div>
+                        <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'noticeboard','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                    </div>
+                </div>
+                {% endfor %}
+           </div>
+    </div>
+{% endif %}
+{% if entities is defined and entities is not empty  and module.slug == 'portfolio' %}
+    <div class="blog-sidebar">
+        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Portfolio</h4>
+        <div class="media">
+            <div class="row">
+                {% for key,portfolio in entities  %}
+                    <div class="col-md-6 col-sm-6" style="margin-bottom: 5px">
+                        <div class="box-sidebar-portfolio">
+                            <a class="thumbnail"><img src="{{ image(portfolio.webPath).resize(171,180) }}" alt=""></a>
+                            <ul class="social-links">
+                                <li><a target="_blank" href="http://{{ portfolio.website }}" class="fa fa-link"></a></li>
+                            </ul>
                         </div>
                     </div>
-                </div>
+                {% endfor %}
             </div>
+        </div>
     </div>
 {% endif %}
+
+{#<div class="blog-sidebar">
+    <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent Branch</h4>
+    <div class="media">
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    {% for entity in entities  %}
+                        {% for key,branch in entities  %}
+                            <div class="col-md-3 col-sm-6">
+                                <div class="pricingTable btn-block black">
+                                    <div class="pricingTable-header">
+                                        <span>{{ branch.name }}</span>
+                                    </div>
+                                    <div class="pricingContent">
+                                        <ul>
+                                            <li><i class="fa fa-phone"></i>&nbsp;{{ branch.mobile }}</li>
+                                            <li><i class="fa fa-envelope"></i>&nbsp;{{ branch.email }}</li>
+                                            <li><i class="fa fa-user"></i>&nbsp;{{ branch.contactPerson }}</li>
+                                            <li><i class="fa fa-bookmark"></i>&nbsp;{{ branch.designation }}</li>
+                                        </ul>
+                                    </div><!-- /  CONTENT BOX-->
+                                    <div class="pricingTable-sign-up"><!-- BUTTON BOX-->
+                                        <span class="price-value" ><i class="fa fa-home"></i>&nbsp;{{ branch.address }}</span>
+                                        <div class="clearfix"></div>
+                                        <a href="" class="btn btn-sm orange">Direction<i class="fa fa-map-marker"></i></a>
+                                    </div><!-- BUTTON BOX-->
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>#}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% if entities is defined and entities is not empty  and module.slug == 'service' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Our Services</h4>
@@ -199,97 +333,7 @@
 
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty  and module.slug == 'faq' %}
-    <div class="blog-sidebar">
-        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;FAQ</h4>
-        <hr style="margin-bottom:2px;">
 
-        <div class="media">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel-group" id="sidebar-accordion" role="tablist" aria-multiselectable="true">
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingOne">
-                                <h4 class="panel-title">
-                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        SECTION 1
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                <div class="panel-body">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia lacinia mauris, at ultricies leo ornare nec. Vivamus eu est vel felis dignissim tempor. Nulla facilisi. Duis molestie tortor ac tempor volutpat. Phasellus nec mi aliquet, sollicitudin neque eget, consectetur libero. Vestibulum sollicitudin sapien libero, egestas tempus eros scelerisque eu.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingTwo">
-                                <h4 class="panel-title">
-                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        SECTION 2
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                <div class="panel-body">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia lacinia mauris, at ultricies leo ornare nec. Vivamus eu est vel felis dignissim tempor. Nulla facilisi. Duis molestie tortor ac tempor volutpat. Phasellus nec mi aliquet, sollicitudin neque eget, consectetur libero. Vestibulum sollicitudin sapien libero, egestas tempus eros scelerisque eu.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingThree">
-                                <h4 class="panel-title">
-                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        SECTION 3
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                                <div class="panel-body">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia lacinia mauris, at ultricies leo ornare nec. Vivamus eu est vel felis dignissim tempor. Nulla facilisi. Duis molestie tortor ac tempor volutpat. Phasellus nec mi aliquet, sollicitudin neque eget, consectetur libero. Vestibulum sollicitudin sapien libero, egestas tempus eros scelerisque eu.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingFour">
-                                <h4 class="panel-title">
-                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                        SECTION 4
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                                <div class="panel-body">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lacinia lacinia mauris, at ultricies leo ornare nec. Vivamus eu est vel felis dignissim tempor. Nulla facilisi. Duis molestie tortor ac tempor volutpat. Phasellus nec mi aliquet, sollicitudin neque eget, consectetur libero. Vestibulum sollicitudin sapien libero, egestas tempus eros scelerisque eu.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-{% endif %}
-{% if entities is defined and entities is not empty  and module.slug == 'portfolio' %}
-    <div class="blog-sidebar">
-        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Portfolio</h4>
-        <div class="media">
-            <div class="row">
-                {% for key,portfolio in entities  %}
-                    <div class="col-md-6 col-sm-6" style="margin-bottom: 5px">
-                        <div class="box-sidebar-portfolio">
-                            <a class="thumbnail"><img src="{{ image(portfolio.webPath).resize(171,180) }}" alt=""></a>
-                            <ul class="social-links">
-                                <li><a target="_blank" href="http://{{ portfolio.website }}" class="fa fa-link"></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-{% endif %}
 {% if entities is defined and entities is not empty and module.slug == 'team' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Our Team</h4>

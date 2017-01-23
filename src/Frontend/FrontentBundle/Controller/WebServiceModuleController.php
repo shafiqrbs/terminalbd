@@ -172,6 +172,8 @@ class WebServiceModuleController extends Controller
                     if(!empty($menu->getModule())){
                         $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
                     }
+                    $sidebar = $em->getRepository('SettingAppearanceBundle:SidebarWidgetPanel')->getSidebarPanel($globalOption,$sidebar = 3);
+
 
                 }else{
 
@@ -179,6 +181,7 @@ class WebServiceModuleController extends Controller
                     $page = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'slug' => $module));
                     $featurePages = $em->getRepository('SettingContentBundle:Page')->getListForModule($globalOption,$page);
                     $twigName = "content";
+                    $sidebar = $em->getRepository('SettingAppearanceBundle:SidebarWidgetPanel')->getSidebarPanel($globalOption,$sidebar = 2);
 
                 }
             }
@@ -202,6 +205,7 @@ class WebServiceModuleController extends Controller
                 'page'                  => $page,
                 'moduleName'            => $moduleName,
                 'details'               => $details,
+                'sidebar'               => $sidebar,
             )
         );
     }

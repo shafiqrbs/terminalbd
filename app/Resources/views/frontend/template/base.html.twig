@@ -106,7 +106,23 @@
 <script>
  $(document).ready(function(){
 
-        var navbar = $('.navbar').outerHeight(true);
+        /* var menu = $('#menu-bar'),
+                 pos = menu.offset();
+
+         $(window).scroll(function(){
+             if($(this).scrollTop() > pos.top+menu.height() && menu.hasClass('default')){
+                 menu.fadeOut('fast', function(){
+                     $(this).removeClass('default').addClass('fixed').fadeIn('fast');
+                 });
+             } else if($(this).scrollTop() <= pos.top && menu.hasClass('fixed')){
+                 menu.fadeOut('fast', function(){
+                     $(this).removeClass('fixed').addClass('default').fadeIn('fast');
+                 });
+             }
+         });
+*/
+
+/*        var navbar = $('.navbar').outerHeight(true);
         var mins = 10;
         $('#breadcrumb').css({
             'margin-top':(navbar-mins),
@@ -120,7 +136,7 @@
         $('.top-nav-margin').css({
              'margin-top':(navbar-17),
          });
-
+ */
         $('.select2').select2({
             placeholder: "Select",
             allowClear: true,
@@ -345,11 +361,22 @@
     $(document).ready(gallery);
 </script>
 <style>
+
+    /* CSS3 position: fixed */
+/*    .fixed {
+        position: fixed;
+        top: -5px;
+        left: 0;
+        width: 100%;
+        z-index: 9999;
+        overflow: hidden;
+    }*/
     .page-content{
         line-height: 25px;
         text-align: justify;
         margin-top: 30px;
         margin-bottom: 30px;
+
     }
 </style>
 </body>
