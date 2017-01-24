@@ -182,7 +182,6 @@ class TransactionRepository extends EntityRepository
     private function insertPurchaseCash($purchase,$accountPurchase)
     {
 
-
         $amount = $purchase->getPaymentAmount();
         if($amount > 0) {
 

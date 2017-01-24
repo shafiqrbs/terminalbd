@@ -110,6 +110,7 @@ class Excel
         $repository = $this->getItemRepository();
 
         $masterItem = $this->getMasterItem($item);
+
         $itemSize = $this->getSize($item);
         if($this->getInventoryConfig()->getIsSize() == 1){
             $itemSize     = $itemSize;
@@ -138,7 +139,6 @@ class Excel
         }
 
         $itemObj = $repository->findOneBy(array(
-            'name'            => $this->sentence_case($item['ProductName']),
             'masterItem'      => $masterItem,
             'size'            => $itemSize,
             'color'           => $itemColor,
@@ -212,7 +212,6 @@ class Excel
         if($masterItem == NULL) {
             $masterItem = $masterItemRepository->findOneBy(array(
                 'name' => $this->sentence_case($item['ProductName']),
-                'category' => $category,
                 'inventoryConfig' => $this->getInventoryConfig()
             ));
 
