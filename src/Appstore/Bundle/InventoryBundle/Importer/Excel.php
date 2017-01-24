@@ -83,22 +83,13 @@ class Excel
                 $itemObj = new Item();
                 $itemObj->setName($this->sentence_case($item['ProductName']));
                 $itemObj->setMasterItem($masterItem);
-                //if($this->getInventoryConfig()->getIsColor() == 1) {
-                    $itemObj->setColor($itemColor);
-                //}
-                //if($this->getInventoryConfig()->getIsSize() == 1) {
-                    $itemObj->setSize($itemSize);
-                //}
-                //if($this->getInventoryConfig()->getIsVendor() == 1) {
-                    $itemObj->setVendor($vendor);
-                //}
-                //if($this->getInventoryConfig()->getIsBrand() == 1) {
-                    $itemObj->setBrand($brand);
-                //}
+                $itemObj->setColor($itemColor);
+                $itemObj->setSize($itemSize);
+                $itemObj->setVendor($vendor);
+                $itemObj->setBrand($brand);
                 $itemObj->setInventoryConfig($this->getInventoryConfig());
                 $itemObj = $this->save($itemObj);
             }
-
             $this->setCachedData('Item', $key, $itemObj);
         }
 
@@ -111,43 +102,32 @@ class Excel
 
         $masterItem = $this->getMasterItem($item);
 
-        $itemSize = $this->getSize($item);
-        if($this->getInventoryConfig()->getIsSize() == 1){
-            $itemSize     = $itemSize;
-        }else{
-            $itemSize     ='NULL';
+        $qb = $repository->createQueryBuilder('i');
+        $qb->where('i.inventoryConfig ='.$this->getInventoryConfig()->getId());
+        $qb->andWhere('i.masterItem ='.$masterItem->getId());
+
+        if($this->getInventoryConfig()->getIsSize()) {
+            $itemSize = $this->getSize($item);
+            $qb->andWhere('i.size =' . $itemSize->getId());
         }
 
-        $itemColor = $this->getColor($item);
-        if($this->getInventoryConfig()->getIsColor() == 1){
-            $itemColor     = $itemColor;
-        }else{
-            $itemColor     ='NULL';
+        if($this->getInventoryConfig()->getIsColor()){
+            $itemColor = $this->getColor($item);
+            $qb->andWhere('i.color ='.$itemColor->getId());
         }
 
-        $vendor = $this->getVendor($item);
-        if($this->getInventoryConfig()->getIsVendor() == 1){
-            $vendor     = $vendor;
-        }else{
-            $vendor     ='NULL';
-        }
-        $brand = $this->getBrand($item);
-        if($this->getInventoryConfig()->getIsBrand() == 1){
-            $brand     = $brand;
-        }else{
-            $brand     ='NULL';
+        if($this->getInventoryConfig()->getIsVendor()) {
+            $vendor = $this->getVendor($item);
+            $qb->andWhere('i.vendor ='.$vendor->getId());
         }
 
-        $itemObj = $repository->findOneBy(array(
-            'masterItem'      => $masterItem,
-            'size'            => $itemSize,
-            'color'           => $itemColor,
-            'brand'           => $brand,
-            'vendor'          => $vendor,
-            'inventoryConfig' => $this->getInventoryConfig(),
-        ));
+        if($this->getInventoryConfig()->getIsBrand()){
+            $brand = $this->getBrand($item);
+            $qb->andWhere('i.brand ='.$brand->getId());
+        }
 
-        return $itemObj;
+        return $qb->getQuery()->getOneOrNullResult();
+
     }
 
     private function getPurchaseVendorItem($item)

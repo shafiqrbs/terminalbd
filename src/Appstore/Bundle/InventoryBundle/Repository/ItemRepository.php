@@ -32,9 +32,8 @@ class ItemRepository extends EntityRepository
             $entity = $this->find($row['id']);
             $entity->setPurchaseQuantity($row['quantity']);
             $this->_em->persist($entity);
+            $this->_em->flush();
         }
-        $this->_em->flush();
-
     }
 
     public function checkDuplicateSKU(InventoryConfig $inventory,$data)
