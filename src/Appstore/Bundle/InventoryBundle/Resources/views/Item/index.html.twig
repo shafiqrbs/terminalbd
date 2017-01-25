@@ -139,7 +139,7 @@
                                     <tr>
                                         <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                         <td class="numeric" >
-                                            {{ entity.name }}
+                                            {{ entity.name }}=={{ entity.id }}
                                         </td>
                                         <td class="numeric" >
                                             {{ entity.sku }}

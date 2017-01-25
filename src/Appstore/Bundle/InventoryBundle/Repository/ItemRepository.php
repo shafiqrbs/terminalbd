@@ -120,7 +120,8 @@ class ItemRepository extends EntityRepository
             $qb->setParameter('brand', $brand);
 
         }
-        $qb->orderBy('item.updated','DESC');
+        $qb->orderBy('item.masterItem','ASC');
+        $qb->orderBy('item.size','ASC');
         $qb->getQuery();
         return  $qb;
 

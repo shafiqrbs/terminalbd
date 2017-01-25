@@ -48,7 +48,7 @@ class Purchase
 
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="purchase" )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", mappedBy="purchase" , cascade={"remove"})
      **/
     private  $accountPurchase;
 
