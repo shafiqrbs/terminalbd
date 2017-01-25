@@ -86,11 +86,10 @@ class ItemRepository extends EntityRepository
         $brand = isset($data['brand'])? $data['brand'] :'';
 
         $qb = $this->createQueryBuilder('item');
+        $qb->join('item.masterItem', 'm');
         $qb->where("item.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
         if (!empty($item)) {
-
-            $qb->join('item.masterItem', 'm');
             $qb->andWhere("m.name = :name");
             $qb->setParameter('name', $item);
         }
@@ -120,8 +119,7 @@ class ItemRepository extends EntityRepository
             $qb->setParameter('brand', $brand);
 
         }
-        $qb->orderBy('item.masterItem','ASC');
-        $qb->orderBy('item.size','ASC');
+        $qb->orderBy('m.name','ASC');
         $qb->getQuery();
         return  $qb;
 
