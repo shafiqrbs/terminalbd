@@ -169,6 +169,7 @@
                             <small>{{ entity.updated|date("M") }}</small>
                         </div>
                         <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'noticeboard','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                        <p class="post-description">{{ entity.content|truncate(120)|raw }}</p>
                     </div>
                 </div>
                 {% endfor %}

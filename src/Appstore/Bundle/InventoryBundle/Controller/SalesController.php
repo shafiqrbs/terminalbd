@@ -381,6 +381,8 @@ class SalesController extends Controller
 
     public function deleteAction(Sales $sales)
     {
+
+
         $em = $this->getDoctrine()->getManager();
         if (!$sales) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
@@ -568,59 +570,100 @@ class SalesController extends Controller
 
     public function printAction($code)
     {
-        // echo $code;
-        //$this->printWithOutEscPos();
-        //$connector = new FilePrintConnector("/dev/usb/lp1");
-        $connector = new NetworkPrintConnector("192.168.1.250", 9100);
-        $printer = new Printer($connector);
+
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
+        $this->printWithOutEscPos($sales);
+        exit;
+        /*
+        $connector  = new NetworkPrintConnector("192.168.1.250",9100);
+        $printer    = new Printer($connector);
         try {
             $printer -> text("Hello World!\n");
             $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
-//            $printer -> text("Hello World!\n");
+            $printer -> text("Hello World!\n");
+            $printer -> text("Hello World!\n");
+            $printer -> text("Hello World!\n");
             $printer -> cut();
             $printer -> close();
 
         } finally {
             $printer -> close();
         }
-        exit;
+        exit;*/
     }
 
-    public function printWithOutEscPos(){
+    public function printWithOutEscPos(Sales $entity)
+    {
+
+        $option = $entity->getInventoryConfig()->getGlobalOption();
+
+        /** ===================Company Information=================================== */
+
+        $companyName    = $option->getName();
+        $mobile         = $option->getMobile();
+        $website        = $option->getDomain();
+        $address        = $option->getContactPage()->getAddress1();
+        $thana          = !empty($option->getContactPage()->getLocation()) ? $option->getContactPage()->getLocation()->getName():'';
+        $district       = !empty($option->getContactPage()->getLocation()) ? $option->getContactPage()->getLocation()->getParent()->getName():'';
 
 
+        /** ===================Invoice Information=================================== */
 
-        $texttoprint = <<<EOD
-        HEADER
-        --------------------
-          item: price
-        --------------------
-         Cup  : 100
-         Plate: 200
-        --------------------
-        Total:  300
-                   Thanks
-EOD;
-        //$texttoprint = "RECIPT TEXT \n NEXT LINE \n MORE STUFF";
-        $texttoprint = stripslashes($texttoprint);
-        $fp = fsockopen("192.168.1.250", 9100, $errno, $errstr, 10);
-        if (!$fp) {
-            echo "$errstr ($errno)<br />\n";
-        } else {
-            fwrite($fp, "\033\100");
-            $out = $texttoprint . "\r\n";
-            fwrite($fp, $out);
-            fwrite($fp, "\012\012\012\012\012\012\012\012\012\033\151\010\004\001");
-            fclose($fp);
+        $invoice = $entity->getInvoice();
+        $subTotal = $entity->getSubTotal();
+        $total = $entity->getTotal();
+        $discount = $entity->getDiscount();
+        $vat = $entity->getVat();
+        $due = $entity->getDue();
+        $transaction = $entity->getTransactionMethod()->getName();
+
+        /** ===================Invoice Sales Item Information========================= */
+
+        $i = 1;
+        $serialNo = array();
+        $name = array();
+        $quantity = array();
+        $subAmount = array();
+        foreach ( $entity->getSalesItems() as $row){
+            $serialNo[]     = $i;
+            $name[]         = $row->getItem()->getName();
+            $quantity[]     = $row->getQuantity();
+            $subAmount[]     = $row->getSubTotal();
+            $i++;
         }
 
+        $url = 'http://127.0.0.1/posprint/test.php';
+        $data =array(
+            'companyName'   => $companyName,
+            'mobile'        => $mobile,
+            'website'       => $website,
+            'address'       => $address,
+            'thana'         => $thana,
+            'district'      => $district,
+            'invoice'       => $invoice ,
+            'subTotal'      => $subTotal,
+            'total'         => $total,
+            'discount'      => $discount,
+            'vat'           => $vat,
+            'due'           => $due,
+            'transaction'   => $transaction,
+            'serialNo'      => $serialNo,
+            'name'          =>$name,
+            'quantity'      =>$quantity,
+            'subAmount'     =>$subAmount
+
+        );
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($data));
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        echo $response = curl_exec($ch);
+
+        exit;
     }
-
-
 }

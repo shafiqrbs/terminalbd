@@ -48,7 +48,12 @@ class PosOrderSmsListener extends BaseSmsAwareListener
         }else{
             $customer = "Dear Customer your order is processing and you will get your product within 3 working days. Thanks ".$sales->getInventoryConfig()->getGlobalOption()->getName();
         }
-        $administrator = "You get new order, invoice no ".$sales->getInvoice();
+        if($sales->getCustomer()->getLocation()){
+            $location = "and Location ".$sales->getCustomer()->getLocation()->getName().",".$sales->getCustomer()->getLocation()->getParent()->getName();
+        }else{
+            $location ='';
+        }
+        $administrator = "You get new order, Invoice no ".$sales->getInvoice() ." , Amount ".$sales->getTotal().$location;
 
         $customerMobile = "+88".$sales->getCustomer()->getMobile();
         $administratorMobile = "+88".$sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getMobile();

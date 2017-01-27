@@ -133,3 +133,23 @@ $(".event-prev").click(function(){
 });
 
 
+var owlNotice = $("#page-notice-slider");
+owlNotice.owlCarousel({
+    items:2,
+    itemsDesktop:[1199,3],
+    itemsDesktopSmall:[979,2],
+    itemsTablet:[768,1],
+    pagination: false,
+    paginationNumbers: false,
+    autoPlay:false,
+    rewindNav:false
+});
+// Custom Navigation Events
+$(".notice-next").click(function(){
+    owlNotice.trigger('owl.next');
+});
+$(".notice-prev").click(function(){
+    owlNotice.trigger('owl.prev');
+});
+
+

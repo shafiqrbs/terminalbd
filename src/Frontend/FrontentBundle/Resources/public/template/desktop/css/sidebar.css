@@ -512,9 +512,7 @@
 }
 
 .notice-list .post-title a{
-    font-size:15px;
-    color: #444;
-    text-transform: uppercase;
+    text-transform: capitalize;
     margin-bottom: 6px;
     display: block;
     line-height:20px;
@@ -522,8 +520,10 @@
 }
 
 .notice-list:hover .post-title a{
-    color:#078071;
     text-decoration:none;
+}
+.notice-list p.post-description{
+    padding: 0;
 }
 
 /** #####################################  End Sidebar Notice Board  ####################################### */

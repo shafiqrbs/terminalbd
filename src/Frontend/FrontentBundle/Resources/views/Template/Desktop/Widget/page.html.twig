@@ -188,3 +188,33 @@
         {% endfor %}
     </div>
 {% endif %}
+
+{% if entities is defined and entities is not empty and module.slug == 'noticeboard' %}
+    <div class="blog-sidebar">
+        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent News</h4>
+        <hr style="margin-bottom:2px;">
+            <div class="media">
+                <div class="col-md-12">
+                    <div id="page-notice-slider" class="owl-carousel">
+                        {% for key,notice in entities  %}
+                            <div class="notice-slide">
+                                <div class="post-content">
+                                    <div class="post-date">
+                                        <span class="month">{{ notice.updated|date('F') }}</span>
+                                        <span class="date">{{ notice.updated|date('d') }}</span>
+                                    </div>
+                                    <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'noticeBoard','slug':notice.slug }) }}"> {{ notice.name }}</a></h5>
+                                    <p class="post-description">
+                                        {{ notice.content|truncate(200)|raw }}
+                                    </p>
+                                </div>
+                                <ul class="post-bar">
+                                    {% if notice.webPath is not empty %}<li> <i class="fa fa-file"></i> <a target="_blank" href="{{ notice.webPath }}">Download</a> </li>{% endif %}
+                                </ul>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+    </div>
+{% endif %}

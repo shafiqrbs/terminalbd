@@ -173,9 +173,10 @@ class ItemRepository extends EntityRepository
             $entity->setPurchaseQuantity($qnt);
             $entity->setUpdated($purchase->getCreated());
             $em->persist($entity);
+            $em->flush();
         }
 
-        $em->flush();
+
     }
     public function getItemPurchaseReturn($purchaseReturn){
 
@@ -187,8 +188,9 @@ class ItemRepository extends EntityRepository
             $entity->setPurchaseQuantityReturn($qnt);
             $entity->setUpdated($purchaseReturn->getCreated());
             $em->persist($entity);
+            $em->flush();
         }
-        $em->flush();
+
 
     }
 
@@ -212,8 +214,9 @@ class ItemRepository extends EntityRepository
             $qnt = ($entity->getSalesQuantity() + $salesItem->getQuantity());
             $entity->setSalesQuantity($qnt);
             $em->persist($entity);
+            $em->flush();
+
         }
-        $em->flush();
 
     }
 
@@ -226,8 +229,9 @@ class ItemRepository extends EntityRepository
             $qnt = ($entity->getSalesQuantityReturn() + $salesItem->getQuantity());
             $entity->setSalesQuantityReturn($qnt);
             $em->persist($entity);
+            $em->flush();
         }
-        $em->flush();
+
 
     }
 

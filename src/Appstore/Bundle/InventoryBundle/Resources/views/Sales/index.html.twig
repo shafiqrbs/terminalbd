@@ -151,7 +151,7 @@
                                                 <td class="numeric" >
                                                     {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
                                                         <a href="{{ path('inventory_sales_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                                        <a  href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
+                                                        <a  href="javascript:" rel="{{ path('inventory_sales_print',{'code':entity.invoice}) }}"  class="btn green mini print" ><i class="icon-print"></i></a>
                                                     {% endif %}
                                                     {% if entity.paymentStatus == "Pending" %}
                                                         <a href="{{ path('inventory_sales_edit', { 'code': entity.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
@@ -238,4 +238,17 @@
     }
     })
     })
+
+    $('#sales').on("click", ".print", function() {
+        var url = $(this).attr("rel");
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (response) {
+                console.log(response);
+            }
+        })
+    })
+
+
 {% endblock %}
