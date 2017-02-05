@@ -335,7 +335,7 @@ class Product implements CodeAwareEntity
      */
     public function getSTRPadCode()
     {
-        $code = str_pad($this->getCode(),3, '0', STR_PAD_LEFT);
+        $code = str_pad($this->getCode(),4, '0', STR_PAD_LEFT);
         return $code;
     }
 

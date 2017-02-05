@@ -133,18 +133,33 @@ class SalesRepository extends EntityRepository
             ->where('si.sales = :sales')
             ->setParameter('sales', $sales ->getId())
             ->getQuery()->getSingleResult();
-        if($import == 'import')
-        {
+        if($import == 'import'){
             $sales->setPayment($total['total']);
         }
-        $sales->setSubTotal($total['total']);
-        $sales->setTotal($total['total']);
-        $sales->setDue($total['total']);
-        $sales->setTotalItem($total['totalItem']);
+
+        if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
+            $totalAmount = ($total['total'] - $sales->getDiscount());
+            $vat = $this->getCulculationVat($sales,$totalAmount);
+            $sales->setVat($vat);
+        }
+        if($total['total'] > 0){
+            $sales->setSubTotal($total['total']);
+            $sales->setTotal($total['total'] + $sales->getVat());
+            $sales->setDue($total['total']+ $sales->getVat());
+            $sales->setTotalItem($total['totalItem']);
+        }else{
+            $sales->setSubTotal(0);
+            $sales->setTotal(0);
+            $sales->setDue(0);
+            $sales->setTotalItem(0);
+            $sales->setDiscount(0);
+            $sales->setVat(0);
+        }
+
         $em->persist($sales);
         $em->flush();
 
-        return $total['total'];
+        return $sales;
 
     }
 
@@ -221,8 +236,8 @@ class SalesRepository extends EntityRepository
 
     public function getCulculationVat(Sales $sales,$totalAmount)
     {
-            $vat = ( ($totalAmount * (int)$sales->getInventoryConfig()->getVat())/100 );
-            return $vat;
+        $vat = ( ($totalAmount * (int)$sales->getInventoryConfig()->getVatPercentage())/100 );
+        return round($vat);
 
     }
 

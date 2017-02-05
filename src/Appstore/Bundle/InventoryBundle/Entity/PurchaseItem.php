@@ -94,9 +94,9 @@ class PurchaseItem
 
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="quantity", type="integer")
+     * @ORM\Column(name="quantity", type="float")
      */
     private $quantity;
 

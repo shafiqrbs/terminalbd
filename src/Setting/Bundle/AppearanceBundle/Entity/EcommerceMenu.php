@@ -55,7 +55,7 @@ class EcommerceMenu
     private $globalOption;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="ecommerceMenu")
+     * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="ecommerceMenus")
      **/
 
     private $categories;

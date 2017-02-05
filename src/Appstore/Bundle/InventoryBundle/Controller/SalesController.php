@@ -64,6 +64,56 @@ class SalesController extends Controller
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
 
+    public function newAction()
+    {
+        $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer'] : '';
+        $em = $this->getDoctrine()->getManager();
+        $entity = new Sales();
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        if ($customer > 0) {
+            $customer = $em->getRepository('DomainUserBundle:Customer')->find($customer);
+            if (!empty($customer)) {
+
+                $entity->setCustomer($customer);
+                $entity->setSalesMode('customer');
+                $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(4);
+                $entity->setTransactionMethod($transactionMethod);
+                $entity->setMobile($customer->getMobile());
+
+            }else{
+                $globalOption = $this->getUser()->getGlobalOption();
+                $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
+                $entity->setCustomer($customer);
+                $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+                $entity->setTransactionMethod($transactionMethod);
+                $entity->setSalesMode('pos');
+            }
+
+        }else{
+            $globalOption = $this->getUser()->getGlobalOption();
+            $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
+            $entity->setCustomer($customer);
+            $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+            $entity->setTransactionMethod($transactionMethod);
+            $entity->setSalesMode('pos');
+        }
+        $entity->setPaymentStatus('Pending');
+        $entity->setInventoryConfig($inventory);
+        $entity->setSalesBy($this->getUser());
+        if(!empty($this->getUser()->getProfile()->getBranches())){
+            $entity->setBranches($this->getUser()->getProfile()->getBranches());
+        }
+        $em->persist($entity);
+        $em->flush();
+        return $this->redirect($this->generateUrl('inventory_sales_edit', array('code' => $entity->getInvoice())));
+
+    }
+
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
+     */
+
     public function salesItemAction()
     {
 
@@ -98,21 +148,56 @@ class SalesController extends Controller
         if (!empty($purchaseItem) && $itemStock > $checkQuantity) {
 
             $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
-            $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
             $msg = 'Product added successfully';
 
         } else {
 
-            $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
             $msg = 'There is no product in our inventory';
         }
 
-        return new Response(json_encode(array('salesTotal' => $salesTotal, 'purchaseItem' => $purchaseItem, 'salesItem' => $salesItems, 'salesItem' => $salesItems, 'msg' => $msg)));
+        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
+        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
+        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
+        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'purchaseItem' => $purchaseItem, 'salesItem' => $salesItems,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
         exit;
     }
 
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
+     */
+
+    public function salesDiscountUpdateAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $discount = $request->request->get('discount');
+        $sales = $request->request->get('sales');
+
+        $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
+        $total = ($sales->getSubTotal() - $discount);
+        if($total > $discount ){
+            if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
+                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
+                $sales->setVat($vat);
+            }
+            $sales->setDiscount($discount);
+            $sales->setTotal($total+$vat);
+            $sales->setDue($total+$vat);
+            $em->persist($sales);
+            $em->flush();
+        }
+
+
+        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
+        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
+        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
+        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
+        exit;
+    }
 
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
@@ -130,8 +215,10 @@ class SalesController extends Controller
         $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($salesItem->getPurchaseItem());
         $itemStock = $salesItem->getPurchaseItem()->getItemStock();
 
+        if(!empty($salesItem) && $itemStock > $checkQuantity && $salesItem->getQuantity() > $quantity
+            or
+            !empty($salesItem) && $itemStock > $checkQuantity && $checkQuantity >= ($quantity - $salesItem->getQuantity())) {
 
-        if (!empty($salesItem) && $itemStock > $checkQuantity) {
             $salesItem->setQuantity($quantity);
             $salesItem->setSalesPrice($salesPrice);
             if (!empty($customPrice)) {
@@ -140,50 +227,25 @@ class SalesController extends Controller
             $salesItem->setSubTotal($quantity * $salesPrice);
             $em->persist($salesItem);
             $em->flush();
-            $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
-            return new Response(json_encode(array('salesTotal' => $salesTotal, 'msg' => 'Product added successfully')));
+
+            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
+            $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
+            $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
+            $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
+            return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => 'Product added successfully' , 'success' => 'success')));
 
         } else {
 
-            $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
-            return new Response(json_encode(array('salesTotal' => $salesTotal, 'msg' => 'There is no product in our inventory')));
+            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($salesItem->getSales());
+            $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
+            $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
+            $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
+            return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => 'There is no product in our inventory' , 'success' => 'success')));
         }
+
         exit;
     }
 
-    /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
-     */
-
-    public function newAction()
-    {
-        $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer'] : '';
-        $em = $this->getDoctrine()->getManager();
-        $entity = new Sales();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        if ($customer > 0) {
-            $customer = $em->getRepository('DomainUserBundle:Customer')->find($customer);
-            if (!empty($customer)) {
-                $entity->setCustomer($customer);
-                $entity->setSalesMode('customer');
-                $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(4);
-                $entity->setTransactionMethod($transactionMethod);
-                $entity->setMobile($customer->getMobile());
-            }else{
-                $entity->setSalesMode('pos');
-            }
-        }
-        $entity->setPaymentStatus('Pending');
-        $entity->setInventoryConfig($inventory);
-        $entity->setSalesBy($this->getUser());
-        if(!empty($this->getUser()->getProfile()->getBranches())){
-            $entity->setBranches($this->getUser()->getProfile()->getBranches());
-        }
-        $em->persist($entity);
-        $em->flush();
-        return $this->redirect($this->generateUrl('inventory_sales_edit', array('code' => $entity->getInvoice())));
-
-    }
 
     /**
      * Finds and displays a Sales entity.
@@ -226,6 +288,7 @@ class SalesController extends Controller
         } else {
             $twig = 'pos';
         }
+
         if ($entity->getProcess() != "In-progress") {
             return $this->redirect($this->generateUrl('inventory_sales_show', array('id' => $entity->getId())));
         }
@@ -252,6 +315,7 @@ class SalesController extends Controller
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
+                'id' => 'posForm',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -289,7 +353,7 @@ class SalesController extends Controller
 
             $entity->setSubTotal($data['paymentSubTotal']);
             if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($data['paymentTotal']);
+                $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
                 $entity->setVat($vat);
             }
             $entity->setDue($data['dueAmount']);
@@ -391,7 +455,6 @@ class SalesController extends Controller
             $salesImport = $sales->getSalesImport();
             $em->remove($salesImport);
         }
-        $sales->getSalesImport();
         $em->remove($sales);
         $em->flush();
         return new Response(json_encode(array('success' => 'success')));
@@ -412,9 +475,11 @@ class SalesController extends Controller
 
         $em->remove($entity);
         $em->flush();
-        $salesTotal = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-        $salesTotal = $salesTotal > 0 ? $salesTotal : 0;
-        return new Response(json_encode(array('salesTotal' => $salesTotal, 'success' => 'success')));
+        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
+        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
+        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
+        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'success' => 'success')));
         exit;
 
     }
@@ -447,7 +512,7 @@ class SalesController extends Controller
     public function deleteEmptyInvoiceAction()
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig' => $inventory, 'paymentStatus' => 'Pending','total' => 0));
+        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findBy(array('inventoryConfig' => $inventory, 'paymentStatus' => 'Pending'));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity) {
             $em->remove($entity);
@@ -572,8 +637,88 @@ class SalesController extends Controller
     {
 
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
-        $this->printWithOutEscPos($sales);
+        $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
+        $option = $entity->getInventoryConfig()->getGlobalOption();
+
+        /** ===================Company Information=================================== */
+
+        $vatRegNo       = $inventory->getVatRegNo();
+        $companyName    = $option->getName();
+        $mobile         = $option->getMobile();
+        $website        = $option->getDomain();
+        $address1       = $option->getContactPage()->getAddress1();
+        $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
+        $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
+
+        $address = $address1.$thana.$district;
+
+        /** ===================Invoice Information=================================== */
+
+        $invoice = $entity->getInvoice();
+        $subTotal = $entity->getSubTotal();
+        $total = $entity->getTotal();
+        $discount = $entity->getDiscount();
+        $vat = $entity->getVat();
+        $due = $entity->getDue();
+        $transaction = $entity->getTransactionMethod()->getName();
+
+
+        /** ===================Customer Information=================================== */
+
+        $invoice = $entity->getInvoice();
+        $subTotal = $entity->getSubTotal();
+        $total = $entity->getTotal();
+        $discount = $entity->getDiscount();
+        $vat = $entity->getVat();
+        $due = $entity->getDue();
+        $payment = $entity->getPayment();
+        $transaction = $entity->getTransactionMethod()->getName();
+        $salesBy = $entity->getSalesBy()->getProfile()->getName();;
+
+
+        /** ===================Invoice Sales Item Information========================= */
+
+        $i = 1;
+        $serialNo = array();
+        $barcode = array();
+        $name = array();
+        $quantity = array();
+        $subAmount = array();
+        foreach ( $entity->getSalesItems() as $row){
+            $serialNo[]         = $i;
+            $barcode[]          = $row->getPurchaseItem()->getBarcode();
+            $name[]             = $row->getItem()->getName();
+            $quantity[]         = $row->getQuantity();
+            $subAmount[]        = $row->getSubTotal();
+            $i++;
+        }
+
+        $data =array(
+            'salesBy'      => $salesBy,
+            'vatRegNo'      => $vatRegNo,
+            'companyName'   => $companyName,
+            'mobile'        => $mobile,
+            'website'       => $website,
+            'address'       => $address,
+            'thana'         => $thana,
+            'district'      => $district,
+            'invoice'       => $invoice ,
+            'subTotal'      => $subTotal,
+            'total'         => $total,
+            'payment'       => $payment,
+            'discount'      => $discount,
+            'vat'           => $vat,
+            'due'           => $due,
+            'transaction'   => $transaction,
+            'serialNo'      => $serialNo,
+            'barcode'       => $barcode,
+            'name'          => $name,
+            'quantity'      => $quantity,
+            'subAmount'     => $subAmount
+
+        );
+
+        return new JsonResponse($data);
         exit;
         /*
         $connector  = new NetworkPrintConnector("192.168.1.250",9100);
@@ -633,7 +778,6 @@ class SalesController extends Controller
             $i++;
         }
 
-        $url = 'http://127.0.0.1/posprint/test.php';
         $data =array(
             'companyName'   => $companyName,
             'mobile'        => $mobile,
@@ -655,15 +799,7 @@ class SalesController extends Controller
 
         );
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS,http_build_query($data));
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-        echo $response = curl_exec($ch);
-
+        return new JsonResponse('ok');
         exit;
     }
 }

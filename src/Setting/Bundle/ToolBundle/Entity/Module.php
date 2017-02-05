@@ -141,12 +141,13 @@ class Module
 
      /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel", mappedBy="module")
-     * @ORM\OrderBy({"name" = "DESC"})
+     * @ORM\OrderBy({"id" = "DESC"})
      **/
     private $sidebarWidgetPanel;
 
+
      /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="module")
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="module")
      * @ORM\OrderBy({"name" = "ASC"})
      **/
     private $featureWidgets;

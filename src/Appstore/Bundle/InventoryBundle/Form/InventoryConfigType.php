@@ -19,16 +19,18 @@ class InventoryConfigType extends AbstractType
     {
 
         $builder
+            ->add('vatRegNo','text', array('attr'=>array('class'=>'m-wrap span8 ','placeholder'=>'Enter vat registration no.')))
             ->add('salesReturnDayLimit','integer',array('attr'=>array('class'=>'numeric')))
-            ->add('vatPercentage','integer',array('attr'=>array('class'=>'numeric')))
+            ->add('vatPercentage','integer',array('attr'=>array('class'=>'numeric span8')))
             ->add('deliveryProcess',
 
                 'choice', array(
                 'attr'=>array('class'=>'check-list  span12'),
                 'choices' => array(
-                    'Pos' => 'Point of Sales(POS)',
-                    'CustomerSales' => 'Customer Base Sales',
-                    'ManualPos' => 'Manual Sales System',
+                    'Pos'           => 'Point of Sales(POS)',
+                    'OnlineSales'   => 'Online Sales',
+                    'GeneralSales'  => 'General Sales',
+                    'Order'         => 'Online Order',
                     'BranchInvoice' => 'Branch Invoice',
                 ),
                 'required'    => true,

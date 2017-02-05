@@ -89,7 +89,9 @@ class ItemRepository extends EntityRepository
         $qb->join('item.masterItem', 'm');
         $qb->where("item.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
+
         if (!empty($item)) {
+
             $qb->andWhere("m.name = :name");
             $qb->setParameter('name', $item);
         }

@@ -165,6 +165,14 @@ class InventoryConfig
     private $vatPercentage;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="vatRegNo", type="string",  nullable=true)
+     */
+    private $vatRegNo;
+
+
+    /**
      * @var array
      *
      * @ORM\Column(name="deliveryProcess", type="array", nullable=true )
@@ -194,6 +202,38 @@ class InventoryConfig
     private $vatEnable = false;
 
     /**
+     * @var smallint
+     *
+     * @ORM\Column(name="printMarginTop", type="smallint",  nullable=true)
+     */
+    private $printTopMargin = 0;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="printMarginBottom", type="smallint",  nullable=true)
+     */
+    private $printMarginBottom = 0;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPrintHeader", type="boolean",  nullable=true)
+     */
+    private $isPrintHeader = true;
+
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPrintFooter", type="boolean",  nullable=true)
+     */
+    private $isPrintFooter = true;
+
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="isItem", type="boolean",  nullable=true)
@@ -215,6 +255,13 @@ class InventoryConfig
      * @ORM\Column(name="isSize", type="boolean",  nullable=true)
      */
     private $isSize;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isModel", type="boolean",  nullable=true)
+     */
+    private $isModel;
 
 
     /**
@@ -869,6 +916,102 @@ class InventoryConfig
     public function setPrintLeftMargin($printLeftMargin)
     {
         $this->printLeftMargin = $printLeftMargin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVatRegNo()
+    {
+        return $this->vatRegNo;
+    }
+
+    /**
+     * @param string $vatRegNo
+     */
+    public function setVatRegNo($vatRegNo)
+    {
+        $this->vatRegNo = $vatRegNo;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsModel()
+    {
+        return $this->isModel;
+    }
+
+    /**
+     * @param boolean $isModel
+     */
+    public function setIsModel($isModel)
+    {
+        $this->isModel = $isModel;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getPrintTopMargin()
+    {
+        return $this->printTopMargin;
+    }
+
+    /**
+     * @param smallint $printTopMargin
+     */
+    public function setPrintTopMargin($printTopMargin)
+    {
+        $this->printTopMargin = $printTopMargin;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getPrintMarginBottom()
+    {
+        return $this->printMarginBottom;
+    }
+
+    /**
+     * @param smallint $printMarginBottom
+     */
+    public function setPrintMarginBottom($printMarginBottom)
+    {
+        $this->printMarginBottom = $printMarginBottom;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsPrintHeader()
+    {
+        return $this->isPrintHeader;
+    }
+
+    /**
+     * @param boolean $isPrintHeader
+     */
+    public function setIsPrintHeader($isPrintHeader)
+    {
+        $this->isPrintHeader = $isPrintHeader;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsPrintFooter()
+    {
+        return $this->isPrintFooter;
+    }
+
+    /**
+     * @param boolean $isPrintFooter
+     */
+    public function setIsPrintFooter($isPrintFooter)
+    {
+        $this->isPrintFooter = $isPrintFooter;
     }
 
 

@@ -49,24 +49,24 @@ class SalesItem
     private  $sales;
 
     /**
-     * @var integer
+     * @var float
      *
-     * @ORM\Column(name="quantity", type="integer")
+     * @ORM\Column(name="quantity", type="float")
      */
     private $quantity;
 
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="salesPrice", type="decimal")
+     * @ORM\Column(name="salesPrice", type="float")
      */
     private $salesPrice;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="purchasePrice", type="decimal")
+     * @ORM\Column(name="purchasePrice", type="float")
      */
     private $purchasePrice;
 
@@ -86,9 +86,9 @@ class SalesItem
     private $customPrice = false;
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="subTotal", type="decimal")
+     * @ORM\Column(name="subTotal", type="float")
      */
     private $subTotal;
 
@@ -103,21 +103,6 @@ class SalesItem
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * @param int $quantity
-     */
-    public function setQuantity($quantity)
-    {
-        $this->quantity = $quantity;
-    }
 
     /**
      * @return string
@@ -269,6 +254,22 @@ class SalesItem
     public function getSalesReturnItem()
     {
         return $this->salesReturnItem;
+    }
+
+    /**
+     * @return float
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param float $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
     }
 
 

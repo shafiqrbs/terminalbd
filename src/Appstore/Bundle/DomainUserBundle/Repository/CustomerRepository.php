@@ -16,7 +16,7 @@ class CustomerRepository extends EntityRepository
     public function checkDuplicateCustomer(GlobalOption $globalOption, $mobile)
     {
         $em = $this->_em;
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$globalOption,'mobile'=>$mobile));
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption,'mobile' => $mobile));
         if($entity) {
             return false;
         }else{
@@ -25,10 +25,29 @@ class CustomerRepository extends EntityRepository
 
     }
 
+    public function defaultCustomer($global)
+    {
+
+        $mobile = $global->getMobile();
+        $em = $this->_em;
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $global ,'mobile' => $mobile));
+        if($entity){
+            return $entity;
+        }else{
+            $entity = new Customer();
+            $entity->setMobile($mobile);
+            $entity->setName('Default');
+            $entity->setGlobalOption($global);
+            $em->persist($entity);
+            $em->flush();
+            return $entity;
+        }
+    }
+
     public function findExistingCustomer($sales, $mobile)
     {
         $em = $this->_em;
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=>$sales->getInventoryConfig()->getGlobalOption(),'mobile'=>$mobile));
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $sales->getInventoryConfig()->getGlobalOption(),'mobile'=>$mobile));
         if($entity){
             return $entity;
         }else{

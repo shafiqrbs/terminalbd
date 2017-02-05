@@ -684,7 +684,7 @@ class Item
     }
 
     /**
-     * @return mixed
+     * @return Product
      */
     public function getMasterItem()
     {

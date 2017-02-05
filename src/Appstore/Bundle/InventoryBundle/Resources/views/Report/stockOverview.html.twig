@@ -47,7 +47,12 @@
                                     <th class="numeric" >Sales Price</th>
                                     <td class="numeric" >{{ priceOverview.salesPrice|number_format }}</td>
                                 </tr>
+                                <tr>
+                                    <th class="numeric" >Approximately Profit</th>
+                                    <th class="numeric" >{{ (priceOverview.salesPrice - priceOverview.purchasePrice)|number_format }}</th>
+                                </tr>
                             </table>
+
                             <div class="form-actions portlet box green">
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>Current Stock Quantity</div>
@@ -80,10 +85,10 @@
                                     <td class="numeric" >&nbsp;</td>
                                 </tr>
                                 <tr>
+                                    <th class="numeric" ></th>
+                                    <td class="numeric" ></td>
                                     <th class="numeric" >Current Stock</th>
-                                    <td class="numeric" >{{ stockOverview.remaining }}</td>
-                                    <th class="numeric" >&nbsp;</th>
-                                    <td class="numeric" >&nbsp;</td>
+                                    <th class="numeric" >{{ stockOverview.remaining }}</th>
                                 </tr>
                             </table>
                         </div>

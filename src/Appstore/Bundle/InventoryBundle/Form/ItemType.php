@@ -54,7 +54,6 @@ class ItemType extends AbstractType
                         ->where("p.status = 1")
                         ->andWhere("p.inventoryConfig =".$this->inventoryConfig->getId())
                         ->orderBy("p.name","ASC");
-
                 },
             ));
 
@@ -78,22 +77,6 @@ class ItemType extends AbstractType
                     },
                 )) ;
 
-            }else{
-
-                $builder
-                    ->add('vendor', 'entity', array(
-                        'required'    => true,
-                        'class' => 'Appstore\Bundle\InventoryBundle\Entity\Vendor',
-                        'empty_value' => '---Choose a vendor ---',
-                        'property' => 'companyName',
-                        'attr'=>array('class'=>'span12 select2'),
-                        'query_builder' => function(EntityRepository $er){
-                            return $er->createQueryBuilder('v')
-                                ->where("v.status = 1")
-                                ->andWhere("v.inventoryConfig =".$this->inventoryConfig->getId());
-
-                        },
-                )) ;
             }
             if($this->inventoryConfig->getIsColor() == 1 ) {
 
@@ -114,21 +97,6 @@ class ItemType extends AbstractType
                     },
                 ));
 
-            }else{
-
-                $builder
-                    ->add('color', 'entity', array(
-                        'required' => true,
-                        'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemColor',
-                        'empty_value' => '---Choose a color ---',
-                        'property' => 'name',
-                        'attr' => array('class' => 'span12 select2'),
-                        'query_builder' => function (EntityRepository $er) {
-                            return $er->createQueryBuilder('v')
-                                ->where("v.status = 1");
-
-                        },
-                ));
             }
             if($this->inventoryConfig->getIsSize() == 1 ) {
 
@@ -148,21 +116,6 @@ class ItemType extends AbstractType
                         },
                     ));
 
-            }else{
-
-                $builder
-                    ->add('size', 'entity', array(
-                        'required'    => true,
-                        'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemSize',
-                        'empty_value' => '---Choose a size/weight ---',
-                        'property' => 'name',
-                        'attr'=>array('class'=>'span12 select2'),
-                        'query_builder' => function(EntityRepository $er){
-                            return $er->createQueryBuilder('v')
-                                ->where("v.status = 1");
-
-                        },
-                    ));
             }
 
             if($this->inventoryConfig->getIsBrand() == 1 ) {
@@ -184,26 +137,7 @@ class ItemType extends AbstractType
                         },
                     ));
 
-            }else{
-
-                $builder
-                    ->add('brand', 'entity', array(
-                        'required'    => true,
-                        'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',
-                        'empty_value' => '---Choose a brand ---',
-                        'property' => 'name',
-                        'attr'=>array('class'=>'span12 select2'),
-                        'query_builder' => function(EntityRepository $er){
-                            return $er->createQueryBuilder('v')
-                                ->where("v.status = 1")
-                                ->andWhere("v.inventoryConfig =".$this->inventoryConfig->getId());
-                        },
-                    ));
-
             }
-
-            $builder
-                ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=> 4,'placeholder'=>'Item description')));
 
     }
     

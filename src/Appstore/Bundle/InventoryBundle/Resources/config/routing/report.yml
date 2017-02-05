@@ -3,6 +3,22 @@ inventory_report_overview:
     path:     /overview
     defaults: { _controller: "InventoryBundle:Report:overview" }
 
+inventory_report_till_stock:
+    path:     /till-stock
+    defaults: { _controller: "InventoryBundle:Report:tillStock" }
+
+inventory_report_periodic_stock:
+    path:     /periodic-stock
+    defaults: { _controller: "InventoryBundle:Report:periodicStock" }
+
+inventory_report_operational_stock:
+    path:     /operational-stock
+    defaults: { _controller: "InventoryBundle:Report:operationalStock" }
+
+inventory_report_group_stock:
+    path:     /group-stock
+    defaults: { _controller: "InventoryBundle:Report:groupStock" }
+
 inventory_report_stock:
     path:     /{group}/stock
     defaults: { _controller: "InventoryBundle:Report:stock" }

@@ -276,7 +276,7 @@ class Page
     protected $pageModules;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel", mappedBy="page" )
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel", mappedBy="page" )
      **/
     protected $sidebarWidgetPanel;
 

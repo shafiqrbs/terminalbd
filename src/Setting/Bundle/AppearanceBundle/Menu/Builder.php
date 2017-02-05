@@ -456,33 +456,36 @@ class Builder extends ContainerAware
 
                 }
 
-                if(in_array('ManualPos',$deliveryProcess)){
+                if(in_array('OnlineSales',$deliveryProcess)){
 
-                    $menu['Inventory']->addChild('Manual Sales System')
+                    $menu['Inventory']->addChild('Online Sales')
                         ->setAttribute('icon','icon icon-truck')
                         ->setAttribute('dropdown', true);
-                    $menu['Inventory']['Manual Sales System']->addChild('Pos', array('route' => 'inventory_sales_new'))->setAttribute('icon','icon-shopping-cart');
-
+                    $menu['Inventory']['Customer Sales']->addChild('Online Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
+                    $menu['Inventory']['Customer Sales']->addChild('Online Sales', array('route' => 'inventory_sales'))->setAttribute('icon',' icon-th-list');
                 }
 
-                if(in_array('CustomerSales',$deliveryProcess)){
-
-                    $menu['Inventory']->addChild('Customer Sales')
-                        ->setAttribute('icon','icon icon-truck')
-                        ->setAttribute('dropdown', true);
-                    $menu['Inventory']['Customer Sales']->addChild('Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
-                    $menu['Inventory']['Customer Sales']->addChild('Sales', array('route' => 'inventory_sales'))->setAttribute('icon',' icon-th-list');
-                    $menu['Inventory']['Customer Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon','icon-share-alt');
-
-                }
-
-                if(in_array('TemporaryDelivery',$deliveryProcess)){
+                if(in_array('GeneralSales',$deliveryProcess)){
 
                     $menu['Inventory']
-                        ->addChild('Temporary Delivery Item')
+                        ->addChild('General Sales')
                         ->setAttribute('icon','icon icon-truck')
                         ->setAttribute('dropdown', true);
-                    $menu['Inventory']['Temporary Delivery Item']->addChild('Pos', array('route' => 'inventory_sales_new'))->setAttribute('icon','icon-shopping-cart');
+                    $menu['Inventory']['General Sales']->addChild('Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
+                    $menu['Inventory']['General Sales']->addChild('Sales', array('route' => 'inventory_salesgeneral'))->setAttribute('icon',' icon-th-list');
+                    $menu['Inventory']['General Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon','icon-share-alt');
+
+                }
+
+                if(in_array('Order',$deliveryProcess)){
+
+                    $menu['Inventory']
+                        ->addChild('Online Order')
+                        ->setAttribute('icon','icon icon-truck')
+                        ->setAttribute('dropdown', true);
+                    $menu['Inventory']['Online Order']->addChild('Online Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
+                    $menu['Inventory']['Online Order']->addChild('Order', array('route' => 'inventory_sales'))->setAttribute('icon',' icon-th-list');
+                    $menu['Inventory']['Online Order']->addChild('Order Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon','icon-share-alt');
                 }
 
                 if($inventory->getIsBranch() == 1 ){
@@ -530,17 +533,14 @@ class Builder extends ContainerAware
             $menu['Inventory']->addChild('Reports')
                 ->setAttribute('icon','icon-bar-chart')
                 ->setAttribute('dropdown', true);
-            $menu['Inventory']['Reports']->addChild('Stock Item', array('route' => ''))->setAttribute('icon','icon-bar-chart')->setAttribute('dropdown', true);;
-            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Overview', array('route' => 'inventory_report_overview'))->setAttribute('icon','icon-bar-chart');
-            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Item', array('route' => 'inventory_report_stock_item'))->setAttribute('icon','icon-bar-chart');
-            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Vendor', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'vendor')))->setAttribute('icon','icon-bar-chart');
-            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Brand', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'brand')))->setAttribute('icon','icon-bar-chart');
-            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Product', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'product')))->setAttribute('icon','icon-bar-chart');
-            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Category', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'category')))->setAttribute('icon','icon-bar-chart');
-            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Size', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'size')))->setAttribute('icon','icon-bar-chart');
-            $menu['Inventory']['Reports']['Stock Item']->addChild('Stock Color', array('route' => 'inventory_report_stock','routeParameters' => array('group' => 'color')))->setAttribute('icon','icon-bar-chart');
-            $menu['Inventory']['Reports']->addChild('Purchase', array('route' => 'inventory_report_purchase'))->setAttribute('icon','icon-bar-chart');
-            $menu['Inventory']['Reports']->addChild('Sales', array('route' => 'inventory_report_sales'))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']->addChild('Summary Overview', array('route' => 'inventory_report_overview'))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']->addChild('Item Overview', array('route' => 'inventory_report_stock_item'))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']->addChild('Till Stock', array('route' => 'inventory_report_till_stock'))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']->addChild('Periodic Stock', array('route' => 'inventory_report_periodic_stock'))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']->addChild('Operational Stock', array('route' => 'inventory_report_operational_stock'))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']->addChild('Group Stock', array('route' => 'inventory_report_group_stock'))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']->addChild('Purchase with price', array('route' => 'inventory_report_purchase'))->setAttribute('icon','icon-bar-chart');
+            $menu['Inventory']['Reports']->addChild('Sales with price', array('route' => 'inventory_report_sales'))->setAttribute('icon','icon-bar-chart');
 
         }
 

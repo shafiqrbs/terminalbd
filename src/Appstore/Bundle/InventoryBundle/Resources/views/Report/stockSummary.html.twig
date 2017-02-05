@@ -117,10 +117,8 @@
                                 {% for entity in entities %}
                                     <tr>
                                         <td>{{ loop.index }}</td>
-                                        <td class="numeric" >{{ entity.masterItem.name }}
-                                            {% if entity.color  %}-{{ entity.color.name }}{% endif %}
-                                            {% if entity.size  %}-{{ entity.size.name }}{% endif %}
-                                            {% if entity.vendor  %}-{{ entity.vendor.name }}{% endif %}
+                                        <td class="numeric" >{{ entity.name }}</td>
+
                                         <td class="numeric" >{{ entity.purchaseQuantity }}</td>
                                         <td class="numeric" >{{ entity.purchaseQuantityReturn }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity }}</td>

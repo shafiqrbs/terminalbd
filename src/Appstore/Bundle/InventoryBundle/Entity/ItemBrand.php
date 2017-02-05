@@ -5,6 +5,7 @@ namespace Appstore\Bundle\InventoryBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -44,6 +45,11 @@ class ItemBrand  implements CodeAwareEntity
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="brands")
      */
     protected $ecommerceMenu;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="brand")
+     **/
+    private $featureWidgets;
 
 
     /**
@@ -336,6 +342,14 @@ class ItemBrand  implements CodeAwareEntity
     public function getEcommerceMenu()
     {
         return $this->ecommerceMenu;
+    }
+
+    /**
+     * @return FeatureWidget
+     */
+    public function getFeatureWidgets()
+    {
+        return $this->featureWidgets;
     }
 
 

@@ -28,17 +28,20 @@ class ItemColorRepository extends EntityRepository
 
     }
 
-    public function searchAutoComplete($q)
+    public function searchAutoComplete($inventory,$q)
     {
-        $query = $this->createQueryBuilder('e');
-        $query->select('e.name as id');
-        $query->addSelect('e.name as text');
-        $query->where('e.status = 1');
-        $query->andWhere($query->expr()->like("e.name", "'$q%'"  ));
-        $query->groupBy('e.id');
-        $query->orderBy('e.name', 'ASC');
-        $query->setMaxResults( '10' );
-        return $query->getQuery()->getResult();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.item','item');
+        $qb->select('e.name as id');
+        $qb->addSelect('e.name as text');
+        $qb->where('e.status = 1');
+        $qb->andWhere("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere($qb->expr()->like("e.name", "'$q%'"  ));
+        $qb->groupBy('e.id');
+        $qb->orderBy('e.name', 'ASC');
+        $qb->setMaxResults( '10' );
+        return $qb->getQuery()->getResult();
 
     }
 }

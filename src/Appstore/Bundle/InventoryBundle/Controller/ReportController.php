@@ -18,7 +18,6 @@ class ReportController extends Controller
 
     public function paginate($entities)
     {
-
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $entities,
@@ -47,6 +46,99 @@ class ReportController extends Controller
     }
 
 
+    public function tillStockAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $stockOverview = $em->getRepository('InventoryBundle:StockItem')->getStockOverview($inventory,$data);
+        $entities = $em->getRepository('InventoryBundle:StockItem')->stockItem($inventory,$data);
+        $pagination = $this->paginate($entities);
+        $previousQuantity = $em->getRepository('InventoryBundle:StockItem')->tillStockItem($mode ='previous',$inventory,$data);
+        $purchaseQuantity = $em->getRepository('InventoryBundle:StockItem')->tillStockItem($mode ='purchase',$inventory,$data);
+        $saleQuantity = $em->getRepository('InventoryBundle:StockItem')->tillStockItem($mode ='sales',$inventory,$data);
+
+        return $this->render('InventoryBundle:Report:tillStock.html.twig', array(
+            'entities' => $pagination,
+            'previousQuantity' => $previousQuantity,
+            'purchaseQuantity' => $purchaseQuantity,
+            'saleQuantity' => $saleQuantity,
+            'stockOverview' => $stockOverview,
+            'searchForm' => $data,
+        ));
+    }
+
+    public function periodicStockAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $stockOverview = $em->getRepository('InventoryBundle:StockItem')->getStockOverview($inventory,$data);
+        $entities = $em->getRepository('InventoryBundle:StockItem')->stockItem($inventory,$data);
+        $pagination = $this->paginate($entities);
+        $previousQuantity = $em->getRepository('InventoryBundle:StockItem')->periodicStockItem($mode ='previous',$inventory,$data);
+        $purchaseQuantity = $em->getRepository('InventoryBundle:StockItem')->periodicStockItem($mode ='purchase',$inventory,$data);
+        $saleQuantity = $em->getRepository('InventoryBundle:StockItem')->periodicStockItem($mode ='sales',$inventory,$data);
+
+        return $this->render('InventoryBundle:Report:periodicStock.html.twig', array(
+            'entities' => $pagination,
+            'previousQuantity' => $previousQuantity,
+            'purchaseQuantity' => $purchaseQuantity,
+            'saleQuantity' => $saleQuantity,
+            'stockOverview' => $stockOverview,
+            'searchForm' => $data,
+        ));
+
+    }
+
+    public function operationalStockAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $em->getRepository('InventoryBundle:StockItem')->stockItem($inventory,$data);
+        $pagination = $this->paginate($entities);
+        $quantity = $em->getRepository('InventoryBundle:StockItem')->operationalStockItem($inventory,$data);
+        return $this->render('InventoryBundle:Report:operationalStock.html.twig', array(
+            'entities' => $pagination,
+            'quantity' => $quantity,
+            'searchForm' => $data,
+        ));
+
+    }
+
+    public function groupStockAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        //$stockOverview = $em->getRepository('InventoryBundle:StockItem')->getStockOverview($inventory,$data);
+        $entities = $em->getRepository('InventoryBundle:StockItem')->stockGroupItemName($inventory,$data);
+        $pagination = $this->paginate($entities);
+        $previousQuantity = $em->getRepository('InventoryBundle:StockItem')->groupStockItem($mode ='previous',$inventory,$data);
+        $purchase = $em->getRepository('InventoryBundle:StockItem')->groupStockItem($mode ='purchase',$inventory,$data);
+        $purchaseReturn = $em->getRepository('InventoryBundle:StockItem')->groupStockItem($mode ='purchaseReturn',$inventory,$data);
+        $sale = $em->getRepository('InventoryBundle:StockItem')->groupStockItem($mode ='sales',$inventory,$data);
+        $salesReturn = $em->getRepository('InventoryBundle:StockItem')->groupStockItem($mode ='salesReturn',$inventory,$data);
+        $damage = $em->getRepository('InventoryBundle:StockItem')->groupStockItem($mode ='damage',$inventory,$data);
+        $online = $em->getRepository('InventoryBundle:StockItem')->groupStockItem($mode ='online',$inventory,$data);
+        $onlineReturn = $em->getRepository('InventoryBundle:StockItem')->groupStockItem($mode ='onlineReturn',$inventory,$data);
+
+        return $this->render('InventoryBundle:Report:groupStock.html.twig', array(
+            'entities' => $pagination,
+            'previousQuantity' => $previousQuantity,
+            'purchase' => $purchase,
+            'purchaseReturn' => $purchaseReturn,
+            'sale' => $sale,
+            'salesReturn' => $salesReturn,
+            'damage' => $damage,
+            'online' => $online,
+            'onlineReturn' => $onlineReturn,
+            'searchForm' => $data,
+        ));
+
+    }
+
     public function stockAction($group)
     {
         $em = $this->getDoctrine()->getManager();
@@ -61,7 +153,7 @@ class ReportController extends Controller
         ));
     }
 
- public function stockItemAction()
+    public function stockItemAction()
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;

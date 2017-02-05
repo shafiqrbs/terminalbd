@@ -45,6 +45,13 @@ inventory_sales_print_invoice:
     path:     /{invoice}/invoice
     defaults: { _controller: "InventoryBundle:Sales:invoicePrint" }
 
+inventory_sales_discount_update:
+    path:     /sales/discount-update
+    defaults: { _controller: "InventoryBundle:Sales:salesDiscountUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
 inventory_sales_item_update:
     path:     /sales/item/update
     defaults: { _controller: "InventoryBundle:Sales:salesItemUpdate" }

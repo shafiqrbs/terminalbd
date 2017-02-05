@@ -182,12 +182,13 @@ class GlobalOptionRepository extends EntityRepository
 
     public function createGlobalOption($mobile,$data)
     {
+
         $syndicate = $data['Core_userbundle_user']['globalOption']['syndicate'];
         $location = $data['Core_userbundle_user']['globalOption']['location'];
         $name = $data['Core_userbundle_user']['globalOption']['name'];
         $em = $this->_em;
-        $syndicate = $em->getRepository('SettingToolBundle:Syndicate')->findOneBy(array('id'=>$syndicate));
-        $location = $em->getRepository('SettingLocationBundle:Location')->findOneBy(array('id'=>$location));
+        $syndicate = $em->getRepository('SettingToolBundle:Syndicate')->findOneBy(array('id' => $syndicate));
+        $location = $em->getRepository('SettingLocationBundle:Location')->findOneBy(array('id' => $location));
         $globalOption = new GlobalOption();
         $globalOption->setName($name);
         $globalOption->setSlug($this->urlSlug($name));
@@ -279,6 +280,7 @@ class GlobalOptionRepository extends EntityRepository
 
         $customer = new Customer();
         $customer->setGlobalOption($globalOption);
+        $customer->setMobile($globalOption->getMobile(0));
         $customer->setName('Default');
         $em->persist($customer);
 
@@ -294,7 +296,6 @@ class GlobalOptionRepository extends EntityRepository
         $about->setModule($module);
         $about->setName('About us');
         $about->setMenu('About us');
-        $about->setSlug('about-us');
         $em->persist($about);
 
 
@@ -303,7 +304,7 @@ class GlobalOptionRepository extends EntityRepository
         $menu->setPage($about);
         $menu->setModule($module);
         $menu->setMenu($about->getName());
-        $menu->setSlug($about->getName());
+        $menu->setSlug($about->getSlug());
         $em->persist($menu);
 
         $menu = new Menu();

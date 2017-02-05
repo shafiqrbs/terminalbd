@@ -12,6 +12,7 @@ use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Appstore\Bundle\InventoryBundle\Entity\Vendor;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
 
@@ -83,10 +84,18 @@ class Excel
                 $itemObj = new Item();
                 $itemObj->setName($this->sentence_case($item['ProductName']));
                 $itemObj->setMasterItem($masterItem);
-                $itemObj->setColor($itemColor);
-                $itemObj->setSize($itemSize);
-                $itemObj->setVendor($vendor);
-                $itemObj->setBrand($brand);
+                if($this->getInventoryConfig()->getIsColor() == 1) {
+                    $itemObj->setColor($itemColor);
+                }
+                if($this->getInventoryConfig()->getIsSize() == 1) {
+                    $itemObj->setSize($itemSize);
+                }
+                if($this->getInventoryConfig()->getIsVendor() == 1) {
+                    $itemObj->setVendor($vendor);
+                }
+                if($this->getInventoryConfig()->getIsBrand() == 1) {
+                    $itemObj->setBrand($brand);
+                }
                 $itemObj->setInventoryConfig($this->getInventoryConfig());
                 $itemObj = $this->save($itemObj);
             }
@@ -134,12 +143,8 @@ class Excel
         {
             $key = $item['ProductName'] . "_" . $item['Vendor'] . "_" . $item['PurchasePrice']. "_" . $item['Memo'] ;
 
-           /* if($item['ProductName'] =='Ladies Tops'){
-               var_dump($item); die();
-            }*/
-
             $itemObj = $this->getCachedData('PurchaseVendorItem', $key);
-
+            $brand = $this->getBrand($item);
             $repository = $this->getPurchaseVendorItemRepository();
 
 
@@ -153,9 +158,11 @@ class Excel
                 ));
 
                 if ($itemObj == NULL) {
+
                     $itemObj = new PurchaseVendorItem();
                     $masterItem = $this->getMasterItem($item);
                     $itemObj->setMasterItem($masterItem);
+                    $itemObj->setBrand($brand);
                     $itemObj->setName($this->sentence_case($item['ProductName']));
                     $itemObj->setWebName($this->sentence_case($item['ProductName']));
                     $itemObj->setPurchase($purchase);
@@ -166,6 +173,7 @@ class Excel
                     $itemObj->setWebPrice($item['SalesPrice']);
                     $itemObj->setQuantity((int)$item['Quantity']);
                     $itemObj = $this->save($itemObj);
+
                 } else {
                     $itemObj->setQuantity($itemObj->getQuantity() + (int)$item['Quantity']);
                 }
@@ -186,7 +194,7 @@ class Excel
         $key = $item['ProductName'] . "_" . $item['Category'];
         $masterItem = $this->getCachedData('MasterItem', $key);
         $category = $this->getCategory($item);
-
+        $unit = $this->getUnit($item);
         $masterItemRepository = $this->getMasterItemRepository();
 
         if($masterItem == NULL) {
@@ -199,6 +207,7 @@ class Excel
                 $masterItem = new Product();
                 $masterItem->setName($this->sentence_case($item['ProductName']));
                 $masterItem->setCategory($category);
+                $masterItem->setProductUnit($unit);
                 $masterItem->setInventoryConfig($this->getInventoryConfig());
                 $masterItem = $this->save($masterItem);
             }
@@ -249,6 +258,27 @@ class Excel
         }
 
         return $size;
+    }
+
+    private function getUnit($item)
+    {
+        $unit = $this->getCachedData('Unit', $item['Unit']);
+        $unitRepository = $this->getUnitRepository();
+        if($unit == NULL) {
+
+            $unit = $unitRepository->findOneBy(array(
+                'name'                => $item['Unit']
+            ));
+
+            if($unit == null) {
+                $unit = new ProductUnit();
+                $unit->setName($item['Unit']);
+                $unit = $this->save($unit);
+            }
+            $this->setCachedData('Unit', $item['Unit'], $unit);
+        }
+
+        return $unit;
     }
 
 
@@ -459,6 +489,15 @@ class Excel
         return $this->getDoctrain()->getRepository('ProductProductBundle:Category');
     }
 
+    /**
+     * @return \Setting\Bundle\ToolBundle\Repository\ProductUnitRepository
+     */
+    private function getUnitRepository()
+    {
+        return $this->getDoctrain()->getRepository('SettingToolBundle:ProductUnit');
+    }
+
+
     private function getInventoryConfig()
     {
         $inventoryConfig = $this->getCachedData('InventoryConfig', $this->inventoryConfig);
@@ -531,6 +570,10 @@ class Excel
 
         if (empty($item['Quantity'])) {
             $item['Quantity'] = 1;
+        }
+
+        if (empty($item['Unit'])) {
+            $item['Unit'] = $defaultStr;
         }
 
 

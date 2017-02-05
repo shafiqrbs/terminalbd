@@ -71,6 +71,65 @@ class StockItemRepository extends EntityRepository
 
     }
 
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleWithSearch($qb,$data)
+    {
+        if(!empty($data))
+        {
+            $item = isset($data['item'])? $data['item'] :'';
+            $color = isset($data['color'])? $data['color'] :'';
+            $size = isset($data['size'])? $data['size'] :'';
+            $vendor = isset($data['vendor'])? $data['vendor'] :'';
+            $brand = isset($data['brand'])? $data['brand'] :'';
+            $category = isset($data['category'])? $data['category'] :'';
+            $unit = isset($data['unit'])? $data['unit'] :'';
+
+            if (!empty($item)) {
+                $qb->andWhere("m.name = :name");
+                $qb->setParameter('name', $item);
+            }
+            if (!empty($color)) {
+                $qb->join('item.color', 'c');
+                $qb->andWhere("c.name = :color");
+                $qb->setParameter('color', $color);
+            }
+            if (!empty($size)) {
+                $qb->join('item.size', 's');
+                $qb->andWhere("s.name = :size");
+                $qb->setParameter('size', $size);
+            }
+            if (!empty($vendor)) {
+                $qb->join('item.vendor', 'v');
+                $qb->andWhere("v.companyName = :vendor");
+                $qb->setParameter('vendor', $vendor);
+            }
+
+            if (!empty($brand)) {
+                $qb->join('item.brand', 'b');
+                $qb->andWhere("b.name = :brand");
+                $qb->setParameter('brand', $brand);
+            }
+
+            if (!empty($category)) {
+                $qb->join('m.category','cat');
+                $qb->andWhere("cat.name = :category");
+                $qb->setParameter('category', $category);
+            }
+
+            if (!empty($unit)) {
+                $qb->join('m.productUnit','u');
+                $qb->andWhere("b.name = :unit");
+                $qb->setParameter('unit', $unit);
+            }
+
+        }
+
+    }
+
 
     public function getStockPriceOverview($inventory,$data)
     {
@@ -85,6 +144,274 @@ class StockItemRepository extends EntityRepository
         return $result;
 
     }
+    public function stockItem($inventory,$data)
+    {
+
+        $qb = $this->createQueryBuilder('stock');
+        $qb->join('stock.item', 'item');
+        $qb->leftJoin('item.masterItem', 'm');
+        $qb->leftJoin('m.productUnit', 'u');
+        $qb->select("item.name AS name");
+        $qb->addSelect("item.id AS itemId");
+        $qb->addSelect("item.sku AS sku");
+        $qb->addSelect("u.name AS unit");
+
+        $qb->where("stock.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $this->handleWithSearch($qb,$data);
+        $qb->orderBy('m.name','ASC');
+        $qb->getQuery()->getArrayResult();
+        return  $qb;
+
+    }
+
+    public function  getPreviousItemStock($inventory,$data)
+    {
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:PurchaseItem','pi');
+        $qb->join('pi.purchase', 'purchase');
+        $qb->leftJoin('pi.item', 'item');
+        $qb->leftJoin('item.masterItem','m');
+        $qb->leftJoin('item.size', 's');
+        $qb->leftJoin('item.color', 'c');
+        $qb->leftJoin('item.brand', 'b');
+        $qb->leftJoin('item.vendor', 'v');
+        $qb->select('item.id  as itemId');
+        $qb->addSelect('sum(pi.quantity)  as purchaseQuantity');
+        $qb->where("purchase.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('item.id');
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($arrayResult as $row) {
+            $data[$row['itemId']] = $row['purchaseQuantity'];
+        }
+        return $data;
+    }
+
+    public function tillStockItem($mode,$inventory,$data)
+    {
+
+        $qb = $this->createQueryBuilder('stock');
+        $qb->join('stock.item', 'item');
+        $qb->leftJoin('item.masterItem', 'm');
+        $qb->leftJoin('m.productUnit', 'u');
+        $qb->select('SUM(stock.quantity) AS quantity');
+        $qb->addSelect('item.id AS itemId');
+        $qb->where("stock.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        if($mode == 'previous'){
+            $qb->andWhere('stock.process IN(:process)');
+            $qb->setParameter('process',array_values(array('purchase','salesReturn','sales','damage','purchaseReturn','online','onlineReturn')));
+
+            $tillDate = !empty($data['tillDate']) ? date('Y-m-d',strtotime($data['tillDate'])) : date('Y-m-d');
+
+            if (!empty($tillDate) ) {
+                $qb->andWhere("stock.created < :created");
+                $qb->setParameter('created', $tillDate.' 00:00:00');
+            }
+        }
+        if($mode == 'purchase'){
+
+            $qb->andWhere('stock.process IN(:process)');
+            $qb->setParameter('process',array_values(array('purchase','salesReturn','onlineReturn')));
+            $tillDate = !empty($data['tillDate']) ? date('Y-m-d',strtotime($data['tillDate'])) : date('Y-m-d');
+            if (!empty($tillDate) ) {
+                $qb->andWhere("stock.created >= :startDate");
+                $qb->setParameter('startDate', $tillDate.' 00:00:00');
+                $qb->andWhere("stock.created <= :endDate");
+                $qb->setParameter('endDate', $tillDate.' 23:59:59');
+            }
+        }
+
+        if($mode == 'sales'){
+
+            $qb->andWhere('stock.process IN(:process)');
+            $qb->setParameter('process',array_values(array('sales','damage','purchaseReturn','online')));
+            $tillDate = !empty($data['tillDate']) ? date('Y-m-d',strtotime($data['tillDate'])) : date('Y-m-d');
+            if (!empty($tillDate) ) {
+                $qb->andWhere("stock.created >= :startDate");
+                $qb->setParameter('startDate', $tillDate.' 00:00:00');
+                $qb->andWhere("stock.created <= :endDate");
+                $qb->setParameter('endDate', $tillDate.' 23:59:59');
+            }
+        }
+
+        $this->handleWithSearch($qb,$data);
+        $qb->groupBy('item.id');
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($arrayResult as $row) {
+            $data[$row['itemId']] = $row['quantity'];
+        }
+        return $data;
+
+    }
+
+    public function periodicStockItem($mode,$inventory,$data)
+    {
+        $qb = $this->createQueryBuilder('stock');
+        $qb->join('stock.item', 'item');
+        $qb->leftJoin('item.masterItem', 'm');
+        $qb->leftJoin('m.productUnit', 'u');
+        $qb->select('SUM(stock.quantity) AS quantity');
+        $qb->addSelect('item.id AS itemId');
+        $qb->where("stock.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+
+        if($mode == 'previous'){
+            $qb->andWhere('stock.process IN(:process)');
+            $qb->setParameter('process',array_values(array('purchase','salesReturn','sales','damage','purchaseReturn','online','onlineReturn')));
+            $tillDate = !empty($data['startDate']) ? date('Y-m-d',strtotime($data['startDate'])) : date('Y-m-d');
+            if (!empty($tillDate) ) {
+                $qb->andWhere("stock.created < :created");
+                $qb->setParameter('created', $tillDate.' 00:00:00');
+            }
+        }
+
+        if($mode == 'purchase'){
+
+            $qb->andWhere('stock.process IN(:process)');
+            $qb->setParameter('process',array_values(array('purchase','salesReturn','onlineReturn')));
+            $startDate = !empty($data['startDate']) ? date('Y-m-d',strtotime($data['startDate'])) : date('Y-m-d');
+            $endDate = !empty($data['endDate']) ? date('Y-m-d',strtotime($data['endDate'])) : date('Y-m-d');
+
+            if (!empty($startDate) ) {
+                $qb->andWhere("stock.created > :startDate");
+                $qb->setParameter('startDate', $startDate.' 00:00:00');
+                $qb->andWhere("stock.created < :endDate");
+                $qb->setParameter('endDate', $endDate.' 23:59:59');
+            }
+        }
+
+        if($mode == 'sales'){
+
+            $qb->andWhere('stock.process IN(:process)');
+            $qb->setParameter('process',array_values(array('sales','damage','purchaseReturn','online')));
+            $startDate = !empty($data['startDate']) ? date('Y-m-d',strtotime($data['startDate'])) : date('Y-m-d');
+            $endDate = !empty($data['endDate']) ? date('Y-m-d',strtotime($data['endDate'])) : date('Y-m-d');
+            if (!empty($startDate) ) {
+                $qb->andWhere("stock.created >= :startDate");
+                $qb->setParameter('startDate', $startDate.' 00:00:00');
+                $qb->andWhere("stock.created <= :endDate");
+                $qb->setParameter('endDate', $endDate.' 23:59:59');
+            }
+        }
+
+        $this->handleWithSearch($qb,$data);
+        $qb->groupBy('item.id');
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($arrayResult as $row) {
+            $data[$row['itemId']] = $row['quantity'];
+        }
+        return $data;
+
+    }
+
+    public function operationalStockItem($inventory,$data)
+    {
+        $mode = isset($data['mode'])? $data['mode'] :'';
+
+        $qb = $this->createQueryBuilder('stock');
+        $qb->join('stock.item', 'item');
+        $qb->select('SUM(stock.quantity) AS quantity');
+        $qb->addSelect('item.id AS itemId');
+        $qb->where("stock.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+
+        if(!empty($mode)){
+            $qb->andWhere('stock.process IN(:process)');
+            $qb->setParameter('process',array_values(array($mode)));
+        }
+        $startDate = !empty($data['startDate']) ? date('Y-m-d',strtotime($data['startDate'])) : '';
+        $endDate = !empty($data['endDate']) ? date('Y-m-d',strtotime($data['endDate'])) : '';
+        if (!empty($startDate and !empty($endDate)) ) {
+            $qb->andWhere("stock.created >= :startDate");
+            $qb->setParameter('startDate', $startDate.' 00:00:00');
+            $qb->andWhere("stock.created <= :endDate");
+            $qb->setParameter('endDate', $endDate.' 23:59:59');
+        }
+        $this->handleWithSearch($qb,$data);
+        $qb->groupBy('item.id');
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($arrayResult as $row) {
+            $data[$row['itemId']] = $row['quantity'];
+        }
+        return $data;
+
+    }
+
+    public function stockGroupItemName($inventory,$data)
+    {
+        $group = isset($data['group'])? $data['group'] :'masterItem';
+
+        $qb = $this->createQueryBuilder('stock');
+        $qb->join('stock.item', 'item');
+        $qb->join('item.'.$group, 'e');
+        $qb->select("e.name AS name");
+        $qb->addSelect('e.id AS itemId');
+        $qb->where("stock.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $this->handleWithSearch($qb,$data);
+        $qb->groupBy('item.'.$group);
+        $qb->orderBy('e.name','ASC');
+        $qb->getQuery()->getArrayResult();
+        return  $qb;
+
+    }
+
+    public function groupStockItem($mode,$inventory,$data)
+    {
+        $group = isset($data['group'])? $data['group'] :'masterItem';
+
+        $qb = $this->createQueryBuilder('stock');
+        $qb->join('stock.item', 'item');
+        $qb->join('item.'.$group, 'e');
+        $qb->select('SUM(stock.quantity) AS quantity');
+        $qb->addSelect('e.id AS itemId');
+        $qb->where("stock.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+
+        if($mode == 'previous'){
+            $qb->andWhere('stock.process IN(:process)');
+            $qb->setParameter('process',array_values(array('purchase','salesReturn','sales','damage','purchaseReturn','online','onlineReturn')));
+            $tillDate = !empty($data['startDate']) ? date('Y-m-d',strtotime($data['startDate'])) : date('Y-m-d');
+            if (!empty($tillDate) ) {
+                $qb->andWhere("stock.created < :created");
+                $qb->setParameter('created', $tillDate.' 00:00:00');
+            }
+        }
+
+        if(!empty($mode) and  $mode != 'previous'){
+
+            $qb->andWhere('stock.process IN(:process)');
+            $qb->setParameter('process',array_values(array($mode)));
+            $startDate = !empty($data['startDate']) ? date('Y-m-d',strtotime($data['startDate'])) : date('Y-m-d');
+            $endDate = !empty($data['endDate']) ? date('Y-m-d',strtotime($data['endDate'])) : date('Y-m-d');
+
+            if (!empty($startDate) ) {
+                $qb->andWhere("stock.created > :startDate");
+                $qb->setParameter('startDate', $startDate.' 00:00:00');
+                $qb->andWhere("stock.created < :endDate");
+                $qb->setParameter('endDate', $endDate.' 23:59:59');
+            }
+        }
+       // $this->handleWithSearch($qb,$data);
+        $qb->groupBy('item.'.$group);
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($arrayResult as $row) {
+            $data[$row['itemId']] = $row['quantity'];
+        }
+        return $data;
+
+
+    }
+
 
     public function getGroupStock($inventory,$group)
     {
@@ -98,14 +425,13 @@ class StockItemRepository extends EntityRepository
 
 
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.purchaseItem','pi');
         $qb->join('e.item','item');
-        $qb->select('SUM(e.quantity) AS quantity');
-        $qb->addSelect('SUM(pi.quantity) AS purchaseQuantity');
-        $qb->addSelect('SUM(e.quantity * pi.purchasePrice) AS purchasePrice');
-        $qb->addSelect('SUM(e.quantity * pi.salesPrice) AS salesPrice');
+        $qb->select('e.item AS itemId');
+        $qb->addSelect('SUM(e.quantity) AS quantity');
+
         $qb->where("e.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
+
         if (!empty($masterItem)) {
             $qb->addSelect('m.name AS masterItem');
             $qb->leftJoin('item.masterItem', 'm');
@@ -148,8 +474,11 @@ class StockItemRepository extends EntityRepository
         }
         $result = $qb->getQuery()->getArrayResult();
         return $result;
-
     }
+
+
+
+
 
     public function getProcessStock($inventory,$data)
     {
@@ -204,7 +533,6 @@ class StockItemRepository extends EntityRepository
         foreach($arrayResult as $row) {
             $data[$row['itemId']] = $row['purchaseQuantity'];
         }
-
         return $data;
     }
 

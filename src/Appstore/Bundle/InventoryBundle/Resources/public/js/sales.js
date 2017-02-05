@@ -22,7 +22,8 @@ var InventorySales = function(sales) {
                 $('#salesItem').html(obj['salesItem']);
                 $('.salesTotal').html(obj['salesTotal']);
                 $('#dueAmount').val(obj['salesTotal']);
-                $('#subTotal').val(obj['salesTotal']);
+                $('#subTotal').val(obj['salesSubTotal']);
+                $('#vat').val(obj['salesVat']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('#wrongBarcode').html(obj['msg']);
@@ -36,7 +37,7 @@ var InventorySales = function(sales) {
 
         var barcode = $('#barcodeNo').val();
         if(barcode == ''){
-            $('#wrongBarcode').html('Using wrong barcode, please try again correct barcode.');
+            $('#wrongBarcode').html('Using wrong barcode, Please try again correct barcode.');
             return false;
         }
         $.ajax({
@@ -49,7 +50,8 @@ var InventorySales = function(sales) {
                 $('#purchaseItem').html(obj['purchaseItem']);
                 $('#salesItem').html(obj['salesItem']);
                 $('.salesTotal').html(obj['salesTotal']);
-                $('#subTotal').val(obj['salesTotal']);
+                $('#subTotal').val(obj['salesSubTotal']);
+                $('#vat').val(obj['salesVat']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('#dueAmount').val(obj['salesTotal']);
@@ -76,7 +78,8 @@ var InventorySales = function(sales) {
                 $('#purchaseItem').html(obj['purchaseItem']);
                 $('#salesItem').html(obj['salesItem']);
                 $('.salesTotal').html(obj['salesTotal']);
-                $('#subTotal').val(obj['salesTotal']);
+                $('#subTotal').val(obj['salesSubTotal']);
+                $('#vat').val(obj['salesVat']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('#dueAmount').val(obj['salesTotal']);
@@ -129,7 +132,8 @@ var InventorySales = function(sales) {
                 success: function(response) {
                     obj = JSON.parse(response);
                     $('.salesTotal').html(obj['salesTotal']);
-                    $('#subTotal').val(obj['salesTotal']);
+                    $('#subTotal').val(obj['salesSubTotal']);
+                    $('#vat').val(obj['salesVat']);
                     $('#paymentTotal').val(obj['salesTotal']);
                     $('#paymentSubTotal').val(obj['salesTotal']);
                     $('#dueAmount').html(obj['salesTotal']);
@@ -145,8 +149,8 @@ var InventorySales = function(sales) {
 
         var rel = $(this).attr('rel');
 
-        var quantity = parseInt($('#quantity-'+rel).val());
-        var price = parseInt($('#salesPrice-'+rel).val());
+        var quantity = parseFloat($('#quantity-'+rel).val());
+        var price = parseFloat($('#salesPrice-'+rel).val());
         if($('#customPrice-'+rel).is(':checked')){
             var customPrice = 1;
         }else{
@@ -162,7 +166,8 @@ var InventorySales = function(sales) {
             success: function(response) {
                 obj = JSON.parse(response);
                 $('.salesTotal').html(obj['salesTotal']);
-                $('#subTotal').val(obj['salesTotal']);
+                $('#subTotal').val(obj['salesSubTotal']);
+                $('#vat').val(obj['salesVat']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('#dueAmount').val(obj['salesTotal']);
@@ -184,7 +189,8 @@ var InventorySales = function(sales) {
                 if ('success' == obj['success']) {
                     $('#remove-' + id).hide();
                     $('.salesTotal').html(obj['salesTotal']);
-                    $('#subTotal').val(obj['salesTotal']);
+                    $('#subTotal').val(obj['salesSubTotal']);
+                    $('#vat').val(obj['salesVat']);
                     $('#paymentTotal').val(obj['salesTotal']);
                     $('#paymentSubTotal').val(obj['salesTotal']);
                     $('#dueAmount').val(obj['salesTotal']);
@@ -193,27 +199,38 @@ var InventorySales = function(sales) {
 
             },
         })
+    });
+
+    $(document).on('change', '#discount', function() {
+
+        var discount = parseInt($('#discount').val());
+        $.ajax({
+            url: Routing.generate('inventory_sales_discount_update'),
+            type: 'POST',
+            data:'discount=' + discount+'&sales='+ sales,
+            success: function(response) {
+                obj = JSON.parse(response);
+                $('.salesTotal').html(obj['salesTotal']);
+                $('#subTotal').val(obj['salesSubTotal']);
+                $('#vat').val(obj['salesVat']);
+                $('#paymentTotal').val(obj['salesTotal']);
+                $('#paymentSubTotal').val(obj['salesTotal']);
+                $('#dueAmount').val(obj['salesTotal']);
+            },
+
+        })
     })
 
-    $(document).on('change', '#paymentAmount , #vat , #discount ', function() {
+    $(document).on('change', '#paymentAmount', function() {
 
         var payment     = parseInt($('#paymentAmount').val()  != '' ? $('#paymentAmount').val() : 0 );
-        var subTotal       = parseInt($('#paymentSubTotal').val() != '' ? $('#paymentSubTotal').val() : 0);
-        var vat         = parseInt($('#vat').val() != '' ? $('#vat').val() : 0 );
-        var discount    = parseInt($('#discount').val() != '' ? $('#discount').val() : 0);
-        var netAmount   = ((subTotal+vat)-discount);
-
-        $('.salesTotal').html(netAmount);
-        $('#paymentTotal').val(netAmount);
 
         var total =  parseInt($('#paymentTotal').val());
         if( payment >= total ){
 
             var returnAmount = ( payment - total );
-
             $('#returnAmount').val(returnAmount).addClass('payment-yellow');
             $('#dueAmount').val('').removeClass('payment-red');
-
 
         }else{
 
@@ -223,9 +240,6 @@ var InventorySales = function(sales) {
                 $('#dueAmount').val(dueAmount).addClass('payment-red');
             }
         }
-
-
-
         if(payment > 0 && total > 0  ){
             $(".paymentBtn").attr("disabled", false);
         }else{

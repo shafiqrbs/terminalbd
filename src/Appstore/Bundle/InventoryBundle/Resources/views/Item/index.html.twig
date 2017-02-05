@@ -124,8 +124,9 @@
                                 <thead>
                                 <tr class="head-green">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                    <th class="numeric" >SKU Name </th>
                                     <th class="numeric" >SKU</th>
+                                    <th class="numeric" >SKU Name </th>
+                                    <th class="numeric" >Unit</th>
                                     <th class="numeric" >P.Qnt</th>
                                     <th class="numeric" >Rmn.Qnt</th>
                                     <th class="numeric" >Avg P.Price</th>
@@ -138,10 +139,11 @@
                                 {% for entity in entities %}
                                     <tr>
                                         <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
-                                        <td class="numeric" >{{ entity.name }}</td>
                                         <td class="numeric" >{{ entity.sku }}</td>
-                                        <td class="numeric" >{{ entity.purchaseQuantity }}&nbsp;{% if entity.masterItem.productUnit is not empty %}{{  entity.masterItem.productUnit.name }}{% endif %}</td>
-                                        <td class="numeric" >{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.onlineOrderQuantityReturn)  - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity+ entity.onlineOrderQuantity) }}&nbsp;{% if entity.masterItem.productUnit is not empty %}{{  entity.masterItem.productUnit.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.name }}</td>
+                                        <td class="numeric" >{% if entity.masterItem.productUnit is not empty %}{{  entity.masterItem.productUnit.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.purchaseQuantity }}</td>
+                                        <td class="numeric" >{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.onlineOrderQuantityReturn) - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity+ entity.onlineOrderQuantity) }}</td>
                                         <td class="numeric" >{{ entity.avgPurchasePrice }}</td>
                                         <td class="numeric" >{{ entity.avgSalesPrice }}</td>
                                         <td class="numeric" >
@@ -167,7 +169,7 @@
                                                 <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                                     <thead class="flip-content ">
-                                                    <tr class="head-grey">
+                                                    <tr class="head-blue">
                                                         <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
                                                         <th class="numeric" >Received</th>
                                                         <th class="numeric" >Memo</th>

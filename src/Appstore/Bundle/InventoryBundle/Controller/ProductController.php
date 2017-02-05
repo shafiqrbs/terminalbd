@@ -291,7 +291,8 @@ class ProductController extends Controller
     {
         $item = $_REQUEST['q'];
         if ($item) {
-            $item = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->searchAutoComplete($item);
+            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $item = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->searchAutoComplete($inventory,$item);
         }
         return new JsonResponse($item);
     }
@@ -303,6 +304,25 @@ class ProductController extends Controller
             'text'=> $category
         ));
     }
+
+    public function autoUnitSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $item = $this->getDoctrine()->getRepository('SettingToolBundle:ProductUnit')->searchAutoComplete($inventory,$item);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchUnitNameAction($unit)
+    {
+        return new JsonResponse(array(
+            'id'    => $unit,
+            'text'  => $unit
+        ));
+    }
+
 
     public function masterItemSelectAction()
     {

@@ -225,27 +225,37 @@
     ApproveProcess();
     $('#sales').on("click", ".delete", function() {
 
-    var url = $(this).attr("rel");
-    var id = $(this).attr("id");
-    $.ajax({
-    url: url,
-    type: 'GET',
-    success: function (response) {
-    obj = JSON.parse(response);
-    if ('success' == obj['success']) {
-    $('#salesRemove-' + id).hide();
-    }
-    }
-    })
+        var url = $(this).attr("rel");
+    alert(url);
+        var id = $(this).attr("id");
+        $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (response) {
+        obj = JSON.parse(response);
+        if ('success' == obj['success']) {
+        $('#salesRemove-' + id).hide();
+        }
+        }
+        })
     })
 
     $('#sales').on("click", ".print", function() {
         var url = $(this).attr("rel");
         $.ajax({
+            crossDomain: true,
             url: url,
             type: 'GET',
             success: function (response) {
-                console.log(response);
+                $.ajax({
+                    crossDomain: true,
+                    url: 'http://127.0.0.1/posprint/test.php',
+                    type: 'POST',
+                    data: {data:response},
+                    success: function (response) {
+                        console.log(response);
+                    }
+                })
             }
         })
     })
