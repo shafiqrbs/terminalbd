@@ -187,6 +187,7 @@ class GlobalOptionRepository extends EntityRepository
         $location = $data['Core_userbundle_user']['globalOption']['location'];
         $name = $data['Core_userbundle_user']['globalOption']['name'];
         $em = $this->_em;
+
         $syndicate = $em->getRepository('SettingToolBundle:Syndicate')->findOneBy(array('id' => $syndicate));
         $location = $em->getRepository('SettingLocationBundle:Location')->findOneBy(array('id' => $location));
         $globalOption = new GlobalOption();

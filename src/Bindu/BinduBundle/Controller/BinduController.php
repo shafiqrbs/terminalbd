@@ -100,7 +100,6 @@ class BinduController extends Controller
         if ($form->isValid()) {
 
             $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->createGlobalOption($mobile,$data);
-            //$a = mt_rand(1000,9999);
             $entity->setPlainPassword("1234");
             $entity->setGlobalOption($globalOption);
             $entity->setEnabled(true);
