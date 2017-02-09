@@ -282,12 +282,14 @@ class ItemRepository extends EntityRepository
             $data .= '<td class="numeric" >' . $ongoingSalesQnt . '</td>';
             $data .= '<td class="numeric" >' . ($purchaseItem->getItemStock() - $ongoingSalesQnt) . '</td>';
             $data .= '<td class="numeric" >' . $purchaseItem->getPurchasePrice() . '</td>';
-            if($customer == ""){
+         /*   if($customer == ""){
                 $data .= '<td class="numeric" ><a class="editable" data-name="SalesPrice" href="javascript:"  data-url="/inventory/purchaseitem/inline-update" data-type="text" data-pk="' . $purchaseItem->getId() . '" data-original-title="Enter sales price">' . $purchaseItem->getSalesPrice() . '</a></td>';
                 $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem->getBarcode().'"><i class="icon-shopping-cart"></i>  Add Sales</a></td>';
-            }else{
+            }else{*/
                 $data .= '<td class="numeric" >'.$purchaseItem->getSalesPrice().'</td>';
-            }
+                $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem->getBarcode().'"><i class="icon-shopping-cart"></i>  Add Sales</a></td>';
+
+           // }
             $data .= '</tr>';
         }
         return $data;

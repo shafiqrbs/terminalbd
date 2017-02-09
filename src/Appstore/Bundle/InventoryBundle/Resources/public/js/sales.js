@@ -2,9 +2,80 @@
  * Created by rbs on 2/9/16.
  */
 
+/*function initializeAutoTabOptionOnEnterKey($form) {
+    $('#particular').select2('open');
+    $('#particular').on("select2-selecting", function (e) {
+        setTimeout(function () {
+            gotoNextFieldOfParticular();
+        }, 50)
+    });
+
+    $form.on('keypress', 'input', function (e) {
+
+        if (e.which == 13) {
+            e.preventDefault();
+
+            switch (this.id) {
+                case 'particular':
+                    gotoNextFieldOfParticular();
+                    break;
+                case 'description':
+                    $amountField.focus();
+                    break;
+                case 'amount':
+                    $form.find('input.btn').trigger('click');
+                    break;
+            }
+        }
+    });
+}*/
+
 var InventorySales = function(sales) {
 
     $('input[name=barcode]').focus();
+
+    $('#item').select2('open');
+    $('#item').focus();
+
+    $('body').addClass('page-sidebar-closed');
+    $( "#searchToggole" ).click(function() {
+        $( "#search-product" ).slideToggle( "slow" );
+    });
+
+    $(".addCustomer").click(function(){
+        $( ".customer" ).slideToggle( "slow" );
+    }).toggle( function() {
+        $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
+    }, function() {
+        $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>&nbsp;Customer');
+    });
+
+    $('form.horizontal-form').on('keypress', 'input', function (e) {
+
+        if (e.which == 13) {
+            e.preventDefault();
+
+            switch (this.id) {
+
+                case 'discount':
+                    $('#paymentAmount').focus();
+                    break;
+
+                case 'paymentAmount':
+                    $('#mobile').select2('open');
+                    $('#sales_mobile').focus();
+                    $(".paymentBtn").attr("disabled", false);
+                    break;
+            }
+        }
+    });
+
+    $('#sales_general_salesBy').on("select2-selecting", function (e) {
+        setTimeout(function () {
+            $('#discount').focus();
+        }, 2000)
+    });
+
     $(document).on('change', '#barcode', function() {
         var barcode = $('#barcode').val();
         if(barcode == ''){

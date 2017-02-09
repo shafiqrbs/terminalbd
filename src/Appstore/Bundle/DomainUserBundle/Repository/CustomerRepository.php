@@ -39,11 +39,37 @@ class CustomerRepository extends EntityRepository
             $entity->setName('Default');
             $entity->setGlobalOption($global);
             $em->persist($entity);
-            $em->flush();
+            $em->flush($entity);
             return $entity;
         }
     }
 
+    public function newExistingCustomer($globalOption,$mobile,$data)
+    {
+        $em = $this->_em;
+        $name = $data['sales_general']['customer']['name'];
+        $location = $data['sales_general']['customer']['location'];
+        $address = $data['sales_general']['customer']['address'];
+
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
+        if($entity){
+
+            return $entity;
+
+        }else{
+
+            $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
+            $entity = new Customer();
+            $entity->setMobile($mobile);
+            $entity->setName($name);
+            $entity->setLocation($location);
+            $entity->setAddress($address);
+            $entity->setGlobalOption($globalOption);
+            $em->persist($entity);
+            $em->flush($entity);
+            return $entity;
+        }
+    }
     public function findExistingCustomer($sales, $mobile)
     {
         $em = $this->_em;

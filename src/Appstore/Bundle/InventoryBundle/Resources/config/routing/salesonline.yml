@@ -1,0 +1,32 @@
+inventory_salesonline:
+    path:     /
+    defaults: { _controller: "InventoryBundle:SalesOnline:index" }
+
+inventory_salesonline_customer:
+    path:     /customer
+    defaults: { _controller: "InventoryBundle:SalesOnline:customer" }
+
+inventory_salesonline_show:
+    path:     /{id}/show
+    defaults: { _controller: "InventoryBundle:SalesOnline:show" }
+
+inventory_salesonline_new:
+    path:     /new
+    defaults: { _controller: "InventoryBundle:SalesOnline:new" }
+
+inventory_salesonline_edit:
+    path:     /{code}/online
+    defaults: { _controller: "InventoryBundle:SalesOnline:edit" }
+
+inventory_salesonline_update:
+    path:     /{id}/update
+    defaults: { _controller: "InventoryBundle:SalesOnline:update" }
+    methods:  [POST, PUT]
+
+inventory_salesonline_print_invoice:
+    path:     /{invoice}/invoice
+    defaults: { _controller: "InventoryBundle:SalesOnline:invoicePrint" }
+
+inventory_salesonline_empty_delete:
+    path:     /delete/empty-invoice
+    defaults: { _controller: "InventoryBundle:SalesOnline:deleteEmptyInvoice" }

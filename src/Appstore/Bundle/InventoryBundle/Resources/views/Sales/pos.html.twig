@@ -37,7 +37,7 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn blue" id="searchToggole" href="javascript:"><i class="icon-search"></i>&nbsp;Search</a>
+                                <a class="btn blue" id="searchProduct" href="javascript:"><i class="icon-search"></i>&nbsp;Search</a>
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                     <i class="icon-cogs"></i>&nbsp;Tools
                                     <i class="icon-tasks"></i>
@@ -127,7 +127,7 @@
                                     <div class="span8">
 
                                         <div class="row-fluid">
-                                            <div class="span12 alert-error" id="wrongBarcode"></div>
+                                            <div id="wrongBarcode"></div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
@@ -190,13 +190,6 @@
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="span12 input-prepend input-append input-append-border">
-                                                    <span class="add-on add-on-custom span3">Discount TK.</span><input class="m-wrap span7  center-input numeric" name="discount" id="discount" value="{{ entity.discount }}" type="text">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row-fluid">
-                                            <div class="span12">
-                                                <div class="span12 input-prepend input-append input-append-border">
                                                     <span class="add-on add-on-custom span3">VAT/TAX TK.</span><input class="m-wrap span7 numeric disabled-field" readonly="readonly" name="vat" id="vat" type="text" value="{{ entity.vat }}">
                                                     <input class="m-wrap span9 numeric" name="vat" id="vat" type="hidden">
                                                 </div>
@@ -206,6 +199,13 @@
                                             <div class="span12">
                                                 <div class="span12 input-prepend input-append input-append-border span12">
                                                     <span class="add-on add-on-custom span3">Due TK.</span><input class="m-wrap span7 numeric disabled-field" type="text" name="dueAmount" readonly="readonly" id="dueAmount" value="{{ entity.due }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="input-prepend input-append input-append-border span12">
+                                                    <span class="add-on add-on-custom span3">Return TK.</span><input class="m-wrap span7  numeric disabled-field" readonly="readonly" type="text" id="returnAmount" name="returnAmount">
                                                 </div>
                                             </div>
                                         </div>
@@ -262,16 +262,22 @@
                                             </div>
                                         </div>
                                         <div class="row-fluid">
+                                            <div class="span12 input-append-border">
+                                                {{ form_widget(form.salesBy) }}
+                                                {{ form_errors(form.salesBy) }}
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
                                             <div class="span12">
-                                                <div class="input-prepend input-append input-append-border span12">
-                                                    <span class="add-on add-on-custom span3">Receive TK.</span><input class="m-wrap span7 numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder="">
+                                                <div class="span12 input-prepend input-append input-append-border">
+                                                    <span class="add-on add-on-custom span3">Discount TK.</span><input class="m-wrap span7  center-input numeric" name="discount" id="discount" value="{{ entity.discount }}" type="text">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="input-prepend input-append input-append-border span12">
-                                                    <span class="add-on add-on-custom span3">Return TK.</span><input class="m-wrap span7  numeric disabled-field" readonly="readonly" type="text" id="returnAmount" name="returnAmount">
+                                                    <span class="add-on add-on-custom span3">Receive TK.</span><input class="m-wrap span7 numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder="">
                                                 </div>
                                             </div>
                                         </div>
@@ -284,12 +290,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="row-fluid">
-                                            <div class="span12 input-append-border">
-                                                {{ form_widget(form.salesBy) }}
-                                                {{ form_errors(form.salesBy) }}
-                                            </div>
-                                        </div>
+
                                         <div class="clearfix"></div>
                                         <div class="row-fluid">
                                             <div class="span12 ">
@@ -298,8 +299,9 @@
                                                         <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                                         <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
                                                         <button disabled="disabled" type="submit" class="btn blue paymentBtn"><i class="icon-print"></i>&nbsp;Print</button>
-                                                        <button disabled="disabled" rel="{{ path('inventory_sales_print',{'code':entity.invoice}) }}"  type="button" class="btn green paymentBtn" id="pos"><i class="icon-print m-icon-white"></i>&nbsp;Pos Print</button>
-                                                        <a href="{{ path('inventory_sales_edit',{'code':entity.code}) }}"  class="btn purple"><i class="icon-refresh"></i>&nbsp;Reset</a>
+                                                        <button disabled="disabled" rel="{{ path('inventory_sales_print',{'code':entity.invoice}) }}"  type="button" class="btn green paymentBtn" id="pos"><i class="icon-print m-icon-white"></i>&nbsp;Pos</button>
+                                                        <button disabled="disabled" rel=""  type="submit" class="btn purple paymentBtn" ><i class="icon-ok m-icon-white"></i>&nbsp;Paid</button>
+                                                        <a href="{{ path('inventory_sales_reset',{'id':entity.id}) }}"  class="btn yellow"><i class="icon-refresh"></i></a>
 
                                            {#
                                             <a href="{{ path('inventory_sales') }}"  class="btn yellow"><i class="m-icon-swapleft m-icon-white"></i>&nbsp;Back</a>
@@ -426,11 +428,6 @@
     .center-input{
         min-width: 46.5% !important;
     }
-    #wrongBarcode{
-        line-height: 30px;
-        text-align: left;
-        padding-left:10px;
-    }
     #barcode-box{
         background-color:#2F373E;
         min-height: 88px;
@@ -490,13 +487,14 @@
 {% block documentready %}
     {{ parent() }}
     $('body').addClass('page-sidebar-closed');
-    $( "#searchToggole" ).click(function() {
+    $( "#searchProduct" ).click(function() {
         $( "#search-product" ).slideToggle( "slow" );
     });
     EditableInit();
     InventorySales({{ entity.id ? entity.id : 0 }});
 
     $(document).on("click", "#pos", function() {
+
         var url = $(this).attr("rel");
         $.ajax({
             crossDomain: true,

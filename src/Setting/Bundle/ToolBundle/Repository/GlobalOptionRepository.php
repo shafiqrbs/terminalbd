@@ -198,7 +198,7 @@ class GlobalOptionRepository extends EntityRepository
         $globalOption->setUniqueCode($this->getUniqueId());
         $globalOption->setStatus(false);
         $em->persist($globalOption);
-        $em->flush();
+        $em->flush($globalOption);
         return $globalOption;
 
     }

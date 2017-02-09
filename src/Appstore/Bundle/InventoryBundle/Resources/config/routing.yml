@@ -95,8 +95,8 @@ inventory_salesgeneral:
     prefix:   /inventory/sales-general
 
 inventory_salescustomer:
-    resource: "@InventoryBundle/Resources/config/routing/salescustomer.yml"
-    prefix:   /inventory/sales-customer
+    resource: "@InventoryBundle/Resources/config/routing/salesonline.yml"
+    prefix:   /inventory/sales-online
 
 inventory_stockitem:
     resource: "@InventoryBundle/Resources/config/routing/stockitem.yml"

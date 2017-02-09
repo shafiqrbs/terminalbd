@@ -91,7 +91,7 @@ class SalesRepository extends EntityRepository
 
     }
 
-    public function salesLists($config,$data)
+    public function salesLists($config,$mode='',$data)
     {
 
         $qb = $this->createQueryBuilder('s');
@@ -99,6 +99,8 @@ class SalesRepository extends EntityRepository
         $qb->leftJoin('s.salesBy','u');
         $qb->where("s.inventoryConfig = :config");
         $qb->setParameter('config', $config);
+        $qb->andWhere("s.salesMode = :mode");
+        $qb->setParameter('mode', $mode);
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.updated','DESC');
         $result = $qb->getQuery();
@@ -163,7 +165,7 @@ class SalesRepository extends EntityRepository
 
     }
 
-    public function todaySalesOverview($inventory)
+    public function todaySalesOverview($inventory , $mode='')
     {
         $qb = $this->_em->createQueryBuilder();
         $datetime = new \DateTime("now");
@@ -172,10 +174,12 @@ class SalesRepository extends EntityRepository
         $qb->from('InventoryBundle:Sales','s');
         $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount');
         $qb->where('s.inventoryConfig = :inventory')
+            ->andWhere('s.salesMode =:mode')
             ->andWhere('s.paymentStatus IN (:pStatus)')
             ->andWhere('s.updated >= :today_startdatetime')
             ->andWhere('s.updated <= :today_enddatetime');
         $qb->setParameter('inventory', $inventory)
+            ->setParameter('mode', $mode)
             ->setParameter('pStatus', array('Paid','Due'))
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
@@ -183,7 +187,7 @@ class SalesRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function todaySales($inventory)
+    public function todaySales($inventory , $mode = '')
     {
         $qb = $this->_em->createQueryBuilder();
         $datetime = new \DateTime("now");
@@ -192,10 +196,12 @@ class SalesRepository extends EntityRepository
         $qb->from('InventoryBundle:Sales','s');
         $qb->select('s')
             ->where('s.inventoryConfig = :inventory')
+            ->andWhere('s.salesMode =:mode')
             ->andWhere('s.updated >= :today_startdatetime')
             ->andWhere('s.updated <= :today_enddatetime');
 
         $qb->setParameter('inventory', $inventory)
+            ->setParameter('mode', $mode)
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
         $qb->orderBy("s.invoice", 'DESC');

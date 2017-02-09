@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use Appstore\Bundle\InventoryBundle\Form\SalesGeneralType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
@@ -45,14 +46,61 @@ class SalesGeneralController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory, $data);
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory, $mode='general',$data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
-        return $this->render('InventoryBundle:Sales:index.html.twig', array(
+        return $this->render('InventoryBundle:SalesGeneral:index.html.twig', array(
             'entities' => $pagination,
             'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
         ));
+    }
+
+
+    public function customerAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('DomainUserBundle:Customer')->findWithSearch($globalOption,$data);
+        $pagination = $this->paginate($entities);
+        return $this->render('InventoryBundle:SalesGeneral:customer.html.twig', array(
+            'entities' => $pagination,
+            'searchForm' => $data,
+        ));
+    }
+
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
+     */
+
+    public function newAction()
+    {
+        $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer'] : '';
+        $em = $this->getDoctrine()->getManager();
+        $entity = new Sales();
+        $globalOption = $this->getUser()->getGlobalOption();
+
+        $customerEntity = $em->getRepository('DomainUserBundle:Customer')->find($customer);
+        if (!empty($customer) && !empty($customerEntity)) {
+            $entity->setCustomer($customerEntity);
+        }
+
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
+        $entity->setSalesMode('general');
+        $entity->setPaymentStatus('Pending');
+        $entity->setInventoryConfig($globalOption->getInventoryConfig());
+        $entity->setSalesBy($this->getUser());
+        if(!empty($this->getUser()->getProfile()->getBranches())){
+            $entity->setBranches($this->getUser()->getProfile()->getBranches());
+        }
+        $em->persist($entity);
+        $em->flush();
+        return $this->redirect($this->generateUrl('inventory_salesgeneral_edit', array('code' => $entity->getInvoice())));
+
     }
 
     /**
@@ -191,39 +239,7 @@ class SalesGeneralController extends Controller
         exit;
     }
 
-    /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
-     */
 
-    public function newAction()
-    {
-        $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer'] : '';
-        $em = $this->getDoctrine()->getManager();
-        $entity = new Sales();
-        $globalOption = $this->getUser()->getGlobalOption();
-
-        $customerEntity = $em->getRepository('DomainUserBundle:Customer')->find($customer);
-        if (!empty($customer) && !empty($customerEntity)) {
-            $entity->setCustomer($customer);
-        }else{
-            $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
-            $entity->setCustomer($customer);
-        }
-
-        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-        $entity->setTransactionMethod($transactionMethod);
-        $entity->setSalesMode('general');
-        $entity->setPaymentStatus('Pending');
-        $entity->setInventoryConfig($globalOption->getInventoryConfig());
-        $entity->setSalesBy($this->getUser());
-        if(!empty($this->getUser()->getProfile()->getBranches())){
-            $entity->setBranches($this->getUser()->getProfile()->getBranches());
-        }
-        $em->persist($entity);
-        $em->flush();
-        return $this->redirect($this->generateUrl('inventory_salesgeneral_edit', array('code' => $entity->getInvoice())));
-
-    }
 
     /**
      * Finds and displays a Sales entity.
@@ -258,8 +274,8 @@ class SalesGeneralController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory,$mode = 'general');
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory,$mode = 'general');
 
         if ($entity->getProcess() != "In-progress") {
             return $this->redirect($this->generateUrl('inventory_salesgeneral_show', array('id' => $entity->getId())));
@@ -282,12 +298,12 @@ class SalesGeneralController extends Controller
     private function createEditForm(Sales $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new SalesType($globalOption), $entity, array(
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new SalesGeneralType($globalOption,$location), $entity, array(
             'action' => $this->generateUrl('inventory_salesgeneral_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
-                'id' => 'posForm',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -309,17 +325,30 @@ class SalesGeneralController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         $data = $request->request->all();
+
+
+
         if ($editForm->isValid() and $data['paymentTotal'] > 0 ) {
+            $globalOption = $this->getUser()->getGlobalOption();
+            if (!empty($data['sales_general']['customer']['mobile'])) {
 
-            if (!empty($data['sales']['mobile'])) {
-
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales']['mobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity, $mobile);
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales_general']['customer']['mobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomer($globalOption,$mobile,$data);
                 $entity->setCustomer($customer);
-                $entity->setMobile($mobile);
+
+            } elseif(!empty($data['mobile'])) {
+
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
+                $entity->setCustomer($customer);
+
             } else {
-                $globalOption = $this->getUser()->getGlobalOption();
+
                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
+                if(empty($customer)){
+                    $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
+
+                }
                 $entity->setCustomer($customer);
             }
 
@@ -331,6 +360,7 @@ class SalesGeneralController extends Controller
             $entity->setDue($data['dueAmount']);
             $entity->setDiscount($data['discount']);
             $entity->setTotal($data['paymentTotal']);
+            $entity->setProcess('Paid');
             $entity->setPayment($data['paymentTotal'] - $data['dueAmount']);
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
             $entity->setPaymentInWord($amountInWords);
@@ -349,6 +379,7 @@ class SalesGeneralController extends Controller
                 $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
                 $entity->setPaymentInWord($amountInWords);
             }
+
             $em->flush();
 
             if (in_array('CustomerSales', $entity->getInventoryConfig()->getDeliveryProcess())) {
@@ -358,22 +389,20 @@ class SalesGeneralController extends Controller
                     $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
                 }
             }
-            if ($entity->getTransactionMethod()->getId() == 4) {
-                return $this->redirect($this->generateUrl('inventory_sales_show', array('id' => $entity->getId())));
-            } else {
-                $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
-                $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
-                $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
-                $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
-                $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
-                return $this->redirect($this->generateUrl('inventory_sales_new'));
-            }
+
+            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
+            $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+            $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
+            $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
+            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+            return $this->redirect($this->generateUrl('inventory_salesgeneral_show', array('id' => $entity->getId())));
+
 
         }
 
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory,$mode='general');
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory,$mode='general');
         return $this->render('InventoryBundle:SalesGeneral:sales.html.twig', array(
             'entity' => $entity,
             'todaySales' => $todaySales,

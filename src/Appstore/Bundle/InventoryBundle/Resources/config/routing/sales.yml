@@ -70,6 +70,10 @@ inventory_sales_update:
     defaults: { _controller: "InventoryBundle:Sales:update" }
     methods:  [POST, PUT]
 
+inventory_sales_reset:
+    path:     /{id}/reset
+    defaults: { _controller: "InventoryBundle:Sales:reset" }
+
 inventory_sales_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:Sales:delete" }

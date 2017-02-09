@@ -458,11 +458,14 @@ class Builder extends ContainerAware
 
                 if(in_array('OnlineSales',$deliveryProcess)){
 
-                    $menu['Inventory']->addChild('Online Sales')
+                    $menu['Inventory']
+                        ->addChild('Online Sales')
                         ->setAttribute('icon','icon icon-truck')
                         ->setAttribute('dropdown', true);
-                    $menu['Inventory']['Customer Sales']->addChild('Online Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
-                    $menu['Inventory']['Customer Sales']->addChild('Online Sales', array('route' => 'inventory_sales'))->setAttribute('icon',' icon-th-list');
+                    $menu['Inventory']['Online Sales']->addChild('Customers', array('route' => 'inventory_salesonline_customer'))->setAttribute('icon', 'icon icon-user');
+                    $menu['Inventory']['Online Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon',' icon-plus');
+                    $menu['Inventory']['Online Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon',' icon-th-list');
+                    $menu['Inventory']['Online Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon','icon-share-alt');
                 }
 
                 if(in_array('GeneralSales',$deliveryProcess)){
@@ -471,7 +474,8 @@ class Builder extends ContainerAware
                         ->addChild('General Sales')
                         ->setAttribute('icon','icon icon-truck')
                         ->setAttribute('dropdown', true);
-                    $menu['Inventory']['General Sales']->addChild('Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
+                    $menu['Inventory']['General Sales']->addChild('Customers', array('route' => 'inventory_salesgeneral_customer'))->setAttribute('icon', 'icon icon-user');
+                    $menu['Inventory']['General Sales']->addChild('Add Sales', array('route' => 'inventory_salesgeneral_new'))->setAttribute('icon',' icon-plus');
                     $menu['Inventory']['General Sales']->addChild('Sales', array('route' => 'inventory_salesgeneral'))->setAttribute('icon',' icon-th-list');
                     $menu['Inventory']['General Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon','icon-share-alt');
 

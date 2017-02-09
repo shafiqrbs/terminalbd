@@ -59,7 +59,7 @@ class Customer
     private  $accountSalesReturn;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="customer" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", mappedBy="customer" , cascade={"remove"})
      * @ORM\OrderBy({"updated" = "DESC"})
      **/
     protected $sales;

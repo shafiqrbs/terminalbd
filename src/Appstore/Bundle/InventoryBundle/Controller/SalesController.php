@@ -45,7 +45,7 @@ class SalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory, $data);
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory,$mode = 'pos', $data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         if (in_array('CustomerSales', $inventory->getDeliveryProcess())) {
@@ -66,37 +66,15 @@ class SalesController extends Controller
 
     public function newAction()
     {
-        $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer'] : '';
         $em = $this->getDoctrine()->getManager();
         $entity = new Sales();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        if ($customer > 0) {
-            $customer = $em->getRepository('DomainUserBundle:Customer')->find($customer);
-            if (!empty($customer)) {
-
-                $entity->setCustomer($customer);
-                $entity->setSalesMode('customer');
-                $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(4);
-                $entity->setTransactionMethod($transactionMethod);
-                $entity->setMobile($customer->getMobile());
-
-            }else{
-                $globalOption = $this->getUser()->getGlobalOption();
-                $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
-                $entity->setCustomer($customer);
-                $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-                $entity->setTransactionMethod($transactionMethod);
-                $entity->setSalesMode('pos');
-            }
-
-        }else{
-            $globalOption = $this->getUser()->getGlobalOption();
-            $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
-            $entity->setCustomer($customer);
-            $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-            $entity->setTransactionMethod($transactionMethod);
-            $entity->setSalesMode('pos');
-        }
+        $globalOption = $this->getUser()->getGlobalOption();
+        $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
+        $entity->setCustomer($customer);
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
+        $entity->setSalesMode('pos');
         $entity->setPaymentStatus('Pending');
         $entity->setInventoryConfig($inventory);
         $entity->setSalesBy($this->getUser());
@@ -150,13 +128,13 @@ class SalesController extends Controller
             $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
-            $msg = 'Product added successfully';
+            $msg = '<div class="alert alert-success"><strong>Success!</strong>Product added successfully.</div>';
 
         } else {
 
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
-            $msg = 'There is no product in our inventory';
+            $msg = '<div class="alert"><strong>Warning!</strong>There is no product in our inventory.</div>';
         }
 
         $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
@@ -179,6 +157,7 @@ class SalesController extends Controller
 
         $sales = $em->getRepository('InventoryBundle:Sales')->find($sales);
         $total = ($sales->getSubTotal() - $discount);
+        $vat = 0;
         if($total > $discount ){
             if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($sales,$total);
@@ -232,7 +211,9 @@ class SalesController extends Controller
             $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
             $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
             $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-            return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => 'Product added successfully' , 'success' => 'success')));
+            $msg = '<div class="alert alert-success"><strong>Success!</strong>Product added successfully.</div>';
+
+            return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
 
         } else {
 
@@ -240,7 +221,9 @@ class SalesController extends Controller
             $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
             $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
             $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-            return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => 'There is no product in our inventory' , 'success' => 'success')));
+            $msg = '<div class="alert"><strong>Warning!</strong>There is no product in our inventory.</div>';
+
+            return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
         }
 
         exit;
@@ -280,8 +263,8 @@ class SalesController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory,$mode = 'pos');
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory,$mode = 'pos');
 
         if (in_array('CustomerSales', $inventory->getDeliveryProcess())) {
             $twig = 'customerpos';
@@ -298,6 +281,19 @@ class SalesController extends Controller
             'todaySalesOverview' => $todaySalesOverview,
             'form' => $editForm->createView(),
         ));
+    }
+
+    public function resetAction(Sales $sales)
+    {
+        $em = $this->getDoctrine()->getManager();
+        foreach ($sales->getSalesItems() as $salesItem ) {
+            $em->remove($salesItem);
+
+        }
+        $em->flush();
+        $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+        return $this->redirect($this->generateUrl('inventory_sales_edit', array('code' => $sales->getInvoice())));
+
     }
 
     /**
@@ -400,8 +396,8 @@ class SalesController extends Controller
         }
 
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory);
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory,$mode='pos');
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory,$mode='pos');
         if (in_array('CustomerSales', $inventory->getDeliveryProcess())) {
             $twig = 'customerpos';
         } else {

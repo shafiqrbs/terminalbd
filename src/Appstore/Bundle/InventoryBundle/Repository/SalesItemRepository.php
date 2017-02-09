@@ -124,28 +124,36 @@ class SalesItemRepository extends EntityRepository
             } else{
                 $checked = '';
             }
-             if ($entity->isCustomPrice() != 1 and $entity->getSalesPrice() == $entity->getEstimatePrice()){
+            if ($entity->isCustomPrice() != 1 and $entity->getSalesPrice() == $entity->getEstimatePrice()){
                  $readonly = 'readonly="readonly"';
             } else{
                  $readonly = '';
             }
-            $unit = !empty($entity->getItem()->getMasterItem()) and !empty($entity->getItem()->getMasterItem()->getProductUnit()) ? $entity->getItem()->getMasterItem()->getProductUnit()->getName() :'';
+            if (!empty($entity->getItem()->getMasterItem()) and !empty($entity->getItem()->getMasterItem()->getProductUnit())){
+                $unit = $entity->getItem()->getMasterItem()->getProductUnit()->getName();
+            } else{
+                $unit = '';
+            }
+
             $itemName = $entity->getItem()->getName();
             $data .=' <tr id="remove-'.$entity->getId().'">';
             $data .='<td class="numeric" >'.$i.'</td>';
             $data .='<td class="numeric" >'.$entity->getPurchaseItem()->getBarcode();
             $data .='</br><span>'.$itemName.'</span>';
             $data .='</td>';
-            $data .='<td class="numeric" ><input type="text" name="quantity[]" rel="'.$entity->getId().'"  id="quantity-'.$entity->getId().'" class="m-wrap span10 quantity" value="'.$entity->getQuantity().'" min="1" max="'.$entity->getPurchaseItem()->getQuantity().'" placeholder="'.$entity->getPurchaseItem()->getQuantity().'">'.$unit.'</td>';
-            $data .='<td class="" ><div class="input-prepend">';
+            $data .='<td class=" span3" ><div class="input-append">';
+            $data .='<input type="text" name="quantity[]" rel="'.$entity->getId().'"  id="quantity-'.$entity->getId().'" class="m-wrap span6 quantity" value="'.$entity->getQuantity().'" min="1" max="'.$entity->getPurchaseItem()->getQuantity().'" placeholder="'.$entity->getPurchaseItem()->getQuantity().'">';
+            $data .='<span class="add-on">'.$unit.'</span>';
+            $data .='</div></td>';
+            $data .='<td class=" span3" ><div class="input-prepend">';
             $data .='<span class="add-on">';
             $data .='<input type="hidden" name="estimatePrice" id="estimatePrice-'.$entity->getId().'" value="'.$entity->getEstimatePrice().'">';
             $data .='<input type="checkbox"  class="customPrice" value="1"  '. $checked .' rel="'.$entity->getId().'" id="customPrice-'.$entity->getId().'">';
             $data .='</span>';
-            $data .='<input class="m-wrap span8 numeric salesPrice"  '.$readonly.' rel="'.$entity->getId().'" id="salesPrice-'.$entity->getId().'" type="text" name="salesPrice" value="'.$entity->getSalesPrice().'" placeholder="'.$entity->getEstimatePrice().'">';
-            $data .'</div></td>';
-            $data .='<td class="numeric" ><span id="subTotalShow-'. $entity->getId().'" >'.$entity->getSubTotal().'</td>';
-            $data .='<td class="numeric" >
+            $data .='<input class="m-wrap span8 salesPrice"  '.$readonly.' rel="'.$entity->getId().'" id="salesPrice-'.$entity->getId().'" type="text" name="salesPrice" value="'.$entity->getSalesPrice().'" placeholder="'.$entity->getEstimatePrice().'">';
+            $data .='</div></td>';
+            $data .='<td class="" ><span id="subTotalShow-'. $entity->getId().'" >'.$entity->getSubTotal().'</td>';
+            $data .='<td class="" >
                      <a id="'.$entity->getId().'" title="Are you sure went to delete ?" rel="/inventory/sales/'.$entity->getSales()->getId().'/'.$entity->getId().'/delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                      </td>';
             $data .='</tr>';

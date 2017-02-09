@@ -2,6 +2,10 @@ inventory_salesgeneral:
     path:     /
     defaults: { _controller: "InventoryBundle:SalesGeneral:index" }
 
+inventory_salesgeneral_customer:
+    path:     /customer
+    defaults: { _controller: "InventoryBundle:SalesGeneral:customer" }
+
 inventory_salesgeneral_show:
     path:     /{id}/show
     defaults: { _controller: "InventoryBundle:SalesGeneral:show" }
