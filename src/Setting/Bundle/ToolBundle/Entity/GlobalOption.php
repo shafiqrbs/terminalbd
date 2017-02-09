@@ -61,6 +61,12 @@ class GlobalOption
     protected $users;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="globalOptionAgent" , cascade={"persist", "remove"} )
+     **/
+    protected $agent;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\SmsSender", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
     protected $smsSenders;
@@ -1381,8 +1387,6 @@ class GlobalOption
         return $this->branches;
     }
 
-
-
     /**
      * @return Order
      */
@@ -1452,6 +1456,22 @@ class GlobalOption
     public function getSidebarWidgetPanels()
     {
         return $this->sidebarWidgetPanels;
+    }
+
+    /**
+     * @return User
+     */
+    public function getAgent()
+    {
+        return $this->agent;
+    }
+
+    /**
+     * @param User $agent
+     */
+    public function setAgent($agent)
+    {
+        $this->agent = $agent;
     }
 
 

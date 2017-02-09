@@ -2,6 +2,8 @@
 
 namespace Setting\Bundle\ToolBundle\Controller;
 
+use Core\UserBundle\Entity\User;
+use Core\UserBundle\Form\SignupType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -49,51 +51,51 @@ class GlobalOptionController extends Controller
     public function createAction(Request $request)
     {
 
-        $user = $this->get('security.context')->getToken()->getUser();
-
-        $entity = new GlobalOption();
+        $entity = new User();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
+        $intlMobile = $entity->getProfile()->getMobile();
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $entity->getProfile()->setMobile($mobile);
+        $data = $request->request->all();
         if ($form->isValid()) {
-
+            $user = $this->getUser();
+            $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->createGlobalOption($mobile,$data,$user);
+            $entity->setPlainPassword("1234");
+            $entity->setGlobalOption($globalOption);
+            $entity->setEnabled(true);
+            $entity->setDomainOwner(true);
+            $entity->setUsername($mobile);
+            $entity->setEmail($mobile.'@gmail.com');
+            $entity->setRoles(array('ROLE_DOMAIN'));
             $em = $this->getDoctrine()->getManager();
-            $entity->setUser($user);
             $em->persist($entity);
             $em->flush();
+            $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->initialSetup($entity);
+            $this->get('settong.toolManageRepo')->createDirectory($entity->getGlobalOption()->getId());
 
-            $this->get('session')->getFlashBag()->add(
-                'success',"Data has been inserted successfully"
-            );
-            $this->get('settong.toolManageRepo')->createDirectory($user);
-            $this->getDoctrine()->getRepository('SettingToolBundle:SiteSetting')->globalOptionSetting($entity);
-
-            return $this->redirect($this->generateUrl('globaloption_show', array('id' => $entity->getId())));
-
-
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
+            return $this->redirect($this->generateUrl('tools_domain_agent'));
         }
 
-        return $this->render('SettingToolBundle:GlobalOption:new.html.twig', array(
+        return $this->render('SettingToolBundle:GlobalOption:signup.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
+
     }
 
-    /**
-     * Creates a form to create a GlobalOption entity.
-     *
-     * @param GlobalOption $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(GlobalOption $entity)
+    private function createCreateForm(User $entity)
     {
-
-        $form = $this->createForm(new GlobalOptionType(), $entity, array(
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $em = $this->getDoctrine()->getRepository('SettingToolBundle:Syndicate');
+        $form = $this->createForm(new SignupType($em,$location), $entity, array(
             'action' => $this->generateUrl('globaloption_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'id' => 'signup',
+                'class' => 'registration signupForm',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -101,16 +103,16 @@ class GlobalOptionController extends Controller
         return $form;
     }
 
+
     /**
      * Displays a form to create a new GlobalOption entity.
      *
      */
     public function newAction()
     {
-        $entity = new GlobalOption();
+        $entity = new User();
         $form   = $this->createCreateForm($entity);
-
-        return $this->render('SettingToolBundle:GlobalOption:new.html.twig', array(
+        return $this->render('SettingToolBundle:GlobalOption:signup.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));

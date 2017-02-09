@@ -33,7 +33,7 @@ class SignupProfileType extends AbstractType
                     ))
                 )
                 */
-                ->add('mobile','text', array('attr'=>array('class'=>'mobile','placeholder'=>'Enter your mobile no'),
+                ->add('mobile','text', array('attr'=>array('class'=>'m-wrap  mobile span12','placeholder'=>'Enter your mobile no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter your mobile no required')),
                     new Length(array('max'=>200))

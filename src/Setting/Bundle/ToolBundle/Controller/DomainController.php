@@ -82,6 +82,21 @@ class DomainController extends Controller
         ));
     }
 
+     /**
+     * Lists all GlobalOption entities.
+     *
+     */
+    public function clientAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $entities = $em->getRepository('SettingToolBundle:GlobalOption')->findBy(array('agent' => $user));
+        $entities = $this->paginate($entities);
+        return $this->render('SettingToolBundle:Domain:client.html.twig', array(
+            'entities' => $entities,
+        ));
+    }
+
     public function optionStatusAction()
     {
         $items = array();

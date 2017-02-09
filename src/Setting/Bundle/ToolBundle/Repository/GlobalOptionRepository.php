@@ -180,7 +180,7 @@ class GlobalOptionRepository extends EntityRepository
     }
 
 
-    public function createGlobalOption($mobile,$data)
+    public function createGlobalOption($mobile,$data,$user ='')
     {
 
         $syndicate = $data['Core_userbundle_user']['globalOption']['syndicate'];
@@ -191,6 +191,7 @@ class GlobalOptionRepository extends EntityRepository
         $syndicate = $em->getRepository('SettingToolBundle:Syndicate')->findOneBy(array('id' => $syndicate));
         $location = $em->getRepository('SettingLocationBundle:Location')->findOneBy(array('id' => $location));
         $globalOption = new GlobalOption();
+        $globalOption->setAgent($user);
         $globalOption->setName($name);
         $globalOption->setSlug($this->urlSlug($name));
         $globalOption->setMobile($mobile);

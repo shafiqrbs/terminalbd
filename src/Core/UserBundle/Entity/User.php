@@ -16,6 +16,7 @@ use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -83,6 +84,15 @@ class User extends BaseUser
      **/
 
     protected $globalOption;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", mappedBy="agent" )
+     *  * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="globalOptionAgent_id", referencedColumnName="id")
+     * })
+     **/
+    protected $globalOptionAgents;
+
 
     /**
      * This part for system customer payment
@@ -1108,6 +1118,14 @@ class User extends BaseUser
     public function getDeliveryReturnApprovedBy()
     {
         return $this->deliveryReturnApprovedBy;
+    }
+
+    /**
+     * @return GlobalOption
+     */
+    public function getGlobalOptionAgents()
+    {
+        return $this->globalOptionAgents;
     }
 
 

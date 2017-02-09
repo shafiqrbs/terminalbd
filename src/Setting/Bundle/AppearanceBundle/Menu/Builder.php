@@ -118,6 +118,7 @@ class Builder extends ContainerAware
             ->addChild('My Account & Transaction')
             ->setAttribute('dropdown', true);
         $menu['My Account & Transaction']->addChild('Dashboard',          array('route' => 'bankaccount'))->setAttribute('icon', 'icon-money');
+        $menu['My Account & Transaction']->addChild('Client',        array('route' => 'tools_domain_agent'))->setAttribute('icon', 'icon-money');
         $menu['My Account & Transaction']->addChild('Order',        array('route' => 'mobilebankaccount'))->setAttribute('icon', 'icon-money');
         $menu['My Account & Transaction']->addChild('Pre-order',        array('route' => 'mobilebankaccount'))->setAttribute('icon', 'icon-money');
         $menu['My Account & Transaction']->addChild('Manage Inbox') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);

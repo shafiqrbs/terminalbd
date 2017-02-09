@@ -36,7 +36,7 @@ class InitialOptionType extends AbstractType
 
             $builder
 
-                ->add('name','text', array('required' => false,'attr'=>array('class'=>'m-wrap tooltips','placeholder'=>'Enter your business name' , 'data-original-title' =>'Please enter name of organization' , 'data-trigger' => 'hover'),
+                ->add('name','text', array('required' => false,'attr'=>array('class'=>'m-wrap tooltips span12','placeholder'=>'Enter your business name' , 'data-original-title' =>'Please enter name of organization' , 'data-trigger' => 'hover'),
                     'constraints' =>array(
                         new NotBlank(array('message'=>'Please organization name required')),
                         new Length(array('max'=>200))
@@ -48,7 +48,7 @@ class InitialOptionType extends AbstractType
                         new NotBlank(array('message'=>'Please enter you business type'))
                     ),
                     'required'    => true,
-                    'attr'=>array('class'=>'select2'),
+                    'attr'=>array('class'=>'select2 span12'),
                     'class' => 'Setting\Bundle\ToolBundle\Entity\Syndicate',
                     'choices'=> $this->SyndicateChoiceList(),
                     'choices_as_values' => true,
@@ -59,6 +59,9 @@ class InitialOptionType extends AbstractType
                 ->add('location', 'entity', array(
                     'required'    => false,
                     'empty_value' => '---Select Location---',
+                    'constraints' =>array(
+                        new NotBlank(array('message'=>'Please enter location'))
+                    ),
                     'attr'=>array('class'=>'select2 span12'),
                     'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
                     'choices'=> $this->LocationChoiceList(),
