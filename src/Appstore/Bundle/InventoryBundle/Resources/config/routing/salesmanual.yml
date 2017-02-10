@@ -1,0 +1,40 @@
+inventory_salesmanual:
+    path:     /
+    defaults: { _controller: "InventoryBundle:SalesManual:index" }
+
+inventory_salesmanual_customer:
+    path:     /customer
+    defaults: { _controller: "InventoryBundle:SalesManual:customer" }
+
+inventory_salesmanual_show:
+    path:     /{id}/show
+    defaults: { _controller: "InventoryBundle:SalesManual:show" }
+
+inventory_salesmanual_add:
+    path:     /add-item
+    defaults: { _controller: "InventoryBundle:SalesManual:addItem" }
+
+inventory_salesmanual_busket:
+    path:     /item-busket
+    defaults: { _controller: "InventoryBundle:SalesManual:addBusket" }
+
+inventory_salesmanual_new:
+    path:     /new
+    defaults: { _controller: "InventoryBundle:SalesManual:new" }
+
+inventory_salesmanual_edit:
+    path:     /{code}/pos
+    defaults: { _controller: "InventoryBundle:SalesManual:edit" }
+
+inventory_salesmanual_update:
+    path:     /{id}/update
+    defaults: { _controller: "InventoryBundle:SalesManual:update" }
+    methods:  [POST, PUT]
+
+inventory_salesmanual_print_invoice:
+    path:     /{invoice}/invoice
+    defaults: { _controller: "InventoryBundle:SalesManual:invoicePrint" }
+
+inventory_salesmanual_empty_delete:
+    path:     /delete/empty-invoice
+    defaults: { _controller: "InventoryBundle:SalesManual:deleteEmptyInvoice" }

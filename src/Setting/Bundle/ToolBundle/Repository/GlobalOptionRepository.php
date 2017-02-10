@@ -191,14 +191,18 @@ class GlobalOptionRepository extends EntityRepository
         $syndicate = $em->getRepository('SettingToolBundle:Syndicate')->findOneBy(array('id' => $syndicate));
         $location = $em->getRepository('SettingLocationBundle:Location')->findOneBy(array('id' => $location));
         $globalOption = new GlobalOption();
-        $globalOption->setAgent($user);
+        if($user){
+            $globalOption->setAgent($user);
+            $globalOption->setStatus(true);
+        }else{
+            $globalOption->setStatus(false);
+        }
         $globalOption->setName($name);
         $globalOption->setSlug($this->urlSlug($name));
         $globalOption->setMobile($mobile);
         $globalOption->setSyndicate($syndicate);
         $globalOption->setLocation($location);
         $globalOption->setUniqueCode($this->getUniqueId());
-        $globalOption->setStatus(false);
         $em->persist($globalOption);
         $em->flush($globalOption);
         return $globalOption;

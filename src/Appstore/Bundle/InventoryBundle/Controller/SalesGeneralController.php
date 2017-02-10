@@ -352,7 +352,6 @@ class SalesGeneralController extends Controller
                 $entity->setCustomer($customer);
             }
 
-            $entity->setSubTotal($data['paymentSubTotal']);
             if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
                 $entity->setVat($vat);

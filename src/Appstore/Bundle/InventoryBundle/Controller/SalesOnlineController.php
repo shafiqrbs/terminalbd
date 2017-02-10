@@ -348,7 +348,6 @@ class SalesOnlineController extends Controller
                 $entity->setCustomer($customer);
             }
 
-            $entity->setSubTotal($data['paymentSubTotal']);
             if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
                 $entity->setVat($vat);
@@ -387,7 +386,6 @@ class SalesOnlineController extends Controller
             }
 
             if ($entity->getTransactionMethod()->getId() == 4) {
-
                 return $this->redirect($this->generateUrl('inventory_salesonline_show', array('id' => $entity->getId())));
 
             } else {

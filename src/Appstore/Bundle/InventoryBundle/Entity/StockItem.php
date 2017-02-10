@@ -6,6 +6,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderReturnItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 
 /**
  * StockItem
@@ -65,10 +66,6 @@ class StockItem
      */
     protected $damage;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Vendor", inversedBy="stockItems")
-     */
-    protected $vendor;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="stockItems")
@@ -96,11 +93,90 @@ class StockItem
      */
     protected $country;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Vendor", inversedBy="stockItems")
+     */
+    protected $vendor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="stockItems")
+     */
+    protected $brand;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", inversedBy="stockItems")
+     */
+    protected $size;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="stockItems")
+     */
+    protected $color;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", inversedBy="stockItems")
+     */
+    protected $product;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="stockItems" )
+     **/
+    private  $unit;
 
     /**
      * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="stockItems" )
      **/
     private  $category;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="productName", type="string", nullable = true)
+     */
+    private $productName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="VendorName", type="string", nullable = true)
+     */
+    private $vendorName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="brandName", type="string", nullable = true)
+     */
+    private $brandName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sizeName", type="string", nullable = true)
+     */
+    private $sizeName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="colorName", type="string", nullable = true)
+     */
+    private $colorName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="unitName", type="string", nullable = true)
+     */
+    private $unitName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="categoryName", type="string", nullable = true)
+     */
+    private $categoryName;
 
 
     /**
@@ -309,7 +385,7 @@ class StockItem
      * sales            = 3
      * sales return     = 4
      * reject           = 5
-     * missing          = 6
+     * damage          = 6
      */
 
 
@@ -444,6 +520,198 @@ class StockItem
     public function setOrderReturnItem($orderReturnItem)
     {
         $this->orderReturnItem = $orderReturnItem;
+    }
+
+    /**
+     * @return ProductUnit
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    /**
+     * @param ProductUnit $unit
+     */
+    public function setUnit($unit)
+    {
+        $this->unit = $unit;
+    }
+
+    /**
+     * @return Product
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * @param Product $product
+     */
+    public function setProduct($product)
+    {
+        $this->product = $product;
+    }
+
+    /**
+     * @return ItemBrand
+     */
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    /**
+     * @param ItemBrand $brand
+     */
+    public function setBrand($brand)
+    {
+        $this->brand = $brand;
+    }
+
+    /**
+     * @return ItemSize
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param ItemSize $size
+     */
+    public function setSize($size)
+    {
+        $this->size = $size;
+    }
+
+    /**
+     * @return ItemColor
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param ItemColor $color
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductName()
+    {
+        return $this->productName;
+    }
+
+    /**
+     * @param string $productName
+     */
+    public function setProductName($productName)
+    {
+        $this->productName = $productName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVendorName()
+    {
+        return $this->vendorName;
+    }
+
+    /**
+     * @param string $vendorName
+     */
+    public function setVendorName($vendorName)
+    {
+        $this->vendorName = $vendorName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBrandName()
+    {
+        return $this->brandName;
+    }
+
+    /**
+     * @param string $brandName
+     */
+    public function setBrandName($brandName)
+    {
+        $this->brandName = $brandName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSizeName()
+    {
+        return $this->sizeName;
+    }
+
+    /**
+     * @param string $sizeName
+     */
+    public function setSizeName($sizeName)
+    {
+        $this->sizeName = $sizeName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColorName()
+    {
+        return $this->colorName;
+    }
+
+    /**
+     * @param string $colorName
+     */
+    public function setColorName($colorName)
+    {
+        $this->colorName = $colorName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnitName()
+    {
+        return $this->unitName;
+    }
+
+    /**
+     * @param string $unitName
+     */
+    public function setUnitName($unitName)
+    {
+        $this->unitName = $unitName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryName()
+    {
+        return $this->categoryName;
+    }
+
+    /**
+     * @param string $categoryName
+     */
+    public function setCategoryName($categoryName)
+    {
+        $this->categoryName = $categoryName;
     }
 
 }

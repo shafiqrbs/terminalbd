@@ -30,6 +30,7 @@ class InventoryConfigType extends AbstractType
                     'Pos'           => 'Point of Sales(POS)',
                     'OnlineSales'   => 'Online Sales',
                     'GeneralSales'  => 'General Sales',
+                    'ManualSales'   => 'Manual Sales',
                     'Order'         => 'Online Order',
                     'BranchInvoice' => 'Branch Invoice',
                 ),

@@ -29,7 +29,7 @@
 
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Customer list</div>
-                    </div>
+                      </div>
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
@@ -74,13 +74,12 @@
                                         <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}</td>
                                         <td class="numeric">
                                             <a class="btn mini green" href="{{ path('inventory_customer_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
-                                            <a class="btn mini purple"  href="{{ path('inventory_salesmanual', { 'customer': entity.id }) }}"><i class="icon-eye-open"></i>&nbsp;Orders</a>
                                             {% if entity.sales is empty %}
-                                                <a class="btn mini delete red" href="javascript:" rel="{{ path('inventory_customer_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
+                                            <a class="btn mini delete red" href="javascript:" rel="{{ path('inventory_customer_delete', { 'id': entity.id }) }}" >&nbsp;<i class="icon-trash"></i> </a>
                                             {% endif %}
                                         </td>
                                     </tr>
-                                    {% if entity.sales is not empty %}
+                                        {% if entity.sales is not empty %}
                                         <tr id="show-{{ entity.id }}" class="showing-overview">
                                             <td colspan="7">
                                                 <table class="table table-bordered table-striped table-condensed flip-content ">
@@ -153,8 +152,8 @@
 
                                             </td>
                                         </tr>
-                                    {% endif %}
-                                {% endfor %}
+                                        {% endif %}
+                                    {% endfor %}
                                 </tbody>
                             </table>
                             <div class="pagination pull-center"  >

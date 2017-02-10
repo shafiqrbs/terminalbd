@@ -84,6 +84,32 @@ class SalesItemRepository extends EntityRepository
 
     }
 
+    public function insertSalesManualItems($sales,$data)
+    {
+        $em = $this->_em;
+        $i = 0;
+        var_dump($data);
+        foreach ($data['item'] as $row){
+
+            $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->find($row);
+
+            $entity = new SalesItem();
+            $entity->setSales($sales);
+            $entity->setPurchaseItem($purchaseItem);
+            $entity->setItem($purchaseItem->getItem());
+            $entity->setPurchasePrice($purchaseItem->getPurchasePrice());
+            $entity->setEstimatePrice($purchaseItem->getSalesPrice());
+            $entity->setSalesPrice($data['salesPrice'][$i]);
+            $entity->setQuantity($data['quantity'][$i]);
+            $entity->setSubTotal($data['salesPrice'][$i] * $data['quantity'][$i]);
+            $em->persist($entity);
+
+            $i++;
+        }
+        $em->flush();
+    }
+
+
     public function insertSalesItems($sales,$purchaseItem)
     {
         $em = $this->_em;

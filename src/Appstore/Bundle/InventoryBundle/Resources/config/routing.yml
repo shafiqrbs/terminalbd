@@ -90,6 +90,10 @@ inventory_sales:
     resource: "@InventoryBundle/Resources/config/routing/sales.yml"
     prefix:   /inventory/sales
 
+inventory_manual:
+    resource: "@InventoryBundle/Resources/config/routing/salesmanual.yml"
+    prefix:   /inventory/sales-manual
+
 inventory_salesgeneral:
     resource: "@InventoryBundle/Resources/config/routing/salesgeneral.yml"
     prefix:   /inventory/sales-general

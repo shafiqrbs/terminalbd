@@ -482,6 +482,19 @@ class Builder extends ContainerAware
 
                 }
 
+                if(in_array('ManualSales',$deliveryProcess)){
+
+                    $menu['Inventory']
+                        ->addChild('Manual Sales')
+                        ->setAttribute('icon','icon icon-truck')
+                        ->setAttribute('dropdown', true);
+                    $menu['Inventory']['Manual Sales']->addChild('Customers', array('route' => 'inventory_salesmanual_customer'))->setAttribute('icon', 'icon icon-user');
+                    $menu['Inventory']['Manual Sales']->addChild('Add Sales', array('route' => 'inventory_salesmanual_add'))->setAttribute('icon',' icon-plus');
+                    $menu['Inventory']['Manual Sales']->addChild('Sales', array('route' => 'inventory_salesmanual'))->setAttribute('icon',' icon-th-list');
+                    $menu['Inventory']['Manual Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon','icon-share-alt');
+
+                }
+
                 if(in_array('Order',$deliveryProcess)){
 
                     $menu['Inventory']
