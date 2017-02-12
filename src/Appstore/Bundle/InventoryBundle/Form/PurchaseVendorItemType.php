@@ -49,9 +49,20 @@ class PurchaseVendorItemType extends AbstractType
                         ->orderBy("p.name","ASC");
                 },
             ))
-
-
-        ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'quantity'),
+            ->add('brand', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',
+                'property' => 'name',
+                'empty_value' => '---Choose a Brand ---',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('p')
+                        ->where("p.status = 1")
+                        ->andWhere("p.inventoryConfig =".$this->inventoryConfig->getId())
+                        ->orderBy("p.name","ASC");
+                },
+            ))
+            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'quantity'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add quantity'))
                 )))
@@ -70,7 +81,7 @@ class PurchaseVendorItemType extends AbstractType
             ->add('subTotalSalesPrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','readonly'=> true,'placeholder'=>'sub total')))
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

@@ -135,3 +135,9 @@ services:
           tags:
             - { name: kernel.event_listener, event: setting_tool.post.courier_sms , method: sendSalesCourierSms }
 
+  setting_tool.listener.sms_bulk_sms:
+          class: Setting\Bundle\ToolBundle\EventListener\SmsBulkListener
+          arguments: [@doctrine ,@setting_tool.sms_gateWay]
+          tags:
+            - { name: kernel.event_listener, event: setting_tool.post.bulk_sms , method: sendSms }
+

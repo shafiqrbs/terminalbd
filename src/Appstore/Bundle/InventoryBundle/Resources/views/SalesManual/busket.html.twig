@@ -71,8 +71,8 @@
                                             <td class="numeric" >{{ entity.barcode }}</td>
                                             <td class="numeric" >{{ entity.item.name }}</td>
                                             <td class="numeric" >{{ entity.item.sku }}</td>
-                                            <td class="numeric" >{{ entity.purchasePrice|number_format }}</td>
-                                            <td class="numeric" >{{ entity.salesPrice|number_format }}</td>
+                                            <td class="numeric" >{{ entity.purchasePrice }}</td>
+                                            <td class="numeric" >{{ entity.salesPrice }}</td>
                                             <td class="numeric" >
                                                 <input type="text" name="salesPrice[]" class="span12" id="" value="{{ entity.salesPrice }}" >
                                             </td>
@@ -82,7 +82,7 @@
                                             </td>
                                         </tr>
                                     {% endfor %}
-                                    <tr><td colspan="6"><strong class="pull-right" >Total Amount</strong></td><td class="numeric" ><strong>{{ salesPrice|number_format }}</strong></td><td class="numeric" ><strong>Quantity</strong></td><td class="numeric"><strong>{{ quantity }}</strong></td></tr>
+                                    <tr><td colspan="6"><strong class="pull-right" >Total Amount</strong></td><td class="numeric" ><strong>{{ salesPrice }}</strong></td><td class="numeric" ><strong>Quantity</strong></td><td class="numeric"><strong>{{ quantity }}</strong></td></tr>
                                 </tbody>
                             </table>
                             <!--/span-->

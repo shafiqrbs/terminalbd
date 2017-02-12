@@ -96,7 +96,7 @@
                                         <td class="numeric" >{% if entity.masterItem %}{{ entity.masterItem.name }}-{% endif %}{{ entity.webName }}</td>
                                         <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >{{ entity.masterQuantity }}</td>
-                                        <td class="numeric" >{{ entity.purchasePrice|number_format() }}</td>
+                                        <td class="numeric" >{{ entity.purchasePrice }}</td>
                                         <td class="numeric" >{% if entity.discount is not empty  %}<strike>{% endif %}{{ entity.salesPrice|number_format() }}{% if entity.discount is not empty  %}</strike>{% endif %} {% if entity.discount is not empty  %}{{ entity.discountPrice|number_format() }}{% endif %}</td>
                                         <td class="numeric" >
                                             <a  data-type="select" class="editable" id="discount" data-name="Discount" href="#" data-source="{{ path('inventory_product_inline_discount_search') }}"  data-url="{{ path('inventory_goods_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.discount is not empty %}{{ entity.discount.id }}{% endif %}" data-original-title="Enter discount method">{% if entity.discount is not empty %}{{ entity.discount.name }}-{{ entity.discount.type|capitalize }}{% endif %}</a>

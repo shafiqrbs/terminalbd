@@ -114,6 +114,16 @@ class PurchaseType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add total item'))
                 )))
+            ->add('purchaseTo', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'span12'),
+                'empty_value' => '---Choose a purchase To ---',
+                'choices' => array(
+                    'Internation' => 'Internation',
+                    'National' => 'National',
+                    'In House' => 'In House'
+                ),
+            ))
 
             /*->add('advanceAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
             ->add('commissionAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))

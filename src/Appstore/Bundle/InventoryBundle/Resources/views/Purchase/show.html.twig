@@ -126,10 +126,10 @@
                                             <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span class="badge badge-warning toggle badge-custom" id="{{ vendorItem.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                             <td class="numeric" >{{ vendorItem.name }}</td>
                                             <td class="numeric" >{{ vendorItem.quantity }}</td>
-                                            <td class="numeric" >{{ vendorItem.purchasePrice |number_format() }}</td>
-                                            <td class="numeric" >{{ (vendorItem.purchasePrice*vendorItem.quantity)|number_format() }}</td>
-                                            <td class="numeric" >{{ vendorItem.salesPrice|number_format() }}</td>
-                                            <td class="numeric" >{{ (vendorItem.salesPrice*vendorItem.quantity)|number_format() }}</td>
+                                            <td class="numeric" >{{ vendorItem.purchasePrice }}</td>
+                                            <td class="numeric" >{{ (vendorItem.purchasePrice*vendorItem.quantity) }}</td>
+                                            <td class="numeric" >{{ vendorItem.salesPrice }}</td>
+                                            <td class="numeric" >{{ (vendorItem.salesPrice*vendorItem.quantity) }}</td>
                                         </tr>
 
                                         <tr id="show-{{ vendorItem.id }}" class="showing-overview">
@@ -155,10 +155,10 @@
                                                                     {{ purchaseItem.item.name }}
                                                                 </td>
                                                                 <td class="numeric" >{{ purchaseItem.quantity }}</td>
-                                                                <td class="numeric" >{{ purchaseItem.purchasePrice |number_format() }}</td>
-                                                                <td class="numeric" >{{ purchaseItem.purchasePrice * purchaseItem.quantity|number_format() }}</td>
-                                                                <td class="numeric" >{{ purchaseItem.salesPrice|number_format() }}</td>
-                                                                <td class="numeric" >{{ purchaseItem.salesPrice * purchaseItem.quantity |number_format() }}</td>
+                                                                <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
+                                                                <td class="numeric" >{{ purchaseItem.purchasePrice * purchaseItem.quantity }}</td>
+                                                                <td class="numeric" >{{ purchaseItem.salesPrice }}</td>
+                                                                <td class="numeric" >{{ purchaseItem.salesPrice * purchaseItem.quantity }}</td>
                                                             </tr>
                                                         {% endfor %}
                                                         </tbody>

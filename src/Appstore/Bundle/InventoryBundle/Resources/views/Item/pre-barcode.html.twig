@@ -84,9 +84,9 @@
                                             <td class="numeric" >{% if entity.vendor is not empty %}{{ entity.vendor.vendorCode }}-{% endif %}{{ entity.productCode }}</td>
                                             <td class="numeric" >{% if  entity.parentCategory is defined and entity.parentCategory %}{{ entity.parentCategory.name }}{% endif %}</td>
                                             <td class="numeric" >{{ entity.quantity }}</td>
-                                            <td class="numeric" >{{ entity.purchasePrice|number_format(2, '.', ',')  }}</td>
-                                            <td class="numeric" >{{ entity.purchaseAvgPrice|number_format(2, '.', ',')  }}</td>
-                                            <td class="numeric" >{{ entity.salesPrice|number_format(2, '.', ',')  }}</td>
+                                            <td class="numeric" >{{ entity.purchasePrice  }}</td>
+                                            <td class="numeric" >{{ entity.purchaseAvgPrice  }}</td>
+                                            <td class="numeric" >{{ entity.salesPrice }}</td>
                                             <td class="numeric" >
 
                                                 {% if( entity.status == 1) %}

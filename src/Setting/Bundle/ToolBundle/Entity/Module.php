@@ -70,8 +70,6 @@ class Module
      */
     private $price;
 
-
-
     /**
      * @var boolean
      *

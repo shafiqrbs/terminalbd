@@ -126,9 +126,9 @@
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric" >SKU</th>
                                     <th class="numeric" >SKU Name </th>
-                                    <th class="numeric" >Unit</th>
                                     <th class="numeric" >P.Qnt</th>
                                     <th class="numeric" >Rmn.Qnt</th>
+                                    <th class="numeric" >Unit</th>
                                     <th class="numeric" >Avg P.Price</th>
                                     <th class="numeric" >Avg S.Price</th>
                                     <th class="numeric" >Action</th>
@@ -141,9 +141,9 @@
                                         <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                         <td class="numeric" >{{ entity.sku }}</td>
                                         <td class="numeric" >{{ entity.name }}</td>
-                                        <td class="numeric" >{% if entity.masterItem.productUnit is not empty %}{{  entity.masterItem.productUnit.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.purchaseQuantity }}</td>
                                         <td class="numeric" >{{ (entity.purchaseQuantity + entity.salesQuantityReturn + entity.onlineOrderQuantityReturn) - (entity.purchaseQuantityReturn + entity.salesQuantity + entity.damageQuantity+ entity.onlineOrderQuantity) }}</td>
+                                        <td class="numeric" >{% if entity.masterItem.productUnit is not empty %}{{  entity.masterItem.productUnit.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.avgPurchasePrice }}</td>
                                         <td class="numeric" >{{ entity.avgSalesPrice }}</td>
                                         <td class="numeric" >
@@ -191,7 +191,7 @@
                                                             <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.grn }}{% endif %}</td>
                                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                                             <td class="numeric" >{{ purchaseItem.itemStock }}</td>
-                                                            <td class="numeric" >{{ purchaseItem.purchasePrice|number_format(2, '.', ',') }}</td>
+                                                            <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
                                                             <td class="numeric" ><a class="editable" data-name="SalesPrice" href="#"  data-url="{{ path('inventory_purchaseitem_inline_update') }}" data-type="text" data-pk="{{ purchaseItem.id }}" data-original-title="Enter sales price">{{purchaseItem.salesPrice}}</a></td>
                                                         </tr>
                                                     {% endfor %}

@@ -149,6 +149,7 @@
                                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                                     <th class="numeric" >Vendor item name</th>
                                                     <th class="numeric" >Qnt</th>
+                                                    <th class="numeric" >Unit</th>
                                                     <th class="numeric" >Purchase</th>
                                                     <th class="numeric" >Sub-total</th>
                                                     <th class="numeric" >Sales</th>
@@ -164,10 +165,11 @@
                                                         <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}-{{ vendorItem.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                                         <td class="numeric" >{{ vendorItem.name }}</td>
                                                         <td class="numeric" >{{ vendorItem.quantity }}</td>
-                                                        <td class="numeric" >{{ vendorItem.purchasePrice |number_format() }}</td>
-                                                        <td class="numeric" >{{ (vendorItem.purchasePrice * vendorItem.quantity) |number_format() }}</td>
-                                                        <td class="numeric" >{{ vendorItem.salesPrice|number_format() }}</td>
-                                                        <td class="numeric" >{{ (vendorItem.salesPrice * vendorItem.quantity) |number_format() }}</td>
+                                                        <td class="numeric" >{% if vendorItem.masterItem.productUnit is not empty %}{{  vendorItem.masterItem.productUnit.name }}{% endif %}</td>
+                                                        <td class="numeric" >{{ vendorItem.purchasePrice }}</td>
+                                                        <td class="numeric" >{{ (vendorItem.purchasePrice * vendorItem.quantity) }}</td>
+                                                        <td class="numeric" >{{ vendorItem.salesPrice }}</td>
+                                                        <td class="numeric" >{{ (vendorItem.salesPrice * vendorItem.quantity) }}</td>
                                                          {% if entity.process != 'approved' %}
                                                         <td class="numeric" >
                                                             <a title="Are you sure went to delete ?" id="{{ entity.id }}" href="" rel="{{ path('purchase_vendor_item_delete', { 'id': vendorItem.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
@@ -184,6 +186,7 @@
                                                                     <tr class="head-green">
                                                                         <th class="numeric" >Item</th>
                                                                         <th class="numeric" >Qnt</th>
+                                                                        <th class="numeric" >Unit</th>
                                                                         <th class="numeric" >Sales</th>
                                                                         <th class="numeric" >Sub-total</th>
                                                                         {% if entity.process != 'approved' %} <th></th> {% endif %}
@@ -195,6 +198,7 @@
                                                                         <tr id="remove-purchase-item-{{ purchaseItem.id }}">
                                                                             <td class="numeric" >{{ purchaseItem.item.name }}/{{ purchaseItem.item.sku }}</td>
                                                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
+                                                                            <td class="numeric" >{% if purchaseItem.item.masterItem.productUnit is not empty %}{{  purchaseItem.item.masterItem.productUnit.name }}{% endif %}</td>
                                                                             <td class="numeric" >
                                                                                 {% if entity.process != "approved" %}
                                                                                     <a class="editable" data-name="SalesPrice" href="#"  data-url="{{ path('inventory_purchaseitem_inline_update') }}" data-type="text" data-pk="{{ purchaseItem.id }}" data-original-title="Enter sales price">{{purchaseItem.salesPrice}}</a>

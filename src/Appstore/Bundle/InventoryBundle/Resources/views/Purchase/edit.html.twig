@@ -128,10 +128,10 @@
                                             <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span class="badge badge-warning toggle badge-custom" id="{{ vendorItem.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                             <td class="numeric" >{{ vendorItem.name }}</td>
                                             <td class="numeric" >{{ vendorItem.quantity }}</td>
-                                            <td class="numeric" >{{ vendorItem.purchasePrice |number_format() }}</td>
-                                            <td class="numeric" >{{ (vendorItem.purchasePrice * vendorItem.quantity) |number_format() }}</td>
-                                            <td class="numeric" >{{ vendorItem.salesPrice|number_format() }}</td>
-                                            <td class="numeric" >{{ (vendorItem.salesPrice * vendorItem.quantity) |number_format() }}</td>
+                                            <td class="numeric" >{{ vendorItem.purchasePrice }}</td>
+                                            <td class="numeric" >{{ vendorItem.purchasePrice * vendorItem.quantity }}</td>
+                                            <td class="numeric" >{{ vendorItem.salesPrice }}</td>
+                                            <td class="numeric" >{{ (vendorItem.salesPrice * vendorItem.quantity) }}</td>
                                         </tr>
 
                                         <tr id="show-{{ vendorItem.id }}" class="showing-overview remove-vendor-item-{{ vendorItem.id }}">
@@ -145,7 +145,6 @@
                                                             <th class="numeric" >Qnt</th>
                                                             <th class="numeric" >Sales price</th>
                                                             <th class="numeric" >Sub-total sales</th>
-
                                                         </tr>
                                                         </thead>
                                                         <tbody>

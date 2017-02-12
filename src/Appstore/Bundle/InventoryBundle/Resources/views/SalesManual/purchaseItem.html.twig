@@ -113,15 +113,15 @@
                                 <tbody>
                                 {% for purchaseItem in entities %}
                                     <tr {% if purchaseItem.itemStock == 0    %} class="disabled" aria-disabled="true" {% endif %}>
-                                        <td><input {% if purchaseItem.id in selected %} checked="checked" {% endif %}  data-id="{{ purchaseItem.id }}"  type="checkbox" name="item[]" value="{{ purchaseItem.id }}" class="check tooltips item" data-trigger="hover" data-original-title="Add sales"  >&nbsp;{{ purchaseItem.barcode }}</td>
+                                        <td><input {% if purchaseItem.id in selected %} checked="checked" {% endif %}  data-id="{{ purchaseItem.id }}"  type="checkbox" name="item[]" value="{{ purchaseItem.id }}" class="check tooltips item" data-trigger="hover" data-original-title="Add sales"  ></td>
                                         <td class="numeric" >{{ purchaseItem.item.name }}</td>
                                         <td class="numeric" >{{ purchaseItem.item.sku }}</td>
                                         <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.created|date('d-m-Y') }}{% endif %}</td>
                                         <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.grn }}{% endif %}</td>
                                         <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                         <td class="numeric" >{{ purchaseItem.itemStock }}</td>
-                                        <td class="numeric" >{{ purchaseItem.purchasePrice|number_format }}</td>
-                                        <td class="numeric" >{{purchaseItem.salesPrice|number_format }}</td>
+                                        <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
+                                        <td class="numeric" >{{purchaseItem.salesPrice }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

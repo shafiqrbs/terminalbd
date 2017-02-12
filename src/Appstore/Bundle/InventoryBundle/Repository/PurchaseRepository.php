@@ -145,6 +145,6 @@ class PurchaseRepository extends EntityRepository
     {
         $purchase->setProcess($process);
         $this->_em->persist($purchase);
-        $this->_em->flush();
+        $this->_em->flush($purchase);
     }
 }

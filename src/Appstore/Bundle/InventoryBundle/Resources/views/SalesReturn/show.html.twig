@@ -121,9 +121,9 @@
                                                     <td class="numeric" >{{ loop.index }}</td>
                                                     <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
                                                     <td class="numeric" ><input type="hidden" name="salesQuantity" id="salesQuantity-{{ salesItem.id }}" value="{{ salesItem.quantity }}">{{ salesItem.quantity }}</td>
-                                                    <td class="numeric" >{{ salesItem.purchaseItem.purchasePrice|number_format() }}</td>
+                                                    <td class="numeric" >{{ salesItem.purchaseItem.purchasePrice }}</td>
                                                     <td class="numeric" ><input type="hidden" name="salesPrice" id="salesPrice-{{ salesItem.id }}" value="{{ salesItem.salesPrice }}">{{ salesItem.salesPrice|default|number_format() }}</td>
-                                                    <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
+                                                    <td class="numeric" >{{ salesItem.subTotal }}</td>
                                                     {% if( salesItem.salesReturnItem is defined and  salesItem.salesReturnItem is not empty) %}
                                                         <td class="numeric" >{{ salesItem.salesReturnItem.quantity }}</td>
                                                         <td class="numeric" >{{ salesItem.salesReturnItem.price }}</td>

@@ -211,7 +211,6 @@ class ExcelImporterController extends Controller
                     $em->getRepository('AccountingBundle:Transaction')->purchaseTransaction($entity,$accountPurchase,'Purchase');
                     $em->getRepository('InventoryBundle:Purchase')->updateProcess($entity,'approved');
                 }
-
             }
             $excelImporter->setProgress('updated');
         }

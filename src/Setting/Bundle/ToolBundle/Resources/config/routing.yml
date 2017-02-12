@@ -14,6 +14,10 @@ setting_tool_invoicesmsemail:
     resource: "@SettingToolBundle/Resources/config/routing/invoicesmsemail.yml"
     prefix:   /domain/invoice-sms-email
 
+setting_tool_smsbulk:
+    resource: "@SettingToolBundle/Resources/config/routing/smsbulk.yml"
+    prefix:   /domain/bulk-sms
+
 setting_tool_bankaccount:
     resource: "@SettingToolBundle/Resources/config/routing/portalbankaccount.yml"
     prefix:   /admin/bank

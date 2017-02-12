@@ -7,6 +7,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Entity\DomainUser;
 use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
@@ -1472,6 +1473,14 @@ class GlobalOption
     public function setAgent($agent)
     {
         $this->agent = $agent;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomers()
+    {
+        return $this->customers;
     }
 
 

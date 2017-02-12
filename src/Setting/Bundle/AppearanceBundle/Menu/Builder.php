@@ -164,6 +164,7 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
         $menu['Invoice Sms & Email']->addChild('Manage Sms') ->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
         $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Logs',              array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
+        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Bulk Sms',              array('route' => 'smsbulk'))->setAttribute('icon', 'icon-envelope');
         $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Bundle',            array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
         $menu['Invoice Sms & Email']['Manage Sms']->addChild('Notification Setup',    array('route' => 'domain_notificationconfig'))->setAttribute('icon', 'icon-info-sign');
         $menu['Invoice Sms & Email']->addChild('Invoice Application',         array('route' => 'invoicemodule_domain'))->setAttribute('icon', 'icon-money');

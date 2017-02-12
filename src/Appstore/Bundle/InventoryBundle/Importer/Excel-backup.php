@@ -16,7 +16,7 @@ use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
 
-class Excel
+class ExcelBackup
 {
     use ContainerAwareTrait;
 
@@ -32,6 +32,10 @@ class Excel
 
             $item = $this->senatizeItemData($key, $item, 'Default');
 
+//            if($item['Size'] != 16) {
+//                continue;
+//            }
+
             $purchaseItem = new PurchaseItem();
             $purchaseItem->setItem($this->getItem($item));
             $purchaseItem->setPurchase($this->getPurchase($item));
@@ -46,41 +50,10 @@ class Excel
             $stockItem->setPurchaseItem($purchaseItem);
             $stockItem->setItem($purchaseItem->getItem());
             $stockItem->setQuantity($purchaseItem->getQuantity());
-            $stockItem->setCreatedBy($purchaseItem->getPurchase()->getCreatedBy());
-            $stockItem->setProduct($purchaseItem->getItem()->getMasterItem());
-            $stockItem->setProductName($purchaseItem->getItem()->getMasterItem()->getName());
-            $stockItem->setVendor($purchaseItem->getPurchase()->getVendor());
-            $stockItem->setVendorName($purchaseItem->getPurchase()->getVendor()->getName());
-
-            if(!empty($purchaseItem->getItem()->getMasterItem()->getCategory())){
-                $stockItem->setCategory($purchaseItem->getItem()->getMasterItem()->getCategory());
-                $stockItem->setCategoryName($purchaseItem->getItem()->getMasterItem()->getCategory()->getName());
-            }
-
-            if(!empty($purchaseItem->getItem()->getMasterItem()->getProductUnit())) {
-                $stockItem->setUnit($purchaseItem->getItem()->getMasterItem()->getProductUnit());
-                $stockItem->setUnitName($purchaseItem->getItem()->getMasterItem()->getProductUnit()->getName());
-            }
-
-            if(!empty($purchaseItem->getPurchaseVendorItem()->getBrand())) {
-                $stockItem->setBrand($purchaseItem->getPurchaseVendorItem()->getBrand());
-                $stockItem->setBrandName($purchaseItem->getPurchaseVendorItem()->getBrand()->getName());
-            }
-
-
-            if(!empty($purchaseItem->getItem()->getSize())){
-                $stockItem->setSize($purchaseItem->getItem()->getSize());
-                $stockItem->setSizeName($purchaseItem->getItem()->getSize()->getName());
-            }
-
-            if(!empty($purchaseItem->getItem()->getColor())){
-                $stockItem->setColor($purchaseItem->getItem()->getColor());
-                $stockItem->setColorName($purchaseItem->getItem()->getColor()->getName());
-            }
             $stockItem->setProcess('purchase');
 
             $this->persist($stockItem);
-            $this->flush($stockItem);
+            $this->flush();
 
         }
     }

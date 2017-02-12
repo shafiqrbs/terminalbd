@@ -119,10 +119,10 @@
                                             <div class="caption"><i class="icon-reorder"></i> {{ vendorItem.name }}</div>
                                         </div>
                                         <div class="span8">
-                                            <div class="span3">Purchase: {{ vendorItem.purchasePrice|number_format() }}</div>
+                                            <div class="span3">Purchase: {{ vendorItem.purchasePrice }}</div>
                                             <div class="span3">Quantity: {{ vendorItem.quantity }}</div>
-                                            <div class="span3">Sales:{{ vendorItem.salesPrice|number_format() }}</div>
-                                            <div class="span3">Web:{{ vendorItem.webPrice|number_format() }}</div>
+                                            <div class="span3">Sales:{{ vendorItem.salesPrice }}</div>
+                                            <div class="span3">Web:{{ vendorItem.webPrice }}</div>
                                         </div>
                                         <div class="span1"><button type="button" data-ref-id="{{vendorItem.id }}"  class="btn green mini addmore" ><i class="icon-plus m-icon-white"></i></button></div>
 

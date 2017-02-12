@@ -194,10 +194,10 @@
                                         <td class="numeric" >{{ vendorItem.name }}</td>
                                         <td class="numeric" >{% if vendorItem.masterItem is not empty %}{{ vendorItem.masterItem.name }}{% endif %}</td>
                                         <td class="numeric" >{{ vendorItem.quantity }}</td>
-                                        <td class="numeric" >{{ vendorItem.purchasePrice |number_format() }}</td>
-                                        <td class="numeric" >{{ (vendorItem.purchasePrice * vendorItem.quantity) |number_format() }}</td>
-                                        <td class="numeric" >{{ vendorItem.salesPrice|number_format() }}</td>
-                                        <td class="numeric" >{{ (vendorItem.salesPrice * vendorItem.quantity) |number_format() }}</td>
+                                        <td class="numeric" >{{ vendorItem.purchasePrice }}</td>
+                                        <td class="numeric" >{{ (vendorItem.purchasePrice * vendorItem.quantity) }}</td>
+                                        <td class="numeric" >{{ vendorItem.salesPrice }}</td>
+                                        <td class="numeric" >{{ (vendorItem.salesPrice * vendorItem.quantity) }}</td>
                                         <td class="numeric pull-center" ><a title="Are you sure went to delete ?" rel="{{ path('inventory_purchasevendoritem_delete', { 'id': vendorItem.id }) }}" id="{{  vendorItem.id }}" href="javascript:" class="btn red mini removeVendorItem" ><i class="icon-trash"></i></a>
 
                                     </tr>

@@ -8,6 +8,8 @@ use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+
 /**
  * Customer
  *
@@ -350,7 +352,7 @@ class Customer
     }
 
     /**
-     * @return mixed
+     * @return GlobalOption
      */
     public function getGlobalOption()
     {
@@ -358,7 +360,7 @@ class Customer
     }
 
     /**
-     * @param mixed $globalOption
+     * @param GlobalOption $globalOption
      */
     public function setGlobalOption($globalOption)
     {

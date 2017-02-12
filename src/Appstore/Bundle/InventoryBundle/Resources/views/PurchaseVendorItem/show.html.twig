@@ -142,10 +142,10 @@
                                                     {{ purchaseItem.item.name }}/{{ purchaseItem.item.sku }}
                                                 </td>
                                                 <td class="numeric" >{{ purchaseItem.quantity }}</td>
-                                                <td class="numeric" >{{ purchaseItem.purchasePrice |number_format() }}</td>
-                                                <td class="numeric" >{{ purchaseItem.purchasePrice * purchaseItem.quantity|number_format() }}</td>
-                                                <td class="numeric" >{{ purchaseItem.salesPrice|number_format() }}</td>
-                                                <td class="numeric" >{{ purchaseItem.salesPrice * purchaseItem.quantity |number_format() }}</td>
+                                                <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
+                                                <td class="numeric" >{{ purchaseItem.purchasePrice * purchaseItem.quantity }}</td>
+                                                <td class="numeric" >{{ purchaseItem.salesPrice }}</td>
+                                                <td class="numeric" >{{ purchaseItem.salesPrice * purchaseItem.quantity }}</td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>

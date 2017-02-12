@@ -94,6 +94,21 @@ class SmsSenderRepository extends EntityRepository {
         }
     }
 
+    public function insertSmsBulk($globalOption,$mobile ,$status){
+
+        $entity = new SmsSender();
+        $entity->setMobile($mobile);
+        $entity->setGlobalOption($globalOption);
+        $entity->setStatus($status);
+        $entity->setProcess('Bulk Sms');
+        $entity->setReceiver('Customer');
+        $this->_em->persist($entity);
+        $this->_em->flush();
+        if($status == 'success'){
+           // $this->totalSendSms($globalOption);
+        }
+    }
+
 
     public function totalSendSms($globalOption){
 

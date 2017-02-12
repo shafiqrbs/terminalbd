@@ -108,9 +108,9 @@
                                         <td class="numeric" >{% if entity.purchase is not empty %}{{ entity.purchase.grn }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >{{ entity.stockReminigQnt }}</td>
-                                        <td class="numeric" >{{ entity.purchasePrice |number_format() }}</td>
+                                        <td class="numeric" >{{ entity.purchasePrice }}</td>
 
-                                        <td class="numeric" >{{ entity.salesPrice|number_format() }}</td>
+                                        <td class="numeric" >{{ entity.salesPrice }}</td>
 {#
                                         <td class="numeric" >
                                             <a class="editable" href="#" data-name="WebPrice" data-type="text" data-url="{{ path('inventory_item_web_price') }}" data-pk="{{ entity.id }}" data-original-title="Enter web price">{{entity.webPrice}}</a>

@@ -92,7 +92,6 @@ class PurchaseVendorItemDetailsType extends AbstractType
                     'Female' => 'Female'
                 ),
             ))
-
             ->add('file')
             ->add('isWeb')
 

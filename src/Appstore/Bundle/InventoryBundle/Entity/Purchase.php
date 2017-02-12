@@ -92,7 +92,12 @@ class Purchase
      **/
     private  $accountMobileBank;
 
-
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="purchaseTo", type="string", length=50, nullable=true)
+     */
+    private $purchaseTo;
 
 
     /**
@@ -885,6 +890,22 @@ class Purchase
     public function getPurchaseReturns()
     {
         return $this->purchaseReturns;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPurchaseTo()
+    {
+        return $this->purchaseTo;
+    }
+
+    /**
+     * @param string $purchaseTo
+     */
+    public function setPurchaseTo($purchaseTo)
+    {
+        $this->purchaseTo = $purchaseTo;
     }
 
 }

@@ -123,7 +123,7 @@
                                         <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.grn }}{% endif %}</td>
                                         <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                         <td class="numeric" >{{ purchaseItem.itemStock }}</td>
-                                        <td class="numeric" >{{ purchaseItem.purchasePrice|number_format(2, '.', ',') }}</td>
+                                        <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
                                         <td class="numeric" ><a class="editable" data-name="SalesPrice" href="#"  data-url="{{ path('inventory_purchaseitem_inline_update') }}" data-type="text" data-pk="{{ purchaseItem.id }}" data-original-title="Enter sales price">{{purchaseItem.salesPrice}}</a></td>
                                     </tr>
                                 {% endfor %}
