@@ -209,7 +209,7 @@
                                                                             <td class="numeric" >{{  purchaseItem.salesPrice * purchaseItem.quantity|number_format() }}</td>
                                                                              {% if entity.process != 'approved' %}
                                                                             <td class="pull-center" >
-                                                                                <a title="Are you sure went to delete ?" href="javascript" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini" ><i class="icon-trash"></i></a>
+                                                                                <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini" ><i class="icon-trash"></i></a>
                                                                             </td>
                                                                             {% endif %}
                                                                         </tr>

@@ -44,7 +44,7 @@ class SalesManualController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory, $mode='general',$data);
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory, $mode='manual',$data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('InventoryBundle:SalesManual:index.html.twig', array(
@@ -82,7 +82,7 @@ class SalesManualController extends Controller
         $data = $request->request->all();
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
-        $entity->setSalesMode('general');
+        $entity->setSalesMode('manual');
         $entity->setPaymentStatus('Pending');
         $entity->setInventoryConfig($globalOption->getInventoryConfig());
         $entity->setSalesBy($this->getUser());

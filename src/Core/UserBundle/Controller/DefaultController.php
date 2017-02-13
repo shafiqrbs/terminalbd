@@ -26,7 +26,6 @@ class DefaultController extends Controller
             $enable=0;
         }
 
-
         if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($this->generateUrl('admin'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable == 1) {
@@ -48,7 +47,7 @@ class DefaultController extends Controller
         }elseif (!empty($user) && $enable == 3 ) {
             return $this->redirect($this->generateUrl('domain_suspended'));
         }else{
-            return $this->redirect($this->generateUrl('bindu_homepage'));
+            return $this->redirect($this->generateUrl('fos_user_security_login'));
         }
 
     }

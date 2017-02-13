@@ -55,7 +55,7 @@ class DomainEditUserType extends AbstractType
             )
 
             ->add('enabled');
-            $builder->add('profile', new DomainProfileType($this->globalOption,$this->location));
+            $builder->add('profile', new DomainUserProfileType($this->globalOption,$this->location));
 
     }
 

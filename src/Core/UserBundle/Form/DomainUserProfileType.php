@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 
-class DomainProfileType extends AbstractType
+class DomainUserProfileType extends AbstractType
 {
 
     /** @var  GlobalOption */
@@ -60,12 +60,28 @@ class DomainProfileType extends AbstractType
 
             ))
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')))
+            ->add('permanentAddress','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter permanent address')))
             ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter designation', 'data-original-title' =>'Must be use personal mobile number.' , 'data-trigger' => 'hover'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input user designation'))
                 )
             ))
+            ->add('postalCode','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter postal code')))
+            ->add('additionalPhone','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your additional phone ')))
             ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no')))
+            ->add('dob','birthday', array('attr'=>array('class'=>'m-wrap span12')))
+            ->add('about','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>'8')))
+            ->add('bank', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\Bank',
+                'empty_value' => '---Choose a bank---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->orderBy("b.name", "ASC");
+                },
+            ))
             ->add('branches', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\DomainUserBundle\Entity\Branches',
@@ -78,6 +94,8 @@ class DomainProfileType extends AbstractType
                         ->orderBy("e.name", "ASC");
                 },
             ))
+            ->add('branch','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4 ,'draggable' => 'false' ,'placeholder'=>'Enter your bank branch name')))
+            ->add('accountNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your bank account no')))
             ->add('location', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select Location---',
@@ -89,6 +107,11 @@ class DomainProfileType extends AbstractType
                 'choices'=> $this->LocationChoiceList(),
                 'choices_as_values' => true,
                 'choice_label' => 'nestedLabel',
+            ))
+
+            ->add('bloodGroup', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'choices' => array('A+' => 'A+',  'A-' => 'A-','B+' => 'B+',  'B-' => 'B-',  'O+' => 'O+',  'O-' => 'O-',  'AB+' => 'AB+',  'AB-' => 'AB-'),
             ))
             ->add('file');
     }
