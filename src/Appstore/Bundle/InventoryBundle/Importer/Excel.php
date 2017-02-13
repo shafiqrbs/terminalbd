@@ -24,6 +24,63 @@ class Excel
     private $data = array();
     private $cache = array();
 
+    public function isValid($data) {
+        if($this->inventoryConfig == null) {
+            throw new \Exception("You must set config first");
+        }
+
+        $vendorRepository = $this->getVendorRepository();
+        $purchaseRepository = $this->getPurchaseRepository();
+
+        foreach ($data as $item) {
+
+            if(empty($item['Memo']) || empty($item['Vendor'])) {
+                return false;
+            }
+
+            $vendor = $this->getCachedData('Vendor', $item['Vendor']);
+
+            if($vendor == null) {
+                $vendor = $vendorRepository->findOneBy(array(
+                    'inventoryConfig'   => $this->getInventoryConfig(),
+                    'name'              => $item['Vendor']
+                ));
+                if($vendor != null) {
+                    $this->setCachedData('Vendor', $item['Vendor'], $vendor);
+                }
+            }
+
+
+            if($vendor == null) {
+                continue;
+            }
+
+            $key = $item['Vendor'] . "_" . $item['Memo'] ;
+
+            $purchase = $this->getCachedData('Purchase', $key);
+
+            if($purchase == NULL) {
+
+                $purchase = $purchaseRepository->findOneBy(array(
+                    'vendor'=> $vendor,
+                    'memo'=> $item['Memo'],
+                    'inventoryConfig'=> $this->getInventoryConfig()
+                ));
+
+                if($purchase != NULL) {
+                    $this->setCachedData('Purchase', $key, $purchase);
+                }
+            }
+
+            if($purchase != null) {
+                  return false;
+            }
+        }
+
+        return true;
+
+    }
+
     public function import($data)
     {
         $this->data = $data;
@@ -542,9 +599,9 @@ class Excel
      */
     private function getPurchaseRepository()
     {
-        $colorRepository = $this->getDoctrain()->getRepository('InventoryBundle:Purchase');
+        $purchaseRepository = $this->getDoctrain()->getRepository('InventoryBundle:Purchase');
 
-        return $colorRepository;
+        return $purchaseRepository;
     }
 
     private function flush()
@@ -591,9 +648,6 @@ class Excel
             $item['Category'] = $defaultStr;
         }
 
-        if (empty($item['Memo'])) {
-            $item['Memo'] = 9999;
-        }
 
         if (empty($item['Quantity'])) {
             $item['Quantity'] = 1;

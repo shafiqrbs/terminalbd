@@ -9,9 +9,15 @@ namespace Appstore\Bundle\InventoryBundle\Importer;
 
 
 use Liuggio\ExcelBundle\Factory;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class ExcelDataReader
 {
+
+    use ContainerAwareTrait;
+
+    protected $inventoryConfig;
+
     /**
      * @var Factory
      */
@@ -71,8 +77,32 @@ class ExcelDataReader
                 $namedDataArray[$key] = $dataArray;
 
             }
+
+
         }
 
         return $namedDataArray;
     }
+
+    /**
+     * @return \Appstore\Bundle\InventoryBundle\Repository\PurchaseRepository
+     */
+    private function getPurchaseRepository()
+    {
+        $purchaseRepository = $this->getDoctrain()->getRepository('InventoryBundle:Purchase');
+
+        return $purchaseRepository;
+    }
+
+    /**
+     * @return \Doctrine\Bundle\DoctrineBundle\Registry
+     */
+    private function getDoctrain()
+    {
+        return $this->container->get('doctrine');
+    }
+
+
+
+
 }

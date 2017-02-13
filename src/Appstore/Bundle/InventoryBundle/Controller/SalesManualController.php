@@ -44,7 +44,7 @@ class SalesManualController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory, $mode='manual',$data);
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory, $mode ='manual',$data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('InventoryBundle:SalesManual:index.html.twig', array(
@@ -94,7 +94,11 @@ class SalesManualController extends Controller
 
         $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesManualItems($entity, $data);
         $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($entity);
-        return $this->redirect($this->generateUrl('inventory_salesmanual_edit', array('code' => $entity->getInvoice())));
+        $data = explode(',',$request->cookies->get('items'));
+
+        $redirectResponse = $this->redirect($this->generateUrl('inventory_salesmanual_edit', array('code' => $entity->getInvoice())));
+        $redirectResponse->headers->clearCookie("items");
+        return $redirectResponse;
 
     }
 
@@ -653,6 +657,8 @@ class SalesManualController extends Controller
     public function invoicePrintAction(Sales $entity)
     {
         $barcode = $this->getBarcode($entity->getInvoice());
+        echo $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+        exit;
         return $this->render('InventoryBundle:SalesManual:invoice.html.twig', array(
             'entity'      => $entity,
             'barcode'     => $barcode,

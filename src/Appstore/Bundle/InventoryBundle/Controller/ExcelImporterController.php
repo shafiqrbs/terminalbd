@@ -100,13 +100,25 @@ class ExcelImporterController extends Controller
         $importer->setInventoryConfig($inventory->getId());
         $reader = $this->get('appstore_inventory.importer.excel_data_reader');
         $file =  realpath($excelImporter->getAbsolutePath());
-        $importer->import($reader->getData($file));
-        $excelImporter->setProgress('migrated');
+        $data = $reader->getData($file);
+        if($importer->isValid($data)) {
+            $importer->import($data);
+            $excelImporter->setProgress('migrated');
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been migration successfully"
+            );
+
+        }else{
+            $this->get('session')->getFlashBag()->add(
+                'error',"Excel File memo no null or exist in your system"
+            );
+            $excelImporter->setProgress('invalid');
+        }
         $em->flush();
 
-        $this->get('session')->getFlashBag()->add(
-            'success',"Data has been migration successfully"
-        );
+
+
+
         return $this->redirect($this->generateUrl('inventory_excelimproter'));
     }
 

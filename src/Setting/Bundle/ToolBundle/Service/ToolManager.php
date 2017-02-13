@@ -131,62 +131,54 @@ class ToolManager
         return preg_replace('/-+/', '', $string); // Replaces multiple hyphens with single one.
     }
 
-    public function intToWords($x) {
+    public function intToWords($number) {
 
-        $nwords = array( "zero", "one", "two", "three", "four", "five", "six", "seven",
-            "eight", "nine", "ten", "eleven", "twelve", "thirteen",
-            "fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
-            "nineteen", "twenty", 30 => "thirty", 40 => "forty",
-            50 => "fifty", 60 => "sixty", 70 => "seventy", 80 => "eighty",
-            90 => "ninety" );
-
-        if(!is_numeric($x))
-            $w = '#';
-        else if(fmod($x, 1) != 0)
-            $w = '#';
-        else {
-            if($x < 0) {
-                $w = 'minus ';
-                $x = -$x;
-            } else
-                $w = '';
-            // ... now $x is a non-negative integer.
-
-            if($x < 21)   // 0 to 20
-                $w .= $nwords[$x];
-            else if($x < 100) {   // 21 to 99
-                $w .= $nwords[10 * floor($x/10)];
-                $r = fmod($x, 10);
-                if($r > 0)
-                    $w .= '-'. $nwords[$r];
-            } else if($x < 1000) {   // 100 to 999
-                $w .= $nwords[floor($x/100)] .' hundred';
-                $r = fmod($x, 100);
-                if($r > 0)
-                    $w .= ' and '. $this->intToWords($r);
-            } else if($x < 1000000) {   // 1000 to 999999
-                $w .= $this->intToWords(floor($x/1000)) .' thousand';
-                $r = fmod($x, 1000);
-                if($r > 0) {
-                    $w .= ' ';
-                    if($r < 100)
-                        $w .= 'and ';
-                    $w .= $this->intToWords($r);
-                }
-            } else {    //  millions
-                $w .= $this->intToWords(floor($x/1000000)) .' million';
-                $r = fmod($x, 1000000);
-                if($r > 0) {
-                    $w .= ' ';
-                    if($r < 100)
-                        $w .= 'and ';
-                    $w .= $this->intToWords($r);
-                }
-            }
+        $no = round($number);
+        $point = round($number - $no, 2) * 100;
+        $hundred = null;
+        $digits_1 = strlen($no);
+        $i = 0;
+        $str = array();
+        $words = array('0' => '', '1' => 'one', '2' => 'two',
+            '3' => 'three', '4' => 'four', '5' => 'five', '6' => 'six',
+            '7' => 'seven', '8' => 'eight', '9' => 'nine',
+            '10' => 'ten', '11' => 'eleven', '12' => 'twelve',
+            '13' => 'thirteen', '14' => 'fourteen',
+            '15' => 'fifteen', '16' => 'sixteen', '17' => 'seventeen',
+            '18' => 'eighteen', '19' =>'nineteen', '20' => 'twenty',
+            '30' => 'thirty', '40' => 'forty', '50' => 'fifty',
+            '60' => 'sixty', '70' => 'seventy',
+            '80' => 'eighty', '90' => 'ninety');
+        $digits = array('', 'hundred', 'thousand', 'lakh', 'crore');
+        while ($i < $digits_1) {
+            $divider = ($i == 2) ? 10 : 100;
+            $number = floor($no % $divider);
+            $no = floor($no / $divider);
+            $i += ($divider == 10) ? 1 : 2;
+            if ($number) {
+                $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+                $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+                $str [] = ($number < 21) ? $words[$number] .
+                    " " . $digits[$counter] . $plural . " " . $hundred
+                    :
+                    $words[floor($number / 10) * 10]
+                    . " " . $words[$number % 10] . " "
+                    . $digits[$counter] . $plural . " " . $hundred;
+            } else $str[] = null;
         }
-        $textAmount = ucwords($w);
-        return $textAmount;
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ?
+            "." . $words[$point / 10] . " " .
+            $words[$point = $point % 10] : '';
+        if($points){
+            $paisa = ' Paisa';
+        }else{
+            $paisa ='';
+        }
+        return ucwords($result) . "Taka" . ucwords($points) . $paisa;
     }
+
 
 
 }

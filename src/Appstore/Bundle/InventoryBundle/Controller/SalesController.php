@@ -616,6 +616,7 @@ class SalesController extends Controller
     {
 
         $barcode = $this->getBarcode($entity->getInvoice());
+       // $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
         return $this->render('InventoryBundle:Sales:invoice.html.twig', array(
             'entity'      => $entity,
             'barcode'     => $barcode,
