@@ -39,7 +39,7 @@ class SalesGeneralType extends AbstractType
     {
         $builder
 
-            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
+            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card/cheque no','data-original-title'=>'Add payment card/cheque no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('transactionMethod', 'entity', array(
@@ -58,7 +58,7 @@ class SalesGeneralType extends AbstractType
                 'property' => 'name',
                 'class' => 'Setting\Bundle\ToolBundle\Entity\PaymentCard',
                 'attr'=>array('class'=>'span12 m-wrap'),
-                'empty_value' => '---Choose payment card---',
+                'empty_value' => '---Choose payment method---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
@@ -97,7 +97,7 @@ class SalesGeneralType extends AbstractType
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 select2'),
-                'empty_value' => '---Choose receive mobile bank account---',
+                'empty_value' => '---Choose receive mobile account---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('b')
                         ->where("b.status = 1")

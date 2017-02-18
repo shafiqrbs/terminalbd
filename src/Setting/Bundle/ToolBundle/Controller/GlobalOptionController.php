@@ -4,6 +4,7 @@ namespace Setting\Bundle\ToolBundle\Controller;
 
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\SignupType;
+use Setting\Bundle\ToolBundle\Form\GlobalOptionModifyType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -147,7 +148,6 @@ class GlobalOptionController extends Controller
     public function editAction(GlobalOption $entity)
     {
         $em = $this->getDoctrine()->getManager();
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find GlobalOption entity.');
         }
@@ -186,6 +186,9 @@ class GlobalOptionController extends Controller
         return $form;
 
     }
+
+
+
     /**
      * Edits an existing GlobalOption entity.
      *
@@ -259,6 +262,69 @@ class GlobalOptionController extends Controller
         ;
     }
 
+    /**
+     * Edits an existing GlobalOption entity.
+     *
+     */
+    public function modifyUpdateAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('SettingToolBundle:GlobalOption')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find GlobalOption entity.');
+        }
+
+        $editForm = $this->createModifyForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+
+            $em->flush();
+            //$this->getDoctrine()->getRepository('SettingContentBundle:HomePage')->globalOptionHome($user);
+            //$this->getDoctrine()->getRepository('SettingContentBundle:ContactPage')->globalOptionContact($user);
+            $this->getDoctrine()->getRepository('SettingToolBundle:SiteSetting')->updateSettingMenu($entity);
+            $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->systemConfigUpdate($entity);
+            $this->get('session')->getFlashBag()->add('success',"Data has been updated successfully");
+
+            /*$referer = $request->headers->get('referer');
+            return new RedirectResponse($referer);*/
+            return $this->redirect($this->generateUrl('globaloption_edit', array('id' => $entity->getId())));
+
+
+        }
+        return $this->render('SettingToolBundle:GlobalOption:new.html.twig', array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+        ));
+
+
+    }
+
+    /**
+     * Creates a form to edit a GlobalOption entity.
+     *
+     * @param GlobalOption $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createModifyForm(GlobalOption $entity)
+    {
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new GlobalOptionModifyType($location), $entity, array(
+            'action' => $this->generateUrl('globaloption_modify_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'novalidate' => 'novalidate',
+            )
+        ));
+
+        return $form;
+
+    }
+
 
     /**
      * Displays a form to edit an existing GlobalOption entity.
@@ -274,13 +340,13 @@ class GlobalOptionController extends Controller
 
         $this->get('settong.toolManageRepo')->createDirectory($entity->getId());
         $this->getDoctrine()->getRepository('SettingToolBundle:SiteSetting')->globalOptionSetting($entity);
-        $editForm = $this->createEditForm($entity);
+        $editForm = $this->createModifyForm($entity);
 
         $subSyndicates = $this->getSubSyndicateUnderVendor($entity);
 
         return $this->render('SettingToolBundle:GlobalOption:new.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity'        => $entity,
+            'edit_form'     => $editForm->createView(),
             'subSyndicates' => $subSyndicates
         ));
     }
@@ -289,7 +355,7 @@ class GlobalOptionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $parentId       = $entity->getSyndicate()->getId();
-        $syndicates     = $em->getRepository('SettingToolBundle:Syndicate')->findBy(array('status'=>1,'parent'=>$parentId),array('name'=>'asc'));
+        $syndicates     = $em->getRepository('SettingToolBundle:Syndicate')->findBy(array('status' => 1,'parent' => $parentId),array('name' => 'asc'));
         return $subSyndicates  = $this->getDoctrine()->getRepository('SettingToolBundle:Syndicate')->getSelectedSubSyndicates($syndicates,$entity);
 
     }

@@ -1,6 +1,5 @@
 function InventoryPurchasePage(){
 
-
     $('#purchase').on("click", ".delete", function() {
 
         var url = $(this).attr("rel");
@@ -66,17 +65,21 @@ function InventoryPurchasePage(){
 
 
 
-    $('#appstore_bundle_inventorybundle_purchase_totalAmount , #appstore_bundle_inventorybundle_purchase_paymentAmount ,#appstore_bundle_inventorybundle_purchase_commissionAmount ').change(function(){
+    $('#appstore_bundle_inventorybundle_purchase_totalAmount , #appstore_bundle_inventorybundle_purchase_paymentAmount ,#appstore_bundle_inventorybundle_purchase_commissionAmount ').change(function() {
 
         var totalAmount = ($('#appstore_bundle_inventorybundle_purchase_totalAmount').val());
-        total = (totalAmount != '') ?  parseInt(totalAmount) : 0 ;
+        total = (totalAmount != '') ? parseInt(totalAmount) : 0;
         var paymentAmount = $('#appstore_bundle_inventorybundle_purchase_paymentAmount').val();
-        payment = ( paymentAmount != '') ?  parseInt(paymentAmount) : 0 ;
+        payment = ( paymentAmount != '') ? parseInt(paymentAmount) : 0;
         var commissionPayment = ($('#appstore_bundle_inventorybundle_purchase_commissionAmount').val());
-        commission = (commissionPayment != '') ?  parseInt(commissionPayment) : 0 ;
+        commission = (commissionPayment != '') ? parseInt(commissionPayment) : 0;
         //var due = (total -  ( payment + commission));
-        var due = (total -  payment);
+        var due = (total - payment);
         $('#appstore_bundle_inventorybundle_purchase_dueAmount').val(due);
+        if (paymentAmount = ""){
+            alert(total);
+            $('#appstore_bundle_inventorybundle_purchase_paymentAmount').val(total);
+        }
 
     })
 

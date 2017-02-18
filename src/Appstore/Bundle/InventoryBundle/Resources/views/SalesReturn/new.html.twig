@@ -113,11 +113,10 @@
                                             <tr class="head-green">
                                                 <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
                                                 {#<th class="numeric" >Item</th>#}
-                                                <th class="numeric" >Barcode</th>
-                                                <th class="numeric" >Qnt</th>
-                                                <th class="numeric" >Purchase price</th>
+                                                <th class="numeric" >Item SKU</th>
                                                 <th class="numeric" >Sales price</th>
                                                 <th class="numeric" >Sub-total</th>
+                                                <th class="numeric" >Qnt</th>
                                                 <th class="numeric" >Return Qnt</th>
                                                 <th class="numeric" >Return price</th>
                                                 <th class="numeric" >Return subTotal</th>
@@ -130,11 +129,10 @@
                                                     <tr>
                                                         <td class="numeric" >{{ loop.index }}</td>
                         {#                                <td class="numeric" >{{ salesItem.item.name }}</td>#}
-                                                        <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
-                                                        <td class="numeric" ><input type="hidden" name="salesQuantity" id="salesQuantity-{{ salesItem.id }}" value="{{ salesItem.quantity }}">{{ salesItem.quantity }}</td>
-                                                        <td class="numeric" >{{ salesItem.purchaseItem.purchasePrice }}</td>
+                                                        <td class="numeric" >{{ salesItem.item.sku }}</td>
                                                         <td class="numeric" ><input type="hidden" name="salesPrice" id="salesPrice-{{ salesItem.id }}" value="{{ salesItem.salesPrice }}">{{ salesItem.salesPrice|default|number_format() }}</td>
                                                         <td class="numeric" >{{ salesItem.subTotal }}</td>
+                                                        <td class="numeric" ><input type="hidden" name="salesQuantity" id="salesQuantity-{{ salesItem.id }}" value="{{ salesItem.quantity }}">{{ salesItem.quantity }}</td>
                                                         {% if( salesItem.salesReturnItem is defined and salesItem.salesReturnItem is not empty) %}
                                                             <td class="numeric" >{{ salesItem.salesReturnItem.quantity }}</td>
                                                             <td class="numeric" >{{ salesItem.salesReturnItem.price }}</td>
@@ -164,7 +162,7 @@
 
                                                     </tr>
                                                 {% endfor %}
-                                                <tr><td colspan="8"><span class="pull-right"><strong>Total Amount</strong></span></td><td><span class="pull-left"><strong id="totalAmount">{{ salesReturn.total|number_format }}</strong></span></td><td></td></tr>
+                                                <tr><td colspan="7"><span class="pull-right"><strong>Total Amount</strong></span></td><td><span class="pull-left"><strong id="totalAmount">{{ salesReturn.total|number_format }}</strong></span></td><td></td></tr>
                                             {% endif %}
                                             </tbody>
                                         </table>

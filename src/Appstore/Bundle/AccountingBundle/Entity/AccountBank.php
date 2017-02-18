@@ -76,7 +76,6 @@ class AccountBank
      **/
     private  $serviceSales;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="accountBank"  )
      **/

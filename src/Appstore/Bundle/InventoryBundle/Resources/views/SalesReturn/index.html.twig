@@ -109,7 +109,7 @@
                                                         <thead class="flip-content ">
                                                         <tr class="head-green">
                                                             <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
-                                                            <th class="numeric" >Barcode</th>
+                                                            <th class="numeric" >Item SKU</th>
                                                             <th class="numeric" >Qnt</th>
                                                             <th class="numeric" >Sales price</th>
                                                             <th class="numeric" >Sub-total</th>
@@ -122,7 +122,7 @@
                                                         {% for subList in entity.salesReturnItems %}
                                                             <tr>
                                                                 <td class="numeric" >{{ loop.index }}</td>
-                                                                <td class="numeric" >{{ subList.salesItem.purchaseItem.barcode }}</td>
+                                                                <td class="numeric" >{{ subList.salesItem.item.sku }}</td>
                                                                 <td class="numeric" >{{ subList.salesItem.quantity }}</td>
                                                                 <td class="numeric" >{{ subList.salesItem.salesPrice|number_format() }}</td>
                                                                 <td class="numeric" >{{ subList.salesItem.subTotal|number_format() }}</td>

@@ -76,7 +76,7 @@ class GoodsType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
-                        ->andWhere("p.inventoryConfig =".$this->inventoryConfig->getId())
+                        ->andWhere("p.isValid = 1")
                         ->orderBy("p.name","ASC");
                 },
             ))
@@ -109,7 +109,8 @@ class GoodsType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add web price'))
                 )))
-            */->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
+            */
+            ->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
             ->add('file');
              $builder->add('itemColors', 'entity', array(
                 'required'    => true,
@@ -150,8 +151,6 @@ class GoodsType extends AbstractType
      */
     protected function categoryChoiceList()
     {
-
         return $categoryTree = $this->em->getUseInventoryItemCategory($this->inventoryConfig);
-
     }
 }

@@ -2,34 +2,6 @@
  * Created by rbs on 2/9/16.
  */
 
-/*function initializeAutoTabOptionOnEnterKey($form) {
-    $('#particular').select2('open');
-    $('#particular').on("select2-selecting", function (e) {
-        setTimeout(function () {
-            gotoNextFieldOfParticular();
-        }, 50)
-    });
-
-    $form.on('keypress', 'input', function (e) {
-
-        if (e.which == 13) {
-            e.preventDefault();
-
-            switch (this.id) {
-                case 'particular':
-                    gotoNextFieldOfParticular();
-                    break;
-                case 'description':
-                    $amountField.focus();
-                    break;
-                case 'amount':
-                    $form.find('input.btn').trigger('click');
-                    break;
-            }
-        }
-    });
-}*/
-
 var InventorySales = function(sales) {
 
     $('input[name=barcode]').focus();
@@ -76,62 +48,6 @@ var InventorySales = function(sales) {
         }, 2000)
     });
 
-    $(document).on('change', '#barcode', function() {
-
-        var barcode = $('#barcode').val();
-        if(barcode == ''){
-            $('#wrongBarcode').html('<strong>Error!: </strong>Invalid barcode, Please try again.');
-            return false;
-        }
-        $.ajax({
-            url: Routing.generate('inventory_sales_item_search'),
-            type: 'POST',
-            data:'barcode='+barcode+'&sales='+ sales,
-            success: function(response){
-                $('#barcode').focus().val('');
-                obj = JSON.parse(response);
-                $('#purchaseItem').html(obj['purchaseItem']);
-                $('#salesItem').html(obj['salesItem']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#dueAmount').val(obj['salesTotal']);
-                $('#subTotal').val(obj['salesSubTotal']);
-                $('#vat').val(obj['salesVat']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
-                FormComponents.init();
-            },
-
-        })
-    })
-
-    $(document).on('change', '#barcodeNo', function() {
-
-        var barcode = $('#barcodeNo').val();
-        if(barcode == ''){
-            $('#wrongBarcode').html('Using wrong barcode, Please try again correct barcode.');
-            return false;
-        }
-        $.ajax({
-            url: Routing.generate('inventory_sales_item_search'),
-            type: 'POST',
-            data:'barcode='+barcode+'&sales='+ sales,
-            success: function(response) {
-                $('#barcode').focus().val('');
-                obj = JSON.parse(response);
-                $('#purchaseItem').html(obj['purchaseItem']);
-                $('#salesItem').html(obj['salesItem']);
-                $('.salesTotal').html(obj['salesTotal']);
-                $('#subTotal').val(obj['salesSubTotal']);
-                $('#vat').val(obj['salesVat']);
-                $('#paymentTotal').val(obj['salesTotal']);
-                $('#paymentSubTotal').val(obj['salesTotal']);
-                $('#dueAmount').val(obj['salesTotal']);
-                $('#wrongBarcode').html(obj['msg']);
-                FormComponents.init();
-            },
-        })
-    });
 
     $(document).on('click', '.addSales', function() {
 
@@ -141,7 +57,7 @@ var InventorySales = function(sales) {
             return false;
         }
         $.ajax({
-            url: Routing.generate('inventory_sales_item_search'),
+            url: Routing.generate('inventory_salesmanual_item_search'),
             type: 'POST',
             data:'barcode='+barcode+'&sales='+ sales,
             success: function(response) {
@@ -180,61 +96,19 @@ var InventorySales = function(sales) {
         })
     })
 
-
-
-    $(document).on("click", ".customPrice", function() {
-
-        var rel = $(this).attr('rel');
-        var estimatePrice = parseInt($('#estimatePrice-'+rel).val());
-        var quantity = parseInt($('#quantity-'+rel).val());
-        if($(this).is(':checked'))
-        {
-            $("#salesPrice-"+rel).attr("readonly", false).focus().val(estimatePrice);
-
-        }else{
-
-            var customPrice = 0;
-            $("#salesPrice-"+rel).attr("readonly", true).focus().val(estimatePrice);
-            var subTotal  = (quantity * estimatePrice);
-            $("#subTotalShow-"+rel).html(subTotal);
-            $.ajax({
-                url: Routing.generate('inventory_sales_item_update'),
-                type: 'POST',
-                data:'salesItemId='+rel+'&quantity='+quantity+'&salesPrice='+estimatePrice+'&customPrice='+customPrice,
-                success: function(response) {
-                    obj = JSON.parse(response);
-                    $('.salesTotal').html(obj['salesTotal']);
-                    $('#subTotal').val(obj['salesSubTotal']);
-                    $('#vat').val(obj['salesVat']);
-                    $('#paymentTotal').val(obj['salesTotal']);
-                    $('#paymentSubTotal').val(obj['salesTotal']);
-                    $('#dueAmount').html(obj['salesTotal']);
-                },
-
-            })
-        }
-    });
-
-
-
     $(document).on('change', '.quantity , .salesPrice', function() {
 
         var rel = $(this).attr('rel');
 
         var quantity = parseFloat($('#quantity-'+rel).val());
         var price = parseFloat($('#salesPrice-'+rel).val());
-        if($('#customPrice-'+rel).is(':checked')){
-            var customPrice = 1;
-        }else{
-            var customPrice = 0;
-        }
         var subTotal  = (quantity * price);
         $("#subTotalShow-"+rel).html(subTotal);
 
         $.ajax({
             url: Routing.generate('inventory_sales_item_update'),
             type: 'POST',
-            data:'salesItemId='+rel+'&quantity='+ quantity +'&salesPrice='+price+'&customPrice='+customPrice,
+            data:'salesItemId='+rel+'&quantity='+ quantity +'&salesPrice='+price,
             success: function(response) {
                 obj = JSON.parse(response);
                 $('.salesTotal').html(obj['salesTotal']);
@@ -390,41 +264,6 @@ var InventorySales = function(sales) {
         allowClear: true,
         minimumInputLength:1
     });
-
-    $("#barcodeNo").select2({
-
-        placeholder: "Enter specific barcode",
-        allowClear: true,
-        ajax: {
-
-            url: Routing.generate('inventory_purchaseitem_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function(item){ return item.text +'(' +item.item_name+')'}, // omitted for brevity, see the source of this page
-        formatSelection: function(item){return item.text +'(' +item.item_name+')' }, // omitted for brevity, see the source of this page
-        initSelection: function(element, callback) {
-            var id = $(element).val();
-        },
-        allowClear: true,
-        minimumInputLength:1
-    });
-
 
 }
 

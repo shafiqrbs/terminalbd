@@ -87,16 +87,17 @@ class PurchaseType extends AbstractType
                     new NotBlank(array('message'=>'Please add  memo no'))
             )))
             /*->add('chalan','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))*/
-            ->add('receiveDate','date', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>''),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
-                'years'=> array('2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'),
+
+            ->add('receiveDate', 'date', array(
                 'widget' => 'single_text',
-                // this is actually the default format for single_text
-                'format' => 'yyyy-MM-dd',
-                
-                ))
+                'placeholder' => array(
+                    'mm' => 'mm', 'dd' => 'dd','YY' => 'YY'
+
+                ),
+                'format' => 'dd-MM-yyyy',
+                'attr' => array('class'=>'m-wrap span12 datePicker'),
+                'view_timezone' => 'Asia/Dhaka'))
+
             ->add('totalAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Net total amount BDT'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add total amount BDT'))
@@ -133,7 +134,7 @@ class PurchaseType extends AbstractType
             ->add('totalItem','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
             ->add('paymentType','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
             ->add('paymentMethod','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))*/
-            ->add('file','file',array('attr'=>array('class'=>'default span12')))
+            /*->add('file','file',array('attr'=>array('class'=>'default span12')))*/
         ;
     }
     

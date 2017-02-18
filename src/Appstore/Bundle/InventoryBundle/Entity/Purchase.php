@@ -236,7 +236,7 @@ class Purchase
      *
      * @ORM\Column(name="process", type="string", nullable=true)
      */
-    private $process = "approved";
+    private $process = "created";
 
     /**
      * @var string

@@ -36,7 +36,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn blue" href="{{ path('tools_domain_generate_path') }}">
-                                    <i class="icon-umbrella"></i>&nbsp;Generate Doamin Path
+                                    <i class="icon-umbrella"></i>&nbsp;Generate Domain Route
                                 </a>
                             </div>
                             <div class="btn-group">
@@ -90,6 +90,12 @@
                                     <tr id="show-{{ entity.id }}" class="showing-overview">
                                         <td colspan="10">
                                             <table class="table table-bordered table-striped table-condensed flip-content ">
+                                                <tr>
+                                                    <th class="numeric" >Manage Global Setting</th>
+                                                    <td class="numeric" >
+                                                        <a href="{{ path('globaloption_edit',{id: entity.id}) }}" data-url="" class="btn blue mini" ><i class="icon-pencil"></i>&nbsp;Edit Global Option</a>
+                                                    </td>
+                                                </tr>
                                                 <tr>
                                                     <th class="numeric" >Change Password</th>
                                                     <td class="numeric" >

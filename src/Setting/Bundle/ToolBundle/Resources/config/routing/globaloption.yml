@@ -30,6 +30,11 @@ globaloption_update:
     defaults: { _controller: "SettingToolBundle:GlobalOption:update" }
     requirements: { _method: post|put }
 
+globaloption_modify_update:
+    path:     /{id}/update
+    defaults: { _controller: "SettingToolBundle:GlobalOption:update" }
+    requirements: { _method: post|put }
+
 globaloption_delete:
     path:     /{id}/delete
     defaults: { _controller: "SettingToolBundle:GlobalOption:delete" }

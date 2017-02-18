@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('inventory_salesgeneral') }}">Sales</a>
+                        <a href="{{ path('inventory_salesmanual') }}">Sales</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#"> General sales</a></li>
@@ -42,8 +42,8 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('inventory_salesgeneral_new') }}"><i class="icon-plus-sign"></i>&nbsAdd Sales</a></li>
-                                    <li><a href="{{ path('inventory_salesgeneral') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('inventory_salesmanual_add') }}"><i class="icon-plus-sign"></i>&nbsp;Add Sales</a></li>
+                                    <li><a href="{{ path('inventory_salesmanual') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                                         <tr class="head-green">
                                             <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
                                             <th class="numeric" >SKU</th>
-                                            <th class="numeric" >GRN</th>
+                                            <th class="numeric" >Received / GRN</th>
                                             <th class="numeric" >Remaining Qnt</th>
                                             <th class="numeric" >Ongoing Qnt</th>
                                             <th class="numeric" >Current Stock</th>
@@ -119,7 +119,7 @@
                                                 <thead class="">
                                                 <tr class="head-blue">
                                                     <th class="numeric" >S/N</th>
-                                                    <th class="numeric span3">Barcode</th>
+                                                    <th class="numeric span3">Item</th>
                                                     <th  class="numeric span2">Qnt</th>
                                                     <th>Price</th>
                                                     <th>Total</th>
@@ -131,23 +131,19 @@
                                                     <tr id="remove-{{ salesitem.id }}">
                                                         <td class="numeric" > {{ loop.index }}</td>
                                                         <td  class="numeric">
-                                                            {{ salesitem.purchaseItem.barcode }}<br/>
-                                                                <span>{{ salesitem.item.name }}</span>
+                                                            {{ salesitem.item.name }}<br/>
+                                                            <span>{{ salesitem.purchaseItem.purchase.grn }}</span>
                                                         </td>
                                                         <td class=" span3" >
                                                             <div class="input-append">
-                                                            <input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="m-wrap span6 quantity" placeholder="{{ salesitem.purchaseItem.quantity }}" min="1" max="{{ salesitem.purchaseItem.quantity }}">
+                                                            <input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="m-wrap span6 quantity" placeholder="{{ (salesitem.purchaseItem.itemStock + salesitem.quantity) - ongoingItem[salesitem.purchaseItem.id]|default(0) }}" min="1" max="{{ (salesitem.purchaseItem.itemStock + salesitem.quantity) - ongoingItem[salesitem.purchaseItem.id]|default(0) }}">
                                                                 <span class="add-on">{% if salesitem.item.masterItem is not empty and salesitem.item.masterItem.productUnit is not empty %}{{  salesitem.item.masterItem.productUnit.name }}{% endif %}</span>
                                                             </div>
                                                         </td>
                                                         <td class=" span3" >
-                                                            <div class="input-prepend">
-                                                                    <span class="add-on">
-                                                                        <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
-                                                                        <input type="checkbox" {% if salesitem.customPrice == 1 and salesitem.salesPrice != salesitem.estimatePrice %} checked="checked" {% endif %} name="customPrice" rel="{{ salesitem.id }}" id="customPrice-{{ salesitem.id }}" class="customPrice span4" value="1" >
-                                                                    </span>
-                                                                <input class="m-wrap span10 numeric salesPrice" {% if salesitem.customPrice != 1 and salesitem.salesPrice == salesitem.estimatePrice %} readonly="readonly" {% endif %} rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
-                                                            </div>
+                                                            <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
+                                                            <input type="hidden" name="customPrice" rel="" id="customPrice-{{ salesitem.id }}" class="customPrice" value="1" >
+                                                            <input class="m-wrap span10 numeric salesPrice"  rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
                                                         </td>
                                                         <td><span id="subTotalShow-{{ salesitem.id }}" ><strong>{{ salesitem.subTotal }}</strong></span></td>
                                                         <td>
@@ -203,18 +199,19 @@
                                         </div>
                                     </div>
                                     <div id="cartMethod" class="bankHide">
+
+                                        <div class="row-fluid">
+                                            <div class="span12 input-append-border">
+                                                {{ form_widget(form.paymentCard) }}
+                                                {{ form_errors(form.paymentCard) }}
+                                            </div>
+                                        </div>
                                         <div class="row-fluid">
                                             <div class="span12">
                                                 <div class="input-prepend input-append input-append-border span12">
                                                     {{ form_widget(form.cardNo) }}
                                                     {{ form_errors(form.cardNo) }}
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="row-fluid">
-                                            <div class="span12 input-append-border">
-                                                {{ form_widget(form.paymentCard) }}
-                                                {{ form_errors(form.paymentCard) }}
                                             </div>
                                         </div>
                                         <div class="row-fluid">
@@ -397,7 +394,6 @@
                                                 <tr class="head-green">
                                                     <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
                                                     <th class="numeric" >Item</th>
-                                                    <th class="numeric" >Barcode</th>
                                                     <th class="numeric" >Qnt</th>
                                                     <th class="numeric" >Estimate price</th>
                                                     <th class="numeric" >Sales price</th>
@@ -409,7 +405,6 @@
                                                     <tr>
                                                         <td class="numeric" >{{ loop.index }}</td>
                                                         <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
-                                                        <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
                                                         <td class="numeric" >{{ salesItem.quantity }}</td>
                                                         <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
                                                         <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
@@ -510,7 +505,7 @@
     {{ parent() }}
     {% javascripts
     '@InventoryBundle/Resources/public/js/editable.js'
-    '@InventoryBundle/Resources/public/js/sales.js'
+    '@InventoryBundle/Resources/public/js/salesmanual.js'
     '@InventoryBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

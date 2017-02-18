@@ -179,26 +179,24 @@
                                                         <td class="numeric" >
                                                             {% if(stockItem.process == 'purchase') %}
                                                                 {{ stockItem.purchaseItem.purchase.grn }}
-                                                            {% elseif (stockItem.process == 'purchaseRetrun') %}
+                                                            {% elseif (stockItem.process == 'purchaseReturn') %}
                                                                 {{ stockItem.purchaseItem.purchase.invoice }}
                                                             {% elseif (stockItem.process == 'purchaseReplace') %}
                                                                 {{ stockItem.purchaseItem.purchase.invoice }}
                                                             {% elseif (stockItem.process == 'sales') %}
                                                                 {{ stockItem.salesItem.sales.invoice }}
-                                                            {% elseif (stockItem.process == 'salesRetrun') %}
+                                                            {% elseif (stockItem.process == 'salesReturn') %}
                                                                 {{ stockItem.salesReturnItem.salesReturn.invoice }}
                                                             {% elseif (stockItem.process == 'online') %}
                                                                 {{ stockItem.orderItem.order.invoice }}
                                                             {% elseif (stockItem.process == 'onlineRetrun') %}
                                                                 {{ stockItem.orderReturnItem.orderReturn.invoice }}
-                                                            {% elseif (stockItem.process == 'damage') %}
-                                                              Damage
-                                                            {% endif %}
+                                                            {% elseif (stockItem.process == 'damage') %}Damage{% endif %}
                                                         </td>
                                                         <td class="numeric" > {% if(stockItem.process == 'purchase') %}  {{ stockItem.quantity }} {% endif %}</td>
-                                                        <td class="numeric" > {% if(stockItem.process == 'purchaseRetrun') %}  {{ stockItem.quantity }} {% endif %}</td>
+                                                        <td class="numeric" > {% if(stockItem.process == 'purchaseReturn') %}  {{ stockItem.quantity }} {% endif %}</td>
                                                         <td class="numeric" > {% if(stockItem.process == 'sales') %}  {{ stockItem.quantity }} {% endif %}</td>
-                                                        <td class="numeric" > {% if(stockItem.process == 'salesRetrun') %}  {{ stockItem.quantity }} {% endif %}</td>
+                                                        <td class="numeric" > {% if(stockItem.process == 'salesReturn') %}  {{ stockItem.quantity }} {% endif %}</td>
                                                         <td class="numeric" > {% if(stockItem.process == 'online') %}  {{ stockItem.quantity }} {% endif %}</td>
                                                         <td class="numeric" > {% if(stockItem.process == 'onlineRetrun') %}  {{ stockItem.quantity }} {% endif %}</td>
                                                         <td class="numeric" > {% if(stockItem.process == 'damage') %}  {{ stockItem.quantity }} {% endif %}</td>

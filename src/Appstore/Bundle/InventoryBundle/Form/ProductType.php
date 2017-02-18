@@ -62,9 +62,6 @@ class ProductType extends AbstractType
                 'required'    => true,
                 'empty_value' => '---Select parent category---',
                 'attr'=>array('class'=>'category m-wrap span12 select2'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
                 'class' => 'ProductProductBundle:Category',
                 'property' => 'nestedLabel',
                 'choices'=> $this->categoryChoiceList()

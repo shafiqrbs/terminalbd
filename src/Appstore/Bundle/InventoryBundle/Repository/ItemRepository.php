@@ -7,6 +7,8 @@ use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
+use Symfony\Component\DependencyInjection\Container;
+
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -265,7 +267,7 @@ class ItemRepository extends EntityRepository
 
     }
 
-    public function itemPurchaseDetails($inventory,$id,$customer='')
+    public function itemPurchaseDetails($securityContext,$inventory,$id,$customer='')
     {
 
         $data ='';
@@ -273,23 +275,25 @@ class ItemRepository extends EntityRepository
         foreach($result->getPurchaseItems() as $purchaseItem  ) {
 
             $grn = $purchaseItem->getPurchase()->getGrn();
+            $received = $purchaseItem->getPurchase()->getReceiveDate()->format('d M,Y');
+
+            if ($securityContext->isGranted('ROLE_DOMAIN') || $securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE') ) {
+                 $purchasePrice = $purchaseItem->getPurchasePrice();
+            }else{
+                $purchasePrice = '';
+            }
+
             $ongoingSalesQnt = $this->_em->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
             $data .= '<tr>';
             $data .= '<td class="numeric" >' . $purchaseItem->getBarcode() .'</td>';
             $data .= '<td class="numeric" >' . $result->getSku() . '</td>';
-            $data .= '<td class="numeric" >' . $grn . '</td>';
+            $data .= '<td class="numeric" >' . $received.' / '.$grn . '</td>';
             $data .= '<td class="numeric" >' . $purchaseItem->getItemStock() . '</td>';
             $data .= '<td class="numeric" >' . $ongoingSalesQnt . '</td>';
             $data .= '<td class="numeric" >' . ($purchaseItem->getItemStock() - $ongoingSalesQnt) . '</td>';
-            $data .= '<td class="numeric" >' . $purchaseItem->getPurchasePrice() . '</td>';
-         /*   if($customer == ""){
-                $data .= '<td class="numeric" ><a class="editable" data-name="SalesPrice" href="javascript:"  data-url="/inventory/purchaseitem/inline-update" data-type="text" data-pk="' . $purchaseItem->getId() . '" data-original-title="Enter sales price">' . $purchaseItem->getSalesPrice() . '</a></td>';
-                $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem->getBarcode().'"><i class="icon-shopping-cart"></i>  Add Sales</a></td>';
-            }else{*/
-                $data .= '<td class="numeric" >'.$purchaseItem->getSalesPrice().'</td>';
-                $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem->getBarcode().'"><i class="icon-shopping-cart"></i>  Add Sales</a></td>';
-
-           // }
+            $data .= '<td class="numeric" >' . $purchasePrice . '</td>';
+            $data .= '<td class="numeric" >' . $purchaseItem->getSalesPrice().'</td>';
+            $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem->getBarcode().'"><i class="icon-shopping-cart"></i>  Add Sales</a></td>';
             $data .= '</tr>';
         }
         return $data;

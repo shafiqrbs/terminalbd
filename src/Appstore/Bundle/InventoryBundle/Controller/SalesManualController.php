@@ -114,9 +114,15 @@ class SalesManualController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entities = $em->getRepository('InventoryBundle:PurchaseItem')->findWithSearch($inventory,$data);
         $pagination = $this->paginate($entities);
+        $purchaseItems = array();
+        foreach ($pagination as $value){
+            $purchaseItems[] = $value->getId();
+        }
+        $ongoingItem = $em->getRepository('InventoryBundle:SalesItem')->ongoingSalesQuantity($inventory,$purchaseItems);
         return $this->render('InventoryBundle:SalesManual:purchaseItem.html.twig', array(
             'entities' => $pagination,
-            'selected' => explode(',', $request->cookies->get('items', '')),
+            'ongoingItem' => $ongoingItem,
+            'selected' => explode(',', $request->cookies->get('items','')),
             'searchForm' => $data
         ));
 
@@ -124,14 +130,18 @@ class SalesManualController extends Controller
 
     public function addBusketAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $data = explode(',',$request->cookies->get('items'));
         if(is_null($data)) {
-            return $this->redirect($this->generateUrl('inventory_barcode'));
+            return $this->redirect($this->generateUrl('inventory_salesmanual_add'));
         }
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->getBarcodeForPrint($inventory,$data);
+        $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->getManualSalesItem($inventory,$data);
+        $ongoingItem = $em->getRepository('InventoryBundle:SalesItem')->ongoingSalesQuantity($inventory,$data);
+
         return $this->render('InventoryBundle:SalesManual:busket.html.twig', array(
             'entities'      => $entities,
+            'ongoingItem'      => $ongoingItem,
             'selected' => explode(',', $request->cookies->get('items', '')),
         ));
 
@@ -157,9 +167,6 @@ class SalesManualController extends Controller
         ));
     }
 
-
-
-
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
@@ -174,20 +181,18 @@ class SalesManualController extends Controller
         $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->returnPurchaseItemDetails($inventory, $barcode);
         $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
         $itemStock = $purchaseItem->getItemStock();
-
-
         if (!empty($purchaseItem) && $itemStock > $checkQuantity) {
 
-            $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
+            $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem,$customPrice = 1);
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
-            $msg = 'Product added successfully';
+            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getManualSalesItems($sales);
+            $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
 
         } else {
 
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
-            $msg = 'There is no product in our inventory';
+            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getManualSalesItems($sales);
+            $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
         }
 
         $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
@@ -196,7 +201,6 @@ class SalesManualController extends Controller
         return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'purchaseItem' => $purchaseItem, 'salesItem' => $salesItems,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
         exit;
     }
-
 
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
@@ -243,12 +247,10 @@ class SalesManualController extends Controller
         $customPrice = $request->request->get('customPrice');
 
         $salesItem = $em->getRepository('InventoryBundle:SalesItem')->find($salesItemId);
+        $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
+        $itemStock = $purchaseItem->getItemStock();
 
-        $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($salesItem->getPurchaseItem());
-        $itemStock = $salesItem->getPurchaseItem()->getItemStock();
-
-
-        if (!empty($salesItem) && $itemStock > $checkQuantity || !empty($salesItem) && $itemStock == $checkQuantity && $checkQuantity > $quantity ) {
+        if (!empty($purchaseItem) && $itemStock > $checkQuantity) {
 
             $salesItem->setQuantity($quantity);
             $salesItem->setSalesPrice($salesPrice);
@@ -314,12 +316,17 @@ class SalesManualController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory,$mode = 'manual');
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory,$mode = 'manual');
-
+        $purchaseItems = array();
+        foreach ($entity->getSalesItems() as $value){
+            $purchaseItems[] = $value->getPurchaseItem()->getId();
+        }
+        $ongoingItem = $em->getRepository('InventoryBundle:SalesItem')->ongoingSalesQuantity($inventory,$purchaseItems);
         if ($entity->getProcess() != "In-progress") {
             return $this->redirect($this->generateUrl('inventory_salesmanual_show', array('id' => $entity->getId())));
         }
         return $this->render('InventoryBundle:SalesManual:sales.html.twig', array(
             'entity' => $entity,
+            'ongoingItem' => $ongoingItem,
             'todaySales' => $todaySales,
             'todaySalesOverview' => $todaySalesOverview,
             'form' => $editForm->createView(),

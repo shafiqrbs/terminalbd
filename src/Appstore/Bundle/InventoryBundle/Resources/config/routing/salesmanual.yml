@@ -22,6 +22,13 @@ inventory_salesmanual_new:
     path:     /new
     defaults: { _controller: "InventoryBundle:SalesManual:new" }
 
+inventory_salesmanual_item_search:
+    path:     /search
+    defaults: { _controller: "InventoryBundle:SalesManual:search" }
+    methods:  POST
+    options:
+            expose: true
+
 inventory_salesmanual_edit:
     path:     /{code}/pos
     defaults: { _controller: "InventoryBundle:SalesManual:edit" }
@@ -36,5 +43,5 @@ inventory_salesmanual_print_invoice:
     defaults: { _controller: "InventoryBundle:SalesManual:invoicePrint" }
 
 inventory_salesmanual_empty_delete:
-    path:     /delete/empty-invoice
+    path:     /delete/empty-manual-invoice
     defaults: { _controller: "InventoryBundle:SalesManual:deleteEmptyInvoice" }

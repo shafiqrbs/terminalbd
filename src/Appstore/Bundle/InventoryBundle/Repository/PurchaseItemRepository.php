@@ -89,8 +89,8 @@ class PurchaseItemRepository extends EntityRepository
         $data .='</div>';
         $data .='<div class="span4">';
         $data .='<ul class="unstyled">';
-        $data .='<li><strong>Purchase:</strong> '.number_format($item->getPurchasePrice()).'</li>';
-        $data .='<li><strong>Sales:</strong> '.number_format($item->getSalesPrice()).'</li>';
+        $data .='<li><strong>Purchase:</strong> '.$item->getPurchasePrice().'</li>';
+        $data .='<li><strong>Sales:</strong> '.$item->getSalesPrice().'</li>';
         $data .='</ul>';
         $data .='</div>';
         $data .='<div class="span4">';
@@ -147,6 +147,20 @@ class PurchaseItemRepository extends EntityRepository
         $qb->andWhere("ic.id = :inventory");
         $qb->setParameter('inventory', $inventory->getId());
         return $qb->getQuery()->getResult();
+    }
+
+    public function getManualSalesItem($inventory,$data)
+    {
+
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.purchase', 'purchase');
+        $qb->join('purchase.inventoryConfig', 'ic');
+        $qb->select('pi');
+        $qb->where($qb->expr()->in("pi.id", $data ));
+        $qb->andWhere("ic.id = :inventory");
+        $qb->setParameter('inventory', $inventory->getId());
+        return $qb->getQuery()->getResult();
+
     }
 
     public function returnPurchaseItemDetails($inventory,$barcode)

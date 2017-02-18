@@ -63,6 +63,17 @@ class PurchaseController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $purchase = $this->getDoctrine()->getRepository('InventoryBundle:Purchase')->findOneBy(array('inventoryConfig' => $inventory,'vendor' => $entity->getVendor(),'memo' => $entity->getMemo()));
+            if($purchase){
+
+                $this->get('session')->getFlashBag()->add(
+                    'notice', "Purchase memo no duplicate for this vendor/supplier"
+                );
+                return $this->render('InventoryBundle:Purchase:new.html.twig', array(
+                    'entity' => $entity,
+                    'form'   => $form->createView(),
+                ));
+            }
             $entity->setInventoryConfig($inventory);
             $due = ($entity->getTotalAmount() - $entity->getPaymentAmount());
             $entity->setDueAmount($due);
@@ -79,6 +90,8 @@ class PurchaseController extends Controller
             'form'   => $form->createView(),
         ));
     }
+
+
 
     public function checkItemQuantityAction(Request $request)
     {

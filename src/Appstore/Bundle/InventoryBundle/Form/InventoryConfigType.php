@@ -44,6 +44,7 @@ class InventoryConfigType extends AbstractType
             ->add('isColor')
             ->add('isSize')
             ->add('barcodeColor')
+            ->add('barcodePrint')
             ->add('barcodeSize')
             ->add('barcodeBrandVendor',
                 'choice', array(

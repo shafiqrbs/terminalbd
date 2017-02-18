@@ -34,7 +34,7 @@ class PurchaseVendorItemType extends AbstractType
                     new NotBlank(array('message'=>'Please add vendor base item name'))
                 )))
 
-            ->add('masterItem', 'entity', array(
+            /*->add('masterItem', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Product',
                 'property' => 'name',
@@ -48,7 +48,7 @@ class PurchaseVendorItemType extends AbstractType
                         ->andWhere("p.inventoryConfig =".$this->inventoryConfig->getId())
                         ->orderBy("p.name","ASC");
                 },
-            ))
+            ))*/
             ->add('brand', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',

@@ -97,7 +97,7 @@
                                         <li><strong>Total BDT:</strong> {{ purchase.totalAmount|number_format() }}</li>
                                         <li><strong>Payment BDT:</strong> {{ purchase.paymentAmount|number_format() }}</li>
                                         <li><strong>Due BDT:</strong> {{ purchase.dueAmount|number_format() }}</li>
-                                        <li><strong>Commission BDT:</strong> {{ purchase.commissionAmount|number_format() }}</li>
+                                      {#  <li><strong>Commission BDT:</strong> {{ purchase.commissionAmount|number_format() }}</li>#}
 
 
                                     </ul>
@@ -115,8 +115,8 @@
                                     {{ form_errors(form.name) }}
                                 </div>
                                 <div class="span4">
-                                    {{ form_widget(form.masterItem) }}
-                                    {{ form_errors(form.masterItem) }}
+                                    {{ form_widget(form.brand) }}
+                                    {{ form_errors(form.brand) }}
                                 </div>
                                 <div class="span4">
                                     <div class="span4">
@@ -135,10 +135,7 @@
                                 </div>
                                 <div class="row-fluid">
                                 <div class="span4">&nbsp;</div>
-                                <div class="span4">
-                                    {{ form_widget(form.brand) }}
-                                    {{ form_errors(form.brand) }}
-                                </div>
+                                <div class="span4"> </div>
                                 <div class="span4">
                                     <div class="span4">&nbsp;</div>
                                     <div class="span4">
@@ -234,5 +231,6 @@
     {{ parent() }}
     var url = "{{ path('inventory_purchaseitem_new',{'purchase':purchase.id}) }}";
     InventoryPurchaseVendorItemPage(url);
+
 {% endblock %}
 

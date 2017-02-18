@@ -64,6 +64,30 @@ class SalesItemRepository extends EntityRepository
 
     }
 
+    public function ongoingSalesQuantity($inventory , $data = array())
+    {
+
+        $qb = $this->createQueryBuilder('salesItem');
+        $qb->join('salesItem.sales','sales');
+        $qb->join('salesItem.purchaseItem','pi');
+        $qb->select('SUM(salesItem.quantity) as ongoingQuantity ');
+        $qb->addSelect('pi.id as id ');
+        $qb->where("sales.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('sales.process IN(:process)');
+        $qb->setParameter('process',array_values(array('In-progress','Courier')));
+        if(!empty($data)){
+        $qb->andWhere($qb->expr()->in("pi.id", $data ));
+        }
+        $qb->groupBy('salesItem.purchaseItem');
+        $result =  $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($result as $row) {
+            $data[$row['id']] = $row['ongoingQuantity'];
+        }
+        return $data;
+
+    }
 
     public function checkSalesQuantity(PurchaseItem $purchaseItem)
     {
@@ -75,7 +99,7 @@ class SalesItemRepository extends EntityRepository
         $qb->setParameter('purchaseItem', $purchaseItem->getId());
         $qb->andWhere('sales.process IN(:process)');
         $qb->setParameter('process',array_values(array('In-progress','Courier')));
-        $quantity =  $qb->getQuery()->getSingleResult();
+        $quantity =  $qb->getQuery()->getOneOrNullResult();
         if(!empty($quantity['quantity'])){
             return $quantity['quantity'];
         }else{
@@ -110,7 +134,7 @@ class SalesItemRepository extends EntityRepository
     }
 
 
-    public function insertSalesItems($sales,$purchaseItem)
+    public function insertSalesItems($sales,$purchaseItem,$customPrice = 0 )
     {
         $em = $this->_em;
         $existEntity = $this->findOneBy(array('sales'=> $sales,'purchaseItem'=> $purchaseItem));
@@ -133,6 +157,7 @@ class SalesItemRepository extends EntityRepository
             $entity->setSalesPrice($purchaseItem->getSalesPrice());
             $entity->setEstimatePrice($purchaseItem->getSalesPrice());
             $entity->setQuantity(1);
+            $entity->setCustomPrice($customPrice);
             $entity->setSubTotal($purchaseItem->getSalesPrice());
             $em->persist($entity);
         }
@@ -187,6 +212,43 @@ class SalesItemRepository extends EntityRepository
         }
         return $data;
     }
+
+    public function getManualSalesItems($sales)
+    {
+        $entities = $sales->getSalesItems();
+        $data = '';
+        $i = 1;
+        foreach( $entities as $entity){
+
+            if (!empty($entity->getItem()->getMasterItem()) and !empty($entity->getItem()->getMasterItem()->getProductUnit())){
+                $unit = $entity->getItem()->getMasterItem()->getProductUnit()->getName();
+            } else{
+                $unit = '';
+            }
+
+            $itemName = $entity->getItem()->getName();
+            $data .=' <tr id="remove-'.$entity->getId().'">';
+            $data .='<td class="numeric" >'.$i.'</td>';
+            $data .='<td class="numeric" >'.$entity->getPurchaseItem()->getBarcode();
+            $data .='</br><span>'.$itemName.'</span>';
+            $data .='</td>';
+            $data .='<td class=" span3" ><div class="input-append">';
+            $data .='<input type="text" name="quantity[]" rel="'.$entity->getId().'"  id="quantity-'.$entity->getId().'" class="m-wrap span6 quantity" value="'.$entity->getQuantity().'" min="1" max="'.$entity->getPurchaseItem()->getQuantity().'" placeholder="'.$entity->getPurchaseItem()->getQuantity().'">';
+            $data .='<span class="add-on">'.$unit.'</span>';
+            $data .='</div></td>';
+            $data .='<td class=" span3" >';
+            $data .='<input class="m-wrap span8 salesPrice" id="salesPrice-'.$entity->getId().'" type="text" name="salesPrice" value="'.$entity->getSalesPrice().'" placeholder="'.$entity->getEstimatePrice().'">';
+            $data .='</td>';
+            $data .='<td class="" ><span id="subTotalShow-'. $entity->getId().'" >'.$entity->getSubTotal().'</td>';
+            $data .='<td class="" >
+                     <a id="'.$entity->getId().'" title="Are you sure went to delete ?" rel="/inventory/sales/'.$entity->getSales()->getId().'/'.$entity->getId().'/delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                     </td>';
+            $data .='</tr>';
+            $i++;
+        }
+        return $data;
+    }
+
 
     /**
      * @param $qb

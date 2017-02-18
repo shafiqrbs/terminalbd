@@ -526,21 +526,21 @@ class CategoryRepository extends MaterializedPathRepository
 
     public function getUseInventoryItemCategory(InventoryConfig $inventroy)
     {
-
-        $categories = $inventroy->getItemTypeGrouping()->getCategories();
-
         $arr =array();
-        foreach($categories as $category){
-            $arr[] = array(
-                'id' => $category->getId(),
-                'name' => $category->getName(),
-                'level' => $category->getLevel(),
-                '__children' => $this->childrenHierarchy($category)
-            );
+        $array =array();
+        if(!empty($inventroy->getItemTypeGrouping())){
+
+            $categories = $inventroy->getItemTypeGrouping()->getCategories();
+            foreach($categories as $category){
+                $arr[] = array(
+                    'id' => $category->getId(),
+                    'name' => $category->getName(),
+                    'level' => $category->getLevel(),
+                    '__children' => $this->childrenHierarchy($category)
+                );
+            }
+            $this->buildFlatCategoryTree($arr , $array);
         }
-
-        $this->buildFlatCategoryTree($arr , $array);
-
         return $array == null ? array() : $array;
 
     }

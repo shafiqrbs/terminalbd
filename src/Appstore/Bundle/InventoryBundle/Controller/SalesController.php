@@ -122,19 +122,18 @@ class SalesController extends Controller
         $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
         $itemStock = $purchaseItem->getItemStock();
 
-
         if (!empty($purchaseItem) && $itemStock > $checkQuantity) {
 
             $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
-            $msg = '<div class="alert alert-success"><strong>Success!</strong>Product added successfully.</div>';
+            $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
 
         } else {
 
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
-            $msg = '<div class="alert"><strong>Warning!</strong>There is no product in our inventory.</div>';
+            $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
         }
 
         $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
@@ -191,12 +190,11 @@ class SalesController extends Controller
         $customPrice = $request->request->get('customPrice');
 
         $salesItem = $em->getRepository('InventoryBundle:SalesItem')->find($salesItemId);
-        $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($salesItem->getPurchaseItem());
+        $checkOngoingSalesQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($salesItem->getPurchaseItem());
         $itemStock = $salesItem->getPurchaseItem()->getItemStock();
+        $currentRemainingQnt = ($itemStock + $salesItem->getQuantity()) - ($checkOngoingSalesQuantity + $quantity) ;
 
-        if(!empty($salesItem) && $itemStock > $checkQuantity && $salesItem->getQuantity() > $quantity
-            or
-            !empty($salesItem) && $itemStock > $checkQuantity && $checkQuantity >= ($quantity - $salesItem->getQuantity())) {
+        if(!empty($salesItem) && $itemStock > 0 && $currentRemainingQnt >= 0 ){
 
             $salesItem->setQuantity($quantity);
             $salesItem->setSalesPrice($salesPrice);
@@ -211,7 +209,7 @@ class SalesController extends Controller
             $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
             $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
             $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-            $msg = '<div class="alert alert-success"><strong>Success!</strong>Product added successfully.</div>';
+            $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
 
             return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
 
@@ -221,7 +219,7 @@ class SalesController extends Controller
             $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
             $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
             $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-            $msg = '<div class="alert"><strong>Warning!</strong>There is no product in our inventory.</div>';
+            $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
 
             return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
         }
@@ -475,10 +473,11 @@ class SalesController extends Controller
 
     public function itemPurchaseDetailsAction(Request $request)
     {
+        $securityContext = $this->container->get('security.authorization_checker');
         $item = $request->request->get('item');
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer'] : '';
-        $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemPurchaseDetails($inventory, $item, $customer);
+        $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemPurchaseDetails($securityContext,$inventory, $item, $customer);
         return new Response($data);
     }
 

@@ -190,6 +190,14 @@ class InventoryConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="barcodePrint", type="boolean",  nullable=true)
+     */
+    private $barcodePrint = false;
+
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="isBranchInvoice", type="boolean",  nullable=true)
      */
     private $isBranchInvoice = false;
@@ -1012,6 +1020,22 @@ class InventoryConfig
     public function setIsPrintFooter($isPrintFooter)
     {
         $this->isPrintFooter = $isPrintFooter;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getBarcodePrint()
+    {
+        return $this->barcodePrint;
+    }
+
+    /**
+     * @param bool $barcodePrint
+     */
+    public function setBarcodePrint($barcodePrint)
+    {
+        $this->barcodePrint = $barcodePrint;
     }
 
 

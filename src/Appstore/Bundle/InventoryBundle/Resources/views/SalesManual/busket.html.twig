@@ -50,13 +50,13 @@
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
                                     <th class="numeric" ><span class="btn black mini"><i class="icon  icon-shopping-cart"></i></span></th>
-                                    <th class="numeric" >Barcode</th>
                                     <th class="numeric" >Name </th>
                                     <th class="numeric" >SKU</th>
                                     <th class="numeric" >Purchase </th>
                                     <th class="numeric" >Sales </th>
                                     <th class="numeric" >Sales Price</th>
-                                    <th class="numeric" >Quantity</th>
+                                    <th class="numeric" >Stock Qnt</th>
+                                    <th class="numeric" >Ongoing Qnt</th>
                                     <th class="numeric" >Sales Qnt</th>
                                 </tr>
                                 </thead>
@@ -68,7 +68,6 @@
                                         {% set quantity = quantity + entity.quantity %}
                                         <tr>
                                             <td><input {% if entity.id in selected %} checked="checked" {% endif %}  data-id="{{ entity.id }}"  type="checkbox" name="item[]" value="{{ entity.id }}" class="check tooltips item" data-trigger="hover" data-original-title="Add sales"  >&nbsp</td>
-                                            <td class="numeric" >{{ entity.barcode }}</td>
                                             <td class="numeric" >{{ entity.item.name }}</td>
                                             <td class="numeric" >{{ entity.item.sku }}</td>
                                             <td class="numeric" >{{ entity.purchasePrice }}</td>
@@ -77,8 +76,9 @@
                                                 <input type="text" name="salesPrice[]" class="span12" id="" value="{{ entity.salesPrice }}" >
                                             </td>
                                             <td class="numeric" >{{ entity.itemStock }}</td>
+                                            <td class="numeric" >{{ ongoingItem[entity.id]|default('') }}</td>
                                             <td class="numeric" >
-                                                <input type="text" name="quantity[]" class="span8" id="" value="{{ entity.itemStock }}" >
+                                                <input type="text" name="quantity[]" class="span8" id="" value="{{ entity.itemStock - ongoingItem[entity.id]|default(0) }}" >
                                             </td>
                                         </tr>
                                     {% endfor %}
