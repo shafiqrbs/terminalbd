@@ -27,9 +27,11 @@ function AccountingApproveProcess(){
     })
 
     $(document).on("click", ".approve", function() {
+
         $(this).removeClass('approve');
         var id = $(this).attr("data-id");
         var url = $(this).attr("data-url");
+        $('#delete-'+id).hide();
         $('#action-'+id).hide();
         $.ajax({
             url: url,
@@ -39,7 +41,7 @@ function AccountingApproveProcess(){
             },
         })
 
-    })
+    });
 
     $(".select2User").select2({
 

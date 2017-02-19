@@ -110,7 +110,7 @@
                             {{ form_row(form._token) }}
                             <div class="row-fluid clone  box blue">
                                 <div class="row-fluid">
-                                <div class="span4">
+                                <div class="span4 ui-widget">
                                     {{ form_widget(form.name) }}
                                     {{ form_errors(form.name) }}
                                 </div>
@@ -231,6 +231,56 @@
     {{ parent() }}
     var url = "{{ path('inventory_purchaseitem_new',{'purchase':purchase.id}) }}";
     InventoryPurchaseVendorItemPage(url);
+
+    var availableTags = [
+        "ActionScript",
+        "AppleScript",
+        "Asp",
+        "BASIC",
+        "C",
+        "C++",
+        "Clojure",
+        "COBOL",
+        "ColdFusion",
+        "Erlang",
+        "Fortran",
+        "Groovy",
+        "Haskell",
+        "Java",
+        "JavaScript",
+        "Lisp",
+        "Perl",
+        "PHP",
+        "Python",
+        "Ruby",
+        "Scala",
+        "Scheme"
+    ];
+    $( "#appstore_bundle_inventorybundle_purchasevendoritem_name1" ).autocomplete({
+        source: availableTags
+    });
+
+    $( "#appstore_bundle_inventorybundle_purchasevendoritem_name" ).autocomplete({
+
+        source: function( request, response ) {
+        $.ajax( {
+        url: Routing.generate('inventory_product_masteritem_search'),
+        dataType: "jsonp",
+        data: {
+        term: request.term
+        },
+        success: function( data ) {
+            console.log(data);
+            response( data );
+
+        }
+        } );
+        },
+        minLength: 2,
+        select: function( event, ui ) {
+
+        }
+    });
 
 {% endblock %}
 

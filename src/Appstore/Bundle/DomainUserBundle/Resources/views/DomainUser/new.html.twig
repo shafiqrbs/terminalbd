@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                 Manage of user
+                    Manage of user
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -35,16 +35,21 @@
                         <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown"
+                                   data-close-others="true">
                                     Tools
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('domain_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('domain_user') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('domain_new') }}"><i class="icon-plus-sign"></i>&nbsp;
+                                            Create</a></li>
+                                    <li><a href="{{ path('domain_user') }}"><i class="icon-th-list"></i>&nbsp;Lists</a>
+                                    </li>
                                     {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('domain_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('domain_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
+                                        <li><a href="{{ path('domain_edit',{'id':entity.id}) }}"><i
+                                                        class="icon-edit"></i>&nbsp;Edit</a></li>
+                                        <li><a href="{{ path('domain_show',{'id':entity.id}) }}"><i
+                                                        class="icon-eye-open"></i>&nbsp;Show</a></li>
                                     {% endif %}
                                 </ul>
                             </div>
@@ -55,7 +60,7 @@
                     <div class="portlet-body">
 
                         <div class="portlet-body form">
-                            {% include('flash-message.html.twig')  %}
+                            {% include('flash-message.html.twig') %}
                             <!-- BEGIN FORM-->
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
@@ -64,7 +69,7 @@
                             <div class="row-fluid">
                                 <div class="span6 ">
                                     <div class="control-group">
-                                        <label class="control-label" >Full name<span class="required">*</span></label>
+                                        <label class="control-label">Full name<span class="required">*</span></label>
                                         <div class="controls">
                                             <div class="input-icon left">
                                                 <i class="icon-font"></i>
@@ -78,7 +83,7 @@
                                 <!--/span-->
                                 <div class="span6 ">
                                     <div class="control-group">
-                                        <label class="control-label" >Designation</label>
+                                        <label class="control-label">Designation</label>
                                         <div class="controls">
                                             <div class="input-icon left">
                                                 <i class="icon-font"></i>
@@ -97,7 +102,7 @@
                             <div class="row-fluid">
                                 <div class="span6 ">
                                     <div class="control-group">
-                                        <label class="control-label" >Mobile<span class="required">*</span></label>
+                                        <label class="control-label">Mobile<span class="required">*</span></label>
                                         <div class="controls">
                                             <div class="input-icon left">
                                                 <i class="icon-font"></i>
@@ -111,17 +116,20 @@
                                 <!--/span-->
                                 <div class="span3">
                                     <div class="control-group">
-                                        <label class="control-label" >Joining date</label>
+                                        <label class="control-label">Joining date</label>
                                         <div class="controls">
-                                            {{ form_widget(form.profile.joiningDate) }}
-                                            {{ form_errors(form.profile.joiningDate) }}
+                                            <div class="input-icon left">
+                                                <i class="icon-calendar"></i>
+                                                {{ form_widget(form.profile.joiningDate) }}
+                                                {{ form_errors(form.profile.joiningDate) }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <!--/span-->
                                 <div class="span3">
                                     <div class="control-group">
-                                        <label class="control-label" >Branch</label>
+                                        <label class="control-label">Branch</label>
                                         <div class="controls">
                                             {{ form_widget(form.profile.branches) }}
                                             {{ form_errors(form.profile.branches) }}
@@ -144,7 +152,7 @@
                             <div class="row-fluid">
                                 <div class="span4">
                                     <div class="control-group">
-                                        <label class="control-label" >User name<span class="required">*</span></label>
+                                        <label class="control-label">User name<span class="required">*</span></label>
                                         <div class="controls">
                                             <div class="input-icon left">
                                                 <i class="icon-user"></i>
@@ -158,7 +166,7 @@
                                 <!--/span-->
                                 <div class="span4">
                                     <div class="control-group">
-                                        <label class="control-label" >Password<span class="required">*</span></label>
+                                        <label class="control-label">Password<span class="required">*</span></label>
                                         <div class="controls">
                                             <div class="input-icon left">
                                                 <i class="icon-lock"></i>
@@ -174,7 +182,7 @@
                             <div class="row-fluid">
                                 <div class="span4">
                                     <div class="control-group">
-                                        <label class="control-label" >Email<span class="required">*</span></label>
+                                        <label class="control-label">Email<span class="required">*</span></label>
                                         <div class="controls">
                                             <div class="input-icon left">
                                                 <i class="icon-envelope"></i>
@@ -188,7 +196,7 @@
                                 <!--/span-->
                                 <div class="span4">
                                     <div class="control-group">
-                                        <label class="control-label" >Re-Password</label>
+                                        <label class="control-label">Re-Password</label>
                                         <div class="controls">
                                             <div class="input-icon left">
                                                 <i class="icon-lock"></i>
@@ -215,20 +223,14 @@
                             </div>
                             <!--/row-->
                             <div class="row-fluid">
-                                <div class="span6 ">
+                                <div class="span12">
                                     <div class="control-group">
                                         <div class="controls">
-                                            <div class="input-icon left">
-                                                {{ form_widget(form.roles) }}
-                                                {{ form_errors(form.roles) }}
-                                            </div>
-
+                                            {{ form_widget(form.roles) }}
+                                            {{ form_errors(form.roles) }}
                                         </div>
                                     </div>
                                 </div>
-                                <!--/span-->
-
-                                <!--/span-->
                             </div>
                             <!--/row-->
                             <!--/row-->
@@ -247,7 +249,7 @@
                                         <div class="span12 ">
                                             <div class="control-group">
                                                 <div class="controls">
-                                                    <label class="control-label" >Address<span class="required">*</span></label>
+                                                    <label class="control-label">Address<span class="required">*</span></label>
                                                     <div class="input-icon left">
                                                         <i class="icon-map-marker"></i>
                                                         {{ form_widget(form.profile.address) }}
@@ -261,7 +263,8 @@
                                     <div class="row-fluid">
                                         <div class="span6">
                                             <div class="control-group">
-                                                <label class="control-label" >Location<span class="required">*</span></label>
+                                                <label class="control-label">Location<span
+                                                            class="required">*</span></label>
                                                 <div class="controls">
                                                     {{ form_widget(form.profile.location) }}
                                                     {{ form_errors(form.profile.location) }}
@@ -270,7 +273,7 @@
                                         </div>
                                         <div class="span6">
                                             <div class="control-group">
-                                                <label class="control-label" >National ID</label>
+                                                <label class="control-label">National ID</label>
                                                 <div class="controls">
                                                     <div class="input-icon left">
                                                         <i class="icon-font"></i>
@@ -284,38 +287,42 @@
                                     </div>
                                 </div>
                                 <div class="span4">
-                                   <div class="row-fluid">
-                                       <div class="span12">
-                                           <div class="control-group">
-                                               <label class="control-label" >Profile Image</label>
-                                               <div class="controls">
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label">Profile Image</label>
+                                                <div class="controls">
 
-                                               </div>
-                                               <div class="controls">
-                                                   <div data-provides="fileupload" class="fileupload fileupload-new">
-                                                       <div style="width: 200px; height: 150px;" class="fileupload-new thumbnail">
-                                                           {% if entity.profile is defined and entity.profile.webPath is defined %}
-                                                               <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.profile.webPath }}">
-                                                           {% else %}
-                                                               <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
-                                                           {% endif %}
-                                                       </div>
-                                                       <div  class="fileupload-preview fileupload-exists thumbnail"></div>
-                                                       <div>
+                                                </div>
+                                                <div class="controls">
+                                                    <div data-provides="fileupload" class="fileupload fileupload-new">
+                                                        <div style="width: 200px; height: 150px;"
+                                                             class="fileupload-new thumbnail">
+                                                            {% if entity.profile is defined and entity.profile.webPath is defined %}
+                                                                <img class="fileupload-preview fileupload-exists thumbnail"
+                                                                     alt="" src="/{{ entity.profile.webPath }}">
+                                                            {% else %}
+                                                                <img alt=""
+                                                                     src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="fileupload-preview fileupload-exists thumbnail"></div>
+                                                        <div>
 													<span class="btn btn-file">
                                                         <span class="fileupload-new">Select image</span>
 													    <span class="fileupload-exists">Change</span>
                                                         {{ form_widget(form.profile.file) }}
                                                         {{ form_errors(form.profile.file) }}
                                                     </span>
-                                                           <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
-                                                       </div>
-                                                   </div>
+                                                            <a data-dismiss="fileupload" class="btn fileupload-exists"
+                                                               href="#">Remove</a>
+                                                        </div>
+                                                    </div>
 
-                                               </div>
-                                           </div>
-                                       </div>
-                                   </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!--/row-->
@@ -336,5 +343,10 @@
             </div>
         </div>
     </div>
+    <style>
+        .check-list label {
+            width: 30% !important;
+        }
+    </style>
 {% endblock %}
 

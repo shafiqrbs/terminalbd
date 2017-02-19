@@ -38,7 +38,7 @@ class Builder extends ContainerAware
             $menu = $this->manageFrontendMenu($menu);
             $menu = $this->manageVendorMenu($menu);
             $menu = $this->manageAdvertismentMenu($menu);
-            $menu = $this->manageAccountingSettingMenu($menu);
+            $menu = $this->manageApplicationSettingMenu($menu);
             $menu = $this->manageDomainMenu($menu);
             $menu = $this->manageSystemAccountMenu($menu);
             $menu = $this->manageCustomerOrderMenu($menu);
@@ -62,31 +62,36 @@ class Builder extends ContainerAware
                     }
                 }
 
-                $a2 = array('accounting', 'e-commerce', 'inventory');
-                $result = array_intersect($arrSlugs, $a2);
+                $applications = array('accounting', 'e-commerce', 'inventory');
+                $result = array_intersect($arrSlugs, $applications);
                 if (!empty($result)) {
-                    $menu = $this->inventoryEcommerceFoodMenu($menu);
+                    $menu = $this->applicationSettingMenu($menu);
                 }
-
-                //$menu = $this->contentMenu($menu);
-                // $menu = $this->mediaMenu($menu);
                 $menu = $this->manageDomainInvoiceMenu($menu);
             }
 
             if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE') || $securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES')) {
 
                 $modules = $globalOption->getSiteSetting()->getAppModules();
-
+                $arrSlugs = array();
                 if (!empty($globalOption->getSiteSetting()) and !empty($modules)) {
                     foreach ($globalOption->getSiteSetting()->getAppModules() as $mod) {
-                        if ($mod->getModuleClass() == 'Inventory') {
-                            $menuName = $mod->getModuleClass() . 'Menu';
-                            $menu = $this->$menuName($menu);
-
+                        if (!empty($mod->getModuleClass())) {
+                            if ($mod->getSlug() == 'inventory') {
+                                $menuName = $mod->getModuleClass() . 'Menu';
+                                $menu = $this->$menuName($menu);
+                            }
+                            $arrSlugs[] = $mod->getSlug();
                         }
-
                     }
                 }
+
+                $applications = array('accounting', 'e-commerce', 'inventory');
+                $result = array_intersect($arrSlugs, $applications);
+                if (!empty($result)) {
+                    $menu = $this->applicationSettingMenu($menu);
+                }
+
                 //exit(\Doctrine\Common\Util\Debug::dump($modules));
             }
 
@@ -94,8 +99,7 @@ class Builder extends ContainerAware
 
             }
             if ($securityContext->isGranted('ROLE_DOMAIN')) {
-                //$menu = $this->websiteMenu($menu);
-                //$menu = $this->appearanceMenu($menu);
+
             }
 
         }
@@ -122,210 +126,6 @@ class Builder extends ContainerAware
         $menu['My Account & Transaction']->addChild('Manage Inbox')->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
         $menu['My Account & Transaction']['Manage Inbox']->addChild('Email', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
         $menu['My Account & Transaction']['Manage Inbox']->addChild('SMS', array('route' => 'invoicemodule'))->setAttribute('icon', 'icon-money');
-        return $menu;
-    }
-
-    public function manageSystemAccountMenu($menu)
-    {
-        $menu
-            ->addChild('System Transaction')
-            ->setAttribute('dropdown', true);
-        $menu['System Transaction']->addChild('Bank', array('route' => 'bankaccount'))->setAttribute('icon', 'icon-money');
-        $menu['System Transaction']->addChild('Mobile Bank', array('route' => 'mobilebankaccount'))->setAttribute('icon', 'icon-money');
-        return $menu;
-    }
-
-    public function manageDomainMenu($menu)
-    {
-        $menu
-            ->addChild('Manage Domain')
-            ->setAttribute('dropdown', true);
-        $menu['Manage Domain']->addChild('Setting Package')->setAttribute('icon', ' icon-cogs')->setAttribute('dropdown', true);
-        $menu['Manage Domain']['Setting Package']->addChild('Application', array('route' => 'applicationpricing'))->setAttribute('icon', 'icon-briefcase');
-        $menu['Manage Domain']['Setting Package']->addChild('SMS/Email', array('route' => 'smspricing'))->setAttribute('icon', 'icon-envelope');
-        $menu['Manage Domain']->addChild('Manage Operation')->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
-        $menu['Manage Domain']['Manage Operation']->addChild('Domain', array('route' => 'tools_domain'))->setAttribute('icon', 'icon-money');
-        $menu['Manage Domain']->addChild('Manage Invoice')->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
-        $menu['Manage Domain']['Manage Invoice']->addChild('Sms Bundle', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
-        $menu['Manage Domain']['Manage Invoice']->addChild('Module Invoice', array('route' => 'invoicemodule'))->setAttribute('icon', 'icon-money');
-
-        return $menu;
-    }
-
-    public function manageDomainInvoiceMenu($menu)
-    {
-        $securityContext = $this->container->get('security.context');
-        $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
-        $menu
-            ->addChild('Invoice Sms & Email')
-            ->setAttribute('icon', 'info-sign')
-            ->setAttribute('dropdown', true);
-        $menu['Invoice Sms & Email']->addChild('Manage Sms')->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
-        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Logs', array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
-        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Bulk Sms', array('route' => 'smsbulk'))->setAttribute('icon', 'icon-envelope');
-        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Bundle', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
-        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Notification Setup', array('route' => 'domain_notificationconfig'))->setAttribute('icon', 'icon-info-sign');
-        $menu['Invoice Sms & Email']->addChild('Invoice Application', array('route' => 'invoicemodule_domain'))->setAttribute('icon', 'icon-money');
-
-        return $menu;
-    }
-
-    public function manageFrontendMenu($menu)
-    {
-        $menu
-            ->addChild('Manage Frontend')
-            ->setAttribute('icon', 'fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-
-        $menu['Manage Frontend']->addChild('Site Slider', array('route' => 'siteslider'));
-        $menu['Manage Frontend']->addChild('Site Content', array('route' => 'sitecontent'));
-        $menu['Manage Frontend']->addChild('Manage Mega Menu', array('route' => 'megamenu'));
-        $menu['Manage Frontend']->addChild('Feature Category', array('route' => 'category_sorting'));
-        $menu['Manage Frontend']->addChild('Collection', array('route' => 'collection'));
-
-        return $menu;
-
-    }
-
-    public function toolsMenu($menu)
-    {
-        $menu
-            ->addChild('Tools')
-            ->setAttribute('icon', 'fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-
-        $menu['Tools']->addChild('Manage Option', array('route' => 'globaloption'));
-        $menu['Tools']->addChild('Manage Setting', array('route' => 'sitesetting'));
-        $menu['Tools']->addChild('Location', array('route' => 'location'));
-        $menu['Tools']->addChild('Business Sector', array('route' => 'syndicate'));
-        $menu['Tools']->addChild('Course', array('route' => 'course'));
-        $menu['Tools']->addChild('Institute Level', array('route' => 'institutelevel'));
-        $menu['Tools']->addChild('Syndicate Module', array('route' => 'syndicatemodule'));
-        $menu['Tools']->addChild('Application Module', array('route' => 'appmodule'));
-        $menu['Tools']->addChild('Module', array('route' => 'module'));
-        $menu['Tools']->addChild('Theme', array('route' => 'theme'));
-        $menu['Tools']->addChild('Menu Custom', array('route' => 'menucustom'));
-        $menu['Tools']->addChild('Menu Group', array('route' => 'menugroup'));
-        $menu['Tools']->addChild('Manage Brand', array('route' => 'branding'));
-        /*    $menu['Tools']->addChild('Inventory&Accounting')
-                ->setAttribute('icon','icon icon-reorder')
-                ->setAttribute('dropdown', true);
-            $menu['Tools']['Inventory&Accounting']->addChild('Color', array('route' => 'color'))->setAttribute('icon', 'icon-th-list');
-            $menu['Tools']['Inventory&Accounting']->addChild('Size', array('route' => 'size'))->setAttribute('icon', 'icon-th-list');
-            $menu['Tools']['Inventory&Accounting']->addChild('Account Head', array('route' => 'accounthead'))->setAttribute('icon','fa fa-money');*/
-
-        return $menu;
-    }
-
-    public function syndicateMenu($menu)
-    {
-        $menu
-            ->addChild('Syndicate')
-            ->setAttribute('icon', 'fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-
-        $menu['Syndicate']->addChild('Education', array('route' => 'education'));
-        $menu['Syndicate']->addChild('Vendor', array('route' => 'vendor'));
-        return $menu;
-    }
-
-    public function productCategoryMenu($menu)
-    {
-        $menu
-            ->addChild('Product Category')
-            ->setAttribute('icon', 'fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-
-        $menu['Product Category']->addChild('Add Category', array('route' => 'category_new'));
-        $menu['Product Category']->addChild('Listing', array('route' => 'category'));
-        return $menu;
-    }
-
-    public function ecommerceMenu($menu)
-    {
-        $menu
-            ->addChild('Item')
-            ->setAttribute('icon', 'fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-
-        $menu['Item']->addChild('Item', array('route' => 'product'));
-        $menu['Item']->addChild('Item type', array('route' => 'product'));
-        $menu['Item']->addChild('Barcode', array('route' => 'barcode'));
-        return $menu;
-    }
-
-    public function appearanceMenu($menu)
-    {
-
-        $securityContext = $this->container->get('security.context');
-        $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
-        $menu
-            ->addChild('Manage Appearance')
-            ->setAttribute('icon', 'fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-
-        $menu['Manage Appearance']->addChild('Customize Template', array('route' => 'templatecustomize_edit', 'routeParameters' => array('id' => $globalOption->getId())));
-        $menu['Manage Appearance']->addChild('Feature & Widget')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
-        $menu['Manage Appearance']['Feature & Widget']->addChild('Sidebar Widget', array('route' => 'sidebarwidget'));
-        $menu['Manage Appearance']['Feature & Widget']->addChild('Feature Widget', array('route' => 'appearancefeaturewidget'));
-        $menu['Manage Appearance']['Feature & Widget']->addChild('Manage Feature', array('route' => 'appearancefeature'));
-        $menu['Manage Appearance']->addChild('Menu', array('route' => 'menu_manage'));
-        $menu['Manage Appearance']->addChild('Menu Grouping', array('route' => 'menugrouping'));
-        $menu['Manage Appearance']->addChild('Settings', array('route' => 'globaloption_modify'));
-        return $menu;
-    }
-
-    public function mediaMenu($menu)
-    {
-        $menu
-            ->addChild('Media')
-            ->setAttribute('icon', 'fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-
-        $menu['Media']->addChild('Galleries', array('route' => 'gallery'));
-        return $menu;
-    }
-
-    public function contentMenu($menu)
-    {
-        $option = $this->container->get('security.context')->getToken()->getUser()->getGlobalOption();
-        $menu
-            ->addChild('Manage Content')
-            ->setAttribute('icon', 'fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-
-        $menu['Manage Content']->addChild('Page', array('route' => 'page'));
-        if ($option->getSiteSetting()) {
-            $syndicateModules = $option->getSiteSetting()->getSyndicateModules();
-            if (!empty($syndicateModules)) {
-                foreach ($option->getSiteSetting()->getSyndicateModules() as $syndmod) {
-                    $menu['Manage Content']->addChild($syndmod->getName(), array('route' => strtolower($syndmod->getModuleClass())));
-                }
-            }
-
-            $modules = $option->getSiteSetting()->getModules();
-            if (!empty($modules)) {
-                foreach ($option->getSiteSetting()->getModules() as $mod) {
-                    $menu['Manage Content']->addChild($mod->getName(), array('route' => strtolower($mod->getModuleClass())));
-                }
-            }
-        }
-        return $menu;
-    }
-
-    public function manageVendorMenu($menu)
-    {
-        $securityContext = $this->container->get('security.context');
-
-        $menu
-            ->addChild('Manage Vendor')
-            ->setAttribute('icon', 'fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-        if ($securityContext->isGranted('ROLE_SUPER_ADMIN')) {
-            $menu['Manage Vendor']->addChild('Vendor', array('route' => 'vendor_user'));
-            $menu['Manage Vendor']->addChild('Education', array('route' => 'education'));
-            $menu['Manage Vendor']->addChild('Scholarship', array('route' => 'scholarship'));
-        }
         return $menu;
     }
 
@@ -387,86 +187,6 @@ class Builder extends ContainerAware
         $menu['Manage Appearance']->addChild('Menu Grouping', array('route' => 'menugrouping'));
         $menu['Manage Appearance']->addChild('Settings', array('route' => 'globaloption_modify'));
         return $menu;
-    }
-
-    public function manageAdvertismentMenu($menu)
-    {
-        $menu
-            ->addChild('Manage Advertisment')
-            ->setAttribute('icon', 'fa fa-bookmark')
-            ->setAttribute('dropdown', true);
-
-        $menu['Manage Advertisment']->addChild('Advertisment', array('route' => 'advertisment'));
-
-        return $menu;
-
-    }
-
-    public function footerMenu(FactoryInterface $factory, array $options)
-    {
-
-        $menu = $factory->createItem('root');
-        $menu->setChildrenAttribute('class', '');
-        $grouping = $this->container->get('doctrine')->getRepository('SettingAppearanceBundle:MenuGrouping')->getFooterMenu();
-        if ($grouping) {
-            foreach ($grouping as $row) {
-
-                $menu
-                    ->addChild($row->getMenu()->getMenu(), array(
-                        'route' => 'frontend_page',
-                        'routeParameters' => array('slug' => $row->getMenu()->getMenuSlug())
-                    ));
-
-            }
-        }
-        return $menu;
-    }
-
-    public function categoryMenu(FactoryInterface $factory, array $options)
-    {
-
-        $menu = $factory->createItem('root');
-        $menu->setChildrenAttribute('class', 'list-group margin-bottom-25 sidebar-menu');
-
-        $this->buildChildMenus($menu, $this->getCategoryList());
-
-        return $menu;
-
-    }
-
-    public function megaMenu(FactoryInterface $factory, array $options)
-    {
-        $menu = $factory->createItem('root');
-        $menus = $this->container->get('doctrine')->getRepository('SettingAppearanceBundle:MegaMenu')->getActiveMenus();
-        $categoryRepository = $this->container->get('doctrine')->getRepository('ProductProductBundle:Category');
-        foreach ($menus as $item) {
-            /** @var MegaMenu $item */
-            $menuName = $item->getName();
-            $menu
-                ->addChild($menuName)
-                ->setAttribute('dropdown', true);
-            $this->buildChildMenus($menu[$menuName], $categoryRepository->buildCategoryGroup($item->getCategories()));
-            $this->buildCollectionMenu($menu[$menuName], $item->getCollections());
-            $this->buildBrandMenu($menu[$menuName], $item->getBrands());
-        }
-
-        return $menu;
-    }
-
-    protected function getCategoryList()
-    {
-        $repo = $this->container->get('doctrine')->getRepository('ProductProductBundle:Category');
-        $options = array(
-            'decorate' => false,
-            'representationField' => 'slug',
-            'html' => false
-        );
-
-        return $repo->childrenHierarchy(
-            null, /* starting from root nodes */
-            false, /* true: load all children, false: only direct */
-            $options
-        );
     }
 
     public function InventoryMenu($menu)
@@ -611,7 +331,7 @@ class Builder extends ContainerAware
 
     }
 
-    public function inventoryEcommerceFoodMenu($menu)
+    public function applicationSettingMenu($menu)
     {
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
@@ -653,7 +373,7 @@ class Builder extends ContainerAware
 
             if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
 
-                $menu['Application Setting']->addChild('Inventory Setting', array('route' => ''))
+                $menu['Application Setting']->addChild('Inventory', array('route' => ''))
                     ->setAttribute('icon', 'fa fa-bookmark')
                     ->setAttribute('dropdown', true);
                 $menu['Application Setting']['Inventory']->addChild('Master Item', array('route' => 'inventory_product'))->setAttribute('icon', 'icon-th-list');
@@ -692,7 +412,6 @@ class Builder extends ContainerAware
         }
         return $menu;
     }
-
 
     public function OnlineSalesSystemMenu($menu)
     {
@@ -946,7 +665,221 @@ class Builder extends ContainerAware
 
     }
 
-    public function manageAccountingSettingMenu($menu)
+    public function manageSystemAccountMenu($menu)
+    {
+        $menu
+            ->addChild('System Transaction')
+            ->setAttribute('dropdown', true);
+        $menu['System Transaction']->addChild('Bank', array('route' => 'bankaccount'))->setAttribute('icon', 'icon-money');
+        $menu['System Transaction']->addChild('Mobile Bank', array('route' => 'mobilebankaccount'))->setAttribute('icon', 'icon-money');
+        return $menu;
+    }
+
+    public function manageDomainMenu($menu)
+    {
+        $menu
+            ->addChild('Manage Domain')
+            ->setAttribute('dropdown', true);
+        $menu['Manage Domain']->addChild('Setting Package')->setAttribute('icon', ' icon-cogs')->setAttribute('dropdown', true);
+        $menu['Manage Domain']['Setting Package']->addChild('Application', array('route' => 'applicationpricing'))->setAttribute('icon', 'icon-briefcase');
+        $menu['Manage Domain']['Setting Package']->addChild('SMS/Email', array('route' => 'smspricing'))->setAttribute('icon', 'icon-envelope');
+        $menu['Manage Domain']->addChild('Manage Operation')->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
+        $menu['Manage Domain']['Manage Operation']->addChild('Domain', array('route' => 'tools_domain'))->setAttribute('icon', 'icon-money');
+        $menu['Manage Domain']->addChild('Manage Invoice')->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
+        $menu['Manage Domain']['Manage Invoice']->addChild('Sms Bundle', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
+        $menu['Manage Domain']['Manage Invoice']->addChild('Module Invoice', array('route' => 'invoicemodule'))->setAttribute('icon', 'icon-money');
+
+        return $menu;
+    }
+
+    public function manageDomainInvoiceMenu($menu)
+    {
+        $securityContext = $this->container->get('security.context');
+        $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
+        $menu
+            ->addChild('Invoice Sms & Email')
+            ->setAttribute('icon', 'info-sign')
+            ->setAttribute('dropdown', true);
+        $menu['Invoice Sms & Email']->addChild('Manage Sms')->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
+        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Logs', array('route' => 'smssender'))->setAttribute('icon', 'icon-phone');
+        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Bulk Sms', array('route' => 'smsbulk'))->setAttribute('icon', 'icon-envelope');
+        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Sms Bundle', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
+        $menu['Invoice Sms & Email']['Manage Sms']->addChild('Notification Setup', array('route' => 'domain_notificationconfig'))->setAttribute('icon', 'icon-info-sign');
+        $menu['Invoice Sms & Email']->addChild('Invoice Application', array('route' => 'invoicemodule_domain'))->setAttribute('icon', 'icon-money');
+
+        return $menu;
+    }
+
+    public function manageFrontendMenu($menu)
+    {
+        $menu
+            ->addChild('Manage Frontend')
+            ->setAttribute('icon', 'fa fa-bookmark')
+            ->setAttribute('dropdown', true);
+
+        $menu['Manage Frontend']->addChild('Site Slider', array('route' => 'siteslider'));
+        $menu['Manage Frontend']->addChild('Site Content', array('route' => 'sitecontent'));
+        $menu['Manage Frontend']->addChild('Manage Mega Menu', array('route' => 'megamenu'));
+        $menu['Manage Frontend']->addChild('Feature Category', array('route' => 'category_sorting'));
+        $menu['Manage Frontend']->addChild('Collection', array('route' => 'collection'));
+
+        return $menu;
+
+    }
+
+    public function toolsMenu($menu)
+    {
+        $menu
+            ->addChild('Tools')
+            ->setAttribute('icon', 'fa fa-bookmark')
+            ->setAttribute('dropdown', true);
+
+        $menu['Tools']->addChild('Manage Option', array('route' => 'globaloption'));
+        $menu['Tools']->addChild('Manage Setting', array('route' => 'sitesetting'));
+        $menu['Tools']->addChild('Location', array('route' => 'location'));
+        $menu['Tools']->addChild('Business Sector', array('route' => 'syndicate'));
+        $menu['Tools']->addChild('Course', array('route' => 'course'));
+        $menu['Tools']->addChild('Institute Level', array('route' => 'institutelevel'));
+        $menu['Tools']->addChild('Syndicate Module', array('route' => 'syndicatemodule'));
+        $menu['Tools']->addChild('Application Module', array('route' => 'appmodule'));
+        $menu['Tools']->addChild('Module', array('route' => 'module'));
+        $menu['Tools']->addChild('Theme', array('route' => 'theme'));
+        $menu['Tools']->addChild('Menu Custom', array('route' => 'menucustom'));
+        $menu['Tools']->addChild('Menu Group', array('route' => 'menugroup'));
+        $menu['Tools']->addChild('Manage Brand', array('route' => 'branding'));
+        /*    $menu['Tools']->addChild('Inventory&Accounting')
+                ->setAttribute('icon','icon icon-reorder')
+                ->setAttribute('dropdown', true);
+            $menu['Tools']['Inventory&Accounting']->addChild('Color', array('route' => 'color'))->setAttribute('icon', 'icon-th-list');
+            $menu['Tools']['Inventory&Accounting']->addChild('Size', array('route' => 'size'))->setAttribute('icon', 'icon-th-list');
+            $menu['Tools']['Inventory&Accounting']->addChild('Account Head', array('route' => 'accounthead'))->setAttribute('icon','fa fa-money');*/
+
+        return $menu;
+    }
+
+    public function syndicateMenu($menu)
+    {
+        $menu
+            ->addChild('Syndicate')
+            ->setAttribute('icon', 'fa fa-bookmark')
+            ->setAttribute('dropdown', true);
+
+        $menu['Syndicate']->addChild('Education', array('route' => 'education'));
+        $menu['Syndicate']->addChild('Vendor', array('route' => 'vendor'));
+        return $menu;
+    }
+
+    public function productCategoryMenu($menu)
+    {
+        $menu
+            ->addChild('Product Category')
+            ->setAttribute('icon', 'fa fa-bookmark')
+            ->setAttribute('dropdown', true);
+
+        $menu['Product Category']->addChild('Add Category', array('route' => 'category_new'));
+        $menu['Product Category']->addChild('Listing', array('route' => 'category'));
+        return $menu;
+    }
+
+    public function ecommerceMenu($menu)
+    {
+        $menu
+            ->addChild('Item')
+            ->setAttribute('icon', 'fa fa-bookmark')
+            ->setAttribute('dropdown', true);
+
+        $menu['Item']->addChild('Item', array('route' => 'product'));
+        $menu['Item']->addChild('Item type', array('route' => 'product'));
+        $menu['Item']->addChild('Barcode', array('route' => 'barcode'));
+        return $menu;
+    }
+
+    public function appearanceMenu($menu)
+    {
+
+        $securityContext = $this->container->get('security.context');
+        $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
+        $menu
+            ->addChild('Manage Appearance')
+            ->setAttribute('icon', 'fa fa-bookmark')
+            ->setAttribute('dropdown', true);
+
+        $menu['Manage Appearance']->addChild('Customize Template', array('route' => 'templatecustomize_edit', 'routeParameters' => array('id' => $globalOption->getId())));
+        $menu['Manage Appearance']->addChild('Feature & Widget')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
+        $menu['Manage Appearance']['Feature & Widget']->addChild('Sidebar Widget', array('route' => 'sidebarwidget'));
+        $menu['Manage Appearance']['Feature & Widget']->addChild('Feature Widget', array('route' => 'appearancefeaturewidget'));
+        $menu['Manage Appearance']['Feature & Widget']->addChild('Manage Feature', array('route' => 'appearancefeature'));
+        $menu['Manage Appearance']->addChild('Menu', array('route' => 'menu_manage'));
+        $menu['Manage Appearance']->addChild('Menu Grouping', array('route' => 'menugrouping'));
+        $menu['Manage Appearance']->addChild('Settings', array('route' => 'globaloption_modify'));
+        return $menu;
+    }
+
+    public function manageAdvertismentMenu($menu)
+    {
+        $menu
+            ->addChild('Manage Advertisment')
+            ->setAttribute('icon', 'fa fa-bookmark')
+            ->setAttribute('dropdown', true);
+
+        $menu['Manage Advertisment']->addChild('Advertisment', array('route' => 'advertisment'));
+
+        return $menu;
+
+    }
+
+    public function footerMenu(FactoryInterface $factory, array $options)
+    {
+
+        $menu = $factory->createItem('root');
+        $menu->setChildrenAttribute('class', '');
+        $grouping = $this->container->get('doctrine')->getRepository('SettingAppearanceBundle:MenuGrouping')->getFooterMenu();
+        if ($grouping) {
+            foreach ($grouping as $row) {
+
+                $menu
+                    ->addChild($row->getMenu()->getMenu(), array(
+                        'route' => 'frontend_page',
+                        'routeParameters' => array('slug' => $row->getMenu()->getMenuSlug())
+                    ));
+
+            }
+        }
+        return $menu;
+    }
+
+    public function categoryMenu(FactoryInterface $factory, array $options)
+    {
+
+        $menu = $factory->createItem('root');
+        $menu->setChildrenAttribute('class', 'list-group margin-bottom-25 sidebar-menu');
+
+        $this->buildChildMenus($menu, $this->getCategoryList());
+
+        return $menu;
+
+    }
+
+    public function megaMenu(FactoryInterface $factory, array $options)
+    {
+        $menu = $factory->createItem('root');
+        $menus = $this->container->get('doctrine')->getRepository('SettingAppearanceBundle:MegaMenu')->getActiveMenus();
+        $categoryRepository = $this->container->get('doctrine')->getRepository('ProductProductBundle:Category');
+        foreach ($menus as $item) {
+            /** @var MegaMenu $item */
+            $menuName = $item->getName();
+            $menu
+                ->addChild($menuName)
+                ->setAttribute('dropdown', true);
+            $this->buildChildMenus($menu[$menuName], $categoryRepository->buildCategoryGroup($item->getCategories()));
+            $this->buildCollectionMenu($menu[$menuName], $item->getCollections());
+            $this->buildBrandMenu($menu[$menuName], $item->getBrands());
+        }
+
+        return $menu;
+    }
+
+    public function manageApplicationSettingMenu($menu)
     {
         $menu
             ->addChild('Application Setting')
@@ -1019,4 +952,37 @@ class Builder extends ContainerAware
         }
 
     }
+
+    public function manageVendorMenu($menu)
+    {
+        $securityContext = $this->container->get('security.context');
+
+        $menu
+            ->addChild('Manage Vendor')
+            ->setAttribute('icon', 'fa fa-bookmark')
+            ->setAttribute('dropdown', true);
+        if ($securityContext->isGranted('ROLE_SUPER_ADMIN')) {
+            $menu['Manage Vendor']->addChild('Vendor', array('route' => 'vendor_user'));
+            $menu['Manage Vendor']->addChild('Education', array('route' => 'education'));
+            $menu['Manage Vendor']->addChild('Scholarship', array('route' => 'scholarship'));
+        }
+        return $menu;
+    }
+
+    protected function getCategoryList()
+    {
+        $repo = $this->container->get('doctrine')->getRepository('ProductProductBundle:Category');
+        $options = array(
+            'decorate' => false,
+            'representationField' => 'slug',
+            'html' => false
+        );
+
+        return $repo->childrenHierarchy(
+            null, /* starting from root nodes */
+            false, /* true: load all children, false: only direct */
+            $options
+        );
+    }
+
 }

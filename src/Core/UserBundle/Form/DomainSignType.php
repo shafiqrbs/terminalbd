@@ -99,6 +99,7 @@ class DomainSignType extends AbstractType
 
 
         $array = array(
+
             'Domain'=> array(
                 'ROLE_DOMAIN_USER'  => 'Domain User',
                 'ROLE_DOMAIN_MANAGER' => 'Domain Manager'

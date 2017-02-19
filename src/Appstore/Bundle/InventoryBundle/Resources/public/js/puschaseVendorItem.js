@@ -119,6 +119,7 @@ var InventoryPurchaseVendorItemPage = function (purchaseItemUrl) {
             },
         })
     })
+
 }
 var inventoryItemImageGallery = function (item)
     {

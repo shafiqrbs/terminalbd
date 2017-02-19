@@ -36,6 +36,12 @@ inventory_product_inline_search:
     options:
            expose: true
 
+inventory_product_masteritem_search:
+    path:     /master-product-search
+    defaults: { _controller: "InventoryBundle:Product:masterItem" }
+    options:
+           expose: true
+
 inventory_product_search:
     path:     /search
     defaults: { _controller: "InventoryBundle:Product:autoSearch" }

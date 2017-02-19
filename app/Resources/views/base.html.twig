@@ -128,6 +128,10 @@
 'assets/plugins/jquery-migrate-1.2.1.min.js'
 'assets/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js'
 'assets/plugins/jquery-ui/jquery.ui.droppable.js'
+'assets/plugins/jquery-ui/jquery.ui.autocomplete.js'
+'assets/plugins/jquery-ui/jquery.ui.menu.js'
+'assets/plugins/jquery-ui/jquery.ui.position.js'
+'assets/plugins/jquery-ui/jquery.ui.widget.js'
 'assets/plugins/jquery-tree/src/js/jquery.tree.js'
 'assets/plugins/bootstrap/js/bootstrap.min.js'
 'assets/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js'
@@ -233,6 +237,9 @@
         $(".phone").inputmask("mask", {"mask": "99-999999"}); //specifying fn & options
         $( ".date-picker" ).datepicker({
             dateFormat: "yy-mm-dd"
+        });
+        $( ".datePicker" ).datepicker({
+            dateFormat: "dd-mm-yy"
         });
         $('.multiselect').multiselect();
         $(".toggle").click(function(){

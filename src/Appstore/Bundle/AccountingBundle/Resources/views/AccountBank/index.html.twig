@@ -51,42 +51,6 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
-                            <div class="portlet search-portlet box grey">
-                                {#<form class="search-form" action="" method="get" name="itemSearch">
-                                    <div class="span4">
-                                        <div class="controls">
-                                            <input type="text" id="startDate" name="startDate"  class="span6 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}start date{% endif %} ">
-                                            <input type="text" id="endDate" name="endDate"  class="span6 search-input  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}end date{% endif %} ">
-                                        </div>
-                                    </div>
-                                    <div class="span3">
-                                        <select class="search-input span12 select2" id="accountHead" name="accountHead">
-                                            <option value="">Select account head</option>
-                                            {% for account in accountHead %}
-                                                {% set accountId = searchForm.accountHead is defined ? searchForm.accountHead : '' %}
-                                                <option value="{{ account.id }}" {% if accountId == account.id %} selected="selected" {% endif %} >{{ account.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="span4">
-                                        <input type="text" id="toUser" name="toUser"  class="span11 select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="select user">
-                                    </div>
-                                    <div class="1">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <div class="input-append">
-                                                    <div class="btn-group">
-                                                        <button class="btn" type="submit" >
-                                                            <i class="icon-search"></i>&nbsp;Go</button>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>#}
-
-                            </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
@@ -131,6 +95,18 @@
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@AccountingBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    AccountingApproveProcess();
+{% endblock %}
 
 
 

@@ -338,5 +338,20 @@ class ProductController extends Controller
 
     }
 
+    public function masterItemAction()
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Product')->findBy(
+            array('inventoryConfig' => $inventory,'status' => 1)
+        );
+        $items = array();
+        foreach ($entities as $entity):
+            $items[]=array('id' => $entity->getName(),'text'=> $entity->getName(),'label'=> $entity->getName());
+        endforeach;
+        return new JsonResponse($items);
+
+    }
+
+
 
 }
