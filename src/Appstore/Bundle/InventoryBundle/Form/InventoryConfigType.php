@@ -44,7 +44,7 @@ class InventoryConfigType extends AbstractType
                 'choices' => array(
                     'save'          => 'Save',
                     'printer'       => 'Printer',
-                    'posPrinter'   => 'Pos Printer',
+                    'pos'   => 'Pos Printer',
                 ),
                     'required'    => true,
                     'multiple'    => false,

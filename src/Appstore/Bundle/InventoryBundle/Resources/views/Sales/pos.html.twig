@@ -298,18 +298,15 @@
                                                     <div class="pull-center">
                                                         <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                                         <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
-
+                                                        {% if entity.inventoryConfig.printer == 'printer' %}
                                                         <button disabled="disabled" type="submit" class="btn blue paymentBtn"><i class="icon-print"></i>&nbsp;Print</button>
+                                                        {% elseif{% if entity.inventoryConfig.printer == 'pos'  %}
                                                         <button disabled="disabled" rel="{{ path('inventory_sales_print',{'code':entity.invoice}) }}"  type="button" class="btn green paymentBtn" id="pos"><i class="icon-print m-icon-white"></i>&nbsp;Pos</button>
+                                                        {% else %}
                                                         <button disabled="disabled" rel=""  type="submit" class="btn purple paymentBtn" ><i class="icon-ok m-icon-white"></i>&nbsp;Save</button>
+                                                        {% endif %}
                                                         <a href="{{ path('inventory_sales_reset',{'id':entity.id}) }}"  class="btn yellow"><i class="icon-refresh"></i></a>
-
-                                           {#
-                                            <a href="{{ path('inventory_sales') }}"  class="btn yellow"><i class="m-icon-swapleft m-icon-white"></i>&nbsp;Back</a>
-                                           <button type="submit" class="btn blue"><i class="icon-print"></i></button>
-                                                        <button type="reset" class="btn purple"><i class="icon-refresh"></i> </button>
-                                                        <button type="submit" class="btn yellow"><i class="icon-pushpin"></i></button>
-                                           #}         </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
