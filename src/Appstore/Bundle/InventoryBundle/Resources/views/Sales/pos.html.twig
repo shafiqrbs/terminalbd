@@ -300,7 +300,7 @@
                                                         <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
                                                         {% if entity.inventoryConfig.printer == 'printer' %}
                                                         <button disabled="disabled" type="submit" class="btn blue paymentBtn"><i class="icon-print"></i>&nbsp;Print</button>
-                                                        {% elseif{% if entity.inventoryConfig.printer == 'pos'  %}
+                                                        {% elseif entity.inventoryConfig.printer == 'pos'  %}
                                                         <button disabled="disabled" rel="{{ path('inventory_sales_print',{'code':entity.invoice}) }}"  type="button" class="btn green paymentBtn" id="pos"><i class="icon-print m-icon-white"></i>&nbsp;Pos</button>
                                                         {% else %}
                                                         <button disabled="disabled" rel=""  type="submit" class="btn purple paymentBtn" ><i class="icon-ok m-icon-white"></i>&nbsp;Save</button>
@@ -315,7 +315,6 @@
                                 </div>
                                 {{ form_end(form) }}
                             <!-- BEGIN FORM-->
-
                             <div class="clearfix">&nbsp;</div>
                             <!--/span-->
 
