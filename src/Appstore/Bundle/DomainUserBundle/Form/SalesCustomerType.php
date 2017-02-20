@@ -33,7 +33,7 @@ class SalesCustomerType extends AbstractType
             )
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile customer-input','autocomplete'=>'off','placeholder'=>'Mobile no'))
             )
-            ->add('address','text', array('attr'=>array('class'=>'m-wrap span12 customer-input','placeholder'=>'Enter customer address')))
+            ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 customer-input','rows'=>2,'placeholder'=>'Enter customer address')))
             ->add('location', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select Location---',

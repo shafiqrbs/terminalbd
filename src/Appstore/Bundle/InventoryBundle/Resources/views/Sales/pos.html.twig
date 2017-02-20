@@ -298,9 +298,10 @@
                                                     <div class="pull-center">
                                                         <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                                         <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
+
                                                         <button disabled="disabled" type="submit" class="btn blue paymentBtn"><i class="icon-print"></i>&nbsp;Print</button>
                                                         <button disabled="disabled" rel="{{ path('inventory_sales_print',{'code':entity.invoice}) }}"  type="button" class="btn green paymentBtn" id="pos"><i class="icon-print m-icon-white"></i>&nbsp;Pos</button>
-                                                        <button disabled="disabled" rel=""  type="submit" class="btn purple paymentBtn" ><i class="icon-ok m-icon-white"></i>&nbsp;Paid</button>
+                                                        <button disabled="disabled" rel=""  type="submit" class="btn purple paymentBtn" ><i class="icon-ok m-icon-white"></i>&nbsp;Save</button>
                                                         <a href="{{ path('inventory_sales_reset',{'id':entity.id}) }}"  class="btn yellow"><i class="icon-refresh"></i></a>
 
                                            {#

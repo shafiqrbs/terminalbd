@@ -149,6 +149,12 @@ class InventoryConfig
      */
     protected $damages;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="printer", type="string", length=50,nullable = true)
+     */
+    private $printer;
 
     /**
      * @var smallint
@@ -1036,6 +1042,25 @@ class InventoryConfig
     public function setBarcodePrint($barcodePrint)
     {
         $this->barcodePrint = $barcodePrint;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrinter()
+    {
+        return $this->printer;
+    }
+
+    /**
+     * @param string $printer
+     * Printer
+     * Pos Printer
+     * Save
+     */
+    public function setPrinter($printer)
+    {
+        $this->printer = $printer;
     }
 
 

@@ -23,7 +23,6 @@ class InventoryConfigType extends AbstractType
             ->add('salesReturnDayLimit','integer',array('attr'=>array('class'=>'numeric')))
             ->add('vatPercentage','integer',array('attr'=>array('class'=>'numeric span8')))
             ->add('deliveryProcess',
-
                 'choice', array(
                 'attr'=>array('class'=>'check-list  span12'),
                 'choices' => array(
@@ -39,6 +38,19 @@ class InventoryConfigType extends AbstractType
                 'expanded'  => true,
                 'empty_data'  => null,
             ))
+            ->add('printer',
+                'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'choices' => array(
+                    'save'          => 'Save',
+                    'printer'       => 'Printer',
+                    'posPrinter'   => 'Pos Printer',
+                ),
+                    'required'    => true,
+                    'multiple'    => false,
+                    'expanded'  => false,
+                    'empty_data'  => null,
+            ))
             ->add('vatEnable')
             ->add('isBranch')
             ->add('isColor')
@@ -46,6 +58,7 @@ class InventoryConfigType extends AbstractType
             ->add('barcodeColor')
             ->add('barcodePrint')
             ->add('barcodeSize')
+            ->add('isPrintFooter')
             ->add('barcodeBrandVendor',
                 'choice', array(
                     'attr'=>array('class'=>'span12'),

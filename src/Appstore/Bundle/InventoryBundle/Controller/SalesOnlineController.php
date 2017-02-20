@@ -82,6 +82,7 @@ class SalesOnlineController extends Controller
         $customerEntity = $em->getRepository('DomainUserBundle:Customer')->find($customer);
         if (!empty($customer) && !empty($customerEntity)) {
             $entity->setCustomer($customerEntity);
+            $entity->setMobile($customerEntity->getMobile());
         }
 
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(4);
@@ -355,7 +356,6 @@ class SalesOnlineController extends Controller
             $entity->setDue($data['dueAmount']);
             $entity->setDiscount($data['discount']);
             $entity->setTotal($data['paymentTotal']);
-            $entity->setProcess('Paid');
             $entity->setPayment($data['paymentTotal'] - $data['dueAmount']);
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
             $entity->setPaymentInWord($amountInWords);
