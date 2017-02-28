@@ -46,5 +46,7 @@ class EcommerceConfigRepository extends EntityRepository
         $Promotion = $em->createQuery('DELETE EcommerceBundle:Discount e WHERE e.ecommerceConfig = '. $ecommerceId);
         $Promotion->execute();
 
+
+
     }
 }
