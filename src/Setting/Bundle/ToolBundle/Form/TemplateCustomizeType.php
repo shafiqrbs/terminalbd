@@ -64,6 +64,22 @@ class TemplateCustomizeType extends AbstractType
                 'placeholder'=>'','readonly'=>'readonly')
             ))
 
+            ->add('dividerBgColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+
+            ->add('dividerColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+
+            ->add('dividerTitleColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+
+
             ->add('siteH1TextSize', 'choice', array(
                 'attr'=>array('class'=>'selectbox span12'),
                 'choices' => array('10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),

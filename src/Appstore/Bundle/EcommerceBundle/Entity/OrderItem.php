@@ -25,12 +25,14 @@ class OrderItem
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="orderItems"  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="orderItems")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $order;
 
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", inversedBy="orderItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $purchaseVendorItem;
 
@@ -41,11 +43,13 @@ class OrderItem
 
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="orderItem" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $purchaseItem;
 
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", inversedBy="orderItems")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $goodsItem;
 

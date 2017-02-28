@@ -36,6 +36,7 @@ class DeliveryReturn
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", inversedBy="deliveryReturns" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $purchaseItem;
 

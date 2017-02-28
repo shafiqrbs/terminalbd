@@ -58,7 +58,11 @@ class PurchaseVendorItemListener
     public function getItemCodes(PurchaseVendorItem $entity){
 
 
-        $masterItem     = $entity->getMasterItem()->getSTRPadCode();
+        if(!empty($entity->getMasterItem())){
+            $masterItem     = $entity->getMasterItem()->getSTRPadCode();
+        }else{
+            $masterItem = 0000;
+        }
         $code           = '-'.$entity->getSTRPadCode();
         $sku            = $masterItem.$code;
 

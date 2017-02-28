@@ -165,7 +165,7 @@
                                                         <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}-{{ vendorItem.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                                         <td class="numeric" >{{ vendorItem.name }}</td>
                                                         <td class="numeric" >{{ vendorItem.quantity }}</td>
-                                                        <td class="numeric" >{% if vendorItem.masterItem.productUnit is not empty %}{{  vendorItem.masterItem.productUnit.name }}{% endif %}</td>
+                                                        <td class="numeric" >{% if vendorItem.masterItem.productUnit is defined and vendorItem.masterItem.productUnit is not empty %}{{  vendorItem.masterItem.productUnit.name }}{% endif %}</td>
                                                         <td class="numeric" >{{ vendorItem.purchasePrice }}</td>
                                                         <td class="numeric" >{{ (vendorItem.purchasePrice * vendorItem.quantity) }}</td>
                                                         <td class="numeric" >{{ vendorItem.salesPrice }}</td>

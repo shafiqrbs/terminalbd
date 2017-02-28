@@ -497,5 +497,37 @@ class Template
         return $this->ehomeItems;
     }
 
+    /**
+     * @return int
+     */
+    public function getDivWidth()
+    {
+        return $this->divWidth;
+    }
+
+    /**
+     * @param int $divWidth
+     */
+    public function setDivWidth($divWidth)
+    {
+        $this->divWidth = $divWidth;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDivHeight()
+    {
+        return $this->divHeight;
+    }
+
+    /**
+     * @param int $divHeight
+     */
+    public function setDivHeight($divHeight)
+    {
+        $this->divHeight = $divHeight;
+    }
+
 
 }

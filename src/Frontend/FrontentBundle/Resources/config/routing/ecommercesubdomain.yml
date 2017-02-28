@@ -60,6 +60,10 @@ webservice_module_category:
     defaults: { _controller: FrontendBundle:WebServiceModule:moduleCategory }
 
 
+webservice_product_category:
+    path:     /product/category/{id}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:category }
+
 webservice_product_promotion:
     path:     /product/promotion/{id}
     defaults: { _controller: FrontendBundle:WebServiceProduct:promotion }

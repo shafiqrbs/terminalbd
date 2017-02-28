@@ -17,15 +17,16 @@ class FeatureWidgetItemRepository extends EntityRepository
     public function insert(FeatureWidget $featureWidget,$data)
     {
         $em = $this->_em;
-        foreach ($data['feature'] as $row){
-
-            $entity = new FeatureWidgetItem();
-            $entity->setFeatureWidget($featureWidget);
-            $entity->setFeature($em->getRepository('SettingAppearanceBundle:Feature')->find($row));
-            $em->persist($entity);
-            $em->flush();
-
+        if(!empty($data['feature'])){
+            foreach ($data['feature'] as $row){
+                $entity = new FeatureWidgetItem();
+                $entity->setFeatureWidget($featureWidget);
+                $entity->setFeature($em->getRepository('SettingAppearanceBundle:Feature')->find($row));
+                $em->persist($entity);
+                $em->flush();
+            }
         }
+
     }
 
     public function update(FeatureWidget $featureWidget,$data)

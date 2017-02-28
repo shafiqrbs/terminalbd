@@ -135,12 +135,11 @@ class PaymentSalaryController extends Controller
         $invoiceAmountOverview = $this->getDoctrine()->getRepository('AccountingBundle:SalarySetting')->invoiceAmountOverview($globalOption,$data);
         $paymentAmountOverview = $this->getDoctrine()->getRepository('AccountingBundle:PaymentSalary')->paymentAmountOverview($globalOption,$data);
         return $this->render('AccountingBundle:PaymentSalary:new.html.twig', array(
-            'user' => $user,
-            'entity' => $entity,
-            'user'      => $user,
-            'invoiceAmountOverview'      => $invoiceAmountOverview,
-            'paymentAmountOverview'      => $paymentAmountOverview,
-            'form'   => $form->createView(),
+            'user'                          => $user,
+            'entity'                        => $entity,
+            'invoiceAmountOverview'         => $invoiceAmountOverview,
+            'paymentAmountOverview'         => $paymentAmountOverview,
+            'form'                          => $form->createView(),
         ));
     }
 
@@ -161,7 +160,6 @@ class PaymentSalaryController extends Controller
             'paymentAmountOverview'      => $paymentAmountOverview,
         ));
     }
-
 
     /**
      * Deletes a SalesItem entity.

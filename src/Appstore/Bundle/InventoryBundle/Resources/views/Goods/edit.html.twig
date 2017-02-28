@@ -17,7 +17,7 @@
                         <a href="{{ path('inventory_goods') }}">Product</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#"> {{ entity.name }} Details</a></li>
+                    <li><a href="#"> {{ entity.webName }} Details</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -221,9 +221,6 @@
                                         <div class="control-group">
                                             <label class="control-label" >Feature image</label>
                                             <div class="controls">
-
-                                            </div>
-                                            <div class="controls">
                                                 <div data-provides="fileupload" class="fileupload fileupload-new">
                                                     <div  class="fileupload-new thumbnail">
                                                         {% if(entity.webPath) %}
@@ -243,7 +240,6 @@
                                                         <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>

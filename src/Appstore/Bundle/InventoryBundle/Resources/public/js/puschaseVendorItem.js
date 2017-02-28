@@ -120,7 +120,7 @@ var InventoryPurchaseVendorItemPage = function (purchaseItemUrl) {
         })
     })
 
-}
+};
 var inventoryItemImageGallery = function (item)
     {
         if (item > 0) {

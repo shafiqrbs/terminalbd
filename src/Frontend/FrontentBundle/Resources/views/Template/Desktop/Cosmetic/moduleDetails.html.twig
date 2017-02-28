@@ -1,0 +1,79 @@
+{% extends ':frontend/template:base.html.twig' %}
+{% block body %}
+    <div class="clearfix"></div>
+
+    <section id="breadcrumb">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="crumb">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i><a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':moduleName|lower }) }}"> {{ moduleName }}</a><i>/</i>{{ details.name }}</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container blog">
+        <div class="row">
+            <article class="col-md-8">
+                {% if ( moduleName == 'News') %}
+                    {{ include('@Frontend/Template/Desktop/ModuleDetails/news.html.twig')}}
+                {% elseif( moduleName == 'Blog' ) %}
+                    {{ include('@Frontend/Template/Desktop/ModuleDetails/blog.html.twig')}}
+                {% elseif( moduleName == 'Testimonial' ) %}
+                    {{ include('@Frontend/Template/Desktop/ModuleDetails/testimonial.html.twig')}}
+                {% elseif( moduleName == 'Timeline' ) %}
+                    {{ include('@Frontend/Template/Desktop/ModuleDetails/timeline.html.twig')}}
+                {% elseif( moduleName == 'Branch' ) %}
+                    {{ include('@Frontend/Template/Desktop/ModuleDetails/branch.html.twig')}}
+                {% elseif( moduleName == 'Event' ) %}
+                    {{ include('@Frontend/Template/Desktop/ModuleDetails/event.html.twig')}}
+                {% elseif( moduleName == 'ClassRoutine' ) %}
+                    {{ include('@Frontend/Template/Desktop/ModuleDetails/blackout.html.twig')}}
+                {% elseif( moduleName == 'Blackout' ) %}
+                    {{ include('@Frontend/Template/Desktop/ModuleDetails/blackout.html.twig')}}
+                {% elseif( moduleName == 'NoticeBoard' ) %}
+                    {{ include('@Frontend/Template/Desktop/ModuleDetails/noticeboard.html.twig')}}
+                {% elseif( moduleName == 'Admission' ) %}
+                    {{ include('@Frontend/Template/Desktop/ModuleDetails/admission.html.twig')}}
+                {% elseif( moduleName == 'Syndicate' ) %}
+                    {{ include('@Frontend/Template/Desktop/ModuleDetails/syndicate.html.twig')}}
+                {% else %}
+                    {{ include('@Frontend/Template/Desktop/Module/default.html.twig')}}
+                {% endif %}
+            </article>
+            <!-- Blog Sidebar Column -->
+            <aside class="col-md-4 sidebar-padding">
+                <!-- Blog Categories -->
+                <div class="blog-sidebar">
+                    <h4 class="sidebar-title"><i class="fa fa-list-ul"></i> Categories</h4>
+                    <hr>
+                    <ul class="sidebar-list">
+                        {% for cat in categories %}
+                        <li><a href="{{ path('webservice_module_category',{'subdomain': globalOption.subDomain,'module':moduleName|lower ,'slug':cat.slug }) }}">{{ cat.name }}</a></li>
+                       {% endfor %}
+                    </ul>
+                </div>
+                <!-- Recent Posts -->
+                <div class="blog-sidebar">
+                    {#<h4 class="sidebar-title"><i class="fa fa-align-left"></i> Recent News</h4>
+                    <hr style="margin-bottom: 5px;">
+                    {% for news in globalOption.newses|slice(0,5)  %}
+                        <div class="media">
+                            <a class="pull-left" href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':news.slug }) }}">
+                                <img class="img-responsive media-object" src="{{ image(news.webPath).resize(100,100) }}" alt="Media Object">
+                            </a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':news.slug }) }}">{{ news.name }}</a></h4>
+                                {{ news.content|raw|truncate(100) }}
+                            </div>
+                        </div>
+                    {% endfor %}#}
+                </div>
+
+            </aside>
+        </div>
+    </div>
+{% endblock %}
+
+{% block documentready %}
+    {{ parent() }}
+{% endblock %}

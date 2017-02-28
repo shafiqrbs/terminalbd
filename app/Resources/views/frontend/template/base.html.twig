@@ -44,12 +44,16 @@
     'assets/template/plugin/owl.carousel/owl.theme.min.css'
     'assets/template/plugin/side.toolbar/vcore.sidebar.css'
     'assets/template/plugin/pgslider/pgwslider.min.css'
+    'assets/template/plugin/revolution_slider/css/rs-style.css'
+    'assets/template/plugin/revolution_slider/rs-plugin/css/settings.css'
+    'assets/template/plugin/textillate/assets/animate.css'
     'assets/bindu/3rd/select2/select2.css'
     'assets/template/desktop/css/module.css'
     %}
+
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
-    <link href="/assets/template/desktop/{{ template }}/css/style.css" rel="stylesheet" />
+  {#  <link href="/assets/template/desktop/{{ template }}/css/style.css" rel="stylesheet" />#}
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -95,7 +99,11 @@
 'assets/template/plugin/pgslider/imagezoom.js'
 'assets/template/plugin/pgslider/pgwslider.js'
 'assets/template/plugin/side.toolbar/vcore.sidebar.js'
-'assets/template/desktop/js/jquery.quicksand.js'
+'assets/template/plugin/revolution_slider/rs-plugin/js/jquery.themepunch.plugins.min.js'
+'assets/template/plugin/revolution_slider/rs-plugin/js/jquery.themepunch.revolution.min.js'
+'assets/template/plugin/textillate/assets/jquery.fittext.js'
+'assets/template/plugin/textillate/assets/jquery.lettering.js'
+'assets/template/plugin/matchHeight/height-match.js'
 
 %}
 
@@ -377,6 +385,25 @@
         margin-top: 30px;
         margin-bottom: 30px;
 
+    }
+
+    #footer {
+        width: 100%;
+        font-size: 12px;
+        background-color: #1E1E1E;
+        display: block;
+        color: #f7f7f7;
+    }
+    .myfooter {
+        color: #9d9d9d;
+        padding: 10px 0px;
+    }
+    #toTop {
+        position: fixed;
+        bottom: 38px;
+        right: 10px;
+        cursor: pointer;
+        display: none;
     }
 </style>
 </body>

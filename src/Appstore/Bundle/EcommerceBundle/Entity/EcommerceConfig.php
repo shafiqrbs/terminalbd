@@ -106,6 +106,13 @@ class EcommerceConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="showBrand", type="boolean")
+     */
+    private $showBrand = true;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="isPreorder", type="boolean")
      */
     private $isPreorder = false;
@@ -479,6 +486,22 @@ class EcommerceConfig
     public function setShowMasterName($showMasterName)
     {
         $this->showMasterName = $showMasterName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getShowBrand()
+    {
+        return $this->showBrand;
+    }
+
+    /**
+     * @param bool $showBrand
+     */
+    public function setShowBrand($showBrand)
+    {
+        $this->showBrand = $showBrand;
     }
 
 }

@@ -1,0 +1,189 @@
+{% extends ':frontend/template:base.html.twig' %}
+{% block body %}
+{#
+    $featureCategories          = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getCategoryFeature();
+    {% if(featureCategories) %}
+        {{ featureCategories|raw }}
+    {% endif %}#}
+
+    <!-- Header Carousel -->
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+        <section class="section-white top-nav-margin" style="background-color: rgb(27, 27, 27)" >
+            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'position':'Home'}) %}
+        </section>
+    {% endif %}
+
+{#    {% if globalOption.ecommerceConfig.templates is not empty %}
+        <section class="section-divide" id="dashboard">
+            <div class="container">
+                <div class="row">
+                    {% render controller("FrontendBundle:EcommerceWidget:homeTopWidget",{'globalOption':globalOption.id,'position':'top'}) %}
+                </div>
+            </div>
+        </section>
+    {% endif %}#}
+<style>
+    a{
+        color: #002842;
+        text-decoration: none;
+    }
+    a:hover{
+        text-decoration: none;
+    }
+    .owl-prev, .owl-next {opacity: 0 !important;}
+    .owl-carousel:hover .owl-controls .owl-buttons .owl-prev {opacity: 1 !important;}
+    .owl-carousel:hover .owl-controls .owl-buttons .owl-next {opacity: 1 !important;}
+    .owl-carousel:hover .owl-controls .owl-buttons .owl-next .btn , .owl-carousel:hover .owl-controls .owl-buttons .owl-prev .btn{
+        border-radius: 50%;
+        width: 42px;
+        height: 42px;
+        line-height: 36px;
+        padding: 0;
+        margin: 0;
+
+    }
+    .owl-carousel:hover .owl-controls .owl-buttons .owl-next .btn:hover,
+    .owl-carousel:hover .owl-controls .owl-buttons .owl-prev .btn:hover{
+        background-color: #002842
+    }
+
+
+    .owl-theme .owl-controls .owl-buttons div.owl-next {
+        right: 25px;
+    }
+    .owl-theme .owl-controls .owl-buttons div.owl-prev {
+        left: 25px;
+    }
+    .owl-theme .owl-controls .owl-buttons div.owl-prev,
+    .owl-theme .owl-controls .owl-buttons div.owl-next{
+        top: 31%;
+        position: absolute;
+        padding: 0!important;
+        background: rgba(255,255,255,.8)!important;
+    }
+</style>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/js/common.js'
+    '@FrontendBundle/Resources/public/template/js/revolutionSlider.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    commonJs();
+{#    Index.initRevolutionSlider();#}
+
+{#
+    $(".carousel-indicators li").click(function() {
+        $('.image').removeClass('image-default');
+        $('.image').addClass('image-animate');
+    });
+#}
+
+    jQuery('#rev_slider').show().revolution({
+        sliderType:"standard",
+        sliderLayout:"fullwidth",
+        responsiveLevels: [1240, 1024, 550, 480],
+        lazyType: "smart",
+        stopLoop: 'off',
+        stopAfterLoops: -1,
+        stopAtSlide: -1,
+    });
+
+    var owlMain = $("#main-slider");
+
+        owlMain.owlCarousel({
+        items:1,
+        animateOut: 'fadeOut',
+        itemsDesktop:[1240,1],
+        itemsDesktopSmall:[979,2],
+        itemsTablet:[768,1],
+        pagination: true,
+        paginationNumbers: true,
+        autoPlay:false,
+        rewindNav:false,
+
+   });
+
+
+    var owlCategory = $("#category-slider");
+    owlCategory.owlCarousel({
+    items:4,
+    itemsDesktop:[1199,3],
+    itemsDesktopSmall:[979,2],
+    itemsTablet:[768,1],
+    pagination: false,
+    paginationNumbers: false,
+    autoPlay:false,
+    rewindNav:false
+    });
+    // Custom Navigation Events
+    $(".next").click(function(){
+    owlCategory.trigger('owl.next');
+    })
+
+    $(".prev").click(function(){
+    owlCategory.trigger('owl.prev');
+    })
+
+    var owlFeatureCategory = $("#feature-category");
+    owlFeatureCategory.owlCarousel({
+    items:4,
+    itemsDesktop:[1199,3],
+    itemsDesktopSmall:[979,2],
+    itemsTablet:[768,1],
+    pagination: false,
+    paginationNumbers: false,
+    autoPlay:false,
+    rewindNav:false
+    });
+    // Custom Navigation Events
+    $(".next").click(function(){
+    owlCategory.trigger('owl.next');
+    })
+
+    $(".prev").click(function(){
+    owlCategory.trigger('owl.prev');
+    })
+
+    var owlPromotion = $("#promotion-slider");
+        owlPromotion.owlCarousel({
+            items:4,
+            itemsCustom : false,
+            itemsDesktop : [1199,4],
+            itemsDesktopSmall : [980,3],
+            itemsTablet: [768,2],
+            itemsTabletSmall: false,
+            itemsMobile : [479,1],
+            itemsScaleUp : false,
+            autoPlay:false,
+            rewindNav:false,
+            navigation : true,
+            navigationText: [
+            "<span class='btn prevPromotion glyphicon glyphicon-chevron-left'></span>",
+            "<span class='btn nextPromotion glyphicon glyphicon-chevron-right'></span>"
+            ],
+            rewindNav : false,
+            pagination : false,
+    });
+
+{% endblock %}
+
+
+
+
+
+
+
+
+

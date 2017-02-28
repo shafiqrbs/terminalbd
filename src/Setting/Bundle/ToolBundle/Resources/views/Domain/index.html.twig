@@ -103,6 +103,13 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
+                                                    <th class="numeric" >Reset Operational Data</th>
+                                                    <td class="numeric" >
+                                                        <a href="{{ path('tools_option_reset',{id: entity.id}) }}" data-url="" class="btn purple mini resetPass" ><i class="icon-refresh"></i>&nbsp;Reset Data</a>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
                                                     <th class="numeric" >Invoice Generate for Module & Software</th>
                                                     <td class="numeric" >
                                                         <a href="{{ path('invoicemodule_new',{option:entity.id}) }}" class="btn green mini" ><i class="icon-credit-card"></i>&nbsp;Generate Invoice</a>

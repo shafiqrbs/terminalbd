@@ -217,8 +217,15 @@
     <script>
         var purchase = {{ purchase.id }}
     </script>
-{% endblock %}
 
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@InventoryBundle/Resources/public/css/jquery-ui.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
@@ -231,48 +238,16 @@
     {{ parent() }}
     var url = "{{ path('inventory_purchaseitem_new',{'purchase':purchase.id}) }}";
     InventoryPurchaseVendorItemPage(url);
-
-    var availableTags = [
-        "ActionScript",
-        "AppleScript",
-        "Asp",
-        "BASIC",
-        "C",
-        "C++",
-        "Clojure",
-        "COBOL",
-        "ColdFusion",
-        "Erlang",
-        "Fortran",
-        "Groovy",
-        "Haskell",
-        "Java",
-        "JavaScript",
-        "Lisp",
-        "Perl",
-        "PHP",
-        "Python",
-        "Ruby",
-        "Scala",
-        "Scheme"
-    ];
-    $( "#appstore_bundle_inventorybundle_purchasevendoritem_name1" ).autocomplete({
-        source: availableTags
-    });
-
     $( "#appstore_bundle_inventorybundle_purchasevendoritem_name" ).autocomplete({
 
         source: function( request, response ) {
         $.ajax( {
         url: Routing.generate('inventory_product_masteritem_search'),
-        dataType: "jsonp",
         data: {
         term: request.term
         },
         success: function( data ) {
-            console.log(data);
             response( data );
-
         }
         } );
         },

@@ -126,6 +126,20 @@ class FeatureWidget
      */
     private $featureFor;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="featureCategory", type="boolean")
+     */
+    private $featureCategory = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="featureBrand", type="boolean")
+     */
+    private $featureBrand = true;
+
 
     /**
      * @var \DateTime
@@ -490,5 +504,37 @@ class FeatureWidget
     public function setBrand($brand)
     {
         $this->brand = $brand;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getFeatureCategory()
+    {
+        return $this->featureCategory;
+    }
+
+    /**
+     * @param bool $featureCategory
+     */
+    public function setFeatureCategory($featureCategory)
+    {
+        $this->featureCategory = $featureCategory;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getFeatureBrand()
+    {
+        return $this->featureBrand;
+    }
+
+    /**
+     * @param bool $featureBrand
+     */
+    public function setFeatureBrand($featureBrand)
+    {
+        $this->featureBrand = $featureBrand;
     }
 }

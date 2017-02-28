@@ -14,6 +14,14 @@ setting_appearance_sidebarwidget:
     resource: "@SettingAppearanceBundle/Resources/config/routing/sidebarwidget.yml"
     prefix:   /domain/sidebar-widget
 
+setting_appearance_appearancecategory:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/featurecategory.yml"
+    prefix:   /e-commerce/feature-category
+
+setting_appearance_appearancebrand:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/featurebrand.yml"
+    prefix:   /e-commerce/feature-brand
+
 setting_appearance_ecommercemenu:
     resource: "@SettingAppearanceBundle/Resources/config/routing/ecommercemenu.yml"
     prefix:   /domain/ecommerce-menu

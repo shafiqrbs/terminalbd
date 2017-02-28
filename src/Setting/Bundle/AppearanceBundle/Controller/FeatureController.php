@@ -186,11 +186,13 @@ class FeatureController extends Controller
 
             $entity->upload();
             $em->flush();
-
-            return $this->redirect($this->generateUrl('appearancefeature_edit', array('id' => $id)));
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been updated successfully"
+            );
+            return $this->redirect($this->generateUrl('appearancefeature'));
         }
 
-        return $this->render('SettingAppearanceBundle:Feature:edit.html.twig', array(
+        return $this->render('SettingAppearanceBundle:Feature:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

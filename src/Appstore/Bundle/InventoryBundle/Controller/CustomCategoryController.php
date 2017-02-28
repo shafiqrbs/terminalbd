@@ -26,7 +26,7 @@ class CustomCategoryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('ProductProductBundle:Category')->findBy(array('inventoryConfig' => $inventoryConfig ),array( 'parent'=>'asc' , 'name' =>'asc' ));
+        $entities = $em->getRepository('ProductProductBundle:Category')->findBy(array('inventoryConfig' => $inventoryConfig ),array( 'name' =>'asc' ));
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:CustomCategory:index.html.twig', array(
             'entities' => $pagination,
@@ -203,7 +203,7 @@ class CustomCategoryController extends Controller
 
             $entity->upload();
             $em->flush();
-            return $this->redirect($this->generateUrl('inventory_category_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('inventory_category'));
         }
 
         return $this->render('InventoryBundle:CustomCategory:edit.html.twig', array(

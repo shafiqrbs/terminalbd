@@ -37,6 +37,7 @@ function ApproveProcess(){
         var id = $(this).attr("data-id");
         var url = $(this).attr("data-url");
         $('#action-'+id).hide();
+        $('#delete-'+id).hide();
         $.ajax({
             url: url,
             type: 'GET',

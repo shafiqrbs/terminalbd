@@ -41,4 +41,32 @@
         min-height:520px;
         min-width: 320px;
     }
+
+    .header-line-center , .header-line-center-bottom, .header-line-right, .header-double-line-right {
+        color: {{ globalOption.templateCustomize.dividerTitleColor }}!important;
+    }
+    {% if globalOption.templateCustomize.dividerBgColor  is not empty%}
+    .header-line-center , .header-line-center-bottom, .header-line-right, .header-double-line-right{
+        background: {{ globalOption.templateCustomize.dividerBgColor }}!important;
+    }
+    {% endif %}
+
+    .header-line-center h1:before, .header-line-center h2:before, .header-line-center h3:before, .header-line-center h4:before, .header-line-center h5:before, .header-line-center h6:before ,
+    .header-line-center h1:after, .header-line-center h2:after, .header-line-center h3:after, .header-line-center h4:after, .header-line-center h5:after, .header-line-center h6:after ,
+    .header-line-center-bottom h1:before, .header-line-center-bottom h2:before, .header-line-center-bottom h3:before, .header-line-center-bottom h4:before, .header-line-center-bottom h5:before, .header-line-center-bottom h6:before,
+    .header-line-right h1:after, .header-line-right h2:after, .header-line-right h3:after, .header-line-right h4:after, .header-line-right h5:after, .header-line-right h6:after ,
+    .header-line-right h1:after, .header-line-right h2:after, .header-line-right h3:after, .header-line-right h4:after, .header-line-right h5:after, .header-line-right h6:after {
+        background: {{ globalOption.templateCustomize.dividerColor }}!important;
+    }
+    .header-double-line-right h1:after, .header-double-line-right h2:after, .header-double-line-right h3:after, .header-double-line-right h4:after, .header-double-line-right h5:after, .header-double-line-right h6:after {
+        border-bottom:{{ globalOption.templateCustomize.dividerColor }}!important;
+        border-top:{{ globalOption.templateCustomize.dividerColor }}!important;
+    }
+    .header-line-bottom h1, .header-line-bottom h2, .header-line-bottom h3, .header-line-bottom h4, .header-line-bottom h5, .header-line-bottom h6 {
+        border-bottom: 1px solid {{ globalOption.templateCustomize.dividerColor }}!important;
+    }
+    .tm-title-border {
+        border: 2px solid {{ globalOption.templateCustomize.dividerColor }}!important;
+    }
+
 </style>

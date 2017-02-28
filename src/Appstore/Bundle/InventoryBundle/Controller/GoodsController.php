@@ -40,11 +40,7 @@ class GoodsController extends Controller
     /**
      * Lists all PurchaseVendorItem entities.
      *
-     */
-
-    /**
-     * Lists all PurchaseVendorItem entities.
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_ECOMMERCE")
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
      */
 
     public function indexAction()
@@ -136,7 +132,7 @@ class GoodsController extends Controller
 
     /**
      * Displays a form to create a new PurchaseVendorItem entity.
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_ECOMMERCE")
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
      */
     public function newAction()
     {
@@ -174,8 +170,9 @@ class GoodsController extends Controller
 
     /**
      * Displays a form to edit an existing PurchaseVendorItem entity.
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_ECOMMERCE")
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
      */
+
     public function editAction(PurchaseVendorItem $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -333,7 +330,7 @@ class GoodsController extends Controller
 
     /**
      * Deletes a PurchaseVendorItem entity.
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_ECOMMERCE")
+     * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
      */
     public function deleteAction(PurchaseVendorItem $vendorItem)
     {

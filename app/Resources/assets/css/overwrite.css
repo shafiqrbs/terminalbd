@@ -414,3 +414,9 @@ label.error {
 .add-on-height{
     height: 24px !important;
 }
+
+/*
+.ui-autocomplete-loading {
+    background: white url("../img/loader-red.gif") right center no-repeat;
+}
+*/

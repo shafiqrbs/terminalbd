@@ -1,3 +1,106 @@
+/*  ========================== HEADER LABEL CSS==========================*/
+
+.header-line-center {
+    text-align: center;
+    color: #ffffff;
+}
+
+.header-line-center , .header-line-center-bottom, .header-line-right{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.header-line-center h1, .header-line-center h2, .header-line-center h3, .header-line-center h4, .header-line-center h5, .header-line-center h6 {
+    display: inline-block;
+    position: relative;
+}
+
+.header-line-center h1:before, .header-line-center h2:before, .header-line-center h3:before, .header-line-center h4:before, .header-line-center h5:before, .header-line-center h6:before {
+    position: absolute;
+    content: "";
+    height: 2px;
+    width: 66%;
+    left: -66.5%;
+    top: 50%;
+    margin-top: -1px;
+    background: #0a70e3;
+}
+
+.header-line-center h1:after, .header-line-center h2:after, .header-line-center h3:after, .header-line-center h4:after, .header-line-center h5:after, .header-line-center h6:after {
+    position: absolute;
+    content: "";
+    background: #0a70e3;
+    height: 2px;
+    width: 66%;
+    right: -66.5%;
+    top: 50%;
+    margin-top: -1px;
+}
+
+.header-double-line-right h1:after, .header-double-line-right h2:after, .header-double-line-right h3:after, .header-double-line-right h4:after, .header-double-line-right h5:after, .header-double-line-right h6:after {
+    border-bottom: #0a70e3;
+    border-top: #0a70e3;
+    height: 6px;
+    position: absolute;
+    content: "";
+    top: 50%;
+    margin-top: -3px;
+    left: 105%;
+    width: 9999em;
+}
+
+.header-line-center-bottom h1:before, .header-line-center-bottom h2:before, .header-line-center-bottom h3:before, .header-line-center-bottom h4:before, .header-line-center-bottom h5:before, .header-line-center-bottom h6:before {
+    position: absolute;
+    content: "";
+    background:#0a70e3;
+    height: 1px;
+    width: 100px;
+    left: 50%;
+    top: 100%;
+    margin-left: -50px;
+}
+
+.header-line-right h1:after, .header-line-right h2:after, .header-line-right h3:after, .header-line-right h4:after, .header-line-right h5:after, .header-line-right h6:after {
+    background: #0a70e3;
+    height: 1px;
+    position: absolute;
+    content: "";
+    top: 50%;
+    margin-top: -1px;
+    left: 105%;
+    width: 9999em;
+}
+
+.header-line-center-bottom {
+    text-align: center;
+}
+.header-line-center-bottom h1, .header-line-center-bottom h2, .header-line-center-bottom h3, .header-line-center-bottom h4, .header-line-center-bottom h5, .header-line-center-bottom h6 {
+    display: inline-block;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.header-line-bottom h1, .header-line-bottom h2, .header-line-bottom h3, .header-line-bottom h4, .header-line-bottom h5, .header-line-bottom h6 {
+    padding-bottom: 5px;
+    border-bottom: 1px solid #0a70e3;
+}
+
+.header-line-right h1, .header-line-right h2, .header-line-right h3, .header-line-right h4, .header-line-right h5, .header-line-right h6 {
+    position: relative;
+    display: inline-block;
+}
+
+.tm-title {
+    text-transform: uppercase;
+    margin: 0 0 15px 0;
+}
+.tm-title-border {
+    padding: 10px;
+    border: 2px solid #0a70e3
+}
+
+/*  ========================== HEADER LABEL CSS==========================*/
+
 .img-logo img{
     max-height: 120px;
 }

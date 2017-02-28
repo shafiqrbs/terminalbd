@@ -98,14 +98,14 @@ class TemplateCustomize
     /**
      * @var string
      *
-     * @ORM\Column(name="siteBgColor", type="string", length=255, nullable=true)
+     * @ORM\Column(name="siteBgColor", type="string", length=50, nullable=true)
      */
     private $siteBgColor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="bgImage", type="string", length=255, nullable=true)
+     * @ORM\Column(name="bgImage", type="string", length=50, nullable=true)
      */
     private $bgImage;
 
@@ -152,35 +152,35 @@ class TemplateCustomize
     /**
      * @var string
      *
-     * @ORM\Column(name="buttonBgColorHover", type="string", length=255, nullable=true)
+     * @ORM\Column(name="buttonBgColorHover", type="string", length=50, nullable=true)
      */
     private $buttonBgColorHover;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="siteH1TextSize", type="string", length=255, nullable=true)
+     * @ORM\Column(name="siteH1TextSize", type="string", length=50, nullable=true)
      */
     private $siteH1TextSize;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="siteH2TextSize", type="string", length=255, nullable=true)
+     * @ORM\Column(name="siteH2TextSize", type="string", length=50, nullable=true)
      */
     private $siteH2TextSize;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="siteH3TextSize", type="string", length=255, nullable=true)
+     * @ORM\Column(name="siteH3TextSize", type="string", length=50, nullable=true)
      */
     private $siteH3TextSize;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="siteH4TextSize", type="string", length=255, nullable=true)
+     * @ORM\Column(name="siteH4TextSize", type="string", length=50, nullable=true)
      */
     private $siteH4TextSize;
 
@@ -195,9 +195,31 @@ class TemplateCustomize
     /**
      * @var string
      *
-     * @ORM\Column(name="headerBgImage", type="string", length=255, nullable=true)
+     * @ORM\Column(name="headerBgImage", type="string", length=50, nullable=true)
      */
     private $headerBgImage;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dividerBgColor", type="string", length=50, nullable=true)
+     */
+    private $dividerBgColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dividerColor", type="string", length=50, nullable=true)
+     */
+    private $dividerColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dividerTitleColor", type="string", length=50, nullable=true)
+     */
+    private $dividerTitleColor;
+
 
     /**
      * @Assert\File(maxSize="8388608")
@@ -1002,6 +1024,54 @@ class TemplateCustomize
     public function setMenuLiHovera($menuLiHovera)
     {
         $this->menuLiHovera = $menuLiHovera;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDividerBgColor()
+    {
+        return $this->dividerBgColor;
+    }
+
+    /**
+     * @param mixed $dividerBgColor
+     */
+    public function setDividerBgColor($dividerBgColor)
+    {
+        $this->dividerBgColor = $dividerBgColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDividerColor()
+    {
+        return $this->dividerColor;
+    }
+
+    /**
+     * @param string $dividerColor
+     */
+    public function setDividerColor($dividerColor)
+    {
+        $this->dividerColor = $dividerColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDividerTitleColor()
+    {
+        return $this->dividerTitleColor;
+    }
+
+    /**
+     * @param string $dividerTitleColor
+     */
+    public function setDividerTitleColor($dividerTitleColor)
+    {
+        $this->dividerTitleColor = $dividerTitleColor;
     }
 
 

@@ -12,7 +12,7 @@ app_setting_mobile:
 
 app_setting_barnch_shop:
     resource: "@InventoryBundle/Resources/config/routing/appsetting/branchshop.yml"
-    prefix:   /appsetting/branch-shop
+    prefix:   /inventory/branch-shop
 
 inventory_excelimproter:
     resource: "@InventoryBundle/Resources/config/routing/excelimporter.yml"
@@ -44,7 +44,7 @@ inventory_service_sales:
 
 inventory_goods:
     resource: "@InventoryBundle/Resources/config/routing/goods.yml"
-    prefix:   /goods/item
+    prefix:   /ecommerce/product
 
 inventory_purchasevendoritem:
     resource: "@InventoryBundle/Resources/config/routing/purchasevendoritem.yml"

@@ -45,8 +45,10 @@ class SalesItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="salesItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $sales;
+
 
     /**
      * @var float

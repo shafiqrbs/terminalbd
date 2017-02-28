@@ -23,6 +23,7 @@ class SalesReturnItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesReturn", inversedBy="salesReturnItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $salesReturn;
 

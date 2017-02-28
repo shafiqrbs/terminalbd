@@ -32,7 +32,6 @@ class ItemGallery
     protected $purchaseVendorItem;
 
 
-
     /**
      * @var text
      *

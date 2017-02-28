@@ -223,9 +223,16 @@ class PurchaseVendorItemRepository extends EntityRepository
         $entities = $purchase->getPurchaseVendorItems();
         $data = '';
         foreach( $entities as $entity){
+
+            if($entity->getMasterItem()){
+                $masterItem = $entity->getMasterItem()->getName();
+            }else{
+                $masterItem = '';
+            }
+
             $data .=' <tr id="remove-vendor-item-'.$entity->getId().'">';
             $data .='<td class="numeric" >'.$entity->getName().'</td>';
-            $data .='<td class="numeric" >'.$entity->getMasterItem()->getName().'</td>';
+            $data .='<td class="numeric" >'.$masterItem.'</td>';
             $data .='<td class="numeric" >'.$entity->getQuantity().'</td>';
             $data .='<td class="numeric" >'.$entity->getPurchasePrice().'</td>';
             $data .='<td class="numeric" >'.number_format ($entity->getQuantity() * $entity->getPurchasePrice() ).'</td>';

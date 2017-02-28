@@ -65,9 +65,9 @@ class SalesReturn implements CodeAwareEntity
      **/
     private  $accountSalesReturn;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesReturnItem", mappedBy="salesReturn" , cascade={"remove"} )
+
      **/
     private  $salesReturnItems;
 

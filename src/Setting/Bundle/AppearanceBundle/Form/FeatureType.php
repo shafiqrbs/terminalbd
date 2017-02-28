@@ -108,6 +108,26 @@ class FeatureType extends AbstractType
                         ->orderBy('e.name','ASC');
                 },
             ))
+            ->add('buttonName','text', array('attr'=>array('class'=>'span12 m-wrap','placeholder'=>'Button Text')))
+            ->add('buttonBg','text', array('attr'=>array('class'=>'span8 m-wrap colorpicker-default','placeholder'=>'Button Bg')))
+            ->add('captionBgColor','text', array('attr'=>array('class'=>'span12 m-wrap colorpicker-default','placeholder'=>'Caption Background Color')))
+
+            ->add('captionPosition', 'choice', array(
+                'attr'=>array('class'=>'span12  m-wrap'),
+                'empty_value' => '---Caption Position ---',
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'top-left'               => 'Top Left',
+                    'top-center'             => 'Top Center',
+                    'top-right'              => 'Top Right',
+                    'center'                 => 'Center',
+                    'bottom-left'            => 'Bottom Left',
+                    'bottom-center'          => 'Bottom Center',
+                    'bottom-right'           => 'Bottom Right',
+
+                 ),
+            ))
             ->add('targetTo', 'choice', array(
                 'attr'=>array('class'=>'span12  m-wrap targetTo'),
                 'empty_value' => '---Select Target URL ---',
@@ -115,6 +135,7 @@ class FeatureType extends AbstractType
                 'multiple'      =>false,
                 'choices' => array(
                     'Category'          => 'Category',
+                    'Brand'             => 'Brand',
                     'Page'              => 'Page',
                     'Promotion'         => 'Promotion',
                     'Tag'               => 'Tag',

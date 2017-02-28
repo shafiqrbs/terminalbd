@@ -38,49 +38,51 @@ class PurchaseItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="purchaseItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $purchase;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", inversedBy="purchaseItems" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", inversedBy="purchaseItems")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $purchaseVendorItem;
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseReturnItem", mappedBy="purchaseItem" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseReturnItem", mappedBy="purchaseItem"  , cascade={"remove"} )
      **/
     private  $purchaseReturnItem;
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", mappedBy="purchaseItem" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", mappedBy="purchaseItem" , cascade={"remove"}  )
      **/
     private  $salesItems;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\BranchInvoiceItem", mappedBy="purchaseItem" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\BranchInvoiceItem", mappedBy="purchaseItem" , cascade={"remove"} )
      **/
     private  $branchInvoiceItems;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn", mappedBy="purchaseItem")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn", mappedBy="purchaseItem" , cascade={"remove"} )
      */
     protected $deliveryReturns;
 
      /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\DeliveryItem", mappedBy="purchaseItem")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\DeliveryItem", mappedBy="purchaseItem" , cascade={"remove"} )
      */
     protected $deliveryItems;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="purchaseItem" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="purchaseItem" , cascade={"remove"}  )
      **/
     private  $damages;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="purchaseItem" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="purchaseItem"  , cascade={"remove"} )
      **/
     private  $orderItem;
 

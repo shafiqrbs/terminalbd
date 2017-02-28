@@ -17,7 +17,7 @@ class BranchShopController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_PAYROLL_MANAGER")
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY")
      */
     public function indexAction()
     {
@@ -94,7 +94,7 @@ class BranchShopController extends Controller
 
     /**
      * Displays a form to create a new Branches entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY")
      */
 
     public function newAction()
@@ -129,7 +129,7 @@ class BranchShopController extends Controller
 
     /**
      * Displays a form to edit an existing Branches entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY")
      */
 
     public function editAction($id)
@@ -172,7 +172,7 @@ class BranchShopController extends Controller
     }
     /**
      * Edits an existing Branches entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY")
      */
     public function updateAction(Request $request, $id)
     {

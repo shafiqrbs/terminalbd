@@ -45,20 +45,6 @@ function InventoryPurchasePage(){
         })
     })
 
-    $(document).on("click", ".approve", function() {
-
-        $(this).removeClass('approve');
-        var url = $(this).attr("rel");
-        var id = $(this).attr("data-title");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                location.reload();
-            },
-        })
-
-    })
 
     $('#appstore_bundle_inventorybundle_purchase_memo').attr("required", true);
     $('#appstore_bundle_inventorybundle_purchase_dueAmount').attr("disabled", true);

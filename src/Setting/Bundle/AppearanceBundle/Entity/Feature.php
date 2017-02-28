@@ -4,6 +4,7 @@ namespace Setting\Bundle\AppearanceBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
+use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
 use Doctrine\ORM\Mapping as ORM;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ContentBundle\Entity\Page;
@@ -70,11 +71,46 @@ class Feature
     private  $discount;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="features")
+     */
+    protected $brand;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255 , nullable=true)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="captionBgColor", type="string", length=50 , nullable=true)
+     */
+    private $captionBgColor;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="buttonName", type="string", length=100 , nullable=true)
+     */
+    private $buttonName;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="buttonBg", type="string", length=50 , nullable=true)
+     */
+    private $buttonBg;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="captionPosition", type="string", length=25 , nullable=true)
+     */
+    private $captionPosition;
+
 
     /**
      * @var string
@@ -511,6 +547,88 @@ class Feature
     public function setPage($page)
     {
         $this->page = $page;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getButtonName()
+    {
+        return $this->buttonName;
+    }
+
+    /**
+     * @param string $buttonName
+     */
+    public function setButtonName($buttonName)
+    {
+        $this->buttonName = $buttonName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCaptionBgColor()
+    {
+        return $this->captionBgColor;
+    }
+
+    /**
+     * @param string $captionBgColor
+     */
+    public function setCaptionBgColor($captionBgColor)
+    {
+        $this->captionBgColor = $captionBgColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCaptionPosition()
+    {
+        return $this->captionPosition;
+    }
+
+    /**
+     * @param string $captionPosition
+     */
+    public function setCaptionPosition($captionPosition)
+    {
+        $this->captionPosition = $captionPosition;
+    }
+
+    /**
+     * @return string
+     */
+    public function getButtonBg()
+    {
+        return $this->buttonBg;
+    }
+
+    /**
+     * @param string $buttonBg
+     */
+    public function setButtonBg($buttonBg)
+    {
+        $this->buttonBg = $buttonBg;
+    }
+
+    /**
+     * @return ItemBrand
+     */
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    /**
+     * @param ItemBrand $brand
+     */
+    public function setBrand($brand)
+    {
+        $this->brand = $brand;
     }
 
 }

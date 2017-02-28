@@ -27,11 +27,13 @@ class FeatureWidgetItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", inversedBy="featureWidgetItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $featureWidget;
 
      /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", inversedBy="featureWidgetItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $feature;
 

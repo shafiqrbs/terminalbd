@@ -29,7 +29,7 @@ class EcommerceMenuType extends AbstractType
         $this->em = $em;
         $this->globalOption = $globalOption;
         $this->ecommerceConfig = $globalOption->getEcommerceConfig()->getId();
-        $this->inventoryConfig = $globalOption->getInventoryConfig()->getId();
+        $this->inventoryConfig = $globalOption->getInventoryConfig();
     }
 
     /**
@@ -62,7 +62,7 @@ class EcommerceMenuType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                         return $er->createQueryBuilder('b')
                             ->andWhere("b.status = 1")
-                            ->andWhere("b.inventoryConfig =".$this->inventoryConfig)
+                            ->andWhere("b.inventoryConfig =".$this->inventoryConfig->getId())
                             ->orderBy('b.name','ASC');
                     },
             ))
@@ -139,7 +139,7 @@ class EcommerceMenuType extends AbstractType
      */
     protected function categoryChoiceList()
     {
-        return $categoryTree = $this->em->getCategoryOptionGroup();
+        return $categoryTree = $this->em->getUserCategoryOptionGroup($this->inventoryConfig);
     }
 
 }

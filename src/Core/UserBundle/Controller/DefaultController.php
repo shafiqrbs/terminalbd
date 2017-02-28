@@ -37,7 +37,25 @@ class DefaultController extends Controller
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY') && $enable == 1 ) {
             return $this->redirect($this->generateUrl('domain'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES') && $enable == 1) {
-            return $this->redirect($this->generateUrl('inventory_sales'));
+
+            $inventory = $user->getGlobalOption()->getInventoryConfig();
+
+            $deliveryProcess = $inventory->getDeliveryProcess();
+
+            if (!empty($deliveryProcess)) {
+                if (in_array('Pos', $deliveryProcess)) {
+                    return $this->redirect($this->generateUrl('inventory_sales'));
+                } elseif (in_array('OnlineSales', $deliveryProcess)) {
+                    return $this->redirect($this->generateUrl('inventory_salesonline'));
+                } elseif (in_array('GeneralSales', $deliveryProcess)) {
+                    return $this->redirect($this->generateUrl('inventory_salesgeneral'));
+                } elseif (in_array('ManualSales', $deliveryProcess)) {
+                    return $this->redirect($this->generateUrl('inventory_salesmanual'));
+                } elseif (in_array('Order', $deliveryProcess)) {
+                    return $this->redirect($this->generateUrl('inventory_customer'));
+                }
+            }
+
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE') && $enable == 1) {
             return $this->redirect($this->generateUrl('purchase'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_CUSTOMER')) {

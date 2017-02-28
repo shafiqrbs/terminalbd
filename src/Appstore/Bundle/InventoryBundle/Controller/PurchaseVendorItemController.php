@@ -63,9 +63,15 @@ class PurchaseVendorItemController extends Controller
         if( $this->checkItemQuantity($purchase, $vendorQnt) == true ){
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
+
+                $masterItem = $this->getDoctrine()->getRepository('InventoryBundle:Product')->findOneBy(array('inventoryConfig' => $purchase->getInventoryConfig(),'name' => $entity->getName()));
+
                 $entity->setInventoryConfig($purchase->getInventoryConfig());
                 $entity->setPurchase($purchase);
                 $entity->setSource('inventory');
+                if(!empty($masterItem)){
+                    $entity->setMasterItem($masterItem);
+                }
                 $entity->setWebName($entity->getName());
                 $em->persist($entity);
                 $em->flush();
@@ -255,6 +261,7 @@ class PurchaseVendorItemController extends Controller
     {
 
         if($vendorItem){
+            $this->getDoctrine()->getRepository('InventoryBundle:Purchase')->updateProcess($vendorItem->getPurchase(),'created');
             $em = $this->getDoctrine()->getManager();
             $vendorItem->deleteImageDirectory();
             $em->remove($vendorItem);

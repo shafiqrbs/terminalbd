@@ -35,6 +35,7 @@ class PurchaseVendorItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="purchaseVendorItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $purchase;

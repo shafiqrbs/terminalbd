@@ -51,6 +51,7 @@ class EcommerceConfigType extends AbstractType
                 ),
             ))
             ->add('showMasterName')
+            ->add('showBrand')
 /*            ->add('isColor')*/
             ->add('isPreorder')
             ->add('cart')

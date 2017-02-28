@@ -4,6 +4,7 @@ namespace Product\Bundle\ProductBundle\Entity;
 
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Doctrine\Common\Util\Debug;
+use Doctrine\ORM\Query\Expr\Orx;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 
 /**
@@ -485,9 +486,7 @@ class CategoryRepository extends MaterializedPathRepository
             ->getResult();
 
         $categories = $this->getCategoriesIndexedById($results);
-
         $grouped = array();
-
         foreach ($categories as $category) {
             switch($category->getLevel()) {
                 case 2: break;
@@ -495,7 +494,6 @@ class CategoryRepository extends MaterializedPathRepository
                     $grouped[$categories[$category->getParentIdByLevel(2)]->getName()][$category->getId()] = $category;
             }
         }
-
         return $grouped;
     }
 
@@ -523,6 +521,42 @@ class CategoryRepository extends MaterializedPathRepository
         return $categories;
     }
 
+    public function getUserCategoryOptionGroup(InventoryConfig $inventroy)
+    {
+        $grouped = array();
+
+        if(!empty($inventroy->getItemTypeGrouping())){
+
+            $qb = $this->createQueryBuilder('node');
+            $orX = $qb->expr()->orX();
+
+            $categories = $inventroy->getItemTypeGrouping()->getCategories();
+            foreach($categories as $category){
+                $orX->add("node.path like '" . $category->getId() . "/%'");
+            }
+
+            $results = $qb
+                ->orderBy('node.level, node.name', 'ASC')
+                ->where('node.level > 1')
+                ->andWhere($orX)
+                ->getQuery()
+                ->getResult();
+
+            $categories = $this->getCategoriesIndexedById($results);
+
+            foreach ($categories as $category) {
+                switch($category->getLevel()) {
+                    case 2: break;
+                    default:
+                        $grouped[$categories[$category->getParentIdByLevel(2)]->getName()][$category->getId()] = $category;
+                }
+            }
+            return $grouped;
+        }
+
+        return $grouped == null ? array() : $grouped;
+
+    }
 
     public function getUseInventoryItemCategory(InventoryConfig $inventroy)
     {

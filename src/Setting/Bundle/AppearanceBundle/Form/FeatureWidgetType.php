@@ -161,7 +161,10 @@ class FeatureWidgetType extends AbstractType
                     'Tag'               => 'Tag',
                     'Discount'          => 'Discount'
                 ),
-            ));
+            ))
+            ->add('featureBrand')
+            ->add('featureCategory')
+        ;
     }
     
     /**

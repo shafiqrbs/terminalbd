@@ -154,8 +154,19 @@ class DomainController extends Controller
             $dispatcher->dispatch('setting_tool.post.change_domain_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeDomainSmsEvent($option,$entity->getUsername(),$a));
         }
         exit;
+    }
+
+    public function resetSystemDataAction(GlobalOption $option)
+    {
+
+        set_time_limit(0);
+        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->accountingReset($option);
+        $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
+        $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option->getInventoryConfig());
+        return $this->redirect($this->generateUrl('tools_domain'));
 
     }
+
 
 
 }

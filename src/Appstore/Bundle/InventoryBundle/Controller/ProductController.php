@@ -340,13 +340,12 @@ class ProductController extends Controller
 
     public function masterItemAction()
     {
+        $q = $_REQUEST['term'];
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Product')->findBy(
-            array('inventoryConfig' => $inventory,'status' => 1)
-        );
+        $entities = $this->getDoctrine()->getRepository('InventoryBundle:Product')->searchAutoComplete($q,$inventory);
         $items = array();
         foreach ($entities as $entity):
-            $items[]=array('id' => $entity->getName(),'text'=> $entity->getName(),'label'=> $entity->getName());
+            $items[]=array('id' => $entity['id'],'value' => $entity['id']);
         endforeach;
         return new JsonResponse($items);
 
