@@ -126,6 +126,7 @@ class InventoryConfigType extends AbstractType
                     'empty_data'  =>1,
             ))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
+            ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('barcodeText','text',array('attr'=>array('class'=>'m-wrap span12')))
             ->add('barcodeText',
                 'choice', array(
