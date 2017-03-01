@@ -134,6 +134,7 @@ class InventoryConfigType extends AbstractType
                         '' => '--Select Barcode Text--',
                         'including vat' => 'including vat',
                         'without vat' => 'without vat',
+                        '+ vat' => '+ vat',
                     ),
                     'required'    => true,
                     'multiple'    => false,
