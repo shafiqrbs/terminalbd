@@ -1,6 +1,7 @@
 <?php
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
+use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -141,10 +142,29 @@ class PurchaseRepository extends EntityRepository
         }
         return $code;
     }
+
     public function updateProcess($purchase,$process = 'complete')
     {
         $purchase->setProcess($process);
         $this->_em->persist($purchase);
         $this->_em->flush($purchase);
+    }
+
+    public function searchAutoComplete(InventoryConfig $inventory,$q)
+    {
+
+        $search = strtolower($q);
+        $query = $this->createQueryBuilder('i');
+        $query->select('i.id as id');
+        $query->addSelect('i.grn as name');
+        $query->addSelect('i.grn as text');
+        $query->where("i.id = :inventory");
+        $query->setParameter('inventory', $inventory->getId());
+        $query->andWhere($query->expr()->like("i.grn", "'%$search%'"  ));
+        $query->groupBy('i.id');
+        $query->orderBy('i.updated', 'DESC');
+        $query->setMaxResults( '30' );
+        return $query->getQuery()->getResult();
+
     }
 }

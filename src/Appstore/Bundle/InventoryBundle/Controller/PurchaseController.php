@@ -5,6 +5,7 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -321,6 +322,23 @@ class PurchaseController extends Controller
 
     }
 
+    public function autoSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $item = $this->getDoctrine()->getRepository('InventoryBundle:Purchase')->searchAutoComplete($inventory,$item);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchNameAction($size)
+    {
+        return new JsonResponse(array(
+            'id'=>$size,
+            'text'=>$size
+        ));
+    }
 
 
 }

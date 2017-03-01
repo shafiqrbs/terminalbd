@@ -33,6 +33,14 @@ purchase_status:
     path:     /{id}/status
     defaults: { _controller: "InventoryBundle:Purchase:edit" }
 
+inventory_grn_search:
+    path:     /{id}/purchase-auto-search
+    defaults: { _controller: "InventoryBundle:Purchase:autoSearch" }
+
+inventory_grn_name:
+    path:     /{id}/purchase-search-name
+    defaults: { _controller: "InventoryBundle:Purchase:searchName" }
+
 purchase_approve:
     path:     /{id}/approve
     defaults: { _controller: "InventoryBundle:Purchase:approve" }

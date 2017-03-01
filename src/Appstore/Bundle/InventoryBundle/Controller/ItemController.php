@@ -482,7 +482,6 @@ class ItemController extends Controller
         endforeach;
         return new JsonResponse($items);
 
-
     }
 
 }

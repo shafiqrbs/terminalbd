@@ -93,7 +93,6 @@ class DeliveryController extends Controller
     public function initialProductBranchDeliveryAction(Request $request)
     {
         set_time_limit(0);
-        ignore_user_abort(true);
         $entity = new Delivery();
 
         $shop = $request->request->get('shop');
@@ -101,17 +100,16 @@ class DeliveryController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        if($shop > 0 ){
+        $purchase = $em->getRepository('InventoryBundle:Purchase')->findOneBy(array('grn' => $grn));
+        if($shop > 0 and !empty($purchase) ){
             $shop = $em->getRepository('DomainUserBundle:Branches')->find($shop);
             if(!empty($shop)){
                 $entity->setBranch($shop);
             }
+            $entity->setInventoryConfig($inventory);
+            $em->persist($entity);
+            $em->flush();
         }
-        $entity->setInventoryConfig($inventory);
-        $em->persist($entity);
-        $em->flush();
-
-        $purchase = $em->getRepository('InventoryBundle:Purchase')->findOneBy(array('inventoryConfig' => $inventory,'grn' => $grn));
 
         foreach ( $purchase->getPurchaseItems() as $item){
 
@@ -237,10 +235,12 @@ class DeliveryController extends Controller
         return $this->redirect($this->generateUrl('inventory_delivery'));
 
     }
+
     /**
      * Deletes a Delivery entity.
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_BRANCH")
      */
+
     public function deleteAction($id)
     {
 
@@ -290,8 +290,8 @@ class DeliveryController extends Controller
     public function searchDeliveryNameAction($size)
     {
         return new JsonResponse(array(
-            'id'=>$size,
-            'text'=>$size
+            'id'=> $size,
+            'text'=> $size
         ));
     }
 
@@ -352,7 +352,6 @@ class DeliveryController extends Controller
         }else{
             return $this->redirect($this->generateUrl('inventory_delivery'));
         }
-
-
     }
+
 }
