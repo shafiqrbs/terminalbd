@@ -34,7 +34,7 @@ purchase_status:
     defaults: { _controller: "InventoryBundle:Purchase:edit" }
 
 inventory_grn_search:
-    path:     /{id}/purchase-auto-search
+    path:     /purchase-auto-search
     defaults: { _controller: "InventoryBundle:Purchase:autoSearch" }
     options:
            expose: true
