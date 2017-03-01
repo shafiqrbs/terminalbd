@@ -1,6 +1,6 @@
 {% extends '::print.html.twig' %}
 {% block body %}
-<div style="margin-left:{{ printLeftMargin }}px;margin-top:{{ printTopMargin }}px">
+<div style="margin-left:{{ printLeftMargin }};margin-top:{{ printTopMargin }} ">
     {% for barcode in barCoder %}
         {{ barcode|raw }}
     {% endfor %}
