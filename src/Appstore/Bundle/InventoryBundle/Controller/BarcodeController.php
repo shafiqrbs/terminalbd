@@ -111,7 +111,7 @@ class BarcodeController extends Controller
         $barcode->setFontSize($fontsize);
         $code = $barcode->generate();
         $data = '';
-        $data .='<div class="barcode-block" style="width:'.$barcodeWidth.'; height:'.$barcodeHeight.'; border:'.$border.'; padding:'.$padding.'; ">';
+        $data .='<div class="barcode-block" style="width:'.$barcodeWidth.'; height:'.$barcodeHeight.'; border:'.$border.'; padding:'.$padding.'; margin-top:'.$margin.'; ">';
         $data .='<div class="centered">';
         if($shopName){
             $data .='<p><span class="center">'.$shopName.'</span></p>';
@@ -188,7 +188,7 @@ class BarcodeController extends Controller
     public function printAction()
     {
         $printLeftMargin = $this->getUser()->getGlobalOption()->getInventoryConfig()->getPrintLeftMargin();
-        $printTopMargin = $this->getUser()->getGlobalOption()->getInventoryConfig()->getBarcodeMargin();
+        $printTopMargin = $this->getUser()->getGlobalOption()->getInventoryConfig()->getPrintTopMargin();
         $barCoder = $this->get('session')->get('barcodeQ');
         if($printLeftMargin == 0){
             $leftMargin = 0;
