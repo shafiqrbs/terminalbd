@@ -36,10 +36,14 @@ purchase_status:
 inventory_grn_search:
     path:     /{id}/purchase-auto-search
     defaults: { _controller: "InventoryBundle:Purchase:autoSearch" }
+    options:
+           expose: true
 
 inventory_grn_name:
     path:     /{id}/purchase-search-name
     defaults: { _controller: "InventoryBundle:Purchase:searchName" }
+    options:
+           expose: true
 
 purchase_approve:
     path:     /{id}/approve
