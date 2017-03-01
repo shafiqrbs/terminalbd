@@ -27,8 +27,6 @@ class InventoryConfigRepository extends EntityRepository
         $Damage = $em->createQuery('DELETE InventoryBundle:Damage e WHERE e.inventoryConfig = '.$config);
         $Damage->execute();
 
-        $Damage = $em->createQuery('DELETE InventoryBundle:Damage e WHERE e.inventoryConfig = '.$config);
-        $Damage->execute();
 
         $ExcelImporter = $em->createQuery('DELETE InventoryBundle:ExcelImporter e WHERE e.inventoryConfig = '.$config);
         $ExcelImporter->execute();

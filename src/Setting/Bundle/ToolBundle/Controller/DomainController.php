@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ToolBundle\Controller;
 
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -159,10 +160,16 @@ class DomainController extends Controller
     public function resetSystemDataAction(GlobalOption $option)
     {
 
+
         set_time_limit(0);
         $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->accountingReset($option);
         $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
         $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option);
+
+        $dir = WEB_PATH . "/uploads/domain/" . $option->getId() . "/inventory";
+        $a = new Filesystem();
+        $a->remove($dir);
+        $a->mkdir($dir);
         $this->get('session')->getFlashBag()->add(
             'success',"Successfully reset data"
         );
