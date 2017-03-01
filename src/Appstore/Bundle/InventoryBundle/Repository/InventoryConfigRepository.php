@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * InventoryConfigRepository
@@ -14,11 +15,11 @@ class InventoryConfigRepository extends EntityRepository
 {
 
 
-    public function inventoryReset(InventoryConfig $config)
+    public function inventoryReset(GlobalOption $option)
     {
 
         $em = $this->_em;
-        $config = $config->getId();
+        $config = $option->getInventoryConfig()->getId();
 
         $StockItem = $em->createQuery('DELETE InventoryBundle:StockItem e WHERE e.inventoryConfig = '.$config);
         $StockItem->execute();

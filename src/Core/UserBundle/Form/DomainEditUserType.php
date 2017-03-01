@@ -115,6 +115,7 @@ class DomainEditUserType extends AbstractType
                 'ROLE_DOMAIN_INVENTORY_APPROVAL'        => 'Inventory Approval',
                 'ROLE_DOMAIN_INVENTORY_STOCK'           => 'Inventory Stock',
                 'ROLE_DOMAIN_INVENTORY_REPORT'          => 'Inventory Report',
+                'ROLE_DOMAIN_INVENTORY_BRANCH'          => 'Inventory Branch',
                 'ROLE_DOMAIN_INVENTORY_CONFIG'          => 'Inventory Config',
             );
         }

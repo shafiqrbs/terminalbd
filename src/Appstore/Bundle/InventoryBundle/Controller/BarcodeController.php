@@ -60,7 +60,6 @@ class BarcodeController extends Controller
             }else{
                 $size ='';
             }
-
             $sizeColor =  $color.$size;
 
         } elseif (!empty($barcoder->getItem()->getSize()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeSize() == 1 and $barcoder->getItem()->getSize()->getName() != 'Default') {
@@ -98,6 +97,9 @@ class BarcodeController extends Controller
         }else{
             $border = 0;
         }
+
+        $shopName = $barcoder->getItem()->getInventoryConfig()->getShopName();
+
         $scale = $barcoder->getItem()->getInventoryConfig()->getBarcodeScale();
         $fontsize = $barcoder->getItem()->getInventoryConfig()->getBarcodeFontSize();
         $thickness = $barcoder->getItem()->getInventoryConfig()->getBarcodeThickness();
@@ -111,11 +113,15 @@ class BarcodeController extends Controller
         $data = '';
         $data .='<div class="barcode-block" style="width:'.$barcodeWidth.'; height:'.$barcodeHeight.'; border:'.$border.'; padding:'.$padding.'; ">';
         $data .='<div class="centered">';
-        $data .='<p><span class="left">'.$sizeColor.'</span><span class="right">'.$vendorBrand.'</span></p>';
+        if($shopName){
+            $data .='<p><span class="center">'.$shopName.'</span></p>';
+        }
+        if($sizeColor !="" or $vendorBrand !="") {
+            $data .= '<p><span class="left">' . $sizeColor . '</span><span class="right">' . $vendorBrand . '</span></p>';
+        }
         $data .='<div class="clearfix"></div>';
         $data .='<img src="data:image/png;base64,'.$code.'" />';
         $data .='<p><span class="center">TK '.$barcoder->getSalesPrice().' '.$barcoder->getItem()->getInventoryConfig()->getBarcodeText().'</span></p>';
-
         $data .='</div>';
         $data .='</div>';
         return $data;

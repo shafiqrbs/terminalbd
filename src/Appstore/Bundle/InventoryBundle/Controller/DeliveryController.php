@@ -33,7 +33,7 @@ class DeliveryController extends Controller
     }
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER,ROLE_DOMAIN_INVENTORY_MANAGER,ROLE_DOMAIN_INVENTORY_APPROVE")
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_BRANCH")
      */
 
     public function indexAction()
@@ -133,7 +133,7 @@ class DeliveryController extends Controller
 
     /**
      * Displays a form to create a new Delivery entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_BRANCH")
      */
     public function newAction()
     {
@@ -175,7 +175,7 @@ class DeliveryController extends Controller
 
     /**
      * Displays a form to edit an existing Delivery entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_BRANCH")
      */
     public function editAction($code)
     {
@@ -215,7 +215,7 @@ class DeliveryController extends Controller
     }
     /**
      * Edits an existing Delivery entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_BRANCH")
      */
     public function updateAction(Request $request, $id)
     {
@@ -239,7 +239,7 @@ class DeliveryController extends Controller
     }
     /**
      * Deletes a Delivery entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_BRANCH")
      */
     public function deleteAction($id)
     {
@@ -261,7 +261,7 @@ class DeliveryController extends Controller
 
     /**
      * Deletes a Delivery entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_BRANCH")
      */
     public function deliveryItemDeleteAction(Delivery $delivery , DeliveryItem $entity)
     {

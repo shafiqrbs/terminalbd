@@ -162,7 +162,10 @@ class DomainController extends Controller
         set_time_limit(0);
         $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->accountingReset($option);
         $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
-        $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option->getInventoryConfig());
+        $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option);
+        $this->get('session')->getFlashBag()->add(
+            'success',"Successfully reset data"
+        );
         return $this->redirect($this->generateUrl('tools_domain'));
 
     }

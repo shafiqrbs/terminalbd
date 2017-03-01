@@ -20,8 +20,9 @@ class InventoryConfigType extends AbstractType
 
         $builder
             ->add('vatRegNo','text', array('attr'=>array('class'=>'m-wrap span8 ','placeholder'=>'Enter vat registration no.')))
-            ->add('salesReturnDayLimit','integer',array('attr'=>array('class'=>'numeric')))
-            ->add('vatPercentage','integer',array('attr'=>array('class'=>'numeric span8')))
+            ->add('salesReturnDayLimit','integer',array('attr'=>array('class'=>'m-wrap numeric')))
+            ->add('shopName','text',array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Barcode code print shop name')))
+            ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span4')))
             ->add('deliveryProcess',
                 'choice', array(
                 'attr'=>array('class'=>'check-list  span12'),
@@ -61,7 +62,7 @@ class InventoryConfigType extends AbstractType
             ->add('isPrintFooter')
             ->add('barcodeBrandVendor',
                 'choice', array(
-                    'attr'=>array('class'=>'span12'),
+                    'attr'=>array('class'=>'m-wrap span12'),
                     'choices' => array(
                         '' => '--Select one--',
                         '1' => 'Brand',
@@ -74,7 +75,7 @@ class InventoryConfigType extends AbstractType
             ))
             ->add('barcodeThickness',
                 'choice', array(
-                    'attr'=>array('class'=>'span12'),
+                    'attr'=>array('class'=>'m-wrap span12'),
                     'choices' => array(
                         '20' => '20',
                         '22' => '22',
@@ -95,7 +96,7 @@ class InventoryConfigType extends AbstractType
             ))
             ->add('barcodeFontSize',
                 'choice', array(
-                    'attr'=>array('class'=>'span12'),
+                    'attr'=>array('class'=>'m-wrap span12'),
                     'choices' => array(
                         '7' => '7',
                         '8' => '8',
@@ -112,7 +113,7 @@ class InventoryConfigType extends AbstractType
             ))
             ->add('barcodeScale',
                 'choice', array(
-                    'attr'=>array('class'=>'span12'),
+                    'attr'=>array('class'=>'m-wrap span12'),
                     'choices' => array(
                         '1' => '1',
                         '2' => '2',
@@ -124,12 +125,25 @@ class InventoryConfigType extends AbstractType
                     'expanded'  => false,
                     'empty_data'  =>1,
             ))
-            ->add('printLeftMargin','text',array('attr'=>array('class'=>'numeric span8')))
-            ->add('barcodeText','text',array('attr'=>array('class'=>'span12')))
-            ->add('barcodeHeight','integer',array('attr'=>array('class'=>'numeric span8')))
-            ->add('barcodeWidth','integer',array('attr'=>array('class'=>'numeric span8')))
-            ->add('barcodeMargin','integer',array('attr'=>array('class'=>'numeric span8')))
-            ->add('barcodePadding','integer',array('attr'=>array('class'=>'numeric span8')))
+            ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
+            ->add('barcodeText','text',array('attr'=>array('class'=>'m-wrap span12')))
+            ->add('barcodeText',
+                'choice', array(
+                    'attr'=>array('class'=>'m-wrap span12'),
+                    'choices' => array(
+                        '' => '--Select Barcode Text--',
+                        'including vat' => 'including vat',
+                        'without vat' => 'without vat',
+                    ),
+                    'required'    => true,
+                    'multiple'    => false,
+                    'expanded'  => false,
+                    'empty_data'  => null,
+            ))
+            ->add('barcodeHeight','integer',array('attr'=>array('class'=>'m-wrap numeric span8')))
+            ->add('barcodeWidth','integer',array('attr'=>array('class'=>'m-wrap numeric span8')))
+            ->add('barcodeMargin','integer',array('attr'=>array('class'=>'m-wrap numeric span8')))
+            ->add('barcodePadding','integer',array('attr'=>array('class'=>'m-wrap numeric span8')))
         ;
     }
 

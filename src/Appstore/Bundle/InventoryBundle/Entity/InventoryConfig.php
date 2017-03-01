@@ -152,6 +152,14 @@ class InventoryConfig
     /**
      * @var string
      *
+     * @ORM\Column(name="shopName", type="string",  nullable=true)
+     */
+    private $shopName;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="printer", type="string", length=50,nullable = true)
      */
     private $printer;
@@ -1061,6 +1069,22 @@ class InventoryConfig
     public function setPrinter($printer)
     {
         $this->printer = $printer;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShopName()
+    {
+        return $this->shopName;
+    }
+
+    /**
+     * @param string $shopName
+     */
+    public function setShopName($shopName)
+    {
+        $this->shopName = $shopName;
     }
 
 
