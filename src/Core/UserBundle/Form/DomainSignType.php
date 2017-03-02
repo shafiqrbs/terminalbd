@@ -111,13 +111,6 @@ class DomainSignType extends AbstractType
 
         $array = array();
 
-        $array['Admin'] = array(
-
-            'ROLE_DOMAIN_WEBSITE'           => 'Website Dashboard',
-            'ROLE_DOMAIN_INVENTORY'         => 'Inventory Dashboard',
-            'ROLE_DOMAIN_ACCOUNTING'        => 'Accounting Dashboard'
-        );
-
         $website = array('website');
         $result = array_intersect($arrSlugs, $website);
         if (!empty($result)) {

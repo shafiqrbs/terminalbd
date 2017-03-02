@@ -24,3 +24,6 @@ parameters:
 
     domain.main : ~
     domain.ecommerce : ~
+    portal.copyright: ~
+    portal.power: ~
+    portal.sponsor: ~
