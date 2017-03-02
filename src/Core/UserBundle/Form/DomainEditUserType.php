@@ -94,6 +94,12 @@ class DomainEditUserType extends AbstractType
 
         $array = array();
 
+        $array['Admin'] = array(
+            'ROLE_DOMAIN_WEBSITE'           => 'Website Dashboard',
+            'ROLE_DOMAIN_INVENTORY'         => 'Inventory Dashboard',
+            'ROLE_DOMAIN_ACCOUNTING'        => 'Accounting Dashboard'
+        );
+
         $website = array('website');
         $result = array_intersect($arrSlugs, $website);
         if (!empty($result)) {
@@ -112,6 +118,11 @@ class DomainEditUserType extends AbstractType
                 'ROLE_INVENTORY'                        => 'Inventory',
                 'ROLE_DOMAIN_INVENTORY_PURCHASE'        => 'Inventory Purchase',
                 'ROLE_DOMAIN_INVENTORY_SALES'           => 'Inventory Sales',
+                'ROLE_DOMAIN_INVENTORY_CUSTOMER'        => 'Inventory Customer',
+                'ROLE_DOMAIN_INVENTORY_SALES_POS'       => 'Inventory Sales Pos',
+                'ROLE_DOMAIN_INVENTORY_SALES_ONLINE'    => 'Inventory Sales Online',
+                'ROLE_DOMAIN_INVENTORY_SALES_GENERAL'   => 'Inventory Sales General',
+                'ROLE_DOMAIN_INVENTORY_SALES_MANUAL'    => 'Inventory Sales Manual',
                 'ROLE_DOMAIN_INVENTORY_APPROVAL'        => 'Inventory Approval',
                 'ROLE_DOMAIN_INVENTORY_STOCK'           => 'Inventory Stock',
                 'ROLE_DOMAIN_INVENTORY_REPORT'          => 'Inventory Report',
@@ -135,6 +146,7 @@ class DomainEditUserType extends AbstractType
                 'ROLE_DOMAIN_ACCOUNTING_BANK'               => 'Accounting Bank & Mobile',
                 'ROLE_DOMAIN_FINANCE_APPROVAL'              => 'Accounting Approval',
                 'ROLE_DOMAIN_ACCOUNTING_TRANSACTION'        => 'Accounting Transaction',
+                'ROLE_DOMAIN_ACCOUNTING_CONFIG'             => 'Accounting Config',
                 'ROLE_DOMAIN_ACCOUNTING_REPORT'             => 'Accounting Report',
             );
         }

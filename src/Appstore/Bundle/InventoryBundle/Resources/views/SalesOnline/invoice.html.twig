@@ -81,8 +81,8 @@
             <tr><td colspan="5"><strong class="pull-right" >Grand Total</strong></td><td><strong>{{ entity.total|number_format() }}</strong></td></tr>
             <tr><td colspan="5"><strong class="pull-right" >Paid Amount</strong></td><td><strong>{{ entity.payment|number_format() }}</strong></td></tr>
             {% if entity.due %}<tr><td colspan="5"><strong class="pull-right" >Due Amount</strong></td><td><strong>{{ entity.due|number_format() }}</strong></td></tr>{% endif %}
-            <tr><td colspan="6" style="text-align:right"><strong>In word TK.</strong>({{ entity.paymentInWord|raw }} Taka only).</td></tr>
-            <tr><td colspan="6" style="text-align:center">Powered By: Umar Biz Communication, www.umarlimited.com</td></tr>
+            <tr><td colspan="6" style="text-align:right"><strong>In word TK.</strong>({{ entity.paymentInWord|raw }} only).</td></tr>
+            <tr><td colspan="6" style="text-align:center">{{ portal.power|raw }}</td></tr>
             </tfoot>
         </table>
     {% endif %}

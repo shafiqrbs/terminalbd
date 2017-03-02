@@ -32,17 +32,17 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('domain'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {
             return $this->redirect($this->generateUrl('bindu_build'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_MANAGER') && $enable == 1 ) {
-            return $this->redirect($this->generateUrl('domain'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY') && $enable == 1 ) {
+            return $this->redirect($this->generateUrl('domain'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_ACCOUNTING') && $enable == 1 ) {
             return $this->redirect($this->generateUrl('domain'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES') && $enable == 1) {
 
             $inventory = $user->getGlobalOption()->getInventoryConfig();
-
             $deliveryProcess = $inventory->getDeliveryProcess();
 
             if (!empty($deliveryProcess)) {
+
                 if (in_array('Pos', $deliveryProcess)) {
                     return $this->redirect($this->generateUrl('inventory_sales'));
                 } elseif (in_array('OnlineSales', $deliveryProcess)) {
