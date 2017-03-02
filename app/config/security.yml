@@ -14,7 +14,7 @@ security:
 
         # THIS IS PART OF WEBSITE MANAGE
 
-        ROLE_WEBSITE:                                   [ROLE_WEBSITE,ROLE_DOMAIN]
+        ROLE_WEBSITE:                                   [ROLE_WEBSITE]
         ROLE_DOMAIN_WEBSITE_CUSTOMER:                   [ROLE_DOMAIN_WEBSITE_CUSTOMER]
         ROLE_DOMAIN_WEBSITE_MANAGER:                    [ROLE_DOMAIN_WEBSITE_MANAGER]
         ROLE_DOMAIN_WEBSITE_SETTING:                    [ROLE_DOMAIN_WEBSITE_SETTING]
@@ -22,7 +22,7 @@ security:
 
         # THIS IS PART OF ACCOUNTING MANAGE
 
-        ROLE_ACCOUNTING:                                [ROLE_ACCOUNTING,ROLE_DOMAIN]
+        ROLE_ACCOUNTING:                                [ROLE_ACCOUNTING]
         ROLE_DOMAIN_ACCOUNTING_REPORT:                  [ROLE_DOMAIN_ACCOUNTING_REPORT]
         ROLE_DOMAIN_ACCOUNTING_TRANSACTION:             [ROLE_DOMAIN_ACCOUNTING_TRANSACTION]
         ROLE_DOMAIN_ACCOUNTING_EXPENDITURE:             [ROLE_DOMAIN_ACCOUNTING_EXPENDITURE]
@@ -51,7 +51,7 @@ security:
 
         # THIS IS PART OF INVENTORY
 
-        ROLE_INVENTORY:                                 [ROLE_INVENTORY,ROLE_DOMAIN]
+        ROLE_INVENTORY:                                 [ROLE_INVENTORY]
         ROLE_DOMAIN_INVENTORY_REPORT:                   [ROLE_DOMAIN_INVENTORY_REPORT]
         ROLE_DOMAIN_INVENTORY_STOCK:                    [ROLE_DOMAIN_INVENTORY_STOCK]
         ROLE_DOMAIN_INVENTORY_CONFIG:                   [ROLE_DOMAIN_INVENTORY_CONFIG]
