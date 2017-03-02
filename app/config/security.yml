@@ -11,6 +11,9 @@ security:
         ROLE_ADMIN_OPERATION_MANAGER:                   [ROLE_USER]
         ROLE_DOMAIN_CUSTOMER:                           [ROLE_USER]
         ROLE_DOMAIN_USER:                               [ROLE_USER]
+        ROLE_DOMAIN_WEBSITE:                            [ROLE_DOMAIN]
+        ROLE_DOMAIN_INVENTORY:                          [ROLE_DOMAIN]
+        ROLE_DOMAIN_ACCOUNTING:                         [ROLE_DOMAIN]
 
         # THIS IS PART OF WEBSITE MANAGE
 
