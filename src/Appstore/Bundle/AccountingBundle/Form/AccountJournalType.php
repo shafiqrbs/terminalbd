@@ -93,6 +93,7 @@ class AccountJournalType extends AbstractType
                         ->orderBy("e.name");
                 }
             ))
+
             ->add('accountBank', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',

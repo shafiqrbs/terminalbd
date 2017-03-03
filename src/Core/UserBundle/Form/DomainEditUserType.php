@@ -121,7 +121,9 @@ class DomainEditUserType extends AbstractType
                 'ROLE_DOMAIN_INVENTORY_STOCK'           => 'Inventory Stock',
                 'ROLE_DOMAIN_INVENTORY_REPORT'          => 'Inventory Report',
                 'ROLE_DOMAIN_INVENTORY_BRANCH'          => 'Inventory Branch',
+                'ROLE_DOMAIN_INVENTORY_MANAGER'         => 'Inventory Manager',
                 'ROLE_DOMAIN_INVENTORY_CONFIG'          => 'Inventory Config',
+                'ROLE_DOMAIN_INVENTORY'                 => 'Inventory All',
             );
         }
 
@@ -142,6 +144,7 @@ class DomainEditUserType extends AbstractType
                 'ROLE_DOMAIN_ACCOUNTING_TRANSACTION'        => 'Accounting Transaction',
                 'ROLE_DOMAIN_ACCOUNTING_CONFIG'             => 'Accounting Config',
                 'ROLE_DOMAIN_ACCOUNTING_REPORT'             => 'Accounting Report',
+                'ROLE_DOMAIN_ACCOUNTING'                    => 'Accounting All',
             );
         }
 

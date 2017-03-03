@@ -138,6 +138,7 @@ class DomainSignType extends AbstractType
                 'ROLE_DOMAIN_INVENTORY_STOCK'           => 'Inventory Stock',
                 'ROLE_DOMAIN_INVENTORY_REPORT'          => 'Inventory Report',
                 'ROLE_DOMAIN_INVENTORY_BRANCH'          => 'Inventory Branch',
+                'ROLE_DOMAIN_INVENTORY_MANAGER'         => 'Inventory Manager',
                 'ROLE_DOMAIN_INVENTORY_CONFIG'          => 'Inventory Config',
             );
         }

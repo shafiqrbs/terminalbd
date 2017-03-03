@@ -125,7 +125,7 @@
                                 <tbody class="flip-content " id="purchase">
 
                                 {% for entity in entities %}
-                                    <tr id="remove-{{ entity.id }}">
+                                    <tr id="delete-{{ entity.id }}">
                                         <td> {% if entity.purchaseVendorItems is defined and  entity.purchaseVendorItems is not empty  %}<span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                         <td class="numeric" >{{ entity.grn }}</td>
                                         <td class="numeric" >{{ entity.receiveDate|date('d-m-Y') }}</td>

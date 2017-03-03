@@ -1,4 +1,4 @@
-inventoryconfig:
+inventoryconfig_dashboard:
     path:     /
     defaults: { _controller: "InventoryBundle:InventoryConfig:index" }
 

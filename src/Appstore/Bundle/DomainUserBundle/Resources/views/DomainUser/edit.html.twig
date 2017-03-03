@@ -175,6 +175,7 @@
                                         <div class="col-md-9">
                                             <div class="input-icon right">
                                                 <div class="controls">
+                                                    {{ form_errors(form.roles) }}
                                                     {{ form_widget(form.roles, {'attr': {'class': 'form-control multi-select2 span6 m-wrap'}}) }}
                                                 </div>
                                             </div>

@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Wel Come Inventory Dashboard
+                    Inventory Configuration Lists
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,11 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Inventory Dashboard</a></li>
+                    <li>
+                        <a href="{{ path('inventoryconfig') }}">Inventory Configuration</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Inventory Configuration Lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -29,11 +33,25 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Inventory Dashboard</div>
+                        <div class="caption"><i class="icon-reorder"></i>Inventory Configuration</div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <i class="icon-cogs"></i>&nbsp;Tools
+                                    <i class="icon-tasks"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="{{ path('inventoryconfig') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
+
+
                         </div>
                     </div>
                 </div>

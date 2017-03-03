@@ -152,7 +152,7 @@ inventory_itemtypegrouping:
 
 inventory_inventoryconfig:
     resource: "@InventoryBundle/Resources/config/routing/inventoryconfig.yml"
-    prefix:   /inventory/config
+    prefix:   /inventory
 
 stockitem_results:
     path:     /results

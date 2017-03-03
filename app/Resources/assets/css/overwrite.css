@@ -318,6 +318,9 @@ label.error {
     background: #000033;
     opacity: 0.5;
     display: block;
+    background-image:url("../img/loader-red.gif");
+    background-position: center center;
+    background-repeat: no-repeat;
 
 }
 
@@ -414,6 +417,29 @@ label.error {
 .add-on-height{
     height: 24px !important;
 }
+
+.ajax-loading-blue {
+    background: black url("../img/loader-red.gif");
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0.7;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 99;
+}
+
+.ajax-loading-red {
+    background: black url("../img/loader-red.gif");
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0.7;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 99;
+}
+
 
 /*
 .ui-autocomplete-loading {

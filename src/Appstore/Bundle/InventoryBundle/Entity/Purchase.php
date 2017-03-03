@@ -232,6 +232,13 @@ class Purchase
     private $status=true;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="asInvestment", type="boolean")
+     */
+    private $asInvestment = false;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="process", type="string", nullable=true)
@@ -906,6 +913,22 @@ class Purchase
     public function setPurchaseTo($purchaseTo)
     {
         $this->purchaseTo = $purchaseTo;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAsInvestment()
+    {
+        return $this->asInvestment;
+    }
+
+    /**
+     * @param bool $asInvestment
+     */
+    public function setAsInvestment($asInvestment)
+    {
+        $this->asInvestment = $asInvestment;
     }
 
 }

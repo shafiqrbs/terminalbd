@@ -1,6 +1,8 @@
 <?php
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
+use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -83,6 +85,38 @@ class AccountJournalRepository extends EntityRepository
             $qb->andWhere("ex.updated <= :endDate");
             $qb->setParameter('endDate', $endDate.' 23:59:59');
         }
+    }
+
+    public function insertAccountPurchaseJournal(Purchase $purchase)
+    {
+
+        $entity = new AccountJournal();
+        $accountHeadCredit = $this->_em->getRepository('AccountingBundle:AccountHead')->find(49);
+        $accountCashHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(30);
+        $accountBankHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(38);
+        $accountMobileHead = $this->_em->getRepository('AccountingBundle:AccountHead')->find(45);
+
+        $entity->setGlobalOption($purchase->getInventoryConfig()->getGlobalOption());
+        $entity->setTransactionType('Debit');
+        $entity->setAmount($purchase->getPaymentAmount());
+        $entity->setTransactionMethod($purchase->getTransactionMethod());
+        $entity->setAccountBank($purchase->getAccountBank());
+        $entity->setAccountMobileBank($purchase->getAccountMobileBank());
+        $entity->setApprovedBy($purchase->getApprovedBy());
+        $entity->setCreatedBy($purchase->getApprovedBy());
+        $entity->setAccountHeadDebit($accountHeadCredit);
+        if ($purchase->getTransactionMethod()->getId() == 2){
+            $entity->setAccountHeadCredit($accountBankHead);
+        }elseif ($purchase->getTransactionMethod()->getId() == 3){
+            $entity->setAccountHeadCredit($accountMobileHead);
+        }else{
+            $entity->setAccountHeadCredit($accountCashHead);
+        }
+        $entity->setToUser($purchase->getApprovedBy());
+        $entity->setProcess('approved');
+        $this->_em->persist($entity);
+        $this->_em->flush();
+        return $entity;
     }
 
 

@@ -375,16 +375,17 @@ class Builder extends ContainerAware
                             ->setAttribute('dropdown', true);
                         $menu['Inventory']['Point of Sales']->addChild('Pos', array('route' => 'inventory_sales_new'))->setAttribute('icon', 'icon-shopping-cart');
                         $menu['Inventory']['Point of Sales']->addChild('Sales', array('route' => 'inventory_sales'))->setAttribute('icon', ' icon-th-list');
-                        $menu['Inventory']['Point of Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
+                            $menu['Inventory']['Point of Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                        }
                         $menu['Inventory']['Point of Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon-upload');
-                        $menu['Inventory']->addChild('Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
+                        $menu['Inventory']['Point of Sales']->addChild('Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
                     }
                 }
 
                 if (in_array('OnlineSales', $deliveryProcess)) {
 
                     if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES_ONLINE')) {
-
                         $menu['Inventory']
                             ->addChild('Online Sales')
                             ->setAttribute('icon', 'icon icon-truck')
@@ -392,7 +393,9 @@ class Builder extends ContainerAware
                         $menu['Inventory']['Online Sales']->addChild('Customers', array('route' => 'inventory_salesonline_customer'))->setAttribute('icon', 'icon icon-user');
                         $menu['Inventory']['Online Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', ' icon-plus');
                         $menu['Inventory']['Online Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', ' icon-th-list');
-                        $menu['Inventory']['Online Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
+                            $menu['Inventory']['Online Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                        }
                     }
                 }
 
@@ -405,7 +408,9 @@ class Builder extends ContainerAware
                         $menu['Inventory']['General Sales']->addChild('Customers', array('route' => 'inventory_salesgeneral_customer'))->setAttribute('icon', 'icon icon-user');
                         $menu['Inventory']['General Sales']->addChild('Add Sales', array('route' => 'inventory_salesgeneral_new'))->setAttribute('icon', ' icon-plus');
                         $menu['Inventory']['General Sales']->addChild('Sales', array('route' => 'inventory_salesgeneral'))->setAttribute('icon', ' icon-th-list');
-                        $menu['Inventory']['General Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
+                            $menu['Inventory']['General Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                        }
                     }
                 }
 
@@ -419,7 +424,9 @@ class Builder extends ContainerAware
                         $menu['Inventory']['Manual Sales']->addChild('Customers', array('route' => 'inventory_salesmanual_customer'))->setAttribute('icon', 'icon icon-user');
                         $menu['Inventory']['Manual Sales']->addChild('Add Sales', array('route' => 'inventory_salesmanual_add'))->setAttribute('icon', ' icon-plus');
                         $menu['Inventory']['Manual Sales']->addChild('Sales', array('route' => 'inventory_salesmanual'))->setAttribute('icon', ' icon-th-list');
-                        $menu['Inventory']['Manual Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
+                            $menu['Inventory']['Manual Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                        }
                     }
                 }
 
@@ -431,7 +438,9 @@ class Builder extends ContainerAware
                             ->setAttribute('dropdown', true);
                         $menu['Inventory']['Online Order']->addChild('Online Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
                         $menu['Inventory']['Online Order']->addChild('Order', array('route' => 'inventory_sales'))->setAttribute('icon', ' icon-th-list');
-                        $menu['Inventory']['Online Order']->addChild('Order Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
+                            $menu['Inventory']['Online Order']->addChild('Order Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                        }
                     }
                 }
 

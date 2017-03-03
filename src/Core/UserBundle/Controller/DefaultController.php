@@ -19,6 +19,7 @@ class DefaultController extends Controller
     {
 
         $user = $this->getUser();
+        var_dump($user->getRoles());
 
         if( $user->getGlobalOption()){
             $enable = $user->getGlobalOption()->getStatus();
@@ -26,14 +27,15 @@ class DefaultController extends Controller
             $enable=0;
         }
 
+
         if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($this->generateUrl('admin'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable == 1) {
             return $this->redirect($this->generateUrl('domain'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {
             return $this->redirect($this->generateUrl('bindu_build'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY') && $enable == 1 ) {
-            return $this->redirect($this->generateUrl('domain'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') && $enable == 1 ) {
+            return $this->redirect($this->generateUrl('inventoryconfig_dashboard'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_ACCOUNTING') && $enable == 1 ) {
             return $this->redirect($this->generateUrl('domain'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES') && $enable == 1) {
