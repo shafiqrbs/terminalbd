@@ -292,4 +292,22 @@ class AccountJournalController extends Controller
         return new Response('success');
         exit;
     }
+
+
+    /**
+     * Deletes a AccountJournal entity.
+     *
+     */
+    public function approveDeleteAction(AccountJournal $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find AccountJournal entity.');
+        }
+        $em->remove($entity);
+        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->approvedDeleteRecord($entity,'Journal');
+        $em->flush();
+        return new Response('success');
+        exit;
+    }
 }

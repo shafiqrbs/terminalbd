@@ -56,10 +56,15 @@
                                 <div id="search-product">
                                     <div class="row-fluid" style="margin-bottom: 5px">
                                         <form class="search-form" >
+                                        {% if entity.branches is defined and entity.branches is not empty %}
+                                            <input type="text" id="branchItem" name="branchItem"  class="span12 select2Item" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name ">
+                                            {% else %}
                                             <input type="text" id="item" name="item" required="required"  class="m-wrap span12 select2Item " >
+                                        {% endif %}
                                         </form>
                                     </div>
-                                    <div class="row-fluid">
+                                    <div class="row-fluid" id="branchItemStock">
+                                        {% if entity.branches is defined and entity.branches is empty %}
                                         <table class="table table-bordered table-striped table-condensed flip-conten" id="stockItemDetails">
                                             <thead class="flip-content ">
                                             <tr class="head-green">
@@ -76,6 +81,7 @@
                                             </thead>
                                             <tbody id="itemDetails"></tbody>
                                         </table>
+                                        {% endif %}
                                     </div>
                                 </div>
 
@@ -489,6 +495,22 @@
     });
     EditableInit();
     InventorySales({{ entity.id ? entity.id : 0 }});
+
+    $(document).on('change', '#branchItem', function() {
+
+        var item = $('#branchItem').val();
+        if(item == ''){
+        return false;
+        }
+        $.ajax({
+        url: Routing.generate('inventory_branch_sales_item_view',{'item':item}),
+        type: 'GET',
+        success: function(response) {
+        $('#branchItemStock').html(response);
+        },
+        })
+
+    });
 
     $(document).on("click", "#pos", function() {
 

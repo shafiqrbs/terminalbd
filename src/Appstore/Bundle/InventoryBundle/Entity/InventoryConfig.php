@@ -97,6 +97,11 @@ class InventoryConfig
     protected $deliveries;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $deliveryReturns;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\BranchInvoice", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
      */
     protected $branchInvoices;
@@ -1085,6 +1090,14 @@ class InventoryConfig
     public function setShopName($shopName)
     {
         $this->shopName = $shopName;
+    }
+
+    /**
+     * @return DeliveryReturn
+     */
+    public function getDeliveryReturns()
+    {
+        return $this->deliverieReturns;
     }
 
 

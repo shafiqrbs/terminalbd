@@ -22,7 +22,8 @@ class EcommerceMenuController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('SettingAppearanceBundle:EcommerceMenu')->findBy(array(),array('sorting' => 'asc'));
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('SettingAppearanceBundle:EcommerceMenu')->findBy(array('globalOption' => $globalOption ),array('sorting' => 'asc'));
         return $this->render('SettingAppearanceBundle:EcommerceMenu:index.html.twig', array(
             'entities' => $entities,
         ));
@@ -41,6 +42,7 @@ class EcommerceMenuController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->setGlobalOption($this->getUser()->getGlobalOption());
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(

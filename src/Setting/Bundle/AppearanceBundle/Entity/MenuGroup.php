@@ -3,6 +3,7 @@
 namespace Setting\Bundle\AppearanceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * MenuGroup
@@ -34,6 +35,12 @@ class MenuGroup
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+
+    /**
+     * @Gedmo\Slug(fields={"name"}, updatable=false, separator="-")
+     * @ORM\Column(length=255)
+     */
+    private $slug;
 
 
     /**
@@ -142,5 +149,21 @@ class MenuGroup
     public function setSyndicates($syndicates)
     {
         $this->syndicates = $syndicates;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
     }
 }

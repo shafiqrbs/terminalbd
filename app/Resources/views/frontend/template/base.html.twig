@@ -47,7 +47,7 @@
     'assets/template/plugin/revolution_slider/css/rs-style.css'
     'assets/template/plugin/revolution_slider/rs-plugin/css/settings.css'
     'assets/template/plugin/textillate/assets/animate.css'
-    'assets/bindu/3rd/select2/select2.css'
+    'assets/template/plugin/wow/css/animate.css'
     'assets/template/desktop/css/module.css'
     %}
 
@@ -67,14 +67,160 @@
 {% render controller("FrontendBundle:TemplateWidget:header",{'globalOption':globalOption.id}) %}
 <div class="clearfix"></div>
 {% block body %}{% endblock %}
+<style>
+
+    .footer-menu{
+        padding-bottom: 30px;
+    }
+    .footer-menu h4{
+        text-transform: uppercase;
+    }
+    .social-payment{
+        border-bottom: 1px solid #fff;
+        padding-bottom: 20px;
+        padding-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    .social-payment .input-group .form-control:hover ,.bs-example-form .input-group .form-control:hover , .social-payment .input-group .form-control:active, .social-payment .input-group .form-control:focus , .bs-example-form .input-group .form-control:focus {
+        background-color: #ffffee;
+        color: #0b0e23;
+    }
+    .input-group-lg>.form-control, .input-group-lg>.input-group-addon, .input-group-lg>.input-group-btn>.btn{
+        font-size: 14px;
+    }
+
+    .social-payment .social-tooltip{
+       margin-top: -2px;
+    }
+    .social-payment .social-tooltip a{
+
+        height: 36px;
+        width: 36px;
+        background: #000;
+        display: inline-block;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 36px;
+        text-shadow: 0 1px 0 rgba(0,0,0,0.2);
+        transition: all 0.15s ease;
+        font-size: 18px;
+
+    }
+    .social-payment .social-tooltip a#facebook{
+        background: linear-gradient(#4562a0, #3b5998);
+        color:#ffffff
+    }
+    .social-payment .social-tooltip a#facebook:hover{
+        background: linear-gradient(#3c5899, #3c5899);
+        transition: all 1s ease;
+    }
+    .social-payment .social-tooltip a#twitter{
+        background: linear-gradient(#00a0d1, #00a0d1);
+        color:#ffffff
+    }
+    .social-payment .social-tooltip a#instagram{
+        background: linear-gradient(#5b85aa, #4e799e);
+        color:#ffffff
+    }
+    .social-payment .social-tooltip a#email{
+        background: linear-gradient(#db4a39, #db4a39);
+        color:#ffffff
+    }
+
+
+</style>
+<section class="footer-menu">
+    <div class="container social-payment" >
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="bs-callout" >
+                    <h4>PAYMENT METHOD</h4>
+                    <p><img src="{{ asset('assets/img/credit-card.png') }}" ></p>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <h4>SEARCH YOUR PRODUCT</h4>
+                <div class="social-tooltip">
+                    <div class="input-group"> <input class="form-control" placeholder="Find your Favorite Products" aria-label="Text input with multiple buttons"> <div class="input-group-btn"> <button type="button" class="btn blue btn-default" aria-label="Help"><span data-toggle="tooltip" title="Find your Favorites products " class="glyphicon glyphicon-question-sign"></span></button> <button type="button" class="btn btn-default green"><span class="glyphicon glyphicon-search"></span></button> </div> </div> </div>
+
+            </div>
+            <div class="col-sm-3">
+                <h4>KEEP IN TOUCH</h4>
+                <div class="social-tooltip">
+                    <a data-toggle="tooltip" id="facebook" title="Follow on Facebook" target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook fa-fw  "></i></a>
+                    <a data-toggle="tooltip" id="twitter" title="Follow on Twitter" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-twitter fa-fw  "></i></a>
+                    <a data-toggle="tooltip" id="instagram" title="Follow on Instagram" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-instagram fa-fw  "></i></a>
+                    <a data-toggle="tooltip" id="email" title="Send as an email" target="_blank"  href="mailto:{{ globalOption.email }}"><i class="fa fa-envelope fa-fw  "></i></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="container" id="footer-menu" >
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="bs-callout" >
+                    <h4>WHO WE ARE</h4>
+                    <p>
+                     {% render controller("FrontendBundle:TemplateWidget:about",{'globalOption':globalOption.id,'wordlimit':300}) %}
+                    </p>
+                </div>
+
+            </div>
+            <div class="col-sm-3">
+                <h4>{{ globalOption.name }}</h4>
+                {% render controller("FrontendBundle:TemplateWidget:footerMenu",{'globalOption':globalOption.id,'menuGroup':3}) %}
+            </div>
+            <div class="col-sm-2">
+                <h4>HELP</h4>
+                {% render controller("FrontendBundle:TemplateWidget:footerMenu",{'globalOption':globalOption.id,'menuGroup':7}) %}
+            </div>
+            <div class="col-sm-3">
+                <h4>SHOP/OFFICE ADDRESS</h4>
+                <address>
+                    {% if globalOption.contactPage.address1 is not empty %}
+
+                                 <p style="font-weight: bolder"> <i class="fa fa-home"></i>&nbsp;{{ globalOption.contactPage.address1 }}<br>
+                        {% if globalOption.contactPage.location is defined and globalOption.contactPage.location %}
+                            {{ globalOption.contactPage.location.name }}, {{ globalOption.contactPage.location.parent.name }}
+                        {% endif %}
+                        {% if globalOption.contactPage.postalCode is defined and globalOption.contactPage.postalCode %}
+                            -{{ globalOption.contactPage.postalCode }}
+                        {% endif %}
+                                 </p>
+                    {% endif %}
+                    {% if globalOption.contactPage.startHour %}
+                        <i class="fa fa-clock-o"></i>&nbsp;<strong>{{ globalOption.contactPage.startHour }} To {{ globalOption.contactPage.endHour }}</strong>
+                    {% endif %}
+                    {% if globalOption.contactPage.weeklyOffDay is not empty %}
+                        <br><i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;<strong>
+                                    {% for day in globalOption.contactPage.weeklyOffDay %}
+                                        {{ day }}
+                                        {% if not loop.last %},{% endif %}
+                                    {% endfor %}
+                                </strong>
+                    {% endif %}
+                    <br>
+                                <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
+                                <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=23.801422,90.352599">Direction</a>
+
+                </address>
+            </div>
+        </div>
+
+    </div>
+</section>
 <footer id="footer">
-    <div class="container">
+     <div class="container">
         <div class="row myfooter">
-            <div class="col-sm-6"><div class="pull-left">
-                    &copy; Copyright {{ globalOption.name }} {{ "now"|date('Y') }}
-                </div></div>
             <div class="col-sm-6">
-                <div class="pull-right">Designed & Developed by <a target="_blank" href="http://www.terminalbd.com">Umar It Limited</a></div>
+                <div class="pull-left">
+                    &copy; Copyright {{ globalOption.name }} {{ "now"|date('Y') }}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="pull-right">Designed & Developed by <a target="_blank" href="http://www.terminalbd.com">{{ portal_design_development }}</a></div>
             </div>
         </div>
     </div>
@@ -94,7 +240,6 @@
 'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
 'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
 'assets/template/plugin/owl.carousel/owl.carousel.min.js'
-'assets/template/plugin/select2/select2.min.js'
 'assets/template/plugin/side.toolbar/vcore.sidebar.js'
 'assets/template/plugin/pgslider/imagezoom.js'
 'assets/template/plugin/pgslider/pgwslider.js'
@@ -104,9 +249,9 @@
 'assets/template/plugin/textillate/assets/jquery.fittext.js'
 'assets/template/plugin/textillate/assets/jquery.lettering.js'
 'assets/template/plugin/matchHeight/height-match.js'
-
+'assets/template/plugin/select2/select2.min.js'
+'assets/template/plugin/wow/js/wow.min.js'
 %}
-
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 <script>  subdomain ="{{ globalOption.subDomain }}"; </script>
@@ -145,11 +290,34 @@
              'margin-top':(navbar-17),
          });
  */
+
+         var navbar = $('.navbar-header').outerHeight(true);
+
+         var mins = 22;
+         $('.bs-example-form').css({
+             'margin-top':(navbar/2 - mins)
+         });
+
+     var stickyOffset = $('.sticky').offset().top;
+
+         $(window).scroll(function(){
+             var sticky = $('.sticky'),
+                 scroll = $(window).scrollTop();
+             if (scroll >= stickyOffset) sticky.addClass('fixed');
+             else sticky.removeClass('fixed');
+         });
+
+         $('.social-tooltip').tooltip({
+             selector: "[data-toggle=tooltip]",
+             container: "body"
+         });
+
         $('.select2').select2({
             placeholder: "Select",
             allowClear: true,
             color: "black"
         });
+
         $(".numeric").numeric();
         $(".mobile").inputmask("mask", {"mask": "99999-999-999"}); //specifying fn & options
         $('#searchEvent').click(function(){
@@ -367,18 +535,17 @@
         );
     });
     $(document).ready(gallery);
+     wow = new WOW(
+         {
+             boxClass:     'wow',
+             animateClass: 'animated',
+             offset:       100
+         }
+     );
+     wow.init();
 </script>
 <style>
 
-    /* CSS3 position: fixed */
-/*    .fixed {
-        position: fixed;
-        top: -5px;
-        left: 0;
-        width: 100%;
-        z-index: 9999;
-        overflow: hidden;
-    }*/
     .page-content{
         line-height: 25px;
         text-align: justify;

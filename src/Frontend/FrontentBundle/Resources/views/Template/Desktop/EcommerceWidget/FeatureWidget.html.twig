@@ -265,10 +265,10 @@
                         {% endfor %}
                     </ol>
                     <!-- Wrapper for slides -->
-                   {# <div class="carousel-inner">
+                    <div class="carousel-inner">
                         {% for slide in widget.featureWidgetItems %}
                             <div class="item {% if loop.index-1 == 0 %} active {% endif %}">
-                                <img class="image" style="height:456px; width:100%" src="{% if slide.feature.webPath is not empty  %} {{ slide.feature.webPath }}{% endif %}" alt="...">
+                                <img class="image" style="height:750px; width:100%" src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath) }}{% endif %}" alt="...">
                                 <div class="carousel-caption caption-{{ slide.feature.captionPosition }}" style="background-color: {{ slide.feature.captionBgColor }}">
                                     <h4>{{ slide.feature.name }}</h4>
                                     <span>{{ slide.feature.content|raw }}</span>
@@ -287,7 +287,7 @@
                                 </div>
                             </div>
                         {% endfor %}
-                    </div>#}
+                    </div>
                 </div>
             </div>
         </div>
@@ -400,7 +400,7 @@
 
 
         </style>
-        <div class="container">
+        <div class="container wow slideInRight" data-wow-delay="2s">
             <div class="row">
             {% for slide in widget.featureWidgetItems %}
                 {% if(slide.feature.webPath) %}
@@ -431,12 +431,6 @@
             <div class="container">
                 <div class="header-double-line-right">
                     <h3>{{ widget.category.name }}</h3>
-                </div>
-                     <div class="text-right owl-carousel-next-prev">
-                    <div class="customNavigation" >
-                        <a class="btn prev glyphicon glyphicon-chevron-left"></a>
-                        <a class="btn next glyphicon glyphicon-chevron-right"></a>
-                    </div>
                 </div>
                 <div id="product" class="row">
                     <div id="category-slider" class="owl-carousel">
@@ -476,21 +470,66 @@
                 </div>
             </div>
         {% endif %}
+        <style>
+            .container-margin{
+                margin-bottom: 30px;
+            }
+
+            .product-preview .team-content {
+                position: absolute;
+                top: 0;
+                left:0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                padding:0 !important;
+                background: rgba(255,255,255,0.8);
+                transition: all 0.50s ease-in-out;
+                color: #0b0e23;
+            }
+            .product-preview .view-link {
+                padding: 0;
+                margin: 0;
+                position: relative;
+                top: 87%;
+            }
+            .product-preview .view-link li {
+                list-style: none;
+                margin-right:0;
+                display: inline-block;
+                width: 100%;
+            }
+            .product-preview .view-link li a {
+                width: 100%;
+                height: 35px;
+                line-height: 35px;
+                border-radius: 0;
+                color: #fff;
+                background: rgba(0, 0, 0, 0.3);
+                font-size: 12px;
+                color: #0b0e23;
+            }
+            .product-preview .view-link li a:hover {
+                background: #002842;
+                text-decoration: none;
+                color: #FFFFFF;
+            }
+        </style>
         {% if widget.promotion is defined and widget.promotion is not empty %}
-            <div class="container">
+            <div class="container container-margin wow slideInLeft" data-wow-duration="4s">
                 <div class="header-double-line-right">
                     <h4>{{ widget.promotion.name }}</h4>
                 </div>
                 <div id="product" class="row">
                     <div id="promotion-slider" class="owl-carousel">
                         {% for product in  widget.promotion.purchaseVendorItems |slice(0,12)  %}
-                            <div class="col-md-12" >
+                            <div class="col-md-12 fadeInRight animated" data-wow-delay="0.2s" >
                                 <div class="thumbnail" data-match-height="item-promotion">
                                     <div class="product-preview group list-group-image" >
                                         <img class="img-responsive" src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="">
                                         <div class="team-content">
                                             <ul class="view-link">
-                                                <li><a href="#" class="fa fa-eye"></a></li>
+                                                <li><a href="#" class="fa fa-eye">&nbsp;QUICK VIEW</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -513,28 +552,27 @@
             </div>
         {% endif %}
         {% if widget.featureCategory is defined and widget.featureCategory is not empty %}
-            <div class="container">
+            <div class="container container-margin wow bounceInLeft" data-wow-offset="300" >
                 <div class="header-double-line-right">
-                    <h4>Browser BY  Categories</h4>
-                </div>
-                <div class="text-right owl-carousel-next-prev">
-                    <div class="customNavigation" >
-                        <a class="btn prev glyphicon glyphicon-chevron-left"></a>
-                        <a class="btn next glyphicon glyphicon-chevron-right"></a>
+                    <h4>Browser By  Categories</h4>
+                    <div class="text-right">
+                    <a class="btn prev glyphicon glyphicon-chevron-left"></a>
+                    <a class="btn next glyphicon glyphicon-chevron-right"></a>
                     </div>
                 </div>
+
                 <div id="product" class="row">
-                    <div id="owlFeatureCategory" class="owl-carousel">
-                        {% for category in  widget.globalOption.inventoryConfig.products  %}
-                                <div class="col-md-12">
+                    <div id="feature-category" class="owl-carousel">
+                        {% for category in  widget.globalOption.featureCategories  %}
+                                  <div class="col-md-12">
                                     <div class="thumbnail" data-match-height="feature-category">
-                                        <div class="product-preview group list-group-image product-equal-height" >
-                                            <img class="img-responsive" src="{{ image(category.webPath).resize(200,200, 'purple') }}" alt="">
-                                        </div>
-                                        <div class="caption">
-                                            <p class="group inner product-name text-center" ><a href="{{ path('webservice_product_category',{'subdomain': globalOption.subDomain,'id':category.id }) }}"><strong>{% if category.name is not empty %}{{ category.category.name }}{% endif %}</strong></a> </p>
+                                        <div class="product-preview group" >
+                                            <img class="img-responsive" src="{{ image(category.webPath).resize(250,200, 'black') }}" alt="">
                                         </div>
                                     </div>
+                                      <div class="caption">
+                                          <p class="group inner product-name text-center" ><a href="{{ path('webservice_product_category',{'subdomain': globalOption.subDomain,'id':category.id }) }}"><strong>{{ category.category.name }}</strong></a> </p>
+                                      </div>
                                 </div>
                         {% endfor %}
                     </div>
@@ -542,7 +580,7 @@
             </div>
         {% endif %}
         {% if widget.featureBrand is defined and widget.featureBrand is not empty %}
-            <div class="container">
+            <div class="container wow fadeInDown" data-wow-delay="2s" >
                 <div class="header-double-line-right">
                     <h4>Browser BY  BRANDS</h4>
                 </div>
@@ -553,16 +591,17 @@
                     </div>
                 </div>
                 <div id="product" class="row">
-                    <div id="owlFeatureCategory" class="owl-carousel">
-                        {% for category in  widget.globalOption.inventoryConfig.products  %}
+                    <div id="feature-brand" class="owl-carousel">
+                        {% for brand in  widget.globalOption.featureBrands  %}
                             <div class="col-md-12">
-                                <div class="thumbnail" data-match-height="feature-category">
-                                    <div class="product-preview group list-group-image product-equal-height" >
-                                        <img class="img-responsive" src="{{ image(category.webPath).resize(200,200, 'purple') }}" alt="">
+                                <div class="thumbnail" data-match-height="feature-brand">
+                                    <div class="product-preview" >
+                                        <img class="img-responsive" src="{{ image(brand.webPath).resize(150,120) }}" alt="">
                                     </div>
-                                    <div class="caption">
-                                        <p class="group inner product-name text-center" ><a href="{{ path('webservice_product_category',{'subdomain': globalOption.subDomain,'id':category.id }) }}"><strong>{% if category.name is not empty %}{{ category.category.name }}{% endif %}</strong></a> </p>
-                                    </div>
+
+                                </div>
+                                <div class="caption">
+                                    <p class="group inner product-name text-center" ><a href="{{ path('webservice_product_brand',{'subdomain': globalOption.subDomain,'id':brand.id }) }}"><strong>{{ brand.brand.name }}</strong></a> </p>
                                 </div>
                             </div>
                         {% endfor %}

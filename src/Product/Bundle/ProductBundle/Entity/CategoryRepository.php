@@ -451,6 +451,7 @@ class CategoryRepository extends MaterializedPathRepository
         $result = array();
 
         foreach($categories as $category) {
+
             $parentCategory = $this->getParentCategoryByLevel($category, 2);
 
 
@@ -463,14 +464,14 @@ class CategoryRepository extends MaterializedPathRepository
             if(!isset($result[$parentId])) {
                 $result[$parentId] = array(
                     'name' =>  $parentCategory->getName(),
-                    'slug' =>  $parentCategory->getSlug(),
+                    'id' =>  $parentCategory->getId(),
                     '__children' =>  array(),
                 );
             }
 
             $result[$parentId]['__children'][] = array(
                 'name' => $category->getName(),
-                'slug' => $category->getSlug()
+                'id' => $category->getId()
             );
         }
 

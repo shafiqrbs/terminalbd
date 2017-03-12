@@ -14,8 +14,8 @@ class PageModuleRepository extends EntityRepository
 {
     public function createFeatureModule($page,$data)
     {
-
-       foreach( $data['rowModule'] as $key => $row ){
+        if(!empty($data['rowModule'])){
+            foreach( $data['rowModule'] as $key => $row ){
 
                 $pageModule = !empty($data['pageModule'][$key]) ? $data['pageModule'][$key] :0;
                 $module = !empty($data['module'][$key]) ? $data['module'][$key] :0;
@@ -30,7 +30,7 @@ class PageModuleRepository extends EntityRepository
                     if($pageModuleId > 0){
                         $entity = $this->_em->getRepository('SettingContentBundle:PageModule')->find($pageModuleId);
                     }else{
-                         $entity = new PageModule();
+                        $entity = new PageModule();
                     }
                     $module = $this->_em->getRepository('SettingToolBundle:Module')->find($moduleId);
                     $entity->setName($data['name'][$key]);
@@ -42,9 +42,11 @@ class PageModuleRepository extends EntityRepository
                     $this->_em->persist($entity);
                     $this->_em->flush();
 
-               }
+                }
 
-       }
+            }
+        }
+
     }
 
     private  function remove($pageModule)

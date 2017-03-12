@@ -515,7 +515,7 @@
     background:#363b45;
     text-transform: uppercase;
 }
-.btn:after{
+/*.btn:after{
     content: "";
     border-width: 8px 8px 8px 0;
     border-style: solid;
@@ -523,7 +523,7 @@
     position: absolute;
     top:31.5%;
     right:0;
-}
+}*/
 .btn-sm:after{
     border-width: 5px 5px 5px 0;
     top:33.5%;

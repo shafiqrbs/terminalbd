@@ -132,9 +132,9 @@
                                 <tr class="head-grey">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Name</th>
                                     <th class="numeric" >Barcode</th>
                                     <th class="numeric" >Purchase Invoice/Date</th>
-                                    <th class="numeric" >SKU</th>
                                     <th class="numeric" >Quantity</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -145,9 +145,9 @@
                                     <tr>
                                         <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.item.name }}</td>
                                         <td class="numeric" >{{ entity.purchaseItem.barcode }}</td>
                                         <td class="numeric" >{{ entity.purchaseItem.purchase.grn }}/{{ entity.purchaseItem.purchase.receiveDate|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.item.sku }}</td>
                                         <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >
                                             {% if entity.approvedBy is empty %}
@@ -190,13 +190,11 @@
     {{ parent() }}
     {% javascripts
     '@InventoryBundle/Resources/public/js/approveProcess.js'
-    '@InventoryBundle/Resources/public/js/damage.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    InventoryDelivery Return();
     ApproveProcess();
 {% endblock %}

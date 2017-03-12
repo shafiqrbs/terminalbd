@@ -1,5 +1,18 @@
 <style>
 
+    {% if globalOption.templateCustomize.anchorColor is not empty %}
+        a{
+            color: {{ globalOption.templateCustomize.anchorColor }} !important;
+        }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.anchorHoverColor is not empty %}
+        a:hover, a:focus{
+            color: {{ globalOption.templateCustomize.anchorHoverColor }} !important;
+            cursor: pointer;
+        }
+    {% endif %}
+
     /* Customize Template for Customer demand*/
     {% if globalOption.templateCustomize.siteBgColor is not empty %}
     .siteBgColor{
@@ -17,6 +30,14 @@
     }
     #top-bar, #menu-bar{
         background-color: {{ globalOption.templateCustomize.menuBgColor }}!important;
+    }
+    .footer-menu{
+        {% if globalOption.templateCustomize.footerTextColor is not empty %}
+            color: {{ globalOption.templateCustomize.footerTextColor }}!important;
+        {% endif %}
+        {% if globalOption.templateCustomize.footerBgColor is not empty %}
+            background-color: {{ globalOption.templateCustomize.footerBgColor }}!important;
+        {% endif %}
     }
     .site-name{
         color: {{ globalOption.templateCustomize.siteNameColor }}!important;
@@ -37,6 +58,7 @@
         color: {{ globalOption.templateCustomize.footerTextColor }}!important;
         background: {{ globalOption.templateCustomize.footerBgColor }}!important;
     }
+
     #gmap_canvas{
         min-height:520px;
         min-width: 320px;
@@ -50,23 +72,35 @@
         background: {{ globalOption.templateCustomize.dividerBgColor }}!important;
     }
     {% endif %}
-
+    {% if globalOption.templateCustomize.borderColor  is not empty%}
     .header-line-center h1:before, .header-line-center h2:before, .header-line-center h3:before, .header-line-center h4:before, .header-line-center h5:before, .header-line-center h6:before ,
     .header-line-center h1:after, .header-line-center h2:after, .header-line-center h3:after, .header-line-center h4:after, .header-line-center h5:after, .header-line-center h6:after ,
     .header-line-center-bottom h1:before, .header-line-center-bottom h2:before, .header-line-center-bottom h3:before, .header-line-center-bottom h4:before, .header-line-center-bottom h5:before, .header-line-center-bottom h6:before,
     .header-line-right h1:after, .header-line-right h2:after, .header-line-right h3:after, .header-line-right h4:after, .header-line-right h5:after, .header-line-right h6:after ,
     .header-line-right h1:after, .header-line-right h2:after, .header-line-right h3:after, .header-line-right h4:after, .header-line-right h5:after, .header-line-right h6:after {
-        background: {{ globalOption.templateCustomize.dividerColor }}!important;
+        background: {{ globalOption.templateCustomize.borderColor }}!important;
     }
+    {% endif %}
+    {% if globalOption.templateCustomize.borderColor  is not empty%}
     .header-double-line-right h1:after, .header-double-line-right h2:after, .header-double-line-right h3:after, .header-double-line-right h4:after, .header-double-line-right h5:after, .header-double-line-right h6:after {
-        border-bottom:{{ globalOption.templateCustomize.dividerColor }}!important;
-        border-top:{{ globalOption.templateCustomize.dividerColor }}!important;
+        border-bottom:1px solid {{ globalOption.templateCustomize.borderColor }}!important;
+        border-top:1px solid {{ globalOption.templateCustomize.borderColor }}!important;
     }
+    {% endif %}
+    {% if globalOption.templateCustomize.borderColor  is not empty%}
     .header-line-bottom h1, .header-line-bottom h2, .header-line-bottom h3, .header-line-bottom h4, .header-line-bottom h5, .header-line-bottom h6 {
-        border-bottom: 1px solid {{ globalOption.templateCustomize.dividerColor }}!important;
+        border-bottom: 1px solid {{ globalOption.templateCustomize.borderColor }}!important;
     }
+    {% endif %}
+    {% if globalOption.templateCustomize.borderColor  is not empty%}
     .tm-title-border {
-        border: 2px solid {{ globalOption.templateCustomize.dividerColor }}!important;
+        border: 2px solid {{ globalOption.templateCustomize.borderColor }}!important;
     }
+    {% endif %}
+    {% if globalOption.templateCustomize.borderColor  is not empty%}
+    .social-payment{
+        border-bottom: 1px solid {{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    {% endif %}
 
 </style>

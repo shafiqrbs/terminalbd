@@ -18,11 +18,11 @@ class FeatureBrandController extends Controller
 
     /**
      * Lists all FeatureBrand entities.
-     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_SETTING")
      */
 
     public function indexAction()
     {
+
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('SettingAppearanceBundle:FeatureBrand')->findBy(array('globalOption'=> $globalOption));
@@ -34,7 +34,7 @@ class FeatureBrandController extends Controller
 
     /**
      * Creates a new FeatureBrand entity.
-     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_SETTING")
+     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_CONFIG")
      */
 
     public function createAction(Request $request)
@@ -84,7 +84,7 @@ class FeatureBrandController extends Controller
 
     /**
      * Displays a form to create a new FeatureBrand entity.
-     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_SETTING")
+     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_CONFIG")
      */
     public function newAction()
     {
@@ -121,7 +121,7 @@ class FeatureBrandController extends Controller
 
     /**
      * Displays a form to edit an existing FeatureBrand entity.
-     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_SETTING")
+     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_CONFIG")
      */
     public function editAction($id)
     {
@@ -166,7 +166,7 @@ class FeatureBrandController extends Controller
     }
     /**
      * Edits an existing FeatureBrand entity.
-     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_SETTING")
+     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_CONFIG")
      */
     public function updateAction(Request $request, $id)
     {
@@ -204,7 +204,7 @@ class FeatureBrandController extends Controller
 
     /**
      * Deletes a FeatureBrand entity.
-     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_SETTING")
+     * @Secure(roles="ROLE_DOMAIN_ECOMMERCE_CONFIG")
      */
     public function deleteAction($id)
     {

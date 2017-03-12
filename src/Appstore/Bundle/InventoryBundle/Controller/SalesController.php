@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use Appstore\Bundle\InventoryBundle\Entity\Item;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
@@ -44,16 +45,13 @@ class SalesController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory,$mode = 'pos', $data);
+
+        $user = $this->getUser();
+
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $user , $mode = 'pos', $data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
-        if (in_array('CustomerSales', $inventory->getDeliveryProcess())) {
-            $twig = 'customerSales';
-        } else {
-            $twig = 'index';
-        }
-        return $this->render('InventoryBundle:Sales:' . $twig . '.html.twig', array(
+        return $this->render('InventoryBundle:Sales:index.html.twig', array(
             'entities' => $pagination,
             'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
@@ -63,6 +61,7 @@ class SalesController extends Controller
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
+
 
     public function newAction()
     {
@@ -355,6 +354,7 @@ class SalesController extends Controller
             } else if ($data['paymentTotal'] > $data['paymentAmount']) {
                 $entity->setPaymentStatus('Due');
             }
+            $entity->setProcess('Paid');
             if (empty($data['sales']['salesBy'])) {
                 $entity->setSalesBy($this->getUser());
             }
@@ -480,6 +480,15 @@ class SalesController extends Controller
         $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemPurchaseDetails($securityContext,$inventory, $item, $customer);
         return new Response($data);
     }
+
+
+    public function branchStockItemDetailsAction(Item $item)
+    {
+        $user = $this->getUser();
+        $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemDeliveryPurchaseDetails($user,$item);
+        return new Response($data);
+    }
+
 
 
     public function getBarcode($invoice)

@@ -66,7 +66,6 @@ class TemplateCustomize
     private $showEmail = true;
 
 
-
     /**
      * @var string
      *
@@ -212,6 +211,14 @@ class TemplateCustomize
      * @ORM\Column(name="dividerColor", type="string", length=50, nullable=true)
      */
     private $dividerColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="borderColor", type="string", length=50, nullable=true)
+     */
+    private $borderColor;
+
 
     /**
      * @var string
@@ -1072,6 +1079,22 @@ class TemplateCustomize
     public function setDividerTitleColor($dividerTitleColor)
     {
         $this->dividerTitleColor = $dividerTitleColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBorderColor()
+    {
+        return $this->borderColor;
+    }
+
+    /**
+     * @param string $borderColor
+     */
+    public function setBorderColor($borderColor)
+    {
+        $this->borderColor = $borderColor;
     }
 
 

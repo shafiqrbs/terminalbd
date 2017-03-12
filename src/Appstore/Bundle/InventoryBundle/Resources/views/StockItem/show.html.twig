@@ -54,33 +54,18 @@
 
                         <div class="portlet-body form">
                             <div class="row-fluid">
-                                <div class="span4">
-                                    <h4>Vendor:</h4>
-                                    <ul class="unstyled">
-                                        <li>{{ entity.vendor.companyName }}</li>
-                                        <li>{{ entity.vendor.name }}</li>
-                                        <li>{{ entity.vendor.mobile }}</li>
-                                        <li>{{ entity.vendor.address }}</li>
-                                        {% if entity.vendor.country %}
-                                            <li>{{ entity.vendor.country.name }}</li>
-                                        {% endif %}
 
-                                    </ul>
-                                </div>
-                                <div class="span4">
+                                <div class="span6">
                                     <h4>Item Overview:</h4>
                                     <ul class="unstyled">
-                                        <li>{{ entity.name }}</li>
-                                        <li>{{ entity.masterItem.name }}</li>
-                                        <li>{{ entity.color.name }}</li>
-                                        <li>{{ entity.size.name }}</li>
-                                        {% if entity.vendor.country %}
-                                            <li>{{ entity.vendor.country.name }}</li>
-                                        {% endif %}
-
+                                        <li><strong>Item Name</strong>: {{ entity.masterItem.name }}</li>
+                                        {% if entity.masterItem.category is defined and entity.masterItem.category is not empty %}<li><strong>Category</strong>: {{ entity.masterItem.category.name }}</li>{% endif %}
+                                        {% if entity.brand is defined and entity.brand is not empty %}<li><strong>Brand</strong>: {{ entity.brand.name }}</li>{% endif %}
+                                        {% if entity.size is defined and entity.size is not empty %}<li><strong>Size/Dimension</strong>: {{ entity.size.name }}</li>{% endif %}
+                                        {% if entity.color is defined and entity.color is not empty %}<li><strong>Color</strong>: {{ entity.color.name }}</li>{% endif %}
                                     </ul>
                                 </div>
-                                <div class="span4">
+                                <div class="span6">
                                     <h4>Stock overview:</h4>
                                     <ul class="unstyled">
                                         <li><strong>Purchase Qnt:</strong>&nbsp;{{ entity.purchaseQuantity }}</li>
@@ -91,13 +76,11 @@
                                     </ul>
                                 </div>
 
-                                <div class="span3 image-preview"></div>
-                            </div>
-                            {% include('flash-message.html.twig')  %}
 
-                            <div class="form-actions portlet box blue">
+                            </div>
+                                <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>Verdor receive item list</div>
+                                    <div class="caption"><i class="icon-reorder"></i>Item Details : </div>
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>

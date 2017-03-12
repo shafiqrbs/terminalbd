@@ -2,6 +2,10 @@ inventory_report:
     resource: "@InventoryBundle/Resources/config/routing/report.yml"
     prefix:   /inventory/report
 
+inventory_branch_report:
+    resource: "@InventoryBundle/Resources/config/routing/branchreport.yml"
+    prefix:   /inventory/branch-report
+
 app_setting_bank:
     resource: "@InventoryBundle/Resources/config/routing/appsetting/bankaccount.yml"
     prefix:   /appsetting/bank-account

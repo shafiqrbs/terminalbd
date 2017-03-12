@@ -1,6 +1,6 @@
 <?php
 
-namespace Setting\Bundle\AppearanceBundle\Entity;
+namespace Setting\Bundle\AppearanceBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -32,10 +32,11 @@ class EcommerceMenuRepository extends EntityRepository
         }
     }
 
-    public function getActiveMenus()
+    public function getActiveMenus($subdomain)
     {
+        $option = $this->_em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
         return $this->findBy(
-            array('status' => true),
+            array('status' => true,'globalOption' => $option),
             array('sorting'=>'asc')
         );
     }

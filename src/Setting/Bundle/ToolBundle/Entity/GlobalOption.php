@@ -16,6 +16,8 @@ use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Setting\Bundle\AppearanceBundle\Entity\Feature;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureBrand;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureCategory;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidget;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel;
@@ -115,6 +117,16 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
     protected $features;
+
+   /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureBrand", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $featureBrands;
+
+   /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureCategory", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     **/
+    protected $featureCategories;
 
    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\MediaBundle\Entity\PageFile", mappedBy="globalOption" , cascade={"persist", "remove"} )
@@ -385,6 +397,14 @@ class GlobalOption
      * @ORM\Column(name="facebookApps", type="boolean" , nullable=true)
      */
     private $facebookApps;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="instagramPageUrl", type="string", length=255 , nullable=true)
+     */
+    private $instagramPageUrl;
+
     /**
      * @var string
      *
@@ -1378,8 +1398,6 @@ class GlobalOption
    return $this->accountingConfig;
   }
 
-
-
     /**
      * @return Branches
      */
@@ -1481,6 +1499,38 @@ class GlobalOption
     public function getCustomers()
     {
         return $this->customers;
+    }
+
+    /**
+     * @return FeatureBrand
+     */
+    public function getFeatureBrands()
+    {
+        return $this->featureBrands;
+    }
+
+    /**
+     * @return FeatureCategory
+     */
+    public function getFeatureCategories()
+    {
+        return $this->featureCategories;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInstagramPageUrl()
+    {
+        return $this->instagramPageUrl;
+    }
+
+    /**
+     * @param string $instagramPageUrl
+     */
+    public function setInstagramPageUrl($instagramPageUrl)
+    {
+        $this->instagramPageUrl = $instagramPageUrl;
     }
 
 

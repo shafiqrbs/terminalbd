@@ -7,6 +7,7 @@ use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
+use Core\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\Container;
 
 use Doctrine\ORM\EntityRepository;
@@ -300,28 +301,42 @@ class ItemRepository extends EntityRepository
 
     }
 
-    public function itemDeliveryPurchaseDetails($inventory,$id)
+    public function itemDeliveryPurchaseDetails(User $user,$item)
     {
 
         $data ='';
-        $result = $this->findOneBy(array('inventoryConfig' => $inventory,'id'=>$id));
-        foreach($result->getPurchaseItems() as $purchaseItem  ) {
 
-            $received = $purchaseItem->getPurchase()->getReceiveDate()->format('d-m-Y');
-            $memo = $purchaseItem->getPurchase()->getMemo();
+        $result = $this->_em->getRepository('InventoryBundle:Delivery')->stockItemDetails($user,$item);
+        $stockSalesItem = $this->_em->getRepository('InventoryBundle:Delivery')->stockSalesItemDetails($user,$item);
+        $stockOngoingItem = $this->_em->getRepository('InventoryBundle:Delivery')->stockOngoingItemDetails($user,$item);
+        $stockReturnItem = $this->_em->getRepository('InventoryBundle:Delivery')->stockReturnItemDetails($user,$item);
+
+        foreach( $result as $row  ) {
+
+
+            $received = $row['purchaseDate']->format('d-m-Y');
+            $memo = $row['memo'];
+
+            $salesQnt = !empty($stockSalesItem[$row['purchaseItemId']]) ? $stockSalesItem[$row['purchaseItemId']] : 0;
+            $ongoingQnt = !empty($stockOngoingItem[$row['purchaseItemId']]) ? $stockOngoingItem[$row['purchaseItemId']] : 0;
+            $returnQnt = !empty($stockReturnItem[$row['purchaseItemId']]) ? $stockReturnItem[$row['purchaseItemId']] : 0;
+
+            $remaingQnt = $row['receiveQuantity'] - $salesQnt - $returnQnt ;
+
             $data .= '<tr>';
-            $data .= '<td class="numeric" >'.$purchaseItem->getBarcode().'</td>';
-            $data .= '<td class="numeric" >'.$result->getName().' / '.$result->getSku().'</td>';
+            $data .= '<td class="numeric" >'.$row['barcode'].'</td>';
+            $data .= '<td class="numeric" >'.$row['name'].' / '.$row['sku'].'</td>';
             $data .= '<td class="numeric" >'.$received.'/'.$memo.'</td>';
-            $data .= '<td class="numeric" >'.$purchaseItem->getQuantity().'</td>';
-            $data .= '<td class="numeric" >'.$purchaseItem->getItemStock().'</td>';
-            $data .= '<td class="numeric" >'.$purchaseItem->getPurchasePrice().'</td>';
-            $data .= '<td class="numeric" >'.$purchaseItem->getSalesPrice().'</td>';
-            $data .= '<td class="numeric" ><input type="number" id="'.$purchaseItem->getBarcode().'" name="quantity" max="'.$purchaseItem->getItemStock().'" min="1" value="'.$purchaseItem->getItemStock().'" >';
-            $data .= '<a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem->getBarcode().'"><i class="icon-plus"></i> Add</a></td>';
+            $data .= '<td class="numeric" >'.$remaingQnt.'</td>';
+            $data .= '<td class="numeric" >'.$ongoingQnt.'</td>';
+            $data .= '<td class="numeric" >'.$remaingQnt - $ongoingQnt.'</td>';
+            $data .= '<td class="numeric" >'.$row['salesPrice'].'</td>';
+            $data .= '<a class="btn mini blue addSales" href="javascript:" id="'.$row['barcode'].'"><i class="icon-plus"></i> Add</a></td>';
             $data .= '</tr>';
         }
+
         return $data;
     }
+
 
 }

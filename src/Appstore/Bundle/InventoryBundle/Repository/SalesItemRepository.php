@@ -86,8 +86,9 @@ class SalesItemRepository extends EntityRepository
             $data[$row['id']] = $row['ongoingQuantity'];
         }
         return $data;
-
     }
+
+
 
     public function checkSalesQuantity(PurchaseItem $purchaseItem)
     {

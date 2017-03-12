@@ -309,16 +309,6 @@ class DeliveryController extends Controller
         exit;
     }
 
-    public function itemPurchaseDetailsAction(Request $request)
-    {
-        $item = $request->request->get('item');
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemDeliveryPurchaseDetails($inventory,$item);
-        return new Response($data);
-    }
-
-
-
     public function pdfIncomeAction()
     {
         $globalOption = $this->getUser()->getGlobalOption();

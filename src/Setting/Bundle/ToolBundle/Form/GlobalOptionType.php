@@ -92,6 +92,7 @@ class GlobalOptionType extends AbstractType
                 ->add('facebookPageUrl','text', array('attr'=>array('class'=>'m-wrap span12')))
                 ->add('customizeDesign')
                 ->add('twitterUrl','text', array('attr'=>array('class'=>'m-wrap span12')))
+                ->add('instagramPageUrl','text', array('attr'=>array('class'=>'m-wrap span12')))
                 ->add('googlePlus','text', array('attr'=>array('class'=>'m-wrap span12')))
                 ->add('webMail','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your web mail url')))
                 ->add('smsIntegration')

@@ -60,26 +60,43 @@ class DeliveryReturnController extends Controller
      */
     public function createAction(Request $request)
     {
+        $branch = $this->getUser()->getBranches();
         $entity = new DeliveryReturn();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        $data = $request->request->all();
+        $barcode = $data['appstore_bundle_inventorybundle_delivery_return']['purchaseItem'];
+        $purchaseItem = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('barcode' => $barcode));
+
+        $deliveryItem = $this->getDoctrine()->getRepository('InventoryBundle:DeliveryItem')->checkItem($branch,$purchaseItem);
 
         if ($form->isValid()) {
+            if(!empty($deliveryItem)) {
 
-            $em = $this->getDoctrine()->getManager();
-            $data = $request->request->all();
-            $barcode = $data['appstore_bundle_inventorybundle_delivery_return']['purchaseItem'];
-            $purchaseItem = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('barcode' => $barcode));
-            $branch = $this->getUser()->getBranches();
-            $entity->setBranch($branch);
-            $entity->setItem($purchaseItem->getItem());
-            $entity->setPurchaseItem($purchaseItem);
-            $em->persist($entity);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'success',"Data has been added successfully"
-            );
-            return $this->redirect($this->generateUrl('inventory_deliveryreturn_new'));
+                $em = $this->getDoctrine()->getManager();
+                $entity->setInventoryConfig($this->getUser()->getGlobalOption()->getInventoryConfig());
+                $entity->setBranch($branch);
+                $entity->setItem($purchaseItem->getItem());
+                $entity->setPurchaseItem($purchaseItem);
+                $em->persist($entity);
+                $em->flush();
+                $this->get('session')->getFlashBag()->add(
+                    'success', "Data has been added successfully"
+                );
+                return $this->redirect($this->generateUrl('inventory_deliveryreturn_new'));
+
+            }else{
+
+                $this->get('session')->getFlashBag()->add(
+                    'notice', "This barcode not found at delivery invoice in branch"
+                );
+                $todayDeliveryReturn = $this->todayDeliveryReturn();
+                return $this->render('InventoryBundle:DeliveryReturn:new.html.twig', array(
+                    'entity' => $entity,
+                    'entities' => $todayDeliveryReturn,
+                    'form'   => $form->createView(),
+                ));
+            }
 
         }
         $todayDeliveryReturn = $this->todayDeliveryReturn();
@@ -290,11 +307,6 @@ class DeliveryReturnController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemDeliveryReturnUpdate($entity);
-            $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->insertDeliveryReturnItem($entity);
-            $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertInventoryDeliveryReturnItem($entity);
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertDeliveryReturnTransaction($entity);
-
             return new Response('success');
         } else {
             return new Response('failed');

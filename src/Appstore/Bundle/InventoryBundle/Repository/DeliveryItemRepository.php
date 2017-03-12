@@ -13,4 +13,18 @@ use Doctrine\ORM\EntityRepository;
 class DeliveryItemRepository extends EntityRepository
 {
 
+    public function checkItem($branch,$purchaseItem)
+    {
+        $qb = $this->createQueryBuilder('di');
+        $qb->join('di.delivery','d');
+        $qb->where('di.purchaseItem = :purchaseItem');
+        $qb->setParameter('purchaseItem', $purchaseItem);
+        $qb->andWhere('d.branch = :branch');
+        $qb->setParameter('branch', $branch);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+    }
+
+
+
 }

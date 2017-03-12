@@ -936,4 +936,22 @@ class TransactionRepository extends EntityRepository
 
     }
 
+    public function approvedDeleteRecord($entity,$process){
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('AccountingBundle:Transaction','e');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $entity->getGlobalOption()->getId());
+        $qb->andWhere("e.process = :process");
+        $qb->setParameter('process', $process);
+        $qb->andWhere("e.accountRefNo = :accountRefNo");
+        $qb->setParameter('accountRefNo', $entity->getAccountRefNo());
+        $result = $qb->getQuery()->getResult();
+        foreach ($result as $row){
+            $this->_em->remove($row);
+            $this->_em->flush();
+        }
+
+    }
+
 }

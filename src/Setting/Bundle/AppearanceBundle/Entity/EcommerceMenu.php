@@ -15,8 +15,9 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  * EcommerceMenu
  *
  * @ORM\Table(name="ecommoerce_menu")
- * @ORM\Entity(repositoryClass="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenuRepository")
+ * @ORM\Entity(repositoryClass="Setting\Bundle\AppearanceBundle\Repository\EcommerceMenuRepository")
  */
+
 class EcommerceMenu
 {
     /**
@@ -83,6 +84,11 @@ class EcommerceMenu
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="ecommerceMenu")
      */
     protected $brands;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", inversedBy="ecommerceMenu")
+     */
+    protected $features;
 
     /**
      * @var smallint
@@ -281,6 +287,22 @@ class EcommerceMenu
     public function setBrands($brands)
     {
         $this->brands = $brands;
+    }
+
+    /**
+     * @return Feature
+     */
+    public function getFeatures()
+    {
+        return $this->features;
+    }
+
+    /**
+     * @param Feature $features
+     */
+    public function setFeatures($features)
+    {
+        $this->features = $features;
     }
 
 

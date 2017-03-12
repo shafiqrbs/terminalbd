@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -91,16 +92,23 @@ class SalesRepository extends EntityRepository
 
     }
 
-    public function salesLists($config,$mode='',$data)
+    public function salesLists( User $user , $mode = '', $data)
     {
 
+        $config = $user->getGlobalOption()->getInventoryConfig();
+        $branch = $user->getProfile()->getBranches();
+
         $qb = $this->createQueryBuilder('s');
-        $qb->leftJoin('s.customer','c');
-        $qb->leftJoin('s.salesBy','u');
+        $qb->leftJoin('s.customer', 'c');
+        $qb->leftJoin('s.salesBy', 'u');
         $qb->where("s.inventoryConfig = :config");
         $qb->setParameter('config', $config);
         $qb->andWhere("s.salesMode = :mode");
         $qb->setParameter('mode', $mode);
+        if ($branch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.updated','DESC');
         $result = $qb->getQuery();

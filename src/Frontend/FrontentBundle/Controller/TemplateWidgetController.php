@@ -47,6 +47,17 @@ class TemplateWidgetController extends Controller
         ));
     }
 
+    public function footerMenuAction(GlobalOption $globalOption, $menuGroup , Request $request)
+    {
+        /* Device Detection code desktop or mobile */
+
+        $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> $menuGroup ),array('sorting'=>'asc'));
+        $footerMenu = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
+        return $this->render('@Frontend/Template/Desktop/Widget/FooterMenu.html.twig', array(
+            'footerMenu'           => $footerMenu,
+        ));
+    }
+
     public function footerAction(GlobalOption $globalOption,Request $request)
     {
 
@@ -124,10 +135,27 @@ class TemplateWidgetController extends Controller
     public function aboutusAction(GlobalOption $globalOption,$wordlimit)
     {
 
-        $about                     = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption,'slug' => 'about-us'));
+        $slug = $globalOption->getSlug().'-about-us';
+        $about                     = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption,'slug' => $slug ));
 
         if(!empty($about)){
             return $this->render('@Frontend/Widget/aboutus.html.twig', array(
+                'about'           => $about->getPage(),
+                'wordlimit'           => $wordlimit,
+            ));
+        }else{
+            return new Response('');
+        }
+
+    }
+
+    public function aboutAction(GlobalOption $globalOption,$wordlimit)
+    {
+
+        $slug = $globalOption->getSlug().'-about-us';
+        $about                     = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption,'slug' => $slug));
+        if(!empty($about)){
+            return $this->render('@Frontend/Widget/about.html.twig', array(
                 'about'           => $about->getPage(),
                 'wordlimit'           => $wordlimit,
             ));
@@ -171,6 +199,8 @@ class TemplateWidgetController extends Controller
             'globalOption'     => $globalOption,
         ));
     }
+
+
 
 
 

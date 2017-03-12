@@ -104,6 +104,7 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Invoice</th>
+                                    <th class="numeric" >Mode</th>
                                     <th class="numeric" >Ref No.</th>
                                     <th class="numeric" >Transaction Method</th>
                                     <th class="numeric" >Sales</th>
@@ -119,6 +120,9 @@
                                         <td class="numeric" >{% if entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if entity.sales is not empty %}{{ entity.sales.invoice }} {% endif %}
+                                        </td>
+                                        <td class="numeric" >
+                                            {% if entity.sales is not empty %}{{ entity.sales.salesMode }} {% endif %}
                                         </td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                          <td class="numeric" >

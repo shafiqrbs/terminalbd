@@ -9,11 +9,14 @@
 namespace Setting\Bundle\AppearanceBundle\Menu;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
+use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
 use Setting\Bundle\AppearanceBundle\Entity\MegaMenu;
 use Setting\Bundle\ToolBundle\Entity\Branding;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Setting\Bundle\AppearanceBundle\Entity\MenuGrouping;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Symfony\Component\HttpFoundation\Request;
 
 
 class Builder extends ContainerAware
@@ -370,6 +373,7 @@ class Builder extends ContainerAware
 
                 if (in_array('Pos', $deliveryProcess)) {
                     if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES_POS')) {
+
                         $menu['Inventory']->addChild('Point of Sales')
                             ->setAttribute('icon', 'icon icon-truck')
                             ->setAttribute('dropdown', true);
@@ -378,8 +382,8 @@ class Builder extends ContainerAware
                         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
                             $menu['Inventory']['Point of Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
                         }
-                        $menu['Inventory']['Point of Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon-upload');
                         $menu['Inventory']['Point of Sales']->addChild('Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
+                        $menu['Inventory']['Point of Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon-upload');
                     }
                 }
 
@@ -469,16 +473,19 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'icon-hdd');
             $menu['Inventory']['Manage Stock']->addChild('Stock Item Details', array('route' => 'inventory_stockitem'))
                 ->setAttribute('icon', 'icon-hdd');
+        }
+        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
             if ($inventory->getBarcodePrint() == 1) {
                 $menu['Inventory']['Manage Stock']->addChild('Barcode Print', array('route' => 'inventory_barcode'))
                     ->setAttribute('icon', 'icon-barcode');
             }
-            $menu['Inventory']['Manage Stock']->addChild('Vendor Item', array('route' => 'inventory_purchasevendoritem'))
-                ->setAttribute('icon', 'icon-info-sign');
             $menu['Inventory']['Manage Stock']->addChild('Damage', array('route' => 'inventory_damage'))
                 ->setAttribute('icon', ' icon-trash');
         }
-
+        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
+            $menu['Inventory']['Manage Stock']->addChild('Vendor Item', array('route' => 'inventory_purchasevendoritem'))
+                ->setAttribute('icon', 'icon-info-sign');
+        }
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH')) {
 
             if ($inventory->getIsBranch() == 1) {
@@ -511,6 +518,17 @@ class Builder extends ContainerAware
             $menu['Inventory']['Reports']->addChild('Sales with price', array('route' => 'inventory_report_sales'))->setAttribute('icon', 'icon-bar-chart');
 
         }
+        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH')) {
+
+            $menu['Inventory']->addChild('Branch Reports')
+                ->setAttribute('icon', 'icon-bar-chart')
+                ->setAttribute('dropdown', true);
+            $menu['Inventory']['Branch Reports']->addChild('Stock Overview', array('route' => 'inventory_branch_report_overview'))->setAttribute('icon', 'icon-bar-chart');
+            $menu['Inventory']['Branch Reports']->addChild('Branch Stock', array('route' => 'inventory_branch_report_stock'))->setAttribute('icon', 'icon-bar-chart');
+            $menu['Inventory']['Branch Reports']->addChild('Item Stock', array('route' => 'inventory_branch_report_item'))->setAttribute('icon', 'icon-bar-chart');
+            $menu['Inventory']['Branch Reports']->addChild('Sales Item', array('route' => 'inventory_branch_report_sales'))->setAttribute('icon', 'icon-bar-chart');
+        }
+
         return $menu;
 
     }
@@ -551,7 +569,7 @@ class Builder extends ContainerAware
             $menu['E-commerce']['Order']->addChild('Pre-order', array('route' => 'customer_preorder'))->setAttribute('icon', 'icon-truck');
 
         }
-        if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_SETTING')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
 
             $menu['E-commerce']->addChild('E-commerce Template', array('route' => ''))
                 ->setAttribute('icon', 'fa fa-bookmark')
@@ -996,6 +1014,147 @@ class Builder extends ContainerAware
         }
 
         return $menu;
+    }
+
+    public function frontendEommerceMenu(FactoryInterface $factory, array $options)
+    {
+
+        $subdomain = $this->container->get('router')->getContext()->getParameter('subdomain');
+        $menu = $factory->createItem('root');
+        $menus = $this->container->get('doctrine')->getRepository('SettingAppearanceBundle:EcommerceMenu')->getActiveMenus($subdomain);
+
+        $categoryRepository = $this->container->get('doctrine')->getRepository('ProductProductBundle:Category');
+        foreach ($menus as $item) {
+
+            /** @var EcommerceMenu $item */
+
+            $menuName = $item->getName();
+            $menu
+                ->addChild($menuName)
+                ->setAttribute('dropdown', true);
+            $this->buildDomainCategoryMenus($menu[$menuName], $categoryRepository->buildCategoryGroup($item->getCategories()));
+            $this->buildDomainBrandMenu($menu[$menuName], $item->getBrands());
+            $this->buildDomainPromotionMenu($menu[$menuName], $item->getPromotions());
+            $this->buildDomainTagMenu($menu[$menuName], $item->getTags());
+            $this->buildDomainDiscountMenu($menu[$menuName], $item->getDiscounts());
+            $this->buildDomainFeatureMenu($menu[$menuName], $item->getFeatures());
+           // $this->buildDomainPromotionMenu($menu[$menuName], $item->getCollections($subdomain));
+            //$this->buildDomainTagMenu($menu[$menuName], $item->getCollections($subdomain));
+           // $this->buildBrandMenu($menu[$menuName], $item->getBrands());
+        }
+
+        return $menu;
+    }
+
+    private function buildDomainCategoryMenus(ItemInterface $menu, $categories)
+    {
+
+        foreach ($categories as $category) {
+
+            /** var Category $category */
+            $categoryName = $category['name'];
+
+            if (!empty($categoryName)) {
+
+                $menu
+                    ->addChild($categoryName, array('route' => 'webservice_product_category',
+                        'routeParameters' => array('id' => $category['id'])
+                    ))
+                    ->setAttribute('icon', 'fa fa-angle-right');
+
+                if (!empty($category['__children'])) {
+                    $menu->setAttribute('dropdown', true);
+                    $menu[$categoryName]->setChildrenAttribute('class', 'dropdown-menu');
+                    $this->buildDomainCategoryMenus($menu[$categoryName], $category['__children']);
+                }
+            }
+        }
+    }
+
+    private function buildDomainBrandMenu(ItemInterface $menu, $brands)
+    {
+        $menu
+            ->addChild('brands')
+            ->setAttribute('brands', true)
+            ->setAttribute('class', 'col-md-12 nav-brands');
+        foreach ($brands as $brand) {
+            /** @var Branding $brand */
+            $menu['brands']->addChild($brand->getName(), array('route' => 'webservice_product_brand',
+                'routeParameters' => array('id' => $brand->getId())
+            ))
+                ->setAttribute('brand', true)
+                ->setAttribute('icon', 'fa fa-angle-right');
+
+        }
+    }
+
+    private function buildDomainPromotionMenu(ItemInterface $menu, $collections)
+    {
+
+        if ($collections->count() > 0) {
+
+            $menu
+                ->addChild('collection');
+
+            foreach ($collections as $collection) {
+                /** @var Branding $brand */
+                $menu['collection']->addChild($collection->getName(), array('route' => 'frontend_collection',
+                    'routeParameters' => array('slug' => $collection->getSlug())
+                ));
+            }
+        }
+
+    }
+
+    private function buildDomainTagMenu(ItemInterface $menu, $collections){
+        if ($collections->count() > 0) {
+
+            $menu
+                ->addChild('collection');
+
+            foreach ($collections as $collection) {
+                /** @var Branding $brand */
+                $menu['collection']->addChild($collection->getName(), array('route' => 'frontend_collection',
+                    'routeParameters' => array('slug' => $collection->getSlug())
+                ));
+            }
+        }
+    }
+
+    private function buildDomainDiscountMenu(ItemInterface $menu, $collections)
+    {
+
+        if ($collections->count() > 0) {
+
+            $menu
+                ->addChild('collection');
+
+            foreach ($collections as $collection) {
+                /** @var Branding $brand */
+                $menu['collection']->addChild($collection->getName(), array('route' => 'frontend_collection',
+                    'routeParameters' => array('slug' => $collection->getId())
+                ));
+            }
+        }
+
+    }
+
+    private function buildDomainFeatureMenu(ItemInterface $menu, $collections)
+    {
+
+        if ($collections->count() > 0) {
+
+            $menu
+                ->addChild('collection');
+
+            foreach ($collections as $collection) {
+                /** @var Branding $brand */
+                $menu['collection']->addChild($collection->getName(), array('route' => 'frontend_collection',
+                    'routeParameters' => array('slug' => $collection->getId())
+                ));
+            }
+        }
+
     }
 
     public function manageApplicationSettingMenu($menu)

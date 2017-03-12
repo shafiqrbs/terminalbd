@@ -90,13 +90,10 @@ class EcommerceMenuType extends AbstractType
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
-                        ->andWhere('e.type IN (:type)')
-                        ->setParameter('type', array_values(array('promotion')))
                         ->andWhere("e.ecommerceConfig = $this->ecommerceConfig")
                         ->orderBy('e.name','ASC');
                 },
             ))
-
             ->add('tags', 'entity', array(
                 'required'    => false,
                 'multiple'      =>true,
@@ -106,12 +103,28 @@ class EcommerceMenuType extends AbstractType
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
-                        ->andWhere('e.type IN (:type)')
-                        ->setParameter('type', array_values(array('tag')))
-                        ->andWhere("e.ecommerceConfig = $this->ecommerceConfig")
+                        /*                        ->andWhere('e.type IN (:type)')
+                                              ->setParameter('type', array_values(array('tag')))*/
+                                               ->andWhere("e.ecommerceConfig = $this->ecommerceConfig")
                         ->orderBy('e.name','ASC');
                 },
-            ));
+            ))
+
+            ->add('features', 'entity', array(
+                'required'    => false,
+                'multiple'      =>true,
+                'class' => 'Setting\Bundle\AppearanceBundle\Entity\Feature',
+                'property' => 'name',
+                'attr'=>array('class'=>'m-wrap span12 multiselect '),
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.globalOption =". $this->globalOption->getId())
+                        ->orderBy('e.name','ASC');
+                },
+            ))
+
+          ;
     }
 
 

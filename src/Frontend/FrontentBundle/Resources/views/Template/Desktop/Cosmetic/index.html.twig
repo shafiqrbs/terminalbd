@@ -10,10 +10,29 @@
     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
         <section class="section-white top-nav-margin" style="background-color: rgb(27, 27, 27)" >
             {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'position':'Home'}) %}
+
         </section>
     {% endif %}
+    <section style="background-color: rgb(22, 22, 22); height: 70px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1" style="margin-top: 10px" >
+                    <div class="col-md-10" >
+                        <div  style="padding: 10px;border: 1px solid #000;color: #fff;font-size: 20px;">
+                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> PLACE YOUR ORDER NOW - RECEIVE YOUR ITEMS WITHIN 72 HOURS
+                        </div>
+                        </div>
+                        <div class="col-md-2"><a style="margin-top: 7px;
+    border: 3px solid #fff;
+    border-radius: 15px;
+    background: #000;" class="btn" href="{{ path('webservice_product') }}">SHOP NOW</a></div></div>
+            </div>
+        </div>
+    </section>
 
-{#    {% if globalOption.ecommerceConfig.templates is not empty %}
+{#
+
+{% if globalOption.ecommerceConfig.templates is not empty %}
         <section class="section-divide" id="dashboard">
             <div class="container">
                 <div class="row">
@@ -21,7 +40,50 @@
                 </div>
             </div>
         </section>
-    {% endif %}#}
+{% endif %}
+
+#}
+        <section>
+
+            {% if globalOption.contactPage.latitude is not empty and globalOption.contactPage.longitude is not empty %}
+                <div id="gmap_canvas" class="gmap">
+                    <div class="Lat">{{ globalOption.contactPage.latitude }}</div>
+                    <div class="Lng">{{ globalOption.contactPage.longitude }}</div>
+                    <div class="imgMap">{{ asset('assets/img/placeholder.png') }}</div>
+                    <address>Address Here</address>
+                    <div class="infoWindow">
+                            <span style="line-height: 25px;">{% if globalOption.contactPage.address1 is not empty %}
+
+                                 <p style="font-size: 18px; line-height: 25px; font-weight: bolder"> <i class="fa fa-home"></i>&nbsp;{{ globalOption.contactPage.address1 }}<br>
+                                    {% if globalOption.contactPage.location is defined and globalOption.contactPage.location %}
+                                        {{ globalOption.contactPage.location.name }}, {{ globalOption.contactPage.location.parent.name }}
+                                    {% endif %}
+                                    {% if globalOption.contactPage.postalCode is defined and globalOption.contactPage.postalCode %}
+                                        -{{ globalOption.contactPage.postalCode }}
+                                    {% endif %}
+                                 </p>
+                                {% endif %}
+                                {% if globalOption.contactPage.startHour %}
+                                    <i class="fa fa-clock-o"></i>&nbsp;<strong>{{ globalOption.contactPage.startHour }} To {{ globalOption.contactPage.endHour }}</strong>
+                                {% endif %}
+                                {% if globalOption.contactPage.weeklyOffDay is not empty %}
+                                    <br><i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;<strong>
+                                    {% for day in globalOption.contactPage.weeklyOffDay %}
+                                        {{ day }}
+                                        {% if not loop.last %},{% endif %}
+                                    {% endfor %}
+                                </strong>
+                                {% endif %}
+                                <br>
+                                <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
+                                <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=23.801422,90.352599">Direction</a>
+
+                            </span>
+                    </div>
+                </div>
+            {% endif %}
+        </section>
+
 <style>
     a{
         color: #002842;
@@ -74,13 +136,16 @@
     {% javascripts
     '@FrontendBundle/Resources/public/template/js/common.js'
     '@FrontendBundle/Resources/public/template/js/revolutionSlider.js'
+    '@FrontendBundle/Resources/public/js/kmaps.min.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+    <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDmior4xLqsriysUeQhtdSawc8yjDyaWaw"></script>
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
     commonJs();
+    $('#gmap_canvas').kmaps();
 {#    Index.initRevolutionSlider();#}
 
 {#
@@ -139,6 +204,26 @@
     var owlFeatureCategory = $("#feature-category");
     owlFeatureCategory.owlCarousel({
     items:4,
+    itemsDesktop:[1199,3],
+    itemsDesktopSmall:[979,2],
+    itemsTablet:[768,1],
+    pagination: false,
+    paginationNumbers: false,
+    autoPlay:false,
+    rewindNav:false
+    });
+    // Custom Navigation Events
+    $(".next").click(function(){
+    owlCategory.trigger('owl.next');
+    })
+
+    $(".prev").click(function(){
+    owlCategory.trigger('owl.prev');
+    })
+
+    var owlFeatureBrand = $("#feature-brand");
+    owlFeatureBrand.owlCarousel({
+    items:6,
     itemsDesktop:[1199,3],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,1],

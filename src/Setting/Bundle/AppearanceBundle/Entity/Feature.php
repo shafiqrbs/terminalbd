@@ -75,6 +75,11 @@ class Feature
      */
     protected $brand;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="features")
+     */
+    protected $ecommerceMenu;
+
 
     /**
      * @var string
@@ -629,6 +634,14 @@ class Feature
     public function setBrand($brand)
     {
         $this->brand = $brand;
+    }
+
+    /**
+     * @return EcommerceMenu
+     */
+    public function getEcommerceMenu()
+    {
+        return $this->ecommerceMenu;
     }
 
 }

@@ -23,6 +23,10 @@ class DeliveryReturn
      */
     private $id;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="deliveryReturns" )
+     **/
+    private  $inventoryConfig;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="deliveryReturns")
@@ -228,6 +232,22 @@ class DeliveryReturn
     public function setBranch($branch)
     {
         $this->branch = $branch;
+    }
+
+    /**
+     * @return InventoryConfig
+     */
+    public function getInventoryConfig()
+    {
+        return $this->inventoryConfig;
+    }
+
+    /**
+     * @param InventoryConfig $inventoryConfig
+     */
+    public function setInventoryConfig($inventoryConfig)
+    {
+        $this->inventoryConfig = $inventoryConfig;
     }
 
 

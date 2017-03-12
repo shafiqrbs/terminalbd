@@ -91,6 +91,7 @@ class GlobalOptionModifyType extends AbstractType
 
                 ->add('email','text', array('attr'=>array('class'=>'m-wrap span12')))
                 ->add('facebookPageUrl','text', array('attr'=>array('class'=>'m-wrap span12')))
+                ->add('instagramPageUrl','text', array('attr'=>array('class'=>'m-wrap span12')))
                 ->add('customizeDesign')
                 ->add('twitterUrl','text', array('attr'=>array('class'=>'m-wrap span12')))
                 ->add('googlePlus','text', array('attr'=>array('class'=>'m-wrap span12')))

@@ -53,56 +53,67 @@ class AccountCash
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", inversedBy="accountCash")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $accountJournal;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchase", inversedBy="accountCash")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $accountPurchase;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn", inversedBy="accountCash")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $accountPurchaseReturn;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", inversedBy="accountCash")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $accountSales;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder", inversedBy="accountCash")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $accountOnlineOrder;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn", inversedBy="accountCash")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $accountSalesReturn;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", inversedBy="accountCash" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $expenditure;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PaymentSalary", inversedBy="accountCash" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $paymentSalary;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\PettyCash", inversedBy="accountCash" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $pettyCash;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="accountCash"  )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $order;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", inversedBy="accountCash"  )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $preOrder;
 

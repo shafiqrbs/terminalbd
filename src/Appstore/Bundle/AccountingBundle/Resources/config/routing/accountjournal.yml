@@ -35,3 +35,9 @@ account_journal_delete:
     defaults: { _controller: "AccountingBundle:AccountJournal:delete" }
     options:
            expose: true
+
+account_journal_approve_delete:
+    path:     /{id}/approve-delete
+    defaults: { _controller: "AccountingBundle:AccountJournal:approveDelete" }
+    options:
+           expose: true
