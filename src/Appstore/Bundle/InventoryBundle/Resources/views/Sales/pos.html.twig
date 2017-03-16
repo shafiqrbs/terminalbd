@@ -481,6 +481,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@InventoryBundle/Resources/public/js/posprint.js'
     '@InventoryBundle/Resources/public/js/editable.js'
     '@InventoryBundle/Resources/public/js/sales.js'
     %}
@@ -516,19 +517,10 @@
 
         var url = $(this).attr("rel");
         $.ajax({
-            crossDomain: true,
             url: url,
             type: 'GET',
             success: function (response) {
-                $.ajax({
-                    crossDomain: true,
-                    url: 'http://127.0.0.1/posprint/test.php',
-                    type: 'POST',
-                    data: {data:response},
-                    success: function (response) {
-                        ('#posForm').submit();
-                    }
-                })
+                jsPostPrint(response);
             }
         })
     });

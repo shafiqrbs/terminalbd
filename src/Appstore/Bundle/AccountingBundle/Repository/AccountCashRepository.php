@@ -14,6 +14,8 @@ use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
+use Core\UserBundle\Entity\User;
+use Core\UserBundle\UserBundle;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -80,12 +82,19 @@ class AccountCashRepository extends EntityRepository
 
     }
 
-    public function findWithSearch($globalOption,$transactionMethods,$data = '')
+    public function findWithSearch(User $user,$transactionMethods,$data = '')
     {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.transactionMethod','t');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+        if (!empty($branch)){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
         $qb->andWhere("t.id IN(:transactionMethod)");
         $qb->setParameter('transactionMethod',array_values($transactionMethods));
         $this->handleSearchBetween($qb,$data);
@@ -94,17 +103,24 @@ class AccountCashRepository extends EntityRepository
         return $result;
 
     }
-    public function accountCashOverview($globalOption,$transactionMethod,$data)
+    public function accountCashOverview(User $user,$transactionMethods,$data)
     {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
 
         $qb = $this->createQueryBuilder('e');
+        $qb->join('e.transactionMethod','t');
         $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
-        $qb->andWhere("e.transactionMethod = :transactionMethod");
-        $qb->setParameter('transactionMethod', $transactionMethod);
+        if (!empty($branch)){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $qb->andWhere("t.id IN(:transactionMethod)");
+        $qb->setParameter('transactionMethod',array_values($transactionMethods));
         $this->handleSearchBetween($qb,$data);
-        $result = $qb->getQuery()->getSingleResult();
+        $result = $qb->getQuery()->getOneOrNullResult();
         $data =  array('debit'=> $result['debit'],'credit'=> $result['credit']);
         return $data;
 
@@ -157,8 +173,6 @@ class AccountCashRepository extends EntityRepository
         }
 
     }
-
-
 
     public function lastInsertCash($entity,$processHead)
     {
@@ -267,8 +281,12 @@ class AccountCashRepository extends EntityRepository
             /* Cash - Cash Debit */
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
         }
+
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setAccountSales($entity);
+        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
+            $cash->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        }
         $cash->setTransactionMethod($entity->getTransactionMethod());
         $cash->setProcessHead('Sales');
         $cash->setAccountRefNo($entity->getAccountRefNo());
@@ -359,14 +377,17 @@ class AccountCashRepository extends EntityRepository
         $balance = $this->lastInsertCash($entity,'Expenditure');
         $em = $this->_em;
         $cash = new AccountCash();
-        if($entity->getTransactionMethod() == 2){
+        if($entity->getTransactionMethod()->getId() == 2){
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
-        }elseif($entity->getTransactionMethod() == 3){
+        }elseif($entity->getTransactionMethod()->getId() == 3){
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
         }else{
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
         }
         $cash->setGlobalOption($entity->getGlobalOption());
+        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
+            $cash->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        }
         $cash->setExpenditure($entity);
         $cash->setTransactionMethod($entity->getTransactionMethod());
         $cash->setAccountBank($entity->getAccountBank());

@@ -4,6 +4,7 @@ namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * SalesItemRepository
@@ -274,21 +275,47 @@ class SalesItemRepository extends EntityRepository
             }
     }
 
+    public function reportSalesPrice(GlobalOption $globalOption,$data)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:Sales','sales');
+        $qb->select('SUM(sales.total) AS salesAmount');
+        $qb->where("sales.globalOption = :globalOption");
+        $qb->where("sales.inventoryConfig = :inventoryConfig");
+        $qb->setParameter('inventoryConfig', $globalOption->getInventoryConfig());
+        $qb->andWhere("sales.paymentStatus = :paymentStatus");
+        $qb->setParameter('paymentStatus', 'Paid');
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getSingleResult();
+        return $data = $result['salesAmount'] ;
+    }
 
-    public function reportPurchasePrice($globalOption,$data)
+
+    public function reportPurchasePrice(GlobalOption $globalOption,$data)
     {
         $qb = $this->createQueryBuilder('si');
         $qb->join('si.sales','sales');
         $qb->select('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
         $qb->where("sales.inventoryConfig = :inventoryConfig");
         $qb->setParameter('inventoryConfig', $globalOption->getInventoryConfig());
-        $qb->andWhere("sales.paymentStatus != :paymentStatus");
-        $qb->setParameter('paymentStatus', 'Pending');
+        $qb->andWhere("sales.paymentStatus = :paymentStatus");
+        $qb->setParameter('paymentStatus', 'Paid');
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getSingleResult();
         return $data = $result['totalPurchaseAmount'] ;
     }
 
-
-
+    public function reportProductVat(GlobalOption $globalOption,$data)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:Sales','sales');
+        $qb->select('SUM(sales.vat) AS salesVat');
+        $qb->where("sales.inventoryConfig = :inventoryConfig");
+        $qb->setParameter('inventoryConfig', $globalOption->getInventoryConfig());
+        $qb->andWhere("sales.paymentStatus = :paymentStatus");
+        $qb->setParameter('paymentStatus', 'Paid');
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $data = $result['salesVat'] ;
+    }
 }

@@ -54,10 +54,12 @@ class AccountJournalRepository extends EntityRepository
 
     public function reportOperatingRevenue($globalOption,$data){
 
+        $parent = array(23,37);
         $qb = $this->createQueryBuilder('ex');
         $qb->join('ex.accountHeadCredit','accountHead');
         $qb->select('sum(ex.amount) as amount, accountHead.name as name');
-        $qb->where('accountHead.parent = 20');
+        $qb->where("ex.parent IN (:parent)");
+        $qb->setParameter('parent', $parent);
         $qb->andWhere('ex.globalOption = :globalOption');
         $qb->setParameter('globalOption', $globalOption);
         $this->handleSearchBetween($qb,$data);

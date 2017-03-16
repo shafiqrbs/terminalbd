@@ -89,16 +89,27 @@ class ExpenseCategoryRepository extends MaterializedPathRepository
     public function getFlatExpenseCategoryTree($globalOption)
     {
 
-        $query = $this->createQueryBuilder("node")
+        $expenditures = $this->createQueryBuilder("node")
             ->where('node.globalOption = :option')
             ->setParameter('option', $globalOption)
-            ->andWhere('node.status = :status')
-            ->setParameter('status', 1)
-            ->getQuery();
+            ->orderBy('node.level','ASC')
+            ->getQuery()->getResult();
 
-        $this->buildFlatExpenseCategoryTree($query->getArrayResult(), $array);
+        $arr = array();
+        $array = array();
+        foreach($expenditures as $category){
 
-        return $array == null ? array() : $array;
+            $arr[] = array(
+                'id' => $category->getId(),
+                'name' => $category->getName(),
+                'level' => $category->getLevel(),
+                '__children' => $this->childrenHierarchy($category)
+            );
+        }
+
+        $this->buildFlatExpenseCategoryTree($arr , $array );
+        return $array == null ? array() : $array ;
+
     }
 
     private function buildFlatTree($categories, &$array = array())
@@ -130,17 +141,20 @@ class ExpenseCategoryRepository extends MaterializedPathRepository
     }
 
     private function formatLabel($level, $value) {
+
         $level = $level - 1;
         return str_repeat("-", $level * 3) . str_repeat(">", $level) . "$value";
+
     }
 
     public function getCategoryOptions($globalOption){
 
         $ret = array();
         $em = $this->_em;
-        $categories = $em->getRepository('AccountingBundle:ExpenseCategory')->findBy(array('globalOption'=>$globalOption,'status'=>1),array('name'=>'asc'));
+        $categories = $em->getRepository('AccountingBundle:ExpenseCategory')->findBy(array('globalOption' => $globalOption ,'status' => 1),array('name'=>'asc'));
 
         foreach( $categories as $cat ){
+
             if( !$cat->getParent() ){
                 continue;
             }
@@ -151,9 +165,10 @@ class ExpenseCategoryRepository extends MaterializedPathRepository
             $ret[ $cat->getParent()->getName() ][ $cat->getId() ] = $cat;
         }
 
+        return $ret;
+
         //\Doctrine\Common\Util\Debug::dump($ret);
         //exit;
-        return $ret;
     }
 
 

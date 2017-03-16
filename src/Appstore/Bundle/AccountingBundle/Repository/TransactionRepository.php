@@ -64,6 +64,29 @@ class TransactionRepository extends EntityRepository
 
     }
 
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
+    {
+
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+
+        if (!empty($data['startDate']) ) {
+
+            $qb->andWhere("ex.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate.' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+
+            $qb->andWhere("ex.updated <= :endDate");
+            $qb->setParameter('endDate', $endDate.' 23:59:59');
+        }
+    }
+
     public function transactionOverview($globalOption,$accountHead = 0)
     {
         $qb = $this->_em->createQueryBuilder();
@@ -143,6 +166,21 @@ class TransactionRepository extends EntityRepository
 
     }
 
+    public function reportTransactionIncome($globalOption,$accountHeads,$data){
+
+        $qb = $this->createQueryBuilder('ex');
+        $qb->join('ex.accountHead','accountHead');
+        $qb->select('sum(ex.amount) as amount, sum(ex.debit) as debit , sum(ex.credit) as credit, accountHead.name as name, accountHead.toIncrease as toIncrease');
+        $qb->where("accountHead.parent IN (:parent)");
+        $qb->setParameter('parent', $accountHeads);
+        $qb->andWhere('ex.globalOption = :globalOption');
+        $qb->setParameter('globalOption', $globalOption);
+        $this->handleSearchBetween($qb,$data);
+        $qb->groupBy('ex.accountHead');
+        return  $qb->getQuery()->getArrayResult();
+
+    }
+
     public function insertAccountJournalTransaction(AccountJournal $journal)
     {
 
@@ -156,6 +194,9 @@ class TransactionRepository extends EntityRepository
 
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
+        if(!empty($entity->getCreatededBy()->getProfile()->getBranches())){
+            $transaction->setBranches($entity->getCreatededBy()->getProfile()->getBranches());
+        }
         $transaction->setProcessHead('Journal');
         $transaction->setProcess($entity->getAccountHeadDebit()->getParent()->getName());
         $transaction->setAccountRefNo($entity->getAccountRefNo());
@@ -175,6 +216,9 @@ class TransactionRepository extends EntityRepository
 
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
+        if(!empty($entity->getCreatededBy()->getProfile()->getBranches())){
+            $transaction->setBranches($entity->getCreatededBy()->getProfile()->getBranches());
+        }
         $transaction->setProcessHead('Journal');
         $transaction->setProcess($entity->getAccountHeadCredit()->getParent()->getName());
         $transaction->setAccountRefNo($entity->getAccountRefNo());
@@ -188,7 +232,6 @@ class TransactionRepository extends EntityRepository
         return $transaction;
 
     }
-
 
     public function purchaseTransaction(Purchase $purchase,$accountPurchase,$source='')
     {
@@ -312,7 +355,6 @@ class TransactionRepository extends EntityRepository
     public function insertPurchaseLiabilityDebitTransaction($entity)
     {
 
-
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
         $transaction->setAccountRefNo($entity->getAccountRefNo());
@@ -328,13 +370,11 @@ class TransactionRepository extends EntityRepository
 
     }
 
-
     public function purchaseReturnTransaction($entity,$accountPurchaseReturn)
     {
 
         $this->insertPurchaseReturn($entity,$accountPurchaseReturn);
         $this->insertPurchaseReturnAccountReceivable($entity,$accountPurchaseReturn);
-
 
     }
 
@@ -381,8 +421,6 @@ class TransactionRepository extends EntityRepository
         $this->insertSalesVatAccountPayable($entity,$accountSales);
     }
 
-
-
     private function insertSalesItem($entity,AccountSales $accountSales)
     {
 
@@ -390,6 +428,9 @@ class TransactionRepository extends EntityRepository
         $amount =  $entity->getTotal();
         $transaction = new Transaction();
         $transaction->setGlobalOption($accountSales->getGlobalOption());
+        if(!empty($accountSales->getApprovedBy()->getProfile()->getBranches())){
+            $transaction->setBranches($accountSales->getApprovedBy()->getProfile()->getBranches());
+        }
         $transaction->setAccountRefNo($accountSales->getAccountRefNo());
         $transaction->setProcessHead('Sales');
         $transaction->setProcess('Goods');
@@ -408,6 +449,9 @@ class TransactionRepository extends EntityRepository
         if($amount > 0) {
             $transaction = new Transaction();
             $transaction->setGlobalOption($accountSales->getGlobalOption());
+            if(!empty($accountSales->getApprovedBy()->getProfile()->getBranches())){
+                $transaction->setBranches($accountSales->getApprovedBy()->getProfile()->getBranches());
+            }
             $transaction->setAccountRefNo($accountSales->getAccountRefNo());
             $transaction->setProcessHead('Sales');
             $transaction->setUpdated($entity->getUpdated());
@@ -442,6 +486,9 @@ class TransactionRepository extends EntityRepository
 
             $transaction = new Transaction();
             $transaction->setGlobalOption($accountSales->getGlobalOption());
+            if(!empty($accountSales->getApprovedBy()->getProfile()->getBranches())){
+                $transaction->setBranches($accountSales->getApprovedBy()->getProfile()->getBranches());
+            }
             $transaction->setAccountRefNo($accountSales->getAccountRefNo());
             $transaction->setProcessHead('Sales');
             $transaction->setProcess('AccountReceivable');
@@ -464,6 +511,9 @@ class TransactionRepository extends EntityRepository
 
              $transaction = new Transaction();
              $transaction->setGlobalOption($accountSales->getGlobalOption());
+             if(!empty($accountSales->getApprovedBy()->getProfile()->getBranches())){
+                 $transaction->setBranches($accountSales->getApprovedBy()->getProfile()->getBranches());
+             }
              $transaction->setAccountRefNo($accountSales->getAccountRefNo());
              $transaction->setProcessHead('Sales');
              $transaction->setProcess('AccountPayable');
@@ -482,8 +532,7 @@ class TransactionRepository extends EntityRepository
     {
         $this->insertSalesReturnDebit($entity,$accountSalesReturn);
         $this->insertSalesReturnCredit($entity,$accountSalesReturn);
-      }
-
+    }
 
     private function insertSalesReturnDebit($entity,$accountSalesReturn)
     {
@@ -657,6 +706,9 @@ class TransactionRepository extends EntityRepository
 
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
+        if(!empty($entity->getCreatededBy()->getProfile()->getBranches())){
+            $transaction->setBranches($entity->getCreatededBy()->getProfile()->getBranches());
+        }
         $transaction->setAccountRefNo($entity->getAccountRefNo());
         $transaction->setProcessHead('Sales');
         $transaction->setUpdated($entity->getUpdated());
@@ -670,7 +722,7 @@ class TransactionRepository extends EntityRepository
             /* Current Asset Bank Cash Debit */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
             $transaction->setProcess('Current Assets');
-        }if($entity->getTransactionMethod()->getId() == 3 ){
+        }elseif($entity->getTransactionMethod()->getId() == 3 ){
             /* Current Asset Mobile Account Debit */
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(43));
             $transaction->setProcess('Current Assets');
@@ -686,6 +738,9 @@ class TransactionRepository extends EntityRepository
     {
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
+        if(!empty($entity->getCreatededBy()->getProfile()->getBranches())){
+            $transaction->setBranches($entity->getCreatededBy()->getProfile()->getBranches());
+        }
         $transaction->setProcess('Current Asset');
         $transaction->setAccountRefNo($entity->getAccountRefNo());
         $transaction->setUpdated($entity->getUpdated());
@@ -702,7 +757,6 @@ class TransactionRepository extends EntityRepository
 
         $this->insertPettyCashDebitTransaction($entity);
         $this->insertPettyCashCreditTransaction($entity);
-
 
     }
 
@@ -776,19 +830,19 @@ class TransactionRepository extends EntityRepository
         $this->_em->flush();
     }
 
-
     public function insertExpenditureTransaction($entity)
     {
         $this->insertExpenditureDebitTransaction($entity);
         $this->insertExpenditureCreditTransaction($entity);
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertExpenditureCash($entity);
-
     }
 
-    public function insertExpenditureDebitTransaction($entity)
+    public function insertExpenditureDebitTransaction(Expenditure $entity)
     {
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
+        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
+            $transaction->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        }
         $transaction->setAccountRefNo($entity->getAccountRefNo());
         $transaction->setProcessHead('Expenditure');
         $transaction->setProcess('Operating Expense');
@@ -805,6 +859,9 @@ class TransactionRepository extends EntityRepository
     {
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
+        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
+            $transaction->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        }
         $transaction->setAccountRefNo($entity->getAccountRefNo());
         $transaction->setProcessHead('Expenditure');
 
@@ -815,7 +872,7 @@ class TransactionRepository extends EntityRepository
         }elseif($entity->getTransactionMethod()->getId() == 2 ){
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
             $transaction->setProcess('Current Assets');
-        }if($entity->getTransactionMethod()->getId() == 3 ){
+        }elseif($entity->getTransactionMethod()->getId() == 3 ){
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
             $transaction->setProcess('Current Assets');
         }
@@ -826,7 +883,6 @@ class TransactionRepository extends EntityRepository
         $this->_em->flush();
 
     }
-
 
     public function insertSalaryTransaction(PaymentSalary $paymentSalary)
     {
@@ -913,8 +969,6 @@ class TransactionRepository extends EntityRepository
         $this->_em->persist($transaction);
         $this->_em->flush();
     }
-
-
 
     private  function getNetBalance($inventory)
     {

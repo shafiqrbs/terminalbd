@@ -62,6 +62,9 @@ class AccountJournalController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
+            if(!empty($this->getUser()->getProfile()->getBranches())){
+                $entity->setBranches($this->getUser()->getProfile()->getBranches());
+            }
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(

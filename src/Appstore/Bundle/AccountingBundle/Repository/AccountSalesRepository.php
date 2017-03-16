@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -16,12 +17,19 @@ class AccountSalesRepository extends EntityRepository
 {
 
 
-    public function salesOverview($globalOption,$data)
+    public function salesOverview(User $user,$data)
     {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS receiveAmount, SUM(e.amount) AS dueAmount, SUM(e.amount) AS returnAmount ');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+        if (!empty($branch)){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
         $qb->andWhere("e.process = 'approved'");
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getSingleResult();
@@ -30,11 +38,18 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
-    public function findWithSearch($globalOption,$data = '')
+    public function findWithSearch(User $user,$data = '')
     {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+        if (!empty($branch)){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
         $result = $qb->getQuery();
@@ -96,7 +111,7 @@ class AccountSalesRepository extends EntityRepository
     {
         $em = $this->_em;
         $entity = $em->getRepository('AccountingBundle:AccountSales')->findOneBy(
-            array('globalOption'=>$globalOption,'customer'=> $entity->getCustomer(),'process'=>'approved'),
+            array('globalOption' => $globalOption,'customer' => $entity->getCustomer(),'process'=>'approved'),
             array('id' => 'DESC')
         );
 
@@ -129,6 +144,9 @@ class AccountSalesRepository extends EntityRepository
         $accountSales->setBalance($lastBalance);
 
         $accountSales->setApprovedBy($entity->getCreatedBy());
+        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
+            $entity->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        }
         $accountSales->setProcessHead('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);
@@ -149,18 +167,12 @@ class AccountSalesRepository extends EntityRepository
             $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
         }
 
-
-        $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.totalAmount) AS salesAmount');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption);
-        $this->handleSearchBetween($qb,$data);
-        $result = $qb->getQuery()->getSingleResult();
+        $salesPrice = $this->_em->getRepository('InventoryBundle:SalesItem')->reportSalesPrice($globalOption,$data);
         $purchasePrice = $this->_em->getRepository('InventoryBundle:SalesItem')->reportPurchasePrice($globalOption,$data);
-        $Expenditures = $this->_em->getRepository('AccountingBundle:Expenditure')->reportExpenditure($globalOption,$data);
-        $revenues = $this->_em->getRepository('AccountingBundle:AccountJournal')->reportOperatingRevenue($globalOption,$data);
-
-        $data =  array('salesAmount' => $result['salesAmount'],'purchasePrice' => $purchasePrice,'revenues' => $revenues ,'expenditures' => $Expenditures);
+        $salesVat = $this->_em->getRepository('InventoryBundle:SalesItem')->reportProductVat($globalOption,$data);
+        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
+        $revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
+        $data =  array('salesAmount' => $salesPrice ,'purchasePrice' => $purchasePrice,'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesVat);
         return $data;
 
     }

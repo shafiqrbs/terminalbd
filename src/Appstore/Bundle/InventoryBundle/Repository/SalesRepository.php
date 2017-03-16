@@ -173,8 +173,12 @@ class SalesRepository extends EntityRepository
 
     }
 
-    public function todaySalesOverview($inventory , $mode='')
+    public function todaySalesOverview(User $user , $mode='')
     {
+
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $branch = $user->getProfile()->getBranches();
+
         $qb = $this->_em->createQueryBuilder();
         $datetime = new \DateTime("now");
         $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
@@ -191,12 +195,20 @@ class SalesRepository extends EntityRepository
             ->setParameter('pStatus', array('Paid','Due'))
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
+        if ($branch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
         $qb->orderBy("s.updated", 'DESC');
         return $qb->getQuery()->getResult();
     }
 
-    public function todaySales($inventory , $mode = '')
+    public function todaySales(User $user , $mode = '')
     {
+
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $branch = $user->getProfile()->getBranches();
+
         $qb = $this->_em->createQueryBuilder();
         $datetime = new \DateTime("now");
         $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
@@ -212,6 +224,10 @@ class SalesRepository extends EntityRepository
             ->setParameter('mode', $mode)
             ->setParameter('today_startdatetime', $today_startdatetime)
             ->setParameter('today_enddatetime', $today_enddatetime);
+        if ($branch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
         $qb->orderBy("s.invoice", 'DESC');
 
         return $qb->getQuery()->getResult();
@@ -241,20 +257,12 @@ class SalesRepository extends EntityRepository
         }
         return $result =   $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);;
 
-
     }
-
-
-
-
 
     public function getCulculationVat(Sales $sales,$totalAmount)
     {
         $vat = ( ($totalAmount * (int)$sales->getInventoryConfig()->getVatPercentage())/100 );
         return round($vat);
-
     }
-
-
 
 }

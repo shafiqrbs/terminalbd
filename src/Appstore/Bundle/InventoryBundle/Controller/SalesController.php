@@ -259,9 +259,8 @@ class SalesController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory,$mode = 'pos');
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory,$mode = 'pos');
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'pos');
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'pos');
 
         if ($entity->getProcess() != "In-progress") {
             return $this->redirect($this->generateUrl('inventory_sales_show', array('id' => $entity->getId())));
@@ -650,16 +649,6 @@ class SalesController extends Controller
 
         $address = $address1.$thana.$district;
 
-        /** ===================Invoice Information=================================== */
-
-        $invoice = $entity->getInvoice();
-        $subTotal = $entity->getSubTotal();
-        $total = $entity->getTotal();
-        $discount = $entity->getDiscount();
-        $vat = $entity->getVat();
-        $due = $entity->getDue();
-        $transaction = $entity->getTransactionMethod()->getName();
-
 
         /** ===================Customer Information=================================== */
 
@@ -718,86 +707,7 @@ class SalesController extends Controller
 
         return new JsonResponse($data);
         exit;
-        /*
-        $connector  = new NetworkPrintConnector("192.168.1.250",9100);
-        $printer    = new Printer($connector);
-        try {
-            $printer -> text("Hello World!\n");
-            $printer -> text("Hello World!\n");
-            $printer -> text("Hello World!\n");
-            $printer -> text("Hello World!\n");
-            $printer -> text("Hello World!\n");
-            $printer -> cut();
-            $printer -> close();
 
-        } finally {
-            $printer -> close();
-        }
-        exit;*/
     }
 
-    public function printWithOutEscPos(Sales $entity)
-    {
-
-        $option = $entity->getInventoryConfig()->getGlobalOption();
-
-        /** ===================Company Information=================================== */
-
-        $companyName    = $option->getName();
-        $mobile         = $option->getMobile();
-        $website        = $option->getDomain();
-        $address        = $option->getContactPage()->getAddress1();
-        $thana          = !empty($option->getContactPage()->getLocation()) ? $option->getContactPage()->getLocation()->getName():'';
-        $district       = !empty($option->getContactPage()->getLocation()) ? $option->getContactPage()->getLocation()->getParent()->getName():'';
-
-
-        /** ===================Invoice Information=================================== */
-
-        $invoice = $entity->getInvoice();
-        $subTotal = $entity->getSubTotal();
-        $total = $entity->getTotal();
-        $discount = $entity->getDiscount();
-        $vat = $entity->getVat();
-        $due = $entity->getDue();
-        $transaction = $entity->getTransactionMethod()->getName();
-
-        /** ===================Invoice Sales Item Information========================= */
-
-        $i = 1;
-        $serialNo = array();
-        $name = array();
-        $quantity = array();
-        $subAmount = array();
-        foreach ( $entity->getSalesItems() as $row){
-            $serialNo[]     = $i;
-            $name[]         = $row->getItem()->getName();
-            $quantity[]     = $row->getQuantity();
-            $subAmount[]     = $row->getSubTotal();
-            $i++;
-        }
-
-        $data =array(
-            'companyName'   => $companyName,
-            'mobile'        => $mobile,
-            'website'       => $website,
-            'address'       => $address,
-            'thana'         => $thana,
-            'district'      => $district,
-            'invoice'       => $invoice ,
-            'subTotal'      => $subTotal,
-            'total'         => $total,
-            'discount'      => $discount,
-            'vat'           => $vat,
-            'due'           => $due,
-            'transaction'   => $transaction,
-            'serialNo'      => $serialNo,
-            'name'          =>$name,
-            'quantity'      =>$quantity,
-            'subAmount'     =>$subAmount
-
-        );
-
-        return new JsonResponse('ok');
-        exit;
-    }
 }

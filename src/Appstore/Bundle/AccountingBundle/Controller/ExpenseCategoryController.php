@@ -82,7 +82,8 @@ class ExpenseCategoryController extends Controller
     {
 
         $em = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory');
-        $form = $this->createForm(new ExpenseCategoryType($em,$globalOption), $entity, array(
+        $emHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead');
+        $form = $this->createForm(new ExpenseCategoryType($em,$emHead,$globalOption), $entity, array(
             'action' => $this->generateUrl('expensecategory_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -163,8 +164,8 @@ class ExpenseCategoryController extends Controller
     private function createEditForm(ExpenseCategory $entity,$globalOption)
     {
         $em = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory');
-
-        $form = $this->createForm(new ExpenseCategoryType($em,$globalOption), $entity, array(
+        $emHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead');
+        $form = $this->createForm(new ExpenseCategoryType($em,$emHead,$globalOption), $entity, array(
             'action' => $this->generateUrl('expensecategory_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -200,7 +201,7 @@ class ExpenseCategoryController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('expensecategory_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('expensecategory'));
         }
 
         return $this->render('AccountingBundle:ExpenseCategory:edit.html.twig', array(

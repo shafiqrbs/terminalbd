@@ -96,15 +96,18 @@
                                 </tr>
                                 <tr><th>Sales</th><td></td><th class="numeric" >{{ overview.salesAmount|number_format }}</th></tr>
                                 <tr><th>Goods Purchase</th><th class="numeric" >({{ overview.purchasePrice|number_format }})</th><td></td></tr>
-                                <tr><th colspan="2" ><span class="pull-right">Gross Profit</span></th><th class="numeric" >{{ (overview.salesAmount -overview.purchasePrice)|number_format }}</th></tr>
-                                {% set totalRevenue = 0 %}
+                                <tr><th>Sales Vat</th><th class="numeric" >({{ overview.salesVat|number_format }})</th><td></td></tr>
+                                <tr><th colspan="2" ><span class="pull-right">Gross Profit</span></th><th class="numeric" >{{ (overview.salesAmount - overview.purchasePrice - overview.salesVat)|number_format }}</th></tr>
+                                {% set totalCredit = 0 %}
+                                {% set totalDebit = 0 %}
                                 {% if overview.revenues is not empty %}
                                 <tr><th colspan="3">Operating Revenue</th></tr>
                                 {% for revenue in overview.revenues %}
-                                    {% set totalRevenue = totalRevenue + revenue.amount  %}
-                                    <tr><td>{{ revenue.name }}</td><td></td><td class="numeric" >{{ revenue.amount|number_format }}</td></tr>
+                                    {% set totalCredit = totalCredit + revenue.credit  %}
+                                    {% set totalDebit = totalDebit + revenue.debit  %}
+                                    <tr><td>{{ revenue.name }}</td><td class="numeric" >{% if revenue.toIncrease == 'Debit' %}{{ revenue.debit|number_format }}{% endif %}</td><td class="numeric" >{% if revenue.toIncrease == 'Credit' %}{{ revenue.credit|number_format }}{% endif %}</td></tr>
                                 {% endfor %}
-                                <tr><th>Grand Total Revenue</th><td></td><th class="numeric" >{{ totalRevenue|number_format }}</th></tr>
+                                <tr><th>Grand Total Revenue</th><th class="numeric" >{{ totalDebit|number_format }}</th><th class="numeric" >{{ totalCredit|number_format }}</th></tr>
                                 {% endif %}
                                 <tr><th colspan="3">Operating Expense</th></tr>
                                 {% set totalExpense = 0 %}
@@ -113,7 +116,7 @@
                                     <tr><td>{{ expense.name }}</td><td class="numeric" >{{ expense.amount|number_format }}</td><td></td></tr>
                                 {% endfor %}
                                 <tr><th>Grand Total Expense</th><th class="numeric" >({{ totalExpense|number_format }})</th><td></td></tr>
-                                {% set grandTotal = (overview.salesAmount + totalRevenue) - (overview.purchasePrice + totalExpense ) %}
+                                {% set grandTotal = (overview.salesAmount + totalCredit ) - (overview.purchasePrice + totalExpense + overview.salesVat + totalDebit ) %}
                                 <tr><th colspan="2"><span class="pull-right">Grand Profit/Loss</span></th><th class="numeric" >{{ grandTotal|number_format }}</th></tr>
                                 </tbody>
                             </table>

@@ -24,4 +24,35 @@ class AccountHeadRepository extends EntityRepository
         return $query->getQuery()->getResult();
 
     }
+
+    public function getAccountHeadTrees(){
+
+        $ret = array();
+        $parent = array(23,37);
+        $query = $this->createQueryBuilder('e');
+        $query->select('e');
+        $query->where("e.parent IN (:parent)");
+        $query->setParameter('parent', $parent);
+        $query->orderBy('e.name', 'ASC');
+        $accountHeads =  $query->getQuery()->getResult();
+
+        foreach( $accountHeads as $cat ){
+
+            if( !$cat->getParent() ){
+                continue;
+            }
+            $key = $cat->getParent()->getName();
+            if(!array_key_exists($key, $ret) ){
+                $ret[ $cat->getParent()->getName() ] = array();
+            }
+            $ret[ $cat->getParent()->getName() ][ $cat->getId() ] = $cat;
+        }
+
+        return $ret;
+
+        //\Doctrine\Common\Util\Debug::dump($ret);
+        //exit;
+
+    }
+
 }

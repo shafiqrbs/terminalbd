@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Form;
 
+use Appstore\Bundle\AccountingBundle\Repository\AccountHeadRepository;
 use Appstore\Bundle\AccountingBundle\Repository\ExpenseCategoryRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
@@ -15,14 +16,18 @@ class ExpenseCategoryType extends AbstractType
     /** @var  ExpenseCategoryRepository */
     private $em;
 
+    /** @var  AccountHeadRepository */
+    private $accountHead;
+
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(ExpenseCategoryRepository $em, GlobalOption $globalOption)
+    function __construct(ExpenseCategoryRepository $em , AccountHeadRepository $accountHead, GlobalOption $globalOption)
     {
         $this->em = $em;
         $this->globalOption = $globalOption;
+        $this->accountHead = $accountHead;
     }
 
 
@@ -40,6 +45,18 @@ class ExpenseCategoryType extends AbstractType
 
                 )
             ))
+            ->add('accountHead', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
+                'empty_value' => '---Choose a account head---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required'))
+                ),
+                'choices'=> $this->ExpenseAccountChoiceList()
+            ))
+
             ->add('parent', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select parent expense category---',
@@ -77,7 +94,16 @@ class ExpenseCategoryType extends AbstractType
      */
     protected function ExpenseCategoryChoiceList()
     {
-        return $ExpenseCategoryTree = $this->em->getFlatExpenseCategoryTree($this->globalOption);
+        return $this->em->getFlatExpenseCategoryTree($this->globalOption);
+
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function ExpenseAccountChoiceList()
+    {
+        return $this->accountHead->getAccountHeadTrees();
 
     }
 

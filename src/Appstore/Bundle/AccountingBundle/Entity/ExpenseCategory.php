@@ -32,6 +32,12 @@ class ExpenseCategory
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="expenseCategory" )
+     **/
+    private  $accountHead;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="expenseCategory" )
      **/
     private  $expendituries;
@@ -401,6 +407,22 @@ class ExpenseCategory
     public function getExpendituries()
     {
         return $this->expendituries;
+    }
+
+    /**
+     * @return AccountHead
+     */
+    public function getAccountHead()
+    {
+        return $this->accountHead;
+    }
+
+    /**
+     * @param AccountHead $accountHead
+     */
+    public function setAccountHead($accountHead)
+    {
+        $this->accountHead = $accountHead;
     }
 }
 

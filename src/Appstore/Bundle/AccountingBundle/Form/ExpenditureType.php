@@ -81,22 +81,6 @@ class ExpenditureType extends AbstractType
                 },
             ))
 
-            ->add('accountHead', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountHead',
-                'empty_value' => '---Choose a account head---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.parent IN(:parents)")
-                        ->setParameter('parents', array(23,37))
-                        ->andWhere("e.status = 1");
-                },
-            ))
             ->add('expenseCategory', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select expense category---',
@@ -105,6 +89,7 @@ class ExpenditureType extends AbstractType
                 'property' => 'nestedLabel',
                 'choices'=> $this->ExpenseCategoryChoiceList()
             ))
+
             ->add('toUser', 'entity', array(
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -14,42 +15,85 @@ use Doctrine\ORM\EntityRepository;
 class ExpenditureRepository extends EntityRepository
 {
 
-    public function expenditureOverview($globalOption,$data)
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
     {
-        $qb = $this->_em->createQueryBuilder();
-        $datetime = new \DateTime("now");
-        $startDate = isset($data['startDate']) and $data['startDate'] != '' ? $data['startDate'].' 00:00:00' :'';
-        $endDate =   isset($data['endDate']) and $data['endDate'] != '' ? $data['endDate'].' 23:59:59' :'';
-        $toUser =    isset($data['toUser'])? $data['toUser'] :'';
-        $accountHead = isset($data['accountHead'])? $data['accountHead'] :'';
 
+        $startDate      = isset($data['startDate']) and $data['startDate'] != '' ? $data['startDate'].' 00:00:00' :'';
+        $endDate        = isset($data['endDate']) and $data['endDate'] != '' ? $data['endDate'].' 23:59:59' :'';
+        $toUser         = isset($data['toUser'])? $data['toUser'] :'';
+        $accountHead    = isset($data['accountHead'])? $data['accountHead'] :'';
+        $category       = isset($data['category'])? $data['category'] :'';
 
-        $qb->from('AccountingBundle:Expenditure','s');
-        $qb->select('sum(s.amount) as amount');
-        $qb->where('s.process = :process');
-        $qb->setParameter('process', 'approved');
-        $qb->andWhere('s.globalOption = :globalOption');
-        $qb->setParameter('globalOption', $globalOption);
         if (!empty($startDate) and $startDate !="") {
 
-            $qb->andWhere("s.updated >= :startDate");
+            $qb->andWhere("e.updated >= :startDate");
             $qb->setParameter('startDate', $startDate);
         }
+
         if (!empty($endDate)) {
-            $qb->andWhere("s.updated <= :endDate");
+            $qb->andWhere("e.updated <= :endDate");
             $qb->setParameter('endDate', $endDate);
         }
+
         if (!empty($toUser)) {
-            $qb->andWhere("s.toUser = :toUser");
+            $qb->andWhere("e.toUser = :toUser");
             $qb->setParameter('toUser', $toUser);
         }
+
         if (!empty($accountHead)) {
-            $qb->andWhere("s.accountHead = :accountHead");
+            $qb->andWhere("e.accountHead = :accountHead");
             $qb->setParameter('accountHead', $accountHead);
         }
+        if (!empty($category)) {
+            $qb->andWhere("e.category = :category");
+            $qb->setParameter('category', $category);
+        }
+    }
 
-        $amount = $qb->getQuery()->getSingleScalarResult();
-        return  $amount ;
+
+    public function expenditureOverview(User $user , $data)
+    {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('AccountingBundle:Expenditure','e');
+        $qb->select('sum(e.amount) as amount');
+        $qb->where('e.process = :process');
+        $qb->setParameter('process', 'approved');
+        $qb->andWhere('e.globalOption = :globalOption');
+        $qb->setParameter('globalOption', $globalOption);
+        if (!empty($branch)){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $this->handleSearchBetween($qb,$data);
+        $amount = $qb->getQuery()->getOneOrNullResult();
+        return  $amount['amount'] ;
+
+    }
+
+    public function findWithSearch(User $user , $data)
+    {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        if (!empty($branch)){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.updated','DESC');
+        $result = $qb->getQuery();
+        return $result;
 
     }
 
@@ -58,7 +102,7 @@ class ExpenditureRepository extends EntityRepository
 
         $em = $this->_em;
         $entity = $em->getRepository('AccountingBundle:Expenditure')->findOneBy(
-            array('globalOption' => $entity->getGlobalOption(),'expenseCategory'=>$entity->getExpenseCategory(),'process'=>'approved'),
+            array('globalOption' => $entity->getGlobalOption(),'expenseCategory' => $entity->getExpenseCategory(),'process'=>'approved'),
             array('id' => 'DESC')
         );
 
@@ -70,64 +114,5 @@ class ExpenditureRepository extends EntityRepository
 
 
 
-    public function insertSalaryExpenditure(PaymentSalary $paymentSalary)
-    {
-        $entity = new Expenditure();
-
-        $em = $this->_em;
-        $globalOption = $paymentSalary->getUser()->getGlobalOption();
-        $accountHead = $em->getRepository('AccountingBundle:AccountHead')->find(25);
-        $entity->setGlobalOption($globalOption);
-        $entity->setAccountHead($accountHead);
-        $entity->setAccountMobileBank($paymentSalary->getAccountMobileBank());
-        $entity->setAccountBank($paymentSalary->getAccountBank());
-        $entity->setToUser($paymentSalary->getUser());
-        $entity->setCreatedBy($paymentSalary->getCreatedBy());
-        $entity->setApprovedBy($paymentSalary->getApprovedBy());
-        $entity->setAmount($paymentSalary->getTotalAmount());
-        $entity->setRemark($paymentSalary->getRemark());
-        $entity->setTransactionMethod($paymentSalary->getTransactionMethod());
-        $entity->setProcess('approved');
-        $em->persist($entity);
-        $em->flush();
-
-    }
-
-    /**
-     * @param $qb
-     * @param $data
-     */
-
-    protected function handleSearchBetween($qb,$data)
-    {
-
-        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-
-        if (!empty($data['startDate']) ) {
-
-            $qb->andWhere("ex.updated >= :startDate");
-            $qb->setParameter('startDate', $startDate.' 00:00:00');
-        }
-        if (!empty($data['endDate'])) {
-
-            $qb->andWhere("ex.updated <= :endDate");
-            $qb->setParameter('endDate', $endDate.' 23:59:59');
-        }
-    }
-
-    public function reportExpenditure($globalOption,$data){
-
-        $qb = $this->createQueryBuilder('ex');
-        $qb->join('ex.accountHead','accountHead');
-        $qb->select('sum(ex.amount) as amount, accountHead.name as name');
-        $qb->where('ex.accountHead = 37');
-        $qb->andWhere('ex.globalOption = :globalOption');
-        $qb->setParameter('globalOption', $globalOption);
-        $this->handleSearchBetween($qb,$data);
-        $qb->groupBy('ex.accountHead');
-        return  $qb->getQuery()->getArrayResult();
-
-    }
 
 }

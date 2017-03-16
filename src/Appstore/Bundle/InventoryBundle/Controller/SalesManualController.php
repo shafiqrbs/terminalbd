@@ -43,8 +43,7 @@ class SalesManualController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory, $mode ='manual',$data);
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($this->getUser(), $mode ='manual',$data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('InventoryBundle:SalesManual:index.html.twig', array(
@@ -313,9 +312,8 @@ class SalesManualController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory,$mode = 'manual');
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory,$mode = 'manual');
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'manual');
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'manual');
         $purchaseItems = array();
         foreach ($entity->getSalesItems() as $value){
             $purchaseItems[] = $value->getPurchaseItem()->getId();

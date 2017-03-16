@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\PaymentType;
@@ -30,6 +31,11 @@ class AccountJournal
      **/
 
     protected $globalOption;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="accountJournal" )
+     **/
+    private  $branches;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="accountJournals" )
@@ -482,6 +488,22 @@ class AccountJournal
     public function setAccountMobileBank($accountMobileBank)
     {
         $this->accountMobileBank = $accountMobileBank;
+    }
+
+    /**
+     * @return Branches
+     */
+    public function getBranches()
+    {
+        return $this->branches;
+    }
+
+    /**
+     * @param Branches $branches
+     */
+    public function setBranches($branches)
+    {
+        $this->branches = $branches;
     }
 
 

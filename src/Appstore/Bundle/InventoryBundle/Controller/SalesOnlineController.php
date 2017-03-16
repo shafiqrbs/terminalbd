@@ -41,8 +41,7 @@ class SalesOnlineController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory,$mode='online', $data);
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $this->getUser() ,$mode='online', $data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('InventoryBundle:SalesOnline:index.html.twig', array(
@@ -270,9 +269,9 @@ class SalesOnlineController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory,$mode = 'online');
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory,$mode = 'online');
+
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'online');
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'online');
 
         if ($entity->getProcess() != "In-progress") {
             return $this->redirect($this->generateUrl('inventory_salesgeneral_show', array('id' => $entity->getId())));
@@ -545,6 +544,7 @@ class SalesOnlineController extends Controller
             $entity->setProcess($data['value']);
         }
         $em->flush();
+
         if($entity->getProcess() == 'Courier'){
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                 $dispatcher = $this->container->get('event_dispatcher');
@@ -565,6 +565,7 @@ class SalesOnlineController extends Controller
                 $dispatcher->dispatch('setting_tool.post.process_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
             }
         }
+
         exit;
 
     }
@@ -579,6 +580,9 @@ class SalesOnlineController extends Controller
             $entity->setPayment($entity->getPayment() + $entity->getDue());
             $entity->setDue($entity->getTotal() - $entity->getPayment());
             $entity->setApprovedBy($this->getUser());
+            if(!empty($this->getUser()->getProfile()->getBranches())){
+                $entity->setBranches($this->getUser()->getProfile()->getBranches());
+            }
             $em->flush();
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
@@ -586,7 +590,9 @@ class SalesOnlineController extends Controller
             $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
             $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
             return new Response('success');
+
         } else {
+
             return new Response('failed');
         }
         exit;
@@ -599,6 +605,9 @@ class SalesOnlineController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setPaymentStatus('Cancel');
             $entity->setApprovedBy($this->getUser());
+            if(!empty($this->getUser()->getProfile()->getBranches())){
+                $entity->setBranches($this->getUser()->getProfile()->getBranches());
+            }
             $em->flush();
             return new Response('success');
         } else {

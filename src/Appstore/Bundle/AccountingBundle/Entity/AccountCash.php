@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,6 +30,11 @@ class AccountCash
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="accountCashes")
      **/
     protected $globalOption;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="accountCashes" )
+     **/
+    private  $branches;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="accountCashes" )
@@ -605,6 +611,23 @@ class AccountCash
     {
         $this->accountOnlineOrder = $accountOnlineOrder;
     }
+
+    /**
+     * @return Branches
+     */
+    public function getBranches()
+    {
+        return $this->branches;
+    }
+
+    /**
+     * @param Branches $branches
+     */
+    public function setBranches($branches)
+    {
+        $this->branches = $branches;
+    }
+
 
 }
 

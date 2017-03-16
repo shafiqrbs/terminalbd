@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -40,6 +41,11 @@ class Transaction
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountHead", inversedBy="transactions" )
      **/
      private $accountHead;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="transactions" )
+     **/
+    private  $branches;
 
 
     /**
@@ -401,6 +407,22 @@ class Transaction
     public function setProcessHead($processHead)
     {
         $this->processHead = $processHead;
+    }
+
+    /**
+     * @return Branches
+     */
+    public function getBranches()
+    {
+        return $this->branches;
+    }
+
+    /**
+     * @param Branches $branches
+     */
+    public function setBranches($branches)
+    {
+        $this->branches = $branches;
     }
 
 }

@@ -2,7 +2,11 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Entity;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
+use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
+use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Delivery;
 use Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn;
@@ -85,6 +89,28 @@ class Branches
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="branches" )
      **/
     private  $accountSales;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="branches" )
+     **/
+    private  $accountCash;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Expenditure", mappedBy="branches" )
+     **/
+    private  $expenditure;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\Transaction", mappedBy="branches" )
+     **/
+    private  $transactions;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountJournal", mappedBy="branches" )
+     **/
+    private  $accountJournal;
 
     /**
      * @var string
@@ -366,6 +392,38 @@ class Branches
     public function getSalesReturns()
     {
         return $this->salesReturns;
+    }
+
+    /**
+     * @return Expenditure
+     */
+    public function getExpenditure()
+    {
+        return $this->expenditure;
+    }
+
+    /**
+     * @return AccountCash
+     */
+    public function getAccountCash()
+    {
+        return $this->accountCash;
+    }
+
+    /**
+     * @return Transaction
+     */
+    public function getTransactions()
+    {
+        return $this->transactions;
+    }
+
+    /**
+     * @return AccountJournal
+     */
+    public function getAccountJournal()
+    {
+        return $this->accountJournal;
     }
 
 

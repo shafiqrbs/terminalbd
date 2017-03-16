@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * AccountHead
@@ -71,7 +72,6 @@ class AccountHead
     private  $transactions;
 
 
-
     /**
      * @var string
      *
@@ -85,6 +85,13 @@ class AccountHead
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+
+    /**
+     * @Gedmo\Slug(fields={"name"})
+     * @Doctrine\ORM\Mapping\Column(length=255)
+     */
+    private $slug;
+
 
     /**
      * @var string
@@ -309,6 +316,22 @@ class AccountHead
     public function getExpendituries()
     {
         return $this->expendituries;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
     }
 
 }

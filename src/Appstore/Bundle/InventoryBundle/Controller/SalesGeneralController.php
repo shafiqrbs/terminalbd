@@ -45,8 +45,7 @@ class SalesGeneralController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($inventory, $mode='general',$data);
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists($this->getUser(), $mode='general',$data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('InventoryBundle:SalesGeneral:index.html.twig', array(
@@ -273,9 +272,9 @@ class SalesGeneralController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory,$mode = 'general');
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory,$mode = 'general');
+
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'general');
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'general');
 
         if ($entity->getProcess() != "In-progress") {
             return $this->redirect($this->generateUrl('inventory_salesgeneral_show', array('id' => $entity->getId())));

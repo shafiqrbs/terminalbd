@@ -103,8 +103,7 @@ class DefaultController extends Controller
 
         $user = $this->getUser();
         $em = $this->get('doctrine.orm.entity_manager');
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory);
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser());
         return $this->render('UserBundle:Default:domain.html.twig', array(
             'user' => $user,
             'todaySalesOverview' => $todaySalesOverview

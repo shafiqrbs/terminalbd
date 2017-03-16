@@ -37,10 +37,11 @@ class ExpenditureController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('AccountingBundle:Expenditure')->findBy(array('globalOption'=>$globalOption),array('updated'=>'desc'));
+        $user = $this->getUser();
+        $globalOption = $user->getGlobalOption();
+        $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch($user,$data);
         $pagination = $this->paginate($entities);
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($globalOption,$data);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
         //$flatExpenseCategoryTree = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->getCategoryOptions();
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
 
@@ -67,6 +68,10 @@ class ExpenditureController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption( $this->getUser()->getGlobalOption());
             $entity->setBalance($lastBalance + $entity->getAmount());
+            $entity->setAccountHead($entity->getExpenseCategory()->getAccountHead());
+            if(!empty($this->getUser()->getProfile()->getBranches())){
+                $entity->setBranches($this->getUser()->getProfile()->getBranches());
+            }
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -259,11 +264,13 @@ class ExpenditureController extends Controller
             $expenditure->setProcess('approved');
             $expenditure->setApprovedBy($this->getUser());
             $em->flush();
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertExpenditureCash($expenditure);
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertExpenditureTransaction($expenditure);
             return new Response('success');
         } else {
             return new Response('failed');
         }
+
         exit;
     }
 

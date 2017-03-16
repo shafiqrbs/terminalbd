@@ -37,7 +37,9 @@ class AccountCashController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $globalOption = $this->getUser()->getGlobalOption();
+        $user = $this->getUser();
+        $globalOption = $user->getGlobalOption();
+
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($globalOption,$data);
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->accountCashOverview($globalOption,$data);
