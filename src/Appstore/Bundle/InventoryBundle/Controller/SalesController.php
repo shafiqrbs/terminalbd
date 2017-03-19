@@ -346,8 +346,6 @@ class SalesController extends Controller
             $entity->setDiscount($data['discount']);
             $entity->setTotal($data['paymentTotal']);
             $entity->setPayment($data['paymentTotal'] - $data['dueAmount']);
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
-            $entity->setPaymentInWord($amountInWords);
 
             if ($data['paymentTotal'] <= $data['paymentAmount']) {
                 $entity->setPaymentStatus('Paid');
@@ -376,6 +374,7 @@ class SalesController extends Controller
             if ($entity->getTransactionMethod()->getId() == 4) {
                 return $this->redirect($this->generateUrl('inventory_sales_show', array('id' => $entity->getId())));
             } else {
+
                 $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
                 $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
                 $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
@@ -383,7 +382,6 @@ class SalesController extends Controller
                 $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
                 return $this->redirect($this->generateUrl('inventory_sales_new'));
             }
-
         }
 
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
@@ -490,7 +488,6 @@ class SalesController extends Controller
     }
 
 
-
     public function getBarcode($invoice)
     {
         $barcode = new BarcodeGenerator();
@@ -576,10 +573,14 @@ class SalesController extends Controller
         if (!empty($entity)) {
 
             $em = $this->getDoctrine()->getManager();
+
             $entity->setPaymentStatus('Paid');
-            $entity->setPayment($entity->getPayment() + $entity->getDue());
-            $entity->setDue($entity->getTotal() - $entity->getPayment());
+            $entity->setProcess('Paid');
+            $entity->setPayment($entity->getTotal());
+            $entity->setDue(0);
             $entity->setApprovedBy($this->getUser());
+            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+            $entity->setPaymentInWord($amountInWords);
             $em->flush();
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
@@ -607,8 +608,6 @@ class SalesController extends Controller
         }
         exit;
     }
-
-
 
     public function salesSelectAction()
     {
@@ -642,12 +641,13 @@ class SalesController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
         $option = $entity->getInventoryConfig()->getGlobalOption();
-
+        $this->approvedOrder($entity);
         /** ===================Company Information=================================== */
         if(!empty($entity->getBranches())){
 
             $branch = $entity->getBranches();
-            $address1 = $branch->getAddress();
+            $branchName     = $branch->getName();
+            $address1       = $branch->getAddress();
             $thana          = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getName():'';
             $district       = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getParent()->getName():'';
             $address = $address1.$thana.$district;
@@ -698,26 +698,28 @@ class SalesController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text($companyName."\n");
         $printer -> selectPrintMode();
-        $printer -> text($address."\n");
-        $printer -> text($mobile."\n");
-
+        if(!empty($entity->getBranches())) {
+            $printer->text($branchName . "\n");
+        }else{
+            $printer -> text($address."\n");
+        }
+       /* $printer -> text($mobile."\n");*/
         $printer -> feed();
 
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(false);
-        if(!empty($data['vatRegNo'])){
-            $printer -> text("Vat Reg: ".$vatRegNo.".\n");
-            $printer -> text("Date: ".$date . "\n");
+        if(!empty($vatRegNo)){
+            $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
         }
-
-        if(!empty($data['customerName'])){
+        /*
+        if(!empty($mobile)){
             $printer -> text ( "----------------------------------" );
-            $printer -> text("Customer: ".$data['customerName'].".\n");
-            $printer -> text("Mobile: ".$data['customerMobile'] . "\n");
+            $printer -> text("Mobile: ".$mobile. "\n");
             $printer -> setEmphasis(false);
         }
+        */
 
         /* Information for the receipt */
 
@@ -730,14 +732,198 @@ class SalesController extends Controller
         $due            = new PosItemManager('Due: ','Tk.',number_format($due));
 
         /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("SALES INVOICE\n");
+        $printer -> text("SALES INVOICE\n\n");
         $printer -> setEmphasis(false);
 
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> text(new item('Item Code', 'Qnt', 'Amount'));
+        $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
+        $printer -> setEmphasis(false);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);;
+        $printer -> setEmphasis(false);
+
+        $i=1;
+      foreach ( $entity->getSalesItems() as $row){
+
+            $printer -> setUnderline(Printer::UNDERLINE_NONE);
+            $printer -> text( new PosItemManager($i.'. '.$row->getItem()->getName(),"",""));
+            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
+            $printer -> text(new PosItemManager($row->getPurchaseItem()->getBarcode(),$row->getQuantity(),number_format($row->getSubTotal())));
+            $i++;
+        }
+       $printer -> setUnderline(Printer::UNDERLINE_NONE);
+       $printer -> setEmphasis(true);
+       $printer -> text ( "\n" );
+       $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+       $printer -> text($subTotal);
+       $printer -> setEmphasis(false);
+       if($vat){
+           $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
+           $printer->text($vat);
+           $printer->setEmphasis(false);
+       }
+       if($discount){
+           $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+           $printer->text($discount);
+           $printer -> setEmphasis(false);
+           $printer -> text ( "\n" );
+       }
+       $printer -> setEmphasis(true);
+       $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+       $printer -> text($grandTotal);
+       $printer -> setUnderline(Printer::UNDERLINE_NONE);
+
+       $printer->text("\n");
+       $printer->setEmphasis(false);
+       $printer->text($transaction);
+       $printer->selectPrintMode();
+
+
+        /* Barcode Print */
+        $printer->selectPrintMode ( Printer::MODE_DOUBLE_HEIGHT | Printer::MODE_DOUBLE_WIDTH );
+        $printer->text ( "\n" );
+        $printer->selectPrintMode ();
+        $printer->setBarcodeHeight (60);
+        $hri = array (Printer::BARCODE_TEXT_BELOW => "");
+        $printer -> feed();
+        foreach ( $hri as $position => $caption){
+            $printer->selectPrintMode ();
+            $printer -> setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text ($caption);
+            $printer->setBarcodeTextPosition ( $position );
+            $printer->barcode ($invoice , Printer::BARCODE_JAN13 );
+            $printer->feed ();
+        }
+        /* Footer */
+
+        $printer -> feed();
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text("Sales By: ".$salesBy."\n");
+        $printer -> text("Thank you for shopping\n");
+        if($website){
+            $printer -> text("Please visit www.".$website."\n");
+        }
+        $printer -> text($date . "\n");
+        $response =  base64_encode($connector->getData());
+        $printer -> close();
+        return new Response($response);
+
+    }
+
+    public function posPrint(Sales $entity){
+
+
+
+        $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
+        $printer = new Printer($connector);
+        $printer -> initialize();
+
+
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $option = $entity->getInventoryConfig()->getGlobalOption();
+
+        /** ===================Company Information=================================== */
+        if(!empty($entity->getBranches())){
+
+            $branch = $entity->getBranches();
+            $branchName     = $branch->getName();
+            $address1       = $branch->getAddress();
+            $thana          = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getName():'';
+            $district       = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getParent()->getName():'';
+            $address = $address1.$thana.$district;
+
+        }else{
+
+            $address1       = $option->getContactPage()->getAddress1();
+            $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
+            $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
+            $address = $address1.$thana.$district;
+
+        }
+
+        $vatRegNo       = $inventory->getVatRegNo();
+        $companyName    = $option->getName();
+        $mobile         = $option->getMobile();
+        $website        = $option->getDomain();
+
+
+        /** ===================Customer Information=================================== */
+
+        $invoice            = $entity->getInvoice();
+        $subTotal           = $entity->getSubTotal();
+        $total              = $entity->getTotal();
+        $discount           = $entity->getDiscount();
+        $vat                = $entity->getVat();
+        $due                = $entity->getDue();
+        $payment            = $entity->getPayment();
+        $transaction        = $entity->getTransactionMethod()->getName();
+        $salesBy            = $entity->getSalesBy()->getProfile()->getName();;
+
+
+        /** ===================Invoice Sales Item Information========================= */
+
+        $i = 1;
+        $items = array();
+        foreach ( $entity->getSalesItems() as $row){
+            $items[]  = new PosItemManager($i.'. '.$row->getItem()->getName() ,$row->getQuantity(),$row->getSubTotal());
+        }
+
+        /* Date is kept the same for testing */
+        $date = date('l jS \of F Y h:i:s A');
+
+        /* Name of shop */
+        /* Name of shop */
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text($companyName."\n");
+        $printer -> selectPrintMode();
+        if(!empty($entity->getBranches())) {
+            $printer->text($branchName . "\n");
+        }else{
+            $printer -> text($address."\n");
+        }
+        /* $printer -> text($mobile."\n");*/
+        $printer -> feed();
+
+        /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer -> setEmphasis(false);
+        if(!empty($vatRegNo)){
+            $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
+            $printer -> setEmphasis(false);
+        }
+        /*
+        if(!empty($mobile)){
+            $printer -> text ( "----------------------------------" );
+            $printer -> text("Mobile: ".$mobile. "\n");
+            $printer -> setEmphasis(false);
+        }
+        */
+
+        /* Information for the receipt */
+
+        $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
+        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
+        $vat            = new PosItemManager('Add Vat: ','Tk.',number_format($vat));
+        $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
+        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
+        $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
+        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
+
+        /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> setEmphasis(true);
+        $printer -> text("SALES INVOICE\n\n");
+        $printer -> setEmphasis(false);
+
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
         $printer -> setEmphasis(false);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);;
         $printer -> setEmphasis(false);
@@ -747,11 +933,10 @@ class SalesController extends Controller
 
             $printer -> setUnderline(Printer::UNDERLINE_NONE);
             $printer -> text( new PosItemManager($i.'. '.$row->getItem()->getName(),"",""));
-            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
             $printer -> text(new PosItemManager($row->getPurchaseItem()->getBarcode(),$row->getQuantity(),number_format($row->getSubTotal())));
             $i++;
         }
-
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> setEmphasis(true);
         $printer -> text ( "\n" );
@@ -772,19 +957,14 @@ class SalesController extends Controller
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($grandTotal);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> text($payment);
-        $printer -> setEmphasis(false);
-
-        $printer->setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        $printer->text($due);
-        $printer->selectPrintMode();
 
         $printer->text("\n");
         $printer->setEmphasis(false);
         $printer->text($transaction);
         $printer->selectPrintMode();
+
+
         /* Barcode Print */
         $printer->selectPrintMode ( Printer::MODE_DOUBLE_HEIGHT | Printer::MODE_DOUBLE_WIDTH );
         $printer->text ( "\n" );
@@ -804,17 +984,15 @@ class SalesController extends Controller
 
         $printer -> feed();
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text("For trading hours, please visit www.".$website."\n");
-        $printer -> feed();
+        $printer -> text("Sales By: ".$salesBy."\n");
+        $printer -> text("Thank you for shopping\n");
+        if($website){
+            $printer -> text("Please visit www.".$website."\n");
+        }
         $printer -> text($date . "\n");
         $response =  base64_encode($connector->getData());
-
         $printer -> close();
-        return new Response($response);
-
-    }
-
-    public function posEx(){
+        return $response;
 
 
     }
