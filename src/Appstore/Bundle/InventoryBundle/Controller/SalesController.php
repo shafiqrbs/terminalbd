@@ -642,6 +642,7 @@ class SalesController extends Controller
         $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
         $option = $entity->getInventoryConfig()->getGlobalOption();
         $this->approvedOrder($entity);
+
         /** ===================Company Information=================================== */
         if(!empty($entity->getBranches())){
 
