@@ -390,8 +390,8 @@ class AccountCashRepository extends EntityRepository
             $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
         }
         $cash->setGlobalOption($entity->getGlobalOption());
-        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
-            $cash->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        if(!empty($entity->getBranches())){
+            $cash->setBranches($entity->getBranches());
         }
         $cash->setExpenditure($entity);
         $cash->setTransactionMethod($entity->getTransactionMethod());

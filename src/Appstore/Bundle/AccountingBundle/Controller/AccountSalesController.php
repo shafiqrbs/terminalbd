@@ -82,6 +82,9 @@ class AccountSalesController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption( $this->getUser()->getGlobalOption());
             $entity->setProcessHead('Account Sales');
+            if(!empty($this->getUser()->getProfile()->getBranches())){
+                $entity->setBranches($this->getUser()->getProfile()->getBranches());
+            }
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -248,7 +251,7 @@ class AccountSalesController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $data = array('mobile'=> $entity->getCustomer()->getMobile());
-            $result = $em->getRepository('AccountingBundle:AccountSales')->salesOverview($this->getUser()->getGlobalOption(),$data);
+            $result = $em->getRepository('AccountingBundle:AccountSales')->salesOverview($this->getUser(),$data);
             $balance = $result['totalAmount'] - ($result['receiveAmount'] + $entity->getAmount());
             $entity->setBalance($balance);
             $entity->setProcess('approved');
