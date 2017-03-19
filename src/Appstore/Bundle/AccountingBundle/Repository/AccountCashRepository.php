@@ -177,7 +177,6 @@ class AccountCashRepository extends EntityRepository
     public function lastInsertCash($entity,$processHead)
     {
         $em = $this->_em;
-
         if($entity->getTransactionMethod()->getId() == 2){
 
             $array = array('globalOption' => $entity->getGlobalOption(),'transactionMethod' => $entity->getTransactionMethod(),'accountBank' => $entity->getAccountBank(), 'processHead' => $processHead );
@@ -190,6 +189,7 @@ class AccountCashRepository extends EntityRepository
 
             $array = array('globalOption' => $entity->getGlobalOption(),'transactionMethod' => $entity->getTransactionMethod(), 'processHead' => $processHead );
         }
+
         $entity = $em->getRepository('AccountingBundle:AccountCash')->findOneBy($array,array('id' => 'DESC'));
 
         if (empty($entity)) {
@@ -211,9 +211,11 @@ class AccountCashRepository extends EntityRepository
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setAccountJournal($entity);
         $cash->setTransactionMethod($entity->getTransactionMethod());
-        $cash->setAccountJournal($entity);
         $cash->setProcessHead('Journal');
         $cash->setAccountRefNo($entity->getAccountRefNo());
+        if(!empty($entity->getBranches())){
+            $cash->setBranches($entity->getBranches());
+        }
         $cash->setUpdated($entity->getUpdated());
         if($entity->getTransactionType()  == 'Debit' ){
             $cash->setAccountHead($entity->getAccountHeadDebit());
@@ -284,8 +286,8 @@ class AccountCashRepository extends EntityRepository
 
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setAccountSales($entity);
-        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
-            $cash->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        if(!empty($entity->getBranches())){
+            $cash->setBranches($entity->getBranches());
         }
         $cash->setTransactionMethod($entity->getTransactionMethod());
         $cash->setProcessHead('Sales');
@@ -307,6 +309,9 @@ class AccountCashRepository extends EntityRepository
 
         $cash->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(35));
         $cash->setGlobalOption($entity->getGlobalOption());
+        if(!empty($entity->getBranches())){
+            $cash->setBranches($entity->getBranches());
+        }
         $cash->setAccountSalesReturn($entity);
         $cash->setTransactionMethod($entity->getTransactionMethod());
         $cash->setProcessHead('SalesReturn');

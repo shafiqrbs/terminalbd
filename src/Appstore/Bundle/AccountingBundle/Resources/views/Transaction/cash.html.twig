@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+    {% extends '::base.html.twig' %}
 {% block body %}
     <div class="container-fluid">
         <!-- BEGIN PAGE HEADER-->
@@ -88,7 +88,7 @@
                                     <th class="numeric" >Ref no.</th>
                                     <th class="numeric" >Debit</th>
                                     <th class="numeric" >Credit</th>
-                                    <th class="numeric" >Balance</th>
+                                    <th class="numeric" >Remark</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -100,7 +100,7 @@
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                         <td class="numeric" >{{ entity.debit|number_format }}</td>
                                         <td class="numeric" >{{ entity.credit|number_format }}</td>
-                                        <td class="numeric" >{{ entity.balance|number_format }}</td>
+                                        <td class="numeric" >{#{{ entity.balance|number_format }}#}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

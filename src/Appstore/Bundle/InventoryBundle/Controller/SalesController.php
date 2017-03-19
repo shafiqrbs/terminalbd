@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use Appstore\Bundle\InventoryBundle\Entity\Item;
+use Appstore\Bundle\InventoryBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
@@ -633,81 +634,190 @@ class SalesController extends Controller
     public function printAction($code)
     {
 
+        $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
+        $printer = new Printer($connector);
+        $printer -> initialize();
+
+
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
         $option = $entity->getInventoryConfig()->getGlobalOption();
 
         /** ===================Company Information=================================== */
+        if(!empty($entity->getBranches())){
+
+            $branch = $entity->getBranches();
+            $address1 = $branch->getAddress();
+            $thana          = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getName():'';
+            $district       = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getParent()->getName():'';
+            $address = $address1.$thana.$district;
+
+        }else{
+
+            $address1       = $option->getContactPage()->getAddress1();
+            $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
+            $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
+            $address = $address1.$thana.$district;
+
+        }
 
         $vatRegNo       = $inventory->getVatRegNo();
         $companyName    = $option->getName();
         $mobile         = $option->getMobile();
         $website        = $option->getDomain();
-        $address1       = $option->getContactPage()->getAddress1();
-        $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
-        $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
-
-        $address = $address1.$thana.$district;
 
 
         /** ===================Customer Information=================================== */
 
-        $invoice = $entity->getInvoice();
-        $subTotal = $entity->getSubTotal();
-        $total = $entity->getTotal();
-        $discount = $entity->getDiscount();
-        $vat = $entity->getVat();
-        $due = $entity->getDue();
-        $payment = $entity->getPayment();
-        $transaction = $entity->getTransactionMethod()->getName();
-        $salesBy = $entity->getSalesBy()->getProfile()->getName();;
+        $invoice            = $entity->getInvoice();
+        $subTotal           = $entity->getSubTotal();
+        $total              = $entity->getTotal();
+        $discount           = $entity->getDiscount();
+        $vat                = $entity->getVat();
+        $due                = $entity->getDue();
+        $payment            = $entity->getPayment();
+        $transaction        = $entity->getTransactionMethod()->getName();
+        $salesBy            = $entity->getSalesBy()->getProfile()->getName();;
 
 
         /** ===================Invoice Sales Item Information========================= */
 
         $i = 1;
-        $serialNo = array();
-        $barcode = array();
-        $name = array();
-        $quantity = array();
-        $subAmount = array();
+        $items = array();
         foreach ( $entity->getSalesItems() as $row){
-            $serialNo[]         = $i;
-            $barcode[]          = $row->getPurchaseItem()->getBarcode();
-            $name[]             = $row->getItem()->getName();
-            $quantity[]         = $row->getQuantity();
-            $subAmount[]        = $row->getSubTotal();
+            $items[]  = new PosItemManager($i.'. '.$row->getItem()->getName() ,$row->getQuantity(),$row->getSubTotal());
+        }
+
+        /* Date is kept the same for testing */
+        $date = date('l jS \of F Y h:i:s A');
+
+        /* Name of shop */
+        /* Name of shop */
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text($companyName."\n");
+        $printer -> selectPrintMode();
+        $printer -> text($address."\n");
+        $printer -> text($mobile."\n");
+
+        $printer -> feed();
+
+        /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer -> setEmphasis(false);
+        if(!empty($data['vatRegNo'])){
+            $printer -> text("Vat Reg: ".$vatRegNo.".\n");
+            $printer -> text("Date: ".$date . "\n");
+            $printer -> setEmphasis(false);
+        }
+
+        if(!empty($data['customerName'])){
+            $printer -> text ( "----------------------------------" );
+            $printer -> text("Customer: ".$data['customerName'].".\n");
+            $printer -> text("Mobile: ".$data['customerMobile'] . "\n");
+            $printer -> setEmphasis(false);
+        }
+
+        /* Information for the receipt */
+
+        $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
+        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
+        $vat            = new PosItemManager('Add Vat: ','Tk.',number_format($vat));
+        $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
+        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
+        $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
+        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
+
+        /* Title of receipt */
+        $printer -> setEmphasis(true);
+        $printer -> text("SALES INVOICE\n");
+        $printer -> setEmphasis(false);
+
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text(new item('Item Code', 'Qnt', 'Amount'));
+        $printer -> setEmphasis(false);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);;
+        $printer -> setEmphasis(false);
+
+        $i=1;
+        foreach ( $entity->getSalesItems() as $row){
+
+            $printer -> setUnderline(Printer::UNDERLINE_NONE);
+            $printer -> text( new PosItemManager($i.'. '.$row->getItem()->getName(),"",""));
+            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+            $printer -> text(new PosItemManager($row->getPurchaseItem()->getBarcode(),$row->getQuantity(),number_format($row->getSubTotal())));
             $i++;
         }
 
-        $data =array(
-            'salesBy'      => $salesBy,
-            'vatRegNo'      => $vatRegNo,
-            'companyName'   => $companyName,
-            'mobile'        => $mobile,
-            'website'       => $website,
-            'address'       => $address,
-            'thana'         => $thana,
-            'district'      => $district,
-            'invoice'       => $invoice ,
-            'subTotal'      => $subTotal,
-            'total'         => $total,
-            'payment'       => $payment,
-            'discount'      => $discount,
-            'vat'           => $vat,
-            'due'           => $due,
-            'transaction'   => $transaction,
-            'serialNo'      => $serialNo,
-            'barcode'       => $barcode,
-            'name'          => $name,
-            'quantity'      => $quantity,
-            'subAmount'     => $subAmount
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> setEmphasis(true);
+        $printer -> text ( "\n" );
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($subTotal);
+        $printer -> setEmphasis(false);
+        if($vat){
+            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
+            $printer->text($vat);
+            $printer->setEmphasis(false);
+        }
+        if($discount){
+            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+            $printer->text($discount);
+            $printer -> setEmphasis(false);
+            $printer -> text ( "\n" );
+        }
+        $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($grandTotal);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($payment);
+        $printer -> setEmphasis(false);
 
-        );
+        $printer->setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer->text($due);
+        $printer->selectPrintMode();
 
-        return new JsonResponse($data);
-        exit;
+        $printer->text("\n");
+        $printer->setEmphasis(false);
+        $printer->text($transaction);
+        $printer->selectPrintMode();
+        /* Barcode Print */
+        $printer->selectPrintMode ( Printer::MODE_DOUBLE_HEIGHT | Printer::MODE_DOUBLE_WIDTH );
+        $printer->text ( "\n" );
+        $printer->selectPrintMode ();
+        $printer->setBarcodeHeight (60);
+        $hri = array (Printer::BARCODE_TEXT_BELOW => "");
+        $printer -> feed();
+        foreach ( $hri as $position => $caption){
+            $printer->selectPrintMode ();
+            $printer -> setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text ($caption);
+            $printer->setBarcodeTextPosition ( $position );
+            $printer->barcode ($invoice , Printer::BARCODE_JAN13 );
+            $printer->feed ();
+        }
+        /* Footer */
+
+        $printer -> feed();
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text("For trading hours, please visit www.".$website."\n");
+        $printer -> feed();
+        $printer -> text($date . "\n");
+        $response =  base64_encode($connector->getData());
+
+        $printer -> close();
+        return new Response($response);
+
+    }
+
+    public function posEx(){
+
 
     }
 
 }
+

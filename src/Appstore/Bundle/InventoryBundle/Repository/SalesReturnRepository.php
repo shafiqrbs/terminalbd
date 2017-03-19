@@ -5,6 +5,7 @@ use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturnItem;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -15,6 +16,26 @@ use Doctrine\ORM\EntityRepository;
  */
 class SalesReturnRepository extends EntityRepository
 {
+
+    public function findWithSearch(User $user)
+    {
+
+        $config = $user->getGlobalOption()->getInventoryConfig();
+        $branch = $user->getProfile()->getBranches();
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->where("s.inventoryConfig = :config");
+        $qb->setParameter('config', $config);
+        if ($branch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $qb->orderBy('s.updated','DESC');
+        $result = $qb->getQuery();
+        return $result;
+
+    }
+
     public function getRowsCount(InventoryConfig $inventory)
     {
         $qb = $this->_em->createQueryBuilder();

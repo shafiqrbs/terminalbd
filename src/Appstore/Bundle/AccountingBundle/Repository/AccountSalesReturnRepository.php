@@ -106,6 +106,9 @@ class AccountSalesReturnRepository extends EntityRepository
         $em = $this->_em;
         $accountSales = new AccountSalesReturn();
         $accountSales->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
+        if(!empty($entity->getBranches())){
+            $accountSales->setBranches($entity->getBranches());
+        }
         $accountSales->setSalesReturn($entity);
         $accountSales->setCustomer($entity->getSales()->getCustomer());
         $accountSales->setTotalAmount($entity->getTotal());

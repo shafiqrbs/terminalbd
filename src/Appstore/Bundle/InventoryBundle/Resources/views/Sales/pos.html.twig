@@ -304,13 +304,13 @@
                                                     <div class="pull-center">
                                                         <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                                         <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
-                                                        {% if entity.inventoryConfig.printer == 'printer' %}
+                                                        {#{% if entity.inventoryConfig.printer == 'printer' %}#}
                                                         <button disabled="disabled" type="submit" class="btn blue paymentBtn"><i class="icon-print"></i>&nbsp;Print</button>
-                                                        {% elseif entity.inventoryConfig.printer == 'pos'  %}
+                                                      {#  {% elseif entity.inventoryConfig.printer == 'pos'  %}#}
                                                         <button disabled="disabled" rel="{{ path('inventory_sales_print',{'code':entity.invoice}) }}"  type="button" class="btn green paymentBtn" id="pos"><i class="icon-print m-icon-white"></i>&nbsp;Pos</button>
-                                                        {% else %}
+                                                      {#  {% else %}#}
                                                         <button disabled="disabled" rel=""  type="submit" class="btn purple paymentBtn" ><i class="icon-ok m-icon-white"></i>&nbsp;Save</button>
-                                                        {% endif %}
+                                                     {#   {% endif %}#}
                                                         <a href="{{ path('inventory_sales_reset',{'id':entity.id}) }}"  class="btn yellow"><i class="icon-refresh"></i></a>
                                                     </div>
                                                 </div>
@@ -423,6 +423,17 @@
             </div>
         </div>
     </div>
+ <script>
+
+     (function(d, s, id) {
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) return;
+         js = d.createElement(s); js.id = id;
+         js.src = "http://localhost.xiidea.net:9432/assets/easy-print-server.js";
+         fjs.parentNode.insertBefore(js, fjs);
+     }(document, "script", "xiidea-epp-sdk"));
+
+ </script>
 <style>
     .input-append .add-on, .input-prepend input[class*="numeric"]{
         font-size: 16px !important;
@@ -521,9 +532,28 @@
             type: 'GET',
             success: function (response) {
                 jsPostPrint(response);
+                setTimeout("pageRedirect()", 5000);
             }
         })
     });
+    function pageRedirect() {
+        window.location.href = "{{ path('account_sales_new') }}";
+    }
+
+    function jsPostPrint(data) {
+
+        if(typeof EasyPOSPrinter == 'undefined') {
+            alert("Printer library not found");
+            return;
+        }
+        EasyPOSPrinter.raw(data);
+        EasyPOSPrinter.cut();
+        EasyPOSPrinter.print(function(r, x){
+            console.log(r)
+        });
+
+    }
+
 
 
 {% endblock %}

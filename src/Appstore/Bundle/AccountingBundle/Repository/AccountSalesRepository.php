@@ -27,7 +27,7 @@ class AccountSalesRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if (!empty($branch)){
-            $qb->andWhere("s.branches = :branch");
+            $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
         }
         $qb->andWhere("e.process = 'approved'");
@@ -47,7 +47,7 @@ class AccountSalesRepository extends EntityRepository
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if (!empty($branch)){
-            $qb->andWhere("s.branches = :branch");
+            $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
         }
         $this->handleSearchBetween($qb,$data);
@@ -111,10 +111,9 @@ class AccountSalesRepository extends EntityRepository
     {
         $em = $this->_em;
         $entity = $em->getRepository('AccountingBundle:AccountSales')->findOneBy(
-            array('globalOption' => $globalOption,'customer' => $entity->getCustomer(),'process'=>'approved'),
+            array('globalOption' => $globalOption,'customer' => $entity->getCustomer(),'process' => 'approved'),
             array('id' => 'DESC')
         );
-
         if (empty($entity)) {
             return 0;
         }
@@ -138,14 +137,14 @@ class AccountSalesRepository extends EntityRepository
 
         $data = array('mobile'=> $entity->getCustomer()->getMobile());
 
-        $result = $this->salesOverview($entity->getInventoryConfig()->getGlobalOption(),$data);
+        $result = $this->salesOverview($entity->getApprovedBy(),$data);
         $balance = ($result['totalAmount'] -  $result['receiveAmount']);
         $lastBalance = ($balance + $entity->getDue());
         $accountSales->setBalance($lastBalance);
 
-        $accountSales->setApprovedBy($entity->getCreatedBy());
-        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
-            $entity->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        $accountSales->setApprovedBy($entity->getApprovedBy());
+        if(!empty($entity->getApprovedBy()->getProfile()->getBranches())){
+            $entity->setBranches($entity->getApprovedBy()->getProfile()->getBranches());
         }
         $accountSales->setProcessHead('Sales');
         $accountSales->setProcess('approved');

@@ -397,9 +397,6 @@ class Builder extends ContainerAware
                         $menu['Inventory']['Online Sales']->addChild('Customers', array('route' => 'inventory_salesonline_customer'))->setAttribute('icon', 'icon icon-user');
                         $menu['Inventory']['Online Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', ' icon-plus');
                         $menu['Inventory']['Online Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', ' icon-th-list');
-                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
-                            $menu['Inventory']['Online Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
-                        }
                     }
                 }
 

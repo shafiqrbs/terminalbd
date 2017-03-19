@@ -86,3 +86,7 @@ services:
     appstore_inventory.importer.sales_excel_data_reader:
         class: Appstore\Bundle\InventoryBundle\Importer\SalesDataReader
         arguments: [ @phpexcel ]
+
+    settong.poItemRepo:
+      class: Appstore\Bundle\InventoryBundle\Service\PosItemManager
+      arguments: [@doctrine]

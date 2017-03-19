@@ -19,6 +19,19 @@ use Symfony\Component\HttpFoundation\Response;
 class SalesReturnController extends Controller
 {
 
+    public function paginate($entities)
+    {
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        return $pagination;
+    }
+
+
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
@@ -26,10 +39,10 @@ class SalesReturnController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:SalesReturn')->findBy(array('inventoryConfig'=>$inventory));
+        $entities = $em->getRepository('InventoryBundle:SalesReturn')->findWithSearch($this->getUser());
+        $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:SalesReturn:index.html.twig', array(
-            'entities' => $entities,
+            'entities' => $pagination,
         ));
     }
 
@@ -42,7 +55,7 @@ class SalesReturnController extends Controller
         $salesId = $request->request->get('invoice');
         $invoice = $this->get('settong.toolManageRepo')->specialExpClean($salesId);
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array( 'inventoryConfig'=>$inventory,'invoice' => $invoice));
+        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array( 'inventoryConfig' => $inventory,'invoice' => $invoice ,'process' =>'Paid'));
         if(!empty($sales)){
             $em = $this->getDoctrine()->getManager();
             $entity = new SalesReturn();

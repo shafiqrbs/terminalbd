@@ -91,6 +91,12 @@ class Branches
     private  $accountSales;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn", mappedBy="branches" )
+     **/
+    private  $accountSalesReturn;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="branches" )
      **/
     private  $accountCash;
@@ -424,6 +430,14 @@ class Branches
     public function getAccountJournal()
     {
         return $this->accountJournal;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccountSalesReturn()
+    {
+        return $this->accountSalesReturn;
     }
 
 
