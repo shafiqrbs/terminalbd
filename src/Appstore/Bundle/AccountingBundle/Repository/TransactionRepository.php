@@ -433,8 +433,8 @@ class TransactionRepository extends EntityRepository
         $amount =  $entity->getTotal();
         $transaction = new Transaction();
         $transaction->setGlobalOption($accountSales->getGlobalOption());
-        if(!empty($accountSales->getApprovedBy()->getProfile()->getBranches())){
-            $transaction->setBranches($accountSales->getApprovedBy()->getProfile()->getBranches());
+        if(!empty($accountSales->getBranches())){
+            $transaction->setBranches($accountSales->getBranches());
         }
         $transaction->setAccountRefNo($accountSales->getAccountRefNo());
         $transaction->setProcessHead('Sales');
@@ -454,8 +454,8 @@ class TransactionRepository extends EntityRepository
         if($amount > 0) {
             $transaction = new Transaction();
             $transaction->setGlobalOption($accountSales->getGlobalOption());
-            if(!empty($accountSales->getApprovedBy()->getProfile()->getBranches())){
-                $transaction->setBranches($accountSales->getApprovedBy()->getProfile()->getBranches());
+            if(!empty($accountSales->getBranches())){
+                $transaction->setBranches($accountSales->getBranches());
             }
             $transaction->setAccountRefNo($accountSales->getAccountRefNo());
             $transaction->setProcessHead('Sales');
@@ -516,8 +516,8 @@ class TransactionRepository extends EntityRepository
 
              $transaction = new Transaction();
              $transaction->setGlobalOption($accountSales->getGlobalOption());
-             if(!empty($accountSales->getApprovedBy()->getProfile()->getBranches())){
-                 $transaction->setBranches($accountSales->getApprovedBy()->getProfile()->getBranches());
+             if(!empty($accountSales->getBranches())){
+                 $transaction->setBranches($accountSales->getBranches());
              }
              $transaction->setAccountRefNo($accountSales->getAccountRefNo());
              $transaction->setProcessHead('Sales');
@@ -708,18 +708,18 @@ class TransactionRepository extends EntityRepository
 
     public function insertAccountSalesTransaction(AccountSales $entity){
 
-        $this->insertAccountDebitTransaction($entity);
-        $this->insertAccountCreditTransaction($entity);
+        $this->insertAccountSalesDebitTransaction($entity);
+        $this->insertAccountSalesCreditTransaction($entity);
         $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($entity);
     }
 
-    public function  insertAccountDebitTransaction($entity)
+    public function  insertAccountSalesDebitTransaction(AccountSales $entity)
     {
 
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
-        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
-            $transaction->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        if(!empty($entity->getBranches())){
+            $transaction->setBranches($entity->getBranches());
         }
         $transaction->setAccountRefNo($entity->getAccountRefNo());
         $transaction->setProcessHead('Sales');
@@ -746,16 +746,17 @@ class TransactionRepository extends EntityRepository
         $this->_em->flush();
     }
 
-    public function  insertAccountCreditTransaction($entity)
+    public function  insertAccountSalesCreditTransaction(AccountSales $entity)
     {
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
-        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
-            $transaction->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        if(!empty($entity->getBranches())){
+            $transaction->setBranches($entity->getBranches());
         }
         $transaction->setProcess('Current Asset');
         $transaction->setAccountRefNo($entity->getAccountRefNo());
         $transaction->setUpdated($entity->getUpdated());
+        $transaction->setProcessHead('Sales');
         /* Sales Revenue - Sales Due Payment credit */
         $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(21));
         $transaction->setAmount('-'.$entity->getAmount());
@@ -852,8 +853,8 @@ class TransactionRepository extends EntityRepository
     {
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
-        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
-            $transaction->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        if(!empty($entity->getBranches())){
+            $transaction->setBranches($entity->getBranches());
         }
         $transaction->setAccountRefNo($entity->getAccountRefNo());
         $transaction->setProcessHead('Expenditure');
@@ -871,8 +872,8 @@ class TransactionRepository extends EntityRepository
     {
         $transaction = new Transaction();
         $transaction->setGlobalOption($entity->getGlobalOption());
-        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
-            $transaction->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        if(!empty($entity->getBranches())){
+            $transaction->setBranches($entity->getBranches());
         }
         $transaction->setAccountRefNo($entity->getAccountRefNo());
         $transaction->setProcessHead('Expenditure');

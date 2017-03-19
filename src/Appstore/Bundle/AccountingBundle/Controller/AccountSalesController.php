@@ -60,10 +60,9 @@ class AccountSalesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('AccountingBundle:AccountSalesReturn')->findWithSearch($globalOption,$data);
+        $entities = $em->getRepository('AccountingBundle:AccountSalesReturn')->findWithSearch($this->getUser(),$data);
         $pagination = $this->paginate($entities);
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSalesReturn')->salesOverview($globalOption,$data);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSalesReturn')->salesReturnOverview($this->getUser(),$data);
         return $this->render('AccountingBundle:AccountSales:salesReturn.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,

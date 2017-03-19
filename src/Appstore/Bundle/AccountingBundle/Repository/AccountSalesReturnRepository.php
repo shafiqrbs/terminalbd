@@ -5,6 +5,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -17,13 +18,19 @@ class AccountSalesReturnRepository extends EntityRepository
 {
 
 
-    public function salesOverview($globalOption,$data)
+    public function salesReturnOverview(User $user,$data)
     {
 
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.totalAmount) AS totalAmount, SUM(e.amount) AS receiveAmount, SUM(e.amount) AS dueAmount,SUM(e.amount) AS returnAmount ');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+        if (!empty($branch)){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
         $qb->andWhere("e.process = 'approved'");
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getSingleResult();
@@ -32,11 +39,18 @@ class AccountSalesReturnRepository extends EntityRepository
 
     }
 
-    public function findWithSearch($globalOption,$data = '')
+    public function findWithSearch(User $user,$data = '')
     {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+
         $qb = $this->createQueryBuilder('e');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+        if (!empty($branch)){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
         $result = $qb->getQuery();
@@ -107,6 +121,7 @@ class AccountSalesReturnRepository extends EntityRepository
         $accountSales = new AccountSalesReturn();
         $accountSales->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
         if(!empty($entity->getBranches())){
+
             $accountSales->setBranches($entity->getBranches());
         }
         $accountSales->setSalesReturn($entity);
