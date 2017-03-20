@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -13,6 +14,100 @@ use Doctrine\ORM\EntityRepository;
  */
 class AccountJournalRepository extends EntityRepository
 {
+
+
+    public function findWithSearch(User $user,$data = '')
+    {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        if (!empty($branch)){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.updated','DESC');
+        $result = $qb->getQuery();
+        return $result;
+    }
+
+    public function accountCashOverview(User $user,$transactionMethods,$data)
+    {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.transactionMethod','t');
+        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        if (!empty($branch)){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $qb->andWhere("t.id IN(:transactionMethod)");
+        $qb->setParameter('transactionMethod',array_values($transactionMethods));
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $data =  array('debit'=> $result['debit'],'credit'=> $result['credit']);
+        return $data;
+
+    }
+
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
+    {
+        if(!empty($data))
+        {
+            $datetime = new \DateTime("now");
+            $accountRefNo = isset($data['accountRefNo'])  ? $data['accountRefNo'] : '';
+            $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
+            $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
+
+            $startDate = isset($data['startDate']) and $data['startDate'] != '' ? $data['startDate'].' 00:00:00' : $today_startdatetime;
+            $endDate =   isset($data['endDate']) and $data['endDate'] != '' ? $data['endDate'].' 23:59:59' : $today_enddatetime;
+
+
+            if (!empty($accountRefNo)) {
+
+                $qb->andWhere("e.accountRefNo = :accountRefNo");
+                $qb->setParameter('accountRefNo', $accountRefNo);
+            }
+
+            if (!empty($toUser)) {
+
+
+                $qb->andWhere("e.toUser = :toUser");
+                $qb->setParameter('toUser', $toUser);
+            }
+            if (!empty($accountHead)) {
+
+                $qb->andWhere("e.accountHead = :accountHead");
+                $qb->setParameter('accountHead', $accountHead);
+            }
+
+            if (!empty($data['startDate']) ) {
+
+                $qb->andWhere("e.updated >= :startDate");
+                $qb->setParameter('startDate', $startDate.' 00:00:00');
+            }
+            if (!empty($data['endDate'])) {
+
+                $qb->andWhere("e.updated <= :endDate");
+                $qb->setParameter('endDate', $endDate.' 23:59:59');
+            }
+
+        }
+
+    }
+
     public function accountJournalOverview($globalOption,$data)
     {
         $qb = $this->_em->createQueryBuilder();
@@ -30,6 +125,7 @@ class AccountJournalRepository extends EntityRepository
         $qb->select('sum(s.amount) as amount');
         $qb->where('s.globalOption = :globalOption');
         $qb->setParameter('globalOption', $globalOption);
+
         if (!empty($startDate) and $startDate !="") {
             $qb->andWhere("s.updated >= :startDate");
             $qb->setParameter('startDate', $startDate);
@@ -66,28 +162,7 @@ class AccountJournalRepository extends EntityRepository
         $qb->groupBy('accountHead.id');
         return  $qb->getQuery()->getArrayResult();
     }
-    /**
-     * @param $qb
-     * @param $data
-     */
 
-    protected function handleSearchBetween($qb,$data)
-    {
-
-        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
-        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-
-        if (!empty($data['startDate']) ) {
-
-            $qb->andWhere("ex.updated >= :startDate");
-            $qb->setParameter('startDate', $startDate.' 00:00:00');
-        }
-        if (!empty($data['endDate'])) {
-
-            $qb->andWhere("ex.updated <= :endDate");
-            $qb->setParameter('endDate', $endDate.' 23:59:59');
-        }
-    }
 
     public function insertAccountPurchaseJournal(Purchase $purchase)
     {

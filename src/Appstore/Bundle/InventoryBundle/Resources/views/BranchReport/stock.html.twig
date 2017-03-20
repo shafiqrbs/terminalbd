@@ -91,6 +91,7 @@
                                     <th class="numeric" >Unit</th>
                                     <th class="numeric" >Receive</th>
                                     <th class="numeric" >Sales</th>
+                                    <th class="numeric" >Sales Return</th>
                                     <th class="numeric" >Ongoing Sales</th>
                                     <th class="numeric" >Return</th>
                                     <th class="numeric" >Remaining</th>
@@ -105,9 +106,10 @@
                                             <td class="numeric" >{% if entity.masterItem.productUnit is defined and entity.masterItem.productUnit is not empty %}{{ entity.masterItem.productUnit.name }}{% endif %}</td>
                                             <td class="numeric" >{{ entity.receiveQuantity }}</td>
                                             <td class="numeric" >{{  stockSalesItem[entity.itemId]|default() }}</td>
+                                            <td class="numeric" >{{  salesReturnItem[entity.itemId]|default() }}</td>
                                             <td class="numeric" >{{  stockOngoingItem[entity.itemId]|default() }}</td>
                                             <td class="numeric" >{{  stockReturnItem[entity.itemId]|default() }}</td>
-                                            <td class="numeric" >{{  entity.receiveQuantity - (stockReturnItem[entity.itemId]|default(0)) -  stockSalesItem[entity.itemId]|default(0) - stockOngoingItem[entity.itemId]|default(0) }}</td>
+                                            <td class="numeric" >{{  entity.receiveQuantity +  salesReturnItem[entity.itemId]|default(0) - (stockReturnItem[entity.itemId]|default(0)) -  stockSalesItem[entity.itemId]|default(0) - stockOngoingItem[entity.itemId]|default(0) }}</td>
                                             <td class="numeric" ><a class="btn green mini" href="{{ path('inventory_branch_report_item_view',{'item' : entity.itemId}) }}"><i class="icon-eye-open"></i></a> </td>
                                          </tr>
                                     {% endfor %}

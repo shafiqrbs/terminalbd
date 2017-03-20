@@ -170,6 +170,22 @@ class DeliveryRepository extends EntityRepository
         return $result;
     }
 
+    public  function getSalesReturnOverview($inventory, $branch , $data=''){
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:SalesReturnItem','si');
+        $qb->join('si.salesReturn','e');
+        $qb->select('SUM(si.quantity) AS quantity');
+        $qb->where('e.process = :process');
+        $qb->setParameter('process','complete');
+        $qb->andWhere("e.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere("e.branches = :branch");
+        $qb->setParameter('branch', $branch);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+    }
+
 
 
     /**
@@ -277,6 +293,33 @@ class DeliveryRepository extends EntityRepository
         $qb->setParameter('branch', $branch);
         // $this->handleWithSearch($qb,$data);
         $qb->groupBy('salesItem.item');
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($arrayResult as $row) {
+            $data[$row['itemId']] = $row['salesQuantity'];
+        }
+        return $data;
+
+    }
+
+    public function stockSalesReturnItem($inventory,$branch,$data)
+    {
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:SalesReturnItem','sales_return_item');
+        $qb->join('sales_return_item.salesReturn','sales_return');
+        $qb->join('sales_return_item.salesItem','salesItem');
+        $qb->join('salesItem.item','item');
+        $qb->select('item.id as itemId');
+        $qb->addSelect("SUM(sales_return_item.quantity) AS salesQuantity ");
+        $qb->where("sales_return.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('sales_return.process =:process ');
+        $qb->setParameter('process','complete');
+        $qb->andWhere("sales_return.branches = :branch");
+        $qb->setParameter('branch', $branch);
+        // $this->handleWithSearch($qb,$data);
+        $qb->groupBy('item.id');
         $arrayResult = $qb->getQuery()->getArrayResult();
         $data = array();
         foreach($arrayResult as $row) {
@@ -400,6 +443,37 @@ class DeliveryRepository extends EntityRepository
 
     }
 
+    public function stockSalesReturnItemDetails(User $user,$item)
+    {
+
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $branch = $user->getProfile()->getBranches();
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:SalesReturnItem','sales_return_item');
+        $qb->join('sales_return_item.salesReturn','sales_return');
+        $qb->join('sales_return_item.salesItem','salesItem');
+        $qb->join('salesItem.purchaseItem','purchaseItem');
+        $qb->select('purchaseItem.id as purchaseItemId');
+        $qb->addSelect("SUM(sales_return_item.quantity) AS salesReturnQuantity ");
+        $qb->where("sales_return.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('sales_return.process =:process ');
+        $qb->setParameter('process','complete');
+        $qb->andWhere("sales_return.branches = :branch");
+        $qb->setParameter('branch', $branch);
+        $qb->andWhere("salesItem.item = :item");
+        $qb->setParameter('item', $item);
+        $qb->groupBy('salesItem.purchaseItem');
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($arrayResult as $row) {
+            $data[$row['purchaseItemId']] = $row['salesReturnQuantity'];
+        }
+        return $data;
+
+    }
+
     public function stockOngoingItemDetails(User $user,$item)
     {
         $inventory = $user->getGlobalOption()->getInventoryConfig();
@@ -463,6 +537,7 @@ class DeliveryRepository extends EntityRepository
 
         $result = $this->stockItemDetails($user,$item);
         $stockSalesItem = $this->stockSalesItemDetails($user,$item);
+        $stockSalesReturnItem = $this->stockSalesReturnItemDetails($user,$item);
         $stockOngoingItem = $this->stockOngoingItemDetails($user,$item);
         $stockReturnItem = $this->stockReturnItemDetails($user,$item);
 
@@ -471,8 +546,9 @@ class DeliveryRepository extends EntityRepository
             $salesQnt = !empty($stockSalesItem[$row['purchaseItemId']]) ? $stockSalesItem[$row['purchaseItemId']] : 0;
             $ongoingQnt = !empty($stockOngoingItem[$row['purchaseItemId']]) ? $stockOngoingItem[$row['purchaseItemId']] : 0;
             $returnQnt = !empty($stockReturnItem[$row['purchaseItemId']]) ? $stockReturnItem[$row['purchaseItemId']] : 0;
+            $salesReturnQnt = !empty($stockSalesReturnItem[$row['purchaseItemId']]) ? $stockSalesReturnItem[$row['purchaseItemId']] : 0;
 
-            $remaingQnt = $row['receiveQuantity'] - $salesQnt - $returnQnt - $ongoingQnt ;
+            $remaingQnt = $row['receiveQuantity'] + $salesReturnQnt - $salesQnt - $returnQnt - $ongoingQnt ;
             $received = $row['purchaseDate']->format('d-m-Y');
             $deliveryDate = $row['deliveryDate']->format('d-m-Y');
 
@@ -482,6 +558,7 @@ class DeliveryRepository extends EntityRepository
             $data .= '<td class="numeric" >'.$deliveryDate.'</td>';
             $data .= '<td class="numeric" >'.$row['receiveQuantity'].'</td>';
             $data .= '<td class="numeric" >'.$salesQnt.'</td>';
+            $data .= '<td class="numeric" >'.$salesReturnQnt.'</td>';
             $data .= '<td class="numeric" >'.$ongoingQnt.'</td>';
             $data .= '<td class="numeric" >'.$remaingQnt.'</td>';
             $data .= '<td class="numeric" >'.$row['salesPrice'].'</td>';
@@ -548,7 +625,8 @@ class DeliveryRepository extends EntityRepository
         $qb->from('InventoryBundle:SalesItem','salesItem');
         $qb->join('salesItem.sales','sales');
         $qb->join('salesItem.purchaseItem','purchaseItem');
-        $qb->select('purchaseItem.id as purchaseItemId');
+        $qb->select('salesItem.id as salesItemId');
+        $qb->addSelect('purchaseItem.id as purchaseItemId');
         $qb->addSelect("sales.invoice AS invoice ");
         $qb->addSelect("sales.updated AS updated ");
         $qb->addSelect("sales.salesMode AS salesMode ");
@@ -572,6 +650,41 @@ class DeliveryRepository extends EntityRepository
         }
         $qb->orderBy('sales.updated','DESC');
         $data = $qb->getQuery()->getArrayResult();
+        return $data;
+
+    }
+
+    public function stockSalesReturnItemHistory(User $user,$item , $barcode = 0 )
+    {
+
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $branch = $user->getProfile()->getBranches();
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:SalesReturnItem','sales_return_item');
+        $qb->join('sales_return_item.salesReturn','sales_return');
+        $qb->join('sales_return_item.salesItem','salesItem');
+        $qb->join('salesItem.purchaseItem','purchaseItem');
+        $qb->select('salesItem.id as salesItemId');
+        $qb->addSelect("SUM(sales_return_item.quantity) AS salesReturnQuantity ");
+        $qb->where("sales_return.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('sales_return.process =:process ');
+        $qb->setParameter('process','complete');
+        $qb->andWhere("sales_return.branches = :branch");
+        $qb->setParameter('branch', $branch);
+        $qb->andWhere("salesItem.item = :item");
+        $qb->setParameter('item', $item);
+        if(!empty($barcode)){
+            $qb->andWhere("purchaseItem.barcode = :barcode");
+            $qb->setParameter('barcode', $barcode);
+        }
+        $qb->groupBy('salesItem.id');
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($arrayResult as $row) {
+            $data[$row['salesItemId']] = $row['salesReturnQuantity'];
+        }
         return $data;
 
     }

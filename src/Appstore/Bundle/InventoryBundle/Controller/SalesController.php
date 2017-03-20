@@ -678,16 +678,18 @@ class SalesController extends Controller
         $due                = $entity->getDue();
         $payment            = $entity->getPayment();
         $transaction        = $entity->getTransactionMethod()->getName();
-        $salesBy            = $entity->getSalesBy()->getProfile()->getName();;
+        $salesBy            = $entity->getSalesBy()->getProfile()->getName();
 
+        /* Information for the receipt */
 
-        /** ===================Invoice Sales Item Information========================= */
+        $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
+        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
+        $vat            = new PosItemManager('Add Vat: ','Tk.',number_format($vat));
+        $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
+        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
+        $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
+        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
 
-        $i = 1;
-        $items = array();
-        foreach ( $entity->getSalesItems() as $row){
-            $items[]  = new PosItemManager($i.'. '.$row->getItem()->getName() ,$row->getQuantity(),$row->getSubTotal());
-        }
 
         /* Date is kept the same for testing */
         $date = date('l jS \of F Y h:i:s A');
@@ -704,33 +706,17 @@ class SalesController extends Controller
         }else{
             $printer -> text($address."\n");
         }
-       /* $printer -> text($mobile."\n");*/
+
         $printer -> feed();
 
         /* Title of receipt */
-        $printer -> setJustification(Printer::JUSTIFY_LEFT);
-        $printer -> setEmphasis(false);
         if(!empty($vatRegNo)){
+            $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+            $printer -> setJustification(Printer::JUSTIFY_LEFT);
+            $printer -> setEmphasis(false);
             $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
         }
-        /*
-        if(!empty($mobile)){
-            $printer -> text ( "----------------------------------" );
-            $printer -> text("Mobile: ".$mobile. "\n");
-            $printer -> setEmphasis(false);
-        }
-        */
-
-        /* Information for the receipt */
-
-        $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
-        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
-        $vat            = new PosItemManager('Add Vat: ','Tk.',number_format($vat));
-        $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
-        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
-        $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
-        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
 
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
@@ -747,7 +733,7 @@ class SalesController extends Controller
         $printer -> setEmphasis(false);
 
         $i=1;
-      foreach ( $entity->getSalesItems() as $row){
+        foreach ( $entity->getSalesItems() as $row){
 
             $printer -> setUnderline(Printer::UNDERLINE_NONE);
             $printer -> text( new PosItemManager($i.'. '.$row->getItem()->getName(),"",""));

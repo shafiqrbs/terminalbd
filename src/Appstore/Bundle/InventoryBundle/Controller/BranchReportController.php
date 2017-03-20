@@ -44,9 +44,10 @@ class BranchReportController extends Controller
         $stockOverview = $em->getRepository('InventoryBundle:Delivery')->getStockOverview($inventory,$branch,$data);
         $salesOngoingOverview = $em->getRepository('InventoryBundle:Delivery')->getSalesOngoingOverview($inventory,$branch,$data);
         $salesOverview = $em->getRepository('InventoryBundle:Delivery')->getSalesOverview($inventory,$branch,$data);
+        $salesReturnOverview = $em->getRepository('InventoryBundle:Delivery')->getSalesReturnOverview($inventory,$branch,$data);
         $returnOverview = $em->getRepository('InventoryBundle:Delivery')->getReturnOverview($inventory,$branch,$data);
 
-        $stockOverview = array('stock'=>$stockOverview['quantity'] , 'ongoing'=> $salesOngoingOverview['quantity'],'sales' => $salesOverview['quantity'] , 'return'=> $returnOverview['quantity']) ;
+        $stockOverview = array('stock'=>$stockOverview['quantity'] , 'ongoing'=> $salesOngoingOverview['quantity'],'sales' => $salesOverview['quantity'] , 'return'=> $returnOverview['quantity'],'salesReturn' => $salesReturnOverview['quantity']) ;
         return $this->render('InventoryBundle:BranchReport:stockOverview.html.twig', array(
             'stockOverview' => $stockOverview
         ));
@@ -62,15 +63,17 @@ class BranchReportController extends Controller
         $entities =  $em->getRepository('InventoryBundle:Delivery')->stockItem($inventory,$branch,$data);
         $pagination = $this->paginate($entities);
         $stockSalesItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItem($inventory,$branch,$data);
+        $salesReturnItem = $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItem($inventory,$branch,$data);
         $stockOngoingItem =  $em->getRepository('InventoryBundle:Delivery')->stockOngoingItem($inventory,$branch,$data);
         $stockReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockReturnItem($inventory,$branch,$data);
 
         return $this->render('InventoryBundle:BranchReport:stock.html.twig', array(
-            'entities' => $pagination,
-            'stockOngoingItem' => $stockOngoingItem,
-            'stockSalesItem' => $stockSalesItem,
-            'stockReturnItem' => $stockReturnItem,
-            'searchForm' => $data,
+            'entities'                  => $pagination,
+            'stockOngoingItem'          => $stockOngoingItem,
+            'stockSalesItem'            => $stockSalesItem,
+            'salesReturnItem'           => $salesReturnItem,
+            'stockReturnItem'           => $stockReturnItem,
+            'searchForm'                => $data,
         ));
     }
 
@@ -92,12 +95,14 @@ class BranchReportController extends Controller
         $user = $this->getUser();
         $entities = $em->getRepository('InventoryBundle:Delivery')->stockItemDetails($user,$item);
         $stockSalesItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItemDetails($user,$item);
+        $stockSalesReturnItem = $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItemDetails($user,$item);
         $stockOngoingItem =  $em->getRepository('InventoryBundle:Delivery')->stockOngoingItemDetails($user,$item);
         $stockReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockReturnItemDetails($user,$item);
 
         return $this->render('InventoryBundle:BranchReport:stockDetails.html.twig', array(
             'entity'          => $item,
             'entities'      => $entities,
+            'stockSalesReturnItem' => $stockSalesReturnItem,
             'stockOngoingItem' => $stockOngoingItem,
             'stockSalesItem' => $stockSalesItem,
             'stockReturnItem' => $stockReturnItem,
@@ -112,6 +117,7 @@ class BranchReportController extends Controller
         $entities = $em->getRepository('InventoryBundle:Delivery')->stockItemDetails($user,$item);
         $totalQnt = $em->getRepository('InventoryBundle:Delivery')->stockReceiveSingleItem($user,$item);
         $stockSalesItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItemDetails($user,$item);
+        $stockSalesReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItemDetails($user,$item);
         $stockOngoingItem =  $em->getRepository('InventoryBundle:Delivery')->stockOngoingItemDetails($user,$item);
         $stockReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockReturnItemDetails($user,$item);
 
@@ -119,6 +125,7 @@ class BranchReportController extends Controller
             'entity'            => $item,
             'totalQnt'          => $totalQnt,
             'entities'          => $entities,
+            'stockReturnSalesItem' => $stockSalesReturnItem,
             'stockOngoingItem'  => $stockOngoingItem,
             'stockSalesItem'    => $stockSalesItem,
             'stockReturnItem'   => $stockReturnItem,
@@ -135,12 +142,14 @@ class BranchReportController extends Controller
         $user = $this->getUser();
         $entities = $em->getRepository('InventoryBundle:Delivery')->stockItemDetails($user,$item);
         $stockSalesItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItemDetails($user,$item);
+        $stockSalesReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItemDetails($user,$item);
         $stockOngoingItem =  $em->getRepository('InventoryBundle:Delivery')->stockOngoingItemDetails($user,$item);
         $stockReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockReturnItemDetails($user,$item);
 
         return $this->render('InventoryBundle:BranchReport:itemStockDetails.html.twig', array(
             'entity'          => $item,
             'entities'      => $entities,
+            'stockSalesReturnItem' => $stockSalesReturnItem,
             'stockOngoingItem' => $stockOngoingItem,
             'stockSalesItem' => $stockSalesItem,
             'stockReturnItem' => $stockReturnItem,
@@ -166,11 +175,13 @@ class BranchReportController extends Controller
         $user = $this->getUser();
         $totalQnt = $em->getRepository('InventoryBundle:Delivery')->stockReceiveSingleItem($user,$item);
         $entities =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItemHistory($user,$item);
+        $stockSalesReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItemHistory($user,$item);
 
         return $this->render('InventoryBundle:BranchReport:salesItemDetails.html.twig', array(
-            'entity'            => $item,
-            'totalQnt'          => $totalQnt,
-            'entities'          => $entities
+            'entity'                            => $item,
+            'totalQnt'                          => $totalQnt,
+            'entities'                          => $entities,
+            'stockSalesReturnItem'              => $stockSalesReturnItem
         ));
 
     }
@@ -182,11 +193,13 @@ class BranchReportController extends Controller
         $purchaseItem = $em->getRepository('InventoryBundle:Delivery')->barcodeWithItem($user, $barcode);
         $totalQnt = $em->getRepository('InventoryBundle:Delivery')->stockReceiveSingleItem($user, $purchaseItem->getItem(),$barcode);
         $entities =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItemHistory($user,$purchaseItem->getItem(),$barcode);
+        $stockSalesReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItemHistory($user,$purchaseItem->getItem(),$barcode);
 
         return $this->render('InventoryBundle:BranchReport:salesItemDetails.html.twig', array(
-            'entity'            =>  $purchaseItem->getItem(),
-            'totalQnt'          => $totalQnt,
-            'entities'          => $entities
+            'entity'                            =>  $purchaseItem->getItem(),
+            'totalQnt'                          => $totalQnt,
+            'entities'                          => $entities,
+            'stockSalesReturnItem'              => $stockSalesReturnItem
         ));
 
     }

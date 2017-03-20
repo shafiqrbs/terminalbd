@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Stock Items
+                    Branch Item Stock
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Stock Items</a></li>
+                    <li><a href="{{ path('inventory_branch_report_item') }}">Branch Item Stock</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -29,7 +29,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Item lists</div>
+                        <div class="caption"><i class="icon-reorder"></i>Item Details</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -48,7 +48,7 @@
 
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
-                            <div class="portlet search-portlet box grey">
+                            <div class="portlet search-portlet">
                                 <div class="row-fluid">
                                     <form class="search-form" action="" method="get" name="itemSearch">
                                         <div class="span12">
@@ -84,6 +84,7 @@
                                         <th class="numeric" >Receive Date</th>
                                         <th class="numeric" >Receive Qnt</th>
                                         <th class="numeric" >Sales Qnt</th>
+                                        <th class="numeric" >Sales Reurn Qnt</th>
                                         <th class="numeric" >Ongoing Qnt</th>
                                         <th class="numeric" >Return Qnt</th>
                                         <th class="numeric" >Remaining Qnt</th>
@@ -93,6 +94,7 @@
                                     <tbody >
                                     {% set receive = 0 %}
                                     {% set salesItem = 0 %}
+                                    {% set salesReturnItem = 0 %}
                                     {% set ongoingItem = 0 %}
                                     {% set returnItem = 0 %}
 
@@ -100,6 +102,7 @@
 
                                         {%  set receive = receive + entity.receiveQuantity  %}
                                         {%  set salesItem = salesItem + stockSalesItem[entity.purchaseItemId]|default(0)  %}
+                                        {%  set salesReturnItem = salesReturnItem + stockSalesReturnItem[entity.purchaseItemId]|default(0)  %}
                                         {%  set ongoingItem = ongoingItem + stockOngoingItem[entity.purchaseItemId]|default(0)  %}
                                         {%  set returnItem = returnItem + stockReturnItem[entity.purchaseItemId]|default(0)  %}
                                         <tr>
@@ -109,19 +112,22 @@
                                             <td class="numeric" >{{ entity.deliveryDate|date('d-m-Y') }}</td>
                                             <td class="numeric" >{{ entity.receiveQuantity }}</td>
                                             <td class="numeric" >{{ stockSalesItem[entity.purchaseItemId]|default() }}</td>
+                                            <td class="numeric" >{{ stockSalesReturnItem[entity.purchaseItemId]|default() }}</td>
                                             <td class="numeric" >{{ stockOngoingItem[entity.purchaseItemId]|default() }}</td>
                                             <td class="numeric" >{{ stockReturnItem[entity.purchaseItemId]|default() }}</td>
-                                            <td class="numeric" >{{ entity.receiveQuantity - (stockReturnItem[entity.purchaseItemId]|default(0)) -  stockSalesItem[entity.purchaseItemId]|default(0) - stockOngoingItem[entity.purchaseItemId]|default(0) }}</td>
+                                            <td class="numeric" >{{ entity.receiveQuantity + salesReturnItem - (stockReturnItem[entity.purchaseItemId]|default(0)) -  stockSalesItem[entity.purchaseItemId]|default(0) - stockOngoingItem[entity.purchaseItemId]|default(0) }}</td>
                                             <td class="numeric" >{{ entity.salesPrice }}</td>
                                         </tr>
                                     {% endfor %}
                                     <tr>
-                                        <td colspan="5"><strong class="pull-right">Total</strong></td>
+                                        <td colspan="4"><strong class="pull-right">Total</strong></td>
                                         <td class="numeric" >{{ receive }}</td>
                                         <td class="numeric" >{{ salesItem }}</td>
+                                        <td class="numeric" >{{ salesReturnItem }}</td>
                                         <td class="numeric" >{{ ongoingItem }}</td>
                                         <td class="numeric" >{{ returnItem }}</td>
-                                        <td class="numeric" >{{ receive - salesItem - ongoingItem - returnItem  }}</td>
+                                        <td class="numeric" >{{ receive + salesReturnItem - salesItem - ongoingItem - returnItem  }}</td>
+                                        <td></td>
                                     </tr>
 
                                     </tbody>

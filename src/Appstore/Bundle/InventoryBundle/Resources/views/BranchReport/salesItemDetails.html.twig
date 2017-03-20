@@ -26,6 +26,7 @@
         <th class="numeric" >Process</th>
         <th class="numeric" >Sales Qnt</th>
         <th class="numeric" >Ongoing Qnt</th>
+        <th class="numeric" >Sales Return Qnt</th>
     </tr>
     </thead>
     <tbody >
@@ -53,12 +54,14 @@
             <td class="numeric" >{{ entity.process }}</td>
             <td class="numeric" >{% if  entity.process == 'Paid' %}{{ entity.quantity }}{% endif %}</td>
             <td class="numeric" >{% if  entity.process != 'Paid' %}{{ entity.quantity }}{% endif %}</td>
+            <td class="numeric" >{{ stockSalesReturnItem[entity.salesItemId]|default() }}</td>
 
         </tr>
     {% endfor %}
     <tr>
         <td colspan="8"><strong class="pull-right">Total</strong></td>
         <td class="numeric" >{{ salesItem }}</td>
+        <td class="numeric" >{{ ongoingItem }}</td>
         <td class="numeric" >{{ ongoingItem }}</td>
     </tr>
 

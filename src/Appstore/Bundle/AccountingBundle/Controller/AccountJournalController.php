@@ -37,16 +37,13 @@ class AccountJournalController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('AccountingBundle:AccountJournal')->findBy(array('globalOption'=>$globalOption),array('updated'=>'desc'));
+        $entities = $em->getRepository('AccountingBundle:AccountJournal')->findWithSearch( $this->getUser(),$data);
         $pagination = $this->paginate($entities);
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->accountJournalOverview($globalOption,$data);
         $accountHead = $this->getDoctrine()->getRepository('AccountingBundle:AccountHead')->getChildrenAccountHead($parent =array(1,5,9,12,17,20,23,29,44));
         return $this->render('AccountingBundle:AccountJournal:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
             'accountHead' => $accountHead,
-            'overview' => $overview,
         ));
     }
     /**
