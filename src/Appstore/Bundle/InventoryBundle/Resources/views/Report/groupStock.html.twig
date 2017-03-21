@@ -167,13 +167,6 @@
         </div>
     </div>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/style.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts

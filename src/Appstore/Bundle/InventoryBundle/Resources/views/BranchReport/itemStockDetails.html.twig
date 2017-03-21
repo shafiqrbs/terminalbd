@@ -52,7 +52,7 @@
             <td class="numeric" >{{ stockSalesReturnItem[entity.purchaseItemId]|default() }}</td>
             <td class="numeric" >{{ stockOngoingItem[entity.purchaseItemId]|default() }}</td>
             <td class="numeric" >{{ stockReturnItem[entity.purchaseItemId]|default() }}</td>
-            <td class="numeric" >{{ entity.receiveQuantity - (stockReturnItem[entity.purchaseItemId]|default(0)) -  stockSalesItem[entity.purchaseItemId]|default(0) - stockOngoingItem[entity.purchaseItemId]|default(0) }}</td>
+            <td class="numeric" >{{ entity.receiveQuantity + stockSalesReturnItem[entity.purchaseItemId]|default(0) - (stockReturnItem[entity.purchaseItemId]|default(0)) -  stockSalesItem[entity.purchaseItemId]|default(0) - stockOngoingItem[entity.purchaseItemId]|default(0) }}</td>
             <td class="numeric" >{{ entity.salesPrice }}</td>
         </tr>
     {% endfor %}

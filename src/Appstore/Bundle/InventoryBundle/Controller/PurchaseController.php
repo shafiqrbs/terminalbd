@@ -335,11 +335,11 @@ class PurchaseController extends Controller
         return new JsonResponse($item);
     }
 
-    public function searchNameAction($size)
+    public function searchNameAction($grn)
     {
         return new JsonResponse(array(
-            'id'=>$size,
-            'text'=>$size
+            'id'=>$grn,
+            'text'=>$grn
         ));
     }
 

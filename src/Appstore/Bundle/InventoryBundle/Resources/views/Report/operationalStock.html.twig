@@ -61,6 +61,7 @@
                                         <input type="text" id="color" name="color"  class="span12 select2Color" value="{% if searchForm.color is defined %}{{ searchForm.color }}{% endif %}"  autocomplete="off" placeholder="Enter color name ">
                                     </div>
                                 </div>
+                                <br/>
                                 <div class="row-fluid">
                                     <div class="span3">
                                         <input type="text" id="brand" name="brand"  class="span12 select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}"  autocomplete="off" placeholder="Enter brand name ">
@@ -86,6 +87,7 @@
 
                                     </div>
                                 </div>
+                                <br/>
                                 <div class="row-fluid">
                                     <div class="span6">
                                         <input type="text" id="startDate" name="startDate"  class="span12 m-wrap date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}{{ "now"|date("m/d/Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}{{ "now"|date("m/d/Y") }}{% endif %} ">
@@ -137,13 +139,6 @@
         </div>
     </div>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/style.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts

@@ -36,14 +36,8 @@
                                     <i class="icon-cogs"></i>&nbsp;Tools
                                     <i class="icon-tasks"></i>
                                 </a>
-                                {#<ul class="dropdown-menu pull-right">
-                                    <li><a href=""><i class="icon-print"></i>&nbsp; Print</a></li>
-                                    <li><a href=""><i class=" icon-download"></i>&nbsp;Pdf</a></li>
-                                    <li><a href=""><i class=" icon-download-alt"></i>&nbsp;Excel</a></li>
-                                </ul>#}
                             </div>
                         </div>
-
                     </div>
 
                     <div class="portlet-body">
@@ -54,24 +48,36 @@
                                         <input type="text" id="item" name="item"  class="span12 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name ">
                                     </div>
                                     <div class="span3">
+                                        <input type="text" id="unit" name="unit"  class="span12 select2Unit" value="{% if searchForm.unit is defined %}{{ searchForm.unit }}{% endif %}"  autocomplete="off" placeholder="Enter unit name ">
+                                    </div>
+                                    <div class="span3">
                                         <input type="text" id="size" name="size"  class="span12 select2Size" value="{% if searchForm.size is defined %}{{ searchForm.size }}{% endif %}"  autocomplete="off" placeholder="Enter size name ">
                                     </div>
                                     <div class="span3">
                                         <input type="text" id="color" name="color"  class="span12 select2Color" value="{% if searchForm.color is defined %}{{ searchForm.color }}{% endif %}"  autocomplete="off" placeholder="Enter color name ">
                                     </div>
-                                    <div class="span3">
-                                        <input type="text" id="vendor" name="vendor"  class="span12 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
-                                    </div>
-
                                 </div>
+                                <br/>
+                                <div class="row-fluid">
+                                    <div class="span3">
+                                        <input type="text" id="brand" name="brand"  class="span12 select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}"  autocomplete="off" placeholder="Enter brand name ">
+                                    </div>
+                                    <div class="span3">
+                                        <input type="text" id="" name="vendor"  class="span12 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
+                                    </div>
+                                    <div class="span6">
+                                        <input type="text" id="category" name="category"  class="span12 select2Category" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Enter category name">
+                                    </div>
+                                </div>
+                                <br/>
                                 <div class="row-fluid">
                                     <div class="span6">
-                                        <input type="text" id="startDate" name="startDate"  class="span12 m-wrap date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                        <input type="text" id="startDate" name="startDate"  class="span12 m-wrap date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}{{ "now"|date("m/d/Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}{{ "now"|date("m/d/Y") }}{% endif %} ">
                                     </div>
                                     <div class="span6">
                                         <div class="controls">
                                             <div class="input-append span11">
-                                                <input type="text" id="endDate" name="endDate"  class="span12 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                                <input type="text" id="endDate" name="endDate"  class="span12 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("m/d/Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("m/d/Y") }}{% endif %}  ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -85,9 +91,9 @@
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
                                     <th class="numeric" ><i class="icon-reorder"></i></th>
+                                    <th class="numeric" >SKU</th>
                                     <th class="numeric" >Name</th>
-                                    <th class="numeric" >Size</th>
-                                    <th class="numeric" >Color</th>
+                                    <th class="numeric" >Unit</th>
                                     <th class="numeric" >Purchase Qnt.</th>
                                     <th class="numeric" >Remaining Qnt</th>
                                     <th class="numeric" >Purchase Price</th>
@@ -105,10 +111,10 @@
                                     {% set totalSales = totalSales + entity.salesPrice %}
                                     <tr>
                                         <td>{{ loop.index }}</td>
-                                        <td class="numeric" >{{ entity.masterItem }}</td>
-                                        <td class="numeric" >{% if entity.size  %}{{ entity.size }}{% endif %}</td>
-                                        <td class="numeric" >{% if entity.color  %}{{ entity.color }}{% endif %}</td>
-                                         <td class="numeric" >{% if purchaseQuantity[entity.itemId] is defined %}
+                                        <td class="numeric" >{{ entity.sku }}</td>
+                                        <td class="numeric" >{{ entity.name }}</td>
+                                        <td class="numeric" >{% if entity.masterItem.productUnit is defined and entity.masterItem.productUnit is not empty %}{{ entity.masterItem.productUnit.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if purchaseQuantity[entity.itemId] is defined %}
                                                 {% set totalQnt = totalQnt + purchaseQuantity[entity.itemId] %}
                                                 {{ purchaseQuantity[entity.itemId] }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.remainingQuantity }}</td>
@@ -127,31 +133,15 @@
             </div>
         </div>
     </div>
-    <style>
-        .select2-container {
-            margin-left: 0px!important;
-            margin-bottom: 5px;
-        }
-        input[class*="span"].m-wrap {
-            height: 34px!important;
-        }
-    </style>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/style.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@InventoryBundle/Resources/public/js/item.js' %}
+    '@InventoryBundle/Resources/public/js/approveProcess.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    InventoryItemListPage();
+    ApproveProcess();
 {% endblock %}

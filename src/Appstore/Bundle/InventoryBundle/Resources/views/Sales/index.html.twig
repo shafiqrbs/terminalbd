@@ -201,7 +201,6 @@
     $('#sales').on("click", ".delete", function() {
 
         var url = $(this).attr("rel");
-    alert(url);
         var id = $(this).attr("id");
         $.ajax({
         url: url,
@@ -214,26 +213,5 @@
         }
         })
     })
-
-    $('#sales').on("click", ".print", function() {
-        var url = $(this).attr("rel");
-        $.ajax({
-            crossDomain: true,
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                $.ajax({
-                    crossDomain: true,
-                    url: 'http://127.0.0.1/posprint/test.php',
-                    type: 'POST',
-                    data: {data:response},
-                    success: function (response) {
-                        console.log(response);
-                    }
-                })
-            }
-        })
-    })
-
 
 {% endblock %}

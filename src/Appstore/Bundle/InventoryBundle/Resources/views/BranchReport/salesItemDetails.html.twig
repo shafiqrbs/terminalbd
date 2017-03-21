@@ -33,6 +33,7 @@
 
     {% set salesItem = 0 %}
     {% set ongoingItem = 0 %}
+    {% set salesReturnItem = 0 %}
 
 
     {% for entity in entities %}
@@ -42,6 +43,7 @@
     {% if  entity.process != 'Paid' %}
         {%  set ongoingItem = ongoingItem + entity.quantity %}
     {% endif %}
+        {%  set salesReturnItem = salesReturnItem + stockSalesReturnItem[entity.salesItemId]|default(0) %}
 
         <tr>
             <td>{{ loop.index }}</td>
@@ -62,7 +64,7 @@
         <td colspan="8"><strong class="pull-right">Total</strong></td>
         <td class="numeric" >{{ salesItem }}</td>
         <td class="numeric" >{{ ongoingItem }}</td>
-        <td class="numeric" >{{ ongoingItem }}</td>
+        <td class="numeric" >{{ salesReturnItem }}</td>
     </tr>
 
     </tbody>

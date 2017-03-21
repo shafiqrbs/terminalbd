@@ -103,8 +103,7 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-green">
-                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                    <th class="numeric" >Invoice</th>
+                                    <th class="numeric" ><i class="icon-list"></i>&nbsp;Invoice</th>
                                     <th class="numeric" >Date</th>
                                     <th class="numeric" >Sub-Total</th>
                                     <th class="numeric" >Net Total</th>
@@ -118,7 +117,6 @@
                                 <tbody id="sales">
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
-                                        <td> {% if entity.salesItems is defined and  entity.salesItems is not empty  %}<span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
@@ -156,39 +154,8 @@
                                                     <a href="{{ path('account_sales_new') }}" class="btn mini blue" ><i class="icon-money"></i></a>
                                                 {% endif %}
                                             {% endif %}
-                                        </td>
-                                    </tr>
-                                    <tr id="show-{{ entity.id }}" class="showing-overview">
-                                        <td colspan="11">
-                                            {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
-                                                <table class="table table-bordered table-striped table-condensed flip-content ">
+                                            <a data-toggle="modal" href="#responsive" rel="{{ path('inventory_salesonline_show_preview', { 'id': entity.id }) }}" class="btn purple mini sales-preview" ><i class="icon-eye-open">Preview</i></a>
 
-                                                    <thead class="flip-content ">
-                                                    <tr class="head-green">
-                                                        <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
-                                                        <th class="numeric" >Item</th>
-                                                        <th class="numeric" >Barcode</th>
-                                                        <th class="numeric" >Qnt</th>
-                                                        <th class="numeric" >Estimate price</th>
-                                                        <th class="numeric" >Sales price</th>
-                                                        <th class="numeric" >Sub-total</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {% for salesItem in entity.salesItems %}
-                                                        <tr>
-                                                            <td class="numeric" >{{ loop.index }}</td>
-                                                            <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
-                                                            <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
-                                                            <td class="numeric" >{{ salesItem.quantity }}</td>
-                                                            <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
-                                                            <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
-                                                            <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -202,6 +169,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div id="responsive" class="modal hide fade" tabindex="-1" data-width="850"  data-height="" style="background: #ffffff"  >
     </div>
 {% endblock %}
 
@@ -218,4 +187,18 @@
     {{ parent() }}
     EditableInit();
     ApproveProcess();
+    $( ".sales-preview" ).click(function() {
+        var url = $(this).attr("rel");
+        $.ajax({
+            url: url,
+            type: 'GET',
+            beforeSend: function() {
+                $('#responsive').show().addClass('ajax-loading').fadeIn(5000);
+            },
+            success: function (response) {
+                $('#responsive').removeClass('ajax-loading');
+                $('#responsive').html(response);
+            }
+        })
+    });
 {% endblock %}

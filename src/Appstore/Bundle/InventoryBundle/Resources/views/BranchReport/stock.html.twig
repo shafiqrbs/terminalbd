@@ -64,6 +64,7 @@
                                             <input type="text" id="vendor" name="vendor"  class="span12 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Enter vendor name">
                                         </div>
                                     </div>
+                                    <br/>
                                     <div class="row-fluid">
                                         <div class="span6">
                                             <input type="text" id="startDate" name="startDate"  class="span12 m-wrap date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
@@ -126,23 +127,7 @@
             </div>
         </div>
     </div>
-    <style>
-        .select2-container {
-            margin-left: 0px!important;
-            margin-bottom: 5px;
-        }
-        input[class*="span"].m-wrap {
-            height: 34px!important;
-        }
-    </style>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/style.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts

@@ -255,6 +255,21 @@ class SalesOnlineController extends Controller
     }
 
     /**
+     * Finds and displays a Sales entity.
+     *
+     */
+    public function showPreviewAction(Sales $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
+        if ($inventory == $entity->getInventoryConfig()->getId()) {
+            return $this->render('InventoryBundle:SalesOnline:show-preview.html.twig', array(
+                'entity' => $entity,
+            ));
+        }
+    }
+
+
+    /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
 

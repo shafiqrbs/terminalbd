@@ -74,17 +74,18 @@
                             <div class="row-fluid">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
+                                        <div class="span2">
+                                            <input type="text" id="barcode" name="barcode"  class="span12 select2Barcode" value="{% if searchForm.barcode is defined %}{{ searchForm.barcode }}{% endif %}"  autocomplete="off" placeholder="Enter item barcode">
+                                        </div>
                                         <div class="span3">
                                             <input type="text" id="item" name="item"  class="span12 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name">
                                         </div>
-                                        <div class="span3">
+                                        <div class="span2">
                                             <input type="text" id="brand" name="brand"  class="leftMargin span12 select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}"  autocomplete="off" placeholder="Product brand name">
                                         </div>
-
-                                        <div class="span3">
+                                        <div class="span2">
                                             <input type="text" id="vendor" name="vendor"  class="leftMargin span12 select2Vendor" value="{% if searchForm.vendor is defined %}{{ searchForm.vendor }}{% endif %}"  autocomplete="off" placeholder="Select vendor name">
                                         </div>
-
                                         <div class="span3">
                                             <div class="controls">
                                                 <div class="input-append span10">
@@ -104,7 +105,6 @@
                                 <tr class="head-grey">
                                     <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
                                     <th class="numeric" >SKU Name </th>
-                                    <th class="numeric" >SKU</th>
                                     <th class="numeric" >Received</th>
                                     <th class="numeric" >GRN</th>
                                     <th class="numeric" >Qnt</th>
@@ -118,13 +118,12 @@
                                     <tr {% if purchaseItem.itemStock == 0    %} class="disabled" aria-disabled="true" {% endif %}>
                                         <td><input {% if purchaseItem.id in selected %}checked="checked"{% endif %} id="action-{{ purchaseItem.id }}" {% if purchaseItem.itemStock == 0    %} disabled="disabled" {% endif %} data-id="{{ purchaseItem.id }}" data-url="{{ path('account_bank_approve',{'id':purchaseItem.id}) }}" type="checkbox" name="item[]" value="{{ purchaseItem.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="Barcode print"  >&nbsp;{{ purchaseItem.barcode }}</td>
                                         <td class="numeric" >{{ purchaseItem.item.name }}</td>
-                                        <td class="numeric" >{{ purchaseItem.item.sku }}</td>
                                         <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.created|date('d-m-Y') }}{% endif %}</td>
                                         <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.grn }}{% endif %}</td>
                                         <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                         <td class="numeric" >{{ purchaseItem.itemStock }}</td>
                                         <td class="numeric" >{{ purchaseItem.purchasePrice }}</td>
-                                        <td class="numeric" ><a class="editable" data-name="SalesPrice" href="#"  data-url="{{ path('inventory_purchaseitem_inline_update') }}" data-type="text" data-pk="{{ purchaseItem.id }}" data-original-title="Enter sales price">{{purchaseItem.salesPrice}}</a></td>
+                                        <td class="numeric" >{{ purchaseItem.salesPrice }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

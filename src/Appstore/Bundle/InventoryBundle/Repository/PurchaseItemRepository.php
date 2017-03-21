@@ -19,6 +19,7 @@ class PurchaseItemRepository extends EntityRepository
         $item = isset($data['item'])? $data['item'] :'';
         $grn = isset($data['grn'])? $data['grn'] :'';
         $brand = isset($data['brand'])? $data['brand'] :'';
+        $barcode = isset($data['barcode'])? $data['barcode'] :'';
 
         $qb = $this->createQueryBuilder('pi');
         $qb->join("pi.purchase",'purchase');
@@ -42,6 +43,10 @@ class PurchaseItemRepository extends EntityRepository
         if (!empty($grn)) {
             $qb->andWhere("purchase.grn = :grn");
             $qb->setParameter('grn', $grn);
+        }
+        if (!empty($barcode)) {
+            $qb->andWhere("pi.barcode = :barcode");
+            $qb->setParameter('barcode', $barcode);
         }
         $qb->orderBy('item.updated','DESC');
         $sql = $qb->getQuery();

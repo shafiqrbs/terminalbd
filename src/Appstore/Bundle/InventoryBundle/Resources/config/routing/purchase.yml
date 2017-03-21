@@ -40,7 +40,7 @@ inventory_grn_search:
            expose: true
 
 inventory_grn_name:
-    path:     /purchase-search-name
+    path:     /{grn}/purchase-search-name
     defaults: { _controller: "InventoryBundle:Purchase:searchName" }
     options:
            expose: true

@@ -323,4 +323,12 @@ class PurchaseItemController extends Controller
         exit;
 
     }
+
+    public function searchNameAction($barcode)
+    {
+        return new JsonResponse(array(
+            'id'    => $barcode,
+            'text'  => $barcode
+        ));
+    }
 }

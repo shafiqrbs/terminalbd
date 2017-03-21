@@ -52,6 +52,7 @@
         'assets/plugins/bootstrap-editable/inputs-ext/address/address.css'
         'assets/plugins/jquery-nestable/jquery.nestable.css'
         'assets/plugins/jquery-tree/src/css/jquery.tree.css'
+        'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
         'assets/css/comments.css'
         'assets/css/overwrite.css'
 
@@ -189,6 +190,7 @@
 'assets/scripts/jquery.mjs.nestedSortable.js'
 'assets/scripts/nested-sortable.js'
 'assets/scripts/app.js'
+'assets/scripts/ui-modals.js'
 'assets/scripts/form-editable.js'
 'assets/js/jquery.cookie-1.4.1.min.js'
 'assets/scripts/ui-jqueryui.js'
@@ -219,6 +221,7 @@
 
         {% block documentready %}
             App.init();
+            UIModals.init();
             //FormValidation.init();
             FormComponents.init();
             //Tasks.initDashboardWidget();

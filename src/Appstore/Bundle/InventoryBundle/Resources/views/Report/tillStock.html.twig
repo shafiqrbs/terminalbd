@@ -63,9 +63,8 @@
                                         <div class="span3">
                                             <input type="text" id="color" name="color"  class="span12 select2Color" value="{% if searchForm.color is defined %}{{ searchForm.color }}{% endif %}"  autocomplete="off" placeholder="Enter color name ">
                                         </div>
-
-
                                     </div>
+                                    <br/>
                                     <div class="row-fluid">
                                         <div class="span3">
                                             <input type="text" id="brand" name="brand"  class="span12 select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}"  autocomplete="off" placeholder="Enter brand name ">
@@ -151,23 +150,8 @@
             </div>
         </div>
     </div>
-    <style>
-        .select2-container {
-            margin-left: 0px!important;
-            margin-bottom: 5px;
-        }
-        input[class*="span"].m-wrap {
-            height: 34px!important;
-        }
-    </style>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/style.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
+
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts

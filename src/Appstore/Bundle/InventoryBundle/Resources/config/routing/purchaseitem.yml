@@ -31,6 +31,12 @@ inventory_purchaseitem_search:
     options:
             expose: true
 
+inventory_barcode_name:
+    path:     /{barcode}/barcode-name
+    defaults: { _controller: "InventoryBundle:PurchaseItem:searchName" }
+    options:
+            expose: true
+
 inventory_purchaseitem_edit:
     path:     /{id}/edit
     defaults: { _controller: "InventoryBundle:PurchaseItem:edit" }

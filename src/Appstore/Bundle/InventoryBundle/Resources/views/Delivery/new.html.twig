@@ -75,7 +75,7 @@
                                 <div class="span4">
                                     <div class="controls">
                                         <label class="control-label" for="firstName">Quantity</label>
-                                        <div class="input-append span11">
+                                        <div class="input-append span12">
                                             {{ form_widget(form.quantity) }}
                                             {{ form_errors(form.quantity) }}
                                             <div class="btn-group">
@@ -150,13 +150,7 @@
         </div>
     </div>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/style.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
+
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts

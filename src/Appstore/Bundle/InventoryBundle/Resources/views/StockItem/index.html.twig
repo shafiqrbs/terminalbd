@@ -48,6 +48,7 @@
                     <div class="portlet-body flip-scroll">
 
                         {% include('flash-message.html.twig')  %}
+
                         <div class="row-fluid">
                             <form class="search-form" action="" method="get" name="itemSearch">
                                 <div class="row-fluid">
@@ -64,6 +65,7 @@
                                         <input type="text" id="color" name="color"  class="span12 select2Color" value="{% if searchForm.color is defined %}{{ searchForm.color }}{% endif %}"  autocomplete="off" placeholder="Enter color name ">
                                     </div>
                                 </div>
+                                <br>
                                 <div class="row-fluid">
                                     <div class="span3">
                                         <input type="text" id="brand" name="brand"  class="span12 select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}"  autocomplete="off" placeholder="Enter brand name ">
@@ -75,14 +77,11 @@
                                         <input type="text" id="category" name="category"  class="span12 select2Category" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Enter category name">
                                     </div>
                                     <div class="span1">
-                                        <div class="controls">
-                                            <div class="input-append span11">
-                                                <div class="btn-group">
-                                                    <button class="btn blue" type="submit"><i class="icon-search"></i></button>
-                                                </div>
-                                            </div>
+                                        <div class="btn-group">
+                                            <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                         </div>
                                     </div>
+
                                 </div>
                             </form>
                         </div>
@@ -225,13 +224,6 @@
         </div>
     </div>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/style.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts

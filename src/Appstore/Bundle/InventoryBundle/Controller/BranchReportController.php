@@ -133,9 +133,6 @@ class BranchReportController extends Controller
 
     }
 
-
-
-
     public function branchStockItemDetailsAction(Item $item)
     {
         $em = $this->getDoctrine()->getManager();
