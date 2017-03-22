@@ -243,6 +243,8 @@ class SalesOnlineController extends Controller
      */
     public function showAction(Sales $entity)
     {
+
+
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
         if ($inventory == $entity->getInventoryConfig()->getId()) {
             return $this->render('InventoryBundle:SalesOnline:show.html.twig', array(
@@ -261,9 +263,18 @@ class SalesOnlineController extends Controller
     public function showPreviewAction(Sales $entity)
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
+
+        if(!empty($this->getUser()->getProfile()->getBranches())){
+            $itemBranchStock = $this->getDoctrine()->getRepository('InventoryBundle:Delivery')->returnBranchSalesItem($this->getUser(),$entity);
+        }else{
+            $data = array('stockReceiveItem' => '' , 'stockSalesItem' => '' , 'stockSalesReturnItem' => '', 'stockReturnItem' => ''  );
+            $itemBranchStock = $data ;
+        }
+
         if ($inventory == $entity->getInventoryConfig()->getId()) {
             return $this->render('InventoryBundle:SalesOnline:show-preview.html.twig', array(
-                'entity' => $entity,
+                'entity'            => $entity,
+                'itemBranchStocks'   => $itemBranchStock,
             ));
         }
     }

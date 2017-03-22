@@ -245,6 +245,7 @@ class SalesController extends Controller
 
     }
 
+
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
@@ -279,11 +280,28 @@ class SalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         foreach ($sales->getSalesItems() as $salesItem ) {
             $em->remove($salesItem);
-
         }
         $em->flush();
         $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
         return $this->redirect($this->generateUrl('inventory_sales_edit', array('code' => $sales->getInvoice())));
+
+    }
+
+    public function salesInlineMobileUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('InventoryBundle:Sales')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['value']);
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity, $mobile);
+        $entity->setCustomer($customer);
+        $entity->setMobile($mobile);
+        $em->flush();
+        exit;
 
     }
 
@@ -479,14 +497,12 @@ class SalesController extends Controller
         return new Response($data);
     }
 
-
     public function branchStockItemDetailsAction(Item $item)
     {
         $user = $this->getUser();
         $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemDeliveryPurchaseDetails($user,$item);
         return new Response($data);
     }
-
 
     public function getBarcode($invoice)
     {
@@ -501,7 +517,6 @@ class SalesController extends Controller
         $data .= '<img src="data:image/png;base64,' . $code . '" />';
         return $data;
     }
-
 
     public function deleteEmptyInvoiceAction()
     {
@@ -566,7 +581,6 @@ class SalesController extends Controller
         exit;
 
     }
-
 
     public function approvedOrder(Sales $entity)
     {

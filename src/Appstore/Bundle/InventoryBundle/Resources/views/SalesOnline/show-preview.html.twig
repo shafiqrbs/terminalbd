@@ -60,19 +60,26 @@
                                         <th class="numeric" >Estimate price</th>
                                         <th class="numeric" >Sales price</th>
                                         <th class="numeric" >Sub-total</th>
+                                        <th class="numeric" >Branch Stock</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {% for salesItem in entity.salesItems %}
                                         <tr>
                                             <td class="numeric" >{{ loop.index }}</td>
-                                            <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
+                                            <td class="numeric" >{{ salesItem.item.name }} <br/>{{ salesItem.item.sku }}</td>
                                             <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
                                             <td class="numeric" >{{ salesItem.quantity }}</td>
                                             <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
                                             <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
                                             <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
-
+                                            <td class="numeric" >
+                                                {% if itemBranchStocks['stockReceiveItem'][salesItem.purchaseItem.id]|default(0)  is empty %}
+                                                    Received NULL
+                                                {% else %}
+                                                    {{ itemBranchStocks['stockReceiveItem'][salesItem.purchaseItem.id]|default(0) + itemBranchStocks['stockSalesReturnItem'][salesItem.purchaseItem.id]|default(0) - itemBranchStocks['stockSalesItem'][salesItem.purchaseItem.id]|default(0)- itemBranchStocks['stockReturnItem'][salesItem.purchaseItem.id]|default(0) }}
+                                                {% endif %}
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>

@@ -37,8 +37,8 @@ inventory_sales_new:
 
 inventory_sales_create:
     path:     /create
-    defaults: { _controller: "InventoryBundle:Sales:create" }
-    methods:  POST
+    defaults: { _controller: "InventoryBundle:Sales:new" }
+
 
 inventory_sales_edit:
     path:     /{code}/pos
@@ -103,6 +103,13 @@ inventory_sales_inline_update:
 inventory_sales_inline_process_update:
     path:     /sales/inline-process-update
     defaults: { _controller: "InventoryBundle:Sales:salesInlineProcessUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+inventory_sales_mobile_update:
+    path:     /sales/mobile-update
+    defaults: { _controller: "InventoryBundle:Sales:salesInlineMobileUpdate" }
     methods:  POST
     options:
             expose: true

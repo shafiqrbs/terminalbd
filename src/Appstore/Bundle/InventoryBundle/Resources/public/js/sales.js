@@ -103,7 +103,7 @@ var InventorySales = function(sales) {
             },
 
         })
-    })
+    });
 
     $(document).on('change', '#barcodeNo', function() {
 
@@ -178,7 +178,7 @@ var InventorySales = function(sales) {
                 $(".editable").editable();
             },
         })
-    })
+    });
 
 
 
@@ -291,7 +291,7 @@ var InventorySales = function(sales) {
             },
 
         })
-    })
+    });
 
     $(document).on('change', '#paymentAmount', function() {
 
@@ -318,7 +318,7 @@ var InventorySales = function(sales) {
             $(".paymentBtn").attr("disabled", true);
         }
 
-    })
+    });
 
 
     $(document).on('change', '#sales_transactionMethod', function() {
@@ -335,7 +335,7 @@ var InventorySales = function(sales) {
             $('#bkashMethod').hide();
         }
 
-    })
+    });
 
     $('#sales').on("click", ".delete", function() {
 
@@ -351,7 +351,7 @@ var InventorySales = function(sales) {
                 }
             }
         })
-    })
+    });
 
     $(".select2Item").select2({
 

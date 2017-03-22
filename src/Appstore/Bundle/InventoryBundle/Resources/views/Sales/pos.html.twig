@@ -289,14 +289,9 @@
                                         </div>
                                         <div class="row-fluid">
                                             <div class="span12">
-                                                <div class="input-prepend input-append input-append-border span12">
-                                                    {{ form_widget(form.mobile) }}
-                                                    {{ form_errors(form.mobile) }}
-                                                </div>
+                                                <a class="btn mini btn-action editable span12"  href="#"  data-url="{{ path('inventory_sales_mobile_update') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Enter customer mobile no">{{ entity.mobile }}</a>
                                             </div>
-
                                         </div>
-
                                         <div class="clearfix"></div>
                                         <div class="row-fluid">
                                             <div class="span12 ">
@@ -305,18 +300,17 @@
                                                         <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                                         <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
                                                         {% if entity.inventoryConfig.printer == 'printer' %}
-                                                        <button disabled="disabled" type="submit" class="btn blue paymentBtn"><i class="icon-print"></i>&nbsp;Print</button>
+                                                        <button disabled="disabled" type="submit" class="span10 btn blue paymentBtn"><i class="icon-print"></i>&nbsp;Print</button>
                                                         {% elseif entity.inventoryConfig.printer == 'pos'  %}
-                                                        <button disabled="disabled" rel="{{ path('inventory_sales_print',{'code':entity.invoice}) }}" name="pos"  type="button" class="btn green paymentBtn" id="pos"><i class="icon-print m-icon-white"></i>&nbsp;Pos</button>
+                                                        <button  rel="{{ path('inventory_sales_print',{'code':entity.invoice}) }}" name="pos"  type="button" class="span10 btn green paymentBtn" id="pos"><i class="icon-print m-icon-white"></i>&nbsp;Pos</button>
                                                         {% else %}
-                                                        <button disabled="disabled" rel=""  type="submit" class="btn purple paymentBtn" ><i class="icon-ok m-icon-white"></i>&nbsp;Save</button>
+                                                        <button disabled="disabled" rel=""  type="submit" class="span10 btn purple paymentBtn" ><i class="icon-ok m-icon-white"></i>&nbsp;Save</button>
                                                         {% endif %}
                                                         <a href="{{ path('inventory_sales_reset',{'id':entity.id}) }}"  class="btn yellow"><i class="icon-refresh"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                                 {{ form_end(form) }}
@@ -423,7 +417,16 @@
             </div>
         </div>
     </div>
- <script>
+    <div id="static" class="modal hide fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-body">
+            <p style="text-align: center; font-weight: bold; color: red; font-size: 15px">Please add receive amount fast.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn green">Okay</button>
+        </div>
+    </div>
+
+    <script>
 
      (function(d, s, id) {
          var js, fjs = d.getElementsByTagName(s)[0];
@@ -526,6 +529,11 @@
 
     $(document).on("click", "#pos", function() {
 
+       var paymentAmount = $('#paymentAmount').val();
+        if(paymentAmount == ''){
+            $('#static').modal();
+            return false;
+        }
         var url = $(this).attr("rel");
         $.ajax({
             url: url,
