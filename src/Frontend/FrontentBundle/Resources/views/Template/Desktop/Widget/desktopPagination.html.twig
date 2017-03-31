@@ -2,23 +2,15 @@
 <div class="">
     <div class="right">
         <form style="float: left" id="page-form"  name="page-form" method="get" action="">
-
-            {% if pageCount > 1 %}
-                {% set limit = app.request.get('limit') %}
-                <select id="limit" name="limit" class="page-selector" style="border-right: 1px solid #cccccc"  onchange='this.form.submit()'>
-                    <option value="">Per Page</option>
-                    <option {% if limit == 10  %} selected="selected" {% endif %} value="10">10</option>
-                    <option {% if limit == 20  %} selected="selected" {% endif %} value="20">20</option>
-                    <option {% if limit == 30  %} selected="selected" {% endif %} value="30">30</option>
-                </select>
-            {% endif %}
         {% if previous is defined %}
             <a style="float: left" class="btn btn-default btn-sm page-button" href="{{ path(route, query|merge({(pageParameterName): previous})) }}"><span class="glyphicon glyphicon glyphicon-chevron-left"></span>&nbsp;Prev</a>
+        {% else %}
+            <a style="float: left" class="btn btn-default btn-sm page-button" disabled href="javascript:"><span class="glyphicon glyphicon glyphicon-chevron-left"></span>&nbsp;Prev</a>
         {% endif %}
         {% if pageCount > 1 %}
             {% set page = app.request.get('page') %}
             <select id="page" name="page" class="page-selector"  onchange='this.form.submit()'>
-                <option value="">Page</option>
+                <option value="">-- Pagination --</option>
                 {% for i in 1..pageCount %}
                     <option {% if page == i  %} selected="selected" {% endif %} value="{{ i }}"> {{ i }}</option>
                 {% endfor %}

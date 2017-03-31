@@ -70,7 +70,7 @@ class FeatureWidgetController extends Controller
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
             $entity->setGlobalOption($user->getGlobalOption());
-            $name = $entity->getPosition().'-'.$entity->getPositionPage();
+            $name = $entity->getPageName().'-'.$entity->getPosition();
             $entity->setName($name);
             $em->persist($entity);
             $em->flush();
@@ -227,7 +227,7 @@ class FeatureWidgetController extends Controller
         $data = $request->request->all();
         if ($editForm->isValid()) {
 
-            $name = $entity->getPosition().'-'.$entity->getPositionPage();
+            $name = $entity->getPageName().'-'.$entity->getPosition();
             $entity->setName($name);
             $em->flush();
             $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidgetItem')->update($entity,$data);
@@ -238,7 +238,7 @@ class FeatureWidgetController extends Controller
         $features = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->findBy(array('globalOption' => $global));
 
 
-        return $this->render('SettingAppearanceBundle:FeatureWidget:edit.html.twig', array(
+        return $this->render('SettingAppearanceBundle:FeatureWidget:new.html.twig', array(
             'entity'      => $entity,
             'features'      => $features,
             'featureIds'      => '',

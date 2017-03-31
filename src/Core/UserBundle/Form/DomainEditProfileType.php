@@ -71,26 +71,26 @@ class DomainEditProfileType extends AbstractType
                 'choices_as_values' => true,
                 'choice_label' => 'nestedLabel',
             ))
-            ->add('branches', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\DomainUserBundle\Entity\Branches',
-                'empty_value' => '---Choose a branch---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->andWhere("e.globalOption =".$this->globalOption->getId())
-                        ->orderBy("e.name", "ASC");
-                },
-            ))
             ->add('bloodGroup', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span6'),
                 'choices' => array('A+' => 'A+',  'A-' => 'A-','B+' => 'B+',  'B-' => 'B-',  'O+' => 'O+',  'O-' => 'O-',  'AB+' => 'AB+',  'AB-' => 'AB-'),
 
             ))
-            ->add('file')
+            ->add('bank', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\Bank',
+                'empty_value' => '---Choose a bank---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->orderBy("b.name", "ASC");
+                },
+            ))
+            ->add('branch','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4 ,'draggable' => 'false' ,'placeholder'=>'Enter your bank branch name')))
+            ->add('accountNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your bank account no')))
 
-        ;
+            ->add('file');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

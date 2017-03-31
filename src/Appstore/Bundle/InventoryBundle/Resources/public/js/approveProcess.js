@@ -93,6 +93,45 @@ function ApproveProcess(){
         minimumInputLength:1
     });
 
+    $(".branchSales2Item").select2({
+
+        placeholder: "Search item, color, size & brand name",
+        allowClear: true,
+        ajax: {
+            url: Routing.generate('item_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function(item){
+
+            //return item.name +' => '+ (item.remainingQuantity)
+            return item.name
+
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function(item){return item.name + ' / ' + item.sku}, // omitted for brevity, see the source of this page
+        initSelection: function(element, callback) {
+            var id = $(element).val();
+        },
+        allowClear: true,
+        minimumInputLength:1
+    });
+
+
     $("#barcodeNo").select2({
 
         placeholder: "Enter specific barcode",
@@ -152,8 +191,8 @@ function ApproveProcess(){
         escapeMarkup: function (m) {
             return m;
         },
-        formatResult: function(item){ return item.text +'(' +item.item_name+')'}, // omitted for brevity, see the source of this page
-        formatSelection: function(item){return item.text +'(' +item.item_name+')' }, // omitted for brevity, see the source of this page
+        formatResult: function(item){ return item.text}, // omitted for brevity, see the source of this page
+        formatSelection: function(item){return item.text}, // omitted for brevity, see the source of this page
         initSelection: function (element, callback) {
             var id = $(element).val();
             $.ajax(Routing.generate('inventory_barcode_name', { barcode : id}), {

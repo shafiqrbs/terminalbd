@@ -48,14 +48,19 @@
     'assets/template/plugin/revolution_slider/rs-plugin/css/settings.css'
     'assets/template/plugin/textillate/assets/animate.css'
     'assets/template/plugin/wow/css/animate.css'
+    'assets/template/plugin/select2/select2.css'
+    'assets/template/plugin/range-slider/bootstrap-slider.css'
+    'assets/template/plugin/ladda/ladda-themeless.min.css'
     'assets/template/desktop/css/module.css'
+    'assets/template/desktop/cosmetic/css/style.css'
     %}
 
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
-  {#  <link href="/assets/template/desktop/{{ template }}/css/style.css" rel="stylesheet" />#}
+    {#  <link href="/assets/template/desktop/{{ template }}/css/style.css" rel="stylesheet" />#}
 
     <!--[if lt IE 9]>
+
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
@@ -64,73 +69,15 @@
 <body data-spy="scroll">
 {{ include('frontend/template/templateCustomize.html.twig')}}
 <!-- Navigation -->
-{% render controller("FrontendBundle:TemplateWidget:header",{'globalOption':globalOption.id}) %}
+{% render controller("FrontendBundle:TemplateWidget:header",{'globalOption':globalOption.id, 'pageName':pageName}) %}
 <div class="clearfix"></div>
 {% block body %}{% endblock %}
-<style>
-
-    .footer-menu{
-        padding-bottom: 30px;
-    }
-    .footer-menu h4{
-        text-transform: uppercase;
-    }
-    .social-payment{
-        border-bottom: 1px solid #fff;
-        padding-bottom: 20px;
-        padding-top: 20px;
-        margin-bottom: 30px;
-    }
-
-    .social-payment .input-group .form-control:hover ,.bs-example-form .input-group .form-control:hover , .social-payment .input-group .form-control:active, .social-payment .input-group .form-control:focus , .bs-example-form .input-group .form-control:focus {
-        background-color: #ffffee;
-        color: #0b0e23;
-    }
-    .input-group-lg>.form-control, .input-group-lg>.input-group-addon, .input-group-lg>.input-group-btn>.btn{
-        font-size: 14px;
-    }
-
-    .social-payment .social-tooltip{
-       margin-top: -2px;
-    }
-    .social-payment .social-tooltip a{
-
-        height: 36px;
-        width: 36px;
-        background: #000;
-        display: inline-block;
-        border-radius: 50%;
-        text-align: center;
-        line-height: 36px;
-        text-shadow: 0 1px 0 rgba(0,0,0,0.2);
-        transition: all 0.15s ease;
-        font-size: 18px;
-
-    }
-    .social-payment .social-tooltip a#facebook{
-        background: linear-gradient(#4562a0, #3b5998);
-        color:#ffffff
-    }
-    .social-payment .social-tooltip a#facebook:hover{
-        background: linear-gradient(#3c5899, #3c5899);
-        transition: all 1s ease;
-    }
-    .social-payment .social-tooltip a#twitter{
-        background: linear-gradient(#00a0d1, #00a0d1);
-        color:#ffffff
-    }
-    .social-payment .social-tooltip a#instagram{
-        background: linear-gradient(#5b85aa, #4e799e);
-        color:#ffffff
-    }
-    .social-payment .social-tooltip a#email{
-        background: linear-gradient(#db4a39, #db4a39);
-        color:#ffffff
-    }
-
-
-</style>
 <section class="footer-menu">
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+        <section class="feature-widget-footer">
+            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':pageName,'position':'footer'}) %}
+        </section>
+    {% endif %}
     <div class="container social-payment" >
         <div class="row">
             <div class="col-sm-5">
@@ -208,7 +155,6 @@
                 </address>
             </div>
         </div>
-
     </div>
 </section>
 <footer id="footer">
@@ -225,6 +171,11 @@
         </div>
     </div>
 </footer>
+<div id="myModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
 {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
 {% if globalOption.templateCustomize.showSidebar == 1 %}
     <div class="side-toolbar" style=""></div>
@@ -249,56 +200,29 @@
 'assets/template/plugin/textillate/assets/jquery.fittext.js'
 'assets/template/plugin/textillate/assets/jquery.lettering.js'
 'assets/template/plugin/matchHeight/height-match.js'
-'assets/template/plugin/select2/select2.min.js'
+'assets/template/plugin/select2/select2.js'
+'assets/template/plugin/range-slider/bootstrap-slider.min.js'
+'assets/template/plugin/ladda/spin.min.js'
+'assets/template/plugin/ladda/ladda.min.js'
+'assets/template/plugin/treeview/treeview.js'
+'assets/template/plugin/jquery-zoom/zoom.js'
 'assets/template/plugin/wow/js/wow.min.js'
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
-<script>  subdomain ="{{ globalOption.subDomain }}"; </script>
+
+<script>  subdomain = "{{ globalOption.subDomain }}"; </script>
 {% block javascriptBlock %}{% endblock %}
 <script>
  $(document).ready(function(){
 
-        /* var menu = $('#menu-bar'),
-                 pos = menu.offset();
-
-         $(window).scroll(function(){
-             if($(this).scrollTop() > pos.top+menu.height() && menu.hasClass('default')){
-                 menu.fadeOut('fast', function(){
-                     $(this).removeClass('default').addClass('fixed').fadeIn('fast');
-                 });
-             } else if($(this).scrollTop() <= pos.top && menu.hasClass('fixed')){
-                 menu.fadeOut('fast', function(){
-                     $(this).removeClass('fixed').addClass('default').fadeIn('fast');
-                 });
-             }
-         });
-*/
-
-/*        var navbar = $('.navbar').outerHeight(true);
-        var mins = 10;
-        $('#breadcrumb').css({
-            'margin-top':(navbar-mins),
-            'margin-bottom':10,
-        });
-
-        $('#no-slider').css({
-            'margin-top':(navbar),
-            'margin-bottom':10,
-        });
-        $('.top-nav-margin').css({
-             'margin-top':(navbar-17),
-         });
- */
-
          var navbar = $('.navbar-header').outerHeight(true);
-
          var mins = 22;
          $('.bs-example-form').css({
              'margin-top':(navbar/2 - mins)
          });
 
-     var stickyOffset = $('.sticky').offset().top;
+        var stickyOffset = $('.sticky').offset().top;
 
          $(window).scroll(function(){
              var sticky = $('.sticky'),
@@ -307,13 +231,32 @@
              else sticky.removeClass('fixed');
          });
 
-         $('.social-tooltip').tooltip({
+    /* // Bind normal buttons
+     Ladda.bind( 'div:not(.progress-demo) button', { timeout: 15000 } );
+
+     // Bind progress buttons and simulate loading progress
+     Ladda.bind( '.progress-demo button', {
+         callback: function( instance ) {
+             var progress = 0;
+             var interval = setInterval( function() {
+                 progress = Math.min( progress + Math.random() * 0.1, 1 );
+                 instance.setProgress( progress );
+
+                 if( progress === 1 ) {
+                     instance.stop();
+                     clearInterval( interval );
+                 }
+             }, 200 );
+         }
+     });*/
+
+     $('.social-tooltip').tooltip({
              selector: "[data-toggle=tooltip]",
              container: "body"
          });
 
         $('.select2').select2({
-            placeholder: "Select",
+            placeholder: "Filter by category",
             allowClear: true,
             color: "black"
         });
@@ -365,8 +308,6 @@
         $(".preview-prev").click(function(){
             owlProduct.trigger('owl.prev');
         })
-
-
 
         var owlClient = $("#client-slider");
         owlClient.owlCarousel({
@@ -545,32 +486,35 @@
      wow.init();
 </script>
 <style>
-
-    .page-content{
-        line-height: 25px;
-        text-align: justify;
-        margin-top: 30px;
-        margin-bottom: 30px;
-
+    .tooltip{
+        z-index: 1000!important;
+    }
+    .form-control, .form-control:focus{
+        border-color: #cccccc;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        background: #fff;
     }
 
-    #footer {
-        width: 100%;
-        font-size: 12px;
-        background-color: #1E1E1E;
-        display: block;
-        color: #f7f7f7;
-    }
-    .myfooter {
-        color: #9d9d9d;
-        padding: 10px 0px;
-    }
-    #toTop {
-        position: fixed;
-        bottom: 38px;
-        right: 10px;
-        cursor: pointer;
-        display: none;
+    textarea:focus,
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="datetime"]:focus,
+    input[type="datetime-local"]:focus,
+    input[type="date"]:focus,
+    input[type="month"]:focus,
+    input[type="time"]:focus,
+    input[type="week"]:focus,
+    input[type="number"]:focus,
+    input[type="email"]:focus,
+    input[type="url"]:focus,
+    input[type="search"]:focus,
+    input[type="tel"]:focus,
+    input[type="color"]:focus,
+    .uneditable-input:focus {
+        border-color: #285e8e;
+        box-shadow:none;
+        outline: 0 none;
     }
 </style>
 </body>

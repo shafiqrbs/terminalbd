@@ -416,8 +416,8 @@ var InventorySales = function(sales) {
         escapeMarkup: function (m) {
             return m;
         },
-        formatResult: function(item){ return item.text +'(' +item.item_name+')'}, // omitted for brevity, see the source of this page
-        formatSelection: function(item){return item.text +'(' +item.item_name+')' }, // omitted for brevity, see the source of this page
+        formatResult: function(item){ return item.text}, // omitted for brevity, see the source of this page
+        formatSelection: function(item){return item.text }, // omitted for brevity, see the source of this page
         initSelection: function(element, callback) {
             var id = $(element).val();
         },

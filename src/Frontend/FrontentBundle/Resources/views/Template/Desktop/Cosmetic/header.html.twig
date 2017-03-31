@@ -41,6 +41,11 @@
             </div>
         </div>
     </section>
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+        <section class="feature-widget-header-top" >
+            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':pageName,'position':'header-top'}) %}
+        </section>
+    {% endif %}
     <style>
 
         .input-group-field {
@@ -119,7 +124,25 @@
             margin-top: 14px;
         }
 
-        /*.select2-container .select2-selection--single {
+        .search-box{
+            border: 1px solid #000;
+        }
+        .btn-group-search{
+            height: 46px;
+            margin-left: 0;
+            width: 50px;
+        }
+        .btn-cart{
+             border:1px solid #000;
+             height: 48px;
+        }
+        .input-group-lg{
+            height: 46px;
+            border: 0;
+            border-left:1px solid #000 ;
+        }
+
+        .select2-container .select2-selection--single {
             box-sizing: border-box;
             cursor: pointer;
             display: block;
@@ -130,7 +153,7 @@
 
         .select2-container--default .select2-selection--single {
             background-color: #fff;
-            border: 1px solid #aaa;
+            border: 1px solid #fff;
             border-radius: 0 !important;
         }
 
@@ -154,7 +177,7 @@
             top: 1px;
             right: 1px;
             width: 20px;
-        }*/
+        }
 
     </style>
     <section id="header">
@@ -168,58 +191,95 @@
                 </div>
                 <div class="col-md-9">
                     {% if globalOption.templateCustomize.showSearch == 0 %}
-                        <form class="bs-example bs-example-form" data-example-id="input-group-segmented-buttons">
-                            <div class="row">
-                                <div class="col-lg-12"
-                                     style="padding-right: 0; margin-right: 0; padding-left: 0; margin-left: 0">
-                                    <div class='input-group input-group-lg' style="border: 1px solid #c0c5c9">
-                                        <input type='text' class='form-control'
-                                               placeholder="Find Your Favorite Products"/>
-                                        <div class='input-group-field'>
-                                            <select class='col-md-12 select2 ' style="width: 100%">
-                                                <option>USD</option>
-                                                <option>CAN</option>
-                                                <option>MEX</option>
-                                            </select>
+
+                            <div class="row bs-example-form">
+                                <div class="col-lg-10">
+                                    <form class="bs-example " data-example-id="input-group-segmented-buttons">
+                                        <div class='input-group search-box' >
+                                            <div class='input-group-field'>
+                                                {{ categoryTree|raw }}
+                                            </div>
+                                            <input type='text' class='form-control input-group-lg' style="width: 351px" name="product" id="product"  placeholder="Find Your Favorite Products"/>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-group btn-group-search" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                                            </span>
                                         </div>
-                                        <div class='input-group-field'>
-                                            <select class='col-md-12 select2' style="width: 100%">
-                                                <option>USD</option>
-                                                <option>CAN</option>
-                                                <option>MEX</option>
-                                            </select>
-                                        </div>
-                                        <span class="input-group-btn">
-        <button class="btn btn-default" type="button"><span
-                    class="glyphicon glyphicon-search"></span>&nbsp;SEARCH</button>
-      </span>
-                                    </div>
+
+                                    </form>
+                                </div>
+                                <div class="col-lg-2">
+                                        <div class="input-group dropdown navbar-right">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-group btn-cart dropdown-toggle" data-toggle="dropdown"  aria-expanded="false"><span
+                                                            class="glyphicon glyphicon-shopping-cart"></span></button>
+                                                <a  style=" border:1px solid #000; border-left:none" href="#" class="btn dropdown-toggle" data-toggle="dropdown" role="button"
+                                                   aria-expanded="false"> <span class="label-success badge">0</span>
+                                                    &nbsp;<span class="label label-warning">৳ <em>0.00</em></span></a>
+                                                <ul class="dropdown-menu dropdown-cart" role="menavbar-rightnu">
+                                                    <li>
+                  <span class="item">
+                    <span class="item-left">
+                        <img src="http://lorempixel.com/50/50/" alt=""/>
+                        <span class="item-info">
+                            <span>Item name</span>
+                            <span>23$</span>
+                        </span>
+                    </span>
+                    <span class="item-right">
+                        <button class="btn btn-xs btn-danger pull-right">x</button>
+                    </span>
+                </span>
+                                                    </li>
+                                                    <li>
+                  <span class="item">
+                    <span class="item-left">
+                        <img src="http://lorempixel.com/50/50/" alt=""/>
+                        <span class="item-info">
+                            <span>Item name</span>
+                            <span>23$</span>
+                        </span>
+                    </span>
+                    <span class="item-right">
+                        <button class="btn btn-xs btn-danger pull-right">x</button>
+                    </span>
+                </span>
+                                                    </li>
+                                                    <li>
+                  <span class="item">
+                    <span class="item-left">
+                        <img src="http://lorempixel.com/50/50/" alt=""/>
+                        <span class="item-info">
+                            <span>Item name</span>
+                            <span>23$</span>
+                        </span>
+                    </span>
+                    <span class="item-right">
+                        <button class="btn btn-xs btn-danger pull-right">x</button>
+                    </span>
+                </span>
+                                                    </li>
+                                                    <li>
+                  <span class="item">
+                    <span class="item-left">
+                        <img src="http://lorempixel.com/50/50/" alt=""/>
+                        <span class="item-info">
+                            <span>Item name</span>
+                            <span>23$</span>
+                        </span>
+                    </span>
+                    <span class="item-right">
+                        <button class="btn btn-xs btn-danger pull-right">x</button>
+                    </span>
+                </span>
+                                                    </li>
+                                                    <li class="divider"></li>
+                                                    <li><a class="text-center" href="">View Cart</a></li>
+                                                </ul>
+                                            </div><!-- /btn-group -->
+                                        </div><!-- /input-group -->
                                 </div>
                             </div>
-                        </form>
-
-                        {#
-
-                        <div class="col-lg-6">
-                                    <div class="input-group">
-                                        <div class="input-group-btn">
-                                            <button type="button" class="btn btn-default">Action</button> <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span> <span class="sr-only">Toggle Dropdown</span> </button> <ul class="dropdown-menu"> <li><a href="#">Action</a></li> <li><a href="#">Another action</a></li> <li><a href="#">Something else here</a></li> <li role="separator" class="divider"></li> <li><a href="#">Separated link</a></li> </ul> </div> <input class="form-control" aria-label="Text input with segmented button dropdown"> </div> </div>
-                        <div class="input-group searchbar " id="nav-search">
-                            <input type="text" class="form-control searchbar" placeholder="Search for...">
-                            <select class="form-control select2" placeholder="Search for...">
-                                <option>445435</option>
-                                <option>445435</option>
-                                <option>445435</option>
-                                <option>445435</option>
-                                <option>445435</option>
-                            </select>
-
-                                    <span class="input-group-btn">
-                                    <button class="btn btn-default glyphicon glyphicon-search" type="button"></button>
-                            </span>
-                        </div>#}
                     {% endif %}
-
                 </div>
 
             </div>
@@ -314,7 +374,7 @@
         </style>
 
         <div class="container">
-            <nav class="navbar navbar-mega-menu">
+            <nav class="navbar navbar-mega-menu" style="display: none">
                 <div class="navbar-header">
                     <button class="navbar-toggle" type="button" data-toggle="collapse"
                             data-target=".js-navbar-collapse">
@@ -532,74 +592,7 @@
                         </li>
                         <li><a href="#">Store locator</a></li>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="btn dropdown-toggle" data-toggle="dropdown" role="button"
-                               aria-expanded="false"> <span class="label label-info"><span
-                                            class="glyphicon glyphicon-shopping-cart"></span> &nbsp;7 &nbsp;</span>
-                                &nbsp;<span class="caret"></span></a>
-                            <ul class="dropdown-menu dropdown-cart" role="menu">
-                                <li>
-                  <span class="item">
-                    <span class="item-left">
-                        <img src="http://lorempixel.com/50/50/" alt=""/>
-                        <span class="item-info">
-                            <span>Item name</span>
-                            <span>23$</span>
-                        </span>
-                    </span>
-                    <span class="item-right">
-                        <button class="btn btn-xs btn-danger pull-right">x</button>
-                    </span>
-                </span>
-                                </li>
-                                <li>
-                  <span class="item">
-                    <span class="item-left">
-                        <img src="http://lorempixel.com/50/50/" alt=""/>
-                        <span class="item-info">
-                            <span>Item name</span>
-                            <span>23$</span>
-                        </span>
-                    </span>
-                    <span class="item-right">
-                        <button class="btn btn-xs btn-danger pull-right">x</button>
-                    </span>
-                </span>
-                                </li>
-                                <li>
-                  <span class="item">
-                    <span class="item-left">
-                        <img src="http://lorempixel.com/50/50/" alt=""/>
-                        <span class="item-info">
-                            <span>Item name</span>
-                            <span>23$</span>
-                        </span>
-                    </span>
-                    <span class="item-right">
-                        <button class="btn btn-xs btn-danger pull-right">x</button>
-                    </span>
-                </span>
-                                </li>
-                                <li>
-                  <span class="item">
-                    <span class="item-left">
-                        <img src="http://lorempixel.com/50/50/" alt=""/>
-                        <span class="item-info">
-                            <span>Item name</span>
-                            <span>23$</span>
-                        </span>
-                    </span>
-                    <span class="item-right">
-                        <button class="btn btn-xs btn-danger pull-right">x</button>
-                    </span>
-                </span>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a class="text-center" href="">View Cart</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+
                 </div><!-- /.nav-collapse -->
             </nav>
         </div>

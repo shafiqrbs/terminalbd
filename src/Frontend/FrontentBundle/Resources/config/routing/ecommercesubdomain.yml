@@ -78,7 +78,7 @@ webservice_product_discount:
 
 webservice_product_brand:
     path:     /product/brand/{id}
-    defaults: { _controller: FrontendBundle:WebServiceProduct:discount }
+    defaults: { _controller: FrontendBundle:WebServiceProduct:brand }
 
 webservice_contact:
     path:     /contact

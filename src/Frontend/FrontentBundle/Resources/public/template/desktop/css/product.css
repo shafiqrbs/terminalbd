@@ -4,8 +4,6 @@
     margin-bottom: 15px;
 }
 
-
-
 .outer-div
 {
     padding:0;
@@ -179,7 +177,7 @@
 
 
 input[class*="span"].m-wrap {
-    height: 28px!important;
+    height: 30px!important;
 }
 .numeric input {
     margin-bottom: 0;
@@ -287,6 +285,7 @@ input[class*="span"].m-wrap {
     margin: 0!important;
 }
 .search-portlet.box{
+
     margin-bottom: 0!important;
     height: 34px!important;
     border-bottom: 1px solid #555555!important;

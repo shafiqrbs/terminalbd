@@ -52,7 +52,11 @@ class EcommerceConfigType extends AbstractType
             ))
             ->add('showMasterName')
             ->add('showBrand')
-/*            ->add('isColor')*/
+            ->add('sidebarBrand')
+            ->add('sidebarCategory')
+            ->add('sidebarPrice')
+            ->add('sidebarSize')
+            ->add('sidebarColor')
             ->add('isPreorder')
             ->add('cart')
             ->add('promotion');

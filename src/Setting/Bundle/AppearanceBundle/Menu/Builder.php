@@ -516,14 +516,15 @@ class Builder extends ContainerAware
 
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH')) {
-
-            $menu['Inventory']->addChild('Branch Reports')
-                ->setAttribute('icon', 'icon-bar-chart')
-                ->setAttribute('dropdown', true);
-            $menu['Inventory']['Branch Reports']->addChild('Stock Overview', array('route' => 'inventory_branch_report_overview'))->setAttribute('icon', 'icon-bar-chart');
-            $menu['Inventory']['Branch Reports']->addChild('Branch Stock', array('route' => 'inventory_branch_report_stock'))->setAttribute('icon', 'icon-bar-chart');
-            $menu['Inventory']['Branch Reports']->addChild('Item Stock', array('route' => 'inventory_branch_report_item'))->setAttribute('icon', 'icon-bar-chart');
-            $menu['Inventory']['Branch Reports']->addChild('Sales Item', array('route' => 'inventory_branch_report_sales'))->setAttribute('icon', 'icon-bar-chart');
+            if ($inventory->getIsBranch() == 1) {
+                $menu['Inventory']->addChild('Branch Reports')
+                    ->setAttribute('icon', 'icon-bar-chart')
+                    ->setAttribute('dropdown', true);
+                $menu['Inventory']['Branch Reports']->addChild('Stock Overview', array('route' => 'inventory_branch_report_overview'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Inventory']['Branch Reports']->addChild('Branch Stock', array('route' => 'inventory_branch_report_stock'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Inventory']['Branch Reports']->addChild('Item Stock', array('route' => 'inventory_branch_report_item'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Inventory']['Branch Reports']->addChild('Sales Item', array('route' => 'inventory_branch_report_sales'))->setAttribute('icon', 'icon-bar-chart');
+            }
         }
 
         return $menu;

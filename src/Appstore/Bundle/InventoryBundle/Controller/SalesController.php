@@ -48,7 +48,6 @@ class SalesController extends Controller
         $data = $_REQUEST;
 
         $user = $this->getUser();
-
         $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $user , $mode = 'pos', $data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
@@ -607,7 +606,6 @@ class SalesController extends Controller
         }
         exit;
     }
-
 
     public function returnCancelOrder(Sales $entity)
     {

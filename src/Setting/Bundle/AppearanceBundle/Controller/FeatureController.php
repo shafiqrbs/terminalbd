@@ -238,8 +238,7 @@ class FeatureController extends Controller
             ->setAction($this->generateUrl('appearancefeature_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-            ;
+            ->getForm();
     }
 
     /**

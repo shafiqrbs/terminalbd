@@ -3,6 +3,7 @@ var searchSubItemConfig = function (subdomain,product) {
 }
 
 $(document).on( "change", ".modalChange", function( e ) {
+
     var subItem = $(this).val();
     var url = $(this).attr("data-url");
     $.ajax({
@@ -59,6 +60,7 @@ $(document).on( "change", ".changeCartSize", function( e ) {
 $('.addCart').submit( function(e) {
 
     var url = $('.cartSubmit').attr("data-url");
+    alert(url);
     $.ajax({
         url:url ,
         type: 'POST',
@@ -126,7 +128,6 @@ $('.preview').click(function () {
 
     var url = $(this).attr("data-url");
     $('.modal-body').html('');
-
     $.ajax({
         url: url,
         type: 'GET',

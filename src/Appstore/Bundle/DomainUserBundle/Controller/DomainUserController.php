@@ -209,8 +209,6 @@ class DomainUserController extends Controller
         return $this->redirect($this->generateUrl('domain_user'));
     }
 
-
-
     /**
      * Creates a form to edit a DomainUser entity.
      *

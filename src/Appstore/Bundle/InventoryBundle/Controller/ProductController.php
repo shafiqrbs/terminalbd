@@ -37,9 +37,9 @@ class ProductController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
+        $data = $_REQUEST;
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:Product')->findBy(array('inventoryConfig'=>$inventory),array('code'=>'ASC'));
+        $entities = $em->getRepository('InventoryBundle:Product')->findWithSearch($inventory,$data);
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:Product:index.html.twig', array(
             'entities' => $pagination,
@@ -192,13 +192,14 @@ class ProductController extends Controller
                 'novalidate' => 'novalidate',
             )
         ));
-
         return $form;
     }
+
     /**
      * Edits an existing Product entity.
      *
      */
+
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -223,9 +224,9 @@ class ProductController extends Controller
             return $this->redirect($this->generateUrl('inventory_product'));
         }
 
-        return $this->render('InventoryBundle:Product:edit.html.twig', array(
+        return $this->render('InventoryBundle:Product:new.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
         ));
     }
     /**

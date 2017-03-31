@@ -99,28 +99,24 @@ class CategoryRepository extends MaterializedPathRepository
         return $tempTree;
     }
 
-    public function printTree( $parent = NULL , $spacing = '--', $user_tree_array = '' ) {
+    public function printTree( $category , $spacing = '--', $user_tree_array = '' ) {
 
         $em = $this->_em;
-
-       /* if(is_array($user_tree_array)){
-            $user_tree_array = array();
-        }*/
-        $category = $em->getRepository('ProductProductBundle:Category')->findBy(array('parent' => $parent ),array('name'=>'asc'));
         foreach ($category as $row )
         {
             $user_tree_array[] = array("id" => $row->getId(), "name" => $spacing . $row->getName());
-            //$user_tree_array[] = array("id" => $row->getId(), "name" => $spacing . $row->getName());
-            $user_tree_array = $this->printTree($row->getId(), $spacing . '--', $user_tree_array);
+            $user_tree_array = $this->printTree($row->getChildren(), $spacing . '--', $user_tree_array);
         }
         return $user_tree_array;
+
     }
 
-    public function  getReturnCategoryTree($slected='')
+    public function  getReturnCategoryTree($category,$slected='')
     {
-        $categoryTree = $this->printTree();
+        $categoryTree = $this->printTree($category);
+
         $tree='';
-        $tree .= "<select name='category' id='category' class='select2' style='width: 50%'>";
+        $tree .= "<select name='category' id='category' style='width: 278px' class='select2'>";
         $tree .= "<option value=''>Filter by category</option>";
         foreach($categoryTree as $row) {
             $selected = ($slected == $row['id'])? 'selected="selected"':'';
@@ -129,6 +125,46 @@ class CategoryRepository extends MaterializedPathRepository
         $tree .= "</select>";
         return $tree;
     }
+
+
+    function getParentId($inventoryCat) {
+
+        $cats = array();
+        foreach ( $inventoryCat->getCategories() as $cat ){
+           $cats[] = $cat->getId();
+        }
+        $qb = $this->createQueryBuilder('category');
+        $qb->where('category.parent IN(:cats)');
+        $qb->setParameter('cats',array_values($cats));
+        $qb->orderBy('category.name','ASC');
+        $result = $qb->getQuery()->getResult();
+        return $result;
+
+    }
+
+    public function productCategorySidebar($category){
+
+
+       if(empty($category) || count($category) == 0){
+           return '';
+       }
+       $result = "<ul>";
+        foreach ($category as $row)
+        {
+            if (!empty($row->getChildren())) {
+                $result.= '<li><a href="/product/category/'.$row->getId().'">'.$row->getName() .'</a>';
+                $result.= $this->productCategorySidebar($row->getChildren());
+                $result.= "</li>";
+            }else {
+                $result .= '<li><a href="/product/category/'.$row->getId().'">' . $row->getName() .'</a></li>';
+            }
+        }
+
+        $result.= "</ul>";
+        return $result;
+
+    }
+
 
 
     public function getSelectdDropdownCategories($data,$array,$slected=''){
@@ -147,7 +183,7 @@ class CategoryRepository extends MaterializedPathRepository
         return $tree .= '</select>';
     }
 
-    public function getGroupCategories($categories,$array){
+    public function getGroupCategories($categories,$array = array() ){
 
 
         $value ='';
@@ -224,7 +260,7 @@ class CategoryRepository extends MaterializedPathRepository
 
     }
 
-    public function getProductCategory($categories,$addCalss =''){
+    public function getProductCategory($categories,$addCalss ='treeview'){
 
         $value ='';
         $addCalss = ($addCalss == '') ? 'list-group margin-bottom-25 sidebar-menu' : 'dropdown-menu';
@@ -235,7 +271,6 @@ class CategoryRepository extends MaterializedPathRepository
             if (!empty($name)) {
 
                 $subIcon = (count($val->getChildren()) > 0 ) ? 1 : 2 ;
-
                 if($subIcon == 1){
                     $value .= '<li class="list-group-item clearfix dropdown" ><a href="shop-product-list.html"><i class="fa fa-angle-right"></i>'.$val->getName().'</a>';
                     $value .= $this->getProductCategory($val->getChildren(),$addCalss ='dropdown-menu');
@@ -243,9 +278,6 @@ class CategoryRepository extends MaterializedPathRepository
                     $value .= '<li class="list-group-item clearfix" ><a href="shop-product-list.html">' . $val->getName().'</a>';
                 }
                 $value .= '</li>';
-
-
-
             }
 
         }
@@ -274,9 +306,6 @@ class CategoryRepository extends MaterializedPathRepository
                     $value .= '<li class="list-group-item clearfix" ><a href="shop-product-list.html">' . $val->getName().'</a>';
                 }
                 $value .= '</li>';
-
-
-
             }
 
         }

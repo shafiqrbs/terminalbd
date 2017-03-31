@@ -20,31 +20,31 @@ use Syndicate\Bundle\ComponentBundle\Entity\Vendor;
 class EcommerceWidgetController extends Controller
 {
 
-
+/*
     public function mobileMenuAction(GlobalOption $globalOption)
     {
-        $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
+        $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=> $globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
         $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
         return $this->render('@Frontend/Template/Mobile/menu.html.twig', array(
             'menuTree'           => $menuTree,
         ));
     }
 
-    public function headerAction(GlobalOption $globalOption,Request $request)
+    public function headerAction(GlobalOption $globalOption, $pageName = '',Request $request)
     {
-        /* Device Detection code desktop or mobile */
 
         $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
         $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
 
-        return $this->render('@Frontend/Template/Desktop/'.$themeName.'/header.html.twig', array(
+         return $this->render('@Frontend/Template/Desktop/'.$themeName.'/header.html.twig', array(
             'menuTree'           => $menuTree,
-            'globalOption'           => $globalOption,
+            'globalOption'       => $globalOption,
+            'pageName'           => $pageName,
 
         ));
-    }
+    }*/
 
     public function footerAction(GlobalOption $globalOption,Request $request)
     {
@@ -99,10 +99,10 @@ class EcommerceWidgetController extends Controller
 
     }
 
-    public function featureWidgetAction(GlobalOption $globalOption , $position ='' )
+    public function featureWidgetAction(GlobalOption $globalOption , $pageName ='', $position ='' )
     {
 
-        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption,'positionPage' => $position ),array('sorting'=>'ASC'));
+        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption,'pageName' => $pageName ,'position' => $position ),array('sorting'=>'ASC'));
         return $this->render('@Frontend/Template/Desktop/EcommerceWidget/FeatureWidget.html.twig', array(
             'features'           => $features,
             'globalOption'           => $globalOption,

@@ -113,6 +113,41 @@ class EcommerceConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="sidebarBrand", type="boolean")
+     */
+    private $sidebarBrand = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sidebarCategory", type="boolean")
+     */
+    private $sidebarCategory = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sidebarPrice", type="boolean")
+     */
+    private $sidebarPrice = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sidebarSize", type="boolean")
+     */
+    private $sidebarSize = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sidebarColor", type="boolean")
+     */
+    private $sidebarColor = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="isPreorder", type="boolean")
      */
     private $isPreorder = false;
@@ -502,6 +537,86 @@ class EcommerceConfig
     public function setShowBrand($showBrand)
     {
         $this->showBrand = $showBrand;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSidebarBrand()
+    {
+        return $this->sidebarBrand;
+    }
+
+    /**
+     * @param bool $sidebarBrand
+     */
+    public function setSidebarBrand($sidebarBrand)
+    {
+        $this->sidebarBrand = $sidebarBrand;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSidebarCategory()
+    {
+        return $this->sidebarCategory;
+    }
+
+    /**
+     * @param bool $sidebarCategory
+     */
+    public function setSidebarCategory($sidebarCategory)
+    {
+        $this->sidebarCategory = $sidebarCategory;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSidebarPrice()
+    {
+        return $this->sidebarPrice;
+    }
+
+    /**
+     * @param bool $sidebarPrice
+     */
+    public function setSidebarPrice($sidebarPrice)
+    {
+        $this->sidebarPrice = $sidebarPrice;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSidebarSize()
+    {
+        return $this->sidebarSize;
+    }
+
+    /**
+     * @param bool $sidebarSize
+     */
+    public function setSidebarSize($sidebarSize)
+    {
+        $this->sidebarSize = $sidebarSize;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSidebarColor()
+    {
+        return $this->sidebarColor;
+    }
+
+    /**
+     * @param bool $sidebarColor
+     */
+    public function setSidebarColor($sidebarColor)
+    {
+        $this->sidebarColor = $sidebarColor;
     }
 
 }

@@ -18,6 +18,41 @@ class PurchaseVendorItemRepository extends EntityRepository
 {
 
 
+    public function findFrontendProductWithSearch($inventory,$data)
+    {
+        if (!empty($data['sortBy'])) {
+            $sortBy = explode('=?=', $data['sortBy']);
+            $sort = $sortBy[0];
+            $order = $sortBy[1];
+        }
+        $qb = $this->createQueryBuilder('product');
+        $qb->leftJoin("product.masterItem",'masterItem');
+        $qb->where("product.isWeb = 1");
+        $qb->andWhere("product.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        if (!empty($data['brand'])) {
+            $qb->andWhere("product.brand = :brand");
+            $qb->setParameter('brand', $data['brand']);
+        }
+
+        if (!empty($data['category'])) {
+            $qb->andWhere("masterItem.category = :category");
+            $qb->setParameter('category', $data['category']);
+        }
+
+        if (empty($data['sortBy'])){
+            $qb->orderBy('product.updated', 'DESC');
+        }else{
+            $qb->orderBy($sort ,$order);
+        }
+
+
+        $qb->getQuery();
+        return  $qb;
+
+    }
+
+
     public function handleSearchBetween($qb,$data){
 
         $name = isset($data['name'])? $data['name'] :'';
@@ -118,28 +153,35 @@ class PurchaseVendorItemRepository extends EntityRepository
 
     }
 
-    public function findGoodsWithSearch($inventory,$data,$limit=0)
-    {
 
-        $order = isset($data['order'])? $data['order'] :'ASC';
-        $qb = $this->createQueryBuilder('item');
-        $qb->leftJoin("item.masterItem",'masterItem' );
-        $qb->where("item.isWeb = 1");
-        $qb->andWhere("item.inventoryConfig = :inventory");
+    public function findGoodsWithSearch($inventory,$data)
+    {
+        if (!empty($data['sortBy'])) {
+            $sortBy = explode('=?=', $data['sortBy']);
+            $sort = $sortBy[0];
+            $order = $sortBy[1];
+        }
+        $qb = $this->createQueryBuilder('product');
+        $qb->join("product.brand",'brand');
+        $qb->where("product.isWeb = 1");
+        $qb->andWhere("product.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('item.updated','DESC');
+        if (empty($data['sortBy'])){
+            $qb->orderBy('product.updated', 'DESC');
+        }else{
+            $qb->orderBy($sort ,$order);
+        }
         $qb->getQuery();
         return  $qb;
 
     }
 
-
     public function findItemWithSearch($inventory,$data,$limit=0)
     {
 
         $qb = $this->createQueryBuilder('item');
-        $qb->join("item.masterItem",'masterItem' );
+        $qb->join("item.masterItem",'masterItem');
         $qb->where("item.source = 'service'");
         $qb->andWhere("item.isWeb = 1");
         $qb->andWhere("item.inventoryConfig = :inventory");

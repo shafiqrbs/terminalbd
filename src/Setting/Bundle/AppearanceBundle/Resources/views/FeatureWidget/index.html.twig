@@ -57,7 +57,7 @@
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                    <th class="numeric" >Page</th>
+                                    <th class="numeric" >Page Name</th>
                                     <th class="numeric" >Position</th>
                                     <th class="numeric" >Feature</th>
                                     <th class="numeric" >Action</th>
@@ -69,7 +69,7 @@
                                 {% for entity in entities %}
                                     <tr>
                                         <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
-                                        <td class="numeric" >{{ entity.positionPage }}</td>
+                                        <td class="numeric" >{{ entity.pageName }}</td>
                                         <td class="numeric" >{{ entity.position }}</td>
                                         <td class="numeric" >{% if entity.jsFeature is not empty %}{{ entity.jsFeature.name }}{% endif %}</td>
                                         <td class="numeric" >

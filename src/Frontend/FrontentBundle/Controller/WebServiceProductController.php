@@ -4,10 +4,12 @@ namespace Frontend\FrontentBundle\Controller;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
+use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Core\UserBundle\Form\CustomerRegisterType;
 use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
+use Product\Bundle\ProductBundle\Entity\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +20,7 @@ use Core\UserBundle\Entity\User;
 class WebServiceProductController extends Controller
 {
 
-    public function paginate($entities,$limit=15)
+    public function paginate($entities,$limit = 4)
     {
 
         $paginator  = $this->get('knp_paginator');
@@ -41,9 +43,10 @@ class WebServiceProductController extends Controller
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
             $data = $_REQUEST;
+            //$limit = !empty($data) or !empty($data['limit'] > 4)  ? $data['limit'] : 4;
             $inventory = $globalOption->getInventoryConfig();
-            $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
-            $pagination = $this->paginate($entities);
+            $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
+            $pagination = $this->paginate($entities, $limit = 4);
 
             /* Device Detection code desktop or mobile */
 
@@ -53,27 +56,123 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
-            $categoryTree = $this->getDoctrine()->getRepository('InventoryBundle:Product')->getProductCategories($globalOption->getInventoryConfig());
-           // $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->build_child();
 
+            //$category = isset($data['category']) ? $data['category'] :0;
 
-            $array = array();
-            $productCategories = $em->getRepository('ProductProductBundle:Category')->findBy(array('status'=>1),array('name'=>'asc'));
-            $category = isset($data['category']) ? $data['category'] :0;
-            $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($category);
+            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
+            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
+            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
             $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
 
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
-
                     'globalOption'  => $globalOption,
-                    'categoryTree'  => $categoryTree,
-                    'brands'  => $brands,
-                    'products'    => $pagination,
+                    'categorySidebar'  => $categorySidebar,
+                    'brands'        => $brands,
+                    'products'      => $pagination,
+                    'pageName'      => 'Product',
+                    'data' => $data['limit']=4,
                 )
             );
         }
     }
+
+    public function brandAction($subdomain,ItemBrand $brand)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+
+        if(!empty($globalOption)){
+
+            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $data = $_REQUEST;
+            if(empty($data)){
+                $data = array('brand' => $brand );
+            }
+            //$limit = !empty($data) or !empty($data['limit'] > 4)  ? $data['limit'] : 4;
+            $inventory = $globalOption->getInventoryConfig();
+            $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
+            $pagination = $this->paginate($entities, $limit = 4);
+
+            /* Device Detection code desktop or mobile */
+
+            $detect = new MobileDetect();
+            if( $detect->isMobile() || $detect->isTablet() ) {
+                $theme = 'Template/Mobile/Default';
+            }else{
+                $theme = 'Template/Desktop/'.$themeName;
+            }
+
+            //$category = isset($data['category']) ? $data['category'] :0;
+
+            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
+            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
+            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
+            $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
+
+            return $this->render('FrontendBundle:'.$theme.':product.html.twig',
+                array(
+                    'globalOption'  => $globalOption,
+                    'categorySidebar'  => $categorySidebar,
+                    'brands'        => $brands,
+                    'products'      => $pagination,
+                    'pageName'      => 'Brand',
+                    'titleName'      => 'Brand: '.$brand->getName(),
+                    'data' => $data['limit']=4,
+                )
+            );
+        }
+    }
+
+    public function categoryAction($subdomain,Category $category)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+
+        if(!empty($globalOption)){
+
+            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $data = $_REQUEST;
+            if(empty($data)){
+                $data = array('category' => $category);
+            }
+            //$limit = !empty($data) or !empty($data['limit'] > 4)  ? $data['limit'] : 4;
+            $inventory = $globalOption->getInventoryConfig();
+            $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
+            $pagination = $this->paginate($entities, $limit = 4);
+
+            /* Device Detection code desktop or mobile */
+
+            $detect = new MobileDetect();
+            if( $detect->isMobile() || $detect->isTablet() ) {
+                $theme = 'Template/Mobile/Default';
+            }else{
+                $theme = 'Template/Desktop/'.$themeName;
+            }
+
+            //$category = isset($data['category']) ? $data['category'] :0;
+
+            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
+            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
+            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
+            $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
+
+            return $this->render('FrontendBundle:'.$theme.':product.html.twig',
+                array(
+                    'globalOption'          => $globalOption,
+                    'categorySidebar'       => $categorySidebar,
+                    'brands'                => $brands,
+                    'products'              => $pagination,
+                    'pageName'              => 'Product',
+                    'data'                  => $data['limit']=4,
+                    'titleName'             => 'Category: '.$category->getName(),
+                )
+            );
+        }
+    }
+
     public function promotionAction($subdomain)
     {
 
@@ -117,6 +216,7 @@ class WebServiceProductController extends Controller
             );
         }
     }
+
     public function tagAction($subdomain)
     {
 
@@ -160,6 +260,7 @@ class WebServiceProductController extends Controller
             );
         }
     }
+
     public function discountAction($subdomain)
     {
 
@@ -203,6 +304,7 @@ class WebServiceProductController extends Controller
             );
         }
     }
+
     public function productDetailsAction($subdomain, $item)
     {
 
@@ -227,6 +329,12 @@ class WebServiceProductController extends Controller
                 $products = $this->paginate($entities,$limit=12);
             }
 
+            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
+            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
+            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
+            $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
+
+
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
@@ -238,9 +346,12 @@ class WebServiceProductController extends Controller
             return $this->render('FrontendBundle:'.$theme.':productDetails.html.twig',
                 array(
                     'globalOption'      => $globalOption,
+                    'categorySidebar'       => $categorySidebar,
+                    'brands'                => $brands,
                     'product'           => $entity,
                     'products'          => $products,
                     'subitem'           => $subItem,
+                    'pageName'          => 'ProductDetails',
 
 
                 )
@@ -309,7 +420,6 @@ class WebServiceProductController extends Controller
         }
     }
 
-
     public function productSubProductCartAction($subdomain ,PurchaseVendorItem $product)
     {
         $subItem = $_REQUEST['subItem'];
@@ -336,7 +446,6 @@ class WebServiceProductController extends Controller
             );
         }
     }
-
 
     public function productAddCartAction(Request $request , $subdomain , PurchaseVendorItem $product, GoodsItem $subitem)
     {
@@ -460,14 +569,11 @@ class WebServiceProductController extends Controller
 
     }
 
-
-
     public function productAddWishListAction($subdomain ,PurchaseVendorItem $product)
     {
 
 
     }
-
 
     public function productCartSaveAction(Request $request , $subdomain)
     {

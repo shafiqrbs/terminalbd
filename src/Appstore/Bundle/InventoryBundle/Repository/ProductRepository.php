@@ -13,6 +13,33 @@ use Doctrine\ORM\EntityRepository;
 class ProductRepository extends EntityRepository
 {
 
+    public function findWithSearch($inventory,$data)
+    {
+
+        $item = isset($data['item'])? $data['item'] :'';
+        $category = isset($data['category'])? $data['category'] :'';
+
+        $qb = $this->createQueryBuilder('masterItem');
+        $qb->join('masterItem.category', 'category');
+        $qb->where("masterItem.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+
+        if (!empty($item)) {
+            $qb->andWhere("masterItem.name = :name");
+            $qb->setParameter('name', $item);
+        }
+
+        if (!empty($category)) {
+            $qb->andWhere("category.name = :name");
+            $qb->setParameter('name', $category);
+        }
+
+        $qb->orderBy('masterItem.name','ASC');
+        $qb->getQuery();
+        return  $qb;
+
+    }
+
     public function getLastId($inventory)
     {
         $qb = $this->_em->createQueryBuilder();

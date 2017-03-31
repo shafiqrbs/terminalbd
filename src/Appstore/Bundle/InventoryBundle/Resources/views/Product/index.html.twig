@@ -51,12 +51,31 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
+                            <div class="row-fluid">
+                                <form class="search-form" action="" method="get" name="itemSearch">
+                                    <div class="row-fluid">
+                                        <div class="span5">
+                                            <input type="text" id="item" name="item"  class="span12 select2Product" value="{% if searchForm.item is defined %}{{ searchForm.item }}{% endif %}"  autocomplete="off" placeholder="Enter item name ">
+                                        </div>
+                                        <div class="span6">
+                                            <input type="text" id="category" name="category"  class="leftMargin span12 select2Category" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Product category">
+                                        </div>
+                                        <div class="span1">
+                                            <div class="btn-group">
+                                                <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </form>
+                            </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
-
-                                    <th class="numeric" >Item name </th>
+                                    {%  set direction = app.request.query.get('direction') %}
+                                    <th {% if entities.isSorted('name') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(entities, 'Name', 'name') }}{% if(direction =='desc') %}<i class="fa fa-caret-up custom-fa"></i> {% else %}<i class="fa fa-caret-down custom-fa"></i> {% endif %}</th>
                                     <th class="numeric" >Category</th>
                                     <th class="numeric" >Item code</th>
                                     <th class="numeric" >Unit</th>
@@ -96,5 +115,16 @@
     </div>
 {% endblock %}
 
-
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@InventoryBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    ApproveProcess();
+{% endblock %}
 

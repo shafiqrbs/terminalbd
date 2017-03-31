@@ -72,17 +72,6 @@ class DomainUserProfileType extends AbstractType
             ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no')))
             ->add('dob','birthday', array('attr'=>array('class'=>'m-wrap span12')))
             ->add('about','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>'8')))
-            ->add('bank', 'entity', array(
-                'required'    => true,
-                'class' => 'Setting\Bundle\ToolBundle\Entity\Bank',
-                'empty_value' => '---Choose a bank---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('b')
-                        ->orderBy("b.name", "ASC");
-                },
-            ))
             ->add('branches', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\DomainUserBundle\Entity\Branches',
@@ -93,6 +82,17 @@ class DomainUserProfileType extends AbstractType
                     return $er->createQueryBuilder('e')
                         ->andWhere("e.globalOption =".$this->globalOption->getId())
                         ->orderBy("e.name", "ASC");
+                },
+            ))
+            ->add('bank', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\Bank',
+                'empty_value' => '---Choose a bank---',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->orderBy("b.name", "ASC");
                 },
             ))
             ->add('branch','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>4 ,'draggable' => 'false' ,'placeholder'=>'Enter your bank branch name')))

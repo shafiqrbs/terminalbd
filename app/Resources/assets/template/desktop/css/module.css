@@ -225,14 +225,30 @@
 .page-selector {
     float: left;
     text-align: center;
-    height: 34px!important;
+    height: 30px!important;
     margin-top: 0!important;
-    border-radius: 0!important;
     border: 1px solid #ccc;
-    background:#1C1C1C;
-    color: #fff8ee;
     border-right: none;
     border-left:none ;
+    padding-left: 10px;
+}
+
+.paginate-form-group {
+    float: right;
+    margin-right: 15px;
+    color: #fff;
+}
+
+.input-selector {
+    text-align: center;
+    height: 30px!important;
+    margin-top: 0!important;
+    border: 1px solid #ccc;
+    padding-left: 10px;
+    color: #1C1C1C;
+}
+.paginate-form-group label , .form-group label{
+    font-weight:normal;
 }
 
 /*      css for sub page */
@@ -278,8 +294,17 @@
 /*      css for sub page */
 
 .paginate {
-    margin-top:10px !important;
+    margin-top:5px !important;
+    margin-bottom: 5px !important;
 }
+
+.paginate-footer {
+    margin-top:0 !important;
+    margin-bottom: 20px !important;
+    padding-top: 20px;
+    border-top: 1px solid #cccccc;
+}
+
 .product-title{
     margin-top: 8px;
     color:#fff8ee;
@@ -508,13 +533,6 @@
 
 /* ######################### BUTTON FOR PAGE #####################################*/
 
-.btn{
-    color:#fff;
-    border-radius: 0;
-    position: relative;
-    background:#363b45;
-    text-transform: uppercase;
-}
 /*.btn:after{
     content: "";
     border-width: 8px 8px 8px 0;
@@ -524,6 +542,7 @@
     top:31.5%;
     right:0;
 }*/
+
 .btn-sm:after{
     border-width: 5px 5px 5px 0;
     top:33.5%;

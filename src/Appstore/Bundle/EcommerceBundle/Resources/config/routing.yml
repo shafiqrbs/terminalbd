@@ -1,28 +1,28 @@
 ecommerce_ecommercehome:
     resource: "@EcommerceBundle/Resources/config/routing/ecommercehome.yml"
-    prefix:   /ecommerce/home
+    prefix:   /e-commerce/home
 
 ecommerce_promotion:
     resource: "@EcommerceBundle/Resources/config/routing/promotion.yml"
-    prefix:   /ecommerce/promotion
+    prefix:   /e-commerce/promotion
 
 eecommerce_discount:
     resource: "@EcommerceBundle/Resources/config/routing/discount.yml"
-    prefix:   /ecommerce/discount
+    prefix:   /e-commerce/discount
 
 ecommerce_ecommerce:
     resource: "@EcommerceBundle/Resources/config/routing/ecommerce.yml"
-    prefix:   /ecommerce/product
+    prefix:   /e-commerce/product
 
 ecommerce_config:
     resource: "@EcommerceBundle/Resources/config/routing/ecommerceconfig.yml"
-    prefix:   /ecommerce/config
+    prefix:   /e-commerce/config
 
 ecommerce_ecommerce_order:
     resource: "@EcommerceBundle/Resources/config/routing/order.yml"
-    prefix:   /ecommerce/order
+    prefix:   /e-commerce/order
 
 ecommerce_ecommerce_preorder:
     resource: "@EcommerceBundle/Resources/config/routing/preorder.yml"
-    prefix:   /ecommerce/preorder
+    prefix:   /e-commerce/preorder
 

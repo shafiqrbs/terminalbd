@@ -44,11 +44,12 @@ class FeatureWidgetType extends AbstractType
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
-                    'Header'       => 'Header',
-                    'Top'          => 'Top',
-                    'Middle'       => 'Middle',
-                    'Bottom'       => 'Bottom',
-                    'Footer'       => 'Footer',
+                    'header-top'                => 'Header Top',
+                    'body-top'                  => 'Body Top',
+                    'body-bottom'               => 'Body Bottom',
+                    'sidebar-top'               => 'Sidebar Top',
+                    'sidebar-bottom'            => 'Sidebar Bottom',
+                    'footer'                    => 'Footer',
                 ),
             ))
             ->add('page', 'entity', array(
@@ -144,9 +145,9 @@ class FeatureWidgetType extends AbstractType
             ))
 
             ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap','rows'=>4)))
-            ->add('positionPage', 'choice', array(
+            ->add('pageName', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12 select2 '),
-                'empty_value' => '---Select Position Page---',
+                'empty_value' => '---Select E-commerce Page ---',
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Select feature page'))
                 ),
@@ -156,6 +157,7 @@ class FeatureWidgetType extends AbstractType
                 'choices' => array(
                     'Home'              => 'Home',
                     'Product'           => 'Product',
+                    'Brand'             => 'Brand',
                     'Category'          => 'Category',
                     'Promotion'         => 'Promotion',
                     'Tag'               => 'Tag',

@@ -45,6 +45,7 @@ class WebServiceController extends Controller
                     'globalOption'    => $globalOption,
                     'homeEntity'    => $homeEntity,
                     'selectedBlockBg'    => $array,
+                    'pageName'    => 'Home',
                 )
             );
 

@@ -31,18 +31,23 @@ class TemplateWidgetController extends Controller
         ));
     }
 
-    public function headerAction(GlobalOption $globalOption,Request $request)
+    public function headerAction(GlobalOption $globalOption, $pageName = '' ,Request $request)
     {
         /* Device Detection code desktop or mobile */
-
+        $em = $this->getDoctrine()->getManager();
         $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
         $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
 
+        $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $globalOption->getInventoryConfig()));
+        $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
+        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($cats);
         return $this->render('@Frontend/Template/Desktop/'.$themeName.'/header.html.twig', array(
-            'menuTree'           => $menuTree,
-            'globalOption'           => $globalOption,
+            'menuTree'              => $menuTree,
+            'globalOption'          => $globalOption,
+            'categoryTree'          => $categoryTree,
+            'pageName'              => $pageName,
 
         ));
     }

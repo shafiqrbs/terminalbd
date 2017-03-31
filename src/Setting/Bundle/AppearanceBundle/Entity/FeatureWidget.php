@@ -108,9 +108,9 @@ class FeatureWidget
     /**
      * @var string
      *
-     * @ORM\Column(name="positionPage", type="string", length=50 , nullable=true)
+     * @ORM\Column(name="pageName", type="string", length=50 , nullable=true)
      */
-    private $positionPage;
+    private $pageName;
 
     /**
      * @var string
@@ -131,14 +131,14 @@ class FeatureWidget
      *
      * @ORM\Column(name="featureCategory", type="boolean")
      */
-    private $featureCategory = true;
+    private $featureCategory = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="featureBrand", type="boolean")
      */
-    private $featureBrand = true;
+    private $featureBrand = false;
 
 
     /**
@@ -292,27 +292,6 @@ class FeatureWidget
         $this->position = $position;
     }
 
-
-    /**
-     * @return string
-     */
-    public function getPositionPage()
-    {
-        return $this->positionPage;
-    }
-
-    /**
-     * @param string $positionPage
-     * Promotion
-     * Category
-     * Tag
-     * Discount
-     */
-
-    public function setPositionPage($positionPage)
-    {
-        $this->positionPage = $positionPage;
-    }
 
     /**
      * @return GlobalOption
@@ -536,5 +515,27 @@ class FeatureWidget
     public function setFeatureBrand($featureBrand)
     {
         $this->featureBrand = $featureBrand;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageName()
+    {
+        return $this->pageName;
+    }
+
+    /**
+     * @param string $pageName
+     * Home
+     * Brand
+     * Promotion
+     * Category
+     * Tag
+     * Discount
+     */
+    public function setPageName($pageName)
+    {
+        $this->pageName = $pageName;
     }
 }
