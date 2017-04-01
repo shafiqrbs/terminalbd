@@ -1844,7 +1844,7 @@
 /* =========================COMMENT CSS ============*/
 
 .fos_comment_comment_metas{
-    background: #649458 !important;
+    background: #222222 !important;
     padding:0;
     color: #fff;
     padding-left: 20px!important;
@@ -1863,7 +1863,7 @@
 #fos_comment_comment_body{
     border: 1px solid #ddddff;
     min-height: 120px;
-    width: 96%;
+    width: 100%;
     padding: 20px;
     background-color: #FFFFff;
 }

@@ -104,7 +104,7 @@
                             <h3 class="panel-title">PRICE RANGE</h3>
                         </div>
                         <div class="panel-body">
-                            <input id="ex2" type="text" class="span12" value="" data-slider-min="1" data-slider-max="1000000" data-slider-step="5" data-slider-value="[100,1000000]"/>
+                            <input id="price-range" type="text" class="span12" value="" data-slider-min="1" data-slider-max="1000000" data-slider-step="5" data-slider-value="[100,1000000]"/>
                         </div>
                         {% endif %}
                         {% if globalOption.ecommerceConfig.sidebarCategory == 1 %}
@@ -242,7 +242,7 @@
 
     $('#grid').click(function(event){event.preventDefault();$('#products .item').removeClass('list-group-item');
     $('#products .item').addClass('grid-group-item');});
-    $("#ex2").slider({
+    $("#price-range").slider({
         tooltip: 'always'
     });
 

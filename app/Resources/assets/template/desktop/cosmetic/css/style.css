@@ -752,3 +752,262 @@ div.treeview, .treeview ul {
     margin-left: 10px;
 }
 
+/* ================= Comment override ==========================*/
+
+
+.fos_comment_comment_metas{
+    background-color: #222222 !important;
+}
+.fos_comment_submit input[type="submit"], .fos_comment_comment_reply_show_form{
+    background-color: #222222 !important;
+}
+
+/*============================= Product Details carousel =========================================*/
+
+.carousel-inner {
+    position: relative;
+    width: 100%;
+    min-height: 300px;
+}
+
+#carousel-custom .custom-carousel-control {
+    position: absolute;
+    top:48%;
+}
+
+#carousel-custom .custom-carousel-control.right {
+    right: 0;
+    left: auto;
+    background-image: none !important;
+    background-repeat: repeat-x;
+}
+#carousel-custom .custom-carousel-control.left {
+    left: 0;
+    right: auto;
+    background-image: none !important;
+    background-repeat: repeat-x;
+}
+
+#carousel-custom {
+    margin: 20px auto;
+    width: 400px;
+}
+#carousel-custom .carousel-indicators {
+    margin: 10px 0 0;
+    position: static;
+    text-align: left;
+    white-space: nowrap;
+    width: 100%;
+    overflow:hidden;
+}
+#carousel-custom .carousel-indicators li {
+    background-color: transparent;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    display: inline-block;
+    height: auto;
+    margin: 0 !important;
+    width: 75px;
+    border: 1px solid #F8F8F8;
+    text-align: center;
+}
+#carousel-custom .carousel-indicators li img {
+    display: block;
+    opacity: 0.5;
+}
+#carousel-custom .carousel-indicators li.active img {
+    opacity: 1;
+}
+#carousel-custom .carousel-indicators li:hover img {
+    opacity: 0.75;
+}
+#carousel-custom .carousel-outer {
+    position: relative;
+}
+.carousel-indicators li img {
+    height: 70px;
+    width: 70px;
+}
+
+/*================== Product Details ====================================*/
+
+/*================== Product Details Share Button ====================================*/
+
+
+.mbm_social {
+    font-size: 0;
+    float:left;
+    width:100%;
+    background:#fff;
+    text-align:left;
+    margin-top: 20px;
+}
+.mbm_social li {
+    display: inline-block;
+    list-style: outside none none;
+    margin: 0 8px 0 0;
+    padding: 0;
+    font-family: "Montserrat", sans-serif;
+    text-transform: uppercase;
+}
+.mbm_social > li:last-child {
+    margin: 0;
+}
+.mbm_social a {
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    color:#fff;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin: 0;
+    width: 50px;
+    height: 31px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    -webkit-transition: all .15s ease;
+    transition: all .15s ease;
+    z-index: 2;
+    font-family: "Montserrat", sans-serif;
+    text-transform: uppercase;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+.mbm_social a:hover {
+    color: #fff;
+}
+.mbm_social a:hover .tooltip {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    -webkit-transform: translate(0, -33px);
+    transform: translate(0, -33px);
+}
+.mbm_social a:active {
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5) inset;
+}
+.mbm_social .tooltip {
+    opacity: 0;
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    z-index: 1;
+    -webkit-transition: all .15s ease;
+    transition: all .15s ease;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+.mbm_social .tooltip span {
+    font-size: 10px;
+    font-weight: bold;
+    left: -50%;
+    line-height: 1;
+    padding: 6px 8px 5px;
+    position: relative;
+    text-transform: uppercase;
+    z-index: 1;
+}
+.mbm_social .tooltip span:after {
+    position: absolute;
+    content: " ";
+    width: 0;
+    height: 0;
+    top: 100%;
+    left: 50%;
+    margin-left: -8px;
+    border: 8px solid transparent;
+}
+.mbm_social .social-twitter {
+    background: #00abdc;
+    background: -webkit-linear-gradient(#00abdc, #00abdc);
+    background: linear-gradient(#00abdc, #00abdc);
+    border-bottom: 1px solid #00abdc;
+}
+.mbm_social .social-twitter:hover {
+    color: #fff;
+    text-shadow: 0px 1px 0px #00abdc;
+}
+.mbm_social .social-twitter span {
+    background: #00abdc ;
+    background: -webkit-linear-gradient(#00abdc, #00abdc);
+    background: linear-gradient(#00abdc, #00abdc);
+    color: #fff;
+}
+.mbm_social .social-twitter span:after {
+    border-top-color: #00abdc;
+}
+.mbm_social .social-linkedin {
+    background: #286580 ;
+    background: -webkit-linear-gradient(#286580, #286580);
+    background: linear-gradient(#286580, #286580);
+    border-bottom: 1px solid #286580;
+}
+.mbm_social .social-linkedin:hover {
+    color: #fff ;
+    text-shadow: 0px 1px 0px #286580;
+}
+.mbm_social .social-linkedin span {
+    background: #286580 ;
+    background: -webkit-linear-gradient(#286580, #286580);
+    background: linear-gradient(#286580, #286580);
+    color: #fff;
+}
+.mbm_social .social-linkedin span:after {
+    border-top-color: #286580 ;
+}
+.mbm_social .social-facebook {
+    background: #325c94 ;
+    background: -webkit-linear-gradient(#4562a0, #385693);
+    background: linear-gradient(#4562a0, #385693);
+    border-bottom: 1px solid #2f487c;
+}
+.mbm_social .social-facebook:hover {
+    color: #fff;
+    text-shadow: 0px 1px 0px #2f487c;
+}
+.mbm_social .social-facebook span {
+    background: #3b5a9b;
+    background: -webkit-linear-gradient(#5873aa, #3b5a9b);
+    background: linear-gradient(#5873aa, #3b5a9b);
+    color: #fff;
+}
+.mbm_social .social-facebook span:after {
+    border-top-color: #325c94;
+}
+.mbm_social .social-google-plus {
+    background: #ea4335;
+    background: -webkit-linear-gradient(#ea4335, #ea4335);
+    background: linear-gradient(#ea4335, #ea4335);
+    border-bottom: 1px solid #ea4335;
+}
+.mbm_social .social-google-plus:hover {
+    color: #fff ;
+    text-shadow: 0px 1px 0px #ea4335;
+}
+.mbm_social .social-google-plus span {
+    background: #ea4335;
+    background: -webkit-linear-gradient(#ea4335, #ea4335);
+    background: linear-gradient(#ea4335, #ea4335);
+    color: #fff ;
+}
+.mbm_social .social-google-plus span:after {
+    border-top-color: #ea4335 ;
+}
+.mbm_social i {
+    position: relative;
+    top: 1px;
+    font-size: 14px;
+}
+.mbm_social small {
+    font-size: 14px;
+    margin: 0 0 0 9px;
+    vertical-align: middle;
+}
