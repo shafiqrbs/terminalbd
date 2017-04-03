@@ -531,11 +531,10 @@ class WebServiceProductController extends Controller
 
             // if(!empty($entity->getMasterItem())){
 
-            $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
-            $products = $this->paginate($entities,$limit=12);
 
-            $category = isset($data['category']) ? $data['category'] :0;
-            $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($category);
+            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
+            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
+            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
             $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
 
 
@@ -558,11 +557,9 @@ class WebServiceProductController extends Controller
             return $this->render('FrontendBundle:'.$theme.':cart.html.twig',
                 array(
                     'globalOption'      => $globalOption,
-                    'categoryTree'      => $categoryTree,
                     'brands'            => $brands,
                     'cart'             => $cart,
-                    'products'          => $products,
-
+                    'pageName'          => 'Cart',
                 )
             );
         }

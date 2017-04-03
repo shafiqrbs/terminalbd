@@ -156,7 +156,7 @@
                     <h3>{{ widget.category.name }}</h3>
                 </div>
                 <div id="product" class="row">
-                    <div id="category-slider" class="owl-carousel">
+                    <div id="category-slider" class="owl-carousel wow fadeInDown" data-wow-duration="4s">
                         {% for masterProduct in  widget.category.masterProducts  %}
                         {% for product in  masterProduct.purchaseVendorItem |slice(0,12)  %}
                             <div class="col-md-12">
@@ -179,7 +179,7 @@
                                         {% if globalOption.ecommerceConfig.showBrand == 1 %}
                                             <p class="group inner brand text-center" ><a href="{{ path('webservice_product_brand',{'subdomain': globalOption.subDomain,'id':product.id }) }}"><span>{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></a> </p>
                                         {% endif %}
-                                        <p class="group inner product-name text-center" ><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></a> </p>
+                                        <p class="group inner product-name text-center" ><a href="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></a> </p>
                                         <div class="row">
                                             <div class="row-fluid">
                                                 <div class="col-xs-6 col-md-6 text-right"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}{{ product.discountPrice|number_format() }}{% endif %}</div>
@@ -196,20 +196,20 @@
             </div>
         {% endif %}
         {% if widget.promotion is defined and widget.promotion is not empty %}
-            <div class="container container-margin wow slideInLeft" data-wow-duration="4s">
+            <div class="container container-margin wow fadeInDown" data-wow-duration="4s">
                 <div class="header-double-line-right">
                     <h4>{{ widget.promotion.name }}</h4>
                 </div>
                 <div id="product" class="row">
                     <div id="promotion-slider" class="owl-carousel">
                         {% for product in  widget.promotion.purchaseVendorItems |slice(0,12)  %}
-                            <div class="col-md-12 fadeInRight animated" data-wow-delay="0.2s" >
+                            <div class="col-md-12 fadeInDown animated" data-wow-delay="0.2s" >
                                 <div class="thumbnail" data-match-height="item-promotion">
                                     <div class="product-preview group list-group-image" >
                                         <img class="img-responsive" src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="">
                                         <div class="team-content">
                                             <ul class="view-link">
-                                                <li><a data-url="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}" href="javascript:" class="fa fa-eye preview"></a></li>
+                                                <li><a data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" href="javascript:" class="fa fa-eye preview"></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -220,7 +220,7 @@
                                             {% if globalOption.ecommerceConfig.showBrand == 1 %}
                                             <p class="group inner brand text-center" ><a href="{{ path('webservice_product_brand',{'subdomain': globalOption.subDomain,'id':product.id }) }}"><span>{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></a> </p>
                                             {% endif %}
-                                            <p class="group inner product-name text-center" ><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></a> </p>
+                                            <p class="group inner product-name text-center" ><a href="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></a> </p>
                                         </div>
                                         <div class="row-fluid">
                                             <div class="col-xs-12 col-md-12 text-center"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</strong></div>
@@ -234,7 +234,7 @@
             </div>
         {% endif %}
         {% if widget.featureCategory is defined and widget.featureCategory is not empty %}
-            <div class="container container-margin wow bounceInLeft" data-wow-offset="300" >
+            <div class="container container-margin wow fadeInDown" data-wow-offset="300" >
                 <div class="header-double-line-right">
                     <h4>Browser By  Categories</h4>
                 {% if widget.globalOption.featureCategories|length > 4  %}

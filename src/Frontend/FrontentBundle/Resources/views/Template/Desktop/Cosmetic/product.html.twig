@@ -1,4 +1,4 @@
-{% extends ':frontend/template:base.html.twig' %}
+{% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
     <div class="clearfix"></div>
     <section id="breadcrumb">
@@ -235,18 +235,6 @@
 {% block documentready %}
     {{ parent() }}
     commonJs();
-    $('#list').click(function(event){
-        event.preventDefault();
-        $('#products .item').addClass('list-group-item');
-    });
-
-    $('#grid').click(function(event){event.preventDefault();$('#products .item').removeClass('list-group-item');
-    $('#products .item').addClass('grid-group-item');});
-    $("#price-range").slider({
-        tooltip: 'always'
-    });
-
-
     $('.addCart').submit( function(e) {
 
         var url = $('.cartSubmit').attr("data-url");
@@ -264,7 +252,5 @@
         e.preventDefault();
 
     });
-
-
     {#    ProductFeatureSlider({{ globalOption.ecommerceConfig.owlProductColumn }});#}
 {% endblock %}

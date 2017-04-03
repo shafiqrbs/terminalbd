@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+    {% set currentPath = path(app.request.attributes.get('_route'),
+    app.request.attributes.get('_route_params')) %}
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta property="og:url"           content="htpp://www.{{ globalOption.domain }}{{ currentPath }}" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="{{ globalOption.name }}" />
+    <meta property="og:description"   content="{{ globalOption.name }}" />
+    <meta property="og:image"         content="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" />
+    <title>{{ globalOption.name }}</title>
+    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}">
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    <!-- Google fonts - witch you want to use - (rest you can just remove) -->
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,800,700italic,700,600italic,600,400italic,300italic,300|Roboto:100,300,400,500,700&amp;subset=latin,latin-ext' type='text/css' />
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- HEADER -->
+    <!-- HEADER -->
+    {% set template = globalOption.siteSetting.theme.folderName|lower %}
+    {#{% set csstemplate = "assets/template/desktop/{{ template }}/css/style.css" %}#}
+    {% stylesheets filter='cssrewrite'
+
+    'assets/template/desktop/css/bootstrap.min.css'
+    'assets/template/desktop/font-awesome/css/font-awesome.min.css'
+    'assets/template/plugin/owl.carousel/owl.carousel.min.css'
+    'assets/template/plugin/owl.carousel/owl.theme.min.css'
+    'assets/template/plugin/side.toolbar/vcore.sidebar.css'
+    'assets/template/plugin/pgslider/pgwslider.min.css'
+    'assets/template/plugin/revolution_slider/css/rs-style.css'
+    'assets/template/plugin/revolution_slider/rs-plugin/css/settings.css'
+    'assets/template/plugin/textillate/assets/animate.css'
+    'assets/template/plugin/wow/css/animate.css'
+    'assets/template/plugin/select2/select2.css'
+    'assets/template/plugin/range-slider/bootstrap-slider.css'
+    'assets/template/plugin/ladda/ladda-themeless.min.css'
+    'assets/template/desktop/css/module.css'
+    'assets/template/desktop/cosmetic/css/style.css'
+
+    %}
+
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+    {#  <link href="/assets/template/desktop/{{ template }}/css/style.css" rel="stylesheet" /> #}
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    {% block cssBlock %}{% endblock %}
+</head>
+<body data-spy="scroll">
+{{ include('frontend/template/templateCustomize.html.twig')}}
+<!-- Navigation -->
+{% render controller("FrontendBundle:TemplateWidget:header",{'globalOption':globalOption.id, 'pageName':pageName}) %}
+<div class="clearfix"></div>
+{% block body %}{% endblock %}
+{{ include('@Frontend/Template/Desktop/Cosmetic/footer.html.twig') }}
+<div id="myModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
+{% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
+{% if globalOption.templateCustomize.showSidebar == 1 %}
+    <div class="side-toolbar" style=""></div>
+{% endif %}
+<!-- jQuery -->
+<!--Jquery Smooth Scrolling-->
+{% javascripts
+
+'assets/template/desktop/js/jquery.js'
+'assets/template/desktop/js/bootstrap.min.js'
+'assets/template/plugin/jquery-inputmask/jquery.inputmask.bundle.min.js'
+'assets/template/plugin/numeric/jquery.numeric.js'
+'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
+'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
+'assets/template/plugin/owl.carousel/owl.carousel.min.js'
+'assets/template/plugin/select2/select2.js'
+'assets/template/plugin/wow/js/wow.min.js'
+'assets/template/plugin/treeview/treeview.js'
+'assets/template/plugin/matchHeight/height-match.js'
+'assets/template/plugin/side.toolbar/vcore.sidebar.js'
+'assets/template/plugin/range-slider/bootstrap-slider.min.js'
+'assets/template/plugin/textillate/assets/jquery.fittext.js'
+'assets/template/plugin/textillate/assets/jquery.lettering.js'
+'assets/template/plugin/revolution_slider/rs-plugin/js/jquery.themepunch.plugins.min.js'
+'assets/template/plugin/revolution_slider/rs-plugin/js/jquery.themepunch.revolution.min.js'
+'assets/template/plugin/jquery-zoom/zoom.js'
+%}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+
+{% endjavascripts %}
+
+<script>  subdomain = "{{ globalOption.subDomain }}"; </script>
+{% block javascriptBlock %}{% endblock %}
+<script>
+
+    wow = new WOW(
+        {
+            boxClass:     'wow',
+            animateClass: 'animated',
+            offset:       100
+        }
+    );
+    wow.init();
+
+    $(document).ready(function(){
+
+        $('.select2').select2({
+            placeholder: "Filter by category",
+            allowClear: true,
+            color: "black"
+        });
+
+        var navbar = $('.navbar-header').outerHeight(true);
+        var mins = 22;
+        $('#header-form').css({
+            'margin-top':(navbar/2 - mins)
+        });
+        $(".numeric").numeric();
+        $(".mobile").inputmask("mask", {"mask": "99999-999-999"});
+        var stickyOffset = $('.sticky').offset().top;
+
+        $(window).scroll(function(){
+            var sticky = $('.sticky'),
+                scroll = $(window).scrollTop();
+            if (scroll >= stickyOffset) sticky.addClass('fixed');
+            else sticky.removeClass('fixed');
+        });
+
+        $('.social-tooltip').tooltip({
+            selector: "[data-toggle=tooltip]",
+            container: "body"
+        });
+
+        $('.side-toolbar').vSidebar({
+            'items': [
+                {% render controller("FrontendBundle:TemplateWidget:sidebar",{'globalOption':globalOption.id}) %}
+            ],
+            'position': 'right bottom'
+        });
+
+        $(".dropdown").hover(
+            function() {
+                $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideDown("400");
+                $(this).toggleClass('open');
+            },
+            function() {
+                $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideUp("400");
+                $(this).toggleClass('open');
+            }
+        );
+        $('#list').click(function(event){event.preventDefault();$('#product .item').addClass('list-group-item');});
+        $('#grid').click(function(event){event.preventDefault();$('#product .item').removeClass('list-group-item');
+        $('#products .item').addClass('grid-group-item');});
+
+        $('body').append('<div id="toTop" class="btn btn-primary color1"><span class="glyphicon glyphicon-chevron-up"></span></div>');
+        $(window).scroll(function () {
+            if ($(this).scrollTop() != 0) {
+                $('#toTop').fadeIn();
+            } else {
+                $('#toTop').fadeOut();
+            }
+        });
+        $('#toTop').click(function(){
+            $("html, body").animate({ scrollTop: 0 }, 700);
+            return false;
+        });
+        $("#price-range").slider({
+            tooltip: 'always'
+        });
+
+        {% block documentready %}{% endblock %}
+
+    });
+
+</script>
+<style>
+    .tooltip{
+        z-index: 1000!important;
+    }
+    .form-control, .form-control:focus{
+        border-color: #cccccc;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        background: #fff;
+    }
+
+    textarea:focus,
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="datetime"]:focus,
+    input[type="datetime-local"]:focus,
+    input[type="date"]:focus,
+    input[type="month"]:focus,
+    input[type="time"]:focus,
+    input[type="week"]:focus,
+    input[type="number"]:focus,
+    input[type="email"]:focus,
+    input[type="url"]:focus,
+    input[type="search"]:focus,
+    input[type="tel"]:focus,
+    input[type="color"]:focus,
+    .uneditable-input:focus {
+        border-color: #285e8e;
+        box-shadow:none;
+        outline: 0 none;
+    }
+
+    #error{
+        color: #a94442;
+        background-color: #f2dede;
+        border: 1px solid transparent;
+        border-color: #ebccd1;
+        padding:5px;
+        margin-bottom: 20px;
+        display: inherit;
+    }
+
+</style>
+</body>
+</html>

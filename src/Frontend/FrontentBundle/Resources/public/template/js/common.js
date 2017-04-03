@@ -379,6 +379,7 @@ $('.modalOpen').click(function(){
 });
 
 
+/*
 $('.pgwSlider').pgwSlider({
 
     mainClassName : 'pgwSlider',
@@ -402,6 +403,7 @@ $('.pgwSlider').pgwSlider({
     previousSlide :true
 
 });
+
 
 function sameHeights(selector) {
 
@@ -485,7 +487,7 @@ setTimeout(function () { // set 1 second timeout for having all fonts loaded
     heightsEqualizer('.js-equal-height');
 }, 1000);
 
-
+ */
 
 
 

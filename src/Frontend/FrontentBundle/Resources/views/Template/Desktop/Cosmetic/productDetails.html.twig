@@ -1,4 +1,4 @@
-{% extends ':frontend/template:base.html.twig' %}
+{% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
     {% set paymentID = globalOption.id~'-ecommerce-product-'~product.id %}
     <div class="clearfix"></div>
@@ -6,7 +6,7 @@
         <div class="container">
             <ol class="breadcrumb">
                 <li><a href="{{ path('ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
-                <li class="active"><a href="{{ path('webservice_product',{'subdomain':globalOption.subdomain}) }}">Product</a></li>
+                <li class=""><a href="{{ path('webservice_product',{'subdomain':globalOption.subdomain}) }}">Product</a></li>
                 <li class="active"><span>{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</span></li>
             </ol>
         </div>
@@ -233,7 +233,7 @@
                                                   </button>
                                                 {% if  globalOption.ecommerceConfig.cart == 1 %}
                                                     <input type="hidden" name="productImg"  value="{% if product.webPath is not empty %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
-                                                    <button type="button" class="btn btn-lg btn-info">
+                                                    <button type="submit" class="btn btn-lg btn-info">
                                                         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to cart
                                                     </button>
                                                 {% endif %}
@@ -319,7 +319,7 @@
                                                 <img class="img-responsive" src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="">
                                                 <div class="team-content">
                                                     <ul class="view-link">
-                                                        <li><a data-url="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}" href="javascript:" class="fa fa-eye preview"></a></li>
+                                                        <li><a data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" href="javascript:" class="fa fa-eye preview"></a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -330,7 +330,7 @@
                                                     {% if globalOption.ecommerceConfig.showBrand == 1 %}
                                                         <p class="group inner brand text-center" ><a href="{{ path('webservice_product_brand',{'subdomain': globalOption.subDomain,'id':product.id }) }}"><span>{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></a> </p>
                                                     {% endif %}
-                                                    <p class="group inner product-name text-center" ><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></a> </p>
+                                                    <p class="group inner product-name text-center" ><a href="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></a> </p>
                                                 </div>
                                                 <div class="row-fluid">
                                                     <div class="col-xs-12 col-md-12 text-center"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</strong></div>
@@ -407,7 +407,6 @@
     {% endif %}
     <div class="clearfix"></div>
     <!-- Modal -->
-
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -425,14 +424,11 @@
 
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+{% endjavascripts %}
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
     $("#zoom").elevateZoom({ zoomType    : "inner", cursor: "crosshair" });
-    $("#price-range").slider({
-        tooltip: 'always'
-    });
     var owlCategory = $("#category-carousel");
     owlCategory.owlCarousel({
     items:3,
@@ -567,6 +563,7 @@
     e.preventDefault();
     }
     });
+
 {% endblock %}
 
 
