@@ -126,7 +126,6 @@ webservice_login:
     path:     /customer-login
     defaults: { _controller: FrontendBundle:WebServiceCustomer:confirm }
 
-
 webservice_module:
     path:     /{module}
     defaults: { _controller: FrontendBundle:WebServiceModule:module }
@@ -139,6 +138,3 @@ frontend_brand:
     path:     /brand/{slug}
     defaults: { _controller: FrontendBundle:Default:brand }
 
-frontend_collection:
-    path:     /collection/{slug}
-    defaults: { _controller: FrontendBundle:Default:collection }

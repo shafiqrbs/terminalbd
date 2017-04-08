@@ -23,7 +23,6 @@ class MenuRepository extends EntityRepository
             $entity->setGlobalOption($reEntity->getGlobalOption());
             $entity->setMenu($reEntity->getMenu());
             $entity->setSlug($reEntity->getSlug());
-            $entity->setModule($reEntity->getModule());
             $entity->setPage($reEntity);
             $this->getEntityManager()->persist($entity);
             $this->getEntityManager()->flush();

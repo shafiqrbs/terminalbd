@@ -89,27 +89,43 @@ class ExpenseCategoryRepository extends MaterializedPathRepository
     public function getFlatExpenseCategoryTree($globalOption)
     {
 
-        $expenditures = $this->createQueryBuilder("node")
+        $categories = $this->createQueryBuilder("node")
             ->where('node.globalOption = :option')
+            ->andWhere('node.level = :level')
             ->setParameter('option', $globalOption)
+            ->setParameter('level', 1)
             ->orderBy('node.level','ASC')
             ->getQuery()->getResult();
 
-        $arr = array();
-        $array = array();
-        foreach($expenditures as $category){
+        $arr =array();
+        $array =array();
+        if(!empty($categories)){
 
-            $arr[] = array(
-                'id' => $category->getId(),
-                'name' => $category->getName(),
-                'level' => $category->getLevel(),
-                '__children' => $this->childrenHierarchy($category)
-            );
+            foreach($categories as $category){
+                $arr[] = array(
+                    'id' => $category->getId(),
+                    'name' => $category->getName(),
+                    'level' => $category->getLevel(),
+                    '__children' => $this->childrenHierarchy($category)
+                );
+            }
+            $this->buildFlatCategoryTree($arr , $array);
         }
+        return $array == null ? array() : $array;
+    }
 
-        $this->buildFlatExpenseCategoryTree($arr , $array );
-        return $array == null ? array() : $array ;
+    private function buildFlatCategoryTree($categories, &$array = array())
+    {
+        usort($categories, function($a, $b){
+            return strcmp($a["name"], $b["name"]);
+        });
 
+        foreach($categories as $category) {
+            $array[] = $this->find($category['id']);
+            if(isset($category['__children'])) {
+                $this->buildFlatCategoryTree($category['__children'], $array);
+            }
+        }
     }
 
     private function buildFlatTree($categories, &$array = array())

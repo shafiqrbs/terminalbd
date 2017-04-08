@@ -104,6 +104,35 @@ class MenuTreeManager
         return $value;
 
     }
+
+    public function getEcommerceFooterMenuTree($arr,$subdomain,$device ='')
+    {
+
+        $value ='';
+        $value .='<ul>';
+        $prefix = '';
+        foreach ($arr as $val) {
+
+            $menu = $val->getMenu()->getMenu();
+            if (!empty($menu)) {
+                $subIcon = (count($val->getChildren()) > 0 ) ? 1 : 2 ;
+                if($subIcon == 1){
+                    $value .= '<li><a href="/'.$val->getMenu()->getSlug().'">' . $val->getMenu()->getMenu().'</a>';
+                    $value .= $this->getMenuTree($val->getChildren(),$subdomain,$device);
+                }else{
+                    $value .= '<li><a href="/'.$val->getMenu()->getSlug().'">' . $val->getMenu()->getMenu().'</a>';
+                }
+                $value .= '</li>';
+            } else {
+                $value .= '<li><a href="/'.$val->getMenu()->getSlug().'">'.$val->getMenu()->getMenu() . '</a></li>';
+            }
+        }
+        $value .='</ul>';
+
+        return $value;
+
+    }
+
     public function getMobileMenuTree($arr,$subdomain,$device ='')
     {
 
@@ -191,6 +220,7 @@ class MenuTreeManager
 
 
     }
+
 
 
 }

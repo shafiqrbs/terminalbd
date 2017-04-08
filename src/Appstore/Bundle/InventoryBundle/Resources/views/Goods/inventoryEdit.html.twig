@@ -185,15 +185,15 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                    {% for goodsItem in  entity.goodsItems %}
-                                        <tr>
-                                            <td class="numeric">{% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% endif %}</td>
-                                            <td class="numeric">{% if goodsItem.colors is not empty %}{% for color in goodsItem.colors  %} {{ color.name }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}</td>
-                                            <td class="numeric">{% if goodsItem.quantity is not empty %}{{ goodsItem.quantity }}{% endif %}</td>
-                                            <td class="numeric">{% if goodsItem.purchasePrice is not empty %}{{ goodsItem.purchasePrice }}{% endif %}</td>
-                                            <td class="numeric">{% if goodsItem.salesPrice is not empty %}{{ goodsItem.salesPrice }}{% endif %}</td>
-                                        </tr>
-                                    {% endfor %}
+                                            {% for goodsItem in  entity.goodsItems %}
+                                                <tr>
+                                                    <td class="numeric">{% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% endif %}</td>
+                                                    <td class="numeric">{% if goodsItem.colors is not empty %}{% for color in goodsItem.colors  %} {{ color.name }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}</td>
+                                                    <td class="numeric">{% if goodsItem.quantity is not empty %}{{ goodsItem.quantity }}{% endif %}</td>
+                                                    <td class="numeric">{% if goodsItem.purchasePrice is not empty %}{{ goodsItem.purchasePrice }}{% endif %}</td>
+                                                    <td class="numeric">{% if goodsItem.salesPrice is not empty %}{{ goodsItem.salesPrice }}{% endif %}</td>
+                                                </tr>
+                                            {% endfor %}
                                             </tbody>
                                         </table>
                                     {% endif %}

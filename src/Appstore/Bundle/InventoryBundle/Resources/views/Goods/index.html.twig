@@ -50,27 +50,30 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
-                            <div class="portlet search-portlet box grey">
-                                <div class="row-fluid" >
-                                    <form class="search-form" action="" method="get" name="itemSearch">
-                                        <div class="span7">
+                            <div class="row-fluid">
+                                <form class="search-form" action="" method="get" name="itemSearch">
+                                    <div class="row-fluid">
+                                        <div class="span3">
+                                            <input type="text" id="item" name="item" class="span12 select2Product" value="" autocomplete="off" placeholder="Enter item name ">
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="brand" name="brand" class="span12 select2Brand" value="" autocomplete="off" placeholder="Enter brand name ">
+                                        </div>
+                                        <div class="span3">
+                                            <input type="text" id="category" name="category" class="span12 select2Category" value="" autocomplete="off" placeholder="Enter product category name ">
+                                        </div>
+                                        <div class="span3">
                                             <div class="controls">
-                                                <input type="text" id="updated" name="updated"  class="span4 search-input m-ctrl-medium date-picker" value="{% if searchForm.updated is defined %}{{ searchForm.updated }}{% endif %}"  autocomplete="off" placeholder="Ptoduct created date">
-                                                <input type="text" id="name" name="name"  class="span8 search-input" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="Search by product name">
+                                                <div class="input-append span11">
+                                                    <input type="text" id="tillDate" name="tillDate" class="span11 m-wrap date-picker hasDatepicker" value="04/06/2017" autocomplete="off" placeholder="Till date  ">
+                                                    <div class="btn-group">
+                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="span4 left-margin">
-                                            <input type="text" id="category" name="category"  class="span11 select2Category" value="{% if searchForm.category is defined %}{{ searchForm.category }}{% endif %}"  autocomplete="off" placeholder="Search by product category">
-                                        </div>
-                                        <div class="span1">
-                                            <div class="btn-group">
-                                                <button class="btn" type="submit" >
-                                                    <i class="icon-search"></i>&nbsp;Go</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-
+                                    </div>
+                                </form>
                             </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
@@ -163,13 +166,6 @@
         </div>
     </div>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@InventoryBundle/Resources/public/css/style.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts

@@ -63,6 +63,7 @@ class EcommerceMenu
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="ecommerceMenuPromotion" )
+     * @ORM\OrderBy({"name" = "ASC"})
      **/
     private  $promotions;
 
@@ -77,16 +78,19 @@ class EcommerceMenu
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", inversedBy="ecommerceMenu" )
+     * @ORM\OrderBy({"name" = "ASC"})
      **/
     private  $discounts;
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="ecommerceMenu")
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     protected $brands;
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", inversedBy="ecommerceMenu")
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     protected $features;
 

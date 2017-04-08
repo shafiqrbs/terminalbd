@@ -97,6 +97,7 @@
     {{ parent() }}
     {% javascripts
     '@FrontendBundle/Resources/public/template/js/common.js'
+    '@FrontendBundle/Resources/public/template/js/product.js'
     '@FrontendBundle/Resources/public/template/js/revolutionSlider.js'
     '@FrontendBundle/Resources/public/js/kmaps.min.js'
     %}
@@ -106,16 +107,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    commonJs();
     $('#gmap_canvas').kmaps();
-{#    Index.initRevolutionSlider();#}
-
-{#
-    $(".carousel-indicators li").click(function() {
-        $('.image').removeClass('image-default');
-        $('.image').addClass('image-animate');
-    });
-#}
 {% endblock %}
 
 

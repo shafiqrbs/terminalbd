@@ -58,6 +58,8 @@ class EcommerceConfigType extends AbstractType
             ->add('sidebarSize')
             ->add('sidebarColor')
             ->add('isPreorder')
+            ->add('isColor')
+            ->add('isSize')
             ->add('cart')
             ->add('promotion');
     }

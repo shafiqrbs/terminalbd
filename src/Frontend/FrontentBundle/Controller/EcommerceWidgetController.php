@@ -29,22 +29,30 @@ class EcommerceWidgetController extends Controller
             'menuTree'           => $menuTree,
         ));
     }
+*/
 
-    public function headerAction(GlobalOption $globalOption, $pageName = '',Request $request)
+    public function headerAction(GlobalOption $globalOption,$pageName )
     {
-
-        $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
-        $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
+        /* Device Detection code desktop or mobile */
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
 
-         return $this->render('@Frontend/Template/Desktop/'.$themeName.'/header.html.twig', array(
-            'menuTree'           => $menuTree,
-            'globalOption'       => $globalOption,
-            'pageName'           => $pageName,
-
+        $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $globalOption->getInventoryConfig()));
+        $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
+        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($cats);
+        return $this->render('@Frontend/Template/Desktop/'.$themeName.'/header.html.twig', array(
+            'globalOption'          => $globalOption,
+            'categoryTree'          => $categoryTree,
+            'pageName'              => $pageName
         ));
-    }*/
+    }
+
+    public function returnMegaCategoryMenuAction(GlobalOption $globalOption , $categories,$column = 6){
+
+        $categoryMegaMenu =  $this->getDoctrine()->getRepository('SettingAppearanceBundle:EcommerceMenu')->getMegaMenuCategory($globalOption,$categories,$column);
+
+        return new Response($categoryMegaMenu);
+    }
 
     public function footerAction(GlobalOption $globalOption,Request $request)
     {
@@ -117,6 +125,17 @@ class EcommerceWidgetController extends Controller
 
         return $this->render('@Frontend/Template/Desktop/EcommerceWidget/Template.html.twig', array(
             'templates'           => $templates,
+        ));
+    }
+
+    public function footerMenuAction(GlobalOption $globalOption, $menuGroup , Request $request)
+    {
+        /* Device Detection code desktop or mobile */
+
+        $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> $menuGroup ),array('sorting'=>'asc'));
+        $footerMenu = $this->get('setting.menuTreeSettingRepo')->getEcommerceFooterMenuTree($menus,$globalOption->getSubDomain());
+        return $this->render('@Frontend/Template/Desktop/Widget/FooterMenu.html.twig', array(
+            'footerMenu'           => $footerMenu,
         ));
     }
 

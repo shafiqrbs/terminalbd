@@ -2,7 +2,9 @@
 
 namespace Setting\Bundle\AppearanceBundle\Repository;
 
+use Doctrine\Common\Util\Debug;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * EcommerceMenuRepository
@@ -39,5 +41,33 @@ class EcommerceMenuRepository extends EntityRepository
             array('status' => true,'globalOption' => $option),
             array('sorting'=>'asc')
         );
+    }
+
+    public function getMegaMenuCategory(GlobalOption $globalOption , $categories,$column){
+
+        $menues = array();
+
+        foreach ($categories as $category) {
+            $parent = $category->getParent();
+            if(!isset($menues[$parent->getId()])) {
+                $menues[$parent->getId()]  = array(
+                    'id' => $parent->getId(),
+                    'name' => $parent->getName(),
+                    'children' => array()
+                );
+            }
+            $menues[$parent->getId()]['children'][] = $category;
+        }
+        $str = "";
+        foreach ($menues as $item) {
+            $str .= '<ul class="'.$column.'" data-match-height="menu-category" >';
+            $str .= '<li class="dropdown-header">' . $item['name'] .'</li>';
+            foreach ($item['children'] as $child) {
+                $str .= '<li><a href="/product/category/'. $child->getId() .'">' . $child->getName() .'</a></li>';
+            }
+            $str .= '</ul>';
+        }
+        return $str;
+
     }
 }

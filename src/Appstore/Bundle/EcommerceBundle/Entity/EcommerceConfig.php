@@ -162,6 +162,14 @@ class EcommerceConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="isSize", type="boolean")
+     */
+    private $isSize = false;
+
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="isColor", type="boolean")
      */
     private $isColor = false;
@@ -617,6 +625,22 @@ class EcommerceConfig
     public function setSidebarColor($sidebarColor)
     {
         $this->sidebarColor = $sidebarColor;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsSize()
+    {
+        return $this->isSize;
+    }
+
+    /**
+     * @param bool $isSize
+     */
+    public function setIsSize($isSize)
+    {
+        $this->isSize = $isSize;
     }
 
 }

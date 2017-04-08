@@ -584,6 +584,4 @@ class WebServiceProductController extends Controller
 
 
     }
-
-
 }

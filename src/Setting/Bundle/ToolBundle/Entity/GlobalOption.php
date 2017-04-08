@@ -15,6 +15,8 @@ use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
+use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
 use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureBrand;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureCategory;
@@ -210,6 +212,7 @@ class GlobalOption
     protected $expenditure;
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory", mappedBy="globalOption" , cascade={"persist", "remove"})
+     * @ORM\OrderBy({"level" = "ASC"})
      */
     protected $expenseCategory;
     /**
@@ -1303,7 +1306,9 @@ class GlobalOption
      */
     public function getExpenseCategory()
     {
-        return $this->expenseCategory;
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq('level', 1));
+        return $this->expenseCategory->matching($criteria);
     }
 
     /**
@@ -1531,6 +1536,14 @@ class GlobalOption
     public function setInstagramPageUrl($instagramPageUrl)
     {
         $this->instagramPageUrl = $instagramPageUrl;
+    }
+
+    /**
+     * @return EcommerceMenu
+     */
+    public function getEcommerceMenus()
+    {
+        return $this->ecommerceMenus;
     }
 
 

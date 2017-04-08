@@ -156,22 +156,12 @@ class PurchaseVendorItemRepository extends EntityRepository
 
     public function findGoodsWithSearch($inventory,$data)
     {
-        if (!empty($data['sortBy'])) {
-            $sortBy = explode('=?=', $data['sortBy']);
-            $sort = $sortBy[0];
-            $order = $sortBy[1];
-        }
         $qb = $this->createQueryBuilder('product');
-        $qb->join("product.brand",'brand');
         $qb->where("product.isWeb = 1");
         $qb->andWhere("product.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
         $this->handleSearchBetween($qb,$data);
-        if (empty($data['sortBy'])){
-            $qb->orderBy('product.updated', 'DESC');
-        }else{
-            $qb->orderBy($sort ,$order);
-        }
+        $qb->orderBy('product.updated', 'DESC');
         $qb->getQuery();
         return  $qb;
 

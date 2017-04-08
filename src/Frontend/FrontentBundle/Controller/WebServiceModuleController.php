@@ -76,7 +76,8 @@ class WebServiceModuleController extends Controller
                 'pagination'    => $pagination,
                 'page'          => $page,
                 'featurePages'  => $featurePages,
-                'sidebar'      => $sidebar,
+                'sidebar'       => $sidebar,
+                'pageName'      => 'pageName',
             )
         );
     }
@@ -187,8 +188,6 @@ class WebServiceModuleController extends Controller
             }
 
         }
-
-
         $page = ($page) ? $page :'';
         $categories = ($categories) ? $categories :'';
         /* Device Detection code desktop or mobile */
@@ -206,6 +205,7 @@ class WebServiceModuleController extends Controller
                 'moduleName'            => $moduleName,
                 'details'               => $details,
                 'sidebar'               => $sidebar,
+                'pageName'              => 'pageName',
             )
         );
     }
