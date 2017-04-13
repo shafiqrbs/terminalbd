@@ -2,6 +2,10 @@ ecommerce_ecommercehome:
     resource: "@EcommerceBundle/Resources/config/routing/ecommercehome.yml"
     prefix:   /e-commerce/home
 
+ecommerce_coupon:
+    resource: "@EcommerceBundle/Resources/config/routing/coupon.yml"
+    prefix:   /e-commerce/coupon
+
 ecommerce_promotion:
     resource: "@EcommerceBundle/Resources/config/routing/promotion.yml"
     prefix:   /e-commerce/promotion

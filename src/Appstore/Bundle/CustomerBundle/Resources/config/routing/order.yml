@@ -15,7 +15,7 @@ order_cart:
     defaults: { _controller: "CustomerBundle:Order:cart" }
 
 order_payment:
-    path:     /payment/{id}
+    path:     /{id}/payment
     defaults: { _controller: "CustomerBundle:Order:payment" }
 
 order_process:

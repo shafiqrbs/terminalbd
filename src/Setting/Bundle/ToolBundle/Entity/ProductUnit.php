@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ToolBundle\Entity;
 
 use Appstore\Bundle\InventoryBundle\Entity\Product;
+use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ContentBundle\Entity\TradeItem;
@@ -29,6 +30,12 @@ class ProductUnit
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", mappedBy="productUnit")
      */
     protected $masterProducts;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="unit")
+     */
+    protected $stockItems;
+
 
     /**
      * @var string
@@ -136,14 +143,20 @@ class ProductUnit
         return $this->status;
     }
 
-
-
     /**
      * @return Product
      */
     public function getMasterProducts()
     {
         return $this->masterProducts;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
     }
 
 

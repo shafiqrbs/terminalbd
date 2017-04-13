@@ -19,7 +19,9 @@ class CustomerInboxRepository extends EntityRepository
         $em = $this->_em;
             $entity = new CustomerInbox();
             $entity->setCustomer($customer);
-            $entity->setContent($data['content']);
+            if(isset($data['content'])) {
+                $entity->setContent($data['content']);
+            }
             $entity->setType($type);
             $em->persist($entity);
             $em->flush();

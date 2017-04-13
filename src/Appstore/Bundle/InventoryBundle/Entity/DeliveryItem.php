@@ -52,14 +52,12 @@ class DeliveryItem
      */
     private $salesPrice;
 
-
     /**
      * @var string
      *
      * @ORM\Column(name="subTotal", type="decimal")
      */
     private $subTotal;
-
 
     /**
      * Get id
@@ -174,6 +172,22 @@ class DeliveryItem
     public function setSalesPrice($salesPrice)
     {
         $this->salesPrice = $salesPrice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubTotalPurchase()
+    {
+        return $this->subTotalPurchase;
+    }
+
+    /**
+     * @param string $subTotalPurchase
+     */
+    public function setSubTotalPurchase($subTotalPurchase)
+    {
+        $this->subTotalPurchase = $subTotalPurchase;
     }
 
 

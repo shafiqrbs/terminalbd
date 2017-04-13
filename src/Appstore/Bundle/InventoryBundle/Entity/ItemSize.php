@@ -37,7 +37,13 @@ class ItemSize
      */
     protected $item;
 
-     /**
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="size")
+     */
+    protected $stockItems;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="size")
      */
     protected $purchaseVendorItems;
@@ -285,6 +291,14 @@ class ItemSize
     public function setIsValid($isValid)
     {
         $this->isValid = $isValid;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
     }
 }
 

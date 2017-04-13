@@ -46,140 +46,6 @@
             {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':pageName,'position':'header-top'}) %}
         </section>
     {% endif %}
-    <style>
-
-        .input-group-field {
-            display: table-cell;
-            vertical-align: middle;
-            border-radius: 4px;
-        }
-
-        .input-group-lg > .form-control, .input-group-lg > .input-group-addon, .input-group-lg > .input-group-btn > .btn {
-            border-radius: 0 !important;
-        }
-
-        .input-group-field .form-control, .input-group-field .form-control {
-            border-radius: inherit !important;
-        }
-
-        .input-group-field:not(:first-child):not(:last-child) {
-            border-radius: 0;
-        }
-
-        .input-group-field:not(:first-child):not(:last-child) .form-control {
-            border-left-width: 0;
-            border-right-width: 0;
-        }
-
-        .input-group-field:last-child {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-
-        ul.dropdown-cart {
-            min-width: 250px;
-        }
-
-        ul.dropdown-cart li .item {
-            display: block;
-            padding: 3px 10px;
-            margin: 3px 0;
-        }
-
-        ul.dropdown-cart li .item:hover {
-            background-color: #f3f3f3;
-        }
-
-        ul.dropdown-cart li .item:after {
-            visibility: hidden;
-            display: block;
-            font-size: 0;
-            content: " ";
-            clear: both;
-            height: 0;
-        }
-
-        ul.dropdown-cart li .item-left {
-            float: left;
-        }
-
-        ul.dropdown-cart li .item-left img,
-        ul.dropdown-cart li .item-left span.item-info {
-            float: left;
-        }
-
-        ul.dropdown-cart li .item-left span.item-info {
-            margin-left: 10px;
-        }
-
-        ul.dropdown-cart li .item-left span.item-info span {
-            display: block;
-        }
-
-        ul.dropdown-cart li .item-right {
-            float: right;
-        }
-
-        ul.dropdown-cart li .item-right button {
-            margin-top: 14px;
-        }
-
-        .search-box{
-            border: 1px solid #000;
-        }
-        .btn-group-search{
-            height: 46px;
-            margin-left: 0;
-            width: 50px;
-        }
-        .btn-cart{
-             border:1px solid #000;
-             height: 48px;
-        }
-        .input-group-lg{
-            height: 46px;
-            border: 0;
-            border-left:1px solid #000 ;
-        }
-
-        .select2-container .select2-selection--single {
-            box-sizing: border-box;
-            cursor: pointer;
-            display: block;
-            height: 46px;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        .select2-container--default .select2-selection--single {
-            background-color: #fff;
-            border: 1px solid #fff;
-            border-radius: 0 !important;
-        }
-
-        .select2-container .select2-selection--single .select2-selection__rendered {
-            display: block;
-            padding-left: 8px;
-            padding-right: 20px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: #444;
-            line-height: 46px;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 46px;
-            position: absolute;
-            top: 1px;
-            right: 1px;
-            width: 20px;
-        }
-
-    </style>
     <section id="header">
         <div class="container">
             <div class="row navbar-header">
@@ -192,93 +58,66 @@
                 <div class="col-md-9">
                     {% if globalOption.templateCustomize.showSearch == 0 %}
 
-                            <div class="row bs-example-form" id="header-form">
-                                <div class="col-lg-10">
-                                    <form class="bs-example " data-example-id="input-group-segmented-buttons">
-                                        <div class='input-group search-box' >
-                                            <div class='input-group-field'>
-                                                {{ categoryTree|raw }}
-                                            </div>
-                                            <input type='text' class='form-control input-group-lg' style="width: 351px" name="product" id="product"  placeholder="Find Your Favorite Products"/>
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-group btn-group-search" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                        <div class="row bs-example-form" id="header-form">
+                            <div class="col-lg-10">
+                                <form class="bs-example" action="{{ path('webservice_product',{'subdomain':globalOption.subDomain}) }}"  method="get" data-example-id="input-group-segmented-buttons">
+                                    <div class='input-group search-box' >
+                                        <div class='input-group-field'>
+                                            {{ categoryTree|raw }}
+                                        </div>
+                                        <input type='text' class='form-control input-group-lg' style="width: 351px" name="product" id="product" value="{% if searchForm.product is defined %}{{ searchForm.product }}{% endif %}"  placeholder="Find Your Favorite Products"/>
+                                        <span class="input-group-btn">
+                                                <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
                                             </span>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="input-group dropdown navbar-right">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-group btn-cart dropdown-toggle search-box-bg" data-toggle="dropdown"  aria-expanded="false"><span
+                                                    class="glyphicon glyphicon-shopping-cart"></span></button>
+                                        <a  style=" border:1px solid #000; border-left:none" href="#" class="btn dropdown-toggle search-box-bg" data-toggle="dropdown" role="button"
+                                            aria-expanded="false"> <span class="label-success badge totalItem" >{{ cart.total_items }}</span>
+                                            &nbsp;<span class="label label-warning">৳ <em class="totalAmount">&nbsp;{{ cart.total }}</em></span></a>
+                                        <div class="item-list">
+                                            {% if  cart.contents is not empty %}
+                                                <ul class="dropdown-menu dropdown-cart" role="menavbar-rightnu">
+                                                    {% for product in cart.contents %}
+                                                        <li id="item-remove-{{ product.rowid }}">
+                                                              <span class="item">
+                                                                <span class="item-left">
+                                                                    {% if product.productImg is not empty %}
+                                                                        <img src="{{ image(product.productImg).scaleResize(50,50) }}"
+                                                                             alt=""/>
+                                                                    {% endif %}
+                                                                    <span class="item-info">
+                                                                        <span>{{ product.name|truncate(15) }}</span>
+                                                                        <span>Qnt&nbsp;{{ product.quantity }}</span>
+                                                                        <span><strong>{{ globalOption.ecommerceConfig.currency }}
+                                                                                &nbsp;{{ product.price }}</strong></span>
+                                                                    </span>
+                                                                </span>
+                                                                <span class="item-right">
+                                                                    <button id="{{ product.rowid }}"
+                                                                            data-url="{{ path('webservice_product_cart_remove',{'cartid':product.rowid}) }}"
+                                                                            class="btn btn-xs btn-danger pull-right hunger-remove-cart"><span
+                                                                                class="glyphicon glyphicon-trash"></span></button>
+                                                                </span>
+                                                            </span>
+                                                        </li>
+                                                    {% endfor %}
+                                                    <li class="divider"></li>
+                                                    <li><a class="text-center" href="{{ path('webservice_product_cart_details') }}">View Cart</a></li>
+                                                </ul>
+                                            {% endif %}
                                         </div>
 
-                                    </form>
-                                </div>
-                                <div class="col-lg-2">
-                                        <div class="input-group dropdown navbar-right">
-                                            <div class="input-group-btn">
-                                                <button type="button" class="btn btn-group btn-cart dropdown-toggle" data-toggle="dropdown"  aria-expanded="false"><span
-                                                            class="glyphicon glyphicon-shopping-cart"></span></button>
-                                                <a  style=" border:1px solid #000; border-left:none" href="#" class="btn dropdown-toggle" data-toggle="dropdown" role="button"
-                                                   aria-expanded="false"> <span class="label-success badge">0</span>
-                                                    &nbsp;<span class="label label-warning">৳ <em>0.00</em></span></a>
-                                                <ul class="dropdown-menu dropdown-cart" role="menavbar-rightnu">
-                                                    <li>
-                  <span class="item">
-                    <span class="item-left">
-                        <img src="http://lorempixel.com/50/50/" alt=""/>
-                        <span class="item-info">
-                            <span>Item name</span>
-                            <span>23$</span>
-                        </span>
-                    </span>
-                    <span class="item-right">
-                        <button class="btn btn-xs btn-danger pull-right">x</button>
-                    </span>
-                </span>
-                                                    </li>
-                                                    <li>
-                  <span class="item">
-                    <span class="item-left">
-                        <img src="http://lorempixel.com/50/50/" alt=""/>
-                        <span class="item-info">
-                            <span>Item name</span>
-                            <span>23$</span>
-                        </span>
-                    </span>
-                    <span class="item-right">
-                        <button class="btn btn-xs btn-danger pull-right">x</button>
-                    </span>
-                </span>
-                                                    </li>
-                                                    <li>
-                  <span class="item">
-                    <span class="item-left">
-                        <img src="http://lorempixel.com/50/50/" alt=""/>
-                        <span class="item-info">
-                            <span>Item name</span>
-                            <span>23$</span>
-                        </span>
-                    </span>
-                    <span class="item-right">
-                        <button class="btn btn-xs btn-danger pull-right">x</button>
-                    </span>
-                </span>
-                                                    </li>
-                                                    <li>
-                  <span class="item">
-                    <span class="item-left">
-                        <img src="http://lorempixel.com/50/50/" alt=""/>
-                        <span class="item-info">
-                            <span>Item name</span>
-                            <span>23$</span>
-                        </span>
-                    </span>
-                    <span class="item-right">
-                        <button class="btn btn-xs btn-danger pull-right">x</button>
-                    </span>
-                </span>
-                                                    </li>
-                                                    <li class="divider"></li>
-                                                    <li><a class="text-center" href="">View Cart</a></li>
-                                                </ul>
-                                            </div><!-- /btn-group -->
-                                        </div><!-- /input-group -->
-                                </div>
+
+                                    </div><!-- /btn-group -->
+                                </div><!-- /input-group -->
                             </div>
+                        </div>
                     {% endif %}
                 </div>
 
@@ -301,17 +140,16 @@
 
                     <ul class="nav navbar-nav">
                         {% for  menu in globalOption.ecommerceMenus  %}
-                        <li class="dropdown mega-dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ menu.name }}<span
-                                        class="caret"></span></a>
-                            <ul class="dropdown-menu mega-dropdown-menu">
-                                {% if menu.features is not empty or menu.promotions is not empty or menu.discounts is not empty or menu.tags is not empty %}
-                                <li class="col-sm-3" data-match-height="menu-content" style="background-color: #f9f9f9; border-right:1px solid #d6d9dd">
-                                    {% if menu.features is not empty %}
-                                    <div class="col-sm-12" id="menCollection" class="carousel feature" data-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <div class="container wow featureInRight" data-wow-delay="2s">
-                                                    <div class="row">
+                            <li class="dropdown mega-dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ menu.name }}<span
+                                            class="caret"></span></a>
+                                <ul class="dropdown-menu mega-dropdown-menu">
+                                    {% if menu.features is not empty or menu.promotions is not empty or menu.discounts is not empty or menu.tags is not empty %}
+                                        <li class="col-sm-3" data-match-height="menu-content" style="background-color: #f9f9f9; border-right:1px solid #d6d9dd">
+                                            {% if menu.features is not empty %}
+                                                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                                                    <!-- Wrapper for slides -->
+                                                    <div class="carousel-inner menu-carousel-inner" role="listbox">
                                                         {% for feature in  menu.features %}
                                                             {% if(feature.webPath) %}
                                                                 {% if feature.targetTo == 'Promotion' %}
@@ -325,88 +163,80 @@
                                                                 {% else %}
                                                                     {% set path = path('webservice_product') %}
                                                                 {% endif %}
-                                                                <div class="item {% if loop.index == 1 %} active {% endif %}">
-                                                                    <a href="{{ path }}"><img src="{{ image(feature.webPath).resize(220,160) }}"  class="img-responsive" alt="product 1"></a>
-                                                                    <h4><small>{{ feature.name }}</small></h4>
-                                                                    <button href="{{ path }}" class="btn btn-default" type="button"><span class="glyphicon glyphicon-heart"></span>Show More</button>
+                                                                <div class="item menu-slider {% if loop.index == 1 %} active {% endif %}">
+                                                                    <a href="{{ path }}"><img  src="{{ image(feature.webPath).forceResize(220,160) }}"  style="height: 160px!important;" class="img-responsive" alt="{{ feature.name }}"></a>
+                                                                    <h4><small>{{ feature.name|capitalize }}</small></h4>
+                                                                    <span class="menu-slider-button text-center"><a href="{{ path }}" class="btn btn-info" type="button">See Me&nbsp;<span class="glyphicon glyphicon-play"></span></a></span>
                                                                 </div><!-- End Item -->
                                                             {% endif %}
                                                         {% endfor %}
                                                     </div>
+                                                    <!-- Controls -->
+                                                    <a class="header-carousel-left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                                    </a>
+                                                    <a class="header-carousel-right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                                    </a>
                                                 </div>
-                                        </div><!-- End Carousel Inner -->
-                                        <!-- Controls -->
-                                        <a class="left carousel-control" href="#menCollection" role="button"
-                                           data-feature="prev">
-                                                <span class="glyphicon glyphicon-chevron-left"
-                                                      aria-hidden="true"></span>
-                                            <span class="sr-only">Previous</span>
-                                        </a>
-                                        <a class="right carousel-control" href="#menCollection" role="button"
-                                           data-feature="next">
-                                                <span class="glyphicon glyphicon-chevron-right"
-                                                      aria-hidden="true"></span>
-                                            <span class="sr-only">Next</span>
-                                        </a>
-                                    </div><!-- /.carousel -->
+                                            {% endif %}
+                                            {% if menu.promotions is not empty %}
+                                                <ul class="col-sm-12">
+                                                    <li class="dropdown-header">Promotion's</li>
+                                                    {% for promotion in  menu.promotions %}
+                                                        <li><a href="{{ path('webservice_product',{'promotion':promotion.id}) }}">{{ promotion.name }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                            {% if menu.discounts is not empty %}
+                                                <ul class="col-sm-12">
+                                                    <li class="dropdown-header">Discount Offer's</li>
+                                                    {% for discount in  menu.discounts %}
+                                                        <li><a href="{{ path('webservice_product',{'discount':discount.id}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                            {% if menu.tags is not empty %}
+                                                <ul class="col-sm-12">
+                                                    <li class="dropdown-header">Popular Tag's</li>
+                                                    {% for tag in  menu.tags %}
+                                                        <li><a href="{{ path('webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </li>
                                     {% endif %}
-                                    {% if menu.promotions is not empty %}
-                                    <ul class="col-sm-12">
-                                        <li class="dropdown-header">Promotion's</li>
-                                        {% for promotion in  menu.promotions %}
-                                        <li><a href="{{ path('webservice_product',{'promotion':promotion.id}) }}">{{ promotion.name }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                    {% endif %}
-                                    {% if menu.discounts is not empty %}
-                                        <ul class="col-sm-12">
-                                            <li class="dropdown-header">Discount Offer's</li>
-                                            {% for discount in  menu.discounts %}
-                                                <li><a href="{{ path('webservice_product',{'discount':discount.id}) }}">{{ discount.name }}</a></li>
-                                            {% endfor %}
-                                        </ul>
-                                    {% endif %}
-                                    {% if menu.tags is not empty %}
-                                        <ul class="col-sm-12">
-                                            <li class="dropdown-header">Popular Tag's</li>
-                                            {% for tag in  menu.tags %}
-                                                <li><a href="{{ path('webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>
-                                            {% endfor %}
-                                        </ul>
-                                    {% endif %}
-                                </li>
-                                {% endif %}
-                                {% if menu.categories is not empty %}
+                                    {% if menu.categories is not empty %}
 
-                                    {% if menu.features is empty and menu.promotions is empty and menu.discounts is empty and menu.tags is  empty and  menu.brands is empty %}
-                                        {% set column   = "col-sm-3" %}
-                                        {% set class    = "col-sm-12" %}
-                                    {% elseif (menu.features is not empty and  menu.brands is empty)  or (menu.promotions is not empty and  menu.brands is empty ) or (menu.discounts is not empty and  menu.brands is empty ) or (menu.tags is not  empty and  menu.brands is empty )  %}
-                                        {% set column   = "col-sm-4" %}
-                                        {% set class    = "col-sm-9" %}
-                                    {% elseif (menu.features is not empty  and  menu.brands is not empty ) or (menu.promotions is not empty  and  menu.brands is not empty ) or (menu.discounts is not empty  and  menu.brands is not empty ) or ( menu.tags is not empty  and  menu.brands is not empty) %}
-                                        {% set column   = "col-sm-6" %}
-                                        {% set class    = "col-sm-6" %}
-                                    {% else %}
-                                        {% set class    = "col-sm-6" %}
-                                    {% endif %}
+                                        {% if menu.features is empty and menu.promotions is empty and menu.discounts is empty and menu.tags is  empty and  menu.brands is empty %}
+                                            {% set column   = "col-sm-3" %}
+                                            {% set class    = "col-sm-12" %}
+                                        {% elseif (menu.features is not empty and  menu.brands is empty)  or (menu.promotions is not empty and  menu.brands is empty ) or (menu.discounts is not empty and  menu.brands is empty ) or (menu.tags is not  empty and  menu.brands is empty )  %}
+                                            {% set column   = "col-sm-4" %}
+                                            {% set class    = "col-sm-9" %}
+                                        {% elseif (menu.features is not empty  and  menu.brands is not empty ) or (menu.promotions is not empty  and  menu.brands is not empty ) or (menu.discounts is not empty  and  menu.brands is not empty ) or ( menu.tags is not empty  and  menu.brands is not empty) %}
+                                            {% set column   = "col-sm-6" %}
+                                            {% set class    = "col-sm-6" %}
+                                        {% else %}
+                                            {% set class    = "col-sm-6" %}
+                                        {% endif %}
 
-                                <li class="{{ class }}" data-match-height="menu-content" style="border-right:1px solid #d6d9dd">
-                                    {% render controller("FrontendBundle:EcommerceWidget:returnMegaCategoryMenu",{globalOption:globalOption, categories: menu.categories,column:column}) %}
-                                </li>
-                                {% endif %}
-                                {% if menu.brands is not empty %}
-                                <li data-match-height="menu-content" class="{% if (menu.features is empty or menu.promotions is empty or menu.discounts is empty or menu.tags is  empty ) and  menu.categories is empty %} col-sm-12 {% elseif menu.categories is empty %} col-sm-9 {% else %} col-sm-3 {% endif %}">
-                                    <ul class="col-sm-12">
-                                        <li class="dropdown-header">Brand's</li>
-                                        {% for brand in menu.brands %}
-                                          <li class="{% if menu.categories is empty %} col-sm-3 {% endif %}" ><a href="{{ path('webservice_product_brand',{'id' : brand.id}) }}">{{ brand.name }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </li>
+                                        <li class="{{ class }}" data-match-height="menu-content" style="border-right:1px solid #d6d9dd">
+                                            {% render controller("FrontendBundle:EcommerceWidget:returnMegaCategoryMenu",{globalOption:globalOption, categories: menu.categories,column:column}) %}
+                                        </li>
+                                    {% endif %}
+                                    {% if menu.brands is not empty %}
+                                        <li data-match-height="menu-content" class="{% if (menu.features is empty or menu.promotions is empty or menu.discounts is empty or menu.tags is  empty ) and  menu.categories is empty %} col-sm-12 {% elseif menu.categories is empty %} col-sm-9 {% else %} col-sm-3 {% endif %}">
+                                            <ul class="col-sm-12">
+                                                <li class="dropdown-header">Brand's</li>
+                                                {% for brand in menu.brands %}
+                                                    <li class="{% if menu.categories is empty %} col-sm-3 {% endif %}" ><a href="{{ path('webservice_product_brand',{'id' : brand.id}) }}">{{ brand.name }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </li>
                         {% endfor %}
                     </ul>
 

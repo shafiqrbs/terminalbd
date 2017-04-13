@@ -64,7 +64,7 @@ class OrderRepository extends EntityRepository
 
         $em = $this->_em;
         $order = new Order();
-        $globalOption = $this->_em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
+        $globalOption = $this->_em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $shop));
         $order->setGlobalOption($globalOption);
         $customer = $this->getDomainCustomer($user,$globalOption);
         $order->setCustomer($customer);
@@ -90,9 +90,9 @@ class OrderRepository extends EntityRepository
 
     }
 
-    public function getDomainCustomer(User $user,$globalOption)
+    public function getDomainCustomer(User $user,GlobalOption $globalOption)
     {
-        $mobile = $user->getProfile()->getMobile();
+
         $customer = $this->_em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption,'mobile' => $user));
         if(!empty($customer)){
 
@@ -103,13 +103,13 @@ class OrderRepository extends EntityRepository
             $em = $this->_em;
             $entity = new Customer();
             $entity->setGlobalOption($globalOption);
-            $entity->setMobile($mobile);
+            $entity->setMobile($user->getUsername());
             $entity->setEmail($user->getEmail());
             $entity->setAddress($user->getProfile()->getAddress());
             $entity->setName($user->getProfile()->getName());
             $entity->setCustomerType('online');
             $em->persist($entity);
-            $em->flush();
+            $em->flush($entity);
             return $entity;
         }
     }

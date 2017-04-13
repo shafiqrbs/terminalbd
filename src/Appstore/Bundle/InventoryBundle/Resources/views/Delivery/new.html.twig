@@ -98,18 +98,24 @@
                                             <th class="numeric">Barcode</th>
                                             <th class="numeric">Name</th>
                                             <th  class="numeric">Quantity</th>
-                                            <th>Sales Price</th>
+                                            <th>Purchase</th>
+                                            <th>Sub-total</th>
+                                            <th>Sales</th>
                                             <th>Sub-Total</th>
                                             <th><i class="icon-trash"></i></th>
                                         </tr>
                                         </thead>
                                         <tbody id="deliveryItem">
+                                        {%  set totalPurchase = 0 %}
                                         {% for item in entity.deliveryItems %}
+                                            {%  set totalPurchase = totalPurchase + (item.purchaseItem.purchasePrice * item.quantity) %}
                                             <tr>
                                             <td class="numeric" >{{ loop.index }}</td>
                                             <td class="numeric">{{ item.purchaseItem.barcode }}</td>
                                             <td class="numeric">{{ item.item.name }}</td>
                                             <td  class="numeric">{{ item.quantity }}</td>
+                                            <td>{{ item.purchaseItem.purchasePrice }}</td>
+                                            <td>{{ item.purchaseItem.purchasePrice * item.quantity  }}</td>
                                             <td>{{ item.salesPrice }}</td>
                                             <td>{{ item.subTotal }}</td>
                                             <td><a id="" title="Are you sure went to delete ?" rel="{{ path('inventory_delivery_item_delete',{'delivery':entity.id,'id':item.id}) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
@@ -117,9 +123,11 @@
                                         {% endfor %}
                                         <tr>
                                             <td colspan="3"><span class="pull-right"><strong>Total Quantity</strong></span></td>
-                                            <td><span class="pull-right" id="totalQuantity">{{ entity.totalQuantity }}</span></td>
-                                            <td><span class="pull-right"><span class="pull-right"><strong id="totalAmount">Total Amount</strong></span></span></td>
-                                            <td><span class="pull-right"><strong>{{ entity.totalAmount|number_format }}</strong></span></td>
+                                            <td><span class="pull-left" id="totalQuantity">{{ entity.totalQuantity }}</span></td>
+                                            <td><span class="pull-right"><span class="pull-right"><strong id="totalAmount">Total Purchase</strong></span></span></td>
+                                            <td><span class="pull-left"><strong>{{ totalPurchase|number_format }}</strong></span></td>
+                                            <td><span class="pull-right"><span class="pull-right"><strong id="totalAmount">Total Sales</strong></span></span></td>
+                                            <td><span class="pull-left"><strong>{{ entity.totalAmount|number_format }}</strong></span></td>
                                             <td></td>
                                         </tr>
                                         </tbody>

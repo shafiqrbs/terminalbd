@@ -21,10 +21,12 @@ class PurchaseVendorItemRepository extends EntityRepository
     public function findFrontendProductWithSearch($inventory,$data)
     {
         if (!empty($data['sortBy'])) {
+
             $sortBy = explode('=?=', $data['sortBy']);
             $sort = $sortBy[0];
             $order = $sortBy[1];
         }
+
         $qb = $this->createQueryBuilder('product');
         $qb->leftJoin("product.masterItem",'masterItem');
         $qb->where("product.isWeb = 1");
@@ -40,17 +42,51 @@ class PurchaseVendorItemRepository extends EntityRepository
             $qb->setParameter('category', $data['category']);
         }
 
+        if (!empty($data['product'])) {
+             $search = strtolower($data['product']);
+             $qb->andWhere($qb->expr()->like("product.slug", "'%$search%'"  ));
+        }
+
         if (empty($data['sortBy'])){
             $qb->orderBy('product.updated', 'DESC');
         }else{
             $qb->orderBy($sort ,$order);
         }
-
-
-        $qb->getQuery();
-        return  $qb;
+        $res = $qb->getQuery();
+        return  $res;
 
     }
+
+    public function frontendProductNext($entity){
+
+        $db = $this->getNextPrevious($entity);
+        return $db->andWhere($db->expr()->gt('e.id',$entity->getId()))->getQuery()->getOneOrNullResult();
+    }
+    public function frontendProductPrev($entity){
+        $db = $this->getNextPrevious($entity);
+        return $db->andWhere($db->expr()->lt('e.id',$entity->getId()))->getQuery()->getOneOrNullResult();
+    }
+
+    private function getNextPrevious(PurchaseVendorItem $entity)
+    {
+
+
+        /**
+         * @var PurchaseVendorItem $entity
+         */
+        $em = $this->_em;
+        $db = $em->createQueryBuilder();
+        $db->select('e');
+        $db->from('InventoryBundle:PurchaseVendorItem','e');
+        $db->where($db->expr()->andX(
+            $db->expr()->eq('e.isWeb',1),
+            $db->expr()->eq('e.inventoryConfig',$entity->getInventoryConfig()->getId())
+        ));
+        $db->setMaxResults(1);
+        return $db;
+
+    }
+
 
 
     public function handleSearchBetween($qb,$data){
@@ -127,6 +163,7 @@ class PurchaseVendorItemRepository extends EntityRepository
         return  $qb;
 
     }
+
     public function findAllProductWithSearch($data,$limit=0)
     {
 
@@ -152,7 +189,6 @@ class PurchaseVendorItemRepository extends EntityRepository
         return  $qb;
 
     }
-
 
     public function findGoodsWithSearch($inventory,$data)
     {
@@ -206,8 +242,6 @@ class PurchaseVendorItemRepository extends EntityRepository
         return  $qb;
 
     }
-
-
 
     public function getPurchaseVendorQuantitySum($purchase)
     {

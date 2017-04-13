@@ -11,11 +11,200 @@ a:hover{
 
 p{
     line-height: 1.66667em;
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
+
 .btn, .btn-group-sm>.btn, .btn-sm{
     border-radius: 0!important;
 }
+.box .info-links{
+    line-height: 30px;
+}
+
+.tooltip{
+    z-index: 100!important;
+}
+.form-control, .form-control:focus{
+    border-color: #cccccc;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: #fff;
+    color: #000;
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {
+    border-color: #285e8e;
+    box-shadow:none;
+    outline: 0 none;
+}
+
+#error{
+    color: #a94442;
+    background-color: #f2dede;
+    border: 1px solid transparent;
+    border-color: #ebccd1;
+    padding:5px;
+    margin-bottom: 20px;
+    display: inherit;
+}
+.help-block{
+    margin-top: 0;
+}
+
+/*=================================== HEADER =====================================*/
+
+.input-group-field {
+    display: table-cell;
+    vertical-align: middle;
+    border-radius: 4px;
+}
+
+.input-group-lg > .form-control, .input-group-lg > .input-group-addon, .input-group-lg > .input-group-btn > .btn {
+    border-radius: 0 !important;
+}
+
+.input-group-field .form-control, .input-group-field .form-control {
+    border-radius: inherit !important;
+}
+
+.input-group-field:not(:first-child):not(:last-child) {
+    border-radius: 0;
+}
+
+.input-group-field:not(:first-child):not(:last-child) .form-control {
+    border-left-width: 0;
+    border-right-width: 0;
+}
+
+.input-group-field:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+ul.dropdown-cart {
+    min-width: 250px;
+}
+
+ul.dropdown-cart li .item {
+    display: block;
+    padding: 3px 10px;
+    margin: 3px 0;
+}
+
+ul.dropdown-cart li .item:hover {
+    background-color: #f3f3f3;
+}
+
+ul.dropdown-cart li .item:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+ul.dropdown-cart li .item-left {
+    float: left;
+}
+
+ul.dropdown-cart li .item-left img,
+ul.dropdown-cart li .item-left span.item-info {
+    float: left;
+}
+
+ul.dropdown-cart li .item-left span.item-info {
+    margin-left: 10px;
+}
+
+ul.dropdown-cart li .item-left span.item-info span {
+    display: block;
+}
+
+ul.dropdown-cart li .item-right {
+    float: right;
+}
+
+ul.dropdown-cart li .item-right button {
+    margin-top: 14px;
+}
+
+.search-box{
+    border: 1px solid #000;
+}
+.search-box-bg{
+    background-color: #0b0b0b;
+    color: #ffffff;
+}
+.btn-group-search{
+    height: 46px;
+    margin-left: 0;
+    width: 50px;
+}
+
+.btn-cart{
+    border:1px solid #000;
+    height: 48px;
+}
+.input-group-lg{
+    height: 46px;
+    border: 0;
+    border-left:1px solid #000;
+}
+
+
+.select2-container .select2-selection--single {
+    box-sizing: border-box;
+    cursor: pointer;
+    display: block;
+    height: 46px;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #fff;
+    border-radius: 0 !important;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    display: block;
+    padding-left: 8px;
+    padding-right: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #444;
+    line-height: 46px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 46px;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    width: 20px;
+}
+/*=================================== END HEADER =====================================*/
 
 /* ================================= MEGA MENU ===========================*/
 
@@ -101,6 +290,30 @@ p{
 .navbar-mega-menu {
     margin-bottom: 0;
     border: none;
+}
+
+.header-carousel-left , .header-carousel-right{
+    top:53%;
+}
+.header-carousel-left{
+    float: left;
+    left:-2%;
+}
+.header-carousel-right{
+    float: right;
+    left:90.2%;
+}
+.menu-carousel-inner{
+    min-height:auto !important;
+    margin-top:10px;
+}
+.menu-slider h4 small{
+    font-size: 12px;
+    text-transform: capitalize;
+}
+.menu-slider-button{
+    width: 100%;
+    display: inline-block;
 }
 
 /* ================================= MEGA MENU ===========================*/
@@ -624,7 +837,7 @@ div.treeview, .treeview ul {
 /* ------------------- Carousel Styling ------------------- */
 
 .carousel-inner {
-    border-radius: 15px;
+    border-radius:0;
 }
 
 .carousel-caption {

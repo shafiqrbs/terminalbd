@@ -5,12 +5,15 @@ ecommercesubdomain:
 webservice_sms_receive:
     path:     /receive/sms
     defaults: { _controller: FrontendBundle:SmsEmailReceive:smsReceive}
+    options:
+            expose: true
 
 webservice_email_receive:
-    path:     /receive/email
+    path:     /receive/email-sender
     defaults: { _controller: FrontendBundle:SmsEmailReceive:emailReceive}
     methods:  POST
-
+    options:
+            expose: true
 
 webservice_product_details:
     path:     /product/{item}

@@ -34,6 +34,12 @@ class ItemColor
     protected $item;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="color")
+     */
+    protected $stockItems;
+
+
+    /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="colors")
      */
     protected $goodsItem;
@@ -259,6 +265,14 @@ class ItemColor
     public function getPurchaseVendorItems()
     {
         return $this->purchaseVendorItems;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
     }
 }
 

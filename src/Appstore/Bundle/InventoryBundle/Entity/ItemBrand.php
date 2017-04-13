@@ -5,6 +5,7 @@ namespace Appstore\Bundle\InventoryBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
+use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureBrand;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -37,6 +38,11 @@ class ItemBrand  implements CodeAwareEntity
     protected $items;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="brand")
+     */
+    protected $stockItems;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="brand")
      */
     protected $purchaseVendorItems;
@@ -56,6 +62,10 @@ class ItemBrand  implements CodeAwareEntity
      **/
     private $featureBrands;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="brand")
+     **/
+    private $features;
 
     /**
      * @var string
@@ -278,11 +288,19 @@ class ItemBrand  implements CodeAwareEntity
     }
 
     /**
-     * @param FeatureBrand $featureBrands
+     * @return Feature
      */
-    public function setFeatureBrands($featureBrands)
+    public function getFeatures()
     {
-        $this->featureBrands = $featureBrands;
+        return $this->features;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
     }
 
 

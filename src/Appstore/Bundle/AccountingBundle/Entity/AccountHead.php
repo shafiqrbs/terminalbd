@@ -42,6 +42,12 @@ class AccountHead
     private  $expendituries;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory", mappedBy="accountHead" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $expenseCategory;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="accountHead" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
@@ -332,6 +338,14 @@ class AccountHead
     public function setSlug($slug)
     {
         $this->slug = $slug;
+    }
+
+    /**
+     * @return ExpenseCategory
+     */
+    public function getExpenseCategory()
+    {
+        return $this->expenseCategory;
     }
 
 }

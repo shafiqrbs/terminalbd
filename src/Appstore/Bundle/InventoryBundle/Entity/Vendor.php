@@ -33,6 +33,10 @@ class Vendor implements CodeAwareEntity
      */
     protected $items;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="vendor")
+     */
+    protected $stockItems;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", mappedBy="vendor")
@@ -54,10 +58,6 @@ class Vendor implements CodeAwareEntity
      */
     protected $accountPurchaseReturns;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="vendor")
-     */
-    protected $stockItems;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Country", inversedBy="vendors")
@@ -391,6 +391,14 @@ class Vendor implements CodeAwareEntity
     {
         $code = str_pad($this->getCode(),3, '0', STR_PAD_LEFT);
         return $code;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
     }
 }
 

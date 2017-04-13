@@ -67,13 +67,18 @@ class OrderController extends Controller
 
     }
 
+    /**
+     * @param $shop
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function cartToOrderAction($shop , Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $cart = new Cart($request->getSession());
         $user = $this->getUser();
         $order = $em->getRepository('EcommerceBundle:Order')->insertNewCustomerOrder($user,$shop,$cart);
-        return $this->redirect($this->generateUrl('order_payment',array('id' => $order->getId())));
+        return $this->redirect($this->generateUrl('order_payment',array('id' => $order->getId(),'shop' => $order->getGlobalOption()->getUniqueCode())));
 
     }
 
@@ -116,7 +121,7 @@ class OrderController extends Controller
         $globalOption = $entity->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $form = $this->createForm(new OrderType($globalOption,$location), $entity, array(
-            'action' => $this->generateUrl('order_process', array('shop'=>$entity->getGlobalOption()->getSlug(),'id' => $entity->getId())),
+            'action' => $this->generateUrl('order_process', array('shop' => $entity->getGlobalOption()->getUniqueCode(),'id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',

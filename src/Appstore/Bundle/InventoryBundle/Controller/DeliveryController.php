@@ -121,10 +121,10 @@ class DeliveryController extends Controller
             $delivery->setSalesPrice($item->getSalesPrice());
             $delivery->setSubTotal($item->getSalesPrice() * $item->getQuantity());
             $em->persist($delivery);
-            $em->flush();
+            $em->flush($delivery);
 
         }
-
+        $this->getDoctrine()->getRepository('InventoryBundle:Delivery')->updateDeliveryTotal($entity);
         return $this->redirect($this->generateUrl('inventory_delivery_edit', array( 'code' => $entity->getInvoice())));
 
     }

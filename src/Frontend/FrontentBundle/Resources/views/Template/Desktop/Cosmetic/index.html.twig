@@ -33,21 +33,7 @@
             </div>
         </div>
     </section>
-
-{#
-
-{% if globalOption.ecommerceConfig.templates is not empty %}
-        <section class="section-divide" id="dashboard">
-            <div class="container">
-                <div class="row">
-                    {% render controller("FrontendBundle:EcommerceWidget:homeTopWidget",{'globalOption':globalOption.id,'position':'top'}) %}
-                </div>
-            </div>
-        </section>
-{% endif %}
-
-#}
-        <section>
+    <section>
             {% if globalOption.contactPage.latitude is not empty and globalOption.contactPage.longitude is not empty %}
                 <div id="gmap_canvas" class="gmap">
                     <div class="Lat">{{ globalOption.contactPage.latitude }}</div>
@@ -107,7 +93,26 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+
+    $('#newsLetter').submit( function(e) {
+
+        $.ajax({
+
+        url         : $('#newsLetter').attr( 'action' ),
+        type        : $('#newsLetter').attr( 'method' ),
+        data: new FormData( this ),
+        processData : false,
+        contentType : false,
+        success: function(response) {
+        alert(response);
+        },
+
+        });
+
+    });
+
     $('#gmap_canvas').kmaps();
+
 {% endblock %}
 
 

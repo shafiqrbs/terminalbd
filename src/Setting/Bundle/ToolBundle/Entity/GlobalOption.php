@@ -66,7 +66,7 @@ class GlobalOption
     protected $users;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="globalOptionAgent" , cascade={"persist", "remove"} )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="globalOptionAgents" , cascade={"persist", "remove"} )
      **/
     protected $agent;
 

@@ -183,11 +183,9 @@
                                 <div class="span7" id="message"></div>
 
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    <a class="btn green approve approved-{{ entity.id }}" data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('purchase_approve', { 'id': entity.id }) }}"><i class="icon-ok"></i>&nbsp;Approve</a>
-
-                                    {#  <a type="reset" class="btn yellow"><i class="icon-print"></i>&nbsp;Print</a>
+                                      {#  <a type="reset" class="btn yellow"><i class="icon-print"></i>&nbsp;Print</a>
                                       <a type="reset" class="btn purple"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>#}
-                                    {% if ( app.user.granted("ROLE_DOMAIN")  and entity.process == 'complete' or app.user.granted("ROLE_DOMAIN_INVENTORY_APPROVAL")  and entity.process == 'complete' or app.user.granted("ROLE_DOMAIN_INVENTORY")  and entity.process == 'complete' )  %}
+                                    {% if (  (app.user.granted("ROLE_DOMAIN")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY_APPROVAL")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY")  and entity.process == 'complete') )  %}
                                         <a class="btn purple approve"  data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('purchase_approve', { 'id': entity.id,'reject':'reject'  }) }}" ><i class="icon-refresh"></i>&nbsp;Reject</a>
                                         <a class="btn green approve approved-{{ entity.id }}" data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('purchase_approve', { 'id': entity.id }) }}"><i class="icon-ok"></i>&nbsp;Approve</a>
                                     {% elseif entity.process == 'approved'  %}

@@ -67,7 +67,7 @@ class ModuleController extends Controller
     public function subdomainModuleAction($subdomain,$module)
     {
 
-       exit;
+
         $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug'=>$subdomain));
         $moduleEntity = $this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('menuSlug'=>$module));
         $syndicate = 'get'.$globalOption->getSyndicate()->getEntityName();
@@ -95,8 +95,6 @@ class ModuleController extends Controller
     public function subdomainContentAction($subdomain,$slug)
     {
 
-echo $slug;
-        exit;
 
         $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug'=>$subdomain));
         $syndicate = 'get'.$globalOption->getSyndicate()->getEntityName();
@@ -147,8 +145,7 @@ echo $slug;
 
     public function subdomainModuleFileDownloadAction($subdomain,$module,$slug)
     {
-        echo $slug;
-        exit;
+
         $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug'=>$subdomain));
         $moduleEntity = $this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('menuSlug'=>$module));
         if(!$moduleEntity){
@@ -179,7 +176,7 @@ echo $slug;
         $homeModule = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getModuleListing($entity);
         $admissionModule = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getSyndicateModuleListing($entity);
         $user = $entity->getUser();
-        $testimonial = $this->getDoctrine()->getRepository('SettingContentBundle:Testimonial')->findOneBy(array('user'=>$user,'isFeature'=>1),array('created'=>'desc'));
+        $testimonial = $this->getDoctrine()->getRepository('SettingContentBundle:Testimonial')->findOneBy(array('user' => $user ,'isFeature'=>1),array('created'=>'desc'));
         $next = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getNext($entity);
         $previous = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getPrevious($entity);
         $relatedLocationVendors = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getRelatedLocationVendor($entity);

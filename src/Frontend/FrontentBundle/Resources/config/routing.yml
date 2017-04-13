@@ -8,9 +8,9 @@ kintethako:
 
 domain_receive_email:
     path:     /{subdomain}/email/receive
-    defaults: { _controller: FrontendBundle:SmsEmailReceive:smsReceive}
+    defaults: { _controller: FrontendBundle:SmsEmailReceive:emailReceive}
 
 domain_receive_sms:
     path:     /{subdomain}/sms/receive
-    defaults: { _controller: FrontendBundle:SmsEmailReceive:emailReceive}
+    defaults: { _controller: FrontendBundle:SmsEmailReceive:smsReceive}
 

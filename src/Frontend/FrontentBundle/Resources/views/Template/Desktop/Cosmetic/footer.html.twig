@@ -15,7 +15,16 @@
             <div class="col-sm-4">
                 <h4>NEWS LETTER</h4>
                 <div class="social-tooltip">
-                    <div class="input-group"> <input class="form-control" placeholder="Enter your e-mail" aria-label="Text input with multiple buttons"> <div class="input-group-btn"> <button type="button" class="btn blue btn-default" aria-label="Help"><span data-toggle="tooltip" title="Are you interest new product & offer to send please your e-mail." class="glyphicon glyphicon-question-sign"></span></button> <button type="button" class="btn btn-default green"><span class="glyphicon glyphicon-saved"></span></button> </div> </div> </div>
+                    <form name="newsLetter" method="post" id="newsLetter" action="{{ path('webservice_email_receive') }}">
+                        <div class="input-group">
+                            <input class="form-control" type="email" name="email" id="email" data-toggle="tooltip" required="required" title="Enter valid e-mail address" placeholder="Enter your e-mail" aria-label="Text input with multiple buttons">
+                            <div class="input-group-btn"> <button type="button" class="btn btn-info" aria-label="Help"><span data-toggle="tooltip" title="Are you interest new product & offer to send please your e-mail." class="glyphicon glyphicon-question-sign"></span></button>
+                            <button type="button" class="btn btn-primary emailSender"><span class="glyphicon glyphicon-saved"></span></button>
+                            </div>
+                        </div>
+                        <span id="email-success"></span>
+                    </form>
+                </div>
 
             </div>
             <div class="col-sm-3">

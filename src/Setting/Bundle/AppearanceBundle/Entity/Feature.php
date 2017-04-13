@@ -644,4 +644,12 @@ class Feature
         return $this->ecommerceMenu;
     }
 
+    /**
+     * @return SidebarWidgetPanel
+     */
+    public function getSidebarWidgetPanel()
+    {
+        return $this->sidebarWidgetPanel;
+    }
+
 }

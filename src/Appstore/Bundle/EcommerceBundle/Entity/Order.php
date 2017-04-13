@@ -63,7 +63,12 @@ class Order
      **/
     private  $accountOnlineOrder;
 
-     /**
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\CouponCode", inversedBy="order" )
+     **/
+    private  $couponCode;
+
+    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="order" )
      **/
     private  $accountCash;
@@ -928,6 +933,22 @@ class Order
     public function getAccountOnlineOrder()
     {
         return $this->accountOnlineOrder;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCouponCode()
+    {
+        return $this->couponCode;
+    }
+
+    /**
+     * @param mixed $couponCode
+     */
+    public function setCouponCode($couponCode)
+    {
+        $this->couponCode = $couponCode;
     }
 
 }

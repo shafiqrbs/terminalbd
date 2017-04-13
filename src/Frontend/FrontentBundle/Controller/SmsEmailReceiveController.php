@@ -39,10 +39,13 @@ class SmsEmailReceiveController extends Controller
     public function emailReceiveAction(Request $request,$subdomain)
     {
 
-        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('status' => 1,'subDomain' => $subdomain));
+        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('status' => 1, 'subDomain' => $subdomain));
         $data = $request->request->all();
-        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
-        $data['mobile'] = $mobile;
+        if (isset($data['mobile'])){
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+            $data['mobile'] = $mobile;
+        }
+
         $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->insertContactCustomer($globalOption,$data);
         $customerInbox = $this->getDoctrine()->getRepository('DomainUserBundle:CustomerInbox')->sendCustomerMessage($customer,$data,'email');
 
@@ -51,7 +54,7 @@ class SmsEmailReceiveController extends Controller
             $dispatcher->dispatch('setting_tool.post.email_receive', new ReceiveEmailEvent($globalOption , $customerInbox));
 
         }
-        return new Response($customer->getEmail());
+        return new Response('success');
 
 
     }

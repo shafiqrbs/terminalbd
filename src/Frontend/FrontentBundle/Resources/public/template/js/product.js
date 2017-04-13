@@ -19,6 +19,7 @@ $(document).on( "change", ".modalChange", function( e ) {
 });
 
 $(document).on( "change", ".changeSize", function( e ) {
+
     var subItem = $(this).val();
     var url = $(this).attr("data-url");
     $.ajax({
@@ -60,32 +61,43 @@ $(document).on( "change", ".changeCartSize", function( e ) {
 $('.addCart').submit( function(e) {
 
     var url = $('.cartSubmit').attr("data-url");
-    alert(url);
     $.ajax({
         url:url ,
         type: 'POST',
-        data: new FormData( this ),
+        data: new FormData(this),
         processData: false,
         contentType: false,
         success: function(response){
-            $('.vsidebar .txt').html('54000');
+
+            obj = JSON.parse(response);
+            $('.totalItem').html(obj['totalItem']);
+            $('.totalAmount').html(obj['cartTotal']);
+            $('.item-list').html(obj['salesItem']);
+            $('.vsidebar .txt').html(obj['cartResult']);
         }
     });
     e.preventDefault();
 
 });
 
-$(document).on( "click", ".addCart", function(e){
+
+$(document).on( "click", ".addCartx", function(e){
 
     var url = $('.cartSubmit').attr("data-url");
     $.ajax({
         url:url ,
         type: 'POST',
-        data: new FormData( this ),
+        data: new FormData(this),
         processData: false,
         contentType: false,
         success: function(response){
-            $('.vsidebar .txt').html('54000');
+
+            obj = JSON.parse(response);
+            $('.totalItem').html(obj['totalItem']);
+            $('.totalAmount').html(obj['cartTotal']);
+            $('.item-list').html(obj['salesItem']);
+            $('.vsidebar .txt').html(obj['cartResult']);
+
         }
     });
     e.preventDefault();
@@ -104,6 +116,47 @@ $('.update-cart').click( function() {
         data:'price='+price+'&quantity='+quantity,
         success: function(response){
             location.reload();
+        }
+    });
+    e.preventDefault();
+
+});
+
+
+$(document).on( "click", ".cartSubmit", function(e){
+
+    var url = $('.cartSubmit').attr("data-url");
+    var data = $('.addCart').serialize();
+    $.ajax({
+        url:url ,
+        type: 'POST',
+        data:data,
+        success: function(response){
+
+            obj = JSON.parse(response);
+            $('.totalItem').html(obj['totalItem']);
+            $('.totalAmount').html(obj['cartTotal']);
+            $('.item-list').html(obj['salesItem']);
+            $('.vsidebar .txt').html(obj['cartResult']);
+
+        }
+    });
+    e.preventDefault();
+
+});
+
+$(document).on( "click", ".hunger-remove-cart", function(e){
+    var url = $(this).attr("data-url");
+    var id = $(this).attr("id");
+    $('#item-remove-'+id).hide();
+    $.ajax({
+        url:url ,
+        type: 'GET',
+        success: function(response){
+            obj = JSON.parse(response);
+            $('.totalItem').html(obj['totalItem']);
+            $('.totalAmount').html(obj['cartTotal']);
+            $('.vsidebar .txt').html(obj['cartResult']);
         }
     });
     e.preventDefault();

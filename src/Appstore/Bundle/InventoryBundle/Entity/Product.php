@@ -37,6 +37,12 @@ class Product implements CodeAwareEntity
     protected $items;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="product")
+     */
+    protected $stockItems;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="masterItem")
      */
     protected $purchaseVendorItem;
@@ -490,6 +496,14 @@ class Product implements CodeAwareEntity
     public function setContent($content)
     {
         $this->content = $content;
+    }
+
+    /**
+     * @return StockItem
+     */
+    public function getStockItems()
+    {
+        return $this->stockItems;
     }
 
 

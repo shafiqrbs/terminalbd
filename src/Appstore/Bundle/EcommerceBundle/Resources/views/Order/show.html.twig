@@ -136,7 +136,7 @@
                                         <td class="numeric" >{% if  item.goodsItem.size %}{{ item.goodsItem.size.name }}{% endif %}</td>
                                         <td class="numeric" >{% if item.color is not empty %}{{ item.color.name }}{% endif %}</td>
                                         <td class="numeric" > {{ item.quantity }}
-                                            &nbsp;{{ item.purchaseVendorItem.masterItem.productUnit.name }}</td>
+                                            {% if item.purchaseVendorItem.masterItem is not empty and item.purchaseVendorItem.masterItem.productUnit is not empty %}&nbsp;{{ item.purchaseVendorItem.masterItem.productUnit.name }}{% endif %}</td>
                                         <td class="numeric" >{{ item.price }}</td>
                                         <td class="numeric" >=&nbsp;{{ item.subTotal }}</td>
                                     </tr>

@@ -97,7 +97,7 @@ class Branches
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="branches" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="branches" )
      **/
     private  $accountCash;
 

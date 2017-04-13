@@ -2,17 +2,8 @@ webservice:
     path:     /
     defaults: { _controller: FrontendBundle:WebService:index }
 
-webservice_product_details:
-    path:     /{subdomain}/product/{item}
-    defaults: { _controller: FrontendBundle:WebServiceProduct:productDetails }
 
-webservice_product_cart:
-    path:     /{subdomain}/cart/{item}
-    defaults: { _controller: FrontendBundle:WebServiceProduct:productAddCart }
 
-webservice_product_wishlist:
-    path:     /{subdomain}/wishlist/{item}
-    defaults: { _controller: FrontendBundle:WebServiceProduct:productAddCart }
 
 webservice_module_page:
     path:     /{subdomain}/{module}/{slug}
@@ -49,4 +40,6 @@ webservice_login:
 webservice_module:
     path:     /{subdomain}/{module}
     defaults: { _controller: FrontendBundle:WebServiceModule:module }
+
+
 

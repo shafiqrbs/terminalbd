@@ -548,6 +548,7 @@ class Builder extends ContainerAware
             $menu['E-commerce']['Product']->addChild('Product', array('route' => 'inventory_goods'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Promotion', array('route' => 'ecommerce_promotion'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Discount', array('route' => 'ecommerce_discount'))->setAttribute('icon', 'icon-th-list');
+            $menu['E-commerce']['Product']->addChild('Coupon', array('route' => 'ecommerce_coupon'))->setAttribute('icon', 'icon-tags');
         }
 
         /*$menu['E-commerce']->addChild('Transaction', array('route' => ''))

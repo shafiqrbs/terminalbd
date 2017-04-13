@@ -334,6 +334,8 @@ class WebServiceProductController extends Controller
             $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
             $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
 
+            $next = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->frontendProductNext($entity);
+            $previous = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->frontendProductPrev($entity);
 
             /* Device Detection code desktop or mobile */
 
@@ -344,16 +346,18 @@ class WebServiceProductController extends Controller
                 $theme = 'Template/Desktop/'.$themeName;
             }
             return $this->render('FrontendBundle:'.$theme.':productDetails.html.twig',
+
                 array(
+
                     'globalOption'      => $globalOption,
-                    'categorySidebar'       => $categorySidebar,
-                    'brands'                => $brands,
+                    'categorySidebar'   => $categorySidebar,
+                    'brands'            => $brands,
                     'product'           => $entity,
                     'products'          => $products,
                     'subitem'           => $subItem,
+                    'next'              => $next,
+                    'previous'          => $previous,
                     'pageName'          => 'ProductDetails',
-
-
                 )
             );
         }
@@ -482,7 +486,34 @@ class WebServiceProductController extends Controller
         $cartTotal = $cart->total();
         $totalItems = $cart->total_items();
         $cartResult = $cartTotal.'('.$totalItems.')';
-        return new Response($cartResult);
+        $salesItems = $this->getCartItem($cart->contents());
+        return new Response(json_encode(array('cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems, 'salesItem' => $salesItems)));
+
+
+    }
+
+    public function getCartItem($salesItems){
+
+        $items = '';
+       foreach ($salesItems as $product ) {
+            $items .= '<li id="item-remove-'.$product['rowid'].'" ><span class="item">';
+            $items .= '<span class="item-left">';
+            $items .= '<img height="50" width="50" src="'.$product['productImg'] . '">';
+            $items .= '<span class="item-info">';
+            $items .= '<span>' . $product['name'] . '</span>';
+            $items .= '<span>' . $product['quantity'] . '</span>';
+            $items .= '<span>' . $product['price'] . '</span>';
+            $items .= '</span>';
+            $items .= '</span>';
+            $items .= '<span class="item-right">';
+            $items .= '<button data-url="/cart/product-remove/'.$product['rowid'] .'" class="btn btn-xs btn-danger pull-right  hunger-remove-cart"><span class="glyphicon glyphicon-trash"></span></button>';
+            $items .= '</span>';
+            $items .= '</span>';
+            $items .= '</span></li>';
+        }
+        $items .='<li class="divider"></li>';
+        $items .='<li><a class="text-center" href="/cart-details">View Cart</a></li>';
+        return $items;
 
     }
 
@@ -512,7 +543,9 @@ class WebServiceProductController extends Controller
         $cartTotal = $cart->total();
         $totalItems = $cart->total_items();
         $cartResult = $cartTotal.'('.$totalItems.')';
-        return new Response($cartResult);
+        $salesItems = $this->getCartItem($cart);
+        return new Response(json_encode(array('cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems, 'salesItem' => $salesItems)));
+
 
     }
 

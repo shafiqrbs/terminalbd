@@ -32,7 +32,7 @@ class AccountCash
     protected $globalOption;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="accountCashes" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="accountCash" )
      **/
     private  $branches;
 

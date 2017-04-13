@@ -103,6 +103,11 @@ class Category
     protected $features;
 
     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureCategory", mappedBy="category" )
+     **/
+    protected $featureCategories;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\Branding", mappedBy="categories" )
      **/
     protected $branding;

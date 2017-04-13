@@ -31,19 +31,25 @@ class EcommerceWidgetController extends Controller
     }
 */
 
-    public function headerAction(GlobalOption $globalOption,$pageName )
+    public function headerAction(Request $request , GlobalOption $globalOption,$pageName )
     {
         /* Device Detection code desktop or mobile */
+
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
+        $cart = new Cart($request->getSession());
+        $data = $_REQUEST;
+        $category = isset($data['category']) ? $data['category'] :'';
 
         $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $globalOption->getInventoryConfig()));
         $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
-        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($cats);
+        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($cats,$category);
         return $this->render('@Frontend/Template/Desktop/'.$themeName.'/header.html.twig', array(
             'globalOption'          => $globalOption,
             'categoryTree'          => $categoryTree,
-            'pageName'              => $pageName
+            'pageName'              => $pageName,
+            'cart'                  => $cart,
+            'searchForm'            => $data
         ));
     }
 

@@ -44,6 +44,11 @@ class EcommerceConfig
      */
     protected $orders;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Coupon", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
+     */
+    protected $coupons;
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Discount", mappedBy="ecommerceConfig" , cascade={"persist", "remove"})
      */
