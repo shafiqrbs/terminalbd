@@ -87,17 +87,15 @@ class PurchaseVendorItemRepository extends EntityRepository
 
     }
 
-
-
     public function handleSearchBetween($qb,$data){
 
-        $name = isset($data['name'])? $data['name'] :'';
-        $cat = isset($data['category'])? $data['category'] :'';
-        $brand = isset($data['brand'])? $data['brand'] :'';
-        $vendor = isset($data['vendor'])? $data['vendor'] :'';
-        $grn = isset($data['grn'])? $data['grn'] :'';
-        $receiveDate = isset($data['receiveDate'])? $data['receiveDate'] :'';
-        $memo = isset($data['memo'])? $data['memo'] :'';
+        $name           = isset($data['name'])? $data['name'] :'';
+        $cat            = isset($data['category'])? $data['category'] :'';
+        $brand          = isset($data['brand'])? $data['brand'] :'';
+        $vendor         = isset($data['vendor'])? $data['vendor'] :'';
+        $grn            = isset($data['grn'])? $data['grn'] :'';
+        $receiveDate    = isset($data['receiveDate'])? $data['receiveDate'] :'';
+        $memo           = isset($data['memo'])? $data['memo'] :'';
 
         if (!empty($vendor)) {
             $qb->join('purchase.vendor', 'v');

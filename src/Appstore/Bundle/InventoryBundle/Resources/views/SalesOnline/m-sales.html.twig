@@ -8,58 +8,49 @@
                 <h3 class="purchase_order-title">
                     Online sales
                 </h3>
-                <ul class="breadcrumb">
-                    <li>
-                        <i class="icon-home"></i>
-                        <a href="{{ path('homepage') }}">Home</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
-                    <li>
-                        <a href="{{ path('inventory_salesonline') }}">Sales</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
-                    <li><a href="#"> Online sales</a></li>
-                    <li class="pull-right btn blue disabled mini">
-                        <i class="fa fa-calendar"></i>
-                        {{ "now"|date("d-F-Y") }}
-                    </li>
-                </ul>
+
             </div>
         </div>
-
         <div class="clearfix">&nbsp;</div>
         <!-- BEGIN purchase_order CONTENT-->
         <div class="row-fluid">
             <div class="span12">
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Daily Sales Overview </div>
-
+                        <div class="caption"><i class="icon-reorder"></i>Online Sales</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('inventory_salesonline_new') }}"><i class="icon-plus-sign"></i>&nbsp;Add Sales</a></li>
-                                    <li><a href="{{ path('inventory_salesonline') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <a href="#" class="btn red"><i class="icon-trash"></i></a>
+                                <a href="#" class="btn blue"><i class="icon-list"></i></a>
+                                <a href="#" class="btn purple"><i class="icon-plus"></i></a>
+                                <a href="#" class="btn yellow"><i class="icon-tags"></i></a>
                             </div>
                         </div>
 
                     </div>
                     <div class="portlet-body">
                         <!-- END purchase_order HEADER-->
-                        <div class="row-fluid " id="purchaseItemx">
-                            <div class="span4"><ul class="unstyled"><li><strong>Estimate Amount #:</strong>&nbsp; {{ todaySalesOverview[0]["subTotal"] }}</li><li><strong>Sales Amount:</strong>&nbsp; {{ todaySalesOverview[0]["total"] }}</li></ul></div>
-                            <div class="span4"><ul class="unstyled"><li><strong>Due Amount:</strong> &nbsp; {{ todaySalesOverview[0]["totalDue"] }}</li><li><strong>Discount Amount:</strong>&nbsp; {{ todaySalesOverview[0]["totalDiscount"] }}</li></ul></div>
-                            <div class="span4"><ul class="unstyled"><li><strong>Receive Amount:</strong> &nbsp; {{ todaySalesOverview[0]["total"]-todaySalesOverview[0]["totalDue"] }}</li><li><strong>Total Voucher:</strong>&nbsp;{{ todaySalesOverview[0]["totalVoucher"] }}</li></ul></div>
+                        <div class="row-fluid " id="purchaseItem">
+                            <div class="span12">
+                                <ul class="unstyled">
+                                    <li><strong>Sales Amount:</strong>&nbsp;{{ todaySalesOverview[0]["total"] }}</li>
+                                    <li><strong>Due Amount:</strong> &nbsp;{{ todaySalesOverview[0]["totalDue"] }}</li>
+                                    <li><strong>Receive Amount:</strong> &nbsp;{{ todaySalesOverview[0]["total"]-todaySalesOverview[0]["totalDue"] }}</li>
+                                    <li><strong>Discount Amount:</strong>&nbsp;{{ todaySalesOverview[0]["totalDiscount"] }}</li>
+                                    <li><strong>Total Voucher:</strong>&nbsp;{{ todaySalesOverview[0]["totalVoucher"] }}</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="clearfix"></div>
-                    <div class="portlet-title purple">
-                        <div class="caption"><i class="icon-reorder"></i>Search & Add Products</div>
+                    <div class="portlet-title">
+                        <div class="actions">
+                            <div class="btn-group">
+                                <button class="btn black">Invoice</button><button class="btn red">{{ entity.invoice }}</button>
+                                <button class="btn purple">Tk</button>
+                                <button class="btn red"><span class="salesTotal">{{ entity.total|default('0.00') }}</span></button>
+                            </div>
+                        </div>
                     </div>
                     <div class="portlet-body">
                         <div class="clearfix"></div>
@@ -69,17 +60,13 @@
                                     <input type="text" id="item" name="item" required="required"  class="m-wrap span12 select2Item " >
                                 </form>
                             </div>
+
                             <div class="row-fluid">
                                 <table class="table table-bordered table-striped table-condensed flip-conten" id="stockItemDetails">
                                     <thead class="flip-content ">
                                     <tr class="head-green">
                                         <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
-                                        <th class="numeric" >SKU</th>
-                                        <th class="numeric" >GRN</th>
-                                        <th class="numeric" >Remaining Qnt</th>
-                                        <th class="numeric" >Ongoing Qnt</th>
                                         <th class="numeric" >Current Stock</th>
-                                        <th class="numeric" >Purchase price</th>
                                         <th class="numeric" >Sales price</th>
                                         <th class="numeric" >Action</th>
                                     </tr>
@@ -87,44 +74,15 @@
                                     <tbody id="itemDetails"></tbody>
                                 </table>
                             </div>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <div class="row-fluid">
-                                        <div class="span6">
-                                            <div class="input-prepend input-append span12">
-                                                <span class="add-on add-on-height"><i class="icon-barcode"></i></span>
-                                                <input type="text" id="barcode" name="barcode" required="required" class="m-wrap span11" placeholder="Enter product barcode" autocomplete="off">
-                                                <span class="add-on add-on-height"><i class="icon-search"></i></span>
-                                            </div>
-                                        </div>
-                                        <div class="span6" style="margin-left:10px; margin-top:10px ">
-                                            <input type="text" id="barcodeNo" name="barcodeNo" required="required" class="m-wrap span12"  autocomplete="off">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="clearfix"></div>
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
                         <div class="row-fluid">
-                            <div class="span8" id="barcode-box">
+                            <div class="span12" >
                                 <div class="" id="wrongBarcode"></div>
                             </div>
-                            <div class="span4">
-                                <div class="row-fluid">
-                                    <div class="span12 responsive" data-tablet="span6" data-desktop="span3">
-                                        <div class="dashboard-stat" id="payment-board">
-                                            <div class="details">
-                                                <div class="number">TK.<span class="salesTotal">{{ entity.total }}</span></div>
-                                                <div class="desc">Order no. {{ entity.invoice }}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-
                         <div class="row-fluid">
                             <div class="span8">
                                 <div class="row-fluid">
@@ -136,9 +94,9 @@
                                         <table class="table table-bordered table-hover">
                                             <thead class="">
                                             <tr class="head-blue">
-                                                <th class="numeric" >S/N</th>
-                                                <th class="numeric span3">Barcode</th>
-                                                <th  class="numeric span2">Qnt</th>
+                                                <th>S/N</th>
+                                                <th>Item</th>
+                                                <th>Qnt</th>
                                                 <th>Price</th>
                                                 <th>Total</th>
                                                 <th><i class="icon-trash"></i></th>
@@ -147,25 +105,15 @@
                                             <tbody id="salesItem" >
                                             {% for salesitem in entity.salesItems %}
                                                 <tr id="remove-{{ salesitem.id }}">
-                                                    <td class="numeric" > {{ loop.index }}</td>
+                                                    <td> {{ loop.index }}</td>
                                                     <td  class="numeric">
-                                                        {{ salesitem.purchaseItem.barcode }}<br/>
-                                                        <span>{{ salesitem.item.name }}</span>
+                                                       {{ salesitem.item.name }}
                                                     </td>
-                                                    <td class=" span3" >
-                                                        <div class="input-append">
-                                                            <input type="text" id="quantity-{{ salesitem.id }}" rel="{{ salesitem.id }}" name="quantity[]"  value="{{ salesitem.quantity }}" class="m-wrap span6 quantity" placeholder="{{ salesitem.purchaseItem.quantity }}" min="1" max="{{ salesitem.purchaseItem.quantity }}">
-                                                            <span class="add-on">{% if salesitem.item.masterItem is not empty and salesitem.item.masterItem.productUnit is not empty %}{{  salesitem.item.masterItem.productUnit.name }}{% endif %}</span>
-                                                        </div>
+                                                    <td>
+                                                        {{ salesitem.quantity }}{% if salesitem.item.masterItem is not empty and salesitem.item.masterItem.productUnit is not empty %}-{{  salesitem.item.masterItem.productUnit.name }}{% endif %}
                                                     </td>
-                                                    <td class=" span3" >
-                                                        <div class="input-prepend">
-                                                                    <span class="add-on">
-                                                                        <input type="hidden" name="estimatePrice" id="estimatePrice-{{ salesitem.id }}" value="{{ salesitem.estimatePrice }}">
-                                                                        <input type="checkbox" {% if salesitem.customPrice == 1 and salesitem.salesPrice != salesitem.estimatePrice %} checked="checked" {% endif %} name="customPrice" rel="{{ salesitem.id }}" id="customPrice-{{ salesitem.id }}" class="customPrice span4" value="1" >
-                                                                    </span>
-                                                            <input class="m-wrap span10 numeric salesPrice" {% if salesitem.customPrice != 1 and salesitem.salesPrice == salesitem.estimatePrice %} readonly="readonly" {% endif %} rel="{{ salesitem.id }}" id="salesPrice-{{ salesitem.id }}" type="text" name="salesPrice" value="{{ salesitem.salesPrice }}" placeholder="{{ salesitem.estimatePrice }}">
-                                                        </div>
+                                                    <td>
+                                                        {{ salesitem.salesPrice }}
                                                     </td>
                                                     <td><span id="subTotalShow-{{ salesitem.id }}" ><strong>{{ salesitem.subTotal }}</strong></span></td>
                                                     <td>
@@ -185,111 +133,141 @@
                             <div class="span4" id="payment-info">
                                 <div class="row-fluid">
                                     <div class="span12">
-                                        <div class="span12 input-prepend input-append input-append-border">
-                                            <span class="add-on add-on-custom span3">Sub-Total TK.</span><input class="m-wrap span7 numeric salesTotal disabled-field" readonly="readonly" id="subTotal" type="text" value="{{ entity.subTotal }}">
+                                        <div class="control-group">
+                                            <label class="control-label red" for="firstName">Sub-Total TK. <span class="pull-right sales-right salesTotal" id="subTotal" >{{ entity.subTotal }}</span></label>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">VAT/TAX TK. <span class="pull-right totalVat sales-right"  >{{ entity.vat }}</span></label>
+                                            <input class="m-wrap numeric" name="vat" id="vat" type="hidden">
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Due TK. <span class="pull-right totalVat sales-right"  id="dueAmount" >{{ entity.due }}</span></label>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Return TK.  <span class="pull-right totalVat sales-right"  id="returnAmount" ></span></label>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Discount TK. <span class="pull-right totalVat sales-right"><input class="numeric" style="font-size: 20px; height: 23px; width: 100px; font-weight: bold; margin-top: -5px; text-align: right" name="discount" id="discount" value="{{ entity.discount }}" type="text"></span></label>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Grand Total TK. <span class="pull-right salesTotal sales-right"  id="" >{{ entity.total }}</span></label>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
 
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="row-fluid">
                                     <div class="span12">
-                                        <div class="span12 input-prepend input-append input-append-border">
-                                            <span class="add-on add-on-custom span3">VAT/TAX TK.</span><input class="m-wrap span7 numeric disabled-field" readonly="readonly" name="vat" id="vat" type="text" value="{{ entity.vat }}">
-                                            <input class="m-wrap span9 numeric" name="vat" id="vat" type="hidden">
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                {{ form_widget(form.transactionMethod) }}
+                                                {{ form_errors(form.transactionMethod) }}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="span12 input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3">Due TK.</span><input class="m-wrap span7 numeric disabled-field" type="text" name="dueAmount" readonly="readonly" id="dueAmount" value="{{ entity.due }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3">Return TK.</span><input class="m-wrap span7  numeric disabled-field" readonly="readonly" type="text" id="returnAmount" name="returnAmount">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12 input-append-border">
-                                        {{ form_widget(form.transactionMethod) }}
-                                        {{ form_errors(form.transactionMethod) }}
-                                    </div>
+                                    <!--/span-->
                                 </div>
                                 <div id="cartMethod" class="bankHide">
                                     <div class="row-fluid">
                                         <div class="span12">
-                                            <div class="input-prepend input-append input-append-border span12">
-                                                {{ form_widget(form.cardNo) }}
-                                                {{ form_errors(form.cardNo) }}
+                                            <div class="control-group">
+                                                <div class="controls">
+                                                    {{ form_widget(form.cardNo) }}
+                                                    {{ form_errors(form.cardNo) }}
+                                                </div>
                                             </div>
                                         </div>
+                                        <!--/span-->
                                     </div>
                                     <div class="row-fluid">
-                                        <div class="span12 input-append-border">
-                                            {{ form_widget(form.paymentCard) }}
-                                            {{ form_errors(form.paymentCard) }}
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <div class="controls">
+                                                    {{ form_widget(form.paymentCard) }}
+                                                    {{ form_errors(form.paymentCard) }}
+                                                </div>
+                                            </div>
                                         </div>
+                                        <!--/span-->
                                     </div>
                                     <div class="row-fluid">
-                                        <div class="span12 input-append-border">
-                                            {{ form_widget(form.accountBank) }}
-                                            {{ form_errors(form.accountBank) }}
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <div class="controls">
+                                                    {{ form_widget(form.accountBank) }}
+                                                    {{ form_errors(form.accountBank) }}
+                                                </div>
+                                            </div>
                                         </div>
+                                        <!--/span-->
                                     </div>
                                 </div>
                                 <div id="bkashMethod" class="mobileBankHide">
                                     <div class="row-fluid">
-                                        <div class="span12 input-append-border">
-                                            {{ form_widget(form.accountMobileBank) }}
-                                            {{ form_errors(form.accountMobileBank) }}
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <div class="controls">
+                                                    {{ form_widget(form.accountMobileBank) }}
+                                                    {{ form_errors(form.accountMobileBank) }}
+                                                </div>
+                                            </div>
                                         </div>
+                                        <!--/span-->
                                     </div>
                                     <div class="row-fluid">
                                         <div class="span12">
-                                            <div class="input-prepend input-append input-append-border span12">
-                                                {{ form_widget(form.paymentMobile) }}
-                                                {{ form_errors(form.paymentMobile) }}
+                                            <div class="control-group">
+                                                <div class="controls">
+                                                    {{ form_widget(form.paymentMobile) }}
+                                                    {{ form_errors(form.paymentMobile) }}
+                                                </div>
                                             </div>
                                         </div>
+                                        <!--/span-->
                                     </div>
                                     <div class="row-fluid">
                                         <div class="span12">
-                                            <div class="input-prepend input-append input-append-border span12">
-                                                {{ form_widget(form.transactionId) }}
-                                                {{ form_errors(form.transactionId) }}
+                                            <div class="control-group">
+                                                <div class="controls">
+                                                    {{ form_widget(form.transactionId) }}
+                                                    {{ form_errors(form.transactionId) }}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12 input-append-border">
-                                        {{ form_widget(form.salesBy) }}
-                                        {{ form_errors(form.salesBy) }}
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12 ">
-                                        <div class="span12 input-prepend input-append input-append-border">
-                                            <span class="add-on add-on-custom span3">Discount TK.</span><input class="m-wrap span7 numeric" name="discount" id="discount" value="{{ entity.discount }}" type="text">
-                                        </div>
+                                        <!--/span-->
                                     </div>
                                 </div>
                                 <div class="row-fluid">
                                     <div class="span12">
-                                        <div class="input-prepend input-append input-append-border span12">
-                                            <span class="add-on add-on-custom span3">Receive TK.</span><input class="m-wrap span7 numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder="">
+                                        <div class="control-group">
+                                            <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Customer mobile">
+                                            <a href="javascript:" class="pull-right btn yellow addCustomer"><i class="icon-user"></i></a>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12 input-append-border">
-                                        <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span9 select2Customer" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Customer mobile">
-                                        <a href="javascript:" class="pull-right btn green addCustomer"><i class="icon-user"></i></a>
                                     </div>
                                 </div>
                                 <div class="row-fluid customer" id="">
@@ -330,12 +308,32 @@
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Receive TK. <span class="pull-right totalVat sales-right"><input class="numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder=""></span></label>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                {{ form_widget(form.salesBy) }}
+                                                {{ form_errors(form.salesBy) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="row-fluid">
                                     <div class="span12 ">
                                         <div class="box grey">
                                             <div class="pull-center">
                                                 <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                                 <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
-                                                <button rel=""  type="submit" class="btn green" id="pos"><i class="icon-print m-icon-white"></i>&nbsp;Received</button>
+                                                <button rel=""  type="submit" class="btn blue" id="pos"><strong><i class="icon-print m-icon-white"></i>&nbsp;Received</strong></button>
                                             </div>
                                         </div>
                                     </div>
@@ -356,35 +354,26 @@
 
                             <thead class="flip-content ">
                             <tr class="head-blue">
-                                <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                 <th class="numeric" >Invoice</th>
                                 <th class="numeric" >Date</th>
                                 <th class="numeric" >Item</th>
                                 <th class="numeric" >Sub-Total</th>
-                                <th class="numeric" >Discount</th>
                                 <th class="numeric" >Net Total</th>
                                 <th class="numeric" >Payment</th>
                                 <th class="numeric" >Created By</th>
-                                <th class="numeric" >Transaction</th>
-                                <th class="numeric" >Process</th>
                                 <th class="numeric" >Action</th>
                             </tr>
                             </thead>
                             <tbody id="sales">
                             {% for dailySales in todaySales %}
                                 <tr id="delete-{{ dailySales.id }}">
-                                    <td> {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}<span data-trigger="hover" data-original-title="Barcode print" class="btn blue mini toggle badge-custom" id="{{ dailySales.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                     <td class="numeric" >{{ dailySales.invoice }}</td>
                                     <td class="numeric" >{{ dailySales.updated|date('d-m-Y') }}</td>
                                     <td class="numeric" >{{ dailySales.totalItem }}</td>
                                     <td class="numeric" >{{ dailySales.subTotal|number_format  }}</td>
-                                    <td class="numeric" >{{ dailySales.discount|number_format  }}</td>
                                     <th class="numeric" >{{ dailySales.total|number_format  }}</th>
                                     <th class="numeric" >{{ dailySales.payment|number_format }}</th>
                                     <td class="numeric" >{% if dailySales.salesBy %}{{ dailySales.salesBy }}{% endif %}</td>
-                                    <td class="numeric" >{% if dailySales.transactionMethod is not empty %}{{ dailySales.transactionMethod.name }}{% endif %}</td>
-                                    <td class="numeric" >{% if dailySales.process is not empty %}{{ dailySales.process }}{% endif %}</a>
-                                    </td>
                                     <td class="numeric" >
                                         {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}
                                             <a href="{{ path('inventory_sales_show', { 'id': dailySales.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
@@ -404,40 +393,6 @@
                                         {% endif %}
                                     </td>
                                 </tr>
-                                <tr id="show-{{ dailySales.id }}" class="showing-overview">
-                                    <td colspan="11">
-                                        {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}
-                                            <table class="table table-bordered table-striped table-condensed flip-content ">
-
-                                                <thead class="flip-content ">
-                                                <tr class="head-green">
-                                                    <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
-                                                    <th class="numeric" >Item</th>
-                                                    <th class="numeric" >Barcode</th>
-                                                    <th class="numeric" >Qnt</th>
-                                                    <th class="numeric" >Estimate price</th>
-                                                    <th class="numeric" >Sales price</th>
-                                                    <th class="numeric" >Sub-total</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {% for salesItem in dailySales.salesItems %}
-                                                    <tr>
-                                                        <td class="numeric" >{{ loop.index }}</td>
-                                                        <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
-                                                        <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
-                                                        <td class="numeric" >{{ salesItem.quantity }}</td>
-                                                        <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
-                                                        <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
-                                                        <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
-
-                                                    </tr>
-                                                {% endfor %}
-                                                </tbody>
-                                            </table>
-                                        {% endif %}
-                                    </td>
-                                </tr>
                             {% endfor %}
 
                             </tbody>
@@ -449,6 +404,54 @@
     </div>
     <style>
 
+        .select2Item{
+            border: 5px solid #4b8df8
+        }
+        .sales-right{
+            padding-right: 10px;
+        }
+         .sales-right input{
+             font-size: 20px;
+             width: 100px;
+             font-weight: bold;
+             margin-top: -5px;
+             text-align: right;
+             border-right:2px solid #000;
+             border-left:2px solid #000;
+             height: 23px;
+        }
+        .select2-search{
+            padding-left: 0;
+            padding-right: 0;
+        }
+        .select2-search input{
+            border: 5px solid #d84a38!important;
+            font-size: 18px;
+        }
+        .form-horizontal .control-group{
+            margin-bottom: 0!important;
+            border-bottom: 2px solid #000;
+        }
+        .form-horizontal .control-label{
+            float: left;
+            text-align: left;
+            background: #d84a38;
+            color: #fff;
+            font-weight: bold;
+            line-height: 32px;
+            height: 33px;
+            padding-left: 3%;
+            margin:0!important;
+            width: 97%;
+            font-size: 20px;
+        }
+        .form-horizontal .controls{
+            margin-left: 0;
+        }
+        .form-horizontal .controls input[class*="span"].m-wrap{
+            border: 0!important;
+        }
+
         input[class*="span"].m-wrap {
             height: 33px!important;
             background: #ffffff;
@@ -457,6 +460,12 @@
         .input-height{
             height: 33px
         }
+        .form-horizontal .controls .disabled-field{
+            background-color: #f2dede!important;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
 
         #sales_general_customer_address {
             resize: none!important;

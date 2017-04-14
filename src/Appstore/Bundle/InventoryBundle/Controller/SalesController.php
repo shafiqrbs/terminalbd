@@ -5,6 +5,7 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
+use Frontend\FrontentBundle\Service\MobileDetect;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
@@ -121,17 +122,24 @@ class SalesController extends Controller
         $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
         $itemStock = $purchaseItem->getItemStock();
 
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        $device = '';
+        if( $detect->isMobile() || $detect->isTablet() ) {
+            $device = 'mobile' ;
+        }
+
         if (!empty($purchaseItem) && $itemStock > $checkQuantity) {
 
             $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
+            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales,$device);
             $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
 
         } else {
 
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales);
+            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales,$device);
             $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
         }
 
@@ -403,12 +411,7 @@ class SalesController extends Controller
 
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory,$mode='pos');
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory,$mode='pos');
-        if (in_array('CustomerSales', $inventory->getDeliveryProcess())) {
-            $twig = 'customerpos';
-        } else {
-            $twig = 'pos';
-        }
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory , $mode='pos');
         return $this->render('InventoryBundle:Sales:pos.html.twig', array(
             'entity' => $entity,
             'todaySales' => $todaySales,
@@ -492,7 +495,14 @@ class SalesController extends Controller
         $item = $request->request->get('item');
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer'] : '';
-        $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemPurchaseDetails($securityContext,$inventory, $item, $customer);
+
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        $device = '';
+        if( $detect->isMobile() || $detect->isTablet() ) {
+            $device = 'mobile' ;
+        }
+        $data = $this->getDoctrine()->getRepository('InventoryBundle:Item')->itemPurchaseDetails($securityContext,$inventory, $item, $customer, $device);
         return new Response($data);
     }
 

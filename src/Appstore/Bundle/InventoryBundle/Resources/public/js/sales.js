@@ -45,9 +45,9 @@ var InventorySales = function(sales) {
     $(".addCustomer").click(function(){
         $( ".customer" ).slideToggle( "slow" );
     }).toggle( function() {
-        $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
+        $(this).removeClass("green").addClass("red").html('<i class="icon-remove"></i>');
     }, function() {
-        $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>&nbsp;Customer');
+        $(this).removeClass("red").addClass("green").html('<i class="icon-user"></i>');
     });
 
     $('form.horizontal-form').on('keypress', 'input', function (e) {

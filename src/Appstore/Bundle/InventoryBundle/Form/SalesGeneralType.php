@@ -70,6 +70,7 @@ class SalesGeneralType extends AbstractType
                 'class' => 'Core\UserBundle\Entity\User',
                 'property' => 'username',
                 'attr'=>array('class'=>'span12 select2'),
+                'empty_value' => '---Sales By---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
                         ->where("u.isDelete != 1")

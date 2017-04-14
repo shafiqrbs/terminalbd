@@ -4,6 +4,7 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use Appstore\Bundle\InventoryBundle\Form\SalesGeneralType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
+use Frontend\FrontentBundle\Service\MobileDetect;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
@@ -302,7 +303,18 @@ class SalesOnlineController extends Controller
         if ($entity->getProcess() != "In-progress") {
             return $this->redirect($this->generateUrl('inventory_salesgeneral_show', array('id' => $entity->getId())));
         }
-        return $this->render('InventoryBundle:SalesOnline:sales.html.twig', array(
+
+        /* Device Detection code desktop or mobile */
+
+        $detect = new MobileDetect();
+
+        if( $detect->isMobile() || $detect->isTablet() ) {
+            $theme = 'sales';
+        }else{
+            $theme = 'm-sales';
+        }
+
+        return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(
             'entity' => $entity,
             'todaySales' => $todaySales,
             'todaySalesOverview' => $todaySalesOverview,
@@ -325,7 +337,7 @@ class SalesOnlineController extends Controller
             'action' => $this->generateUrl('inventory_salesonline_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'class' => 'horizontal-form',
+                'class' => 'form-horizontal',
                 'novalidate' => 'novalidate',
             )
         ));

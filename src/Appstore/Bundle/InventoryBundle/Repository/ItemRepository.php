@@ -268,7 +268,7 @@ class ItemRepository extends EntityRepository
 
     }
 
-    public function itemPurchaseDetails($securityContext,$inventory,$id,$customer='')
+    public function itemPurchaseDetails($securityContext,$inventory,$id,$customer = '', $device = '')
     {
 
         $data ='';
@@ -278,7 +278,7 @@ class ItemRepository extends EntityRepository
             $grn = $purchaseItem->getPurchase()->getGrn();
             $received = $purchaseItem->getPurchase()->getReceiveDate()->format('d M,Y');
 
-            if ($securityContext->isGranted('ROLE_DOMAIN') || $securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE') ) {
+            if ($securityContext->isGranted('ROLE_DOMAIN') || $securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')|| $securityContext->isGranted('ROLE_DOMAIN_INVENTORY') ) {
                  $purchasePrice = $purchaseItem->getPurchasePrice();
             }else{
                 $purchasePrice = '';
@@ -287,12 +287,16 @@ class ItemRepository extends EntityRepository
             $ongoingSalesQnt = $this->_em->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
             $data .= '<tr>';
             $data .= '<td class="numeric" >' . $purchaseItem->getBarcode() .'</td>';
-            $data .= '<td class="numeric" >' . $result->getSku() . '</td>';
-            $data .= '<td class="numeric" >' . $received.' / '.$grn . '</td>';
-            $data .= '<td class="numeric" >' . $purchaseItem->getItemStock() . '</td>';
-            $data .= '<td class="numeric" >' . $ongoingSalesQnt . '</td>';
+            if($device != 'mobile') {
+                $data .= '<td class="numeric" >' . $result->getSku() . '</td>';
+                $data .= '<td class="numeric" >' . $received.' / '.$grn . '</td>';
+                $data .= '<td class="numeric" >' . $purchaseItem->getItemStock() . '</td>';
+                $data .= '<td class="numeric" >' . $ongoingSalesQnt . '</td>';
+            }
             $data .= '<td class="numeric" >' . ($purchaseItem->getItemStock() - $ongoingSalesQnt) . '</td>';
-            $data .= '<td class="numeric" >' . $purchasePrice . '</td>';
+            if($device != 'mobile') {
+                $data .= '<td class="numeric" >' . $purchasePrice . '</td>';
+            }
             $data .= '<td class="numeric" >' . $purchaseItem->getSalesPrice().'</td>';
             $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem->getBarcode().'"><i class="icon-shopping-cart"></i>  Add Sales</a></td>';
             $data .= '</tr>';
