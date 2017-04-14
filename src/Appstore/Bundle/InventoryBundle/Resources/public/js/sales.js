@@ -37,11 +37,6 @@ var InventorySales = function(sales) {
     $('#item').select2('open');
     $('#item').focus();
 
-    $('body').addClass('page-sidebar-closed');
-    $( "#searchToggole" ).click(function() {
-        $( "#search-product" ).slideToggle( "slow" );
-    });
-
     $(".addCustomer").click(function(){
         $( ".customer" ).slideToggle( "slow" );
     }).toggle( function() {
