@@ -311,7 +311,7 @@ class SalesOnlineController extends Controller
         if( $detect->isMobile() || $detect->isTablet() ) {
             $theme = 'm-sales';
         }else{
-            $theme = 'sales';
+            $theme = 'm-sales';
         }
 
         return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(

@@ -652,7 +652,7 @@ class StockItemRepository extends EntityRepository
 
         $em = $this->_em;
         foreach($purchaseReturn->getPurchaseReturnItems() as $purchaseReturnItem ){
-            $category = $purchaseReturnItem->getPurchaseItem()->getItem()->getMasterItem()->getCategory();
+
             $entity = new StockItem();
             $entity->setInventoryConfig($purchaseReturn->getInventoryConfig());
             $entity->setPurchaseItem($purchaseReturnItem->getPurchaseItem());
@@ -727,7 +727,7 @@ class StockItemRepository extends EntityRepository
             $entity->setItem($row->getItem());
             $quantity = '-'.$row->getQuantity();
             $entity->setQuantity($quantity);
-            $entity->setCreatedBy($sales->getSalesBy());
+            $entity->setCreatedBy($sales->getCreatedBy());
 
             $purchaseItem = $row->getPurchaseItem();
 

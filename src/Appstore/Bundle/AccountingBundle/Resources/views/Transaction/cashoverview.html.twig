@@ -34,13 +34,13 @@
                     </div>
 
                     <div class="portlet-body">
-                        <div class="portlet-body flip-scroll">
+                        <div class="portlet-body">
                             {% include('flash-message.html.twig') %}
 
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
-                                <tr class="head-grey">
-                                    <th>Transaction Method</th>
+                                <tr class="head-blue">
+                                    <th class="numeric">Transaction</th>
                                     <th class="numeric" >Debit</th>
                                     <th class="numeric" >Credit</th>
                                     <th class="numeric" >Balance</th>
@@ -51,7 +51,7 @@
                                     {% for row in overviews %}
                                     <tr>
                                         {% set sum = sum + (row.debit-row.credit) %}
-                                        <th>{{ row.name }}</th>
+                                        <th class="numeric">{{ row.name }}</th>
                                         <td class="numeric" >{{ row.debit|number_format }}</td>
                                         <td class="numeric" >{{ row.credit|number_format }}</td>
                                         <td class="numeric" >{{ (row.debit-row.credit)|number_format }}</td>
@@ -65,8 +65,8 @@
                             </table>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
-                                <tr class="head-grey">
-                                    <th>Bank Account Name</th>
+                                <tr class="head-green">
+                                    <th class="numeric">Bank Account</th>
                                     <th class="numeric" >Debit</th>
                                     <th class="numeric" >Credit</th>
                                     <th class="numeric" >Balance</th>
@@ -92,7 +92,7 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
-                                    <th>Mobile Account Name</th>
+                                    <th>Mobile Account</th>
                                     <th class="" >Debit</th>
                                     <th class="" >Credit</th>
                                     <th class="" >Balance</th>
@@ -117,7 +117,7 @@
                             </table>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
-                                <tr class="head-grey">
+                                <tr class="head-yellow">
                                     <th>Account Head</th>
                                     <th class="numeric"  >Debit</th>
                                     <th class="numeric"  >Credit</th>

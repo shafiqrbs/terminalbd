@@ -298,7 +298,7 @@ class ItemRepository extends EntityRepository
                 $data .= '<td class="numeric" >' . $purchasePrice . '</td>';
             }
             $data .= '<td class="numeric" >' . $purchaseItem->getSalesPrice().'</td>';
-            $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem->getBarcode().'"><i class="icon-shopping-cart"></i>  Add Sales</a></td>';
+            $data .= '<td class="numeric" ><a class="btn mini blue addSales" href="javascript:" id="'.$purchaseItem->getBarcode().'"><i class="icon-shopping-cart"></i>  Add</a></td>';
             $data .= '</tr>';
         }
         return $data;

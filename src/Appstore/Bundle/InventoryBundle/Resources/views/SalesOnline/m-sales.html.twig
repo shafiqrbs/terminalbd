@@ -5,10 +5,9 @@
         <!-- BEGIN purchase_order HEADER-->
         <div class="row-fluid">
             <div class="span12">
-                <h3 class="purchase_order-title">
+                <h3 class="page-title">
                     Online sales
                 </h3>
-
             </div>
         </div>
         <div class="clearfix">&nbsp;</div>
@@ -66,8 +65,8 @@
                                     <thead class="flip-content ">
                                     <tr class="head-green">
                                         <th class="numeric" ><span class="btn black mini"><i class="icon-barcode"></i></span></th>
-                                        <th class="numeric" >Current Stock</th>
-                                        <th class="numeric" >Sales price</th>
+                                        <th class="numeric" >Stock</th>
+                                        <th class="numeric" >Price</th>
                                         <th class="numeric" >Action</th>
                                     </tr>
                                     </thead>
@@ -349,8 +348,8 @@
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>List of online sales</div>
                     </div>
-                    <div class="portlet-body">
-                        <table class="table table-bordered table-striped table-condensed flip-content ">
+                    <div class="portlet-body  flip-scroll">
+                        <table class="table table-bordered table-striped table-condensed flip-content">
 
                             <thead class="flip-content ">
                             <tr class="head-blue">
@@ -371,8 +370,8 @@
                                     <td class="numeric" >{{ dailySales.updated|date('d-m-Y') }}</td>
                                     <td class="numeric" >{{ dailySales.totalItem }}</td>
                                     <td class="numeric" >{{ dailySales.subTotal|number_format  }}</td>
-                                    <th class="numeric" >{{ dailySales.total|number_format  }}</th>
-                                    <th class="numeric" >{{ dailySales.payment|number_format }}</th>
+                                    <td class="numeric" ><b>{{ dailySales.total|number_format  }}</b></td>
+                                    <td class="numeric" ><b>{{ dailySales.payment|number_format }}</b></td>
                                     <td class="numeric" >{% if dailySales.salesBy %}{{ dailySales.salesBy }}{% endif %}</td>
                                     <td class="numeric" >
                                         {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}

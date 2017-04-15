@@ -330,6 +330,23 @@
     ul.page-sidebar-menu > li.current_ancestor > ul > li.current_ancestor > a{
         background: #000!important;
     }
+    @media (max-width: 979px) {
+        .navbar .brand {
+            display: none !important;
+        }
+        .page-content .breadcrumb{
+            display:none !important;
+        }
+        .page-title{
+            margin: 0!important;
+        }
+        .showing-overview{
+            display: none !important;
+        }
+        .pagination ul>li>a, .pagination ul>li>span{
+            padding: 4px 23px;
+        }
+    }
 </style>
 {% block footer %}
     <div class="footer">
