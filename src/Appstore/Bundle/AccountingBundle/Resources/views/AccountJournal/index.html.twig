@@ -50,38 +50,43 @@
                     </div>
 
                     <div class="portlet-body">
-                        <div class="portlet-body flip-scroll">
-                            {% include('flash-message.html.twig')  %}
-                            <div class="portlet search-portlet box grey">
-                                <form class="search-form" action="" method="get" name="itemSearch">
-                                    <div class="span7">
+                        <div class="portlet-body">
+                            {% include('flash-message.html.twig') %}
+                            <form class="search-form" action="" method="get" name="itemSearch">
+                                <div class="row-fluid">
+                                    <div class="span4">
+                                        <select class="search-input span12" id="accountHead" name="accountHead">
+                                            <option value="">Select account head</option>
+                                            {% for account in accountHead %}
+                                                <option value="{{ account.id }}">{{ account.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="span3">
+                                        <input type="text" id="toUser" name="toUser"  class="span12 select2User leftMargin " value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }} {% endif %}"  autocomplete="off" placeholder="select user">
+                                    </div>
+                                    <div class="span2">
+                                        <input type="text" id="startDate" name="startDate"  class="span12 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                    </div>
+                                    <div class="span3">
                                         <div class="controls">
-                                            <input type="text" id="startDate" name="startDate"  class="span4 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="start date ">
-                                            <input type="text" id="endDate" name="endDate"  class="span4 search-input  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="end date ">
-                                            <select class="search-input span4" id="accountHead" name="accountHead">
-                                                <option value="">Select account head</option>
-                                                {% for account in accountHead %}
-                                                    <option value="{{ account.id }}">{{ account.name }}</option>
-                                                {% endfor %}
-                                            </select>
+                                            <div class="input-append span11">
+                                                <input type="text" id="endDate" name="endDate"  class="span10 search-input  m-ctrl-medium date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %} ">
+                                                <div class="btn-group">
+                                                    <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="span4 leftMargin">
-                                        <input type="text" id="toUser" name="toUser"  class="span11 select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }} {% endif %}"  autocomplete="off" placeholder="select user">
-                                    </div>
-                                    <div class="span1">
-                                        <div class="btn-group">
-                                            <button class="btn" type="submit" >
-                                                <i class="icon-search"></i>&nbsp;Go</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="portlet-body flip-scroll">
 
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
-                                 <tr class="head-grey">
+                                 <tr class="head-blue">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Transaction Method</th>
                                     <th class="numeric" >Ref No</th>

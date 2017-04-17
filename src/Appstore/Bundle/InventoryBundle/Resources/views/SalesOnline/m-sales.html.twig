@@ -133,7 +133,7 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label red" for="firstName">Sub-Total TK. <span class="pull-right sales-right salesTotal" id="subTotal" >{{ entity.subTotal }}</span></label>
+                                            <label class="control-label red" for="firstName">Sub-Total TK. <span class="pull-right sales-right subTotal" id="" >{{ entity.subTotal }}</span></label>
                                         </div>
                                     </div>
                                     <!--/span-->
@@ -150,7 +150,7 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="firstName">Due TK. <span class="pull-right totalVat sales-right"  id="dueAmount" >{{ entity.due }}</span></label>
+                                            <label class="control-label" for="firstName">Due TK. <span class="pull-right sales-right dueAmount"  id="" >{{ entity.due }}</span></label>
                                         </div>
                                     </div>
                                     <!--/span-->
@@ -158,7 +158,7 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="firstName">Return TK.  <span class="pull-right totalVat sales-right"  id="returnAmount" ></span></label>
+                                            <label class="control-label" for="firstName">Return TK.  <span class="pull-right  sales-right returnAmount"  id="" ></span></label>
                                         </div>
                                     </div>
                                     <!--/span-->
@@ -166,7 +166,7 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="firstName">Discount TK. <span class="pull-right totalVat sales-right"><input class="numeric" style="font-size: 20px; height: 23px; width: 100px; font-weight: bold; margin-top: -5px; text-align: right" name="discount" id="discount" value="{{ entity.discount }}" type="text"></span></label>
+                                            <label class="control-label" for="firstName">Discount TK. <span class="pull-right sales-right"><input class="numeric" style="font-size: 20px; height: 23px; width: 100px; font-weight: bold; margin-top: -5px; text-align: right" name="discount" id="discount" value="{{ entity.discount }}" type="text"></span></label>
                                         </div>
                                     </div>
                                     <!--/span-->
@@ -264,7 +264,7 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <input type="text" style="margin-left:0!important;" id="mobile" name="mobile"  class="span10 select2Customer" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Customer mobile">
+                                            <input type="text" style="margin-left:0!important; width:86%" id="mobile" name="mobile"  class=" select2Customer" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Customer mobile">
                                             <a href="javascript:" class="pull-right btn yellow addCustomer"><i class="icon-user"></i></a>
                                         </div>
                                     </div>
@@ -309,7 +309,7 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="firstName">Receive TK. <span class="pull-right totalVat sales-right"><input class="numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder=""></span></label>
+                                            <label class="control-label" for="firstName">Receive TK. <span class="pull-right sales-right"><input class="numeric" type="text" name="paymentAmount" id="paymentAmount" placeholder=""></span></label>
                                         </div>
                                     </div>
                                     <!--/span-->
@@ -560,6 +560,7 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
+    $('body').removeClass('page-sidebar-closed');
     EditableInit();
     InventorySales({{ entity.id ? entity.id : 0 }});
     ApproveProcess();

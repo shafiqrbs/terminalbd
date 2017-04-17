@@ -45,6 +45,11 @@ var InventorySales = function(sales) {
         $(this).removeClass("red").addClass("green").html('<i class="icon-user"></i>');
     });
 
+    $('body').addClass('page-sidebar-closed');
+    $( "#searchToggole" ).click(function() {
+        $( "#search-product" ).slideToggle( "slow" );
+    });
+
     $('form.horizontal-form').on('keypress', 'input', function (e) {
 
         if (e.which == 13) {
@@ -279,10 +284,13 @@ var InventorySales = function(sales) {
                 obj = JSON.parse(response);
                 $('.salesTotal').html(obj['salesTotal']);
                 $('#subTotal').val(obj['salesSubTotal']);
+                $('.subTotal').html(obj['salesSubTotal']);
                 $('#vat').val(obj['salesVat']);
+                $('.totalVat').html(obj['salesVat']);
                 $('#paymentTotal').val(obj['salesTotal']);
                 $('#paymentSubTotal').val(obj['salesTotal']);
                 $('#dueAmount').val(obj['salesTotal']);
+                $('.dueAmount').html(obj['salesTotal']);
             },
 
         })
@@ -297,14 +305,18 @@ var InventorySales = function(sales) {
 
             var returnAmount = ( payment - total );
             $('#returnAmount').val(returnAmount).addClass('payment-yellow');
+            $('.returnAmount').html(returnAmount).addClass('payment-yellow');
             $('#dueAmount').val('').removeClass('payment-red');
+            $('.dueAmount').html('').removeClass('payment-red');
 
         }else{
 
             var dueAmount = (total-payment);
             if(dueAmount > 0){
                 $('#returnAmount').val('').removeClass('payment-yellow');
+                $('.returnAmount').html('').removeClass('payment-yellow');
                 $('#dueAmount').val(dueAmount).addClass('payment-red');
+                $('.dueAmount').html(dueAmount).addClass('payment-red');
             }
         }
         if(payment > 0 && total > 0  ){
