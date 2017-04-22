@@ -30,6 +30,11 @@ class ExcelImporter
     private  $inventoryConfig;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", mappedBy="purchaseImport" , cascade={"detach","merge"} )
+     **/
+    private  $purchase;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
@@ -83,6 +88,13 @@ class ExcelImporter
      * @Assert\File(maxSize="8388608")
      */
     protected $file;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="asInvestment", type="boolean")
+     */
+    private $asInvestment = false;
 
 
     /**
@@ -286,6 +298,30 @@ class ExcelImporter
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAsInvestment()
+    {
+        return $this->asInvestment;
+    }
+
+    /**
+     * @param bool $asInvestment
+     */
+    public function setAsInvestment($asInvestment)
+    {
+        $this->asInvestment = $asInvestment;
+    }
+
+    /**
+     * @return Purchase
+     */
+    public function getPurchase()
+    {
+        return $this->purchase;
     }
 
 

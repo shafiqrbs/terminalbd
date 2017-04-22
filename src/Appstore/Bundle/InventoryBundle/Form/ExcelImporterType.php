@@ -18,11 +18,9 @@ class ExcelImporterType extends AbstractType
         $builder
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add  file name'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please using any file name'))
+                    new NotBlank(array('message'=>'Please choose  any valid file which extension excel'))
                 )))
-            ->add('file')
-
-        ;
+            ->add('file');
     }
     
     /**

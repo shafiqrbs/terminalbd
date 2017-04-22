@@ -60,3 +60,37 @@ purchase_vendor_item_delete:
 purchase_item_delete:
     path:     /{id}/purchase-item-delete
     defaults: { _controller: "InventoryBundle:Purchase:deleteItem" }
+
+purchase_edit_approve:
+    path:     /{id}/edit-approve
+    defaults: { _controller: "InventoryBundle:Purchase:editApprove" }
+
+
+purchase_update_approve:
+    path:      /{id}/update-approve
+    defaults: { _controller: "InventoryBundle:Purchase:updateApprove" }
+    methods:  [POST, PUT]
+
+purchase_vendoritem_inline_update:
+    path:     /inline-purchase-vendor-item-update
+    defaults: { _controller: "InventoryBundle:Purchase:inlinePurchaseVendorItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+purchase_purchaseitem_inline_update:
+    path:     /inline-purchase-item-update
+    defaults: { _controller: "InventoryBundle:Purchase:inlinePurchaseItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+purchase_vendoritem_delete:
+    path:     /{purchase}/{id}/purchase-delete-vendoritem
+    defaults: { _controller: "InventoryBundle:Purchase:purchaseVendorItemDelete" }
+
+purchase_purchaseitem_delete:
+    path:     /{purchase}/{id}/purchase-delete-item
+    defaults: { _controller: "InventoryBundle:Purchase:purchaseItemDelete" }
+
+

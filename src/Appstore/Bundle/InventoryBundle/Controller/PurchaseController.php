@@ -5,6 +5,7 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
+use Appstore\Bundle\InventoryBundle\Form\PurchaseApproveType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -288,7 +289,6 @@ class PurchaseController extends Controller
         }
     }
 
-
     /**
      * Deletes a PurchaseVendorItem entity.
      *
@@ -342,6 +342,179 @@ class PurchaseController extends Controller
             'text'=>$grn
         ));
     }
+
+
+    /**
+     * Displays a form to edit an existing Purchase entity.
+     *
+     */
+    public function editApproveAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('InventoryBundle:Purchase')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Purchase entity.');
+        }
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $em->getRepository('InventoryBundle:Purchase')->getSumPurchase($this->getUser(),$inventory);
+        $editForm = $this->createEditApproveForm($entity);
+
+        return $this->render('InventoryBundle:Purchase:editApprove.html.twig', array(
+            'entity'      => $entity,
+            'form'   => $editForm->createView(),
+        ));
+    }
+
+    /**
+     * Creates a form to edit a Purchase entity.
+     *
+     * @param Purchase $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditApproveForm(Purchase $entity)
+    {
+        $inventoryConfig =  $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $form = $this->createForm(new PurchaseApproveType($inventoryConfig), $entity, array(
+            'action' => $this->generateUrl('purchase_update_approve', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form purchase',
+                'novalidate' => 'novalidate',
+            )
+
+        ));
+        return $form;
+    }
+
+    /**
+     * Edits an existing Purchase entity.
+     *
+     */
+    public function updateApproveAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('InventoryBundle:Purchase')->find($id);
+        $editForm = $this->createEditApproveForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+
+            $entity->setApprovedBy($this->getUser());
+            $entity->setProcess('approved');
+            $em->flush();
+            $em->getRepository('InventoryBundle:Item')->getItemUpdatePriceQnt($entity);
+            $em->getRepository('InventoryBundle:StockItem')->insertPurchaseStockItem($entity);
+            if($entity->getAsInvestment() == 1){
+                $journal = $em->getRepository('AccountingBundle:AccountJournal')->insertAccountPurchaseJournal($entity);
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
+                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountJournalTransaction($journal);
+            }
+            $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertAccountPurchase($entity);
+            $em->getRepository('AccountingBundle:Transaction')->purchaseTransaction($entity,$accountPurchase);
+            $this->get('session')->getFlashBag()->add(
+                'success', "Purchase invoice approved successfully"
+            );
+            return $this->redirect($this->generateUrl('purchase'));
+        }
+
+        return $this->render('InventoryBundle:Purchase:editApprove.html.twig', array(
+            'entity'        => $entity,
+            'form'          => $editForm->createView(),
+
+        ));
+
+    }
+
+    public function inlinePurchaseVendorItemUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('InventoryBundle:PurchaseVendorItem')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        $entity->setPurchasePrice($data['value']);
+        foreach ($entity -> getPurchaseItems() as $purchaseItem ){
+
+            /** @var PurchaseItem $purchaseItem */
+
+            $purchaseItem->setPurchasePrice($data['value']);
+            $em->persist($purchaseItem);
+        }
+        $em->flush();
+        $em->getRepository('InventoryBundle:Purchase')->purchaseModifyUpdate($entity->getPurchase());
+        exit;
+
+    }
+
+    public function purchaseVendorItemDeleteAction(Purchase $purchase , PurchaseVendorItem $purchaseVendorItem)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($purchaseVendorItem);
+        $em->flush();
+        $em->getRepository('InventoryBundle:Purchase')->purchaseModifyUpdate($purchase);
+        $this->get('session')->getFlashBag()->add(
+            'success', "Purchase invoice approved successfully"
+        );
+        return $this->redirect($this->generateUrl('purchase_edit_approve',array('id' => $purchase->getId())));
+
+    }
+
+
+    public function inlinePurchaseItemUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('InventoryBundle:PurchaseItem')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        $entity->setQuantity($data['value']);
+        $em->flush();
+
+        $sumPurchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->getPurchaseItemQuantity($entity->getPurchase(), $entity->getPurchaseVendorItem()->getId());
+
+        $purchaseVendorItem =  $entity->getPurchaseVendorItem();
+
+        /** @var PurchaseVendorItem  $purchaseVendorItem */
+
+        $purchaseVendorItem->setQuantity($sumPurchaseItem['totalQnt']);
+        $em->persist($purchaseVendorItem);
+        $em->flush();
+        $em->getRepository('InventoryBundle:Purchase')->purchaseModifyUpdate($entity->getPurchase());
+        exit;
+
+    }
+
+
+    public function purchaseItemDeleteAction(Purchase $purchase, PurchaseItem $purchaseItem)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $sumPurchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->getPurchaseItemQuantity($purchaseItem->getPurchase(), $purchaseItem->getPurchaseVendorItem()->getId());
+
+        $purchaseVendorItem =  $purchaseItem->getPurchaseVendorItem();
+
+        /** @var PurchaseVendorItem  $purchaseVendorItem */
+
+        if($sumPurchaseItem['totalItem'] == 1 ){
+            $em->remove($purchaseVendorItem);
+        }else{
+            $em->remove($purchaseItem);
+        }
+        $em->flush();
+        $em->getRepository('InventoryBundle:Purchase')->purchaseModifyUpdate($purchase);
+        $this->get('session')->getFlashBag()->add(
+            'success', "Purchase invoice approved successfully"
+        );
+        return $this->redirect($this->generateUrl('purchase_edit_approve',array('id' => $purchase->getId())));
+    }
+
+
 
 
 }

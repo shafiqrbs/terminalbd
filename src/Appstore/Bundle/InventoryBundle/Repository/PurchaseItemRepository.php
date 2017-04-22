@@ -71,13 +71,17 @@ class PurchaseItemRepository extends EntityRepository
     }
 
 
-    public function getPurchaseItemQuantity($purchase)
+    public function getPurchaseItemQuantity($purchase,$purchaseVendorItem = 0 )
     {
         $qb = $this->_em->createQueryBuilder();
-        $qb->select('sum(e.quantity)  as totalQnt' , 'count(e.id)  as totalItem');
-        $qb->from('InventoryBundle:PurchaseItem','e');
+        $qb->select('sum(e.quantity)  as totalQnt', 'count(e.id)  as totalItem');
+        $qb->from('InventoryBundle:PurchaseItem', 'e');
         $qb->where("e.purchase = :purchase");
         $qb->setParameter('purchase', $purchase->getId());
+        if ($purchaseVendorItem > 0){
+            $qb->andWhere("e.purchaseVendorItem = :purchaseVendorItem");
+            $qb->setParameter('purchaseVendorItem', $purchaseVendorItem );
+        }
         $qb = $qb->getQuery()->getSingleResult();
         return $qb;
     }

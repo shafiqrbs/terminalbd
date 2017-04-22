@@ -5,6 +5,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Core\UserBundle\Entity\User;
@@ -21,22 +22,38 @@ use Doctrine\ORM\EntityRepository;
 class ItemRepository extends EntityRepository
 {
 
-    public  function getSumPurchaseItem($inventory){
+    public  function getSumPurchaseItem($inventory , $excelImporter = ''){
 
         $qb = $this->createQueryBuilder('item');
         $qb->join('item.purchaseItems', 'pItem');
+        $qb->join('pItem.purchase', 'purchase');
         $qb->select('item.id as id');
         $qb->addSelect('SUM(pItem.quantity) as quantity ');
-        $qb->where("item.inventoryConfig = :inventory");
+        $qb->where("purchase.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
+        $qb->where("purchase.process = :process");
+        $qb->setParameter('process', 'imported');
+
+        /*if(!empty($excelImporter)){
+
+            $purchaseIds = array();
+            $purchases = $this->_em->getRepository('InventoryBundle:Purchase')->findBy(array('purchaseImport' => $excelImporter, 'process' => 'imported' ));
+            foreach ($purchases as $purchase){
+                $purchaseIds = $purchase->getId();
+            }
+            $qb->andWhere("purchase.id IN (:ids)");
+            $qb->setParameter('ids',array_values($purchaseIds));
+        }*/
+
         $qb->groupBy('item.id');
         $result = $qb->getQuery()->getResult();
         foreach ($result as $row ){
             $entity = $this->find($row['id']);
             $entity->setPurchaseQuantity($row['quantity']);
             $this->_em->persist($entity);
-            $this->_em->flush();
+            $this->_em->flush($entity);
         }
+
     }
 
     public function checkDuplicateSKU(InventoryConfig $inventory,$data)
@@ -174,6 +191,7 @@ class ItemRepository extends EntityRepository
         foreach($purchase->getPurchaseItems() as $purchaseItem ){
 
             $entity = $purchaseItem->getItem();
+            /** @var Item $entity */
             $qnt = ($entity->getPurchaseQuantity() + $purchaseItem->getQuantity());
             $entity->setPurchaseQuantity($qnt);
             $entity->setUpdated($purchase->getCreated());

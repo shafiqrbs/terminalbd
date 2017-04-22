@@ -107,18 +107,15 @@ class ExcelImporterController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been migration successfully"
             );
-
+            $em->flush();
+            return $this->redirect($this->generateUrl('purchase'));
         }else{
             $this->get('session')->getFlashBag()->add(
                 'error',"Excel File memo no null or exist in your system"
             );
             $excelImporter->setProgress('invalid');
+            $em->flush();
         }
-        $em->flush();
-
-
-
-
         return $this->redirect($this->generateUrl('inventory_excelimproter'));
     }
 
@@ -211,7 +208,7 @@ class ExcelImporterController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
 
         /*  This function is written for sum total item base.  */
-        $em->getRepository('InventoryBundle:Item')->getSumPurchaseItem($inventory);
+        $em->getRepository('InventoryBundle:Item')->getSumPurchaseItem($inventory,$excelImporter);
 
         /*  This function is written for sum total item base.  */
         $varified = $em->getRepository('InventoryBundle:Purchase')->getSumPurchase( $this->getUser(),$inventory);

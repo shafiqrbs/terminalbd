@@ -311,7 +311,7 @@ class SalesOnlineController extends Controller
         if( $detect->isMobile() || $detect->isTablet() ) {
             $theme = 'm-sales';
         }else{
-            $theme = 'm-sales';
+            $theme = 'sales';
         }
 
         return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(
@@ -360,9 +360,8 @@ class SalesOnlineController extends Controller
         $editForm->handleRequest($request);
         $data = $request->request->all();
 
-
-
         if ($editForm->isValid() and $data['paymentTotal'] > 0 ) {
+
             $globalOption = $this->getUser()->getGlobalOption();
             if (!empty($data['sales_general']['customer']['mobile'])) {
 
@@ -438,7 +437,7 @@ class SalesOnlineController extends Controller
         }
 
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory,$mode='online');
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory , $mode='online');
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory,$mode='online');
         return $this->render('InventoryBundle:SalesOnline:sales.html.twig', array(
             'entity' => $entity,

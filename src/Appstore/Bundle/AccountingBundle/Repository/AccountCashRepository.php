@@ -177,6 +177,7 @@ class AccountCashRepository extends EntityRepository
     public function lastInsertCash($entity,$processHead)
     {
         $em = $this->_em;
+
         if($entity->getTransactionMethod()->getId() == 2){
 
             $array = array('globalOption' => $entity->getGlobalOption(),'transactionMethod' => $entity->getTransactionMethod(),'accountBank' => $entity->getAccountBank(), 'processHead' => $processHead );
@@ -199,7 +200,7 @@ class AccountCashRepository extends EntityRepository
     }
 
 
-    public function insertAccountCash(AccountJournal $entity,$processHead ='Journal')
+    public function insertAccountCash(AccountJournal $entity , $processHead ='Journal')
     {
 
         $balance = $this->lastInsertCash($entity,$processHead);
@@ -211,7 +212,7 @@ class AccountCashRepository extends EntityRepository
         $cash->setGlobalOption($entity->getGlobalOption());
         $cash->setAccountJournal($entity);
         $cash->setTransactionMethod($entity->getTransactionMethod());
-        $cash->setProcessHead('Journal');
+        $cash->setProcessHead($processHead);
         $cash->setAccountRefNo($entity->getAccountRefNo());
         if(!empty($entity->getBranches())){
             $cash->setBranches($entity->getBranches());

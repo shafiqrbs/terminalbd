@@ -41,6 +41,14 @@ inventory_vendoritem_inline_update:
     options:
             expose: true
 
+purchase_vendoritem_inline_update:
+    path:     /inline-update
+    defaults: { _controller: "InventoryBundle:PurchaseItem:inlineItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+
 inventory_vendoritem_gallery:
     path:     /{item}/upload
     defaults: { _controller: "InventoryBundle:PurchaseVendorItem:uploadItemImage" }

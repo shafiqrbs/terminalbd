@@ -25,6 +25,7 @@ class Excel
     private $cache = array();
 
     public function isValid($data) {
+
         if($this->inventoryConfig == null) {
             throw new \Exception("You must set config first");
         }
@@ -146,7 +147,6 @@ class Excel
     {
         $this->inventoryConfig = $inventoryConfig;
     }
-
 
     private function getItem($item)
     {

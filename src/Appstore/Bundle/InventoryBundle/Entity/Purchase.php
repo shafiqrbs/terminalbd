@@ -35,6 +35,12 @@ class Purchase
 
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ExcelImporter", inversedBy="purchase" , cascade={"detach","merge"} )
+     **/
+    private  $purchaseImport;
+
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="purchase" , cascade={"remove"})
      * @ORM\OrderBy({"id" = "DESC"})
      **/
@@ -929,6 +935,22 @@ class Purchase
     public function setAsInvestment($asInvestment)
     {
         $this->asInvestment = $asInvestment;
+    }
+
+    /**
+     * @return ExcelImporter
+     */
+    public function getPurchaseImport()
+    {
+        return $this->purchaseImport;
+    }
+
+    /**
+     * @param ExcelImporter $purchaseImport
+     */
+    public function setPurchaseImport($purchaseImport)
+    {
+        $this->purchaseImport = $purchaseImport;
     }
 
 }
