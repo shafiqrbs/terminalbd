@@ -2,6 +2,7 @@
 
 namespace Product\Bundle\ProductBundle\Entity;
 
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Appstore\Bundle\InventoryBundle\Entity\ItemAttribute;
 use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
@@ -66,6 +67,7 @@ class Category
      **/
     protected $products;
 
+
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="categories" )
      **/
@@ -116,6 +118,12 @@ class Category
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MegaMenu", mappedBy="categories" )
      **/
     protected $megaMenu;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="category" )
+     **/
+    protected $particulars;
+
 
 
     /**
@@ -564,6 +572,14 @@ class Category
     public function getFeatures()
     {
         return $this->features;
+    }
+
+    /**
+     * @return Particular
+     */
+    public function getParticulars()
+    {
+        return $this->particulars;
     }
 
 

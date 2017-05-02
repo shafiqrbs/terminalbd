@@ -14,9 +14,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class ExpenditureType extends AbstractType
 {
 
-    /** @var  InventoryConfig */
+    /** @var  GlobalOption */
 
-    public  $inventoryConfig;
+    public  $globalOption;
 
     /** @var  ExpenseCategoryRepository */
 

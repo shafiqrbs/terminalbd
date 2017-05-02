@@ -126,14 +126,14 @@ class ContactPage
     /**
      * @var string
      *
-     * @ORM\Column(name="startHour", type="string", length=255, nullable=true)
+     * @ORM\Column(name="startHour", type="string", length=10, nullable=true)
      */
     private $startHour;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="endHour", type="string", length=255, nullable=true)
+     * @ORM\Column(name="endHour", type="string", length=10, nullable=true)
      */
     private $endHour;
 

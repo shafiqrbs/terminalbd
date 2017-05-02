@@ -1,0 +1,25 @@
+hms_invoice:
+    path:     /
+    defaults: { _controller: "HospitalBundle:Invoice:index" }
+
+hms_invoice_show:
+    path:     /{id}/show
+    defaults: { _controller: "HospitalBundle:Invoice:show" }
+
+hms_invoice_new:
+    path:     /new
+    defaults: { _controller: "HospitalBundle:Invoice:new" }
+
+hms_invoice_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "HospitalBundle:Invoice:edit" }
+
+hms_invoice_update:
+    path:     /{id}/update
+    defaults: { _controller: "HospitalBundle:Invoice:update" }
+    methods:  [POST, PUT]
+
+hms_invoice_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "HospitalBundle:Invoice:delete" }
+

@@ -66,6 +66,7 @@ class AppKernel extends Kernel
             new Appstore\Bundle\ImsBundle\ImsBundle(),
             new Xiidea\Bundle\DomainBundle\XiideaDomainBundle(),
             new Appstore\Bundle\CustomerBundle\CustomerBundle(),
+            new Appstore\Bundle\HospitalBundle\HospitalBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

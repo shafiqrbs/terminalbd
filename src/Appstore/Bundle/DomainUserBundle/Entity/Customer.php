@@ -106,14 +106,14 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable =true)
+     * @ORM\Column(name="name", type="string", length=100, nullable =true)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="customerType", type="string", length=255, nullable =true)
+     * @ORM\Column(name="customerType", type="string", length=15, nullable =true)
      */
     private $customerType;
 
@@ -127,14 +127,14 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255, nullable =true)
+     * @ORM\Column(name="email", type="string", length=100, nullable =true)
      */
     private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="facebookId", type="string", length=255, nullable =true)
+     * @ORM\Column(name="facebookId", type="string", length=100, nullable =true)
      */
     private $facebookId;
 
@@ -148,7 +148,7 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="bloodGroup", type="string", length=255, nullable =true)
+     * @ORM\Column(name="bloodGroup", type="string", length=20, nullable =true)
      */
     private $bloodGroup;
 
@@ -162,15 +162,22 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="ageGroup", type="string", nullable = true)
+     * @ORM\Column(name="ageGroup", type="string",length=10 , nullable = true)
      */
     private $ageGroup;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="age", type="smallint",length=2, nullable = true)
+     */
+    private $age;
 
 
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="string", length=255 , nullable = true)
+     * @ORM\Column(name="gender", type="string", length=10 , nullable = true)
      */
     private $gender;
 
@@ -407,6 +414,7 @@ class Customer
      * studentParent
      * apartment
      * appointment
+     * hospital
      */
     public function setCustomerType($customerType)
     {
@@ -596,6 +604,22 @@ class Customer
     public function setCustomerId($customerId)
     {
         $this->customerId = $customerId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAge()
+    {
+        return $this->age;
+    }
+
+    /**
+     * @param int $age
+     */
+    public function setAge($age)
+    {
+        $this->age = $age;
     }
 
 }

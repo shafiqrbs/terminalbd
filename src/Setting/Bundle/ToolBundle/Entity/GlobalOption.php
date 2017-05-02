@@ -13,6 +13,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -528,6 +529,11 @@ class GlobalOption
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\NotificationConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
     private $notificationConfig;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $hospitalConfig;
 
 
     /**
@@ -1544,6 +1550,14 @@ class GlobalOption
     public function getEcommerceMenus()
     {
         return $this->ecommerceMenus;
+    }
+
+    /**
+     * @return HospitalConfig
+     */
+    public function getHospitalConfig()
+    {
+        return $this->hospitalConfig;
     }
 
 

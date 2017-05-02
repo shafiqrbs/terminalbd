@@ -120,7 +120,7 @@ class PurchaseType extends AbstractType
                 'attr'=>array('class'=>'span12'),
                 'empty_value' => '---Choose a purchase To ---',
                 'choices' => array(
-                    'Internation' => 'Internation',
+                    'International' => 'International',
                     'National' => 'National',
                     'In House' => 'In House'
                 ),

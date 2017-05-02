@@ -141,8 +141,6 @@ class User extends BaseUser
      */
     protected $vendor;
 
-
-
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\SiteSetting", mappedBy="user" , cascade={"persist", "remove"})
      **/
@@ -525,6 +523,23 @@ class User extends BaseUser
      **/
     private  $serviceApprovedBy;
 
+    /* ==================================== HMS =========================================**/
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="referencedBy" , cascade={"persist", "remove"})
+     */
+    protected $hmsInvoiceReferencedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="deliveredBy" , cascade={"persist", "remove"})
+     */
+    protected $hmsInvoiceDeliveredBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $hmsInvoiceCreatedBy;
+
 
 
     public function isGranted($role)
@@ -553,6 +568,11 @@ class User extends BaseUser
     public function getUsername()
     {
         return $this->username;
+    }
+
+    public function userFullName(){
+
+        return $this->profile->getName().' ('. $this->username .')';
     }
 
     public function toArray($collection)

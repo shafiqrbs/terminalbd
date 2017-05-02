@@ -1,0 +1,154 @@
+<?php
+
+namespace Appstore\Bundle\HospitalBundle\Form;
+
+use Appstore\Bundle\DomainUserBundle\Form\CustomerForHospitalType;
+use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
+use Appstore\Bundle\HospitalBundle\Entity\Category;
+use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
+use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\LocationBundle\Repository\LocationRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
+class InvoiceType extends AbstractType
+{
+
+    /** @var  LocationRepository */
+    private $location;
+
+    /** @var  CategoryRepository */
+    private $emCategory;
+
+    /** @var  GlobalOption */
+    private $globalOption;
+
+
+    function __construct(GlobalOption $globalOption , CategoryRepository $emCategory ,  LocationRepository $location)
+    {
+        $this->location         = $location;
+        $this->emCategory       = $emCategory;
+        $this->globalOption     = $globalOption;
+    }
+
+
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+
+            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
+            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
+            ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
+            ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12 resize-fix','rows'=>3,'placeholder'=>'Add remarks','autocomplete'=>'off')))
+            ->add('deliveryTime','text', array('attr'=>array('class'=>'m-wrap small clockface_1 span10', 'data-format' => 'hh:mm A', 'placeholder'=>'End hour')))
+            ->add('deliveryDate', 'date', array(
+                'widget' => 'single_text',
+                'placeholder' => array(
+                    'mm' => 'mm', 'dd' => 'dd','YY' => 'YY'
+
+                ),
+                'format' => 'dd-MM-yyyy',
+                'attr' => array('class'=>'m-wrap span12'),
+                'view_timezone' => 'Asia/Dhaka'))
+
+            ->add('transactionMethod', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->orderBy("e.id","ASC");
+                }
+            ))
+            ->add('paymentCard', 'entity', array(
+                'required'    => false,
+                'property' => 'name',
+                'class' => 'Setting\Bundle\ToolBundle\Entity\PaymentCard',
+                'attr'=>array('class'=>'span12 m-wrap'),
+                'empty_value' => '---Choose payment card---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->orderBy("e.id","ASC");
+                }
+            ))
+
+            ->add('accountBank', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountBank',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'empty_value' => '---Choose receive bank account---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.globalOption =".$this->globalOption->getId())
+                        ->orderBy("b.name", "ASC");
+                }
+            ))
+
+            ->add('accountMobileBank', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'empty_value' => '---Choose receive mobile bank account---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.globalOption =".$this->globalOption->getId())
+                        ->orderBy("b.name", "ASC");
+                }
+            ))
+        ;
+        $builder->add('referredDoctor', new InvoiceReferredDoctorType( $this->emCategory ,$this->globalOption,$this->location));
+        $builder->add('customer', new CustomerForHospitalType( $this->location ));
+    }
+    
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'Appstore\Bundle\HospitalBundle\Entity\Invoice'
+        ));
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'appstore_bundle_hospitalbundle_invoice';
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function PathologyChoiceList()
+    {
+        return $this->emCategory->getParentCategoryTree($parent = 2 /** Pathology */ );
+
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function DepartmentChoiceList()
+    {
+        return $this->emCategory->getParentCategoryTree($parent = 7 /** Department */);
+
+    }
+
+
+}

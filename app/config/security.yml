@@ -94,6 +94,11 @@ security:
         ROLE_DOMAIN_SERVICE_MANAGER:                    [ROLE_DOMAIN_SERVICE,ROLE_DOMAIN_SERVICE_MANAGER]
 
 
+        ROLE_HOSPITAL:                                   [ROLE_HOSPITAL]
+        ROLE_DOMAIN_HOSPITAL:                            [ROLE_HOSPITAL,ROLE_DOMAIN_HOSPITAL]
+        ROLE_DOMAIN_HOSPITAL_MANAGER:                    [ROLE_DOMAIN_SERVICE,ROLE_DOMAIN_HOSPITAL_MANAGER]
+
+
         ROLE_DOMAIN_PURCHASE:                           [ROLE_DOMAIN_PURCHASE]
         ROLE_APP_SETTING:                               [ROLE_APP_SETTING]
 
@@ -101,7 +106,7 @@ security:
         # THIS IS PART OF MAIN DOMAIN MANAGE
 
         ROLE_DOMAIN_MANAGER:                            []
-        ROLE_DOMAIN:                                    [ROLE_DOMAIN,ROLE_DOMAIN_WEBSITE,ROLE_DOMAIN_INVENTORY,ROLE_DOMAIN_HR_PAYROLL,ROLE_DOMAIN_ACCOUNTING,ROLE_DOMAIN_ECOMMERCE,ROLE_APP_SETTING]
+        ROLE_DOMAIN:                                    [ROLE_DOMAIN,ROLE_FOOD,ROLE_SERVICE,ROLE_HOSPITAL,ROLE_GOODS,ROLE_DOMAIN_WEBSITE,ROLE_DOMAIN_INVENTORY,ROLE_DOMAIN_HR_PAYROLL,ROLE_DOMAIN_ACCOUNTING,ROLE_DOMAIN_ECOMMERCE,ROLE_APP_SETTING]
 
         ROLE_ADMIN_OPERATION_USER:                      [ROLE_ADMIN_OPERATION_USER,ROLE_DOMAIN]
         ROLE_ADMIN_OPERATION_MANAGER:                   [ROLE_ADMIN_OPERATION_MANAGER,ROLE_ADMIN_OPERATION_USER]
@@ -140,6 +145,7 @@ security:
         - { path: ^/hr,                 role: ROLE_HR }
         - { path: ^/payroll,            role: ROLE_PAYROLL }
         - { path: ^/inventory,          role: ROLE_INVENTORY }
+        - { path: ^/hms,                role: ROLE_HOSPITAL }
         - { path: ^/vendor,             role: ROLE_DOMAIN }
         - { path: ^/web-builder/build,  role: ROLE_DOMAIN }
         - { path: ^/customer,           role: ROLE_CUSTOMER }

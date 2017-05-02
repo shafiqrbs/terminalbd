@@ -95,6 +95,20 @@ class Builder extends ContainerAware
                 }
             }
 
+            $result = array_intersect($menuName, array('Hospital'));
+            if (!empty($result)) {
+               if ($securityContext->isGranted('ROLE_DOMAIN')){
+                    $menu = $this->HospitalSalesMenu($menu);
+               }
+            }
+
+            $result = array_intersect($menuName, array('FoodProduct'));
+            if (!empty($result)) {
+                if ($securityContext->isGranted('ROLE_DOMAIN')){
+                    $menu = $this->FoodProductMenu($menu);
+                }
+            }
+
             $applications = array('accounting', 'e-commerce', 'inventory');
             $result = array_intersect($arrSlugs, $applications);
             if (!empty($result)) {
@@ -710,6 +724,46 @@ class Builder extends ContainerAware
                 $menu['Inventory']['System Setting']->addChild('Variant', array('route' => 'colorsize'))
                     ->setAttribute('icon', 'icon-th-list');
                 $menu['Inventory']['System Setting']->addChild('Ware House', array('route' => 'inventory_warehouse'))->setAttribute('icon', 'icon-th-list');*/
+        return $menu;
+
+    }
+
+    public function HospitalSalesMenu($menu)
+    {
+
+        $securityContext = $this->container->get('security.context');
+        $user = $securityContext->getToken()->getUser();
+        $menu
+            ->addChild('Hospital & Diagnostic')
+            ->setAttribute('icon', 'icon icon-medkit')
+            ->setAttribute('dropdown', true);
+
+        $menu['Hospital & Diagnostic']->addChild('Manage Invoice')
+            ->setAttribute('icon', 'icon icon-reorder')
+            ->setAttribute('dropdown', true);
+        $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Pathology Invoice New', array('route' => 'hms_invoice_new'))
+            ->setAttribute('icon', 'icon-plus');
+        $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Pathology Invoice', array('route' => 'inventory_serviceitem'))
+            ->setAttribute('icon', 'icon-plus');
+        $menu['Hospital & Diagnostic']->addChild('System Setting')
+            ->setAttribute('icon', 'icon icon-cogs')
+            ->setAttribute('dropdown', true);
+        $menu['Hospital & Diagnostic']['System Setting']->addChild('Configuration', array('route' => 'inventoryconfig_edit'))
+                ->setAttribute('icon', 'icon-cog');
+        $menu['Hospital & Diagnostic']['System Setting']->addChild('Pathology', array('route' => 'hms_pathology'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Hospital & Diagnostic']['System Setting']->addChild('Doctor', array('route' => 'hms_doctor'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Hospital & Diagnostic']['System Setting']->addChild('Referred Doctor', array('route' => 'hms_referreddoctor'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Hospital & Diagnostic']['System Setting']->addChild('Cabin/Ward', array('route' => 'hms_cabin'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Hospital & Diagnostic']['System Setting']->addChild('Medicine', array('route' => 'hms_medicine'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Hospital & Diagnostic']['System Setting']->addChild('Surgery', array('route' => 'hms_surgery'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Hospital & Diagnostic']['System Setting']->addChild('Category', array('route' => 'hms_category'))->setAttribute('icon', 'icon-tag');
+
         return $menu;
 
     }

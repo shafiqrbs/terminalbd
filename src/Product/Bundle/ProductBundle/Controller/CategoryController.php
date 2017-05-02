@@ -23,10 +23,14 @@ class CategoryController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('ProductProductBundle:Category')->findBy(array(),array( 'parent'=>'asc' , 'name' =>'asc' ));
+        $data = $_REQUEST;
+        $entities = $em->getRepository('ProductProductBundle:Category')->findWithSearch($data);
         $pagination = $this->paginate($entities);
+        $categories = $em->getRepository('ProductProductBundle:Category')->findBy(array('level'=>1),array('name' =>'asc' ));
         return $this->render('ProductProductBundle:Category:index.html.twig', array(
             'entities' => $pagination,
+            'categories' => $categories,
+            'searchForm' => $data,
         ));
 
     }

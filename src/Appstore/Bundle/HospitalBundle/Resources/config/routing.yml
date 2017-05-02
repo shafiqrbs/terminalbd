@@ -1,0 +1,39 @@
+hospital_invoice:
+    resource: "@HospitalBundle/Resources/config/routing/invoice.yml"
+    prefix:   /invoice
+
+hospital_particular:
+    resource: "@HospitalBundle/Resources/config/routing/particular.yml"
+    prefix:   /particular
+
+hospital_pathology:
+    resource: "@HospitalBundle/Resources/config/routing/pathology.yml"
+    prefix:   /pathology
+
+hospital_doctor:
+    resource: "@HospitalBundle/Resources/config/routing/doctor.yml"
+    prefix:   /doctor
+
+hospital_cabin:
+    resource: "@HospitalBundle/Resources/config/routing/cabin.yml"
+    prefix:   /cabin-ward
+
+hospital_surgery:
+    resource: "@HospitalBundle/Resources/config/routing/surgery.yml"
+    prefix:   /surgery-operation
+
+hospital_medicine:
+    resource: "@HospitalBundle/Resources/config/routing/medicine.yml"
+    prefix:   /medicine
+
+hospital_referred_doctor:
+    resource: "@HospitalBundle/Resources/config/routing/referreddoctor.yml"
+    prefix:   /referred-doctor
+
+hospital_category:
+    resource: "@HospitalBundle/Resources/config/routing/category.yml"
+    prefix:   /category
+
+hospital_homepage:
+    path:     /
+    defaults: { _controller: HospitalBundle:Default:index }

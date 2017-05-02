@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Doctrine\ORM\Mapping as ORM;
@@ -105,6 +106,11 @@ class AccountBank
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="accountBank"  )
      **/
     private  $preOrders;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="accountBank" , cascade={"persist", "remove"})
+     */
+    protected $hmsInvoice;
 
 
     /**
@@ -449,6 +455,14 @@ class AccountBank
     public function getAccountOnlineOrders()
     {
         return $this->accountOnlineOrders;
+    }
+
+    /**
+     * @return Invoice
+     */
+    public function getHmsInvoice()
+    {
+        return $this->hmsInvoice;
     }
 
 }

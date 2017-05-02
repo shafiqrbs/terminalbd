@@ -13,6 +13,7 @@ namespace Core\UserBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\ToolBundle\Entity\Designation;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -46,8 +47,12 @@ class Profile
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="profiles")
      **/
-
     protected $location;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Designation", inversedBy="designationProfiles")
+     **/
+    protected $designation;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\DomainUser", inversedBy="profile" )
@@ -81,13 +86,6 @@ class Profile
      */
     private $email;
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="designation", type="string", length=100, nullable=true)
-     */
-    private $designation;
 
      /**
      * @var string
@@ -340,30 +338,6 @@ class Profile
         return null === $this->path
             ? null
             : $this->getUploadDir() . '/' . $this->path;
-    }
-
-
-    /**
-     * Set designation
-     *
-     * @param string $designation
-     * @return Profile
-     */
-    public function setDesignation($designation)
-    {
-        $this->designation = $designation;
-
-        return $this;
-    }
-
-    /**
-     * Get designation
-     *
-     * @return string
-     */
-    public function getDesignation()
-    {
-        return $this->designation;
     }
 
     /**
@@ -759,6 +733,22 @@ class Profile
     public function setBranches($branches)
     {
         $this->branches = $branches;
+    }
+
+    /**
+     * @return Designation
+     */
+    public function getDesignation()
+    {
+        return $this->designation;
+    }
+
+    /**
+     * @param Designation $designation
+     */
+    public function setDesignation($designation)
+    {
+        $this->designation = $designation;
     }
 
 

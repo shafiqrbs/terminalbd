@@ -1,3 +1,7 @@
+hospital:
+    resource: "@HospitalBundle/Resources/config/routing.yml"
+    prefix:   /hms
+
 core_user_bundle:
     resource: "@UserBundle/Resources/config/routing.yml"
 

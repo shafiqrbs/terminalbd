@@ -1,0 +1,14 @@
+services:
+#    hospital.example:
+#        class: Appstore\Bundle\HospitalBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    appstore.hospital.setting.event.listener:
+        class: Appstore\Bundle\HospitalBundle\EventListener\SettingListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.hospital.invoice.event.listener:
+        class: Appstore\Bundle\HospitalBundle\EventListener\InvoiceListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }

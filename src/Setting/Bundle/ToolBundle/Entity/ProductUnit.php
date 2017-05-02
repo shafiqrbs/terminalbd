@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ToolBundle\Entity;
 
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Doctrine\ORM\Mapping as ORM;
@@ -35,6 +36,11 @@ class ProductUnit
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="unit")
      */
     protected $stockItems;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="unit" , cascade={"persist", "remove"})
+     **/
+    private $particulars;
 
 
     /**
@@ -157,6 +163,14 @@ class ProductUnit
     public function getStockItems()
     {
         return $this->stockItems;
+    }
+
+    /**
+     * @return Particular
+     */
+    public function getParticulars()
+    {
+        return $this->particulars;
     }
 
 

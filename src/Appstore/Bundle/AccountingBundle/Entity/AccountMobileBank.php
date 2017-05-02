@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
@@ -100,6 +101,11 @@ class AccountMobileBank
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="accountMobileBank"  )
      **/
     private  $preOrders;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="accountMobileBank" , cascade={"persist", "remove"})
+     */
+    protected $hmsInvoice;
 
     /**
      * @var string
@@ -411,6 +417,14 @@ class AccountMobileBank
     public function getAccountOnlineOrders()
     {
         return $this->accountOnlineOrders;
+    }
+
+    /**
+     * @return Invoice
+     */
+    public function getHmsInvoice()
+    {
+        return $this->hmsInvoice;
     }
 
 

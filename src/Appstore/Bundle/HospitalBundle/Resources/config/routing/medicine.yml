@@ -1,0 +1,33 @@
+hms_medicine:
+    path:     /
+    defaults: { _controller: "HospitalBundle:Medicine:index" }
+
+hms_medicine_show:
+    path:     /{id}/show
+    defaults: { _controller: "HospitalBundle:Medicine:show" }
+
+hms_medicine_new:
+    path:     /new
+    defaults: { _controller: "HospitalBundle:Medicine:new" }
+
+hms_medicine_create:
+    path:     /create
+    defaults: { _controller: "HospitalBundle:Medicine:create" }
+    methods:  POST
+
+hms_medicine_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "HospitalBundle:Medicine:edit" }
+
+hms_medicine_update:
+    path:     /{id}/update
+    defaults: { _controller: "HospitalBundle:Medicine:update" }
+    methods:  [POST, PUT]
+
+hms_medicine_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "HospitalBundle:Medicine:delete" }
+
+hms_medicine_status:
+    path:     /{id}/status
+    defaults: { _controller: "HospitalBundle:Medicine:status" }

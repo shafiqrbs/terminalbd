@@ -16,7 +16,25 @@ use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 class CategoryRepository extends MaterializedPathRepository
 {
 
-   public function getCategories($data,$array)
+   public function findWithSearch($data){
+
+       $name = isset($data['name'])? $data['name'] :'';
+       $parent = isset($data['parent'])? $data['parent'] :'';
+       $qb = $this->createQueryBuilder('category');
+       $qb->where('category.level != :null')->setParameter('null', 'N;') ;
+       if (!empty($name)) {
+           $qb->andWhere($qb->expr()->like("category.name", "'%$name%'"  ));
+       }
+       if(!empty($parent)){
+           $qb->andWhere("category.parent = :parent");
+           $qb->setParameter('parent', $parent);
+       }
+       $qb->orderBy('category.name','ASC');
+       $qb->getQuery();
+       return  $qb;
+   }
+
+    public function getCategories($data,$array)
     {
 
 

@@ -55,8 +55,33 @@
 
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
+                            <div class="row-fluid">
+                                <form class="search-form" action="" method="get" name="itemSearch">
+                                    <div class="row-fluid">
+                                        <div class="span6">
+                                            <div class="controls">
+                                                <select name="parent" id="parent" class="select2 span12">
+                                                <option value="">---Select Category---</option>
+                                                {% for cat in categories %}
+                                                    <option value="{{ cat.id }}" {% if searchForm.parent is defined and cat.id == searchForm.parent %} selected="selected" {% endif %}>{{ cat.name }}</option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="span6">
+                                            <div class="controls">
+                                                <div class="input-append span12">
+                                                    <input type="text" id="name" name="name"  class="span11 m-wrap" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}  ">
+                                                    <div class="btn-group">
+                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
-
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
                                     <th class="numeric" >Name</th>

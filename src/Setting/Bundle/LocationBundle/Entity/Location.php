@@ -5,6 +5,7 @@ namespace Setting\Bundle\LocationBundle\Entity;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Core\UserBundle\Entity\Profile;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -106,6 +107,11 @@ class Location
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", mappedBy="location")
      */
     protected $branches;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="location")
+     */
+    protected $particulars;
 
 
     /**
@@ -314,6 +320,14 @@ class Location
     public function getPage()
     {
         return $this->page;
+    }
+
+    /**
+     * @return Particular
+     */
+    public function getParticulars()
+    {
+        return $this->particulars;
     }
 
 }

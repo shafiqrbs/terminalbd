@@ -68,7 +68,7 @@ class SalesGeneralType extends AbstractType
             ->add('salesBy', 'entity', array(
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
-                'property' => 'username',
+                'property' => 'userFullName',
                 'attr'=>array('class'=>'span12 select2'),
                 'empty_value' => '---Sales By---',
                 'query_builder' => function(EntityRepository $er){

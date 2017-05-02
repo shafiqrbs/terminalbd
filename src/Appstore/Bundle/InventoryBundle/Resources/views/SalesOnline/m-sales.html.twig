@@ -151,6 +151,7 @@
                                     <div class="span12">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName">Due TK. <span class="pull-right sales-right dueAmount"  id="" >{{ entity.due }}</span></label>
+                                            <input class="m-wrap span9 numeric" name="dueAmount" id="dueAmount" type="hidden" value="{{ entity.due }}">
                                         </div>
                                     </div>
                                     <!--/span-->
@@ -330,6 +331,7 @@
                                     <div class="span12 ">
                                         <div class="box grey">
                                             <div class="pull-center">
+                                                <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                                 <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                                 <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
                                                 <button rel=""  type="submit" class="btn blue" id="pos"><strong><i class="icon-print m-icon-white"></i>&nbsp;Received</strong></button>
