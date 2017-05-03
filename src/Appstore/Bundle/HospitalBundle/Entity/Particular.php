@@ -46,7 +46,7 @@ class Particular implements HmsCodeAwareEntity
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Category", inversedBy="particular" , cascade={"persist", "remove"})
      **/
-    private $category;
+    private $hmsCategory;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Category", inversedBy="particularDepartment" , cascade={"persist", "remove"})
@@ -390,23 +390,6 @@ class Particular implements HmsCodeAwareEntity
     public function setQuantity($quantity)
     {
         $this->quantity = $quantity;
-    }
-
-
-    /**
-     * @return Category
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * @param Category $category
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
     }
 
     /**
@@ -814,6 +797,22 @@ class Particular implements HmsCodeAwareEntity
     public function getHmsInvoice()
     {
         return $this->hmsInvoice;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getHmsCategory()
+    {
+        return $this->hmsCategory;
+    }
+
+    /**
+     * @param Category $hmsCategory
+     */
+    public function setHmsCategory($hmsCategory)
+    {
+        $this->hmsCategory = $hmsCategory;
     }
 
 
