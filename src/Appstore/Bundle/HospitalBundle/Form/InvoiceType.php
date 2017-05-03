@@ -46,14 +46,10 @@ class InvoiceType extends AbstractType
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
-            ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12 resize-fix','rows'=>3,'placeholder'=>'Add remarks','autocomplete'=>'off')))
-            ->add('deliveryTime','text', array('attr'=>array('class'=>'m-wrap small clockface_1 span10', 'data-format' => 'hh:mm A', 'placeholder'=>'End hour')))
+            ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('deliveryDate', 'date', array(
                 'widget' => 'single_text',
-                'placeholder' => array(
-                    'mm' => 'mm', 'dd' => 'dd','YY' => 'YY'
-
-                ),
+                'placeholder' => array('mm' => 'mm', 'dd' => 'dd','YY' => 'YY'),
                 'format' => 'dd-MM-yyyy',
                 'attr' => array('class'=>'m-wrap span12'),
                 'view_timezone' => 'Asia/Dhaka'))

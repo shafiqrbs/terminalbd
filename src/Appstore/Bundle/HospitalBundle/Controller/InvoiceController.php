@@ -46,7 +46,7 @@ class InvoiceController extends Controller
         $data = $_REQUEST;
 
         $user = $this->getUser();
-        $entities = $em->getRepository('HospitalBundle:Invoice')->salesLists( $user , $mode = 'pos', $data);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('HospitalBundle:Invoice:index.html.twig', array(

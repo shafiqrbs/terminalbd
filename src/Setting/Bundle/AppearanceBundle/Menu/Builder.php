@@ -741,9 +741,9 @@ class Builder extends ContainerAware
         $menu['Hospital & Diagnostic']->addChild('Manage Invoice')
             ->setAttribute('icon', 'icon icon-reorder')
             ->setAttribute('dropdown', true);
-        $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Pathology Invoice New', array('route' => 'hms_invoice_new'))
+        $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Invoice New', array('route' => 'hms_invoice_new'))
             ->setAttribute('icon', 'icon-plus');
-        $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Pathology Invoice', array('route' => 'inventory_serviceitem'))
+        $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Invoice', array('route' => 'hms_invoice'))
             ->setAttribute('icon', 'icon-plus');
         $menu['Hospital & Diagnostic']->addChild('System Setting')
             ->setAttribute('icon', 'icon icon-cogs')
