@@ -560,10 +560,4 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock  %}
-{% block documentready %}
-    {{ parent() }}
-    $('body').removeClass('page-sidebar-closed');
-    EditableInit();
-    InventorySales({{ entity.id ? entity.id : 0 }});
-    ApproveProcess();
-{% endblock %}
+
