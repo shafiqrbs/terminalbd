@@ -7,13 +7,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
- * Category
+ * HmsCategory
  *
  * @Gedmo\Tree(type="materializedPath")
  * @ORM\Table(name="hms_category")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\HospitalBundle\Repository\CategoryRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository")
  */
-class Category
+class HmsCategory
 {
     /**
      * @var integer
@@ -26,9 +26,14 @@ class Category
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="hmsCategory" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="category" )
      **/
     private  $particulars;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="department" )
+     **/
+    private  $particularDepartments;
 
 
     /**
@@ -50,7 +55,7 @@ class Category
 
     /**
      * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="HmsCategory", inversedBy="children")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="parent", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      * })
@@ -64,7 +69,7 @@ class Category
     private $level;
 
     /**
-     * @ORM\OneToMany(targetEntity="Category" , mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="HmsCategory" , mappedBy="parent")
      * @ORM\OrderBy({"name" = "ASC"})
      **/
     private $children;
@@ -128,7 +133,7 @@ class Category
      *
      * @param string $name
      *
-     * @return Category
+     * @return HmsCategory
      */
     public function setName($name)
     {
@@ -154,7 +159,7 @@ class Category
      *
      * @param string $slug
      *
-     * @return Category
+     * @return HmsCategory
      */
     public function setSlug($slug)
     {
@@ -178,7 +183,7 @@ class Category
      *
      * @param integer $code
      *
-     * @return Category
+     * @return HmsCategory
      */
     public function setCode($code)
     {
@@ -203,7 +208,7 @@ class Category
      *
      * @param boolean $status
      *
-     * @return Category
+     * @return HmsCategory
      */
     public function setStatus($status)
     {
@@ -372,6 +377,14 @@ class Category
     public function getParticulars()
     {
         return $this->particulars;
+    }
+
+    /**
+     * @return Particular
+     */
+    public function getParticularDepartments()
+    {
+        return $this->particularDepartments;
     }
 
 }

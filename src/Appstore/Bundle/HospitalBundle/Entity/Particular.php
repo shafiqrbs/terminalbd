@@ -44,12 +44,12 @@ class Particular implements HmsCodeAwareEntity
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Category", inversedBy="particular" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="particulars" , cascade={"persist", "remove"})
      **/
-    private $hmsCategory;
+    private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Category", inversedBy="particularDepartment" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="particularDepartments" , cascade={"persist", "remove"})
      **/
     private $department;
 
@@ -488,8 +488,26 @@ class Particular implements HmsCodeAwareEntity
         $this->service = $service;
     }
 
+
     /**
-     * @return Category
+     * @return HmsCategory
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param HmsCategory $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+    }
+
+
+    /**
+     * @return HmsCategory
      */
     public function getDepartment()
     {
@@ -497,7 +515,7 @@ class Particular implements HmsCodeAwareEntity
     }
 
     /**
-     * @param Category $department
+     * @param HmsCategory $department
      */
     public function setDepartment($department)
     {
@@ -799,21 +817,7 @@ class Particular implements HmsCodeAwareEntity
         return $this->hmsInvoice;
     }
 
-    /**
-     * @return Category
-     */
-    public function getHmsCategory()
-    {
-        return $this->hmsCategory;
-    }
 
-    /**
-     * @param Category $hmsCategory
-     */
-    public function setHmsCategory($hmsCategory)
-    {
-        $this->hmsCategory = $hmsCategory;
-    }
 
 
 }
