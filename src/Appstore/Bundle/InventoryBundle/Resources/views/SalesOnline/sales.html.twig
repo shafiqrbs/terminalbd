@@ -552,7 +552,7 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
     InventorySales({{ entity.id ? entity.id : 0 }});
+    EditableInit();
     ApproveProcess();
 {% endblock %}
