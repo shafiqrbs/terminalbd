@@ -552,7 +552,6 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    $('body').removeClass('page-sidebar-closed');
     EditableInit();
     InventorySales({{ entity.id ? entity.id : 0 }});
     ApproveProcess();
