@@ -43,15 +43,17 @@ class PosOrderSmsListener extends BaseSmsAwareListener
          */
 
         $sales = $event->getSales();
-        if($sales->getCustomer()->getLocation()->getParent()->getName() == 'Dhaka'){
-            $customer = "Dear Customer your order is processing and you will get your product within 1 working days. Thanks ".$sales->getInventoryConfig()->getGlobalOption()->getName();
-        }else{
-            $customer = "Dear Customer your order is processing and you will get your product within 3 working days. Thanks ".$sales->getInventoryConfig()->getGlobalOption()->getName();
-        }
-        if($sales->getCustomer()->getLocation()){
-            $location = "and Location ".$sales->getCustomer()->getLocation()->getName().",".$sales->getCustomer()->getLocation()->getParent()->getName();
-        }else{
-            $location ='';
+        if(!empty($sales->getCustomer())) {
+            if ($sales->getCustomer()->getLocation()->getParent()->getName() == 'Dhaka') {
+                $customer = "Dear Customer your order is processing and you will get your product within 1 working days. Thanks " . $sales->getInventoryConfig()->getGlobalOption()->getName();
+            } else {
+                $customer = "Dear Customer your order is processing and you will get your product within 3 working days. Thanks " . $sales->getInventoryConfig()->getGlobalOption()->getName();
+            }
+            if ($sales->getCustomer()->getLocation()) {
+                $location = "and Location " . $sales->getCustomer()->getLocation()->getName() . "," . $sales->getCustomer()->getLocation()->getParent()->getName();
+            } else {
+                $location = '';
+            }
         }
         $administrator = "You get new order, Invoice no ".$sales->getInvoice() ." , Amount ".$sales->getTotal().$location;
 
@@ -104,12 +106,12 @@ class PosOrderSmsListener extends BaseSmsAwareListener
         $customer = "Dear Customer your invoice ID.".$sales->getInvoice().' and Courier Invoice.'.$sales->getCourierInvoice().". Thanks ".$sales->getInventoryConfig()->getGlobalOption()->getName();
         $customerMobile = "+88".$sales->getCustomer()->getMobile();
         if(!empty($sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()) and $sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1){
-            if(!empty($sales->getCustomer()->getMobile())){
+            if(!empty($sales->getCustomer() and $sales->getCustomer()->getMobile())){
                echo $status = $this->gateway->send($customer , $customerMobile);
                 $this->em->getRepository('SettingToolBundle:SmsSender')->insertSalesCourierSms($sales,$status);
             }
         }
-        }
+    }
 
 
 }
