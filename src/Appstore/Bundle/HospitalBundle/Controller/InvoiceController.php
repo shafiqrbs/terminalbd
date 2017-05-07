@@ -315,31 +315,7 @@ class InvoiceController extends Controller
 
     public function salesDiscountUpdateAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $discount = $request->request->get('discount');
-        $sales = $request->request->get('sales');
 
-        $sales = $em->getRepository('HospitalBundle:Invoice')->find($sales);
-        $total = ($sales->getSubTotal() - $discount);
-        $vat = 0;
-        if($total > $discount ){
-            if ($sales->getInventoryConfig()->getVatEnable() == 1 && $sales->getInventoryConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('HospitalBundle:Invoice')->getCulculationVat($sales,$total);
-                $sales->setVat($vat);
-            }
-            $sales->setDiscount($discount);
-            $sales->setTotal($total+$vat);
-            $sales->setDue($total+$vat);
-            $em->persist($sales);
-            $em->flush();
-        }
-
-
-        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
-        exit;
     }
 
     /**
@@ -348,48 +324,7 @@ class InvoiceController extends Controller
 
     public function salesItemUpdateAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $salesItemId = $request->request->get('salesItemId');
-        $quantity = $request->request->get('quantity');
-        $salesPrice = $request->request->get('salesPrice');
-        $customPrice = $request->request->get('customPrice');
 
-        $salesItem = $em->getRepository('HospitalBundle:InvoiceItem')->find($salesItemId);
-        $checkOngoingInvoiceQuantity = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceItem')->checkInvoiceQuantity($salesItem->getPurchaseItem());
-        $itemStock = $salesItem->getPurchaseItem()->getItemStock();
-        $currentRemainingQnt = ($itemStock + $salesItem->getQuantity()) - ($checkOngoingInvoiceQuantity + $quantity) ;
-
-        if(!empty($salesItem) && $itemStock > 0 && $currentRemainingQnt >= 0 ){
-
-            $salesItem->setQuantity($quantity);
-            $salesItem->setInvoicePrice($salesPrice);
-            if (!empty($customPrice)) {
-                $salesItem->setCustomPrice($customPrice);
-            }
-            $salesItem->setSubTotal($quantity * $salesPrice);
-            $em->persist($salesItem);
-            $em->flush();
-
-            $sales = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($salesItem->getInvoice());
-            $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-            $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-            $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-            $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
-
-            return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
-
-        } else {
-
-            $sales = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($salesItem->getInvoice());
-            $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-            $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-            $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-            $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
-
-            return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
-        }
-
-        exit;
     }
 
 
@@ -479,45 +414,21 @@ class InvoiceController extends Controller
      */
     public function itemDeleteAction(Invoice $sales, $salesItem)
     {
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('HospitalBundle:InvoiceItem')->find($salesItem);
-        if (!$salesItem) {
-            throw $this->createNotFoundException('Unable to find InvoiceItem entity.');
-        }
-
-        $em->remove($entity);
-        $em->flush();
-        $sales = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($sales);
-        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal,'salesVat' => $vat, 'success' => 'success')));
-        exit;
 
     }
 
     public function itemPurchaseDetailsAction(Request $request)
     {
-        $securityContext = $this->container->get('security.authorization_checker');
-        $item = $request->request->get('item');
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $customer = isset($_REQUEST['customer']) ? $_REQUEST['customer'] : '';
 
-        /* Device Detection code desktop or mobile */
-        $detect = new MobileDetect();
-        $device = '';
-        if( $detect->isMobile() || $detect->isTablet() ) {
-            $device = 'mobile' ;
-        }
-        $data = $this->getDoctrine()->getRepository('HospitalBundle:Item')->itemPurchaseDetails($securityContext,$inventory, $item, $customer, $device);
-        return new Response($data);
     }
 
     public function branchStockItemDetailsAction(Item $item)
     {
-        $user = $this->getUser();
-        $data = $this->getDoctrine()->getRepository('HospitalBundle:Item')->itemDeliveryPurchaseDetails($user,$item);
-        return new Response($data);
+
+    }
+    public function salesItemAction(Request $request)
+    {
+
     }
 
     public function getBarcode($invoice)
