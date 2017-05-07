@@ -14,6 +14,32 @@ hms_invoice_edit:
     path:     /{id}/edit
     defaults: { _controller: "HospitalBundle:Invoice:edit" }
 
+hms_invoice_particular_search:
+    path:     /{id}/particular-search
+    defaults: { _controller: "HospitalBundle:Invoice:particularSearch" }
+
+
+hms_invoice_particular_add:
+    path:     /{invoice}/particular-add
+    defaults: { _controller: "HospitalBundle:Invoice:addParticular" }
+    methods:  POST
+    options:
+            expose: true
+
+hms_invoice_discount_update:
+    path:     /invoice/invoice-dicount-update
+    defaults: { _controller: "HospitalBundle:Invoice:invoiceDiscountUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+hms_invoice_approved:
+    path:     /{id}/invoice-approved
+    defaults: { _controller: "HospitalBundle:Invoice:approve" }
+    methods:  POST
+    options:
+            expose: true
+
 hms_invoice_update:
     path:     /{id}/update
     defaults: { _controller: "HospitalBundle:Invoice:update" }
@@ -22,4 +48,17 @@ hms_invoice_update:
 hms_invoice_delete:
     path:     /{id}/delete
     defaults: { _controller: "HospitalBundle:Invoice:delete" }
+
+hms_invoice_confirm:
+    path:     /{id}/invoice-confirm
+    defaults: { _controller: "HospitalBundle:Invoice:confirm" }
+
+
+hms_invoice_particular_delete:
+    path:     /{invoice}/{id}/particular-delete
+    defaults: { _controller: "HospitalBundle:Invoice:invoiceParticularDelete" }
+
+hms_invoice_print_invoice:
+    path:     /{id}/print
+    defaults: { _controller: "HospitalBundle:Invoice:invoicePrint" }
 

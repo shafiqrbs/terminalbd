@@ -7,6 +7,7 @@ use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CustomerForHospitalType extends AbstractType
 {
@@ -26,15 +27,39 @@ class CustomerForHospitalType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter patient name')))
-            ->add('age','text', array('attr'=>array('class'=>'m-wrap span12 numeric','autocomplete'=>'off','placeholder'=>'Enter age')))
-            ->add('gender', 'choice', array(
-                'attr'=>array('class'=>'span12'),
+
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter patient name'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Enter patient name')),
+                )
+            ))
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Enter patient mobile no'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Enter patient mobile no')),
+                )
+            ))
+            ->add('age','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Enter patient age'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Enter patient age')),
+            )))
+
+            ->add('ageType', 'choice', array(
+                'attr'=>array('class'=>'span12 select-custom'),
                 'expanded'      =>false,
                 'multiple'      =>false,
-                'choices' => array('Male' => 'Male',  'Female' => 'Female', 'Others' => 'Others'),
+                'choices' => array('Years' => 'Years','Months' => 'Months','Day' => 'Day')
             ))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Mobile no')))
+            ->add('gender', 'choice', array(
+                'attr'=>array('class'=>'span12 select-custom'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array('Female' => 'Female','Male' => 'Male', 'Others' => 'Others'),
+            ))
+            ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 resize','rows'=> 3,'autocomplete'=>'off','placeholder'=>'Enter patient name'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Enter patient name')),
+                )
+            ))
             ->add('location', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select Location---',

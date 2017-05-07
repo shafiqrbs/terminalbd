@@ -93,7 +93,7 @@ class DoctorController extends Controller
     private function createCreateForm(Particular $entity, $globalOption)
     {
 
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:Category');
+        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
         $form = $this->createForm(new DoctorType($em,$globalOption), $entity, array(
             'action' => $this->generateUrl('hms_doctor_create', array('id' => $entity->getId())),
             'method' => 'POST',
@@ -161,7 +161,7 @@ class DoctorController extends Controller
      */
     private function createEditForm(Particular $entity,$globalOption)
     {
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:Category');
+        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
         $form = $this->createForm(new DoctorType($em,$globalOption), $entity, array(
             'action' => $this->generateUrl('hms_doctor_update', array('id' => $entity->getId())),
             'method' => 'PUT',

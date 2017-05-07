@@ -1,0 +1,137 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+    <!-- BEGIN category HEADER-->
+    <div class="row-fluid">
+        <div class="span12">
+            <h3 class="category-title">
+                Manage Pathological Report Prepared
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="{{ path('homepage') }}">Home</a>
+                    <span class="icon-angle-right"></span>
+                </li>
+                <li>
+                    <a href="{{ path('hms_referreddoctor') }}">Pathological Report Prepared</a>
+                    <span class="icon-angle-right"></span>
+                </li>
+                <li><a href="#">Manage Pathological Report Prepared</a></li>
+                <li class="pull-right btn blue disabled mini">
+                    <i class="fa fa-calendar"></i>
+                    {{ "now"|date("d-F-Y") }}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- END category HEADER-->
+    <!-- BEGIN category CONTENT-->
+    <div class="row-fluid">
+    <div class="span12">
+
+    <div class="portlet box green tabbable">
+        <div class="portlet-title">
+            <div class="caption"><i class="icon-reorder"></i>Pathological Report Prepared</div>
+            <div class="actions">
+                <div class="btn-group">
+                    <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <i class="icon-cogs"></i>&nbsp;Tools
+                        <i class="icon-tasks"></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                         <li><a href="{{ path('hms_invoice_particular') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+    <div class="portlet-body">
+        <div class="portlet-body form">
+            <div class="row-fluid">
+
+                <div class="span3">
+                    <h4>About:</h4>
+                    <ul class="unstyled">
+                        <li><strong>Customer #:</strong>&nbsp;{{ entity.invoice.customer.name }}</li>
+                        <li><strong>Mobile #:</strong>&nbsp;{{ entity.invoice.customer.mobile }}</li>
+                        <li><strong>Gender #:</strong>&nbsp;{{ entity.invoice.customer.gender }}</li>
+                        <li><strong>Age #:</strong>&nbsp;{{ entity.invoice.customer.age }}-{{ entity.invoice.customer.ageType }}</li>
+                    </ul>
+                </div>
+                <div class="span3">
+                    <h4>Particular:</h4>
+                    <ul class="unstyled">
+                        <li><strong>Particular #:</strong>&nbsp;{{ entity.particular.name }}</li>
+                        <li><strong>Category #:</strong>&nbsp;{{ entity.particular.category.name }}</li>
+                        <li><strong>Instruction #:</strong>&nbsp;{{ entity.particular.instruction }}</li>
+                    </ul>
+                </div>
+                <div class="span3">
+                    <h4>Invoice:</h4>
+                    <ul class="unstyled">
+                        <li><strong>Invoice #:</strong>&nbsp;{{ entity.invoice.invoice }}</li>
+                        <li><strong>Created #:</strong>&nbsp;{{ entity.invoice.created|date('d-m-Y') }}</li>
+                        <li><strong>Delivery #:</strong>&nbsp;{{ entity.invoice.deliveryDateTime }}</li>
+                    </ul>
+                </div>
+                <div class="span3">
+                    <h4>Referred By:</h4>
+                    {% if entity.invoice.referredDoctor is not empty %}
+                        <ul class="unstyled">
+                            <li><strong>Code:</strong>&nbsp;{{ entity.invoice.referredDoctor.particularCode }}</li>
+                            <li><strong>Name:</strong>&nbsp;{{ entity.invoice.referredDoctor.name }}</li>
+                            <li><strong>Mobile:</strong>&nbsp;{{ entity.invoice.referredDoctor.mobile }}</li>
+                            <li><strong>Address:</strong>&nbsp;{{ entity.invoice.referredDoctor.address }}</li>
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            {% include('flash-message.html.twig')  %}
+
+            <!-- BEGIN FORM-->
+            {{ form_start(form) }}
+            {{ form_row(form._token) }}
+            <div class="row-fluid">
+                <!--/span-->
+                <div class="span12">
+                    <div class="control-group">
+                        <label class="control-label" for="name">Process Progress </label>
+                        <div class="controls">
+                            {{ form_widget(form.process) }}
+                            {{ form_errors(form.process) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="row-fluid">
+                <!--/span-->
+                <div class="span12">
+                    <div class="control-group">
+                        <label class="control-label" for="name">Comment</label>
+                        <div class="controls">
+                            {{ form_widget(form.comment) }}
+                            {{ form_errors(form.comment) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions portlet box grey">
+                <div class="pull-right">
+                    <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
+                </div>
+            </div>
+            {{ form_end(form) }}
+            <!-- END FORM-->
+        </div>
+    </div>
+    </div>
+
+    </div>
+    </div>
+    </div>
+{% endblock %}

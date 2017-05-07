@@ -41,8 +41,8 @@ class CabinController extends Controller
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Particular')->findWithSearch($config , $service = 2, $data);
         $pagination = $this->paginate($entities);
-        $categories = $this->getDoctrine()->getRepository('HospitalBundle:Category')->findBy(array('parent'=>2),array('name' =>'asc' ));
-        $departments = $this->getDoctrine()->getRepository('HospitalBundle:Category')->findBy(array('parent'=>7),array('name' =>'asc' ));
+        $categories = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->findBy(array('parent'=>2),array('name' =>'asc' ));
+        $departments = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->findBy(array('parent'=>7),array('name' =>'asc' ));
         return $this->render('HospitalBundle:Cabin:index.html.twig', array(
             'entities' => $pagination,
             'categories' => $categories,
@@ -92,7 +92,7 @@ class CabinController extends Controller
     private function createCreateForm(Particular $entity, $globalOption)
     {
 
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:Category');
+        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
         $form = $this->createForm(new CabinType($em,$globalOption), $entity, array(
             'action' => $this->generateUrl('hms_cabin_create', array('id' => $entity->getId())),
             'method' => 'POST',
@@ -160,9 +160,8 @@ class CabinController extends Controller
      */
     private function createEditForm(Particular $entity,$globalOption)
     {
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:Category');
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CabinType($em,$globalOption,$location), $entity, array(
+        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
+        $form = $this->createForm(new CabinType($em,$globalOption), $entity, array(
             'action' => $this->generateUrl('hms_cabin_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

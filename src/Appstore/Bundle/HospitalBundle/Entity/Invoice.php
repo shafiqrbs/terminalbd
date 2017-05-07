@@ -50,7 +50,7 @@ class Invoice
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="invoice" , cascade={"remove"} )
-     * @ORM\OrderBy({"id" = "DESC"})
+     * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $invoiceParticulars;
 
@@ -63,12 +63,12 @@ class Invoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="hmsInvoice"  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="hmsInvoices" ,cascade={"persist"} )
      **/
     private  $customer;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="hmsInvoice"  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="hmsInvoice", cascade={"persist"}  )
      **/
     private  $referredDoctor;
 
@@ -88,7 +88,7 @@ class Invoice
     /**
      * @var string
      *
-     * @ORM\Column(name="paymentMethod", type="string", length=50, nullable=true)
+     * @ORM\Column(name="paymentMethod", type="string", length=30, nullable=true)
      */
     private $paymentMethod='Cash';
 
@@ -169,13 +169,6 @@ class Invoice
      */
     private $code;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="totalItem", type="smallint", length=2, nullable=true)
-     */
-    private $totalItem;
-
 
     /**
      * @var string
@@ -192,12 +185,28 @@ class Invoice
      */
     private $subTotal;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="referredCommission", type="decimal", nullable=true)
+     */
+    private $referredCommission;
+
     /**
      * @var string
      *
      * @ORM\Column(name="discount", type="decimal", nullable=true)
      */
     private $discount;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="percentage", type="smallint" , length=3 , nullable=true)
+     */
+    private $percentage;
+
 
     /**
      * @var string
@@ -213,6 +222,12 @@ class Invoice
      */
     private $total;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="netTotal", type="decimal", nullable=true)
+     */
+    private $netTotal;
 
     /**
      * @var string
@@ -267,9 +282,23 @@ class Invoice
     /**
      * @var string
      *
-     * @ORM\Column(name="deliveryTime", type="text", length=20, nullable=true)
+     * @ORM\Column(name="deliveryTime", type="string", length=20, nullable=true)
      */
     private $deliveryTime;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="deliveryDateTime", type="string",  length=50, nullable=true)
+     */
+    private $deliveryDateTime;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="printFor", type="string",  length=50, nullable=true)
+     */
+    private $printFor ='Pathological';
 
 
     /**
@@ -872,5 +901,87 @@ class Invoice
     {
         $this->deliveryTime = $deliveryTime;
     }
+
+    /**
+     * @return int
+     */
+    public function getPercentage()
+    {
+        return $this->percentage;
+    }
+
+    /**
+     * @param int $percentage
+     */
+    public function setPercentage($percentage)
+    {
+        $this->percentage = $percentage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNetTotal()
+    {
+        return $this->netTotal;
+    }
+
+    /**
+     * @param string $netTotal
+     */
+    public function setNetTotal($netTotal)
+    {
+        $this->netTotal = $netTotal;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReferredCommission()
+    {
+        return $this->referredCommission;
+    }
+
+    /**
+     * @param string $referredCommission
+     */
+    public function setReferredCommission($referredCommission)
+    {
+        $this->referredCommission = $referredCommission;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeliveryDateTime()
+    {
+        return $this->deliveryDateTime;
+    }
+
+    /**
+     * @param string $deliveryDateTime
+     */
+    public function setDeliveryDateTime($deliveryDateTime)
+    {
+        $this->deliveryDateTime = $deliveryDateTime;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrintFor()
+    {
+        return $this->printFor;
+    }
+
+    /**
+     * @param string $printFor
+     */
+    public function setPrintFor($printFor)
+    {
+        $this->printFor = $printFor;
+    }
+
+
 }
 

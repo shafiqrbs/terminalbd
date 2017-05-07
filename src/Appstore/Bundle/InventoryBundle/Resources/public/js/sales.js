@@ -249,7 +249,9 @@ var InventorySales = function(sales) {
         })
     });
 
-    $('#salesItem').on("click", ".delete", function() {
+
+
+$('#salesItem').on("click", ".delete", function() {
 
         var url = $(this).attr("rel");
         var id = $(this).attr("id");

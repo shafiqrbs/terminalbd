@@ -178,6 +178,18 @@
                 </div>
                 <!--/span-->
             </div>
+            <div class="row-fluid">
+                <!--/span-->
+                <div class="span12">
+                    <div class="control-group">
+                        <label class="control-label" >Instruction</label>
+                        <div class="controls">
+                            {{ form_widget(form.instruction) }}
+                            {{ form_errors(form.instruction) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="form-actions portlet box grey">
                 <div class="pull-right">
                     <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>

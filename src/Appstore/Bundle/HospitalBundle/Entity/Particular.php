@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table( name = "hms_particular")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\HospitalBundle\Repository\ParticularRepository")
  */
-class Particular implements HmsCodeAwareEntity
+class Particular
 {
     /**
      * @var integer
@@ -32,7 +32,7 @@ class Particular implements HmsCodeAwareEntity
     private $hospitalConfig;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", mappedBy="referredDoctor" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="referredDoctor")
      **/
     private $hmsInvoice;
 
@@ -41,6 +41,11 @@ class Particular implements HmsCodeAwareEntity
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="particulars" , cascade={"persist", "remove"})
      **/
     private $service;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", inversedBy="particular" , cascade={"persist", "remove"})
+     **/
+    private $pathologicalReport;
 
 
     /**
@@ -108,6 +113,14 @@ class Particular implements HmsCodeAwareEntity
      * @ORM\Column(name="content", type="text", nullable=true)
      */
     private $content;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="instruction", type="text", nullable=true)
+     */
+    private $instruction;
+
 
     /**
      * @var string
@@ -268,6 +281,11 @@ class Particular implements HmsCodeAwareEntity
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getReferred(){
+
+        return $this->particularCode.' - '.$this->name .' ('. $this->mobile .')';
     }
 
     /**
@@ -817,7 +835,37 @@ class Particular implements HmsCodeAwareEntity
         return $this->hmsInvoice;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPathologicalReport()
+    {
+        return $this->pathologicalReport;
+    }
 
+    /**
+     * @param mixed $pathologicalReport
+     */
+    public function setPathologicalReport($pathologicalReport)
+    {
+        $this->pathologicalReport = $pathologicalReport;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInstruction()
+    {
+        return $this->instruction;
+    }
+
+    /**
+     * @param string $instruction
+     */
+    public function setInstruction($instruction)
+    {
+        $this->instruction = $instruction;
+    }
 
 
 }

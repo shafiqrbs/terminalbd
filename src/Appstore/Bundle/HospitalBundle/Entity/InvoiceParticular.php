@@ -2,9 +2,8 @@
 
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
-use Appstore\Bundle\DomainUserBundle\Entity\Branches;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
-use Product\Bundle\ProductBundle\Entity\Category;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -35,11 +34,21 @@ class InvoiceParticular
      **/
     private $particular;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", inversedBy="invoiceParticular")
+     **/
+    private $pathologicalReport;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticularReport", mappedBy="invoiceParticular")
+     **/
+    private $invoiceParticularReports;
+
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="smallint", type="float")
+     * @ORM\Column(name="quantity", type="smallint")
      */
     private $quantity = 1;
 
@@ -73,6 +82,45 @@ class InvoiceParticular
      * @ORM\Column(name="subTotal", type="float")
      */
     private $subTotal;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceParticularDelivered" )
+     **/
+    private  $particularDeliveredBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceParticularPrepared" )
+     **/
+    private  $particularPreparedBy;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="process", type="string", length=30, nullable=true)
+     */
+    private $process ='In-progress';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="text", nullable=true)
+     */
+    private $comment;
+
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created", type="datetime")
+     */
+    private $created;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated", type="datetime")
+     */
+    private $updated;
 
 
     /**
@@ -197,6 +245,118 @@ class InvoiceParticular
     public function setInvoice($invoice)
     {
         $this->invoice = $invoice;
+    }
+
+    /**
+     * @return User
+     */
+    public function getParticularPreparedBy()
+    {
+        return $this->particularPreparedBy;
+    }
+
+    /**
+     * @param User $particularPreparedBy
+     */
+    public function setParticularPreparedBy($particularPreparedBy)
+    {
+        $this->particularPreparedBy = $particularPreparedBy;
+    }
+
+    /**
+     * @return User
+     */
+    public function getParticularDeliveredBy()
+    {
+        return $this->particularDeliveredBy;
+    }
+
+    /**
+     * @param User $particularDeliveredBy
+     */
+    public function setParticularDeliveredBy($particularDeliveredBy)
+    {
+        $this->particularDeliveredBy = $particularDeliveredBy;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param \DateTime $updated
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @param string $comment
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcess()
+    {
+        return $this->process;
+    }
+
+    /**
+     * @param string $process
+     */
+    public function setProcess($process)
+    {
+        $this->process = $process;
+    }
+
+    /**
+     * @return PathologicalReport
+     */
+    public function getPathologicalReport()
+    {
+        return $this->pathologicalReport;
+    }
+
+    /**
+     * @param PathologicalReport $pathologicalReport
+     */
+    public function setPathologicalReport($pathologicalReport)
+    {
+        $this->pathologicalReport = $pathologicalReport;
     }
 
 

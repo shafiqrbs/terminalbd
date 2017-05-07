@@ -39,8 +39,8 @@ class PathologyController extends Controller
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Particular')->findWithSearch($config , $service = 1, $data);
         $pagination = $this->paginate($entities);
-        $categories = $this->getDoctrine()->getRepository('HospitalBundle:Category')->findBy(array('parent'=>2),array('name' =>'asc' ));
-        $departments = $this->getDoctrine()->getRepository('HospitalBundle:Category')->findBy(array('parent'=>7),array('name' =>'asc' ));
+        $categories = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->findBy(array('parent'=>2),array('name' =>'asc' ));
+        $departments = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->findBy(array('parent'=>7),array('name' =>'asc' ));
         return $this->render('HospitalBundle:Pathology:index.html.twig', array(
             'entities' => $pagination,
             'categories' => $categories,
@@ -90,7 +90,7 @@ class PathologyController extends Controller
     private function createCreateForm(Particular $entity, $globalOption)
     {
 
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:Category');
+        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
         $form = $this->createForm(new PathologyType($em,$globalOption), $entity, array(
             'action' => $this->generateUrl('hms_pathology_create', array('id' => $entity->getId())),
             'method' => 'POST',
@@ -158,7 +158,7 @@ class PathologyController extends Controller
      */
     private function createEditForm(Particular $entity,$globalOption)
     {
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:Category');
+        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
         $form = $this->createForm(new PathologyType($em,$globalOption), $entity, array(
             'action' => $this->generateUrl('hms_pathology_update', array('id' => $entity->getId())),
             'method' => 'PUT',

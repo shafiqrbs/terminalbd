@@ -4,6 +4,7 @@ namespace Appstore\Bundle\HospitalBundle\Form;
 
 use Appstore\Bundle\HospitalBundle\Entity\Category;
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
+use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
@@ -15,14 +16,14 @@ class PathologyType extends AbstractType
 {
 
 
-    /** @var  CategoryRepository */
+    /** @var  HmsCategoryRepository */
     private $emCategory;
 
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(CategoryRepository $emCategory , GlobalOption $globalOption)
+    function __construct(HmsCategoryRepository $emCategory , GlobalOption $globalOption)
     {
         $this->emCategory = $emCategory;
         $this->globalOption = $globalOption;
@@ -43,6 +44,7 @@ class PathologyType extends AbstractType
                 )
             ))
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
+            ->add('instruction','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>'3','placeholder'=>'Enter test related any instruction for patient')))
             ->add('minimumPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter minimum price')))
             ->add('commission','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter commission')))
             ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter price'),
@@ -89,7 +91,7 @@ class PathologyType extends AbstractType
                 'required'    => true,
                 'empty_value' => '---Select department---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Category',
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please select required'))
                 ),
@@ -104,7 +106,7 @@ class PathologyType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please select required'))
                 ),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Category',
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
                 'choices'=> $this->PathologyChoiceList()
             ))

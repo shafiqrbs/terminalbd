@@ -107,7 +107,7 @@ class PosOrderSmsListener extends BaseSmsAwareListener
         $customerMobile = "+88".$sales->getCustomer()->getMobile();
         if(!empty($sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()) and $sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1){
             if(!empty($sales->getCustomer() and $sales->getCustomer()->getMobile())){
-               echo $status = $this->gateway->send($customer , $customerMobile);
+                $status = $this->gateway->send($customer , $customerMobile);
                 $this->em->getRepository('SettingToolBundle:SmsSender')->insertSalesCourierSms($sales,$status);
             }
         }

@@ -600,7 +600,7 @@ class User extends BaseUser
 
 
     /**
-     * @param mixed $profile
+     * @param Profile $profile
      */
     public function setProfile($profile)
     {

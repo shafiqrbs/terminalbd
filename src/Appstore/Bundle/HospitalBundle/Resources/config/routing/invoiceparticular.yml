@@ -1,0 +1,39 @@
+hms_invoice_particular:
+    path:     /
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:index" }
+
+hms_invoice_particular_show:
+    path:     /{id}/show
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:show" }
+
+hms_invoice_particular_new:
+    path:     /new
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:new" }
+
+hms_invoice_particular_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:edit" }
+
+hms_invoice_particular_particular_search:
+    path:     /{id}/particular-search
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:particularSearch" }
+
+hms_invoice_particular_discount_update:
+    path:     /invoice/invoice-dicount-update
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:invoiceDiscountUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+hms_invoice_particular_update:
+    path:     /{id}/update
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:update" }
+    methods:  [POST, PUT]
+
+hms_invoice_particular_delivery:
+    path:     /{id}/delivery
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:delivery" }
+
+
+
+

@@ -70,6 +70,7 @@ class CustomerRepository extends EntityRepository
             return $entity;
         }
     }
+
     public function findExistingCustomer($sales, $mobile)
     {
         $em = $this->_em;
@@ -85,6 +86,39 @@ class CustomerRepository extends EntityRepository
             $em->flush();
             return $entity;
         }
+    }
+
+    public function findHmsExistingCustomer($globalOption, $mobile,$data)
+    {
+        $em = $this->_em;
+
+        $name = $data['customer']['name'];
+        $gender = $data['customer']['gender'];
+        $age = $data['customer']['age'];
+        $location = $data['customer']['location'];
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'name' => $name ,'mobile' => $mobile,'age' => $age,'gender' => $gender));
+        if($entity){
+
+            return $entity;
+
+        }else{
+
+            $entity = new Customer();
+            if(!empty($location)){
+                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
+                $entity->setLocation($location);
+            }
+            $entity->setMobile($mobile);
+            $entity->setName($name);
+            $entity->setGender($gender);
+            $entity->setAge($age);
+            $entity->setGlobalOption($globalOption);
+            $em->persist($entity);
+            $em->flush($entity);
+
+            return $entity;
+        }
+
     }
 
     public function findWithSearch($globalOption,$data)

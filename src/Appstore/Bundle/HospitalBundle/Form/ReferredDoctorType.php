@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\HospitalBundle\Form;
 
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
+use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -17,14 +18,14 @@ class ReferredDoctorType extends AbstractType
     /** @var  LocationRepository */
     private $location;
 
-    /** @var  CategoryRepository */
+    /** @var  HmsCategoryRepository */
     private $emCategory;
 
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(CategoryRepository $emCategory , GlobalOption $globalOption, LocationRepository $location)
+    function __construct(HmsCategoryRepository $emCategory , GlobalOption $globalOption, LocationRepository $location)
     {
         $this->location         = $location;
         $this->emCategory       = $emCategory;
@@ -51,7 +52,7 @@ class ReferredDoctorType extends AbstractType
                 'required'    => true,
                 'empty_value' => '---Select pathology---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Category',
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
                 'choices'=> $this->PathologyChoiceList()
             ))
@@ -60,7 +61,7 @@ class ReferredDoctorType extends AbstractType
                 'required'    => true,
                 'empty_value' => '---Select department---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Category',
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
                 'choices'=> $this->DepartmentChoiceList()
             ))

@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
+use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -20,7 +21,7 @@ class InvoiceRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-        if (!empty($name)) {
+        if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
         }
         if(!empty($service)){
@@ -31,4 +32,49 @@ class InvoiceRepository extends EntityRepository
         $qb->getQuery();
         return  $qb;
     }
+
+    public function updateInvoiceTotalPrice(Invoice $invoice)
+    {
+        $em = $this->_em;
+        $total = $em->createQueryBuilder()
+            ->from('HospitalBundle:InvoiceParticular','si')
+            ->select('sum(si.subTotal) as total')
+            ->where('si.invoice = :invoice')
+            ->setParameter('invoice', $invoice ->getId())
+            ->getQuery()->getSingleResult();
+
+        if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
+            $totalAmount = ($total['total'] - $invoice->getDiscount());
+            $vat = $this->getCulculationVat($invoice,$totalAmount);
+            $invoice->setVat($vat);
+        }
+        if($total['total'] > 0){
+
+            $invoice->setSubTotal($total['total']);
+            $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $invoice->setDue($invoice->getTotal());
+
+        }else{
+
+            $invoice->setSubTotal(0);
+            $invoice->setTotal(0);
+            $invoice->setDue(0);
+            $invoice->setDiscount(0);
+            $invoice->setVat(0);
+        }
+
+        $em->persist($invoice);
+        $em->flush();
+
+        return $invoice;
+
+    }
+
+    public function getCulculationVat(Invoice $sales,$totalAmount)
+    {
+        $vat = ( ($totalAmount * (int)$sales->getHospitalConfig()->getVatPercentage())/100 );
+        return round($vat);
+    }
+
+
 }

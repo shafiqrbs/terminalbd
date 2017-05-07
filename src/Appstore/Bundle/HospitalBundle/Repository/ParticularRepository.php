@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -36,5 +37,62 @@ class ParticularRepository extends EntityRepository
         $qb->getQuery();
         return  $qb;
     }
+
+    public function getServiceWithParticular($hospital){
+
+        $qb = $this->createQueryBuilder('e')
+            ->leftJoin('e.service','s')
+            ->select('e.id')
+            ->addSelect('e.name')
+            ->addSelect('e.particularCode')
+            ->addSelect('e.price')
+            ->addSelect('e.minimumPrice')
+            ->addSelect('e.quantity')
+            ->addSelect('s.name as serviceName')
+            ->addSelect('s.code as serviceCode')
+            ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
+            ->andWhere('s.id IN(:process)')
+            ->setParameter('process',array_values(array(1,2,3,4)))
+            ->orderBy('e.service','ASC')
+            ->getQuery()->getArrayResult();
+            return  $qb;
+    }
+
+    public function findHmsExistingCustomer($hospital, $mobile,$data)
+    {
+        $em = $this->_em;
+
+        $name = $data['referredDoctor']['name'];
+        $department = $data['referredDoctor']['department'];
+        $location = $data['referredDoctor']['location'];
+        $address = $data['referredDoctor']['address'];
+        $entity = $em->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital ,'service' => 6 ,'mobile' => $mobile));
+        if($entity){
+
+            return $entity;
+
+        }else{
+
+            $entity = new Particular();
+            if(!empty($location)){
+                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
+                $entity->setLocation($location);
+            }
+            if(!empty($department)){
+                $department = $em->getRepository('HospitalBundle:HmsCategory')->find($department);
+                $entity->setDepartment($department);
+            }
+            $entity->setService($em->getRepository('HospitalBundle:Service')->find(6));
+            $entity->setMobile($mobile);
+            $entity->setName($name);
+            $entity->setAddress($address);
+            $entity->setHospitalConfig($hospital);
+            $em->persist($entity);
+            $em->flush($entity);
+            return $entity;
+        }
+
+    }
+
 
 }

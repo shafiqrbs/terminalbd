@@ -41,8 +41,8 @@ class MedicineController extends Controller
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Particular')->findWithSearch($config , $service = 4, $data);
         $pagination = $this->paginate($entities);
-        $categories = $this->getDoctrine()->getRepository('HospitalBundle:Category')->findBy(array('parent'=>2),array('name' =>'asc' ));
-        $departments = $this->getDoctrine()->getRepository('HospitalBundle:Category')->findBy(array('parent'=>7),array('name' =>'asc' ));
+        $categories = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->findBy(array('parent'=>2),array('name' =>'asc' ));
+        $departments = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->findBy(array('parent'=>7),array('name' =>'asc' ));
         return $this->render('HospitalBundle:Medicine:index.html.twig', array(
             'entities' => $pagination,
             'categories' => $categories,
@@ -92,7 +92,7 @@ class MedicineController extends Controller
     private function createCreateForm(Particular $entity, $globalOption)
     {
 
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:Category');
+        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
         $form = $this->createForm(new MedicineType($em,$globalOption), $entity, array(
             'action' => $this->generateUrl('hms_medicine_create', array('id' => $entity->getId())),
             'method' => 'POST',
@@ -160,7 +160,7 @@ class MedicineController extends Controller
      */
     private function createEditForm(Particular $entity,$globalOption)
     {
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:Category');
+        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
         $form = $this->createForm(new MedicineType($em,$globalOption), $entity, array(
             'action' => $this->generateUrl('hms_medicine_update', array('id' => $entity->getId())),
             'method' => 'PUT',

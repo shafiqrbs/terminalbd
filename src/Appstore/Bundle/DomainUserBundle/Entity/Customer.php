@@ -4,6 +4,7 @@ namespace Appstore\Bundle\DomainUserBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\LocationBundle\Entity\Location;
@@ -39,6 +40,13 @@ class Customer
      * @ORM\OrderBy({"id" = "DESC"})
      */
     protected $orders;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="customer")
+     * @ORM\OrderBy({"id" = "DESC"})
+     */
+    protected $hmsInvoices;
 
 
     /**
@@ -169,9 +177,16 @@ class Customer
     /**
      * @var integer
      *
-     * @ORM\Column(name="age", type="smallint",length=2, nullable = true)
+     * @ORM\Column(name="age", type="smallint",length=3, nullable = true)
      */
     private $age;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ageType", type="string", length=10, nullable = true)
+     */
+    private $ageType;
 
 
     /**
@@ -620,6 +635,30 @@ class Customer
     public function setAge($age)
     {
         $this->age = $age;
+    }
+
+    /**
+     * @return Invoice
+     */
+    public function getHmsInvoices()
+    {
+        return $this->hmsInvoices;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAgeType()
+    {
+        return $this->ageType;
+    }
+
+    /**
+     * @param string $ageType
+     */
+    public function setAgeType($ageType)
+    {
+        $this->ageType = $ageType;
     }
 
 }

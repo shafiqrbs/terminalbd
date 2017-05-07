@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\HospitalBundle\Form;
 
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
+use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -17,14 +18,14 @@ class InvoiceReferredDoctorType extends AbstractType
     /** @var  LocationRepository */
     private $location;
 
-    /** @var  CategoryRepository */
+    /** @var  HmsCategoryRepository */
     private $emCategory;
 
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(CategoryRepository $emCategory , GlobalOption $globalOption, LocationRepository $location)
+    function __construct(HmsCategoryRepository $emCategory , GlobalOption $globalOption, LocationRepository $location)
     {
         $this->location         = $location;
         $this->emCategory       = $emCategory;
@@ -39,18 +40,14 @@ class InvoiceReferredDoctorType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter Doctor/Reference name'),
-                    'constraints' =>array(
-                        new NotBlank(array('message'=>'Please enter doctor/agent name'))
-                    ))
-            )
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter Doctor/Reference name')))
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Mobile no')))
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Enter doctor/agent address')))
             ->add('department', 'entity', array(
                 'required'    => true,
-                'empty_value' => '---Select department---',
+                'empty_value' => '---Select Department---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Category',
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
                 'choices'=> $this->DepartmentChoiceList()
             ))

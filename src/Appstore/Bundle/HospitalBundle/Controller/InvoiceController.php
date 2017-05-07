@@ -3,6 +3,8 @@
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -35,10 +37,6 @@ class InvoiceController extends Controller
         return $pagination;
     }
 
-    /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
-     */
-
     public function indexAction()
     {
 
@@ -63,9 +61,6 @@ class InvoiceController extends Controller
         $entity = new Invoice();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entity->setHospitalConfig($hospital);
-        $globalOption = $this->getUser()->getGlobalOption();
-        $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
-        $entity->setCustomer($customer);
         $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
         $entity->setService($service);
         $referredDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital,'name'=>'Self','service' => 6));
@@ -93,46 +88,164 @@ class InvoiceController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'service' => 6,'status'=>1),array('name'=>'ASC'));
-        $services = $this->getDoctrine()->getRepository('HospitalBundle:Service')->findBy(array(),array('name'=>'ASC'));
-        $particulars = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital ,'service' => 1),array('name'=>'ASC'));
+
         $editForm = $this->createEditForm($entity);
         if ($entity->getProcess() != "In-progress") {
             return $this->redirect($this->generateUrl('hms_invoice_show', array('id' => $entity->getId())));
         }
+        $particulars = $em->getRepository('HospitalBundle:Particular')->getServiceWithParticular($hospital);
+        $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
         return $this->render('HospitalBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
-            'referredDoctors' => $referredDoctors,
-            'services' => $services,
             'particulars' => $particulars,
+            'referredDoctors' => $referredDoctors,
             'form' => $editForm->createView(),
         ));
     }
 
-
-
-    /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
-     */
-
-    public function salesItemAction()
+    public function particularSearchAction(Particular $particular)
     {
-
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $em->getRepository('HospitalBundle:InvoiceItem')->salesItems($inventory, $data);
-        $pagination = $this->paginate($entities);
-        return $this->render('HospitalBundle:Invoice:salesItem.html.twig', array(
-            'entities' => $pagination,
-            'searchForm' => $data,
-        ));
+        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $particular->getQuantity(), 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
     }
 
+    public function addParticularAction(Request $request, Invoice $invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $particularId = $request->request->get('particularId');
+        $quantity = $request->request->get('quantity');
+        $price = $request->request->get('price');
+        $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
+        $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->insertInvoiceItems($invoice, $invoiceItems);
+        $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($invoice);
+        $invoiceParticulars = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->getSalesItems($invoice);
+        $msg = 'Particular added successfully';
 
-    /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
-     */
+        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
+        $grandTotal = $invoice->getTotal() > 0 ? $invoice->getTotal() : 0;
+        $vat = $invoice->getVat() > 0 ? $invoice->getVat() : 0;
+
+        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal, 'vat' => $vat,'invoiceParticulars' => $invoiceParticulars, 'msg' => $msg )));
+        exit;
+    }
+
+    public function invoiceParticularDeleteAction(Invoice $invoice, InvoiceParticular $particular){
+
+        $em = $this->getDoctrine()->getManager();
+        if (!$particular) {
+            throw $this->createNotFoundException('Unable to find SalesItem entity.');
+        }
+
+        $em->remove($particular);
+        $em->flush();
+        $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($invoice);
+        $invoiceParticulars = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->getSalesItems($invoice);
+
+        $msg = 'Particular deleted successfully';
+        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
+        $grandTotal = $invoice->getTotal() > 0 ? $invoice->getTotal() : 0;
+        $vat = $invoice->getVat() > 0 ? $invoice->getVat() : 0;
+
+        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal, 'vat' => $vat,'invoiceParticular' => $invoiceParticulars, 'msg' => $msg )));
+        exit;
+
+
+    }
+
+    public function invoiceDiscountUpdateAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $discount = $request->request->get('discount');
+        $invoice = $request->request->get('invoice');
+
+        $sales = $em->getRepository('HospitalBundle:Invoice')->find($invoice);
+        $total = ($sales->getSubTotal() - $discount);
+        $vat = 0;
+        if($total > $discount ){
+            if ($sales->getHospitalConfig()->getVatEnable() == 1 && $sales->getHospitalConfig()->getVatPercentage() > 0) {
+                $vat = $em->getRepository('HospitalBundle:Invoice')->getCulculationVat($sales,$total);
+                $sales->setVat($vat);
+            }
+            $sales->setDiscount($discount);
+            $sales->setTotal($total + $vat);
+            $sales->setDue($total + $vat);
+            $em->persist($sales);
+            $em->flush();
+        }
+
+        $invoiceParticulars = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->getSalesItems($sales);
+        $subTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
+        $grandTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
+        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
+        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'vat' => $vat,'invoiceParticulars' => $invoiceParticulars, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
+        exit;
+    }
+
+    public function updateAction(Request $request, Invoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+        $referredId = $request->request->get('referredId');
+        $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
+         if ($editForm->isValid()) {
+
+            if (!empty($data['customer']['name'])) {
+
+                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
+                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomer($this->getUser()->getGlobalOption(), $mobile,$data);
+                 $entity->setCustomer($customer);
+                 $entity->setMobile($mobile);
+
+            }
+            if (!empty($referredId)) {
+                $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $entity->getHospitalConfig() , 'service' => 6, 'id' => $referredId ));
+                $entity->setReferredDoctor($referred);
+
+            }elseif(!empty($data['referredDoctor']['name']) && !empty($data['referredDoctor']['mobile'])) {
+
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['referredDoctor']['mobile']);
+                $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findHmsExistingCustomer($entity->getHospitalConfig() , $mobile,$data);
+                $entity->setReferredDoctor($referred);
+            }
+
+
+            if ($entity->getHospitalConfig()->getVatEnable() == 1 && $entity->getHospitalConfig()->getVatPercentage() > 0) {
+                $vat = $em->getRepository('HospitalBundle:Invoice')->getCulculationVat($entity,$entity->getTotal());
+                $entity->setVat($vat);
+            }
+
+            $entity->setDue($entity->getTotal() - $entity->getPayment());
+
+            if ($entity->getTotal() <= $entity->getPayment() ) {
+                $entity->setPaymentStatus('Paid');
+            } else if ($entity->getTotal() > $entity->getPayment() ) {
+                $entity->setPaymentStatus('Due');
+            }
+            $entity->setProcess('In-progress');
+            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+            $entity->setPaymentInWord($amountInWords);
+            $em->flush();
+
+            if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+               $dispatcher = $this->container->get('event_dispatcher');
+               $dispatcher->dispatch('setting_tool.post.hms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
+            }
+            return $this->redirect($this->generateUrl('hms_invoice_show', array('id' => $entity->getId())));
+        }
+        $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=>6),array('name'=>'ASC'));
+        $particulars = $em->getRepository('HospitalBundle:Particular')->getServiceWithParticular($entity->getHospitalConfig());
+        return $this->render('HospitalBundle:Invoice:new.html.twig', array(
+            'entity' => $entity,
+            'particulars' => $particulars,
+            'referredDoctors' => $referredDoctors,
+            'form' => $editForm->createView(),
+        ));
+    }
 
     public function searchAction(Request $request)
     {
@@ -173,10 +286,32 @@ class InvoiceController extends Controller
         exit;
     }
 
+    public function showAction(Invoice $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
+        if ($inventory == $entity->getHospitalConfig()->getId()) {
+            return $this->render('HospitalBundle:Invoice:show.html.twig', array(
+                'entity' => $entity,
+            ));
+        } else {
+            return $this->redirect($this->generateUrl('hms_invoice'));
+        }
 
-    /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
-     */
+    }
+
+    public function confirmAction(Invoice $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
+        if ($inventory == $entity->getHospitalConfig()->getId()) {
+            return $this->render('HospitalBundle:Invoice:confirm.html.twig', array(
+                'entity' => $entity,
+            ));
+        } else {
+            return $this->redirect($this->generateUrl('hms_invoice'));
+        }
+
+    }
+
 
     public function salesDiscountUpdateAction(Request $request)
     {
@@ -259,55 +394,6 @@ class InvoiceController extends Controller
 
 
     /**
-     * Finds and displays a Invoice entity.
-     *
-     */
-    public function showAction(Invoice $entity)
-    {
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
-        if ($inventory == $entity->getInventoryConfig()->getId()) {
-            return $this->render('HospitalBundle:Invoice:show.html.twig', array(
-                'entity' => $entity,
-            ));
-        } else {
-            return $this->redirect($this->generateUrl('hms_invoice'));
-        }
-
-    }
-
-
-
-    public function resetAction(Invoice $sales)
-    {
-        $em = $this->getDoctrine()->getManager();
-        foreach ($sales->getInvoiceItems() as $salesItem ) {
-            $em->remove($salesItem);
-        }
-        $em->flush();
-        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($sales);
-        return $this->redirect($this->generateUrl('hms_invoice_edit', array('code' => $sales->getInvoice())));
-
-    }
-
-    public function salesInlineMobileUpdateAction(Request $request)
-    {
-        $data = $request->request->all();
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('HospitalBundle:Invoice')->find($data['pk']);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
-        }
-
-        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['value']);
-        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity, $mobile);
-        $entity->setCustomer($customer);
-        $entity->setMobile($mobile);
-        $em->flush();
-        exit;
-
-    }
-
-    /**
      * Creates a form to edit a Invoice entity.wq
      *
      * @param Invoice $entity The entity
@@ -317,7 +403,7 @@ class InvoiceController extends Controller
     private function createEditForm(Invoice $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $category = $this->getDoctrine()->getRepository('HospitalBundle:Category');
+        $category = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $form = $this->createForm(new InvoiceType($globalOption,$category ,$location), $entity, array(
             'action' => $this->generateUrl('hms_invoice_update', array('id' => $entity->getId())),
@@ -331,108 +417,32 @@ class InvoiceController extends Controller
         return $form;
     }
 
-    /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
-     */
-
-    public function updateAction(Request $request, Invoice $entity)
+    public function approveAction(Request $request , Invoice $entity)
     {
+
         $em = $this->getDoctrine()->getManager();
+        $payment = $request->request->get('payment');
+        $discount = $request->request->get('discount');
+        $process = $request->request->get('process');
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invoice entity.');
-        }
 
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-        $data = $request->request->all();
-        if ($editForm->isValid() and $data['paymentTotal'] > 0 ) {
-
-            if (!empty($data['sales']['mobile'])) {
-
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales']['mobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findExistingCustomer($entity, $mobile);
-                $entity->setCustomer($customer);
-                $entity->setMobile($mobile);
-            } else {
-                $globalOption = $this->getUser()->getGlobalOption();
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
-                $entity->setCustomer($customer);
-            }
-
-            if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('HospitalBundle:Invoice')->getCulculationVat($entity,$data['paymentTotal']);
-                $entity->setVat($vat);
-            }
-            $entity->setDue($data['dueAmount']);
-            $entity->setDiscount($data['discount']);
-            $entity->setTotal($data['paymentTotal']);
-            $entity->setPayment($data['paymentTotal'] - $data['dueAmount']);
-
-            if ($data['paymentTotal'] <= $data['paymentAmount']) {
-                $entity->setPaymentStatus('Paid');
-            } else if ($data['paymentTotal'] > $data['paymentAmount']) {
-                $entity->setPaymentStatus('Due');
-            }
-            $entity->setProcess('Paid');
-            if (empty($data['sales']['salesBy'])) {
-                $entity->setInvoiceBy($this->getUser());
-            }
-            if ($entity->getTransactionMethod()->getId() != 4) {
-                $entity->setApprovedBy($this->getUser());
-            }
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-            $entity->setPaymentInWord($amountInWords);
-
-            $em->flush();
-
-            if (in_array('CustomerInvoice', $entity->getInventoryConfig()->getDeliveryProcess())) {
-
-                if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
-                    $dispatcher = $this->container->get('event_dispatcher');
-                    $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
-                }
-            }
-            if ($entity->getTransactionMethod()->getId() == 4) {
-                return $this->redirect($this->generateUrl('hms_invoice_show', array('id' => $entity->getId())));
-            } else {
-
-                $em->getRepository('HospitalBundle:Item')->getItemInvoiceUpdate($entity);
-                $em->getRepository('HospitalBundle:StockItem')->insertInvoiceStockItem($entity);
-                $em->getRepository('HospitalBundle:GoodsItem')->updateEcommerceItem($entity);
-                $accountInvoice = $em->getRepository('AccountingBundle:AccountInvoice')->insertAccountInvoice($entity);
-                $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountInvoice);
-                return $this->redirect($this->generateUrl('hms_invoice_new'));
-            }
-        }
-
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todayInvoice = $em->getRepository('HospitalBundle:Invoice')->todayInvoice($inventory,$mode='pos');
-        $todayInvoiceOverview = $em->getRepository('HospitalBundle:Invoice')->todayInvoiceOverview($inventory , $mode='pos');
-        return $this->render('HospitalBundle:Invoice:pos.html.twig', array(
-            'entity' => $entity,
-            'todayInvoice' => $todayInvoice,
-            'todayInvoiceOverview' => $todayInvoiceOverview,
-            'form' => $editForm->createView(),
-        ));
-
-    }
-
-    /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_APPROVE")
-     */
-
-    public function approveAction(Invoice $entity)
-    {
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setPaymentStatus('Paid');
+            if($payment){
+
+                $entity->setDiscount($entity->getDiscount() + $discount);
+                $entity->setTotal($entity->getTotal() - $entity->getDiscount());
+                $entity->setPayment($entity->getPayment() + $payment);
+                $entity->setDue($entity->getTotal() - $entity->getPayment());
+                if($entity->getPayment() >= $entity->getTotal()) {
+                    $entity->setPaymentStatus('Paid');
+                }
+            }
+            $entity->setProcess($process);
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            $em->getRepository('HospitalBundle:Item')->getItemInvoiceUpdate($entity);
-            $em->getRepository('HospitalBundle:StockItem')->insertInvoiceStockItem($entity);
-            $accountInvoice = $em->getRepository('AccountingBundle:AccountInvoice')->insertAccountInvoice($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountInvoice);
+            //$accountInvoice = $em->getRepository('AccountingBundle:AccountInvoice')->insertAccountInvoice($entity);
+            //$em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountInvoice);
             return new Response('success');
         } else {
             return new Response('failed');
@@ -514,9 +524,9 @@ class InvoiceController extends Controller
     {
         $barcode = new BarcodeGenerator();
         $barcode->setText($invoice);
-        $barcode->setType(BarcodeGenerator::Code128);
+        $barcode->setType(BarcodeGenerator::Code39Extended);
         $barcode->setScale(1);
-        $barcode->setThickness(34);
+        $barcode->setThickness(25);
         $barcode->setFontSize(8);
         $code = $barcode->generate();
         $data = '';
@@ -550,43 +560,7 @@ class InvoiceController extends Controller
 
     }
 
-    public function salesInlineProcessUpdateAction(Request $request)
-    {
-        $data = $request->request->all();
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('HospitalBundle:Invoice')->find($data['pk']);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
-        }
-        if ($data['value'] == 'Paid' or $data['value'] == 'Returned'){
-            $entity->setProcess($data['value']);
-        }elseif (!empty($entity->getCourierInvoice()) and $data['value'] == 'Courier'){
-            $entity->setProcess($data['value']);
-        }
-        $em->flush();
-        if($entity->getProcess() == 'Courier'){
-            if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
-                $dispatcher = $this->container->get('event_dispatcher');
-                $dispatcher->dispatch('setting_tool.post.courier_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
-            }
-        }
-        if($entity->getProcess() == 'Paid'){
-            $this->approvedOrder($entity);
-            if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
-                $dispatcher = $this->container->get('event_dispatcher');
-                $dispatcher->dispatch('setting_tool.post.process_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
-            }
-        }elseif($entity->getProcess() == 'Returned'){
-            $this->returnCancelOrder($entity);
-            if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
 
-                $dispatcher = $this->container->get('event_dispatcher');
-                $dispatcher->dispatch('setting_tool.post.process_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
-            }
-        }
-        exit;
-
-    }
 
     public function approvedOrder(Invoice $entity)
     {
@@ -642,366 +616,12 @@ class InvoiceController extends Controller
     {
 
         $barcode = $this->getBarcode($entity->getInvoice());
-       // $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-        return $this->render('HospitalBundle:Invoice:invoice.html.twig', array(
+        $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+        return $this->render('HospitalBundle:Invoice:print.html.twig', array(
             'entity'      => $entity,
             'barcode'     => $barcode,
+            'inWords'     => $inWords,
         ));
     }
-
-    public function printAction($code)
-    {
-
-        $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
-        $printer = new Printer($connector);
-        $printer -> initialize();
-
-
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
-        $option = $entity->getInventoryConfig()->getGlobalOption();
-        $this->approvedOrder($entity);
-
-        /** ===================Company Information=================================== */
-        if(!empty($entity->getBranches())){
-
-            $branch = $entity->getBranches();
-            $branchName     = $branch->getName();
-            $address1       = $branch->getAddress();
-            $thana          = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getName():'';
-            $district       = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getParent()->getName():'';
-            $address = $address1.$thana.$district;
-
-        }else{
-
-            $address1       = $option->getContactPage()->getAddress1();
-            $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
-            $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
-            $address = $address1.$thana.$district;
-
-        }
-
-        $vatRegNo       = $inventory->getVatRegNo();
-        $companyName    = $option->getName();
-        $mobile         = $option->getMobile();
-        $website        = $option->getDomain();
-
-
-        /** ===================Customer Information=================================== */
-
-        $invoice            = $entity->getInvoice();
-        $subTotal           = $entity->getSubTotal();
-        $total              = $entity->getTotal();
-        $discount           = $entity->getDiscount();
-        $vat                = $entity->getVat();
-        $due                = $entity->getDue();
-        $payment            = $entity->getPayment();
-        $transaction        = $entity->getTransactionMethod()->getName();
-        $salesBy            = $entity->getInvoiceBy()->getProfile()->getName();
-
-        /* Information for the receipt */
-
-        $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
-        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
-        $vat            = new PosItemManager('Add Vat: ','Tk.',number_format($vat));
-        $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
-        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
-        $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
-        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
-
-
-        /* Date is kept the same for testing */
-        $date = date('l jS \of F Y h:i:s A');
-
-        /* Name of shop */
-        /* Name of shop */
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text($companyName."\n");
-        $printer -> selectPrintMode();
-        if(!empty($entity->getBranches())) {
-            $printer->text($branchName . "\n");
-        }else{
-            $printer -> text($address."\n");
-        }
-
-        $printer -> feed();
-
-        /* Title of receipt */
-        if(!empty($vatRegNo)){
-            $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-            $printer -> setJustification(Printer::JUSTIFY_LEFT);
-            $printer -> setEmphasis(false);
-            $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
-            $printer -> setEmphasis(false);
-        }
-
-        /* Title of receipt */
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> setEmphasis(true);
-        $printer -> text("SALES INVOICE\n\n");
-        $printer -> setEmphasis(false);
-
-        $printer -> setJustification(Printer::JUSTIFY_LEFT);
-        $printer -> setEmphasis(true);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
-        $printer -> setEmphasis(false);
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);;
-        $printer -> setEmphasis(false);
-
-        $i=1;
-        foreach ( $entity->getInvoiceItems() as $row){
-
-            $printer -> setUnderline(Printer::UNDERLINE_NONE);
-            $printer -> text( new PosItemManager($i.'. '.$row->getItem()->getName(),"",""));
-            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
-            $printer -> text(new PosItemManager($row->getPurchaseItem()->getBarcode(),$row->getQuantity(),number_format($row->getSubTotal())));
-            $i++;
-        }
-       $printer -> setUnderline(Printer::UNDERLINE_NONE);
-       $printer -> setEmphasis(true);
-       $printer -> text ( "\n" );
-       $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-       $printer -> text($subTotal);
-       $printer -> setEmphasis(false);
-       if($vat){
-           $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
-           $printer->text($vat);
-           $printer->setEmphasis(false);
-       }
-       if($discount){
-           $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-           $printer->text($discount);
-           $printer -> setEmphasis(false);
-           $printer -> text ( "\n" );
-       }
-       $printer -> setEmphasis(true);
-       $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-       $printer -> text($grandTotal);
-       $printer -> setUnderline(Printer::UNDERLINE_NONE);
-
-       $printer->text("\n");
-       $printer->setEmphasis(false);
-       $printer->text($transaction);
-       $printer->selectPrintMode();
-
-
-        /* Barcode Print */
-        $printer->selectPrintMode ( Printer::MODE_DOUBLE_HEIGHT | Printer::MODE_DOUBLE_WIDTH );
-        $printer->text ( "\n" );
-        $printer->selectPrintMode ();
-        $printer->setBarcodeHeight (60);
-        $hri = array (Printer::BARCODE_TEXT_BELOW => "");
-        $printer -> feed();
-        foreach ( $hri as $position => $caption){
-            $printer->selectPrintMode ();
-            $printer -> setJustification(Printer::JUSTIFY_CENTER);
-            $printer->text ($caption);
-            $printer->setBarcodeTextPosition ( $position );
-            $printer->barcode ($invoice , Printer::BARCODE_JAN13 );
-            $printer->feed ();
-        }
-        /* Footer */
-
-        $printer -> feed();
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text("Invoice By: ".$salesBy."\n");
-        $printer -> text("Thank you for shopping\n");
-        if($website){
-            $printer -> text("Please visit www.".$website."\n");
-        }
-        $printer -> text($date . "\n");
-        $response =  base64_encode($connector->getData());
-        $printer -> close();
-        return new Response($response);
-
-    }
-
-    public function posPrint(Invoice $entity){
-
-
-
-        $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
-        $printer = new Printer($connector);
-        $printer -> initialize();
-
-
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $option = $entity->getInventoryConfig()->getGlobalOption();
-
-        /** ===================Company Information=================================== */
-        if(!empty($entity->getBranches())){
-
-            $branch = $entity->getBranches();
-            $branchName     = $branch->getName();
-            $address1       = $branch->getAddress();
-            $thana          = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getName():'';
-            $district       = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getParent()->getName():'';
-            $address = $address1.$thana.$district;
-
-        }else{
-
-            $address1       = $option->getContactPage()->getAddress1();
-            $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
-            $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
-            $address = $address1.$thana.$district;
-
-        }
-
-        $vatRegNo       = $inventory->getVatRegNo();
-        $companyName    = $option->getName();
-        $mobile         = $option->getMobile();
-        $website        = $option->getDomain();
-
-
-        /** ===================Customer Information=================================== */
-
-        $invoice            = $entity->getInvoice();
-        $subTotal           = $entity->getSubTotal();
-        $total              = $entity->getTotal();
-        $discount           = $entity->getDiscount();
-        $vat                = $entity->getVat();
-        $due                = $entity->getDue();
-        $payment            = $entity->getPayment();
-        $transaction        = $entity->getTransactionMethod()->getName();
-        $salesBy            = $entity->getInvoiceBy()->getProfile()->getName();;
-
-
-        /** ===================Invoice Invoice Item Information========================= */
-
-        $i = 1;
-        $items = array();
-        foreach ( $entity->getInvoiceItems() as $row){
-            $items[]  = new PosItemManager($i.'. '.$row->getItem()->getName() ,$row->getQuantity(),$row->getSubTotal());
-        }
-
-        /* Date is kept the same for testing */
-        $date = date('l jS \of F Y h:i:s A');
-
-        /* Name of shop */
-        /* Name of shop */
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text($companyName."\n");
-        $printer -> selectPrintMode();
-        if(!empty($entity->getBranches())) {
-            $printer->text($branchName . "\n");
-        }else{
-            $printer -> text($address."\n");
-        }
-        /* $printer -> text($mobile."\n");*/
-        $printer -> feed();
-
-        /* Title of receipt */
-        $printer -> setJustification(Printer::JUSTIFY_LEFT);
-        $printer -> setEmphasis(false);
-        if(!empty($vatRegNo)){
-            $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
-            $printer -> setEmphasis(false);
-        }
-        /*
-        if(!empty($mobile)){
-            $printer -> text ( "----------------------------------" );
-            $printer -> text("Mobile: ".$mobile. "\n");
-            $printer -> setEmphasis(false);
-        }
-        */
-
-        /* Information for the receipt */
-
-        $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
-        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
-        $vat            = new PosItemManager('Add Vat: ','Tk.',number_format($vat));
-        $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
-        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
-        $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
-        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
-
-        /* Title of receipt */
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> setEmphasis(true);
-        $printer -> text("SALES INVOICE\n\n");
-        $printer -> setEmphasis(false);
-
-        $printer -> setJustification(Printer::JUSTIFY_LEFT);
-        $printer -> setEmphasis(true);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
-        $printer -> setEmphasis(false);
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);;
-        $printer -> setEmphasis(false);
-
-        $i=1;
-        foreach ( $entity->getInvoiceItems() as $row){
-
-            $printer -> setUnderline(Printer::UNDERLINE_NONE);
-            $printer -> text( new PosItemManager($i.'. '.$row->getItem()->getName(),"",""));
-            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
-            $printer -> text(new PosItemManager($row->getPurchaseItem()->getBarcode(),$row->getQuantity(),number_format($row->getSubTotal())));
-            $i++;
-        }
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        $printer -> setEmphasis(true);
-        $printer -> text ( "\n" );
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> text($subTotal);
-        $printer -> setEmphasis(false);
-        if($vat){
-            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
-            $printer->text($vat);
-            $printer->setEmphasis(false);
-        }
-        if($discount){
-            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-            $printer->text($discount);
-            $printer -> setEmphasis(false);
-            $printer -> text ( "\n" );
-        }
-        $printer -> setEmphasis(true);
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> text($grandTotal);
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);
-
-        $printer->text("\n");
-        $printer->setEmphasis(false);
-        $printer->text($transaction);
-        $printer->selectPrintMode();
-
-
-        /* Barcode Print */
-        $printer->selectPrintMode ( Printer::MODE_DOUBLE_HEIGHT | Printer::MODE_DOUBLE_WIDTH );
-        $printer->text ( "\n" );
-        $printer->selectPrintMode ();
-        $printer->setBarcodeHeight (60);
-        $hri = array (Printer::BARCODE_TEXT_BELOW => "");
-        $printer -> feed();
-        foreach ( $hri as $position => $caption){
-            $printer->selectPrintMode ();
-            $printer -> setJustification(Printer::JUSTIFY_CENTER);
-            $printer->text ($caption);
-            $printer->setBarcodeTextPosition ( $position );
-            $printer->barcode ($invoice , Printer::BARCODE_JAN13 );
-            $printer->feed ();
-        }
-        /* Footer */
-
-        $printer -> feed();
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text("Invoice By: ".$salesBy."\n");
-        $printer -> text("Thank you for shopping\n");
-        if($website){
-            $printer -> text("Please visit www.".$website."\n");
-        }
-        $printer -> text($date . "\n");
-        $response =  base64_encode($connector->getData());
-        $printer -> close();
-        return $response;
-
-
-    }
-
 }
 

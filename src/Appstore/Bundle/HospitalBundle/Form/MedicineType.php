@@ -4,6 +4,7 @@ namespace Appstore\Bundle\HospitalBundle\Form;
 
 use Appstore\Bundle\HospitalBundle\Entity\Category;
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
+use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Component\Form\AbstractType;
@@ -15,14 +16,14 @@ class MedicineType extends AbstractType
 {
 
 
-    /** @var  CategoryRepository */
+    /** @var  HmsCategoryRepository */
     private $emCategory;
 
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(CategoryRepository $emCategory , GlobalOption $globalOption)
+    function __construct(HmsCategoryRepository $emCategory , GlobalOption $globalOption)
     {
         $this->emCategory = $emCategory;
         $this->globalOption = $globalOption;
@@ -75,7 +76,7 @@ class MedicineType extends AbstractType
                 'required'    => true,
                 'empty_value' => '---Select pathology---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Category',
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
                 'choices'=> $this->PathologyChoiceList()
             ))

@@ -2,7 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
-use Appstore\Bundle\HospitalBundle\Entity\Category;
+use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
 use Appstore\Bundle\HospitalBundle\Form\CategoryType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -35,7 +35,7 @@ class CategoryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $entities = $em->getRepository('HospitalBundle:Category')->findWithSearch($data);
+        $entities = $em->getRepository('HospitalBundle:HmsCategory')->findWithSearch($data);
         $pagination = $this->paginate($entities);
         $categories = $em->getRepository('HospitalBundle:Category')->findBy(array('level'=>1),array('name' =>'asc' ));
         return $this->render('HospitalBundle:Category:index.html.twig', array(
@@ -52,7 +52,7 @@ class CategoryController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new Category();
+        $entity = new HmsCategory();
         $globalOption = $this->getUser()->getGlobalOption();
         $form = $this->createCreateForm($entity,$globalOption);
         $form->handleRequest($request);
@@ -80,7 +80,7 @@ class CategoryController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Category $entity, $globalOption)
+    private function createCreateForm(HmsCategory $entity, $globalOption)
     {
 
         $em = $this->getDoctrine()->getRepository('HospitalBundle:Category');
@@ -101,7 +101,7 @@ class CategoryController extends Controller
      */
     public function newAction()
     {
-        $entity = new Category();
+        $entity = new HmsCategory();
         $globalOption = $this->getUser()->getGlobalOption();
         $form   = $this->createCreateForm($entity,$globalOption);
 
@@ -128,7 +128,7 @@ class CategoryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('HospitalBundle:Category')->find($id);
+        $entity = $em->getRepository('HospitalBundle:HmsCategory')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');
@@ -149,9 +149,9 @@ class CategoryController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Category $entity,$globalOption)
+    private function createEditForm(HmsCategory $entity,$globalOption)
     {
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:Category');
+        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
         $form = $this->createForm(new CategoryType($em,$globalOption), $entity, array(
             'action' => $this->generateUrl('hms_category_update', array('id' => $entity->getId())),
             'method' => 'PUT',
@@ -172,7 +172,7 @@ class CategoryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('HospitalBundle:Category')->find($id);
+        $entity = $em->getRepository('HospitalBundle:HmsCategory')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');
@@ -201,7 +201,7 @@ class CategoryController extends Controller
      * Deletes a Category entity.
      *
      */
-    public function deleteAction(Category $entity)
+    public function deleteAction(HmsCategory $entity)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
@@ -219,7 +219,7 @@ class CategoryController extends Controller
     public function sortingAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('HospitalBundle:Category')->findBy(array('level'=> 1 ),array('sorting'=>'asc'));
+        $entities = $em->getRepository('HospitalBundle:HmsCategory')->findBy(array('level'=> 1 ),array('sorting'=>'asc'));
         $pagination = $this->paginate($entities);
         return $this->render('HospitalBundle:Category:sorting.html.twig', array(
             'entities' => $pagination,
@@ -238,7 +238,7 @@ class CategoryController extends Controller
     public function featureAction()
     {
         $data = $_REQUEST;
-        $this->getDoctrine()->getRepository('HospitalBundle:Category')->setCategoryFeature($data);
+        $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->setCategoryFeature($data);
         return $this->redirect($this->generateUrl('hms_category_sorting'));
 
     }
@@ -247,7 +247,7 @@ class CategoryController extends Controller
      * Status a Page entity.
      *
      */
-    public function statusAction(Category $entity)
+    public function statusAction(HmsCategory $entity)
     {
 
 

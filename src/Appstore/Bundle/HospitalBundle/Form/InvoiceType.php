@@ -5,7 +5,9 @@ namespace Appstore\Bundle\HospitalBundle\Form;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForHospitalType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
 use Appstore\Bundle\HospitalBundle\Entity\Category;
+use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
+use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -20,14 +22,14 @@ class InvoiceType extends AbstractType
     /** @var  LocationRepository */
     private $location;
 
-    /** @var  CategoryRepository */
+    /** @var  HmsCategoryRepository */
     private $emCategory;
 
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(GlobalOption $globalOption , CategoryRepository $emCategory ,  LocationRepository $location)
+    function __construct(GlobalOption $globalOption , HmsCategoryRepository $emCategory ,  LocationRepository $location)
     {
         $this->location         = $location;
         $this->emCategory       = $emCategory;
@@ -46,19 +48,43 @@ class InvoiceType extends AbstractType
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
+            ->add('deliveryDateTime','text', array('attr'=>array('class'=>'m-wrap span10 tooltips','data-trigger' => 'hover','placeholder'=>'Report delivery date','data-original-title'=>'Report delivery date','autocomplete'=>'off'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Add delivery date time')),
+                )
+            ))
+            ->add('payment','text', array('attr'=>array('class'=>'tooltips','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Add receive amount')),
+                )
+            ))
+            ->add('printFor', 'choice', array(
+                'attr'=>array('class'=>'span12 select-custom'),
+                'empty_value' => '--- Select Print For ---',
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array('Pathological' => 'Pathological','Admission' => 'Admission','Release' => 'Release', 'Surgery' => 'Surgery', 'Emergency' => 'Emergency'),
+            ))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
-            ->add('deliveryDate', 'date', array(
-                'widget' => 'single_text',
-                'placeholder' => array('mm' => 'mm', 'dd' => 'dd','YY' => 'YY'),
-                'format' => 'dd-MM-yyyy',
-                'attr' => array('class'=>'m-wrap span12'),
-                'view_timezone' => 'Asia/Dhaka'))
+            ->add('referredDoctor', 'entity', array(
+                  'required'    => true,
+                  'property' => 'referred',
+                  'empty_value' => '--- Select Referred Doctor/Agent ---',
+                  'attr'=>array('class'=>'m-wrap span12 select2'),
+                  'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                  'query_builder' => function(EntityRepository $er){
+                      return $er->createQueryBuilder('e')
+                          ->where("e.service = 6")
+                          ->orderBy("e.name","ASC");
+                  }
+
+            ))
 
             ->add('transactionMethod', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")

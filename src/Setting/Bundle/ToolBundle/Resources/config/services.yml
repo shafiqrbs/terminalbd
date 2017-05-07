@@ -141,3 +141,15 @@ services:
           tags:
             - { name: kernel.event_listener, event: setting_tool.post.bulk_sms , method: sendSms }
 
+
+  setting_tool.listener.hms_invoice_sms:
+        class: Setting\Bundle\ToolBundle\EventListener\HmsInvoiceSmsListener
+        arguments: [@doctrine ,@setting_tool.sms_gateWay]
+        tags:
+          - { name: kernel.event_listener, event: setting_tool.post.hms_invoice_sms , method: sendSms }
+
+  setting_tool.listener.hms_invoice_delivered_sms:
+          class: Setting\Bundle\ToolBundle\EventListener\HmsInvoiceSmsListener
+          arguments: [@doctrine ,@setting_tool.sms_gateWay]
+          tags:
+            - { name: kernel.event_listener, event: setting_tool.post.hms_invoice_delivered_sms , method: sendSalesConfirmSms }

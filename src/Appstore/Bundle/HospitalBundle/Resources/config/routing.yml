@@ -2,6 +2,10 @@ hospital_invoice:
     resource: "@HospitalBundle/Resources/config/routing/invoice.yml"
     prefix:   /invoice
 
+hospital_invoice_particular:
+    resource: "@HospitalBundle/Resources/config/routing/invoiceparticular.yml"
+    prefix:   /invoice-particular
+
 hospital_particular:
     resource: "@HospitalBundle/Resources/config/routing/particular.yml"
     prefix:   /particular

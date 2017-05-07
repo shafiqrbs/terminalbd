@@ -8,6 +8,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    appstore.hospital.particular.event.listener:
+        class: Appstore\Bundle\HospitalBundle\EventListener\ParticularListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     appstore.hospital.invoice.event.listener:
         class: Appstore\Bundle\HospitalBundle\EventListener\InvoiceListener
         tags:
