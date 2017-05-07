@@ -2,8 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Form;
 
-use Appstore\Bundle\HospitalBundle\Entity\Category;
-use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
+use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
 use Appstore\Bundle\HospitalBundle\Repository\HmsCategoryRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -53,7 +52,7 @@ class MedicineType extends AbstractType
                 'required'    => true,
                 'empty_value' => '---Select department---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Category',
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
                 'choices'=> $this->DepartmentChoiceList()
             ))

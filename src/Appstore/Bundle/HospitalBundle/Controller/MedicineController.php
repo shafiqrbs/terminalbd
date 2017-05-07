@@ -3,10 +3,7 @@
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
-use Appstore\Bundle\HospitalBundle\Form\DoctorType;
 use Appstore\Bundle\HospitalBundle\Form\MedicineType;
-use Appstore\Bundle\HospitalBundle\Form\ParticularType;
-use Appstore\Bundle\HospitalBundle\Form\PathologyType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Validator\Constraints\Null;

@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\HospitalBundle\EventListener;
 
 use Appstore\Bundle\HospitalBundle\Entity\HmsCodeAwareEntity;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class ParticularListener
@@ -17,7 +18,7 @@ class ParticularListener
 
         $entity = $args->getEntity();
 
-        if ($entity instanceof HmsCodeAwareEntity) {
+        if ($entity instanceof Particular) {
             $lastCode = $this->getLastCode($args,$entity);
             $entity->setCode((int)$lastCode + 1);
             $entity->setParticularCode(sprintf("%s%s",$entity->getService()->getCode(), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
