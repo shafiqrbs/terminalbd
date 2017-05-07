@@ -55,10 +55,7 @@ class CustomerForHospitalType extends AbstractType
                 'multiple'      =>false,
                 'choices' => array('Female' => 'Female','Male' => 'Male', 'Others' => 'Others'),
             ))
-            ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 resize','rows'=> 3,'autocomplete'=>'off','placeholder'=>'Enter patient name'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter patient name')),
-                )
+            ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 resize','rows'=> 3,'autocomplete'=>'off','placeholder'=>'Enter patient address')
             ))
             ->add('location', 'entity', array(
                 'required'    => false,
