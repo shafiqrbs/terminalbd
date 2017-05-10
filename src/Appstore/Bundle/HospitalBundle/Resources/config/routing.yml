@@ -1,6 +1,18 @@
+hospital_purchase:
+    resource: "@HospitalBundle/Resources/config/routing/purchase.yml"
+    prefix:   /purchase
+
+hospital_vendor:
+    resource: "@HospitalBundle/Resources/config/routing/vendor.yml"
+    prefix:   /vendor
+
 hospital_invoice:
     resource: "@HospitalBundle/Resources/config/routing/invoice.yml"
     prefix:   /invoice
+
+hospital_invoice_admission:
+    resource: "@HospitalBundle/Resources/config/routing/invoiceadmission.yml"
+    prefix:   /invoice-admission
 
 hospital_invoice_particular:
     resource: "@HospitalBundle/Resources/config/routing/invoiceparticular.yml"

@@ -11,6 +11,8 @@ use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
+use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
@@ -181,7 +183,7 @@ class TransactionRepository extends EntityRepository
         $qb->setParameter('globalOption', $globalOption);
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy('ex.accountHead');
-        return  $qb->getQuery()->getArrayResult();
+        return  $qb->getQuery()->getOneOrNullResult();
 
     }
 
@@ -1002,6 +1004,101 @@ class TransactionRepository extends EntityRepository
         }
 
     }
+
+    /** =========================== HOSPITAL MANAGEMENT SYSTEM    =========================== */
+
+    public function hmsSalesTransaction(InvoiceTransaction $entity,$accountSales)
+    {
+        $this->insertHmsCashDebit($entity,$accountSales);
+        $this->insertHmsCashCredit($entity,$accountSales);
+        if($entity->getVat() > 0){
+            $this->insertHmsSalesVatAccountPayable($entity,$accountSales);
+        }
+    }
+
+    private function insertHmsCashDebit(InvoiceTransaction $entity , AccountSales $accountSales)
+    {
+        $amount = $entity->getPayment();
+        if($amount > 0) {
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountSales->getGlobalOption());
+            if(!empty($accountSales->getBranches())){
+                $transaction->setBranches($accountSales->getBranches());
+            }
+            $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+            $transaction->setProcessHead('Sales');
+            $transaction->setUpdated($entity->getUpdated());
+
+            /* Cash - Cash various */
+            if($accountSales->getTransactionMethod()->getId() == 2 ){
+                /* Current Asset Bank Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $transaction->setProcess('Current Assets');
+            }elseif($accountSales->getTransactionMethod()->getId() == 3 ){
+                /* Current Asset Mobile Account Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $transaction->setProcess('Current Assets');
+            }else{
+                /* Cash - Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+                $transaction->setProcess('Cash');
+            }
+
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+        }
+    }
+
+    public function insertHmsCashCredit(InvoiceTransaction $entity , AccountSales $accountSales)
+    {
+
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($accountSales->getGlobalOption());
+        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
+            $transaction->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        }
+        $transaction->setProcessHead('Sales');
+        $transaction->setProcess('Operating Revenue');
+        $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+        $transaction->setUpdated($entity->getUpdated());
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(8));
+        $transaction->setAmount('-'.$entity->getPayment());
+        $transaction->setCredit($entity->getPayment());
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+        return $transaction;
+
+    }
+
+    private function insertHmsSalesVatAccountPayable(Invoice $entity, AccountSales $accountSales)
+    {
+
+        $amount = $entity->getVat();
+        if($amount > 0){
+
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountSales->getGlobalOption());
+            if(!empty($accountSales->getBranches())){
+                $transaction->setBranches($accountSales->getBranches());
+            }
+            $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+            $transaction->setProcessHead('Sales');
+            $transaction->setProcess('AccountPayable');
+            /* Current Liabilities - Sales Vat & Tax */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(16));
+            $transaction->setAmount('-'.$amount);
+            $transaction->setCredit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+
+        }
+
+    }
+
+
+    /** =========================== HOSPITAL MANAGEMENT SYSTEM  =========================== */
 
     public function approvedDeleteRecord($entity,$process){
 

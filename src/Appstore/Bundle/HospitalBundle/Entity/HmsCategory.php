@@ -35,6 +35,11 @@ class HmsCategory
      **/
     private  $particularDepartments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="department" )
+     **/
+    private  $hmsInvoices;
+
 
     /**
      * @var string
@@ -385,6 +390,14 @@ class HmsCategory
     public function getParticularDepartments()
     {
         return $this->particularDepartments;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHmsInvoices()
+    {
+        return $this->hmsInvoices;
     }
 
 }

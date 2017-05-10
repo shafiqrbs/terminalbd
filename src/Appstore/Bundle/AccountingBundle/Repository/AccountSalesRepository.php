@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Core\UserBundle\Entity\User;
@@ -144,7 +145,7 @@ class AccountSalesRepository extends EntityRepository
 
         $accountSales->setApprovedBy($entity->getApprovedBy());
         if(!empty($entity->getApprovedBy()->getProfile()->getBranches())){
-            $entity->setBranches($entity->getApprovedBy()->getProfile()->getBranches());
+            $accountSales->setBranches($entity->getApprovedBy()->getProfile()->getBranches());
         }
         $accountSales->setProcessHead('Sales');
         $accountSales->setProcess('approved');
@@ -168,13 +169,43 @@ class AccountSalesRepository extends EntityRepository
 
         $salesPrice = $this->_em->getRepository('InventoryBundle:SalesItem')->reportSalesPrice($globalOption,$data);
         $purchasePrice = $this->_em->getRepository('InventoryBundle:SalesItem')->reportPurchasePrice($globalOption,$data);
-        $salesVat = $this->_em->getRepository('InventoryBundle:SalesItem')->reportProductVat($globalOption,$data);
+        $salesVat = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(16), $data);
         $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
         $revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
         $data =  array('salesAmount' => $salesPrice ,'purchasePrice' => $purchasePrice,'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesVat);
         return $data;
 
     }
+
+
+    public function reportHmsIncome($globalOption,$data)
+    {
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+        }
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.totalAmount) AS salesAmount');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $this->handleSearchBetween($qb,$data);
+        $result  = $qb->getQuery()->getOneOrNullResult();
+        $salesAmount = $result['salesAmount'];
+
+        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
+        $revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
+        $salesVat = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
+        $data =  array('salesAmount' => $salesAmount ,'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesVat);
+        return $data;
+
+    }
+
+
 
     public function reportMonthlyIncome($globalOption,$data)
     {
@@ -208,6 +239,38 @@ class AccountSalesRepository extends EntityRepository
         return $data;
 
     }
+
+    public function insertAccountInvoice(InvoiceTransaction $entity)
+    {
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+
+        $accountSales->setAccountBank($entity->getAccountBank());
+        $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
+        $accountSales->setGlobalOption($entity->getInvoice()->getHospitalConfig()->getGlobalOption());
+        $accountSales->setHmsInvoices($entity->getInvoice());
+        $accountSales->setCustomer($entity->getInvoice()->getCustomer());
+        $accountSales->setTransactionMethod($entity->getTransactionMethod());
+        $accountSales->setTotalAmount($entity->getPayment());
+        $accountSales->setAmount($entity->getPayment());
+        $accountSales->setApprovedBy($entity->getCreatedBy());
+        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
+            $accountSales->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        }
+        $accountSales->setProcessHead('Sales');
+        $accountSales->setProcess('approved');
+        $em->persist($accountSales);
+        $em->flush();
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        return $accountSales;
+
+    }
+
+    public function reportHmsTransactionIncome()
+    {
+
+    }
+
 
 
 

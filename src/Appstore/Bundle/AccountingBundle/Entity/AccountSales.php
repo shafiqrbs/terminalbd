@@ -3,6 +3,8 @@
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
+use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -80,6 +82,13 @@ class AccountSales
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="salesApprove" )
      **/
     private  $approvedBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="accountSales" )
+     **/
+    private  $hmsInvoices;
+
+
 
 
     /**
@@ -521,6 +530,22 @@ class AccountSales
     public function setAccountMobileBank($accountMobileBank)
     {
         $this->accountMobileBank = $accountMobileBank;
+    }
+
+    /**
+     * @return Invoice
+     */
+    public function getHmsInvoices()
+    {
+        return $this->hmsInvoices;
+    }
+
+    /**
+     * @param Invoice $hmsInvoices
+     */
+    public function setHmsInvoices($hmsInvoices)
+    {
+        $this->hmsInvoices = $hmsInvoices;
     }
 }
 

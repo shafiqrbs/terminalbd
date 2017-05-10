@@ -1,0 +1,67 @@
+hms_purchase:
+    path:     /
+    defaults: { _controller: "HospitalBundle:Purchase:index" }
+
+hms_purchase_show:
+    path:     /{id}/show
+    defaults: { _controller: "HospitalBundle:Purchase:show" }
+
+hms_purchase_new:
+    path:     /new
+    defaults: { _controller: "HospitalBundle:Purchase:new" }
+
+hms_purchase_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "HospitalBundle:Purchase:edit" }
+
+hms_purchase_update:
+    path:     /{id}/update
+    defaults: { _controller: "HospitalBundle:Purchase:update" }
+    methods:  [POST, PUT]
+
+hms_purchase_status:
+    path:     /{id}/status
+    defaults: { _controller: "HospitalBundle:Purchase:edit" }
+
+
+hms_purchase_approve:
+    path:     /{id}/approve
+    defaults: { _controller: "HospitalBundle:Purchase:approve" }
+
+hms_purchase_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "HospitalBundle:Purchase:delete" }
+
+hms_purchase_particular_search:
+    path:     /{id}/particular-search
+    defaults: { _controller: "HospitalBundle:Purchase:particularSearch" }
+
+
+hms_purchase_particular_add:
+    path:     /{invoice}/particular-add
+    defaults: { _controller: "HospitalBundle:Purchase:addParticular" }
+    methods:  POST
+    options:
+            expose: true
+
+hms_purchase_discount_update:
+    path:     /purchase/dicount-update
+    defaults: { _controller: "HospitalBundle:Purchase:invoiceDiscountUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+hms_purchase_approved:
+    path:     /{id}/invoice-approved
+    defaults: { _controller: "HospitalBundle:Purchase:approve" }
+    methods:  POST
+    options:
+            expose: true
+
+hms_purchase_particular_delete:
+    path:     /{invoice}/{id}/particular-delete
+    defaults: { _controller: "HospitalBundle:Purchase:invoiceParticularDelete" }
+
+hms_purchase_print_invoice:
+    path:     /{id}/print
+    defaults: { _controller: "HospitalBundle:Purchase:invoicePrint" }

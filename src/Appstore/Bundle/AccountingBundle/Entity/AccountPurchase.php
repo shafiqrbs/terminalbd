@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
+use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
 use Doctrine\ORM\Mapping as ORM;
@@ -47,6 +48,11 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="accountPurchase" , cascade={"detach","merge"} )
          **/
         private  $purchase;
+
+        /**
+         * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsPurchase", inversedBy="accountPurchase" , cascade={"detach","merge"} )
+         **/
+        private  $hmsPurchase;
 
         /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountPurchases" )
@@ -607,6 +613,14 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function setAccountMobileBank($accountMobileBank)
         {
             $this->accountMobileBank = $accountMobileBank;
+        }
+
+        /**
+         * @return HmsPurchase
+         */
+        public function getHmsPurchase()
+        {
+            return $this->hmsPurchase;
         }
 
     }

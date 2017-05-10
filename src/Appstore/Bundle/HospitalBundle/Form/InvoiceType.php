@@ -49,21 +49,23 @@ class InvoiceType extends AbstractType
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('deliveryDateTime','text', array('attr'=>array('class'=>'m-wrap span10 tooltips','data-trigger' => 'hover','placeholder'=>'Report delivery date','data-original-title'=>'Report delivery date','autocomplete'=>'off'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Add delivery date time')),
-                )
+
             ))
             ->add('payment','text', array('attr'=>array('class'=>'tooltips','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Add receive amount')),
-                )
+
             ))
             ->add('printFor', 'choice', array(
                 'attr'=>array('class'=>'span12 select-custom'),
                 'empty_value' => '--- Select Print For ---',
                 'expanded'      =>false,
                 'multiple'      =>false,
-                'choices' => array('Pathological' => 'Pathological','Admission' => 'Admission','Release' => 'Release', 'Surgery' => 'Surgery', 'Emergency' => 'Emergency'),
+                'choices' => array(
+                    'pathological' => 'Pathological',
+                    'admission' => 'Admission',
+                    'release' => 'Release',
+                    'surgery' => 'Surgery',
+                    'emergency' => 'Emergency'
+                ),
             ))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('referredDoctor', 'entity', array(

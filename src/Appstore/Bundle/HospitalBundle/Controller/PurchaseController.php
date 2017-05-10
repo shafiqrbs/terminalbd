@@ -1,0 +1,332 @@
+<?php
+
+namespace Appstore\Bundle\HospitalBundle\Controller;
+
+use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
+use Appstore\Bundle\HospitalBundle\Entity\HmsPurchaseItem;
+use Appstore\Bundle\HospitalBundle\Entity\HmsVendor;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
+use Appstore\Bundle\HospitalBundle\Form\PurchaseType;
+use Appstore\Bundle\HospitalBundle\Form\VendorType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Null;
+/**
+ * Vendor controller.
+ *
+ */
+class PurchaseController extends Controller
+{
+
+    /**
+     * Lists all Vendor entities.
+     *
+     */
+    public function indexAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsVendor')->findBy(array('hospitalConfig' => $hospital),array('companyName'=>'ASC'));
+        return $this->render('HospitalBundle:Vendor:index.html.twig', array(
+            'entities' => $entities,
+        ));
+    }
+    /**
+     * Creates a new Vendor entity.
+     *
+     */
+    public function createAction(Request $request)
+    {
+        $entity = new HmsVendor();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+            $entity->setHospitalConfig($hospital);
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been inserted successfully"
+            );
+            return $this->redirect($this->generateUrl('hms_vendor', array('id' => $entity->getId())));
+        }
+
+        return $this->render('HospitalBundle:Vendor:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+
+    public function newAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = new HmsPurchase();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity->setHospitalConfig($hospital);
+        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
+        $entity->setCreatedBy($this->getUser());
+        $em->persist($entity);
+        $em->flush();
+        return $this->redirect($this->generateUrl('hms_purchase_edit', array('id' => $entity->getId())));
+
+    }
+
+
+    public function editAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $em->getRepository('HospitalBundle:HmsPurchase')->findOneBy(array('hospitalConfig' => $hospital , 'id' => $id));
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $editForm = $this->createEditForm($entity);
+        $particulars = $em->getRepository('HospitalBundle:Particular')->getMedicineParticular($hospital);
+        return $this->render('HospitalBundle:Purchase:new.html.twig', array(
+            'entity' => $entity,
+            'particulars' => $particulars,
+            'form' => $editForm->createView(),
+        ));
+    }
+
+    /**
+     * Creates a form to edit a Invoice entity.wq
+     *
+     * @param Invoice $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditForm(HmsPurchase $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new PurchaseType($globalOption), $entity, array(
+            'action' => $this->generateUrl('hms_purchase_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'posForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    public function particularSearchAction(Particular $particular)
+    {
+        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> 1 , 'minimumPrice'=> '', 'instruction'=>'')));
+    }
+
+    public function addParticularAction(Request $request, HmsPurchase $invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $particularId = $request->request->get('particularId');
+        $quantity = $request->request->get('quantity');
+        $price = $request->request->get('price');
+        $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
+        $this->getDoctrine()->getRepository('HospitalBundle:HmsPurchaseItem')->insertPurchaseItems($invoice, $invoiceItems);
+        $invoice = $this->getDoctrine()->getRepository('HospitalBundle:HmsPurchase')->updatePurchaseTotalPrice($invoice);
+        $invoiceParticulars = $this->getDoctrine()->getRepository('HospitalBundle:HmsPurchaseItem')->getPurchaseItems($invoice);
+        $msg = 'Particular added successfully';
+
+        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
+        $grandTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
+        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
+        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticulars' => $invoiceParticulars, 'msg' => $msg )));
+        exit;
+    }
+
+    public function invoiceParticularDeleteAction(HmsPurchase $invoice, HmsPurchaseItem $particular){
+
+        $em = $this->getDoctrine()->getManager();
+        if (!$particular) {
+            throw $this->createNotFoundException('Unable to find SalesItem entity.');
+        }
+
+        $em->remove($particular);
+        $em->flush();
+        $invoice = $this->getDoctrine()->getRepository('HospitalBundle:HmsPurchase')->updatePurchaseTotalPrice($invoice);
+        $invoiceParticulars = $this->getDoctrine()->getRepository('HospitalBundle:HmsPurchaseItem')->getPurchaseItems($invoice);
+
+        $msg = 'Particular deleted successfully';
+        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
+        $grandTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
+        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
+        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticular' => $invoiceParticulars, 'msg' => $msg )));
+        exit;
+
+
+    }
+
+    public function invoiceDiscountUpdateAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $discount = $request->request->get('discount');
+        $purchase = $request->request->get('invoice');
+
+        $purchase = $em->getRepository('HospitalBundle:HmsPurchase')->find($purchase);
+        $total = ($purchase->getSubTotal() - $discount);
+        $vat = 0;
+        if($total > $discount ){
+
+            $purchase->setDiscount($discount);
+            $purchase->setNetTotal($total + $vat);
+            $purchase->setDue($total + $vat);
+            $em->persist($purchase);
+            $em->flush();
+        }
+
+        $invoiceParticulars = $this->getDoctrine()->getRepository('HospitalBundle:HmsPurchaseItem')->getPurchaseItems($purchase);
+        $subTotal = $purchase->getSubTotal() > 0 ? $purchase->getSubTotal() : 0;
+        $grandTotal = $purchase->getNetTotal() > 0 ? $purchase->getNetTotal() : 0;
+        $dueAmount = $purchase->getDue() > 0 ? $purchase->getDue() : 0;
+        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticulars' => $invoiceParticulars, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
+        exit;
+    }
+
+    public function updateAction(Request $request, HmsPurchase $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+
+        $editForm = $this->createEditForm($entity);
+        $editForm->handleRequest($request);
+        if ($editForm->isValid()) {
+            $entity->setProcess('Done');
+            $em->flush();
+            return $this->redirect($this->generateUrl('hms_purchase_show', array('id' => $entity->getId())));
+        }
+        $particulars = $em->getRepository('HospitalBundle:Particular')->getMedicineParticular($entity->getHospitalConfig());
+        return $this->render('HospitalBundle:Purchase:new.html.twig', array(
+            'entity' => $entity,
+            'particulars' => $particulars,
+            'form' => $editForm->createView(),
+        ));
+    }
+
+
+    /**
+     * Finds and displays a Vendor entity.
+     *
+     */
+    public function showAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('HospitalBundle:HmsPurchase')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Vendor entity.');
+        }
+
+        $deleteForm = $this->createDeleteForm($id);
+
+        return $this->render('HospitalBundle:Purchase:show.html.twig', array(
+            'entity'      => $entity,
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
+
+    /**
+     * Deletes a Vendor entity.
+     *
+     */
+    public function deleteAction(Request $request, $id)
+    {
+        $form = $this->createDeleteForm($id);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('HospitalBundle:HmsVendor')->find($id);
+
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find Vendor entity.');
+            }
+
+            $em->remove($entity);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('hms_vendor'));
+    }
+
+    /**
+     * Creates a form to delete a Vendor entity by id.
+     *
+     * @param mixed $id The entity id
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('hms_vendor_delete', array('id' => $id)))
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->getForm()
+            ;
+    }
+
+    /**
+     * Status a Page entity.
+     *
+     */
+    public function statusAction(Request $request, $id)
+    {
+        $form = $this->createDeleteForm($id);
+        $form->handleRequest($request);
+
+        //$data = $request->request->all();
+
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('HospitalBundle:HmsVendor')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find District entity.');
+        }
+
+        $status = $entity->isStatus();
+        if($status == 1){
+            $entity->setStatus(false);
+        } else{
+            $entity->setStatus(true);
+        }
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'success',"Status has been changed successfully"
+        );
+        return $this->redirect($this->generateUrl('hms_vendor'));
+    }
+
+    public function autoSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $item = $this->getDoctrine()->getRepository('HospitalBundle:HmsVendor')->searchAutoComplete($item,$inventory);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchVendorNameAction($vendor)
+    {
+        return new JsonResponse(array(
+            'id'=>$vendor,
+            'text'=>$vendor
+        ));
+    }
+
+}

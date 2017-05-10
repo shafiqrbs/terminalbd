@@ -44,7 +44,7 @@ class InvoiceController extends Controller
         $data = $_REQUEST;
 
         $user = $this->getUser();
-        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $data);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'pathology' , $data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('HospitalBundle:Invoice:index.html.twig', array(
@@ -68,6 +68,7 @@ class InvoiceController extends Controller
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
         $entity->setPaymentStatus('Pending');
+        $entity->setInvoiceMode('pathology');
         $entity->setCreatedBy($this->getUser());
         if(!empty($this->getUser()->getProfile()->getBranches())){
             $entity->setBranches($this->getUser()->getProfile()->getBranches());
@@ -123,8 +124,8 @@ class InvoiceController extends Controller
         $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
         $grandTotal = $invoice->getTotal() > 0 ? $invoice->getTotal() : 0;
         $vat = $invoice->getVat() > 0 ? $invoice->getVat() : 0;
-
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal, 'vat' => $vat,'invoiceParticulars' => $invoiceParticulars, 'msg' => $msg )));
+        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
+        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => $vat,'invoiceParticulars' => $invoiceParticulars, 'msg' => $msg )));
         exit;
     }
 
@@ -144,8 +145,8 @@ class InvoiceController extends Controller
         $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
         $grandTotal = $invoice->getTotal() > 0 ? $invoice->getTotal() : 0;
         $vat = $invoice->getVat() > 0 ? $invoice->getVat() : 0;
-
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal, 'vat' => $vat,'invoiceParticular' => $invoiceParticulars, 'msg' => $msg )));
+        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
+        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => $vat,'invoiceParticular' => $invoiceParticulars, 'msg' => $msg )));
         exit;
 
 
@@ -176,7 +177,8 @@ class InvoiceController extends Controller
         $subTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
         $grandTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
         $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'vat' => $vat,'invoiceParticulars' => $invoiceParticulars, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
+        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
+        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => $vat,'invoiceParticulars' => $invoiceParticulars, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
         exit;
     }
 
@@ -202,14 +204,13 @@ class InvoiceController extends Controller
                  $entity->setMobile($mobile);
 
             }
-            if (!empty($referredId)) {
-                $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $entity->getHospitalConfig() , 'service' => 6, 'id' => $referredId ));
-                $entity->setReferredDoctor($referred);
-
-            }elseif(!empty($data['referredDoctor']['name']) && !empty($data['referredDoctor']['mobile'])) {
+            if(!empty($data['referredDoctor']['name']) && !empty($data['referredDoctor']['mobile'])) {
 
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['referredDoctor']['mobile']);
                 $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findHmsExistingCustomer($entity->getHospitalConfig() , $mobile,$data);
+                $entity->setReferredDoctor($referred);
+            }else{
+                $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $entity->getHospitalConfig() , 'service' => 6, 'id' => $referredId ));
                 $entity->setReferredDoctor($referred);
             }
 
@@ -313,20 +314,6 @@ class InvoiceController extends Controller
     }
 
 
-    public function salesDiscountUpdateAction(Request $request)
-    {
-
-    }
-
-    /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
-     */
-
-    public function salesItemUpdateAction(Request $request)
-    {
-
-    }
-
 
     /**
      * Creates a form to edit a Invoice entity.wq
@@ -393,7 +380,6 @@ class InvoiceController extends Controller
     public function deleteAction(Invoice $sales)
     {
 
-
         $em = $this->getDoctrine()->getManager();
         if (!$sales) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
@@ -408,28 +394,6 @@ class InvoiceController extends Controller
         exit;
     }
 
-    /**
-     * Deletes a InvoiceItem entity.
-     *
-     */
-    public function itemDeleteAction(Invoice $sales, $salesItem)
-    {
-
-    }
-
-    public function itemPurchaseDetailsAction(Request $request)
-    {
-
-    }
-
-    public function branchStockItemDetailsAction(Item $item)
-    {
-
-    }
-    public function salesItemAction(Request $request)
-    {
-
-    }
 
     public function getBarcode($invoice)
     {
@@ -441,7 +405,7 @@ class InvoiceController extends Controller
         $barcode->setFontSize(8);
         $code = $barcode->generate();
         $data = '';
-        $data .= '<img src="data:image/png;base64,' . $code . '" />';
+        $data .= '<img src="data:image/png;base64,'.$code .'" />';
         return $data;
     }
 
@@ -528,7 +492,8 @@ class InvoiceController extends Controller
 
         $barcode = $this->getBarcode($entity->getInvoice());
         $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
-        return $this->render('HospitalBundle:Invoice:print.html.twig', array(
+
+        return $this->render('HospitalBundle:Invoice:'.$entity->getPrintFor().'.html.twig', array(
             'entity'      => $entity,
             'barcode'     => $barcode,
             'inWords'     => $inWords,

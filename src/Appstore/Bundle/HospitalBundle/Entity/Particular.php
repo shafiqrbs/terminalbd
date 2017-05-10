@@ -36,6 +36,11 @@ class Particular
      **/
     private $hmsInvoice;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="cabin")
+     **/
+    private $hmsInvoiceCabin;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="particulars" , cascade={"persist", "remove"})
@@ -57,6 +62,11 @@ class Particular
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="particularDepartments" , cascade={"persist", "remove"})
      **/
     private $department;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="assignDoctor" , cascade={"persist", "remove"})
+     **/
+    private $hmsInvoiceDoctor;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="particular" )
@@ -865,6 +875,30 @@ class Particular
     public function setInstruction($instruction)
     {
         $this->instruction = $instruction;
+    }
+
+    /**
+     * @return Invoice
+     */
+    public function getHmsInvoiceCabin()
+    {
+        return $this->hmsInvoiceCabin;
+    }
+
+    /**
+     * @return Invoice
+     */
+    public function getHmsInvoiceDepartment()
+    {
+        return $this->hmsInvoiceDepartment;
+    }
+
+    /**
+     * @return Invoice
+     */
+    public function getHmsInvoiceDoctor()
+    {
+        return $this->hmsInvoiceDoctor;
     }
 
 

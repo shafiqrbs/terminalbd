@@ -31,6 +31,18 @@ class ReportController extends Controller
         ));
     }
 
+    public function hmsIncomeAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportHmsIncome($globalOption,$data);
+        return $this->render('AccountingBundle:Report:hmsIncome.html.twig', array(
+            'overview' => $overview,
+            'searchForm' => $data,
+        ));
+    }
+
 
     public function pdfIncomeAction()
     {

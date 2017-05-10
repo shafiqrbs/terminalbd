@@ -58,6 +58,26 @@ class ParticularRepository extends EntityRepository
             return  $qb;
     }
 
+    public function getMedicineParticular($hospital){
+
+        $qb = $this->createQueryBuilder('e')
+            ->leftJoin('e.service','s')
+            ->select('e.id')
+            ->addSelect('e.name')
+            ->addSelect('e.particularCode')
+            ->addSelect('e.price')
+            ->addSelect('e.minimumPrice')
+            ->addSelect('e.quantity')
+            ->addSelect('s.name as serviceName')
+            ->addSelect('s.code as serviceCode')
+            ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
+            ->andWhere('s.id IN(:process)')
+            ->setParameter('process',array_values(array(4)))
+            ->orderBy('e.service','ASC')
+            ->getQuery()->getArrayResult();
+            return  $qb;
+    }
+
     public function findHmsExistingCustomer($hospital, $mobile,$data)
     {
         $em = $this->_em;

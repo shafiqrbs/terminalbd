@@ -17,3 +17,8 @@ services:
         class: Appstore\Bundle\HospitalBundle\EventListener\InvoiceListener
         tags:
             - { name: doctrine.event_listener, event: prePersist }
+
+    appstore.hospital.purchase.event.listener:
+        class: Appstore\Bundle\HospitalBundle\EventListener\PurchaseListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }

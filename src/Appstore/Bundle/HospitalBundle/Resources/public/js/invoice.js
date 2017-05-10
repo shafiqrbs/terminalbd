@@ -68,7 +68,7 @@ $(document).on('click', '#addParticular', function() {
             $('.grandTotal').html(obj['grandTotal']);
             $('#paymentTotal').val(obj['grandTotal']);
             $('#dueAmount').val(obj['grandTotal']);
-            $('.dueAmount').html(obj['grandTotal']);
+            $('.dueAmount').html(obj['dueAmount']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
         }
@@ -89,8 +89,7 @@ $(document).on('change', '#discount', function() {
             $('#vat').val(obj['vat']);
             $('.grandTotal').html(obj['grandTotal']);
             $('#paymentTotal').val(obj['grandTotal']);
-            $('#dueAmount').val(obj['grandTotal']);
-            $('.dueAmount').html(obj['grandTotal']);
+            $('.dueAmount').html(obj['dueAmount']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
         },
@@ -113,7 +112,7 @@ $('#invoiceParticulars').on("click", ".delete", function() {
             $('#vat').val(obj['vat']);
             $('.grandTotal').html(obj['grandTotal']);
             $('#paymentTotal').val(obj['grandTotal']);
-            $('.dueAmount').html(obj['grandTotal']);
+            $('.dueAmount').html(obj['dueAmount']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
         }

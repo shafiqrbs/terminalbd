@@ -121,6 +121,48 @@ class Customer
     /**
      * @var string
      *
+     * @ORM\Column(name="permanentAddress", type="text",  nullable =true)
+     */
+    private $permanentAddress;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fatherName", type="string", length=100, nullable =true)
+     */
+    private $fatherName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="motherName", type="string", length=100, nullable =true)
+     */
+    private $motherName;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="religion", type="string", length=100, nullable =true)
+     */
+    private $religion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="profession", type="string", length=100, nullable =true)
+     */
+    private $profession;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nationality", type="string", length=100, nullable =true)
+     */
+    private $nationality;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="customerType", type="string", length=15, nullable =true)
      */
     private $customerType;
@@ -659,6 +701,102 @@ class Customer
     public function setAgeType($ageType)
     {
         $this->ageType = $ageType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPermanentAddress()
+    {
+        return $this->permanentAddress;
+    }
+
+    /**
+     * @param string $permanentAddress
+     */
+    public function setPermanentAddress($permanentAddress)
+    {
+        $this->permanentAddress = $permanentAddress;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFatherName()
+    {
+        return $this->fatherName;
+    }
+
+    /**
+     * @param string $fatherName
+     */
+    public function setFatherName($fatherName)
+    {
+        $this->fatherName = $fatherName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMotherName()
+    {
+        return $this->motherName;
+    }
+
+    /**
+     * @param string $motherName
+     */
+    public function setMotherName($motherName)
+    {
+        $this->motherName = $motherName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReligion()
+    {
+        return $this->religion;
+    }
+
+    /**
+     * @param string $religion
+     */
+    public function setReligion($religion)
+    {
+        $this->religion = $religion;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProfession()
+    {
+        return $this->profession;
+    }
+
+    /**
+     * @param string $profession
+     */
+    public function setProfession($profession)
+    {
+        $this->profession = $profession;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNationality()
+    {
+        return $this->nationality;
+    }
+
+    /**
+     * @param string $nationality
+     */
+    public function setNationality($nationality)
+    {
+        $this->nationality = $nationality;
     }
 
 }

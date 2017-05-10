@@ -37,6 +37,11 @@ class Invoice
     private $hospitalConfig;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction", mappedBy="invoice" , cascade={"remove"})
+     **/
+    private $invoiceTransactions;
+
+     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="invoices" , cascade={"persist", "remove"})
      **/
     private $service;
@@ -56,7 +61,7 @@ class Invoice
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="hmsInvoice" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="hmsInvoices" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $accountSales;
@@ -71,6 +76,21 @@ class Invoice
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="hmsInvoice", cascade={"persist"}  )
      **/
     private  $referredDoctor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="hmsInvoiceDoctor", cascade={"persist"}  )
+     **/
+    private  $assignDoctor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="hmsInvoiceCabin", cascade={"persist"}  )
+     **/
+    private  $cabin;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="hmsInvoices", cascade={"persist"}  )
+     **/
+    private  $department;
 
 
     /**
@@ -177,6 +197,13 @@ class Invoice
      */
     private $paymentStatus = "Pending";
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cabinNo", type="string", length=50, nullable=true)
+     */
+    private $cabinNo;
+
 
     /**
      * @var string
@@ -225,6 +252,13 @@ class Invoice
     /**
      * @var string
      *
+     * @ORM\Column(name="grandTotal", type="decimal", nullable=true)
+     */
+    private $grandTotal;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="netTotal", type="decimal", nullable=true)
      */
     private $netTotal;
@@ -243,6 +277,13 @@ class Invoice
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
     private $comment;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="disease", type="text", nullable=true)
+     */
+    private $disease;
 
     /**
      * @var string
@@ -298,8 +339,14 @@ class Invoice
      *
      * @ORM\Column(name="printFor", type="string",  length=50, nullable=true)
      */
-    private $printFor ='Pathological';
+    private $printFor ='pathological';
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="invoiceMode", type="string", length=50, nullable=true)
+     */
+    private $invoiceMode = 'pathological';
 
     /**
      * Get id
@@ -478,21 +525,6 @@ class Invoice
         $this->updated = $updated;
     }
 
-    /**
-     * @return int
-     */
-    public function getTotalItem()
-    {
-        return $this->totalItem;
-    }
-
-    /**
-     * @param int $totalItem
-     */
-    public function setTotalItem($totalItem)
-    {
-        $this->totalItem = $totalItem;
-    }
 
     /**
      * @return Bank
@@ -980,6 +1012,126 @@ class Invoice
     public function setPrintFor($printFor)
     {
         $this->printFor = $printFor;
+    }
+
+    /**
+     * @return Particular
+     */
+    public function getCabin()
+    {
+        return $this->cabin;
+    }
+
+    /**
+     * @param mixed $cabin
+     */
+    public function setCabin($cabin)
+    {
+        $this->cabin = $cabin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceMode()
+    {
+        return $this->invoiceMode;
+    }
+
+    /**
+     * @param string $invoiceMode
+     */
+    public function setInvoiceMode($invoiceMode)
+    {
+        $this->invoiceMode = $invoiceMode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDisease()
+    {
+        return $this->disease;
+    }
+
+    /**
+     * @param string $disease
+     */
+    public function setDisease($disease)
+    {
+        $this->disease = $disease;
+    }
+
+    /**
+     * @return Particular
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
+
+    /**
+     * @param Particular $department
+     */
+    public function setDepartment($department)
+    {
+        $this->department = $department;
+    }
+
+    /**
+     * @return Particular
+     */
+    public function getAssignDoctor()
+    {
+        return $this->assignDoctor;
+    }
+
+    /**
+     * @param Particular $assignDoctor
+     */
+    public function setAssignDoctor($assignDoctor)
+    {
+        $this->assignDoctor = $assignDoctor;
+    }
+
+    /**
+     * @return InvoiceTransaction
+     */
+    public function getInvoiceTransactions()
+    {
+        return $this->invoiceTransactions;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCabinNo()
+    {
+        return $this->cabinNo;
+    }
+
+    /**
+     * @param string $cabinNo
+     */
+    public function setCabinNo($cabinNo)
+    {
+        $this->cabinNo = $cabinNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGrandTotal()
+    {
+        return $this->grandTotal;
+    }
+
+    /**
+     * @param string $grandTotal
+     */
+    public function setGrandTotal($grandTotal)
+    {
+        $this->grandTotal = $grandTotal;
     }
 
 

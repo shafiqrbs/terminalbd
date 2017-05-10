@@ -145,7 +145,7 @@
                     <table class="table table-bordered table-striped table-condensed table-fixed">
                         <thead>
                         <tr>
-                            <td class="span1">&nbsp;&nbsp;<i class="icon-list"></i></td>
+                            <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
                             <th class="span1">Si/No</th>
                             <th class="span1">Code</th>
                             <th class="span4">Particular</th>
@@ -226,7 +226,7 @@
                                     <select id="particular" name="particular" class="span12 ">
                                         <option value="">--- Select service name ---</option>
                                        {% for particular in particulars %}
-                                           <option value="{{ path('hms_invoice_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }}  {{ particular.serviceCode }}-{{ particular.serviceName }}</option>
+                                           <option value="{{ path('hms_invoice_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} </option>
                                        {% endfor %}
                                      </select>
                                 </div>
@@ -252,7 +252,6 @@
                                     </label>
                                     <div class="controls">
                                         <select id="referredId" name="referredId" class="select2 span12" >
-                                            <option value="">--- Select referred doctor/agent ---</option>
                                             {% for doctor in referredDoctors %}
                                                 <option value="{{ doctor.id }}">{{ doctor.particularCode }} - {{ doctor.name }}</option>
                                             {% endfor %}

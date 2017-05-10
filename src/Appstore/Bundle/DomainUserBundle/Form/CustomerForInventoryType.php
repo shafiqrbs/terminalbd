@@ -7,7 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class CustomerType extends AbstractType
+class CustomerForInventoryType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder

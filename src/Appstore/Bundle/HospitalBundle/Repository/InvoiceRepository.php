@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvoiceRepository extends EntityRepository
 {
-    public function invoiceLists($user , $data)
+    public function invoiceLists($user , $mode , $data)
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
@@ -21,6 +21,7 @@ class InvoiceRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
         }
@@ -52,7 +53,7 @@ class InvoiceRepository extends EntityRepository
 
             $invoice->setSubTotal($total['total']);
             $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
-            $invoice->setDue($invoice->getTotal());
+            $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
 
         }else{
 
