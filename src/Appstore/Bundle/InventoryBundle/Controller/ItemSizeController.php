@@ -111,11 +111,8 @@ class ItemSizeController extends Controller
             throw $this->createNotFoundException('Unable to find ItemSize entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('InventoryBundle:ItemSize:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -134,12 +131,9 @@ class ItemSizeController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('InventoryBundle:ItemSize:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -177,8 +171,6 @@ class ItemSizeController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ItemSize entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
@@ -193,7 +185,6 @@ class ItemSizeController extends Controller
         return $this->render('InventoryBundle:ItemSize:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -224,22 +215,6 @@ class ItemSizeController extends Controller
         return $this->redirect($this->generateUrl('itemsize'));
     }
 
-    /**
-     * Creates a form to delete a ItemSize entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('itemsize_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
-    }
 
     public function autoSearchAction(Request $request)
     {
