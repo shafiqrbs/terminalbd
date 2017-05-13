@@ -154,9 +154,6 @@
                                                     <th class="numeric" >Sub-total</th>
                                                     <th class="numeric" >Sales</th>
                                                     <th class="numeric" >Sub-total</th>
-                                                    {% if entity.process != 'approved' %}
-                                                    <th class="numeric" ></th>
-                                                    {% endif %}
                                                 </tr>
                                                 </thead>
                                                 <tbody id="purchaseVendorItem" >
@@ -170,11 +167,7 @@
                                                         <td class="numeric" >{{ (vendorItem.purchasePrice * vendorItem.quantity) }}</td>
                                                         <td class="numeric" >{{ vendorItem.salesPrice }}</td>
                                                         <td class="numeric" >{{ (vendorItem.salesPrice * vendorItem.quantity) }}</td>
-                                                         {% if entity.process != 'approved' %}
-                                                        <td class="numeric" >
-                                                            <a title="Are you sure went to delete ?" id="{{ entity.id }}" href="" rel="{{ path('purchase_vendor_item_delete', { 'id': vendorItem.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
-                                                        </td>
-                                                        {% endif %}
+
                                                     </tr>
 
                                                     <tr id="show-{{ entity.id  }}-{{ vendorItem.id }}" class="showing-overview remove-vendor-item-{{ vendorItem.id }}">
@@ -189,8 +182,6 @@
                                                                         <th class="numeric" >Unit</th>
                                                                         <th class="numeric" >Sales</th>
                                                                         <th class="numeric" >Sub-total</th>
-                                                                        {% if entity.process != 'approved' %} <th></th> {% endif %}
-
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody id="purchaseItem" >
@@ -207,11 +198,6 @@
                                                                                 {% endif %}
                                                                             </td>
                                                                             <td class="numeric" >{{  purchaseItem.salesPrice * purchaseItem.quantity|number_format() }}</td>
-                                                                             {% if entity.process != 'approved' %}
-                                                                            <td class="pull-center" >
-                                                                                <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini" ><i class="icon-trash"></i></a>
-                                                                            </td>
-                                                                            {% endif %}
                                                                         </tr>
                                                                     {% endfor %}
 

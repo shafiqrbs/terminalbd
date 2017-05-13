@@ -74,10 +74,8 @@ class PurchaseItemController extends Controller
                 }
                 return $this->redirect($this->generateUrl('purchase_show', array('id' => $purchase->getId())));
 
+
             }
-
-            //$item = $em->getRepository('InventoryBundle:PurchaseItem')->getItemList($purchase);
-
             return new Response($checkQuantity);
 
 
@@ -89,7 +87,7 @@ class PurchaseItemController extends Controller
         $em = $this->getDoctrine()->getManager();
         $totalQnt = $em->getRepository('InventoryBundle:PurchaseVendorItem')->getPurchaseVendorQuantitySum($purchase);
         $itemQnt = 0;
-        foreach ($data['quantity'] as $key=>$quantity) {
+        foreach ($data['quantity'] as $key => $quantity) {
             $itemQnt += $quantity;
         }
 
@@ -115,7 +113,7 @@ class PurchaseItemController extends Controller
             'action' => $this->generateUrl('inventory_purchaseitem_create',array('purchase'=>$purchase)),
             'method' => 'POST',
             'attr' => array(
-                'class' => 'horizontal-form addPurchase'
+                'class' => 'horizontal-form'
 
             )
         ));

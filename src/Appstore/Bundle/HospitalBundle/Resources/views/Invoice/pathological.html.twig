@@ -39,7 +39,7 @@
                     {% if entity.customer is not empty %}<li><strong>Patient Name:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
                     {% if entity.customer is not empty %}<li><strong>Mobile No:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
                     {% if entity.customer is not empty %}<li><strong>Gender:</strong>&nbsp;{{ entity.customer.gender }}</li>{% endif %}
-                    {% if entity.customer is not empty %}<li><strong>Age:</strong>&nbsp;{{ entity.customer.age }}-{{ entity.customer.ageType }}</li>{% endif %}
+                    {% if entity.customer is not empty %}<li><strong>Age:</strong>&nbsp;{{ entity.customer.age }}&nbsp;{{ entity.customer.ageType }}</li>{% endif %}
                     {% if entity.customer is not empty and entity.customer.location is not empty %}<li><strong>Location</strong>&nbsp;{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
                 </ul>
             </td>

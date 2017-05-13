@@ -22,9 +22,14 @@ customer_pre_order_process:
     resource: "@CustomerBundle/Resources/config/routing/preorder.yml"
     prefix:   /{shop}/pre-order
 
+agent_client:
+    resource: "@CustomerBundle/Resources/config/routing/agentclient.yml"
+    prefix:   /agent
+
 domain_customer_homepage:
     path:     /dashboard/
     defaults: { _controller: "CustomerBundle:Customer:index" }
+
 
 
 

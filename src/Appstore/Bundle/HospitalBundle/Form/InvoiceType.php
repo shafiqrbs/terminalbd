@@ -51,8 +51,9 @@ class InvoiceType extends AbstractType
             ->add('deliveryDateTime','text', array('attr'=>array('class'=>'m-wrap span10 tooltips','data-trigger' => 'hover','placeholder'=>'Report delivery date','data-original-title'=>'Report delivery date','autocomplete'=>'off'),
 
             ))
-            ->add('payment','text', array('attr'=>array('class'=>'tooltips','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
-
+            ->add('payment','text', array('attr'=>array('class'=>'tooltips payment','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
+            ))
+            ->add('discount','text', array('attr'=>array('class'=>'tooltips discount','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
             ))
             ->add('printFor', 'choice', array(
                 'attr'=>array('class'=>'span12 select-custom'),

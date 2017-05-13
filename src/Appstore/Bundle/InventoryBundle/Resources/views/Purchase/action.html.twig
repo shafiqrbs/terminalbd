@@ -1,18 +1,14 @@
-{% if entity.process == 'created'  %}
+{% if entity.process == 'created' or entity.process == 'wfs'  %}
     <a href="{{ path('purchase_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
     {% if entity.purchaseVendorItems is empty %}
         <a href="{{ path('purchase_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
     {% endif %}
-    <a data-title="Add purchase item" href="{{ path('inventory_purchasevendoritem_new', { 'purchase': entity.id }) }}" class="btn blue mini" ><i class="icon-plus-sign"></i> vendor</a>
-    <a title="Are you sure went to delete ?" href="javascript:" data-id="{{ entity.id }}" data-url="{{ path('purchase_delete', { 'id': entity.id }) }}"  class="btn red mini delete" ><i class="icon-trash"></i></a>
-{% endif %}
-{% if entity.process == 'wfs' %}
-    <a href="{{ path('purchase_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-    {% if entity.purchaseVendorItems is empty %}
-        <a href="{{ path('purchase_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+    {% if entity.purchaseVendorItems is not empty and entity.vendorItemSum != entity.totalQnt  %}
+        <a data-title="Add purchase item" href="{{ path('inventory_purchasevendoritem_new', { 'purchase': entity.id }) }}" class="btn mini blue" ><i class="icon-plus-sign"></i> vendor</a>
     {% endif %}
-    <a data-title="Add purchase item" href="{{ path('inventory_purchasevendoritem_new', { 'purchase': entity.id }) }}" class="btn blue mini" ><i class="icon-plus-sign"></i> vendor</a>
-    <a data-title="Add purchase item" href="{{ path('inventory_purchaseitem_new', { 'purchase': entity.id }) }}" class="btn green mini" ><i class="icon-plus-sign"></i>&nbsp;stock</a>
+    {% if entity.purchaseVendorItems is not empty and entity.vendorItemSum == entity.totalQnt and entity.vendorItemSum != entity.purchaseItemSum  %}
+        <a data-title="Add purchase item" href="{{ path('inventory_purchaseitem_new', { 'purchase': entity.id }) }}" class="btn mini purple " ><i class="icon-plus-sign"></i>&nbsp;stock</a>
+    {% endif %}
     <a title="Are you sure went to delete ?" href="javascript:" data-id="{{ entity.id }}" data-url="{{ path('purchase_delete', { 'id': entity.id }) }}"  class="btn red mini delete approved-{{ entity.id }}" ><i class="icon-trash"></i></a>
 {% endif %}
 

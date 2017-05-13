@@ -953,5 +953,23 @@ class Purchase
         $this->purchaseImport = $purchaseImport;
     }
 
+    public function  getPurchaseItemSum()
+    {
+        $quantity = 0;
+        foreach($this->purchaseItems AS $item) {
+            $quantity += $item->getQuantity(); //$recipecost now $this->recipecost.
+        }
+        return $quantity ;
+    }
+
+    public function  getVendorItemSum()
+    {
+        $quantity = 0;
+        foreach($this->purchaseVendorItems AS $item) {
+            $quantity += $item->getQuantity(); //$recipecost now $this->recipecost.
+        }
+        return $quantity ;
+    }
+
 }
 

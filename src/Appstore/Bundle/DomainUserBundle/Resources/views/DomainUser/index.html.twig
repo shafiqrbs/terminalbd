@@ -77,7 +77,7 @@
                                         <td>{% if entity.isDelete == 1 %}<span class="btn mini red"><i class="icon-trash"></i></span>{% endif %}</td>
                                         <td class="numeric">{{ entity.lastLogin|date('d-m-Y') }}</td>
                                         <td class="numeric">
-                                            {% if entity.role != 'ROLE_DOMAIN' %}
+                                            {% if entity.role != 'ROLE_DOMAIN' or entity.role != 'ROLE_SUPER_ADMIN' %}
                                             <a href="{{ path('domain_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                             <a title="Are you sure went to delete ?" href="{{ path('domain_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif %}

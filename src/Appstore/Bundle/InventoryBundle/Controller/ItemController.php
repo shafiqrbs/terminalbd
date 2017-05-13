@@ -6,6 +6,7 @@ use Appstore\Bundle\InventoryBundle\Entity\ItemGallery;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Appstore\Bundle\InventoryBundle\Form\ItemSearchType;
 use Appstore\Bundle\InventoryBundle\Form\ItemWebType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -175,11 +176,8 @@ class ItemController extends Controller
             throw $this->createNotFoundException('Unable to find Item entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('InventoryBundle:Item:show.html.twig', array(
+       return $this->render('InventoryBundle:Item:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -340,30 +338,25 @@ class ItemController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Item entity.');
-            }
+            throw $this->createNotFoundException('Unable to find item entity.');
+        }
+
+        try {
 
             $em->remove($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('item'));
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }
+        return $this->redirect($this->generateUrl('item'));
     }
 
-    /**
-     * Creates a form to delete a Item entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('item_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-            ;
-    }
 
     /**
      * Status a Page entity.
@@ -371,8 +364,6 @@ class ItemController extends Controller
      */
     public function statusAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('InventoryBundle:Item')->find($id);

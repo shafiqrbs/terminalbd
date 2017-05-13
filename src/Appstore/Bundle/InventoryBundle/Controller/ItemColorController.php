@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -195,24 +196,27 @@ class ItemColorController extends Controller
      * Deletes a ItemColor entity.
      * @Secure(roles="ROLE_ADMIN_OPERATION_USER")
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(ItemColor $entity)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Product entity.');
+        }
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('InventoryBundle:ItemColor')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find ItemColor entity.');
-            }
+        try {
 
             $em->remove($entity);
             $em->flush();
-        }
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
 
-        return $this->redirect($this->generateUrl('ItemColor'));
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }
+        return $this->redirect($this->generateUrl('itemcolor'));
     }
 
     /**

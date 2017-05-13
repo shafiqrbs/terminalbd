@@ -33,6 +33,11 @@ class HospitalConfig
     private $invoices;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", mappedBy="hospitalConfig")
+     **/
+    private $pathologicalReport;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsVendor", mappedBy="hospitalConfig")
      **/
     private $vendors;
@@ -677,6 +682,14 @@ class HospitalConfig
     public function getVendors()
     {
         return $this->vendors;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPathologicalReport()
+    {
+        return $this->pathologicalReport;
     }
 
 

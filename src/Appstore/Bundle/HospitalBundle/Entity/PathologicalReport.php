@@ -23,6 +23,11 @@ class PathologicalReport
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="pathologicalReport" , cascade={"persist", "remove"})
+     **/
+    private $hospitalConfig;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=50, nullable=true)
@@ -129,6 +134,22 @@ class PathologicalReport
     public function getInvoiceParticulars()
     {
         return $this->invoiceParticulars;
+    }
+
+    /**
+     * @return HospitalConfig
+     */
+    public function getHospitalConfig()
+    {
+        return $this->hospitalConfig;
+    }
+
+    /**
+     * @param HospitalConfig $hospitalConfig
+     */
+    public function setHospitalConfig($hospitalConfig)
+    {
+        $this->hospitalConfig = $hospitalConfig;
     }
 
 

@@ -15,7 +15,7 @@ function InventoryPurchasePage(){
         })
     })
 
-    $('#purchaseVendorItem').on("click", ".delete", function() {
+    $(document).on("click", ".vendorItemDelete", function() {
 
         var url = $(this).attr("rel");
         var id = $(this).attr("id");
@@ -24,13 +24,13 @@ function InventoryPurchasePage(){
             type: 'GET',
             success: function (response) {
                 if ('success' == response) {
-                    $('#remove-vendor-item-' + id).hide();
+                   location.reload();
                 }
             },
         })
     })
 
-    $('#purchaseItem').on("click", ".delete", function() {
+    $(document).on("click", ".purchaseItemDelete", function() {
 
         var url = $(this).attr("rel");
         var id = $(this).attr("id");
@@ -39,7 +39,7 @@ function InventoryPurchasePage(){
             type: 'GET',
             success: function (response) {
                 if ('success' == response) {
-                    $('#remove-purchase-item-' + id).hide();
+                   location.reload();
                 }
             },
         })

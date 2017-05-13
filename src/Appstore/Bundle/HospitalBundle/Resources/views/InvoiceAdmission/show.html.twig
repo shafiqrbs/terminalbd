@@ -44,8 +44,8 @@
                                 </a>
                                 <ul class="dropdown-menu pull-right">
                                     <li><a href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus-sign"></i>&nbsp;Add Invoice</a></li>
+                                    <li><a href="{{ path('hms_invoice_admission_edit',{'id': entity.id }) }}"><i class="icon-pencil"></i>&nbsp;Update</a></li>
                                     <li><a href="{{ path('hms_invoice_admission') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-
                                 </ul>
                             </div>
                         </div>
@@ -146,23 +146,115 @@
                                             {% endif %}
                                         {% endfor %}
                                         </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td colspan="8" class="span12" style="border: 1px double #000"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+                                            <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
+                                            <td class="span2"><strong id="vat">{{ entity.vat|number_format }}</strong></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                                            <td class="span2"><strong id="vat">{{ entity.discount|number_format }}</strong></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Net Total TK.</strong> =</span></td>
+                                            <td class="span2"><strong id="vat">{{ entity.total|number_format }}</strong></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
+                                            <td class="span2"><strong id="vat">{{ entity.payment|number_format }}</strong></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
+                                            <td class="span2"><strong id="vat">{{ entity.due|number_format }}</strong></td>
+
+                                        </tr>
+
+                                        </tfoot>
                                     </table>
                                 {% endif %}
                             </div>
                             <div class="clearfix">&nbsp;</div>
+                            {% if entity.paymentStatus != 'Paid' %}
+                            <div class="row-fluid particular-info" >
+                                <form method="post" name="form" id="form">
+                                    <div class="span2 pull-right">
+                                        <button type="button" class="btn blue" id="addPayment" data-url="{{ path('hms_invoice_approved',{'id':entity.id}) }}" ><i class="icon-save"></i>&nbsp;Save</button>
+                                    </div>
+                                    <div class="span3 pull-right">
+                                        <select id="process" name="process" class="span12 m-wrap">
+                                            <option value="">--- Select Process Status ---</option>
+                                            <option {% if entity.process == 'In-progress' %} selected="selected" {% endif %} value="In-progress">In-progress</option>
+                                            <option {% if entity.process == 'Done' %} selected="selected" {% endif %} value="Done">Done</option>
+                                            <option {% if entity.process == 'Canceled' %} selected="selected" {% endif %} value="Canceled">Canceled</option>
+                                        </select>
+                                    </div>
+                                    <div class="span2  pull-right"><input type="text" class="m-wrap span12" id="payment" name="payment" value="" maxlength="8"  placeholder="Payment amount"></div>
+                                    <div class="span2 pull-right"><input type="number" class="m-wrap span12" id="discount" name="discount" placeholder="Discount amount"  ></div>
+                                </form>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            {% endif %}
+                            <div class="row-fluid" id="showPayment">
+                                <div class="span12">
+                                    <table class="table table-bordered table-striped table-condensed table-fixed">
+                                        <thead>
+                                        <tr class="head-blue">
+                                            <th class="numeric">&nbsp;&nbsp;<i class="icon-list"></i></th>
+                                            <th class="numeric">Created</th>
+                                            <th class="numeric">Payment Method</th>
+                                            <th class="numeric">Discount</th>
+                                            <th class="numeric">Vat/Tax</th>
+                                            <th class="numeric">Amount</th>
+                                            <th class="numeric">Created By</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="invoiceTransaction">
+                                        {% for transaction in entity.invoiceTransactions %}
+                                            <tr>
+                                                <td  class="numeric">{{ loop.index }}</td>
+                                                <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
+                                                <td class="numeric">{{ transaction.transactionMethod.name }}</td>
+                                                <td class="numeric">{{ transaction.discount }}</td>
+                                                <td class="numeric">{{ transaction.vat }}</td>
+                                                <td class="numeric">{{ transaction.payment }}</td>
+                                                <td class="numeric">{{ transaction.createdBy }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td class="numeric" colspan="3"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                            <td class="numeric"><strong class="discountAmount">{{ entity.discount|number_format }}</strong></td>
+                                            <td class="numeric"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
+                                            <td class="numeric"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
+                                            <td class="numeric"></td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
-                                <div class="span8" id="message"></div>
-
-                                <div class="pull-right" id="action-{{ entity.id }}">
-                                    <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
+                                 <div class="pull-right" id="action-{{ entity.id }}">
+                                    <a target="_blank"  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
                                     {#<a type="reset" class="btn blue"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>#}
                                     <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                     <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
+                                    <span  id="show"  data-trigger="hover" data-original-title="All payment history" class=" btn purple receivePayment tooltips" ><i class="icon-money"></i>&nbsp;Payment History</span>
 
                                 </div>
-
-
-                            </div>
+                           </div>
                         </div>
                     </div>
                 </div>
@@ -171,4 +263,23 @@
         </div>
     </div>
 {% endblock %}
-
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@HospitalBundle/Resources/public/css/invoice.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@HospitalBundle/Resources/public/js/invoice.js'
+    '@HospitalBundle/Resources/public/js/editable.js'
+    '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+{% endblock %}

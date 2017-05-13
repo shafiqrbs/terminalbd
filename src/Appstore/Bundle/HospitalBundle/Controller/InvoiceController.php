@@ -109,8 +109,39 @@ class InvoiceController extends Controller
         return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $particular->getQuantity(), 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
     }
 
+    public function returnResultData(Invoice $entity,$msg=''){
+
+        $invoiceParticulars = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->getSalesItems($entity);
+        $invoiceTransaction = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->getInvoiceTransactionItems($entity);
+
+        $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
+        $netTotal = $entity->getNetTotal() > 0 ? $entity->getNetTotal() : 0;
+        $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
+        $vat = $entity->getVat() > 0 ? $entity->getVat() : 0;
+        $due = $entity->getDue() > 0 ? $entity->getDue() : 0;
+        $discount = $entity->getDiscount() > 0 ? $entity->getDiscount() : 0;
+
+
+       $data = array(
+           'subTotal' => $subTotal,
+           'netTotal' => $netTotal,
+           'payment' => $payment ,
+           'due' => $due,
+           'vat' => $vat,
+           'discount' => $discount,
+           'invoiceTransaction' => $invoiceTransaction,
+           'invoiceParticulars' => $invoiceParticulars ,
+           'msg' => $msg ,
+           'success' => 'success'
+       );
+
+       return $data;
+
+    }
+
     public function addParticularAction(Request $request, Invoice $invoice)
     {
+
         $em = $this->getDoctrine()->getManager();
         $particularId = $request->request->get('particularId');
         $quantity = $request->request->get('quantity');
@@ -118,36 +149,35 @@ class InvoiceController extends Controller
         $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
         $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->insertInvoiceItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($invoice);
-        $invoiceParticulars = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->getSalesItems($invoice);
-        $msg = 'Particular added successfully';
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($invoice);
 
-        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
-        $grandTotal = $invoice->getTotal() > 0 ? $invoice->getTotal() : 0;
-        $vat = $invoice->getVat() > 0 ? $invoice->getVat() : 0;
-        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => $vat,'invoiceParticulars' => $invoiceParticulars, 'msg' => $msg )));
+        $msg = 'Particular added successfully';
+        $result = $this->returnResultData($invoice,$msg);
+        return new Response(json_encode($result));
         exit;
+
     }
 
-    public function invoiceParticularDeleteAction(Invoice $invoice, InvoiceParticular $particular){
+    public function invoiceParticularDeleteAction( $invoice, InvoiceParticular $particular){
+
 
         $em = $this->getDoctrine()->getManager();
         if (!$particular) {
             throw $this->createNotFoundException('Unable to find SalesItem entity.');
         }
-
         $em->remove($particular);
         $em->flush();
-        $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($invoice);
-        $invoiceParticulars = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->getSalesItems($invoice);
+        $entity =  $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->find($invoice);
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($entity);
+        $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->updateInvoiceTransactionDiscount($entity);
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
 
         $msg = 'Particular deleted successfully';
-        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
-        $grandTotal = $invoice->getTotal() > 0 ? $invoice->getTotal() : 0;
-        $vat = $invoice->getVat() > 0 ? $invoice->getVat() : 0;
-        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => $vat,'invoiceParticular' => $invoiceParticulars, 'msg' => $msg )));
+        $result = $this->returnResultData($entity,$msg);
+        return new Response(json_encode($result));
         exit;
+
+
 
 
     }
@@ -158,27 +188,35 @@ class InvoiceController extends Controller
         $discount = $request->request->get('discount');
         $invoice = $request->request->get('invoice');
 
-        $sales = $em->getRepository('HospitalBundle:Invoice')->find($invoice);
-        $total = ($sales->getSubTotal() - $discount);
-        $vat = 0;
-        if($total > $discount ){
-            if ($sales->getHospitalConfig()->getVatEnable() == 1 && $sales->getHospitalConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('HospitalBundle:Invoice')->getCulculationVat($sales,$total);
-                $sales->setVat($vat);
-            }
-            $sales->setDiscount($discount);
-            $sales->setTotal($total + $vat);
-            $sales->setDue($total + $vat);
-            $em->persist($sales);
+        $entity = $em->getRepository('HospitalBundle:Invoice')->find($invoice);
+        $total = ($entity->getSubTotal() - $discount);
+        if($total > $discount && $discount > 0 ){
+            $em->persist($entity);
             $em->flush();
+
+            $discount = $request->request->get('discount');
+            $transactionData = array('payment' => 0, 'discount' => $discount);
+            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity, $transactionData);
+            $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
         }
 
-        $invoiceParticulars = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->getSalesItems($sales);
-        $subTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-        $grandTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => $vat,'invoiceParticulars' => $invoiceParticulars, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
+        $msg = 'Discount added successfully';
+        $result = $this->returnResultData($entity,$msg);
+        return new Response(json_encode($result));
+        exit;
+
+
+    }
+
+    public function discountDeleteAction(Invoice $entity)
+    {
+
+        $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->updateInvoiceTransactionDiscount($entity);
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
+
+        $msg = 'Discount deleted successfully';
+        $result = $this->returnResultData($entity,$msg);
+        return new Response(json_encode($result));
         exit;
     }
 
@@ -194,14 +232,14 @@ class InvoiceController extends Controller
         $editForm->handleRequest($request);
         $referredId = $request->request->get('referredId');
         $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
-         if ($editForm->isValid()) {
+        if ($editForm->isValid()) {
 
             if (!empty($data['customer']['name'])) {
 
-                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
-                 $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomer($this->getUser()->getGlobalOption(), $mobile,$data);
-                 $entity->setCustomer($customer);
-                 $entity->setMobile($mobile);
+                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
+                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomer($this->getUser()->getGlobalOption(), $mobile,$data);
+                $entity->setCustomer($customer);
+                $entity->setMobile($mobile);
 
             }
             if(!empty($data['referredDoctor']['name']) && !empty($data['referredDoctor']['mobile'])) {
@@ -213,32 +251,29 @@ class InvoiceController extends Controller
                 $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $entity->getHospitalConfig() , 'service' => 6, 'id' => $referredId ));
                 $entity->setReferredDoctor($referred);
             }
-
-
-            if ($entity->getHospitalConfig()->getVatEnable() == 1 && $entity->getHospitalConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('HospitalBundle:Invoice')->getCulculationVat($entity,$entity->getTotal());
-                $entity->setVat($vat);
-            }
-
-            $entity->setDue($entity->getTotal() - $entity->getPayment());
-
-            if ($entity->getTotal() <= $entity->getPayment() ) {
-                $entity->setPaymentStatus('Paid');
-            } else if ($entity->getTotal() > $entity->getPayment() ) {
-                $entity->setPaymentStatus('Due');
-            }
             $entity->setProcess('In-progress');
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
 
+            $payment = $request->request->get('payment');
+            $discount = $request->request->get('discount');
+
+            if($payment > 0 || $discount > 0) {
+
+                $transactionData = array('payment' => $payment, 'discount' => $discount);
+                $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity, $transactionData);
+                $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
+            }
+
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
-               $dispatcher = $this->container->get('event_dispatcher');
-               $dispatcher->dispatch('setting_tool.post.hms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.hms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
             }
             return $this->redirect($this->generateUrl('hms_invoice_show', array('id' => $entity->getId())));
         }
-        $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=>6),array('name'=>'ASC'));
+
+        $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=> 6),array('name'=>'ASC'));
         $particulars = $em->getRepository('HospitalBundle:Particular')->getServiceWithParticular($entity->getHospitalConfig());
         return $this->render('HospitalBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
@@ -350,21 +385,14 @@ class InvoiceController extends Controller
 
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
-            if($payment){
-
-                $entity->setDiscount($entity->getDiscount() + $discount);
-                $entity->setTotal($entity->getTotal() - $entity->getDiscount());
-                $entity->setPayment($entity->getPayment() + $payment);
-                $entity->setDue($entity->getTotal() - $entity->getPayment());
-                if($entity->getPayment() >= $entity->getTotal()) {
-                    $entity->setPaymentStatus('Paid');
-                }
-            }
             $entity->setProcess($process);
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            //$accountInvoice = $em->getRepository('AccountingBundle:AccountInvoice')->insertAccountInvoice($entity);
-            //$em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountInvoice);
+            if($payment > 0 || $discount > 0) {
+                $transactionData = array('payment' => $payment, 'discount' => $discount);
+                $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity,$transactionData);
+                $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
+            }
             return new Response('success');
         } else {
             return new Response('failed');
@@ -377,18 +405,14 @@ class InvoiceController extends Controller
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
 
-    public function deleteAction(Invoice $sales)
+    public function deleteAction(Invoice $entity)
     {
 
         $em = $this->getDoctrine()->getManager();
-        if (!$sales) {
+        if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        if (!empty($sales->getInvoiceImport())) {
-            $salesImport = $sales->getInvoiceImport();
-            $em->remove($salesImport);
-        }
-        $em->remove($sales);
+        $em->remove($entity);
         $em->flush();
         return new Response(json_encode(array('success' => 'success')));
         exit;
@@ -421,71 +445,30 @@ class InvoiceController extends Controller
         return $this->redirect($this->generateUrl('hms_invoice'));
     }
 
-    public function salesInlineUpdateAction(Request $request)
+
+    public function statusSelectAction()
+    {
+        $items  = array();
+        $items[]= array('value' => 'In-progress','text'=>'In-progress');
+        $items[]= array('value' => 'Done','text'=>'Done');
+        $items[]= array('value' => 'Canceled','text'=>'Canceled');
+        return new JsonResponse($items);
+    }
+
+    public function invoiceProcessUpdateAction(Request $request)
     {
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('HospitalBundle:Invoice')->find($data['pk']);
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        $entity->setCourierInvoice($data['value']);
+        $entity->setProcess($data['value']);
         $em->flush();
         exit;
 
     }
 
-
-
-    public function approvedOrder(Invoice $entity)
-    {
-        if (!empty($entity)) {
-
-            $em = $this->getDoctrine()->getManager();
-
-            $entity->setPaymentStatus('Paid');
-            $entity->setProcess('Paid');
-            $entity->setPayment($entity->getTotal());
-            $entity->setDue(0);
-            $entity->setApprovedBy($this->getUser());
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-            $entity->setPaymentInWord($amountInWords);
-            $em->flush();
-            $em->getRepository('HospitalBundle:Item')->getItemInvoiceUpdate($entity);
-            $em->getRepository('HospitalBundle:StockItem')->insertInvoiceStockItem($entity);
-            $em->getRepository('HospitalBundle:GoodsItem')->updateEcommerceItem($entity);
-            $accountInvoice = $em->getRepository('AccountingBundle:AccountInvoice')->insertAccountInvoice($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountInvoice);
-            return new Response('success');
-        } else {
-            return new Response('failed');
-        }
-        exit;
-    }
-
-    public function returnCancelOrder(Invoice $entity)
-    {
-        if (!empty($entity)) {
-            $em = $this->getDoctrine()->getManager();
-            $entity->setPaymentStatus('Cancel');
-            $entity->setApprovedBy($this->getUser());
-            $em->flush();
-            return new Response('success');
-        } else {
-            return new Response('failed');
-        }
-        exit;
-    }
-
-    public function salesSelectAction()
-    {
-        $items  = array();
-        $items[]= array('value' => 'Paid','text'=>'Paid');
-        $items[]= array('value' => 'In-progress','text'=>'In-progress');
-        $items[]= array('value' => 'Courier','text'=>'Courier');
-        $items[]= array('value' => 'Returned','text'=>'Returned');
-        return new JsonResponse($items);
-    }
 
     public function invoicePrintAction(Invoice $entity)
     {

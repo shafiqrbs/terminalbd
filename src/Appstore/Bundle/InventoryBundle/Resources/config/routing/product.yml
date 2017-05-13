@@ -28,7 +28,6 @@ inventory_product_update:
 inventory_product_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:Product:delete" }
-    methods:  [POST, DELETE]
 
 inventory_product_inline_search:
     path:     /inline-product-search

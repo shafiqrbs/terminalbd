@@ -18,21 +18,6 @@ hms_invoice_admission_particular_search:
     path:     /{id}/particular-search
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:particularSearch" }
 
-
-hms_invoice_admission_particular_add:
-    path:     /{invoice}/particular-add
-    defaults: { _controller: "HospitalBundle:InvoiceAdmission:addParticular" }
-    methods:  POST
-    options:
-            expose: true
-
-hms_invoice_admission_discount_update:
-    path:     /invoice/invoice-dicount-update
-    defaults: { _controller: "HospitalBundle:InvoiceAdmission:invoiceDiscountUpdate" }
-    methods:  POST
-    options:
-            expose: true
-
 hms_invoice_admission_approved:
     path:     /{id}/invoice-approved
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:approve" }
@@ -48,15 +33,6 @@ hms_invoice_admission_update:
 hms_invoice_admission_delete:
     path:     /{id}/delete
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:delete" }
-
-hms_invoice_admission_confirm:
-    path:     /{id}/invoice-confirm
-    defaults: { _controller: "HospitalBundle:InvoiceAdmission:confirm" }
-
-
-hms_invoice_admission_particular_delete:
-    path:     /{invoice}/{id}/particular-delete
-    defaults: { _controller: "HospitalBundle:InvoiceAdmission:invoiceParticularDelete" }
 
 hms_invoice_admission_print_invoice:
     path:     /{id}/print

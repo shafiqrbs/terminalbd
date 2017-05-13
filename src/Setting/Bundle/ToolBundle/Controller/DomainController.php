@@ -162,10 +162,18 @@ class DomainController extends Controller
 
 
         set_time_limit(0);
-        $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->accountingReset($option);
-        $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
-        $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option);
-
+        if($option->getAccountingConfig()){
+            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->accountingReset($option);
+        }
+        if($option->getEcommerceConfig()) {
+            $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
+        }
+        if($option->getInventoryConfig()) {
+            $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option);
+        }
+        if($option->getHospitalConfig()) {
+            $this->getDoctrine()->getRepository('InventoryBundle:HospitalConfig')->hospitalReset($option);
+        }
         $dir = WEB_PATH . "/uploads/domain/" . $option->getId() . "/inventory";
         $a = new Filesystem();
         $a->remove($dir);

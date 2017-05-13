@@ -38,6 +38,7 @@ class Invoice
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction", mappedBy="invoice" , cascade={"remove"})
+     * @ORM\OrderBy({"updated" = "DESC"})
      **/
     private $invoiceTransactions;
 

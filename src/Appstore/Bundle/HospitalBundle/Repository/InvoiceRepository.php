@@ -39,26 +39,30 @@ class InvoiceRepository extends EntityRepository
         $em = $this->_em;
         $total = $em->createQueryBuilder()
             ->from('HospitalBundle:InvoiceParticular','si')
-            ->select('sum(si.subTotal) as total')
+            ->select('sum(si.subTotal) as subTotal')
             ->where('si.invoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
-            ->getQuery()->getSingleResult();
+            ->getQuery()->getOneOrNullResult();
 
-        if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
-            $totalAmount = ($total['total'] - $invoice->getDiscount());
-            $vat = $this->getCulculationVat($invoice,$totalAmount);
-            $invoice->setVat($vat);
-        }
-        if($total['total'] > 0){
+        $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
+        if($subTotal > 0){
 
-            $invoice->setSubTotal($total['total']);
+            if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
+                $totalAmount = ($subTotal- $invoice->getDiscount());
+                $vat = $this->getCulculationVat($invoice,$totalAmount);
+                $invoice->setVat($vat);
+            }
+
+            $invoice->setSubTotal($subTotal);
             $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $invoice->setNetTotal($invoice->getTotal());
             $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
 
         }else{
 
             $invoice->setSubTotal(0);
             $invoice->setTotal(0);
+            $invoice->setNetTotal(0);
             $invoice->setDue(0);
             $invoice->setDiscount(0);
             $invoice->setVat(0);
@@ -71,6 +75,32 @@ class InvoiceRepository extends EntityRepository
 
     }
 
+    public function updatePaymentReceive(Invoice $invoice)
+    {
+        $em = $this->_em;
+        $res = $em->createQueryBuilder()
+            ->from('HospitalBundle:InvoiceTransaction','si')
+            ->select('sum(si.payment) as payment , sum(si.discount) as discount, sum(si.vat) as vat')
+            ->where('si.invoice = :invoice')
+            ->setParameter('invoice', $invoice ->getId())
+            ->getQuery()->getOneOrNullResult();
+        $payment = !empty($res['payment']) ? $res['payment'] :0;
+        $discount = !empty($res['discount']) ? $res['discount'] :0;
+        $vat = !empty($res['vat']) ? $res['vat'] :0;
+        $invoice->setPayment($payment);
+        $invoice->setDiscount($discount);
+        $invoice->setVat($vat);
+        $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+        $invoice->setNetTotal($invoice->getTotal());
+        $invoice->setDue($invoice->getTotal() - $invoice->getPayment());
+        if($invoice->getPayment() >= $invoice->getTotal()){
+            $invoice->setPaymentStatus('Paid');
+        }else{
+            $invoice->setPaymentStatus('Due');
+        }
+        $em->flush();
+
+    }
     public function getCulculationVat(Invoice $sales,$totalAmount)
     {
         $vat = ( ($totalAmount * (int)$sales->getHospitalConfig()->getVatPercentage())/100 );

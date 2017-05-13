@@ -42,6 +42,7 @@ class Builder extends ContainerAware
             $menu = $this->manageApplicationSettingMenu($menu);
             $menu = $this->manageDomainMenu($menu);
             $menu = $this->manageSystemAccountMenu($menu);
+            $menu = $this->PayrollMenu($menu);
             $menu = $this->manageCustomerOrderMenu($menu);
 
 
@@ -119,6 +120,11 @@ class Builder extends ContainerAware
 
             if ($securityContext->isGranted('ROLE_DOMAIN') || $securityContext->isGranted('ROLE_DOMAIN_MANAGER')) {
                 $menu = $this->manageDomainInvoiceMenu($menu);
+                $menu = $this->manageCustomerOrderMenu($menu);
+            }
+
+            if ($securityContext->isGranted('ROLE_CUSTOMER')) {
+                $menu = $this->manageCustomerOrderMenu($menu);
             }
 
             /* if ($securityContext->isGranted('ROLE_DOMAIN') || $securityContext->isGranted('ROLE_DOMAIN_MANAGER')) {
@@ -191,16 +197,15 @@ class Builder extends ContainerAware
 
     public function manageCustomerOrderMenu($menu)
     {
+        $securityContext = $this->container->get('security.context');
         $menu
             ->addChild('My Account & Transaction')
             ->setAttribute('dropdown', true);
-        $menu['My Account & Transaction']->addChild('Dashboard', array('route' => 'bankaccount'))->setAttribute('icon', 'icon-money');
-        $menu['My Account & Transaction']->addChild('Client', array('route' => 'tools_domain_agent'))->setAttribute('icon', 'icon-money');
-        $menu['My Account & Transaction']->addChild('Order', array('route' => 'mobilebankaccount'))->setAttribute('icon', 'icon-money');
-        $menu['My Account & Transaction']->addChild('Pre-order', array('route' => 'mobilebankaccount'))->setAttribute('icon', 'icon-money');
+        $menu['My Account & Transaction']->addChild('Client', array('route' => 'agentclient'))->setAttribute('icon', 'icon-user');
+        $menu['My Account & Transaction']->addChild('Receive Invoice', array('route' => 'agentclient_invoice'))->setAttribute('icon', 'icon-money');
         $menu['My Account & Transaction']->addChild('Manage Inbox')->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
-        $menu['My Account & Transaction']['Manage Inbox']->addChild('Email', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-money');
-        $menu['My Account & Transaction']['Manage Inbox']->addChild('SMS', array('route' => 'invoicemodule'))->setAttribute('icon', 'icon-money');
+        $menu['My Account & Transaction']['Manage Inbox']->addChild('Email', array('route' => 'invoicesmsemail'))->setAttribute('icon', 'icon-envelope');
+        $menu['My Account & Transaction']['Manage Inbox']->addChild('SMS', array('route' => 'invoicemodule'))->setAttribute('icon', 'icon-phone');
         return $menu;
     }
 
@@ -891,6 +896,15 @@ class Builder extends ContainerAware
             $menu['HR & Payroll']['Payroll']->addChild('Salary Transaction', array('route' => 'account_paymentsalary'))->setAttribute('icon', 'icon-th-list');
             $menu['HR & Payroll']['Payroll']->addChild('Payment Salary', array('route' => 'account_paymentsalary_employee'))->setAttribute('icon', 'icon-th-list');
             $menu['HR & Payroll']['Payroll']->addChild('Salary Invoice', array('route' => 'account_salarysetting'))->setAttribute('icon', 'icon-th-list');
+        }
+        if ($securityContext->isGranted('ROLE_ADMIN')) {
+
+            $menu['HR & Payroll']->addChild('Manage Agent')->setAttribute('icon', 'icon-group')->setAttribute('dropdown', true);
+            $menu['HR & Payroll']['Manage Agent']->addChild('Agent New', array('route' => 'agent_new'))->setAttribute('icon', 'icon-user');
+            $menu['HR & Payroll']['Manage Agent']->addChild('Agent', array('route' => 'agent'))->setAttribute('icon', 'icon-user');
+            $menu['HR & Payroll']->addChild('Agent Payroll')->setAttribute('icon', 'icon-group')->setAttribute('dropdown', true);
+            $menu['HR & Payroll']['Agent Payroll']->addChild('Agent Transaction', array('route' => 'agentpayment'))->setAttribute('icon', 'icon-th-list');
+            $menu['HR & Payroll']['Agent Payroll']->addChild('Agent Invoice', array('route' => 'agentpayment_invoice'))->setAttribute('icon', 'icon-th-list');
         }
         return $menu;
 

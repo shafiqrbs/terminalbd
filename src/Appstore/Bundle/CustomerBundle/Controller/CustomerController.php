@@ -42,6 +42,7 @@ class CustomerController extends Controller
 
     }
 
+
     public function cartAction(Request $request)
     {
 

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -197,21 +198,25 @@ class VendorController extends Controller
      * Deletes a Vendor entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Vendor $entity)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('InventoryBundle:Vendor')->find($id);
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Vendor entity.');
+        }
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Vendor entity.');
-            }
-
+        try {
             $em->remove($entity);
             $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another table"
+            );
         }
 
         return $this->redirect($this->generateUrl('inventory_vendor'));

@@ -4,13 +4,30 @@
         <div class="sidebar-toggler hidden-phone"></div>
         <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
     </li>
-    {% if globalOption is not empty %}
-    <li class="start ">
-        <a href="{{ path('customer',{'shop':globalOption.slug}) }}">
-            <i class="icon-home"></i>
-            <span class="title">Dashboard</span>
+
+    <li class="start " >
+        <a href="javascript:">
+            <i class="icon-umbrella"></i>
+            <span class="title">Agent Client</span>
+            <span class="arrow "></span>
         </a>
+        <ul class="sub-menu">
+            <li >
+                <a href="{{ path('agentclient') }}">
+                    <i class="icon-cloud"></i>
+                    <span class="title">Client</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('agentclient_new') }}">
+                    <i class="icon-shopping-cart"></i>
+                    <span class="title">New Client</span>
+                </a>
+            </li>
+        </ul>
     </li>
+    {% if globalOption is not empty %}
+
     <li >
         <a href="javascript:">
             <i class="icon-umbrella"></i>

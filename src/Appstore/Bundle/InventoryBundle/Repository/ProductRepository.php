@@ -20,13 +20,12 @@ class ProductRepository extends EntityRepository
         $category = isset($data['category'])? $data['category'] :'';
 
         $qb = $this->createQueryBuilder('masterItem');
-        $qb->join('masterItem.category', 'category');
+        $qb->leftJoin('masterItem.category', 'category');
         $qb->where("masterItem.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
 
         if (!empty($item)) {
-            $qb->andWhere("masterItem.name = :name");
-            $qb->setParameter('name', $item);
+            $qb->andWhere($qb->expr()->like("masterItem.name", "'%$item%'"  ));
         }
 
         if (!empty($category)) {

@@ -118,6 +118,7 @@
                                         <th class="numeric" >Sub total</th>
                                         <th class="numeric" >Sales price</th>
                                         <th class="numeric" >Sub total</th>
+                                        <th class="numeric" ></th>
                                     </tr>
                                     </thead>
                                     <tbody id="purchaseItem" >
@@ -130,6 +131,13 @@
                                             <td class="numeric" >{{ (vendorItem.purchasePrice*vendorItem.quantity) }}</td>
                                             <td class="numeric" >{{ vendorItem.salesPrice }}</td>
                                             <td class="numeric" >{{ (vendorItem.salesPrice*vendorItem.quantity) }}</td>
+
+                                                <td class="numeric pull-right">
+                                                    {% if entity.process != 'approved' %}
+                                                    <a title="Are you sure went to delete ?" id="{{ entity.id }}" href="javascript:" rel="{{ path('purchase_vendor_item_delete', { 'id': vendorItem.id }) }}" class="btn red mini vendorItemDelete" ><i class="icon-trash"></i></a>
+                                                    {% endif %}
+                                                </td>
+
                                         </tr>
 
                                         <tr id="show-{{ vendorItem.id }}" class="showing-overview">
@@ -145,6 +153,7 @@
                                                             <th class="numeric" >Sub total</th>
                                                             <th class="numeric" >Sales price</th>
                                                             <th class="numeric" >Sub total</th>
+                                                            <th class="numeric" ></th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
@@ -159,6 +168,11 @@
                                                                 <td class="numeric" >{{ purchaseItem.purchasePrice * purchaseItem.quantity }}</td>
                                                                 <td class="numeric" >{{ purchaseItem.salesPrice }}</td>
                                                                 <td class="numeric" >{{ purchaseItem.salesPrice * purchaseItem.quantity }}</td>
+                                                                <td class=" numeric pull-left" >
+                                                                    {% if entity.process != 'approved' %}
+                                                                    <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
+                                                                    {% endif %}
+                                                                </td>
                                                             </tr>
                                                         {% endfor %}
                                                         </tbody>
@@ -175,25 +189,27 @@
 
                             </div>
                             <div class="clearfix">&nbsp;</div>
-                            {#<div class="form-actions portlet box">
-                                <textarea class="span12" rows="5" placeholder="any remark add here "></textarea>
-
-                            </div>
-                            #}<div class="form-actions portlet box grey">
-                                <div class="span7" id="message"></div>
-
+                            <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                      {#  <a type="reset" class="btn yellow"><i class="icon-print"></i>&nbsp;Print</a>
-                                      <a type="reset" class="btn purple"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>#}
-                                    {% if (  (app.user.granted("ROLE_DOMAIN")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY_APPROVAL")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY")  and entity.process == 'complete') )  %}
+                                    {% if entity.process != 'approved' %}
+                                        {% if entity.purchaseVendorItems is empty %}
+                                            <a href="{{ path('purchase_edit', { 'id': entity.id }) }}" class="btn green" ><i class="icon-edit"></i></a>
+                                        {% endif %}
+                                        {% if entity.purchaseVendorItems is not empty and entity.vendorItemSum != entity.totalQnt  %}
+                                        <a data-title="Add purchase item" href="{{ path('inventory_purchasevendoritem_new', { 'purchase': entity.id }) }}" class="btn blue" ><i class="icon-plus-sign"></i> vendor</a>
+                                        {% endif %}
+                                        {% if entity.purchaseVendorItems is not empty and entity.vendorItemSum == entity.totalQnt and entity.vendorItemSum != entity.purchaseItemSum  %}
+                                        <a data-title="Add purchase item" href="{{ path('inventory_purchaseitem_new', { 'purchase': entity.id }) }}" class="btn purple " ><i class="icon-plus-sign"></i>&nbsp;stock</a>
+                                        {% endif %}
+                                    {% endif %}
+                                    <a title="Are you sure went to delete ?" href="javascript:" data-id="{{ entity.id }}" data-url="{{ path('purchase_delete', { 'id': entity.id }) }}"  class="btn red delete approved-{{ entity.id }}" ><i class="icon-trash"></i></a>
+                                    {% if (  (app.user.granted("ROLE_DOMAIN")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY_APPR  OVAL")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY")  and entity.process == 'complete') )  %}
                                         <a class="btn purple approve"  data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('purchase_approve', { 'id': entity.id,'reject':'reject'  }) }}" ><i class="icon-refresh"></i>&nbsp;Reject</a>
                                         <a class="btn green approve approved-{{ entity.id }}" data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('purchase_approve', { 'id': entity.id }) }}"><i class="icon-ok"></i>&nbsp;Approve</a>
                                     {% elseif entity.process == 'approved'  %}
                                         <span  class="btn green"><i class="icon-ok"></i>&nbsp;Approved</span>
                                     {% endif %}
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -207,6 +223,7 @@
     {{ parent() }}
     {% javascripts
     '@InventoryBundle/Resources/public/js/approveProcess.js'
+    '@InventoryBundle/Resources/public/js/puschase.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -214,5 +231,6 @@
 {% block documentready %}
     {{ parent() }}
     ApproveProcess();
+    InventoryPurchasePage();
 {% endblock %}
 

@@ -4,6 +4,7 @@ namespace Setting\Bundle\ToolBundle\Repository;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
+use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -212,18 +213,26 @@ class GlobalOptionRepository extends EntityRepository
 
     public function systemConfigUpdate(GlobalOption $globalOption )
     {
-        $entity = $this->_em->getRepository('InventoryBundle:InventoryConfig')->findOneBy(array('globalOption'=>$globalOption));
-        if(empty($entity)){
+        $inventory = $this->_em->getRepository('InventoryBundle:InventoryConfig')->findOneBy(array('globalOption'=>$globalOption));
+        if(empty($inventory)){
             $config = new InventoryConfig();
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }
-        $entity = $this->_em->getRepository('EcommerceBundle:EcommerceConfig')->findOneBy(array('globalOption'=>$globalOption));
-        if(empty($entity)){
+
+        $ecommerce = $this->_em->getRepository('EcommerceBundle:EcommerceConfig')->findOneBy(array('globalOption'=>$globalOption));
+        if(empty($ecommerce)){
             $config = new EcommerceConfig();
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
 
+        }
+
+        $hospital = $this->_em->getRepository('HospitalBundle:HospitalConfig')->findOneBy(array('globalOption'=>$globalOption));
+        if(empty($hospital)){
+            $config = new HospitalConfig();
+            $config->setGlobalOption($globalOption);
+            $this->_em->persist($config);
         }
         $this->_em->flush();
 

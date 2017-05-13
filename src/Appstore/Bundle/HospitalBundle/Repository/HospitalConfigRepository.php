@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * HospitalConfigRepository
@@ -11,4 +12,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class HospitalConfigRepository extends EntityRepository
 {
+    public function HospitalReset(GlobalOption $option)
+    {
+
+        $em = $this->_em;
+        $config = $option->getHospitalConfig()->getId();
+
+        $StockItem = $em->createQuery('DELETE HospitalBundle:Invoice e WHERE e.hospitalConfig = '.$config);
+        $StockItem->execute();
+
+        $Damage = $em->createQuery('DELETE HospitalBundle:Particular e WHERE e.hospitalConfig = '.$config);
+        $Damage->execute();
+
+        $Damage = $em->createQuery('DELETE HospitalBundle:PathologicalReport e WHERE e.hospitalConfig = '.$config);
+        $Damage->execute();
+
+        $HmsPurchase = $em->createQuery('DELETE HospitalBundle:HmsPurchase e WHERE e.hospitalConfig = '.$config);
+        $HmsPurchase->execute();
+
+        $HmsVendor = $em->createQuery('DELETE HospitalBundle:HmsVendor e WHERE e.hospitalConfig = '.$config);
+        $HmsVendor->execute();
+
+        $Particular = $em->createQuery('DELETE HospitalBundle:Particular e WHERE e.hospitalConfig = '.$config);
+        $Particular->execute();
+
+    }
 }

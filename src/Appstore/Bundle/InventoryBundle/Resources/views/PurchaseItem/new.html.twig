@@ -115,7 +115,7 @@
                                 <div class="form-actions portlet box blue">
                                     <div class="portlet-title">
                                         <div class="span3">
-                                            <div class="caption"><i class="icon-reorder"></i>&nbsp;{{ vendorItem.masterItem.name }}&nbsp;-&nbsp;{{ vendorItem.name }}</div>
+                                            <div class="caption"><i class="icon-reorder"></i>&nbsp;{% if vendorItem.masterItem is not empty %}{{ vendorItem.masterItem.name }}&nbsp;-{% endif %}&nbsp;{{ vendorItem.name }}</div>
                                         </div>
                                         <div class="span8">
                                             <div class="span3">Purchase: {{ vendorItem.purchasePrice }}</div>
@@ -153,13 +153,44 @@
                                         <div class="span1"><button type="button" class="btn red  remove hidden" ><i class="icon-trash m-icon-white"></i></button></div>
                                     </div>
                                 </div>
+                                {% if  vendorItem.purchaseItems is not empty %}
+                                {% for purchaseItem in vendorItem.purchaseItems %}
+                                    <div class="clone-block" id="clone-block-{{vendorItem.id }}">
+                                        <div class="row-fluid clone  box blue">
+                                            <div class="span5">
+                                                <select class="span12" name="item[]" style="height: 32px">
+                                                    {% for item in items %}
+                                                        <option value="{{ item.id }}">
+                                                            {{ item.name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="span6">
+                                                <div class="span6"><input type="hidden" id="" name="purchaseVendorItem[]" class="" value="{{ vendorItem.id }}"  >
+                                                    <div class="input-append span8">
+                                                        <input type="number" id="" name="quantity[]" min="1" max="{{ vendorItem.quantity }}" class="m-wrap tooltips span12" required="required" value="{{ purchaseItem.quantity }}" placeholder="no of quantity" , data-original-title ="No of quantity" , data-trigger = "hover" ><span class="add-on">{% if vendorItem.masterItem.productUnit is defined and vendorItem.masterItem.productUnit is not empty %}{{ vendorItem.masterItem.productUnit.name }}{% endif %}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="span4">
+                                                    <input type="text" id="" name="salesPrice[]" class="m-wrap span12 tooltips"  placeholder="sales price" value="{{ purchaseItem.salesPrice }}" , data-original-title ="Please add sales price" , data-trigger = "hover" >
+                                                </div>
+
+                                            </div>
+                                            <div class="span1">
+                                                <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                             {% endfor %}
                             <div class="form-actions portlet box grey">
                                 <div class="span8" id="message"></div>
                                 <div class="pull-right">
                                     <input type="hidden" id="totalQnt" value="{{ total }}">
                                     <button type="reset" class="btn purple action-button"><i class="icon-refresh"></i> Reset</button>
-                                    <button type="submit" class="btn green action-button"><i class="icon-ok"></i>&nbsp;Submit</button>
+                                    <button type="button" id="purchaseBtn" class="btn green action-button addPurchase"><i class="icon-ok"></i>&nbsp;Submit</button>
 
                                 </div>
                             </div>
@@ -174,101 +205,11 @@
     </div>
 
 {% endblock %}
-{% block documentready %}
+{% block javascriptBlock %}
     {{ parent() }}
-
-    {#<script>#}
-
-    $('.addPurchase').submit( function( e ) {
-
-        var totalQnt =  $('#totalQnt').val();
-
-        var quantity = 0;
-            $("input[name='quantity[]']").each(function (index, element) {
-            quantity = quantity + parseFloat(($(element).val() != '') ?  parseFloat($(element).val()) : 0);
-        });
-
-        var itemquantity = [];
-        $("input[name='quantity[]']").each(function() {
-            var value = $(this).val();
-            if (value) {
-            itemquantity.push(value);
-            }
-        });
-
-
-       if(quantity != totalQnt ){
-            $('#message').text('Not equal total quantity & item base total quantity');
-            $('.quantity').focus();
-            return false;
-        }else if(itemquantity.length === 0 ){
-            $('#message').text('Item quantity field values are blank');
-            $('.quantity').focus();
-            return false;
-        }else{
-            $('.addPurchase').submit();
-        }
-    {#
-
-        $.ajax({
-            url:'{{ path('inventory_purchaseitem_create',{'purchase':purchase}) }}',
-            type: 'POST',
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            beforeSend: function() {
-                $('#dataProces').show().addClass('ajax-loading').fadeIn(3000);
-            },
-            success: function(response) {
-                $('#dataProces').fadeOut(3000);
-                if(response == 'success'){
-                    $('.action-button').attr("disabled", true);
-                    $('#message').html('Purchase item added successfully waiting for approve');
-                }else{
-                    $('#message').html('Purchase item quantity must be explicit your item');
-                }
-            },
-
-            })
-            e.preventDefault();
-    #}
-   });
-
-    $('#purchaseItem').on("click", ".delete", function() {
-            var url = $(this).attr("rel");
-            var id = $(this).attr("id");
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function (response) {
-                    if ('success' == response) {
-                        $('#remove-' + id).hide();
-                    }
-                },
-            })
-        })
-
-
-        var count = 0;
-        $('.addmore').click(function(){
-
-            var $el = $(this);
-            $vendor_id = $el.data('ref-id');
-            var $cloneBlock = $('#clone-block-'+ $vendor_id);
-
-            var $clone = $cloneBlock.find('.clone:eq(0)').clone();
-            $clone.find('[id]').each(function(){this.id+='someotherpart'});
-            $clone.find(':text,textarea' ).val("");
-            $clone.attr('id', "added"+(++count));
-            $clone.find('.remove').removeClass('hidden');
-            $cloneBlock.append($clone);
-            $('.numeric').numeric();
-        });
-
-        $('form.addPurchase').on('click', '.remove', function(){
-            $(this).closest('.clone').remove();
-        });
-
-
-
-{% endblock %}
+    {% javascripts
+    '@InventoryBundle/Resources/public/js/puschaseItem.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}

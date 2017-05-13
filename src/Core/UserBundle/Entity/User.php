@@ -60,6 +60,13 @@ class User extends BaseUser
      */
     private $domainOwner = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="agent", type="boolean", nullable=true)
+     */
+    private $agent = false;
+
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -539,6 +546,8 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="createdBy" , cascade={"persist", "remove"})
      */
     protected $hmsInvoiceCreatedBy;
+
+
 
 
 
@@ -1146,6 +1155,22 @@ class User extends BaseUser
     public function getGlobalOptionAgents()
     {
         return $this->globalOptionAgents;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAgent()
+    {
+        return $this->agent;
+    }
+
+    /**
+     * @param mixed $agent
+     */
+    public function setAgent($agent)
+    {
+        $this->agent = $agent;
     }
 
 

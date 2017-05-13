@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Manage Invoice
+                   Manage Admission Invoice
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,10 +14,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('hms_invoice_admission') }}">Invoice</a>
+                        <a href="{{ path('hms_invoice_admission') }}">Admission Invoice</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">View Lists</a></li>
+                    <li><a href="#">Admission View Lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -33,7 +33,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Invoice</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Admission Invoice</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -86,12 +86,11 @@
                                     <th class="numeric" >Invoice No</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Mobile</th>
-                                    <th class="numeric" >Delivery Date</th>
                                     <th class="numeric" >Net Total</th>
                                     <th class="numeric" >Payment</th>
-                                    <th class="numeric" >Balance</th>
+                                    <th class="numeric" >Due</th>
                                     <th class="numeric" >Status</th>
-                                    <th class="numeric" >Report</th>
+                                    <th class="numeric" >Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -103,12 +102,19 @@
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.deliveryDateTime }}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.payment }}</td>
                                         <td class="numeric" >{{ entity.due }}</td>
                                         <td class="numeric" >{{ entity.paymentStatus }}</td>
-                                        <td class="numeric" >{{ entity.process }}</td>
+                                        <td class="numeric" >
+                                            {% if entity.payment > 0 and entity.total > 0 and entity.process == 'In-progress' %}
+                                            {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_MANAGER"))  %}
+                                                <a  data-type="select" class="btn mini purple-stripe btn-action editable" id="process" data-name="process" href="#" data-source="{{ path('hms_invoice_status_select') }}"  data-url="{{ path('hms_invoice_process_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.process is not empty %}{{ entity.process }}{% endif %}" data-original-title="Enter invoice process">{% if entity.process is not empty %}{{ entity.process }}{% endif %}</a>
+                                            {% endif %}
+                                            {% else %}
+                                            {{ entity.process }}
+                                            {% endif %}
+                                        </td>
                                         <td class="numeric" >
                                             {% if entity.paymentStatus == 'Pending' %}
                                             <a href="{{ path('hms_invoice_admission_edit', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
@@ -117,12 +123,10 @@
                                             {% if entity.paymentStatus == 'Paid' or entity.paymentStatus == 'Due' %}
                                             <a href="{{ path('hms_invoice_admission_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                             <a  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}"  class="btn green mini" ><i class="icon-print"></i></a>
-                                            <a href="{{ path('hms_invoice_admission_edit', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
+                                            {% if entity.process == 'In-progress' %}
+                                                <a href="{{ path('hms_invoice_admission_edit', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
                                             {% endif %}
-                                            {% if entity.paymentStatus == 'Due' %}
-                                                <a href="{{ path('hms_invoice_admission_show', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-money"></i></a>
                                             {% endif %}
-
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -139,19 +143,15 @@
         </div>
     </div>
 {% endblock %}
-{#{% block javascriptBlock %}
+{% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
     '@HospitalBundle/Resources/public/js/editable.js'
-    '@HospitalBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-{% endblock  %}#}
-{#
+{% endblock  %}
 {% block documentready %}
     {{ parent() }}
     EditableInit();
-    $('body').addClass('page-sidebar-closed');
 {% endblock %}
-#}

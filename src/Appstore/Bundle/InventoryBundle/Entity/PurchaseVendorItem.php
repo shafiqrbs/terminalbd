@@ -57,7 +57,7 @@ class PurchaseVendorItem
     private  $goodsItems;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="purchaseVendorItem" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="purchaseVendorItem" , cascade={"remove"}  )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $orderItems;
@@ -68,17 +68,17 @@ class PurchaseVendorItem
     private  $masterItem;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemMetaAttribute", mappedBy="purchaseVendorItem" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemMetaAttribute", mappedBy="purchaseVendorItem" , cascade={"remove"}  )
      **/
     private  $itemMetaAttributes;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemKeyValue", mappedBy="purchaseVendorItem" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemKeyValue", mappedBy="purchaseVendorItem" , cascade={"remove"}  )
      **/
     private  $itemKeyValues;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemGallery", mappedBy="purchaseVendorItem")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemGallery", mappedBy="purchaseVendorItem" , cascade={"remove"} )
      */
     protected $itemGalleries;
 

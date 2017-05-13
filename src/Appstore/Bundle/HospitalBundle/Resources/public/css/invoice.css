@@ -1,5 +1,11 @@
 @import url("http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css");
 
+.dropdown-menu .divider{
+    margin: 0;
+}
+#showPayment{
+    display: none;
+}
 .particular-info{
     background: #8FAF99;
     padding: 10px;

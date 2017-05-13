@@ -70,13 +70,14 @@ class InvoiceAdmissionController extends Controller
         $entity->setTransactionMethod($transactionMethod);
         $entity->setPaymentStatus('Pending');
         $entity->setInvoiceMode('admission');
+        $entity->setPrintFor('admission');
         $entity->setCreatedBy($this->getUser());
         if(!empty($this->getUser()->getProfile()->getBranches())){
             $entity->setBranches($this->getUser()->getProfile()->getBranches());
         }
         $em->persist($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('hms_invoice_admission_admission_edit', array('id' => $entity->getId())));
+        return $this->redirect($this->generateUrl('hms_invoice_admission_edit', array('id' => $entity->getId())));
 
     }
 
@@ -105,6 +106,30 @@ class InvoiceAdmissionController extends Controller
         ));
     }
 
+    /**
+     * Creates a form to edit a Invoice entity.wq
+     *
+     * @param Invoice $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditForm(Invoice $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $category = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new InvoiceAdmissionType($globalOption,$category ,$location), $entity, array(
+            'action' => $this->generateUrl('hms_invoice_admission_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'id' => 'posForm',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
     public function particularSearchAction(Particular $particular)
     {
         return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $particular->getQuantity(), 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
@@ -112,76 +137,13 @@ class InvoiceAdmissionController extends Controller
 
     public function addParticularAction(Request $request, Invoice $invoice)
     {
-        $em = $this->getDoctrine()->getManager();
-        $particularId = $request->request->get('particularId');
-        $quantity = $request->request->get('quantity');
-        $price = $request->request->get('price');
-        $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
-        $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->insertInvoiceItems($invoice, $invoiceItems);
-        $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($invoice);
-        $invoiceParticulars = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->getSalesItems($invoice);
-        $msg = 'Particular added successfully';
-
-        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
-        $grandTotal = $invoice->getTotal() > 0 ? $invoice->getTotal() : 0;
-        $vat = $invoice->getVat() > 0 ? $invoice->getVat() : 0;
-        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
-
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => $vat,'invoiceParticulars' => $invoiceParticulars, 'msg' => $msg )));
-        exit;
     }
 
     public function invoiceParticularDeleteAction(Invoice $invoice, InvoiceParticular $particular){
-
-        $em = $this->getDoctrine()->getManager();
-        if (!$particular) {
-            throw $this->createNotFoundException('Unable to find SalesItem entity.');
-        }
-
-        $em->remove($particular);
-        $em->flush();
-        $invoice = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($invoice);
-        $invoiceParticulars = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->getSalesItems($invoice);
-
-        $msg = 'Particular deleted successfully';
-        $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
-        $grandTotal = $invoice->getTotal() > 0 ? $invoice->getTotal() : 0;
-        $vat = $invoice->getVat() > 0 ? $invoice->getVat() : 0;
-        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => $vat,'invoiceParticular' => $invoiceParticulars, 'msg' => $msg )));
-        exit;
-
-
     }
 
     public function invoiceDiscountUpdateAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $discount = $request->request->get('discount');
-        $invoice = $request->request->get('invoice');
-
-        $sales = $em->getRepository('HospitalBundle:Invoice')->find($invoice);
-        $total = ($sales->getSubTotal() - $discount);
-        $vat = 0;
-        if($total > $discount ){
-            if ($sales->getHospitalConfig()->getVatEnable() == 1 && $sales->getHospitalConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('HospitalBundle:Invoice')->getCulculationVat($sales,$total);
-                $sales->setVat($vat);
-            }
-            $sales->setDiscount($discount);
-            $sales->setTotal($total + $vat);
-            $sales->setDue($sales->getTotal() - $sales->getPayment());
-            $em->persist($sales);
-            $em->flush();
-        }
-
-        $invoiceParticulars = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->getSalesItems($sales);
-        $subTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-        $grandTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
-        return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => $vat,'invoiceParticulars' => $invoiceParticulars, 'msg' => 'Discount updated successfully' , 'success' => 'success')));
-        exit;
     }
 
     public function updateAction(Request $request, Invoice $entity)
@@ -216,31 +178,22 @@ class InvoiceAdmissionController extends Controller
                 $entity->setReferredDoctor($referred);
             }
 
-
-            if ($entity->getHospitalConfig()->getVatEnable() == 1 && $entity->getHospitalConfig()->getVatPercentage() > 0) {
-                $vat = $em->getRepository('HospitalBundle:Invoice')->getCulculationVat($entity,$entity->getTotal());
-                $entity->setVat($vat);
-            }
-
-            $entity->setDue($entity->getTotal() - $entity->getPayment());
-
-            if ($entity->getTotal() <= $entity->getPayment() ) {
-                $entity->setPaymentStatus('Paid');
-            } else if ($entity->getTotal() > $entity->getPayment() ) {
-                $entity->setPaymentStatus('Due');
-            }
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setProcess('In-progress');
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
 
-            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity);
-
+            $payment = $data['payment'];
+            if($payment > 0 ) {
+                 $transactionData = array('payment' => $payment, 'discount' => 0 );
+                 $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity, $transactionData);
+                 $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
+            }
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                $dispatcher = $this->container->get('event_dispatcher');
                $dispatcher->dispatch('setting_tool.post.hms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
             }
-            return $this->redirect($this->generateUrl('hms_invoice_admission_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('hms_invoice_admission_edit', array('id' => $entity->getId())));
         }
 
         $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=>6),array('name'=>'ASC'));
@@ -282,29 +235,7 @@ class InvoiceAdmissionController extends Controller
 
 
 
-    /**
-     * Creates a form to edit a Invoice entity.wq
-     *
-     * @param Invoice $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createEditForm(Invoice $entity)
-    {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $category = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new InvoiceAdmissionType($globalOption,$category ,$location), $entity, array(
-            'action' => $this->generateUrl('hms_invoice_admission_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-            'attr' => array(
-                'class' => 'form-horizontal',
-                'id' => 'posForm',
-                'novalidate' => 'novalidate',
-            )
-        ));
-        return $form;
-    }
+
 
     public function approveAction(Request $request , Invoice $entity)
     {

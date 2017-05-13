@@ -53,6 +53,10 @@ hms_invoice_delete:
     path:     /{id}/delete
     defaults: { _controller: "HospitalBundle:Invoice:delete" }
 
+hms_invoice_discount_delete:
+    path:     /{id}/discount-delete
+    defaults: { _controller: "HospitalBundle:Invoice:discountDelete" }
+
 hms_invoice_confirm:
     path:     /{id}/invoice-confirm
     defaults: { _controller: "HospitalBundle:Invoice:confirm" }
@@ -65,4 +69,17 @@ hms_invoice_particular_delete:
 hms_invoice_print_invoice:
     path:     /{id}/print
     defaults: { _controller: "HospitalBundle:Invoice:invoicePrint" }
+
+hms_invoice_process_update:
+    path:     /hms-invoice/upadte-process
+    defaults: { _controller: "HospitalBundle:Invoice:invoiceProcessUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
+hms_invoice_status_select:
+    path:     /invoice-status-select
+    defaults: { _controller: "HospitalBundle:Invoice:statusSelect" }
+    options:
+           expose: true
 

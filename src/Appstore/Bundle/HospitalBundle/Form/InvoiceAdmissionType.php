@@ -54,7 +54,8 @@ class InvoiceAdmissionType extends AbstractType
 
             ))
             ->add('payment','text', array('attr'=>array('class'=>'tooltips payment','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
-
+            ))
+            ->add('discount','text', array('attr'=>array('class'=>'tooltips discount','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
             ))
             ->add('printFor', 'choice', array(
                 'attr'=>array('class'=>'span12 select-custom'),
@@ -65,6 +66,7 @@ class InvoiceAdmissionType extends AbstractType
                     'pathological' => 'Pathological',
                     'admission' => 'Admission',
                     'release' => 'Release',
+                    'certificate' => 'Release Certificate',
                     'surgery' => 'Surgery',
                     'emergency' => 'Emergency'
                 ),

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -144,12 +145,8 @@ class ProductController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Product entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('InventoryBundle:Product:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -233,42 +230,30 @@ class ProductController extends Controller
      * Deletes a Product entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Product $entity)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('InventoryBundle:Product')->find($id);
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Product entity.');
+        }
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Product entity.');
-            }
+        try {
 
             $em->remove($entity);
             $em->flush();
-        }
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
 
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }
         return $this->redirect($this->generateUrl('inventory_product'));
     }
 
-    /**
-     * Creates a form to delete a Product entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('inventory_product_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
-    }
 
     public function autoSearchAction(Request $request)
     {

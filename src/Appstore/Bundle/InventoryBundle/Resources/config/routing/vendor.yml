@@ -43,4 +43,3 @@ inventory_vendor_status:
 inventory_vendor_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:Vendor:delete" }
-    methods:  [POST, DELETE]

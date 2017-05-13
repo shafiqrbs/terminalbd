@@ -34,6 +34,10 @@ $(document).on('change', '.transactionMethod', function() {
 
 });
 
+$(".receivePayment").click(function(){
+    $("#showPayment").slideToggle(1000);
+});
+
 $(document).on('change', '#particular', function() {
 
     var url = $('#particular').val();
@@ -62,38 +66,76 @@ $(document).on('click', '#addParticular', function() {
         data: 'particularId='+particularId+'&quantity='+quantity+'&price='+price,
         success: function (response) {
             obj = JSON.parse(response);
+            $('.subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('#netTotal').val(obj['netTotal']);
+            $('.paymentAmount').html(obj['payment']);
+            $('.vat').val(obj['vat']);
+            $('.due').html(obj['due']);
+            $('.discountAmount').html(obj['discount']);
+            $('.discount').val('').attr( "placeholder", obj['discount'] );
             $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('#subTotal').html(obj['subTotal']);
-            $('#vat').val(obj['vat']);
-            $('.grandTotal').html(obj['grandTotal']);
-            $('#paymentTotal').val(obj['grandTotal']);
-            $('#dueAmount').val(obj['grandTotal']);
-            $('.dueAmount').html(obj['dueAmount']);
+            $('#invoiceTransaction').html(obj['invoiceTransaction']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
         }
     })
 });
-$(document).on('change', '#discount', function() {
 
-    var discount = parseInt($('#discount').val());
+
+$(document).on('change', '.discount', function() {
+
+    var discount = parseInt($('.discount').val());
     var invoice = parseInt($('#invoiceId').val());
+
     $.ajax({
         url: Routing.generate('hms_invoice_discount_update'),
         type: 'POST',
         data:'discount=' + discount+'&invoice='+ invoice,
         success: function(response) {
+
             obj = JSON.parse(response);
+            $('.subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('#netTotal').val(obj['netTotal']);
+            $('.paymentAmount').html(obj['payment']);
+            $('.vat').html(obj['vat']);
+            $('.due').html(obj['due']);
+            $('#due').val(obj['due']);
+            $('.discountAmount').html(obj['discount']);
+            $('.discount').val('').attr("placeholder", obj['discount']);
             $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('#subTotal').html(obj['subTotal']);
-            $('#vat').val(obj['vat']);
-            $('.grandTotal').html(obj['grandTotal']);
-            $('#paymentTotal').val(obj['grandTotal']);
-            $('.dueAmount').html(obj['dueAmount']);
+            $('#invoiceTransaction').html(obj['invoiceTransaction']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
-        },
+        }
 
+    })
+});
+
+$(document).on("click", ".removeDiscount", function() {
+
+    var url = $(this).attr("data-url");
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (response) {
+
+            obj = JSON.parse(response);
+            $('.subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('#netTotal').val(obj['netTotal']);
+            $('.paymentAmount').html(obj['payment']);
+            $('.vat').html(obj['vat']);
+            $('.due').html(obj['due']);
+            $('#due').val(obj['due']);
+            $('.discountAmount').html(obj['discount']);
+            $('.discount').val('').attr( "placeholder", obj['discount'] );
+            $('#invoiceParticulars').html(obj['invoiceParticulars']);
+            $('#invoiceTransaction').html(obj['invoiceTransaction']);
+            $('.msg-hidden').show();
+            $('#msg').html(obj['msg']);
+        }
     })
 });
 
@@ -107,30 +149,51 @@ $('#invoiceParticulars').on("click", ".delete", function() {
         type: 'GET',
         success: function (response) {
             obj = JSON.parse(response);
+            $('.subTotal').html(obj['subTotal']);
+            $('.netTotal').html(obj['netTotal']);
+            $('#netTotal').val(obj['netTotal']);
+            $('.paymentAmount').html(obj['payment']);
+            $('.vat').html(obj['vat']);
+            $('.due').html(obj['due']);
+            $('#due').val(obj['due']);
+            $('.discountAmount').html(obj['discount']);
+            $('.discount').val('').attr( "placeholder", obj['discount'] );
             $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('#subTotal').html(obj['subTotal']);
-            $('#vat').val(obj['vat']);
-            $('.grandTotal').html(obj['grandTotal']);
-            $('#paymentTotal').val(obj['grandTotal']);
-            $('.dueAmount').html(obj['dueAmount']);
+            $('#invoiceTransaction').html(obj['invoiceTransaction']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
         }
     })
 });
 
+$(document).on('click', '#addPayment', function() {
+
+    var payment = $('#payment').val();
+    var discount = $('#discount').val();
+    var process = $('#process').val();
+    var url = $('#addPayment').attr('data-url');
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: 'payment='+ payment +'&discount='+ discount +'&process='+ process,
+        success: function (response) {
+            location.reload();
+        }
+    })
+});
+
 $(document).on('change', '#appstore_bundle_hospitalbundle_invoice_payment', function() {
 
-    var payment     = parseInt($('#appstore_bundle_hospitalbundle_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
-    var total =  parseInt($('#paymentTotal').val());
-    var dueAmount = (total-payment);
+    var payment  = parseInt($('#appstore_bundle_hospitalbundle_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
+    var due =  parseInt($('#due').val());
+    var dueAmount = (due - payment);
     if(dueAmount > 0){
         $('#balance').html('Due Tk.');
-        $('.dueAmount').html(dueAmount);
+        $('.due').html(dueAmount);
     }else{
-        var balance =  payment-total ;
+        var balance =  payment - due ;
         $('#balance').html('Return Tk.');
-        $('.dueAmount').html(balance);
+        $('.due').html(balance);
     }
 });
 

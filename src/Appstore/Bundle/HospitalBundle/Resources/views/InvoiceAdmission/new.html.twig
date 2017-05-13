@@ -312,7 +312,7 @@
                             <td class="span2">{{ item.particular.service.name }}</td>
                             <td class="span1">{{ item.quantity }}</td>
                             <td class="span1">{{ item.subTotal|number_format }}</td>
-                            <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_invoice_admission_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
+                            <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_invoice_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
                         </tr>
                         {% if item.particular.service.id == 1 %}
                             <tr id="show-{{ item.id }}" class="showing-overview">
@@ -334,13 +334,25 @@
                         </tr>
                         <tr>
                             <td colspan="6" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
-                            <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
+                            <td class="span2"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
-                         <tr>
+                        <tr>
                             <td colspan="6" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
-                             <td class="span2"><strong id="vat">{{ entity.vat|number_format }}</strong></td>
+                             <td class="span2"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
                              <td class="span1"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                             <td class="span2"><strong class="discountAmount">{{ entity.discount|number_format }}</strong></td>
+                             <td class="span1">
+                                 <a href="javascript:" id=""  data-trigger="hover" data-original-title="Delete discount amount" data-url="{{ path('hms_invoice_discount_delete',{'id':entity.id}) }}" class=" btn red mini removeDiscount tooltips"><i class="icon-trash"></i></a>
+                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
+                            <td class="span2"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
+                            <td class="span1"></td>
                         </tr>
                         </tfoot>
                     </table>
@@ -356,8 +368,8 @@
                     <a class="btn yellow span12 pull-left" ><span id="msg"></span></a>
                 </div>
                 <div class="pull-right span3">
-                    <button type="button" class="btn green span10 grandTotal" style="text-align: left">{{ entity.total }}</button>
-                   <a href="javascript:" id="show"  data-trigger="hover" data-original-title="All payment history" class=" btn blue receivePayment tooltips"><i class="icon-angle-down"></i></a>
+                    <button type="button" class="btn green span10 netTotal" style="text-align: left">{{ entity.total }}</button>
+                   <a href="javascript:" id="show"  data-trigger="hover" data-original-title="All payment history" class=" btn purple receivePayment tooltips"><i class="icon-money"></i></a>
                 </div>
                 <div class="pull-right span2">
                     <a class="btn blue span12 pull-right" style="text-align: right" ><i class="icon-money"></i>&nbsp;<strong>Grand Total</strong>&nbsp;=&nbsp;</a>
@@ -374,24 +386,31 @@
                             <th class="numeric">Created</th>
                             <th class="numeric">Payment Method</th>
                             <th class="numeric">Discount</th>
+                            <th class="numeric">Vat/Tax</th>
                             <th class="numeric">Amount</th>
+                            <th class="numeric">Created By</th>
                         </tr>
                         </thead>
-                        <tbody id="">
+                        <tbody id="invoiceTransaction">
                         {% for transaction in entity.invoiceTransactions %}
                             <tr>
                                 <td  class="numeric">{{ loop.index }}</td>
-                                <td  class="numeric">{{ transaction.created|date('d-m-Y') }}</td>
+                                <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
                                 <td class="numeric">{{ transaction.transactionMethod.name }}</td>
                                 <td class="numeric">{{ transaction.discount }}</td>
+                                <td class="numeric">{{ transaction.vat }}</td>
                                 <td class="numeric">{{ transaction.payment }}</td>
+                                <td class="numeric">{{ transaction.createdBy }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td class="numeric" colspan="4"><span class="pull-right"><strong>Total Received TK.</strong> =</span></td>
-                            <td class="numeric"><strong>{{ entity.payment|number_format }}</strong></td>
+                            <td class="numeric" colspan="3"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                            <td class="numeric"><strong class="discountAmount">{{ entity.discount|number_format }}</strong></td>
+                            <td class="numeric"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
+                            <td class="numeric"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
+                            <td class="numeric"></td>
                         </tr>
                         </tfoot>
                     </table>
@@ -415,7 +434,7 @@
                                 <div class="span2"><input type="text" class="m-wrap span12" id="price" name="price" value="" maxlength="8"></div>
                                 <div class="span1">
                                     <input type="hidden" id="particularId" name="particularId" value="">
-                                    <button type="button" class="btn blue" id="addParticular" data-url="{{ path('hms_invoice_admission_particular_add',{'invoice':entity.id}) }}" >Add</button>
+                                    <button type="button" class="btn blue" id="addParticular" data-url="{{ path('hms_invoice_particular_add',{'invoice':entity.id}) }}" >Add</button>
                                 </div>
                             </div>
                         </div>
@@ -505,7 +524,9 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
-                                <label class="control-label" for="firstName"><span>Discount TK.</span> <span class="pull-right sales-right"><input class="numeric"  name="discount" id="discount" value="{{ entity.discount }}" autocomplete="off" type="text"></span></label>
+                                <label class="control-label" for="firstName"><span>Discount TK.</span>
+                                    <span class="pull-right sales-right">{{ form_widget(form.discount) }}</span>
+                                </label>
                             </div>
                         </div>
                         <!--/span-->
@@ -514,8 +535,8 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
-                                <label class="control-label" for="firstName"><span>Receive TK.</span> <span class="pull-right sales-right">{{ form_widget(form.payment) }}
-                                        </span>
+                                <label class="control-label" for="firstName"><span>Receive TK.</span>
+                                    <span class="pull-right sales-right">{{ form_widget(form.payment) }}</span>
                                 </label>
                                 <div class="controls">
                                 {{ form_errors(form.payment) }}
@@ -528,7 +549,7 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
-                                <label class="control-label" for="firstName"><span id="balance">Due TK.</span> <span class="pull-right sales-right dueAmount" style="text-align: left; width: 110px"  id="" >{{ entity.due }}</span></label>
+                                <label class="control-label" for="firstName"><span id="balance">Due TK.</span> <span class="pull-right sales-right due" style="text-align: left; width: 110px"  id="" >{{ entity.due }}</span></label>
                             </div>
                         </div>
                         <!--/span-->
@@ -643,8 +664,7 @@
                         </div>
                         <!--/span-->
                     </div>
-                    <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}">
-                    <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
+
                     <div class="clearfix"></div>
                 </div>
             </div>
@@ -654,7 +674,26 @@
 
                 </div>
                 <div class="pull-right span3">
-                    <button type="submit" class="btn blue span12" id="receiveBtn"><i class="icon-ok"></i> Received with Print</button>
+                    <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}">
+                    <input type="hidden" name="netTotal" class="" id="netTotal" value="{{ entity.total }}">
+                    <input type="hidden" name="due" class="" id="due" value="{{ entity.due }}">
+                    <button type="submit" class="btn blue" id="receiveBtn"><i class="icon-save"></i> Received</button>
+                    <div class="btn-group dropup">
+                        <a class="btn purple" href="#" data-toggle="dropdown" data-hover="dropdown"  aria-haspopup="true" aria-expanded="false" data-close-others="true">
+                            <i class="icon-print"></i>&nbsp;Print for&nbsp;<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id , 'for':'pathological'}) }}"><i class="icon-print"></i>&nbsp;Pathological</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id ,'for':'admission'}) }}"><i class="icon-print"></i>&nbsp;Admission</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id ,'for':'certificate'}) }}"><i class="icon-print"></i>&nbsp;Certificate</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id ,'for':'surgery'}) }}"><i class="icon-print"></i>&nbsp;Surgery</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id ,'for':'emergency'}) }}"><i class="icon-print"></i>&nbsp;Emergency</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             {{ form_end(form) }}
@@ -665,13 +704,7 @@
     </div>
     </div>
     </div>
-      <style>
-          #showPayment{
-              display: none;
-          }
-      </style>
 {% endblock %}
-
 {% block cssBlock %}
 {% stylesheets filter='cssrewrite'
     '@HospitalBundle/Resources/public/css/invoice.css'
@@ -696,12 +729,10 @@
     $('body').addClass('page-sidebar-closed');
     $('input[name=particular]').focus();
     $( ".payment" ).val('');
+    $( ".discount" ).val('');
     $( ".payment" ).attr( "placeholder", "{{ entity.payment }}" );
+    $( ".discount" ).attr( "placeholder", "{{ entity.discount }}" );
     $(".receivePayment").click(function(){
-        $("#showPayment").slideToggle(100);
-        }).receivePayment( function() {
-        $(this).children("i").addClass('icon-angle-up');
-        }, function() {
-        $(this).children("i").addClass('icon-angle-down');
+        $("#showPayment").slideToggle(1000);
     });
 {% endblock %}

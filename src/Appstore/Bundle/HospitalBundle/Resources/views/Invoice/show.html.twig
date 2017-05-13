@@ -146,8 +146,76 @@
                                             {% endif %}
                                         {% endfor %}
                                         </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td colspan="8" class="span12" style="border: 1px double #000"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+                                            <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
+                                            <td class="span2"><strong id="vat">{{ entity.vat|number_format }}</strong></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                                            <td class="span2"><strong id="vat">{{ entity.discount|number_format }}</strong></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Net Total TK.</strong> =</span></td>
+                                            <td class="span2"><strong id="vat">{{ entity.total|number_format }}</strong></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
+                                            <td class="span2"><strong id="vat">{{ entity.payment|number_format }}</strong></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="6" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
+                                            <td class="span2"><strong id="vat">{{ entity.due|number_format }}</strong></td>
+
+                                        </tr>
+
+                                        </tfoot>
                                     </table>
                                 {% endif %}
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid" id="showPayment">
+                                <div class="span12">
+                                    <table class="table table-bordered table-striped table-condensed table-fixed">
+                                        <thead>
+                                        <tr class="head-blue">
+                                            <th class="numeric">&nbsp;&nbsp;<i class="icon-list"></i></th>
+                                            <th class="numeric">Created</th>
+                                            <th class="numeric">Payment Method</th>
+                                            <th class="numeric">Discount</th>
+                                            <th class="numeric">Amount</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="">
+                                        {% for transaction in entity.invoiceTransactions %}
+                                            <tr>
+                                                <td  class="numeric">{{ loop.index }}</td>
+                                                <td  class="numeric">{{ transaction.created|date('d-m-Y') }}</td>
+                                                <td class="numeric">{{ transaction.transactionMethod.name }}</td>
+                                                <td class="numeric">{{ transaction.discount }}</td>
+                                                <td class="numeric">{{ transaction.payment }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td class="numeric" colspan="4"><span class="pull-right"><strong>Total Received TK.</strong> =</span></td>
+                                            <td class="numeric"><strong>{{ entity.payment|number_format }}</strong></td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">

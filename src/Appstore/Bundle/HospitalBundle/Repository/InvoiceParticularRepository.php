@@ -69,20 +69,22 @@ class InvoiceParticularRepository extends EntityRepository
         return $data;
     }
 
-    public function invoiceParticularLists($hospital){
+    public function invoiceParticularLists($user){
 
             $invoice = isset($data['invoice'])? $data['invoice'] :'';
             $particular = isset($data['particular'])? $data['particular'] :'';
             $category = isset($data['category'])? $data['category'] :'';
+
+            $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
 
             $qb = $this->createQueryBuilder('e');
             $qb->select('e');
             $qb->join('e.invoice','invoice');
             $qb->join('e.particular','particular');
             $qb->join('particular.category','category');
-            $qb->where('particular.service = :service')->setParameter('service', 1) ;
-/*            $qb->andWhere('invoice.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-            $qb->andWhere('particular.process IN(:process)');
+            $qb->where('particular.service = :service')->setParameter('service',1) ;
+            $qb->andWhere('invoice.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+            /*$qb->andWhere('particular.process IN(:process)');
             $qb->setParameter('process',array_values(array('In-progress','Damage','Impossible')));
             if (!empty($invoice)) {
                 $qb->andWhere($qb->expr()->like("invoice.invoice", "'%$invoice%'"  ));

@@ -47,7 +47,9 @@
             <td class="pull-right">
                 <ul class="unstyled">
                     <li><strong>Created: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:m A') }}</strong></li>
-                    <li><strong>Amount:</strong>&nbsp;{{ entity.payment|number_format() }}</li>
+                    <li><strong>Receivable Tk.</strong>&nbsp;{{ entity.total|number_format() }}</li>
+                    <li><strong>Payment Tk.</strong>&nbsp;{{ entity.payment|number_format() }}</li>
+                    <li><strong>Due Tk.</strong>&nbsp;{{ entity.due|number_format() }}</li>
                     <li><strong>In words:</strong>&nbsp;{{ inWords|raw }} only</li>
                     <li><strong>Payment status:</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
                     <li><hr></li>

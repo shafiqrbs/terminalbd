@@ -89,12 +89,12 @@
             {% endfor %}
             </tbody>
             <tfoot>
-            <tr><td colspan="5"><strong class="pull-right" >Total Amount</strong></td><td><strong>{{ entity.subTotal|number_format() }}</strong></td></tr>
-            {% if entity.discount %}<tr><td colspan="5"><strong class="pull-right" >Discount Amount</strong></td><td><strong>{{ entity.discount|number_format() }}</strong></td></tr>{% endif %}
-            {% if entity.vat %}<tr><td colspan="5"><strong class="pull-right" >Vat/Tax Amount</strong></td><td><strong>{{ entity.vat|number_format() }}</strong></td></tr>{% endif %}
-            <tr><td colspan="5"><strong class="pull-right" >Grand Total</strong></td><td><strong>{{ entity.total|number_format() }}</strong></td></tr>
-            <tr><td colspan="5"><strong class="pull-right" >Paid Amount</strong></td><td><strong>{{ entity.payment|number_format() }}</strong></td></tr>
-            {% if entity.due %}<tr><td colspan="5"><strong class="pull-right" >Due Amount</strong></td><td><strong>{{ entity.due|number_format() }}</strong></td></tr>{% endif %}
+            <tr><td colspan="5"><strong class="pull-right" >Total Amount Tk.</strong></td><td><strong>{{ entity.subTotal|number_format() }}</strong></td></tr>
+            {% if entity.discount %}<tr><td colspan="5"><strong class="pull-right" >Discount Tk.</strong></td><td><strong>{{ entity.discount|number_format() }}</strong></td></tr>{% endif %}
+            {% if entity.vat %}<tr><td colspan="5"><strong class="pull-right" >Vat/Tax Tk.</strong></td><td><strong>{{ entity.vat|number_format() }}</strong></td></tr>{% endif %}
+            <tr><td colspan="5"><strong class="pull-right" >Net Total Tk.</strong></td><td><strong>{{ entity.total|number_format() }}</strong></td></tr>
+            <tr><td colspan="5"><strong class="pull-right" >Received Tk.</strong></td><td><strong>{{ entity.payment|number_format() }}</strong></td></tr>
+            {% if entity.due %}<tr><td colspan="5"><strong class="pull-right" >Due Tk.</strong></td><td><strong>{{ entity.due|number_format() }}</strong></td></tr>{% endif %}
             <tr><td colspan="6" style="text-align:right"><strong>In word TK.</strong>({{ inWords|raw }} only).</td></tr>
             <tr><td colspan="6" style="text-align:right"><strong>Remarks</strong>{{ entity.comment|raw }}.</td></tr>
             <tr><td colspan="4">{{ portal_power }}</td><td><strong class="pull-right" >Created By</strong></td><td><strong>{{ entity.createdBy }}</strong></td></tr>

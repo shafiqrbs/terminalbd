@@ -5,6 +5,7 @@ security:
     role_hierarchy:
 
         ROLE_CUSTOMER:                                  [ROLE_USER]
+        ROLE_AGENT:                                     [ROLE_AGENT]
         ROLE_VENDOR:                                    [ROLE_USER]
         ROLE_MANAGER:                                   [ROLE_USER]
         ROLE_ADMIN_OPERATION_USER:                      [ROLE_USER]
@@ -106,7 +107,7 @@ security:
         # THIS IS PART OF MAIN DOMAIN MANAGE
 
         ROLE_DOMAIN_MANAGER:                            []
-        ROLE_DOMAIN:                                    [ROLE_DOMAIN,ROLE_FOOD,ROLE_SERVICE,ROLE_HOSPITAL,ROLE_GOODS,ROLE_DOMAIN_WEBSITE,ROLE_DOMAIN_INVENTORY,ROLE_DOMAIN_HR_PAYROLL,ROLE_DOMAIN_ACCOUNTING,ROLE_DOMAIN_ECOMMERCE,ROLE_APP_SETTING]
+        ROLE_DOMAIN:                                    [ROLE_DOMAIN,ROLE_AGENT,ROLE_FOOD,ROLE_SERVICE,ROLE_HOSPITAL,ROLE_GOODS,ROLE_DOMAIN_WEBSITE,ROLE_DOMAIN_INVENTORY,ROLE_DOMAIN_HR_PAYROLL,ROLE_DOMAIN_ACCOUNTING,ROLE_DOMAIN_ECOMMERCE,ROLE_APP_SETTING]
 
         ROLE_ADMIN_OPERATION_USER:                      [ROLE_ADMIN_OPERATION_USER,ROLE_DOMAIN]
         ROLE_ADMIN_OPERATION_MANAGER:                   [ROLE_ADMIN_OPERATION_MANAGER,ROLE_ADMIN_OPERATION_USER]
@@ -148,6 +149,7 @@ security:
         - { path: ^/hms,                role: ROLE_HOSPITAL }
         - { path: ^/vendor,             role: ROLE_DOMAIN }
         - { path: ^/web-builder/build,  role: ROLE_DOMAIN }
+        - { path: ^/customer,           role: ROLE_AGENT }
         - { path: ^/customer,           role: ROLE_CUSTOMER }
         - { path: ^/user,               role: ROLE_USER }
         - { path: ^/general,            role: ROLE_USER }

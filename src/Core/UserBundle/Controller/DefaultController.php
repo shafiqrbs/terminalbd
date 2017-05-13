@@ -21,13 +21,13 @@ class DefaultController extends Controller
         $user = $this->getUser();
 
 
+
         if( $user->getGlobalOption()){
             $enable = $user->getGlobalOption()->getStatus();
         }else{
             $enable=0;
         }
-/*        var_dump($user->getRoles());
-        exit;*/
+
 
         if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($this->generateUrl('admin'));
@@ -61,6 +61,8 @@ class DefaultController extends Controller
 
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE') && $enable == 1) {
             return $this->redirect($this->generateUrl('purchase'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_AGENT')) {
+              return $this->redirect($this->generateUrl('agentclient'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_CUSTOMER')) {
               return $this->redirect($this->generateUrl('customer'));
         }elseif (!empty($user) && $enable == 2 ) {

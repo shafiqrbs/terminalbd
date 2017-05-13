@@ -287,6 +287,8 @@ class PurchaseController extends Controller
         }else{
             return new Response('failed');
         }
+
+        exit;
     }
 
     /**
@@ -297,6 +299,7 @@ class PurchaseController extends Controller
     {
 
         if($vendorItem){
+            $this->updatePurchaseStatus($vendorItem->getPurchase(),'created');
             $em = $this->getDoctrine()->getManager();
             $em->remove($vendorItem);
             $em->flush();
@@ -304,6 +307,8 @@ class PurchaseController extends Controller
         }else{
             return new Response('failed');
         }
+
+        exit;
 
     }
 
@@ -315,6 +320,7 @@ class PurchaseController extends Controller
     {
 
         if($purchaseItem){
+            $this->updatePurchaseStatus($purchaseItem->getPurchase(),'wfs');
             $em = $this->getDoctrine()->getManager();
             $em->remove($purchaseItem);
             $em->flush();
@@ -323,6 +329,14 @@ class PurchaseController extends Controller
             return new Response('failed');
         }
 
+    }
+
+    public function  updatePurchaseStatus(Purchase $entity,$process){
+
+        $em = $this->getDoctrine()->getManager();
+        $entity->setProcess($process);
+        $em->persist($entity);
+        $em->flush();
     }
 
     public function autoSearchAction(Request $request)

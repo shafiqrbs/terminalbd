@@ -26,3 +26,11 @@ domain_user_customer:
 domain_user_domain:
     resource: "@DomainUserBundle/Resources/config/routing/domainuser.yml"
     prefix:   /hr/employee
+
+domain_agent_user:
+    resource: "@DomainUserBundle/Resources/config/routing/agent.yml"
+    prefix:   /hr/agent
+
+domain_agent_payment:
+    resource: "@DomainUserBundle/Resources/config/routing/agentpayment.yml"
+    prefix:   /hr/agent-payment
