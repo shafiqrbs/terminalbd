@@ -2,6 +2,7 @@
 
 namespace Setting\Bundle\ToolBundle\Repository;
 
+use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
@@ -213,6 +214,13 @@ class GlobalOptionRepository extends EntityRepository
 
     public function systemConfigUpdate(GlobalOption $globalOption )
     {
+        $inventory = $this->_em->getRepository('AccountingBundle:AccountingConfig')->findOneBy(array('globalOption'=>$globalOption));
+        if(empty($inventory)){
+            $config = new AccountingConfig();
+            $config->setGlobalOption($globalOption);
+            $this->_em->persist($config);
+        }
+
         $inventory = $this->_em->getRepository('InventoryBundle:InventoryConfig')->findOneBy(array('globalOption'=>$globalOption));
         if(empty($inventory)){
             $config = new InventoryConfig();
