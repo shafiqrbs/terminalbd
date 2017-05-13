@@ -163,7 +163,7 @@ class DomainController extends Controller
 
         set_time_limit(0);
         if($option->getAccountingConfig()){
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->accountingReset($option);
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountingConfig')->accountingReset($option);
         }
         if($option->getEcommerceConfig()) {
             $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
@@ -172,7 +172,7 @@ class DomainController extends Controller
             $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option);
         }
         if($option->getHospitalConfig()) {
-            $this->getDoctrine()->getRepository('InventoryBundle:HospitalConfig')->hospitalReset($option);
+            $this->getDoctrine()->getRepository('HospitalBundle:HospitalConfig')->hospitalReset($option);
         }
         $dir = WEB_PATH . "/uploads/domain/" . $option->getId() . "/inventory";
         $a = new Filesystem();
