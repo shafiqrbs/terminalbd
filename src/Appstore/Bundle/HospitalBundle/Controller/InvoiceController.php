@@ -256,12 +256,10 @@ class InvoiceController extends Controller
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
 
-            $payment = $request->request->get('payment');
-            $discount = $request->request->get('discount');
+            $payment = $data['payment'];
+            if($payment > 0) {
 
-            if($payment > 0 || $discount > 0) {
-
-                $transactionData = array('payment' => $payment, 'discount' => $discount);
+                $transactionData = array('payment' => $payment, 'discount' => 0);
                 $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity, $transactionData);
                 $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
             }

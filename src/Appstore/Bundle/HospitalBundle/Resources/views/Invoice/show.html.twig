@@ -194,24 +194,31 @@
                                             <th class="numeric">Created</th>
                                             <th class="numeric">Payment Method</th>
                                             <th class="numeric">Discount</th>
+                                            <th class="numeric">Vat/Tax</th>
                                             <th class="numeric">Amount</th>
+                                            <th class="numeric">Created By</th>
                                         </tr>
                                         </thead>
-                                        <tbody id="">
+                                        <tbody id="invoiceTransaction">
                                         {% for transaction in entity.invoiceTransactions %}
                                             <tr>
                                                 <td  class="numeric">{{ loop.index }}</td>
-                                                <td  class="numeric">{{ transaction.created|date('d-m-Y') }}</td>
+                                                <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
                                                 <td class="numeric">{{ transaction.transactionMethod.name }}</td>
                                                 <td class="numeric">{{ transaction.discount }}</td>
+                                                <td class="numeric">{{ transaction.vat }}</td>
                                                 <td class="numeric">{{ transaction.payment }}</td>
+                                                <td class="numeric">{{ transaction.createdBy }}</td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td class="numeric" colspan="4"><span class="pull-right"><strong>Total Received TK.</strong> =</span></td>
-                                            <td class="numeric"><strong>{{ entity.payment|number_format }}</strong></td>
+                                            <td class="numeric" colspan="3"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                            <td class="numeric"><strong class="discountAmount">{{ entity.discount|number_format }}</strong></td>
+                                            <td class="numeric"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
+                                            <td class="numeric"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
+                                            <td class="numeric"></td>
                                         </tr>
                                         </tfoot>
                                     </table>
@@ -219,17 +226,13 @@
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
-                                <div class="span8" id="message"></div>
-
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
                                     {#<a type="reset" class="btn blue"><i class=" icon-download-alt"></i>&nbsp;Pdf</a>#}
                                     <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                     <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
-
+                                    <span  id="show"  data-trigger="hover" data-original-title="All payment history" class=" btn purple receivePayment tooltips" ><i class="icon-money"></i>&nbsp;Payment History</span>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -239,4 +242,21 @@
         </div>
     </div>
 {% endblock %}
-
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@HospitalBundle/Resources/public/css/invoice.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@HospitalBundle/Resources/public/js/invoice.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
+{% endblock %}

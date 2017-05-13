@@ -64,6 +64,7 @@ class AccountSales
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Sales", inversedBy="accountSales" )
+     * @ORM\JoinColumn(name="sales_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $sales;
 
@@ -85,11 +86,9 @@ class AccountSales
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="accountSales" )
+     * @ORM\JoinColumn(name="hmsInvoice_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     private  $hmsInvoices;
-
-
-
 
     /**
      * @var string
