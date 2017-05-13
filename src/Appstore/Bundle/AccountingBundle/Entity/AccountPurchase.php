@@ -46,6 +46,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
         /**
          * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", inversedBy="accountPurchase" , cascade={"detach","merge"} )
+         * @ORM\JoinColumn(name="purchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
          **/
         private  $purchase;
 
