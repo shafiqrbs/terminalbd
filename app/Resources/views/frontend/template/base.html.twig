@@ -52,12 +52,11 @@
     'assets/template/plugin/range-slider/bootstrap-slider.css'
     'assets/template/plugin/ladda/ladda-themeless.min.css'
     'assets/template/desktop/css/module.css'
-    'assets/template/desktop/cosmetic/css/style.css'
     %}
 
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
-    {#  <link href="/assets/template/desktop/{{ template }}/css/style.css" rel="stylesheet" />#}
+      <link href="/assets/template/desktop/{{ template }}/css/style.css" rel="stylesheet" />
 
     <!--[if lt IE 9]>
 
@@ -72,7 +71,7 @@
 {% render controller("FrontendBundle:TemplateWidget:header",{'globalOption':globalOption.id, 'pageName':pageName}) %}
 <div class="clearfix"></div>
 {% block body %}{% endblock %}
-<section class="footer-menu">
+{#<section class="footer-menu">
     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
         <section class="feature-widget-footer">
             {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':pageName,'position':'footer'}) %}
@@ -156,7 +155,7 @@
             </div>
         </div>
     </div>
-</section>
+</section>#}
 <footer id="footer">
      <div class="container">
         <div class="row myfooter">

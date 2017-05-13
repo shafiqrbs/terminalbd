@@ -39,14 +39,9 @@ class TemplateWidgetController extends Controller
         $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
         $siteEntity = $globalOption->getSiteSetting();
         $themeName = $siteEntity->getTheme()->getFolderName();
-
-        $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $globalOption->getInventoryConfig()));
-        $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
-        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($cats);
         return $this->render('@Frontend/Template/Desktop/'.$themeName.'/header.html.twig', array(
             'menuTree'              => $menuTree,
             'globalOption'          => $globalOption,
-            'categoryTree'          => $categoryTree,
             'pageName'              => $pageName,
 
         ));

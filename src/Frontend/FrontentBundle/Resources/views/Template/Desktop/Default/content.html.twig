@@ -33,7 +33,7 @@
                     <a href="http://www.linkedin.com/shareArticle?mini=true" title="Share on LinkedIn" target="_blank" class="btn btn-linkedin"><i class="fa fa-linkedin"></i> LinkedIn</a>
                 </div>
                 <div class="row">
-                {% if sidebar.feature is not empty %}
+                {% if sidebar is not empty and sidebar.feature is not empty %}
                     {% for entity in sidebar.feature %}
                         <div class="col-md-3 sidebar-feature ">
                             <img src="{{ image(entity.webPath).resize() }}" alt="">
@@ -75,7 +75,7 @@
                             {% endfor %}
                         {% endif %}
                     </div>
-                    {% if sidebar.feature is not empty %}
+                    {% if sidebar is not empty and sidebar.feature is not empty %}
                         {% for entity in sidebar.feature %}
                             <div class="sidebar-feature">
                                 <img src="{{ image(entity.webPath).resize() }}" alt="">
@@ -90,7 +90,7 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-                {% if sidebar.page is not empty %}
+                {% if sidebar is not empty and sidebar.page is not empty %}
                     <div class="blog-sidebar">
                         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Our Pages</h4>
                         <hr>
@@ -101,7 +101,7 @@
                         </ul>
                     </div>
                 {% endif %}
-                {% if sidebar is not empty %}
+                {% if sidebar is not empty and sidebar is not empty %}
                     {% for module in sidebar.module %}
                         {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'module':module.id}) %}
                     {% endfor %}

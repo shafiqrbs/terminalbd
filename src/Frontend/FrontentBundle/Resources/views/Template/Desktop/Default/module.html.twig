@@ -37,7 +37,7 @@
         </article>
         <!-- Blog Sidebar Column -->
         <aside class="col-md-4 sidebar-padding js-equal-height" style="background: #FBFCFE">
-            {% if sidebar.feature is not empty %}
+            {% if sidebar is not empty and sidebar.feature is not empty %}
                 {% for entity in sidebar.feature %}
                     <div class="sidebar-feature">
                         <img src="{{ image(entity.webPath).resize() }}" alt="">

@@ -14,6 +14,7 @@ class WebServiceController extends Controller
     public function indexAction($subdomain)
     {
 
+
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
 

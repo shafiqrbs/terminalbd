@@ -603,11 +603,12 @@ class Builder extends ContainerAware
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
 
-            $menu['E-commerce']->addChild('E-commerce Template', array('route' => ''))
+            /*
+             $menu['E-commerce']->addChild('E-commerce Template', array('route' => ''))
                 ->setAttribute('icon', 'fa fa-bookmark')
                 ->setAttribute('dropdown', true);
             $menu['E-commerce']['E-commerce Template']->addChild('Home View', array('route' => 'ecommercehome'))->setAttribute('icon', 'fa fa-th-list');
-            $menu['E-commerce']['E-commerce Template']->addChild('Mange Template', array('route' => 'ecommercetemplate'))->setAttribute('icon', 'fa fa-th-list');
+            $menu['E-commerce']['E-commerce Template']->addChild('Mange Template', array('route' => 'ecommercetemplate'))->setAttribute('icon', 'fa fa-th-list');*/
             $menu['E-commerce']->addChild('Setting', array('route' => ''))
                 ->setAttribute('icon', 'fa fa-bookmark')
                 ->setAttribute('dropdown', true);
