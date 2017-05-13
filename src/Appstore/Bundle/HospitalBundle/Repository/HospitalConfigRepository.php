@@ -12,7 +12,9 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class HospitalConfigRepository extends EntityRepository
 {
-    public function HospitalReset(GlobalOption $option)
+
+
+    public function hospitalReset(GlobalOption $option)
     {
 
         $em = $this->_em;
