@@ -214,8 +214,8 @@ class GlobalOptionRepository extends EntityRepository
 
     public function systemConfigUpdate(GlobalOption $globalOption )
     {
-        $inventory = $this->_em->getRepository('AccountingBundle:AccountingConfig')->findOneBy(array('globalOption'=>$globalOption));
-        if(empty($inventory)){
+        $accounting = $this->_em->getRepository('AccountingBundle:AccountingConfig')->findOneBy(array('globalOption'=>$globalOption));
+        if(empty($accounting)){
             $config = new AccountingConfig();
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
@@ -228,8 +228,8 @@ class GlobalOptionRepository extends EntityRepository
             $this->_em->persist($config);
         }
 
-        $ecommerce = $this->_em->getRepository('EcommerceBundle:EcommerceConfig')->findOneBy(array('globalOption'=>$globalOption));
-        if(empty($ecommerce)){
+        $commerce = $this->_em->getRepository('EcommerceBundle:EcommerceConfig')->findOneBy(array('globalOption'=>$globalOption));
+        if(empty($commerce)){
             $config = new EcommerceConfig();
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
