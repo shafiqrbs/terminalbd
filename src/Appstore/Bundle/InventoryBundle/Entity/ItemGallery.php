@@ -28,6 +28,7 @@ class ItemGallery
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", inversedBy="itemGalleries" )
+     * @ORM\JoinColumn(name="purchaseVendorItem_id", referencedColumnName="id", nullable=true, onDelete="cascade")
      **/
     protected $purchaseVendorItem;
 
