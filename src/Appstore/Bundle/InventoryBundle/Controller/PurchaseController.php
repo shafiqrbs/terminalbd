@@ -421,7 +421,6 @@ class PurchaseController extends Controller
             $entity->setProcess('approved');
             $em->flush();
             $em->getRepository('InventoryBundle:Item')->getItemUpdatePriceQnt($entity);
-            $em->getRepository('InventoryBundle:StockItem')->insertPurchaseStockItem($entity);
             if($entity->getAsInvestment() == 1){
                 $journal = $em->getRepository('AccountingBundle:AccountJournal')->insertAccountPurchaseJournal($entity);
                 $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertAccountCash($journal,'Journal');
