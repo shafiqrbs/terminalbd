@@ -1,20 +1,17 @@
 /**
  * Created by rbs on 5/1/17.
  */
-$(".addReferred").click(function(){
-
-    if ($(this).attr("id") == 'show') {
-
-        $( ".referred-add" ).slideDown( "slow" );
-        $( ".referred-search" ).slideUp( "slow" );
-
-    }else {
-
-        $( ".referred-add" ).slideUp( "slow" );
-        $( ".referred-search" ).slideDown( "slow" );
-
-    }
-
+$(document).on("click", ".approve", function() {
+    alert('approve');
+    $(this).removeClass('approve');
+    var url = $(this).attr("data-url");
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (response) {
+            location.reload();
+        },
+    })
 });
 
 $(document).on('change', '.transactionMethod', function() {
@@ -56,6 +53,12 @@ $(document).on('click', '#addParticular', function() {
     var quantity = $('#quantity').val();
     var price = $('#price').val();
     var url = $('#addParticular').attr('data-url');
+    alert(particularId);
+    if(particularId == ''){
+        $('#msg').html('Please select medicine or accessories name');
+        return false;
+
+    }
     $.ajax({
         url: url,
         type: 'POST',
@@ -67,7 +70,7 @@ $(document).on('click', '#addParticular', function() {
             $('#vat').val(obj['vat']);
             $('.grandTotal').html(obj['grandTotal']);
             $('#paymentTotal').val(obj['grandTotal']);
-            $('#dueAmount').val(obj['grandTotal']);
+            $('#due').val(obj['dueAmount']);
             $('.dueAmount').html(obj['dueAmount']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
@@ -89,6 +92,7 @@ $(document).on('change', '#discount', function() {
             $('#vat').val(obj['vat']);
             $('.grandTotal').html(obj['grandTotal']);
             $('#paymentTotal').val(obj['grandTotal']);
+            $('#due').val(obj['dueAmount']);
             $('.dueAmount').html(obj['dueAmount']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
@@ -111,7 +115,7 @@ $('#invoiceParticulars').on("click", ".delete", function() {
             $('#subTotal').html(obj['subTotal']);
             $('#vat').val(obj['vat']);
             $('.grandTotal').html(obj['grandTotal']);
-            $('#paymentTotal').val(obj['grandTotal']);
+            $('#due').val(obj['dueAmount']);
             $('.dueAmount').html(obj['dueAmount']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
@@ -119,16 +123,16 @@ $('#invoiceParticulars').on("click", ".delete", function() {
     })
 });
 
-$(document).on('change', '#appstore_bundle_hospitalbundle_invoice_payment', function() {
+$(document).on('change', '#appstore_bundle_hospitalbundle_hmspurchase_payment', function() {
 
-    var payment     = parseInt($('#appstore_bundle_hospitalbundle_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
-    var total =  parseInt($('#paymentTotal').val());
-    var dueAmount = (total-payment);
+    var payment     = parseInt($('#appstore_bundle_hospitalbundle_hmspurchase_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_hmspurchase_payment').val() : 0 );
+    var due =  parseInt($('#due').val());
+    var dueAmount = (due - payment);
     if(dueAmount > 0){
         $('#balance').html('Due Tk.');
         $('.dueAmount').html(dueAmount);
     }else{
-        var balance =  payment-total ;
+        var balance =  payment - due ;
         $('#balance').html('Return Tk.');
         $('.dueAmount').html(balance);
     }

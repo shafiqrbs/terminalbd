@@ -53,10 +53,8 @@ hms_purchase_discount_update:
 
 hms_purchase_approved:
     path:     /{id}/invoice-approved
-    defaults: { _controller: "HospitalBundle:Purchase:approve" }
-    methods:  POST
-    options:
-            expose: true
+    defaults: { _controller: "HospitalBundle:Purchase:approved" }
+
 
 hms_purchase_particular_delete:
     path:     /{invoice}/{id}/particular-delete

@@ -121,7 +121,10 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     <a target="_blank"  href="{{ path('hms_purchase_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
-                                    <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
+                                    {% if ( entity.process == 'Done') %}
+                                    <a target="_blank" href="javascript:"  data-url="{{ path('hms_purchase_approved',{'id':entity.id}) }}" class="btn blue approve "><i class="icon-ok"></i>&nbsp;Approve</a>
+                                    {% endif %}
+                                    <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                                 </div>
                            </div>
                         </div>
@@ -132,4 +135,12 @@
         </div>
     </div>
 {% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@HospitalBundle/Resources/public/js/purchase.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
 

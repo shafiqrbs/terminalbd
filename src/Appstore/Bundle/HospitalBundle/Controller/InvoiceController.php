@@ -251,6 +251,7 @@ class InvoiceController extends Controller
                 $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $entity->getHospitalConfig() , 'service' => 6, 'id' => $referredId ));
                 $entity->setReferredDoctor($referred);
             }
+            
             $entity->setProcess('In-progress');
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
@@ -380,7 +381,6 @@ class InvoiceController extends Controller
         $discount = $request->request->get('discount');
         $process = $request->request->get('process');
 
-
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess($process);
@@ -390,6 +390,9 @@ class InvoiceController extends Controller
                 $transactionData = array('payment' => $payment, 'discount' => $discount);
                 $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity,$transactionData);
                 $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
+            }
+            if($entity->getProcess() == 'Done' && $entity->getPaymentStatus() == 'Paid'){
+                $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getSalesUpdateQnt($entity);
             }
             return new Response('success');
         } else {

@@ -107,7 +107,29 @@ class Particular
      *
      * @ORM\Column(name="quantity", type="smallint", length=3, nullable=true)
      */
-    private $quantity = 1;
+    private $quantity = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="purchaseQuantity", type="integer", nullable=true)
+     */
+    private $purchaseQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="salesQuantity", type="integer", nullable=true)
+     */
+    private $salesQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="remainingQuantity", type="integer", nullable=true)
+     */
+    private $remainingQuantity;
+
 
     /**
      * @var string
@@ -899,6 +921,54 @@ class Particular
     public function getHmsInvoiceDoctor()
     {
         return $this->hmsInvoiceDoctor;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPurchaseQuantity()
+    {
+        return $this->purchaseQuantity;
+    }
+
+    /**
+     * @param int $purchaseQuantity
+     */
+    public function setPurchaseQuantity($purchaseQuantity)
+    {
+        $this->purchaseQuantity = $purchaseQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSalesQuantity()
+    {
+        return $this->salesQuantity;
+    }
+
+    /**
+     * @param int $salesQuantity
+     */
+    public function setSalesQuantity($salesQuantity)
+    {
+        $this->salesQuantity = $salesQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRemainingQuantity()
+    {
+        return $this->remainingQuantity;
+    }
+
+    /**
+     * @param int $remainingQuantity
+     */
+    public function setRemainingQuantity($remainingQuantity)
+    {
+        $this->remainingQuantity = $remainingQuantity;
     }
 
 

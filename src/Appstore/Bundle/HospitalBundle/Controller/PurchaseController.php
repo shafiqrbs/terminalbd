@@ -44,6 +44,7 @@ class PurchaseController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+
             $em = $this->getDoctrine()->getManager();
             $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
             $entity->setHospitalConfig($hospital);
@@ -139,6 +140,7 @@ class PurchaseController extends Controller
         $subTotal = $invoice->getSubTotal() > 0 ? $invoice->getSubTotal() : 0;
         $grandTotal = $invoice->getNetTotal() > 0 ? $invoice->getNetTotal() : 0;
         $dueAmount = $invoice->getDue() > 0 ? $invoice->getDue() : 0;
+
         return new Response(json_encode(array('subTotal' => $subTotal,'grandTotal' => $grandTotal,'dueAmount' => $dueAmount, 'vat' => '','invoiceParticulars' => $invoiceParticulars, 'msg' => $msg )));
         exit;
     }
@@ -203,6 +205,7 @@ class PurchaseController extends Controller
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
             $entity->setProcess('Done');
+            $entity->setDue($entity->getNetTotal() - $entity->getPayment());
             $em->flush();
             return $this->redirect($this->generateUrl('hms_purchase_show', array('id' => $entity->getId())));
         }
@@ -228,56 +231,47 @@ class PurchaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('HospitalBundle:Purchase:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
+
+    public function approvedAction(HmsPurchase $entity)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        if (!empty($entity)) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setProcess('Approved');
+            $entity->setApprovedBy($this->getUser());
+            $em->flush();
+            $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getPurchaseUpdateQnt($entity);
+            return new Response('success');
+        } else {
+            return new Response('failed');
+        }
+        exit;
+    }
+
 
 
     /**
      * Deletes a Vendor entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(HmsPurchase $entity)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('HospitalBundle:HmsVendor')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Vendor entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
 
-        return $this->redirect($this->generateUrl('hms_vendor'));
+        $em->remove($entity);
+        $em->flush();
+        return $this->redirect($this->generateUrl('hms_purchase'));
     }
 
-    /**
-     * Creates a form to delete a Vendor entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('hms_vendor_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-            ;
-    }
 
     /**
      * Status a Page entity.
@@ -285,10 +279,6 @@ class PurchaseController extends Controller
      */
     public function statusAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        //$data = $request->request->all();
 
 
         $em = $this->getDoctrine()->getManager();

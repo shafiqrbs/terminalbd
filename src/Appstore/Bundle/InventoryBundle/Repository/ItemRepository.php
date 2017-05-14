@@ -191,16 +191,17 @@ class ItemRepository extends EntityRepository
         foreach($purchase->getPurchaseItems() as $purchaseItem ){
 
             $entity = $purchaseItem->getItem();
+
             /** @var Item $entity */
+
             $qnt = ($entity->getPurchaseQuantity() + $purchaseItem->getQuantity());
             $entity->setPurchaseQuantity($qnt);
             $entity->setUpdated($purchase->getCreated());
             $em->persist($entity);
             $em->flush();
         }
-
-
     }
+
     public function getItemPurchaseReturn($purchaseReturn){
 
         $em = $this->_em;

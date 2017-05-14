@@ -71,25 +71,32 @@
                         </tr>
                         </thead>
                         <tbody id="invoiceParticulars">
-                        {% for item in entity.purchaseItems %}
-                        <tr id="remove-{{ item.id }}">
-                            <td  class="span1">{{ loop.index }}</td>
-                            <td  class="span1">{{ item.particular.particularCode }}</td>
-                            <td class="span4">{{ item.particular.name }}</td>
-                            <td class="span1">{{ item.quantity }}</td>
-                            <td class="span1">{{ item.purchasePrice }}</td>
-                            <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
-                            <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
-                        </tr>
-                        {% endfor %}
+                        {% if entity.purchaseItems is not empty %}
+                            {% for item in entity.purchaseItems %}
+                                <tr id="remove-{{ item.id }}">
+                                    <td  class="span1">{{ loop.index }}</td>
+                                    <td  class="span1">{{ item.particular.particularCode }}</td>
+                                    <td class="span4">{{ item.particular.name }}</td>
+                                    <td class="span1">{{ item.quantity }}</td>
+                                    <td class="span1">{{ item.purchasePrice }}</td>
+                                    <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
+                                    <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
                         </tbody>
                         <tfoot>
                         <tr>
                             <td colspan="7" class="span12" style="border: 1px double #000"></td>
                         </tr>
                         <tr>
-                            <td colspan="5" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+                            <td colspan="5" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                             <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
+                            <td class="span1"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                            <td class="span2"><strong id="subTotal">{{ entity.discount|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         </tfoot>
@@ -252,17 +259,16 @@
                     </div>
                     <div class="clearfix"></div>
 
-                    <input type="hidden" name="purchaseId" id="purchaseId" value="{{ entity.id }}">
-                    <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.netTotal }}">
+
                     <div class="clearfix"></div>
                 </div>
             </div>
             <div class="clearfix">&nbsp;</div>
             <div class="form-actions portlet box grey">
-                <div class="pull-left span9">
-
-                </div>
-                <div class="pull-right span3">
+                <input type="hidden" class="dueAmount" name="due" id="due" value="{{ entity.due }}">
+                <input type="hidden" name="purchaseId" id="purchaseId" value="{{ entity.id }}">
+                <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.netTotal }}">
+                <div class="pull-right">
                     <button type="submit" class="btn blue span12" id="receiveBtn"><i class="icon-save"></i> Payment</button>
                 </div>
             </div>

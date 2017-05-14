@@ -1,6 +1,10 @@
 <?php
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
+use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
+use Appstore\Bundle\HospitalBundle\Entity\HmsPurchaseItem;
+use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Doctrine\ORM\EntityRepository;
 
@@ -113,6 +117,51 @@ class ParticularRepository extends EntityRepository
         }
 
     }
+
+    public function getPurchaseUpdateQnt(HmsPurchase $purchase){
+
+        $em = $this->_em;
+
+        /** @var HmsPurchaseItem $purchaseItem */
+
+        foreach($purchase->getPurchaseItems() as $purchaseItem ){
+
+            /** @var Particular  $particular */
+
+            $particular = $purchaseItem->getParticular();
+            
+            $qnt = ($particular->getPurchaseQuantity() + $purchaseItem->getQuantity());
+            $particular->setPurchaseQuantity($qnt);
+            $em->persist($particular);
+            $em->flush();
+
+        }
+    }
+
+    public function getSalesUpdateQnt(Invoice $invoice){
+
+        $em = $this->_em;
+
+        /** @var InvoiceParticular $item */
+
+        foreach($invoice->getInvoiceParticulars() as $item ){
+
+            /** @var Particular  $particular */
+
+            $particular = $item->getParticular();
+            if( $particular->getService()->getId() == 4 ){
+
+                $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
+                $particular->setSalesQuantity($qnt);
+                $em->persist($particular);
+                $em->flush();
+            }
+
+
+        }
+    }
+
+
 
 
 }
