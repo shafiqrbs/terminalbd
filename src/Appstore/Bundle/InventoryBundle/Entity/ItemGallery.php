@@ -21,10 +21,6 @@ class ItemGallery
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", inversedBy="itemGalleries" )
-     **/
-    protected $item;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", inversedBy="itemGalleries" )

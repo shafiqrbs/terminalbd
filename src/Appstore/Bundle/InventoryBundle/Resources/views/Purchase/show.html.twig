@@ -132,10 +132,12 @@
                                             <td class="numeric" >{{ vendorItem.salesPrice }}</td>
                                             <td class="numeric" >{{ (vendorItem.salesPrice*vendorItem.quantity) }}</td>
 
-                                                <td class="numeric pull-right">
+                                                <td class="numeric">
+                                                    <span class="pull-right">
                                                     {% if entity.process != 'approved' %}
                                                     <a title="Are you sure went to delete ?" id="{{ entity.id }}" href="javascript:" rel="{{ path('purchase_vendor_item_delete', { 'id': vendorItem.id }) }}" class="btn red mini vendorItemDelete" ><i class="icon-trash"></i></a>
                                                     {% endif %}
+                                                    </span>
                                                 </td>
 
                                         </tr>
@@ -147,6 +149,7 @@
 
                                                         <thead class="flip-content ">
                                                         <tr class="head-green">
+                                                            <th class="numeric" >Barcode</th>
                                                             <th class="numeric" >Item</th>
                                                             <th class="numeric" >Qnt</th>
                                                             <th class="numeric" >Purchase price</th>
@@ -160,6 +163,7 @@
                                                         {% for purchaseItem in vendorItem.purchaseItems %}
 
                                                             <tr>
+                                                                <td class="numeric" >{{ purchaseItem.barcode }}</td>
                                                                 <td class="numeric" >
                                                                     {{ purchaseItem.item.name }}
                                                                 </td>
@@ -168,10 +172,12 @@
                                                                 <td class="numeric" >{{ purchaseItem.purchasePrice * purchaseItem.quantity }}</td>
                                                                 <td class="numeric" >{{ purchaseItem.salesPrice }}</td>
                                                                 <td class="numeric" >{{ purchaseItem.salesPrice * purchaseItem.quantity }}</td>
-                                                                <td class=" numeric pull-left" >
+                                                                <td class=" numeric" >
+                                                                     <span class="pull-left">
                                                                     {% if entity.process != 'approved' %}
                                                                     <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
                                                                     {% endif %}
+                                                                     </span>
                                                                 </td>
                                                             </tr>
                                                         {% endfor %}
@@ -201,8 +207,8 @@
                                         {% if entity.purchaseVendorItems is not empty and entity.vendorItemSum == entity.totalQnt and entity.vendorItemSum != entity.purchaseItemSum  %}
                                         <a data-title="Add purchase item" href="{{ path('inventory_purchaseitem_new', { 'purchase': entity.id }) }}" class="btn purple " ><i class="icon-plus-sign"></i>&nbsp;stock</a>
                                         {% endif %}
+                                        <a title="Are you sure went to delete ?" href="javascript:" data-id="{{ entity.id }}" data-url="{{ path('purchase_delete', { 'id': entity.id }) }}"  class="btn red delete approved-{{ entity.id }}" ><i class="icon-trash"></i></a>
                                     {% endif %}
-                                    <a title="Are you sure went to delete ?" href="javascript:" data-id="{{ entity.id }}" data-url="{{ path('purchase_delete', { 'id': entity.id }) }}"  class="btn red delete approved-{{ entity.id }}" ><i class="icon-trash"></i></a>
                                     {% if (  (app.user.granted("ROLE_DOMAIN")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY_APPR  OVAL")  and entity.process == 'complete') or (app.user.granted("ROLE_DOMAIN_INVENTORY")  and entity.process == 'complete') )  %}
                                         <a class="btn purple approve"  data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('purchase_approve', { 'id': entity.id,'reject':'reject'  }) }}" ><i class="icon-refresh"></i>&nbsp;Reject</a>
                                         <a class="btn green approve approved-{{ entity.id }}" data-id="{{ entity.id }}" data-title="{{ entity.id }}" data-url="{{ path('purchase_approve', { 'id': entity.id }) }}"><i class="icon-ok"></i>&nbsp;Approve</a>

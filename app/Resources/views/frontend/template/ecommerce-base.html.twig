@@ -63,7 +63,7 @@
 <body data-spy="scroll">
 {{ include('frontend/template/templateCustomize.html.twig')}}
 <!-- Navigation -->
-{% render controller("FrontendBundle:EcommerceW6idget:header",{'globalOption':globalOption, 'pageName':pageName}) %}
+{% render controller("FrontendBundle:EcommerceWidget:header",{'globalOption':globalOption, 'pageName':pageName}) %}
 <div class="clearfix"></div>
 {% block body %}{% endblock %}
 {{ include('@Frontend/Template/Desktop/Cosmetic/footer.html.twig') }}

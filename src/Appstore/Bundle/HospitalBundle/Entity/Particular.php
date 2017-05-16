@@ -123,13 +123,6 @@ class Particular
      */
     private $salesQuantity;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="remainingQuantity", type="integer", nullable=true)
-     */
-    private $remainingQuantity;
-
 
     /**
      * @var string
@@ -907,21 +900,6 @@ class Particular
         return $this->hmsInvoiceCabin;
     }
 
-    /**
-     * @return Invoice
-     */
-    public function getHmsInvoiceDepartment()
-    {
-        return $this->hmsInvoiceDepartment;
-    }
-
-    /**
-     * @return Invoice
-     */
-    public function getHmsInvoiceDoctor()
-    {
-        return $this->hmsInvoiceDoctor;
-    }
 
     /**
      * @return int
@@ -955,21 +933,6 @@ class Particular
         $this->salesQuantity = $salesQuantity;
     }
 
-    /**
-     * @return int
-     */
-    public function getRemainingQuantity()
-    {
-        return $this->remainingQuantity;
-    }
-
-    /**
-     * @param int $remainingQuantity
-     */
-    public function setRemainingQuantity($remainingQuantity)
-    {
-        $this->remainingQuantity = $remainingQuantity;
-    }
 
 
 }

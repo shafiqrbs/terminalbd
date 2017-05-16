@@ -39,4 +39,3 @@ itembrand_update:
 itembrand_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:ItemBrand:delete" }
-    methods:  [POST, DELETE]

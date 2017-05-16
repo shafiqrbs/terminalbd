@@ -132,7 +132,8 @@ class InvoiceAdmissionController extends Controller
 
     public function particularSearchAction(Particular $particular)
     {
-        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $particular->getQuantity(), 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
+        $quantity = $particular->getQuantity() > 0 ? $particular->getQuantity() :1;
+        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $quantity, 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
     }
 
     public function addParticularAction(Request $request, Invoice $invoice)

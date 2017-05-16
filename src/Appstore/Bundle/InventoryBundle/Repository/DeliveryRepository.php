@@ -81,6 +81,8 @@ class DeliveryRepository extends EntityRepository
             $data .='<td class="numeric" >'.$entity->getPurchaseItem()->getBarcode().'</td>';
             $data .='<td class="numeric" >'.$itemName.'</td>';
             $data .='<td class="numeric" >'.$entity->getQuantity().'</td>';
+            $data .='<td class="numeric" >'.$entity->getPurchaseItem()->getPurchasePrice().'</td>';
+            $data .='<td class="numeric" >'.$entity->getPurchaseItem()->getPurchasePrice() * $entity->getQuantity().'</td>';
             $data .='<td class="numeric" >'.$entity->getSalesPrice().'</td>';
             $data .='<td class="numeric" >'.$entity->getSubTotal().'</td>';
             $data .='<td class="numeric" >

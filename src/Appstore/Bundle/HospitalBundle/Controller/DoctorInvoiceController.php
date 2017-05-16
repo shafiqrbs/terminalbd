@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
+use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
@@ -19,10 +20,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Hackzilla\BarcodeBundle\Utility\Barcode;
 /**
- * Invoice controller.
+ * DoctorInvoiceController controller.
  *
  */
-class InvoiceController extends Controller
+class DoctorInvoiceController extends Controller
 {
 
     public function paginate($entities)
@@ -44,10 +45,10 @@ class InvoiceController extends Controller
         $data = $_REQUEST;
 
         $user = $this->getUser();
-        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'pathology' , $data);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->doctorInvoiceLists($user,$data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
-        return $this->render('HospitalBundle:Invoice:index.html.twig', array(
+        return $this->render('HospitalBundle:DoctorInvoice:index.html.twig', array(
             'entities' => $pagination,
             'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
@@ -55,28 +56,16 @@ class InvoiceController extends Controller
     }
 
 
-    public function newAction()
+    public function newAction(Invoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = new Invoice();
+        $entity = new DoctorInvoice();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entity->setHospitalConfig($hospital);
-        $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
-        $entity->setService($service);
-        $referredDoctor = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital,'name'=>'Self','service' => 6));
-        $entity->setReferredDoctor($referredDoctor);
-        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-        $entity->setTransactionMethod($transactionMethod);
-        $entity->setPaymentStatus('Pending');
-        $entity->setInvoiceMode('pathology');
-        $entity->setCreatedBy($this->getUser());
-        if(!empty($this->getUser()->getProfile()->getBranches())){
-            $entity->setBranches($this->getUser()->getProfile()->getBranches());
-        }
-        $em->persist($entity);
-        $em->flush();
-        return $this->redirect($this->generateUrl('hms_invoice_edit', array('id' => $entity->getId())));
-
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital,'name'=>'Self','service' => 6));
+        return $this->render('HospitalBundle:DoctorInvoice:new.html.twig', array(
+            'entity' => $entity,
+            'referredDoctors' => $referredDoctors,
+        ));
     }
 
 

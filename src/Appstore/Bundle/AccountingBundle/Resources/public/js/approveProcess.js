@@ -2,13 +2,20 @@ function AccountingApproveProcess(){
 
 
     $( ".date-picker" ).datepicker({
-        dateFormat: "yy-mm-dd"
+        dateFormat: "dd-mm-yy"
     });
     // Getter
     var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
 
     // Setter
-    $( ".date-picker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+    $( ".date-picker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
+
+    $(document).on("click", ".editable-submit", function() {
+        setTimeout(pageReload, 3000);
+    });
+    function pageReload() {
+        location.reload();
+    }
 
     $(document).on("click", ".delete", function() {
 

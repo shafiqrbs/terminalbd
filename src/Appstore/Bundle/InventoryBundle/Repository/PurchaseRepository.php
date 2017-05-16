@@ -115,6 +115,7 @@ class PurchaseRepository extends EntityRepository
             $entity->setPaymentAmount($row['total']);
             $entity->setTransactionMethod($this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
             $this->_em->persist($entity);
+
         }
 
         $this->_em->flush();
@@ -125,8 +126,6 @@ class PurchaseRepository extends EntityRepository
         return false;
 
    }
-
-
 
     public  function purchaseModifyUpdate($purchase){
 

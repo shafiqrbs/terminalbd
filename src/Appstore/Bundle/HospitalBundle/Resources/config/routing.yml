@@ -10,6 +10,10 @@ hospital_invoice:
     resource: "@HospitalBundle/Resources/config/routing/invoice.yml"
     prefix:   /invoice
 
+hospital_doctor_invoice:
+    resource: "@HospitalBundle/Resources/config/routing/doctorinvoice.yml"
+    prefix:   /doctor-invoice
+
 hospital_invoice_admission:
     resource: "@HospitalBundle/Resources/config/routing/invoiceadmission.yml"
     prefix:   /invoice-admission

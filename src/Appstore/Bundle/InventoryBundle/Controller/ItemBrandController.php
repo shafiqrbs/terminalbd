@@ -110,11 +110,8 @@ class ItemBrandController extends Controller
             throw $this->createNotFoundException('Unable to find ItemBrand entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('InventoryBundle:ItemBrand:show.html.twig', array(
+       return $this->render('InventoryBundle:ItemBrand:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -133,12 +130,10 @@ class ItemBrandController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('InventoryBundle:ItemBrand:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -175,7 +170,6 @@ class ItemBrandController extends Controller
             throw $this->createNotFoundException('Unable to find ItemBrand entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
@@ -194,7 +188,6 @@ class ItemBrandController extends Controller
         return $this->render('InventoryBundle:ItemBrand:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -224,23 +217,6 @@ class ItemBrandController extends Controller
         }
 
         return $this->redirect($this->generateUrl('itembrand'));
-    }
-
-    /**
-     * Creates a form to delete a ItemBrand entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('itembrand_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
     }
 
     public function autoSearchAction(Request $request)

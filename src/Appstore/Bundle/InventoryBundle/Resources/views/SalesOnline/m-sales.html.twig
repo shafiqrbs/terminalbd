@@ -19,10 +19,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Online Sales</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a href="#" class="btn red"><i class="icon-trash"></i></a>
-                                <a href="#" class="btn blue"><i class="icon-list"></i></a>
-                                <a href="#" class="btn purple"><i class="icon-plus"></i></a>
-                                <a href="#" class="btn yellow"><i class="icon-tags"></i></a>
+                                 <a href="{{ path('inventory_salesonline') }}" class="btn blue"><i class="icon-list"></i></a>
+                                <a href="{{ path('inventory_salesonline_new') }}" class="btn purple"><i class="icon-plus"></i></a>
                             </div>
                         </div>
 
@@ -52,6 +50,8 @@
                         </div>
                     </div>
                     <div class="portlet-body">
+                        <div class="clearfix"></div>
+                        {% include('flash-message.html.twig')  %}
                         <div class="clearfix"></div>
                         <div id="search-productx" style="background:#EEF1F4; padding-top:5px; padding-bottom: 20px">
                             <div class="row-fluid" style="margin-bottom: 5px">
@@ -562,8 +562,8 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    $('body').removeClass('page-sidebar-closed');
     EditableInit();
     InventorySales({{ entity.id ? entity.id : 0 }});
     ApproveProcess();
+    $('.page-header-fixed').removeClass('page-sidebar-closed');
 {% endblock %}

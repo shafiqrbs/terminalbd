@@ -84,6 +84,7 @@ class AccountCashRepository extends EntityRepository
 
     public function findWithSearch(User $user,$transactionMethods,$data = '')
     {
+
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
 
@@ -140,9 +141,26 @@ class AccountCashRepository extends EntityRepository
             $process =    isset($data['processHead'])? $data['processHead'] :'';
             $accountBank =    isset($data['accountBank'])? $data['accountBank'] :'';
             $accountMobileBank =    isset($data['accountMobileBank'])? $data['accountMobileBank'] :'';
-
-
+            if (!empty($process)) {
+                $qb->andWhere("e.processHead = :process");
+                $qb->setParameter('process', $process);
+            }
             if (!empty($accountRefNo)) {
+
+                $qb->andWhere("e.accountRefNo = :accountRefNo");
+                $qb->setParameter('accountRefNo', $accountRefNo);
+            }
+
+           /* if (!empty($data['tillDate']) and !empty($data['tillDate']) ) {
+
+                $compareTo = new \DateTime($data['tillDate']);
+                $tillDate =  $compareTo->format('Y-m-d 23:59:59');
+                $qb->andWhere("e.updated > :startDate");
+                $qb->setParameter('updated', $tillDate);
+
+            }*/
+
+           /* if (!empty($accountRefNo)) {
 
                 $qb->andWhere("e.accountRefNo = :accountRefNo");
                 $qb->setParameter('accountRefNo', $accountRefNo);
@@ -169,7 +187,7 @@ class AccountCashRepository extends EntityRepository
 
                 $qb->andWhere("e.accountMobileBank = :accountMobileBank");
                 $qb->setParameter('accountMobileBank', $accountMobileBank);
-            }
+            }*/
         }
 
     }

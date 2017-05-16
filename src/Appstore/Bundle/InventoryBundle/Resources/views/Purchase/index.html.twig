@@ -177,6 +177,7 @@
 
                                                                     <thead class="flip-content ">
                                                                     <tr class="head-green">
+                                                                        <th class="numeric" >Barcode</th>
                                                                         <th class="numeric" >Item</th>
                                                                         <th class="numeric" >Qnt</th>
                                                                         <th class="numeric" >Unit</th>
@@ -187,7 +188,8 @@
                                                                     <tbody id="purchaseItem" >
                                                                     {% for purchaseItem in vendorItem.purchaseItems %}
                                                                         <tr id="remove-purchase-item-{{ purchaseItem.id }}">
-                                                                            <td class="numeric" >{{ purchaseItem.item.name }}/{{ purchaseItem.item.sku }}</td>
+                                                                            <td class="numeric" >{{ purchaseItem.barcode }}</td>
+                                                                            <td class="numeric" >{{ purchaseItem.item.name }}</td>
                                                                             <td class="numeric" >{{ purchaseItem.quantity }}</td>
                                                                             <td class="numeric" >{% if purchaseItem.item.masterItem.productUnit is not empty %}{{  purchaseItem.item.masterItem.productUnit.name }}{% endif %}</td>
                                                                             <td class="numeric" >

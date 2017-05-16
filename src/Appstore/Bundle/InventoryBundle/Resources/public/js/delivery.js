@@ -10,9 +10,8 @@ var InventoryDelivery = function(delivery) {
 
         var barcode = $('#delivery_item_purchaseItem').val();
         var quantity = $('#delivery_item_quantity').val();
-
         if(barcode == ''){
-            $('#wrongBarcode').html('Using wrong barcode, please try again correct barcode.');
+            $('#msg').html('Using wrong barcode, please try again correct barcode.');
             return false;
         }
         $.ajax({
@@ -20,13 +19,17 @@ var InventoryDelivery = function(delivery) {
             type: 'POST',
             data:'barcode='+barcode+'&delivery='+ delivery+'&quantity='+quantity,
             success: function(response) {
-                $('#delivery_item_purchaseItem').focus().val('');
-                $('#delivery_item_quantity').focus().val('');
                 obj = JSON.parse(response);
+                if( obj['msg'] =='success'){
+                    $('#delivery_item_purchaseItem').focus().val('');
+                    $('#delivery_item_quantity').focus().val('');
+                    $('.select2-container.select2-allowclear .select2-choice .select2-chosen').hide()
+                    $('.select2-container.select2-allowclear .select2-choice abbr').hide()
+                }
                 $('#deliveryItem').html(obj['deliveryItems']);
                 $('#totalQuantity').html(obj['totalQuantity']);
                 $('#totalAmount').html(obj['totalAmount']);
-
+                $('#msg').html(obj['msg']);
                 FormComponents.init();
             },
         })

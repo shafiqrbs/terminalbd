@@ -104,6 +104,70 @@ class SalesOnlineController extends Controller
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
      */
 
+    public function editAction($code)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Sales entity.');
+        }
+
+        $editForm = $this->createEditForm($entity);
+
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'online');
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'online');
+
+        if ($entity->getProcess() != "In-progress") {
+            return $this->redirect($this->generateUrl('inventory_salesgeneral_show', array('id' => $entity->getId())));
+        }
+
+        /* Device Detection code desktop or mobile */
+
+        $detect = new MobileDetect();
+
+        if( $detect->isMobile() || $detect->isTablet() ) {
+            $theme = 'm-sales';
+        }else{
+            $theme = 'sales';
+        }
+
+        return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(
+            'entity' => $entity,
+            'todaySales' => $todaySales,
+            'todaySalesOverview' => $todaySalesOverview,
+            'form' => $editForm->createView(),
+        ));
+    }
+
+    /**
+     * Creates a form to edit a Sales entity.wq
+     *
+     * @param Sales $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditForm(Sales $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new SalesGeneralType($globalOption,$location), $entity, array(
+            'action' => $this->generateUrl('inventory_salesonline_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'form-horizontal',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+
+    /**
+     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
+     */
+
     public function salesItemAction()
     {
 
@@ -281,68 +345,6 @@ class SalesOnlineController extends Controller
     }
 
 
-    /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
-     */
-
-    public function editAction($code)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entity = $em->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Sales entity.');
-        }
-
-        $editForm = $this->createEditForm($entity);
-
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($this->getUser(),$mode = 'online');
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser(),$mode = 'online');
-
-        if ($entity->getProcess() != "In-progress") {
-            return $this->redirect($this->generateUrl('inventory_salesgeneral_show', array('id' => $entity->getId())));
-        }
-
-        /* Device Detection code desktop or mobile */
-
-        $detect = new MobileDetect();
-
-        if( $detect->isMobile() || $detect->isTablet() ) {
-            $theme = 'm-sales';
-        }else{
-            $theme = 'sales';
-        }
-
-        return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(
-            'entity' => $entity,
-            'todaySales' => $todaySales,
-            'todaySalesOverview' => $todaySalesOverview,
-            'form' => $editForm->createView(),
-        ));
-    }
-
-    /**
-     * Creates a form to edit a Sales entity.wq
-     *
-     * @param Sales $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createEditForm(Sales $entity)
-    {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new SalesGeneralType($globalOption,$location), $entity, array(
-            'action' => $this->generateUrl('inventory_salesonline_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-            'attr' => array(
-                'class' => 'form-horizontal',
-                'novalidate' => 'novalidate',
-            )
-        ));
-        return $form;
-    }
 
     /**
      * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
@@ -359,7 +361,6 @@ class SalesOnlineController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         $data = $request->request->all();
-
         if ($editForm->isValid() and $data['paymentTotal'] > 0 ) {
 
             $globalOption = $this->getUser()->getGlobalOption();
@@ -436,10 +437,23 @@ class SalesOnlineController extends Controller
 
         }
 
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($inventory , $mode='online');
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($inventory,$mode='online');
-        return $this->render('InventoryBundle:SalesOnline:sales.html.twig', array(
+        $user = $this->getUser();
+        $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($user , $mode='online');
+        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($user,$mode='online');
+
+        /* Device Detection code desktop or mobile */
+
+        $detect = new MobileDetect();
+
+        if( $detect->isMobile() || $detect->isTablet() ) {
+            $theme = 'm-sales';
+        }else{
+            $theme = 'sales';
+        }
+        $this->get('session')->getFlashBag()->add(
+            'error',"Add item with Customer information must be"
+        );
+        return $this->render('InventoryBundle:SalesOnline:'.$theme.'.html.twig', array(
             'entity' => $entity,
             'todaySales' => $todaySales,
             'todaySalesOverview' => $todaySalesOverview,

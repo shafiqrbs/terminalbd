@@ -51,11 +51,6 @@ class Item
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemGallery", mappedBy="item" , cascade={"remove"} )
-     */
-    protected $itemGalleries;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="item" , cascade={"remove"} )
      */
     protected $stockItems;
@@ -590,14 +585,6 @@ class Item
     public function setBrand($brand)
     {
         $this->brand = $brand;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getItemGalleries()
-    {
-        return $this->itemGalleries;
     }
 
     /**

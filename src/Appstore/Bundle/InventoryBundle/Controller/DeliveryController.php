@@ -101,7 +101,7 @@ class DeliveryController extends Controller
         $em = $this->getDoctrine()->getManager();
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $purchase = $em->getRepository('InventoryBundle:Purchase')->findOneBy(array('grn' => $grn));
-        if($shop > 0 and !empty($purchase) ){
+        if($shop > 0 and !empty($purchase) and !empty($shop) ){
             $shop = $em->getRepository('DomainUserBundle:Branches')->find($shop);
             if(!empty($shop)){
                 $entity->setBranch($shop);
@@ -109,23 +109,31 @@ class DeliveryController extends Controller
             $entity->setInventoryConfig($inventory);
             $em->persist($entity);
             $em->flush();
+
+            foreach ( $purchase->getPurchaseItems() as $item){
+
+                $delivery = new DeliveryItem();
+                $delivery->setPurchaseItem($item);
+                $delivery->setItem($item->getItem());
+                $delivery->setDelivery($entity);
+                $delivery->setQuantity($item->getQuantity());
+                $delivery->setSalesPrice($item->getSalesPrice());
+                $delivery->setSubTotal($item->getSalesPrice() * $item->getQuantity());
+                $em->persist($delivery);
+                $em->flush($delivery);
+
+            }
+            $this->getDoctrine()->getRepository('InventoryBundle:Delivery')->updateDeliveryTotal($entity);
+            return $this->redirect($this->generateUrl('inventory_delivery_edit', array( 'code' => $entity->getInvoice())));
+
+        }else{
+
+            $this->get('session')->getFlashBag()->add(
+                'notice', "Your missing branch or grn no"
+            );
+            return $this->redirect($this->generateUrl('inventory_delivery'));
+
         }
-
-        foreach ( $purchase->getPurchaseItems() as $item){
-
-            $delivery = new DeliveryItem();
-            $delivery->setPurchaseItem($item);
-            $delivery->setItem($item->getItem());
-            $delivery->setDelivery($entity);
-            $delivery->setQuantity($item->getQuantity());
-            $delivery->setSalesPrice($item->getSalesPrice());
-            $delivery->setSubTotal($item->getSalesPrice() * $item->getQuantity());
-            $em->persist($delivery);
-            $em->flush($delivery);
-
-        }
-        $this->getDoctrine()->getRepository('InventoryBundle:Delivery')->updateDeliveryTotal($entity);
-        return $this->redirect($this->generateUrl('inventory_delivery_edit', array( 'code' => $entity->getInvoice())));
 
     }
 
@@ -254,7 +262,7 @@ class DeliveryController extends Controller
             $em->remove($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
-                'success',"Data has been deleted successfully"
+                'error',"Data has been deleted successfully"
             );
            return $this->redirect($this->generateUrl('inventory_delivery'));
     }
