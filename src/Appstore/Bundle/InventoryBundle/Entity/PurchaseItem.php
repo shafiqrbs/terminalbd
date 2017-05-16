@@ -57,7 +57,7 @@ class PurchaseItem
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", mappedBy="purchaseItem" , cascade={"remove"}  )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\SalesItem", mappedBy="purchaseItem" )
      **/
     private  $salesItems;
 
