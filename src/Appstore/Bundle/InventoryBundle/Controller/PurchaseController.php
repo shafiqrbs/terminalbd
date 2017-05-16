@@ -254,6 +254,7 @@ class PurchaseController extends Controller
     public function approveAction(Purchase $purchase)
     {
 
+        set_time_limit(0);
         $em = $this->getDoctrine()->getManager();
         $purchase->setApprovedBy($this->getUser());
         $purchase->setProcess('approved');
