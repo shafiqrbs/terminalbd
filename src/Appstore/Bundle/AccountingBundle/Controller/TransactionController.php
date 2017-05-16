@@ -81,10 +81,10 @@ class TransactionController extends Controller
         $data = $_REQUEST;
 
         $globalOption = $this->getUser()->getGlobalOption();
-        $overviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionCashOverview($globalOption,$data);
-        $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview($globalOption,$data);
-        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBkashCashOverview($globalOption,$data);
-        $transactionAccountHeadCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionAccountHeadCashOverview($globalOption,$data);
+        $overviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionCashOverview( $this->getUser(),$data);
+        $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
+        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBkashCashOverview( $this->getUser(),$data);
+        $transactionAccountHeadCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionAccountHeadCashOverview( $this->getUser(),$data);
         return $this->render('AccountingBundle:Transaction:cashoverview.html.twig', array(
             'overviews'                             => $overviews,
             'transactionBankCashOverviews'          => $transactionBankCashOverviews,

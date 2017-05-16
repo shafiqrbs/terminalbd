@@ -156,7 +156,7 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
-    public function reportIncome($globalOption,$data)
+    public function reportSalesIncome(User $user,$data)
     {
         if(empty($data)){
             $datetime = new \DateTime("now");
@@ -167,11 +167,11 @@ class AccountSalesRepository extends EntityRepository
             $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
         }
 
-        $salesPrice = $this->_em->getRepository('InventoryBundle:SalesItem')->reportSalesPrice($globalOption,$data);
-        $purchasePrice = $this->_em->getRepository('InventoryBundle:SalesItem')->reportPurchasePrice($globalOption,$data);
-        $salesVat = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(16), $data);
-        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
-        $revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
+        $salesPrice = $this->_em->getRepository('InventoryBundle:SalesItem')->reportSalesPrice($user,$data);
+        $purchasePrice = $this->_em->getRepository('InventoryBundle:SalesItem')->reportPurchasePrice($user,$data);
+        $salesVat = $this->_em->getRepository('InventoryBundle:SalesItem')->reportProductVat($user, $data);
+        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37), $data);
+        $revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(20), $data);
         $data =  array('salesAmount' => $salesPrice ,'purchasePrice' => $purchasePrice,'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesVat);
         return $data;
 

@@ -113,7 +113,6 @@
                                     <th class="numeric" >Ref no.</th>
                                     <th class="numeric" >Debit</th>
                                     <th class="numeric" >Credit</th>
-                                    <th class="numeric" >Balance</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -126,7 +125,7 @@
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                         <td class="numeric" >{{ entity.debit|number_format }}</td>
                                         <td class="numeric" >{{ entity.credit|number_format }}</td>
-                                        <td class="numeric" >{{ entity.balance|number_format }}</td>
+
                                     </tr>
                                 {% endfor %}
                                 </tbody>

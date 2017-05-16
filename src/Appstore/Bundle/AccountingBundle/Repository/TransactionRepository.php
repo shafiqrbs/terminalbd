@@ -175,6 +175,9 @@ class TransactionRepository extends EntityRepository
         $transaction->setAccountHead($entity->getAccountHeadDebit());
         $transaction->setAmount($entity->getAmount());
         $transaction->setDebit($entity->getAmount());
+        if(!empty($entity->getBranches())){
+            $transaction->setBranches($entity->getBranches());
+        }
         $this->_em->persist($transaction);
         $this->_em->flush();
 
@@ -197,6 +200,9 @@ class TransactionRepository extends EntityRepository
         $transaction->setAccountHead($entity->getAccountHeadCredit());
         $transaction->setAmount('-'.$entity->getAmount());
         $transaction->setCredit($entity->getAmount());
+        if(!empty($entity->getBranches())){
+            $transaction->setBranches($entity->getBranches());
+        }
         $this->_em->persist($transaction);
         $this->_em->flush();
 
@@ -458,8 +464,8 @@ class TransactionRepository extends EntityRepository
 
             $transaction = new Transaction();
             $transaction->setGlobalOption($accountSales->getGlobalOption());
-            if(!empty($accountSales->getApprovedBy()->getProfile()->getBranches())){
-                $transaction->setBranches($accountSales->getApprovedBy()->getProfile()->getBranches());
+            if(!empty($accountSales->getBranches())){
+                $transaction->setBranches($accountSales->getBranches());
             }
             $transaction->setAccountRefNo($accountSales->getAccountRefNo());
             $transaction->setProcessHead('Sales');
@@ -972,6 +978,8 @@ class TransactionRepository extends EntityRepository
 
     /** =========================== HOSPITAL MANAGEMENT SYSTEM    =========================== */
 
+
+
     public function hmsSalesTransaction(InvoiceTransaction $entity,$accountSales)
     {
         $this->insertHmsCashDebit($entity,$accountSales);
@@ -1021,8 +1029,8 @@ class TransactionRepository extends EntityRepository
 
         $transaction = new Transaction();
         $transaction->setGlobalOption($accountSales->getGlobalOption());
-        if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
-            $transaction->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
+        if(!empty($accountSales->getBranches())){
+            $transaction->setBranches($accountSales->getBranches());
         }
         $transaction->setProcessHead('Sales');
         $transaction->setProcess('Operating Revenue');

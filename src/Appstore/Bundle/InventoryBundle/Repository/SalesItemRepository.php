@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -293,45 +294,63 @@ class SalesItemRepository extends EntityRepository
             }
     }
 
-    public function reportSalesPrice(GlobalOption $globalOption,$data)
+    public function reportSalesPrice(User $user ,$data)
     {
+
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+
         $qb = $this->_em->createQueryBuilder();
         $qb->from('InventoryBundle:Sales','sales');
         $qb->select('SUM(sales.total) AS salesAmount');
         $qb->where("sales.globalOption = :globalOption");
         $qb->where("sales.inventoryConfig = :inventoryConfig");
         $qb->setParameter('inventoryConfig', $globalOption->getInventoryConfig());
-        $qb->andWhere("sales.paymentStatus = :paymentStatus");
-        $qb->setParameter('paymentStatus', 'Paid');
+        if (!empty($branch)){
+            $qb->andWhere("sales.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $qb->andWhere('sales.paymentStatus IN(:paymentStatus)');
+        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getSingleResult();
         return $data = $result['salesAmount'] ;
     }
 
 
-    public function reportPurchasePrice(GlobalOption $globalOption,$data)
+    public function reportPurchasePrice(User $user,$data)
     {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
         $qb = $this->createQueryBuilder('si');
         $qb->join('si.sales','sales');
         $qb->select('SUM(si.quantity * si.purchasePrice ) AS totalPurchaseAmount');
         $qb->where("sales.inventoryConfig = :inventoryConfig");
         $qb->setParameter('inventoryConfig', $globalOption->getInventoryConfig());
-        $qb->andWhere("sales.paymentStatus = :paymentStatus");
-        $qb->setParameter('paymentStatus', 'Paid');
+        if (!empty($branch)){
+            $qb->andWhere("sales.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $qb->andWhere('sales.paymentStatus IN(:paymentStatus)');
+        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getSingleResult();
         return $data = $result['totalPurchaseAmount'] ;
+
     }
 
-    public function reportProductVat(GlobalOption $globalOption,$data)
+    public function reportProductVat(User $user ,$data)
     {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+
         $qb = $this->_em->createQueryBuilder();
         $qb->from('InventoryBundle:Sales','sales');
         $qb->select('SUM(sales.vat) AS salesVat');
         $qb->where("sales.inventoryConfig = :inventoryConfig");
         $qb->setParameter('inventoryConfig', $globalOption->getInventoryConfig());
-        $qb->andWhere("sales.paymentStatus = :paymentStatus");
-        $qb->setParameter('paymentStatus', 'Paid');
+        $qb->andWhere('sales.paymentStatus IN(:paymentStatus)');
+        $qb->setParameter('paymentStatus',array_values(array('Paid','Due')));
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getOneOrNullResult();
         return $data = $result['salesVat'] ;

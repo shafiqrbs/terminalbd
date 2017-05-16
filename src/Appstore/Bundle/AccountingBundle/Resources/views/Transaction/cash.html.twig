@@ -64,7 +64,7 @@
                                     <div class="span4">
                                         <div class="controls">
                                             <div class="input-append span11">
-                                                <input type="text" id="tillDate" name="tillDate"  class="span11 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.tillDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.tillDate is defined %}{{ searchForm.tillDate }}{% else %}Till date{% endif %}  ">
+                                                <input type="text" id="tillDate" name="tillDate"  class="span11 m-wrap date-picker" value="{% if searchForm.tillDate is defined %}{{ searchForm.tillDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.tillDate is defined %}{{ searchForm.tillDate }}{% else %}Till date{% endif %}  ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -106,7 +106,6 @@
                                     <th class="numeric" >Ref no.</th>
                                     <th class="numeric" >Debit</th>
                                     <th class="numeric" >Credit</th>
-                                    <th class="numeric" >Remark</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -118,7 +117,6 @@
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
                                         <td class="numeric" >{{ entity.debit|number_format }}</td>
                                         <td class="numeric" >{{ entity.credit|number_format }}</td>
-                                        <td class="numeric" >{#{{ entity.balance|number_format }}#}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
