@@ -55,6 +55,14 @@ class InventoryConfigRepository extends EntityRepository
         $Purchase = $em->createQuery('DELETE InventoryBundle:Item e WHERE e.inventoryConfig = '.$config);
         $Purchase->execute();
 
+        $Purchase = $em->createQuery('DELETE InventoryBundle:Product e WHERE e.inventoryConfig = '.$config);
+        $Purchase->execute();
+
+        $Purchase = $em->createQuery('DELETE InventoryBundle:ItemBrand e WHERE e.inventoryConfig = '.$config);
+        $Purchase->execute();
+
+
+
     }
 
 
