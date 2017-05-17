@@ -6,6 +6,7 @@ use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
+use Appstore\Bundle\HospitalBundle\Form\DoctorInvoiceType;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
@@ -56,17 +57,71 @@ class DoctorInvoiceController extends Controller
     }
 
 
-    public function newAction(Invoice $entity)
+    public function newAction(Invoice $invoice)
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new DoctorInvoice();
+        $form = $this->createCreateForm($entity,$invoice);
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $hospital,'name'=>'Self','service' => 6));
         return $this->render('HospitalBundle:DoctorInvoice:new.html.twig', array(
-            'entity' => $entity,
+            'entity' => $invoice,
+            'invoice' => $invoice,
             'referredDoctors' => $referredDoctors,
+            'form'   => $form->createView(),
         ));
     }
+
+    /**
+     * Creates a form to create a Vendor entity.
+     *
+     * @param Vendor $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(DoctorInvoice $entity,Invoice $invoice)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new DoctorInvoiceType($globalOption), $entity, array(
+            'action' => $this->generateUrl('hms_doctor_invoice_create', array('id' => $invoice->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    /**
+     * Creates a new Vendor entity.
+     *
+     */
+    public function createAction(Request $request, Invoice $invoice)
+    {
+        $entity = new DoctorInvoice();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+            $entity->setHospitalConfig($hospital);
+            $entity->setInvoice($invoice);
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been inserted successfully"
+            );
+            return $this->redirect($this->generateUrl('hms_doctor_invoice_edit', array('id' => $entity->getId())));
+        }
+
+        return $this->render('HospitalBundle:DoctorInvoice:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
 
 
     public function editAction($id)

@@ -7,8 +7,14 @@ hms_doctor_invoice_show:
     defaults: { _controller: "HospitalBundle:DoctorInvoice:show" }
 
 hms_doctor_invoice_new:
-    path:     /new
+    path:     /{id}/new
     defaults: { _controller: "HospitalBundle:DoctorInvoice:new" }
+
+
+hms_doctor_invoice_create:
+    path:     /{id}/create
+    defaults: { _controller: "HospitalBundle:DoctorInvoice:create" }
+    methods:  [POST]
 
 hms_doctor_invoice_admission:
     path:     /admission-new
@@ -48,6 +54,7 @@ hms_doctor_invoice_update:
     path:     /{id}/update
     defaults: { _controller: "HospitalBundle:DoctorInvoice:update" }
     methods:  [POST, PUT]
+
 
 hms_doctor_invoice_delete:
     path:     /{id}/delete

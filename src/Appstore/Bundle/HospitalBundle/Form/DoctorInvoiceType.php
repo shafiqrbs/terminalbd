@@ -31,12 +31,8 @@ class DoctorInvoiceType extends AbstractType
     {
         $builder
 
-            ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
-            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('payment','text', array('attr'=>array('class'=>'tooltips payment','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
-            ))
-            ->add('discount','text', array('attr'=>array('class'=>'tooltips discount','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
             ))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('referredDoctor', 'entity', array(
@@ -57,18 +53,6 @@ class DoctorInvoiceType extends AbstractType
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 m-wrap transactionMethod'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->orderBy("e.id","ASC");
-                }
-            ))
-            ->add('paymentCard', 'entity', array(
-                'required'    => false,
-                'property' => 'name',
-                'class' => 'Setting\Bundle\ToolBundle\Entity\PaymentCard',
-                'attr'=>array('class'=>'span12 m-wrap'),
-                'empty_value' => '---Choose payment card---',
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")

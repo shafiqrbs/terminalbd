@@ -318,35 +318,14 @@ class DeliveryController extends Controller
         exit;
     }
 
-    public function pdfIncomeAction()
-    {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $data = $_REQUEST;
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportIncome($globalOption,$data);
-        $html = $this->renderView(
-            'AccountingBundle:Report:incomePdf.html.twig', array(
-                'overview' => $overview,
-                'print' => ''
-            )
-        );
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="incomePdf.pdf"');
-        echo $pdf;
-
-    }
-
-
     public function printAction(Delivery $entity)
     {
+
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         if(!empty($inventory)){
 
             $html = $this->renderView(
-                'InventoryBundle:Delivery:invoice.html.twig', array(
+                'InventoryBundle:Delivery:pdfInvoice.html.twig', array(
                     'entity'      => $entity,
                     'print' => ''
                 )
@@ -357,9 +336,24 @@ class DeliveryController extends Controller
             $pdf             = $snappy->getOutputFromHtml($html);
 
             header('Content-Type: application/pdf');
-            header('Content-Disposition: attachment; filename="incomePdf.pdf"');
+            header('Content-Disposition: attachment; filename="'.$entity->getBranch()->getName().'.pdf"');
             echo $pdf;
 
+        }else{
+            return $this->redirect($this->generateUrl('inventory_delivery'));
+        }
+
+    }
+
+
+    public function printxAction(Delivery $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        if(!empty($inventory)){
+            return $this->render('InventoryBundle:Delivery:pdfInvoice.html.twig', array(
+                'entity'      => $entity,
+                'print' => '<script>window.print();</script>'
+            ));
         }else{
             return $this->redirect($this->generateUrl('inventory_delivery'));
         }

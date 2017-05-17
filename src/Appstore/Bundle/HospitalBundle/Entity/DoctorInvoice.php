@@ -138,6 +138,19 @@ class DoctorInvoice
      */
     private $paymentFor;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="paymentMobile", type="string", length=50, nullable=true)
+     */
+    private $paymentMobile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="transactionId", type="string", length=100, nullable=true)
+     */
+    private $transactionId;
 
     /**
      * @var string
@@ -628,6 +641,38 @@ class DoctorInvoice
     public function setDoctorInvoiceParticulars($doctorInvoiceParticulars)
     {
         $this->doctorInvoiceParticulars = $doctorInvoiceParticulars;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentMobile()
+    {
+        return $this->paymentMobile;
+    }
+
+    /**
+     * @param string $paymentMobile
+     */
+    public function setPaymentMobile($paymentMobile)
+    {
+        $this->paymentMobile = $paymentMobile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransactionId()
+    {
+        return $this->transactionId;
+    }
+
+    /**
+     * @param string $transactionId
+     */
+    public function setTransactionId($transactionId)
+    {
+        $this->transactionId = $transactionId;
     }
 
 }
