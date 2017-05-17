@@ -410,6 +410,7 @@ class PurchaseController extends Controller
      */
     public function updateApproveAction(Request $request, $id)
     {
+        set_time_limit(0);
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('InventoryBundle:Purchase')->find($id);
