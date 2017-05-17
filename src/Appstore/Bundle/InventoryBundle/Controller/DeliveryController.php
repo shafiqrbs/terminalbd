@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use Appstore\Bundle\InventoryBundle\Entity\DeliveryItem;
+use Knp\Snappy\Pdf;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -343,10 +344,22 @@ class DeliveryController extends Controller
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         if(!empty($inventory)){
-            return $this->render('InventoryBundle:Delivery:invoice.html.twig', array(
-                'entity'      => $entity,
-                'print' => '<script>window.print();</script>'
-            ));
+
+            $html = $this->renderView(
+                'InventoryBundle:Delivery:invoice.html.twig', array(
+                    'entity'      => $entity,
+                    'print' => ''
+                )
+            );
+
+            $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+            $snappy          = new Pdf($wkhtmltopdfPath);
+            $pdf             = $snappy->getOutputFromHtml($html);
+
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: attachment; filename="incomePdf.pdf"');
+            echo $pdf;
+
         }else{
             return $this->redirect($this->generateUrl('inventory_delivery'));
         }
