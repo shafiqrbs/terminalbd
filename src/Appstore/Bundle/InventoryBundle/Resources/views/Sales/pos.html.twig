@@ -425,18 +425,19 @@
             <button type="button" data-dismiss="modal" class="btn green">Okay</button>
         </div>
     </div>
-
+{% if entity.inventoryConfig.printer == 'pos' %}
     <script>
 
-     (function(d, s, id) {
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) return;
-         js = d.createElement(s); js.id = id;
-         js.src = "http://localhost.xiidea.net:9432/assets/easy-print-server.js";
-         fjs.parentNode.insertBefore(js, fjs);
-     }(document, "script", "xiidea-epp-sdk"));
+         (function(d, s, id) {
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) return;
+             js = d.createElement(s); js.id = id;
+             js.src = "http://localhost.xiidea.net:9432/assets/easy-print-server.js";
+             fjs.parentNode.insertBefore(js, fjs);
+         }(document, "script", "xiidea-epp-sdk"));
 
- </script>
+    </script>
+{% endif %}
 <style>
     .input-append .add-on, .input-prepend input[class*="numeric"]{
         font-size: 16px !important;
@@ -510,58 +511,4 @@
     });
     EditableInit();
     InventorySales({{ entity.id ? entity.id : 0 }});
-
-    $(document).on('change', '#branchItem', function() {
-
-        var item = $('#branchItem').val();
-        if(item == ''){
-        return false;
-        }
-        $.ajax({
-        url: Routing.generate('inventory_branch_sales_item_view',{'item':item}),
-        type: 'GET',
-        success: function(response) {
-        $('#branchItemStock').html(response);
-        },
-        })
-
-    });
-
-    $(document).on("click", "#pos", function() {
-
-       var paymentAmount = $('#paymentAmount').val();
-        if(paymentAmount == ''){
-            $('#static').modal();
-            return false;
-        }
-        var url = $(this).attr("rel");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                jsPostPrint(response);
-                setTimeout(pageRedirect(), 5000);
-            }
-        })
-    });
-    function pageRedirect() {
-        window.location.href = "{{ path('inventory_sales_new') }}";
-    }
-
-    function jsPostPrint(data) {
-
-        if(typeof EasyPOSPrinter == 'undefined') {
-            alert("Printer library not found");
-            return;
-        }
-        EasyPOSPrinter.raw(data);
-        EasyPOSPrinter.cut();
-        EasyPOSPrinter.print(function(r, x){
-            console.log(r)
-        });
-
-    }
-
-
-
 {% endblock %}

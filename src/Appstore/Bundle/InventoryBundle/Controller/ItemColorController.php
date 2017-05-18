@@ -215,6 +215,10 @@ class ItemColorController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'notice',"Data has been relation another Table"
             );
+        }catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice', 'Please contact system administrator further notification.'
+            );
         }
         return $this->redirect($this->generateUrl('itemcolor'));
     }

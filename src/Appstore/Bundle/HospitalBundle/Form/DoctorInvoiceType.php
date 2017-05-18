@@ -32,18 +32,35 @@ class DoctorInvoiceType extends AbstractType
         $builder
 
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
-            ->add('payment','text', array('attr'=>array('class'=>'tooltips payment','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
+            ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Add mobile transaction id','data-original-title'=>'Add mobile transaction id','autocomplete'=>'off')))
+            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 tooltips payment','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
             ))
-            ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
-            ->add('referredDoctor', 'entity', array(
+            ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Add remarks','autocomplete'=>'off')))
+            ->add('assignDoctor', 'entity', array(
                   'required'    => true,
                   'property' => 'referred',
-                  'empty_value' => '--- Select Referred Doctor/Agent ---',
+                  'empty_value' => '--- Select Doctor/Referred ---',
                   'attr'=>array('class'=>'m-wrap span12 select2'),
                   'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                   'query_builder' => function(EntityRepository $er){
                       return $er->createQueryBuilder('e')
-                          ->where("e.service = 6")
+                          ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
+                          ->andWhere('e.service IN (:service)')
+                          ->setParameter('service', array('5','6'))
+                          ->orderBy("e.name","ASC");
+                  }
+
+            ))
+            ->add('hmsCommission', 'entity', array(
+                  'required'    => true,
+                  'property' => 'name',
+                  'empty_value' => '--- Select commission type ---',
+                  'attr'=>array('class'=>'m-wrap span12'),
+                  'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCommission',
+                  'query_builder' => function(EntityRepository $er){
+                      return $er->createQueryBuilder('e')
+                          ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
+                          ->andWhere("e.status = 1")
                           ->orderBy("e.name","ASC");
                   }
 

@@ -43,6 +43,12 @@ class Invoice
     private $invoiceTransactions;
 
      /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="hmsInvoice" , cascade={"remove"})
+     * @ORM\OrderBy({"updated" = "DESC"})
+     **/
+    private $doctorInvoices;
+
+     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="invoices" , cascade={"persist", "remove"})
      **/
     private $service;
@@ -1133,6 +1139,14 @@ class Invoice
     public function setGrandTotal($grandTotal)
     {
         $this->grandTotal = $grandTotal;
+    }
+
+    /**
+     * @return DoctorInvoice
+     */
+    public function getDoctorInvoices()
+    {
+        return $this->doctorInvoices;
     }
 
 

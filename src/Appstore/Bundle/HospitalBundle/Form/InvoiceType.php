@@ -77,7 +77,8 @@ class InvoiceType extends AbstractType
                   'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
                   'query_builder' => function(EntityRepository $er){
                       return $er->createQueryBuilder('e')
-                          ->where("e.service = 6")
+                          ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
+                          ->andWhere("e.service = 6")
                           ->orderBy("e.name","ASC");
                   }
 

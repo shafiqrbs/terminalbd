@@ -36,10 +36,16 @@ class DoctorInvoice
     private $hospitalConfig;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoiceParticular", mappedBy="doctorInvoice" , cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="doctorInvoices")
      * @ORM\OrderBy({"updated" = "DESC"})
      **/
-    private $doctorInvoiceParticulars;
+    private $hmsInvoice;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCommission", inversedBy="doctorInvoices")
+     * @ORM\OrderBy({"name" = "ASC"})
+     **/
+    private $hmsCommission;
 
 
     /**
@@ -608,41 +614,6 @@ class DoctorInvoice
     }
 
 
-
-    /**
-     * @return string
-     */
-    public function getPaymentFor()
-    {
-        return $this->paymentFor;
-    }
-
-    /**
-     * @param string $paymentFor
-     * Doctor
-     * Referred
-     */
-    public function setPaymentFor($paymentFor)
-    {
-        $this->paymentFor = $paymentFor;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDoctorInvoiceParticulars()
-    {
-        return $this->doctorInvoiceParticulars;
-    }
-
-    /**
-     * @param mixed $doctorInvoiceParticulars
-     */
-    public function setDoctorInvoiceParticulars($doctorInvoiceParticulars)
-    {
-        $this->doctorInvoiceParticulars = $doctorInvoiceParticulars;
-    }
-
     /**
      * @return string
      */
@@ -673,6 +644,39 @@ class DoctorInvoice
     public function setTransactionId($transactionId)
     {
         $this->transactionId = $transactionId;
+    }
+
+    /**
+     * @return Invoice
+     */
+    public function getInvoices()
+    {
+        return $this->invoices;
+    }
+
+    /**
+     * @param Invoice $invoices
+     */
+    public function setInvoices($invoices)
+    {
+        $this->invoices = $invoices;
+    }
+
+
+    /**
+     * @return HmsCommission
+     */
+    public function getHmsCommission()
+    {
+        return $this->hmsCommission;
+    }
+
+    /**
+     * @param HmsCommission $hmsCommission
+     */
+    public function setHmsCommission($hmsCommission)
+    {
+        $this->hmsCommission = $hmsCommission;
     }
 
 }

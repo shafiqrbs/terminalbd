@@ -7,6 +7,7 @@ use Appstore\Bundle\HospitalBundle\Form\DoctorType;
 use Appstore\Bundle\HospitalBundle\Form\ReferredDoctorType;
 use Appstore\Bundle\HospitalBundle\Form\ParticularType;
 use Appstore\Bundle\HospitalBundle\Form\PathologyType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Validator\Constraints\Null;
@@ -215,8 +216,23 @@ class ReferredDoctorController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-        $em->remove($entity);
-        $em->flush();
+        try {
+
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice', 'Please contact system administrator further notification.'
+            );
+        }
         return $this->redirect($this->generateUrl('hms_referreddoctor'));
     }
 

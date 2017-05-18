@@ -207,6 +207,7 @@ class VendorController extends Controller
         }
 
         try {
+
             $em->remove($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -215,7 +216,11 @@ class VendorController extends Controller
 
         } catch (ForeignKeyConstraintViolationException $e) {
             $this->get('session')->getFlashBag()->add(
-                'notice',"Data has been relation another table"
+                'notice',"Data has been relation another Table"
+            );
+        }catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice', 'Please contact system administrator further notification.'
             );
         }
 

@@ -310,7 +310,7 @@ class Particular
 
     public function getReferred(){
 
-        return $this->particularCode.' - '.$this->name .' ('. $this->mobile .')';
+        return $this->particularCode.' - '.$this->name .' ('. $this->mobile .')/'.$this->getService()->getName();
     }
 
     /**

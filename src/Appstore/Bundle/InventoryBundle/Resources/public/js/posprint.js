@@ -1,34 +1,47 @@
-(function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "http://localhost.xiidea.net:9432/assets/easy-print-server.js";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, "script", "xiidea-epp-sdk"));
+$(document).on('change', '#branchItem', function() {
 
-function helloPrint() {
-
-    if(typeof EasyPOSPrinter == 'undefined') {
-        alert("Printer library not found");
-        return;
+    var item = $('#branchItem').val();
+    if(item == ''){
+        return false;
     }
+    $.ajax({
+        url: Routing.generate('inventory_branch_sales_item_view',{'item':item}),
+        type: 'GET',
+        success: function(response) {
+            $('#branchItemStock').html(response);
+        },
+    })
 
-    EasyPOSPrinter.text("Hello Printer!");
-    EasyPOSPrinter.feed(2);
-    EasyPOSPrinter.cut();
-    EasyPOSPrinter.print(function(r, x){
-        console.log(r)
-    });
+});
+
+$(document).on("click", "#pos", function() {
+
+    var paymentAmount = $('#paymentAmount').val();
+    if(paymentAmount == ''){
+        $('#static').modal();
+        return false;
+    }
+    var url = $(this).attr("rel");
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (response) {
+            jsPostPrint(response);
+            setTimeout(pageRedirect(), 5000);
+        }
+    })
+});
+function pageRedirect() {
+    window.location.href = "{{ path('inventory_sales_new') }}";
 }
 
-function jsPostPrintx(data) {
+function jsPostPrint(data) {
 
     if(typeof EasyPOSPrinter == 'undefined') {
         alert("Printer library not found");
         return;
     }
     EasyPOSPrinter.raw(data);
-
     EasyPOSPrinter.cut();
     EasyPOSPrinter.print(function(r, x){
         console.log(r)

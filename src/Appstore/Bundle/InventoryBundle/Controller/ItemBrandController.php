@@ -212,11 +212,11 @@ class ItemBrandController extends Controller
 
         } catch (ForeignKeyConstraintViolationException $e) {
             $this->get('session')->getFlashBag()->add(
-                'notice', $e->getMessage()
+                'notice',"Data has been relation another Table"
             );
         }catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add(
-                'notice', $e->getMessage()
+                'notice', 'Please contact system administrator further notification.'
             );
         }
 
