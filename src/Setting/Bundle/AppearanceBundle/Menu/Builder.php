@@ -391,8 +391,8 @@ class Builder extends ContainerAware
 
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
+        $userRoles = $user->getRoles();
         $inventory = $user->getGlobalOption()->getInventoryConfig();
-
         $menu
             ->addChild('Inventory')
             ->setAttribute('icon', 'icon icon-th-large')
@@ -405,75 +405,88 @@ class Builder extends ContainerAware
             if (!empty($deliveryProcess)) {
 
                 if (in_array('Pos', $deliveryProcess)) {
-                    if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES_POS')) {
 
-                        $menu['Inventory']->addChild('Point of Sales')
-                            ->setAttribute('icon', 'icon icon-truck')
-                            ->setAttribute('dropdown', true);
-                        $menu['Inventory']['Point of Sales']->addChild('Pos', array('route' => 'inventory_sales_new'))->setAttribute('icon', 'icon-shopping-cart');
-                        $menu['Inventory']['Point of Sales']->addChild('Sales', array('route' => 'inventory_sales'))->setAttribute('icon', ' icon-th-list');
-                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
-                            $menu['Inventory']['Point of Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                    if (in_array('ROLE_DOMAIN_INVENTORY_SALES_POS',$userRoles)) {
+                        if ($this->container->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES_POS')){
+
+
+                            $menu['Inventory']->addChild('Point of Sales')
+                                ->setAttribute('icon', 'icon icon-truck')
+                                ->setAttribute('dropdown', true);
+                            $menu['Inventory']['Point of Sales']->addChild('Pos', array('route' => 'inventory_sales_new'))->setAttribute('icon', 'icon-shopping-cart');
+                            $menu['Inventory']['Point of Sales']->addChild('Sales', array('route' => 'inventory_sales'))->setAttribute('icon', ' icon-th-list');
+                            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
+                                $menu['Inventory']['Point of Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                            }
+                            $menu['Inventory']['Point of Sales']->addChild('Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
+                            $menu['Inventory']['Point of Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon-upload');
                         }
-                        $menu['Inventory']['Point of Sales']->addChild('Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
-                        $menu['Inventory']['Point of Sales']->addChild('Sales Import', array('route' => 'inventory_salesimport'))->setAttribute('icon', 'icon-upload');
                     }
+
                 }
 
                 if (in_array('OnlineSales', $deliveryProcess)) {
 
-                    if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES_ONLINE')) {
-                        $menu['Inventory']
-                            ->addChild('Online Sales')
-                            ->setAttribute('icon', 'icon icon-truck')
-                            ->setAttribute('dropdown', true);
-                        $menu['Inventory']['Online Sales']->addChild('Customers', array('route' => 'inventory_salesonline_customer'))->setAttribute('icon', 'icon icon-user');
-                        $menu['Inventory']['Online Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', ' icon-plus');
-                        $menu['Inventory']['Online Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', ' icon-th-list');
+                    if (in_array('ROLE_DOMAIN_INVENTORY_SALES_ONLINE',$userRoles)) {
+                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES_ONLINE')) {
+                            $menu['Inventory']
+                                ->addChild('Online Sales')
+                                ->setAttribute('icon', 'icon icon-truck')
+                                ->setAttribute('dropdown', true);
+                            $menu['Inventory']['Online Sales']->addChild('Customers', array('route' => 'inventory_salesonline_customer'))->setAttribute('icon', 'icon icon-user');
+                            $menu['Inventory']['Online Sales']->addChild('Add Sales', array('route' => 'inventory_salesonline_new'))->setAttribute('icon', ' icon-plus');
+                            $menu['Inventory']['Online Sales']->addChild('Sales', array('route' => 'inventory_salesonline'))->setAttribute('icon', ' icon-th-list');
+                        }
                     }
                 }
 
                 if (in_array('GeneralSales', $deliveryProcess)) {
-                    if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES_GENERAL')) {
-                        $menu['Inventory']
-                            ->addChild('General Sales')
-                            ->setAttribute('icon', 'icon icon-truck')
-                            ->setAttribute('dropdown', true);
-                        $menu['Inventory']['General Sales']->addChild('Customers', array('route' => 'inventory_salesgeneral_customer'))->setAttribute('icon', 'icon icon-user');
-                        $menu['Inventory']['General Sales']->addChild('Add Sales', array('route' => 'inventory_salesgeneral_new'))->setAttribute('icon', ' icon-plus');
-                        $menu['Inventory']['General Sales']->addChild('Sales', array('route' => 'inventory_salesgeneral'))->setAttribute('icon', ' icon-th-list');
-                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
-                            $menu['Inventory']['General Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                    if (in_array('ROLE_DOMAIN_INVENTORY_SALES_ONLINE',$userRoles)) {
+                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES_GENERAL')) {
+                            $menu['Inventory']
+                                ->addChild('General Sales')
+                                ->setAttribute('icon', 'icon icon-truck')
+                                ->setAttribute('dropdown', true);
+                            $menu['Inventory']['General Sales']->addChild('Customers', array('route' => 'inventory_salesgeneral_customer'))->setAttribute('icon', 'icon icon-user');
+                            $menu['Inventory']['General Sales']->addChild('Add Sales', array('route' => 'inventory_salesgeneral_new'))->setAttribute('icon', ' icon-plus');
+                            $menu['Inventory']['General Sales']->addChild('Sales', array('route' => 'inventory_salesgeneral'))->setAttribute('icon', ' icon-th-list');
+                            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
+                                $menu['Inventory']['General Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                            }
                         }
                     }
                 }
 
                 if (in_array('ManualSales', $deliveryProcess)) {
-                    if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES_MANUAL')) {
+                    if (in_array('ROLE_DOMAIN_INVENTORY_SALES_MANUAL',$userRoles)) {
+                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES_MANUAL')) {
 
-                        $menu['Inventory']
-                            ->addChild('Manual Sales')
-                            ->setAttribute('icon', 'icon icon-truck')
-                            ->setAttribute('dropdown', true);
-                        $menu['Inventory']['Manual Sales']->addChild('Customers', array('route' => 'inventory_salesmanual_customer'))->setAttribute('icon', 'icon icon-user');
-                        $menu['Inventory']['Manual Sales']->addChild('Add Sales', array('route' => 'inventory_salesmanual_add'))->setAttribute('icon', ' icon-plus');
-                        $menu['Inventory']['Manual Sales']->addChild('Sales', array('route' => 'inventory_salesmanual'))->setAttribute('icon', ' icon-th-list');
-                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
-                            $menu['Inventory']['Manual Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                            $menu['Inventory']
+                                ->addChild('Manual Sales')
+                                ->setAttribute('icon', 'icon icon-truck')
+                                ->setAttribute('dropdown', true);
+                            $menu['Inventory']['Manual Sales']->addChild('Customers', array('route' => 'inventory_salesmanual_customer'))->setAttribute('icon', 'icon icon-user');
+                            $menu['Inventory']['Manual Sales']->addChild('Add Sales', array('route' => 'inventory_salesmanual_add'))->setAttribute('icon', ' icon-plus');
+                            $menu['Inventory']['Manual Sales']->addChild('Sales', array('route' => 'inventory_salesmanual'))->setAttribute('icon', ' icon-th-list');
+                            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
+                                $menu['Inventory']['Manual Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                            }
                         }
                     }
                 }
 
                 if (in_array('Order', $deliveryProcess)) {
-                    if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES_ORDER')) {
-                        $menu['Inventory']
-                            ->addChild('Online Order')
-                            ->setAttribute('icon', 'icon icon-truck')
-                            ->setAttribute('dropdown', true);
-                        $menu['Inventory']['Online Order']->addChild('Online Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
-                        $menu['Inventory']['Online Order']->addChild('Order', array('route' => 'inventory_sales'))->setAttribute('icon', ' icon-th-list');
-                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
-                            $menu['Inventory']['Online Order']->addChild('Order Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                    if (in_array('ROLE_DOMAIN_INVENTORY_SALES_ORDER',$userRoles)) {
+                        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES_ORDER')) {
+                            $menu['Inventory']
+                                ->addChild('Online Order')
+                                ->setAttribute('icon', 'icon icon-truck')
+                                ->setAttribute('dropdown', true);
+                            $menu['Inventory']['Online Order']->addChild('Online Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
+                            $menu['Inventory']['Online Order']->addChild('Order', array('route' => 'inventory_sales'))->setAttribute('icon', ' icon-th-list');
+                            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
+                                $menu['Inventory']['Online Order']->addChild('Order Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
+                            }
                         }
                     }
                 }
@@ -764,13 +777,15 @@ class Builder extends ContainerAware
         $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Pathological New', array('route' => 'hms_invoice_new'))
             ->setAttribute('icon', 'icon-plus');
         $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Pathological', array('route' => 'hms_invoice'))
-            ->setAttribute('icon', 'icon-plus');
+            ->setAttribute('icon', 'icon-th-list');
         $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission New', array('route' => 'hms_invoice_admission_new'))
             ->setAttribute('icon', 'icon-plus');
         $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'))
-            ->setAttribute('icon', 'icon-plus');
-        $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Doctor Commission', array('route' => 'hms_doctor_invoice'))
-            ->setAttribute('icon', 'icon-plus');
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Doctor New Commission', array('route' => 'hms_doctor_commission_invoice'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Doctor Invoice', array('route' => 'hms_doctor_invoice'))
+            ->setAttribute('icon', 'icon-th-list');
         $menu['Hospital & Diagnostic']->addChild('Pathological Report')
             ->setAttribute('icon', 'icon icon-reorder')
             ->setAttribute('dropdown', true);

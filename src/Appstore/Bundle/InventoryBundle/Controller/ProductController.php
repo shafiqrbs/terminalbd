@@ -318,7 +318,7 @@ class ProductController extends Controller
         );
         $items = array();
         foreach ($entities as $entity):
-            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName());
+            $items[] = array('value' => $entity->getId(),'text'=> $entity->getName());
         endforeach;
         return new JsonResponse($items);
 

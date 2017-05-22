@@ -85,12 +85,8 @@
                                     <div class="control-group">
                                         <label class="control-label">Designation</label>
                                         <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-font"></i>
-                                                {{ form_widget(form.profile.designation) }}
-                                                {{ form_errors(form.profile.designation) }}
-                                            </div>
-
+                                            {{ form_widget(form.profile.designation) }}
+                                            {{ form_errors(form.profile.designation) }}
                                         </div>
                                     </div>
                                 </div>
@@ -224,13 +220,21 @@
                             <!--/row-->
                             <div class="row-fluid">
                                 <div class="span12">
-                                    <div class="control-group">
-                                        <div class="controls">
-                                            {{ form_widget(form.roles) }}
-                                            {{ form_errors(form.roles) }}
+                                    <div class="form-group">
+                                        <label for="{{ form.roles.vars.id }}" class="control-label col-md-2">
+                                            Access Control Role:
+                                        </label>
+                                        <div class="col-md-9">
+                                            <div class="input-icon right">
+                                                <div class="controls">
+                                                    {{ form_errors(form.roles) }}
+                                                    {{ form_widget(form.roles, {'attr': {'class': 'form-control multi-select2 span6 m-wrap'}}) }}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                             <!--/row-->
                             <!--/row-->
@@ -343,10 +347,11 @@
             </div>
         </div>
     </div>
-    <style>
-        .check-list label {
-            width: 30% !important;
-        }
-    </style>
+{% endblock %}
+{% block documentready %}
+
+    {{ parent() }}
+    $("select.multi-select2").multiSelect();
+
 {% endblock %}
 

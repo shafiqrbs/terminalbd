@@ -19,7 +19,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Designation
  *
- * @ORM\Table(name ="tools_designation")
+ * @ORM\Table(name ="designation")
  * @ORM\Entity
  */
 class Designation

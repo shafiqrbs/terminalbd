@@ -42,6 +42,26 @@ class ParticularRepository extends EntityRepository
         return  $qb;
     }
 
+    public function getFindWithParticular($hospital,$services){
+
+        $qb = $this->createQueryBuilder('e')
+            ->leftJoin('e.service','s')
+            ->select('e.id')
+            ->addSelect('e.name')
+            ->addSelect('e.particularCode')
+            ->addSelect('e.price')
+            ->addSelect('e.minimumPrice')
+            ->addSelect('e.quantity')
+            ->addSelect('s.name as serviceName')
+            ->addSelect('s.code as serviceCode')
+            ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
+            ->andWhere('s.id IN(:service)')
+            ->setParameter('service',array_values($services))
+            ->orderBy('e.service','ASC')
+            ->getQuery()->getArrayResult();
+        return  $qb;
+    }
+
     public function getServiceWithParticular($hospital){
 
         $qb = $this->createQueryBuilder('e')
@@ -55,8 +75,8 @@ class ParticularRepository extends EntityRepository
             ->addSelect('s.name as serviceName')
             ->addSelect('s.code as serviceCode')
             ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
-            ->andWhere('s.id IN(:process)')
-            ->setParameter('process',array_values(array(1,2,3,4)))
+            ->andWhere('s.id IN(:service)')
+            ->setParameter('service',array_values(array(1,2,3,4)))
             ->orderBy('e.service','ASC')
             ->getQuery()->getArrayResult();
             return  $qb;
@@ -156,10 +176,31 @@ class ParticularRepository extends EntityRepository
                 $em->persist($particular);
                 $em->flush();
             }
-
-
         }
     }
+
+    public function groupServiceBy(){
+
+        $pass2 = array();
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.hospitalConfig = :config')->setParameter('config', 1) ;
+        $qb->andWhere('e.service IN(:service)')
+            ->setParameter('service',array_values(array(1,2,3,4)));
+        $qb->orderBy('e.name','ASC');
+        $data = $qb->getQuery()->getResult();
+
+        foreach ($data as $parent => $children){
+
+            foreach($children as $child => $none){
+                $pass2[$parent][$child] = true;
+                $pass2[$child][$parent] = true;
+            }
+        }
+
+    }
+
+
+
 
 
 

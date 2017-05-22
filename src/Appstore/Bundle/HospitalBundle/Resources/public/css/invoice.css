@@ -14,7 +14,7 @@
 }
 
 
-.controls ul li {
+.controls ul li , .control-group ul li {
     list-style: none;
     color: #f0262f;
     padding-left: 6px;

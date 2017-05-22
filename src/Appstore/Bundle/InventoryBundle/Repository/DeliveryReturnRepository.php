@@ -20,7 +20,7 @@ class DeliveryReturnRepository extends EntityRepository
 
         $item = isset($data['item'])? $data['item'] :'';
         $qb = $this->createQueryBuilder('e');
-      /*  $qb->where("e.branch = :branch");
+        $qb->where("e.branch = :branch");
         $qb->setParameter('branch', $branch);
 
         if (!empty($startDate) and $startDate !="") {
@@ -36,7 +36,7 @@ class DeliveryReturnRepository extends EntityRepository
             $qb->join('e.item', 'item');
             $qb->andWhere("item.sku = :sku");
             $qb->setParameter('sku', $item);
-        }*/
+        }
         $qb->orderBy('e.id','DESC');
         $qb->getQuery();
         return  $qb;

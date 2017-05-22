@@ -70,7 +70,7 @@
                                     <tr>
                                         <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
                                         <td>{{ entity.profile.name }}</td>
-                                        <td>{{ entity.profile.designation }}</td>
+                                        <td>{% if entity.profile.designation is defined and entity.profile.designation is not empty %}{{ entity.profile.designation.name }}{% endif %}</td>
                                         <td>{{ entity.username }}</td>
                                         <td class="numeric"><a href="tel:+88 {{ entity.profile.mobile }}"> {{ entity.profile.mobile }}</a></td>
                                         <td>{% if entity.enabled == 1 %}<span class="btn mini blue"><i class="icon-ok"></i></span>{% else %}<span class="btn mini red"><i class="icon-remove"></i></span>{% endif %}</td>

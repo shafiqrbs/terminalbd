@@ -76,12 +76,13 @@
                                     </div>
                                 </div>
                             </form>
-                            <table>
-                                <tr>
-                                    <th class="numeric" colspan="7" style="text-align: right"><strong>Grand Total</strong></th>
-                                    <td class="numeric" ><strong>{{ overview|number_format }}</strong></td>
-                                    <td class="numeric" ></td>
-                                </tr>
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                <thead class="flip-content">
+                                    <tr class="head-red">
+                                        <th class="span3" ><strong>Total Expenses</strong></th>
+                                        <th class="" ><strong>{{ overview|number_format }}</strong></th>
+                                    </tr>
+                                </thead>
                             </table>
                         </div>
                         <div class="portlet-body flip-scroll">

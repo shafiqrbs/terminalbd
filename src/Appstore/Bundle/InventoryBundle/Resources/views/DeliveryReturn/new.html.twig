@@ -104,8 +104,8 @@
                             <div class="clearfix"><br/></div>
                             <!--/span-->
                             <div class="form-actions portlet box grey">
-                                <div class="pull-center">
-                                    <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
+                                <div class="pull-right">
+                                    <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
                                     <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
                                     {% if(entity.id > 0 ) %}
                                         <a href="{{ path('inventory_deliveryreturn_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
@@ -134,7 +134,7 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Barcode</th>
-                                    <th class="numeric" >Purchase Invoice/Date</th>
+                                    <th class="numeric" >Delivery Invoice/Date</th>
                                     <th class="numeric" >Quantity</th>
                                     <th class="numeric" >Action</th>
                                 </tr>

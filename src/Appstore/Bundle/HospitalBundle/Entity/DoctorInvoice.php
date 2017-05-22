@@ -47,12 +47,6 @@ class DoctorInvoice
      **/
     private $hmsCommission;
 
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="doctorInvoice", cascade={"persist"}  )
-     **/
-    private  $referredDoctor;
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="doctorInvoiceDoctor", cascade={"persist"}  )
      **/
@@ -133,20 +127,6 @@ class DoctorInvoice
     /**
      * @var string
      *
-     * @ORM\Column(name="paymentStatus", type="string", length=50, nullable=true)
-     */
-    private $paymentStatus = "Pending";
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="paymentFor", type="string", length=30, nullable=true)
-     */
-    private $paymentFor;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="paymentMobile", type="string", length=50, nullable=true)
      */
     private $paymentMobile;
@@ -157,28 +137,6 @@ class DoctorInvoice
      * @ORM\Column(name="transactionId", type="string", length=100, nullable=true)
      */
     private $transactionId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="subTotal", type="decimal", nullable=true)
-     */
-    private $subTotal;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="total", type="decimal", nullable=true)
-     */
-    private $total;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="netTotal", type="decimal", nullable=true)
-     */
-    private $netTotal;
 
     /**
      * @var string
@@ -195,13 +153,6 @@ class DoctorInvoice
      */
     private $comment;
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="due", type="decimal", nullable=true)
-     */
-    private $due;
 
     /**
      * @var \DateTime
@@ -244,7 +195,7 @@ class DoctorInvoice
     }
 
 
-      /**
+    /**
      * @return string
      */
     public function getPaymentMethod()
@@ -264,39 +215,6 @@ class DoctorInvoice
     public function setPaymentMethod($paymentMethod)
     {
         $this->paymentMethod = $paymentMethod;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSubTotal()
-    {
-        return $this->subTotal;
-    }
-
-    /**
-     * @param string $subTotal
-     */
-    public function setSubTotal($subTotal)
-    {
-        $this->subTotal = $subTotal;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getTotal()
-    {
-        return $this->total;
-    }
-
-    /**
-     * @param string $total
-     */
-    public function setTotal($total)
-    {
-        $this->total = $total;
     }
 
     /**
@@ -347,29 +265,6 @@ class DoctorInvoice
     {
         $this->bank = $bank;
     }
-
-
-    /**
-     * @return string
-     */
-    public function getPaymentStatus()
-    {
-        return $this->paymentStatus;
-    }
-
-    /**
-     * @param string $paymentStatus
-     * Paid
-     * Pending
-     * Partial
-     * Due
-     * Other
-     */
-    public function setPaymentStatus($paymentStatus)
-    {
-        $this->paymentStatus = $paymentStatus;
-    }
-
 
     /**
      * @return integer
@@ -549,55 +444,6 @@ class DoctorInvoice
     }
 
     /**
-     * @return string
-     */
-    public function getDue()
-    {
-        return $this->due;
-    }
-
-    /**
-     * @param string $due
-     */
-    public function setDue($due)
-    {
-        $this->due = $due;
-    }
-
-    /**
-     * @return Particular
-     */
-    public function getReferredDoctor()
-    {
-        return $this->referredDoctor;
-    }
-
-    /**
-     * @param Particular $referredDoctor
-     */
-    public function setReferredDoctor($referredDoctor)
-    {
-        $this->referredDoctor = $referredDoctor;
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getNetTotal()
-    {
-        return $this->netTotal;
-    }
-
-    /**
-     * @param string $netTotal
-     */
-    public function setNetTotal($netTotal)
-    {
-        $this->netTotal = $netTotal;
-    }
-
-    /**
      * @return Particular
      */
     public function getAssignDoctor()
@@ -647,23 +493,6 @@ class DoctorInvoice
     }
 
     /**
-     * @return Invoice
-     */
-    public function getInvoices()
-    {
-        return $this->invoices;
-    }
-
-    /**
-     * @param Invoice $invoices
-     */
-    public function setInvoices($invoices)
-    {
-        $this->invoices = $invoices;
-    }
-
-
-    /**
      * @return HmsCommission
      */
     public function getHmsCommission()
@@ -677,6 +506,22 @@ class DoctorInvoice
     public function setHmsCommission($hmsCommission)
     {
         $this->hmsCommission = $hmsCommission;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHmsInvoice()
+    {
+        return $this->hmsInvoice;
+    }
+
+    /**
+     * @param mixed $hmsInvoice
+     */
+    public function setHmsInvoice($hmsInvoice)
+    {
+        $this->hmsInvoice = $hmsInvoice;
     }
 
 }

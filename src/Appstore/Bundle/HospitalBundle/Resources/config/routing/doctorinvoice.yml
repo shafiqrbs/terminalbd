@@ -1,6 +1,10 @@
-hms_doctor_invoice:
+hms_doctor_commission_invoice:
     path:     /
     defaults: { _controller: "HospitalBundle:DoctorInvoice:index" }
+
+hms_doctor_invoice:
+    path:     /doctor
+    defaults: { _controller: "HospitalBundle:DoctorInvoice:doctorInvoice" }
 
 hms_doctor_invoice_show:
     path:     /{id}/show
@@ -16,77 +20,17 @@ hms_doctor_invoice_create:
     defaults: { _controller: "HospitalBundle:DoctorInvoice:create" }
     methods:  [POST]
 
-hms_doctor_invoice_admission:
-    path:     /admission-new
-    defaults: { _controller: "HospitalBundle:DoctorInvoice:new" }
-
-hms_doctor_invoice_edit:
-    path:     /{id}/edit
-    defaults: { _controller: "HospitalBundle:DoctorInvoice:edit" }
-
-hms_doctor_invoice_particular_search:
-    path:     /{id}/particular-search
-    defaults: { _controller: "HospitalBundle:DoctorInvoice:particularSearch" }
-
-
-hms_doctor_invoice_particular_add:
-    path:     /{invoice}/particular-add
-    defaults: { _controller: "HospitalBundle:DoctorInvoice:addParticular" }
-    methods:  POST
-    options:
-            expose: true
-
-hms_doctor_invoice_discount_update:
-    path:     /invoice/invoice-dicount-update
-    defaults: { _controller: "HospitalBundle:DoctorInvoice:invoiceDiscountUpdate" }
-    methods:  POST
-    options:
-            expose: true
-
-hms_doctor_invoice_approved:
-    path:     /{id}/invoice-approved
-    defaults: { _controller: "HospitalBundle:DoctorInvoice:approve" }
-    methods:  POST
-    options:
-            expose: true
-
-hms_doctor_invoice_update:
-    path:     /{id}/update
-    defaults: { _controller: "HospitalBundle:DoctorInvoice:update" }
-    methods:  [POST, PUT]
-
-
 hms_doctor_invoice_delete:
     path:     /{id}/delete
     defaults: { _controller: "HospitalBundle:DoctorInvoice:delete" }
 
-hms_doctor_invoice_discount_delete:
-    path:     /{id}/discount-delete
-    defaults: { _controller: "HospitalBundle:DoctorInvoice:discountDelete" }
+hms_doctor_invoice_pay:
+    path:     /{id}/pay
+    defaults: { _controller: "HospitalBundle:DoctorInvoice:pay" }
 
 hms_doctor_invoice_confirm:
     path:     /{id}/invoice-confirm
     defaults: { _controller: "HospitalBundle:DoctorInvoice:confirm" }
 
 
-hms_doctor_invoice_particular_delete:
-    path:     /{invoice}/{id}/particular-delete
-    defaults: { _controller: "HospitalBundle:DoctorInvoice:invoiceParticularDelete" }
-
-hms_doctor_invoice_print_doctor_invoice:
-    path:     /{id}/print
-    defaults: { _controller: "HospitalBundle:DoctorInvoice:invoicePrint" }
-
-hms_doctor_invoice_process_update:
-    path:     /hms-invoice/upadte-process
-    defaults: { _controller: "HospitalBundle:DoctorInvoice:invoiceProcessUpdate" }
-    methods:  POST
-    options:
-            expose: true
-
-hms_doctor_invoice_status_select:
-    path:     /invoice-status-select
-    defaults: { _controller: "HospitalBundle:DoctorInvoice:statusSelect" }
-    options:
-           expose: true
 

@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -15,78 +16,96 @@ class DoctorInvoiceRepository extends EntityRepository
 {
 
 
-    public function updateInvoiceTotalPrice(Invoice $invoice)
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
+    {
+        $invoice = isset($data['hmsInvoice'])? $data['hmsInvoice'] :'';
+        $commission = isset($data['commission'])? $data['commission'] :'';
+        $assignDoctor = isset($data['assignDoctor'])? $data['assignDoctor'] :'';
+        $process = isset($data['process'])? $data['process'] :'';
+        $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
+
+
+        if (!empty($invoice)) {
+            $qb->andWhere($qb->expr()->like("hmsInvoice.invoice", "'%$invoice%'"  ));
+        }
+        if(!empty($commission)){
+            $qb->andWhere("e.hmsCommission = :commission");
+            $qb->setParameter('commission', $commission);
+        }
+        if(!empty($assignDoctor)){
+            $qb->andWhere("e.assignDoctor = :assignDoctor");
+            $qb->setParameter('assignDoctor', $assignDoctor);
+        }
+        if(!empty($process)){
+            $qb->andWhere("e.process = :process");
+            $qb->setParameter('process', $process);
+        }
+        if(!empty($transactionMethod)){
+            $qb->andWhere("e.transactionMethod = :transactionMethod");
+            $qb->setParameter('transactionMethod', $transactionMethod);
+        }
+    }
+
+    public function findWithList(User $user,$data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.hmsInvoice','hmsInvoice');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.updated','DESC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
+    public function  findWithOverview(User $user,$data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.hmsInvoice','hmsInvoice');
+        $qb->select('sum(e.payment) as subTotal');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.process = :process')->setParameter('process', 'In-progress') ;
+        $this->handleSearchBetween($qb,$data);
+        $receivable = $qb->getQuery()->getOneOrNullResult();
+        $receivableTotal = !empty($receivable['subTotal']) ? $receivable['subTotal'] :0;
+
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.hmsInvoice','hmsInvoice');
+        $qb->select('sum(e.payment) as subTotal');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Paid') ;
+        $this->handleSearchBetween($qb,$data);
+        $payment = $qb->getQuery()->getOneOrNullResult();
+        $paymentTotal = !empty($payment['subTotal']) ? $payment['subTotal'] :0;
+        $due = $receivableTotal- $paymentTotal;
+        $data = array( 'commission'=> $receivableTotal , 'payment'=> $paymentTotal , 'due'=> $due);
+        return $data;
+    }
+
+
+    public function updateCommissionInvoice(Invoice $invoice)
     {
         $em = $this->_em;
-        $total = $em->createQueryBuilder()
-            ->from('HospitalBundle:InvoiceParticular','si')
-            ->select('sum(si.subTotal) as subTotal')
-            ->where('si.invoice = :invoice')
+        $total = $this->createQueryBuilder('e')
+            ->select('sum(e.payment) as subTotal')
+            ->where('e.hmsInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();
 
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
-        if($subTotal > 0){
-
-            if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
-                $totalAmount = ($subTotal- $invoice->getDiscount());
-                $vat = $this->getCulculationVat($invoice,$totalAmount);
-                $invoice->setVat($vat);
-            }
-
-            $invoice->setSubTotal($subTotal);
-            $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
-            $invoice->setNetTotal($invoice->getTotal());
-            $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
-
-        }else{
-
-            $invoice->setSubTotal(0);
-            $invoice->setTotal(0);
-            $invoice->setNetTotal(0);
-            $invoice->setDue(0);
-            $invoice->setDiscount(0);
-            $invoice->setVat(0);
-        }
-
-        $em->persist($invoice);
-        $em->flush();
-
-        return $invoice;
-
+        return $subTotal;
     }
 
-    public function updatePaymentReceive(Invoice $invoice)
-    {
-        $em = $this->_em;
-        $res = $em->createQueryBuilder()
-            ->from('HospitalBundle:InvoiceTransaction','si')
-            ->select('sum(si.payment) as payment , sum(si.discount) as discount, sum(si.vat) as vat')
-            ->where('si.invoice = :invoice')
-            ->setParameter('invoice', $invoice ->getId())
-            ->getQuery()->getOneOrNullResult();
-        $payment = !empty($res['payment']) ? $res['payment'] :0;
-        $discount = !empty($res['discount']) ? $res['discount'] :0;
-        $vat = !empty($res['vat']) ? $res['vat'] :0;
-        $invoice->setPayment($payment);
-        $invoice->setDiscount($discount);
-        $invoice->setVat($vat);
-        $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
-        $invoice->setNetTotal($invoice->getTotal());
-        $invoice->setDue($invoice->getTotal() - $invoice->getPayment());
-        if($invoice->getPayment() >= $invoice->getTotal()){
-            $invoice->setPaymentStatus('Paid');
-        }else{
-            $invoice->setPaymentStatus('Due');
-        }
-        $em->flush();
 
-    }
-    public function getCulculationVat(Invoice $sales,$totalAmount)
-    {
-        $vat = ( ($totalAmount * (int)$sales->getHospitalConfig()->getVatPercentage())/100 );
-        return round($vat);
-    }
+
 
 
 }

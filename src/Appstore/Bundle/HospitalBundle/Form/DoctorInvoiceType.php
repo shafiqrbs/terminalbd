@@ -33,12 +33,18 @@ class DoctorInvoiceType extends AbstractType
 
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Add mobile transaction id','data-original-title'=>'Add mobile transaction id','autocomplete'=>'off')))
-            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 tooltips payment','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
+            ->add('payment','text', array('attr'=>array('class'=>'m-wrap span12 tooltips payment','data-trigger' => 'hover','placeholder'=>'Payment amount','data-original-title'=>'Enter payment amount','autocomplete'=>'off'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Payment input required')),
+                )
             ))
             ->add('comment','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>3,'placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('assignDoctor', 'entity', array(
                   'required'    => true,
                   'property' => 'referred',
+                    'constraints' =>array(
+                        new NotBlank(array('message'=>'Please select doctor/referred/agent')),
+                    ),
                   'empty_value' => '--- Select Doctor/Referred ---',
                   'attr'=>array('class'=>'m-wrap span12 select2'),
                   'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
@@ -55,6 +61,9 @@ class DoctorInvoiceType extends AbstractType
                   'required'    => true,
                   'property' => 'name',
                   'empty_value' => '--- Select commission type ---',
+                  'constraints' =>array(
+                        new NotBlank(array('message'=>'Payment input required')),
+                  ),
                   'attr'=>array('class'=>'m-wrap span12'),
                   'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCommission',
                   'query_builder' => function(EntityRepository $er){

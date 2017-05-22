@@ -3,16 +3,14 @@
 namespace Appstore\Bundle\DomainUserBundle\Controller;
 use Core\UserBundle\Form\DomainEditProfileType;
 use FOS\UserBundle\Model\UserManager;
-use Appstore\Bundle\DomainUserBundle\Form\DomainEditUserType;
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\DomainEditSignType;
 use Core\UserBundle\Form\DomainSignType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Appstore\Bundle\DomainUserBundle\Entity\DomainUser;
-use Appstore\Bundle\DomainUserBundle\Form\DomainUserType;
+
 
 /**
  * DomainUser controller.
@@ -30,7 +28,7 @@ class DomainUserController extends Controller
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
         $entities = $user->getGlobalOption()->getUsers();
-        return $this->render('DomainUserBundle:Agent:index.html.twig', array(
+        return $this->render('DomainUserBundle:DomainUser:index.html.twig', array(
             'entities' => $entities,
         ));
     }
@@ -61,7 +59,7 @@ class DomainUserController extends Controller
             return $this->redirect($this->generateUrl('domain_user'));
         }
 
-        return $this->render('DomainUserBundle:Agent:new.html.twig', array(
+        return $this->render('DomainUserBundle:DomainUser:new.html.twig', array(
             'globalOption' => $globalOption,
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -77,9 +75,10 @@ class DomainUserController extends Controller
      */
     private function createCreateForm(User $entity)
     {
+        $user = $this->getDoctrine()->getRepository('UserBundle:User');
         $globalOption = $this->getUser()->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new DomainSignType($globalOption,$location), $entity, array(
+        $form = $this->createForm(new DomainSignType($user,$globalOption,$location), $entity, array(
             'action' => $this->generateUrl('domain_create'),
             'method' => 'POST',
             'attr' => array(
@@ -101,7 +100,7 @@ class DomainUserController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $form   = $this->createCreateForm($entity);
 
-        return $this->render('DomainUserBundle:Agent:new.html.twig', array(
+        return $this->render('DomainUserBundle:DomainUser:new.html.twig', array(
             'globalOption' => $globalOption,
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -121,7 +120,7 @@ class DomainUserController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find DomainUser entity.');
         }
-        return $this->render('DomainUserBundle:Agent:show.html.twig', array(
+        return $this->render('DomainUserBundle:DomainUser:show.html.twig', array(
             'user'      => $entity,
         ));
     }
@@ -136,7 +135,7 @@ class DomainUserController extends Controller
         $em = $this->getDoctrine()->getManager();
         $editForm = $this->createEditForm($user);
         $globalOption = $user->getGlobalOption();
-        return $this->render('DomainUserBundle:Agent:edit.html.twig', array(
+        return $this->render('DomainUserBundle:DomainUser:edit.html.twig', array(
             'globalOption' => $globalOption,
             'entity'      => $user,
             'form'   => $editForm->createView(),
@@ -144,17 +143,18 @@ class DomainUserController extends Controller
     }
 
     /**
-    * Creates a form to edit a DomainUser entity.
-    *
-    * @param User $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a DomainUser entity.
+     *
+     * @param User $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(User $entity)
     {
+        $user = $this->getDoctrine()->getRepository('UserBundle:User');
         $globalOption = $this->getUser()->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new \Core\UserBundle\Form\DomainEditUserType($globalOption,$location), $entity, array(
+        $form = $this->createForm(new \Core\UserBundle\Form\DomainEditUserType($user, $globalOption,$location), $entity, array(
             'action' => $this->generateUrl('domain_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -186,7 +186,7 @@ class DomainUserController extends Controller
             return $this->redirect($this->generateUrl('domain_edit', array('id' => $id)));
         }
 
-        return $this->render('DomainUserBundle:Agent:edit.html.twig', array(
+        return $this->render('DomainUserBundle:DomainUser:edit.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
 
@@ -208,6 +208,8 @@ class DomainUserController extends Controller
         );
         return $this->redirect($this->generateUrl('domain_user'));
     }
+
+
 
     /**
      * Creates a form to edit a DomainUser entity.
@@ -242,7 +244,7 @@ class DomainUserController extends Controller
         $user = $this->getUser();
         $editForm = $this->createEditProfileForm($user);
         $globalOption = $user->getGlobalOption();
-        return $this->render('DomainUserBundle:Agent:profile.html.twig', array(
+        return $this->render('DomainUserBundle:DomainUser:profile.html.twig', array(
             'globalOption' => $globalOption,
             'entity'      => $user,
             'form'   => $editForm->createView(),
@@ -274,7 +276,7 @@ class DomainUserController extends Controller
             return $this->redirect($this->generateUrl('domain_edit_profile'));
         }
 
-        return $this->render('DomainUserBundle:Agent:profile.html.twig', array(
+        return $this->render('DomainUserBundle:DomainUser:profile.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
 

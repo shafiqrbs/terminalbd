@@ -277,6 +277,35 @@ class CustomerController extends Controller
         ));
     }
 
+    public function searchAutoCompleteNameAction()
+    {
+        $q = $_REQUEST['term'];
+        $option = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteName($option,$q);
+        $items = array();
+        foreach ($entities as $entity):
+            $items[]=array('id' => $entity['id'],'value' => $entity['id']);
+        endforeach;
+        return new JsonResponse($items);
+
+    }
+
+    public function searchAutoCompleteMobileAction()
+    {
+        $q = $_REQUEST['term'];
+        $option = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoComplete($option,$q);
+        $items = array();
+        foreach ($entities as $entity):
+            $items[]=array('id' => $entity['id'],'value' => $entity['id']);
+        endforeach;
+        return new JsonResponse($items);
+
+    }
+
+
+
+
 
 
 }

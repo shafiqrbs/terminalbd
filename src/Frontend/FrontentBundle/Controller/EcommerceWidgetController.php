@@ -117,7 +117,14 @@ class EcommerceWidgetController extends Controller
     {
 
         $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption,'pageName' => $pageName ,'position' => $position ),array('sorting'=>'ASC'));
-        return $this->render('@Frontend/Template/Desktop/EcommerceWidget/FeatureWidget.html.twig', array(
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/EcommerceWidget/FeatureWidget';
+        }else{
+            $theme = 'Template/Desktop/EcommerceWidget/FeatureWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
             'features'           => $features,
             'globalOption'           => $globalOption,
         ));

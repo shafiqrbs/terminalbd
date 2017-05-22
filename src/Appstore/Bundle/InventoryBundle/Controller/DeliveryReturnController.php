@@ -48,10 +48,11 @@ class DeliveryReturnController extends Controller
 
     public function todayDeliveryReturn()
     {
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $branch = $this->getUser()->getBranches();
         $data = array('startDate'=> date('Y-m-d'),'endDate'=> date('Y-m-d'));
-        $entities = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:DeliveryReturn')->findWithSearch($inventory,$data);
-        return $entities;
+        $entities = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:DeliveryReturn')->findWithSearch($branch,$data);
+        $paginate = $this->paginate($entities);
+        return $paginate;
     }
 
     /**
@@ -60,6 +61,7 @@ class DeliveryReturnController extends Controller
      */
     public function createAction(Request $request)
     {
+
         $branch = $this->getUser()->getBranches();
         $entity = new DeliveryReturn();
         $form = $this->createCreateForm($entity);
@@ -68,10 +70,10 @@ class DeliveryReturnController extends Controller
         $barcode = $data['appstore_bundle_inventorybundle_delivery_return']['purchaseItem'];
         $purchaseItem = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('barcode' => $barcode));
 
-        $deliveryItem = $this->getDoctrine()->getRepository('InventoryBundle:DeliveryItem')->checkItem($branch,$purchaseItem);
+         if ($form->isValid() and !empty($purchaseItem)) {
 
-        if ($form->isValid()) {
-            if(!empty($deliveryItem)) {
+             $deliveryItem = $this->getDoctrine()->getRepository('InventoryBundle:DeliveryItem')->checkItem($this->getUser(),$purchaseItem,$entity->getQuantity());
+             if(!empty($deliveryItem) and $deliveryItem == 'valid') {
 
                 $em = $this->getDoctrine()->getManager();
                 $entity->setInventoryConfig($this->getUser()->getGlobalOption()->getInventoryConfig());
@@ -88,8 +90,9 @@ class DeliveryReturnController extends Controller
             }else{
 
                 $this->get('session')->getFlashBag()->add(
-                    'notice', "This barcode not found at delivery invoice in branch"
+                    'error', "Your current branch stock ".$deliveryItem
                 );
+
                 $todayDeliveryReturn = $this->todayDeliveryReturn();
                 return $this->render('InventoryBundle:DeliveryReturn:new.html.twig', array(
                     'entity' => $entity,
@@ -99,6 +102,9 @@ class DeliveryReturnController extends Controller
             }
 
         }
+        $this->get('session')->getFlashBag()->add(
+            'error', "This barcode not found at delivery invoice in branch"
+        );
         $todayDeliveryReturn = $this->todayDeliveryReturn();
         return $this->render('InventoryBundle:DeliveryReturn:new.html.twig', array(
             'entity' => $entity,
@@ -135,14 +141,10 @@ class DeliveryReturnController extends Controller
     {
         $entity = new DeliveryReturn();
         $form   = $this->createCreateForm($entity);
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $data = array('startDate'=> date('Y-m-d'),'endDate'=> date('Y-m-d'));
-        $entities = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:DeliveryReturn')->findWithSearch($inventory,$data);
-
-        $paginate = $this->paginate($entities);
+        $entities = $this->todayDeliveryReturn();
         return $this->render('InventoryBundle:DeliveryReturn:new.html.twig', array(
             'entity' => $entity,
-            'entities' => $paginate,
+            'entities' => $entities,
             'form'   => $form->createView(),
         ));
     }

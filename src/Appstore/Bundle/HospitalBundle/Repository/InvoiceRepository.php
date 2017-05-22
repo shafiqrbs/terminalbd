@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -13,43 +14,120 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvoiceRepository extends EntityRepository
 {
-    public function invoiceLists($user , $mode , $data)
+
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleSearchBetween($qb,$data)
+    {
+        $invoice = isset($data['invoice'])? $data['invoice'] :'';
+        $commission = isset($data['commission'])? $data['commission'] :'';
+        $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
+        $referred = isset($data['referred'])? $data['referred'] :'';
+        $process = isset($data['process'])? $data['process'] :'';
+        $customerName = isset($data['name'])? $data['name'] :'';
+        $customerMobile = isset($data['mobile'])? $data['mobile'] :'';
+        $created = isset($data['created'])? $data['created'] :'';
+        $deliveryDate = isset($data['deliveryDate'])? $data['deliveryDate'] :'';
+        $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
+        $service = isset($data['service'])? $data['service'] :'';
+
+        if (!empty($invoice)) {
+            $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
+        }
+        if (!empty($customerName)) {
+            $qb->join('e.customer','c');
+            $qb->andWhere($qb->expr()->like("c.name", "'%$customerName%'"  ));
+        }
+        if (!empty($customerMobile)) {
+            $qb->join('e.customer','m');
+            $qb->andWhere($qb->expr()->like("m.mobile", "'%$customerMobile%'"  ));
+        }
+        if (!empty($created)) {
+            $compareTo = new \DateTime($created);
+            $created =  $compareTo->format('Y-m-d');
+            $qb->andWhere("e.updated LIKE :created");
+            $qb->setParameter('created', $created.'%');
+        }
+
+        if (!empty($deliveryDate)) {
+            $qb->andWhere("e.deliveryDateTime LIKE :deliveryDate");
+            $qb->setParameter('deliveryDate', $deliveryDate.'%');
+        }
+
+        if(!empty($commission)){
+            $qb->andWhere("e.hmsCommission = :commission");
+            $qb->setParameter('commission', $commission);
+        }
+        if(!empty($assignDoctor)){
+            $qb->andWhere("e.assignDoctor = :assignDoctor");
+            $qb->setParameter('assignDoctor', $assignDoctor);
+        }
+
+        if(!empty($referred)){
+            $qb->andWhere("e.referredDoctor = :referredDoctor");
+            $qb->setParameter('referredDoctor', $referred);
+        }
+
+        if(!empty($process)){
+            $qb->andWhere("e.process = :process");
+            $qb->setParameter('process', $process);
+        }
+
+        if(!empty($transactionMethod)){
+            $qb->andWhere("e.transactionMethod = :transactionMethod");
+            $qb->setParameter('transactionMethod', $transactionMethod);
+        }
+
+        if(!empty($service)){
+            $qb->andWhere("e.service = :service");
+            $qb->setParameter('service', $service);
+        }
+    }
+
+    public function findWithOverview(User $user , $data)
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
-        $invoice = isset($data['invoice'])? $data['invoice'] :'';
-        $service = isset($data['service'])? $data['service'] :'';
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
+        $qb->where('e.hospitalConfig = :hospital');
+        $qb->setParameter('hospital', $hospital);
+        $this->handleSearchBetween($qb,$data);
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        $netTotal = !empty($result['netTotal']) ? $result['netTotal'] :0;
+        $netPayment = !empty($result['netPayment']) ? $result['netPayment'] :0;
+        $netDue = !empty($result['netDue']) ? $result['netDue'] :0;
+        $netCommission = !empty($result['netCommission']) ? $result['netCommission'] :0;
+
+        $data = array('netTotal'=> $netTotal , 'netPayment'=> $netPayment , 'netDue'=> $netDue , 'netCommission'=> $netCommission);
+
+        return $data;
+    }
+
+    public function invoiceLists(User $user , $mode , $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
 
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
-        if (!empty($invoice)) {
-            $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
-        }
-        if(!empty($service)){
-            $qb->andWhere("e.service = :service");
-            $qb->setParameter('service', $service);
-        }
         $qb->orderBy('e.updated','DESC');
+        $this->handleSearchBetween($qb,$data);
         $qb->getQuery();
         return  $qb;
     }
 
-    public function doctorInvoiceLists($user,$data)
+    public function doctorInvoiceLists(User $user,$data)
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
-        $invoice = isset($data['invoice'])? $data['invoice'] :'';
-        $service = isset($data['service'])? $data['service'] :'';
 
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.paymentStatus != :status')->setParameter('status', 'pending') ;
-        if (!empty($invoice)) {
-            $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
-        }
-        if(!empty($service)){
-            $qb->andWhere("e.service = :service");
-            $qb->setParameter('service', $service);
-        }
+        $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
         $qb->getQuery();
         return  $qb;
@@ -122,6 +200,27 @@ class InvoiceRepository extends EntityRepository
         $em->flush();
 
     }
+
+
+    public function updateCommissionPayment(Invoice $invoice)
+    {
+        $em = $this->_em;
+        $res = $em->createQueryBuilder()
+            ->from('HospitalBundle:DoctorInvoice','si')
+            ->select('sum(si.payment) as payment')
+            ->where('si.hmsInvoice = :invoice')
+            ->setParameter('invoice', $invoice ->getId())
+            ->andWhere('si.process = :process')
+            ->setParameter('process', 'Paid')
+            ->getQuery()->getOneOrNullResult();
+        $payment = !empty($res['payment']) ? $res['payment'] :0;
+        $invoice->setCommission($payment);
+        $em->persist($invoice);
+        $em->flush();
+
+    }
+
+
     public function getCulculationVat(Invoice $sales,$totalAmount)
     {
         $vat = ( ($totalAmount * (int)$sales->getHospitalConfig()->getVatPercentage())/100 );

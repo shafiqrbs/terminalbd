@@ -64,3 +64,15 @@ domain_location_name:
     defaults: { _controller: "DomainUserBundle:Customer:searchLocationName" }
     options:
            expose: true
+
+domain_customer_auto_name_search:
+    path:     /customer-auto-name-search
+    defaults: { _controller: "DomainUserBundle:Customer:searchAutoCompleteName" }
+    options:
+           expose: true
+
+domain_customer_auto_mobile_search:
+    path:     /customer-auto-mobile-search
+    defaults: { _controller: "DomainUserBundle:Customer:searchAutoCompleteMobile" }
+    options:
+           expose: true

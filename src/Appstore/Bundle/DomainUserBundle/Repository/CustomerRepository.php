@@ -228,12 +228,30 @@ class CustomerRepository extends EntityRepository
         $query->where($query->expr()->like("e.mobile", "'$q%'"  ));
         $query->andWhere("e.globalOption = :globalOption");
         $query->setParameter('globalOption', $globalOption->getId());
-        $query->groupBy('e.id');
+        $query->groupBy('e.mobile');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
 
     }
+
+    public function searchAutoCompleteName(GlobalOption $globalOption, $q)
+    {
+        $query = $this->createQueryBuilder('e');
+
+        $query->select('e.name as id');
+        $query->addSelect('e.name as text');
+        $query->where($query->expr()->like("e.name", "'$q%'"  ));
+        $query->andWhere("e.globalOption = :globalOption");
+        $query->setParameter('globalOption', $globalOption->getId());
+        $query->groupBy('e.name');
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '10' );
+        return $query->getQuery()->getResult();
+
+    }
+
+
 
 
 }

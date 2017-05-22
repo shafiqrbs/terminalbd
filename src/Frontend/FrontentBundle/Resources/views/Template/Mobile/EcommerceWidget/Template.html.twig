@@ -1,0 +1,9 @@
+{% if templates is defined and templates is not empty  %}
+    {% for entity in templates %}
+    {% if(entity.webPath) %}
+        <div  style="overflow: hidden;height: {{ entity.divHeight }}px; width: {{ entity.divWidth }}px; margin-bottom: 15px;"  class="col-xs-12 col-md-12 ">
+            <a href=""> <img class="img-responsive" alt="" src="{{ entity.webPath }}"></a>
+        </div>
+    {% endif %}
+    {% endfor %}
+{% endif %}

@@ -1,0 +1,39 @@
+{% extends ':frontend/template/mobile:base.html.twig' %}
+{% block body %}
+    <!--/welcome-->
+    <div class="welcome">
+        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+            <section class="feature-widget-body-top">
+                {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id, 'pageName':'Home','position':'body-top'}) %}
+            </section>
+        {% endif %}
+        <div class="b-bottom">
+            <div class="col-md-12">
+
+                {#{% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+                    <section class="feature-widget-body-bottom"  >
+                        {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id, 'pageName':'Home','position':'body-bottom'}) %}
+                    </section>
+                {% endif %}
+                <section style="background-color: rgb(22, 22, 22); height: 70px;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-10 col-md-offset-1" style="margin-top: 10px" >
+                                <div class="col-md-10" >
+                                    <div  style="padding: 10px;border: 1px solid #000;color: #fff;font-size: 20px;">
+                                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> PLACE YOUR ORDER NOW - RECEIVE YOUR ITEMS WITHIN 72 HOURS
+                                    </div>
+                                </div>
+                                <div class="col-md-2"><a style="margin-top: 7px;
+    border: 3px solid #fff;
+    border-radius: 15px;
+    background: #000;" class="btn" href="{{ path('webservice_product') }}">SHOP NOW</a></div></div>
+                        </div>
+                    </div>
+                </section>#}
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <!--//welcome-->
+{% endblock %}

@@ -122,6 +122,9 @@ class SalesController extends Controller
         $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesQuantity($purchaseItem);
         $itemStock = $purchaseItem->getItemStock();
 
+        $branch = $this->getUser()->getProfile()->getBranches();
+        $branchStockItem = $this->getDoctrine()->getRepository('InventoryBundle:DeliveryItem')->checkItem($this->getUser(),$purchaseItem);
+
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();
         $device = '';
@@ -129,7 +132,13 @@ class SalesController extends Controller
             $device = 'mobile' ;
         }
 
-        if (!empty($purchaseItem) && $itemStock > $checkQuantity) {
+        if (!empty($branch) && $branchStockItem != 'valid') {
+
+            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales,$device);
+            $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
+
+        }elseif(!empty($purchaseItem) && $itemStock > $checkQuantity) {
 
             $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesItems($sales, $purchaseItem);
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);

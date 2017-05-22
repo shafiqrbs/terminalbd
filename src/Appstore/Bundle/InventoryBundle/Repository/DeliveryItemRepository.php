@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\Delivery;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -13,17 +15,50 @@ use Doctrine\ORM\EntityRepository;
 class DeliveryItemRepository extends EntityRepository
 {
 
-    public function checkItem($branch,$purchaseItem)
+    public function checkItem(User $user,PurchaseItem $purchaseItem,$quantity = 0)
     {
-        $qb = $this->createQueryBuilder('di');
-        $qb->join('di.delivery','d');
-        $qb->where('di.purchaseItem = :purchaseItem');
-        $qb->setParameter('purchaseItem', $purchaseItem);
-        $qb->andWhere('d.branch = :branch');
-        $qb->setParameter('branch', $branch);
-        $result = $qb->getQuery()->getOneOrNullResult();
-        return $result;
+        $em = $this->_em;
+
+        $totalQnt = $em->getRepository('InventoryBundle:Delivery')->stockReceiveSingleItem($user, $purchaseItem->getItem(),$purchaseItem->getBarcode());
+        $stockSalesItemHistory =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItemHistory($user,$purchaseItem->getItem(),$purchaseItem->getBarcode());
+        $salesQnt = isset($stockSalesItemHistory) and !empty($stockSalesItemHistory) ? $stockSalesItemHistory[0]['quantity']:0;
+        $stockSalesReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItemHistory($user,$purchaseItem->getItem(),$purchaseItem->getBarcode());
+        $salesReturnQnt = isset($stockSalesReturnItem) and !empty($stockSalesReturnItem) ? $stockSalesReturnItem[0]['quantity']:0;
+        $stockDeliveryReturnItem =  $this->stockReturnBarcodeItem($user,$purchaseItem);
+        $deliveryReturnQnt = isset($stockDeliveryReturnItem) and !empty($stockDeliveryReturnItem) ? $stockDeliveryReturnItem : 0;
+
+        $stockQnt = (($totalQnt + $salesReturnQnt) - ($salesQnt + $salesReturnQnt + $deliveryReturnQnt));
+        if( $stockQnt > 0 && $stockQnt >= $quantity ){
+            $output = 'valid';
+        }else{
+            $output = $stockQnt ;
+        }
+        return $output;
+
     }
+
+    public function stockReturnBarcodeItem(User $user,$item)
+    {
+        $branch = $user->getProfile()->getBranches();
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:DeliveryReturn','e');
+        $qb->join('e.purchaseItem','purchaseItem');
+        $qb->select('SUM(e.quantity) AS returnQnt ');
+        $qb->where("e.branch = :branch");
+        $qb->setParameter('branch', $branch);
+        $qb->andWhere("e.purchaseItem = :item");
+        $qb->setParameter('item', $item);
+        $arrayResult = $qb->getQuery()->getOneOrNullResult();
+        return $arrayResult['returnQnt'];
+
+
+    }
+
+
+
+
+
 
 
 

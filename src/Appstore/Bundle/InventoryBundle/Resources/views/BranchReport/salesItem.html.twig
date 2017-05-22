@@ -86,7 +86,7 @@
     $(document).on('change', '#branchItem', function() {
 
         var item = $('#branchItem').val();
-        if(item == ''){.
+        if(item == ''){
             return false;
         }
         $.ajax({
@@ -102,7 +102,7 @@
 
         var item = $('#salesItem').val();
         if(item == ''){
-        return false;
+            return false;
         }
         $.ajax({
         url: Routing.generate('inventory_branch_report_sales_item_search',{'item':item}),
@@ -118,7 +118,7 @@
 
         var barcode = $('#itemBarcode').val();
         if(barcode == ''){
-        return false;
+            return false;
         }
         $.ajax({
         url: Routing.generate('inventory_branch_report_sales_item_barcode_search',{'barcode':barcode}),

@@ -65,10 +65,20 @@ class DomainProfileType extends AbstractType
 
 
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')))
-            ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter designation', 'data-original-title' =>'Must be use personal mobile number.' , 'data-trigger' => 'hover'),
+            ->add('designation', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\Designation',
+                'empty_value' => '---Choose a designation---',
+                'property' => 'name',
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input user designation'))
-                )
+                    new NotBlank(array('message'=>'Select user designation'))
+                ),
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status =1")
+                        ->orderBy("e.name", "ASC");
+                },
             ))
             ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no')))
             ->add('branches', 'entity', array(
@@ -79,7 +89,7 @@ class DomainProfileType extends AbstractType
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
-                        ->andWhere("e.globalOption =".$this->globalOption->getId())
+                        ->where("e.globalOption =".$this->globalOption->getId())
                         ->orderBy("e.name", "ASC");
                 },
             ))

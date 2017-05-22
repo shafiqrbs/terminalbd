@@ -281,6 +281,22 @@ class Invoice
     /**
      * @var string
      *
+     * @ORM\Column(name="commission", type="decimal", nullable=true)
+     */
+    private $commission;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="commissionApproved", type="boolean" )
+     */
+    private $commissionApproved = false;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
     private $comment;
@@ -1147,6 +1163,38 @@ class Invoice
     public function getDoctorInvoices()
     {
         return $this->doctorInvoices;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCommission()
+    {
+        return $this->commission;
+    }
+
+    /**
+     * @param string $commission
+     */
+    public function setCommission($commission)
+    {
+        $this->commission = $commission;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCommissionApproved()
+    {
+        return $this->commissionApproved;
+    }
+
+    /**
+     * @param bool $commissionApproved
+     */
+    public function setCommissionApproved($commissionApproved)
+    {
+        $this->commissionApproved = $commissionApproved;
     }
 
 

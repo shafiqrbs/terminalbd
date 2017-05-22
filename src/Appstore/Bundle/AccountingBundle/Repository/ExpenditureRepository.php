@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
+use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -105,14 +106,35 @@ class ExpenditureRepository extends EntityRepository
             array('globalOption' => $entity->getGlobalOption(),'expenseCategory' => $entity->getExpenseCategory(),'process'=>'approved'),
             array('id' => 'DESC')
         );
-
         if (empty($entity)) {
             return 0;
         }
         return $entity->getBalance();
+
     }
 
+    public function insertCommissionPayment(DoctorInvoice $doctorInvoice)
+    {
+        $em = $this->_em;
+        $entity = new Expenditure();
+        $entity->setGlobalOption($doctorInvoice->getHospitalConfig()->getGlobalOption());
+        $entity->setAmount($doctorInvoice->getPayment());
+        $entity->setCreatedBy($doctorInvoice->getCreatedBy());
+        $entity->setApprovedBy($doctorInvoice->getApprovedBy());
+        $entity->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(50));
+        $entity->setTransactionMethod($doctorInvoice->getTransactionMethod());
+        $entity->setAccountMobileBank($doctorInvoice->getAccountMobileBank());
+        $entity->setAccountBank($doctorInvoice->getAccountBank());
+        $entity->setRemark('From Doctor Commission. Invoice No.-'.$doctorInvoice->getInvoice());
+        $entity->setProcess('approved');
+        $em->persist($entity);
+        $em->flush();
+
+        $em->getRepository('AccountingBundle:AccountCash')->insertExpenditureCash($entity);
+        $em->getRepository('AccountingBundle:Transaction')->insertExpenditureTransaction($entity);
 
 
+
+    }
 
 }

@@ -1,6 +1,54 @@
 /**
  * Created by rbs on 5/1/17.
  */
+
+$( ".date-picker" ).datepicker({
+    dateFormat: "dd-mm-yy"
+});
+// Getter
+var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
+
+// Setter
+$( ".date-picker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
+
+
+$( "#name" ).autocomplete({
+
+    source: function( request, response ) {
+        $.ajax( {
+            url: Routing.generate('domain_customer_auto_name_search'),
+            data: {
+                term: request.term
+            },
+            success: function( data ) {
+                response( data );
+            }
+        } );
+    },
+    minLength: 2,
+    select: function( event, ui ) {}
+
+});
+
+$( "#mobile" ).autocomplete({
+
+    source: function( request, response ) {
+        $.ajax( {
+            url: Routing.generate('domain_customer_auto_mobile_search'),
+            data: {
+                term: request.term
+            },
+            success: function( data ) {
+                response( data );
+            }
+        } );
+    },
+    minLength: 2,
+    select: function( event, ui ) {}
+
+});
+
+
 $(".addReferred").click(function(){
 
     if ($(this).attr("id") == 'show') {
@@ -40,7 +88,7 @@ $(".receivePayment").click(function(){
 
 $(document).on('change', '#particular', function() {
 
-    var url = $('#particular').val();
+    var url = $('#addParticular').attr('data-url');
     $.ajax({
         url: url,
         type: 'GET',
