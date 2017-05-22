@@ -53,12 +53,8 @@ class BranchesType extends AbstractType
                 'property' => 'username',
                 'attr'=>array('class'=>'span12 select2'),
                 'empty_value' => '---Choose assign manager ---',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('u')
-
                         ->andWhere("u.globalOption =".$this->globalOption->getId())
                         ->orderBy("u.username", "ASC");
                 }

@@ -66,7 +66,7 @@
                                     <tr>
                                         <td class="numeric" ><a href="{{ path('appsetting_branchshop_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >{{ entity.location.name }},{{ entity.location.parent.name }}</td>
-                                        <td class="numeric" >{{ entity.branchManager }}/{{ entity.branchManager.profile.designation }}</td>
+                                        <td class="numeric" >{{ entity.branchManager }}/{% if entity.branchManager.profile.designation is not empty %}{{ entity.branchManager.profile.designation.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.mobile }}</td>
                                         <td class="numeric" >{% if entity.status == 1 %}Active {% else %}In-active {% endif %}</td>
                                         <td class="numeric" >
