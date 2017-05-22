@@ -20,7 +20,7 @@ use Core\UserBundle\Entity\User;
 class WebServiceProductController extends Controller
 {
 
-    public function paginate($entities,$limit = 4)
+    public function paginate($entities,$limit)
     {
 
         $paginator  = $this->get('knp_paginator');
@@ -43,16 +43,17 @@ class WebServiceProductController extends Controller
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
             $data = $_REQUEST;
-            //$limit = !empty($data) or !empty($data['limit'] > 4)  ? $data['limit'] : 4;
+            $ecommerce = $globalOption->getEcommerceConfig();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
-            $pagination = $this->paginate($entities, $limit = 4);
+            $pagination = $this->paginate($entities, $limit);
 
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
-                $theme = 'Template/Mobile/Default';
+                $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }

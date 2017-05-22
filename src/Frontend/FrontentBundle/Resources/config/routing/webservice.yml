@@ -2,9 +2,6 @@ webservice:
     path:     /
     defaults: { _controller: FrontendBundle:WebService:index }
 
-
-
-
 webservice_module_page:
     path:     /{subdomain}/{module}/{slug}
     defaults: { _controller: FrontendBundle:WebServiceModule:modulePage }

@@ -27,7 +27,7 @@ class DeliveryItemRepository extends EntityRepository
         $stockDeliveryReturnItem =  $this->stockReturnBarcodeItem($user,$purchaseItem);
         $deliveryReturnQnt = isset($stockDeliveryReturnItem) and !empty($stockDeliveryReturnItem) ? $stockDeliveryReturnItem : 0;
 
-        $stockQnt = (($totalQnt + $salesReturnQnt) - ($salesQnt + $salesReturnQnt + $deliveryReturnQnt));
+        $stockQnt = (($totalQnt + $salesReturnQnt) - ($salesQnt + $deliveryReturnQnt));
         if( $stockQnt > 0 && $stockQnt >= $quantity ){
             $output = 'valid';
         }else{

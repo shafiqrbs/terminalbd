@@ -1,4 +1,4 @@
-{% extends ':template:base.html.twig' %}
+{% extends ':frontend/template/mobile:base.html.twig' %}
 {% block body %}
     <div class="bannerPane bannerPane-business-locaton">
         <div class="overlay"></div>
@@ -12,12 +12,12 @@
         <div class="row" style="margin-bottom: 5px">
             <form id="page-form"  name="page-form" method="get" action="" style="width: 99%!important;">
                 {% set cat = app.request.get('cat') %}
-                <select id="cat" name="cat" class="category-select select2" onchange='this.form.submit()' >
+         {#       <select id="cat" name="cat" class="category-select select2" onchange='this.form.submit()' >
                     <option>Product Search</option>
                     {% for category in categoryTree %}
                     <option {% if category.id == cat %} selected="selected" {% endif %} value="{{ category.id }}">{{ category.name }}</option>
                     {% endfor %}
-                </select>
+                </select>#}
             </form>
         </div>
         <div class="row">
@@ -48,7 +48,7 @@
                                     <tr><td>&nbsp;</td>
                                         <td class="right">
                                             <a href="{{ path('webservice_product_details',{'subdomain':globalOption.subDomain,'product':'product','item':product.id}) }}" class="o-buttons blue right"><i class="fa fa-eye"></i>&nbsp;View more</a>
-                                            <a  href="javascript:" data-url="{{ path('webservice_product_cart',{'subdomain':globalOption.subDomain,'cart':'cart','item':product.id}) }}" class="o-buttons green right"><i class="fa fa-shopping-cart"></i>&nbsp;Add to cart</a>
+                                            <a  href="javascript:" data-url="{{ path('webservice_product_cart',{'subdomain':globalOption.subDomain,'cart':'cart','product':product.id ,'subitem':product.id}) }}" class="o-buttons green right"><i class="fa fa-shopping-cart"></i>&nbsp;Add to cart</a>
                                         </td>
                                     </tr>
                                 </table>
@@ -59,7 +59,7 @@
             </div>
         {% endfor %}
         <div class="row" style="margin-bottom: 5px">
-            <form id="page-form"  name="page-form" method="get" action="" style="width: 99%!important;">
+           {# <form id="page-form"  name="page-form" method="get" action="" style="width: 99%!important;">
                 {% set cat = app.request.get('cat') %}
                 <select id="cat" name="cat" class="category-select select2" onchange='this.form.submit()' >
                     <option>Product Search</option>
@@ -67,7 +67,7 @@
                         <option {% if category.id == cat %} selected="selected" {% endif %} value="{{ category.id }}">{{ category.name }}</option>
                     {% endfor %}
                 </select>
-            </form>
+            </form>#}
         </div>
         <div class="pagination">
             {{ knp_pagination_render(products) }}
