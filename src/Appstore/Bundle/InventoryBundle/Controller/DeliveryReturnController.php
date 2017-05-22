@@ -67,7 +67,7 @@ class DeliveryReturnController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $data = $request->request->all();
-        $barcode = $data['appstore_bundle_inventorybundle_delivery_return']['purchaseItem'];
+        $barcode = trim($data['appstore_bundle_inventorybundle_delivery_return']['purchaseItem']);
         $purchaseItem = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('barcode' => $barcode));
 
          if ($form->isValid() and !empty($purchaseItem)) {
