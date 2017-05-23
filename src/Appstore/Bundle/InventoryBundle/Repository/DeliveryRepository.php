@@ -14,40 +14,48 @@ use Doctrine\ORM\EntityRepository;
  */
 class DeliveryRepository extends EntityRepository
 {
-    public function findWithSearch($inventory,$data)
+    public function findWithSearch(User $user , $inventory,$data)
     {
+
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $branch = $user->getProfile()->getBranches();
+        $userRoles = $user->getRoles();
+
 
         $startDate = isset($data['startDate'])  ? $data['startDate'].' 00:00:00' :'';
         $endDate =   isset($data['endDate'])  ? $data['endDate'].' 23:59:59' :'';
 
         $item = isset($data['item'])? $data['item'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
-        $qb = $this->createQueryBuilder('damage');
-        $qb->where("damage.inventoryConfig = :inventory");
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
-
+        if (!in_array('ROLE_DOMAIN_INVENTORY_MANAGER',$userRoles)) {
+            $qb->andWhere("e.branch = :branch");
+            $qb->setParameter('branch', $branch);
+        }
         if (!empty($startDate) and $startDate !="") {
-            $qb->andWhere("damage.updated >= :startDate");
+            $qb->andWhere("e.updated >= :startDate");
             $qb->setParameter('startDate', $startDate);
         }
         if (!empty($endDate)) {
-            $qb->andWhere("damage.updated <= :endDate");
+            $qb->andWhere("e.updated <= :endDate");
             $qb->setParameter('endDate', $endDate);
         }
 
         if (!empty($item)) {
-            $qb->join('damage.item', 'item');
+            $qb->join('e.item', 'item');
             $qb->andWhere("item.sku = :sku");
             $qb->setParameter('sku', $item);
         }
 
         if (!empty($vendor)) {
-            $qb->join('damage.item.vendor', 'v');
+            $qb->join('e.item.vendor', 'v');
             $qb->andWhere("v.companyName = :companyName");
             $qb->setParameter('companyName', $vendor);
         }
 
-        $qb->orderBy('damage.id','DESC');
+        $qb->orderBy('e.id','DESC');
         $qb->getQuery();
         return  $qb;
     }

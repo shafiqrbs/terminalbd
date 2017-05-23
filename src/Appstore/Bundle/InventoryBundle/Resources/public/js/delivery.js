@@ -20,12 +20,8 @@ var InventoryDelivery = function(delivery) {
             data:'barcode='+barcode+'&delivery='+ delivery+'&quantity='+quantity,
             success: function(response) {
                 obj = JSON.parse(response);
-                if( obj['msg'] =='success'){
-                    $('#delivery_item_purchaseItem').focus().val('');
-                    $('#delivery_item_quantity').focus().val('');
-                    $('.select2-container.select2-allowclear .select2-choice .select2-chosen').hide()
-                    $('.select2-container.select2-allowclear .select2-choice abbr').hide()
-                }
+
+                $('#delivery_item_quantity').focus().val('');
                 $('#deliveryItem').html(obj['deliveryItems']);
                 $('#totalQuantity').html(obj['totalQuantity']);
                 $('#totalAmount').html(obj['totalAmount']);

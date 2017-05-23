@@ -41,8 +41,8 @@ class DeliveryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:Delivery')->findWithSearch($inventory,$data);
+        $user = $this->getUser();
+        $entities = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:Delivery')->findWithSearch($user,$data);
         $paginate = $this->paginate($entities);
         $shops = $this->getDoctrine()->getRepository('DomainUserBundle:Branches')->findBy(array('globalOption'=> $this->getUser()->getGlobalOption()),array('name'=>'ASC'));
         return $this->render('InventoryBundle:Delivery:index.html.twig', array(

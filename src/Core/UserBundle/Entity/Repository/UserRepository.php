@@ -83,21 +83,21 @@ class UserRepository extends EntityRepository
         if (!empty($result)) {
 
             $array['Inventory'] = array(
-                'ROLE_INVENTORY'                        => 'Inventory',
-                'ROLE_DOMAIN_INVENTORY_PURCHASE'        => 'Inventory Purchase',
-                'ROLE_DOMAIN_INVENTORY_SALES'           => 'Inventory Sales',
-                'ROLE_DOMAIN_INVENTORY_CUSTOMER'        => 'Inventory Customer',
-                'ROLE_DOMAIN_INVENTORY_SALES_POS'       => 'Inventory Sales Pos',
-                'ROLE_DOMAIN_INVENTORY_SALES_ONLINE'    => 'Inventory Sales Online',
-                'ROLE_DOMAIN_INVENTORY_SALES_GENERAL'   => 'Inventory Sales General',
-                'ROLE_DOMAIN_INVENTORY_SALES_MANUAL'    => 'Inventory Sales Manual',
-                'ROLE_DOMAIN_INVENTORY_APPROVAL'        => 'Inventory Approval',
-                'ROLE_DOMAIN_INVENTORY_STOCK'           => 'Inventory Stock',
-                'ROLE_DOMAIN_INVENTORY_REPORT'          => 'Inventory Report',
-                'ROLE_DOMAIN_INVENTORY_BRANCH'          => 'Inventory Branch',
-                'ROLE_DOMAIN_INVENTORY_MANAGER'         => 'Inventory Manager',
-                'ROLE_DOMAIN_INVENTORY_CONFIG'          => 'Inventory Config',
-                'ROLE_DOMAIN_INVENTORY'                 => 'Inventory All',
+                'ROLE_INVENTORY'                                    => 'Inventory',
+                'ROLE_DOMAIN_INVENTORY_PURCHASE'                    => 'Inventory Purchase',
+                'ROLE_DOMAIN_INVENTORY_SALES'                       => 'Inventory Sales',
+                'ROLE_DOMAIN_INVENTORY_CUSTOMER'                    => 'Inventory Customer',
+                'ROLE_DOMAIN_INVENTORY_SALES_POS'                   => 'Inventory Sales Pos',
+                'ROLE_DOMAIN_INVENTORY_SALES_ONLINE'                => 'Inventory Sales Online',
+                'ROLE_DOMAIN_INVENTORY_SALES_GENERAL'               => 'Inventory Sales General',
+                'ROLE_DOMAIN_INVENTORY_SALES_MANUAL'                => 'Inventory Sales Manual',
+                'ROLE_DOMAIN_INVENTORY_APPROVAL'                    => 'Inventory Approval',
+                'ROLE_DOMAIN_INVENTORY_STOCK'                       => 'Inventory Stock',
+                'ROLE_DOMAIN_INVENTORY_REPORT'                      => 'Inventory Report',
+                'ROLE_DOMAIN_INVENTORY_BRANCH'                      => 'Inventory Branch',
+                'ROLE_DOMAIN_INVENTORY_MANAGER'                     => 'Inventory Manager',
+                'ROLE_DOMAIN_INVENTORY_CONFIG'                      => 'Inventory Config',
+                'ROLE_DOMAIN_INVENTORY'                             => 'Inventory All',
             );
         }
 
