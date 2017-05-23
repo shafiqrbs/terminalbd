@@ -653,11 +653,15 @@ class SalesController extends Controller
     public function invoicePrintAction(Sales $entity)
     {
 
+
         $barcode = $this->getBarcode($entity->getInvoice());
-       // $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+        $totalAmount = ( $entity->getTotal() + $entity->getDeliveryCharge());
+        $inWard = $this->get('settong.toolManageRepo')->intToWords($totalAmount);
+
         return $this->render('InventoryBundle:Sales:invoice.html.twig', array(
             'entity'      => $entity,
             'barcode'     => $barcode,
+            'inWard'     => $inWard,
         ));
     }
 

@@ -207,6 +207,8 @@ class Sales
          */
         private $subTotal;
 
+
+
         /**
          * @var string
          *
@@ -235,6 +237,13 @@ class Sales
          * @ORM\Column(name="payment", type="decimal", nullable=true)
          */
         private $payment;
+
+        /**
+         * @var string
+         *
+         * @ORM\Column(name="deliveryCharge", type="decimal", nullable=true)
+         */
+        private $deliveryCharge = 0;
 
 
         /**
@@ -890,6 +899,22 @@ class Sales
         public function setSalesMode($salesMode)
         {
                 $this->salesMode = $salesMode;
+        }
+
+        /**
+         * @return string
+         */
+        public function getDeliveryCharge()
+        {
+            return $this->deliveryCharge;
+        }
+
+        /**
+         * @param string $deliveryCharge
+         */
+        public function setDeliveryCharge($deliveryCharge)
+        {
+            $this->deliveryCharge = $deliveryCharge;
         }
 
 

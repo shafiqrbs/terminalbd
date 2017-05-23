@@ -390,6 +390,7 @@ class SalesOnlineController extends Controller
                 $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
                 $entity->setVat($vat);
             }
+            $entity->setDeliveryCharge($data['deliveryCharge']);
             $entity->setDue($data['dueAmount']);
             $entity->setDiscount($data['discount']);
             $entity->setTotal($data['paymentTotal']);

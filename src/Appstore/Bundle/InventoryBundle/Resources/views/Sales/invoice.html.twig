@@ -78,10 +78,11 @@
             <tr><td colspan="5"><strong class="pull-right" >Total Amount</strong></td><td><strong>{{ entity.subTotal|number_format() }}</strong></td></tr>
             {% if entity.discount %}<tr><td colspan="5"><strong class="pull-right" >Discount Amount</strong></td><td><strong>{{ entity.discount|number_format() }}</strong></td></tr>{% endif %}
             {% if entity.vat %}<tr><td colspan="5"><strong class="pull-right" >Vat/Tax Amount</strong></td><td><strong>{{ entity.vat|number_format() }}</strong></td></tr>{% endif %}
-            <tr><td colspan="5"><strong class="pull-right" >Grand Total</strong></td><td><strong>{{ entity.total|number_format() }}</strong></td></tr>
+            {% if entity.deliveryCharge %}<tr><td colspan="5"><strong class="pull-right" >Delivery Charge</strong></td><td><strong>{{ entity.deliveryCharge|number_format() }}</strong></td></tr>{% endif %}
+            <tr><td colspan="5"><strong class="pull-right" >Grand Total</strong></td><td><strong>{{ (entity.total + entity.deliveryCharge) |number_format() }}</strong></td></tr>
             <tr><td colspan="5"><strong class="pull-right" >Paid Amount</strong></td><td><strong>{{ entity.payment|number_format() }}</strong></td></tr>
-            {% if entity.due %}<tr><td colspan="5"><strong class="pull-right" >Due Amount</strong></td><td><strong>{{ entity.due|number_format() }}</strong></td></tr>{% endif %}
-            <tr><td colspan="6" style="text-align:right"><strong>In word TK.</strong>({{ entity.paymentInWord|raw }} only).</td></tr>
+            {% if entity.due %}<tr><td colspan="5"><strong class="pull-right" >Due Amount</strong></td><td><strong>{{ (entity.due + entity.deliveryCharge) |number_format() }}</strong></td></tr>{% endif %}
+            <tr><td colspan="6" style="text-align:right"><strong>In word TK.</strong>({{ inWard|raw }} only).</td></tr>
             <tr><td colspan="6" style="text-align:center">{{ portal_power }}</td></tr>
             </tfoot>
         </table>
