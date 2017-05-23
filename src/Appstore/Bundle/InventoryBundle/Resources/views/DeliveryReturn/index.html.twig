@@ -57,8 +57,8 @@
                                 <tr class="head-grey">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Barcode</th>
-                                    <th class="numeric" >Purchase Invoice/Date</th>
                                     <th class="numeric" >SKU</th>
+                                    <th class="numeric" >Purchase Invoice/Date</th>
                                     <th class="numeric" >Price</th>
                                     <th class="numeric" >Quantity</th>
                                     <th class="numeric" >Action</th>
@@ -70,8 +70,8 @@
                                     <tr>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.purchaseItem.barcode }}</td>
+                                        <td class="numeric" >{{ entity.item.name }}</td>
                                         <td class="numeric" >{{ entity.purchaseItem.purchase.grn }}/{{ entity.purchaseItem.purchase.receiveDate|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.item.sku }}</td>
                                         <td class="numeric" >{{ entity.purchaseItem.purchasePrice }}</td>
                                         <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >
