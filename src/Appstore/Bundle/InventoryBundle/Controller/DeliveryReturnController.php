@@ -43,6 +43,7 @@ class DeliveryReturnController extends Controller
         $paginate = $this->paginate($entities);
         return $this->render('InventoryBundle:DeliveryReturn:index.html.twig', array(
             'entities' => $paginate,
+            'searchForm' => $data
         ));
     }
 

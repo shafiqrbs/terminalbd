@@ -17,9 +17,15 @@ class DeliveryReturnRepository extends EntityRepository
 
         $startDate = isset($data['startDate'])  ? $data['startDate'].' 00:00:00' :'';
         $endDate =   isset($data['endDate'])  ? $data['endDate'].' 23:59:59' :'';
-
         $item = isset($data['item'])? $data['item'] :'';
+        $color = isset($data['color'])? $data['color'] :'';
+        $size = isset($data['size'])? $data['size'] :'';
+        $vendor = isset($data['vendor'])? $data['vendor'] :'';
+        $brand = isset($data['brand'])? $data['brand'] :'';
+
         $qb = $this->createQueryBuilder('e');
+        $qb->join('e.item', 'item');
+        $qb->join('item.masterItem', 'm');
         $qb->where("e.branch = :branch");
         $qb->setParameter('branch', $branch);
 
@@ -33,9 +39,35 @@ class DeliveryReturnRepository extends EntityRepository
         }
 
         if (!empty($item)) {
-            $qb->join('e.item', 'item');
-            $qb->andWhere("item.sku = :sku");
-            $qb->setParameter('sku', $item);
+
+            $qb->andWhere("m.name = :name");
+            $qb->setParameter('name', $item);
+        }
+        if (!empty($color)) {
+
+            $qb->join('item.color', 'c');
+            $qb->andWhere("c.name = :color");
+            $qb->setParameter('color', $color);
+        }
+        if (!empty($size)) {
+
+            $qb->join('item.size', 's');
+            $qb->andWhere("s.name = :size");
+            $qb->setParameter('size', $size);
+        }
+        if (!empty($vendor)) {
+
+            $qb->join('item.vendor', 'v');
+            $qb->andWhere("v.companyName = :vendor");
+            $qb->setParameter('vendor', $vendor);
+        }
+
+        if (!empty($brand)) {
+
+            $qb->join('item.brand', 'b');
+            $qb->andWhere("b.name = :brand");
+            $qb->setParameter('brand', $brand);
+
         }
         $qb->orderBy('e.id','DESC');
         $qb->getQuery();
