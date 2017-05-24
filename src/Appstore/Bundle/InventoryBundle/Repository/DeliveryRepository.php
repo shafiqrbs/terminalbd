@@ -14,7 +14,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class DeliveryRepository extends EntityRepository
 {
-    public function findWithSearch(User $user , $inventory,$data)
+    public function findWithSearch(User $user , $data)
     {
 
         $inventory = $user->getGlobalOption()->getInventoryConfig();
@@ -28,12 +28,15 @@ class DeliveryRepository extends EntityRepository
         $item = isset($data['item'])? $data['item'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
         $qb = $this->createQueryBuilder('e');
+
         $qb->where("e.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
+
         if (!in_array('ROLE_DOMAIN_INVENTORY_MANAGER',$userRoles)) {
             $qb->andWhere("e.branch = :branch");
             $qb->setParameter('branch', $branch);
         }
+
         if (!empty($startDate) and $startDate !="") {
             $qb->andWhere("e.updated >= :startDate");
             $qb->setParameter('startDate', $startDate);

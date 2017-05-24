@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\DeliveryReturn;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,8 +13,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class DeliveryReturnRepository extends EntityRepository
 {
-    public function findWithSearch($branch,$data)
+    public function findWithSearch(User $user , $data)
     {
+
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+        $branch = $user->getProfile()->getBranches();
+        $userRoles = $user->getRoles();
 
         $startDate = isset($data['startDate'])  ? $data['startDate'].' 00:00:00' :'';
         $endDate =   isset($data['endDate'])  ? $data['endDate'].' 23:59:59' :'';
@@ -26,8 +31,14 @@ class DeliveryReturnRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.item', 'item');
         $qb->join('item.masterItem', 'm');
-        $qb->where("e.branch = :branch");
-        $qb->setParameter('branch', $branch);
+
+        $qb->where("e.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+
+        if (!in_array('ROLE_DOMAIN_INVENTORY_MANAGER',$userRoles)) {
+            $qb->andWhere("e.branch = :branch");
+            $qb->setParameter('branch', $branch);
+        }
 
         if (!empty($startDate) and $startDate !="") {
             $qb->andWhere("e.created >= :startDate");

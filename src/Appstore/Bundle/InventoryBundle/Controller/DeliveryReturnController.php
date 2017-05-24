@@ -38,8 +38,8 @@ class DeliveryReturnController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $branch = $this->getUser()->getBranches();
-        $entities = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:DeliveryReturn')->findWithSearch($branch,$data);
+        $user = $this->getUser();
+        $entities = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:DeliveryReturn')->findWithSearch($user,$data);
         $paginate = $this->paginate($entities);
         return $this->render('InventoryBundle:DeliveryReturn:index.html.twig', array(
             'entities' => $paginate,
