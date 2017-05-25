@@ -1,472 +1,59 @@
 {% extends ':frontend/template/mobile:base.html.twig' %}
 {% block body %}
-    <div class="bannerPane bannerPane-business-locaton">
+    {#<div class="bannerPane bannerPane-business-locaton">
         <div class="overlay"></div>
         <div class="s-banner-content">
             <div><img width="100" src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" /></div>
            Product
         </div>
     </div>
-
+#}
     <div id="content"  class="product" style="margin-bottom: 50px">
-        <div class="row" style="margin-bottom: 5px">
-            <form id="page-form"  name="page-form" method="get" action="" style="width: 99%!important;">
-                {% set cat = app.request.get('cat') %}
-         {#       <select id="cat" name="cat" class="category-select select2" onchange='this.form.submit()' >
-                    <option>Product Search</option>
-                    {% for category in categoryTree %}
-                    <option {% if category.id == cat %} selected="selected" {% endif %} value="{{ category.id }}">{{ category.name }}</option>
-                    {% endfor %}
-                </select>#}
-            </form>
-        </div>
-        <div class="row">
-            <div class="pagination">
-                {{ knp_pagination_render(products) }}
-            </div>
+        <div style="margin-bottom:15px; clear: both;">
+            {% render controller("FrontendBundle:EcommerceWidget:header",{'globalOption':globalOption, 'pageName':'product'}) %}
         </div>
         <br/>
-
-            <div class="container" id="product-section">
-
+        <div class="container" id="product-section">
                 <div class="row">
                     {% for product in products %}
-                    <div class="col-xs-6 col-md-4" ><img src="{{ image(product.webPath()).resize() }}"  alt=""/> </div>
+                        {% set paymentID = globalOption.id~'-ecommerce-product-'~product.id %}
+                        <div class="outer-div">
+                            <div class="inner-div">
+                                <div id="" class="ic_container capslide_img_cont ">
+                                    <img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}"  alt=""/>
+                                    <div class="overlay"></div>
+                                    <div class="ic_caption">
+                                        <p class="title"><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}"  >{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></p>
+                                        <div class="product-short-details">
+                                            <span>{{ globalOption.ecommerceConfig.currency }}&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</span>
+                                        </div>
+                                        <div class="media-body">
+                                            <ul class="list-inline list-unstyled">
+                                                <li><span><i class="fa fa-dribbble" aria-hidden="true"></i>&nbsp;{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></li>
+                                                <li>|</li>
+                                                <li><span><span class="badge"><span class="fos-comment-count" data-fos-comment-thread-id="{{ paymentID }}">#</span></span> comments</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
                 </div>
             </div><!-- end container -->
-
-{#            <div class="outer-div">
-                <div class="inner-div">
-                    <div id="" class="ic_container capslide_img_cont ">
-
-                        <div class="overlay"></div>
-                        <div class="ic_caption">
-                            <p class="left title"><a href="{{ path('webservice_product_details',{'subdomain':globalOption.subDomain,'product':'product','item':product.id}) }}"  >{% if product.masterItem %}{{ product.masterItem.name }}{% endif %}{% if product.webName %} - {{ product.webName }}{% endif %}</a></p>
-                            <div class="product-short-details">
-                                <span class="left">BDT {{ product.webPrice|format }}</span>
-                                <span class="right">{{ product.purchaseStockItem }}</span>
-                            </div>
-                            <div class="ic_text product-details">
-                                <table>
-                                    {% if product.masterItem is not empty and product.masterItem.category is not empty %}<tr><td>Category</td><td>{{ product.masterItem.category.name }}</td></tr>{% endif %}
-                                    {% if product.gender is not empty %}<tr><td>Gender</td><td>{{ product.gender }}</td></tr>{% endif %}
-                                    {% if product.ageGroup is not empty %}<tr><td>Age Group</td><td >{{ product.ageGroup }}</td></tr>{% endif %}
-                                    {% if product.brand is not empty %}<tr><td>Brand</td><td>{{ product.brand.name }}</td></tr>{% endif %}
-                                    {% if product.country is not empty %}<tr><td>Made in</td><td>{{ product.country.name }}</td></tr>{% endif %}
-                                    <tr><td>&nbsp;</td>
-                                        <td class="right">
-                                            <a href="{{ path('webservice_product_details',{'subdomain':globalOption.subDomain,'product':'product','item':product.id}) }}" class="o-buttons blue right"><i class="fa fa-eye"></i>&nbsp;View more</a>
-                                            <a  href="javascript:" data-url="{{ path('webservice_product_cart',{'subdomain':globalOption.subDomain,'cart':'cart','product':product.id ,'subitem':product.id}) }}" class="o-buttons green right"><i class="fa fa-shopping-cart"></i>&nbsp;Add to cart</a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>#}
-        {% endfor %}
-        <div class="row" style="margin-bottom: 5px">
-           {# <form id="page-form"  name="page-form" method="get" action="" style="width: 99%!important;">
-                {% set cat = app.request.get('cat') %}
-                <select id="cat" name="cat" class="category-select select2" onchange='this.form.submit()' >
-                    <option>Product Search</option>
-                    {% for category in categoryTree %}
-                        <option {% if category.id == cat %} selected="selected" {% endif %} value="{{ category.id }}">{{ category.name }}</option>
-                    {% endfor %}
-                </select>
-            </form>#}
-        </div>
-        <div class="pagination">
+        <br/>
+        <div class="mobile-pagination" style="background-color: #00A8FF">
             {{ knp_pagination_render(products) }}
         </div>
-        <br/>
-        </div>
+    </div>
 <style>
 
-    .outer-div
-    {
-        padding:0;
-        background-color: #f3f3f3;
-        margin-bottom: 15px;
-    }
-    .inner-div
-    {
-        margin: 0 auto;
-        height: auto;
-        background-color: #f3f3f3;
-        border-radius: 3px;
-        text-align: center;
-        width: 100%;
-    }
-
-    .ic_caption .title{
-        font-weight: bold;
-        margin-top: 5px !important;
-        line-height: 20px!important;
-        height: 20px !important;
-        padding-left: 8px!important;
-        padding-right: 8px !important;
-        clear: both;
-        width: 100%;
-        color: #ffffff;
-    }
-
-    .product-details{
-        margin-bottom: 1px;
-        margin-top: 1px;
-        padding: 8px;
-        border-top: 1px solid #ffffff;
-    }
-    .product-details table{
-        margin: 0!important;
-        padding: 0!important;
-        border: none;
-        width: 100%;
-    }
-
-
-    .product-short-details{
-        margin-bottom: 1px;
-        margin-top: 1px;
-        padding-right: 10px;
-        padding-bottom: 5px;
-        font-size: 12px;
-    }
-
-    .product-details .info-list {
-
-        background-repeat: no-repeat;
-        background-size: 18px 18px;
-        font-size: 11px;
-        padding-left: 30px;
-        background-position: 10px 9px;
-    }
-
-    .product-details .buy-list {
-        background-repeat: no-repeat;
-        background-size: 18px 18px;
-        font-size: 11px;
-        padding-left:30px;
-        background-position: 5px 6px;
-
-    }
-
-
-    .ic_caption p{
-        padding: 0!important;
-        margin: 0!important;
-        display: block;
-        height: 14px;
-        font-size: 10px;
-        line-height: 14px;
-        color: #ffffff;
-    }
-    .ic_caption p.title a{
-        font-size: 13px;
-        text-decoration: none;
-        color: #ffffff;
-    }
-
-    .ic_caption p.title a:hover{
-        text-decoration: underline !important;
-        color: #fff;
-    }
-
-    .left{
-        text-align: left;
-        float: left;
-        display: inline-block;
-    }
-    .center{
-        text-align: center;
-        display: inline-block;
-    }
-
-    .right{
-        text-align: right;
-        float: right;
-        display: inline-block;
-        right: 5px;
-    }
-
-    .product .product-details{
-        margin-bottom: 1px;
-        margin-top: 1px;
-        border-top: 1px solid #000;
-    }
-    .product .product-details table{
-        margin: 0!important;
-        padding: 0!important;
-        border: none;
-    }
-    .product .product-details table tr{
-        background: #fff;
-    }
-    .product .product-details table tr td{
-        padding:0!important;
-        text-shadow: none!important;
-        line-height: 20px;
-        font-size: 12px;
-        border: none;
-        background: #ffffff;
-    }
-    .product .product-details table tr td:nth-child(1){
-        width: 20%;
-        border-right: none;
-    }
-
-    .product .product-details table tr td:nth-child(2){
-        width: 80%;
-        border-right: none;
-    }
-
-    .product .product-short-details{
-        margin-bottom: 1px;
-        margin-top: 1px;
-        padding: 8px;
-    }
-
-    .product .product-details .info-list {
-
-        background-repeat: no-repeat;
-        background-size: 18px 18px;
-        font-size: 11px;
-        line-height: 18px;
-        padding-left: 24px;
-        text-align: left;
-        width: 30%;
-        float: right;
-    }
-
-    .product .product-details .buy-list {
-        background-position: 16px 6px;
-        background-repeat: no-repeat;
-        background-size: 24px 24px;
-        font-size: 14px;
-        padding-left:50px;
-    }
-
-    .product .product-details .wallet-list {
-        background-position: 16px 9px;
-        background-repeat: no-repeat;
-        background-size: 24px 24px;
-        font-size: 14px;
-        padding-left:50px;
-    }
-
-
-    input[class*="span"].m-wrap {
-        height: 28px!important;
-    }
-    .numeric input {
-        margin-bottom: 0;
-        min-height: 15px!important;
-        width: 70px;
-        height: 15px!important;
-        border: 1px solid #999;
-        font-size: 13px!important;
-        line-height: 15px!important;
-    }
-
-    .td-inline-input input{
-        height: 15px!important;
-        line-height: 13px!important;
-        min-height: 15px!important;
-        font-size: 13px!important;
-        border: 1px solid #999;
-        width: 70px;
-    }
-
-    .category-select {
-        float: left;
-        width: 100%!important;
-
-    }
-    .select2-container .select2-choice {
-        height: 32px;
-        line-height: 32px;
-        margin-top: 3px;
-    }
-    .select2-container .select2-choice {
-        border-radius: 0!important;
-    }
-    .select2-drop{
-        border-radius: 0!important;
-    }
-    .page-select {
-        float: left;
-        width: 40px!important;
-        text-align: center;
-        height: 32px!important;
-        line-height: 32px;
-        margin-top: 3px!important;
-        border-radius: 0!important;
-        border: 1px solid #999;
-    }
-
-    .td-inline-label{
-        height: 15px!important;
-        line-height: 25px!important;
-        min-height: 15px!important;
-        font-size: 13px!important;
-    }
-
-    .head-blue {
-        background: #4b8df8;
-    }
-    .head-blue th{
-        color: #ffffff;
-        font-weight: 400;
-    }
-    #purchaseItem td{
-        vertical-align: middle;
-    }
-    #purchaseItem .input-append, .input-prepend{
-        margin-bottom: 0;
-    }
-    .payment-label{
-        line-height: 34px;
-        text-align: right;
-    }
-    .center-input{
-        width: 105px!important;
-    }
-
-    .payment-red {
-        color: red!important;
-    }
-
-    .payment-yellow {
-        color: blue !important;
-    }
-    #cartMethod{
-        display: none;
-    }
-
-    .form .control-group .controls ul{
-        margin-left: 0;
-        margin-top: -10px;
-    }
-    #error-msg{
-        color: #f0262f;
-    }
-
-
-    .select2-container{
-        margin-left: 15px!important;
-    }
-    .select2Item{
-        float: left!important;
-        margin-left: 0!important;
-    }
-
-    .search-form{
-        margin: 0!important;
-    }
-    .search-portlet.box{
-        margin-bottom: 0!important;
-        height: 34px!important;
-        border-bottom: 1px solid #555555!important;
-        border-top: 1px solid #555555!important;
-    }
-
-    #message {
-        line-height: 21px;
-        text-align: right;
-        font-weight: bold;
-        color: #ffffff;
-    }
-
-    .select2{
-        margin-left: 0!important;
-    }
-    .input-append .add-on, .input-prepend input[class*="numeric"]{
-        font-size: 13px!important;
-    }
-    .input-append .add-on, .input-prepend .add-on{
-        display: inline-block;
-        width: auto;
-        height: 20px;
-        min-width: 16px;
-        padding: 4px 5px;
-        font-size: 11px;
-        font-weight: normal;
-        line-height: 20px;
-        text-align: center;
-        text-shadow: 0 1px 0 #ffffff;
-        background-color: #e5e5e5;
-        border: 1px solid #e5e5e5;
-    }
-    .ic_container{
-        left: -1px;
-    }
-    .ic_container img{
-        min-width: 305px;
-    }
-
-    .ps-toolbar{
-        z-index: 999999!important;
-    }
-
-    #numberBox {
-        border: 2px solid #2c3e50;
-        font-size: 20px;
-        text-align: center;
-        height: 35px;
-        width: 100%;
-    }
-
-    .dropdown{
-        height: 35px;
-        margin-bottom: 5px;
-    }
-    .product-single-meta .p-single-meta-likes {
-        float: left;
-        text-align: left;
-        font-size: 14px;
-    }
-
-    .product-single-meta{
-        padding:0;
-        margin-bottom:0;
-        display: inline-block;
-        width: 100%;
-    }
-
-    .product-single-meta .p-single-meta-likes i {
-        font-size: 18px;
-        color: #008d71;
-    }
-
-    .product-single-meta .p-single-meta-share a {
-        font-size: 12px;
-        color: #EAEAEA;
-        width: 25px;
-        height: 25px;
-        line-height: 25px;
-        text-align: center;
-        background-color: #008d71;
-        display: inline-block;
-        border-radius: 50%;
-    }
-    .module-title a
-    {
-        color: #008d71!important;
-    }
-    .module-title a:hover
-    {
-        background:#ffffff!important;
-        color: #35aa47!important;
-        text-decoration: underline;
-    }
 
 </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@FrontendBundle/Resources/public/template/mobile/css/product.css'
+    '@FrontendBundle/Resources/public/template/mobile/css/product-cosmetic.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}

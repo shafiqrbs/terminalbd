@@ -27,15 +27,21 @@ class WebServiceProductController extends Controller
         $pagination = $paginator->paginate(
             $entities,
             $this->get('request')->query->get('page', 1)/*page number*/,
-            $limit  /*limit per page*/
+            1  /*limit per page*/
         );
-        $pagination->setTemplate('FrontendBundle:Template/Desktop/Widget:desktopPagination.html.twig');
+        $detect = new MobileDetect();
+        if( $detect->isMobile() || $detect->isTablet() ) {
+            $pagination->setTemplate('FrontendBundle:Template/Desktop/Widget:mobilePagination.html.twig');
+        }else{
+            $pagination->setTemplate('FrontendBundle:Template/Desktop/Widget:mobilePagination.html.twig');
+        }
         return $pagination;
     }
 
-    public function productAction($subdomain)
+    public function productAction(Request $request , $subdomain)
     {
 
+        $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
 
@@ -55,9 +61,8 @@ class WebServiceProductController extends Controller
             if( $detect->isMobile() || $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
-                $theme = 'Template/Desktop/'.$themeName;
+                $theme = 'Template/Mobile/'.$themeName;
             }
-
             //$category = isset($data['category']) ? $data['category'] :0;
 
             $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
@@ -68,11 +73,12 @@ class WebServiceProductController extends Controller
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
                     'globalOption'  => $globalOption,
+                    'cart'                  => $cart,
                     'categorySidebar'  => $categorySidebar,
                     'brands'        => $brands,
                     'products'      => $pagination,
-                    'pageName'      => 'Product',
-                    'data' => $data['limit']=4,
+                    'pageName'      => 'Product'
+
                 )
             );
         }

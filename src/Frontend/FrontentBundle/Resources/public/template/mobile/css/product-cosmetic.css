@@ -1,0 +1,59 @@
+.outer-div
+{
+    padding:0;
+    margin-bottom: 30px;
+}
+
+.inner-div
+{
+    margin: 0 auto;
+    height: auto;
+    border-radius: 3px;
+    text-align: center;
+    width: 100%;
+    background-color: #FFFFff;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+
+.ic_caption .title {
+
+    margin-top: 15px !important;
+    line-height: 20px!important;
+    padding-left: 8px!important;
+    padding-right: 8px !important;
+    clear: both;
+    width: 100%;
+    padding-bottom: 30px!important;
+
+}
+
+.ic_caption p.title a{
+
+    text-decoration: none !important;
+    font-size: 16px;
+}
+
+.ic_caption p{
+    padding: 0!important;
+    margin: 0!important;
+    display: block;
+    height: 14px;
+    line-height: 14px;
+}
+
+.product-details table{
+    margin: 0!important;
+    padding: 0!important;
+    border: none;
+    width: 100%;
+}
+.product-short-details{
+
+    margin-top: 1px;
+    padding-right: 10px;
+    padding-bottom: 5px;
+    font-size: 20px;
+    margin-bottom: 10px!important;
+    border-bottom: 1px solid  #f3f3f3;
+}

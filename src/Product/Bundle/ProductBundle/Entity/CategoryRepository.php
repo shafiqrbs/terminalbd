@@ -129,7 +129,7 @@ class CategoryRepository extends MaterializedPathRepository
 
     }
 
-    public function  getReturnCategoryTree($category,$slected='')
+    public function  getReturnCategoryTree($category,$selected='')
     {
         $categoryTree = $this->printTree($category);
 
@@ -137,12 +137,28 @@ class CategoryRepository extends MaterializedPathRepository
         $tree .= "<select name='category' id='category' style='width: 278px' class='select2'>";
         $tree .= "<option value=''>Filter by category</option>";
         foreach($categoryTree as $row) {
-            $selected = ($slected == $row['id'])? 'selected="selected"':'';
+            $selected = ($selected == $row['id'])? 'selected="selected"':'';
             $tree .= "<option ".$selected." value=".$row["id"].">".$row["name"]."</option>";
         }
         $tree .= "</select>";
         return $tree;
     }
+
+    public function  getReturnCategoryTreeForMobile($category,$selected='')
+    {
+        $categoryTree = $this->printTree($category);
+
+        $tree='';
+        $tree .= "<select name='category' id='category' style='width: 185px !important;' class='select2'>";
+        $tree .= "<option value=''>Filter by category</option>";
+        foreach($categoryTree as $row) {
+            $selected = ($selected == $row['id'])? 'selected="selected"':'';
+            $tree .= "<option ".$selected." value=".$row["id"].">".$row["name"]."</option>";
+        }
+        $tree .= "</select>";
+        return $tree;
+    }
+
 
 
     function getParentId($inventoryCat) {

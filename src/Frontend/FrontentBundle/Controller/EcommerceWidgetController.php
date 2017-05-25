@@ -31,7 +31,7 @@ class EcommerceWidgetController extends Controller
     }
 */
 
-    public function headerAction(Request $request , GlobalOption $globalOption,$pageName )
+    public function headerAction(Request $request , GlobalOption $globalOption , $pageName ='' )
     {
         /* Device Detection code desktop or mobile */
 
@@ -43,14 +43,22 @@ class EcommerceWidgetController extends Controller
 
         $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $globalOption->getInventoryConfig()));
         $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
-        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($cats,$category);
-        return $this->render('@Frontend/Template/Desktop/'.$themeName.'/header.html.twig', array(
+        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTreeForMobile($cats,$category);
+
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName;
+        }else{
+            $theme = 'Template/Mobile/'.$themeName;
+        }
+        return $this->render('@Frontend/'.$theme.'/header.html.twig', array(
             'globalOption'          => $globalOption,
             'categoryTree'          => $categoryTree,
             'pageName'              => $pageName,
             'cart'                  => $cart,
             'searchForm'            => $data
         ));
+
     }
 
     public function returnMegaCategoryMenuAction(GlobalOption $globalOption , $categories,$column = 6){

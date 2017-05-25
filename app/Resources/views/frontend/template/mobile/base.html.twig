@@ -45,9 +45,40 @@
                 <div class="profile-left">
                     <a href="#mm-menu" class="main-menu"><i class="fa fa-navicon"></i></a>
                 </div>
+
                 <div class="Profile-mid">
                     <h5 class="pro-link"><a class="site-name" href="{{ path('mobile_home',{'subdomain':globalOption.subDomain}) }}">{{ globalOption.name }}</a></h5>
                 </div>
+                <style>
+                    .box-link{
+                        height: 21px;
+                    }
+                    .social-links {
+                        padding: 0;
+                        margin: 0;
+                        list-style: none;
+                        padding-right: 5px;
+                        position: absolute;
+                        right: 0;
+                        top: 8px;
+                    }
+                    .social-links li {
+                        display: inline-block;
+                        margin-left: 5px;
+                    }
+                    .social-links li a {
+                        display: block;
+                        width: 30px;
+                        height: 30px;
+                        line-height: 30px;
+                        border-radius: 50%;
+                        font-size: 17px;
+                        color: #f9eee8;
+                        border: 1px solid #f9eee8;
+                        transition: all 0.5s ease 0s;
+                        text-align: center;
+                    }
+                </style>
                 <div class="clearfix"></div>
             </div>
             <!-- banner -->
@@ -58,10 +89,65 @@
                         <h3>Welcome</h3>
                      </div>
                 </div>
+
             </div>
             <!-- //banner -->
             {% block body %}{% endblock %}
             <!--/footer-->
+            <div id="menu-bar" style="position: fixed; width: 350px; transition: all 300ms ease; height: 100%; top: 0px; right: 0px;" class="left-shadow-overlay">
+                <div class="handle">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </div>
+                <div class="menu-notify box-link">
+                    <ul class="social-links">
+                        <li><a href="javascript:" class="register-btn"><i class="fa fa-sign-in"></i></a></li>
+                        <li><a href="javascript:" class="login-preview"><i class="fa fa-lock"></i></a></li>
+                        <li><a href="javascript:" class="login-preview"><i class="fa fa-cart"></i></a></li>
+                    </ul>
+                </div>
+                <div id="cart-details">
+                    <h5>Cart Details</h5>
+                    <div class="item-list">
+                        {% if  cart.contents is not empty %}
+                            <ul class="dropdown-menu dropdown-cart" role="menavbar-rightnu">
+                                {% for product in cart.contents %}
+                                    <li id="item-remove-{{ product.rowid }}">
+                                                              <span class="item">
+                                                                <span class="item-left">
+                                                                    {% if product.productImg is not empty %}
+                                                                        <img src="{{ image(product.productImg).scaleResize(50,50) }}"
+                                                                             alt=""/>
+                                                                    {% endif %}
+                                                                    <span class="item-info">
+                                                                        <span>{{ product.name|truncate(15) }}</span>
+                                                                        <span>Qnt&nbsp;{{ product.quantity }}</span>
+                                                                        <span><strong>{{ globalOption.ecommerceConfig.currency }}
+                                                                                &nbsp;{{ product.price }}</strong></span>
+                                                                    </span>
+                                                                </span>
+                                                                <span class="item-right">
+                                                                    <button id="{{ product.rowid }}"
+                                                                            data-url="{{ path('webservice_product_cart_remove',{'cartid':product.rowid}) }}"
+                                                                            class="btn btn-xs btn-danger pull-right hunger-remove-cart"><span
+                                                                                class="glyphicon glyphicon-trash"></span></button>
+                                                                </span>
+                                                            </span>
+                                    </li>
+                                {% endfor %}
+                                <li class="divider"></li>
+                                <li><a class="text-center" href="{{ path('webservice_product_cart_details') }}">View Cart</a></li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div id="login">
+                    <h5>Login</h5>
+                </div>
+                <div id="sign-in">
+                    <h5>Sign-up</h5>
+                </div>
+
+            </div>
             <div class="w3agile">
                 <!-- modal -->
                 <div id="email-modal" class="mfp-hide">
@@ -163,6 +249,7 @@
 'assets/template/mobile/js/modernizr.custom.js'
 'assets/template/mobile/js/jquery.mmenu.min.all.js'
 'assets/template/mobile/js/jquery.nicescroll.min.js'
+'assets/template/mobile/js/jquery.slidereveal.min.js'
 'assets/template/mobile/js/scripts.js'
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -289,10 +376,165 @@
 
         });
 
+        $(function() {
+
+            $("#menu-bar a").click(function () {
+                var id = $(this).attr("href").substring(1);
+                $("html, body").animate({scrollTop: $("#" + id).offset().top}, 1000, function () {
+                    $("#menu-bar").slideReveal("hide");
+                });
+            });
+
+            var slider = $("#menu-bar").slideReveal({
+                // width: 100,
+                push: false,
+                position: "right",
+                // speed: 600,
+                trigger: $(".handle"),
+                // autoEscape: false,
+                shown: function (obj) {
+                    obj.find(".handle").html('<span class="glyphicon glyphicon-chevron-right"></span>');
+                    obj.addClass("left-shadow-overlay");
+                },
+                hidden: function (obj) {
+                    obj.find(".handle").html('<span class="glyphicon glyphicon-chevron-left"></span>');
+                    obj.removeClass("left-shadow-overlay");
+                }
+            });
+        });
+
         {% block documentready %}
         {% endblock %}
 
     });
 </script>
+<style>
+    * {
+        box-sizing: content-box;
+    }
+
+    #menu-btn{
+        position: relative;
+        float: right;
+        margin-right: 15px;
+        padding: 9px 10px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        background-color: transparent;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        border-color: #333;
+    }
+
+    #menu-btn:hover{
+        background-color: #333;
+    }
+
+    #menu-btn .icon-bar{
+        background-color: #fff;
+        display: block;
+        width: 22px;
+        height: 2px;
+        border-radius: 1px;
+    }
+    #menu-btn .icon-bar:not(:first-child){
+        margin-top: 4px;
+    }
+
+    #menu-bar{
+        background-color: #BDBDBD;
+        color: #fff;
+        z-index: 1002;
+    }
+    .left-shadow-overlay{
+        box-shadow: 10px 0 15px 10px #585858;
+    }
+    #menu-bar h3{
+        background-color: #2E2E2E;
+        font-size: 1.9em;
+        padding: 20px;
+        margin: 0;
+        font-weight: 300;
+    }
+/*    #menu-bar a{
+        border-bottom: 1px solid #D8D8D8;
+        padding: 1em;
+        display: block;
+        color: #424242;
+        font-size: 1.4em;
+        font-weight: 300;
+        text-decoration: none;
+    }
+    #menu-bar a:hover{
+        background-color: #D8D8D8;
+    }*/
+    #menu-bar .handle{
+        background-color: #2E2E2E;
+        left: -40px;
+        padding: 10px;
+        position: absolute;
+        top: 2px;
+        width: 20px;
+        cursor: pointer;
+        /*margin-top: -20px;*/
+        /*-moz-transition: 200ms ease all;
+        -webkit-transition: 200ms ease all;
+      -o-transition: 200ms ease all;
+      transition: 200ms ease all;*/
+    }
+    #menu-bar .handle:hover{
+        /*left: -46px;
+        width: 30px;*/
+    }
+    #download-bar{
+        background-color: #E6E6E6;
+        padding: 10px;
+        box-shadow: -10px 0 15px -6px #585858 inset;
+    }
+
+    #download-bar div.well{
+        margin-top: 10px;
+    }
+
+    .side-panel{
+        background-color: #E6E6E6;
+        padding: 10px;
+    }
+
+    .side-panel-left{
+        box-shadow: -5px 0 15px -6px #585858 inset;
+    }
+    .side-panel-left-overlay{
+        box-shadow: -10px 0 15px 10px #585858;
+    }
+    .side-panel-right{
+        box-shadow: 5px 0 15px -6px #585858 inset;
+    }
+
+    .jumbotron{
+        margin-bottom: 0px;
+    }
+
+    .navbar{
+        border-radius: 0px;
+        margin-bottom: 0px;
+    }
+
+    section{
+        padding-top: 20px;
+    }
+
+    section:last-child{
+        margin-bottom: 30px;
+    }
+    #sample-1-btn{
+        margin-bottom: 10px;
+    }
+
+    #sample-1 .panel{
+        margin-top: 10px;
+    }
+</style>
 </body>
 </html>
