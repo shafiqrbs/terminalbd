@@ -46,8 +46,8 @@
 <div id="page">
     {{ include('bindu/mobile/header.html.twig')}}
     {% block body %}{% endblock %}
-    {{ include('bindu/mobile/menu.html.twig')}}
-    {{ include('bindu/mobile/modal.html.twig')}}
+{#    {{ include('bindu/mobile/menu.html.twig')}}
+    {{ include('bindu/mobile/modal.html.twig')}}#}
     {{ include('bindu/mobile/footer.html.twig')}}
 </div>
 
@@ -133,8 +133,8 @@
         });
 
         $('.plainText').bind('keyup blur',function(){
-                    var node = $(this);
-                    node.val(node.val().replace(/[^a-z]/g,'') ); }
+            var node = $(this);
+            node.val(node.val().replace(/[^a-z]/g,'') ); }
         );
         var acc_wrapper = $('.tm-accordion');
         $('.tm-accordion .accordion-container').hide();
@@ -174,9 +174,9 @@
         $('.message').keypress(function(e) {
 
             var tval = $('textarea').val(),
-                    tlength = tval.length,
-                    set = 150,
-                    remain = parseInt(set - tlength);
+                tlength = tval.length,
+                set = 150,
+                remain = parseInt(set - tlength);
             $('#limit').text(remain);
             if (remain <= 0 && e.which !== 0 && e.charCode !== 0) {
                 $('textarea').val((tval).substring(0, tlength - 1))
