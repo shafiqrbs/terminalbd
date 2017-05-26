@@ -2,6 +2,7 @@
 
 namespace Bindu\BinduBundle\Controller;
 use Frontend\FrontentBundle\Service\MobileDetect;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\Syndicate;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
