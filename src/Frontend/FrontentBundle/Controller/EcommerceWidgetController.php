@@ -49,7 +49,7 @@ class EcommerceWidgetController extends Controller
         if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/'.$themeName;
         }else{
-            $theme = 'Template/Mobile/'.$themeName;
+            $theme = 'Template/Desktop/'.$themeName;
         }
         return $this->render('@Frontend/'.$theme.'/header.html.twig', array(
             'globalOption'          => $globalOption,

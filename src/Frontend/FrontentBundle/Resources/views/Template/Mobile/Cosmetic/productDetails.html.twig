@@ -126,7 +126,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="product" class="row">
+                <div id="product" class="">
                     {% for product in products  %}
                         {% set paymentID = globalOption.id~'-ecommerce-product-'~product.id %}
                         <div class="outer-div">
@@ -137,7 +137,6 @@
                                             <img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}"  alt=""/>
                                         </a>
                                     </div>
-                                    <div class="overlay"></div>
                                     <div class="ic_caption">
                                         <p class="title"><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}"  >{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></p>
                                         <div class="product-short-details">
