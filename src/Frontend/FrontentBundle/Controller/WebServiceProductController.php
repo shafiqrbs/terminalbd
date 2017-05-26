@@ -28,7 +28,7 @@ class WebServiceProductController extends Controller
         $pagination = $paginator->paginate(
             $entities,
             $this->get('request')->query->get('page', 1)/*page number*/,
-            1  /*limit per page*/
+            $limit /*limit per page*/
         );
         $detect = new MobileDetect();
         if( $detect->isMobile() || $detect->isTablet() ) {
