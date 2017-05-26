@@ -88,7 +88,14 @@ class TemplateWidgetController extends Controller
         $csrfToken = $this->get('security.csrf.token_manager')->getToken('authenticate')->getValue();
         $user = new User();
         $form   = $this->createCreateForm($globalOption->getSubDomain(),$user);
-        return $this->render('@Frontend/Template/Desktop/Widget/modalLogin.html.twig', array(
+
+        $detect = new MobileDetect();
+        if( $detect->isMobile() || $detect->isTablet() ) {
+            $template = 'Template/Mobile/Widget/';
+        }else{
+            $template = 'Template/Mobile/Widget/';
+        }
+        return $this->render('@Frontend/'.$template.'/modalLogin.html.twig', array(
             'globalOption'             => $globalOption,
             'csrfToken'   => $csrfToken,
             'form'   => $form->createView(),

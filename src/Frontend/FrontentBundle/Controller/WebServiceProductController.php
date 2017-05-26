@@ -10,6 +10,7 @@ use Core\UserBundle\Form\CustomerRegisterType;
 use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -312,9 +313,9 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function productDetailsAction($subdomain, $item)
+    public function productDetailsAction(Request $request , $subdomain, $item)
     {
-
+        $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         $entity =  $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'slug'=>$item));
@@ -350,13 +351,15 @@ class WebServiceProductController extends Controller
             if($detect->isMobile() || $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
-                $theme = 'Template/Desktop/'.$themeName;
+                $theme = 'Template/Mobile/'.$themeName;
             }
+
             return $this->render('FrontendBundle:'.$theme.':productDetails.html.twig',
 
                 array(
 
                     'globalOption'      => $globalOption,
+                    'cart'              => $cart,
                     'categorySidebar'   => $categorySidebar,
                     'brands'            => $brands,
                     'product'           => $entity,
@@ -462,6 +465,8 @@ class WebServiceProductController extends Controller
     {
 
         $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
 
         $quantity = $request->request->get('quantity');
         $color = $request->request->get('color');
@@ -473,8 +478,11 @@ class WebServiceProductController extends Controller
         }else{
             $colorName ='';
         }
+        /** @var GlobalOption $globalOption */
 
-        $masterItem = !empty($product->getMasterItem()) ? $product->getMasterItem()->getName().'-':'';
+        $showMaster = $globalOption->getEcommerceConfig()->getShowMasterName();
+
+        echo $masterItem = !empty($product->getMasterItem()) and $showMaster == 1 ? $product->getMasterItem()->getName().'-':'';
 
         $data = array(
 
@@ -493,33 +501,42 @@ class WebServiceProductController extends Controller
         $cartTotal = $cart->total();
         $totalItems = $cart->total_items();
         $cartResult = $cartTotal.'('.$totalItems.')';
-        $salesItems = $this->getCartItem($cart->contents());
+        $salesItems = $this->getCartItem($globalOption,$cart->contents());
         return new Response(json_encode(array('cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems, 'salesItem' => $salesItems)));
 
 
     }
 
-    public function getCartItem($salesItems){
+    public function getCartItem(GlobalOption $globalOption , $salesItems){
 
-        $items = '';
+
+        $currency = $globalOption->getEcommerceConfig()->getCurrency();
+
+       $items = '';
+
        foreach ($salesItems as $product ) {
-            $items .= '<li id="item-remove-'.$product['rowid'].'" ><span class="item">';
-            $items .= '<span class="item-left">';
-            $items .= '<img height="50" width="50" src="'.$product['productImg'] . '">';
-            $items .= '<span class="item-info">';
-            $items .= '<span>' . $product['name'] . '</span>';
-            $items .= '<span>' . $product['quantity'] . '</span>';
-            $items .= '<span>' . $product['price'] . '</span>';
-            $items .= '</span>';
-            $items .= '</span>';
-            $items .= '<span class="item-right">';
-            $items .= '<button data-url="/cart/product-remove/'.$product['rowid'] .'" class="btn btn-xs btn-danger pull-right  hunger-remove-cart"><span class="glyphicon glyphicon-trash"></span></button>';
-            $items .= '</span>';
-            $items .= '</span>';
-            $items .= '</span></li>';
+
+            $items .= '<li id="item-remove-'.$product['rowid'].'" ><div class="item">';
+            $items .= '<div class="col-md-12 cart-product-title">'.$product['name'].'</div>';
+            $items .= '<div class="col-md-6">';
+            $items .= '<img height="100" width="160" src="'.$product['productImg'] . '">';
+            $items .= '</div>';
+            $items .= '<div class="col-md-6">';
+            $items .= '<div class="input-group">';
+            $items .= '<span class="input-group-addon">'.$currency .' '. $product['price'].'</span>';
+            $items .= '<input type="text" class="form-control" width="80" value="' . $product['quantity'] . '">';
+            $items .= '</div>';
+            $items .= '<div class="btn-group text-right col-md-12" role="group" >';
+            $items .= '<button id="'.$product['rowid'].'"  data-url="/cart/product-remove/'.$product['rowid'] .'"
+                                                            class="btn btn-danger pull-right hunger-remove-cart"><span class="glyphicon glyphicon-trash"></span>
+                                                    </button>';
+            $items .= '<button id="'.$product['rowid'].'"  data-url="/cart/product-update/'.$product['rowid'] .'" data-id="'. $product['price'] .'" data-value="'.$product['quantity'].'" 
+                                                            class="btn btn-success pull-right hunger-update-cart"><span class="glyphicon glyphicon-pencil"></span>
+                                                    </button>';
+            $items .= '</div>';
+            $items .= '</div>';
+            $items .= '</div></li>';
         }
-        $items .='<li class="divider"></li>';
-        $items .='<li><a class="text-center" href="/cart-details">View Cart</a></li>';
         return $items;
 
     }
@@ -584,7 +601,7 @@ class WebServiceProductController extends Controller
             if($detect->isMobile() && $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
-                $theme = 'Template/Desktop/'.$themeName;
+                $theme = 'Template/Mobile/'.$themeName;
             }
 
             $cart = new Cart($request->getSession());

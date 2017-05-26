@@ -51,7 +51,7 @@
                 </div>
                 <style>
                     .box-link{
-                        height: 21px;
+                        height: 45px;
                     }
                     .social-links {
                         padding: 0;
@@ -94,59 +94,57 @@
             <!-- //banner -->
             {% block body %}{% endblock %}
             <!--/footer-->
-            <div id="menu-bar" style="position: fixed; width: 350px; transition: all 300ms ease; height: 100%; top: 0px; right: 0px;" class="left-shadow-overlay">
+            <div id="side-bar-panel" class="left-shadow-overlay" >
                 <div class="handle">
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </div>
                 <div class="menu-notify box-link">
+                    <div class="text-left">{{ app.user }}</div>
                     <ul class="social-links">
                         <li><a href="javascript:" class="register-btn"><i class="fa fa-sign-in"></i></a></li>
                         <li><a href="javascript:" class="login-preview"><i class="fa fa-lock"></i></a></li>
-                        <li><a href="javascript:" class="login-preview"><i class="fa fa-cart"></i></a></li>
+                        <li><a href="javascript:" class="cart-preview"><i class="fa fa-shopping-cart"></i></a></li>
                     </ul>
                 </div>
                 <div id="cart-details">
-                    <h5>Cart Details</h5>
-                    <div class="item-list">
+                    <div class="item-list" style="background: #222">
                         {% if  cart.contents is not empty %}
-                            <ul class="dropdown-menu dropdown-cart" role="menavbar-rightnu">
-                                {% for product in cart.contents %}
-                                    <li id="item-remove-{{ product.rowid }}">
-                                                              <span class="item">
-                                                                <span class="item-left">
-                                                                    {% if product.productImg is not empty %}
-                                                                        <img src="{{ image(product.productImg).scaleResize(50,50) }}"
-                                                                             alt=""/>
-                                                                    {% endif %}
-                                                                    <span class="item-info">
-                                                                        <span>{{ product.name|truncate(15) }}</span>
-                                                                        <span>Qnt&nbsp;{{ product.quantity }}</span>
-                                                                        <span><strong>{{ globalOption.ecommerceConfig.currency }}
-                                                                                &nbsp;{{ product.price }}</strong></span>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="item-right">
-                                                                    <button id="{{ product.rowid }}"
-                                                                            data-url="{{ path('webservice_product_cart_remove',{'cartid':product.rowid}) }}"
-                                                                            class="btn btn-xs btn-danger pull-right hunger-remove-cart"><span
-                                                                                class="glyphicon glyphicon-trash"></span></button>
-                                                                </span>
-                                                            </span>
-                                    </li>
+                            <ul class="cart-list">
+                                {% for item in cart.contents %}
+                                    <li id="item-remove-{{ item.rowid }}">
+                                        <div class="item">
+                                            <div class="col-md-12 cart-product-title">{{ item.name }}</div>
+                                            <div class="col-md-6">
+                                                {% if item.productImg is not empty %}
+                                                    <img src="{{ item.productImg }}" height="100" width="160" alt=""/>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ item.price }}</span>
+                                                    <input type="text" class="form-control" width="80" id="{{ item.rowid }}" value="{{ item.quantity }}">
+                                                </div><!-- /input-group -->
+                                                <div class="btn-group text-right col-md-12" role="group" >
+                                                    <button id="{{ item.rowid }}"  data-url="{{ path('webservice_product_cart_remove',{'cartid':item.rowid}) }}"
+                                                            class="btn  btn-danger pull-right hunger-remove-cart" data-id="{{ item.price }}" data-value="{{ item.quantity }}" ><span class="glyphicon glyphicon-trash"></span>
+                                                    </button>
+                                                    <button id="{{ item.rowid }}"  data-url="{{ path('webservice_product_cart_update',{'cartid':item.rowid}) }}"
+                                                            class="btn btn-success pull-right hunger-update-cart"><span class="glyphicon glyphicon-pencil"></span>
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                   </li>
                                 {% endfor %}
-                                <li class="divider"></li>
-                                <li><a class="text-center" href="{{ path('webservice_product_cart_details') }}">View Cart</a></li>
                             </ul>
+                            <div class="text-center col-md-12"><a class="btn btn-warning " href="javascript:">Grand Total<b class="totalAmount">{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cart.total }}</b></a><a class="btn btn-info" href="{{ path('webservice_product_cart_details') }}">View Cart</a></div>
                         {% endif %}
                     </div>
                 </div>
-                <div id="login">
-                    <h5>Login</h5>
+                <div id="login-signip">
+                    {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
                 </div>
-                <div id="sign-in">
-                    <h5>Sign-up</h5>
-                </div>
-
             </div>
             <div class="w3agile">
                 <!-- modal -->
@@ -254,6 +252,7 @@
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
+<script>  subdomain = "{{ globalOption.subDomain }}"; </script>
 {% block javascriptBlock %}{% endblock %}
 <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDmior4xLqsriysUeQhtdSawc8yjDyaWaw"></script>
 <script type="text/javascript">
@@ -385,7 +384,7 @@
                 });
             });
 
-            var slider = $("#menu-bar").slideReveal({
+            var slider = $("#side-bar-panel").slideReveal({
                 // width: 100,
                 push: false,
                 position: "right",
@@ -399,6 +398,10 @@
                 hidden: function (obj) {
                     obj.find(".handle").html('<span class="glyphicon glyphicon-chevron-left"></span>');
                     obj.removeClass("left-shadow-overlay");
+                    $('#registerModal').hide();
+                    $('#forgetModal').hide();
+                    $('#loginModal').hide();
+                    $('#cart-details').hide();
                 }
             });
         });
@@ -409,40 +412,42 @@
     });
 </script>
 <style>
-    * {
-        box-sizing: content-box;
+
+    .help-block{
+        margin-top: 0;
+    }
+    #cat-search{
+        margin-bottom:15px;
+        clear: both;
     }
 
-    #menu-btn{
-        position: relative;
-        float: right;
-        margin-right: 15px;
-        padding: 9px 10px;
-        margin-top: 8px;
-        margin-bottom: 8px;
-        background-color: transparent;
-        background-image: none;
-        border: 1px solid transparent;
-        border-radius: 4px;
-        border-color: #333;
+    ul.cart-list{
+        list-style: none;
+        padding-top: 15px;
+    }
+    ul.cart-list li{
+        list-style: none;
+        margin-left: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #FFFFff;
+        margin-bottom: 15px;
+        display:inline-block;
+    }
+    .cart-product-title{
+        font-size: 15px;
+        padding-bottom: 15px;
     }
 
-    #menu-btn:hover{
-        background-color: #333;
-    }
+    #side-bar-panel{
+           position: fixed;
+           width: 350px!important;
+           transition: all 300ms ease;
+           height: 100%;
+           top: 0px;
+           right: 0px;
+       }
 
-    #menu-btn .icon-bar{
-        background-color: #fff;
-        display: block;
-        width: 22px;
-        height: 2px;
-        border-radius: 1px;
-    }
-    #menu-btn .icon-bar:not(:first-child){
-        margin-top: 4px;
-    }
-
-    #menu-bar{
+    #side-bar-panel{
         background-color: #BDBDBD;
         color: #fff;
         z-index: 1002;
@@ -450,51 +455,23 @@
     .left-shadow-overlay{
         box-shadow: 10px 0 15px 10px #585858;
     }
-    #menu-bar h3{
-        background-color: #2E2E2E;
-        font-size: 1.9em;
-        padding: 20px;
-        margin: 0;
-        font-weight: 300;
-    }
-/*    #menu-bar a{
-        border-bottom: 1px solid #D8D8D8;
-        padding: 1em;
-        display: block;
-        color: #424242;
-        font-size: 1.4em;
-        font-weight: 300;
-        text-decoration: none;
-    }
-    #menu-bar a:hover{
-        background-color: #D8D8D8;
-    }*/
-    #menu-bar .handle{
+
+    #side-bar-panel .handle{
         background-color: #2E2E2E;
         left: -40px;
         padding: 10px;
         position: absolute;
         top: 2px;
-        width: 20px;
         cursor: pointer;
-        /*margin-top: -20px;*/
-        /*-moz-transition: 200ms ease all;
+        width: 40px!important;
+        -moz-transition: 200ms ease all;
         -webkit-transition: 200ms ease all;
-      -o-transition: 200ms ease all;
-      transition: 200ms ease all;*/
+        -o-transition: 200ms ease all;
+        transition: 200ms ease all;
     }
-    #menu-bar .handle:hover{
+    #side-bar-panel .handle:hover{
         /*left: -46px;
         width: 30px;*/
-    }
-    #download-bar{
-        background-color: #E6E6E6;
-        padding: 10px;
-        box-shadow: -10px 0 15px -6px #585858 inset;
-    }
-
-    #download-bar div.well{
-        margin-top: 10px;
     }
 
     .side-panel{
@@ -528,13 +505,7 @@
     section:last-child{
         margin-bottom: 30px;
     }
-    #sample-1-btn{
-        margin-bottom: 10px;
-    }
 
-    #sample-1 .panel{
-        margin-top: 10px;
-    }
 </style>
 </body>
 </html>

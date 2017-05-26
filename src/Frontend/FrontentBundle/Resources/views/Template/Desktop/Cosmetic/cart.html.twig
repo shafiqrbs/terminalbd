@@ -160,22 +160,22 @@
     {{ parent() }}
     $('.hanger-remove-cart').click( function() {
 
-    var url = $(this).attr("data-url");
-    var id = $(this).attr("id");
-    alert(id);
-    $.ajax({
-    url:url ,
-    type: 'GET',
-    success: function(response){
-    obj = JSON.parse(response);
-    $('.item-remove-'+id).remove();
-    $('.totalItem').html(obj['totalItem']);
-    $('.totalAmount').html(obj['cartTotal']);
-    $('.item-list').html(obj['salesItem']);
-    $('.vsidebar .txt').html(obj['cartResult']);
-    }
-    });
-    e.preventDefault();
+        var url = $(this).attr("data-url");
+        var id = $(this).attr("id");
+        alert(id);
+        $.ajax({
+        url:url ,
+        type: 'GET',
+        success: function(response){
+        obj = JSON.parse(response);
+        $('.item-remove-'+id).remove();
+        $('.totalItem').html(obj['totalItem']);
+        $('.totalAmount').html(obj['cartTotal']);
+        $('.item-list').html(obj['salesItem']);
+        $('.vsidebar .txt').html(obj['cartResult']);
+        }
+        });
+        e.preventDefault();
 
     });
 

@@ -9,7 +9,7 @@
     </div>
 #}
     <div id="content"  class="product" style="margin-bottom: 50px">
-        <div style="margin-bottom:15px; clear: both;">
+        <div id="cat-search">
             {% render controller("FrontendBundle:EcommerceWidget:header",{'globalOption':globalOption, 'pageName':'product'}) %}
         </div>
         <br/>
@@ -60,10 +60,14 @@
 {% endblock  %}
 {% block javascriptBlock %}
     {% javascripts
-    '@FrontendBundle/Resources/public/template/js/product.js'
+    '@FrontendBundle/Resources/public/template/mobile/js/common.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
+{% block documentready %}
+    {{ parent() }}
+{% endblock %}
+
 
 
