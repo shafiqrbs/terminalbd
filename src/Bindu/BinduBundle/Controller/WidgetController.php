@@ -1,8 +1,7 @@
 <?php
 
 namespace Bindu\BinduBundle\Controller;
-use Desktop\Bundle\Service\MobileDetect;
-use Proxies\__CG__\Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Frontend\FrontentBundle\Service\MobileDetect;
 use Setting\Bundle\ToolBundle\Entity\Syndicate;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
@@ -26,31 +25,32 @@ class WidgetController extends Controller
    public function businessAction($directory = NULL )
     {
 
-        exit;
+
         $entities                     = $this->getDoctrine()->getRepository('SettingToolBundle:Syndicate')->findBy(array('status'=>1),array('name'=>'ASC'));
-        $detect = new \Frontend\FrontentBundle\Service\MobileDetect();
-        /*if($detect->isMobile() OR  $detect->isTablet() ) {
+        $detect = new MobileDetect();
+        if($detect->isMobile() OR  $detect->isTablet() ) {
             return $this->render('@Bindu/Frontend/Mobile/businessContent.html.twig', array(
                 'entities'           => $entities,
             ));
         }else{
-            return $this->render('@Bindu/Frontend/Desktop/businessContent.html.twig', array(
+            return $this->render('@Bindu/Frontend/Mobile/businessContent.html.twig', array(
                 'entities'           => $entities,
             ));
-        }*/
+        }
 
     }
 
    public function locationAction()
     {
         $entities                     = $this->getDoctrine()->getRepository('SettingLocationBundle:Location')->findBy(array('level'=>2),array('name'=>'ASC'));
+
         $detect = new MobileDetect();
         if( $detect->isMobile() OR  $detect->isTablet() ) {
             return $this->render('@Bindu/Frontend/Mobile/locationContent.html.twig', array(
                 'entities'           => $entities,
             ));
         }else{
-            return $this->render('@Bindu/Frontend/Desktop/locationContent.html.twig', array(
+            return $this->render('@Bindu/Frontend/Mobile/locationContent.html.twig', array(
                 'entities'           => $entities,
             ));
         }
