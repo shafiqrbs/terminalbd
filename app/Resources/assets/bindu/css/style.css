@@ -647,7 +647,7 @@ header {
   /** Social **/
 }
 header #tm-header-top {
-  background: #000000;
+  background: #999 !important;
   color: #ffffff;
 }
 header #tm-header-top .tm-logo {

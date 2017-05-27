@@ -208,7 +208,20 @@
 
     </div>
 {% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@BinduBundle/Resources/public/js/webBuilder.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
 {% block documentready %}
+    {{ parent() }}
+    builderJs();
+{% endblock %}
+
+{#{% block documentready %}
 
     {{ parent() }}
 
@@ -414,7 +427,7 @@
                         $('.main-setting').fadeOut(3500);
                 },
                 complete: function(){
-                    {#document.location.reload();#}
+                    #}{#document.location.reload();#}{#
                 }
             });
         }
@@ -758,4 +771,4 @@
 
     });
 
-{% endblock %}
+{% endblock %}#}

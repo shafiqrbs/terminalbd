@@ -168,6 +168,7 @@ class BinduController extends Controller
         }
         echo $valid;
         exit;
+
     }
 
     public function subdomainCheckingAction(Request $request)
@@ -367,9 +368,11 @@ class BinduController extends Controller
     public function businessDirectoryDetailsAction($directory)
     {
 
-        $syndicate = $this->getDoctrine()->getRepository('SettingToolBundle:Syndicate')->findOneBy(array('slug'=>$directory));
-        $data = array('syndicate'=>$syndicate);
-        $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain($data);
+        $syndicate = $this->getDoctrine()->getRepository('SettingToolBundle:Syndicate')->findOneBy(array('slug' => $directory));
+        // $data = array('syndicate' => $syndicate->getId());
+       // $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBySubdomain($data);
+        $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBy(array('status'=>1,'syndicate' => $syndicate), array('name'=>'ASC'));
+
         $detect = new MobileDetect();
         if( $detect->isMobile() OR  $detect->isTablet() ) {
             $theme = 'Frontend/Mobile';
@@ -397,7 +400,7 @@ class BinduController extends Controller
     public function locationDirectoryDetailsAction($location)
     {
 
-        $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBy(array('status'=>1,'location'=>$location),array('name'=>'ASC'));
+        $entities =$this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findBy(array('status'=>1,'location' => $location), array('name'=>'ASC'));
 
         $detect = new MobileDetect();
         if( $detect->isMobile() OR  $detect->isTablet() ) {

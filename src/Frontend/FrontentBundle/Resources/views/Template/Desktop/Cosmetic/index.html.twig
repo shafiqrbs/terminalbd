@@ -33,11 +33,11 @@
             </div>
         </div>
     </section>
-    <section>
+{#    <section>
             {% if globalOption.contactPage.latitude is not empty and globalOption.contactPage.longitude is not empty %}
                 <div id="gmap_canvas" class="gmap">
-                    <div class="Lat">{{ globalOption.contactPage.latitude }}</div>
-                    <div class="Lng">{{ globalOption.contactPage.longitude }}</div>
+                    <div class="Lat">10.359352</div>
+                    <div class="Lng">106.673089</div>
                     <div class="imgMap">{{ asset('assets/img/placeholder.png') }}</div>
                     <address>Address Here</address>
                     <div class="infoWindow">
@@ -69,9 +69,22 @@
 
                             </span>
                     </div>
+                    <div class="mapType">ROADMAP</div>
+                    <div class="mapCenter">true</div>
+                    <div class="Title">Hello</div>
+                    <div class="infoWidth">200</div>
+                    <div class="mapStyle">black</div>
+                    <div class="mapZoom">15</div>
+                    <div class="scrollwheel">true</div>
+                    <div class="disableDoubleClickZoom">true</div>
+                    <div class="fullscreenControl">true</div>
+                    <div class="disableOpenURL">false</div>
+                    <div class="OpenURL">View full map</div>
+                    <div class="draggable">true</div>
+                    <div class="disableDefaultUI">false</div>
                 </div>
             {% endif %}
-        </section>
+        </section>#}
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -93,7 +106,9 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-
+    if ($('#gmap_canvas').length) {
+        $('#gmap_canvas').kmaps();
+    }
     $('#newsLetter').submit( function(e) {
 
         $.ajax({
@@ -111,7 +126,7 @@
 
     });
 
-    $('#gmap_canvas').kmaps();
+
 
 {% endblock %}
 

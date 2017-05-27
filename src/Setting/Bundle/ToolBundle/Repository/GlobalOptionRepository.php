@@ -37,12 +37,14 @@ class GlobalOptionRepository extends EntityRepository
 
     public function searchHandle($qb,$data)
     {
+
         if(!empty($data['location'])){
             $qb->andWhere("e.location= :location");
             $qb->setParameter('location', $data['location']);
         }
         if(!empty($data['syndicate'])){
-            $qb->andWhere("e.syndicate= :syndicate");
+            var_dump($data);
+            $qb->andWhere("e.syndicate = :syndicate");
             $qb->setParameter('syndicate', $data['syndicate']);
         }
         if(!empty($data['name'])){

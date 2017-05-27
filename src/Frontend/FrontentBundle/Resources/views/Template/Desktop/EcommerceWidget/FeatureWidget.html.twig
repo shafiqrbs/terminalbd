@@ -116,8 +116,30 @@
             </div>
         </div>
     </div>
+        <style>
+            .header-line-center h1:before, .header-line-center h2:before, .header-line-center h3:before, .header-line-center h4:before, .header-line-center h5:before, .header-line-center h6:before {
+                position: absolute;
+                content: "";
+                height: 2px;
+                width: 50%;
+                left: -50%;
+                top: 50%;
+                margin-top: -1px;
+                background: #0a70e3;
+            }
+            .header-line-center h1:after, .header-line-center h2:after, .header-line-center h3:after, .header-line-center h4:after, .header-line-center h5:after, .header-line-center h6:after {
+                position: absolute;
+                content: "";
+                background: #0a70e3;
+                height: 2px;
+                width: 50%;
+                right: -50.5%;
+                top: 50%;
+                margin-top: -1px;
+            }
+        </style>
         <div class="header-line-center">
-            <h1 class="tm-title tm-title-border">WELCOME TO {{ globalOption.name }}</h1>
+            <h1 class="tm-title-border">WELCOME TO {{ globalOption.name }}</h1>
         </div>
     {% endif %}
 

@@ -1,7 +1,13 @@
 {% extends ':bindu/mobile:base.html.twig' %}
 {% block body %}
+    <script>
+        var divWidth = ($('.bannerPane').width());
+        $('#map').width(divWidth);
+        $('iframe').width(divWidth);
+
+    </script>
     <div class="bannerPane">
-        <div id="map" style="width:100%; height:300px;">
+        <div id="map" style="height:300px;">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.4788484295605!2d90.35037491184286!3d23.80156561219735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDQ4JzA1LjQiTiA5MMKwMjEnMDkuMiJF!5e0!3m2!1sen!2sbd!4v1465999161467" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
         </div>
     </div>
@@ -22,4 +28,5 @@
             <i class="fa fa-envelope"></i>&nbsp;<a href="mailto:info@terminalbd.com"> info@terminalbd.com</a><br />
         </p>
     </div>
+
 {% endblock %}
