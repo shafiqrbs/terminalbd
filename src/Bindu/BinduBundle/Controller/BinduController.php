@@ -476,7 +476,7 @@ class BinduController extends Controller
         if( $detect->isMobile() &&  $detect->isTablet() ) {
             $theme = 'Frontend/Mobile';
         }else{
-            $theme = 'Frontend/Desktop';
+            $theme = 'Frontend/Mobile';
         }
         return $this->render('BinduBundle:'.$theme.':product.html.twig');
 

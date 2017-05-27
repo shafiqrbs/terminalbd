@@ -67,7 +67,7 @@ class WidgetController extends Controller
                 'entities'           => $entities,
             ));
         }else{
-            return $this->render('@Bindu/Frontend/Desktop/module.html.twig', array(
+            return $this->render('@Bindu/Frontend/Mobile/module.html.twig', array(
                 'entities'           => $entities,
             ));
         }
@@ -83,7 +83,7 @@ class WidgetController extends Controller
                 'entities'           => $entities,
             ));
         }else{
-            return $this->render('@Bindu/Frontend/Desktop/syndicateModule.html.twig', array(
+            return $this->render('@Bindu/Frontend/Mobile/syndicateModule.html.twig', array(
                 'entities'           => $entities,
             ));
         }
@@ -99,7 +99,7 @@ class WidgetController extends Controller
                 'entities'           => $entities,
             ));
         }else{
-            return $this->render('@Bindu/Frontend/Desktop/appModule.html.twig', array(
+            return $this->render('@Bindu/Frontend/Mobile/appModule.html.twig', array(
                 'entities'           => $entities,
             ));
         }
