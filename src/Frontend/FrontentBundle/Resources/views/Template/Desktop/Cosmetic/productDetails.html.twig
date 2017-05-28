@@ -375,15 +375,15 @@
                             <div id="category-carousel" class="owl-carousel">
                                 {% for product in products  %}
                                     <div class="col-md-12 fadeInRight animated" data-wow-delay="0.2s" >
-                                        <div class="" data-match-height="item-promotion">
-                                            <div class="product-preview group list-group-image" >
-                                                <img class="img-responsive" src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="">
-                                                <div class="team-content">
-                                                    <ul class="view-link">
-                                                        <li><a data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" href="javascript:" class="fa fa-eye preview"></a></li>
-                                                    </ul>
-                                                </div>
+                                        <div class="product-feature-box list-group-image">
+                                            <img class="img-responsive" data-match-height="item-promotion-img" src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="">
+                                            <div class="product-feature-box-content">
+                                                <span class="post">{{ product.webName }}</span>
                                             </div>
+                                            <ul class="social">
+                                                <li><a data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" href="javascript:" class="preview" ><i class="fa fa-eye"></i></a></li>
+                                                <li><a  href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}" ><i class="fa fa-link"></i></a></li>
+                                            </ul>
                                         </div>
                                         <div class="caption">
                                             <div class="row">
