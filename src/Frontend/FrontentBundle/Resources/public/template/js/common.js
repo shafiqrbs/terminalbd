@@ -142,7 +142,27 @@ $(document).on( "click", ".emailSender", function(e){
         owlCategory.trigger('owl.prev');
     })
 
-    var owlPromotion = $("#promotion-slider");
+    var owlPromotion = $("#promotion-sliderx");
+    owlPromotion.owlCarousel({
+        items:4,
+        itemsCustom : false,
+        itemsDesktop : [1199,4],
+        itemsDesktopSmall : [980,3],
+        itemsTablet: [768,2],
+        itemsTabletSmall: false,
+        itemsMobile : [479,1],
+        itemsScaleUp : false,
+        autoPlay:false,
+        rewindNav:false,
+        navigation : true,
+        navigationText: [
+            "<span class='btn prevPromotion glyphicon glyphicon-chevron-left'></span>",
+            "<span class='btn nextPromotion glyphicon glyphicon-chevron-right'></span>"
+        ],
+        pagination : false,
+    });
+
+    var owlPromotion = $(".promotion-carousel");
     owlPromotion.owlCarousel({
         items:4,
         itemsCustom : false,

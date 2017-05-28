@@ -50,6 +50,7 @@ class EcommerceConfigType extends AbstractType
                     '6'       => 'Per Column-6',
                 ),
             ))
+            ->add('showSidebar')
             ->add('showMasterName')
             ->add('showBrand')
             ->add('sidebarBrand')

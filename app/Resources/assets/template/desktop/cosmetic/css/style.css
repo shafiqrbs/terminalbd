@@ -15,7 +15,7 @@ p{
 }
 
 .btn, .btn-group-sm>.btn, .btn-sm{
-    border-radius: 0!important;
+   /* border-radius: 0!important;*/
 }
 .box .info-links{
     line-height: 30px;
@@ -409,18 +409,19 @@ ul.dropdown-cart li .item-right button {
     padding: 0;
     margin: 0;
     position: relative;
-    top: 87%;
+    top: 80%;
 }
 .product-preview .view-link li {
     list-style: none;
     margin-right:0;
     display: inline-block;
     width: 100%;
+    height: 40px;
 }
 .product-preview .view-link li a {
     width: 100%;
-    height: 35px;
-    line-height: 35px;
+    height: 40px;
+    line-height: 40px;
     border-radius: 0;
     background: rgba(0, 0, 0, 0.3);
     font-size: 12px;
@@ -430,6 +431,7 @@ ul.dropdown-cart li .item-right button {
     background: #002842;
     text-decoration: none;
     color: #FFFFFF;
+    height: 40px!important;
 }
 
 /*==================================== Feature Widget CSS=======================================*/
@@ -998,11 +1000,6 @@ div.treeview, .treeview ul {
 
 .caption .currency{
     color: #ffffff;
-}
-
-.product-preview .view-link li a{
-    font-size: 20px;
-    background-color: #f39426;
 }
 
 .deliveryBox{

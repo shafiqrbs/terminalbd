@@ -107,6 +107,7 @@
                                     </div>
                                 </div>
                                 <div class="span3">
+
                                     <div class="row-fluid">
                                         <div class="span12 ">
                                             <div class="control-group">
@@ -147,10 +148,33 @@
                                                 </div>
                                         </div>
                                     </div>
-
+                                     <div class="row-fluid">
+                                                                     <div class="span12 ">
+                                                                         <div class="control-group">
+                                                                             <label class="control-label" for="price">Product Using Size &nbsp; {{ form_widget(form.isSize) }}
+                                                                                 {{ form_errors(form.isSize) }}</label>
+                                                                         </div>
+                                                                     </div>
+                                                                 </div>
+                                     <div class="row-fluid">
+                                 <div class="span12 ">
+                                     <div class="control-group">
+                                         <label class="control-label" for="price">Product Using Color &nbsp; {{ form_widget(form.isColor) }}
+                                             {{ form_errors(form.isColor) }}</label>
+                                     </div>
+                                 </div>
+                             </div>
                                     <div class="row-fluid">
                                         <div class="span12 ">
                                            <strong>Manage Sidebar</strong>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12 ">
+                                            <div class="control-group">
+                                                <label class="control-label" for="price">Show Product Sidebar &nbsp; {{ form_widget(form.showSidebar) }}
+                                                    {{ form_errors(form.showSidebar) }}</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row-fluid">
@@ -193,14 +217,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                   {# <div class="row-fluid">
-                                        <div class="span12 ">
-                                            <div class="control-group">
-                                                <label class="control-label" for="price">Product Using Color &nbsp; {{ form_widget(form.isColor) }}
-                                                    {{ form_errors(form.isColor) }}</label>
-                                            </div>
-                                        </div>
-                                    </div>#}
+
                                 </div>
 
                                 <div class="span5">

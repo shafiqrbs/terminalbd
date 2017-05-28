@@ -20,16 +20,18 @@
     <div class="clearfix"></div>
     <section>
         <div class="container" >
-            <div class="col-md-3 sidebar-top" >
-                <div class="row">
-                    <div class="col-md-12 paginate">
-                        <div class="btn-group pull-left">
-                            <div class="product-title"><span class="glyphicon glyphicon-filter"></span>&nbsp;REFINE RESULTS</div>
+            {% if globalOption.ecommerceConfig.showSidebar == 1 %}
+                <div class="col-md-3 sidebar-top" >
+                    <div class="row">
+                        <div class="col-md-12 paginate">
+                            <div class="btn-group pull-left">
+                                <div class="product-title"><span class="glyphicon glyphicon-filter"></span>&nbsp;REFINE RESULTS</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-9">
+            {% endif %}
+            <div class="{% if globalOption.ecommerceConfig.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}">
                 <div class="row paginate">
                     <div class="col-md-8">
                         <div class="btn-group pull-left">
@@ -107,6 +109,7 @@
     <div class="clearfix"></div>
     <section id="products" style="margin-top: 20px">
         <div class="container">
+        {% if globalOption.ecommerceConfig.showSidebar == 1 %}
             <div class="col-md-3" data-match-height="body-content" >
                 <div class="row">
                     <div class="clearfix"></div>
@@ -182,7 +185,8 @@
                     </form>
                 </div>
             </div>
-            <div class="col-md-9" data-match-height="" style="width: 73%; margin-left: 2%"   >
+        {% endif %}
+            <div class="{% if globalOption.ecommerceConfig.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="" {% if globalOption.ecommerceConfig.showSidebar == 1 %} style="width: 73%; margin-left: 2%" {% endif %}  >
                 <div class="row-fluid">
                     <div class="col-xs-6 col-md-6 o-margin-padding">
                         <div id='carousel-custom' class='carousel slide' data-ride='carousel'>
@@ -406,12 +410,14 @@
     </section>
     <section>
         <div class="container" >
+            {% if globalOption.ecommerceConfig.showSidebar == 1 %}
             <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
                 <div class="row div-vertical-center">
                 <button  class="btn btn-info ladda-button" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
                 </div>
             </div>
-            <div class="col-md-9" data-match-height="body-footer"  >
+            {% endif %}
+            <div class="{% if globalOption.ecommerceConfig.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="body-footer"  >
                 <div class="row paginate-footer" >
                     <div class="row-fluid">
                         <div class="col-md-4 col-sm-6">

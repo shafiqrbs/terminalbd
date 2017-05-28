@@ -43,12 +43,12 @@ class EcommerceWidgetController extends Controller
 
         $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $globalOption->getInventoryConfig()));
         $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
-        $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTreeForMobile($cats,$category);
-
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTreeForMobile($cats,$category);
             $theme = 'Template/Mobile/'.$themeName;
         }else{
+            $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($cats,$category);
             $theme = 'Template/Desktop/'.$themeName;
         }
         return $this->render('@Frontend/'.$theme.'/header.html.twig', array(

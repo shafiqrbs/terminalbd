@@ -104,6 +104,13 @@ class EcommerceConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="showSidebar", type="boolean")
+     */
+    private $showSidebar = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="showMasterName", type="boolean")
      */
     private $showMasterName = true;
@@ -646,6 +653,22 @@ class EcommerceConfig
     public function setIsSize($isSize)
     {
         $this->isSize = $isSize;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getShowSidebar()
+    {
+        return $this->showSidebar;
+    }
+
+    /**
+     * @param bool $showSidebar
+     */
+    public function setShowSidebar($showSidebar)
+    {
+        $this->showSidebar = $showSidebar;
     }
 
 }

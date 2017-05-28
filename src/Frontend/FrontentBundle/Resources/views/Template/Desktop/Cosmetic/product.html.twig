@@ -18,6 +18,7 @@
     <div class="clearfix"></div>
     <section>
         <div class="container" >
+            {% if globalOption.ecommerceConfig.showSidebar == 1 %}
             <div class="col-md-3 sidebar-top" >
                 <div class="row">
                     <div class="col-md-12 paginate">
@@ -27,7 +28,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-9">
+            {% endif %}
+            <div class="{% if globalOption.ecommerceConfig.showSidebar == 1 %} col-md-9 {% else %}col-md-12 {% endif %}">
                 <div class="row paginate">
                     <div class="col-md-6">
                         <div class="btn-group pull-left">
@@ -73,6 +75,7 @@
     <div class="clearfix"></div>
     <section id="products" style="margin-top: 20px">
         <div class="container">
+            {% if globalOption.ecommerceConfig.showSidebar == 1 %}
             <div class="col-md-3" data-match-height="body-content" >
                 <div class="row">
                     <div class="clearfix"></div>
@@ -148,19 +151,20 @@
                     </form>
                </div>
             </div>
-            <div class="col-md-9" data-match-height="body-content"  >
+            {% endif %}
+            <div class="{% if globalOption.ecommerceConfig.showSidebar == 1 %} col-md-9 {% else %}col-md-12 {% endif %}" data-match-height="body-content"  >
                 <div id="products" class="row list-group">
                     {% for product in products %}
                         <div data-wow-delay="0.2s" data-match-height="item-promotion" class="item fadeInRight animated col-xs-{{ globalOption.ecommerceConfig.perColumn }} col-lg-{{ globalOption.ecommerceConfig.perColumn }}">
-                            <div class="" >
-                                <div class="product-preview group list-group-image" >
-                                    <img class="img-responsive" data-match-height="item-promotion-img" src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="">
-                                    <div class="team-content">
-                                        <ul class="view-link">
-                                            <li><a class="preview fa fa-eye" data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" ></a></li>
-                                        </ul>
-                                    </div>
+                            <div class="product-feature-box list-group-image">
+                                <img class="img-responsive" data-match-height="item-promotion-img" src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="">
+                                <div class="product-feature-box-content">
+                                    <span class="post">{{ product.webName }}</span>
                                 </div>
+                                <ul class="social">
+                                    <li><a data-url="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" href="javascript:" class="preview" ><i class="fa fa-eye"></i></a></li>
+                                    <li><a  href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}" ><i class="fa fa-link"></i></a></li>
+                                </ul>
                             </div>
                             <div class="caption">
                                 <div class="row-fluid">
@@ -182,12 +186,14 @@
     </section>
     <section>
         <div class="container" >
+            {% if globalOption.ecommerceConfig.showSidebar == 1 %}
             <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
                 <div class="row div-vertical-center">
                     <button  class="btn btn-info ladda-button" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
                 </div>
             </div>
-            <div class="col-md-9" data-match-height="body-footer"  >
+            {% endif %}
+            <div class="{% if globalOption.ecommerceConfig.showSidebar == 1 %} col-md-9 {% else %}col-md-12 {% endif %}" data-match-height="body-footer"  >
                 <div class="row paginate-footer" >
                     <div class="col-md-5 navbar-left">
                     <form class="form-inline">
@@ -221,6 +227,13 @@
     <div class="clearfix"></div>
     <!-- Modal -->
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/desktop/css/product.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
