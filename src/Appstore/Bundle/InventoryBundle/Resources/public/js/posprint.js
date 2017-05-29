@@ -32,7 +32,7 @@ $(document).on("click", "#pos", function() {
     })
 });
 function pageRedirect() {
-    window.location.href = "{{ path('inventory_sales_new') }}";
+    window.location.href = "/inventory/sales/new";
 }
 
 function jsPostPrint(data) {
