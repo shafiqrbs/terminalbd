@@ -1039,5 +1039,19 @@ class StockItemRepository extends EntityRepository
     }
 
 
+    public function purchaseItemStockRemoveQnt($purchase){
+
+        $em = $this->_em;
+        foreach($purchase->getPurchaseItems() as $purchaseItem ){
+
+            $StockItem = $this->_em->getRepository('InventoryBundle:StockItem')->findOneBy(array('purchaseItem'=>$purchaseItem));
+            if(!empty($StockItem)){
+                $em->remove($StockItem);
+                $em->flush();
+            }
+        }
+    }
+
+
 
 }

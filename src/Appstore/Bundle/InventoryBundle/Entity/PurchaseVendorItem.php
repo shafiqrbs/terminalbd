@@ -760,7 +760,6 @@ class PurchaseVendorItem
         );
 
         // set the path property to the filename where you've saved the file
-
         $this->path = $filename;
 
         // clean up the file property as you won't need it anymore

@@ -135,7 +135,26 @@ class AccountPurchaseRepository extends EntityRepository
         $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
         return $accountPurchase;
 
+    }
 
+    public function removeApprovedAccountPurchase(Purchase $purchase)
+    {
+
+        $accountPurchase = $purchase->getAccountPurchase();
+
+        $accountCash = $this->_em->getRepository('AccountingBundle:AccountCash')->findOneBy(array('processHead'=>'Purchase','globalOption' => $accountPurchase->getGlobalOption() ,'accountRefNo' => $accountPurchase->getAccountRefNo()));
+        if($accountCash){
+            $this->_em->remove($accountCash);
+            $this->_em->flush();
+        }
+
+        $transactions = $this->_em->getRepository('AccountingBundle:Transaction')->findBy(array('processHead'=>'Purchase','globalOption' => $accountPurchase->getGlobalOption() ,'accountRefNo' => $accountPurchase->getAccountRefNo()));
+        foreach ($transactions as $transaction){
+            if($transaction){
+                $this->_em->remove($transaction);
+                $this->_em->flush();
+            }
+        }
 
     }
 

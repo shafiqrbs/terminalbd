@@ -53,6 +53,10 @@ purchase_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:Purchase:delete" }
 
+approved_purchase_deleted:
+    path:     /{id}/approved-purchase-deleted
+    defaults: { _controller: "InventoryBundle:Purchase:approvedPurchaseDeleted" }
+
 purchase_vendor_item_delete:
     path:     /{id}/vendor-item-delete
     defaults: { _controller: "InventoryBundle:Purchase:deleteVendor" }

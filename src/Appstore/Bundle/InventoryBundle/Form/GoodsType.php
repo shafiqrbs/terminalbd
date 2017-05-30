@@ -42,9 +42,6 @@ class GoodsType extends AbstractType
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Product',
                 'property' => 'name',
                 'attr'=>array('class'=>'span12 '),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required'))
-                ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")

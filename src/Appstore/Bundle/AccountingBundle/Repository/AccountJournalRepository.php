@@ -164,7 +164,7 @@ class AccountJournalRepository extends EntityRepository
     }
 
 
-    public function insertAccountPurchaseJournal(Purchase $purchase)
+    public function    insertAccountPurchaseJournal(Purchase $purchase)
     {
 
         $entity = new AccountJournal();
@@ -190,10 +190,17 @@ class AccountJournalRepository extends EntityRepository
             $entity->setAccountHeadCredit($accountCashHead);
         }
         $entity->setToUser($purchase->getApprovedBy());
+        $entity->setJournalSource('purchase');
         $entity->setProcess('approved');
         $this->_em->persist($entity);
         $this->_em->flush();
         return $entity;
+    }
+
+
+    public function removeApprovedPurchaseJournal(Purchase $purchase)
+    {
+        $this->_em->getRepository('AccountingBundle:AccountJournal')->findOneBy(array('approvedBy' => $purchase->getApprovedBy(),'globalOption'=> $purchase->getInventoryConfig()->getGlobalOption(),'amount'=> $purchase->getPaymentAmount() ));
     }
 
 

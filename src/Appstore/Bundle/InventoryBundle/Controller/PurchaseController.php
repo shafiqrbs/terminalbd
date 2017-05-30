@@ -530,6 +530,37 @@ class PurchaseController extends Controller
     }
 
 
+    public function approvedPurchaseDeletedAction(Purchase $purchase)
+    {
+
+        set_time_limit(0);
+        $em = $this->getDoctrine()->getManager();
+
+        $this->getDoctrine()->getRepository('InventoryBundle:Item')->purchaseItemReverseUpdateQnt($purchase);
+        $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->purchaseItemStockRemoveQnt($purchase);
+        //$this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->removeApprovedPurchaseJournal($purchase);
+        $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->removeApprovedAccountPurchase($purchase);
+        $em->remove($purchase);
+        $em->flush();
+        return $this->redirect($this->generateUrl('purchase'));
+
+        /*
+         * Item Remove Total quantity
+         * Stock Details
+         * Purchase Item
+         * Purchase Vendor Item
+         * Purchase
+         * Account Purchase
+         * Account Journal
+         * Transaction
+         * Delete Journal & Account Purchase
+         *
+         * */
+
+
+    }
+
+
 
 
 }

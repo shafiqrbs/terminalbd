@@ -102,14 +102,21 @@ class AccountJournal
     /**
      * @var string
      *
-     * @ORM\Column(name="processHead", type="string", length=255, nullable = true)
+     * @ORM\Column(name="processHead", type="string", length=100, nullable = true)
      */
     private $processHead;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="process", type="string", length=255, nullable = true)
+     * @ORM\Column(name="journalSource", type="string", length=25, nullable = true)
+     */
+    private $journalSource;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="process", type="string", length=50, nullable = true)
      */
     private $process;
 
@@ -504,6 +511,22 @@ class AccountJournal
     public function setBranches($branches)
     {
         $this->branches = $branches;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJournalSource()
+    {
+        return $this->journalSource;
+    }
+
+    /**
+     * @param string $journalSource
+     */
+    public function setJournalSource($journalSource)
+    {
+        $this->journalSource = $journalSource;
     }
 
 
