@@ -70,7 +70,7 @@
                                         </tr>
                                     {% endif %}
                                 {% endfor %}
-                                <tr><td>Description</td><td class="left">{{ product.content|raw }}</td></tr>
+                                <tr><td valign="top">Description</td><td class="left">{{ product.content|raw }}</td></tr>
                             </table>
                             {#<div class="left" style="width: 100%">
                                 <input  type="number" value="1" id="numberBox"  min="1" max="{{ product.purchaseStockItem  }}" class="numeric" maxlength="{{ product.purchaseStockItem  }}">
@@ -114,16 +114,14 @@
                 </div>
             </div>
         </article>
+        <div class="clearfix"></div>
         {% if(products) %}
             {% if product.masterItem is not empty and product.masterItem.category is not empty and product.masterItem.category is defined %}
                 <br>
+                <div class="clear"></div>
                 <div class="col-md-12" >
-                    <div class="row">
-                        <div class="col-md-12 paginate">
-                            <div class="btn-group pull-left">
-                                <h4 class="title"><i class="fa fa-tag"></i>&nbsp;<strong>{{ product.masterItem.category.name }}</strong></h4>
-                            </div>
-                        </div>
+                    <div class="bs-callout bs-callout-info">
+                        <h4 class="title"><i class="fa fa-tag"></i>&nbsp;<strong>{{ product.masterItem.category.name }}</strong></h4>
                     </div>
                 </div>
                 <div id="product" class="">
