@@ -130,7 +130,7 @@ class EcommerceWidgetController extends Controller
         if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/EcommerceWidget/FeatureWidget';
         }else{
-            $theme = 'Template/Desktop/EcommerceWidget/FeatureWidget';
+            $theme = 'Template/Mobile/EcommerceWidget/FeatureWidget';
         }
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
             'features'           => $features,

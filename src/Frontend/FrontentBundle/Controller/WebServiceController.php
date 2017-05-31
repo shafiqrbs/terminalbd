@@ -1,6 +1,7 @@
 <?php
 
 namespace Frontend\FrontentBundle\Controller;
+use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +12,7 @@ class WebServiceController extends Controller
      * @param $subdomain
      * @return mixed
      */
-    public function indexAction($subdomain)
+    public function indexAction(Request $request , $subdomain)
     {
 
 
@@ -19,7 +20,7 @@ class WebServiceController extends Controller
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
 
         if(!empty($globalOption)){
-
+            $cart = new Cart($request->getSession());
 
             $siteEntity = $globalOption->getSiteSetting();
             $themeName = $siteEntity->getTheme()->getFolderName();
@@ -38,8 +39,9 @@ class WebServiceController extends Controller
             if( $detect->isMobile() ||  $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
-                $theme = 'Template/Desktop/'.$themeName;
+                $theme = 'Template/Mobile/'.$themeName;
             }
+
             return $this->render('FrontendBundle:'.$theme.':index.html.twig',
                 array(
                     'entity'    => $globalOption,
@@ -47,6 +49,7 @@ class WebServiceController extends Controller
                     'homeEntity'    => $homeEntity,
                     'selectedBlockBg'    => $array,
                     'pageName'    => 'Home',
+                    'cart'    => $cart,
                 )
             );
 
