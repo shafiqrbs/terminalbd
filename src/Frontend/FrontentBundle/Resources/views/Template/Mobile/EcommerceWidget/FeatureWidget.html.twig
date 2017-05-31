@@ -157,31 +157,26 @@
                     <div id="category-slider" class="owl-carousel wow fadeInDown" data-wow-duration="4s">
                         {% for masterProduct in  widget.category.masterProducts  %}
                         {% for product in  masterProduct.purchaseVendorItem |slice(0,12)  %}
-                            <div class="col-md-12">
-                                <div class="thumbnail" data-match-height="item-promotion">
-                                    <div class="product-preview group list-group-image product-equal-height" >
-                                        <img class="img-responsive" src="{{ image(product.webPath).resize(400,400, 'purple') }}" alt="">
-                                        <div class="team-content">
-                                            <h3 class="team-prof">
-                                                <a href="#">{{ product.name }}</a>
-                                                <small>{#{{ product.price|number_format }}#}</small>
-                                            </h3>
-                                            <ul class="social-link">
-                                                <li><a href="#" class="fa fa-facebook"></a></li>
-                                                <li><a href="#" class="fa fa-google"></a></li>
-                                                <li><a href="#" class="fa fa-twitter"></a></li>
-                                            </ul>
+                            <div class="outer-div">
+                                <div class="inner-div">
+                                    <div id="" class="ic_container capslide_img_cont ">
+                                        <div class="col-xs-12 col-md-12">
+                                            <a href="javascript:" class="thumbnail">
+                                                <img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}"  alt=""/>
+                                            </a>
                                         </div>
-                                    </div>
-                                    <div class="caption">
-                                        {% if globalOption.ecommerceConfig.showBrand == 1 %}
-                                            <p class="group inner brand text-center" ><a href="{{ path('webservice_product_brand',{'subdomain': globalOption.subDomain,'id':product.id }) }}"><span>{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></a> </p>
-                                        {% endif %}
-                                        <p class="group inner product-name text-center" ><a href="{{ path('webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></a> </p>
-                                        <div class="row">
-                                            <div class="row-fluid">
-                                                <div class="col-xs-6 col-md-6 text-right"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}{{ product.discountPrice|number_format() }}{% endif %}</div>
-                                                <div class="col-xs-6 col-md-6 text-left"><strong>{{ product.quantity }}&nbsp;{% if  product.masterItem.productUnit is defined and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</strong></div>
+                                        <div class="overlay"></div>
+                                        <div class="ic_caption">
+                                            <p class="title"><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}"  >{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></p>
+                                            <div class="product-short-details">
+                                                <span>{{ globalOption.ecommerceConfig.currency }}&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</span>
+                                            </div>
+                                            <div class="media-body">
+                                                <ul class="list-inline list-unstyled">
+                                                    <li><span><i class="fa fa-dribbble" aria-hidden="true"></i>&nbsp;{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></li>
+                                                    <li>|</li>
+                                                    <li><span><span class="badge"><span class="fos-comment-count" data-fos-comment-thread-id="{{ paymentID }}">#</span></span> comments</span></li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
