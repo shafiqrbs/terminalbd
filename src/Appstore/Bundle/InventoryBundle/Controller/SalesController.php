@@ -747,8 +747,9 @@ class SalesController extends Controller
         /* Title of receipt */
         if(!empty($vatRegNo)){
             $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-            $printer -> setJustification(Printer::JUSTIFY_LEFT);
+            $printer -> setJustification(Printer::JUSTIFY_CENTER);
             $printer -> setEmphasis(false);
+            $printer -> selectPrintMode();
             $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
         }
@@ -759,6 +760,7 @@ class SalesController extends Controller
         $printer -> text("SALES INVOICE\n\n");
         $printer -> setEmphasis(false);
 
+        $printer -> selectPrintMode();
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
@@ -766,7 +768,7 @@ class SalesController extends Controller
         $printer -> setEmphasis(false);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);;
         $printer -> setEmphasis(false);
-
+        $printer -> feed();
         $i=1;
         foreach ( $entity->getSalesItems() as $row){
 
