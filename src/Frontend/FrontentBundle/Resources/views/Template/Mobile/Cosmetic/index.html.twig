@@ -37,3 +37,17 @@
     </div>
     <!--//welcome-->
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/mobile/css/product-cosmetic.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/mobile/js/common.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
