@@ -713,7 +713,7 @@ class SalesController extends Controller
         $due                = $entity->getDue();
         $payment            = $entity->getPayment();
         $transaction        = $entity->getTransactionMethod()->getName();
-        $salesBy            = $entity->getSalesBy()->getProfile()->getName();
+        $salesBy            = $entity->getCreatedBy();
 
         /* Information for the receipt */
 
