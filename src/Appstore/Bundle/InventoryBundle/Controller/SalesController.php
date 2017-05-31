@@ -912,7 +912,7 @@ class SalesController extends Controller
 
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> setEmphasis(false);
+        $printer -> setEmphasis(true);
         if(!empty($vatRegNo)){
             $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
@@ -949,7 +949,7 @@ class SalesController extends Controller
         $printer -> setEmphasis(false);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);;
         $printer -> setEmphasis(false);
-
+        $printer -> feed();
         $i=1;
         foreach ( $entity->getSalesItems() as $row){
 
@@ -959,6 +959,7 @@ class SalesController extends Controller
             $printer -> text(new PosItemManager($row->getPurchaseItem()->getBarcode(),$row->getQuantity(),number_format($row->getSubTotal())));
             $i++;
         }
+        $printer -> feed();
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> setEmphasis(true);
         $printer -> text ( "\n" );
@@ -982,7 +983,7 @@ class SalesController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
 
         $printer->text("\n");
-        $printer->setEmphasis(false);
+        $printer -> feed();
         $printer->text($transaction);
         $printer->selectPrintMode();
 
