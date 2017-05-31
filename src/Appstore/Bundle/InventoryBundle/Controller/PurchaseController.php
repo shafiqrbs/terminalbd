@@ -538,7 +538,7 @@ class PurchaseController extends Controller
 
         $this->getDoctrine()->getRepository('InventoryBundle:Item')->purchaseItemReverseUpdateQnt($purchase);
         $this->getDoctrine()->getRepository('InventoryBundle:StockItem')->purchaseItemStockRemoveQnt($purchase);
-        //$this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->removeApprovedPurchaseJournal($purchase);
+        $this->getDoctrine()->getRepository('AccountingBundle:AccountJournal')->removeApprovedPurchaseJournal($purchase);
         $this->getDoctrine()->getRepository('AccountingBundle:AccountPurchase')->removeApprovedAccountPurchase($purchase);
         $em->remove($purchase);
         $em->flush();

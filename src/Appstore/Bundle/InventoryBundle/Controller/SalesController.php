@@ -897,7 +897,6 @@ class SalesController extends Controller
         $date = date('l jS \of F Y h:i:s A');
 
         /* Name of shop */
-        /* Name of shop */
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
@@ -912,12 +911,13 @@ class SalesController extends Controller
         $printer -> feed();
 
         /* Title of receipt */
-        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(false);
         if(!empty($vatRegNo)){
             $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
         }
+        $printer -> feed();
         /*
         if(!empty($mobile)){
             $printer -> text ( "----------------------------------" );
