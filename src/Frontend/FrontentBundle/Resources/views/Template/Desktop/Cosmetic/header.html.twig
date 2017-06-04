@@ -51,9 +51,9 @@
             <div class="row navbar-header">
                 <div class="col-md-3">
                     <a class="img-logo"
-                       href="{{ path('ecommercesubdomain') }}">{% if globalOption.templateCustomize.webPath('logo') is not empty %}
+                       href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.webPath('logo') is not empty %}
                             <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"
-                                 alt="company logo" />{% else %}{{ globalOption.name }}{% endif %}</a>
+                                 alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}</a>
                 </div>
                 <div class="col-md-9">
                     {% if globalOption.templateCustomize.showSearch == 0 %}
