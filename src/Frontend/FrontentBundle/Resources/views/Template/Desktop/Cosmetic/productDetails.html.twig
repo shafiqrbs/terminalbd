@@ -469,6 +469,14 @@
     {% endif %}
     <div class="clearfix"></div>
     <!-- Modal -->
+    <script>
+        {% if globalOption.ecommerceConfig.showSidebar == 1 %}
+        var item =  3;
+        {% else %}
+        var item =  4;
+        {% endif %}
+
+    </script>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -493,7 +501,7 @@
    {# $("#zoom").elevateZoom({ zoomType    : "inner", cursor: "crosshair" });#}
     var owlCategory = $("#category-carousel");
     owlCategory.owlCarousel({
-    items:3,
+    items: item ,
     itemsCustom : false,
     itemsDesktop : [1199,4],
     itemsDesktopSmall : [980,3],
