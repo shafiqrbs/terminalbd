@@ -428,7 +428,7 @@
                                 <div class="delivery-content">
                                     <h3>Home Delivery</h3>
                                     <p>We provide delivery service all over country.</p>
-                                    <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module':'page','slug':globalOption.slug~'-home-delivery'}) }}" class="read">Read more<i class="fa fa-angle-right"></i></a>
+                                    <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module':'page','slug':globalOption.slug~'-home-delivery'}) }}" class="read">Read more<i class="fa fa-angle-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -451,7 +451,7 @@
                                 <div class="delivery-content">
                                     <h3>Payment Method</h3>
                                     <p> You can you any of the following payment method during your order.</p>
-                                    <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module':'page','slug':globalOption.slug~'-payment-method'}) }}" class="read">Read more<i class="fa fa-angle-right"></i>
+                                    <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module':'page','slug':globalOption.slug~'-payment-method'}) }}" class="read">Read more<i class="fa fa-angle-right"></i>
                                     </a>
                                 </div>
                             </div>
