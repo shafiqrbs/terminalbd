@@ -17,8 +17,9 @@
             </div>
             <div class="col-xs-12 col-md-12">
                 <div class="module-title">
-                    <i class="fa fa-dribbble"></i>&nbsp;{% if product.brand is not empty %}<a href="{{ path('webservice_product',{'subdomain':globalOption.subDomain,'brand':product.brand.id }) }}">{{ product.brand.name }}</a>{% endif %}&nbsp;&nbsp;&nbsp;
-                    <i class="fa fa-tag"></i>&nbsp;{% if product.masterItem.category is defined and product.masterItem.category is not empty %}<a href="{{ path('webservice_product',{'subdomain':globalOption.subDomain,'category':product.masterItem.category.id }) }}">{{ product.masterItem.category.name }}</a>{% endif %}
+                    <i class="fa fa-dribbble"></i>&nbsp;{% if product.brand is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subDomain,'brand':product.brand.id }) }}">{{ product.brand.name }}</a>{% endif %}&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-tag"></i>&nbsp;{% if product.masterItem.category is defined and product.masterItem.category is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subDomain,'category':product.masterItem.category.id }) }}">{{ product.masterItem.category.name }}</a>{% endif %}
+                    {% if product.itemGalleries is defined and product.itemGalleries is not empty %} <i class="fa fa-file-image-o"></i>&nbsp;<a href="{{ image(product.webPath()).resize() }}">Preview</a> {% endif %}
                     {% if product.itemGalleries is defined and product.itemGalleries is not empty %}
                         <div id="Gallery">
                             <i class="fa fa-file-image-o"></i>&nbsp;<a href="{{ image(product.webPath()).resize() }}">Preview</a>
@@ -88,7 +89,7 @@
                                     {% endfor %}
                                 </select>
                             </div>#}
-                            {#     <div class="center" style="width:100%; text-align: center"><a href="javascript:" id="cart" data-content="" data-url="{{ path('webservice_product_cart',{'subdomain':globalOption.subDomain,'cart':'cart','item':product.id}) }}" class="o-buttons green"><i class="fa fa-cart-plus"></i>&nbsp;Add to cart</a><a href="{{ path('webservice_product_wishlist',{'subdomain':globalOption.subDomain,'wishlist':'wishlist','item':product.id}) }}" class="o-buttons firoza wishlist">Wish list</a></div>
+                            {#     <div class="center" style="width:100%; text-align: center"><a href="javascript:" id="cart" data-content="" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart',{'subdomain':globalOption.subDomain,'cart':'cart','item':product.id}) }}" class="o-buttons green"><i class="fa fa-cart-plus"></i>&nbsp;Add to cart</a><a href="{{ path(globalOption.subDomain ~ '_webservice_product_wishlist',{'subdomain':globalOption.subDomain,'wishlist':'wishlist','item':product.id}) }}" class="o-buttons firoza wishlist">Wish list</a></div>
                             #}
                           <form class="addCart" style="margin-top: 30px">
                             <div class="input-group">
@@ -104,7 +105,7 @@
                                               </button>
                                         {% if  globalOption.ecommerceConfig.cart == 1 %}
                                             <input type="hidden" name="productImg"  value="/{% if product.webPath is not empty %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
-                                            <button type="submit" class="btn btn-lg btn-info cartSubmit" data-url="{{ path('webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : subitem.id }) }}">
+                                            <button type="submit" class="btn btn-lg btn-info cartSubmit" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : subitem.id }) }}">
                                             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to cart</button>
                                         {% endif %}
 
@@ -137,7 +138,7 @@
                                         </a>
                                     </div>
                                     <div class="ic_caption">
-                                        <p class="title"><a href="{{ path('webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}"  >{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></p>
+                                        <p class="title"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}"  >{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></p>
                                         <div class="product-short-details">
                                             <span>{{ globalOption.ecommerceConfig.currency }}&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</span>
                                         </div>

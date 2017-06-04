@@ -98,10 +98,11 @@ class WebServiceProductController extends Controller
             if(empty($data)){
                 $data = array('brand' => $brand );
             }
-            //$limit = !empty($data) or !empty($data['limit'] > 4)  ? $data['limit'] : 4;
+            $ecommerce = $globalOption->getEcommerceConfig();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
-            $pagination = $this->paginate($entities, $limit = 4);
+            $pagination = $this->paginate($entities, $limit);
 
             /* Device Detection code desktop or mobile */
 
@@ -127,7 +128,7 @@ class WebServiceProductController extends Controller
                     'products'      => $pagination,
                     'pageName'      => 'Brand',
                     'titleName'      => 'Brand: '.$brand->getName(),
-                    'data' => $data['limit']=4,
+                    'data' => $data,
                 )
             );
         }
@@ -146,10 +147,11 @@ class WebServiceProductController extends Controller
             if(empty($data)){
                 $data = array('category' => $category);
             }
-            //$limit = !empty($data) or !empty($data['limit'] > 4)  ? $data['limit'] : 4;
+            $ecommerce = $globalOption->getEcommerceConfig();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
-            $pagination = $this->paginate($entities, $limit = 4);
+            $pagination = $this->paginate($entities, $limit);
 
             /* Device Detection code desktop or mobile */
 
@@ -193,7 +195,9 @@ class WebServiceProductController extends Controller
             $data = $_REQUEST;
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
-            $pagination = $this->paginate($entities);
+            $ecommerce = $globalOption->getEcommerceConfig();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
+            $pagination = $this->paginate($entities,$limit);
 
             /* Device Detection code desktop or mobile */
 
@@ -237,7 +241,9 @@ class WebServiceProductController extends Controller
             $data = $_REQUEST;
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
-            $pagination = $this->paginate($entities);
+            $ecommerce = $globalOption->getEcommerceConfig();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
+            $pagination = $this->paginate($entities,$limit);
 
             /* Device Detection code desktop or mobile */
 
@@ -281,7 +287,9 @@ class WebServiceProductController extends Controller
             $data = $_REQUEST;
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
-            $pagination = $this->paginate($entities);
+            $ecommerce = $globalOption->getEcommerceConfig();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
+            $pagination = $this->paginate($entities,$limit);
 
             /* Device Detection code desktop or mobile */
 
