@@ -234,7 +234,7 @@ var InventorySales = function(sales) {
         $.ajax({
             url: Routing.generate('inventory_sales_item_update'),
             type: 'POST',
-            data:'salesItemId='+rel+'&quantity='+ quantity +'&salesPrice='+price+'&customPrice='+customPrice,
+            data:'salesItemId='+ rel +'&quantity='+ quantity +'&salesPrice='+ price +'&customPrice='+ customPrice,
             success: function(response) {
                 obj = JSON.parse(response);
                 $('.salesTotal').html(obj['salesTotal']);
@@ -251,7 +251,7 @@ var InventorySales = function(sales) {
 
 
 
-$('#salesItem').on("click", ".delete", function() {
+   $('#salesItem').on("click", ".delete", function() {
 
         var url = $(this).attr("rel");
         var id = $(this).attr("id");

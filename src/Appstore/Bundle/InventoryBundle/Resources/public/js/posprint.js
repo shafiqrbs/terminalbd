@@ -27,25 +27,20 @@ $(document).on("click", "#pos", function() {
         type: 'GET',
         success: function (response) {
             jsPostPrint(response);
-            setTimeout(pageRedirect(), 5000);
+            setTimeout(pageRedirect(), 3000);
         }
     })
 });
 
 $(document).on("click", "#onlineSalesPos", function() {
 
-    var paymentAmount = $('#paymentAmount').val();
-    if(paymentAmount == ''){
-        $('#static').modal();
-        return false;
-    }
     var url = $(this).attr("rel");
     $.ajax({
         url: url,
         type: 'GET',
         success: function (response) {
             jsPostPrint(response);
-            setTimeout(pageOnlineSalesRedirect(), 5000);
+            setTimeout(pageOnlineSalesRedirect(), 3000);
         }
     })
 });

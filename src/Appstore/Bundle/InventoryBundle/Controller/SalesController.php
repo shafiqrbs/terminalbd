@@ -702,8 +702,6 @@ class SalesController extends Controller
 
         }
 
-
-
         $vatRegNo       = $inventory->getVatRegNo();
         $companyName    = $option->getName();
         $mobile         = $option->getMobile();
@@ -711,20 +709,6 @@ class SalesController extends Controller
 
 
         /** ===================Customer Information=================================== */
-
-        if( $entity->getSalesMode() == 'online' ){
-
-            /* @var Customer $customer **/
-
-            $customer = $entity->getCustomer();
-            $name = 'Name '. $customer->getName();
-            $customerMobile = 'Mobile no '. $customer->getMobile();
-            $customerAddress = 'Address '. $customer->getAddress();
-            $location = $customer->getLocation()->getName().','.$customer->getLocation()->getParent()->getName();
-
-        }
-
-        /** ===================Transaction  Information=================================== */
 
         $invoice            = $entity->getInvoice();
         $subTotal           = $entity->getSubTotal();
@@ -734,7 +718,7 @@ class SalesController extends Controller
         $due                = $entity->getDue();
         $payment            = $entity->getPayment();
         $transaction        = $entity->getTransactionMethod()->getName();
-        $salesBy            = $entity->getCreatedBy();
+        $salesBy            = $entity->getSalesBy();
 
         /* Information for the receipt */
 
@@ -742,14 +726,7 @@ class SalesController extends Controller
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
         $vat            = new PosItemManager('Add Vat: ','Tk.',number_format($vat));
         $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
-        $deliveryCharge = new PosItemManager('Delivery Charge: ','Tk.',number_format($entity->getDeliveryCharge()));
-
-        if( $entity->getSalesMode() == 'online' ) {
-            $grandTotal = new PosItemManager('Net Payable: ', 'Tk.', number_format($total + $entity->getDeliveryCharge()));
-        }else{
-            $grandTotal = new PosItemManager('Net Payable: ', 'Tk.', number_format($total));
-        }
-
+        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
         $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
         $due            = new PosItemManager('Due: ','Tk.',number_format($due));
 
@@ -757,21 +734,20 @@ class SalesController extends Controller
         /* Date is kept the same for testing */
         $date = date('l jS \of F Y h:i:s A');
 
-        /* Customer Information */
-
+        /* Name of shop */
+        /* Name of shop */
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text($companyName."\n");
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> selectPrintMode();
         if(!empty($entity->getBranches())) {
             $printer->text($branchName . "\n");
         }else{
             $printer -> text($address."\n");
         }
-        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+
+        $printer -> feed();
 
         /* Title of receipt */
         if(!empty($vatRegNo)){
@@ -781,30 +757,6 @@ class SalesController extends Controller
             $printer -> selectPrintMode();
             $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
-        }
-
-        if( $entity->getSalesMode() == 'online' ) {
-
-            /* Customer Information */
-            $printer->setUnderline(Printer::UNDERLINE_NONE);
-            $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-            $printer->setJustification(Printer::JUSTIFY_CENTER);
-            $printer -> setEmphasis(true);
-            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-            $printer->text("Bill To \n");
-            $printer -> setEmphasis(false);
-            $printer->selectPrintMode();
-            $printer->setJustification(Printer::JUSTIFY_LEFT);
-            $printer->text($name . "\n");
-            $printer->text($customerMobile . "\n");
-            $printer->text($customerAddress . "\n");
-            $printer->text($location . "\n");
-            $printer -> setEmphasis(true);
-            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-            $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-            $printer->setUnderline(Printer::UNDERLINE_NONE);
-            $printer -> setEmphasis(false);
-
         }
 
         /* Title of receipt */
@@ -817,7 +769,7 @@ class SalesController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> text(new PosItemManager('Product', 'Qnt', 'Amount'));
+        $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
         $printer -> setEmphasis(false);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);;
         $printer -> setEmphasis(false);
@@ -831,40 +783,32 @@ class SalesController extends Controller
             $printer -> text(new PosItemManager($row->getPurchaseItem()->getBarcode(),$row->getQuantity(),number_format($row->getSubTotal())));
             $i++;
         }
-       $printer -> setUnderline(Printer::UNDERLINE_NONE);
-       $printer -> setEmphasis(true);
-       $printer -> text ( "\n" );
-       $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-       $printer -> text($subTotal);
-       $printer -> setEmphasis(false);
-       if($vat){
-           $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
-           $printer->text($vat);
-           $printer->setEmphasis(false);
-       }
-       if($discount){
-           $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-           $printer->text($discount);
-           $printer -> setEmphasis(false);
-           $printer -> text ( "\n" );
-       }
-
-        if($entity->getSalesMode() == 'online' and !empty($deliveryCharge)){
-           $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-           $printer->text($deliveryCharge);
-           $printer -> setEmphasis(false);
-           $printer -> text ( "\n" );
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> setEmphasis(true);
+        $printer -> text ( "\n" );
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($subTotal);
+        $printer -> setEmphasis(false);
+        if($vat){
+            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
+            $printer->text($vat);
+            $printer->setEmphasis(false);
         }
+        if($discount){
+            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+            $printer->text($discount);
+            $printer -> setEmphasis(false);
+            $printer -> text ( "\n" );
+        }
+        $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($grandTotal);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
 
-       $printer -> setEmphasis(true);
-       $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-       $printer -> text($grandTotal);
-       $printer -> setUnderline(Printer::UNDERLINE_NONE);
-
-       $printer->text("\n");
-       $printer->setEmphasis(false);
-       $printer->text($transaction);
-       $printer->selectPrintMode();
+        $printer->text("\n");
+        $printer->setEmphasis(false);
+        $printer->text($transaction);
+        $printer->selectPrintMode();
 
 
         /* Barcode Print */
