@@ -826,7 +826,7 @@ class SalesOnlineController extends Controller
             $printer    ->text($customerMobile . "\n");
             $printer    ->text($customerAddress . "\n");
             $printer    ->text($customerLocation . "\n");
-            $printer    ->text ( "\n\n" );
+            $printer    ->text ( "\n" );
             $printer    ->setEmphasis(false);
 
         }
