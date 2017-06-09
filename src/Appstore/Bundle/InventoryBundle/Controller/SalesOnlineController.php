@@ -747,7 +747,7 @@ class SalesOnlineController extends Controller
             $customerMobile = 'Mobile no: '. $customer->getMobile();
             $customerAddress = 'Address: '. $customer->getAddress();
             $thana          = !empty($customer->getLocation()) ? $customer->getLocation()->getName():'';
-            $district       = !empty($customer->getLocation()) ? $customer->getLocation()->getParent()->getName():'';
+            $district       = !empty($customer->getLocation()) ? ' ,'. $customer->getLocation()->getParent()->getName():'';
             $customerLocation = $thana.$district;
 
         }
