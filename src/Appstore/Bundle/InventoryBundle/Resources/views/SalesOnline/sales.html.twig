@@ -342,7 +342,14 @@
                                             <div class="pull-center">
                                                 <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.total }}">
                                                 <input type="hidden" name="paymentSubTotal" id="paymentSubTotal" value="{{ entity.total }}">
-                                                <button rel=""  type="submit" class="btn green" id="pos"><i class="icon-print m-icon-white"></i>&nbsp;Received</button>
+                                                {% if entity.inventoryConfig.onlineSalesPrinter == 'printer' %}
+                                                    <button rel=""  type="submit" class="btn green span10" name="saveType" value="print" ><i class="icon-print m-icon-white"></i>&nbsp;Print</button>
+                                                {% elseif entity.inventoryConfig.onlineSalesPrinter == 'pos'  %}
+                                                    <button  rel="{{ path('inventory_sales_print',{'code':entity.invoice}) }}" name="onlineSalesPos"  type="button" class="span10 btn green " id="onlineSalesPos"><i class="icon-print m-icon-white"></i>&nbsp;Pos Print</button>
+                                                {% else %}
+                                                    <button rel=""  type="submit" class="span10 btn green" name="saveType" value="save" ><i class="icon-ok m-icon-white"></i>&nbsp;Save</button>
+                                                {% endif %}
+
                                             </div>
                                         </div>
                                     </div>
@@ -539,6 +546,19 @@
             height: 30px!important;
         }
     </style>
+    {% if entity.inventoryConfig.printer == 'pos' %}
+        <script>
+
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "http://localhost.xiidea.net:9432/assets/easy-print-server.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, "script", "xiidea-epp-sdk"));
+
+        </script>
+    {% endif %}
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -550,6 +570,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@InventoryBundle/Resources/public/js/posprint.js'
     '@InventoryBundle/Resources/public/js/editable.js'
     '@InventoryBundle/Resources/public/js/sales.js'
     '@InventoryBundle/Resources/public/js/approveProcess.js'

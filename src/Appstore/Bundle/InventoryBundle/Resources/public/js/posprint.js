@@ -31,8 +31,31 @@ $(document).on("click", "#pos", function() {
         }
     })
 });
+
+$(document).on("click", "#onlineSalesPos", function() {
+
+    var paymentAmount = $('#paymentAmount').val();
+    if(paymentAmount == ''){
+        $('#static').modal();
+        return false;
+    }
+    var url = $(this).attr("rel");
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (response) {
+            jsPostPrint(response);
+            setTimeout(pageOnlineSalesRedirect(), 5000);
+        }
+    })
+});
+
 function pageRedirect() {
     window.location.href = "/inventory/sales/new";
+}
+
+function pageOnlineSalesRedirect() {
+    window.location.href = "/inventory/sales-online/new";
 }
 
 function jsPostPrint(data) {

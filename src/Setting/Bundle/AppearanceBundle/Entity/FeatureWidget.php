@@ -104,6 +104,20 @@ class FeatureWidget
      */
     private $position;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sliderFeature", type="string", length=30 , nullable=true)
+     */
+    private $sliderFeature;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sliderFeaturePosition", type="string", length=10 , nullable=true)
+     */
+    private $sliderFeaturePosition;
+
 
     /**
      * @var string
@@ -537,5 +551,37 @@ class FeatureWidget
     public function setPageName($pageName)
     {
         $this->pageName = $pageName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSliderFeature()
+    {
+        return $this->sliderFeature;
+    }
+
+    /**
+     * @param string $sliderFeature
+     */
+    public function setSliderFeature($sliderFeature)
+    {
+        $this->sliderFeature = $sliderFeature;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSliderFeaturePosition()
+    {
+        return $this->sliderFeaturePosition;
+    }
+
+    /**
+     * @param string $sliderFeaturePosition
+     */
+    public function setSliderFeaturePosition($sliderFeaturePosition)
+    {
+        $this->sliderFeaturePosition = $sliderFeaturePosition;
     }
 }

@@ -18,7 +18,7 @@ class PurchaseVendorItemRepository extends EntityRepository
 {
 
 
-    public function findFrontendProductWithSearch($inventory,$data)
+    public function findFrontendProductWithSearch($inventory,$data,$limit = 0)
     {
         if (!empty($data['sortBy'])) {
 
@@ -52,8 +52,30 @@ class PurchaseVendorItemRepository extends EntityRepository
         }else{
             $qb->orderBy($sort ,$order);
         }
+        if($limit > 0 ) {
+            $qb->setMaxResults($limit);
+        }
         $res = $qb->getQuery();
         return  $res;
+
+    }
+
+
+    public function getSliderFeatureProduct($inventory,$limit = 3)
+    {
+
+        $qb = $this->createQueryBuilder('product');
+        $qb->where("product.isWeb = 1");
+        $qb->expr()->isNotNull('product.promotion');
+        $qb->andWhere("product.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory->getId());
+        if($limit > 0 ) {
+            $qb->setMaxResults($limit);
+        }
+        $qb->orderBy('product.updated', 'DESC');
+        $qb = $qb->getQuery();
+        $result = $qb->getResult();
+        return  $result;
 
     }
 
@@ -104,6 +126,7 @@ class PurchaseVendorItemRepository extends EntityRepository
         }
 
         if (!empty($grn)) {
+            $qb->join('purchase.vendor', 'v');
             $qb->andWhere("purchase.grn = :grn");
             $qb->setParameter('grn', $grn);
         }
@@ -119,6 +142,7 @@ class PurchaseVendorItemRepository extends EntityRepository
         }
 
         if (!empty($cat)) {
+            $qb->join('product.masterItem', 'masterItem');
             $qb->andWhere("masterItem.category = :category");
             $qb->setParameter('category', $cat);
         }
@@ -188,20 +212,22 @@ class PurchaseVendorItemRepository extends EntityRepository
 
     }
 
-    public function findGoodsWithSearch($inventory,$data)
+    public function findGoodsWithSearch($inventory,$data,$limit = 0)
     {
+
         $qb = $this->createQueryBuilder('product');
         $qb->where("product.isWeb = 1");
         $qb->andWhere("product.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('product.updated', 'DESC');
-        $qb->getQuery();
-        return  $qb;
+        $qb = $qb->getQuery();
+        $result = $qb->getResult();
+        return  $result;
 
     }
 
-    public function findItemWithSearch($inventory,$data,$limit=0)
+    public function findItemWithSearch($inventory,$data,$limit = 0)
     {
 
         $qb = $this->createQueryBuilder('item');
@@ -222,6 +248,9 @@ class PurchaseVendorItemRepository extends EntityRepository
         }else{
 
             $qb->orderBy('item.updated','DESC');
+        }
+        if($limit > 0 ){
+            $qb->getMaxResults($limit);
         }
         $qb->getQuery();
         return  $qb;

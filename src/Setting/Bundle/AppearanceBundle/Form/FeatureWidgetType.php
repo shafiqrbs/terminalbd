@@ -164,6 +164,30 @@ class FeatureWidgetType extends AbstractType
                     'Discount'          => 'Discount'
                 ),
             ))
+            ->add('sliderFeature', 'choice', array(
+                'attr'=>array('class'=>'span12  m-wrap targetTo'),
+                'empty_value' => '---Slider with Feature ---',
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'category'          => 'Category',
+                    'brand'             => 'Brand',
+                    'promotion'         => 'Promotion',
+                    'featureProduct'    => 'FeatureProduct',
+                    'tag'               => 'Tag',
+                    'discount'          => 'Discount'
+                ),
+            ))
+            ->add('sliderFeaturePosition', 'choice', array(
+                'attr'=>array('class'=>'span12  m-wrap'),
+                'empty_value' => '---Feature Position ---',
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'left'               => 'Left',
+                    'right'             => 'Right',
+                ),
+            ))
             ->add('featureBrand')
             ->add('featureCategory')
         ;

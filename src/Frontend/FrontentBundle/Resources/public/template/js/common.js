@@ -102,7 +102,7 @@ $(document).on( "click", ".emailSender", function(e){
     })
 */
 
-    var owlFeatureCategory = $("#feature-category");
+    var owlFeatureCategory = $("#category-slider");
     owlFeatureCategory.owlCarousel({
         items:4,
         itemsDesktop:[1199,3],

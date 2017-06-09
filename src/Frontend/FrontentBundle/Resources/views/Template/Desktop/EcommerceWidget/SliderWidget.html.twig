@@ -1,0 +1,142 @@
+<style>
+    /* list */
+    .rounded-list{
+        width: 100%;
+        margin-top: 15px;
+    }
+    .rounded-list ol
+    {
+        counter-reset:li; /* Initiate a counter */
+        margin-left:0; /* Remove the default left margin */
+        padding-left:0; /* Remove the default left padding */
+    }
+
+
+        /* item  */
+    .rounded-list ol > li
+    {
+        position:relative; /* Create a positioning context */
+        list-style:none; /* Disable the normal item numbering */
+        background:#f6f6f6; /* Item background color */
+        margin:0; /* Give each list item a left margin to make room for the numbers */
+        padding-left: 10px; /* Add some spacing around the content */
+        padding-bottom:0px;
+        padding-top:0px;
+        margin-left: 25px;
+    }
+
+
+    .rounded-list ol > li:first-child{
+        margin-top: 5px;
+    }
+
+    /* number  */
+    .rounded-list ol > li p:before
+    {
+        content: counter(li);
+        counter-increment: li;
+        position: absolute;
+        left: -25px;
+        top: 50%;
+
+        /* number background */
+        background: #87ceeb;
+        height: 2em;
+        width: 2em;
+        margin-top: -1em;
+        line-height: 1.5em;
+        border: .3em solid #fff;
+        text-align: center;
+        font-weight: bold;
+        border-radius: 2em;
+    }
+
+    .widget-feature-center {
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+        float: left;
+
+    }
+
+
+</style>
+<div class="col-md-3" data-match-height="slider-height" style="position: relative;">
+
+    {% if feature == 'promotion' %}
+        <div class="widget-feature-center">
+        {% for entity in entities %}
+            <div class="thumbnail wow fadeInDown" data-wow-delay="2s">
+                <a  href="{{ path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':entity.promotion.id}) }}" class=""  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt=""></a>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if feature == 'tag' %}
+        <div class="widget-feature-center">
+            {% for entity in entities %}
+            <div class="thumbnail wow fadeInDown" data-wow-delay="2s">
+             <a href="{{ path(globalOption.subDomain ~ '_webservice_product_tag',{'id':entity.promotion.id}) }}"  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt=""></a>
+            </div>
+                {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if feature == 'discount' %}
+        <div class="widget-feature-center">
+            {% for entity in entities %}
+            <div class="thumbnail wow fadeInDown" data-wow-delay="2s">
+                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_tag',{'id':entity.discount.id}) }}"  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt=""></a>
+            </div>
+                {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if feature == 'featureProduct' %}
+        <div class="widget-feature-center" style="margin-top: 10px">
+            {% for product in entities %}
+            <div class="thumbnail wow fadeInDown" data-wow-delay="2s">
+                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"  > <img class="img-responsive" style="height: 137px"   src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt=""></a>
+            </div>
+                {% endfor %}
+        </div>
+    {% endif %}
+
+
+    {% if feature == 'category' %}
+
+    <table border=0 class="rounded-list widget-feature-center">
+        <tr>
+            <td>
+                <ol class="scrollbar-inner wow fadeInDown" data-wow-delay="2s" style="overflow: hidden">
+                    {% for entity in entities %}
+                        <li><p><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':entity.category.id}) }}" class="" >{{ entity.category.name }}</a></p></li>
+                    {% endfor %}
+                </ol>
+            </td>
+        </tr>
+    </table>
+    {% endif %}
+
+    {% if feature == 'brand' %}
+        <div class="widget-feature-center">
+           {% for entity in entities %}
+                <div class="col-md-6  wow fadeInDown" data-wow-delay="2s" >
+                    <div class="thumbnail">
+                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':entity.brand.id}) }}" class="" > <img class="img-responsive"    src="{{ image(entity.webPath).forceResize(120,75) }}" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="thumbnail">
+                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':entity.brand.id}) }}" class="" > <img class="img-responsive"    src="{{ image(entity.webPath).forceResize(120,75) }}" alt=""></a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>

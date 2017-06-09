@@ -45,13 +45,29 @@ class InventoryConfigType extends AbstractType
                 'choices' => array(
                     'save'          => 'Save',
                     'printer'       => 'Printer',
-                    'pos'   => 'Pos Printer',
+                    'pos'           => 'Pos Printer',
                 ),
                     'required'    => true,
                     'multiple'    => false,
                     'expanded'  => false,
                     'empty_data'  => null,
             ))
+
+            ->add('onlineSalesPrinter',
+                'choice', array(
+                    'attr'=>array('class'=>'m-wrap span12'),
+                    'choices' => array(
+                        'save'          => 'Save',
+                        'printer'       => 'Printer',
+                        'pos'           => 'Pos Printer',
+                    ),
+                    'required'    => true,
+                    'multiple'    => false,
+                    'expanded'  => false,
+                    'empty_data'  => null,
+            ))
+
+
             ->add('vatEnable')
             ->add('isBranch')
             ->add('isColor')

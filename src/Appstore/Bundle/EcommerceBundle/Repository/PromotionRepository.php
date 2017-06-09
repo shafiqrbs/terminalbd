@@ -12,6 +12,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class PromotionRepository extends EntityRepository
 {
+
+
     public function getTypeBasePromotion($config,$type)
     {
 

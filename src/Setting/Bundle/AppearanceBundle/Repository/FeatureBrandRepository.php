@@ -4,6 +4,7 @@ namespace Setting\Bundle\AppearanceBundle\Repository;
 
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * FeatureCategoryRepository
@@ -13,4 +14,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class FeatureBrandRepository extends EntityRepository
 {
+    public function getSliderFeatureBrand(GlobalOption $globalOption , $limit = 6){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.globalOption = :option");
+        $qb->setParameter('option', $globalOption->getId());
+        $qb->orderBy('e.id','DESC');
+        $qb->setMaxResults($limit);
+        $sql = $qb->getQuery();
+        $result = $sql->getResult();
+        return  $result;
+
+    }
 }

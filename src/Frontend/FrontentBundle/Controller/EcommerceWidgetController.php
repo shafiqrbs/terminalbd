@@ -138,6 +138,142 @@ class EcommerceWidgetController extends Controller
         ));
     }
 
+    public function categoryWidgetAction(GlobalOption $globalOption , $category )
+    {
+
+        $data = array('category' => $category);
+        $inventory = $globalOption->getInventoryConfig()->getId();
+        $categoryProducts = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data,$limit=12);
+
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/EcommerceWidget/CategoryWidget';
+        }else{
+            $theme = 'Template/Desktop/EcommerceWidget/CategoryWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'categoryProducts'           => $categoryProducts->getResult(),
+            'globalOption'           => $globalOption,
+        ));
+    }
+
+    public function categoryShortWidgetAction(GlobalOption $globalOption)
+    {
+
+
+        $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureCategory')->getSliderFeatureCategory($globalOption);
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/EcommerceWidget/SliderWidget';
+        }else{
+            $theme = 'Template/Desktop/EcommerceWidget/SliderWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'entities'                  => $entities,
+            'globalOption'              => $globalOption,
+            'feature'                   => 'category',
+        ));
+
+    }
+
+    public function brandShortWidgetAction(GlobalOption $globalOption)
+    {
+
+        $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureBrand')->getSliderFeatureBrand($globalOption);
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/EcommerceWidget/SliderWidget';
+        }else{
+            $theme = 'Template/Desktop/EcommerceWidget/SliderWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'entities'                  => $entities,
+            'globalOption'              => $globalOption,
+            'feature'                   => 'brand',
+        ));
+
+    }
+
+
+    public function featureProductShortWidgetAction(GlobalOption $globalOption)
+    {
+
+        $entities  = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->getSliderFeatureProduct($globalOption->getInventoryConfig());
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/EcommerceWidget/SliderWidget';
+        }else{
+            $theme = 'Template/Desktop/EcommerceWidget/SliderWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'entities'                  => $entities,
+            'globalOption'              => $globalOption,
+            'feature'                   => 'featureProduct',
+        ));
+
+    }
+
+
+
+
+    public function promotionShortWidgetAction(GlobalOption $globalOption)
+    {
+
+        $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->getSliderFeaturePromotion($globalOption,'Promotion');
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/EcommerceWidget/SliderWidget';
+        }else{
+            $theme = 'Template/Desktop/EcommerceWidget/SliderWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'entities'                  => $entities,
+            'globalOption'              => $globalOption,
+            'feature'                   => 'promotion',
+        ));
+
+    }
+
+    public function tagShortWidgetAction(GlobalOption $globalOption)
+    {
+
+        $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->getSliderFeaturePromotion($globalOption,'Tag');
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/EcommerceWidget/SliderWidget';
+        }else{
+            $theme = 'Template/Desktop/EcommerceWidget/SliderWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'entities'                  => $entities,
+            'globalOption'              => $globalOption,
+            'feature'                   => 'tag',
+        ));
+
+    }
+
+
+    public function discountShortWidgetAction(GlobalOption $globalOption)
+    {
+
+        $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->getSliderFeaturePromotion($globalOption,'Discount');
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/EcommerceWidget/SliderWidget';
+        }else{
+            $theme = 'Template/Desktop/EcommerceWidget/SliderWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'entities'                  => $entities,
+            'globalOption'              => $globalOption,
+            'feature'                   => 'discount',
+        ));
+
+    }
+
+
+
     public function homeTopWidgetAction(GlobalOption $globalOption , $position='' )
     {
 

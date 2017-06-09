@@ -333,31 +333,31 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
                                 <div class="span4">
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label " for="vatPercentage">Printer &nbsp;</label>
-                                                <div class="control">
-                                                    {{ form_widget(form.printer) }}
-                                                    {{ form_errors(form.printer) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                        <div class="span12">
-                                            <div class="control-group">
-                                                <label class="control-label" for="firstName">Print Footer Text</label>
-                                                <div class="controls">
-                                                    {{ form_widget(form.isPrintFooter) }}
-                                                    {{ form_errors(form.isPrintFooter) }}
-                                                </div>
-                                            </div>
+                                    <div class="control-group">
+                                        <label class="control-label " for="vatPercentage">Printer &nbsp;</label>
+                                        <div class="control">
+                                            {{ form_widget(form.printer) }}
+                                            {{ form_errors(form.printer) }}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="span4">
-
+                                    <div class="control-group">
+                                        <label class="control-label " for="vatPercentage">Online Sales Printer &nbsp;</label>
+                                        <div class="control">
+                                            {{ form_widget(form.onlineSalesPrinter) }}
+                                            {{ form_errors(form.onlineSalesPrinter) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span4">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Print Footer Text</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.isPrintFooter) }}
+                                            {{ form_errors(form.isPrintFooter) }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>

@@ -170,6 +170,13 @@ class InventoryConfig
     private $printer;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="onlineSalesPrinter", type="string", length=50,nullable = true)
+     */
+    private $onlineSalesPrinter;
+
+    /**
      * @var smallint
      *
      * @ORM\Column(name="salesReturnDayLimit", type="smallint",  nullable=true)
@@ -1097,7 +1104,23 @@ class InventoryConfig
      */
     public function getDeliveryReturns()
     {
-        return $this->deliverieReturns;
+        return $this->deliveryReturns;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOnlineSalesPrinter()
+    {
+        return $this->onlineSalesPrinter;
+    }
+
+    /**
+     * @param string $onlineSalesPrinter
+     */
+    public function setOnlineSalesPrinter($onlineSalesPrinter)
+    {
+        $this->onlineSalesPrinter = $onlineSalesPrinter;
     }
 
 
