@@ -817,7 +817,7 @@ class SalesController extends Controller
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-        $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
+        $printer -> text(new PosItemManager('Product', 'Qnt', 'Amount'));
         $printer -> setEmphasis(false);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);;
         $printer -> setEmphasis(false);
