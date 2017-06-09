@@ -423,7 +423,7 @@ class SalesOnlineController extends Controller
                 }
             }
 
-            if ($data['saveType'] == 'print') {
+            if ($data['saveType'] == 'print' or $entity->getTransactionMethod()->getId() == 4 ) {
 
                 return $this->redirect($this->generateUrl('inventory_salesonline_show', array('id' => $entity->getId())));
 
