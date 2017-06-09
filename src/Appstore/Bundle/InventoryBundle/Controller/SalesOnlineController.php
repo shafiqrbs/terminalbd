@@ -799,13 +799,13 @@ class SalesOnlineController extends Controller
 
         /* Title of receipt */
         if(!empty($vatRegNo)){
-            $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
             $printer -> setJustification(Printer::JUSTIFY_CENTER);
             $printer -> setEmphasis(true);
             $printer -> selectPrintMode();
+            $printer->text ( "\n" );
             $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
-            $printer->text ( "\n\n" );
+            $printer->text ( "\n" );
         }
 
         if( $entity->getSalesMode() == 'online' and !empty($customer) ){
