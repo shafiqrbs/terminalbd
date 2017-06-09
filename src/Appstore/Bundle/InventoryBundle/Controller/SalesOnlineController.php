@@ -805,17 +805,21 @@ class SalesOnlineController extends Controller
             $printer -> selectPrintMode();
             $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
+            $printer->text ( "\n\n" );
         }
 
         if( $entity->getSalesMode() == 'online' and !empty($customer) ){
 
             /* Customer Information */
+            $billTo       = new PosItemManager('Bill To');
+
             $printer->setUnderline(Printer::UNDERLINE_NONE);
             $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+
             $printer->setJustification(Printer::JUSTIFY_CENTER);
             $printer -> setEmphasis(true);
             $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-            $printer->text("Bill To \n");
+            $printer->text($billTo);
             $printer -> setEmphasis(false);
             $printer->selectPrintMode();
             $printer->setJustification(Printer::JUSTIFY_LEFT);
@@ -823,6 +827,7 @@ class SalesOnlineController extends Controller
             $printer->text($customerMobile . "\n");
             $printer->text($customerAddress . "\n");
             $printer->text($customerLocation . "\n");
+            $printer->text ( "\n" );
             $printer -> setEmphasis(true);
             $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
             $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
