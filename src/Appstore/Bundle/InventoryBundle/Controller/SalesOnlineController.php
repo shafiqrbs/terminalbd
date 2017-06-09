@@ -814,8 +814,8 @@ class SalesOnlineController extends Controller
             $billTo       = new PosItemManager('Bill To');
 
             $printer    ->setUnderline(Printer::UNDERLINE_NONE);
-            $printer    ->setEmphasis(true);
             $printer    ->setJustification(Printer::JUSTIFY_LEFT);
+            $printer    ->setEmphasis(true);
             $printer    ->setUnderline(Printer::UNDERLINE_DOUBLE);
             $printer    ->text($billTo);
             $printer    ->text("\n");
