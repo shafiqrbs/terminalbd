@@ -785,7 +785,7 @@ class SalesOnlineController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
         $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text($companyName."\n");
+        $printer -> text($companyName."\n\n");
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> selectPrintMode();
         if(!empty($entity->getBranches())) {
@@ -819,6 +819,8 @@ class SalesOnlineController extends Controller
             $printer -> setEmphasis(true);
             $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
             $printer->text($billTo);
+            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+            $printer->text('Bill To');
             $printer -> setEmphasis(false);
             $printer->selectPrintMode();
             $printer->setJustification(Printer::JUSTIFY_LEFT);
