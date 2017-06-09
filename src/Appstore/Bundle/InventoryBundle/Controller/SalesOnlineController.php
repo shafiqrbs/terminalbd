@@ -692,23 +692,27 @@ class SalesOnlineController extends Controller
         ));
     }
 
-    public function onlinePosPrintAction($code)
+    public function onlinePosPrintAction(Request $request)
     {
 
         $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
         $printer = new Printer($connector);
         $printer -> initialize();
 
-
+        $data = $request->request->all();
+        $salesId = $data['salesId'];
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
+        $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'id' => $salesId));
+        $this->updateOnlineSalesByPosPrint($entity,$data);
         $option = $entity->getInventoryConfig()->getGlobalOption();
-       // $this->approvedOrder($entity);
+
+
 
         /** ===================Company Information=================================== */
         if(!empty($entity->getBranches())){
 
             /* @var Branches $branch **/
+
             $branch = $entity->getBranches();
             $branchName     = $branch->getName();
             $mobile         = $branch->getMobile();
@@ -917,6 +921,83 @@ class SalesOnlineController extends Controller
         $printer -> close();
         return new Response($response);
 
+    }
+
+    public function updateOnlineSalesByPosPrint(Sales $entity,$data){
+
+
+        //var_dump($data);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $globalOption = $this->getUser()->getGlobalOption();
+        if (!empty($data['sales_general']['customer']['mobile'])) {
+
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['sales_general']['customer']['mobile']);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->newExistingCustomer($globalOption,$mobile,$data);
+            $entity->setCustomer($customer);
+
+        } elseif(!empty($data['mobile'])) {
+
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile ));
+            $entity->setCustomer($customer);
+
+        } else {
+
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'name' => 'Default'));
+            if(empty($customer)){
+                $customer = $em->getRepository('DomainUserBundle:Customer')->defaultCustomer($globalOption);
+
+            }
+            $entity->setCustomer($customer);
+        }
+
+        if ($entity->getInventoryConfig()->getVatEnable() == 1 && $entity->getInventoryConfig()->getVatPercentage() > 0) {
+            $vat = $em->getRepository('InventoryBundle:Sales')->getCulculationVat($entity,$data['paymentTotal']);
+            $entity->setVat($vat);
+        }
+        $entity->setDeliveryCharge($data['deliveryCharge']);
+        $entity->setDue($data['dueAmount']);
+        $entity->setDiscount($data['discount']);
+        $entity->setTotal($data['paymentTotal']);
+        $entity->setPayment($data['paymentTotal'] - $data['dueAmount']);
+        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+        $entity->setPaymentInWord($amountInWords);
+
+        if ($data['paymentTotal'] <= $data['paymentAmount']) {
+            $entity->setPaymentStatus('Paid');
+        } else if ($data['paymentTotal'] > $data['paymentAmount']) {
+            $entity->setPaymentStatus('Due');
+        }
+        if (empty($data['sales_general']['salesBy'])) {
+            $entity->setSalesBy($this->getUser());
+        }
+        if ($entity->getTransactionMethod()->getId() != 4) {
+            $entity->setApprovedBy($this->getUser());
+        } else if ($entity->getTransactionMethod()->getId() == 4) {
+            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+            $entity->setPaymentInWord($amountInWords);
+        }
+        $em->flush();
+
+        if (in_array('OnlineSales', $entity->getInventoryConfig()->getDeliveryProcess())) {
+
+            if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.posorder_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
+            }
+        }
+
+        if ($entity->getTransactionMethod()->getId() != 4 ) {
+
+            $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
+            $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+            $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
+            $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
+            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
+            return $this->redirect($this->generateUrl('inventory_salesonline_new'));
+        }
     }
 
 }

@@ -36,8 +36,9 @@ $(document).on("click", "#onlineSalesPos", function() {
 
     var url = $(this).attr("rel");
     $.ajax({
-        url: url,
-        type: 'GET',
+        url: Routing.generate('inventory_salesonline_posprint'),
+        type: 'POST',
+        data : $('.form-horizontal').serialize(),
         success: function (response) {
             jsPostPrint(response);
             setTimeout(pageOnlineSalesRedirect(), 3000);
