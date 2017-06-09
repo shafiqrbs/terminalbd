@@ -813,23 +813,21 @@ class SalesOnlineController extends Controller
             /* Customer Information */
             $billTo       = new PosItemManager('Bill To');
 
-            $printer->setUnderline(Printer::UNDERLINE_NONE);
-            $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-            $printer->setJustification(Printer::JUSTIFY_CENTER);
-            $printer -> setEmphasis(true);
-            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-            $printer->text($billTo);
-            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-            $printer->text('Bill To');
-            $printer -> setEmphasis(false);
-            $printer->selectPrintMode();
-            $printer->setJustification(Printer::JUSTIFY_LEFT);
-            $printer->text($name . "\n");
-            $printer->text($customerMobile . "\n");
-            $printer->text($customerAddress . "\n");
-            $printer->text($customerLocation . "\n");
-            $printer->text ( "\n\n" );
-            $printer -> setEmphasis(false);
+            $printer    ->setUnderline(Printer::UNDERLINE_NONE);
+            $printer    ->setEmphasis(true);
+            $printer    ->selectPrintMode(Printer::JUSTIFY_CENTER | Printer::UNDERLINE_DOUBLE);
+            $printer    ->text($billTo);
+            $printer    ->selectPrintMode(Printer::JUSTIFY_CENTER | Printer::UNDERLINE_DOUBLE);
+            $printer    ->text('Bill To\n\n');
+            $printer    ->setEmphasis(false);
+            $printer    ->selectPrintMode();
+            $printer    ->setJustification(Printer::JUSTIFY_LEFT);
+            $printer    ->text($name . "\n");
+            $printer    ->text($customerMobile . "\n");
+            $printer    ->text($customerAddress . "\n");
+            $printer    ->text($customerLocation . "\n");
+            $printer    ->text ( "\n\n" );
+            $printer    ->setEmphasis(false);
 
         }
 
