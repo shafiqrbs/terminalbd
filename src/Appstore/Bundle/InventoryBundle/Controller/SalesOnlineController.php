@@ -743,11 +743,11 @@ class SalesOnlineController extends Controller
 
         if( $entity->getSalesMode() == 'online' and !empty($customer) ){
 
-            $name = 'Name '. $customer->getName();
-            $customerMobile = 'Mobile no '. $customer->getMobile();
-            $customerAddress = 'Address '. $customer->getAddress();
-            $thana          = !empty($customer->getLocation()) ? ', '.$customer->getLocation()->getName():'';
-            $district       = !empty($customer->getLocation()) ? ', '.$customer->getLocation()->getParent()->getName():'';
+            $name = 'Name: '. $customer->getName();
+            $customerMobile = 'Mobile no: '. $customer->getMobile();
+            $customerAddress = 'Address: '. $customer->getAddress();
+            $thana          = !empty($customer->getLocation()) ? $customer->getLocation()->getName():'';
+            $district       = !empty($customer->getLocation()) ? $customer->getLocation()->getParent()->getName():'';
             $customerLocation = $thana.$district;
 
         }
@@ -815,7 +815,6 @@ class SalesOnlineController extends Controller
 
             $printer->setUnderline(Printer::UNDERLINE_NONE);
             $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-
             $printer->setJustification(Printer::JUSTIFY_CENTER);
             $printer -> setEmphasis(true);
             $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
@@ -826,12 +825,10 @@ class SalesOnlineController extends Controller
             $printer->text($name . "\n");
             $printer->text($customerMobile . "\n");
             $printer->text($customerAddress . "\n");
-            $printer->text($customerLocation . "\n");
-            $printer->text ( "\n" );
-            $printer -> setEmphasis(true);
             $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-            $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
             $printer->setUnderline(Printer::UNDERLINE_NONE);
+            $printer->text($customerLocation . "\n");
+            $printer->text ( "\n\n" );
             $printer -> setEmphasis(false);
 
         }
