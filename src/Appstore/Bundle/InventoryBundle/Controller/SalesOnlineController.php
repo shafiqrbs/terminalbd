@@ -816,9 +816,9 @@ class SalesOnlineController extends Controller
             $printer    ->setUnderline(Printer::UNDERLINE_NONE);
             $printer    ->setEmphasis(true);
             $printer    ->setJustification(Printer::JUSTIFY_LEFT);
-            $printer    ->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
             $printer    ->setUnderline(Printer::UNDERLINE_DOUBLE);
             $printer    ->text($billTo);
+            $printer    ->text("\n");
             $printer    ->setEmphasis(false);
             $printer    ->selectPrintMode();
             $printer    ->setJustification(Printer::JUSTIFY_LEFT);
