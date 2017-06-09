@@ -772,7 +772,7 @@ class SalesOnlineController extends Controller
         $deliveryCharge = new PosItemManager('Delivery Charge: ','Tk.',number_format($deliveryCharge));
 
         if( $entity->getSalesMode() == 'online' ) {
-            $grandTotal = new PosItemManager('Net Payable: ', 'Tk.', number_format($total + $deliveryCharge));
+            $grandTotal = new PosItemManager('Net Payable: ', 'Tk.', number_format($total + $entity->getDeliveryCharge()));
         }else{
             $grandTotal = new PosItemManager('Net Payable: ', 'Tk.', number_format($total));
         }
