@@ -825,8 +825,6 @@ class SalesOnlineController extends Controller
             $printer->text($name . "\n");
             $printer->text($customerMobile . "\n");
             $printer->text($customerAddress . "\n");
-            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
-            $printer->setUnderline(Printer::UNDERLINE_NONE);
             $printer->text($customerLocation . "\n");
             $printer->text ( "\n\n" );
             $printer -> setEmphasis(false);
