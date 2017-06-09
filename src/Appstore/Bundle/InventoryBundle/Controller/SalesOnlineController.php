@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\InventoryBundle\Form\SalesGeneralType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
@@ -701,13 +702,15 @@ class SalesOnlineController extends Controller
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $entity = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array('inventoryConfig' => $inventory, 'invoice' => $code));
         $option = $entity->getInventoryConfig()->getGlobalOption();
-        $this->approvedOrder($entity);
+       // $this->approvedOrder($entity);
 
         /** ===================Company Information=================================== */
         if(!empty($entity->getBranches())){
 
+            /* @var Branches $branch **/
             $branch = $entity->getBranches();
             $branchName     = $branch->getName();
+            $mobile         = $branch->getMobile();
             $address1       = $branch->getAddress();
             $thana          = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getName():'';
             $district       = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getParent()->getName():'';
@@ -716,17 +719,15 @@ class SalesOnlineController extends Controller
         }else{
 
             $address1       = $option->getContactPage()->getAddress1();
+            $mobile         = $option->getMobile();
             $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
             $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
             $address = $address1.$thana.$district;
 
         }
 
-
-
         $vatRegNo       = $inventory->getVatRegNo();
         $companyName    = $option->getName();
-        $mobile         = $option->getMobile();
         $website        = $option->getDomain();
 
 
@@ -740,7 +741,9 @@ class SalesOnlineController extends Controller
             $name = 'Name '. $customer->getName();
             $customerMobile = 'Mobile no '. $customer->getMobile();
             $customerAddress = 'Address '. $customer->getAddress();
-            $location = 'Dhaka';
+            $thana          = !empty($customer->getLocation()) ? ', '.$customer->getLocation()->getName():'';
+            $district       = !empty($customer->getLocation()) ? ', '.$customer->getLocation()->getParent()->getName():'';
+            $customerLocation = $thana.$district;
 
         }
 
@@ -751,8 +754,6 @@ class SalesOnlineController extends Controller
         $total              = $entity->getTotal();
         $discount           = $entity->getDiscount();
         $vat                = $entity->getVat();
-        $due                = $entity->getDue();
-        $payment            = $entity->getPayment();
         $deliveryCharge     = $entity->getDeliveryCharge();
         $transaction        = $entity->getTransactionMethod()->getName();
         $salesBy            = $entity->getCreatedBy();
@@ -771,10 +772,6 @@ class SalesOnlineController extends Controller
             $grandTotal = new PosItemManager('Net Payable: ', 'Tk.', number_format($total));
         }
 
-        $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
-        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
-
-
         /* Date is kept the same for testing */
         $date = date('l jS \of F Y h:i:s A');
 
@@ -791,6 +788,7 @@ class SalesOnlineController extends Controller
         }else{
             $printer -> text($address."\n");
         }
+        $printer->text($mobile . "\n");
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
 
@@ -819,7 +817,7 @@ class SalesOnlineController extends Controller
             $printer->text($name . "\n");
             $printer->text($customerMobile . "\n");
             $printer->text($customerAddress . "\n");
-            $printer->text($location . "\n");
+            $printer->text($customerLocation . "\n");
             $printer -> setEmphasis(true);
             $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
             $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
