@@ -932,6 +932,7 @@ class SalesOnlineController extends Controller
         $printer = new Printer($connector);
         $printer -> initialize();
 
+        $inventory = $entity->getInventoryConfig();
         $option = $entity->getInventoryConfig()->getGlobalOption();
 
         /** ===================Company Information=================================== */
