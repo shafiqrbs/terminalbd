@@ -25,6 +25,10 @@ inventory_salesonline_edit:
     path:     /{code}/online
     defaults: { _controller: "InventoryBundle:SalesOnline:edit" }
 
+inventory_online_pos_print_individual:
+    path:     /{id}/online-pos-print-indivisual
+    defaults: { _controller: "InventoryBundle:SalesOnline:onlinePosPrintIndividual" }
+
 inventory_salesonline_posprint:
     path:     /online-pos-print
     defaults: { _controller: "InventoryBundle:SalesOnline:onlinePosPrint" }

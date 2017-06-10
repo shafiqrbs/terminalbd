@@ -45,12 +45,14 @@ class SalesOnlineController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
+        $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $data = $_REQUEST;
         $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $this->getUser() ,$mode='online', $data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('InventoryBundle:SalesOnline:index.html.twig', array(
             'entities' => $pagination,
+            'inventoryConfig' => $inventoryConfig,
             'transactionMethods' => $transactionMethods,
             'searchForm' => $data,
         ));
@@ -923,10 +925,235 @@ class SalesOnlineController extends Controller
 
     }
 
+    public function onlinePosPrintIndividualAction(Sales $entity)
+    {
+        echo $entity->getInvoice();
+        exit;
+
+        $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
+        $printer = new Printer($connector);
+        $printer -> initialize();
+
+        $data = $request->request->all();
+        $option = $entity->getInventoryConfig()->getGlobalOption();
+
+        /** ===================Company Information=================================== */
+        if(!empty($entity->getBranches())){
+
+            /* @var Branches $branch **/
+
+            $branch = $entity->getBranches();
+            $branchName     = $branch->getName();
+            $mobile         = $branch->getMobile();
+            $address1       = $branch->getAddress();
+            $thana          = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getName():'';
+            $district       = !empty($branch->getLocation()) ? ', '.$branch->getLocation()->getParent()->getName():'';
+            $address = $address1.$thana.$district;
+
+        }else{
+
+            $address1       = $option->getContactPage()->getAddress1();
+            $mobile         = $option->getMobile();
+            $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
+            $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
+            $address = $address1.$thana.$district;
+
+        }
+
+        $vatRegNo       = $inventory->getVatRegNo();
+        $companyName    = $option->getName();
+        $website        = $option->getDomain();
+
+
+        /** ===================Customer Information=================================== */
+
+        /* @var Customer $customer **/
+        $customer = $entity->getCustomer();
+
+        if( $entity->getSalesMode() == 'online' and !empty($customer) ){
+
+            $name = 'Name: '. $customer->getName();
+            $customerMobile = 'Mobile no: '. $customer->getMobile();
+            $customerAddress = 'Address: '. $customer->getAddress();
+            $thana          = !empty($customer->getLocation()) ? $customer->getLocation()->getName():'';
+            $district       = !empty($customer->getLocation()) ? ' ,'. $customer->getLocation()->getParent()->getName():'';
+            $customerLocation = $thana.$district;
+
+        }
+
+        /** ===================Transaction  Information=================================== */
+
+        $invoice            = $entity->getInvoice();
+        $subTotal           = $entity->getSubTotal();
+        $total              = $entity->getTotal();
+        $discount           = $entity->getDiscount();
+        $vat                = $entity->getVat();
+        $deliveryCharge     = $entity->getDeliveryCharge();
+        $transaction        = $entity->getTransactionMethod()->getName();
+        $salesBy            = $entity->getCreatedBy();
+
+        /* Information for the receipt */
+
+        $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
+        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
+        $vat            = new PosItemManager('Add Vat: ','Tk.',number_format($vat));
+        $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
+        $deliveryCharge = new PosItemManager('Delivery Charge: ','Tk.',number_format($deliveryCharge));
+
+        if( $entity->getSalesMode() == 'online' ) {
+            $grandTotal = new PosItemManager('Net Payable: ', 'Tk.', number_format($total + $entity->getDeliveryCharge()));
+        }else{
+            $grandTotal = new PosItemManager('Net Payable: ', 'Tk.', number_format($total));
+        }
+
+        /* Date is kept the same for testing */
+        $date = date('l jS \of F Y h:i:s A');
+
+        /* Customer Information */
+
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text($companyName."\n\n");
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> selectPrintMode();
+        if(!empty($entity->getBranches())) {
+            $printer->text($branchName . "\n");
+        }else{
+            $printer -> text($address."\n");
+        }
+        $printer->text($mobile . "\n");
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+
+        /* Title of receipt */
+        if(!empty($vatRegNo)){
+            $printer -> setJustification(Printer::JUSTIFY_CENTER);
+            $printer -> setEmphasis(true);
+            $printer -> selectPrintMode();
+            $printer->text ( "\n" );
+            $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
+            $printer -> setEmphasis(false);
+            $printer->text ( "\n" );
+        }
+
+        if( $entity->getSalesMode() == 'online' and !empty($customer) ){
+
+            /* Customer Information */
+            $billTo       = new PosItemManager('Bill To');
+
+            $printer    ->setUnderline(Printer::UNDERLINE_NONE);
+            $printer    ->setJustification(Printer::JUSTIFY_LEFT);
+            $printer    ->setEmphasis(true);
+            $printer    ->setUnderline(Printer::UNDERLINE_DOUBLE);
+            $printer    ->text($billTo);
+            $printer    ->text("\n");
+            $printer    ->setEmphasis(false);
+            $printer    ->selectPrintMode();
+            $printer    ->setJustification(Printer::JUSTIFY_LEFT);
+            $printer    ->text($name . "\n");
+            $printer    ->text($customerMobile . "\n");
+            $printer    ->text($customerAddress . "\n");
+            $printer    ->text($customerLocation . "\n");
+            $printer    ->text ( "\n" );
+            $printer    ->setEmphasis(false);
+
+        }
+
+        /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+        $printer -> setEmphasis(true);
+        $printer -> text("SALES INVOICE\n\n");
+        $printer -> setEmphasis(false);
+
+        $printer -> selectPrintMode();
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text(new PosItemManager('Product', 'Qnt', 'Amount'));
+        $printer -> setEmphasis(false);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);;
+        $printer -> setEmphasis(false);
+        $printer -> feed();
+        $i=1;
+        foreach ( $entity->getSalesItems() as $row){
+
+            $printer -> setUnderline(Printer::UNDERLINE_NONE);
+            $printer -> text( new PosItemManager($i.'. '.$row->getItem()->getName(),"",""));
+            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
+            $printer -> text(new PosItemManager($row->getPurchaseItem()->getBarcode(),$row->getQuantity(),number_format($row->getSubTotal())));
+            $i++;
+        }
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> setEmphasis(true);
+        $printer -> text ( "\n" );
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($subTotal);
+        $printer -> setEmphasis(false);
+        if($vat){
+            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
+            $printer->text($vat);
+            $printer->setEmphasis(false);
+        }
+        if($discount){
+            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+            $printer->text($discount);
+            $printer -> setEmphasis(false);
+            $printer -> text ( "\n" );
+        }
+
+        if($entity->getSalesMode() == 'online' and !empty($customer) and !empty($deliveryCharge)){
+            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+            $printer->text($deliveryCharge);
+            $printer -> setEmphasis(false);
+            $printer -> text ( "\n" );
+        }
+
+        $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($grandTotal);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+
+        $printer->text("\n");
+        $printer->setEmphasis(false);
+        $printer->text($transaction);
+        $printer->selectPrintMode();
+
+
+        /* Barcode Print */
+        $printer->selectPrintMode ( Printer::MODE_DOUBLE_HEIGHT | Printer::MODE_DOUBLE_WIDTH );
+        $printer->text ( "\n" );
+        $printer->selectPrintMode ();
+        $printer->setBarcodeHeight (60);
+        $hri = array (Printer::BARCODE_TEXT_BELOW => "");
+        $printer -> feed();
+        foreach ( $hri as $position => $caption){
+            $printer->selectPrintMode ();
+            $printer -> setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text ($caption);
+            $printer->setBarcodeTextPosition ( $position );
+            $printer->barcode ($invoice , Printer::BARCODE_JAN13 );
+            $printer->feed ();
+        }
+        /* Footer */
+
+        $printer -> feed();
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text("Sales By: ".$salesBy."\n");
+        $printer -> text("Thank you for shopping\n");
+        if($website){
+            $printer -> text("Please visit www.".$website."\n");
+        }
+        $printer -> text($date . "\n");
+        $response =  base64_encode($connector->getData());
+        $printer -> close();
+        return new Response($response);
+
+    }
+
     public function updateOnlineSalesByPosPrint(Sales $entity,$data){
 
-
-        //var_dump($data);
 
         $em = $this->getDoctrine()->getManager();
 

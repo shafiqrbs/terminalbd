@@ -403,8 +403,12 @@
                                     <td class="numeric" >
                                         {% if dailySales.salesItems is defined and  dailySales.salesItems is not empty  %}
                                             <a href="{{ path('inventory_sales_show', { 'id': dailySales.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                            <a href="{{ path('inventory_sales_print_invoice',{'invoice':dailySales.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
-                                        {% endif %}
+                                            {% if entity.inventoryConfig.onlineSalesPrinter == 'pos'  %}
+                                                <a href="javascript:" data-url="{{ path('inventory_online_pos_print_individual',{'id':dailySales.id}) }}"  class="btn green mini onlinePosPrintIndividual" ><i class="icon-print"></i></a>
+                                            {% else %}
+                                                <a href="{{ path('inventory_sales_print_invoice',{'invoice':dailySales.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
+                                            {% endif %}
+                                            {% endif %}
                                         {% if dailySales.paymentStatus == "Pending" %}
                                             <a href="{{ path('inventory_sales_edit', { 'code': dailySales.invoice }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
                                             {% if dailySales.id != entity.id  %}
@@ -413,7 +417,6 @@
                                         {% endif %}
                                         {% if dailySales.paymentStatus == "Due" %}
                                         {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_INVENTORY_MANAGER") or app.user.granted("ROLE_DOMAIN_INVENTORY"))  %}
-
                                             <a href="{{ path('account_sales_new') }}" class="btn mini blue" ><i class="icon-money"></i></a>
                                         {% endif %}
                                         {% endif %}

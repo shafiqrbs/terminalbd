@@ -141,7 +141,11 @@
                                         <td class="numeric" >
                                             {% if entity.salesItems is defined and  entity.salesItems is not empty  %}
                                                 <a data-toggle="modal" href="#responsive" rel="{{ path('inventory_salesonline_show_preview', { 'id': entity.id }) }}" class="btn purple mini sales-preview" ><i class="icon-eye-open"></i></a>
-                                                <a  href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
+                                                {% if inventoryConfig.onlineSalesPrinter == 'pos'  %}
+                                                    <a href="javascript:" data-url="{{ path('inventory_online_pos_print_individual',{'id':entity.id}) }}"  class="btn green mini onlinePosPrintIndividual" ><i class="icon-print"></i></a>
+                                                {% else %}
+                                                    <a href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green mini" ><i class="icon-print"></i></a>
+                                                {% endif %}
                                             {% endif %}
 
                                             {% if entity.paymentStatus == "Pending" or entity.process == "In-progress" or entity.process == "Courier" %}
@@ -170,11 +174,25 @@
     </div>
     <div id="responsive" class="modal hide fade" tabindex="-1" data-width="950"  data-height="" style="background: #ffffff"  >
     </div>
+    {% if inventoryConfig.onlineSalesPrinter == 'pos' %}
+        <script>
+
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "http://localhost.xiidea.net:9432/assets/easy-print-server.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, "script", "xiidea-epp-sdk"));
+
+        </script>
+    {% endif %}
 {% endblock %}
 
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@InventoryBundle/Resources/public/js/posprint.js'
     '@InventoryBundle/Resources/public/js/editable.js'
     '@InventoryBundle/Resources/public/js/approveProcess.js'
     %}

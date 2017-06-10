@@ -46,6 +46,13 @@ $(document).on("click", "#onlineSalesPos", function() {
     })
 });
 
+$(document).on("click", ".onlinePosPrintIndividual", function() {
+
+    $.get( $(this).attr("data-url") , function (response) {
+        jsPostPrint(response);
+    })
+});
+
 function pageRedirect() {
     window.location.href = "/inventory/sales/new";
 }
