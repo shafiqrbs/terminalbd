@@ -344,8 +344,8 @@ class SalesOnlineController extends Controller
 
         if ($inventory == $entity->getInventoryConfig()->getId()) {
             return $this->render('InventoryBundle:SalesOnline:show-preview.html.twig', array(
-                'entity'            => $entity,
-                'itemBranchStocks'   => $itemBranchStock,
+                'entity'                => $entity,
+                'itemBranchStocks'      => $itemBranchStock,
             ));
         }
     }
