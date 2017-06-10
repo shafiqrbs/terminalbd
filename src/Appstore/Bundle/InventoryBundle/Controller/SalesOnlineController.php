@@ -927,14 +927,11 @@ class SalesOnlineController extends Controller
 
     public function onlinePosPrintIndividualAction(Sales $entity)
     {
-        echo $entity->getInvoice();
-        exit;
 
         $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
         $printer = new Printer($connector);
         $printer -> initialize();
 
-        $data = $request->request->all();
         $option = $entity->getInventoryConfig()->getGlobalOption();
 
         /** ===================Company Information=================================== */
