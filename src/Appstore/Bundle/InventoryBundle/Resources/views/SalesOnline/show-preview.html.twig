@@ -60,7 +60,6 @@
                                         <th class="numeric" >Sales price</th>
                                         <th class="numeric" >Sub-total</th>
                                         <th class="numeric" >Branch Stock</th>
-                                        <th class="numeric" >Branch Stock</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -94,7 +93,11 @@
     </div>
 </div>
 <div class="modal-footer">
-    <a target="_blank"  href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
+    {% if entity.inventoryConfig.onlineSalesPrinter == 'pos'  %}
+        <a href="javascript:" data-url="{{ path('inventory_online_pos_print_individual',{'id':entity.id}) }}"  class="btn green  onlinePosPrintIndividual" ><i class="icon-print"></i> Pos Print</a>
+    {% else %}
+        <a href="{{ path('inventory_sales_print_invoice',{'invoice':entity.invoice}) }}" target="_blank" class="btn green " ><i class="icon-print"></i> Print</a>
+    {% endif %}
     <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
     <button type="button" data-dismiss="modal" class="btn">Close</button>
 </div>
