@@ -60,6 +60,7 @@
                                         <th class="numeric" >Sales price</th>
                                         <th class="numeric" >Sub-total</th>
                                         <th class="numeric" >Branch Stock</th>
+                                        <th class="numeric" ></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -78,6 +79,12 @@
                                                 {% else %}
                                                     {{ itemBranchStocks['stockReceiveItem'][salesItem.purchaseItem.id]|default(0) + itemBranchStocks['stockSalesReturnItem'][salesItem.purchaseItem.id]|default(0) - itemBranchStocks['stockSalesItem'][salesItem.purchaseItem.id]|default(0)- itemBranchStocks['stockReturnItem'][salesItem.purchaseItem.id]|default(0) }}
                                                 {% endif %}
+                                            </td>
+                                            <th class="numeric" data-url="{{ path('inventory_branch_wise_barcode_product_stock',{'barcode' : salesItem.purchaseItem.barcode }) }}" >Details</th>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="10">
+
                                             </td>
                                         </tr>
                                     {% endfor %}

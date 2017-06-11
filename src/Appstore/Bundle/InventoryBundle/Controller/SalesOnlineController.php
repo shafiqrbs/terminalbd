@@ -47,7 +47,7 @@ class SalesOnlineController extends Controller
         $em = $this->getDoctrine()->getManager();
         $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $data = $_REQUEST;
-        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $this->getUser() ,$mode='online', $data);
+        $entities = $em->getRepository('InventoryBundle:Sales')->salesLists( $this->getUser() , $mode='online', $data);
         $pagination = $this->paginate($entities);
         $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
         return $this->render('InventoryBundle:SalesOnline:index.html.twig', array(
@@ -583,6 +583,9 @@ class SalesOnlineController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
+        if(!empty($this->getUser()->getProfile()->getBranches())){
+            $entity->setBranches($this->getUser()->getProfile()->getBranches());
+        }
         $entity->setCourierInvoice($data['value']);
         $em->flush();
         exit;
@@ -601,6 +604,9 @@ class SalesOnlineController extends Controller
             $entity->setProcess($data['value']);
         }elseif (!empty($entity->getCourierInvoice()) and $data['value'] == 'Courier'){
             $entity->setProcess($data['value']);
+        }
+        if(!empty($this->getUser()->getProfile()->getBranches())){
+            $entity->setBranches($this->getUser()->getProfile()->getBranches());
         }
         $em->flush();
 

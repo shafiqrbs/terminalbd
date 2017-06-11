@@ -199,6 +199,33 @@ class BranchReportController extends Controller
 
     }
 
+    public function branchWiseBarcodeProductStockAction( $id){
+
+
+
+        $em = $this->getDoctrine()->getManager();
+        $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->find($id);
+        $user = $this->getUser();
+        $branches = $user->getGlobalOption()->getBranches();
+        $branchWiseReceiveItem =  $em->getRepository('InventoryBundle:Delivery')->branchWiseReceiveItem($user , $purchaseItem->getId());
+        $branchWiseSalesItem =  $em->getRepository('InventoryBundle:Delivery')->branchWiseSalesItem($user , $purchaseItem);
+        $branchWiseSalesReturnItem =  $em->getRepository('InventoryBundle:Delivery')->branchWiseSalesReturnItem($user, $purchaseItem);
+        $branchWiseOngoingSalesItem =  $em->getRepository('InventoryBundle:Delivery')->branchWiseOngoingSalesItem($user, $purchaseItem);
+        $ongoingSalesItem =  $em->getRepository('InventoryBundle:Delivery')->ongoingSalesItem($user, $purchaseItem);
+        $branchWiseDeliveryReturnItem =  $em->getRepository('InventoryBundle:Delivery')->branchWiseDeliveryReturnItem($user,$purchaseItem);
+        return $this->render('InventoryBundle:BranchReport:branchWiseBarcodeProductStock.html.twig', array(
+            'entity'          => $purchaseItem,
+            'branches'          => $branches,
+            'branchWiseReceiveItem' => $branchWiseReceiveItem,
+            'branchWiseSalesItem' => $branchWiseSalesItem,
+            'branchWiseSalesReturnItem' => $branchWiseSalesReturnItem,
+            'ongoingSalesItem' => $ongoingSalesItem,
+            'branchWiseOngoingSalesItem' => $branchWiseOngoingSalesItem,
+            'branchWiseDeliveryReturnItem' => $branchWiseDeliveryReturnItem,
+        ));
+
+    }
+
 
 
     public function pdfIncomeAction()

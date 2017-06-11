@@ -37,6 +37,52 @@ class DeliveryItemRepository extends EntityRepository
 
     }
 
+    public function checkTotalReceiveQuantity($user, $purchaseItem)
+    {
+        $em = $this->_em;
+
+        $receiveQnt = $em->getRepository('InventoryBundle:Delivery')->stockReceiveSinglePurchaseItem($user, $purchaseItem->getId());
+        $returnQnt =  $em->getRepository('InventoryBundle:Delivery')->stockReturnSinglePurchaseItem($user,$purchaseItem->getId());
+
+        $totalReceive = ($receiveQnt - $returnQnt);
+        return $totalReceive;
+    }
+
+    public function stockReceiveSinglePurchaseItem(User $user,$item)
+    {
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.delivery','delivery');
+        $qb->select('SUM(e.quantity) AS receiveQnt ');
+        $qb->where("delivery.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere("e.purchaseItem = :item");
+        $qb->setParameter('item', $item);
+        $arrayResult = $qb->getQuery()->getOneOrNullResult();
+        return $arrayResult['receiveQnt'];
+
+
+    }
+
+    public function stockReturnSinglePurchaseItem(User $user,$item)
+    {
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:DeliveryReturn','e');
+        $qb->select('SUM(e.quantity) AS returnQnt ');
+        $qb->where("e.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere("e.purchaseItem = :item");
+        $qb->setParameter('item', $item);
+        $arrayResult = $qb->getQuery()->getOneOrNullResult();
+        return $arrayResult['returnQnt'];
+
+
+    }
+
+
     public function stockReturnBarcodeItem(User $user,$item)
     {
         $branch = $user->getProfile()->getBranches();
@@ -51,8 +97,6 @@ class DeliveryItemRepository extends EntityRepository
         $qb->setParameter('item', $item);
         $arrayResult = $qb->getQuery()->getOneOrNullResult();
         return $arrayResult['returnQnt'];
-
-
     }
 
 

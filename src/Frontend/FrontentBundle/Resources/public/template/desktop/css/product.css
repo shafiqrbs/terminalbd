@@ -1,3 +1,6 @@
+.product-item{
+    margin-bottom: 20px;
+}
 .addCart .form-control-custom{
     height: 34px;
     border-radius:0 !important;

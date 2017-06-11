@@ -105,7 +105,7 @@ class SalesRepository extends EntityRepository
         $qb->setParameter('config', $config);
         $qb->andWhere("s.salesMode = :mode");
         $qb->setParameter('mode', $mode);
-        if ($branch){
+        if ($branch and $mode != 'online'){
             $qb->andWhere("s.branches = :branch");
             $qb->setParameter('branch', $branch);
         }

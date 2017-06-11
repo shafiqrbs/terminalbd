@@ -95,6 +95,7 @@ class UserRepository extends EntityRepository
                 'ROLE_DOMAIN_INVENTORY_STOCK'                       => 'Inventory Stock',
                 'ROLE_DOMAIN_INVENTORY_REPORT'                      => 'Inventory Report',
                 'ROLE_DOMAIN_INVENTORY_BRANCH'                      => 'Inventory Branch',
+                'ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER'              => 'Inventory Branch Manager',
                 'ROLE_DOMAIN_INVENTORY_MANAGER'                     => 'Inventory Manager',
                 'ROLE_DOMAIN_INVENTORY_CONFIG'                      => 'Inventory Config',
                 'ROLE_DOMAIN_INVENTORY'                             => 'Inventory All',

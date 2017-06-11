@@ -48,3 +48,10 @@ inventory_branch_report_sales_item_barcode_search:
     methods:  GET
     options:
             expose: true
+
+inventory_branch_wise_barcode_product_stock:
+    path:     /{id}/branch-wise-barcode-product-stock
+    defaults: { _controller: "InventoryBundle:BranchReport:branchWiseBarcodeProductStock" }
+    methods:  GET
+    options:
+            expose: true

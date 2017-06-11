@@ -848,6 +848,166 @@ class DeliveryRepository extends EntityRepository
 
         return $data = array('stockReceiveItem' => $stockReceiveItem , 'stockSalesItem' => $stockSalesItem , 'stockSalesReturnItem' => $stockSalesReturnItem, 'stockReturnItem' => $stockReturnItem  );
 
+    }
+
+    public function branchWiseReceiveItem(User $user,$purchaseItem)
+    {
+
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->from('InventoryBundle:DeliveryItem', 'stock');
+        $qb->join('stock.delivery', 'delivery');
+        $qb->join('delivery.branch', 'branch');
+        $qb->join('stock.purchaseItem', 'purchaseItem');
+        $qb->select('branch.id AS branchId');
+        $qb->addSelect('branch.name AS branchName');
+        $qb->addSelect('SUM(stock.quantity) AS  receiveQuantity ');
+        $qb->where("delivery.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere("purchaseItem.id =:purchaseItemId ");
+        $qb->setParameter('purchaseItemId', $purchaseItem);
+        $qb->groupBy('branch.id');
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($arrayResult as $row) {
+            $data[$row['branchId']] = $row['receiveQuantity'];
+        }
+        return $data;
+
+    }
+
+    public function branchWiseSalesItem(User $user,$purchaseItem)
+    {
+
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:SalesItem','salesItem');
+        $qb->join('salesItem.sales','sales');
+        $qb->join('sales.branches','branch');
+        $qb->select('branch.id AS branchId');
+        $qb->addSelect('branch.name AS branchName');
+        $qb->addSelect("SUM(salesItem.quantity) AS salesQuantity ");
+        $qb->setParameter('inventory', $inventory);
+        $qb->where("sales.inventoryConfig = :inventory");
+        $qb->andWhere('sales.process IN(:process)');
+        $qb->setParameter('process',array_values(array('Paid')));
+        $qb->andWhere("salesItem.purchaseItem = :item");
+        $qb->setParameter('item', $purchaseItem);
+        $qb->groupBy('sales.branches');
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($arrayResult as $row) {
+            $data[$row['branchId']] = $row['salesQuantity'];
+        }
+        return $data;
+
+    }
+
+    public function branchWiseSalesReturnItem(User $user,$purchaseItem)
+    {
+
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:SalesReturnItem','sales_return_item');
+        $qb->join('sales_return_item.salesReturn','sales_return');
+        $qb->join('sales_return.branches','branch');
+        $qb->join('sales_return_item.salesItem','salesItem');
+        $qb->select('branch.id AS branchId');
+        $qb->addSelect('branch.name AS branchName');
+        $qb->addSelect("SUM(sales_return_item.quantity) AS salesReturnQuantity ");
+        $qb->where("sales_return.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('sales_return.process =:process ');
+        $qb->setParameter('process','complete');
+        $qb->andWhere("salesItem.purchaseItem = :item");
+        $qb->setParameter('item', $purchaseItem);
+        $qb->groupBy('branch.id');
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($arrayResult as $row) {
+            $data[$row['branchId']] = $row['salesReturnQuantity'];
+        }
+        return $data;
+
+    }
+
+    public function ongoingSalesItem(User $user,$purchaseItem){
+
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:SalesItem','salesItem');
+        $qb->join('salesItem.sales','sales');
+        $qb->join('sales.branches','branch');
+        $qb->select('branch.id AS branchId');
+        $qb->addSelect('branch.name AS branchName');
+        $qb->addSelect("SUM(salesItem.quantity) AS ongoingQuantity ");
+        $qb->setParameter('inventory', $inventory);
+        $qb->where("sales.inventoryConfig = :inventory");
+        $qb->andWhere('sales.process IN(:process)');
+        $qb->setParameter('process',array_values(array('In-progress','Courier')));
+        $qb->andWhere("sales.branches is NULL ");
+        $qb->andWhere("salesItem.purchaseItem = :item");
+        $qb->setParameter('item', $purchaseItem);
+        $arrayResult = $qb->getQuery()->getOneOrNullResult();
+        $data = $arrayResult['ongoingQuantity'];
+        return $data;
+
+    }
+
+    public function branchWiseOngoingSalesItem(User $user,$purchaseItem)
+    {
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:SalesItem','salesItem');
+        $qb->join('salesItem.sales','sales');
+        $qb->join('sales.branches','branch');
+        $qb->select('branch.id AS branchId');
+        $qb->addSelect('branch.name AS branchName');
+        $qb->addSelect("SUM(salesItem.quantity) AS ongoingQuantity ");
+        $qb->setParameter('inventory', $inventory);
+        $qb->where("sales.inventoryConfig = :inventory");
+        $qb->andWhere('sales.process IN(:process)');
+        $qb->setParameter('process',array_values(array('In-progress','Courier')));
+        $qb->andWhere("salesItem.purchaseItem = :item");
+        $qb->setParameter('item', $purchaseItem);
+        $qb->groupBy('branch.id');
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($arrayResult as $row) {
+            $data[$row['branchId']] = $row['ongoingQuantity'];
+        }
+        return $data;
+
+    }
+
+    public function branchWiseDeliveryReturnItem(User $user,$purchaseItem)
+    {
+        $inventory = $user->getGlobalOption()->getInventoryConfig();
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:DeliveryReturn','e');
+        $qb->join('e.branch','branch');
+        $qb->select('branch.id AS branchId');
+        $qb->addSelect('branch.name AS branchName');
+        $qb->addSelect('SUM(e.quantity) as deliveryQuantity ');
+        $qb->where("e.approvedBy != ''");
+        $qb->andWhere("e.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere("e.purchaseItem = :item");
+        $qb->setParameter('item', $purchaseItem);
+        $qb->groupBy('branch.id');
+        $arrayResult = $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($arrayResult as $row) {
+            $data[$row['branchId']] = $row['deliveryReturnQuantity'];
+        }
+        return $data;
 
     }
 

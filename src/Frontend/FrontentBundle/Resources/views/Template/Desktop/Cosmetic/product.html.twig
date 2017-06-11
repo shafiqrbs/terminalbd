@@ -155,10 +155,10 @@
                </div>
             </div>
             {% endif %}
-            <div class="{% if globalOption.ecommerceConfig.showSidebar == 1 %} col-md-9 {% else %}col-md-12 {% endif %}" data-match-height="body-content"  >
+            <div class="{% if globalOption.ecommerceConfig.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="body-content"  >
                 <div id="products" class="row list-group">
                     {% for product in products %}
-                        <div data-wow-delay="0.2s" data-match-height="item-promotion" class="item fadeInRight animated col-xs-{{ globalOption.ecommerceConfig.perColumn }} col-lg-{{ globalOption.ecommerceConfig.perColumn }}">
+                        <div  data-match-height="item-promotion" class="product-item col-xs-{{ globalOption.ecommerceConfig.perColumn }} col-lg-{{ globalOption.ecommerceConfig.perColumn }}">
                             <div class="product-feature-box list-group-image">
                                 <img class="img-responsive" data-match-height="item-promotion-img" src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="">
                                 <div class="product-feature-box-content">
