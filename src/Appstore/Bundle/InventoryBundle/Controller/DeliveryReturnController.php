@@ -49,11 +49,15 @@ class DeliveryReturnController extends Controller
 
     public function todayDeliveryReturn()
     {
-        $branch = $this->getUser()->getBranches();
         $data = array('startDate'=> date('Y-m-d'),'endDate'=> date('Y-m-d'));
-        $entities = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:DeliveryReturn')->findWithSearch($branch,$data);
-        $paginate = $this->paginate($entities);
-        return $paginate;
+        $entities = $this->getDoctrine()->getManager()->getRepository('InventoryBundle:DeliveryReturn')->findWithSearch( $this->getUser() ,$data);
+        if($entities){
+            $paginate = $this->paginate($entities);
+            return $paginate;
+        }else{
+            return false;
+        }
+
     }
 
     /**

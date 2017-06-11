@@ -21,14 +21,14 @@ class DeliveryItemRepository extends EntityRepository
 
         $totalQnt = $em->getRepository('InventoryBundle:Delivery')->stockReceiveSingleItem($user, $purchaseItem->getItem(),$purchaseItem->getBarcode());
         $stockSalesItemHistory =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItemHistory($user,$purchaseItem->getItem(),$purchaseItem->getBarcode());
-        $salesQnt = isset($stockSalesItemHistory) and !empty($stockSalesItemHistory) ? $stockSalesItemHistory[0]['quantity']:0;
+        $salesQnt =  !empty($stockSalesItemHistory) ? $stockSalesItemHistory[0]['quantity']:0;
         $stockSalesReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItemHistory($user,$purchaseItem->getItem(),$purchaseItem->getBarcode());
-        $salesReturnQnt = isset($stockSalesReturnItem) and !empty($stockSalesReturnItem) ? $stockSalesReturnItem[0]['quantity']:0;
+        $salesReturnQnt =  !empty($stockSalesReturnItem) ? $stockSalesReturnItem[0]['quantity']:0;
         $stockDeliveryReturnItem =  $this->stockReturnBarcodeItem($user,$purchaseItem);
-        $deliveryReturnQnt = isset($stockDeliveryReturnItem) and !empty($stockDeliveryReturnItem) ? $stockDeliveryReturnItem : 0;
+        $deliveryReturnQnt = !empty($stockDeliveryReturnItem) ? $stockDeliveryReturnItem : 0;
 
-        $stockQnt = (($totalQnt + $salesReturnQnt) - ($salesQnt + $deliveryReturnQnt));
-        if( $stockQnt > 0 && $stockQnt >= $quantity ){
+        $stockQnt = (int)(($totalQnt + $salesReturnQnt) - ($salesQnt + $deliveryReturnQnt));
+        if( $stockQnt > 0 and $stockQnt >= $quantity ){
             $output = 'valid';
         }else{
             $output = $stockQnt ;

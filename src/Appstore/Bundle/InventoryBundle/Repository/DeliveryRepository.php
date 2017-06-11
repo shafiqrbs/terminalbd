@@ -285,9 +285,8 @@ class DeliveryRepository extends EntityRepository
         }
         $qb->groupBy('item.id');
         $qb->orderBy('item.name','ASC');
-        $qb->getQuery()->getResult();
-
-        return  $qb;
+        $res = $qb->getQuery()->getArrayResult();
+        return  $res;
 
     }
 
@@ -419,7 +418,7 @@ class DeliveryRepository extends EntityRepository
         $qb->join('stock.purchaseItem', 'purchaseItem');
         $qb->join('purchaseItem.item', 'i');
         $qb->join('purchaseItem.purchase', 'purchase');
-        $qb->select('stock.quantity AS  receiveQuantity ');
+        $qb->select('Sum(stock.quantity) AS  receiveQuantity ');
         $qb->addSelect('i.name AS name');
         $qb->addSelect('i.sku AS sku');
         $qb->addSelect('purchaseItem.id AS purchaseItemId');
@@ -434,6 +433,7 @@ class DeliveryRepository extends EntityRepository
         $qb->setParameter('branch', $branch );
         $qb->andWhere("stock.item = :item");
         $qb->setParameter('item', $item);
+        $qb->groupBy('purchaseItem.id');
         $qb->orderBy('delivery.updated', 'DESC');
         $result = $qb->getQuery()->getArrayResult();
         return $result;
@@ -540,8 +540,7 @@ class DeliveryRepository extends EntityRepository
         $qb->join('e.purchaseItem','purchaseItem');
         $qb->select('purchaseItem.id as purchaseItemId');
         $qb->addSelect('SUM(e.quantity) as deliveryQuantity ');
-        $qb->where("e.approvedBy != ''");
-        $qb->andWhere("e.inventoryConfig = :inventory");
+        $qb->where("e.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere("e.branch = :branch");
         $qb->setParameter('branch', $branch);

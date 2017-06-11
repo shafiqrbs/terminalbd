@@ -75,6 +75,27 @@ class BranchReportController extends Controller
         ));
     }
 
+     public function stockBarcodeAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $entities =  $em->getRepository('InventoryBundle:Delivery')->stockItem( $this->getUser(),$data);
+        $pagination = $this->paginate($entities);
+        $stockSalesItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItem( $this->getUser(),$data);
+        $salesReturnItem = $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItem( $this->getUser(),$data);
+        $stockOngoingItem =  $em->getRepository('InventoryBundle:Delivery')->stockOngoingItem( $this->getUser(),$data);
+        $stockReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockReturnItem( $this->getUser(),$data);
+
+        return $this->render('InventoryBundle:BranchReport:stock.html.twig', array(
+            'entities'                  => $pagination,
+            'stockOngoingItem'          => $stockOngoingItem,
+            'stockSalesItem'            => $stockSalesItem,
+            'salesReturnItem'           => $salesReturnItem,
+            'stockReturnItem'           => $stockReturnItem,
+            'searchForm'                => $data,
+        ));
+    }
+
     public function stockItemAction()
     {
         return $this->render('InventoryBundle:BranchReport:stockDetails.html.twig', array(

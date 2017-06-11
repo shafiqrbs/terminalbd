@@ -76,7 +76,6 @@
                                         <th class="numeric" ><i class="icon-reorder"></i></th>
                                         <th class="numeric" >Barcode</th>
                                         <th class="numeric" >Purchase Date</th>
-                                        <th class="numeric" >Receive Date</th>
                                         <th class="numeric" >Receive Qnt</th>
                                         <th class="numeric" >Sales Qnt</th>
                                         <th class="numeric" >Sales Reurn Qnt</th>
@@ -104,7 +103,6 @@
                                             <td>{{ loop.index }}</td>
                                             <td class="numeric" >{{ entity.barcode }}</td>
                                             <td class="numeric" >{{ entity.purchaseDate|date('d-m-Y') }}</td>
-                                            <td class="numeric" >{{ entity.deliveryDate|date('d-m-Y') }}</td>
                                             <td class="numeric" >{{ entity.receiveQuantity }}</td>
                                             <td class="numeric" >{{ stockSalesItem[entity.purchaseItemId]|default() }}</td>
                                             <td class="numeric" >{{ stockSalesReturnItem[entity.purchaseItemId]|default() }}</td>
@@ -115,7 +113,7 @@
                                         </tr>
                                     {% endfor %}
                                     <tr>
-                                        <td colspan="4"><strong class="pull-right">Total</strong></td>
+                                        <td colspan="3"><strong class="pull-right">Total</strong></td>
                                         <td class="numeric" >{{ receive }}</td>
                                         <td class="numeric" >{{ salesItem }}</td>
                                         <td class="numeric" >{{ salesReturnItem }}</td>
