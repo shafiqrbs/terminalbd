@@ -609,7 +609,7 @@ class WebServiceProductController extends Controller
             if($detect->isMobile() && $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
-                $theme = 'Template/Mobile/'.$themeName;
+                $theme = 'Template/Desktop/'.$themeName;
             }
 
             $cart = new Cart($request->getSession());

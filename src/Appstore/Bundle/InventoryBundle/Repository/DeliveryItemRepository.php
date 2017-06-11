@@ -41,11 +41,12 @@ class DeliveryItemRepository extends EntityRepository
     {
         $em = $this->_em;
 
-        $receiveQnt = $em->getRepository('InventoryBundle:Delivery')->stockReceiveSinglePurchaseItem($user, $purchaseItem->getId());
-        $returnQnt =  $em->getRepository('InventoryBundle:Delivery')->stockReturnSinglePurchaseItem($user,$purchaseItem->getId());
+        $receiveQnt = $em->getRepository('InventoryBundle:DeliveryItem')->stockReceiveSinglePurchaseItem($user, $purchaseItem->getId());
+        $returnQnt =  $em->getRepository('InventoryBundle:DeliveryItem')->stockReturnSinglePurchaseItem($user,$purchaseItem->getId());
 
         $totalReceive = ($receiveQnt - $returnQnt);
-        return $totalReceive;
+        $totalItem = !empty($totalReceive) > 0 ? $totalReceive :0;
+        return (int) 12;
     }
 
     public function stockReceiveSinglePurchaseItem(User $user,$item)

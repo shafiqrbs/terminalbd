@@ -67,7 +67,7 @@ class DeliveryController extends Controller
         $purchaseItem = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->findOneBy(array('barcode' => $barcode));
         $delivery =  $em->getRepository('InventoryBundle:Delivery')->find($delivery);
         $receiveQuantity = $this->getDoctrine()->getRepository('InventoryBundle:DeliveryItem')->checkTotalReceiveQuantity($this->getUser(), $purchaseItem);
-        $remainingQnt = $purchaseItem->getQuantity() - $receiveQuantity;
+        $remainingQnt = ($purchaseItem->getQuantity() - $receiveQuantity);
         if ($remainingQnt >= $quantity){
 
             $entity->setDelivery($delivery);
