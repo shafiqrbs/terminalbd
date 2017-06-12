@@ -556,7 +556,7 @@ class Builder extends ContainerAware
             $menu['Inventory']['Reports']->addChild('Sales with price', array('route' => 'inventory_report_sales'))->setAttribute('icon', 'icon-bar-chart');
 
         }
-        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER')) {
             if ($inventory->getIsBranch() == 1) {
                 $menu['Inventory']->addChild('Branch Reports')
                     ->setAttribute('icon', 'icon-bar-chart')
