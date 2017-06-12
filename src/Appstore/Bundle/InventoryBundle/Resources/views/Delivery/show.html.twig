@@ -109,7 +109,6 @@
                                                 <td>{{ item.purchaseItem.purchasePrice * item.quantity  }}</td>
                                                 <td>{{ item.salesPrice }}</td>
                                                 <td>{{ item.subTotal }}</td>
-
                                                 <td>
                                                     {% if entity.approvedBy is empty  %}
                                                     <a id="" title="Are you sure went to delete ?" rel="{{ path('inventory_delivery_item_delete',{'delivery':entity.id,'id':item.id}) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
