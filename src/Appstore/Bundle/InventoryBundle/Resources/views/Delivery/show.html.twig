@@ -135,8 +135,8 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">
                                     {% if entity.approvedBy is not empty  %}
-                                    <a  href="{{ path('inventory_delivery_print',{'id':entity.id}) }}" class="btn purple" name="save" value="save"><i class="icon-print"></i> Pdf & Print</a>
-                                    <a  href="javasript:" class="btn green" ><i class="icon-print"></i>&nbsp;Approved</a>
+                                    <a  href="{{ path('inventory_delivery_print',{'id':entity.id}) }}" class="btn purple"><i class="icon-download"></i> Download PDF</a>
+                                    <a  href="javasript:" class="btn green" ><i class="icon-check"></i>&nbsp;Approved</a>
                                     {% else  %}
                                         <a title="Are you sure went to delete ?" href="{{ path('inventory_delivery_delete', { 'id': entity.id }) }}" class="btn red" ><i class="icon-trash"></i> Delete</a>
                                         {% if entity.approvedBy is not empty and is_granted('ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER') and entity.totalQuantity > 0 %}
