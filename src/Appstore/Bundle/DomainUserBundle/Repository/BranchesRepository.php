@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\DomainUserBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\CustomerInbox;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * BranchesRepository
@@ -12,6 +13,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class BranchesRepository extends EntityRepository
 {
+    public function searchAutoComplete($q, GlobalOption $option)
+    {
+        $query = $this->createQueryBuilder('e');
+        $query->select('e.name as id');
+        $query->addSelect('e.name as text');
+        $query->where($query->expr()->like("e.name", "'$q%'"  ));
+        $query->andWhere("e.globalOption = :globalOption");
+        $query->setParameter('globalOption', $option->getId());
+        $query->groupBy('e.id');
+        $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '10' );
+        return $query->getQuery()->getResult();
 
+    }
 
 }

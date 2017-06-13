@@ -123,12 +123,12 @@
                                                 <a title="Are you sure went to delete ?" href="{{ path('inventory_delivery_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                             {% if entity.approvedBy is empty and entity.totalQuantity > 0 and app.user.granted("ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER") %}
-                                                <a href="javascript:" id="action-{{ entity.id }}" data-id="{{ entity.id }}" class="btn blue mini approve "  data-url="{{ path('inventory_delivery_approve',{'id':entity.id}) }}"><i class="icon-check"></i>&nbsp;Approve</a>
+                                                <a href="javascript:" id="action-{{ entity.id }}" data-id="{{ entity.id }}" class="btn blue mini approve "  data-url="{{ path('inventory_delivery_approve',{'id':entity.id}) }}"><i class="icon-check-empty"></i>&nbsp;Approve</a>
                                             {% endif %}
                                         {% else %}
                                             <a title="" href="{{ path('inventory_delivery_show', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-eye-open"></i></a>
-                                            {#<a href="{{ path('inventory_delivery_print', { 'id': entity.id }) }}" class="btn purple mini approve " ><i class="icon-print"></i></a>#}
-                                            <a href="javascript:" class="btn green mini approve " ><i class="icon-check"></i>&nbsp;Approved</a>
+                                            <a href="{{ path('inventory_delivery_print',{'id':entity.id}) }}" target="_blank" class="btn purple mini " ><i class="icon-download"></i></a>
+                                            <a href="javascript:" class="btn green mini approve " ><i class="icon-check"></i></a>
                                         {% endif %}
                                         </td>
                                     </tr>

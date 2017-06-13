@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * PurchaseItemRepository
@@ -13,6 +14,68 @@ use Doctrine\ORM\EntityRepository;
 class PurchaseItemRepository extends EntityRepository
 {
 
+    /**
+     * @param $qb
+     * @param $data
+     */
+
+    protected function handleWithSearch($qb,$data)
+    {
+        if(!empty($data))
+        {
+
+            $item = isset($data['item'])? $data['item'] :'';
+            $color = isset($data['color'])? $data['color'] :'';
+            $size = isset($data['size'])? $data['size'] :'';
+            $vendor = isset($data['vendor'])? $data['vendor'] :'';
+            $brand = isset($data['brand'])? $data['brand'] :'';
+            $category = isset($data['category'])? $data['category'] :'';
+            $barcode = isset($data['barcode'])? $data['barcode'] :'';
+
+            if (!empty($barcode)) {
+                $qb->andWhere("pi.barcode = :barcode");
+                $qb->setParameter('barcode', $barcode);
+            }
+
+            if (!empty($item)) {
+                $qb->join('item.masterItem', 'mProduct');
+                $qb->andWhere("mProduct.name = :name");
+                $qb->setParameter('name', $item);
+            }
+
+            if (!empty($color)) {
+                $qb->join('item.color', 'c');
+                $qb->andWhere("c.name = :color");
+                $qb->setParameter('color', $color);
+            }
+
+            if (!empty($size)) {
+                $qb->join('item.size', 's');
+                $qb->andWhere("s.name = :size");
+                $qb->setParameter('size', $size);
+            }
+
+            if (!empty($vendor)) {
+                $qb->join('item.vendor', 'v');
+                $qb->andWhere("v.companyName = :vendor");
+                $qb->setParameter('vendor', $vendor);
+            }
+
+            if (!empty($brand)) {
+                $qb->join('item.brand', 'b');
+                $qb->andWhere("b.name = :brand");
+                $qb->setParameter('brand', $brand);
+            }
+
+            if (!empty($category)) {
+                $qb->join('item.masterItem', 'product');
+                $qb->join('product.category','cat');
+                $qb->andWhere("cat.name = :category");
+                $qb->setParameter('category', $category);
+            }
+        }
+
+    }
 
     public function findWithSearch($inventory,$data)
     {
@@ -52,6 +115,22 @@ class PurchaseItemRepository extends EntityRepository
         $sql = $qb->getQuery();
         return $sql;
 
+    }
+
+    public function getPurchaseItems(GlobalOption $globalOption , $data)
+    {
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.purchase','e');
+        $qb->join('pi.item','item');
+        $qb->select('pi.barcode');
+        $qb->addSelect('pi.quantity');
+        $qb->addSelect('item.name');
+        $qb->where("e.inventoryConfig = :inventoryConfig");
+        $qb->setParameter('inventoryConfig', $globalOption->getInventoryConfig()->getId());
+        $this->handleWithSearch($qb,$data);
+        $qb->orderBy('item.name','ASC');
+        $result = $qb->getQuery();
+        return $result;
     }
 
     public function getPurchaseItemCount($item)

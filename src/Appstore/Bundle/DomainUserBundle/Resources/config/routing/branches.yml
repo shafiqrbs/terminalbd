@@ -32,5 +32,15 @@ domain_branches_delete:
     path:     /{id}/delete
     defaults: { _controller: "DomainUserBundle:Branches:delete" }
 
+domain_branches_search:
+    path:     /search
+    defaults: { _controller: "DomainUserBundle:Branches:autoSearch" }
+    options:
+            expose: true
 
+domain_branches_name:
+    path:      /{branch}/branch-name
+    defaults: { _controller: "DomainUserBundle:Branches:searchBranchName" }
+    options:
+            expose: true
 

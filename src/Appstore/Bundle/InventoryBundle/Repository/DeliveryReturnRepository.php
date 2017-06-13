@@ -17,16 +17,18 @@ class DeliveryReturnRepository extends EntityRepository
     {
 
         $inventory = $user->getGlobalOption()->getInventoryConfig();
-        $branch = $user->getProfile()->getBranches();
+        $branches = $user->getProfile()->getBranches();
         $userRoles = $user->getRoles();
 
         $startDate = isset($data['startDate'])  ? $data['startDate'].' 00:00:00' :'';
         $endDate =   isset($data['endDate'])  ? $data['endDate'].' 23:59:59' :'';
         $item = isset($data['item'])? $data['item'] :'';
+        $barcode = isset($data['barcode'])? $data['barcode'] :'';
         $color = isset($data['color'])? $data['color'] :'';
         $size = isset($data['size'])? $data['size'] :'';
         $vendor = isset($data['vendor'])? $data['vendor'] :'';
         $brand = isset($data['brand'])? $data['brand'] :'';
+        $branch = isset($data['branch'])? $data['branch'] :'';
 
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.item', 'item');
@@ -37,7 +39,7 @@ class DeliveryReturnRepository extends EntityRepository
 
         if (!in_array('ROLE_DOMAIN_INVENTORY_MANAGER',$userRoles)) {
             $qb->andWhere("e.branch = :branch");
-            $qb->setParameter('branch', $branch);
+            $qb->setParameter('branch', $branches);
         }
 
         if (!empty($startDate) and $startDate !="") {
@@ -49,11 +51,18 @@ class DeliveryReturnRepository extends EntityRepository
             $qb->setParameter('endDate', $endDate);
         }
 
+        if (!empty($barcode)) {
+            $qb->join('e.purchaseItem', 'p');
+            $qb->andWhere("p.barcode = :barcode");
+            $qb->setParameter('barcode', $barcode);
+        }
+
         if (!empty($item)) {
 
             $qb->andWhere("m.name = :name");
             $qb->setParameter('name', $item);
         }
+
         if (!empty($color)) {
 
             $qb->join('item.color', 'c');
@@ -80,6 +89,15 @@ class DeliveryReturnRepository extends EntityRepository
             $qb->setParameter('brand', $brand);
 
         }
+
+        if (!empty($branch)) {
+
+            $qb->join('e.branch', 'branch');
+            $qb->andWhere("branch.name = :name");
+            $qb->setParameter('name', $branch);
+        }
+
+
         $qb->orderBy('e.id','DESC');
         $qb->getQuery();
         return  $qb;

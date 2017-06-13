@@ -215,4 +215,23 @@ class BranchesController extends Controller
     }
 
 
+    public function autoSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $globalOption = $this->getUser()->getGlobalOption();
+            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Branches')->searchAutoComplete($item,$globalOption);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchBranchNameAction($branch)
+    {
+        return new JsonResponse(array(
+            'id'=>$branch,
+            'text'=>$branch
+        ));
+    }
+
+
 }

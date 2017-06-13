@@ -132,8 +132,7 @@ class SalesController extends Controller
         if( $detect->isMobile() || $detect->isTablet() ) {
             $device = 'mobile' ;
         }
-
-        if (!empty($branch) and $branchStockItem >= 0 ) {
+        if (!empty($branch) and $branchStockItem == 'invalid' ) {
 
             $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
             $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getSalesItems($sales,$device);

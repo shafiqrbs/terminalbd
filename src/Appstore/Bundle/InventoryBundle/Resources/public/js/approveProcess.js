@@ -674,42 +674,6 @@ function ApproveProcess(){
         minimumInputLength: 1
     });
 
-    $(".select2Item").select2({
-
-        placeholder: "Search item, color, size & brand name",
-        allowClear: true,
-        ajax: {
-            url: Routing.generate('item_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function(item){
-
-            return item.name +' => '+ (item.remainingQuantity)
-
-        }, // omitted for brevity, see the source of this page
-        formatSelection: function(item){return item.name + ' / ' + item.sku}, // omitted for brevity, see the source of this page
-        initSelection: function(element, callback) {
-            var id = $(element).val();
-        },
-        allowClear: true,
-        minimumInputLength:1
-    });
 
     $(document).on('change', '#item', function() {
 
@@ -730,45 +694,9 @@ function ApproveProcess(){
         })
     });
 
-
-    $("#barcodeNo").select2({
-
-        placeholder: "Enter specific barcode",
-        allowClear: true,
-        ajax: {
-
-            url: Routing.generate('inventory_purchaseitem_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function(item){ return item.text +'(' +item.item_name+')'}, // omitted for brevity, see the source of this page
-        formatSelection: function(item){return item.text +'(' +item.item_name+')' }, // omitted for brevity, see the source of this page
-        initSelection: function(element, callback) {
-            var id = $(element).val();
-        },
-        allowClear: true,
-        minimumInputLength:1
-    });
-
     $("#sku").select2({
 
         placeholder: "Enter product sku",
-        allowClear: true,
         ajax: {
 
             url: Routing.generate('inventory_purchaseitem_search'),
@@ -798,6 +726,47 @@ function ApproveProcess(){
         allowClear: true,
         minimumInputLength:1
 
+    });
+
+    $(".select2Branch").select2({
+
+        placeholder: "Search branch name",
+        ajax: {
+            url: Routing.generate('inventory_branches_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        initSelection: function (element, callback) {
+            var branch = $(element).val();
+            $.ajax(Routing.generate('inventory_branches_name', { branch : branch}), {
+                dataType: "json"
+            }).done(function (data) {
+                return  callback(data);
+            });
+        },
+        allowClear: true,
+        minimumInputLength:1
     });
 
 

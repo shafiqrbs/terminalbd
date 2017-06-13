@@ -11,10 +11,13 @@ inventory_branch_report_item_view:
     path:     /{item}/branch-item-view-details
     defaults: { _controller: "InventoryBundle:BranchReport:branchItemDetails" }
 
-
 inventory_branch_report_item:
     path:     /branch-item-view
     defaults: { _controller: "InventoryBundle:BranchReport:stockItem" }
+
+inventory_branch_report_barcode_item:
+    path:     /branch-barcode-wise-item
+    defaults: { _controller: "InventoryBundle:BranchReport:stockBarcode" }
 
 inventory_branch_sales_item_view:
     path:     /{item}/branch-item-sales

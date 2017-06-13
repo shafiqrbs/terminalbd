@@ -31,7 +31,7 @@ class DeliveryItemRepository extends EntityRepository
         if( $stockQnt > 0 and $stockQnt >= $quantity ){
             $output = 'valid';
         }else{
-            $output = $stockQnt ;
+            $output = 'invalid' ;
         }
         return $output;
 

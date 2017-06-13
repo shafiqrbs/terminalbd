@@ -58,12 +58,12 @@ class BranchReportController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $entities =  $em->getRepository('InventoryBundle:Delivery')->stockItem( $this->getUser(),$data);
+        $entities =  $em->getRepository('InventoryBundle:Delivery')->stockItem( $this->getUser(), $group = 'item',$data);
         $pagination = $this->paginate($entities);
-        $stockSalesItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItem( $this->getUser(),$data);
-        $salesReturnItem = $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItem( $this->getUser(),$data);
-        $stockOngoingItem =  $em->getRepository('InventoryBundle:Delivery')->stockOngoingItem( $this->getUser(),$data);
-        $stockReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockReturnItem( $this->getUser(),$data);
+        $stockSalesItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItem( $this->getUser(), $group = 'item',$data);
+        $salesReturnItem = $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItem( $this->getUser(), $group = 'item',$data);
+        $stockOngoingItem =  $em->getRepository('InventoryBundle:Delivery')->stockOngoingItem( $this->getUser(), $group = 'item',$data);
+        $stockReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockReturnItem( $this->getUser(), $group = 'item',$data);
 
         return $this->render('InventoryBundle:BranchReport:stock.html.twig', array(
             'entities'                  => $pagination,
@@ -79,14 +79,14 @@ class BranchReportController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $entities =  $em->getRepository('InventoryBundle:Delivery')->stockItem( $this->getUser(),$data);
+        $entities =  $em->getRepository('InventoryBundle:Delivery')->stockItem( $this->getUser(), $group = 'barcode',$data);
         $pagination = $this->paginate($entities);
-        $stockSalesItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItem( $this->getUser(),$data);
-        $salesReturnItem = $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItem( $this->getUser(),$data);
-        $stockOngoingItem =  $em->getRepository('InventoryBundle:Delivery')->stockOngoingItem( $this->getUser(),$data);
-        $stockReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockReturnItem( $this->getUser(),$data);
+        $stockSalesItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItem( $this->getUser(),$group = 'barcode',$data);
+        $salesReturnItem = $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItem( $this->getUser(),$group = 'barcode',$data);
+        $stockOngoingItem =  $em->getRepository('InventoryBundle:Delivery')->stockOngoingItem( $this->getUser(),$group = 'barcode',$data);
+        $stockReturnItem =  $em->getRepository('InventoryBundle:Delivery')->stockReturnItem( $this->getUser(),$group = 'barcode',$data);
 
-        return $this->render('InventoryBundle:BranchReport:stock.html.twig', array(
+        return $this->render('InventoryBundle:BranchReport:barcodeWiseStock.html.twig', array(
             'entities'                  => $pagination,
             'stockOngoingItem'          => $stockOngoingItem,
             'stockSalesItem'            => $stockSalesItem,
@@ -94,6 +94,37 @@ class BranchReportController extends Controller
             'stockReturnItem'           => $stockReturnItem,
             'searchForm'                => $data,
         ));
+    }
+
+    public function barcodeBranchStockAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $id = 9699 ;
+        $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->find($id);
+        $user = $this->getUser();
+        $branches = $user->getGlobalOption()->getBranches();
+        $barcode = '0526024000551';
+        $data = array('barcode'=> $barcode);
+        $branchWiseReceiveItem =  $em->getRepository('InventoryBundle:Delivery')->branchWiseReceiveItem($user , $data);
+        var_dump($branchWiseReceiveItem);
+        exit;
+        $branchWiseSalesItem =  $em->getRepository('InventoryBundle:Delivery')->branchWiseSalesItem($user , $purchaseItem);
+        $branchWiseSalesReturnItem =  $em->getRepository('InventoryBundle:Delivery')->branchWiseSalesReturnItem($user, $purchaseItem);
+        $branchWiseOngoingSalesItem =  $em->getRepository('InventoryBundle:Delivery')->branchWiseOngoingSalesItem($user, $purchaseItem);
+        $ongoingSalesItem =  $em->getRepository('InventoryBundle:Delivery')->ongoingSalesItem($user, $purchaseItem);
+        $branchWiseDeliveryReturnItem =  $em->getRepository('InventoryBundle:Delivery')->branchWiseDeliveryReturnItem($user,$purchaseItem);
+        return $this->render('InventoryBundle:BranchReport:branchWiseBarcodeProductStock.html.twig', array(
+            'entity'          => $purchaseItem,
+            'branches'          => $branches,
+            'branchWiseReceiveItem' => $branchWiseReceiveItem,
+            'branchWiseSalesItem' => $branchWiseSalesItem,
+            'branchWiseSalesReturnItem' => $branchWiseSalesReturnItem,
+            'ongoingSalesItem' => $ongoingSalesItem,
+            'branchWiseOngoingSalesItem' => $branchWiseOngoingSalesItem,
+            'branchWiseDeliveryReturnItem' => $branchWiseDeliveryReturnItem,
+        ));
+
     }
 
     public function stockItemAction()

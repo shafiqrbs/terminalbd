@@ -509,6 +509,7 @@ class Builder extends ContainerAware
             $menu['Inventory']->addChild('Manage Stock')->setAttribute('icon', 'icon icon-reorder')->setAttribute('dropdown', true);
             $menu['Inventory']['Manage Stock']->addChild('Stock Item', array('route' => 'item'))
                 ->setAttribute('icon', 'icon-hdd');
+            $menu['Inventory']['Manage Stock']->addChild('Barcode wise Branch Stock', array('route' => 'inventory_barcode_branch_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Manage Stock']->addChild('Stock Item Details', array('route' => 'inventory_stockitem'))
                 ->setAttribute('icon', 'icon-hdd');
         }
@@ -520,10 +521,12 @@ class Builder extends ContainerAware
             $menu['Inventory']['Manage Stock']->addChild('Damage', array('route' => 'inventory_damage'))
                 ->setAttribute('icon', ' icon-trash');
         }
+
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
             $menu['Inventory']['Manage Stock']->addChild('Vendor Item', array('route' => 'inventory_purchasevendoritem'))
                 ->setAttribute('icon', 'icon-info-sign');
         }
+
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH')) {
 
             if ($inventory->getIsBranch() == 1) {
@@ -562,7 +565,8 @@ class Builder extends ContainerAware
                     ->setAttribute('icon', 'icon-bar-chart')
                     ->setAttribute('dropdown', true);
                 $menu['Inventory']['Branch Reports']->addChild('Stock Overview', array('route' => 'inventory_branch_report_overview'))->setAttribute('icon', 'icon-bar-chart');
-                $menu['Inventory']['Branch Reports']->addChild('Branch Stock', array('route' => 'inventory_branch_report_stock'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Inventory']['Branch Reports']->addChild('Item wise Stock', array('route' => 'inventory_branch_report_stock'))->setAttribute('icon', 'icon-bar-chart');
+                $menu['Inventory']['Branch Reports']->addChild('Barcode wise Stock', array('route' => 'inventory_branch_report_barcode_item'))->setAttribute('icon', 'icon-bar-chart');
                 $menu['Inventory']['Branch Reports']->addChild('Item Stock', array('route' => 'inventory_branch_report_item'))->setAttribute('icon', 'icon-bar-chart');
                 $menu['Inventory']['Branch Reports']->addChild('Sales Item', array('route' => 'inventory_branch_report_sales'))->setAttribute('icon', 'icon-bar-chart');
             }

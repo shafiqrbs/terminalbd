@@ -80,10 +80,10 @@
                                                     {{ itemBranchStocks['stockReceiveItem'][salesItem.purchaseItem.id]|default(0) + itemBranchStocks['stockSalesReturnItem'][salesItem.purchaseItem.id]|default(0) - itemBranchStocks['stockSalesItem'][salesItem.purchaseItem.id]|default(0)- itemBranchStocks['stockReturnItem'][salesItem.purchaseItem.id]|default(0) }}
                                                 {% endif %}
                                             </td>
-                                            <th class="numeric" data-url="{{ path('inventory_branch_wise_barcode_product_stock',{'barcode' : salesItem.purchaseItem.barcode }) }}" >Details</th>
+                                            <th class="numeric"  ><a href="javascript:" id="{{ salesItem.purchaseItem.barcode }}" data-url="{{ path('inventory_barcode_wise_branch_stock',{'barcode' : salesItem.purchaseItem.barcode }) }}" class="btn mini purple itemBranchPreview">Details</a></th>
                                         </tr>
                                         <tr>
-                                            <td colspan="10">
+                                            <td colspan="10" id="branchDetails-{{ salesItem.purchaseItem.barcode }}">
 
                                             </td>
                                         </tr>

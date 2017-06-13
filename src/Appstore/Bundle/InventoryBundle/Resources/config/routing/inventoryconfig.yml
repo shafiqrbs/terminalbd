@@ -24,18 +24,22 @@ inventoryconfig_data_import_form:
     defaults: { _controller: "InventoryBundle:InventoryConfig:excelDataImportForm" }
     methods:  GET
 
-inventoryconfig_data_import:
-    path:     /{id}/data-import
-    defaults: { _controller: "InventoryBundle:InventoryConfig:excelDataImport" }
-
 
 inventoryconfig_update:
     path:     /{id}/update
     defaults: { _controller: "InventoryBundle:InventoryConfig:update" }
     methods:  [POST, PUT]
 
-inventoryconfig_delete:
-    path:     /{id}/delete
-    defaults: { _controller: "InventoryBundle:InventoryConfig:delete" }
-    methods:  [POST, DELETE]
+
+inventory_branches_search:
+    path:     /search
+    defaults: { _controller: "DomainUserBundle:Branches:autoSearch" }
+    options:
+            expose: true
+
+inventory_branches_name:
+    path:      /{branch}/branch-name
+    defaults: { _controller: "DomainUserBundle:Branches:searchBranchName" }
+    options:
+            expose: true
 

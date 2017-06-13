@@ -87,6 +87,7 @@ class StockItemRepository extends EntityRepository
             $brand = isset($data['brand'])? $data['brand'] :'';
             $category = isset($data['category'])? $data['category'] :'';
             $unit = isset($data['unit'])? $data['unit'] :'';
+            $barcode = isset($data['barcode'])? $data['barcode'] :'';
 
             if (!empty($item)) {
                 $qb->andWhere("m.name = :name");
@@ -1051,6 +1052,139 @@ class StockItemRepository extends EntityRepository
             }
         }
     }
+
+
+    public function bracodeWiseBranchItem($user , $purchaseItem)
+    {
+        $table = '';
+        $em = $this->_em;
+        $globalOption = $user->getGlobalOption();
+        if($purchaseItem){
+            $table .= '<table class="table table-bordered table-striped table-condensed flip-content ">';
+            $table .= '<thead class="flip-content ">';
+            $table .= '<tr class="head-blue" >';
+            $table .= '<td>Barcode</td>';
+            $table .= '<td>Item Name</td>';
+            $table .= '<td>Central Stock</td>';
+            $branches = $globalOption->getBranches();
+            foreach ($branches as $branch) {
+                $table .= '<td>' .$branch->getName().'</td>';
+            }
+            $table .= '<td>Remaining Stock</td>';
+            $table .='</tr>';
+            $table .= '</thead>';
+
+            foreach ($purchaseItem as $row){
+                $table .='<tr>';
+                $table .= '<td>'.$row['barcode'].'</td>';
+                $table .= '<td>'.$row['name'].'</td>';
+                $table .= '<td>'.$row['quantity'].'</td>';
+                $branchQnt = 0;
+                $branchTotalReceiveQnt = 0;
+                foreach ($branches as $branch) {
+
+                    $data = array('barcode' => $row['barcode']);
+                    $receiveItem =  $em->getRepository('InventoryBundle:Delivery')->getStockOverview( $globalOption->getInventoryConfig()->getId(), $branch->getId() , $data);
+                    $returnItem =  $em->getRepository('InventoryBundle:Delivery')->getReturnOverview( $globalOption->getInventoryConfig()->getId(), $branch->getId() , $data);
+                    $ongoingItem =  $em->getRepository('InventoryBundle:Delivery')->getSalesOngoingOverview( $globalOption->getInventoryConfig()->getId(), $branch->getId() , $data);
+                    $salesItem =  $em->getRepository('InventoryBundle:Delivery')->getSalesOverview( $globalOption->getInventoryConfig()->getId(), $branch->getId() , $data);
+                    $salesReturnItem =  $em->getRepository('InventoryBundle:Delivery')->getSalesReturnOverview( $globalOption->getInventoryConfig()->getId(), $branch->getId() , $data);
+
+                    $receiveItemQnt = !empty($receiveItem) ? (int)$receiveItem['quantity'] :0;
+                    $returnItemQnt = !empty($returnItem) ? (int)$returnItem['quantity'] :0;
+                    $ongoingItemQnt = !empty($ongoingItem) ? (int)$ongoingItem['quantity'] :0;
+                    $salesItemQnt = !empty($salesItem) ? (int)$salesItem['quantity'] :0;
+                    $salesReturnItemQnt = !empty($salesReturnItem) ? (int)$salesReturnItem['quantity'] :0;
+
+                    $branchSalesQnt = ( $ongoingItemQnt + $salesItemQnt + $returnItemQnt);
+                    $branchRemainingQnt = ( $receiveItemQnt + $salesReturnItemQnt) - $branchSalesQnt ;
+                    $currentBranchQnt = ($receiveItemQnt - $returnItemQnt);
+                    $branchTotalReceiveQnt += $currentBranchQnt;
+
+                    if($receiveItemQnt > 0){
+                        $table .= '<td>'.$receiveItemQnt.' - '.$branchSalesQnt.' = <b>'.$branchRemainingQnt.'</b></td>';
+                    }else{
+                        $table .= '<td>&nbsp;</td>';
+                    }
+
+                }
+                $remainingQnt = ($row['quantity'] - $branchTotalReceiveQnt);
+                $table .= '<td><b>'.$remainingQnt.'</b></td>';
+                $table .='</tr>';
+            }
+            $table .='</table>';
+
+            return $table;
+
+        }else{
+
+            return false;
+        }
+
+
+
+    }
+
+
+    public function singleBarcodeWiseBranchItem($user , $row)
+    {
+        $table = '';
+        $em = $this->_em;
+        $globalOption = $user->getGlobalOption();
+        if($row){
+            $table .= '<table class="table table-bordered table-striped table-condensed flip-content ">';
+            $branches = $globalOption->getBranches();
+                $table .='<tr>';
+                $table .= '<td>Central Stock</td>';
+                $table .= '<td>'.$row['quantity'].'</td>';
+                $table .='</tr>';
+                $totalRemainingQnt = 0;
+                foreach ($branches as $branch) {
+
+                    $table .='<tr>';
+                    $table .= '<td>'.$branch->getName().'</td>';
+                    $data = array('barcode' => $row['barcode']);
+                    $receiveItem =  $em->getRepository('InventoryBundle:Delivery')->getStockOverview( $globalOption->getInventoryConfig()->getId(), $branch->getId() , $data);
+                    $returnItem =  $em->getRepository('InventoryBundle:Delivery')->getReturnOverview( $globalOption->getInventoryConfig()->getId(), $branch->getId() , $data);
+                    $ongoingItem =  $em->getRepository('InventoryBundle:Delivery')->getSalesOngoingOverview( $globalOption->getInventoryConfig()->getId(), $branch->getId() , $data);
+                    $salesItem =  $em->getRepository('InventoryBundle:Delivery')->getSalesOverview( $globalOption->getInventoryConfig()->getId(), $branch->getId() , $data);
+                    $salesReturnItem =  $em->getRepository('InventoryBundle:Delivery')->getSalesReturnOverview( $globalOption->getInventoryConfig()->getId(), $branch->getId() , $data);
+
+                    $receiveItemQnt = !empty($receiveItem) ? (int)$receiveItem['quantity'] :0;
+                    $returnItemQnt = !empty($returnItem) ? (int)$returnItem['quantity'] :0;
+                    $ongoingItemQnt = !empty($ongoingItem) ? (int)$ongoingItem['quantity'] :0;
+                    $salesItemQnt = !empty($salesItem) ? (int)$salesItem['quantity'] :0;
+                    $salesReturnItemQnt = !empty($salesReturnItem) ? (int)$salesReturnItem['quantity'] :0;
+
+                    $branchSalesQnt = ( $ongoingItemQnt + $salesItemQnt + $returnItemQnt);
+                    $branchRemainingQnt = ( $receiveItemQnt + $salesReturnItemQnt) - $branchSalesQnt ;
+                    if($receiveItemQnt > 0){
+                        $totalRemainingQnt += $branchRemainingQnt;
+                        $table .= '<td>'.$receiveItemQnt.' - '.$branchSalesQnt.' = <b>'.$branchRemainingQnt.'</b></td>';
+                    }else{
+                        $table .= '<td>&nbsp;</td>';
+                    }
+                    $table .='</tr>';
+
+                }
+                $table .='<tr>';
+                $table .= '<td>Central Remaining Stock</td>';
+                $table .= '<td>'.( $row['quantity'] - (int)$totalRemainingQnt) .'</td>';
+                $table .='</tr>';
+
+            $table .='</table>';
+
+            return $table;
+
+        }else{
+
+            return false;
+        }
+
+
+
+    }
+
 
 
 

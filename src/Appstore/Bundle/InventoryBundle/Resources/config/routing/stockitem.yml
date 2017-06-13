@@ -11,3 +11,14 @@ inventory_stockitem_show:
 inventory_stockitem_print:
     path:     /print
     defaults: { _controller: "InventoryBundle:StockItem:print" }
+
+inventory_barcode_branch_stock:
+    path:     /barcode-wise-branch-stock
+    defaults: { _controller: "InventoryBundle:StockItem:barcodeBranchStock" }
+
+inventory_barcode_wise_branch_stock:
+    path:     /{barcode}/single-barcode-wise-branch-stock
+    defaults: { _controller: "InventoryBundle:StockItem:singleBarcodeBranchStock" }
+    methods:  GET
+    options:
+            expose: true

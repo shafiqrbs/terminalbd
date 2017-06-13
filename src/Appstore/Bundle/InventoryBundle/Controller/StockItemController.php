@@ -5,6 +5,7 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 
 /**
@@ -74,6 +75,43 @@ class StockItemController extends Controller
         return $this->render('InventoryBundle:StockItem:show.html.twig', array(
             'entity'      => $item,
         ));
+    }
+
+    public function barcodeBranchStockAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $data = $_REQUEST;
+        $branchStocks ='';
+        $entities = $em->getRepository('InventoryBundle:PurchaseItem')->getPurchaseItems($user->getGlobalOption(),$data);
+        $pagination = $this->paginate($entities);
+        if($entities){
+            $branchStocks = $em->getRepository('InventoryBundle:StockItem')->bracodeWiseBranchItem($user,$pagination);
+        }
+        return $this->render('InventoryBundle:BranchReport:barcodeWiseBranchStock.html.twig', array(
+            'branchStocks'          => $branchStocks,
+            'pagination'            => $pagination,
+            'searchForm'            => $data,
+        ));
+
+    }
+
+    public function singleBarcodeBranchStockAction($barcode)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $data = array('barcode'=>$barcode);
+        $branchStocks ='';
+        $entities = $em->getRepository('InventoryBundle:PurchaseItem')->getPurchaseItems($user->getGlobalOption(),$data);
+        if($entities){
+            $purchaseItem = $entities->getArrayResult()[0] ;
+            $branchStocks = $em->getRepository('InventoryBundle:StockItem')->singleBarcodeWiseBranchItem($user, $purchaseItem);
+        }
+        return new Response($branchStocks);
+        exit;
+
     }
 
 
