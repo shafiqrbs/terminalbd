@@ -46,7 +46,7 @@ class DeliveryItemRepository extends EntityRepository
 
         $totalReceive = ($receiveQnt - $returnQnt);
         $totalItem = !empty($totalReceive) > 0 ? $totalReceive :0;
-        return (int) 12;
+        return (int) $totalItem;
     }
 
     public function stockReceiveSinglePurchaseItem(User $user,$item)
