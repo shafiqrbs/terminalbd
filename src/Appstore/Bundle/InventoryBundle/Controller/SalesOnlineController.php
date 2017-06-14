@@ -69,6 +69,7 @@ class SalesOnlineController extends Controller
         $pagination = $this->paginate($entities);
         return $this->render('InventoryBundle:SalesOnline:customer.html.twig', array(
             'entities' => $pagination,
+            'inventory' => $globalOption->getInventoryConfig(),
             'searchForm' => $data,
         ));
     }
@@ -316,10 +317,12 @@ class SalesOnlineController extends Controller
     {
 
 
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig()->getId();
-        if ($inventory == $entity->getInventoryConfig()->getId()) {
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+
+        if ($inventory->getId() == $entity->getInventoryConfig()->getId()) {
             return $this->render('InventoryBundle:SalesOnline:show.html.twig', array(
                 'entity' => $entity,
+                'inventoryConfig' => $inventory,
             ));
         } else {
             return $this->redirect($this->generateUrl('inventory_salesonline'));
@@ -605,6 +608,7 @@ class SalesOnlineController extends Controller
         }elseif (!empty($entity->getCourierInvoice()) and $data['value'] == 'Courier'){
             $entity->setProcess($data['value']);
         }
+        $entity->setapprovedBy($this->getUser());
         if(!empty($this->getUser()->getProfile()->getBranches())){
             $entity->setBranches($this->getUser()->getProfile()->getBranches());
         }
@@ -644,10 +648,6 @@ class SalesOnlineController extends Controller
             $entity->setPaymentStatus('Paid');
             $entity->setPayment($entity->getPayment() + $entity->getDue());
             $entity->setDue($entity->getTotal() - $entity->getPayment());
-            $entity->setApprovedBy($this->getUser());
-            if(!empty($this->getUser()->getProfile()->getBranches())){
-                $entity->setBranches($this->getUser()->getProfile()->getBranches());
-            }
             $em->flush();
             $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
             $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
@@ -669,10 +669,6 @@ class SalesOnlineController extends Controller
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
             $entity->setPaymentStatus('Cancel');
-            $entity->setApprovedBy($this->getUser());
-            if(!empty($this->getUser()->getProfile()->getBranches())){
-                $entity->setBranches($this->getUser()->getProfile()->getBranches());
-            }
             $em->flush();
             return new Response('success');
         } else {

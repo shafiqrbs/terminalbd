@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
+use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -95,8 +96,15 @@ class SalesRepository extends EntityRepository
     public function salesLists( User $user , $mode = '', $data)
     {
 
+        /* @var InventoryConfig $config */
         $config = $user->getGlobalOption()->getInventoryConfig();
         $branch = $user->getProfile()->getBranches();
+        $existArray = array(
+            'ROLE_DOMAIN_INVENTORY_MANAGER',
+            'ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER',
+            'ROLE_DOMAIN_INVENTORY_APPROVE',
+            'ROLE_DOMAIN_MANAGER'
+        );
 
         $qb = $this->createQueryBuilder('s');
         $qb->leftJoin('s.customer', 'c');
@@ -105,9 +113,13 @@ class SalesRepository extends EntityRepository
         $qb->setParameter('config', $config);
         $qb->andWhere("s.salesMode = :mode");
         $qb->setParameter('mode', $mode);
-        if ($branch and $mode != 'online'){
-            $qb->andWhere("s.branches = :branch");
-            $qb->setParameter('branch', $branch);
+        if ($branch and $mode == 'online'){
+
+            $qb->andWhere("s.branches is NULL OR s.branches =".$branch->getId());
+
+        }elseif($config->getIsBranch() == 1 and empty($branch) and $user->getCheckRoleGlobal(array('ROLE_DOMAIN_INVENTORY_SALES_ONLINE')) and ! $user->getCheckRoleGlobal($existArray) ){
+
+            $qb->andWhere("s.createdBy =".$user->getId());
         }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.updated','DESC');

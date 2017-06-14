@@ -600,8 +600,8 @@ class User extends BaseUser
     public function getRole()
     {
         $role = $this->getRoles();
-
         return $role[0];
+
     }
 
 
@@ -701,14 +701,6 @@ class User extends BaseUser
     public function getSiteSetting()
     {
         return $this->siteSetting;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getBlackout()
-    {
-        return $this->blackout;
     }
 
 
@@ -994,6 +986,18 @@ class User extends BaseUser
 
     }
 
+
+    public function getCheckRoleGlobal($existRole = NULL)
+    {
+
+        $result = array_intersect($existRole, $this->getRoles());
+        if(empty($result)){
+            return false;
+        }else{
+            return true;
+        }
+
+    }
     /**
      * @return PreOrder
      */
