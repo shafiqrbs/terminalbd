@@ -82,6 +82,7 @@
 
 'assets/template/desktop/js/jquery.js'
 'assets/template/desktop/js/bootstrap.min.js'
+'assets/template/plugin/matchHeight/height-match.js'
 'assets/template/plugin/jquery-inputmask/jquery.inputmask.bundle.min.js'
 'assets/template/plugin/numeric/jquery.numeric.js'
 'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
@@ -90,7 +91,6 @@
 'assets/template/plugin/select2/select2.js'
 'assets/template/plugin/wow/js/wow.min.js'
 'assets/template/plugin/treeview/treeview.js'
-'assets/template/plugin/matchHeight/height-match.js'
 'assets/template/plugin/side.toolbar/vcore.sidebar.js'
 'assets/template/plugin/range-slider/bootstrap-slider.min.js'
 'assets/template/plugin/textillate/assets/jquery.fittext.js'
@@ -165,6 +165,7 @@
         );
         $('#list').click(function(event){event.preventDefault();$('#product .item').addClass('list-group-item');});
         $('#grid').click(function(event){event.preventDefault();$('#product .item').removeClass('list-group-item');
+
         $('#products .item').addClass('grid-group-item');});
 
         $('body').append('<div id="toTop" class="btn btn-primary color1"><span class="glyphicon glyphicon-chevron-up"></span></div>');
