@@ -103,7 +103,8 @@ class SalesRepository extends EntityRepository
             'ROLE_DOMAIN_INVENTORY_MANAGER',
             'ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER',
             'ROLE_DOMAIN_INVENTORY_APPROVE',
-            'ROLE_DOMAIN_MANAGER'
+            'ROLE_DOMAIN_MANAGER',
+            'ROLE_DOMAIN'
         );
 
         $qb = $this->createQueryBuilder('s');
