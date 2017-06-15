@@ -86,12 +86,9 @@
     {% javascripts
     '@FrontendBundle/Resources/public/template/js/common.js'
     '@FrontendBundle/Resources/public/template/js/product.js'
-    '@FrontendBundle/Resources/public/template/js/revolutionSlider.js'
-    '@FrontendBundle/Resources/public/js/kmaps.min.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-    <script src="//maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDmior4xLqsriysUeQhtdSawc8yjDyaWaw"></script>
 {% endblock %}
 {% block documentready %}
     {{ parent() }}

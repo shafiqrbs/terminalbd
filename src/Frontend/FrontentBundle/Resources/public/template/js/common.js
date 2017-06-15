@@ -54,7 +54,7 @@ $(document).on( "click", ".emailSender", function(e){
         owlProduct.trigger('owl.prev');
     });
 
-    jQuery('#rev_slider').show().revolution({
+   /* jQuery('#rev_slider').show().revolution({
         sliderType:"standard",
         sliderLayout:"fullwidth",
         responsiveLevels: [1240, 1024, 550, 480],
@@ -63,7 +63,7 @@ $(document).on( "click", ".emailSender", function(e){
         stopAfterLoops: -1,
         stopAtSlide: -1,
     });
-
+*/
     var owlMain = $("#main-slider");
 
     owlMain.owlCarousel({

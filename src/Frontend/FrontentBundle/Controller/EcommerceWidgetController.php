@@ -214,9 +214,6 @@ class EcommerceWidgetController extends Controller
 
     }
 
-
-
-
     public function promotionShortWidgetAction(GlobalOption $globalOption)
     {
 
