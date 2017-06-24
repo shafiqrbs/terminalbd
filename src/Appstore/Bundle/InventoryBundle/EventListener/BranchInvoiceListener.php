@@ -23,7 +23,7 @@ class BranchInvoiceListener
 
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);
-            $entity->setInvoice(sprintf("%s%s", $datetime->format('mY'), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
+            $entity->setInvoice(sprintf("%s%s%s",$entity->getInventoryConfig()->getGlobalOption()->getId(), $datetime->format('mY'), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
         }
     }
 
@@ -35,8 +35,8 @@ class BranchInvoiceListener
      */
     public function getLastCode(LifecycleEventArgs $args, $datetime, $entity)
     {
-        $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
-        $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
+        $today_startdatetime = $datetime->format('Y-m-01 00:00:00');
+        $today_enddatetime = $datetime->format('Y-m-t 23:59:59');
 
 
         $entityManager = $args->getEntityManager();

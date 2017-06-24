@@ -146,6 +146,7 @@ class ItemRepository extends EntityRepository
         return  $qb;
 
     }
+
     public function getLastId($inventory)
     {
         $qb = $this->_em->createQueryBuilder();

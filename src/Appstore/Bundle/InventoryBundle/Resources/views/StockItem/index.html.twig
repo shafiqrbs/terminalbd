@@ -122,8 +122,6 @@
                                 <th class="numeric" >P.Return</th>
                                 <th class="numeric" >Sales</th>
                                 <th class="numeric" >S.Return</th>
-                                <th class="numeric" >Online</th>
-                                <th class="numeric" >O.Return</th>
                                 <th class="numeric" >Damage</th>
                                 <th class="numeric" >Remaining</th>
                                 <th class="numeric" >Action</th>
@@ -141,8 +139,6 @@
                                     <td class="numeric" >{{ entity.purchaseQuantityReturn }}</td>
                                     <td class="numeric" >{{ entity.salesQuantity }}</td>
                                     <td class="numeric" >{{ entity.salesQuantityReturn }}</td>
-                                    <td class="numeric" >{{ entity.onlineOrderQuantity }}</td>
-                                    <td class="numeric" >{{ entity.onlineOrderQuantityReturn }}</td>
                                     <td class="numeric" >{{ entity.damageQuantity }}</td>
                                     {#  <td class="numeric" >{{ entity.minQnt }}</td>
                                          <td class="numeric" >{{ entity.maxQnt }}</td>#}
@@ -152,7 +148,7 @@
                                     </th>
                                 </tr>
                                 <tr id="show-{{ entity.id }}" class="showing-overview">
-                                    <td colspan="13">
+                                    <td colspan="11">
                                         {% if entity.stockItems is defined and  entity.stockItems is not empty  %}
                                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
@@ -160,13 +156,12 @@
                                                 <tr class="head-blue">
                                                     <th class="numeric" >Created</th>
                                                     <th class="numeric" >Process</th>
+                                                    <th class="numeric" >Barcode</th>
                                                     <th class="numeric" >Invoice</th>
                                                     <th class="numeric" >Purchase</th>
                                                     <th class="numeric" >P.Return</th>
                                                     <th class="numeric" >Sales</th>
                                                     <th class="numeric" >S.Return</th>
-                                                    <th class="numeric" >Online</th>
-                                                    <th class="numeric" >O.Return</th>
                                                     <th class="numeric" >Damage</th>
                                                 </tr>
                                                 </thead>
@@ -175,6 +170,7 @@
                                                     <tr>
                                                         <td class="numeric" >{{ stockItem.created|date('d-m-Y') }}</td>
                                                         <td class="numeric" >{{ stockItem.process }}</td>
+                                                        <td class="numeric" > {{ stockItem.purchaseItem.barcode }}</td>
                                                         <td class="numeric" >
                                                             {% if(stockItem.process == 'purchase') %}
                                                                 {{ stockItem.purchaseItem.purchase.grn }}
@@ -186,19 +182,13 @@
                                                                 {{ stockItem.salesItem.sales.invoice }}
                                                             {% elseif (stockItem.process == 'salesReturn') %}
                                                                 {{ stockItem.salesReturnItem.salesReturn.invoice }}
-                                                            {% elseif (stockItem.process == 'online') %}
-                                                                {{ stockItem.orderItem.order.invoice }}
-                                                            {% elseif (stockItem.process == 'onlineRetrun') %}
-                                                                {{ stockItem.orderReturnItem.orderReturn.invoice }}
                                                             {% elseif (stockItem.process == 'damage') %}Damage{% endif %}
                                                         </td>
                                                         <td class="numeric" > {% if(stockItem.process == 'purchase') %}  {{ stockItem.quantity }} {% endif %}</td>
                                                         <td class="numeric" > {% if(stockItem.process == 'purchaseReturn') %}  {{ stockItem.quantity }} {% endif %}</td>
                                                         <td class="numeric" > {% if(stockItem.process == 'sales') %}  {{ stockItem.quantity }} {% endif %}</td>
                                                         <td class="numeric" > {% if(stockItem.process == 'salesReturn') %}  {{ stockItem.quantity }} {% endif %}</td>
-                                                        <td class="numeric" > {% if(stockItem.process == 'online') %}  {{ stockItem.quantity }} {% endif %}</td>
-                                                        <td class="numeric" > {% if(stockItem.process == 'onlineRetrun') %}  {{ stockItem.quantity }} {% endif %}</td>
-                                                        <td class="numeric" > {% if(stockItem.process == 'damage') %}  {{ stockItem.quantity }} {% endif %}</td>
+                                                         <td class="numeric" > {% if(stockItem.process == 'damage') %}  {{ stockItem.quantity }} {% endif %}</td>
 
                                                     </tr>
                                                 {% endfor %}

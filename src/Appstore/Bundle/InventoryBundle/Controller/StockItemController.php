@@ -45,6 +45,25 @@ class StockItemController extends Controller
         ));
     }
 
+    public function barcodeStockAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $data = $_REQUEST;
+        $branchStocks ='';
+        $entities = $em->getRepository('InventoryBundle:PurchaseItem')->getPurchaseItems($user->getGlobalOption(),$data);
+        $pagination = $this->paginate($entities);
+        if($entities){
+            $branchStocks = $em->getRepository('InventoryBundle:StockItem')->barcodeWiseStock($user,$pagination);
+        }
+        return $this->render('InventoryBundle:StockItem:barcodeStock.html.twig', array(
+            'branchStocks'          => $branchStocks,
+            'pagination'            => $pagination,
+            'searchForm'            => $data,
+        ));
+    }
+
     public function indexResultsAction()
     {
         $datatable = $this->get('app.datatable.stockitem');
@@ -87,9 +106,9 @@ class StockItemController extends Controller
         $entities = $em->getRepository('InventoryBundle:PurchaseItem')->getPurchaseItems($user->getGlobalOption(),$data);
         $pagination = $this->paginate($entities);
         if($entities){
-            $branchStocks = $em->getRepository('InventoryBundle:StockItem')->bracodeWiseBranchItem($user,$pagination);
+            $branchStocks = $em->getRepository('InventoryBundle:StockItem')->barcodeWiseBranchItem($user,$pagination);
         }
-        return $this->render('InventoryBundle:BranchReport:barcodeWiseBranchStock.html.twig', array(
+        return $this->render('InventoryBundle:StockItem:barcodeWiseStock.html.twig', array(
             'branchStocks'          => $branchStocks,
             'pagination'            => $pagination,
             'searchForm'            => $data,

@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Core\UserBundle\Entity\User;
@@ -34,6 +35,7 @@ class SalesRepository extends EntityRepository
             $salesBy =    isset($data['toUser'])? $data['toUser'] :'';
             $customer =    isset($data['customer'])? $data['customer'] :'';
             $paymentStatus =    isset($data['paymentStatus'])? $data['paymentStatus'] :'';
+            $mode =    isset($data['mode'])? $data['mode'] :'';
 
 
             if (!empty($startDate)) {
@@ -89,6 +91,11 @@ class SalesRepository extends EntityRepository
                 $qb->andWhere("s.paymentStatus = :paymentStatus");
                 $qb->setParameter('paymentStatus', $paymentStatus);
             }
+
+            if(!empty($mode)){
+                $qb->andWhere("s.salesMode = :mode");
+                $qb->setParameter('mode', $mode);
+            }
         }
 
     }
@@ -121,6 +128,25 @@ class SalesRepository extends EntityRepository
         }elseif($config->getIsBranch() == 1 and empty($branch) and $user->getCheckRoleGlobal(array('ROLE_DOMAIN_INVENTORY_SALES_ONLINE')) and ! $user->getCheckRoleGlobal($existArray) ){
 
             $qb->andWhere("s.createdBy =".$user->getId());
+        }
+        $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('s.updated','DESC');
+        $result = $qb->getQuery();
+        return $result;
+
+    }
+
+    public function salesReport( InventoryConfig $inventory , $data)
+    {
+
+        $branch =    isset($data['branch'])? $data['branch'] :'';
+        $qb = $this->createQueryBuilder('s');
+        $qb->leftJoin('s.customer', 'c');
+        $qb->leftJoin('s.salesBy', 'u');
+        $qb->where("s.inventoryConfig = :config");
+        $qb->setParameter('config', $inventory);
+        if(!empty($branch)){
+            $qb->andWhere("s.branches =".$branch);
         }
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('s.updated','DESC');
@@ -184,6 +210,19 @@ class SalesRepository extends EntityRepository
 
         return $sales;
 
+    }
+
+    public function updateSalesPaymentReceive(AccountSales $accountSales)
+    {
+        /* @var Sales $sales **/
+        $sales = $accountSales->getSales();
+        $sales->setPayment($sales->getPayment() + $accountSales->getAmount());
+        $sales->setDue($sales->getDue() - $accountSales->getAmount());
+        if($sales->getDue() == 0 ){
+            $sales->setPaymentStatus('Paid');
+        }
+        $this->_em->persist($sales);
+        $this->_em->flush();
     }
 
     public function todaySalesOverview(User $user , $mode='')

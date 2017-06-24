@@ -413,7 +413,7 @@ class Builder extends ContainerAware
                                 ->setAttribute('dropdown', true);
                             $menu['Inventory']['Point of Sales']->addChild('Pos', array('route' => 'inventory_sales_new'))->setAttribute('icon', 'icon-shopping-cart');
                             $menu['Inventory']['Point of Sales']->addChild('Sales', array('route' => 'inventory_sales'))->setAttribute('icon', ' icon-th-list');
-                            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
+                            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER') or $securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER')) {
                                 $menu['Inventory']['Point of Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
                             }
                             $menu['Inventory']['Point of Sales']->addChild('Customer', array('route' => 'inventory_customer'))->setAttribute('icon', 'icon icon-user');
@@ -445,7 +445,7 @@ class Builder extends ContainerAware
                             $menu['Inventory']['General Sales']->addChild('Customers', array('route' => 'inventory_salesgeneral_customer'))->setAttribute('icon', 'icon icon-user');
                             $menu['Inventory']['General Sales']->addChild('Add Sales', array('route' => 'inventory_salesgeneral_new'))->setAttribute('icon', ' icon-plus');
                             $menu['Inventory']['General Sales']->addChild('Sales', array('route' => 'inventory_salesgeneral'))->setAttribute('icon', ' icon-th-list');
-                            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
+                            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER') or $securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER') ) {
                                 $menu['Inventory']['General Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
                             }
                         }
@@ -463,7 +463,7 @@ class Builder extends ContainerAware
                             $menu['Inventory']['Manual Sales']->addChild('Customers', array('route' => 'inventory_salesmanual_customer'))->setAttribute('icon', 'icon icon-user');
                             $menu['Inventory']['Manual Sales']->addChild('Add Sales', array('route' => 'inventory_salesmanual_add'))->setAttribute('icon', ' icon-plus');
                             $menu['Inventory']['Manual Sales']->addChild('Sales', array('route' => 'inventory_salesmanual'))->setAttribute('icon', ' icon-th-list');
-                            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER')) {
+                            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_MANAGER') or $securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH_MANAGER')) {
                                 $menu['Inventory']['Manual Sales']->addChild('Sales Return', array('route' => 'inventory_salesreturn'))->setAttribute('icon', 'icon-share-alt');
                             }
                         }
@@ -509,7 +509,8 @@ class Builder extends ContainerAware
             $menu['Inventory']->addChild('Manage Stock')->setAttribute('icon', 'icon icon-reorder')->setAttribute('dropdown', true);
             $menu['Inventory']['Manage Stock']->addChild('Stock Item', array('route' => 'item'))
                 ->setAttribute('icon', 'icon-hdd');
-            $menu['Inventory']['Manage Stock']->addChild('Barcode wise Branch Stock', array('route' => 'inventory_barcode_branch_stock'))->setAttribute('icon', 'icon-bar-chart');
+            $menu['Inventory']['Manage Stock']->addChild('Barcode wise Stock', array('route' => 'inventory_barcode_branch_stock'))->setAttribute('icon', 'icon-bar-chart');
+            $menu['Inventory']['Manage Stock']->addChild('Barcode Stock Details', array('route' => 'inventory_barcode_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Manage Stock']->addChild('Stock Item Details', array('route' => 'inventory_stockitem'))
                 ->setAttribute('icon', 'icon-hdd');
         }
@@ -556,6 +557,7 @@ class Builder extends ContainerAware
             $menu['Inventory']['Reports']->addChild('Operational Stock', array('route' => 'inventory_report_operational_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Reports']->addChild('Group Stock', array('route' => 'inventory_report_group_stock'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Reports']->addChild('Purchase with price', array('route' => 'inventory_report_purchase'))->setAttribute('icon', 'icon-bar-chart');
+            $menu['Inventory']['Reports']->addChild('Periodic Sales Item', array('route' => 'inventory_report_sales_item'))->setAttribute('icon', 'icon-bar-chart');
             $menu['Inventory']['Reports']->addChild('Sales with price', array('route' => 'inventory_report_sales'))->setAttribute('icon', 'icon-bar-chart');
 
         }

@@ -26,9 +26,9 @@ function ApproveProcess(){
         $.ajax({
             url: url,
             type: 'GET',
-            beforeSend: function() {
+            /*beforeSend: function() {
                 $('.tabbable').show().addClass('ajax-loading').fadeIn(3000);
-            },
+            },*/
             success: function (response) {
                 location.reload();
             },
@@ -46,9 +46,9 @@ function ApproveProcess(){
         $.ajax({
             url: url,
             type: 'GET',
-            beforeSend: function() {
+            /*beforeSend: function() {
                 $('.tabbable').show().addClass('ajax-loading').fadeIn(3000);
-            },
+            },*/
             success: function (response) {
                 location.reload();
             },
@@ -58,7 +58,6 @@ function ApproveProcess(){
     $(".select2Item").select2({
 
         placeholder: "Search item, color, size & brand name",
-        allowClear: true,
         ajax: {
             url: Routing.generate('item_search'),
             dataType: 'json',
@@ -96,7 +95,6 @@ function ApproveProcess(){
     $(".branchSales2Item").select2({
 
         placeholder: "Search item, color, size & brand name",
-        allowClear: true,
         ajax: {
             url: Routing.generate('item_search'),
             dataType: 'json',
@@ -135,7 +133,6 @@ function ApproveProcess(){
     $("#barcodeNo").select2({
 
         placeholder: "Enter specific barcode",
-        allowClear: true,
         ajax: {
 
             url: Routing.generate('inventory_purchaseitem_search'),
@@ -169,7 +166,6 @@ function ApproveProcess(){
     $(".select2Barcode").select2({
 
         placeholder: "Enter specific barcode",
-        allowClear: true,
         ajax: {
 
             url: Routing.generate('inventory_purchaseitem_search'),

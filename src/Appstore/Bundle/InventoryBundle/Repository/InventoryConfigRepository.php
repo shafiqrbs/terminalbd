@@ -31,9 +31,6 @@ class InventoryConfigRepository extends EntityRepository
         $ExcelImporter = $em->createQuery('DELETE InventoryBundle:ExcelImporter e WHERE e.inventoryConfig = '.$config);
         $ExcelImporter->execute();
 
-        $SalesImport = $em->createQuery('DELETE InventoryBundle:SalesImport e WHERE e.inventoryConfig = '.$config);
-        $SalesImport->execute();
-
         $SalesReturn = $em->createQuery('DELETE InventoryBundle:SalesReturn e WHERE e.inventoryConfig = '.$config);
         $SalesReturn->execute();
 
@@ -42,6 +39,9 @@ class InventoryConfigRepository extends EntityRepository
 
         $Sales = $em->createQuery('DELETE InventoryBundle:Sales e WHERE e.inventoryConfig = '.$config);
         $Sales->execute();
+
+        $SalesImport = $em->createQuery('DELETE InventoryBundle:SalesImport e WHERE e.inventoryConfig = '.$config);
+        $SalesImport->execute();
 
         $PurchaseReturn = $em->createQuery('DELETE InventoryBundle:PurchaseReturn e WHERE e.inventoryConfig = '.$config);
         $PurchaseReturn->execute();

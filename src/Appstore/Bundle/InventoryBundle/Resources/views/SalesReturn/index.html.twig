@@ -50,27 +50,24 @@
                         <div class="portlet-body">
                             <div class="portlet-body flip-scroll">
                                 {% include('flash-message.html.twig')  %}
-                                <table class="table table-bordered table-striped table-condensed flip-content ">
-                                    <form action="{{ path('inventory_salesreturn_search') }}" method="post" name="itemSearch" id="itemSearch"  >
-                                    <thead>
+                                <form action="{{ path('inventory_salesreturn_search') }}" method="post" name="itemSearch" id="itemSearch"  >
+                                    <div class="row-fluid">
 
-                                        <tr id="search-input">
-                                            <td colspan="8" class="numeric">
-                                                <div class="controls">
-                                                    <div class="input-append span12">
-                                                        <input type="text" id="invoice" name="invoice"  class="span11 m-wrap" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Enter invoice no{% endif %} ">
-                                                        <div class="btn-group">
-                                                            <button class="btn blue" type="submit"><i class="icon-search"></i></button>
-                                                        </div>
+                                        <div class="span12">
+                                            <div class="controls">
+                                                <div class="input-append span12">
+                                                    <input type="text" id="invoice" name="invoice"  class="span11 m-wrap" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Enter invoice no{% endif %} ">
+                                                    <div class="btn-group">
+                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>
                                                 </div>
-                                            </td>
-                                        </tr>
-
-                                    </thead>
-                                    </form>
-                                    <tbody class="flip-content ">
-                                    <tr class="head-grey">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <table class="table table-bordered table-striped table-condensed flip-content ">
+                                    <thead>
+                                    <tr class="head-blue">
                                         <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                         <th class="numeric" >Invoice</th>
                                         <th class="numeric" >Date</th>
@@ -80,7 +77,7 @@
                                         <th class="numeric" >Created By</th>
                                         <th class="numeric" >Action</th>
                                     </tr>
-                                    </tbody>
+                                    </thead>
                                     <tbody id="sales">
                                     {% for entity in entities %}
                                         <tr id="salesRemove-{{ entity.id }}">

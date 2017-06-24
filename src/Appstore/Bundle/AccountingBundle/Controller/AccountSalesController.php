@@ -2,6 +2,8 @@
 
 namespace Appstore\Bundle\AccountingBundle\Controller;
 
+use Appstore\Bundle\AccountingBundle\Form\AccountSalesInvoiceType;
+use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -138,6 +140,33 @@ class AccountSalesController extends Controller
     }
 
     /**
+     * Displays a form to create a new AccountSales entity.
+     *
+     */
+    public function duePaymentAction(Sales $sales)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = new AccountSales();
+
+
+        $entity->setGlobalOption( $this->getUser()->getGlobalOption());
+        $entity->setSales($sales);
+        $entity->setCustomer($sales->getCustomer());
+        $entity->setTransactionMethod($this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find(1));
+        $entity->setProcessHead('Account Sales');
+        if(!empty($this->getUser()->getProfile()->getBranches())){
+            $entity->setBranches($this->getUser()->getProfile()->getBranches());
+        }
+        $em->persist($entity);
+        $em->flush();
+        $form   = $this->createEditForm($entity);
+        return $this->render('AccountingBundle:AccountSales:invoice.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    /**
      * Finds and displays a AccountSales entity.
      *
      */
@@ -170,9 +199,9 @@ class AccountSalesController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        return $this->render('AccountingBundle:AccountSales:edit.html.twig', array(
+        return $this->render('AccountingBundle:AccountSales:invoice.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
         ));
     }
 
@@ -186,7 +215,7 @@ class AccountSalesController extends Controller
     private function createEditForm(AccountSales $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new AccountSalesType($globalOption), $entity, array(
+        $form = $this->createForm(new AccountSalesInvoiceType($globalOption), $entity, array(
             'action' => $this->generateUrl('account_sales_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -214,14 +243,20 @@ class AccountSalesController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $em->flush();
 
-            return $this->redirect($this->generateUrl('account_sales_edit', array('id' => $id)));
+            if ($entity->getSales()->getDue() < $entity->getAmount() ){
+                $this->get('session')->getFlashBag()->add(
+                    'notice',"Payment amount receive must be same or less as due amount"
+                );
+                return $this->redirect($this->generateUrl('account_sales_edit',array('id' => $entity->getId())));
+            }
+            $em->flush();
+            return $this->redirect($this->generateUrl('account_sales'));
         }
 
-        return $this->render('AccountingBundle:AccountSales:edit.html.twig', array(
+        return $this->render('AccountingBundle:AccountSales:invoice.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
         ));
     }
 
@@ -250,13 +285,16 @@ class AccountSalesController extends Controller
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
 
-            $data = array('mobile'=> $entity->getCustomer()->getMobile());
+            $data = array('mobile' => $entity->getCustomer()->getMobile());
             $result = $em->getRepository('AccountingBundle:AccountSales')->salesOverview($this->getUser(),$data);
             $balance = $result['totalAmount'] - ($result['receiveAmount'] + $entity->getAmount());
             $entity->setBalance($balance);
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
+            if($entity->getSales()){
+                $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesPaymentReceive($entity);
+            }
             $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertAccountSalesTransaction($entity);
             return new Response('success');
         } else {

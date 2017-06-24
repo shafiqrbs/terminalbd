@@ -170,6 +170,47 @@ function AccountingApproveProcess(){
         minimumInputLength: 1
     });
 
+    $(".select2Invoice").select2({
+
+        ajax: {
+
+            url: Routing.generate('inventory_sales_invoice_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function (item) {
+            return item.text
+        }, // omitted for brevity, see the source of this page
+        initSelection: function (element, callback) {
+            var id = $(element).val();
+            $.ajax(Routing.generate('inventory_sales_invoice_name', { user : id}), {
+                dataType: "json"
+            }).done(function (data) {
+                return  callback(data);
+            });
+        },
+        allowClear: true,
+        minimumInputLength: 1
+    });
+
 
 }
 

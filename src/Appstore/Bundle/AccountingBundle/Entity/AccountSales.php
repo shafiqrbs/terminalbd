@@ -135,8 +135,6 @@ class AccountSales
      */
     private $code;
 
-
-
    /**
      * @var datetime
      *

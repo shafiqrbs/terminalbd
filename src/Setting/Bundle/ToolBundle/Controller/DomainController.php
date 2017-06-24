@@ -129,7 +129,7 @@ class DomainController extends Controller
 
     public function resetDomainPasswordAction(GlobalOption $option)
     {
-        $entity = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('globalOption'=> $option,'domainOwner'=>1));
+        $entity = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('globalOption'=> $option,'domainOwner' => 1));
         if(!empty($entity)){
             $a = mt_rand(1000,9999);
             $entity->setPlainPassword($a);

@@ -377,7 +377,6 @@
 
     // update heights on load and resize events
     $(window)[on]('load', function(event) {
-        console.log('success');
         matchHeight._update(false, event);
     });
 

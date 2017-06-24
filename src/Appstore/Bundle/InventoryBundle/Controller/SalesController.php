@@ -640,6 +640,25 @@ class SalesController extends Controller
         exit;
     }
 
+    public function salesInvoiceSearchAction()
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $item = $this->getDoctrine()->getRepository('InventoryBundle:Vendor')->searchAutoComplete($item,$inventory);
+        }
+        return new JsonResponse($item);
+        exit;
+    }
+
+    public function searchSalesInvoiceNameAction($invoice)
+    {
+        return new JsonResponse(array(
+            'id'        => $invoice,
+            'text'      => $invoice
+        ));
+    }
+
     public function salesSelectAction()
     {
         $items  = array();

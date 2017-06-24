@@ -110,7 +110,7 @@
 <div class="page-container row-fluid">
     {#{{ dump(app.security.token.user.roles) }}#}
     {% block navigation %}
-        <div class="page-sidebar nav-collapse collapse js-equal-height">
+        <div class="page-sidebar nav-collapse collapse"  data-match-height="body-content">
             <!-- BEGIN SIDEBAR MENU -->
             {% if is_granted('ROLE_CUSTOMER') %}
             {{ include('customer/sidebar.html.twig')}}
@@ -119,7 +119,7 @@
             {% endif %}
         </div>
     {% endblock navigation %}
-    <div class="page-content js-equal-height">
+    <div class="page-content"  data-match-height="body-content">
         {% block body %}{% endblock %}
     </div>
 </div>
@@ -185,6 +185,7 @@
 'assets/plugins/plupload/js/plupload.full.js'
 'assets/plugins/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js'
 'assets/plugins/fancybox/source/jquery.fancybox.pack.js'
+'assets/template/plugin/matchHeight/height-match.js'
 'assets/plugins/jquery-ui/sortable.js'
 'assets/module/numeric/jquery.numeric.js'
 'assets/scripts/jquery.mjs.nestedSortable.js'
@@ -286,6 +287,17 @@
 
         });
 
+
+        $('#show-messenger').click(function(){
+            $('#messenger-block').show();
+            $(this).hide();
+        });
+
+         $('#fb-msg-close').click(function(){
+            $('#messenger-block').hide();
+            $('#show-messenger').show();
+        });
+
         {% endblock %}
     });
 
@@ -361,5 +373,79 @@
         </div>
     </div>
 {% endblock footer %}#}
+<!-- WhatsHelp.io widget -->
+<script type="text/javascript">
+
+
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '369724209850316',
+            xfbml      : true,
+            version    : 'v2.8'
+        });
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+
+</script>
+<style>
+    .fb-messenger {
+        position: fixed;
+        bottom: 32px;
+        right: 20px;
+        z-index: 100;
+    }
+    .panel-messenger {
+        border-color: #4d90fe;
+    }
+    .panel-messenger > .panel-heading {
+        color: #fff;
+        background-color: #4d90fe;
+        border-color: #4d90fe;
+        padding: 10px;
+    }
+    .panel {
+        position: relative;
+    }
+    #messenger-block{
+        display: none;
+    }
+
+
+
+</style>
+<div class="fb-messenger">
+    <div id="messenger-block">
+        <div class="panel panel-messenger">
+            <div class="panel-heading"><b>Facebook Messenger</b> <a id="fb-msg-close"  class="pull-right btn red mini"><i class="icon-remove icon-white"></i></a></div>
+            <div class="panel-body">
+                <div class="fb-page"
+                     data-href="https://www.facebook.com/Terminalbd-304478469740886"
+                     data-tabs="messages"
+                     data-width="400"
+                     data-height="400"
+                     data-small-header="true"
+                     data-adapt-container-width="false"
+                     data-hide-cover="true"
+                     data-show-facepile="false">
+                    <div class="fb-xfbml-parse-ignore">
+                        <blockquote>
+                            <a href="https://m.me/zeroesbd">Message Us</a>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <img id="show-messenger" src="https://png.icons8.com/facebook-messenger/color/48" title="Facebook Messenger" width="48" height="48">
+</div>
+<!-- /WhatsHelp.io widget -->
 </body>
 </html>

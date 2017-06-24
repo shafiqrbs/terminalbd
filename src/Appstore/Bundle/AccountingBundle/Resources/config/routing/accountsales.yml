@@ -23,6 +23,10 @@ account_sales_edit:
     path:     /{id}/edit
     defaults: { _controller: "AccountingBundle:AccountSales:edit" }
 
+account_sales_due:
+    path:     /{sales}/due-payment
+    defaults: { _controller: "AccountingBundle:AccountSales:duePayment" }
+
 account_sales_update:
     path:     /{id}/update
     defaults: { _controller: "AccountingBundle:AccountSales:update" }

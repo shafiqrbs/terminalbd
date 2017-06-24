@@ -119,3 +119,15 @@ inventory_sales_inline_status_select:
     defaults: { _controller: "InventoryBundle:Sales:salesSelect" }
     options:
            expose: true
+
+inventory_sales_invoice_search:
+    path:     /sales-invoice-sesrch
+    defaults: { _controller: "InventoryBundle:Sales:salesInvoiceSearch" }
+    options:
+           expose: true
+
+inventory_sales_invoice_name:
+    path:      /{invoice}/sales-invoice
+    defaults: { _controller: "InventoryBundle:Sales:searchSalesInvoiceName" }
+    options:
+            expose: true

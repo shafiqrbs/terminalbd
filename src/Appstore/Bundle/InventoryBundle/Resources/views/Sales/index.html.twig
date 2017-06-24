@@ -115,7 +115,7 @@
                                             <tr id="salesRemove-{{ entity.id }}">
                                                 <td> {% if entity.salesItems is defined and  entity.salesItems is not empty  %}<span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                                 <td class="numeric" >{{ entity.invoice }}</td>
-                                                <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                                <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                                 <td class="numeric" >{{ entity.totalItem }}</td>
                                                 <td class="numeric" >{{ entity.subTotal|number_format  }}</td>
                                                 <td class="numeric" >{{ entity.discount|number_format  }}</td>
@@ -133,7 +133,7 @@
                                                         <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_sales_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                                     {% endif %}
                                                     {% if entity.paymentStatus == "Due" %}
-                                                        <a href="{{ path('account_sales_new') }}" class="btn mini blue" ><i class="icon-money"></i></a>
+                                                        <a href="{{ path('account_sales_due',{'sales':entity.id}) }}" class="btn mini yellow" ><i class="icon-money"></i></a>
                                                     {% endif %}
                                                 </td>
                                             </tr>

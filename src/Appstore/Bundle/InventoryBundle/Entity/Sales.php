@@ -60,7 +60,7 @@ class Sales
         private  $salesReturnAdjustment;
 
         /**
-         * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="sales", cascade={"remove"} )
+         * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="sales", cascade={"remove"},cascade={"remove"}, orphanRemoval=true )
          * @ORM\OrderBy({"id" = "DESC"})
          **/
         private  $accountSales;

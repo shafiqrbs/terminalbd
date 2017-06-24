@@ -42,7 +42,7 @@ class Purchase
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="purchase" , cascade={"remove"})
-     * @ORM\OrderBy({"id" = "DESC"})
+     * @ORM\OrderBy({"name" = "ASC"})
      **/
     private  $purchaseVendorItems;
 
@@ -79,7 +79,7 @@ class Purchase
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseItem", mappedBy="purchase" , cascade={"remove"})
-     * @ORM\OrderBy({"id" = "DESC"})
+     * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $purchaseItems;
 

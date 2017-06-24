@@ -61,6 +61,7 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
+                                    <th class="numeric" ><i class="icon-list"></i></th>
                                     <th class="numeric" >Name </th>
                                     <th class="numeric" >Item code</th>
                                     <th class="numeric" >Purchase </th>
@@ -75,6 +76,7 @@
                                     {% for entity in entities %}
                                         {% set quantity = quantity + entity.quantity %}
                                         <tr>
+                                            <td class="numeric" >{{ loop.index }}.</td>
                                             <td class="numeric" >{{ entity.item.name }}</td>
                                             <td class="numeric" >{{ entity.item.sku }}</td>
                                             <td class="numeric" >{{ entity.purchasePrice }}</td>
@@ -87,7 +89,7 @@
                                             </td>
                                         </tr>
                                     {% endfor %}
-                                    <tr><td colspan="5"><strong class="pull-right" >Total Barcode Print Quantity</strong></td><td><strong>{{ quantity }}</strong></td><td></td></tr>
+                                    <tr><td colspan="6"><strong class="pull-right" >Total Barcode Print Quantity</strong></td><td><strong>{{ quantity }}</strong></td><td></td></tr>
                                 </tbody>
                             </table>
                             <!--/span-->

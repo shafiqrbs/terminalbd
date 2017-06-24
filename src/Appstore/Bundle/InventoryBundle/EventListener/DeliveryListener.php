@@ -24,7 +24,7 @@ class DeliveryListener
             $lastCode = $this->getLastCode($args, $datetime, $entity);
 
             $entity->setCode($lastCode+1);
-            $entity->setInvoice(sprintf("%s%s", $datetime->format('mY'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
+            $entity->setInvoice(sprintf("%s%s%s",$entity->getInventoryConfig()->getGlobalOption()->getId(), $datetime->format('mY'), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
         }
     }
 
@@ -34,6 +34,7 @@ class DeliveryListener
      * @param $entity
      *
      */
+
     public function getLastCode(LifecycleEventArgs $args, $datetime, $entity)
     {
         $today_startdatetime = $datetime->format('Y-m-01 00:00:00');

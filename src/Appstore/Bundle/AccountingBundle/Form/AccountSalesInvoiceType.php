@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class AccountSalesType extends AbstractType
+class AccountSalesInvoiceType extends AbstractType
 {
 
     public  $globalOption;
@@ -47,17 +47,6 @@ class AccountSalesType extends AbstractType
                         ->where("e.status = 1")
                         ->orderBy("e.id");
                 }
-            ))
-            ->add('customer', 'entity', array(
-                'required'    => true,
-                'class' => 'Appstore\Bundle\DomainUserBundle\Entity\Customer',
-                'empty_value' => '---Choose a customer---',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 select2'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.globalOption =".$this->globalOption->getId());
-                },
             ))
             ->add('accountBank', 'entity', array(
                'required'    => true,

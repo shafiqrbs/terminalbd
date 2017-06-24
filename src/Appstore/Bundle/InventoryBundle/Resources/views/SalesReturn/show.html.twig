@@ -128,10 +128,9 @@
                                                         <td class="numeric" >{{ salesItem.salesReturnItem.quantity }}</td>
                                                         <td class="numeric" >{{ salesItem.salesReturnItem.price }}</td>
                                                     {% else %}
-                                                        <td class="numeric" ><input type="number" class="numeric td-inline-input quantity" rel="{{ salesItem.id }}" autocomplete = "off" min="1" max="{{ salesItem.quantity }}"  id="quantity-{{ salesItem.id }}" name="quantity" value="1" placeholder="{{ salesItem.quantity }}"></td>
-                                                        <td class="numeric" ><input type="text" class="numeric td-inline-input price" rel="{{ salesItem.id }}" autocomplete = "off" min="1" max="{{ salesItem.salesPrice }}"  id="price-{{ salesItem.id }}" name="price" value="" placeholder="{{ salesItem.salesPrice }}"></td>
+                                                        <td class="numeric" >&nbsp;</td>
+                                                        <td class="numeric" >&nbsp;</td>
                                                    {% endif %}
-
                                                     <td class="numeric" >
                                                         {% if( salesItem.salesReturnItem is defined and  salesItem.salesReturnItem is not empty) %}
                                                             <input type="hidden" name="salesReturnId" id="salesReturn-{{ salesItem.id }}" value="{{ entity.id }}"><span id="returnSubTotal-{{ salesItem.id }}">{{ salesItem.salesReturnItem.subTotal|number_format() }}</span>
@@ -142,9 +141,6 @@
                                                     <td class="numeric" id="action-{{ salesItem.id }}">
                                                         {% if( salesItem.salesReturnItem is defined and salesItem.salesReturnItem is not empty) %}
                                                             <button title="" disabled="disabled" type="button"  class="btn red mini returnItem" ><i class="icon-retweet"></i>&nbsp;Returned</button>
-                                                        {% else %}
-                                                            <button title="Are you confirm return this item " disabled="disabled" type="button" id="returnbtn-{{ salesItem.id }}" rel="{{ salesItem.id }}" class="btn green mini returnItem" ><i class="icon-retweet"></i></button>
-                                                            <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('inventory_salesreturn_item_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                                         {% endif %}
                                                     </td>
                                                 </tr>

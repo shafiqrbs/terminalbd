@@ -52,7 +52,7 @@
                                     <div class="span4">
                                         <select id="group" name="group"  class="span12 select2" >
                                             <option>Select Group</option>
-                                            <option value="masterItem" {% if searchForm.group is defined and searchForm.group == 'masterItem' %} selected="selected" {% endif %} >Item Name</option>
+                                            <option value="product" {% if searchForm.group is defined and searchForm.group == 'product' %} selected="selected" {% endif %} >Item Name</option>
                                             <option value="size" {% if searchForm.group is defined and searchForm.group == 'size' %} selected="selected" {% endif %} >Size</option>
                                             <option value="color" {% if searchForm.group is defined and searchForm.group == 'color' %} selected="selected" {% endif %} >Color</option>
                                             <option value="brand" {% if searchForm.group is defined and searchForm.group == 'brand' %} selected="selected" {% endif %} >Brand</option>
@@ -87,8 +87,6 @@
                                 <th class="numeric" >(-)P.Return</th>
                                 <th class="numeric" >(-)Sales</th>
                                 <th class="numeric" >(+)S.Return</th>
-                                <th class="numeric" >(-)Online</th>
-                                <th class="numeric" >(+)O.Return</th>
                                 <th class="numeric" >(-)Damage</th>
                                 <th class="numeric" >Remaining</th>
                             </tr>
@@ -123,19 +121,6 @@
                                 {% else %}
                                     {%  set salesReturn = 0 %}
                                 {% endif %}
-
-                                {% if online[entity.itemId] is defined and online[entity.itemId] is not empty %}
-                                    {% set online = online[entity.itemId] %}
-                                {% else %}
-                                    {%  set online = 0 %}
-                                {% endif %}
-
-                                {% if onlineReturn[entity.itemId] is defined and onlineReturn[entity.itemId] is not empty %}
-                                    {% set onlineReturn = onlineReturn[entity.itemId] %}
-                                {% else %}
-                                    {%  set onlineReturn = 0 %}
-                                {% endif %}
-
                                 {% if damage[entity.itemId] is defined and damage[entity.itemId] is not empty %}
                                     {% set damage = damage[entity.itemId] %}
                                 {% else %}
@@ -149,10 +134,8 @@
                                       <td class="numeric" >{% if purchaseReturn[entity.itemId] is defined %}{{  purchaseReturn[entity.itemId]|trim('-')  }}{% endif %}</td>
                                       <td class="numeric" >{% if sale[entity.itemId] is defined %}{{ sales|trim('-') }}{% endif %}</td>
                                       <td class="numeric" >{% if salesReturn[entity.itemId] is defined %}{{ salesReturn[entity.itemId] }}{% endif %}</td>
-                                      <td class="numeric" >{% if online[entity.itemId] is defined %}{{ online|trim('-') }}{% endif %}</td>
-                                      <td class="numeric" >{% if onlineReturn[entity.itemId] is defined %}{{ onlineReturn[entity.itemId] }}{% endif %}</td>
                                       <td class="numeric" >{% if damage[entity.itemId] is defined %}{{ damage[entity.itemId]|trim('-') }}{% endif %}</td>
-                                      <td class="numeric" >{{ totalPrevious + purchase + purchaseReturn + sales + salesReturn + online + onlineReturn + damage }}</td>
+                                      <td class="numeric" >{{ totalPrevious + purchase + purchaseReturn + sales + salesReturn + damage }}</td>
                                  </tr>
                             {% endfor %}
                             </tbody>

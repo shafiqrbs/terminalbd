@@ -111,7 +111,7 @@ class PurchaseItemRepository extends EntityRepository
             $qb->andWhere("pi.barcode = :barcode");
             $qb->setParameter('barcode', $barcode);
         }
-        $qb->orderBy('item.updated','DESC');
+        $qb->orderBy('item.name','ASC');
         $sql = $qb->getQuery();
         return $sql;
 
@@ -228,12 +228,14 @@ class PurchaseItemRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.item', 'item');
         $qb->join('pi.purchase', 'purchase');
         $qb->join('purchase.inventoryConfig', 'ic');
         $qb->select('pi');
         $qb->where($qb->expr()->in("pi.id", $data ));
         $qb->andWhere("ic.id = :inventory");
         $qb->setParameter('inventory', $inventory->getId());
+        $qb->orderBy('item.name','ASC');
         return $qb->getQuery()->getResult();
     }
 
@@ -241,12 +243,14 @@ class PurchaseItemRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.item', 'item');
         $qb->join('pi.purchase', 'purchase');
         $qb->join('purchase.inventoryConfig', 'ic');
         $qb->select('pi');
         $qb->where($qb->expr()->in("pi.id", $data ));
         $qb->andWhere("ic.id = :inventory");
         $qb->setParameter('inventory', $inventory->getId());
+        $qb->orderBy('item.name','ASC');
         return $qb->getQuery()->getResult();
 
     }
@@ -254,13 +258,15 @@ class PurchaseItemRepository extends EntityRepository
     public function returnPurchaseItemDetails($inventory,$barcode)
     {
 
-        $qb = $this->createQueryBuilder('i');
-        $qb->join('i.purchase', 'p');
-        $qb->select('i');
-        $qb->where("i.barcode = :barcode" );;
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.item', 'item');
+        $qb->join('pi.purchase', 'p');
+        $qb->select('pi');
+        $qb->where("pi.barcode = :barcode" );;
         $qb->setParameter('barcode', $barcode);
         $qb->andWhere("p.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory->getId());
+        $qb->orderBy('item.name','ASC');
         return $qb->getQuery()->getSingleResult();
 
     }
