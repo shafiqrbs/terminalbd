@@ -41,7 +41,7 @@ class TransactionController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('AccountingBundle:Transaction')->getGroupByAccountHead($globalOption);
         $pagination = $this->paginate($entities);
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->transactionOverview($globalOption,$data);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->transactionOverview($globalOption);
         $accountHead = $em->getRepository('AccountingBundle:AccountHead')->findBy(array('status'=>1),array('name'=>'asc'));
         return $this->render('AccountingBundle:Transaction:index.html.twig', array(
             'entities' => $pagination,

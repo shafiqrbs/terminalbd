@@ -164,7 +164,7 @@ class AccountJournalRepository extends EntityRepository
     }
 
 
-    public function    insertAccountPurchaseJournal(Purchase $purchase)
+    public function   insertAccountPurchaseJournal(Purchase $purchase)
     {
 
         $entity = new AccountJournal();
@@ -181,13 +181,13 @@ class AccountJournalRepository extends EntityRepository
         $entity->setAccountMobileBank($purchase->getAccountMobileBank());
         $entity->setApprovedBy($purchase->getApprovedBy());
         $entity->setCreatedBy($purchase->getApprovedBy());
-        $entity->setAccountHeadDebit($accountHeadCredit);
+        $entity->setAccountHeadCredit($accountHeadCredit);
         if ($purchase->getTransactionMethod()->getId() == 2){
-            $entity->setAccountHeadCredit($accountBankHead);
+            $entity->setAccountHeadDebit($accountBankHead);
         }elseif ($purchase->getTransactionMethod()->getId() == 3){
-            $entity->setAccountHeadCredit($accountMobileHead);
+            $entity->setAccountHeadDebit($accountMobileHead);
         }else{
-            $entity->setAccountHeadCredit($accountCashHead);
+            $entity->setAccountHeadDebit($accountCashHead);
         }
         $entity->setToUser($purchase->getApprovedBy());
         $entity->setJournalSource('purchase');

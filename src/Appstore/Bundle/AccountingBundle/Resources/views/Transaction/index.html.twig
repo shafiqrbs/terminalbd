@@ -62,13 +62,14 @@
 
                                 <thead class="flip-content ">
                                 <tr>
-                                    <th class="numeric" colspan="2" style="text-align: right"><strong>Grand Total</strong></th>
+                                    <th class="numeric" colspan="3" ><strong class="pull-right">Grand Total</strong></th>
                                     <td class="numeric" ><strong>{{ overview.debit|number_format }}</strong></td>
                                     <td class="numeric" ><strong>{{ overview.credit|number_format }}</strong></td>
                                     <td class="numeric" ></td>
                                 </tr>
                                 <tr class="head-blue">
-                                    <th class="numeric" >Account Head/Code</th>
+                                    <th class="numeric" >Account Head</th>
+                                    <th class="numeric" >Account Code</th>
                                     <th class="numeric" >Parent Head</th>
                                     <th class="numeric" >Debit</th>
                                     <th class="numeric" >Credit</th>
@@ -78,16 +79,17 @@
                                 <tbody>
                                 {% for entity in entities %}
                                 <tr>
-                                        <td class="numeric" >{{ entity.name }}/{{ entity.code }}</td>
+                                        <td class="numeric" >{{ entity.name }}</td>
+                                        <td class="numeric" >{{ entity.code }}</td>
                                         <td class="numeric" >{{ entity.parentName }}</td>
                                         <td class="numeric" >
                                             {% if entity.toIncrease == 'Debit' %}
-                                                   {{ entity.amount|number_format }}
+                                                   {{ entity.debit|number_format }}
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
                                             {% if entity.toIncrease == 'Credit' %}
-                                                  {{ entity.amount|trim('-')|number_format }}
+                                                  {{ entity.credit|trim('-')|number_format }}
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >

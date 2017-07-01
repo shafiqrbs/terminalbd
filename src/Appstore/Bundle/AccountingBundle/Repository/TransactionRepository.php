@@ -60,33 +60,27 @@ class TransactionRepository extends EntityRepository
 
     public function transactionOverview($globalOption,$accountHead = 0)
     {
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('sum(e.debit) as debit,sum(e.credit) as credit');
-        $qb->from('AccountingBundle:Transaction','e');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption->getId());
-        if($accountHead > 0)
-        {
-            $qb->andWhere("e.accountHead = :accountHead");
-            $qb->setParameter('accountHead', $accountHead);
-        }
-        $result = $qb->getQuery()->getSingleResult();
-        return $result;
 
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('sum(e.debit) as debit , sum(e.credit) as credit');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption',67);
+
+        $result = $qb->getQuery();
+        $res = $result->getOneOrNullResult();
+        return $res;
     }
     public function getGroupByAccountHead($globalOption){
 
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select('sum(e.amount) as amount,accountHead.name as name , parent.name as parentName, accountHead.id, accountHead.toIncrease, accountHead.code');
-        $qb->from('AccountingBundle:Transaction','e');
-        $qb->innerJoin('e.accountHead','accountHead');
-        $qb->leftJoin('accountHead.parent','parent');
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.accountHead','accountHead');
+        $qb->join('accountHead.parent','parent');
+        $qb->select('sum(e.amount) as amount, sum(e.debit) as debit , sum(e.credit) as credit, accountHead.name as name , parent.name as parentName, accountHead.id, accountHead.toIncrease, accountHead.code');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption->getId());
         $qb->groupBy('e.accountHead');
         $qb->orderBy('e.accountHead','ASC');
         $result = $qb->getQuery()->getResult();
-
         return $result;
     }
 
