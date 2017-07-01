@@ -55,7 +55,7 @@ class SalesReturnController extends Controller
         $salesId = $request->request->get('invoice');
         $invoice = $this->get('settong.toolManageRepo')->specialExpClean($salesId);
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array( 'inventoryConfig' => $inventory,'invoice' => $invoice ,'process' =>'Paid'));
+        $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->findOneBy(array( 'inventoryConfig' => $inventory,'invoice' => $invoice ,'process' =>'Done'));
         if(!empty($sales)){
             $em = $this->getDoctrine()->getManager();
             $entity = new SalesReturn();

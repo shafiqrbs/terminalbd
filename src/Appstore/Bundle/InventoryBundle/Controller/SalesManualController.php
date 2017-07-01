@@ -402,7 +402,7 @@ class SalesManualController extends Controller
             $entity->setDue($data['dueAmount']);
             $entity->setDiscount($data['discount']);
             $entity->setTotal($data['paymentTotal']);
-            $entity->setProcess('Paid');
+            $entity->setProcess('Done');
             $entity->setPayment($data['paymentTotal'] - $data['dueAmount']);
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
             $entity->setPaymentInWord($amountInWords);
@@ -581,7 +581,7 @@ class SalesManualController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
-        if ($data['value'] == 'Paid' or $data['value'] == 'Returned'){
+        if ($data['value'] == 'Done' or $data['value'] == 'Returned'){
             $entity->setProcess($data['value']);
         }elseif (!empty($entity->getCourierInvoice()) and $data['value'] == 'Courier'){
             $entity->setProcess($data['value']);
@@ -593,7 +593,7 @@ class SalesManualController extends Controller
                 $dispatcher->dispatch('setting_tool.post.courier_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
             }
         }
-        if($entity->getProcess() == 'Paid'){
+        if($entity->getProcess() == 'Done'){
             $this->approvedOrder($entity);
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                 $dispatcher = $this->container->get('event_dispatcher');
@@ -652,7 +652,7 @@ class SalesManualController extends Controller
     public function salesSelectAction()
     {
         $items  = array();
-        $items[]= array('value' => 'Paid','text'=>'Paid');
+        $items[]= array('value' => 'Done','text'=>'Done');
         $items[]= array('value' => 'In-progress','text'=>'In-progress');
         $items[]= array('value' => 'Courier','text'=>'Courier');
         $items[]= array('value' => 'Returned','text'=>'Returned');

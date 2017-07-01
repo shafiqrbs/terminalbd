@@ -1,14 +1,18 @@
 
 function ApproveProcess(){
 
-    $( ".date-picker" ).datepicker({
-        dateFormat: "dd-mm-yy"
-    });
+    $( ".date-picker" ).datepicker({ dateFormat: "dd-mm-yy" });
     // Getter
     var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
-
     // Setter
     $( ".date-picker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
+
+
+    $( ".dateCalendar" ).datepicker({ dateFormat: "dd-mm-yy" });
+    // Getter
+    $( ".dateCalendar" ).datepicker( "option", "dateFormat" );
+    // Setter
+    $( ".dateCalendar" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
 
     $(document).on("click", ".editable-submit", function() {
         setTimeout(pageReload, 3000);

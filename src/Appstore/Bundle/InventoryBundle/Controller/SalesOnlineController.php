@@ -603,7 +603,7 @@ class SalesOnlineController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
-        if ($data['value'] == 'Paid' or $data['value'] == 'Returned'){
+        if ($data['value'] == 'Done' or $data['value'] == 'Returned'){
             $entity->setProcess($data['value']);
         }elseif (!empty($entity->getCourierInvoice()) and $data['value'] == 'Courier'){
             $entity->setProcess($data['value']);
@@ -620,7 +620,7 @@ class SalesOnlineController extends Controller
                 $dispatcher->dispatch('setting_tool.post.courier_sms', new \Setting\Bundle\ToolBundle\Event\PosOrderSmsEvent($entity));
             }
         }
-        if($entity->getProcess() == 'Paid'){
+        if($entity->getProcess() == 'Done'){
             $this->approvedOrder($entity);
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                 $dispatcher = $this->container->get('event_dispatcher');
@@ -680,7 +680,7 @@ class SalesOnlineController extends Controller
     public function salesSelectAction()
     {
         $items  = array();
-        $items[]= array('value' => 'Paid','text'=>'Paid');
+        $items[]= array('value' => 'Done','text'=>'Done');
         $items[]= array('value' => 'In-progress','text'=>'In-progress');
         $items[]= array('value' => 'Courier','text'=>'Courier');
         $items[]= array('value' => 'Returned','text'=>'Returned');

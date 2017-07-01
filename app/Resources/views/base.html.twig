@@ -53,6 +53,7 @@
         'assets/plugins/jquery-nestable/jquery.nestable.css'
         'assets/plugins/jquery-tree/src/css/jquery.tree.css'
         'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
+        'assets/plugins/calculator/SimpleCalculadorajQuery.css'
         'assets/css/comments.css'
         'assets/css/overwrite.css'
 
@@ -186,6 +187,7 @@
 'assets/plugins/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js'
 'assets/plugins/fancybox/source/jquery.fancybox.pack.js'
 'assets/template/plugin/matchHeight/height-match.js'
+'assets/plugins/calculator/SimpleCalculadorajQuery.js'
 'assets/plugins/jquery-ui/sortable.js'
 'assets/module/numeric/jquery.numeric.js'
 'assets/scripts/jquery.mjs.nestedSortable.js'
@@ -287,16 +289,27 @@
 
         });
 
+        $(document).on('click', '#show-messenger', function() {
 
-        $('#show-messenger').click(function(){
             $('#messenger-block').show();
-            $(this).hide();
+            $('#calculator-block').hide();
         });
 
-         $('#fb-msg-close').click(function(){
+        $('#fb-msg-close').click(function(){
+
             $('#messenger-block').hide();
-            $('#show-messenger').show();
         });
+
+         $('#show-calculator').click(function(){
+             $('#calculator-block').show();
+             $('#messenger-block').hide();
+        });
+
+        $(document).on('click', '#calculator-close', function() {
+            $('#calculator-block').hide();
+        });
+
+        $("#micalc").Calculadora({'EtiquetaBorrar':'Clear'});
 
         {% endblock %}
     });
@@ -396,7 +409,7 @@
 
 </script>
 <style>
-    .fb-messenger {
+    .fb-messenger , .calculator-messenger {
         position: fixed;
         bottom: 32px;
         right: 20px;
@@ -405,7 +418,7 @@
     .panel-messenger {
         border-color: #4d90fe;
     }
-    .panel-messenger > .panel-heading {
+    .panel-messenger > .panel-heading , .panel-calculator > .panel-heading {
         color: #fff;
         background-color: #4d90fe;
         border-color: #4d90fe;
@@ -414,10 +427,16 @@
     .panel {
         position: relative;
     }
-    #messenger-block{
+    #messenger-block , #calculator-block{
         display: none;
+        width: 400px;
     }
-
+    .mbottom:nth-child(5),.mbottom:nth-child(9) ,.mbottom:nth-child(13) {
+       margin-left: 0!important;
+    }
+    .txtr{
+        margin-top: 10px;
+    }
 
 
 </style>
@@ -437,14 +456,18 @@
                      data-show-facepile="false">
                     <div class="fb-xfbml-parse-ignore">
                         <blockquote>
-                            <a href="https://m.me/zeroesbd">Message Us</a>
+                            <a href="http://www.terminalbd.com">Message Us</a>
                         </blockquote>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <img id="show-messenger" src="https://png.icons8.com/facebook-messenger/color/48" title="Facebook Messenger" width="48" height="48">
+</div>
+<div class="calculator-messenger">
+    <div id="calculator-block">
+        <div id="micalc"></div>
+    </div>
 </div>
 <!-- /WhatsHelp.io widget -->
 </body>

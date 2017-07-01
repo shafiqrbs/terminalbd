@@ -39,3 +39,7 @@ inventory_report_sales:
     path:     /sales-transaction
     defaults: { _controller: "InventoryBundle:Report:salesTransaction" }
 
+inventory_report_sales_overview:
+    path:     /sales-transaction-overview
+    defaults: { _controller: "InventoryBundle:Report:salesTransactionOverview" }
+

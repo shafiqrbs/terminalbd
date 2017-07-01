@@ -242,7 +242,7 @@ class DeliveryRepository extends EntityRepository
         $qb->join('stock.sales','e');
         $qb->select('SUM(stock.quantity) AS quantity');
         $qb->where('e.process IN(:process)');
-        $qb->setParameter('process',array_values(array('Paid')));
+        $qb->setParameter('process',array_values(array('Done')));
         $qb->andWhere("e.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere("e.branches = :branch");
@@ -343,7 +343,7 @@ class DeliveryRepository extends EntityRepository
         $qb->setParameter('inventory', $inventory);
         $qb->where("sales.inventoryConfig = :inventory");
         $qb->andWhere('sales.process IN(:process)');
-        $qb->setParameter('process',array_values(array('Paid')));
+        $qb->setParameter('process',array_values(array('Done')));
         $qb->andWhere("sales.branches = :branch");
         $qb->setParameter('branch', $branch);
         $this->handleWithSearch($qb,$data);
@@ -472,7 +472,7 @@ class DeliveryRepository extends EntityRepository
         $qb->setParameter('inventory', $inventory);
         $qb->where("sales.inventoryConfig = :inventory");
         $qb->andWhere('sales.process IN(:process)');
-        $qb->setParameter('process',array_values(array('Paid')));
+        $qb->setParameter('process',array_values(array('Done')));
         $qb->andWhere("sales.branches = :branch");
         $qb->setParameter('branch', $branch);
         $qb->andWhere("salesItem.item = :item");
@@ -682,7 +682,7 @@ class DeliveryRepository extends EntityRepository
         $qb->setParameter('inventory', $inventory);
         $qb->where("sales.inventoryConfig = :inventory");
         $qb->andWhere('sales.process IN(:process)');
-        $qb->setParameter('process',array_values(array('Paid','In-progress','Courier')));
+        $qb->setParameter('process',array_values(array('Done','In-progress','Courier')));
         $qb->andWhere("sales.branches = :branch");
         $qb->setParameter('branch', $branch);
         $qb->andWhere("salesItem.item = :item");
@@ -774,7 +774,7 @@ class DeliveryRepository extends EntityRepository
         $qb->setParameter('inventory', $inventory);
         $qb->where("sales.inventoryConfig = :inventory");
         $qb->andWhere('sales.process IN(:process)');
-        $qb->setParameter('process',array_values(array('Paid','In-progress','Courier')));
+        $qb->setParameter('process',array_values(array('Done','In-progress','Courier')));
         $qb->andWhere("sales.branches = :branch");
         $qb->setParameter('branch', $branch);
         $qb->andWhere("purchaseItem.id IN (:purchaseItemIds)");
@@ -909,7 +909,7 @@ class DeliveryRepository extends EntityRepository
         $qb->setParameter('inventory', $inventory);
         $qb->where("sales.inventoryConfig = :inventory");
         $qb->andWhere('sales.process IN(:process)');
-        $qb->setParameter('process',array_values(array('Paid')));
+        $qb->setParameter('process',array_values(array('Done')));
         $qb->andWhere("salesItem.purchaseItem = :item");
         $qb->setParameter('item', $purchaseItem);
         $qb->groupBy('sales.branches');

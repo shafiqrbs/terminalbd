@@ -81,8 +81,7 @@ class ReportController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $globalOption = $this->getUser()->getGlobalOption();
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMonthlyIncome($globalOption,$data);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMonthlyIncome( $this->getUser(),$data);
         return $this->render('AccountingBundle:Report:monthlyIncome.html.twig', array(
             'overview' => $overview,
             'searchForm' => $data,

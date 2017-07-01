@@ -197,6 +197,26 @@ class ReportController extends Controller
         ));
     }
 
+    public function salesTransactionOverviewAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $cashOverview = $em->getRepository('InventoryBundle:Sales')->salesOverview($inventory,$data);
+        $transactionCash = $em->getRepository('InventoryBundle:Sales')->salesTransactionOverview($inventory,$data);
+        $salesMode = $em->getRepository('InventoryBundle:Sales')->salesModeOverview($inventory,$data);
+        $salesProcess = $em->getRepository('InventoryBundle:Sales')->salesProcessOverview($inventory,$data);
+        $transactionMethods = $em->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status' => 1), array('name' => 'ASC'));
+        return $this->render('InventoryBundle:Report:salesOverview.html.twig', array(
+            'cashOverview'              => $cashOverview ,
+            'transactionCash'           => $transactionCash ,
+            'salesMode'                 => $salesMode ,
+            'salesProcess'              => $salesProcess ,
+            'transactionMethods'        => $transactionMethods ,
+            'branches'                  => $this->getUser()->getGlobalOption()->getBranches(),
+            'searchForm'                => $data ,
+        ));
+    }
     public function salesTransactionAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -212,6 +232,7 @@ class ReportController extends Controller
             'searchForm'    => $data ,
         ));
     }
+
 
 
 

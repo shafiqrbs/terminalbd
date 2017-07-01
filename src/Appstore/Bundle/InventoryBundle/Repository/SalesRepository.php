@@ -236,7 +236,7 @@ class SalesRepository extends EntityRepository
         $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
         $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
         $qb->from('InventoryBundle:Sales','s');
-        $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount');
+        $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
         $qb->where('s.inventoryConfig = :inventory')
             ->andWhere('s.salesMode =:mode')
             ->andWhere('s.paymentStatus IN (:pStatus)')
@@ -253,6 +253,138 @@ class SalesRepository extends EntityRepository
         }
         $qb->orderBy("s.updated", 'DESC');
         return $qb->getQuery()->getResult();
+    }
+
+    public function SalesOverview(InventoryConfig $inventory,$data)
+    {
+
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
+        $branch = isset($data['branch'])  ? $data['branch'] : '';
+
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->from('InventoryBundle:Sales','s');
+        $qb->select('sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
+        $qb->where('s.inventoryConfig = :inventory');
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        if (!empty($startDate)) {
+            $start = date('Y-m-d',strtotime($data['startDate']));
+            $qb->andWhere("s.updated >= :startDate");
+            $qb->setParameter('startDate',$start);
+        }
+
+        if (!empty($endDate)) {
+            $end = date('Y-m-d',strtotime($data['endDate']));
+            $qb->andWhere("s.updated <= :endDate");
+            $qb->setParameter('endDate',$end);
+        }
+
+        if ($branch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function salesTransactionOverview(InventoryConfig $inventory,$data)
+    {
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
+        $branch = isset($data['branch'])  ? $data['branch'] : '';
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->join('s.transactionMethod','t');
+        $qb->select('t.name as transactionName , sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
+        $qb->where('s.inventoryConfig = :inventory');
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        if (!empty($startDate)) {
+            $start = date('Y-m-d',strtotime($data['startDate']));
+            $qb->andWhere("s.updated >= :startDate");
+            $qb->setParameter('startDate',$start);
+        }
+
+        if (!empty($endDate)) {
+            $end = date('Y-m-d',strtotime($data['endDate']));
+            $qb->andWhere("s.updated <= :endDate");
+            $qb->setParameter('endDate',$end);
+        }
+
+        if ($branch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $qb->groupBy("s.transactionMethod");
+        $res = $qb->getQuery();
+        return $result = $res->getArrayResult();
+    }
+
+    public function salesModeOverview(InventoryConfig $inventory,$data)
+    {
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
+        $branch = isset($data['branch'])  ? $data['branch'] : '';
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('s.salesMode as name , sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
+        $qb->where('s.inventoryConfig = :inventory');
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('s.process = :process');
+        $qb->setParameter('process', 'Done');
+        if (!empty($startDate)) {
+            $start = date('Y-m-d',strtotime($data['startDate']));
+            $qb->andWhere("s.updated >= :startDate");
+            $qb->setParameter('startDate',$start);
+        }
+
+        if (!empty($endDate)) {
+            $end = date('Y-m-d',strtotime($data['endDate']));
+            $qb->andWhere("s.updated <= :endDate");
+            $qb->setParameter('endDate',$end);
+        }
+
+        if ($branch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $qb->groupBy("s.salesMode");
+        $res = $qb->getQuery();
+        return $result = $res->getArrayResult();
+    }
+
+    public function salesProcessOverview(InventoryConfig $inventory,$data)
+    {
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
+        $branch = isset($data['branch'])  ? $data['branch'] : '';
+
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('s.process as name , sum(s.subTotal) as subTotal , sum(s.total) as total ,sum(s.payment) as totalPayment , count(s.id) as totalVoucher, sum(s.due) as totalDue, sum(s.discount) as totalDiscount, sum(s.vat) as totalVat');
+        $qb->where('s.inventoryConfig = :inventory');
+        $qb->setParameter('inventory', $inventory);
+        if (!empty($startDate)) {
+            $start = date('Y-m-d',strtotime($data['startDate']));
+            $qb->andWhere("s.updated >= :startDate");
+            $qb->setParameter('startDate',$start);
+        }
+
+        if (!empty($endDate)) {
+            $end = date('Y-m-d',strtotime($data['endDate']));
+            $qb->andWhere("s.updated <= :endDate");
+            $qb->setParameter('endDate',$end);
+        }
+
+        if ($branch){
+            $qb->andWhere("s.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $qb->groupBy("s.process");
+        $res = $qb->getQuery();
+        return $result = $res->getArrayResult();
     }
 
     public function todaySales(User $user , $mode = '')

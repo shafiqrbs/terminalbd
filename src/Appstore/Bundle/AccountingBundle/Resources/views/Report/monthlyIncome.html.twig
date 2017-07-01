@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Income Statement
+                    Monthly Income Statement
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="javascript:">Income Statement</a></li>
+                    <li><a href="javascript:">Monthly Income Statement</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -57,15 +57,48 @@
 
                                     <div class="row-fluid">
                                         <div class="span4">
-                                            <input type="month" id="startMonth" name="startMonth"  class="span12 search-input monthPicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}Income/Loss for month{% endif %}  ">
+                                            <select class="span12 m-wrap" name="startMonth" id='startMonth'>
+                                                <option value=''>--Select Start Month--</option>
+                                                <option value='01' {% if searchForm.startMonth is defined and searchForm.startMonth == '01' %} selected="selected" {% endif %} >Janaury</option>
+                                                <option value='02' {% if searchForm.startMonth is defined and searchForm.startMonth == '02' %} selected="selected" {% endif %} >February</option>
+                                                <option value='03' {% if searchForm.startMonth is defined and searchForm.startMonth == '03' %} selected="selected" {% endif %} >March</option>
+                                                <option value='04' {% if searchForm.startMonth is defined and searchForm.startMonth == '04' %} selected="selected" {% endif %} >April</option>
+                                                <option value='05' {% if searchForm.startMonth is defined and searchForm.startMonth == '05' %} selected="selected" {% endif %} >May</option>
+                                                <option value='06' {% if searchForm.startMonth is defined and searchForm.startMonth == '06' %} selected="selected" {% endif %} >June</option>
+                                                <option value='07' {% if searchForm.startMonth is defined and searchForm.startMonth == '07' %} selected="selected" {% endif %} >July</option>
+                                                <option value='08' {% if searchForm.startMonth is defined and searchForm.startMonth == '08' %} selected="selected" {% endif %} >August</option>
+                                                <option value='09' {% if searchForm.startMonth is defined and searchForm.startMonth == '09' %} selected="selected" {% endif %} >September</option>
+                                                <option value='10' {% if searchForm.startMonth is defined and searchForm.startMonth == '10' %} selected="selected" {% endif %} >October</option>
+                                                <option value='11' {% if searchForm.startMonth is defined and searchForm.startMonth == '11' %} selected="selected" {% endif %} >November</option>
+                                                <option value='12' {% if searchForm.startMonth is defined and searchForm.startMonth == '12' %} selected="selected" {% endif %} >December</option>
+                                            </select>
                                         </div>
                                         <div class="span4">
-                                            <input type="month" id="endMonth" name="endMonth"  class="span12 search-input monthPicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}Income/Loss for month{% endif %}  ">
+                                            <select class="span12 m-wrap" name="endMonth" id='endMonth'>
+                                                <option value=''>--Select End Month--</option>
+                                                <option value='01' {% if searchForm.endMonth is defined and searchForm.endMonth == '01' %} selected="selected" {% endif %} >Janaury</option>
+                                                <option value='02' {% if searchForm.endMonth is defined and searchForm.endMonth == '02' %} selected="selected" {% endif %} >February</option>
+                                                <option value='03' {% if searchForm.endMonth is defined and searchForm.endMonth == '03' %} selected="selected" {% endif %} >March</option>
+                                                <option value='04' {% if searchForm.endMonth is defined and searchForm.endMonth == '04' %} selected="selected" {% endif %} >April</option>
+                                                <option value='05' {% if searchForm.endMonth is defined and searchForm.endMonth == '05' %} selected="selected" {% endif %} >May</option>
+                                                <option value='06' {% if searchForm.endMonth is defined and searchForm.endMonth == '06' %} selected="selected" {% endif %} >June</option>
+                                                <option value='07' {% if searchForm.endMonth is defined and searchForm.endMonth == '07' %} selected="selected" {% endif %} >July</option>
+                                                <option value='08' {% if searchForm.endMonth is defined and searchForm.endMonth == '08' %} selected="selected" {% endif %} >August</option>
+                                                <option value='09' {% if searchForm.endMonth is defined and searchForm.endMonth == '09' %} selected="selected" {% endif %} >September</option>
+                                                <option value='10' {% if searchForm.endMonth is defined and searchForm.endMonth == '10' %} selected="selected" {% endif %} >October</option>
+                                                <option value='11' {% if searchForm.endMonth is defined and searchForm.endMonth == '11' %} selected="selected" {% endif %} >November</option>
+                                                <option value='12' {% if searchForm.endMonth is defined and searchForm.endMonth == '12' %} selected="selected" {% endif %} >December</option>
+                                            </select>
                                         </div>
                                         <div class="span4">
                                             <div class="controls">
                                                 <div class="input-append span11">
-                                                    <input type="month" id="year" name="year"  class="span11 search-input yearPicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}Income/Loss for year{% endif %}  ">
+                                                    <select class="span11 m-wrap" name="year" id='year'>
+                                                        <option value='2017' {% if searchForm.year is defined and searchForm.year == '2017' %} selected="selected" {% endif %} >2017</option>
+                                                        <option value='2018' {% if searchForm.year is defined and searchForm.year == '2018' %} selected="selected" {% endif %} >2018</option>
+                                                        <option value='2019' {% if searchForm.year is defined and searchForm.year == '2019' %} selected="selected" {% endif %} >2019</option>
+                                                        <option value='2020' {% if searchForm.year is defined and searchForm.year == '2020' %} selected="selected" {% endif %} >2020</option>
+                                                     </select>
                                                     <div class="btn-group">
                                                         <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>
@@ -104,19 +137,29 @@
                                 {% if overview.revenues is not empty %}
                                 <tr><th colspan="3">Operating Revenue</th></tr>
                                 {% for revenue in overview.revenues %}
-                                    {% set totalRevenue = totalRevenue + revenue.amount  %}
-                                    <tr><td>{{ revenue.name }}</td><td></td><td class="numeric" >{{ revenue.amount|number_format }}</td></tr>
+                                    {% set totalRevenue = totalRevenue + revenue.credit  %}
+                                    <tr><td>{{ revenue.name }}</td><td></td><td class="numeric" >{{ revenue.credit|number_format }}</td></tr>
                                 {% endfor %}
                                 <tr><th>Grand Total Revenue</th><td></td><th class="numeric" >{{ totalRevenue|number_format }}</th></tr>
                                 {% endif %}
-                                <tr><th colspan="3">Operating Expense</th></tr>
                                 {% set totalExpense = 0 %}
+                                {% if overview.expenditures is not empty %}
+                                <tr><th colspan="3">Operating Expense</th></tr>
                                 {% for expense in overview.expenditures %}
                                     {% set totalExpense = totalExpense + expense.amount  %}
                                     <tr><td>{{ expense.name }}</td><td class="numeric" >{{ expense.amount|number_format }}</td><td></td></tr>
                                 {% endfor %}
+                                {% endif %}
+                                {% set totalAdminis = 0 %}
+                                {% if overview.administrative is not empty %}
+                                <tr><th colspan="3">Administrative expenses</th></tr>
+                                {% for adminis in overview.administrative %}
+                                    {% set totalAdminis = totalAdminis + adminis.amount  %}
+                                    <tr><td>{{ adminis.name }}</td><td class="numeric" >{{ adminis.amount|number_format }}</td><td></td></tr>
+                                {% endfor %}
+                                {% endif %}
                                 <tr><th>Grand Total Expense</th><th class="numeric" >({{ totalExpense|number_format }})</th><td></td></tr>
-                                {% set grandTotal = (overview.salesAmount + totalRevenue) - (overview.purchasePrice + totalExpense ) %}
+                                {% set grandTotal = (overview.salesAmount + totalRevenue) - (overview.purchasePrice + totalExpense + totalAdminis ) %}
                                 <tr><th colspan="2"><span class="pull-right">Grand Profit/Loss</span></th><th class="numeric" >{{ grandTotal|number_format }}</th></tr>
                                 </tbody>
                             </table>
@@ -155,29 +198,10 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    $('.monthPicker').datepicker( {
-    changeMonth: true,
-    changeYear: true,
-    showButtonPanel: true,
-    dateFormat: 'MM',
-    onClose: function(dateText, inst) {
-    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-    }
+    $('#startMonth').change(function(){
+        var month = $(this).val();
+        $('#endMonth').val(month);
     });
-
-    $('.yearPicker').datepicker( {
-    changeMonth: true,
-    changeYear: true,
-    showButtonPanel: true,
-    dateFormat: 'yy',
-    onClose: function(dateText, inst) {
-    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-    }
-    });
-
 {% endblock %}
-
-
-
 
 

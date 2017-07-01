@@ -177,6 +177,32 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
+    public function reportMonthlyIncome(User $user,$data)
+    {
+        if(empty($data)){
+
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-01 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-t 23:59:59');
+
+        }else{
+
+            $data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
+            $data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
+        }
+
+        $salesPrice             = $this->_em->getRepository('InventoryBundle:SalesItem')->reportSalesPrice($user,$data);
+        $purchasePrice          = $this->_em->getRepository('InventoryBundle:SalesItem')->reportPurchasePrice($user,$data);
+        $salesVat               = $this->_em->getRepository('InventoryBundle:SalesItem')->reportProductVat($user, $data);
+        $expenditures           = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37), $data);
+        $revenues               = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(20), $data);
+        $administrative         = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(23), $data);
+        $data =  array('salesAmount' => $salesPrice ,'purchasePrice' => $purchasePrice,'revenues' => $revenues ,'expenditures' => $expenditures,'administrative' => $administrative, 'salesVat' => $salesVat);
+        return $data;
+
+    }
+
+
 
     public function reportHmsIncome($globalOption,$data)
     {
@@ -201,41 +227,6 @@ class AccountSalesRepository extends EntityRepository
         $revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
         $salesVat = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
         $data =  array('salesAmount' => $salesAmount ,'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesVat);
-        return $data;
-
-    }
-
-
-
-    public function reportMonthlyIncome($globalOption,$data)
-    {
-        if(empty($data)){
-
-            $datetime = new \DateTime("now");
-            $data['startDate'] = $datetime->format('Y-m-01 00:00:00');
-            $data['endDate'] = $datetime->format('Y-m-t 23:59:59');
-
-        }else{
-
-            $data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
-            $data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
-        }
-
-
-
-        $qb = $this->createQueryBuilder('e');
-        $qb->select('SUM(e.totalAmount) AS salesAmount');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption);
-        $this->handleSearchBetween($qb,$data);
-        $result = $qb->getQuery()->getSingleResult();
-        $purchasePrice = $this->_em->getRepository('InventoryBundle:SalesItem')->reportPurchasePrice($globalOption,$data);
-        $expenditures = $this->_em->getRepository('AccountingBundle:Expenditure')->reportExpenditure($globalOption,$data);
-        $administrative = $this->_em->getRepository('AccountingBundle:Transaction')->reportAdministrativeRevenue($globalOption,$data);
-        $revenuesDebit = $this->_em->getRepository('AccountingBundle:AccountJournal')->reportOperatingRevenueCredit($globalOption,$data);
-        $revenuesCredit = $this->_em->getRepository('AccountingBundle:AccountJournal')->reportOperatingRevenueCredit($globalOption,$data);
-
-        $data =  array('salesAmount' => $result['salesAmount'],'purchasePrice' => $purchasePrice,'administrative' => $administrative ,'revenuesDebit' => $revenuesDebit ,'revenuesCredit' => $revenuesCredit ,'expenditures' => $expenditures);
         return $data;
 
     }

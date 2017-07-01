@@ -63,7 +63,7 @@
                                     <div class="span3">
                                         <select name="process" id="process" class="span12 m-wrap">
                                             <option  value="">Select Process</option>
-                                            <option {% if searchForm.process is defined and searchForm.process == 'Paid' %} selected="selected" {% endif %} value="Paid">Paid</option>
+                                            <option {% if searchForm.process is defined and searchForm.process == 'Done' %} selected="selected" {% endif %} value="Done">Done</option>
                                             <option {% if searchForm.process is defined and searchForm.process == 'In-progress' %} selected="selected" {% endif %} value="In-progress">In-progress</option>
                                             <option {% if searchForm.process is defined and searchForm.process == 'Courier' %} selected="selected" {% endif %} value="Courier">Courier</option>
                                             <option {% if searchForm.process is defined and searchForm.process == 'Returned' %} selected="selected" {% endif %} value="Returned">Returned</option>
@@ -123,7 +123,7 @@
                                         <td class="numeric" >{% if entity.createdBy %}{{ entity.createdBy }}{% endif %}</td>
                                         {% if inventoryConfig.isBranch == 1 %}<td class="numeric">{% if entity.branches is not empty %}{{ entity.branches.name }} {% else %}Central{% endif %}</td>{% endif %}
                                         <td class="numeric" >
-                                            {% if entity.process == 'Paid' %}
+                                            {% if entity.process == 'Done' %}
                                                 <a class="btn mini green" >{{entity.courierInvoice}}</a>
                                                 <a  class="btn mini purple">{% if entity.process is not empty %}{{ entity.process }}{% endif %}</a>
                                             {% elseif entity.process == 'Returned' %}

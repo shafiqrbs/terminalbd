@@ -148,7 +148,9 @@ class TransactionRepository extends EntityRepository
         $qb->setParameter('globalOption', $globalOption);
         $this->handleSearchBetween($qb,$data);
         $qb->groupBy('ex.accountHead');
-        return  $qb->getQuery()->getOneOrNullResult();
+        $res =  $qb->getQuery();
+        $result = $res->getArrayResult();
+        return $result;
 
     }
 
