@@ -312,8 +312,8 @@ class DeliveryRepository extends EntityRepository
         $qb->setParameter('inventory', $inventory);
         $qb->andWhere("delivery.branch = :branch");
         $qb->setParameter('branch', $branch);
-        $qb->andWhere('delivery.process = :process');
-        $qb->setParameter('process','approved');
+/*        $qb->andWhere('delivery.process = :process');
+        $qb->setParameter('process','completed','approved');*/
         $this->handleWithSearch($qb,$data);
         if($group == 'item'){
             $qb->groupBy('stock.item');

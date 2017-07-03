@@ -79,8 +79,10 @@ class BranchReportController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
+
         $entities =  $em->getRepository('InventoryBundle:Delivery')->stockItem( $this->getUser(), $group = 'barcode',$data);
         $pagination = $this->paginate($entities);
+
         $stockSalesItem =  $em->getRepository('InventoryBundle:Delivery')->stockSalesItem( $this->getUser(),$group = 'barcode',$data);
         $salesReturnItem = $em->getRepository('InventoryBundle:Delivery')->stockSalesReturnItem( $this->getUser(),$group = 'barcode',$data);
         $stockOngoingItem =  $em->getRepository('InventoryBundle:Delivery')->stockOngoingItem( $this->getUser(),$group = 'barcode',$data);

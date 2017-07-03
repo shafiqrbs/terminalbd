@@ -94,6 +94,7 @@
                                 <thead class="flip-content ">
                                 <tr class="head-green">
                                     <th class="numeric" >Created</th>
+                                    <th class="numeric" >Invoice</th>
                                     <th class="numeric" >Branch Name</th>
                                     <th class="numeric" >Manager</th>
                                     <th class="numeric" >Total Item</th>
@@ -110,6 +111,7 @@
                                     </tr>
                                     <tr>
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{{ entity.branch.name }}</td>
                                         <td class="numeric" >{{ entity.branch.branchManager }}</td>
                                         <td class="numeric" >{{ entity.totalItem }}</td>
