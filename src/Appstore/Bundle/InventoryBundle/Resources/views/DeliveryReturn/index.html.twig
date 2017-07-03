@@ -118,7 +118,7 @@
                                         <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >
                                             {% if entity.approvedBy is empty %}
-                                                {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_MANAGER")  or app.user.granted("ROLE_DOMAIN_INVENTORY"))  %}
+                                                {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_MANAGER")  or app.user.granted("ROLE_DOMAIN_INVENTORY_MANAGER") or app.user.granted("ROLE_DOMAIN_INVENTORY"))  %}
                                                 <a href="javascript:" id="action-{{ entity.id }}" data-id="{{ entity.id }}" class="btn blue mini approve "  data-url="{{ path('inventory_deliveryreturn_approve',{'id':entity.id}) }}"><i class="icon-check-empty"></i>&nbsp;Approve</a>
                                                 {% endif %}
                                                 <a title="Are you sure went to delete ?" href="{{ path('inventory_deliveryreturn_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
