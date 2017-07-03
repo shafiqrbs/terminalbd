@@ -11,7 +11,7 @@
                             <small>{#{{ product.price|number_format }}#}</small>
                         </h3>
                         <ul class="social-link">
-                            <li><a href="http://www.facebook.com/sharer.php?s=100&p[title]={% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}&p[url]={{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}&p[summary]={% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}&p[images][0]={{ product.webPath }}&display=popup&caption=Test"  class="fa fa-facebook"></a></li>
+                            <li> <a target="_blank" href="https://www.facebook.com/share.php?u={{ app.request.getSchemeAndHttpHost() }}/product/{{ product.slug }}&picture= {{ app.request.getSchemeAndHttpHost() }}/{{ product.webPath }}&title={{ product.webName }}&description={{ product.content }}"  class="fa fa-facebook"></a></li>
                         </ul>
                     </div>
                 </div>
