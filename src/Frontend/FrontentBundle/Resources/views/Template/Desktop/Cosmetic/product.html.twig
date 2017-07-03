@@ -156,32 +156,37 @@
             </div>
             {% endif %}
             <div class="{% if globalOption.ecommerceConfig.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="body-content"  >
-                <div id="products" class="row list-group">
+                <div id="products" class="row list-group" >
+
+                    <div class="card-grid ">
                     {% for product in products %}
-                        <div  class="product-item card-grid col-xs-{{ globalOption.ecommerceConfig.perColumn }} col-lg-{{ globalOption.ecommerceConfig.perColumn }}">
-                            <div class="product-feature-box list-group-image card">
-                                <img class="img-responsive"  src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="">
-                                <div class="product-feature-box-content">
-                                    <span class="post">{{ product.webName }}</span>
+                        <div  class="product-item col-xs-{{ globalOption.ecommerceConfig.perColumn }} col-lg-{{ globalOption.ecommerceConfig.perColumn }}">
+
+                                <div class="product-feature-box list-group-image card">
+                                    <img class="img-responsive"  src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="">
+                                    <div class="product-feature-box-content">
+                                        <span class="post">{{ product.webName }}</span>
+                                    </div>
+                                    <ul class="social">
+                                        <li><a data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" href="javascript:" class="preview" ><i class="fa fa-eye"></i></a></li>
+                                        <li><a  href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" ><i class="fa fa-link"></i></a></li>
+                                    </ul>
                                 </div>
-                                <ul class="social">
-                                    <li><a data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}" href="javascript:" class="preview" ><i class="fa fa-eye"></i></a></li>
-                                    <li><a  href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" ><i class="fa fa-link"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="caption">
-                                <div class="row-fluid">
-                                    {% if globalOption.ecommerceConfig.showBrand == 1 %}
-                                        <p class="group inner brand text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'subdomain': globalOption.subDomain,'id':product.id }) }}"><span>{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></a> </p>
-                                    {% endif %}
-                                    <p class="group inner product-name text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</strong></a> </p>
+                                <div class="caption">
+                                    <div class="row-fluid">
+                                        {% if globalOption.ecommerceConfig.showBrand == 1 %}
+                                            <p class="group inner brand text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'subdomain': globalOption.subDomain,'id':product.id }) }}"><span>{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></a> </p>
+                                        {% endif %}
+                                        <p class="group inner product-name text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</strong></a> </p>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="col-xs-12 col-md-12 text-center"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</strong></div>
+                                    </div>
                                 </div>
-                                <div class="row-fluid">
-                                    <div class="col-xs-12 col-md-12 text-center"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</strong></div>
-                                </div>
-                            </div>
+
                         </div>
                     {% endfor %}
+                    </div>
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -237,11 +242,11 @@
     .card-grid {
         box-sizing: border-box;
         max-height: 100%;
-        display: flex;
+        display:flex;
         flex-direction: row;
         -webkit-box-orient: horizontal;
         -webkit-box-direction: normal;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: stretch;
         align-content: stretch;
         -webkit-box-align: stretch;
@@ -261,7 +266,7 @@
         flex: 1 1 100%;
         box-sizing: border-box;
         -webkit-box-flex: 1;
-        max-width: 32%;
+        max-width: 100%;
         margin-top: 20px;
         background: white;
         color: black;
