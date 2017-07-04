@@ -67,6 +67,13 @@ class EcommerceConfig
     private $pickupLocation;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="menuType", type="text", nullable = true)
+     */
+    private $menuType = 'Mega';
+
+    /**
      * @var float
      *
      * @ORM\Column(name="shippingCharge", type="float", nullable = true)
@@ -669,6 +676,25 @@ class EcommerceConfig
     public function setShowSidebar($showSidebar)
     {
         $this->showSidebar = $showSidebar;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenuType()
+    {
+        return $this->menuType;
+    }
+
+    /**
+     * @param string $menuType
+     * Mega
+     * Dropdown
+     * Sidebar
+     */
+    public function setMenuType($menuType)
+    {
+        $this->menuType = $menuType;
     }
 
 }

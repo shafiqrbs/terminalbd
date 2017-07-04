@@ -42,6 +42,14 @@ class EcommerceConfigType extends AbstractType
                     '2'       => 'Per Column-6',
                 ),
             ))
+            ->add('menuType', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    'Mega'       => 'Mega',
+                    'Dropdown'       => 'Dropdown',
+                    'Sidebar'       => 'Sidebar',
+                ),
+            ))
             ->add('owlProductColumn', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(

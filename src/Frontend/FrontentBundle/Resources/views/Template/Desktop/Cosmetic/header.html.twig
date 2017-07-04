@@ -112,8 +112,6 @@
                                                 </ul>
                                             {% endif %}
                                         </div>
-
-
                                     </div><!-- /btn-group -->
                                 </div><!-- /input-group -->
                             </div>
@@ -126,7 +124,80 @@
     </section>
     <section id="menu-bar" class="sticky">
         <div class="container">
-            <nav class="navbar navbar-mega-menu">
+            <nav id="header-menu">
+                <ul>
+                {% for  menu in globalOption.ecommerceMenus  %}
+                <li><a href=""> {{ menu.name }}</a>
+                    <ul>
+                        {% if menu.features is not empty %}
+                            <li><a href="#">Feature's</a>
+                                <ul>
+                                    {% for feature in  menu.features %}
+                                        {% if feature.targetTo == 'Promotion' %}
+                                            {% set path = path('webservice_product_promotion',{'id':feature.id}) %}
+                                        {% elseif feature.targetTo == 'Tag' %}
+                                            {% set path = path('webservice_product_tag',{'id':feature.tag.id}) %}
+                                        {% elseif feature.targetTo == 'Discount' %}
+                                            {% set path = path('webservice_product_tag',{'id':feature.discount.id}) %}
+                                        {% elseif feature.targetTo == 'Brand' %}
+                                            {% set path = path('webservice_product') %}
+                                        {% else %}
+                                            {% set path = path('webservice_product') %}
+                                        {% endif %}
+                                        <li><a href="{{ path }}">{{ feature.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                        {% if menu.promotions is not empty %}
+                            <li><a href="#">Promotion's</a>
+                                <ul>
+                                    {% for promotion in  menu.promotions %}
+                                        <li><a href="{{ path('webservice_product',{'promotion':promotion.id}) }}">{{ promotion.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                        {% if menu.discounts is not empty %}
+                            <li><a href="#">Discount Offer's</a></li>
+                                <ul>
+                                    {% for discount in  menu.discounts %}
+                                        <li><a href="{{ path('webservice_product',{'discount':discount.id}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                        {% endif %}
+                        {% if menu.tags is not empty %}
+                            <li><a href="#">Popular Tag's</a></li>
+                                <ul>
+                                    {% for tag in  menu.tags %}
+                                        <li><a href="{{ path('webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                        {% endif %}
+                        {% if menu.categories is not empty %}
+                            <li>
+                                {% render controller("FrontendBundle:EcommerceWidget:returnSimpleCategoryMenu",{categories: menu.categories}) %}
+                            </li>
+                        {% endif %}
+                        {% if menu.brands is not empty %}
+                            {% for brand in menu.brands %}
+                                <li><a href="{{ path('webservice_product_brand',{'id' : brand.id}) }}">{{ brand.name }}</a></li>
+                            {% endfor %}
+                        {% endif %}
+
+                    </ul>
+                 </li>
+                {% endfor %}
+                </ul>
+            </nav>
+            <style>
+                #header-menu ul li {
+                    float: left;
+                    position: relative;
+                    z-index: 999999;
+                }
+            </style>
+            {#<nav class="navbar navbar-mega-menu">
                 <div class="navbar-header">
                     <button class="navbar-toggle" type="button" data-toggle="collapse"
                             data-target=".js-navbar-collapse">
@@ -137,7 +208,6 @@
                     </button>
                 </div>
                 <div class="collapse navbar-collapse js-navbar-collapse">
-
                     <ul class="nav navbar-nav">
                         {% for  menu in globalOption.ecommerceMenus  %}
                             <li class="dropdown mega-dropdown">
@@ -241,7 +311,7 @@
                     </ul>
 
                 </div><!-- /.nav-collapse -->
-            </nav>
+            </nav>#}
         </div>
     </section>
 </nav>

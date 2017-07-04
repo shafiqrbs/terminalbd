@@ -68,6 +68,13 @@ class EcommerceWidgetController extends Controller
         return new Response($categoryMegaMenu);
     }
 
+    public function returnSimpleCategoryMenuAction($categories){
+
+        $categoryMegaMenu =  $this->getDoctrine()->getRepository('SettingAppearanceBundle:EcommerceMenu')->getSimpleCategoryMenu($categories);
+
+        return new Response($categoryMegaMenu);
+    }
+
     public function footerAction(GlobalOption $globalOption,Request $request)
     {
 

@@ -51,23 +51,10 @@
                                     <div class="row-fluid">
                                         <div class="span12 ">
                                             <div class="control-group">
-
-                                                <label class="control-label" for="price">Delivery Charge</label>
+                                                <label class="control-label" for="notes">Menu Type</label>
                                                 <div class="controls">
-                                                    {{ form_widget(form.shippingCharge) }}
-                                                    {{ form_errors(form.shippingCharge) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row-fluid">
-                                        <div class="span12 ">
-                                            <div class="control-group">
-                                                <label class="control-label" for="notes">Currency</label>
-                                                <div class="controls">
-                                                    {{ form_widget(form.currency) }}
-                                                    {{ form_errors(form.currency) }}
+                                                    {{ form_widget(form.menuType) }}
+                                                    {{ form_errors(form.menuType) }}
                                                 </div>
                                             </div>
                                         </div>
@@ -221,6 +208,30 @@
                                 </div>
 
                                 <div class="span5">
+                                    <div class="row-fluid">
+                                        <div class="span12 ">
+                                            <div class="control-group">
+
+                                                <label class="control-label" for="price">Delivery Charge</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.shippingCharge) }}
+                                                    {{ form_errors(form.shippingCharge) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row-fluid">
+                                        <div class="span12 ">
+                                            <div class="control-group">
+                                                <label class="control-label" for="notes">Currency</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.currency) }}
+                                                    {{ form_errors(form.currency) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row-fluid">
                                         <div class="span12 ">
                                             <div class="control-group">

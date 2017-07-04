@@ -70,4 +70,32 @@ class EcommerceMenuRepository extends EntityRepository
         return $str;
 
     }
+
+    public function getSimpleCategoryMenu($categories){
+
+        $menues = array();
+
+        foreach ($categories as $category) {
+            $parent = $category->getParent();
+            if(!isset($menues[$parent->getId()])) {
+                $menues[$parent->getId()]  = array(
+                    'id' => $parent->getId(),
+                    'name' => $parent->getName(),
+                    'children' => array()
+                );
+            }
+            $menues[$parent->getId()]['children'][] = $category;
+        }
+        $str = "";
+        foreach ($menues as $item) {
+            $str .= '<li><a href="">' . $item['name'] .'</a>';
+            $str .= '<ul>';
+            foreach ($item['children'] as $child) {
+                $str .= '<li><a href="/product/category/'. $child->getId() .'">' . $child->getName() .'</a></li>';
+            }
+            $str .= '</ul></li>';
+        }
+        return $str;
+
+    }
 }
