@@ -8,17 +8,9 @@
                 <li class="active"><span>{{ page.name }}</span></li>
             </ol>
         </div>
-</section>
-    <div class="clearfix"></div>
-    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-        <section class="feature-widget-body-top" >
-            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':'Product','position':'body-top'}) %}
-        </section>
-    {% endif %}
-    <div class="clearfix"></div>
+    </section>
     <section>
         <div class="container" >
-
             <div class="col-md-12">
                 <div class="row paginate">
                     <div class="col-md-12">
@@ -33,11 +25,167 @@
     <div class="clearfix"></div>
     <section id="products" style="margin-top: 20px; padding-bottom: 40px">
         <div class="container">
-            <div class="col-md-12" data-match-height="body-content"  >
+
+            <div class="col-md-12 " data-match-height="body-content"  >
+                {% if page.photoGallery is not empty %}
+                    <div class="carousel-container">
+                        <div id="carousel" class="carousel slide carousel-fade" style="width: 100%">
+                        <div class="carousel-inner">
+                            {% if page.webPath is not empty %}
+                                <div class="carousel-item item active">
+                                    <img class="img-responsive"  data-slide-no="0" src="{{ image(page.webPath).scaleResize(1024,768,'#000000') }}" alt="{{ page.name }}" />
+                                    <div class="carousel-caption " >
+                                        <h4>{{ page.name }}</h4>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% for slide in page.photoGallery.galleryImages %}
+                                <div  class="carousel-item item {% if loop.index-1 == 0 and page.webPath is empty %} active  {% endif %}"  {% if loop.index-1 == 0 and page.webPath is empty %} data-slide-no="{{ loop.index-1 }}"  {% endif %} >
+                                    <img class="img-responsive" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,768,'red') }}" alt="...">
+                                    <div class="carousel-caption " >
+                                        {% if slide.caption is not empty %}<h4>{{ slide.caption }}{% endif %}</h4>
+                                        {% if slide.description is not empty %}<span>{{ slide.description|raw }}</span>{% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <!-- Navigation -->
+                          <a class="carousel-post-control left" href="#carousel" data-slide="prev">‹</a>
+                          <a class="carousel-post-control right" href="#carousel" data-slide="next">›</a>
+                    </div>
+                    </div>
+                {% endif %}
+                <div class="clearfix"></div>
                <p>{{ page.content|raw }}</p>
             </div>
         </div>
     </section>
     <div class="clearfix"></div>
+ <style>
+
+     .carousel-post-control {
+         position: absolute;
+         top: 45%;
+         left: 15px;
+         width: 40px;
+         height: 40px;
+         margin-top: -20px;
+         font-size: 60px;
+         font-weight: 100;
+         line-height: 30px;
+         color: #ffffff;
+         text-align: center;
+         background: #222222;
+         border: 3px solid #ffffff;
+         -webkit-border-radius: 23px;
+         -moz-border-radius: 23px;
+         border-radius: 23px;
+         opacity: 0.5;
+         filter: alpha(opacity=50);
+     }
+
+     .carousel-post-control.right {
+         right: 0;
+         left: auto;
+         text-decoration: none!important;
+     }
+
+     .carousel-post-control.left {
+         text-align: left;
+         float: left;
+         text-decoration: none!important;
+     }
+
+     .carousel-caption {
+         position: absolute;
+         left: 0;
+         right: 0;
+         bottom: 0;
+         padding: 15px;
+         background: #333333;
+         background: rgba(0, 0, 0, 0.75);
+     }
+     .carousel-post-control {
+         width: 60px;
+         height: 0;
+         margin-top: -20px;
+         font-size: 100px;
+         background: none;
+         border: none;
+         font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+         font-weight: 300;
+     }
+     .carousel-caption {
+         padding: 25px;
+         text-align: center;
+         width: 100%!important;
+         max-width: 100%!important;
+     }
+     .carousel-caption h4 {
+         font-weight: 100;
+         font-size: 25px;
+     }
+     .carousel-caption p {
+         margin-top: 39px;
+         font-size: 16px;
+         margin-bottom: -8px;
+         font-weight: 300;
+         line-height: 30px;
+     }
+     .carousel-fade .carousel-inner .item {
+         opacity: 0;
+         -webkit-transition-property: opacity;
+         -moz-transition-property: opacity;
+         -o-transition-property: opacity;
+         transition-property: opacity;
+     }
+     .carousel-fade .carousel-inner .active { opacity: 1 }
+     .carousel-fade .carousel-inner .active.left,
+     .carousel-fade .carousel-inner .active.right {
+         left: 0;
+         opacity: 0;
+         z-index: 1;
+     }
+     .carousel-fade .carousel-inner .next.left,
+     .carousel-fade .carousel-inner .prev.right { opacity: 1 }
+     .carousel-fade .carousel-post-control { z-index: 2 }
+     @media only screen and (max-width:767px) {
+         h1 { font-size: 30px !important }
+         .carousel-caption {
+             padding: 15px;
+             text-align: center;
+         }
+         .carousel-caption h4 { font-size: 30px }
+         .carousel-caption p {
+             margin-top: 10px;
+             font-size: 10px;
+             margin-bottom: -10px;
+         }
+
+         .carousel { margin-bottom: 0 }
+         .hero-unit { padding-bottom: 60px }
+         .hero-unit p { font-size: 16px }
+     }
+
+ </style>
  {% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    $(".carousel").carousel({
+        interval: false
+    });
+    $(".carousel").on("slid", function() {
+    var to_slide;
+    to_slide = $(".carousel-item.active").attr("data-slide-no");
+    $(".myCarousel-target.active").removeClass("active");
+    $(".carousel-indicators [data-slide-to=" + to_slide + "]").addClass("active");
+    });
+    $(".myCarousel-target").on("click", function() {
+    $(this).preventDefault();
+    $(".carousel").carousel(parseInt($(this).attr("data-slide-to")));
+    $(".myCarousel-target.active").removeClass("active");
+    $(this).addClass("active");
+    });
+
+{% endblock %}
 

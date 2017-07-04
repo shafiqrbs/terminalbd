@@ -1,52 +1,110 @@
-{% extends ':frontend/template:base.html.twig' %}
+{% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
     <div class="clearfix"></div>
     <section id="breadcrumb">
         <div class="container">
             <ol class="breadcrumb">
-                <li><a href="{{ path('ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
-                <li><a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':moduleName|lower }) }}"> {{ moduleName }}</a></li>
-                <li class="active"><span>{{ details.name }}</span></li>
+                <li><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain':globalOption.subDomain,'module':module.slug|lower }) }}"> {{ module.name }}</a></li>
+                <li class="active"><span>{{ page.name }}</span></li>
             </ol>
         </div>
     </section>
     <div class="clearfix"></div>
-    <section id="products" style="margin-top: 20px; padding-bottom: 40px">
-        <div class="container">
-            <article class="col-md-12" >
-                {% if ( moduleName == 'News') %}
-                    {{ include('@Frontend/Template/Desktop/ModuleDetails/news.html.twig')}}
-                {% elseif( moduleName == 'Blog' ) %}
-                    {{ include('@Frontend/Template/Desktop/ModuleDetails/blog.html.twig')}}
-                {% elseif( moduleName == 'Testimonial' ) %}
-                    {{ include('@Frontend/Template/Desktop/ModuleDetails/testimonial.html.twig')}}
-                {% elseif( moduleName == 'Timeline' ) %}
-                    {{ include('@Frontend/Template/Desktop/ModuleDetails/timeline.html.twig')}}
-                {% elseif( moduleName == 'Branch' ) %}
-                    {{ include('@Frontend/Template/Desktop/ModuleDetails/branch.html.twig')}}
-                {% elseif( moduleName == 'Event' ) %}
-                    {{ include('@Frontend/Template/Desktop/ModuleDetails/event.html.twig')}}
-                {% elseif( moduleName == 'ClassRoutine' ) %}
-                    {{ include('@Frontend/Template/Desktop/ModuleDetails/blackout.html.twig')}}
-                {% elseif( moduleName == 'Blackout' ) %}
-                    {{ include('@Frontend/Template/Desktop/ModuleDetails/blackout.html.twig')}}
-                {% elseif( moduleName == 'NoticeBoard' ) %}
-                    {{ include('@Frontend/Template/Desktop/ModuleDetails/noticeboard.html.twig')}}
-                {% elseif( moduleName == 'Admission' ) %}
-                    {{ include('@Frontend/Template/Desktop/ModuleDetails/admission.html.twig')}}
-                {% elseif( moduleName == 'Syndicate' ) %}
-                    {{ include('@Frontend/Template/Desktop/ModuleDetails/syndicate.html.twig')}}
-                {% else %}
-                    {{ include('@Frontend/Template/Desktop/Module/default.html.twig')}}
-                {% endif %}
-            </article>
-
+    <section>
+        <div class="container" >
+            <div class="col-md-12">
+                <div class="row paginate">
+                    <div class="col-md-12">
+                        <div class="btn-group pull-left">
+                            <div class="product-title"><span class="glyphicon glyphicon-list"></span>&nbsp;{{ module.name }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     <div class="clearfix"></div>
+    <section id="products" style="margin-top: 20px; padding-bottom: 40px">
+        <div class="container blog">
+            <div class="row">
+                <article class="col-md-12" >
+                    {% if ( module.name == 'News') %}
+                        {{ include('@Frontend/Template/Desktop/ModuleDetails/news.html.twig')}}
+                    {% elseif( module.name == 'Blog' ) %}
+                        {{ include('@Frontend/Template/Desktop/ModuleDetails/blog.html.twig')}}
+                    {% elseif( module.name == 'Testimonial' ) %}
+                        {{ include('@Frontend/Template/Desktop/ModuleDetails/testimonial.html.twig')}}
+                    {% elseif( module.name == 'Timeline' ) %}
+                        {{ include('@Frontend/Template/Desktop/ModuleDetails/timeline.html.twig')}}
+                    {% elseif( module.name == 'Branch' ) %}
+                        {{ include('@Frontend/Template/Desktop/ModuleDetails/branch.html.twig')}}
+                    {% elseif( module.name == 'Event' ) %}
+                        {{ include('@Frontend/Template/Desktop/ModuleDetails/event.html.twig')}}
+                    {% elseif( module.name == 'ClassRoutine' ) %}
+                        {{ include('@Frontend/Template/Desktop/ModuleDetails/blackout.html.twig')}}
+                    {% elseif( module.name == 'Blackout' ) %}
+                        {{ include('@Frontend/Template/Desktop/ModuleDetails/blackout.html.twig')}}
+                    {% elseif( module.name == 'NoticeBoard' ) %}
+                        {{ include('@Frontend/Template/Desktop/ModuleDetails/noticeboard.html.twig')}}
+                    {% elseif( module.name == 'Admission' ) %}
+                        {{ include('@Frontend/Template/Desktop/ModuleDetails/admission.html.twig')}}
+                    {% elseif( module.name == 'Syndicate' ) %}
+                        {{ include('@Frontend/Template/Desktop/ModuleDetails/syndicate.html.twig')}}
+                    {% else %}
+                        {{ include('@Frontend/Template/Desktop/Module/default.html.twig')}}
+                    {% endif %}
+                </article>
+                <!-- Blog Sidebar Column -->
+                <aside class="col-md-4 sidebar-padding js-equal-height" style="background: #FBFCFE">
+                    <!-- Blog Categories -->
+                    <div class="blog-sidebar">
+                        <h4 class="sidebar-title"><i class="fa fa-list-ul"></i> Categories</h4>
+                        <hr>
+                        <div class="list-group">
+                            {% for cat in categories %}
+                                <a class="list-group-item" href="{{ path('webservice_module_category',{'subdomain': globalOption.subDomain,'module':moduleName|lower ,'slug':cat.slug }) }}"><i class="fa fa-bookmark"></i>&nbsp;{{ cat.name }}</a>
+                            {% endfor %}
+                        </div>
+                        {% if sidebar.feature is not empty %}
+                            {% for entity in sidebar.feature %}
+                                <div class="sidebar-feature">
+                                    <img src="{{ image(entity.webPath).resize() }}" alt="">
+                                    <div class="over-layer">
+                                        <ul class="social-links">
+                                            <li><a href="#" class="fa fa-link"></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    {% if sidebar.feature is not empty %}
+                        {% for entity in sidebar.feature %}
+                            <div class="sidebar-feature">
+                                <img src="{{ image(entity.webPath).resize() }}" alt="">
+                                <div class="over-layer">
+                                    <ul class="social-links">
+                                        {% if entity.targetTo == 'Page' %}
+                                            <li class=""><a  href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':entity.page.module.slug,'slug':entity.page.slug}) }}" class="fa fa-link"></a></li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if sidebar is not empty %}
+                        {% for module in sidebar.module %}
+                            {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'module':module.id}) %}
+                        {% endfor %}
+                    {% endif %}
+                </aside>
+            </div>
+        </div>
+   </section>
 
+    <div class="clearfix"></div>
 {% endblock %}
-
 {% block documentready %}
     {{ parent() }}
 {% endblock %}

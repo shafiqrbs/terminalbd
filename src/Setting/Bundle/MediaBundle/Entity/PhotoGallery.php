@@ -185,7 +185,7 @@ class PhotoGallery
     }
 
     /**
-     * @param mixed $galleryImages
+     * @param GalleryImage $galleryImages
      */
     public function setGalleryImages($galleryImages)
     {
@@ -193,7 +193,7 @@ class PhotoGallery
     }
 
     /**
-     * @return mixed
+     * @return GalleryImage
      */
     public function getGalleryImages()
     {

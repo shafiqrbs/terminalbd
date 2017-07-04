@@ -1,18 +1,18 @@
-{% set commentID = globalOption.id~'-'~moduleName|lower~'-'~details.id %}
+{% set commentID = globalOption.id~'-'~module.slug~'-'~page.id %}
 <div class="page-header sidebar-title">
-    <h3>{{ details.name }}</h3>
+    <h3>{{ page.name }}</h3>
     <span>
-        <i class="fa fa-user"></i>&nbsp;{{ details.authorName }}&nbsp;&nbsp;&nbsp;<i class="fa fa-comments"></i>&nbsp;Comments&nbsp;<span class="badge"><span class="fos-comment-count" data-fos-comment-thread-id="{{ commentID }}">#</span></span>&nbsp;&nbsp;&nbsp;<i class="fa fa-calendar"></i>&nbsp;{{ details.updated|date('d F, Y') }}
+        <i class="fa fa-user"></i>&nbsp;{{ page.authorName }}&nbsp;&nbsp;&nbsp;<i class="fa fa-comments"></i>&nbsp;Comments&nbsp;<span class="badge"><span class="fos-comment-count" data-fos-comment-thread-id="{{ commentID }}">#</span></span>&nbsp;&nbsp;&nbsp;<i class="fa fa-calendar"></i>&nbsp;{{ page.updated|date('d F, Y') }}
         <i class="fa fa-tags"></i>
-        {% for cat in details.moduleCategory %}
-            <a href="{{ path('webservice_module_category',{'subdomain': globalOption.subDomain,'module':module.name|lower ,'slug':cat.slug }) }}">{{ cat.name }}</a>
+        {% for cat in page.moduleCategory %}
+            <a href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module':module.name|lower ,'slug':cat.slug }) }}">{{ cat.name }}</a>
         {% endfor %}
     </span>
 </div>
-{% if details.webPath is not empty %}
-    <img class="img-responsive displayed" src="{{ image(details.webPath).resize() }}" alt="" />
+{% if page.webPath is not empty %}
+    <img class="img-responsive displayed" src="{{ image(page.webPath).resize() }}" alt="" />
 {% endif %}
-<div><p>{{ details.content|raw }}</p></div>
+<div><p>{{ page.content|raw }}</p></div>
 <div class="blog_post" >
       {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': commentID } %}
     <br/>

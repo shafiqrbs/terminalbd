@@ -1,3 +1,8 @@
+#header-menu ul li {
+    float: left;
+    position: relative;
+    z-index: 999999;
+}
 /*  ========================== HEADER LABEL CSS==========================*/
 
 .header-line-center {

@@ -1,40 +1,39 @@
 {% extends ':frontend/template:base.html.twig' %}
 {% block body %}
     <div class="clearfix"></div>
-
     <section id="breadcrumb">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="crumb">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i><a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module':moduleName|lower }) }}"> {{ moduleName }}</a><i>/</i>{{ details.name }}</div>
-                </div>
-            </div>
+            <ol class="breadcrumb">
+                <li><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain':globalOption.subDomain,'module':module.slug|lower }) }}"> {{ module.name }}</a></li>
+                <li class="active"><span>{{ page.name }}</span></li>
+            </ol>
         </div>
     </section>
     <div class="container blog">
         <div class="row">
-            <article class="col-md-8">
-                {% if ( moduleName == 'News') %}
+            <article class="col-md-12" >
+                {% if ( module.name == 'News') %}
                     {{ include('@Frontend/Template/Desktop/ModuleDetails/news.html.twig')}}
-                {% elseif( moduleName == 'Blog' ) %}
+                {% elseif( module.name == 'Blog' ) %}
                     {{ include('@Frontend/Template/Desktop/ModuleDetails/blog.html.twig')}}
-                {% elseif( moduleName == 'Testimonial' ) %}
+                {% elseif( module.name == 'Testimonial' ) %}
                     {{ include('@Frontend/Template/Desktop/ModuleDetails/testimonial.html.twig')}}
-                {% elseif( moduleName == 'Timeline' ) %}
+                {% elseif( module.name == 'Timeline' ) %}
                     {{ include('@Frontend/Template/Desktop/ModuleDetails/timeline.html.twig')}}
-                {% elseif( moduleName == 'Branch' ) %}
+                {% elseif( module.name == 'Branch' ) %}
                     {{ include('@Frontend/Template/Desktop/ModuleDetails/branch.html.twig')}}
-                {% elseif( moduleName == 'Event' ) %}
+                {% elseif( module.name == 'Event' ) %}
                     {{ include('@Frontend/Template/Desktop/ModuleDetails/event.html.twig')}}
-                {% elseif( moduleName == 'ClassRoutine' ) %}
+                {% elseif( module.name == 'ClassRoutine' ) %}
                     {{ include('@Frontend/Template/Desktop/ModuleDetails/blackout.html.twig')}}
-                {% elseif( moduleName == 'Blackout' ) %}
+                {% elseif( module.name == 'Blackout' ) %}
                     {{ include('@Frontend/Template/Desktop/ModuleDetails/blackout.html.twig')}}
-                {% elseif( moduleName == 'NoticeBoard' ) %}
+                {% elseif( module.name == 'NoticeBoard' ) %}
                     {{ include('@Frontend/Template/Desktop/ModuleDetails/noticeboard.html.twig')}}
-                {% elseif( moduleName == 'Admission' ) %}
+                {% elseif( module.name == 'Admission' ) %}
                     {{ include('@Frontend/Template/Desktop/ModuleDetails/admission.html.twig')}}
-                {% elseif( moduleName == 'Syndicate' ) %}
+                {% elseif( module.name == 'Syndicate' ) %}
                     {{ include('@Frontend/Template/Desktop/ModuleDetails/syndicate.html.twig')}}
                 {% else %}
                     {{ include('@Frontend/Template/Desktop/Module/default.html.twig')}}
@@ -108,3 +107,4 @@
 {% block documentready %}
     {{ parent() }}
 {% endblock %}
+

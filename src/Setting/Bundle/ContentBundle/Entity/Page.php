@@ -5,6 +5,7 @@ namespace Setting\Bundle\ContentBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\LocationBundle\Entity\Location;
+use Setting\Bundle\MediaBundle\Entity\PhotoGallery;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -520,7 +521,7 @@ class Page
 
 
     /**
-     * @param mixed $photoGallery
+     * @param PhotoGallery $photoGallery
      */
     public function setPhotoGallery($photoGallery)
     {
@@ -528,7 +529,7 @@ class Page
     }
 
     /**
-     * @return mixed
+     * @return PhotoGallery
      */
     public function getPhotoGallery()
     {

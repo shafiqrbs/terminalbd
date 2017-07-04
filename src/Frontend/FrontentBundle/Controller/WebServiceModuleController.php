@@ -4,6 +4,7 @@ namespace Frontend\FrontentBundle\Controller;
 
 
 use Frontend\FrontentBundle\Service\MobileDetect;
+use Setting\Bundle\ToolBundle\Entity\SiteSetting;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,7 @@ class WebServiceModuleController extends Controller
 
     public function moduleAction($subdomain,$module)
     {
+
 
         $em = $this->getDoctrine()->getManager();
 
@@ -31,6 +33,7 @@ class WebServiceModuleController extends Controller
             if(!empty($menu)){
 
                 $siteEntity = $globalOption->getSiteSetting();
+                /* @var SiteSetting $siteEntity */
                 $themeName = $siteEntity->getTheme()->getFolderName();
                 $moduleName = $this->get('setting.menuTreeSettingRepo')->getCheckModule($menu);
 
@@ -65,7 +68,6 @@ class WebServiceModuleController extends Controller
         }else{
             $theme = 'Template/Desktop/'.$themeName;
         }
-
         return $this->render('FrontendBundle:'.$theme.':'.$twigName.'.html.twig',
 
             array(
@@ -152,28 +154,31 @@ class WebServiceModuleController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
+
+        $categories ='';
+        $page ='';
+        $entityModule ='';
+        $sidebar = "";
+
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         if(!empty($globalOption)){
 
-            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => $module));
-            $menu = $em->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => $module));
+            $entityModule = $em->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => $module));
 
-            $categories ='';
-            $page ='';
-            $moduleName ='';
-            $details = "";
-            if(!empty($menu)){
+
+
+            if(!empty($entityModule)){
 
                 $siteEntity = $globalOption->getSiteSetting();
                 $themeName = $siteEntity->getTheme()->getFolderName();
 
 
                // $moduleName = $this->get('setting.menuTreeSettingRepo')->getCheckModule($menu);
-                if($menu){
+                if($entityModule){
 
-                    $details = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'slug' => $slug));
+                    $page = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption' => $globalOption,'slug' => $slug));
                     $twigName = "moduleDetails";
-                    $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getId());
+                    $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$entityModule->getId());
                     $sidebar = $em->getRepository('SettingAppearanceBundle:SidebarWidgetPanel')->getSidebarPanel($globalOption,$sidebar = 3);
 
 
@@ -205,8 +210,7 @@ class WebServiceModuleController extends Controller
                 'globalOption'          => $globalOption,
                 'categories'            => $categories,
                 'page'                  => $page,
-                'moduleName'            => $moduleName,
-                'details'               => $details,
+                'module'                => $entityModule,
                 'sidebar'               => $sidebar,
                 'pageName'              => 'pageName',
             )

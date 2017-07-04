@@ -1,12 +1,26 @@
-{% extends ':frontend/template:base.html.twig' %}
+{% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
     <div class="clearfix"></div>
     <section id="breadcrumb">
         <div class="container">
             <ol class="breadcrumb">
-                <li><a href="{{ path('ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
                 <li class="active"><span>{{ title }}</span></li>
             </ol>
+        </div>
+    </section>
+    <div class="clearfix"></div>
+    <section>
+        <div class="container" >
+            <div class="col-md-12">
+                <div class="row paginate">
+                    <div class="col-md-12">
+                        <div class="btn-group pull-left">
+                            <div class="product-title"><span class="glyphicon glyphicon-list"></span>&nbsp;{{ module.name }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     <div class="clearfix"></div>
@@ -35,6 +49,27 @@
                     {{ include('@Frontend/Template/Desktop/Module/default.html.twig')}}
                 {% endif %}
            </article>
+            <aside class="col-md-4 sidebar-padding js-equal-height" style="background: #FBFCFE">
+                {% if sidebar is not empty and sidebar.feature is not empty %}
+                    {% for entity in sidebar.feature %}
+                        <div class="sidebar-feature">
+                            <img src="{{ image(entity.webPath).resize() }}" alt="">
+                            <div class="over-layer">
+                                <ul class="social-links">
+                                    {% if entity.targetTo == 'Page' %}
+                                        <li class=""><a  href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain':globalOption.subDomain,'module':entity.page.module.slug,'slug':entity.page.slug}) }}" class="fa fa-link"></a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% if sidebar is not empty %}
+                    {% for module in sidebar.module %}
+                        {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'module':module.id}) %}
+                    {% endfor %}
+                {% endif %}
+            </aside>
         </div>
     </section>
     <div class="clearfix"></div>
