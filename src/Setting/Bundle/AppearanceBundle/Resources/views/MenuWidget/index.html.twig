@@ -1,0 +1,110 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+    <div class="container-fluid">
+        <!-- BEGIN gallery HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 class="gallery-title">
+                    Form Components
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('homepage') }}">Home</a>
+                        <span class="icon-angle-right"></span>
+                    </li>
+                    <li><a href="#">Manage menus</a></li>
+                    <li class="pull-right btn blue disabled mini">
+                        <i class="fa fa-calendar"></i>
+                        {{ "now"|date("d-F-Y") }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END gallery HEADER-->
+        <!-- BEGIN gallery CONTENT-->
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="portlet box green tabbable">
+
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
+                    </div>
+                    <div class="portlet-body">
+
+                        <div class="tabbable portlet-tabs">
+                           <div class="portlet-body flip-scroll">
+                                {% include('flash-message.html.twig')  %}
+                                <table class="table table-bordered table-striped table-condensed flip-content ">
+
+                                    <thead class="flip-content ">
+                                    <tr class="head-grey">
+                                        <td>&nbsp;&nbsp;<i class="icon-list"></i> Menu</td>
+                                        <th class="numeric" >Menu Slug</th>
+                                        <th class="numeric" >Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for entity in entities %}
+
+                                        {% if(entity.syndicate) %}
+                                            <tr>
+                                                <td class="numeric">{{ entity.menu }}</td>
+                                                <td class="numeric">{{ entity.slug }}</td>
+                                                <td class="numeric"  ><a class="btn blue mini" href="{{ path('appearancemenuwidget_new',{'menu':entity.id}) }}">Add Feature</a> </td>
+                                            </tr>
+                                        {% endif %}
+
+                                        {% if(entity.module) %}
+                                            <tr>
+                                               <td class="numeric">{{ entity.menu }}</td>
+                                                <td class="numeric">{{ entity.slug }}</td>
+                                                <td class="numeric"  ><a class="btn blue mini" href="{{ path('appearancemenuwidget_new',{'menu':entity.id}) }}">Add Feature</a> </td>
+                                            </tr>
+                                        {% endif %}
+
+                                        {% if(entity.syndicateModule) %}
+                                            <tr>
+                                                <td class="numeric">{{ entity.menu }}</td>
+                                                <td class="numeric">{{ entity.slug }}</td>
+                                                <td class="numeric"  ><a class="btn blue mini" href="{{ path('appearancemenuwidget_new',{'menu':entity.id}) }}">Add Feature</a> </td>
+
+                                            </tr>
+                                        {% endif %}
+                                        {% if(entity.page) %}
+                                            <tr>
+                                               <td class="numeric">{{ entity.menu }}</td>
+                                               <td class="numeric">{{ entity.slug }}</td>
+                                                <td class="numeric"  ><a class="btn blue mini" href="{{ path('appearancemenuwidget_new',{'menu':entity.id}) }}">Add Feature</a> </td>
+                                            </tr>
+                                        {% endif %}
+                                        {% if(entity.menuCustom) %}
+                                            <tr>
+                                                <td class="numeric">{{ entity.menu }}</td>
+                                                <td class="numeric">{{ entity.slug }}</td>
+                                                <td class="numeric"  ><a class="btn blue mini" href="{{ path('appearancemenuwidget_new',{'menu':entity.id}) }}">Add Feature</a> </td>
+                                            </tr>
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+

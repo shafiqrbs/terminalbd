@@ -183,27 +183,27 @@ class TemplateWidgetController extends Controller
         ));
     }
 
-    public function moduleSidebarBaseContentAction(GlobalOption $globalOption , Module $module )
+    public function moduleSidebarBaseContentAction(GlobalOption $globalOption , PageModule $pageModule)
     {
-        $limit = 6;
-        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(),$module->getId(),$limit);
+
+        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(),$pageModule->getModule()->getId(),$pageModule->getShowLimit());
 
         return $this->render('@Frontend/Template/Desktop/Widget/sidebar.html.twig', array(
-            'entities'         => $entities,
-            'module'           => $module,
-            'globalOption'     => $globalOption,
+            'entities'          => $entities,
+            'pageModule'        => $pageModule,
+            'globalOption'      => $globalOption,
         ));
     }
 
-    public function pageBaseModuleContentAction(GlobalOption $globalOption , Module $module )
+    public function pageBaseModuleContentAction(GlobalOption $globalOption , PageModule $pageModule )
     {
-        $limit = 6;
-        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(),$module->getId(),$limit);
+
+        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(),$pageModule->getModule()->getId(),$pageModule->getShowLimit());
 
         return $this->render('@Frontend/Template/Desktop/Widget/page.html.twig', array(
-            'entities'         => $entities,
-            'module'           => $module,
-            'globalOption'     => $globalOption,
+            'entities'              => $entities,
+            'pageModule'            => $pageModule,
+            'globalOption'          => $globalOption,
         ));
     }
 

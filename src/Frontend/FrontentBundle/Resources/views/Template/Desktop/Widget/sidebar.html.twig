@@ -1,28 +1,58 @@
-{% if entities is defined and entities is not empty and module.slug == 'blog' %}
+
+{% if entities is defined and entities is not empty and pageModule.module.slug == 'blog' %}
     <div class="blog-sidebar">
-        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent Blogs</h4>
-        <div class="media">
+        <div class="row">
+            <div class="col-md-9">
+                <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent Blog</h4>
+            </div>
+            {% if pageModule.showingType == 'slider' %}
+                <div class="col-md-3 text-right owl-position" >
+                    <a class='blog-sidebar-prev' href='javascript:'>
+                        <span class='glyphicon glyphicon-chevron-left'></span>
+                    </a>
+                    <a class='blog-sidebar-next' href='javascript:'>
+                        <span class='glyphicon glyphicon-chevron-right'></span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        {% if pageModule.showingType == 'grid' %}
             <div class="row">
                 <div class="col-md-12">
-                    <div id="sidebar-blog-slider" class="owl-carousel">
+                    {% for entity in entities  %}
+                        <div class="post-grid">
+                            <ul class="post-info">
+                                <li><i class="fa fa-bookmark"></i> <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'blog','slug':entity.slug }) }}">{{ entity.name }}</a></li>
+                                <li><i class="fa fa-calendar"></i> {{ entity.updated|date("d F, Y") }}</li>
+                                <li><i class="fa fa-user"></i> {{ entity.authorName }}</li>
+                                <li><i class="fa fa-tags"></i> &nbsp;<a href="">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</a></li>
+                            </ul>
+                        </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+        {% elseif pageModule.showingType == 'slider' %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="blog-sidebar-slider" class="owl-carousel">
                         {% for entity in entities  %}
                             <div class="sidebar-blog">
                                 <div class="post-img">
-                                    <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
+                                    <img src="{{ image(entity.webPath).resize(320,160) }}" alt="">
                                     <div class="over-layer">
                                         <ul class="post-link">
-                                            <li><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="fa fa-link"></a></li>
+                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'blog','slug':entity.slug }) }}" class="fa fa-link"></a></li>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="post-review">
-                                    <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                                    <h5 class="post-title"><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'blog','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
                                     <ul class="post-info">
                                         <li><i class="fa fa-calendar"></i> {{ entity.updated|date("d F, Y") }}</li>
                                         <li><i class="fa fa-user"></i> {{ entity.authorName }}</li>
                                         <li><i class="fa fa-tags"></i></li>
                                         <li><a href="">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</a></li>
-
                                     </ul>
                                 </div>
                             </div>
@@ -30,38 +60,77 @@
                     </div>
                 </div>
             </div>
-        </div>
+        {% else %}
+            <ul class="list-line list-group">
+                {% for entity in entities %}
+                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'blog','slug':entity.slug }) }}">{{ entity.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 {% endif %}
 
-{% if entities is defined and entities is not empty and module.slug == 'branch' %}
+{% if entities is defined and entities is not empty and pageModule.module.slug == 'branch' %}
     <div class="blog-sidebar">
-        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Branches</h4>
-        <div class="media">
+        <div class="row">
+            <div class="col-md-9">
+                <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Branch</h4>
+            </div>
+            {% if pageModule.showingType == 'slider' %}
+                <div class="col-md-3 text-right owl-position" >
+                    <a class='branch-sidebar-prev' href='javascript:'>
+                        <span class='glyphicon glyphicon-chevron-left'></span>
+                    </a>
+                    <a class='branch-sidebar-next' href='javascript:'>
+                        <span class='glyphicon glyphicon-chevron-right'></span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        {% if pageModule.showingType == 'grid' %}
             <div class="row">
-                <div class="col-md-12">
-                    <div id="sidebar-branch-slider" class="owl-carousel">
-                        {% for  entity in entities %}
-                            <div class="sidebar-branch">
-                                <h5 class="text-center" ><strong>{{ entity.name }}</strong></h5>
-                                <dl>
-                                    <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
-                                    <dd><i class="fa fa-user"></i>&nbsp;{{ entity.contactPerson }} , <em>{{ entity.designation }}</em></dd>
-                                    <dd><i class="fa fa-mobile"></i>&nbsp;+ 088 {{ entity.mobile|raw }}</dd>
-                                    {% if(entity.phone) %}<dd><i class="fa fa-phone-square"></i></i>&nbsp;+ {{ entity.phone|raw }}</dd>{% endif %}
-                                    {% if(entity.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ entity.fax|raw }}</dd>{% endif %}
-                                    {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
-                                    <dd class="text-center"><a target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}"><i class="fa fa-map-marker"></i> Direction</a></dd>
-                                </dl>
-                            </div>
-                          {% endfor %}
+            <div class="col-md-12">
+                {% for  entity in entities %}
+                    <div class="sidebar-branch">
+                        <span class="text-center branch-head" >{{ entity.name }}</span>
+                        <dl>
+                            <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
+                            <dd><i class="fa fa-mobile"></i>&nbsp;+ 088 {{ entity.mobile|raw }}</dd>
+                            {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
+                            <dd class="text-center"><a class="btn btn-sm  btn-info" target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}">Direction</a></dd>
+                        </dl>
                     </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% elseif pageModule.showingType == 'slider'  %}
+            <div class="row">
+            <div class="col-md-12">
+                <div id="branch-sidebar-slider" class="owl-carousel">
+                    {% for  entity in entities %}
+                        <div class="sidebar-branch">
+                            <span class="text-center branch-head" >{{ entity.name }}</span>
+                            <dl>
+                                <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
+                                <dd><i class="fa fa-mobile"></i>&nbsp;+ 088 {{ entity.mobile|raw }}</dd>
+                                {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
+                                <dd class="text-center"><a class="btn btn-sm  btn-info" target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}">Direction</a></dd>
+                            </dl>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
+        {% else %}
+            <ul class="list-line list-group">
+                {% for entity in entities %}
+                    <li><a target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}">{{ entity.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty  and module.slug == 'client' %}
+{% if entities is defined and entities is not empty  and pageModule.module.slug == 'client' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Client</h4>
         <div class="media">
@@ -80,7 +149,7 @@
         </div>
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty  and module.slug == 'event' %}
+{% if entities is defined and entities is not empty  and pageModule.module.slug == 'event' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Events</h4>
         <div class="media">
@@ -110,7 +179,7 @@
         </div>
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty  and module.slug == 'faq' %}
+{% if entities is defined and entities is not empty  and pageModule.module.slug == 'faq' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;FAQ</h4>
         <div class="media">
@@ -140,7 +209,7 @@
 
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty and module.slug == 'news' %}
+{% if entities is defined and entities is not empty and pageModule.module.slug == 'news' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent News</h4>
         <hr style="margin-bottom:2px;">
@@ -157,7 +226,7 @@
         {% endfor %}
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty and module.slug == 'noticeboard' %}
+{% if entities is defined and entities is not empty and pageModule.module.slug == 'noticeboard' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent Notice</h4>
            <div class="media">
@@ -176,7 +245,7 @@
            </div>
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty  and module.slug == 'portfolio' %}
+{% if entities is defined and entities is not empty  and pageModule.module.slug == 'portfolio' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Portfolio</h4>
         <div class="media">
@@ -248,7 +317,7 @@
 
 
 
-{% if entities is defined and entities is not empty  and module.slug == 'service' %}
+{% if entities is defined and entities is not empty  and pageModule.module.slug == 'service' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Our Services</h4>
         <hr style="margin-bottom:2px;">
@@ -275,7 +344,7 @@
         </div>
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty  and module.slug == 'testimonial' %}
+{% if entities is defined and entities is not empty  and pageModule.module.slug == 'testimonial' %}
     <div class="blog-sidebar">
     <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Testimonials</h4>
         <div class="media">
@@ -303,7 +372,7 @@
 
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty and module.slug == 'sponsor' %}
+{% if entities is defined and entities is not empty and pageModule.module.slug == 'sponsor' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Sponsor</h4>
         <hr style="margin-bottom:2px;">
@@ -335,7 +404,7 @@
     </div>
 {% endif %}
 
-{% if entities is defined and entities is not empty and module.slug == 'team' %}
+{% if entities is defined and entities is not empty and pageModule.module.slug == 'team' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Our Team</h4>
         <div class="media">

@@ -264,10 +264,16 @@ class Builder extends ContainerAware
             $menu['Manage Appearance']->addChild('Customize Template', array('route' => 'templatecustomize_edit', 'routeParameters' => array('id' => $globalOption->getId())));
             $menu['Manage Appearance']->addChild('Feature & Widget')->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
             $menu['Manage Appearance']['Feature & Widget']->addChild('Sidebar Widget', array('route' => 'sidebarwidget'));
-            $menu['Manage Appearance']['Feature & Widget']->addChild('Feature Widget', array('route' => 'appearancefeaturewidget'));
-            $menu['Manage Appearance']['Feature & Widget']->addChild('Manage Feature', array('route' => 'appearancefeature'));
+            if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
+                $menu['Manage Appearance']['Feature & Widget']->addChild('E-commerce Widget', array('route' => 'appearancefeaturewidget'));
+            }
+            $menu['Manage Appearance']['Feature & Widget']->addChild('Menu Widget', array('route' => 'appearancemenuwidget'));
+            $menu['Manage Appearance']['Feature & Widget']->addChild('Create Feature', array('route' => 'appearancefeature'));
             $menu['Manage Appearance']->addChild('Menu', array('route' => 'menu_manage'));
             $menu['Manage Appearance']->addChild('Menu Grouping', array('route' => 'menugrouping'));
+            if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
+                $menu['Manage Appearance']->addChild('E-commerce Menu', array('route' => 'ecommercemenu'));
+            }
         }
 
         if ($securityContext->isGranted('ROLE_DOMAIN_WEBSITE_SETTING')) {
@@ -628,13 +634,9 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'fa fa-bookmark')
                 ->setAttribute('dropdown', true);
             $menu['E-commerce']['Setting']->addChild('E-commerce Config', array('route' => 'ecommerce_config_modify'))->setAttribute('icon', 'fa fa-cog');
-            $menu['E-commerce']->addChild('E-commerce Menu', array('route' => 'ecommercemenu'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']->addChild('Feature & Widget')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
-            $menu['E-commerce']['Feature & Widget']->addChild('Sidebar Widget', array('route' => 'sidebarwidget'));
-            $menu['E-commerce']['Feature & Widget']->addChild('Feature Widget', array('route' => 'appearancefeaturewidget'));
             $menu['E-commerce']['Feature & Widget']->addChild('Feature Category', array('route' => 'featurecategory'));
             $menu['E-commerce']['Feature & Widget']->addChild('Feature Brand', array('route' => 'featurebrand'));
-            $menu['E-commerce']['Feature & Widget']->addChild('Manage Feature', array('route' => 'appearancefeature'));
         }
         return $menu;
     }
@@ -1049,22 +1051,7 @@ class Builder extends ContainerAware
     public function appearanceMenu($menu)
     {
 
-        $securityContext = $this->container->get('security.context');
-        $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
-        $menu
-            ->addChild('Manage Appearance')
-            ->setAttribute('icon', 'fa fa-bookmark')
-            ->setAttribute('dropdown', true);
 
-        $menu['Manage Appearance']->addChild('Customize Template', array('route' => 'templatecustomize_edit', 'routeParameters' => array('id' => $globalOption->getId())));
-        $menu['Manage Appearance']->addChild('Feature & Widget')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
-        $menu['Manage Appearance']['Feature & Widget']->addChild('Sidebar Widget', array('route' => 'sidebarwidget'));
-        $menu['Manage Appearance']['Feature & Widget']->addChild('Feature Widget', array('route' => 'appearancefeaturewidget'));
-        $menu['Manage Appearance']['Feature & Widget']->addChild('Manage Feature', array('route' => 'appearancefeature'));
-        $menu['Manage Appearance']->addChild('Menu', array('route' => 'menu_manage'));
-        $menu['Manage Appearance']->addChild('Menu Grouping', array('route' => 'menugrouping'));
-        $menu['Manage Appearance']->addChild('Settings', array('route' => 'globaloption_modify'));
-        return $menu;
     }
 
     public function manageAdvertismentMenu($menu)

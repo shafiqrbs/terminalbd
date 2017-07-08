@@ -16,6 +16,14 @@ class TemplateCustomizeType extends AbstractType
     {
         $builder
 
+            ->add('showSidebar')
+            ->add('sidebarTooltip')
+            ->add('sidebarTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sidebar title')))
+            ->add('sidebarPosition', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array('left' => 'left',  'right' => 'right'),
+            ))
+
             ->add('siteBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')

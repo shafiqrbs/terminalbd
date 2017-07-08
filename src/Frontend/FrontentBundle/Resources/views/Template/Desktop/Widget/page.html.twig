@@ -1,17 +1,187 @@
-{% if entities is defined and entities is not empty and module.slug == 'blog' %}
+{% if entities is defined and entities is not empty and pageModule.module.slug == 'blog' %}
     <div class="page-block" >
-        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent Blogs</h4>
-        {% if entities|length > 2 %}
-        <div class="text-right page-slide-box">
-            <a class="btn blog-prev glyphicon glyphicon-chevron-left"></a>
-            <a class="btn blog-next glyphicon glyphicon-chevron-right"></a>
+        <div class="row">
+            <div class="col-md-9">
+                <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent Blog</h4>
+            </div>
+            {% if pageModule.showingType == 'slider' %}
+                <div class="col-md-3 text-right owl-position" >
+                    <a class='blog-page-prev' href='javascript:'>
+                        <span class='glyphicon glyphicon-chevron-left'></span>
+                    </a>
+                    <a class='blog-page-next' href='javascript:'>
+                        <span class='glyphicon glyphicon-chevron-right'></span>
+                    </a>
+                </div>
+            {% endif %}
         </div>
-        {% endif %}
         <div class="media">
             <div class="row">
                 <div class="col-md-12">
-                    <div id="page-blog-slider" class="owl-carousel">
+                    <div id="blog-page-slider" class="owl-carousel">
                         {% for entity in entities  %}
+                            <div class="col-md-12">
+                                <div class="sidebar-blog">
+                                    <div class="post-img">
+                                        <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
+                                        <div class="over-layer">
+                                            <ul class="post-link">
+                                                <li><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="fa fa-link"></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="post-review">
+                                        <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                                        <ul class="post-info">
+                                            <li><i class="fa fa-calendar"></i> {{ entity.updated|date("d F, Y") }}</li>
+                                            <li><i class="fa fa-user"></i> {{ entity.authorName }}</li>
+                                        </ul>
+                                        <ul class="tag-info">
+                                            <li><i class="fa fa-tags"></i></li>
+                                            <li><a href="">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</a></li>
+                                        </ul>
+                                        <p class="post-description">
+                                            {{ entity.content|truncate(120)|raw }}
+                                        </p>
+                                        <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="read-more">read more</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="sidebar-blog">
+                                    <div class="post-img">
+                                        <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
+                                        <div class="over-layer">
+                                            <ul class="post-link">
+                                                <li><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="fa fa-link"></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="post-review">
+                                        <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                                        <ul class="post-info">
+                                            <li><i class="fa fa-calendar"></i> {{ entity.updated|date("d F, Y") }}</li>
+                                            <li><i class="fa fa-user"></i> {{ entity.authorName }}</li>
+                                        </ul>
+                                        <ul class="tag-info">
+                                            <li><i class="fa fa-tags"></i></li>
+                                            <li><a href="">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</a></li>
+                                        </ul>
+                                        <p class="post-description">
+                                            {{ entity.content|truncate(120)|raw }}
+                                        </p>
+                                        <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="read-more">read more</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="sidebar-blog">
+                                    <div class="post-img">
+                                        <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
+                                        <div class="over-layer">
+                                            <ul class="post-link">
+                                                <li><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="fa fa-link"></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="post-review">
+                                        <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                                        <ul class="post-info">
+                                            <li><i class="fa fa-calendar"></i> {{ entity.updated|date("d F, Y") }}</li>
+                                            <li><i class="fa fa-user"></i> {{ entity.authorName }}</li>
+                                        </ul>
+                                        <ul class="tag-info">
+                                            <li><i class="fa fa-tags"></i></li>
+                                            <li><a href="">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</a></li>
+                                        </ul>
+                                        <p class="post-description">
+                                            {{ entity.content|truncate(120)|raw }}
+                                        </p>
+                                        <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="read-more">read more</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="sidebar-blog">
+                                    <div class="post-img">
+                                        <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
+                                        <div class="over-layer">
+                                            <ul class="post-link">
+                                                <li><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="fa fa-link"></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="post-review">
+                                        <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                                        <ul class="post-info">
+                                            <li><i class="fa fa-calendar"></i> {{ entity.updated|date("d F, Y") }}</li>
+                                            <li><i class="fa fa-user"></i> {{ entity.authorName }}</li>
+                                        </ul>
+                                        <ul class="tag-info">
+                                            <li><i class="fa fa-tags"></i></li>
+                                            <li><a href="">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</a></li>
+                                        </ul>
+                                        <p class="post-description">
+                                            {{ entity.content|truncate(120)|raw }}
+                                        </p>
+                                        <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="read-more">read more</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="sidebar-blog">
+                                    <div class="post-img">
+                                        <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
+                                        <div class="over-layer">
+                                            <ul class="post-link">
+                                                <li><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="fa fa-link"></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="post-review">
+                                        <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                                        <ul class="post-info">
+                                            <li><i class="fa fa-calendar"></i> {{ entity.updated|date("d F, Y") }}</li>
+                                            <li><i class="fa fa-user"></i> {{ entity.authorName }}</li>
+                                        </ul>
+                                        <ul class="tag-info">
+                                            <li><i class="fa fa-tags"></i></li>
+                                            <li><a href="">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</a></li>
+                                        </ul>
+                                        <p class="post-description">
+                                            {{ entity.content|truncate(120)|raw }}
+                                        </p>
+                                        <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="read-more">read more</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="sidebar-blog">
+                                    <div class="post-img">
+                                        <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
+                                        <div class="over-layer">
+                                            <ul class="post-link">
+                                                <li><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="fa fa-link"></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="post-review">
+                                        <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                                        <ul class="post-info">
+                                            <li><i class="fa fa-calendar"></i> {{ entity.updated|date("d F, Y") }}</li>
+                                            <li><i class="fa fa-user"></i> {{ entity.authorName }}</li>
+                                        </ul>
+                                        <ul class="tag-info">
+                                            <li><i class="fa fa-tags"></i></li>
+                                            <li><a href="">{% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</a></li>
+                                        </ul>
+                                        <p class="post-description">
+                                            {{ entity.content|truncate(120)|raw }}
+                                        </p>
+                                        <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'blog','slug':entity.slug }) }}" class="read-more">read more</a>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-12">
                                 <div class="sidebar-blog">
                                     <div class="post-img">
@@ -47,23 +217,30 @@
     </div>
 {% endif %}
 
-{% if entities is defined and entities is not empty and module.slug == 'branch' %}
+{% if entities is defined and entities is not empty and pageModule.module.slug == 'branch' %}
     <div class="page-block">
-        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Branches</h4>
-        {% if entities|length > 2 %}
-            <div class="text-right page-slide-box">
-                <a class="btn branch-prev glyphicon glyphicon-chevron-left"></a>
-                <a class="btn branch-next glyphicon glyphicon-chevron-right"></a>
+        <div class="row">
+            <div class="col-md-9">
+                <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Our Branch</h4>
             </div>
-        {% endif %}
-        <div class="media">
-            <div class="row">
-                <div class="col-md-12">
-                    <div id="page-branch-slider" class="owl-carousel">
-                        {% for  entity in entities %}
+            {% if pageModule.showingType == 'slider' %}
+                <div class="col-md-3 text-right owl-position" >
+                    <a class='branch-page-prev' href='javascript:'>
+                        <span class='glyphicon glyphicon-chevron-left'></span>
+                    </a>
+                    <a class='branch-page-next' href='javascript:'>
+                        <span class='glyphicon glyphicon-chevron-right'></span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="branch-page-slider" class="owl-carousel">
+                    {% for  entity in entities %}
                         <div class="col-md-12">
                             <div class="sidebar-branch">
-                                <h5 class="text-center" ><strong>{{ entity.name }}</strong></h5>
+                                <h5 class="text-center branch-head" ><strong>{{ entity.name }}</strong></h5>
                                 <dl>
                                     <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
                                     <dd><i class="fa fa-user"></i>&nbsp;{{ entity.contactPerson }} , <em>{{ entity.designation }}</em></dd>
@@ -71,18 +248,115 @@
                                     {% if(entity.phone) %}<dd><i class="fa fa-phone-square"></i>&nbsp;+ {{ entity.phone|raw }}</dd>{% endif %}
                                     {% if(entity.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ entity.fax|raw }}</dd>{% endif %}
                                     {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
-                                    <dd class="text-center"><a target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}"><i class="fa fa-map-marker"></i> Direction</a></dd>
+                                    <dd class="text-center"><a class="btn btn-info" target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}">Direction</a></dd>
                                 </dl>
                             </div>
                         </div>
-                        {% endfor %}
-                    </div>
+                        <div class="col-md-12">
+                            <div class="sidebar-branch">
+                                <h5 class="text-center branch-head" ><strong>{{ entity.name }}</strong></h5>
+                                <dl>
+                                    <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
+                                    <dd><i class="fa fa-user"></i>&nbsp;{{ entity.contactPerson }} , <em>{{ entity.designation }}</em></dd>
+                                    <dd><i class="fa fa-mobile"></i>&nbsp;+ 088 {{ entity.mobile|raw }}</dd>
+                                    {% if(entity.phone) %}<dd><i class="fa fa-phone-square"></i>&nbsp;+ {{ entity.phone|raw }}</dd>{% endif %}
+                                    {% if(entity.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ entity.fax|raw }}</dd>{% endif %}
+                                    {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
+                                    <dd class="text-center"><a class="btn btn-info" target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}">Direction</a></dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="sidebar-branch">
+                                <h5 class="text-center branch-head" ><strong>{{ entity.name }}</strong></h5>
+                                <dl>
+                                    <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
+                                    <dd><i class="fa fa-user"></i>&nbsp;{{ entity.contactPerson }} , <em>{{ entity.designation }}</em></dd>
+                                    <dd><i class="fa fa-mobile"></i>&nbsp;+ 088 {{ entity.mobile|raw }}</dd>
+                                    {% if(entity.phone) %}<dd><i class="fa fa-phone-square"></i>&nbsp;+ {{ entity.phone|raw }}</dd>{% endif %}
+                                    {% if(entity.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ entity.fax|raw }}</dd>{% endif %}
+                                    {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
+                                    <dd class="text-center"><a class="btn btn-info" target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}">Direction</a></dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="sidebar-branch">
+                                <h5 class="text-center branch-head" ><strong>{{ entity.name }}</strong></h5>
+                                <dl>
+                                    <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
+                                    <dd><i class="fa fa-user"></i>&nbsp;{{ entity.contactPerson }} , <em>{{ entity.designation }}</em></dd>
+                                    <dd><i class="fa fa-mobile"></i>&nbsp;+ 088 {{ entity.mobile|raw }}</dd>
+                                    {% if(entity.phone) %}<dd><i class="fa fa-phone-square"></i>&nbsp;+ {{ entity.phone|raw }}</dd>{% endif %}
+                                    {% if(entity.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ entity.fax|raw }}</dd>{% endif %}
+                                    {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
+                                    <dd class="text-center"><a target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}">Direction</a></dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="sidebar-branch">
+                                <h5 class="text-center branch-head" ><strong>{{ entity.name }}</strong></h5>
+                                <dl>
+                                    <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
+                                    <dd><i class="fa fa-user"></i>&nbsp;{{ entity.contactPerson }} , <em>{{ entity.designation }}</em></dd>
+                                    <dd><i class="fa fa-mobile"></i>&nbsp;+ 088 {{ entity.mobile|raw }}</dd>
+                                    {% if(entity.phone) %}<dd><i class="fa fa-phone-square"></i>&nbsp;+ {{ entity.phone|raw }}</dd>{% endif %}
+                                    {% if(entity.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ entity.fax|raw }}</dd>{% endif %}
+                                    {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
+                                    <dd class="text-center"><a class="btn btn-info" target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}">Direction</a></dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="sidebar-branch">
+                                <h5 class="text-center branch-head" ><strong>{{ entity.name }}</strong></h5>
+                                <dl>
+                                    <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
+                                    <dd><i class="fa fa-user"></i>&nbsp;{{ entity.contactPerson }} , <em>{{ entity.designation }}</em></dd>
+                                    <dd><i class="fa fa-mobile"></i>&nbsp;+ 088 {{ entity.mobile|raw }}</dd>
+                                    {% if(entity.phone) %}<dd><i class="fa fa-phone-square"></i>&nbsp;+ {{ entity.phone|raw }}</dd>{% endif %}
+                                    {% if(entity.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ entity.fax|raw }}</dd>{% endif %}
+                                    {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
+                                    <dd class="text-center"><a class="btn btn-info" target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}">Direction</a></dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="sidebar-branch">
+                                <h5 class="text-center branch-head" ><strong>{{ entity.name }}</strong></h5>
+                                <dl>
+                                    <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
+                                    <dd><i class="fa fa-user"></i>&nbsp;{{ entity.contactPerson }} , <em>{{ entity.designation }}</em></dd>
+                                    <dd><i class="fa fa-mobile"></i>&nbsp;+ 088 {{ entity.mobile|raw }}</dd>
+                                    {% if(entity.phone) %}<dd><i class="fa fa-phone-square"></i>&nbsp;+ {{ entity.phone|raw }}</dd>{% endif %}
+                                    {% if(entity.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ entity.fax|raw }}</dd>{% endif %}
+                                    {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
+                                    <dd class="text-center"><a class="btn btn-info" target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}">Direction</a></dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="sidebar-branch">
+                                <h5 class="text-center branch-head" ><strong>{{ entity.name }}</strong></h5>
+                                <dl>
+                                    <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
+                                    <dd><i class="fa fa-user"></i>&nbsp;{{ entity.contactPerson }} , <em>{{ entity.designation }}</em></dd>
+                                    <dd><i class="fa fa-mobile"></i>&nbsp;+ 088 {{ entity.mobile|raw }}</dd>
+                                    {% if(entity.phone) %}<dd><i class="fa fa-phone-square"></i>&nbsp;+ {{ entity.phone|raw }}</dd>{% endif %}
+                                    {% if(entity.fax) %}<dd><i class="fa fa-fax"></i>&nbsp;{{ entity.fax|raw }}</dd>{% endif %}
+                                    {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
+                                    <dd class="text-center"><a target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}">Direction</a></dd>
+                                </dl>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty  and module.slug == 'client' %}
+{% if entities is defined and entities is not empty  and pageModule.module.slug == 'client' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Client</h4>
         {% if entities|length > 4 %}
@@ -107,7 +381,7 @@
         </div>
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty  and module.slug == 'event' %}
+{% if entities is defined and entities is not empty  and pageModule.module.slug == 'event' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Events</h4>
         {% if entities|length > 2 %}
@@ -144,7 +418,7 @@
         </div>
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty  and module.slug == 'faq' %}
+{% if entities is defined and entities is not empty  and pageModule.module.slug == 'faq' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Frequently Question & Answer</h4>
         <div class="media">
@@ -171,7 +445,7 @@
         </div>
     </div>
 {% endif %}
-{% if entities is defined and entities is not empty and module.slug == 'news' %}
+{% if entities is defined and entities is not empty and pageModule.module.slug == 'news' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent News</h4>
         <hr style="margin-bottom:2px;">
@@ -189,7 +463,7 @@
     </div>
 {% endif %}
 
-{% if entities is defined and entities is not empty and module.slug == 'noticeboard' %}
+{% if entities is defined and entities is not empty and pageModule.module.slug == 'noticeboard' %}
     <div class="blog-sidebar">
         <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Recent News</h4>
         <hr style="margin-bottom:2px;">

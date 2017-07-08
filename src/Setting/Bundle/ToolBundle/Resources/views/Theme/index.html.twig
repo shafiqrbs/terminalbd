@@ -74,7 +74,7 @@
                                             {% if( entity.status == 1) %}
                                                 <a class="" href="{{ path('theme_status', { 'id': entity.id}) }}"><span class="badge badge-warning">x</span></a>
                                             {% else %}
-                                                <a class="" href="{{ path('theme_status', { 'id': entity.id}) }}"><span class="badge badge-warning">a</span>    </a>
+                                                <a class="" href="{{ path('theme_status', { 'id': entity.id}) }}"><span class="badge badge-warning">a</span></a>
                                             {% endif %}
                                             <a href="{{ path('theme_edit', { 'id': entity.id }) }}" class="badge badge-inverse" ><i class="icon-edit"></i></a>
                                             <a href="{{ path('theme_show', { 'id': entity.id }) }}" class="badge badge-info" ><i class="icon-eye-open"></i></a>

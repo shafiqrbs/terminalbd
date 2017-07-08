@@ -82,6 +82,11 @@ class FeatureWidget
      */
     protected $brand;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="featureWidgets")
+     */
+    protected $menu;
+
 
     /**
      * @var smallint

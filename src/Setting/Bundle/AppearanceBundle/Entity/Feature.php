@@ -80,6 +80,16 @@ class Feature
      */
     protected $ecommerceMenu;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="feature")
+     */
+    protected $menu;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="featureWidgets")
+     */
+    protected $menuWidget;
+
 
     /**
      * @var string
@@ -650,6 +660,22 @@ class Feature
     public function getSidebarWidgetPanel()
     {
         return $this->sidebarWidgetPanel;
+    }
+
+    /**
+     * @return Menu
+     */
+    public function getMenu()
+    {
+        return $this->menu;
+    }
+
+    /**
+     * @param Menu $menu
+     */
+    public function setMenu($menu)
+    {
+        $this->menu = $menu;
     }
 
 }

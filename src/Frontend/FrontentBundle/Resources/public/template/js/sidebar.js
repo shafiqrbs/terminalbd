@@ -1,21 +1,30 @@
-$("#sidebar-blog-slider").owlCarousel({
+var owlSidebarBlog = $("#blog-sidebar-slider");
+owlSidebarBlog.owlCarousel({
     items:1,
     itemsDesktop:[1000,2],
     itemsDesktopSmall:[979,1],
     itemsTablet:[768,1],
     pagination:false,
-    navigation:true,
+    navigation:false,
     slideSpeed:1000,
     singleItem:true,
     transitionStyle:"goDown",
-    navigationText:["",""],
+    rewindNav : false,
     autoPlay:false
 });
 
+// Custom Navigation Events
+$(".blog-sidebar-next").click(function(){
+    owlSidebarBlog.trigger('owl.next');
+});
+$(".blog-sidebar-prev").click(function(){
+    owlSidebarBlog.trigger('owl.prev');
+});
 
-var owlBlog = $("#page-blog-slider");
-owlBlog.owlCarousel({
-    items:2,
+
+var owlPageBlog = $("#blog-page-slider");
+owlPageBlog.owlCarousel({
+    items:4,
     itemsDesktop:[1199,3],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,1],
@@ -25,20 +34,21 @@ owlBlog.owlCarousel({
     rewindNav:false
 });
 // Custom Navigation Events
-$(".blog-next").click(function(){
-    owlBlog.trigger('owl.next');
+$(".blog-page-next").click(function(){
+    owlPageBlog.trigger('owl.next');
 });
-$(".blog-prev").click(function(){
-    owlBlog.trigger('owl.prev');
+$(".blog-page-prev").click(function(){
+    owlPageBlog.trigger('owl.prev');
 });
 
-$("#sidebar-branch-slider").owlCarousel({
+var owlSidebarBranch = $("#branch-sidebar-slider");
+owlSidebarBranch.owlCarousel({
     items:1,
     itemsDesktop:[1000,2],
     itemsDesktopSmall:[979,1],
     itemsTablet:[768,1],
     pagination:false,
-    navigation:true,
+    navigation:false,
     slideSpeed:1000,
     singleItem:true,
     transitionStyle:"goDown",
@@ -46,9 +56,17 @@ $("#sidebar-branch-slider").owlCarousel({
     autoPlay:false
 });
 
-var owlBranch = $("#page-branch-slider");
-owlBranch.owlCarousel({
-    items:2,
+// Custom Navigation Events
+$(".branch-sidebar-next").click(function(){
+    owlSidebarBranch.trigger('owl.next');
+});
+$(".branch-sidebar-prev").click(function(){
+    owlSidebarBranch.trigger('owl.prev');
+});
+
+var owlPageBranch = $("#branch-page-slider");
+owlPageBranch.owlCarousel({
+    items:4,
     itemsDesktop:[1199,3],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,1],
@@ -58,11 +76,11 @@ owlBranch.owlCarousel({
     rewindNav:false
 });
 // Custom Navigation Events
-$(".branch-next").click(function(){
-    owlBranch.trigger('owl.next');
+$(".branch-page-next").click(function(){
+    owlPageBranch.trigger('owl.next');
 });
-$(".branch-prev").click(function(){
-    owlBranch.trigger('owl.prev');
+$(".branch-page-prev").click(function(){
+    owlPageBranch.trigger('owl.prev');
 });
 
 $("#sidebar-client-slider").owlCarousel({

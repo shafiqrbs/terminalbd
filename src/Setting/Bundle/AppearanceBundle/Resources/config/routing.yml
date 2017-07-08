@@ -6,6 +6,10 @@ setting_appearance_featurewidget:
     resource: "@SettingAppearanceBundle/Resources/config/routing/appearancefeaturewidget.yml"
     prefix:   /domain/feature-widget
 
+setting_appearance_menuwidget:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/appearancemenuwidget.yml"
+    prefix:   /domain/menu-widget
+
 setting_appearance_featurewidgetitem:
     resource: "@SettingAppearanceBundle/Resources/config/routing/appearancefeaturewidgetitem.yml"
     prefix:   /domain/sidebar-widget-item

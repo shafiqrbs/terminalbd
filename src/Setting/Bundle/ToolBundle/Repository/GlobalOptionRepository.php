@@ -74,10 +74,13 @@ class GlobalOptionRepository extends EntityRepository
         $data = array('location'=> $location ,'syndicate'=> $syndicate,'name' => $name);
 
         $qb =  $this->createQueryBuilder('e');
+        $qb->leftJoin('e.templateCustomize', 't');
         $qb->orderBy('e.name', 'ASC');
         $qb->where("e.status = 1");
         $qb->andWhere("e.subDomain != :subDomain");
         $qb->setParameter('subDomain', 'null');
+        $qb->andWhere("t.logo != :logo");
+        $qb->setParameter('logo', 'null');
         $this->searchHandle($qb,$data);
         $result = $qb->getQuery();
         return $result;
@@ -89,7 +92,7 @@ class GlobalOptionRepository extends EntityRepository
         $location = $form->get('location')->getData();
         $syndicate = $form->get('syndicate')->getData();
         $name = $form->get('name')->getData();
-        $data = array('location'=>$location,'syndicate'=>$syndicate,'name' => $name);
+        $data = array('location'=>$location,'syndicate' => $syndicate,'name' => $name);
         $qb  = $this->createQueryBuilder('e');
             $qb->where("e.status = :status");
             $qb->setParameter('status', 1);
@@ -785,6 +788,23 @@ class GlobalOptionRepository extends EntityRepository
                 return $db->getQuery()->getResult();
 
         }
+    }
+
+    public function getAppmoduleArray(GlobalOption $globalOption)
+    {
+        $modules = $globalOption->getSiteSetting()->getAppModules();
+        /* @var GlobalOption $globalOption */
+        $menuName =array();
+        if (!empty($globalOption->getSiteSetting()) and !empty($modules)) {
+            foreach ($globalOption->getSiteSetting()->getAppModules() as $mod) {
+                if (!empty($mod->getModuleClass())) {
+                    $menuName[] = $mod->getModuleClass();
+                }
+
+            }
+        }
+
+        return $menuName;
     }
 
 

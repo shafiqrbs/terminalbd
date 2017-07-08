@@ -1,5 +1,42 @@
 {% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
+    <style>
+        .footer-links li, .list-line li{
+            list-style: none;
+        }
+        .footer-links li:before, .list-line li:before {
+            font-family: 'FontAwesome';
+            content: "\f105";
+            padding-right: 5px;
+        }
+        .post-grid{
+            display: flex;
+            border-top:1px solid #0b0e23 ;
+            padding-top: 10px;
+        }
+        .post-grid .post-info{
+            padding: 0;
+            list-style: none;
+        }
+        .post-grid .post-info li{
+            padding-bottom: 5px;
+        }
+        .owl-position{
+            line-height: 38px;
+        }
+        .branch-head {
+            background: #222;
+            height: 35px;
+            margin-left: -20px;
+            margin-right: -20px;
+            margin-top: 0px;
+            line-height: 35px;
+            color: #fff;
+            display: flex;
+            text-align: center;
+            padding-left: 20px;
+        }
+    </style>
 <div class="clearfix"></div>
     <section id="breadcrumb">
         <div class="container">
@@ -9,59 +46,167 @@
             </ol>
         </div>
     </section>
-    <section>
-        <div class="container" >
-            <div class="col-md-12">
-                <div class="row paginate">
-                    <div class="col-md-12">
-                        <div class="btn-group pull-left">
-                            <div class="product-title"><span class="glyphicon glyphicon-list"></span>&nbsp;{{ page.name }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
     <div class="clearfix"></div>
     <section id="products" style="margin-top: 20px; padding-bottom: 40px">
         <div class="container">
-
-            <div class="col-md-12 " data-match-height="body-content"  >
-                {% if page.photoGallery is not empty %}
-                    <div class="carousel-container">
-                        <div id="carousel" class="carousel slide carousel-fade" style="width: 100%">
-                        <div class="carousel-inner">
-                            {% if page.webPath is not empty %}
-                                <div class="carousel-item item active">
-                                    <img class="img-responsive"  data-slide-no="0" src="{{ image(page.webPath).scaleResize(1024,768,'#000000') }}" alt="{{ page.name }}" />
-                                    <div class="carousel-caption " >
-                                        <h4>{{ page.name }}</h4>
-                                    </div>
+            <div class="row">
+               {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
+                    <div class="col-md-3" data-match-height="body-content"  >
+                        {% if globalOption.templateCustomize.sidebarTitle is not empty %}
+                        <div class="page-title-bar">
+                            <div class="col-md-12">
+                                <div class="btn-group pull-left">
+                                    <div class="page-title"><span class="glyphicon glyphicon-tag"></span>&nbsp;{{ globalOption.templateCustomize.sidebarTitle }}</div>
                                 </div>
-                            {% endif %}
-                            {% for slide in page.photoGallery.galleryImages %}
-                                <div  class="carousel-item item {% if loop.index-1 == 0 and page.webPath is empty %} active  {% endif %}"  {% if loop.index-1 == 0 and page.webPath is empty %} data-slide-no="{{ loop.index-1 }}"  {% endif %} >
-                                    <img class="img-responsive" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,768,'red') }}" alt="...">
-                                    <div class="carousel-caption " >
-                                        {% if slide.caption is not empty %}<h4>{{ slide.caption }}{% endif %}</h4>
-                                        {% if slide.description is not empty %}<span>{{ slide.description|raw }}</span>{% endif %}
-                                    </div>
-                                </div>
-                            {% endfor %}
+                            </div>
                         </div>
-                        <!-- Navigation -->
-                          <a class="carousel-post-control left" href="#carousel" data-slide="prev">‹</a>
-                          <a class="carousel-post-control right" href="#carousel" data-slide="next">›</a>
-                    </div>
+                        {% endif %}
+                        {% if page.pageModules is not empty %}
+                            {% for pageModule in page.pageModules %}
+                                {% if pageModule.contentPosition =='sidebar' %}
+                                    {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'pageModule':pageModule.id}) %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 {% endif %}
-                <div class="clearfix"></div>
-               <p>{{ page.content|raw }}</p>
+                <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %}col-md-12 {% endif %}" data-match-height="body-content"  >
+                    <div class="page-title-bar">
+                        <div class="col-md-12">
+                            <div class="btn-group pull-left">
+                                <div class="page-title"><span class="glyphicon glyphicon-bookmark"></span>&nbsp;{{ page.name }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if page.photoGallery is not empty %}
+                        <div class="carousel-container">
+                            <div id="carousel" class="carousel slide carousel-fade" style="width: 100%">
+                            <div class="carousel-inner">
+                                {% if page.webPath is not empty %}
+                                    <div class="carousel-item item active">
+                                        <img class="img-responsive"  data-slide-no="0" src="{{ image(page.webPath).scaleResize(1024,512,'#000000') }}" alt="{{ page.name }}" />
+                                        <div class="carousel-caption " >
+                                            <h4>{{ page.name }}</h4>
+                                            <p>Place an order on DhakaBrand and enter your address during checkout. We provide cash on delivery system it is only applicable only for Dhaka Metropolitan city. Our customer service</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% for slide in page.photoGallery.galleryImages %}
+                                    <div  class="carousel-item item {% if loop.index-1 == 0 and page.webPath is empty %} active  {% endif %}"  {% if loop.index-1 == 0 and page.webPath is empty %} data-slide-no="{{ loop.index-1 }}"  {% endif %} >
+                                        <img class="img-responsive" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,512,'#000000') }}" alt="...">
+                                        <div class="carousel-caption " >
+                                            {% if slide.caption is not empty %}<h4>{{ slide.caption }}{% endif %}</h4>
+                                            {% if slide.description is not empty %}<p>{{ slide.description|raw }}</p>{% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <!-- Navigation -->
+                              <a class="carousel-post-control left" href="#carousel" data-slide="prev">‹</a>
+                              <a class="carousel-post-control right" href="#carousel" data-slide="next">›</a>
+                        </div>
+                        </div>
+                        <hr><br/></hr>
+                    {% elseif page.webPath is not empty %}
+                        <img class="img-responsive"  data-slide-no="0" src="{{ image(page.webPath).scaleResize(1024,512,'#000000') }}" alt="{{ page.name }}" />
+                        <hr><br/></hr>
+                    {% endif %}
+                    <div class="clearfix"></div>
+                    <p>{{ page.content|raw }}</p>
+                    <div class="clearfix"><br/></div>
+                    <ul class="mbm_social">
+                        <li><a class="social-facebook" target="_blank" href="https://www.facebook.com/share.php?u={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}&picture={{ app.request.getSchemeAndHttpHost() }}/{{ page.webPath }}&title={{ page.name }}&description={{ page.content|truncate(250)|raw }}">
+                                <i class="fa fa-facebook"></i>
+                                <div class="tooltip"><span>facebook</span></div>
+                            </a>
+                        </li>
+                        <li><a class="social-linkedin" target="_blank" href="//www.linkedin.com/shareArticle?mini=true&url={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}">
+                                <i class="fa  fa-linkedin"></i>
+                                <div class="tooltip"><span>LinkedIn</span></div>
+                            </a>
+                        </li>
+                        <li><a class="social-google-plus" target="_blank" href="//plus.google.com/share?url={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}">
+                                <i class="fa fa-google-plus"></i>
+                                <div class="tooltip"><span>Google</span></div>
+                            </a>
+                        </li>
+                        <li><a class="social-twitter" target="_blank" href="//twitter.com/share?url={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}">
+                                <i class="fa fa-twitter"></i>
+                                <div class="tooltip"><span>Twitter</span></div>
+                            </a>
+                        </li>
+                        <li><a class="social-instagram" target="_blank" href="//instagram.com/share?url={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}">
+                                <i class="fa  fa-instagram"></i>
+                                <div class="tooltip"><span>Instagram</span></div>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"><br/></div>
+                    {% if sidebar is not empty and sidebar.feature is not empty %}
+                        {% for entity in sidebar.feature %}
+                            <div class="col-md-3 sidebar-feature ">
+                                <img src="{{ image(entity.webPath).resize() }}" alt="">
+                                <div class="over-layer">
+                                    <ul class="social-links">
+                                        {% if entity.targetTo == 'Page' %}
+                                            <li><a href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':entity.page.module.slug,'slug':entity.page.slug}) }}" class="fa fa-link"></a></li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if sidebar is not empty %}
+                        {% for module in sidebar.module %}
+                            {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'pageModule':pageModule.id}) %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
+                <div class="col-md-3" data-match-height="body-content"  >
+                    {% if globalOption.templateCustomize.sidebarTitle is not empty %}
+                        <div class="page-title-bar">
+                            <div class="col-md-12">
+                                <div class="btn-group pull-left">
+                                    <div class="page-title"><span class="glyphicon glyphicon-tag"></span>&nbsp;{{ globalOption.templateCustomize.sidebarTitle }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if page.pageModules is not empty %}
+                        {% for pageModule in page.pageModules %}
+                            {% if pageModule.contentPosition =='sidebar' %}
+                                {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'pageModule':pageModule.id}) %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% endif %}
             </div>
+            {% if page.pageModules is not empty %}
+                {% for pageModule in page.pageModules %}
+                    {% if pageModule.contentPosition =='bottom' %}
+                        {% render controller("FrontendBundle:TemplateWidget:pageBaseModuleContent",{'globalOption':globalOption.id,'pageModule':pageModule.id}) %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </div>
     </section>
     <div class="clearfix"></div>
  <style>
+
+     .page-title-bar{
+         height: 35px;
+         background: #222222;
+     }
+
+     .page-title{
+         line-height: 35px;
+         font-size: 14px;
+         font-weight: bold;
+         color: #FFFFff;
+         height: 35px;
+     }
 
      .carousel-post-control {
          position: absolute;
@@ -126,11 +271,10 @@
          font-size: 25px;
      }
      .carousel-caption p {
-         margin-top: 39px;
-         font-size: 16px;
+         font-size: 14px;
          margin-bottom: -8px;
          font-weight: 300;
-         line-height: 30px;
+         line-height: 18px;
      }
      .carousel-fade .carousel-inner .item {
          opacity: 0;
@@ -169,7 +313,23 @@
 
  </style>
  {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/desktop/css/sidebar.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/js/sidebar.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
 {% block documentready %}
+
     {{ parent() }}
     $(".carousel").carousel({
         interval: false

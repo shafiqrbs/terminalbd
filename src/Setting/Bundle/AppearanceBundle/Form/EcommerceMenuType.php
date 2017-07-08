@@ -45,6 +45,33 @@ class EcommerceMenuType extends AbstractType
 
                 )
             ))
+            ->add('menu', 'entity', array(
+                'required'    => true,
+                'multiple'      =>false,
+                'attr'=>array('class'=>'m-wrap span12 select2'),
+                'class' => 'Setting\Bundle\AppearanceBundle\Entity\Menu',
+                'property' => 'menu',
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.globalOption =".$this->globalOption->getId())
+                        ->orderBy('e.menu','ASC');
+                },
+            ))
+            ->add('childMenus', 'entity', array(
+                'required'      => true,
+                'multiple'      =>true,
+                'class' => 'Setting\Bundle\AppearanceBundle\Entity\Menu',
+                'property' => 'menu',
+                'attr'=>array('class'=>'m-wrap span12 multiselect'),
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.globalOption =".$this->globalOption->getId())
+                        ->orderBy('e.menu','ASC');
+                },
+            ))
+
             ->add('categories', 'entity', array(
                 'required'    => true,
                 'multiple'      =>true,

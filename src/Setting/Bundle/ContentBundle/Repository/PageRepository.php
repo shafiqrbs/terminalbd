@@ -112,7 +112,7 @@ class PageRepository extends EntityRepository
         return $query;
     }
 
-    public function findModuleContent($doamin,$module,$limit=5)
+    public function findModuleContent($doamin,$module,$limit = 5)
     {
 
         $em = $this->_em;

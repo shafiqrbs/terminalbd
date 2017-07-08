@@ -95,6 +95,18 @@ class EcommerceMenu
     protected $features;
 
     /**
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="ecommerceMenu")
+     */
+     protected $menu;
+
+     /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="ecommerceChildMenu")
+     * @ORM\OrderBy({"name" = "ASC"})
+     */
+     protected $childMenus;
+
+
+    /**
      * @var smallint
      *
      * @ORM\Column(name="sorting", type="smallint" , nullable=true)
@@ -307,6 +319,38 @@ class EcommerceMenu
     public function setFeatures($features)
     {
         $this->features = $features;
+    }
+
+    /**
+     * @return Menu
+     */
+    public function getMenu()
+    {
+        return $this->menu;
+    }
+
+    /**
+     * @param Menu $menu
+     */
+    public function setMenu($menu)
+    {
+        $this->menu = $menu;
+    }
+
+    /**
+     * @return Menu
+     */
+    public function getChildMenus()
+    {
+        return $this->childMenus;
+    }
+
+    /**
+     * @param Menu $childMenus
+     */
+    public function setChildMenus($childMenus)
+    {
+        $this->childMenus = $childMenus;
     }
 
 

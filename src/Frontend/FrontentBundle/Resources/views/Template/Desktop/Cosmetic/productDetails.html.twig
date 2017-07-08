@@ -20,7 +20,7 @@
     <div class="clearfix"></div>
     <section>
         <div class="container" >
-            {% if globalOption.ecommerceConfig.showSidebar == 1 %}
+            {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
                 <div class="col-md-3 sidebar-top" >
                     <div class="row">
                         <div class="col-md-12 paginate">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
             {% endif %}
-            <div class="{% if globalOption.ecommerceConfig.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}">
+            <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}">
                 <div class="row paginate">
                     <div class="col-md-8">
                         <div class="btn-group pull-left">
@@ -66,6 +66,18 @@
                     </div>
                 </div>
             </div>
+            {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
+                <div class="col-md-3 sidebar-top" >
+                    <div class="row">
+                        <div class="col-md-12 paginate">
+                            <div class="btn-group pull-left">
+                                <div class="product-title"><span class="glyphicon glyphicon-filter"></span>&nbsp;REFINE RESULTS</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
         </div>
     </section>
     <style>
@@ -109,8 +121,8 @@
     <div class="clearfix"></div>
     <section id="products" style="margin-top: 20px">
         <div class="container">
-        {% if globalOption.ecommerceConfig.showSidebar == 1 %}
-            <div class="col-md-3" data-match-height="body-content" >
+            {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
+                <div class="col-md-3" data-match-height="body-content" >
                 <div class="row">
                     <div class="clearfix"></div>
                     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
@@ -185,8 +197,8 @@
                     </form>
                 </div>
             </div>
-        {% endif %}
-            <div class="{% if globalOption.ecommerceConfig.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="" {% if globalOption.ecommerceConfig.showSidebar == 1 %} style="width: 73%; margin-left: 2%" {% endif %}  >
+            {% endif %}
+            <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="" {% if globalOption.ecommerceConfig.showSidebar == 1 %} style="width: 73%; margin-left: 2%" {% endif %}  >
                 <div class="row-fluid">
                     <div class="col-xs-6 col-md-6 o-margin-padding">
                         <div id='carousel-custom' class='carousel slide' data-ride='carousel'>
@@ -259,17 +271,22 @@
                                                 <div class="tooltip"><span>facebook</span></div>
                                             </a>
                                         </li>
+                                        <li><a class="social-linkedin" target="_blank" href="//www.linkedin.com/shareArticle?mini=true">
+                                                <i class="fa  fa-linkedin"></i>
+                                                <div class="tooltip"><span>LinkedIn</span></div>
+                                            </a>
+                                        </li>
+                                        <li><a class="social-google-plus" target="_blank" href="//plus.google.com/share?url=http://shoponlinebd.com/product/american-doll-anastasia-beverly-hills/">
+                                                <i class="fa fa-google-plus"></i>
+                                                <div class="tooltip"><span>Google</span></div>
+                                            </a>
+                                        </li>
                                         <li><a class="social-twitter" target="_blank" href="//twitter.com/share?url=http://shoponlinebd.com/product/american-doll-anastasia-beverly-hills/">
                                                 <i class="fa fa-twitter"></i>
                                                 <div class="tooltip"><span>Twitter</span></div>
                                             </a>
                                         </li>
-                                        <li><a class="social-google-plus" target="_blank" href="//plus.google.com/share?url=http://shoponlinebd.com/product/american-doll-anastasia-beverly-hills/">
-                                                <i class="fa fa-google-plus"></i>
-                                                <div class="tooltip"><span>google</span></div>
-                                            </a>
-                                        </li>
-                                        <li><a class="social-linkedin" target="_blank" href="//instagram.com/share?url=http://shoponlinebd.com/product/american-doll-anastasia-beverly-hills/">
+                                        <li><a class="social-instagram" target="_blank" href="//instagram.com/share?url=http://shoponlinebd.com/product/american-doll-anastasia-beverly-hills/">
                                                 <i class="fa  fa-instagram"></i>
                                                 <div class="tooltip"><span>Instagram</span></div>
                                             </a>
@@ -405,19 +422,95 @@
                     {% endif %}
                 </div>
             </div>
+            {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
+                <div class="col-md-3" data-match-height="body-content" >
+                    <div class="row">
+                        <div class="clearfix"></div>
+                        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+                            <section class="feature-widget-body-bottom" >
+                                {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':'Product','position':'sidebar-top'}) %}
+                            </section>
+                        {% endif %}
+                        <div class="clearfix"></div>
+                        <form>
+                            <div class="panel panel-default">
+                                {% if globalOption.ecommerceConfig.sidebarBrand == 1 %}
+                                    <div class="panel-heading">
+                                        <h5 class="panel-title">ALL BRAND (1 To {{ brands|length }})</h5>
+                                    </div>
+                                    <div class="panel-body scrollbar">
+                                        <div class="rectangle-list">
+                                            <ol>
+                                                {% for brand in brands %}
+                                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'subdomain': globalOption.subDomain,'id':brand.id }) }}">{{ brand.name }}</a></li>
+                                                {% endfor %}
+                                            </ol>
+                                        </div>
 
+                                    </div>
+                                {% endif %}
+                                {% if globalOption.ecommerceConfig.sidebarPrice == 1 %}
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">PRICE RANGE</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <input id="price-range" type="text" class="span12" value="" data-slider-min="1" data-slider-max="1000000" data-slider-step="5" data-slider-value="[100,1000000]"/>
+                                    </div>
+                                {% endif %}
+                                {% if globalOption.ecommerceConfig.sidebarCategory == 1 %}
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">ALL CATEGORY</h3>
+                                    </div>
+                                    <div class="panel-body scrollbar">
+                                        <div class="treeview">
+                                            {{ categorySidebar|raw }}
+                                        </div>
+                                        <!-- List Group End Here -->
+                                    </div>
+                                {% endif %}
+                                {% if globalOption.ecommerceConfig.sidebarSize == 1 %}
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">SIZE/WEIGHT/DIMENSION</h3>
+                                    </div>
+                                    <div class="panel-body">
+
+                                        Product Size
+                                        <!-- List Group End Here -->
+                                    </div>
+                                {% endif %}
+                                {% if globalOption.ecommerceConfig.sidebarColor == 1 %}
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">COLOR</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        Color
+                                        <!-- List Group End Here -->
+                                    </div>
+                                {% endif %}
+                                <div class="clearfix"></div>
+                                {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+                                    <section class="feature-widget-body-bottom" >
+                                        {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':'Product','position':'sidebar-bottom'}) %}
+                                    </section>
+                                {% endif %}
+                                <div class="clearfix"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </section>
     <section>
         <div class="container" >
-            {% if globalOption.ecommerceConfig.showSidebar == 1 %}
-            <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
+            {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
+                <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
                 <div class="row div-vertical-center">
                 <button  class="btn btn-info ladda-button" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
                 </div>
             </div>
             {% endif %}
-            <div class="{% if globalOption.ecommerceConfig.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="body-footer"  >
+            <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="body-footer"  >
                 <div class="row paginate-footer" >
                     <div class="row-fluid">
                         <div class="col-md-4 col-sm-6">
@@ -459,6 +552,13 @@
                     </div>
                 </div>
             </div>
+            {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
+                <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
+                    <div class="row div-vertical-center">
+                        <button  class="btn btn-info ladda-button" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </section>
     <div class="clearfix"></div>
@@ -510,7 +610,6 @@
         itemsMobile : [479,1],
         itemsScaleUp : false,
         autoPlay:false,
-        rewindNav:false,
         navigation : true,
         navigationText: [
         "<span class='btn prevPromotion glyphicon glyphicon-chevron-left'></span>",

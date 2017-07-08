@@ -4,6 +4,7 @@ namespace Setting\Bundle\AppearanceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ContentBundle\Entity\PageModule;
 
 /**
  * Menu
@@ -52,6 +53,27 @@ class Menu
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\MenuGrouping", mappedBy="menu" , cascade={"persist", "remove"})
      */
     protected $menuGrouping;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="menu" , cascade={"persist", "remove"})
+     */
+    protected $ecommerceMenu;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="childMenus" , cascade={"persist", "remove"})
+     */
+    protected $ecommerceChildMenu;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\PageModule", mappedBy="menu" , cascade={"persist", "remove"})
+     */
+    protected $pageModules;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="menu" , cascade={"persist", "remove"})
+     */
+    protected $feature;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Module", inversedBy="nav")
@@ -357,6 +379,23 @@ class Menu
     {
         return $this->status;
     }
+
+    /**
+     * @return PageModule
+     */
+    public function getPageModules()
+    {
+        return $this->pageModules;
+    }
+
+    /**
+     * @return Feature
+     */
+    public function getFeature()
+    {
+        return $this->feature;
+    }
+
 
 
 }

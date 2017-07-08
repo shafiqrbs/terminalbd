@@ -37,7 +37,45 @@ class PageModuleRepository extends EntityRepository
                     $entity->setShowLimit($data['showLimit'][$key]);
                     $entity->setShowColumn($data['showColumn'][$key]);
                     $entity->setContentPosition($data['contentPosition'][$key]);
+                    $entity->setShowingType($data['showingType'][$key]);
                     $entity->setPage($page);
+                    $entity->setModule($module);
+                    $this->_em->persist($entity);
+                    $this->_em->flush();
+
+                }
+
+            }
+        }
+
+    }
+
+    public function createMenuFeatureModule($menu ,$data)
+    {
+        if(!empty($data['rowModule'])){
+            foreach( $data['rowModule'] as $key => $row ){
+
+                $pageModule = !empty($data['pageModule'][$key]) ? $data['pageModule'][$key] :0;
+                $module = !empty($data['module'][$key]) ? $data['module'][$key] :0;
+                if($pageModule > 0 and $module == 0 ){
+                    $this->remove($pageModule);
+                }
+                if(!empty($data['module'][$key])) {
+
+                    $pageModuleId = !empty($data['pageModule'][$key]) ? $data['pageModule'][$key] :0;
+                    $moduleId = !empty($data['module'][$key]) ? $data['module'][$key] :0;
+
+                    if($pageModuleId > 0){
+                        $entity = $this->_em->getRepository('SettingContentBundle:PageModule')->find($pageModuleId);
+                    }else{
+                        $entity = new PageModule();
+                    }
+                    $module = $this->_em->getRepository('SettingToolBundle:Module')->find($moduleId);
+                    $entity->setName($data['name'][$key]);
+                    $entity->setShowLimit($data['showLimit'][$key]);
+                    $entity->setContentPosition($data['contentPosition'][$key]);
+                    $entity->setShowingType($data['showingType'][$key]);
+                    $entity->setMenu($menu);
                     $entity->setModule($module);
                     $this->_em->persist($entity);
                     $this->_em->flush();

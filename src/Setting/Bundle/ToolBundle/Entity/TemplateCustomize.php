@@ -45,6 +45,28 @@ class TemplateCustomize
     private $showSidebar = false;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="sidebarTitle", type="string", nullable=true)
+     */
+    private $sidebarTitle = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="showSidebarTooltip", type="boolean", nullable=true)
+     */
+    private $sidebarTooltip = false;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sidebarPosition", type="string", nullable=true)
+     */
+    private $sidebarPosition = 'left';
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="showSearch", type="boolean", nullable=true)
@@ -1095,6 +1117,56 @@ class TemplateCustomize
     public function setBorderColor($borderColor)
     {
         $this->borderColor = $borderColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSidebarPosition()
+    {
+        return $this->sidebarPosition;
+    }
+
+    /**
+     * @param string $sidebarPosition
+     */
+    public function setSidebarPosition($sidebarPosition)
+    {
+        $this->sidebarPosition = $sidebarPosition;
+    }
+
+
+
+    /**
+     * @return bool
+     */
+    public function getSidebarTooltip()
+    {
+        return $this->sidebarTooltip;
+    }
+
+    /**
+     * @param bool $sidebarTooltip
+     */
+    public function setSidebarTooltip($sidebarTooltip)
+    {
+        $this->sidebarTooltip = $sidebarTooltip;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSidebarTitle()
+    {
+        return $this->sidebarTitle;
+    }
+
+    /**
+     * @param string $sidebarTitle
+     */
+    public function setSidebarTitle($sidebarTitle)
+    {
+        $this->sidebarTitle = $sidebarTitle;
     }
 
 

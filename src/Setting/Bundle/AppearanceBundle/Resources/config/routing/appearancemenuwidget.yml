@@ -1,0 +1,33 @@
+appearancemenuwidget:
+    path:     /
+    defaults: { _controller: "SettingAppearanceBundle:MenuWidget:index" }
+
+appearancemenuwidget_sorting:
+    path:     /sorting
+    defaults: { _controller: "SettingAppearanceBundle:MenuWidget:sorting" }
+
+appearancemenuwidget_list_sorted:
+    path:     /sorted-list
+    defaults: { _controller: "SettingAppearanceBundle:MenuWidget:sortedList" }
+
+appearancemenuwidget_show:
+    path:     /{id}/show
+    defaults: { _controller: "SettingAppearanceBundle:MenuWidget:show" }
+
+appearancemenuwidget_new:
+    path:     /{menu}/new
+    defaults: { _controller: "SettingAppearanceBundle:MenuWidget:new" }
+
+appearancemenuwidget_update:
+    path:     /{menu}/update
+    defaults: { _controller: "SettingAppearanceBundle:MenuWidget:update" }
+    methods:  [POST, PUT]
+
+
+appearancemenuwidget_resizing:
+    path:     /resizing
+    defaults: { _controller: "SettingAppearanceBundle:MenuWidget:resize" }
+
+appearancemenuwidget_sorted:
+    path:     /sorted
+    defaults: { _controller: "SettingAppearanceBundle:MenuWidget:sorted" }

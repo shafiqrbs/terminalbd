@@ -1140,6 +1140,7 @@ div.treeview, .treeview ul {
     background:#fff;
     text-align:left;
     margin-top: 20px;
+    padding-left: 0;
 }
 .mbm_social li {
     display: inline-block;
@@ -1300,6 +1301,28 @@ div.treeview, .treeview ul {
 .mbm_social .social-google-plus span:after {
     border-top-color: #ea4335 ;
 }
+
+
+.mbm_social .social-instagram {
+    background: #3f729b;
+    background: -webkit-linear-gradient(#3f729b, #3f729b);
+    background: linear-gradient(#3f729b, #3f729b);
+    border-bottom: 1px solid #3f729b;
+}
+.mbm_social .social-instagram:hover {
+    color: #fff ;
+    text-shadow: 0px 1px 0px #3f729b;
+}
+.mbm_social .social-instagram span {
+    background: #3f729b;
+    background: -webkit-linear-gradient(#3f729b, #3f729b);
+    background: linear-gradient(#3f729b, #3f729b);
+    color: #fff ;
+}
+.mbm_social .social-instagram span:after {
+    border-top-color: #3f729b ;
+}
+
 .mbm_social i {
     position: relative;
     top: 1px;

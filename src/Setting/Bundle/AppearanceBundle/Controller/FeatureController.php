@@ -4,6 +4,8 @@ namespace Setting\Bundle\AppearanceBundle\Controller;
 
 use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Form\FeatureType;
+use Setting\Bundle\AppearanceBundle\Form\PageFeatureType;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,7 +38,16 @@ class FeatureController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Feature();
-        $form = $this->createCreateForm($entity);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $appModules = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getAppmoduleArray($globalOption);
+        $result = array_intersect($appModules, array('Ecommerce'));
+        if (!empty($result)) {
+            $form   = $this->createPageEditForm($entity);
+            $twig ='page';
+        }else{
+            $form   = $this->createCreateForm($entity);
+            $twig ='new';
+        }
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -50,7 +61,9 @@ class FeatureController extends Controller
             return $this->redirect($this->generateUrl('appearancefeature'));
         }
 
-        return $this->render('SettingAppearanceBundle:Feature:new.html.twig', array(
+
+        return $this->render('SettingAppearanceBundle:Feature:'.$twig.'.html.twig', array(
+
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -79,6 +92,30 @@ class FeatureController extends Controller
         return $form;
     }
 
+
+    /**
+     * Creates a form to create a Feature entity.
+     *
+     * @param Feature $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createPageCreateForm(Feature $entity)
+    {
+
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new PageFeatureType($globalOption), $entity, array(
+            'action' => $this->generateUrl('appearancefeature_create'),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+
     /**
      * Displays a form to create a new Feature entity.
      *
@@ -86,9 +123,20 @@ class FeatureController extends Controller
     public function newAction()
     {
         $entity = new Feature();
-        $form   = $this->createCreateForm($entity);
 
-        return $this->render('SettingAppearanceBundle:Feature:new.html.twig', array(
+        $globalOption = $this->getUser()->getGlobalOption();
+
+        $appModules = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getAppmoduleArray($globalOption);
+        $result = array_intersect($appModules, array('Ecommerce'));
+        if (!empty($result)) {
+            $form   = $this->createPageCreateForm($entity);
+            $twig ='page';
+        }else{
+            $form   = $this->createCreateForm($entity);
+            $twig ='new';
+        }
+
+        return $this->render('SettingAppearanceBundle:Feature:'. $twig .'.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -129,14 +177,19 @@ class FeatureController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Feature entity.');
         }
-
-        $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('SettingAppearanceBundle:Feature:new.html.twig', array(
-            'entity'      => $entity,
-            'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+        $globalOption = $this->getUser()->getGlobalOption();
+        $appModules = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getAppmoduleArray($globalOption);
+        $result = array_intersect($appModules, array('Ecommerce'));
+        if (!empty($result)) {
+            $form   = $this->createPageEditForm($entity);
+            $twig ='page';
+        }else{
+            $form   = $this->createEditForm($entity);
+            $twig ='new';
+        }
+        return $this->render('SettingAppearanceBundle:Feature:'.$twig.'.html.twig', array(
+            'entity'        => $entity,
+            'form'          => $form->createView(),
         ));
     }
 
@@ -163,6 +216,26 @@ class FeatureController extends Controller
         return $form;
     }
     /**
+     * Creates a form to edit a Feature entity.
+     *
+     * @param Feature $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createPageEditForm(Feature $entity)
+    {
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new PageFeatureType($globalOption), $entity, array(
+            'action' => $this->generateUrl('appearancefeature_update', array('id' => $entity->getId())),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+    /**
      * Edits an existing Feature entity.
      *
      */
@@ -175,8 +248,16 @@ class FeatureController extends Controller
             throw $this->createNotFoundException('Unable to find Feature entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
+        $globalOption = $this->getUser()->getGlobalOption();
+        $appModules = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getAppmoduleArray($globalOption);
+        $result = array_intersect($appModules, array('Ecommerce'));
+        if (!empty($result)) {
+            $editForm   = $this->createPageEditForm($entity);
+            $twig ='page';
+        }else{
+            $editForm   = $this->createCreateForm($entity);
+            $twig ='new';
+        }
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -191,11 +272,10 @@ class FeatureController extends Controller
             );
             return $this->redirect($this->generateUrl('appearancefeature'));
         }
+        return $this->render('SettingAppearanceBundle:Feature:'.$twig.'.html.twig', array(
 
-        return $this->render('SettingAppearanceBundle:Feature:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 

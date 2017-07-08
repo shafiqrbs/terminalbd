@@ -71,7 +71,6 @@ class PageController extends Controller
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('SettingContentBundle:PageMeta')->pageMeta($entity,$data);
-            $this->getDoctrine()->getRepository('SettingContentBundle:PageModule')->createFeatureModule($entity,$data);
             $this->getDoctrine()->getRepository('SettingAppearanceBundle:Menu')->createMenuForPage($entity);
 
             $this->get('session')->getFlashBag()->add(

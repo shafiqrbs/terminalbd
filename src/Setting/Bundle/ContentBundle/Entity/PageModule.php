@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ContentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\AppearanceBundle\Entity\Menu;
 use Setting\Bundle\ToolBundle\Entity\Module;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -37,6 +38,12 @@ class PageModule
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", inversedBy="pageModules" )
      **/
     protected $page;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="pageModules")
+     **/
+    protected  $menu;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\HomePage", inversedBy="pageModules" )
@@ -78,6 +85,13 @@ class PageModule
      * @ORM\Column(name="showColumn", type="smallint", nullable= true)
      */
     private $showColumn = 3;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="showingType", type="string", nullable= true)
+     */
+    private $showingType = 'list';
 
 
     /**
@@ -213,14 +227,47 @@ class PageModule
 
     /**
      * @param string $contentPosition
-     * Body
      * SideBar
      * Footer
      * Top
+     * Bottom
      */
+
     public function setContentPosition($contentPosition)
     {
         $this->contentPosition = $contentPosition;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShowingType()
+    {
+        return $this->showingType;
+    }
+
+    /**
+     * @param string $showingType
+     */
+    public function setShowingType($showingType)
+    {
+        $this->showingType = $showingType;
+    }
+
+    /**
+     * @return Menu
+     */
+    public function getMenu()
+    {
+        return $this->menu;
+    }
+
+    /**
+     * @param Menu $menu
+     */
+    public function setMenu($menu)
+    {
+        $this->menu = $menu;
     }
 
 
