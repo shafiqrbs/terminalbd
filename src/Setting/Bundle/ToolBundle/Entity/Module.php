@@ -145,7 +145,7 @@ class Module
 
 
      /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="module")
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="module")
      * @ORM\OrderBy({"name" = "ASC"})
      **/
     private $featureWidgets;

@@ -78,24 +78,12 @@ class PurchaseApproveType extends AbstractType
                 'attr'=>array('class'=>'span12'),
                 'empty_value' => '---Choose a purchase To ---',
                 'choices' => array(
-                    'Internationl' => 'Internationl',
+                    'International' => 'International',
                     'National' => 'National',
                     'In House' => 'In House'
                 ),
             ))
-            ->add('asInvestment')
-
-            /*->add('advanceAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
-            /*->add('advanceAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
-            ->add('commissionAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
-            ->add('vatAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
-            ->add('taxAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
-            ->add('totalQnt','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
-            ->add('totalItem','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
-            ->add('paymentType','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
-            ->add('paymentMethod','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))*/
-            /*->add('file','file',array('attr'=>array('class'=>'default span12')))*/
-        ;
+            ->add('asInvestment');
     }
     
     /**

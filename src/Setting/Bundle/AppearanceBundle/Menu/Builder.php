@@ -267,7 +267,7 @@ class Builder extends ContainerAware
             if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
                 $menu['Manage Appearance']['Feature & Widget']->addChild('E-commerce Widget', array('route' => 'appearancefeaturewidget'));
             }
-            $menu['Manage Appearance']['Feature & Widget']->addChild('Menu Widget', array('route' => 'appearancemenuwidget'));
+            $menu['Manage Appearance']['Feature & Widget']->addChild('Website Widget', array('route' => 'appearancewebsitewidget'));
             $menu['Manage Appearance']['Feature & Widget']->addChild('Create Feature', array('route' => 'appearancefeature'));
             $menu['Manage Appearance']->addChild('Menu', array('route' => 'menu_manage'));
             $menu['Manage Appearance']->addChild('Menu Grouping', array('route' => 'menugrouping'));

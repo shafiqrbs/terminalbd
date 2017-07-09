@@ -11,20 +11,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class FeatureWidgetType extends AbstractType
+class WebsiteWidgetType extends AbstractType
 {
-
-    /** @var  CategoryRepository */
-    private $category;
 
     private $globalOption;
 
-    public function __construct(GlobalOption $globalOption, CategoryRepository $category)
+    public function __construct(GlobalOption $globalOption)
     {
         $this->globalOption = $globalOption;
         $this->globalId = $globalOption->getId();
-        $this->ecommerceConfig = $globalOption->getEcommerceConfig()->getId();
-        $this->category = $category;
     }
 
     /**
@@ -34,6 +29,20 @@ class FeatureWidgetType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+
+            ->add('menu', 'entity', array(
+                'required'    => false,
+                'class' => 'Setting\Bundle\AppearanceBundle\Entity\Menu',
+                'empty_value' => '---Select Menu Page---',
+                'property' => 'menu',
+                'attr'=>array('class'=>'m-wrap span12 select2'),
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.globalOption = $this->globalId")
+                        ->orderBy('e.menu','ASC');
+                },
+            ))
 
             ->add('position', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12 select2 '),
@@ -52,68 +61,38 @@ class FeatureWidgetType extends AbstractType
                     'footer'                    => 'Footer',
                 ),
             ))
-            ->add('menu', 'entity', array(
+
+            ->add('page', 'entity', array(
                 'required'    => false,
-                'class' => 'Setting\Bundle\AppearanceBundle\Entity\Menu',
-                'empty_value' => '---Select Menu Page---',
-                'property' => 'menu',
+                'multiple'    => true,
+                'class' => 'Setting\Bundle\ContentBundle\Entity\Page',
+                'empty_value' => '---Select Page---',
+                'property' => 'name',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
+                        ->andWhere("e.module = 12")
                         ->andWhere("e.globalOption = $this->globalId")
-                        ->orderBy('e.menu','ASC');
-                },
-            ))
-            ->add('category', 'entity', array(
-                'required'    => true,
-                'empty_value' => '---Select parent category---',
-                'attr'=>array('class'=>'m-wrap span12 select2 '),
-                'class' => 'ProductProductBundle:Category',
-                'property' => 'nestedLabel',
-                'choices'=> $this->categoryChoiceList()
-            ))
-
-            ->add('discount', 'entity', array(
-                'required'    => false,
-                'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Discount',
-                'empty_value' => '---Select Discount---',
-                'property' => 'name',
-                'attr'=>array('class'=>'m-wrap span12 select2 '),
-                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->andWhere("e.ecommerceConfig =".$this->ecommerceConfig)
                         ->orderBy('e.name','ASC');
                 },
             ))
 
-            ->add('promotion', 'entity', array(
+            ->add('module', 'entity', array(
                 'required'    => false,
-                'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
-                'empty_value' => '---Select Promotion---',
+                'multiple'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\Module',
+                'empty_value' => '---Select page module---',
                 'property' => 'name',
-                'attr'=>array('class'=>'m-wrap span12 select2 '),
+                'attr'=>array('class'=>'m-wrap span12 select2'),
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
+                        ->join('e.nav' ,'n')
                         ->where("e.status = 1")
-                        /*->andWhere('e.type IN (:type)')
-                        ->setParameter('type', array('promotion'))*/
-                        ->andWhere("e.ecommerceConfig = $this->ecommerceConfig")
-                        ->orderBy('e.name','ASC');
-                },
-            ))
-
-            ->add('tag', 'entity', array(
-                'required'    => false,
-                'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
-                'empty_value' => '---Select Tag---',
-                'property' => 'name',
-                'attr'=>array('class'=>'m-wrap span12 select2 '),
-                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status = 1")
-                        ->andWhere("e.ecommerceConfig = $this->ecommerceConfig")
+                        ->andWhere("e.isSingle != 1")
+                        ->andWhere("n.module != 12")
+                        ->andWhere("n.module is not NULL")
+                        ->andWhere("n.globalOption = $this->globalId")
                         ->orderBy('e.name','ASC');
                 },
             ))
@@ -130,26 +109,8 @@ class FeatureWidgetType extends AbstractType
                         ->orderBy('e.name','ASC');
                 },
             ))
+
             ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap','rows' => 6)))
-            ->add('pageName', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12 select2 '),
-                'empty_value' => '---Select E-commerce Page ---',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select feature page'))
-                ),
-                'required'    => false,
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'choices' => array(
-                    'Home'              => 'Home',
-                    'Product'           => 'Product',
-                    'Brand'             => 'Brand',
-                    'Category'          => 'Category',
-                    'Promotion'         => 'Promotion',
-                    'Tag'               => 'Tag',
-                    'Discount'          => 'Discount'
-                ),
-            ))
             ->add('sliderFeature', 'choice', array(
                 'attr'=>array('class'=>'span12  m-wrap targetTo'),
                 'empty_value' => '---Slider with Feature ---',
@@ -174,9 +135,7 @@ class FeatureWidgetType extends AbstractType
                     'right'             => 'Right',
                 ),
             ))
-            ->add('featureBrand')
-            ->add('featureCategory')
-        ;
+            ;
     }
     
     /**

@@ -37,7 +37,7 @@ class FeatureWidget
     private  $globalOption;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Module", inversedBy="featureWidgets" )
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\Module", inversedBy="featureWidgets" )
      **/
     private  $module;
 
@@ -83,7 +83,7 @@ class FeatureWidget
     protected $brand;
 
     /**
-     * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="featureWidgets")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="featureWidgets")
      */
     protected $menu;
 
@@ -130,6 +130,14 @@ class FeatureWidget
      * @ORM\Column(name="pageName", type="string", length=50 , nullable=true)
      */
     private $pageName;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="widgetFor", type="string", length=50 , nullable=true)
+     */
+    private $widgetFor;
 
     /**
      * @var string
@@ -588,5 +596,40 @@ class FeatureWidget
     public function setSliderFeaturePosition($sliderFeaturePosition)
     {
         $this->sliderFeaturePosition = $sliderFeaturePosition;
+    }
+
+    /**
+     * @return Menu
+     */
+    public function getMenu()
+    {
+        return $this->menu;
+    }
+
+    /**
+     * @param Menu $menu
+     */
+    public function setMenu($menu)
+    {
+        $this->menu = $menu;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWidgetFor()
+    {
+        return $this->widgetFor;
+    }
+
+    /**
+     * @param string $widgetFor
+     * website
+     * e-commerce
+     * institute
+     */
+    public function setWidgetFor($widgetFor)
+    {
+        $this->widgetFor = $widgetFor;
     }
 }

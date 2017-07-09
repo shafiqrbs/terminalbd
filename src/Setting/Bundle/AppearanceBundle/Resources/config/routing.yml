@@ -7,8 +7,8 @@ setting_appearance_featurewidget:
     prefix:   /domain/feature-widget
 
 setting_appearance_menuwidget:
-    resource: "@SettingAppearanceBundle/Resources/config/routing/appearancemenuwidget.yml"
-    prefix:   /domain/menu-widget
+    resource: "@SettingAppearanceBundle/Resources/config/routing/appearancewebsitewidget.yml"
+    prefix:   /domain/website-widget
 
 setting_appearance_featurewidgetitem:
     resource: "@SettingAppearanceBundle/Resources/config/routing/appearancefeaturewidgetitem.yml"

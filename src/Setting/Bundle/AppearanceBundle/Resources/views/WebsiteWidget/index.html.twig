@@ -4,7 +4,8 @@
         <!-- BEGIN PAGE HEADER-->
         <div class="row-fluid">
             <div class="span12">
-                <h3 class="page-title">  Manage E-commerce Widget</h3>
+                <h3 class="page-title">
+                    Manage Website Widget                 </h3>
                 <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
@@ -12,7 +13,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('appearancefeaturewidget') }}">E-commerce Widget List</a>
+                        <a href="{{ path('appearancewebsitewidget') }}">Manage Website Widget List</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -31,7 +32,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage E-commerce Widget Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Website Widget Information</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -39,9 +40,9 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('appearancefeaturewidget_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('appearancefeaturewidget_sorting') }}"><i class="icon-th-list"></i>&nbsp;Sorting</a></li>
-                                    <li><a href="{{ path('appearancefeaturewidget') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('appearancewebsitewidget_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                    <li><a href="{{ path('appearancewebsitewidget_sorting') }}"><i class="icon-th-list"></i>&nbsp;Sorting</a></li>
+                                    <li><a href="{{ path('appearancewebsitewidget') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -78,7 +79,7 @@
                                             {% endif %}
                                             <a class="btn mini green-stripe btn-action" href="{{ path('appearancefeaturewidget_edit', { 'id': entity.id }) }}">Edit</a>
                                             {% if entity.jsFeature is not empty and entity.jsFeature.slug == 'feature' %}
-                                            <a class="btn mini green-stripe btn-action" href="{{ path('appearancefeaturewidget_feature', { 'id': entity.id }) }}">Feature</a>
+                                                <a class="btn mini green-stripe btn-action" href="{{ path('appearancefeaturewidget_feature', { 'id': entity.id }) }}">Feature</a>
                                             {% endif %}
                                             <a class="btn mini red-stripe btn-action confirm" title="Are you sure went to delete ?" href="{{ path('appearancefeaturewidget_delete', { 'id': entity.id }) }}" >Delete</a>
                                         </td>

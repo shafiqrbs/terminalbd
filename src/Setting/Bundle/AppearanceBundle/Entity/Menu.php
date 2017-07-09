@@ -70,6 +70,11 @@ class Menu
     protected $pageModules;
 
     /**
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="menu" , cascade={"persist", "remove"})
+     */
+    protected $featureWidgets;
+
+    /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="menu" , cascade={"persist", "remove"})
      */
     protected $feature;

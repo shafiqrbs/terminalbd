@@ -4,15 +4,16 @@ namespace Setting\Bundle\AppearanceBundle\Controller;
 
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\AppearanceBundle\Form\FeatureWidgetType;
+use Setting\Bundle\AppearanceBundle\Form\WebsiteWidgetType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 
 /**
- * FeatureWidget controller.
+ * WebsiteWidgetController controller.
  *
  */
-class FeatureWidgetController extends Controller
+class WebsiteWidgetController extends Controller
 {
 
     /**
@@ -23,9 +24,8 @@ class FeatureWidgetController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption'=> $globalOption,'widgetFor'=>'e-commerce'));
-
-        return $this->render('SettingAppearanceBundle:FeatureWidget:index.html.twig', array(
+        $entities = $em->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption'=> $globalOption ,'widgetFor'=>'e-commerce'));
+        return $this->render('SettingAppearanceBundle:WebsiteWidget:index.html.twig', array(
             'entities' => $entities,
         ));
     }
@@ -39,7 +39,7 @@ class FeatureWidgetController extends Controller
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption'=> $globalOption),array('sorting'=>'ASC'));
-        return $this->render('SettingAppearanceBundle:FeatureWidget:sorting.html.twig', array(
+        return $this->render('SettingAppearanceBundle:WebsiteWidget:sorting.html.twig', array(
             'entities' => $entities,
         ));
     }
@@ -72,7 +72,8 @@ class FeatureWidgetController extends Controller
             $entity->setGlobalOption($user->getGlobalOption());
             $name = $entity->getPageName().'-'.$entity->getPosition();
             $entity->setName($name);
-            $entity->setWidgetFor('e-commerce');
+            $entity->setWidgetFor('website');
+
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidgetItem')->insert($entity,$data);
@@ -88,7 +89,7 @@ class FeatureWidgetController extends Controller
         $features = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->findBy(array('globalOption' => $global));
 
 
-        return $this->render('SettingAppearanceBundle:FeatureWidget:new.html.twig', array(
+        return $this->render('SettingAppearanceBundle:WebsiteWidget:new.html.twig', array(
             'entity' => $entity,
             'features' => $features,
             'featureIds'      => '',
@@ -108,7 +109,7 @@ class FeatureWidgetController extends Controller
 
         $globalOption = $this->getUser()->getGlobalOption();
         $category = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
-        $form = $this->createForm(new FeatureWidgetType($globalOption,$category), $entity, array(
+        $form = $this->createForm(new WebsiteWidgetType($globalOption,$category), $entity, array(
             'action' => $this->generateUrl('appearancefeaturewidget_create'),
             'method' => 'POST',
             'attr' => array(
@@ -129,7 +130,7 @@ class FeatureWidgetController extends Controller
         $form   = $this->createCreateForm($entity);
         $global = $this->getUser()->getGlobalOption();
         $features = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->findBy(array('globalOption' => $global));
-        return $this->render('SettingAppearanceBundle:FeatureWidget:new.html.twig', array(
+        return $this->render('SettingAppearanceBundle:WebsiteWidget:new.html.twig', array(
             'entity'    => $entity,
             'features'  => $features,
             'featureIds'      => '',
@@ -153,7 +154,7 @@ class FeatureWidgetController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('SettingAppearanceBundle:FeatureWidget:show.html.twig', array(
+        return $this->render('SettingAppearanceBundle:WebsiteWidget:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -179,7 +180,7 @@ class FeatureWidgetController extends Controller
         foreach ($entity->getFeatureWidgetItems() as $row ){
             $featureIds[] = $row->getFeature()->getId();;
         }
-        return $this->render('SettingAppearanceBundle:FeatureWidget:new.html.twig', array(
+        return $this->render('SettingAppearanceBundle:WebsiteWidget:new.html.twig', array(
             'entity'      => $entity,
             'features'      => $features,
             'featureIds'      => $featureIds,
@@ -239,7 +240,7 @@ class FeatureWidgetController extends Controller
         $features = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->findBy(array('globalOption' => $global));
 
 
-        return $this->render('SettingAppearanceBundle:FeatureWidget:new.html.twig', array(
+        return $this->render('SettingAppearanceBundle:WebsiteWidget:new.html.twig', array(
             'entity'      => $entity,
             'features'      => $features,
             'featureIds'      => '',
@@ -323,7 +324,7 @@ class FeatureWidgetController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find FeatureWidget entity.');
         }
-        return $this->render('SettingAppearanceBundle:FeatureWidget:feature.html.twig', array(
+        return $this->render('SettingAppearanceBundle:WebsiteWidget:feature.html.twig', array(
             'entity'      => $entity,
         ));
     }
