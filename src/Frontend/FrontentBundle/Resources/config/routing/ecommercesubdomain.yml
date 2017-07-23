@@ -62,7 +62,6 @@ webservice_module_category:
     path:     /category/{module}/{slug}
     defaults: { _controller: FrontendBundle:WebServiceModule:moduleCategory }
 
-
 webservice_product_category:
     path:     /product/category/{id}
     defaults: { _controller: FrontendBundle:WebServiceProduct:category }

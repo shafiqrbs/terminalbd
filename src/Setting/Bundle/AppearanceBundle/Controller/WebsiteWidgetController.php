@@ -24,7 +24,7 @@ class WebsiteWidgetController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption'=> $globalOption ,'widgetFor'=>'e-commerce'));
+        $entities = $em->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption'=> $globalOption ,'widgetFor'=>'website'),array('updated'=>'DESC'));
         return $this->render('SettingAppearanceBundle:WebsiteWidget:index.html.twig', array(
             'entities' => $entities,
         ));
@@ -38,7 +38,7 @@ class WebsiteWidgetController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption'=> $globalOption),array('sorting'=>'ASC'));
+        $entities = $em->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption'=> $globalOption ,'widgetFor'=>'website' ),array('sorting'=>'ASC'));
         return $this->render('SettingAppearanceBundle:WebsiteWidget:sorting.html.twig', array(
             'entities' => $entities,
         ));
@@ -70,6 +70,7 @@ class WebsiteWidgetController extends Controller
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
             $entity->setGlobalOption($user->getGlobalOption());
+            $entity->setPageName($entity->getMenu()->getSlug());
             $name = $entity->getPageName().'-'.$entity->getPosition();
             $entity->setName($name);
             $entity->setWidgetFor('website');
@@ -79,9 +80,9 @@ class WebsiteWidgetController extends Controller
             $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidgetItem')->insert($entity,$data);
 
             if(!empty($entity->getJsFeature()) and $entity->getJsFeature()->getSlug() == 'feature'){
-                return $this->redirect($this->generateUrl('appearancefeaturewidget_feature',array('id'=>$entity->getId())));
+                return $this->redirect($this->generateUrl('appearancewebsitewidget_feature',array('id'=>$entity->getId())));
             }else{
-                return $this->redirect($this->generateUrl('appearancefeaturewidget'));
+                return $this->redirect($this->generateUrl('appearancewebsitewidget'));
             }
 
         }
@@ -108,9 +109,8 @@ class WebsiteWidgetController extends Controller
     {
 
         $globalOption = $this->getUser()->getGlobalOption();
-        $category = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
-        $form = $this->createForm(new WebsiteWidgetType($globalOption,$category), $entity, array(
-            'action' => $this->generateUrl('appearancefeaturewidget_create'),
+        $form = $this->createForm(new WebsiteWidgetType($globalOption), $entity, array(
+            'action' => $this->generateUrl('appearancewebsitewidget_create'),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -200,8 +200,8 @@ class WebsiteWidgetController extends Controller
     {
         $globalOption = $this->getUser()->getGlobalOption();
         $category = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
-        $form = $this->createForm(new FeatureWidgetType($globalOption,$category), $entity, array(
-            'action' => $this->generateUrl('appearancefeaturewidget_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new WebsiteWidgetType($globalOption,$category), $entity, array(
+            'action' => $this->generateUrl('appearancewebsitewidget_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -233,7 +233,7 @@ class WebsiteWidgetController extends Controller
             $entity->setName($name);
             $em->flush();
             $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidgetItem')->update($entity,$data);
-            return $this->redirect($this->generateUrl('appearancefeaturewidget_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('appearancewebsitewidget_edit', array('id' => $id)));
 
         }
         $global = $this->getUser()->getGlobalOption();
@@ -270,7 +270,7 @@ class WebsiteWidgetController extends Controller
                 'error',"Sorry! Data not deleted"
             );
         }
-        return $this->redirect($this->generateUrl('appearancefeaturewidget'));
+        return $this->redirect($this->generateUrl('appearancewebsitewidget'));
     }
 
     /**
@@ -283,7 +283,7 @@ class WebsiteWidgetController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('appearancefeaturewidget_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('appearancewebsitewidget_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
@@ -316,7 +316,7 @@ class WebsiteWidgetController extends Controller
         $this->get('session')->getFlashBag()->add(
             'error',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('appearancefeaturewidget'));
+        return $this->redirect($this->generateUrl('appearancewebsitewidget'));
     }
 
     public function  featureAction(FeatureWidget $entity){

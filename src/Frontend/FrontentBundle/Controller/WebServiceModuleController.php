@@ -19,17 +19,13 @@ class WebServiceModuleController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $categories ='';
         $page ='';
         $pagination ='';
-        $moduleName ='';
-        $featurePages ='';
-        $sidebar ='';
 
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         if(!empty($globalOption)){
 
-            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=>$globalOption ,'slug' => $module));
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => $module));
             if(!empty($menu)){
 
                 $siteEntity = $globalOption->getSiteSetting();
@@ -43,16 +39,12 @@ class WebServiceModuleController extends Controller
                     $pagination = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption' => $globalOption,'module' => $menu->getModule()->getId()),array('id'=>'desc'));
                     $pagination = $this->paginate( $pagination,$limit= 10 );
                     if(!empty($menu->getModule())){
-                        $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
+                        //$categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
                     }
-                    $sidebar = $em->getRepository('SettingAppearanceBundle:SidebarWidgetPanel')->getSidebarPanel($globalOption,$sidebar = 1);
-
                 }else{
 
                     $page = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption,'slug' => $module));
                     $twigName = "content";
-                    $featurePages = $em->getRepository('SettingContentBundle:Page')->getListForModule($globalOption,$page->getPage());
-                    $sidebar = $em->getRepository('SettingAppearanceBundle:SidebarWidgetPanel')->getSidebarPanel($globalOption,$sidebar = 2);
                 }
             }
 
@@ -73,14 +65,65 @@ class WebServiceModuleController extends Controller
             array(
 
                 'globalOption'  => $globalOption,
-                'module'        => $menu->getModule(),
-                'categories'    => $categories,
-                'title'         => $moduleName,
                 'pagination'    => $pagination,
                 'page'          => $page,
-                'featurePages'  => $featurePages,
-                'sidebar'       => $sidebar,
+                'menu'          => $menu,
                 'pageName'      => 'pageName',
+            )
+        );
+    }
+
+    public function modulePageAction($subdomain, $module ,$slug)
+    {
+
+
+        $em = $this->getDoctrine()->getManager();
+
+        $categories ='';
+        $page ='';
+
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        if(!empty($globalOption)){
+
+            $entityModule = $em->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => $module));
+            if(!empty($entityModule)){
+
+                $siteEntity = $globalOption->getSiteSetting();
+                $themeName = $siteEntity->getTheme()->getFolderName();
+
+
+                $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => $module));
+                if($entityModule){
+
+                    $page = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption' => $globalOption,'slug' => $slug));
+                    $twigName = "moduleDetails";
+
+                }else{
+
+                    /** @pram $page Page */
+
+                    $page = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'slug' => $module));
+                    $twigName = "content";
+                }
+            }
+
+        }
+
+        $page = ($page) ? $page :'';
+
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName;
+        }else{
+            $theme = 'Template/Desktop/'.$themeName;
+        }
+        return $this->render('FrontendBundle:'.$theme.':'.$twigName.'.html.twig',
+            array(
+                'globalOption'          => $globalOption,
+                'page'                  => $page,
+                'menu'                  => $menu,
+                'pageName'              => 'pageName',
             )
         );
     }
@@ -139,83 +182,17 @@ class WebServiceModuleController extends Controller
             array(
 
                 'globalOption'  => $globalOption,
-                'module'        => $menu->getModule(),
-                'categories'    => $categories,
-                'title'         => $cat->getName(),
                 'pagination'    => $pagination,
+                'menu'          => $menu,
                 'page'          => $page,
+                'pageName'      => 'pageName',
             )
         );
     }
 
 
 
-    public function modulePageAction($subdomain,$module,$slug)
-    {
 
-        $em = $this->getDoctrine()->getManager();
-
-        $categories ='';
-        $page ='';
-        $entityModule ='';
-        $sidebar = "";
-
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        if(!empty($globalOption)){
-
-            $entityModule = $em->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => $module));
-
-
-
-            if(!empty($entityModule)){
-
-                $siteEntity = $globalOption->getSiteSetting();
-                $themeName = $siteEntity->getTheme()->getFolderName();
-
-
-               // $moduleName = $this->get('setting.menuTreeSettingRepo')->getCheckModule($menu);
-                if($entityModule){
-
-                    $page = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption' => $globalOption,'slug' => $slug));
-                    $twigName = "moduleDetails";
-                    $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$entityModule->getId());
-                    $sidebar = $em->getRepository('SettingAppearanceBundle:SidebarWidgetPanel')->getSidebarPanel($globalOption,$sidebar = 3);
-
-
-                }else{
-
-                    /** @pram $page Page */
-
-                    $page = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'slug' => $module));
-                    $featurePages = $em->getRepository('SettingContentBundle:Page')->getListForModule($globalOption,$page);
-                    $twigName = "content";
-                    $sidebar = $em->getRepository('SettingAppearanceBundle:SidebarWidgetPanel')->getSidebarPanel($globalOption,$sidebar = 2);
-
-                }
-            }
-
-        }
-
-        $page = ($page) ? $page :'';
-        $categories = ($categories) ? $categories :'';
-        /* Device Detection code desktop or mobile */
-        $detect = new MobileDetect();
-        if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $theme = 'Template/Mobile/'.$themeName;
-        }else{
-            $theme = 'Template/Desktop/'.$themeName;
-        }
-        return $this->render('FrontendBundle:'.$theme.':'.$twigName.'.html.twig',
-            array(
-                'globalOption'          => $globalOption,
-                'categories'            => $categories,
-                'page'                  => $page,
-                'module'                => $entityModule,
-                'sidebar'               => $sidebar,
-                'pageName'              => 'pageName',
-            )
-        );
-    }
 
     public function contactAction($subdomain){
 

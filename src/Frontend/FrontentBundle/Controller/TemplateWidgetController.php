@@ -6,6 +6,7 @@ use Core\UserBundle\Form\CustomerRegisterType;
 use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\ContentBundle\Entity\PageModule;
 use Setting\Bundle\ToolBundle\Entity\Branding;
 use Product\Bundle\ProductBundle\Entity\Product;
@@ -195,14 +196,14 @@ class TemplateWidgetController extends Controller
         ));
     }
 
-    public function pageBaseModuleContentAction(GlobalOption $globalOption , PageModule $pageModule )
+    public function pageBaseModuleContentAction(GlobalOption $globalOption , FeatureWidget $widget , $module )
     {
 
-        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(),$pageModule->getModule()->getId(),$pageModule->getShowLimit());
+        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(), $module ,$widget->getModuleShowingLimit());
 
         return $this->render('@Frontend/Template/Desktop/Widget/page.html.twig', array(
             'entities'              => $entities,
-            'pageModule'            => $pageModule,
+            'widget'            => $widget,
             'globalOption'          => $globalOption,
         ));
     }

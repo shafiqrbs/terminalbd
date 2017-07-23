@@ -4,8 +4,7 @@
         <!-- BEGIN PAGE HEADER-->
         <div class="row-fluid">
             <div class="span12">
-                <h3 class="page-title">
-                    Manage Website Widget                 </h3>
+                <h3 class="page-title"> Manage Website Widget </h3>
                 <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
@@ -55,10 +54,11 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
-                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
+                                    <td class="numeric">Created</td>
                                     <th class="numeric" >Page Name</th>
                                     <th class="numeric" >Position</th>
-                                    <th class="numeric" >Feature</th>
+                                    <th class="numeric" >Module Name</th>
+                                    <th class="numeric" >Show Type</th>
                                     <th class="numeric" >Action</th>
 
                                 </tr>
@@ -67,28 +67,22 @@
 
                                 {% for entity in entities %}
                                     <tr>
-                                        <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
-                                        <td class="numeric" >{{ entity.pageName }}</td>
+                                        <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.menu.menu }}</td>
                                         <td class="numeric" >{{ entity.position }}</td>
+                                        <td class="numeric" >{{ entity.module.name }}</td>
                                         <td class="numeric" >{% if entity.jsFeature is not empty %}{{ entity.jsFeature.name }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
-                                                <a class="btn mini green-stripe btn-action" href="{{ path('appearancefeaturewidget_status', { 'id': entity.id}) }}"><span class="badge badge-success">x</span></a>
+                                                <a class="btn mini green-stripe btn-action" href="{{ path('appearancewebsitewidget_status', { 'id': entity.id}) }}"><span class="badge badge-success">x</span></a>
                                             {% else %}
-                                                <a class="btn mini green-stripe btn-action" href="{{ path('appearancefeaturewidget_status', { 'id': entity.id}) }}"><span class="badge badge-important">a</span>    </a>
+                                                <a class="btn mini green-stripe btn-action" href="{{ path('appearancewebsitewidget_status', { 'id': entity.id}) }}"><span class="badge badge-important">a</span>    </a>
                                             {% endif %}
-                                            <a class="btn mini green-stripe btn-action" href="{{ path('appearancefeaturewidget_edit', { 'id': entity.id }) }}">Edit</a>
+                                            <a class="btn mini green-stripe btn-action" href="{{ path('appearancewebsitewidget_edit', { 'id': entity.id }) }}">Edit</a>
                                             {% if entity.jsFeature is not empty and entity.jsFeature.slug == 'feature' %}
-                                                <a class="btn mini green-stripe btn-action" href="{{ path('appearancefeaturewidget_feature', { 'id': entity.id }) }}">Feature</a>
+                                                <a class="btn mini green-stripe btn-action" href="{{ path('appearancewebsitewidget_feature', { 'id': entity.id }) }}">Feature</a>
                                             {% endif %}
-                                            <a class="btn mini red-stripe btn-action confirm" title="Are you sure went to delete ?" href="{{ path('appearancefeaturewidget_delete', { 'id': entity.id }) }}" >Delete</a>
-                                        </td>
-                                    </tr>
-                                    <tr id="show-{{ entity.id }}" class="showing-overview">
-                                        <td colspan="6">
-                                            <table class="inner-table">
-                                                <tr><td>Content</td><td>{{ entity.content|raw }}</td></tr>
-                                            </table>
+                                            <a class="btn mini red-stripe btn-action confirm" title="Are you sure went to delete ?" href="{{ path('appearancewebsitewidget_delete', { 'id': entity.id }) }}" >Delete</a>
                                         </td>
                                     </tr>
                                 {% endfor %}

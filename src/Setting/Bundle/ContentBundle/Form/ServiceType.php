@@ -27,7 +27,7 @@ class ServiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Enter portfolio name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Enter service name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 )

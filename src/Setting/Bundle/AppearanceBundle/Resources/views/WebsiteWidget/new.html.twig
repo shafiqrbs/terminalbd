@@ -53,33 +53,114 @@
                     <!-- BEGIN FORM-->
                     {{ form_start(form) }}
                     {{ form_row(form._token) }}
+                    <div class="row-fluid" >
+                        <div class="span12 ">
+                            <div class="control-group">
+                                <label class="control-label" >Page<span class="required">*</span></label>
+                                <div class="controls">
+                                    {{ form_widget(form.menu) }}
+                                    {{ form_errors(form.menu) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row-fluid">
-                        <div class="span4">
+                        <div class="span12 ">
+                            <div class="control-group">
+                                <label class="control-label" for="firstName">Position<span class="required">*</span></label>
+                                <div class="controls">
+                                    {{ form_widget(form.position) }}
+                                    {{ form_errors(form.position) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+
+                        <div class="span6">
                             <div class="row-fluid" >
                                 <div class="span12 ">
                                     <div class="control-group">
-                                        <label class="control-label" >E-commerce Page<span class="required">*</span></label>
+                                        <label class="control-label" >Assign Page</label>
                                         <div class="controls">
-                                            {{ form_widget(form.menu) }}
-                                            {{ form_errors(form.menu) }}
+                                            {{ form_widget(form.page) }}
+                                            {{ form_errors(form.page) }}
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="span6">
+                            <div class="row-fluid" >
+                                <div class="span9">
+                                    <div class="control-group">
+                                        <label class="control-label" >Page Title</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.pageFeatureName) }}
+                                            {{ form_errors(form.pageFeatureName) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" >Page Show Type</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.pageShowType) }}
+                                            {{ form_errors(form.pageShowType) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+
+                        <div class="span6">
                             <div class="row-fluid">
                                 <div class="span12 ">
                                     <div class="control-group">
-                                        <label class="control-label" for="firstName">Position<span class="required">*</span></label>
+                                        <label class="control-label" for="firstName">Assign Module</label>
                                         <div class="controls">
-                                            {{ form_widget(form.position) }}
-                                            {{ form_errors(form.position) }}
+                                            {{ form_widget(form.module) }}
+                                            {{ form_errors(form.module) }}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-                        <div class="row-fluid">
+                        <div class="span6">
+                            <div class="row-fluid">
+                                <div class="span6">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Module Title</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.moduleFeatureName) }}
+                                            {{ form_errors(form.moduleFeatureName) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Show Type</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.moduleShowType) }}
+                                            {{ form_errors(form.moduleShowType) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Data Limit</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.moduleShowLimit) }}
+                                            {{ form_errors(form.moduleShowLimit) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
                             <div class="span12">
                                 <div class="row-fluid">
                                     <div class="span12 ">
@@ -94,9 +175,6 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
-                    </div>
-
                     <div class="clearfix">&nbsp;</div>
                     <!--/row-->
                     <div class="form-actions portlet box green">
@@ -108,7 +186,7 @@
                     <div class="row-fluid">
                         <div class="span6">
                             <div class="control-group">
-                                <label class="control-label" >Home Slider</label>
+                                <label class="control-label" >Image Jquery Feature</label>
                                 <div class="controls">
                                     {{ form_widget(form.jsFeature) }}
                                     {{ form_errors(form.jsFeature) }}
@@ -150,9 +228,6 @@
                                     <label class="control-label">
                                         {% if(feature.targetTo) %}{{ feature.targetTo }}{% endif %} -
                                         {% if feature.targetTo == 'Category' and feature.category is not empty %}{{ feature.category.name }}{% endif %}
-                                        {% if feature.targetTo == 'Promotion' and feature.promotion is not empty %}{{ feature.promotion.name }}{% endif %}
-                                        {% if feature.targetTo == 'Tag' and feature.tag is not empty %}{{ feature.tag.name }}{% endif %}
-                                        {% if feature.targetTo == 'Discount' and feature.discount is not empty %}{{ feature.discount.name }}{% endif %}
                                     </label>
                                 </div>
                             </div>

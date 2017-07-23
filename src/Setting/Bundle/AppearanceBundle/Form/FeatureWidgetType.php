@@ -35,23 +35,6 @@ class FeatureWidgetType extends AbstractType
     {
         $builder
 
-            ->add('position', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12 select2 '),
-                'empty_value' => '---Select Position---',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select feature position'))
-                ),
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'choices' => array(
-                    'header-top'                => 'Header Top',
-                    'body-top'                  => 'Body Top',
-                    'body-bottom'               => 'Body Bottom',
-                    'sidebar-top'               => 'Sidebar Top',
-                    'sidebar-bottom'            => 'Sidebar Bottom',
-                    'footer'                    => 'Footer',
-                ),
-            ))
             ->add('menu', 'entity', array(
                 'required'    => false,
                 'class' => 'Setting\Bundle\AppearanceBundle\Entity\Menu',
@@ -64,6 +47,25 @@ class FeatureWidgetType extends AbstractType
                         ->andWhere("e.globalOption = $this->globalId")
                         ->orderBy('e.menu','ASC');
                 },
+            ))
+
+            ->add('position', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12 select2 '),
+                'empty_value' => '---Select Position---',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select feature position'))
+                ),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'header-top'                => 'Header Top',
+                    'header-bottom'             => 'Header Bottom',
+                    'body-top'                  => 'Body Top',
+                    'body-bottom'               => 'Body Bottom',
+                    'sidebar-top'               => 'Sidebar Top',
+                    'sidebar-bottom'            => 'Sidebar Bottom',
+                    'footer'                    => 'Footer',
+                ),
             ))
             ->add('category', 'entity', array(
                 'required'    => true,
@@ -131,25 +133,6 @@ class FeatureWidgetType extends AbstractType
                 },
             ))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap','rows' => 6)))
-            ->add('pageName', 'choice', array(
-                'attr'=>array('class'=>'m-wrap span12 select2 '),
-                'empty_value' => '---Select E-commerce Page ---',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select feature page'))
-                ),
-                'required'    => false,
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'choices' => array(
-                    'Home'              => 'Home',
-                    'Product'           => 'Product',
-                    'Brand'             => 'Brand',
-                    'Category'          => 'Category',
-                    'Promotion'         => 'Promotion',
-                    'Tag'               => 'Tag',
-                    'Discount'          => 'Discount'
-                ),
-            ))
             ->add('sliderFeature', 'choice', array(
                 'attr'=>array('class'=>'span12  m-wrap targetTo'),
                 'empty_value' => '---Slider with Feature ---',
@@ -157,11 +140,6 @@ class FeatureWidgetType extends AbstractType
                 'multiple'      =>false,
                 'choices' => array(
                     'category'          => 'Category',
-                    'brand'             => 'Brand',
-                    'promotion'         => 'Promotion',
-                    'featureProduct'    => 'FeatureProduct',
-                    'tag'               => 'Tag',
-                    'discount'          => 'Discount'
                 ),
             ))
             ->add('sliderFeaturePosition', 'choice', array(

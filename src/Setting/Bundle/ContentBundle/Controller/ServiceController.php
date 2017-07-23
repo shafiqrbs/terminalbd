@@ -46,7 +46,7 @@ class ServiceController extends Controller
             $entity->upload();
             $em->persist($entity);
             $em->flush();
-            $this->getDoctrine()->getRepository('SettingContentBundle:PageMeta')->servicePageMeta($entity,$data);
+            $this->getDoctrine()->getRepository('SettingContentBundle:PageMeta')->pageMeta($entity,$data);
             return $this->redirect($this->generateUrl('service'));
         }
 
@@ -175,7 +175,7 @@ class ServiceController extends Controller
             }
             $entity->upload();
             $em->flush();
-            $this->getDoctrine()->getRepository('SettingContentBundle:PageMeta')->servicePageMeta($entity,$data);
+            $this->getDoctrine()->getRepository('SettingContentBundle:PageMeta')->pageMeta($entity,$data);
             return $this->redirect($this->generateUrl('service_edit', array('id' => $id)));
         }
 

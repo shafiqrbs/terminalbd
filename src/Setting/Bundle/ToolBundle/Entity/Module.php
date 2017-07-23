@@ -145,7 +145,7 @@ class Module
 
 
      /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="module")
+     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="module")
      * @ORM\OrderBy({"name" = "ASC"})
      **/
     private $featureWidgets;
@@ -479,6 +479,18 @@ class Module
     {
         return $this->sidebarWidgetPanel;
     }
+
+    public function getModuleBasePostCategory($globalOption){
+
+        $cats = array();
+        foreach($this->getModuleCategory() AS $cat) {
+            if ($cat->getGlobalOption()->getId() == $globalOption ){
+                $cats[] = $cat->getName(); //$recipecost now $this->recipecost.
+            }
+        }
+        return $cats ;
+    }
+
 
 
 }

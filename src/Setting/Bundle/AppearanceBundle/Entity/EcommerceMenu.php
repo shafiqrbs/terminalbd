@@ -101,7 +101,7 @@ class EcommerceMenu
 
      /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="ecommerceChildMenu")
-     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\OrderBy({"menu" = "ASC"})
      */
      protected $childMenus;
 

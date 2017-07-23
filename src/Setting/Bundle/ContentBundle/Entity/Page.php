@@ -106,28 +106,35 @@ class Page
     /**
      * @var string
      *
-     * @ORM\Column(name="authorName", type="string", length=255, nullable=true)
+     * @ORM\Column(name="authorName", type="string", length=150, nullable=true)
      */
     private $authorName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="designation", type="string", length=255, nullable=true)
+     * @ORM\Column(name="price", type="string", length = 20, nullable=true)
+     */
+    private $price = 0;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="designation", type="string", length=150, nullable=true)
      */
     private $designation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="organization", type="string", length=255, nullable=true)
+     * @ORM\Column(name="organization", type="string", length=150, nullable=true)
      */
     private $organization;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="facebook", type="string", length=255, nullable=true)
+     * @ORM\Column(name="facebook", type="string", length=150, nullable=true)
      */
     private $facebook;
 
@@ -135,7 +142,7 @@ class Page
     /**
      * @var string
      *
-     * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
+     * @ORM\Column(name="twitter", type="string", length=150, nullable=true)
      */
     private $twitter;
 
@@ -143,14 +150,14 @@ class Page
     /**
      * @var string
      *
-     * @ORM\Column(name="linkedIn", type="string", length=255,  nullable=true)
+     * @ORM\Column(name="linkedIn", type="string", length=150,  nullable=true)
      */
     private $linkedIn;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="gmail", type="string", length=255, nullable=true)
+     * @ORM\Column(name="gmail", type="string", length=150, nullable=true)
      */
     private $gmail;
 
@@ -164,28 +171,28 @@ class Page
     /**
      * @var string
      *
-     * @ORM\Column(name="contactPerson", type="string", length=255, nullable=true)
+     * @ORM\Column(name="contactPerson", type="string", length=100, nullable=true)
      */
     private $contactPerson;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
+     * @ORM\Column(name="phone", type="string", length=15, nullable=true)
      */
     private $phone;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="mobile", type="string", length=255, nullable=true)
+     * @ORM\Column(name="mobile", type="string", length=15, nullable=true)
      */
     private $mobile;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="fax", type="string", length=255, nullable=true)
+     * @ORM\Column(name="fax", type="string", length=15, nullable=true)
      */
     private $fax;
 
@@ -282,7 +289,7 @@ class Page
     protected $sidebarWidgetPanel;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="page" )
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureWidget", mappedBy="page" )
      **/
     protected $featureWidgets;
 
@@ -1232,6 +1239,22 @@ class Page
     public function setCategory($category)
     {
         $this->category = $category;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param string $price
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
     }
 
 }

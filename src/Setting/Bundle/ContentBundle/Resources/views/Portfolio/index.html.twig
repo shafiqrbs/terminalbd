@@ -68,8 +68,8 @@
                                     <tr>
                                         <td class="numeric" ><a href="{{ path('portfolio_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >
-                                            {% if(entity.moduleCategory is defined and entity.moduleCategory is not empty ) %}
-                                                {{ entity.moduleCategory.name }}
+                                            {% if(entity.category is defined and entity.category is not empty ) %}
+                                                {{ entity.category.name }}
                                             {% endif %}
                                         </td>
                                         <td>{{ entity.website }}</td>

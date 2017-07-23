@@ -1,0 +1,185 @@
+<style>
+    .header-line-center h1:before, .header-line-center h2:before, .header-line-center h3:before, .header-line-center h4:before, .header-line-center h5:before, .header-line-center h6:before {
+        position: absolute;
+        content: "";
+        height: 2px;
+        width: 50%;
+        left: -50%;
+        top: 50%;
+        margin-top: -1px;
+        background: #0a70e3;
+    }
+    .header-line-center h1:after, .header-line-center h2:after, .header-line-center h3:after, .header-line-center h4:after, .header-line-center h5:after, .header-line-center h6:after {
+        position: absolute;
+        content: "";
+        background: #0a70e3;
+        height: 2px;
+        width: 50%;
+        right: -50.5%;
+        top: 50%;
+        margin-top: -1px;
+    }
+
+    .tabCarousel .nav a small
+    {
+        display: block;
+    }
+    .tabCarousel .nav
+    {
+        background: #eee;
+    }
+    .tabCarousel .nav-justified > li > a
+    {
+        border-radius: 0px;
+    }
+    .slider-feature-thumbnail {
+        border: 2px solid red !important;
+        height: 141px;
+        width: 100%;
+        display: block;
+    }
+</style>
+    {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'slider' %}
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                {% for slide in widget.featureWidgetItems %}
+                    <li data-target="#carousel-example-generic" data-slide-to="{{ loop.index-1 }}" class="{% if loop.index == 0 %} active {% endif %}"></li>
+                {% endfor %}
+            </ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                {% for slide in widget.featureWidgetItems %}
+                    <div class="item {% if loop.index-1 == 0 %} active {% endif %}">
+                        <img class="image" style="max-height:750px; width:100%" src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath) }}{% endif %}" alt="...">
+                        <div class="carousel-caption caption-{{ slide.feature.captionPosition }}" style="background-color: {{ slide.feature.captionBgColor }}">
+                            {% if slide.feature.name is not empty %}<h4>{{ slide.feature.name }}{% endif %}</h4>
+                            {% if slide.feature.content is not empty %}<span>{{ slide.feature.content|raw }}</span>{% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    <div class="header-line-center">
+        <h1 class="tm-title-border">WELCOME TO {{ globalOption.name }}</h1>
+    </div>
+    {% endif %}
+    {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'top-tab-slider' %}
+        <div class="container">
+            <div class="row tabCarousel">
+                <div id="topTabCarousel" class="carousel slide col-md-12" data-ride="carousel" data-match-height="slider-height">
+                    <ul class="nav nav-pills nav-justified">
+                        {% for slide in widget.featureWidgetItems %}
+                            <li data-target="#topTabCarousel" style="background-color: {{ slide.feature.captionBgColor }}" data-slide-to="{{ loop.index-1 }}" class="{% if loop.index == 0 %} active {% endif %}"><a href="#">{{ slide.feature.name|truncate(20, false) }}<small>{{ slide.feature.content|truncate(40, false) }}</small></a></li>
+                        {% endfor %}
+                    </ul>
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        {% for slide in widget.featureWidgetItems %}
+                            <div class="item {% if loop.index-1 == 0 %} active {% endif %}">
+                                <img src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath).forceResize(1200,600) }}{% endif %}" alt="...">
+                                <div class="carousel-caption caption-{{ slide.feature.captionPosition }}" >
+                                    {% if slide.feature.targetTo == 'Category' %}
+                                        <br/>
+                                        <a class="btn btn-mini" style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':slide.feature.category.id}) }}">{{ slide.feature.buttonName }}</a>
+
+                                    {% elseif slide.feature.targetTo == 'Promotion' %}
+                                        <br/>
+                                        <a class="btn btn-mini" style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':slide.feature.promotion.id}) }}">{{ slide.feature.buttonName }}</a>
+                                    {% elseif slide.feature.targetTo == 'Tag' %}
+                                        <br/>
+                                        <a class="btn btn-mini" style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_product_tag',{'id':slide.feature.tag.id}) }}">{{ slide.feature.buttonName }}</a>
+                                    {% elseif slide.feature.targetTo == 'Discount' %}
+                                        <br/>
+                                        <a class="btn btn-mini" style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_product_discount',{'id':slide.feature.discount.id}) }}">{{ slide.feature.buttonName }}</a>
+                                    {% elseif slide.feature.targetTo == 'Brand' %}
+                                        <br/>
+                                        <a class="btn btn-mini" style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':slide.feature.barnd.id}) }}">{{ slide.feature.buttonName }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <!-- End Item -->
+                    </div>
+                    <!-- End Carousel Inner -->
+
+                </div>
+                <!-- End Carousel -->
+            </div>
+        </div>
+        <div class="header-line-center">
+            <h1 class="tm-title-border">WELCOME TO {{ globalOption.name }}</h1>
+        </div>
+    {% endif %}
+    {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'bottom-tab-slider' %}
+        <div class="container">
+            <div class="row tabCarousel" >
+                <div id="bottomTabCarousel" class="carousel slide col-md-12" data-ride="carousel" data-match-height="slider-height">
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        {% for slide in widget.featureWidgetItems %}
+                            <div class="item {% if loop.index-1 == 0 %} active {% endif %}">
+                                <img src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath).forceResize(1200,600) }}{% endif %}" alt="...">
+                                <div class="carousel-caption caption-{{ slide.feature.captionPosition }}" >
+                                    {% if slide.feature.targetTo == 'Category' %}
+                                        <br/>
+                                        <a class="btn btn-mini" style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':slide.feature.category.id}) }}">{{ slide.feature.buttonName }}</a>
+
+                                    {% elseif slide.feature.targetTo == 'Promotion' %}
+                                        <br/>
+                                        <a class="btn btn-mini" style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':slide.feature.promotion.id}) }}">{{ slide.feature.buttonName }}</a>
+                                    {% elseif slide.feature.targetTo == 'Tag' %}
+                                        <br/>
+                                        <a class="btn btn-mini" style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_product_tag',{'id':slide.feature.tag.id}) }}">{{ slide.feature.buttonName }}</a>
+                                    {% elseif slide.feature.targetTo == 'Discount' %}
+                                        <br/>
+                                        <a class="btn btn-mini" style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_product_discount',{'id':slide.feature.discount.id}) }}">{{ slide.feature.buttonName }}</a>
+                                    {% elseif slide.feature.targetTo == 'Brand' %}
+                                        <br/>
+                                        <a class="btn btn-mini" style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':slide.feature.barnd.id}) }}">{{ slide.feature.buttonName }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <ul class="nav nav-pills nav-justified">
+                        {% for slide in widget.featureWidgetItems %}
+                            <li data-target="#bottomTabCarousel" style="background-color: {{ slide.feature.captionBgColor }}" data-slide-to="{{ loop.index-1 }}" class="{% if loop.index == 0 %} active {% endif %}"><a href="#">{{ slide.feature.name|truncate(20, false) }}<small>{{ slide.feature.content|truncate(40, false) }}</small></a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="header-line-center">
+            <h1 class="tm-title-border">WELCOME TO {{ globalOption.name }}</h1>
+        </div>
+    {% endif %}
+    {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'feature' %}
+        <div class="wow fadeInDown" data-wow-delay="2s">
+            <div class="row">
+            {% for slide in widget.featureWidgetItems %}
+                {% if(slide.feature.webPath) %}
+                        {% if slide.feature.targetTo == 'Promotion' %}
+                        {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':slide.feature.promotion.id}) %}
+                        {% elseif slide.feature.targetTo == 'Tag' %}
+                        {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':slide.feature.tag.id}) %}
+                        {% elseif slide.feature.targetTo == 'Discount' %}
+                        {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':slide.feature.discount.id}) %}
+                        {% elseif slide.feature.targetTo == 'Brand' %}
+                        {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
+                        {% else %}
+                            {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
+                        {% endif %}
+                    <div  style="overflow: hidden;height: {{ slide.divHeight }}px; width: {{ slide.divWidth }}%; margin-bottom: 15px; position: relative"  class="col-xs-12 col-md-12 feature-box ">
+                        <div class="box-img">
+                            {%  set imageWidth =  slide.divWidth~'%' %}
+                            <img class="img-responsive img-responsive-feature"   src="{{ image(slide.feature.webPath) }}" alt="">
+                            <span class="img-responsive-preview img-responsive-preview-{{  slide.feature.captionPosition }} " style="background-color: {{ slide.feature.captionBgColor }};color: {{ slide.feature.buttonBg }}; " >{{ slide.feature.name }}</span>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+

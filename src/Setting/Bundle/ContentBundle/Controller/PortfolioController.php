@@ -176,7 +176,7 @@ class PortfolioController extends Controller
             }
             $entity->upload();
             $em->flush();
-            $this->getDoctrine()->getRepository('SettingContentBundle:PageMeta')->portfolioPageMeta($entity,$data);
+            $this->getDoctrine()->getRepository('SettingContentBundle:PageMeta')->pageMeta($entity,$data);
             return $this->redirect($this->generateUrl('portfolio_edit', array('id' => $id)));
         }
 

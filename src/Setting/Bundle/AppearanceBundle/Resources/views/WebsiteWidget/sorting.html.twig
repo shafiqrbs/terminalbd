@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    E-commerce  Home Customize
+                    Manage Website Widget Sorting
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('appearancefeaturewidget') }}"> E-commerce Page Customize</a>
+                        <a href="{{ path('appearancefeaturewidget') }}"> >Manage Website Widget</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -30,7 +30,7 @@
         <div class="row-fluid">
             <div class="portlet box green">
                 <div class="portlet-title">
-                    <div class="caption"><i class="icon-reorder"></i> E-commerce Customize</div>
+                    <div class="caption"><i class="icon-reorder"></i> Manage Website Widget Sorting</div>
                     <div class="actions">
                         <div class="btn-group">
                             <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -38,8 +38,8 @@
                                 <i class="icon-tasks"></i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a href="{{ path('appearancefeaturewidget_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                <li><a href="{{ path('appearancefeaturewidget') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                <li><a href="{{ path('appearancewebsitewidget_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                <li><a href="{{ path('appearancewebsitewidget') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                             </ul>
                         </div>
                     </div>
@@ -50,7 +50,29 @@
                             {% for entity in entities %}
                                 <li  data-id="{{ entity.id }}" id="item_{{ entity.id }}" class="dd-item dd3-item">
                                     <span data-id="{{ entity.id }}" class="dd-handle dd3-handle"></span>
-                                    <div class="dd3-content">{{ entity.positionPage }}-{{ entity.position }}-{% if entity.jsFeature is not empty %}{{ entity.jsFeature.name }}{% endif %}</div>
+                                    <div class="dd3-content">
+                                            <div class="span3">
+                                                <div class="btn-group">
+                                                    <button class="btn blue mini" >Menu Name</button>
+                                                    <button class="btn green mini">{{ entity.menu.menu }}</button>
+                                                </div>
+                                            </div>
+                                            <div class="span4">
+                                                <div class="btn-group">
+                                                    <button class="btn blue mini" >Module & Feature</button>
+                                                    <button class="btn yellow mini">{{ entity.module.name }}</button>
+                                                    <button class="btn purple mini">{{ entity.moduleShowType }}</button>
+                                                </div>
+                                            </div>
+                                            <div class="span3">
+                                                <div class="btn-group">
+                                                    <button class="btn blue mini" >Page & Feature</button>
+                                                    <button class="btn yellow mini">{%  if entity.page is not empty %} Yes {% endif %}</button>
+                                                    <button class="btn purple mini">{{ entity.pageShowType }}</button>
+                                                </div>
+                                            </div>
+                                            <div class="span2">{% if entity.jsFeature is not empty %}Feature Image: {{ entity.jsFeature.name }}{% endif %}</div>
+                                    </div>
                                 </li>
                             {% endfor %}
                         </ul>

@@ -1,42 +1,5 @@
 {% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
-    <style>
-        .footer-links li, .list-line li{
-            list-style: none;
-        }
-        .footer-links li:before, .list-line li:before {
-            font-family: 'FontAwesome';
-            content: "\f105";
-            padding-right: 5px;
-        }
-        .post-grid{
-            display: flex;
-            border-top:1px solid #0b0e23 ;
-            padding-top: 10px;
-        }
-        .post-grid .post-info{
-            padding: 0;
-            list-style: none;
-        }
-        .post-grid .post-info li{
-            padding-bottom: 5px;
-        }
-        .owl-position{
-            line-height: 38px;
-        }
-        .branch-head {
-            background: #222;
-            height: 35px;
-            margin-left: -20px;
-            margin-right: -20px;
-            margin-top: 0px;
-            line-height: 35px;
-            color: #fff;
-            display: flex;
-            text-align: center;
-            padding-left: 20px;
-        }
-    </style>
 <div class="clearfix"></div>
     <section id="breadcrumb">
         <div class="container">
@@ -47,11 +10,19 @@
         </div>
     </section>
     <div class="clearfix"></div>
-    <section id="products" style="margin-top: 20px; padding-bottom: 40px">
+    <section>
+        <div class="container">
+            {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header-bottom'}) %}
+            {% endif %}
+        </div>
+    </section>
+    <div class="clearfix"></div>
+    <section class="contain-section">
         <div class="container">
             <div class="row">
-               {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
-                    <div class="col-md-3" data-match-height="body-content"  >
+               {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' and menu.featureWidgetExist == 'ture' %}
+                    <div class="col-md-3"  >
                         {% if globalOption.templateCustomize.sidebarTitle is not empty %}
                         <div class="page-title-bar">
                             <div class="col-md-12">
@@ -61,16 +32,16 @@
                             </div>
                         </div>
                         {% endif %}
-                        {% if page.pageModules is not empty %}
-                            {% for pageModule in page.pageModules %}
-                                {% if pageModule.contentPosition =='sidebar' %}
-                                    {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'pageModule':pageModule.id}) %}
-                                {% endif %}
-                            {% endfor %}
+                        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'sidebar-top'}) %}
                         {% endif %}
                     </div>
                 {% endif %}
-                <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %}col-md-12 {% endif %}" data-match-height="body-content"  >
+                <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgets is not empty %} col-md-9 {% else %}col-md-12 {% endif %}"  >
+                    {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'body-top'}) %}
+                    {% endif %}
+
                     <div class="page-title-bar">
                         <div class="col-md-12">
                             <div class="btn-group pull-left">
@@ -112,7 +83,7 @@
                         <hr><br/></hr>
                     {% endif %}
                     <div class="clearfix"></div>
-                    <p>{{ page.content|raw }}</p>
+                    <div>{{ page.content|raw }}</div>
                     <div class="clearfix"><br/></div>
                     <ul class="mbm_social">
                         <li><a class="social-facebook" target="_blank" href="https://www.facebook.com/share.php?u={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}&picture={{ app.request.getSchemeAndHttpHost() }}/{{ page.webPath }}&title={{ page.name }}&description={{ page.content|truncate(250)|raw }}">
@@ -142,179 +113,54 @@
                         </li>
                     </ul>
                     <div class="clearfix"><br/></div>
-                    {% if sidebar is not empty and sidebar.feature is not empty %}
-                        {% for entity in sidebar.feature %}
-                            <div class="col-md-3 sidebar-feature ">
-                                <img src="{{ image(entity.webPath).resize() }}" alt="">
-                                <div class="over-layer">
-                                    <ul class="social-links">
-                                        {% if entity.targetTo == 'Page' %}
-                                            <li><a href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':entity.page.module.slug,'slug':entity.page.slug}) }}" class="fa fa-link"></a></li>
-                                        {% endif %}
-                                    </ul>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    {% if sidebar is not empty %}
-                        {% for module in sidebar.module %}
-                            {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'pageModule':pageModule.id}) %}
-                        {% endfor %}
+                    {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'body-bottom'}) %}
                     {% endif %}
                 </div>
-                {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
-                <div class="col-md-3" data-match-height="body-content"  >
-                    {% if globalOption.templateCustomize.sidebarTitle is not empty %}
-                        <div class="page-title-bar">
-                            <div class="col-md-12">
-                                <div class="btn-group pull-left">
-                                    <div class="page-title"><span class="glyphicon glyphicon-tag"></span>&nbsp;{{ globalOption.templateCustomize.sidebarTitle }}</div>
+                {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' and menu.featureWidgetExist == 'true'  %}
+                    <div class="col-md-3">
+                        {% if globalOption.templateCustomize.sidebarTitle is not empty %}
+                            <div class="page-title-bar row">
+                                <div class="col-md-12">
+                                    <div class="btn-group pull-left">
+                                        <div class="page-title"><span class="glyphicon glyphicon-tag"></span>&nbsp;{{ globalOption.templateCustomize.sidebarTitle }}</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endif %}
-                    {% if page.pageModules is not empty %}
-                        {% for pageModule in page.pageModules %}
-                            {% if pageModule.contentPosition =='sidebar' %}
-                                {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'pageModule':pageModule.id}) %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
+                        {% endif %}
+                        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'sidebar-top'}) %}
+                        {% endif %}
+                        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'sidebar-bottom'}) %}
+                        {% endif %}
+                    </div>
                 {% endif %}
             </div>
-            {% if page.pageModules is not empty %}
-                {% for pageModule in page.pageModules %}
-                    {% if pageModule.contentPosition =='bottom' %}
-                        {% render controller("FrontendBundle:TemplateWidget:pageBaseModuleContent",{'globalOption':globalOption.id,'pageModule':pageModule.id}) %}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
+
         </div>
     </section>
     <div class="clearfix"></div>
- <style>
-
-     .page-title-bar{
-         height: 35px;
-         background: #222222;
-     }
-
-     .page-title{
-         line-height: 35px;
-         font-size: 14px;
-         font-weight: bold;
-         color: #FFFFff;
-         height: 35px;
-     }
-
-     .carousel-post-control {
-         position: absolute;
-         top: 45%;
-         left: 15px;
-         width: 40px;
-         height: 40px;
-         margin-top: -20px;
-         font-size: 60px;
-         font-weight: 100;
-         line-height: 30px;
-         color: #ffffff;
-         text-align: center;
-         background: #222222;
-         border: 3px solid #ffffff;
-         -webkit-border-radius: 23px;
-         -moz-border-radius: 23px;
-         border-radius: 23px;
-         opacity: 0.5;
-         filter: alpha(opacity=50);
-     }
-
-     .carousel-post-control.right {
-         right: 0;
-         left: auto;
-         text-decoration: none!important;
-     }
-
-     .carousel-post-control.left {
-         text-align: left;
-         float: left;
-         text-decoration: none!important;
-     }
-
-     .carousel-caption {
-         position: absolute;
-         left: 0;
-         right: 0;
-         bottom: 0;
-         padding: 15px;
-         background: #333333;
-         background: rgba(0, 0, 0, 0.75);
-     }
-     .carousel-post-control {
-         width: 60px;
-         height: 0;
-         margin-top: -20px;
-         font-size: 100px;
-         background: none;
-         border: none;
-         font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
-         font-weight: 300;
-     }
-     .carousel-caption {
-         padding: 25px;
-         text-align: center;
-         width: 100%!important;
-         max-width: 100%!important;
-     }
-     .carousel-caption h4 {
-         font-weight: 100;
-         font-size: 25px;
-     }
-     .carousel-caption p {
-         font-size: 14px;
-         margin-bottom: -8px;
-         font-weight: 300;
-         line-height: 18px;
-     }
-     .carousel-fade .carousel-inner .item {
-         opacity: 0;
-         -webkit-transition-property: opacity;
-         -moz-transition-property: opacity;
-         -o-transition-property: opacity;
-         transition-property: opacity;
-     }
-     .carousel-fade .carousel-inner .active { opacity: 1 }
-     .carousel-fade .carousel-inner .active.left,
-     .carousel-fade .carousel-inner .active.right {
-         left: 0;
-         opacity: 0;
-         z-index: 1;
-     }
-     .carousel-fade .carousel-inner .next.left,
-     .carousel-fade .carousel-inner .prev.right { opacity: 1 }
-     .carousel-fade .carousel-post-control { z-index: 2 }
-     @media only screen and (max-width:767px) {
-         h1 { font-size: 30px !important }
-         .carousel-caption {
-             padding: 15px;
-             text-align: center;
-         }
-         .carousel-caption h4 { font-size: 30px }
-         .carousel-caption p {
-             margin-top: 10px;
-             font-size: 10px;
-             margin-bottom: -10px;
-         }
-
-         .carousel { margin-bottom: 0 }
-         .hero-unit { padding-bottom: 60px }
-         .hero-unit p { font-size: 16px }
-     }
-
- </style>
+    <section>
+        <div class="container">
+            {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'footer-top'}) %}
+            {% endif %}
+            <div class="clearfix"><br></div>
+        </div>
+    </section>
+    <div class="clearfix"></div>
+<script>
+    {% if globalOption.templateCustomize.showSidebar == 1 %}
+    var columnItem = 3;
+    {% else %}
+    var columnItem = 4;
+    {% endif %}
+</script>
  {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/desktop/css/common.css'
     '@FrontendBundle/Resources/public/template/desktop/css/sidebar.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
@@ -322,8 +168,11 @@
 {% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
+
     {% javascripts
     '@FrontendBundle/Resources/public/template/js/sidebar.js'
+    '@FrontendBundle/Resources/public/template/js/page.js'
+    '@FrontendBundle/Resources/public/template/js/headerfooter.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

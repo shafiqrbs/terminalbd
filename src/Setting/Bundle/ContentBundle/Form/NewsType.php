@@ -47,9 +47,12 @@ class NewsType extends AbstractType
                 'attr'=>array('class'=>'check-list span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('o')
+                        ->join("o.module",'module')
                         ->where("o.status = 1")
                         ->andWhere(':module MEMBER OF o.module')
-                        ->setParameter('module', 4)
+                        ->setParameter('module', 1)
+/*                        ->andWhere('module.slug = :n')
+                        ->setParameter('n.slug', 'news')*/
                         ->andWhere("o.globalOption =".$this->globalOption->getId())
                         ->orderBy('o.name','ASC');
                 },

@@ -2,7 +2,7 @@
 
 /* =============  Basic Settings modify Bootstarp ===============*/
 a{
-    color: #002842;
+    color: #007CB1;
     text-decoration: none;
 }
 a:hover{
@@ -391,6 +391,59 @@ ul.dropdown-cart li .item-right button {
 
 .container-margin{
     margin-bottom: 30px;
+}
+
+
+.order-widget{
+    background-color: rgb(22, 22, 22); height: 70px;
+}
+.order-widget-block{
+    padding: 10px;border: 1px solid #000;color: #fff;font-size: 20px;
+}
+.shop-now{
+    margin-top: 7px;
+    border: 3px solid #fff;
+    border-radius: 15px;
+    background: #000;
+}
+
+.card-grid {
+    box-sizing: border-box;
+    max-height: 100%;
+    display:flex;
+    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    -webkit-box-align: stretch;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+}
+
+.card-grid:after {
+    content: "";
+    flex: 1 1 100%;
+    max-width: 100%;
+}
+
+.card {
+    flex: 1 1 100%;
+    box-sizing: border-box;
+    -webkit-box-flex: 1;
+    max-width: 100%;
+    margin-top: 20px;
+    background: white;
+    color: black;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+    transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1);
+    will-change: box-shadow;
+    display: block;
+    position: relative;
+    padding: 5px;
 }
 
 .product-preview .team-content {

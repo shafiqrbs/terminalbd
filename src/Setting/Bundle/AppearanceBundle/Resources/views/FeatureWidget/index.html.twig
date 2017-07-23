@@ -54,7 +54,7 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
-                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
+                                    <td class="numeric" >Created</td>
                                     <th class="numeric" >Page Name</th>
                                     <th class="numeric" >Position</th>
                                     <th class="numeric" >Feature</th>
@@ -66,7 +66,7 @@
 
                                 {% for entity in entities %}
                                     <tr>
-                                        <td><span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span></td>
+                                        <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.pageName }}</td>
                                         <td class="numeric" >{{ entity.position }}</td>
                                         <td class="numeric" >{% if entity.jsFeature is not empty %}{{ entity.jsFeature.name }}{% endif %}</td>
@@ -81,13 +81,6 @@
                                             <a class="btn mini green-stripe btn-action" href="{{ path('appearancefeaturewidget_feature', { 'id': entity.id }) }}">Feature</a>
                                             {% endif %}
                                             <a class="btn mini red-stripe btn-action confirm" title="Are you sure went to delete ?" href="{{ path('appearancefeaturewidget_delete', { 'id': entity.id }) }}" >Delete</a>
-                                        </td>
-                                    </tr>
-                                    <tr id="show-{{ entity.id }}" class="showing-overview">
-                                        <td colspan="6">
-                                            <table class="inner-table">
-                                                <tr><td>Content</td><td>{{ entity.content|raw }}</td></tr>
-                                            </table>
                                         </td>
                                     </tr>
                                 {% endfor %}

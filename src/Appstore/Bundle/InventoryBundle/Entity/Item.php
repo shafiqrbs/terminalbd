@@ -806,7 +806,7 @@ class Item
         $this->code = $code;
     }
 
-    public function  getItemBaseQuantity($process =null)
+    public function  getItemBaseQuantity($process = null)
     {
         $quantity = 0;
         foreach($this->stockItems AS $item) {

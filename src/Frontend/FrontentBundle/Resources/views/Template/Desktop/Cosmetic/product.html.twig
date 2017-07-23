@@ -331,46 +331,6 @@
     {% endif %}
     <div class="clearfix"></div>
     <!-- Modal -->
-<style>
-    .card-grid {
-        box-sizing: border-box;
-        max-height: 100%;
-        display:flex;
-        flex-direction: row;
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        justify-content: flex-start;
-        align-items: stretch;
-        align-content: stretch;
-        -webkit-box-align: stretch;
-        -webkit-box-orient: horizontal;
-        -webkit-box-direction: normal;
-        -ms-flex-flow: row wrap;
-        flex-flow: row wrap;
-    }
-
-    .card-grid:after {
-        content: "";
-        flex: 1 1 100%;
-        max-width: 100%;
-    }
-
-    .card {
-        flex: 1 1 100%;
-        box-sizing: border-box;
-        -webkit-box-flex: 1;
-        max-width: 100%;
-        margin-top: 20px;
-        background: white;
-        color: black;
-        box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
-        transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1);
-        will-change: box-shadow;
-        display: block;
-        position: relative;
-        padding: 5px;
-    }
-</style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

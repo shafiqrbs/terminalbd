@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    E-commerce  Home Customize
+                    Website Widget Image Resize
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('appearancefeaturewidget') }}"> E-commerce  Home Customize</a>
+                        <a href="{{ path('appearancewebsitewidget') }}">Website Widget Image Resize</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -30,7 +30,7 @@
         <div class="row-fluid">
             <div class="portlet box green">
                 <div class="portlet-title">
-                    <div class="caption"><i class="icon-reorder"></i> E-commerce Customize</div>
+                    <div class="caption"><i class="icon-reorder"></i> Website Widget Image Resize</div>
                     <div class="actions">
                         <div class="btn-group">
                             <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -38,7 +38,7 @@
                                 <i class="icon-tasks"></i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a href="{{ path('appearancefeaturewidget') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                <li><a href="{{ path('appearancewebsitewidget') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                             </ul>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
                                 {% endif %}
                             {% endfor %}
                         </ul>
-
+<br/><br/>
 
                                 <div class="form-actions portlet box grey">
                                     <div class="pull-center">
@@ -182,6 +182,7 @@
             type: "POST",
             data: serialized
         }).done(function(data){
+            location.reload();
         });
 
     })

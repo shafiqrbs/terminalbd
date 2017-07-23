@@ -156,6 +156,6 @@ security:
         - { path: ^/e-commerce,         role: ROLE_ECOMMERCE }
         - { path: ^/food,               role: ROLE_FOOD }
         - { path: ^/goods,              role: ROLE_GOODS }
-        - { path: ^/service,            role: ROLE_SERVICE }
+        - { path: ^/business,           role: ROLE_SERVICE }
         - { path: ^/appsetting,         role: ROLE_APP_SETTING }
         - { path: ^/,                   role: IS_AUTHENTICATED_ANONYMOUSLY }

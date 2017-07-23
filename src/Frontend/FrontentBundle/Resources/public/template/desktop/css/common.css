@@ -1,3 +1,6 @@
+.clearfix{
+    clear: both; display:block
+}
 .o-margin-padding{
     margin: 0;
     padding: 0;
@@ -111,3 +114,45 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
 .list-table tr{
     height: 35px;
 }
+
+.odd{
+    background-color: #ffffff;
+}
+
+.even{
+    background-color: #FAFAFA;
+}
+
+#catlist{
+    border-bottom:none;
+    margin:10px auto;
+}
+
+#catlist dl{
+    margin:0 auto;
+    border-bottom:1px solid #F5F5F5;
+    padding:10px;
+    overflow:hidden;
+}
+
+#catlist dl:last-child{
+    border-bottom: none;
+}
+
+#catlist dd{
+    overflow:auto;
+    margin-top: 10px;
+
+}
+
+#catlist dt strong{
+    float:right;
+    padding:0 0 0 20px;
+}
+
+#catlist dt img{
+    float:left;
+    margin:0 10px 0 0;
+    border:1px solid #FAFAFA;
+}
+* html dd{height:1%} /* 3px jog*/

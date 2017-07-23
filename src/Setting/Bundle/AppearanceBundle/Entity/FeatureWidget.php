@@ -10,7 +10,6 @@ use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\ContentBundle\Entity\Page;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\Module;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -37,12 +36,12 @@ class FeatureWidget
     private  $globalOption;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\Module", inversedBy="featureWidgets" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Module", inversedBy="featureWidgets" )
      **/
     private  $module;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", inversedBy="featureWidgets")
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", inversedBy="featureWidgets")
      **/
     private $page;
 
@@ -127,7 +126,7 @@ class FeatureWidget
     /**
      * @var string
      *
-     * @ORM\Column(name="pageName", type="string", length=50 , nullable=true)
+     * @ORM\Column(name="pageName", type="string", length = 255 , nullable=true)
      */
     private $pageName;
 
@@ -152,6 +151,42 @@ class FeatureWidget
      * @ORM\Column(name="featureFor", type="string",nullable=true)
      */
     private $featureFor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pageShowType", type="string",length=15 ,nullable=true)
+     */
+    private $pageShowType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pageFeatureName", type="string", length=255 , nullable=true)
+     */
+    private $pageFeatureName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="moduleFeatureName", type="string", length=255 , nullable=true)
+     */
+    private $moduleFeatureName;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="moduleShowType", type="string",length=15 ,nullable=true)
+     */
+    private $moduleShowType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="moduleShowLimit", type="string",length=15 ,nullable=true)
+     */
+    private $moduleShowLimit;
+
 
     /**
      * @var boolean
@@ -631,5 +666,85 @@ class FeatureWidget
     public function setWidgetFor($widgetFor)
     {
         $this->widgetFor = $widgetFor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageShowType()
+    {
+        return $this->pageShowType;
+    }
+
+    /**
+     * @param string $pageShowType
+     */
+    public function setPageShowType($pageShowType)
+    {
+        $this->pageShowType = $pageShowType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModuleShowType()
+    {
+        return $this->moduleShowType;
+    }
+
+    /**
+     * @param string $moduleShowType
+     */
+    public function setModuleShowType($moduleShowType)
+    {
+        $this->moduleShowType = $moduleShowType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModuleShowLimit()
+    {
+        return $this->moduleShowLimit;
+    }
+
+    /**
+     * @param string $moduleShowLimit
+     */
+    public function setModuleShowLimit($moduleShowLimit)
+    {
+        $this->moduleShowLimit = $moduleShowLimit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPageFeatureName()
+    {
+        return $this->pageFeatureName;
+    }
+
+    /**
+     * @param string $pageFeatureName
+     */
+    public function setPageFeatureName($pageFeatureName)
+    {
+        $this->pageFeatureName = $pageFeatureName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModuleFeatureName()
+    {
+        return $this->moduleFeatureName;
+    }
+
+    /**
+     * @param string $moduleFeatureName
+     */
+    public function setModuleFeatureName($moduleFeatureName)
+    {
+        $this->moduleFeatureName = $moduleFeatureName;
     }
 }

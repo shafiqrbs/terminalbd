@@ -54,13 +54,40 @@ class WebsiteWidgetType extends AbstractType
                 'multiple'      =>false,
                 'choices' => array(
                     'header-top'                => 'Header Top',
+                    'header-bottom'             => 'Header Bottom',
                     'body-top'                  => 'Body Top',
                     'body-bottom'               => 'Body Bottom',
                     'sidebar-top'               => 'Sidebar Top',
                     'sidebar-bottom'            => 'Sidebar Bottom',
-                    'footer'                    => 'Footer',
+                    'footer-top'                => 'Footer Top',
+                    'footer-bottom'             => 'Footer Bottom',
                 ),
             ))
+            ->add('pageFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))
+            ->add('moduleFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))
+            ->add('moduleShowLimit','number', array('attr'=>array('class'=>'span12 m-wrap')))
+            ->add('moduleShowType', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'list'                => 'List',
+                    'grid'                => 'Grid',
+                    'slider'              => 'Slider',
+                ),
+            ))
+
+            ->add('pageShowType', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'list'                => 'List',
+                    'grid'                => 'Grid',
+                    'slider'              => 'Slider',
+                ),
+            ))
+
 
             ->add('page', 'entity', array(
                 'required'    => false,
@@ -80,7 +107,7 @@ class WebsiteWidgetType extends AbstractType
 
             ->add('module', 'entity', array(
                 'required'    => false,
-                'multiple'    => true,
+                'multiple'    => false,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\Module',
                 'empty_value' => '---Select page module---',
                 'property' => 'name',

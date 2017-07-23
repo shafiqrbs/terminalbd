@@ -49,6 +49,7 @@ class EcommerceMenuType extends AbstractType
                 'required'    => true,
                 'multiple'      =>false,
                 'attr'=>array('class'=>'m-wrap span12 select2'),
+                'empty_value' => '---Select Menu Page---',
                 'class' => 'Setting\Bundle\AppearanceBundle\Entity\Menu',
                 'property' => 'menu',
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){

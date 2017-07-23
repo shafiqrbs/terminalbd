@@ -110,8 +110,8 @@
                                 <thead>
                                 <tr class="head-green">
                                     <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                    <th class="numeric" >GRN</th>
                                     <th class="numeric" >Received date</th>
+                                    <th class="numeric" >GRN</th>
                                     <th class="numeric" >Memo</th>
                                     <th class="numeric" >Vendor</th>
                                     <th class="numeric" >Total</th>
@@ -126,9 +126,8 @@
 
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
-                                        <td> {% if entity.purchaseVendorItems is defined and  entity.purchaseVendorItems is not empty  %}<span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
-                                        <td class="numeric" >{{ entity.grn }}</td>
                                         <td class="numeric" >{{ entity.receiveDate|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.grn }}</td>
                                         <td class="numeric" >{{ entity.memo }}</td>
                                         <td class="numeric" >{% if entity.vendor is defined and entity.vendor is not null %}<a title="Approve" target="_blank" href="{{ path('inventory_vendor_show',{'id':entity.vendor.id}) }}" class="green  mini" >{{ entity.vendor.companyName }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.totalAmount|number_format() }}</td>
@@ -140,7 +139,7 @@
                                             {% include "@Inventory/Purchase/action.html.twig" %}
                                         </td>
                                     </tr>
-                                    <tr id="show-{{ entity.id }}" class="showing-overview">
+                                    {#<tr id="show-{{ entity.id }}" class="showing-overview">
                                         <td colspan="11">
                                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
@@ -217,7 +216,7 @@
 
 
                                         </td>
-                                    </tr>
+                                    </tr>#}
                                 {% endfor %}
 
                                 </tbody>

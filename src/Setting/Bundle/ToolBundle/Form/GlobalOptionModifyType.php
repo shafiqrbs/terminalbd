@@ -116,7 +116,7 @@ class GlobalOptionModifyType extends AbstractType
 
             ;
             $builder->add('contactPage', new ContactOpeningType());
-            $builder->add('templateCustomize', new TemplateSidebarType());
+            //$builder->add('templateCustomize', new TemplateSidebarType());
             $builder->add('siteSetting', new SiteSettingType($syndicateId));
 
         }else{

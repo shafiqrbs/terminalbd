@@ -47,7 +47,10 @@ class EventType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
+            ->add('organization','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter organization name')))
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter email address')))
+            ->add('website','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter website')))
+            ->add('price','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Enter event price')))
             ->add('content','textarea', array('attr'=>array('class'=>'wysihtml5 m-wrap span12','rows' => 12)))
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12','rows' => 9)))
             ->add('additionalPhone','text', array('attr'=>array('class'=>'m-wrap span12')))

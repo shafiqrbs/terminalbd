@@ -401,6 +401,30 @@ class Menu
         return $this->feature;
     }
 
+    /**
+     * @return FeatureWidget
+     */
+    public function getFeatureWidgets()
+    {
+        return $this->featureWidgets;
+    }
+
+    public function getFeatureWidgetExist()
+    {
+
+        $data = false;
+        if (!empty($this->featureWidgets)){
+            foreach ($this->featureWidgets as $feature) {
+
+                /* @var FeatureWidget $feature */
+                if ($feature->getPosition() == 'sidebar-top' || $feature->getPosition() == 'sidebar-bottom') {
+                    $data = true;
+                }
+            }
+        }
+        return $data;
+
+    }
 
 
 }

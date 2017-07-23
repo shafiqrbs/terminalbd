@@ -1,41 +1,32 @@
 {% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
-{#
-    $featureCategories          = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getCategoryFeature();
-    {% if(featureCategories) %}
-        {{ featureCategories|raw }}
-    {% endif %}#}
-
     <!-- Header Carousel -->
     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
         <section class="feature-widget-body-top" >
             {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id, 'pageName':'Home','position':'body-top'}) %}
         </section>
     {% endif %}
-    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-        <section class="feature-widget-body-bottom"  >
-            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id, 'pageName':'Home','position':'body-bottom'}) %}
-        </section>
-    {% endif %}
-    <section style="background-color: rgb(22, 22, 22); height: 70px;">
+    <section class="order-widget">
         <div class="container">
             <div class="row">
-                <div class="col-md-10 col-md-offset-1" style="margin-top: 10px" >
+                <div class="col-md-10 col-md-offset-1"  style="margin-top: 10px">
                     <div class="col-md-10" >
-                        <div  style="padding: 10px;border: 1px solid #000;color: #fff;font-size: 20px;">
+                        <div class="order-widget-block">
                             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> PLACE YOUR ORDER NOW - RECEIVE YOUR ITEMS WITHIN 72 HOURS
                         </div>
                     </div>
-                    <div class="col-md-2"><a style="margin-top: 7px;
-    border: 3px solid #fff;
-    border-radius: 15px;
-    background: #000;" class="btn" href="{{ path(globalOption.subDomain ~ '_webservice_product') }}">SHOP NOW</a></div></div>
+                    <div class="col-md-2"><a class="btn shop-now" href="{{ path(globalOption.subDomain ~ '_webservice_product') }}">SHOP NOW</a></div></div>
             </div>
         </div>
     </section>
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+        <section class="feature-widget-body-bottom" >
+            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id, 'pageName':'Home','position':'body-bottom'}) %}
+        </section>
+    {% endif %}
+
 {#    <section>
             {% if globalOption.contactPage.latitude is not empty and globalOption.contactPage.longitude is not empty %}
-                <div id="gmap_canvas" class="gmap">
                     <div class="Lat">23.8103</div>
                     <div class="Lng">90.4125</div>
                     <div class="imgMap">{{ asset('assets/img/placeholder.png') }}</div>

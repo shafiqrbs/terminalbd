@@ -24,8 +24,7 @@ class TestimonialController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=> $globalOption,'module'=>3),array('name' => 'asc'));
-
+        $entities = $em->getRepository('SettingContentBundle:Page')->findBy(array('globalOption'=> $globalOption,'module'=> 3),array('name' => 'asc'));
         return $this->render('SettingContentBundle:Testimonial:index.html.twig', array(
             'entities' => $entities,
         ));

@@ -837,6 +837,99 @@
 
 /* ######################### TESTIMONIAL #####################################*/
 
+.web-url{
+    font-size: 12px;
+    text-transform:lowercase ;
+}
+
+.testimonial-list{
+    padding: 20px;
+    margin: 20px 10px;
+}
+.testimonial-list .pic{
+    width: 122px;
+    height: 122px;
+    float: left;
+    margin-right: 50px;
+    position: relative;
+}
+.testimonial-list .pic:before,
+.testimonial-list .pic:after{
+    content: "";
+    display: block;
+    height: 50%;
+    width: 50%;
+    position: absolute;
+}
+.testimonial-list .pic:before{
+    bottom: -10%;
+    left: -10%;
+    border-bottom: 3px solid #E16B47;
+    border-left: 3px solid #E16B47;
+}
+.testimonial-list .pic:after{
+    top: -10%;
+    right: -10%;
+    border-top: 3px solid #e16b47;
+    border-right: 3px solid #e16b47;
+}
+.testimonial-list .pic img{
+    width: 100%;
+    height: auto;
+}
+.testimonial-list .testimonial-list-content{
+    display: table;
+    position: relative;
+}
+.testimonial-list .testimonial-list-content:before{
+    content: "\f10d";
+    font-family: fontawesome;
+    position: absolute;
+    top: -30px;
+    left: -15px;
+    font-size: 60px;
+    color: #d8dad6;
+    z-index: -1;
+}
+.testimonial-list .testimonial-list-title{
+    font-size: 24px;
+    color: #e16b47;
+    text-transform: capitalize;
+}
+.testimonial-list .post{
+    font-size: 13px;
+    font-weight: 600;
+    color: #585f62;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    margin-left: 5px;
+    padding-left: 5px;
+    text-align: justify;
+}
+.testimonial-list .description{
+    font-size: 13px;
+    color: #7c7c7c;
+    line-height: 25px;
+    margin-top: 12px;
+    font-style: italic;
+}
+@media only screen and (max-width: 980px){
+    .testimonial-list{
+        padding: 20px 0;
+        margin: 20px 15px;
+    }
+    .testimonial-list .pic{
+        float: none;
+    }
+    .testimonial-list .testimonial-list-content{
+        display: block;
+        margin-top: 30px;
+    }
+    .testimonial-list .testimonial-list-content:before{
+        z-index: 1;
+        top: -200px;
+    }
+}
+
 .testimonial{
     margin:0 10px;
     position:relative;
@@ -1233,7 +1326,10 @@
 
 /* ######################### TEAM #####################################*/
 
-
+.our-team{
+    border: 1px solid #E1E1E1;
+    margin-bottom: 30px;
+}
 .our-team .pic{
     position: relative;
     overflow: hidden;
@@ -1459,7 +1555,7 @@
     position: relative;
     text-align:center;
     overflow: hidden;
-    box-shadow:0 0 5px #808080;
+    border:1px solid #f0f4f7;
 }
 .our-portfolio img{
     width: 100%;
@@ -1640,7 +1736,6 @@
 /* ######################### NOTICE BOARD #####################################*/
 
 .notice-slide {
-    padding: 0 15px;
     margin-top: 48px;
 }
 
@@ -1776,17 +1871,17 @@
 }
 #accordion .panel-title a{
     display: block;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: bold;
-    color: #f7c59f;
+    color: #DFE1E1;
     padding: 15px 48px 15px 20px;
-    background: #e16b47;
+    background: #2B2D30;
     position: relative;
     transition: all 0.3s ease 0s;
 }
 #accordion .panel-title a.collapsed{
-    color: #e16b47;
-    background: #f7c59f;
+    color: #ffffff!important;
+    background: #121213;
     border-bottom: 1px solid #3d3537;
 }
 #accordion .panel-title a:after,
@@ -1798,10 +1893,10 @@
     position: absolute;
     top: 0;
     right: 30px;
-    background: #f7c59f;
+    background: #DFE1E1;
 }
 #accordion .panel-title a.collapsed:after{
-    background: #e16b47;
+    background: #2B2D30;
 }
 #accordion .panel-title a:before,
 #accordion .panel-title a.collapsed:before{
@@ -1811,23 +1906,23 @@
     height: 25px;
     line-height: 25px;
     border-radius: 50%;
-    background: #f7c59f;
+    background: #DFE1E1;
     position: absolute;
     top: 12px;
     right: 19px;
     font-size: 14px;
-    color: #e16b47;
+    color: #2B2D30;
     text-align: center;
     z-index: 1;
 }
 #accordion .panel-title a.collapsed:before{
     content: "\f067";
-    color: #f7c59f;
-    background: #e16b47;
+    color: #DFE1E1;
+    background: #2B2D30;
 }
 #accordion .panel-body{
-    background: #e16b47;
-    color:  #ffffff;
+    background: #C1C3C4;
+    color:  #000;
     padding: 20px 50px 15px 20px;
     line-height: 25px;
     border: none;
@@ -1838,7 +1933,7 @@
     display: block;
     width: 3px;
     height: 100%;
-    background: #f7c59f;
+    background: #DFE1E1;
     position: absolute;
     top: 0;
     right: 30px;

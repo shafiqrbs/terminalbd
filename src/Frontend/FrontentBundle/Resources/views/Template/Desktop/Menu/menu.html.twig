@@ -126,6 +126,11 @@
         {% for  menu in globalOption.ecommerceMenus  %}
             <li><a href=""> {{ menu.name }}</a>
                 <ul>
+                    {% if menu.childMenus is not empty %}
+                        {% for childMenu in  menu.childMenus %}
+                            <li><a href="{{ path('webservice_module',{'module':childMenu.slug}) }}">{{ childMenu.menu }}</a></li>
+                        {% endfor %}
+                    {% endif %}
                     {% if menu.features is not empty %}
                         <li><a href="#">Feature's</a>
                             <ul>
