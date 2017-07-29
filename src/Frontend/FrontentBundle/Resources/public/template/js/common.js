@@ -1,4 +1,26 @@
 
+$('#main-carousel').carousel({
+    wrap:true,
+    interval:5000
+});
+
+var owlMainPageSlider = $("#main-page-slider");
+owlMainPageSlider.owlCarousel({
+    slideSpeed : 10000,
+    paginationSpeed : 14000,
+    pagination:true,
+    singleItem:true
+});
+
+// Custom Navigation Events
+$("#main-page-next").click(function(){
+    owlMainPageSlider.trigger('owl.next');
+});
+$("#main-page-prev").click(function(){
+    owlMainPageSlider.trigger('owl.prev');
+});
+
+
 $('#bottomTabCarousel').carousel({
     interval:   4000
 });
@@ -266,3 +288,42 @@ $('#topTabCarousel').on('click', '.nav a', function() {
         var inst = $("[data-remodal-id=modal"+id+"]").remodal();
         inst.open();
     });
+
+
+    function fixButtonHeights() {
+
+        var heights = new Array();
+        // Loop to get all element heights
+        $('.height-box').each(function() {
+            // Need to let sizes be whatever they want so no overflow on resize
+            $(this).css('min-height', '0');
+            $(this).css('max-height', 'none');
+            $(this).css('height', 'auto');
+
+            // Then add size (no units) to array
+            heights.push($(this).height());
+        });
+
+        // Find max height of all elements
+        var max = Math.max.apply( Math, heights );
+
+        // Set all heights to max height
+        $('.height-box').each(function() {
+            $(this).css('height', max + 'px');
+            // Note: IF box-sizing is border-box, would need to manually add border and padding to height (or tallest element will overflow by amount of vertical border + vertical padding)
+        });
+    }
+
+    $(window).load(function() {
+        // Fix heights on page load
+        fixButtonHeights();
+
+        // Fix heights on window resize
+        $(window).resize(function() {
+            // Needs to be a timeout function so it doesn't fire every ms of resize
+            setTimeout(function() {
+                fixButtonHeights();
+            }, 120);
+        });
+    });
+

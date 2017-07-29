@@ -53,7 +53,7 @@
                     {% if page.photoGallery is not empty %}
                         <div class="carousel-container">
                             <div id="carousel" class="carousel slide carousel-fade" style="width: 100%">
-                            <div class="carousel-inner">
+                                <div class="carousel-inner">
                                 {% if page.webPath is not empty %}
                                     <div class="carousel-item item active">
                                         <img class="img-responsive"  data-slide-no="0" src="{{ image(page.webPath).scaleResize(1024,512,'#000000') }}" alt="{{ page.name }}" />
@@ -75,7 +75,7 @@
                             <!-- Navigation -->
                               <a class="carousel-post-control left" href="#carousel" data-slide="prev">‹</a>
                               <a class="carousel-post-control right" href="#carousel" data-slide="next">›</a>
-                        </div>
+                            </div>
                         </div>
                         <hr><br/></hr>
                     {% elseif page.webPath is not empty %}
@@ -179,20 +179,22 @@
 {% block documentready %}
 
     {{ parent() }}
+
     $(".carousel").carousel({
-        interval: false
+        interval: 10000,
+        wrap:true
     });
     $(".carousel").on("slid", function() {
-    var to_slide;
-    to_slide = $(".carousel-item.active").attr("data-slide-no");
-    $(".myCarousel-target.active").removeClass("active");
-    $(".carousel-indicators [data-slide-to=" + to_slide + "]").addClass("active");
-    });
-    $(".myCarousel-target").on("click", function() {
-    $(this).preventDefault();
-    $(".carousel").carousel(parseInt($(this).attr("data-slide-to")));
-    $(".myCarousel-target.active").removeClass("active");
-    $(this).addClass("active");
+        var to_slide;
+        to_slide = $(".carousel-item.active").attr("data-slide-no");
+        $(".myCarousel-target.active").removeClass("active");
+        $(".carousel-indicators [data-slide-to=" + to_slide + "]").addClass("active");
+        });
+        $(".myCarousel-target").on("click", function() {
+        $(this).preventDefault();
+        $(".carousel").carousel(parseInt($(this).attr("data-slide-to")));
+        $(".myCarousel-target.active").removeClass("active");
+        $(this).addClass("active");
     });
 
 {% endblock %}

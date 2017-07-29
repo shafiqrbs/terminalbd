@@ -135,6 +135,8 @@ owlSidebarNews.owlCarousel({
 
 });
 
+
+
 /*======================== Notice Slider =============================*/
 
 var owlSidebarNotice = $("#notice-sidebar-slider");

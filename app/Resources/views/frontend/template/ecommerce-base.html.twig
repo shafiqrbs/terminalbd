@@ -168,7 +168,7 @@
         );
         $('#list').click(function(event){event.preventDefault();$('#product .item').addClass('list-group-item');});
         $('#grid').click(function(event){event.preventDefault();$('#product .item').removeClass('list-group-item');
-            $('#products .item').addClass('grid-group-item');});
+        $('#products .item').addClass('grid-group-item');});
 
         $('body').append('<div id="toTop" class="btn btn-primary color1"><span class="glyphicon glyphicon-chevron-up"></span></div>');
         $(window).scroll(function () {
@@ -185,7 +185,6 @@
         $("#price-range").slider({
             tooltip: 'always'
         });
-
         {% block documentready %}{% endblock %}
 
     });
@@ -206,12 +205,10 @@
 <!--End of Tawk.to Script-->
 <style>
 
-/*    .owl-prev, .owl-next {opacity: 0 !important;}
+    .owl-prev, .owl-next {opacity: 0 !important;}
     .owl-carousel:hover .owl-controls .owl-buttons .owl-prev {opacity: 1 !important;}
     .owl-carousel:hover .owl-controls .owl-buttons .owl-next {opacity: 1 !important;}
-    .owl-carousel .owl-controls .owl-buttons .owl-next , .owl-carousel .owl-controls .owl-buttons .owl-prev{
-
-    }*/
+    .owl-carousel .owl-controls .owl-buttons .owl-next , .owl-carousel .owl-controls .owl-buttons .owl-prev{}
 
     .owl-carousel{
         position: inherit!important;
@@ -248,19 +245,6 @@
 
     .feature-carousel .owl-next:before , .page-carousel .owl-next:before{
         content: normal;
-    }
-    .feature-carousel .owl-prev, .page-carousel .owl-prev{
-        content: normal;
-        position: absolute!important;
-        left: 0;
-        top: 45%;
-    }
-
-    .feature-carousel .owl-next , .page-carousel .owl-next{
-        content: normal;
-        position: absolute !important;
-        right: 0;
-        top: 45%;
     }
 
 </style>
