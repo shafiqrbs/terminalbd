@@ -66,6 +66,20 @@ class FeatureType extends AbstractType
                     },
             ))
 
+            ->add('brand', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',
+                'empty_value' => '---Select Brand---',
+                'property' => 'name',
+                'attr'=>array('class'=>'m-wrap span12 '),
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
+                        return $er->createQueryBuilder('e')
+                            ->where("e.status = 1")
+                            ->andWhere("e.inventoryConfig =".$this->globalOption->getInventoryConfig()->getId())
+                            ->orderBy('e.name','ASC');
+                    },
+            ))
+
             ->add('promotion', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
@@ -95,17 +109,17 @@ class FeatureType extends AbstractType
                         ->orderBy('e.name','ASC');
                 },
             ))
-            ->add('page', 'entity', array(
+            ->add('menu', 'entity', array(
                 'required'    => false,
-                'class' => 'Setting\Bundle\ContentBundle\Entity\Page',
+                'class' => 'Setting\Bundle\AppearanceBundle\Entity\Menu',
                 'empty_value' => '---Select page---',
-                'property' => 'name',
+                'property' => 'menu',
                 'attr'=>array('class'=>'m-wrap span12 '),
                 'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
                     return $er->createQueryBuilder('e')
                         ->where("e.status = 1")
                         ->andWhere("e.globalOption =".$this->globalOption->getId())
-                        ->orderBy('e.name','ASC');
+                        ->orderBy('e.menu','ASC');
                 },
             ))
             ->add('buttonName','text', array('attr'=>array('class'=>'span12 m-wrap','placeholder'=>'Button Text')))

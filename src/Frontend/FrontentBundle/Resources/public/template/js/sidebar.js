@@ -1,26 +1,22 @@
 /*======================== Page Slider ============================*/
 
-
 var owlFeatureSidebarSLider = $("#feature-sidebar-slider");
 owlFeatureSidebarSLider.owlCarousel({
     items:1,
+    slideSpeed : 3000,
     itemsDesktop:[1000,2],
     itemsDesktopSmall:[979,1],
     itemsTablet:[768,1],
     pagination:false,
-    navigation:false,
-    slideSpeed:1000,
     singleItem:true,
     transitionStyle:"goDown",
     rewindNav : false,
-    autoPlay:false
-});
-// Custom Navigation Events
-$(".feature-page-next").click(function(){
-    owlFeatureSidebarSLider.trigger('owl.next');
-});
-$(".feature-page-prev").click(function(){
-    owlFeatureSidebarSLider.trigger('owl.prev');
+    autoPlay:false,
+    navigation:true,
+    navigationText: [
+        "<a id='feature-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='feature-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 });
 
 /*======================== End Page Slider =============================*/
@@ -35,21 +31,18 @@ owlSidebarBlog.owlCarousel({
     itemsDesktopSmall:[979,1],
     itemsTablet:[768,1],
     pagination:false,
-    navigation:false,
-    slideSpeed:1000,
+    slideSpeed:3000,
     singleItem:true,
     transitionStyle:"goDown",
     rewindNav : false,
-    autoPlay:false
+    autoPlay:false,
+    navigation:true,
+    navigationText: [
+        "<a id='blog-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='blog-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 });
 
-// Custom Navigation Events
-$(".blog-sidebar-next").click(function(){
-    owlSidebarBlog.trigger('owl.next');
-});
-$(".blog-sidebar-prev").click(function(){
-    owlSidebarBlog.trigger('owl.prev');
-});
 
 /*======================== End Blog Slider =============================*/
 
@@ -62,20 +55,16 @@ owlSidebarBranch.owlCarousel({
     itemsDesktopSmall:[979,1],
     itemsTablet:[768,1],
     pagination:false,
-    navigation:false,
-    slideSpeed:1000,
+    slideSpeed:3000,
     singleItem:true,
     transitionStyle:"goDown",
     rewindNav : false,
-    autoPlay:false
-});
-
-// Custom Navigation Events
-$(".branch-sidebar-next").click(function(){
-    owlSidebarBranch.trigger('owl.next');
-});
-$(".branch-sidebar-prev").click(function(){
-    owlSidebarBranch.trigger('owl.prev');
+    autoPlay:false,
+    navigation:true,
+    navigationText: [
+        "<a id='branch-sidebar-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='branch-sidebar-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 });
 
 /*======================== End Branch Slider =============================*/
@@ -85,22 +74,21 @@ $(".branch-sidebar-prev").click(function(){
 var owlSidebarClient = $("#client-sidebar-slider");
 owlSidebarClient.owlCarousel({
     items:2,
+    slideSpeed:3000,
     itemsDesktop:[1199,2],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,2],
     pagination: false,
     paginationNumbers: false,
     autoPlay:false,
-    rewindNav:false
+    rewindNav:false,
+    navigation : true,
+    navigationText: [
+        "<a id='client-sidebar-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='client-sidebar-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 });
 
-// Custom Navigation Events
-$(".client-sidebar-next").click(function(){
-    owlSidebarClient.trigger('owl.next');
-});
-$(".client-sidebar-prev").click(function(){
-    owlSidebarClient.trigger('owl.prev');
-});
 
 /*======================== End Client Slider =============================*/
 
@@ -110,23 +98,19 @@ $(".client-sidebar-prev").click(function(){
 var owlSidebarEvent = $("#event-sidebar-slider");
 owlSidebarEvent.owlCarousel({
     items:1,
+    slideSpeed:3000,
     itemsDesktop:[1000,2],
     itemsDesktopSmall:[979,1],
     itemsTablet:[768,1],
     pagination:false,
-    navigation:false,
-    slideSpeed:1000,
     singleItem:true,
     transitionStyle:"goDown",
-    navigationText:["",""],
-    autoPlay:false
-});
-// Custom Navigation Events
-$(".event-sidebar-next").click(function(){
-    owlSidebarEvent.trigger('owl.next');
-});
-$(".event-sidebar-prev").click(function(){
-    owlSidebarEvent.trigger('owl.prev');
+    autoPlay:false,
+    navigation:true,
+    navigationText: [
+        "<a id='event-sidebar-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='event-sidebar-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 });
 
 /*======================== News Slider =============================*/
@@ -138,23 +122,18 @@ owlSidebarNews.owlCarousel({
     itemsDesktopSmall:[979,1],
     itemsTablet:[768,1],
     pagination:false,
-    navigation:false,
-    slideSpeed:1000,
+    slideSpeed:3000,
     singleItem:true,
     transitionStyle:"backSlide",
-    navigationText:["",""],
     autoPlay:false,
     rewindNav : false,
+    navigation:true,
+    navigationText: [
+        "<a id='news-sidebar-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='news-sidebar-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 
 });
-// Custom Navigation Events
-$(".news-sidebar-next").click(function(){
-    owlSidebarNews.trigger('owl.next');
-});
-$(".news-sidebar-prev").click(function(){
-    owlSidebarNews.trigger('owl.prev');
-});
-
 
 /*======================== Notice Slider =============================*/
 
@@ -165,23 +144,18 @@ owlSidebarNotice.owlCarousel({
     itemsDesktopSmall:[979,1],
     itemsTablet:[768,1],
     pagination:false,
-    navigation:false,
-    slideSpeed:1000,
+    slideSpeed:3000,
     singleItem:true,
     transitionStyle:"backSlide",
-    navigationText:["",""],
     autoPlay:false,
     rewindNav : false,
+    navigation:true,
+    navigationText: [
+        "<a id='notice-sidebar-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='notice-sidebar-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 
 });
-// Custom Navigation Events
-$(".notice-sidebar-next").click(function(){
-    owlSidebarNotice.trigger('owl.next');
-});
-$(".notice-sidebar-prev").click(function(){
-    owlSidebarNotice.trigger('owl.prev');
-});
-
 
 /*======================== Portfolio Slider =============================*/
 
@@ -192,23 +166,18 @@ owlSidebarPortfolio.owlCarousel({
     itemsDesktopSmall:[979,1],
     itemsTablet:[768,1],
     pagination:false,
-    navigation:false,
-    slideSpeed:1000,
+    slideSpeed:3000,
     singleItem:true,
     transitionStyle:"backSlide",
-    navigationText:["",""],
     autoPlay:false,
     rewindNav : false,
+    navigation:true,
+    navigationText: [
+        "<a id='portfolio-sidebar-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='portfolio-sidebar-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 
 });
-// Custom Navigation Events
-$(".portfolio-sidebar-next").click(function(){
-    owlSidebarPortfolio.trigger('owl.next');
-});
-$(".portfolio-sidebar-prev").click(function(){
-    owlSidebarPortfolio.trigger('owl.prev');
-});
-
 
 /*======================== Service Slider =============================*/
 
@@ -219,23 +188,18 @@ owlSidebarService.owlCarousel({
     itemsDesktopSmall:[979,1],
     itemsTablet:[768,1],
     pagination:false,
-    navigation:false,
-    slideSpeed:1000,
+    slideSpeed:3000,
     singleItem:true,
     transitionStyle:"goDown",
-    navigationText:["",""],
     autoPlay:false,
     rewindNav : false,
+    navigation:true,
+    navigationText: [
+        "<a id='service-sidebar-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='service-sidebar-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 
 });
-// Custom Navigation Events
-$(".service-sidebar-next").click(function(){
-    owlSidebarService.trigger('owl.next');
-});
-$(".service-sidebar-prev").click(function(){
-    owlSidebarService.trigger('owl.prev');
-});
-
 
 /*======================== Sponsor Slider =============================*/
 
@@ -248,71 +212,57 @@ owlSidebarSponsor.owlCarousel({
     pagination: false,
     paginationNumbers: false,
     autoPlay:false,
-    rewindNav:false
+    rewindNav:false,
+    navigation:true,
+    navigationText: [
+        "<a id='sponsor-sidebar-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='sponsor-sidebar-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
+
 
 });
-// Custom Navigation Events
-$(".sponsor-sidebar-next").click(function(){
-    owlSidebarSponsor.trigger('owl.next');
-});
-$(".sponsor-sidebar-prev").click(function(){
-    owlSidebarSponsor.trigger('owl.prev');
-});
-
 
 /*======================== Team Slider =============================*/
 
 var owlSidebarTeam = $("#team-sidebar-slider");
-
 owlSidebarTeam.owlCarousel({
     items:1,
     itemsDesktop:[1000,2],
     itemsDesktopSmall:[979,1],
     itemsTablet:[768,1],
     pagination:false,
-    navigation:false,
-    slideSpeed:1000,
+    slideSpeed:3000,
     singleItem:true,
     transitionStyle:"goDown",
-    navigationText:["",""],
     autoPlay:false,
     rewindNav : false,
+    navigation:true,
+    navigationText: [
+        "<a id='team-sidebar-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='team-sidebar-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 
 });
-// Custom Navigation Events
-$(".team-sidebar-next").click(function(){
-    owlSidebarTeam.trigger('owl.next');
-});
-$(".team-sidebar-prev").click(function(){
-    owlSidebarTeam.trigger('owl.prev');
-});
-
 
 /*======================== Testimonial Slider =============================*/
 
 var owlSidebarTestimonial = $("#testimonial-sidebar-slider");
-
 owlSidebarTestimonial.owlCarousel({
     items:1,
     itemsDesktop:[1000,2],
     itemsDesktopSmall:[979,1],
     itemsTablet:[768,1],
     pagination:false,
-    navigation:false,
-    slideSpeed:1000,
+    slideSpeed:3000,
     singleItem:true,
     transitionStyle:"backSlide",
-    navigationText:["",""],
     autoPlay:false,
     rewindNav : false,
+    navigation:true,
+    navigationText: [
+        "<a id='testimonial-sidebar-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='testimonial-sidebar-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 
 });
-// Custom Navigation Events
-$(".testimonial-sidebar-next").click(function(){
-    owlSidebarTestimonial.trigger('owl.next');
-});
-$(".testimonial-sidebar-prev").click(function(){
-    owlSidebarTestimonial.trigger('owl.prev');
-});
-
 

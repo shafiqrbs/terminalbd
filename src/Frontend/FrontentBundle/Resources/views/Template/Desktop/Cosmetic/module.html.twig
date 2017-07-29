@@ -37,7 +37,7 @@
                         {% endif %}
                     </div>
                 {% endif %}
-                <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgets is not empty %} col-md-9 {% else %}col-md-12 {% endif %}"  >
+                <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %} col-md-9 {% else %}col-md-12 {% endif %}"  >
                     {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
                         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'body-top'}) %}
                     {% endif %}

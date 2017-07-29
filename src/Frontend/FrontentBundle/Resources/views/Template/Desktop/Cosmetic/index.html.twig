@@ -1,69 +1,40 @@
 {% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
-    <!-- Header Carousel -->
-    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-        <section class="feature-widget-body-top" >
-            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id, 'pageName':'Home','position':'body-top'}) %}
-        </section>
-    {% endif %}
-    <section class="order-widget">
+    <section class="home" style="background:#222">
+        <!-- Header Carousel -->
+        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header-bottom') %}
+            <div class="container container-margin">
+                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'header-bottom'}) %}
+            </div>
+        {% endif %}
+        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+            <div class="container container-margin">
+                {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-top'}) %}
+            </div>
+        {% endif %}
         <div class="container">
             <div class="row">
-                <div class="col-md-10 col-md-offset-1"  style="margin-top: 10px">
+                <div class="col-md-10 col-md-offset-1"  style="margin-top: 15px; margin-bottom:15px">
                     <div class="col-md-10" >
                         <div class="order-widget-block">
                             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> PLACE YOUR ORDER NOW - RECEIVE YOUR ITEMS WITHIN 72 HOURS
                         </div>
                     </div>
-                    <div class="col-md-2"><a class="btn shop-now" href="{{ path(globalOption.subDomain ~ '_webservice_product') }}">SHOP NOW</a></div></div>
+                    <div class="col-md-2"><a class="btn shop-now" href="{{ path(globalOption.subDomain ~ '_webservice_product') }}">SHOP NOW</a></div>
+                </div>
             </div>
         </div>
+        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+            <div class="container container-margin">
+                {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'body-bottom'}) %}
+            </div>
+        {% endif %}
+        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer-top') %}
+            <div class="container">
+                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'footer-top'}) %}
+            </div>
+        {% endif %}
     </section>
-    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-        <section class="feature-widget-body-bottom" >
-            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id, 'pageName':'Home','position':'body-bottom'}) %}
-        </section>
-    {% endif %}
-
-{#    <section>
-            {% if globalOption.contactPage.latitude is not empty and globalOption.contactPage.longitude is not empty %}
-                    <div class="Lat">23.8103</div>
-                    <div class="Lng">90.4125</div>
-                    <div class="imgMap">{{ asset('assets/img/placeholder.png') }}</div>
-                    <address>Address Here</address>
-                    <div class="infoWindow">
-                            <span style="line-height: 25px;">{% if globalOption.contactPage.address1 is not empty %}
-
-                                 <p style="font-size: 18px; line-height: 25px; font-weight: bolder"> <i class="fa fa-home"></i>&nbsp;{{ globalOption.contactPage.address1 }}<br>
-                                    {% if globalOption.contactPage.location is defined and globalOption.contactPage.location %}
-                                        {{ globalOption.contactPage.location.name }}, {{ globalOption.contactPage.location.parent.name }}
-                                    {% endif %}
-                                    {% if globalOption.contactPage.postalCode is defined and globalOption.contactPage.postalCode %}
-                                        -{{ globalOption.contactPage.postalCode }}
-                                    {% endif %}
-                                 </p>
-                                {% endif %}
-                                {% if globalOption.contactPage.startHour %}
-                                    <i class="fa fa-clock-o"></i>&nbsp;<strong>{{ globalOption.contactPage.startHour }} To {{ globalOption.contactPage.endHour }}</strong>
-                                {% endif %}
-                                {% if globalOption.contactPage.weeklyOffDay is not empty %}
-                                    <br><i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;<strong>
-                                    {% for day in globalOption.contactPage.weeklyOffDay %}
-                                        {{ day }}
-                                        {% if not loop.last %},{% endif %}
-                                    {% endfor %}
-                                </strong>
-                                {% endif %}
-                                <br>
-                                <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
-                                <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=23.801422,90.352599">Direction</a>
-
-                            </span>
-                    </div>
-
-                </div>
-            {% endif %}
-        </section>#}
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -77,76 +48,16 @@
     {% javascripts
     '@FrontendBundle/Resources/public/template/js/common.js'
     '@FrontendBundle/Resources/public/template/js/product.js'
+    '@FrontendBundle/Resources/public/template/js/e-commerce.js'
+    '@FrontendBundle/Resources/public/template/js/sidebar.js'
+    '@FrontendBundle/Resources/public/template/js/page.js'
+    '@FrontendBundle/Resources/public/template/js/headerfooter.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-
-    if ($('#gmap_canvas').length) {
-        $('#gmap_canvas').kmaps();
-    }
-    $('#newsLetter').submit( function(e) {
-
-        $.ajax({
-
-        url         : $('#newsLetter').attr( 'action' ),
-        type        : $('#newsLetter').attr( 'method' ),
-        data: new FormData( this ),
-        processData : false,
-        contentType : false,
-        success: function(response) {
-        alert(response);
-        },
-
-        });
-
-    });
-
-    $('#bottomTabCarousel').carousel({
-        interval:   4000
-    });
-
-    var clickEvent = false;
-    $('#bottomTabCarousel').on('click', '.nav a', function() {
-    clickEvent = true;
-    $('.nav li').removeClass('active');
-    $(this).parent().addClass('active');
-    }).on('slid.bs.carousel', function(e) {
-    if(!clickEvent) {
-    var count = $('.nav').children().length -1;
-    var current = $('.nav li.active');
-    current.removeClass('active').next().addClass('active');
-    var id = parseInt(current.data('slide-to'));
-    if(count == id) {
-    $('.nav li').first().addClass('active');
-    }
-    }
-    clickEvent = false;
-    });
-
-    $('#topTabCarousel').carousel({
-    interval:   4000
-    });
-
-    var clickEvent = false;
-    $('#topTabCarousel').on('click', '.nav a', function() {
-    clickEvent = true;
-    $('.nav li').removeClass('active');
-    $(this).parent().addClass('active');
-    }).on('slid.bs.carousel', function(e) {
-    if(!clickEvent) {
-    var count = $('.nav').children().length -1;
-    var current = $('.nav li.active');
-    current.removeClass('active').next().addClass('active');
-    var id = parseInt(current.data('slide-to'));
-    if(count == id) {
-    $('.nav li').first().addClass('active');
-    }
-    }
-    clickEvent = false;
-    });
 {% endblock %}
 
 

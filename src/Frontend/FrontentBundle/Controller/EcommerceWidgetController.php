@@ -128,10 +128,10 @@ class EcommerceWidgetController extends Controller
 
     }
 
-    public function featureWidgetAction(GlobalOption $globalOption , $pageName ='', $position ='' )
+    public function featureWidgetAction(GlobalOption $globalOption , $menu ='', $position ='' )
     {
 
-        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption,'pageName' => $pageName ,'position' => $position ),array('sorting'=>'ASC'));
+        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
 
         /* Device Detection code desktop or mobile */
 
@@ -141,13 +141,14 @@ class EcommerceWidgetController extends Controller
         }else{
             $theme = 'Template/Desktop/EcommerceWidget/FeatureWidget';
         }
+
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
-            'features'           => $features,
-            'globalOption'           => $globalOption,
+            'features'                  => $features,
+            'globalOption'              => $globalOption,
         ));
     }
 
-    public function categoryWidgetAction(GlobalOption $globalOption , $category )
+    public function categoryWidgetAction(GlobalOption $globalOption , $category , $sliderId = 1  )
     {
 
         $data = array('category' => $category);
@@ -162,8 +163,9 @@ class EcommerceWidgetController extends Controller
             $theme = 'Template/Desktop/EcommerceWidget/CategoryWidget';
         }
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
-            'categoryProducts'           => $categoryProducts->getResult(),
-            'globalOption'           => $globalOption,
+            'categoryProducts'          => $categoryProducts->getResult(),
+            'globalOption'              => $globalOption,
+            'sliderId'                  => $sliderId,
         ));
     }
 

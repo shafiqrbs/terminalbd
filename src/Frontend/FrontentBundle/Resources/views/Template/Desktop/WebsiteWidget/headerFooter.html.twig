@@ -1,5 +1,13 @@
+{% if widget.jsFeature is not empty %}
+    {% render controller("FrontendBundle:WebsiteWidget:pageBaseFeatureWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
+{% endif %}
 {% if widget.content is not empty %}
-<div class="page-block" >
+    <div class="clearfix"><br/></div>
+    <div class="row"> <div class="col-md-12 text-justify">{{ widget.content|raw }}</div></div>
+    <div class="clearfix"><br/></div>
+{% endif %}
+{% if widget.page is not empty %}
+<div class="page-block page-carousel" >
     {% if widget.jsFeature is not empty %}
         {% render controller("FrontendBundle:WebsiteWidget:pageBaseFeatureWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
     {% endif %}
@@ -11,67 +19,42 @@
     {% if  widget.pageFeatureName is not empty or widget.pageShowType == 'slider' %}
         <div class="page-title-bar">
             {% if  widget.pageFeatureName is not empty %}
-            <div class="col-md-9" >
+            <div class="col-md-12" >
                 <div class="page-title"><i class="fa fa-book"></i>&nbsp;{{ widget.pageFeatureName }}</div>
             </div>
             {% endif %}
-            {% if widget.moduleShowType == 'slider' %}
-                <div class="col-md-3 text-right owl-position" >
-                    <a class='feature-header-footer-prev' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-left'></span>
-                    </a>
-                    <a class='feature-header-footer-next' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-right'></span>
-                    </a>
-                </div>
-            {% endif %}
         </div>
-
     {% endif %}
     {% if widget.pageShowType == 'grid' %}
-        <div class="row">
-            {% for entity in widget.page %}
-                <div class="col-md-3 wow fadeInDown grid" data-wow-delay="2s"  >
-                    <div class="sidebar-blog">
-                        <div class="post-img">
-                            <img class="img-responsive" src="{{ image(entity.webPath).scaleResize(320,200) }}" alt="">
-                            <div class="over-layer">
-                                <ul class="post-link">
-                                    <li><a href="{{  path(globalOption.subDomain ~ '_webservice_module',{'module': entity.slug }) }}" class="fa fa-link"></a></li>
-                                </ul>
-                            </div>
+       <div class="row row-flex">
+            {% for key,entity in widget.page  %}
+                <div class="col-md-3 wow fadeInDown" data-wow-delay="1s" >
+                    <div class="sidebar-serviceBox">
+                        <div class="service-icon">
+                            <i class="fa {% if entity.icon is defined and entity.icon is not empty  %}{{ entity.icon.className }} {% endif %}"></i>
                         </div>
-                        <div class="post-review">
-                            <h5 class="post-title"><a href="{{  path(globalOption.subDomain ~ '_webservice_module',{'module':entity.slug }) }}">{{ entity.name }}</a></h5>
-                            <p class="post-description">
-                                {{ entity.content|truncate(120)|raw }}
-                            </p>
-                            <a href="{{  path(globalOption.subDomain ~ '_webservice_module',{'module':entity.slug }) }}" class="read-more">read more</a>
+                        <div class="service-Content">
+                            <h3 class="title">{{ entity.name }}</h3>
+                            <p class="description">{{ entity.content|raw|truncate(180) }}</p>
+                            <a  href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}" class="read-more pull-right">Read more <i class="fa fa-angle-double-right"></i></a>
                         </div>
                     </div>
                 </div>
             {% endfor %}
-        </div>
+       </div>
     {% elseif widget.pageShowType == 'slider' %}
         <div class="row">
             <div id="feature-header-footer-slider" class="owl-carousel">
                 {% for entity in  widget.page  %}
-                    <div class="col-md-12 wow fadeInDown" data-wow-delay="2s" >
-                        <div class="sidebar-blog">
-                            <div class="post-img">
-                                <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
-                                <div class="over-layer">
-                                    <ul class="post-link">
-                                        <li><a href="{{  path(globalOption.subDomain ~ '_webservice_module',{'module': entity.slug }) }}" class="fa fa-link"></a></li>
-                                    </ul>
-                                </div>
+                    <div class="col-md-12 wow fadeInDown" data-wow-delay="1s" >
+                        <div class="sidebar-serviceBox">
+                            <div class="service-icon">
+                                <i class="fa {% if entity.icon is defined and entity.icon is not empty  %}{{ entity.icon.className }} {% endif %}"></i>
                             </div>
-                            <div class="post-review">
-                                <h5 class="post-title"><a href="{{  path(globalOption.subDomain ~ '_webservice_module',{'module':entity.slug }) }}">{{ entity.name }}</a></h5>
-                                <p class="post-description">
-                                    {{ entity.content|truncate(120)|raw }}
-                                </p>
-                                <a href="{{  path(globalOption.subDomain ~ '_webservice_module',{'module':entity.slug }) }}" class="read-more">read more</a>
+                            <div class="service-Content">
+                                <h3 class="title">{{ entity.name }}</h3>
+                                <p class="description">{{ entity.content|raw|truncate(180) }}</p>
+                                <a  href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}" class="read-more pull-right">Read more <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -91,7 +74,7 @@
                                     {% for cat in list.moduleCategory %}
                                         <a href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module':module.name|lower ,'slug':cat.slug }) }}">{{ cat.name }}</a>
                                     {% endfor %}
-                                    </span>
+                                 </span>
                             </dd>
                         </dl>
                     {% endfor %}
@@ -103,21 +86,11 @@
 </div>
 {% endif %}
 {% if entities is defined and entities is not empty and widget.module.slug == 'blog' %}
-    <div class="page-block" >
+    <div class="page-block page-carousel" >
         <div class="page-title-bar">
-            <div class="col-md-9" >
+            <div class="col-md-12" >
                 <div class="page-title"><i class="fa fa-comments"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
             </div>
-            {% if widget.moduleShowType == 'slider' %}
-                <div class="col-md-3 text-right owl-position" >
-                    <a class='blog-header-footer-prev' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-left'></span>
-                    </a>
-                    <a class='blog-header-footer-next' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-right'></span>
-                    </a>
-                </div>
-            {% endif %}
         </div>
         {% if widget.moduleShowType == 'grid' %}
             <div class="row">
@@ -211,21 +184,11 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'branch' %}
-    <div class="page-block">
+    <div class="page-block page-carousel">
         <div class="page-title-bar">
-            <div class="col-md-9" >
+            <div class="col-md-12" >
                 <div class="page-title"><i class="fa fa-map-marker"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
             </div>
-            {% if widget.moduleShowType == 'slider' %}
-                <div class="col-md-3 text-right owl-position">
-                    <a class='branch-header-footer-prev' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-left'></span>
-                    </a>
-                    <a class='branch-header-footer-next' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-right'></span>
-                    </a>
-                </div>
-            {% endif %}
         </div>
         {% if widget.moduleShowType == 'slider' %}
             <div class="row">
@@ -272,21 +235,11 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty  and widget.module.slug == 'client' %}
-    <div class="page-block" >
+    <div class="page-block page-carousel" >
         <div class="page-title-bar">
-            <div class="col-md-9" >
+            <div class="col-md-12" >
                 <div class="page-title"><i class="fa fa-building"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
             </div>
-            {% if widget.moduleShowType == 'slider' %}
-                <div class="col-md-3 text-right owl-position">
-                    <a class='client-header-footer-prev' href='javascript:'>
-                       <span class='glyphicon glyphicon-chevron-left'></span>
-                    </a>
-                    <a class='client-header-footer-next' href='javascript:'>
-                       <span class='glyphicon glyphicon-chevron-right'></span>
-                    </a>
-                </div>
-            {% endif %}
         </div>
         {% if widget.moduleShowType == 'grid' %}
         <div class="row">
@@ -322,21 +275,11 @@
     </div>
 {% endif %}
 {% if entities is defined and entities is not empty  and widget.module.slug == 'event' %}
-    <div class="page-block" >
+    <div class="page-block page-carousel" >
         <div class="page-title-bar">
-            <div class="col-md-9" >
+            <div class="col-md-12" >
                 <div class="page-title"><i class="fa fa-comments"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
             </div>
-            {% if widget.moduleShowType == 'slider' %}
-                <div class="col-md-3 text-right owl-position" >
-                    <a class='event-header-footer-prev' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-left'></span>
-                    </a>
-                    <a class='event-header-footer-next' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-right'></span>
-                    </a>
-                </div>
-            {% endif %}
         </div>
         {% if widget.moduleShowType == 'grid' %}
         <div class="row">
@@ -365,29 +308,28 @@
         </div>
         {% elseif widget.moduleShowType == 'slider' %}
         <div class="row">
-
             <div id="event-header-footer-slider" class="owl-carousel">
                 {% for key,entity in entities  %}
                     <div class="col-md-12 col-sm-12 ">
-                    <div class="event-sidebar">
-                        <div class="post-img">
-                            <img src="{{ image(entity.webPath).resize(320,200) }}" alt="" class="img-responsive">
-                            <a href="{{  path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'event','slug':entity.slug }) }}" class="overlay"><i class="fa fa-plus-square-o"></i></a>
-                        </div>
+                        <div class="event-sidebar">
+                            <div class="post-img">
+                                <img src="{{ image(entity.webPath).resize(320,200) }}" alt="" class="img-responsive">
+                                <a href="{{  path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'event','slug':entity.slug }) }}" class="overlay"><i class="fa fa-plus-square-o"></i></a>
+                            </div>
 
-                        <div class="post-review">
-                            <ul class="post-comment" style="width: 100%; text-align: left;">
-                                <li><i class="fa fa-calendar"></i> {{ entity.created|date('d') }}&nbsp;<simple>{{ entity.created|date('M,Y') }}</simple></li>
-                                <li><i class="fa fa-map-marker"></i> <simple>{{ entity.location.name }}</simple></li>
-                            </ul>
-                            <div class="clearfix"></div>
-                            <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
-                            <p class="post-description">{{ entity.content|truncate(120)|raw }}</p>
+                            <div class="post-review">
+                                <ul class="post-comment" style="width: 100%; text-align: left;">
+                                    <li><i class="fa fa-calendar"></i> {{ entity.created|date('d') }}&nbsp;<simple>{{ entity.created|date('M,Y') }}</simple></li>
+                                    <li><i class="fa fa-map-marker"></i> <simple>{{ entity.location.name }}</simple></li>
+                                </ul>
+                                <div class="clearfix"></div>
+                                <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                                <p class="post-description">{{ entity.content|truncate(120)|raw }}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-
+                {% endfor %}
+            </div>
         </div>
         {% else %}
             <div class="row">
@@ -444,21 +386,11 @@
     </div>
 {% endif %}
 {% if entities is defined and entities is not empty and widget.module.slug == 'news' %}
-    <div class="page-block" >
+    <div class="page-block page-carousel" >
         <div class="page-title-bar">
-            <div class="col-md-9" >
+            <div class="col-md-12" >
                 <div class="page-title"><i class="fa fa-newspaper-o"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
             </div>
-            {% if widget.moduleShowType == 'slider' %}
-                <div class="col-md-3 text-right owl-position" >
-                    <a class='news-header-footer-prev' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-left'></span>
-                    </a>
-                    <a class='news-header-footer-next' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-right'></span>
-                    </a>
-                </div>
-            {% endif %}
         </div>
         {% if widget.moduleShowType == 'grid' %}
             <div class="row">
@@ -529,6 +461,7 @@
                                 </div>
                             </div>
                         </div>
+
                     {% endfor %}
                 </div>
             </div>
@@ -558,21 +491,11 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'noticeboard' %}
-    <div class="page-block" >
+    <div class="page-block page-carousel" >
         <div class="page-title-bar">
-            <div class="col-md-9" >
+            <div class="col-md-12" >
                 <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
             </div>
-            {% if widget.moduleShowType == 'slider' %}
-                <div class="col-md-3 text-right owl-position" >
-                    <a class='noticeboard-header-footer-prev' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-left'></span>
-                    </a>
-                    <a class='noticeboard-header-footer-next' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-right'></span>
-                    </a>
-                </div>
-            {% endif %}
         </div>
     {% if widget.moduleShowType == 'grid' %}
         <div class="row">
@@ -596,7 +519,7 @@
                 </div>
             {% endfor %}
         </div>
-    {% elseif widget.moduleShowType == 'slider' %} %}
+    {% elseif widget.moduleShowType == 'slider' %}
      <div class="row">
         <div id="notice-header-footer-slider" class="owl-carousel">
             {% for key,notice in entities  %}
@@ -635,41 +558,33 @@
             </div>
         </div>
     {% endif %}
+    </div>
 {% endif %}
 {% if entities is defined and entities is not empty and widget.module.slug == 'portfolio' %}
- <div class="page-block" >
+ <div class="page-block page-carousel" >
            <div class="page-title-bar">
-                <div class="col-md-9" >
+                <div class="col-md-12" >
                     <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
                 </div>
-                {% if widget.moduleShowType == 'slider' %}
-                    <div class="col-md-3 text-right owl-position" >
-                        <a class='portfolio-header-footer-prev' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-left'></span>
-                        </a>
-                        <a class='portfolio-header-footer-next' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-right'></span>
-                        </a>
-                    </div>
-                {% endif %}
+
             </div>
             <div class="clearfix"></div>
             {% if widget.moduleShowType == 'slider' %}
                 <div class="row">
                 <div id="portfolio-header-footer-slider" class="owl-carousel">
                     {% for key,portfolio in entities  %}
-                    <div class="col-md-12">
-                        <div class="our-portfolio">
-                            <img src="{{ image(portfolio.webPath).scaleResize(380,266) }}" alt="">
-                            <div class="team-content">
-                                <h3 class="team-prof">
-                                    <a href="http://{{ portfolio.website }}">{{ portfolio.name }}</a>
-                                    {% if portfolio.category is not empty %}<small>{{ portfolio.category.name }}</small>{% endif %}
-                                </h3>
+                        <div class="col-md-12">
+                            <div class="our-portfolio">
+                                <img src="{{ image(portfolio.webPath).scaleResize(380,266) }}" alt="">
+                                <div class="team-content">
+                                    <h3 class="team-prof">
+                                        <a href="http://{{ portfolio.website }}">{{ portfolio.name }}</a>
+                                        {% if portfolio.category is not empty %}<small>{{ portfolio.category.name }}</small>{% endif %}
+                                    </h3>
+                                </div>
+                                <p><a href="http://{{ portfolio.website }}">{{ portfolio.name }}</a></p>
                             </div>
-                            <p><a href="http://{{ portfolio.website }}">{{ portfolio.name }}</a></p>
                         </div>
-                    </div>
                     {% endfor %}
                 </div>
             </div>
@@ -696,21 +611,11 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'service' %}
- <div class="page-block" >
+ <div class="page-block page-carousel" >
            <div class="page-title-bar">
-                <div class="col-md-9" >
+                <div class="col-md-12" >
                     <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
                 </div>
-                {% if widget.moduleShowType == 'slider' %}
-                    <div class="col-md-3 text-right owl-position" >
-                        <a class='service-header-footer-prev' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-left'></span>
-                        </a>
-                        <a class='service-header-footer-next' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-right'></span>
-                        </a>
-                    </div>
-                {% endif %}
             </div>
             <div class="clearfix"></div>
             {% if widget.moduleShowType == 'slider' %}
@@ -754,21 +659,12 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'sponsor' %}
-    <div class="page-block" >
+    <div class="page-block page-carousel" >
            <div class="page-title-bar">
-                <div class="col-md-9" >
+                <div class="col-md-12" >
                     <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
                 </div>
-                {% if widget.moduleShowType == 'slider' %}
-                    <div class="col-md-3 text-right owl-position" >
-                        <a class='sponsor-header-footer-prev' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-left'></span>
-                        </a>
-                        <a class='sponsor-header-footer-next' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-right'></span>
-                        </a>
-                    </div>
-                {% endif %}
+
             </div>
             <div class="clearfix"></div>
             {% if widget.moduleShowType == 'slider' %}
@@ -797,14 +693,6 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="col-md-2 col-sm-2">
-                                <div class="box-sidebar-portfolio">
-                                    <a class="thumbnail"><img src="{{ image(entity.webPath).resize(171,180) }}" alt=""></a>
-                                    <ul class="social-links">
-                                        <li><a target="_blank" href="http://{{ entity.website }}" class="fa fa-link"></a></li>
-                                    </ul>
-                                </div>
-                            </div>
                         {% endfor %}
                     </div>
             {% endif %}
@@ -812,21 +700,12 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'team' %}
-    <div class="page-block" >
+    <div class="page-block page-carousel" >
            <div class="page-title-bar">
-                <div class="col-md-9" >
+                <div class="col-md-12" >
                     <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
                 </div>
-                {% if widget.moduleShowType == 'slider' %}
-                    <div class="col-md-3 text-right owl-position" >
-                        <a class='team-header-footer-prev' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-left'></span>
-                        </a>
-                        <a class='team-header-footer-next' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-right'></span>
-                        </a>
-                    </div>
-                {% endif %}
+
             </div>
             <div class="clearfix"></div>
             <div class="row">
@@ -901,21 +780,11 @@
 
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'testimonial' %}
-    <div class="page-block" >
+    <div class="page-block page-carousel" >
            <div class="page-title-bar">
-                <div class="col-md-9" >
+                <div class="col-md-12" >
                     <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
                 </div>
-                {% if widget.moduleShowType == 'slider' %}
-                    <div class="col-md-3 text-right owl-position" >
-                        <a class='team-header-footer-prev' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-left'></span>
-                        </a>
-                        <a class='team-header-footer-next' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-right'></span>
-                        </a>
-                    </div>
-                {% endif %}
             </div>
             <div class="clearfix"></div>
             <div class="row">

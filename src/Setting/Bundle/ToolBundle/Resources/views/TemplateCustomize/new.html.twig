@@ -98,6 +98,51 @@
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
+                            <div class="form-actions portlet box blue">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Home Page Manage</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid">
+                                <div class="span4">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Home Bg Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.homeBgColor) }}
+                                                {{ form_errors(form.homeBgColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span4">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Home Anchor Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.homeAnchorColor) }}
+                                                {{ form_errors(form.homeAnchorColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span4">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Home Anchor Color Hover</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.homeAnchorColorHover) }}
+                                                {{ form_errors(form.homeAnchorColorHover) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
                             <!--/row-->
                             <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
@@ -389,6 +434,121 @@
                             <!--/row-->
                             <div class="form-actions portlet box grey">
                                 <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Title</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Height</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-font"></i>
+                                                {{ form_widget(form.titleHeight) }}
+                                                {{ form_errors(form.titleHeight) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Background Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.titleBgColor) }}
+                                                {{ form_errors(form.titleBgColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Border Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.titleBorderColor) }}
+                                                {{ form_errors(form.titleBorderColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Margin Bottom</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.titleMarginBottom) }}
+                                            {{ form_errors(form.titleMarginBottom) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Text Align</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.titleTextAlign) }}
+                                            {{ form_errors(form.titleTextAlign) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Font Size</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.titleFontSize) }}
+                                            {{ form_errors(form.titleFontSize) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Font Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.titleFontColor) }}
+                                                {{ form_errors(form.titleFontColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Slider Position Top(%)</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-font"></i>
+                                                {{ form_widget(form.sliderTopPosition) }}
+                                                {{ form_errors(form.sliderTopPosition) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Slider Position Right(%)</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-font"></i>
+                                                {{ form_widget(form.sliderRightPosition) }}
+                                                {{ form_errors(form.sliderRightPosition) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                             <div class="clearfix">&nbsp;</div>
+                            <!--/row-->
+                            <div class="form-actions portlet box grey">
+                                <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>Divider</div>
                                 </div>
                             </div>
@@ -444,6 +604,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>Logo</div>
@@ -593,4 +754,10 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    $('#cp2').colorpicker({
+        format: 'hex'
+    });
 {% endblock %}

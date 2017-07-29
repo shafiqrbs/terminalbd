@@ -80,6 +80,7 @@
                                         </td>
                                         <td class="numeric" >{% if(entity.targetTo) %}{{ entity.targetTo }}{% endif %} -
                                             {% if entity.targetTo == 'Category' and entity.category is not empty %}{{ entity.category.name }}{% endif %}
+                                            {% if entity.targetTo == 'Brand' and entity.brand is not empty %}{{ entity.brand.name }}{% endif %}
                                             {% if entity.targetTo == 'Promotion' and entity.promotion is not empty %}{{ entity.promotion.name }}{% endif %}
                                             {% if entity.targetTo == 'Tag' and entity.tag is not empty %}{{ entity.tag.name }}{% endif %}
                                             {% if entity.targetTo == 'Discount' and entity.discount is not empty %}{{ entity.discount.name }}{% endif %}

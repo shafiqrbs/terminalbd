@@ -25,7 +25,7 @@ class WebServiceController extends Controller
             $siteEntity = $globalOption->getSiteSetting();
             $themeName = $siteEntity->getTheme()->getFolderName();
             $homeEntity = $em->getRepository('SettingContentBundle:HomePage')->findOneBy(array('globalOption'=>$globalOption));
-
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'home'));
             $array = array();
             foreach ($globalOption->getHomesliders() as $slide)
             {
@@ -49,6 +49,7 @@ class WebServiceController extends Controller
                     'homeEntity'    => $homeEntity,
                     'selectedBlockBg'    => $array,
                     'pageName'    => 'Home',
+                    'menu'    => $menu,
                     'cart'    => $cart,
                 )
             );

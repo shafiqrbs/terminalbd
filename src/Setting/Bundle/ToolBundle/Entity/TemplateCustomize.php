@@ -108,20 +108,109 @@ class TemplateCustomize
      */
     private $logoDisplayWebsite=true;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="homeBgColor", type="string", length=20, nullable=true)
+     */
+    private $homeBgColor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="siteNameColor", type="string", length=255, nullable=true)
+     * @ORM\Column(name="homeAnchorColor", type="string", length=20, nullable=true)
+     */
+    private $homeAnchorColor;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="homeAnchorColorHover", type="string", length=20, nullable=true)
+     */
+    private $homeAnchorColorHover;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="siteNameColor", type="string", length=20, nullable=true)
      */
     private $siteNameColor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="siteBgColor", type="string", length=50, nullable=true)
+     * @ORM\Column(name="siteBgColor", type="string", length=20, nullable=true)
      */
     private $siteBgColor;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="titleHeight", type="integer", length=3, nullable=true)
+     */
+    private $titleHeight;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="titleMarginBottom", type="integer", length=3, nullable=true)
+     */
+    private $titleMarginBottom;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sliderTopPosition", type="integer", length=3, nullable=true)
+     */
+    private $sliderTopPosition;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sliderRightPosition", type="integer", length=3, nullable=true)
+     */
+    private $sliderRightPosition;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titleFontSize", type="string", length=10, nullable=true)
+     */
+    private $titleFontSize;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titleTextAlign", type="string", length=10, nullable=true)
+     */
+    private $titleTextAlign;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titleBgColor", type="string", length=20 ,nullable=true)
+     */
+    private $titleBgColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titleFontColor", type="string", length=20, nullable=true)
+     */
+    private $titleFontColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titleBorderColor", type="string", length=20 ,nullable=true)
+     */
+    private $titleBorderColor;
+
 
     /**
      * @var string
@@ -1167,6 +1256,198 @@ class TemplateCustomize
     public function setSidebarTitle($sidebarTitle)
     {
         $this->sidebarTitle = $sidebarTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHomeBgColor()
+    {
+        return $this->homeBgColor;
+    }
+
+    /**
+     * @param string $homeBgColor
+     */
+    public function setHomeBgColor($homeBgColor)
+    {
+        $this->homeBgColor = $homeBgColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHomeAnchorColor()
+    {
+        return $this->homeAnchorColor;
+    }
+
+    /**
+     * @param string $homeAnchorColor
+     */
+    public function setHomeAnchorColor($homeAnchorColor)
+    {
+        $this->homeAnchorColor = $homeAnchorColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHomeAnchorColorHover()
+    {
+        return $this->homeAnchorColorHover;
+    }
+
+    /**
+     * @param string $homeAnchorColorHover
+     */
+    public function setHomeAnchorColorHover($homeAnchorColorHover)
+    {
+        $this->homeAnchorColorHover = $homeAnchorColorHover;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTitleHeight()
+    {
+        return $this->titleHeight;
+    }
+
+    /**
+     * @param int $titleHeight
+     */
+    public function setTitleHeight($titleHeight)
+    {
+        $this->titleHeight = $titleHeight;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTitleFontSize()
+    {
+        return $this->titleFontSize;
+    }
+
+    /**
+     * @param int $titleFontSize
+     */
+    public function setTitleFontSize($titleFontSize)
+    {
+        $this->titleFontSize = $titleFontSize;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitleBgColor()
+    {
+        return $this->titleBgColor;
+    }
+
+    /**
+     * @param string $titleBgColor
+     */
+    public function setTitleBgColor($titleBgColor)
+    {
+        $this->titleBgColor = $titleBgColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitleFontColor()
+    {
+        return $this->titleFontColor;
+    }
+
+    /**
+     * @param string $titleFontColor
+     */
+    public function setTitleFontColor($titleFontColor)
+    {
+        $this->titleFontColor = $titleFontColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitleBorderColor()
+    {
+        return $this->titleBorderColor;
+    }
+
+    /**
+     * @param string $titleBorderColor
+     */
+    public function setTitleBorderColor($titleBorderColor)
+    {
+        $this->titleBorderColor = $titleBorderColor;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTitleMarginBottom()
+    {
+        return $this->titleMarginBottom;
+    }
+
+    /**
+     * @param int $titleMarginBottom
+     */
+    public function setTitleMarginBottom($titleMarginBottom)
+    {
+        $this->titleMarginBottom = $titleMarginBottom;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSliderTopPosition()
+    {
+        return $this->sliderTopPosition;
+    }
+
+    /**
+     * @param int $sliderTopPosition
+     */
+    public function setSliderTopPosition($sliderTopPosition)
+    {
+        $this->sliderTopPosition = $sliderTopPosition;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSliderRightPosition()
+    {
+        return $this->sliderRightPosition;
+    }
+
+    /**
+     * @param int $sliderRightPosition
+     */
+    public function setSliderRightPosition($sliderRightPosition)
+    {
+        $this->sliderRightPosition = $sliderRightPosition;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitleTextAlign()
+    {
+        return $this->titleTextAlign;
+    }
+
+    /**
+     * @param string $titleTextAlign
+     */
+    public function setTitleTextAlign($titleTextAlign)
+    {
+        $this->titleTextAlign = $titleTextAlign;
     }
 
 

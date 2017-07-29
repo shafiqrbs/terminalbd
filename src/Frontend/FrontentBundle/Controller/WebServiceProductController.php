@@ -3,6 +3,7 @@
 namespace Frontend\FrontentBundle\Controller;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
 use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
@@ -49,6 +50,8 @@ class WebServiceProductController extends Controller
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'product'));
+
             $data = $_REQUEST;
             $ecommerce = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
@@ -78,6 +81,7 @@ class WebServiceProductController extends Controller
                     'categorySidebar'  => $categorySidebar,
                     'brands'        => $brands,
                     'products'      => $pagination,
+                    'menu'          => $menu,
                     'pageName'      => 'Product'
 
                 )
@@ -94,6 +98,8 @@ class WebServiceProductController extends Controller
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'brand'));
+
             $data = $_REQUEST;
             if(empty($data)){
                 $data = array('brand' => $brand );
@@ -126,6 +132,7 @@ class WebServiceProductController extends Controller
                     'categorySidebar'  => $categorySidebar,
                     'brands'        => $brands,
                     'products'      => $pagination,
+                    'menu'          => $menu,
                     'pageName'      => 'Brand',
                     'titleName'      => 'Brand: '.$brand->getName(),
                     'data' => $data,
@@ -143,6 +150,8 @@ class WebServiceProductController extends Controller
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'category'));
+
             $data = $_REQUEST;
             if(empty($data)){
                 $data = array('category' => $category);
@@ -175,15 +184,16 @@ class WebServiceProductController extends Controller
                     'categorySidebar'       => $categorySidebar,
                     'brands'                => $brands,
                     'products'              => $pagination,
+                    'menu'                  => $menu,
                     'pageName'              => 'Product',
-                    'data'                  => $data['limit']=4,
+                    'data'                  => $data['limit']= 4,
                     'titleName'             => 'Category: '.$category->getName(),
                 )
             );
         }
     }
 
-    public function promotionAction($subdomain)
+    public function promotionAction($subdomain, Promotion $promotion)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -192,6 +202,8 @@ class WebServiceProductController extends Controller
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'promotion'));
+
             $data = $_REQUEST;
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
@@ -223,6 +235,7 @@ class WebServiceProductController extends Controller
                     'globalOption'  => $globalOption,
                     'categoryTree'  => $categoryTree,
                     'brands'  => $brands,
+                    'menu'  => $menu,
                     'products'    => $pagination,
                 )
             );
@@ -238,6 +251,9 @@ class WebServiceProductController extends Controller
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'tag'));
+
+
             $data = $_REQUEST;
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
@@ -269,6 +285,7 @@ class WebServiceProductController extends Controller
                     'globalOption'  => $globalOption,
                     'categoryTree'  => $categoryTree,
                     'brands'  => $brands,
+                    'menu'  => $menu,
                     'products'    => $pagination,
                 )
             );
@@ -284,6 +301,9 @@ class WebServiceProductController extends Controller
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'category'));
+
+
             $data = $_REQUEST;
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
@@ -315,6 +335,7 @@ class WebServiceProductController extends Controller
                     'globalOption'  => $globalOption,
                     'categoryTree'  => $categoryTree,
                     'brands'  => $brands,
+                    'menu'  => $menu,
                     'products'    => $pagination,
                 )
             );
@@ -333,6 +354,8 @@ class WebServiceProductController extends Controller
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'product-details'));
+
             $inventory = $globalOption->getInventoryConfig();
 
             /*==========Related Product===============================*/
@@ -375,6 +398,7 @@ class WebServiceProductController extends Controller
                     'subitem'           => $subItem,
                     'next'              => $next,
                     'previous'          => $previous,
+                    'menu'          => $menu,
                     'pageName'          => 'ProductDetails',
                 )
             );

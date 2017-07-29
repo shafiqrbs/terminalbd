@@ -1,21 +1,21 @@
-var owlFeaturePageSLider = $("#feature-page-slider");
-owlFeaturePageSLider.owlCarousel({
+var owlFeaturePageSlider = $("#feature-page-slider");
+owlFeaturePageSlider.owlCarousel({
     items:columnItem,
+    slideSpeed : 3000,
     itemsDesktop:[1199,3],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,1],
     pagination: false,
     paginationNumbers: false,
     autoPlay:false,
-    rewindNav:false
+    rewindNav:false,
+    navigation:true,
+    navigationText: [
+        "<a id='feature-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='feature-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 });
-// Custom Navigation Events
-$(".feature-page-next").click(function(){
-    owlFeaturePageSLider.trigger('owl.next');
-});
-$(".feature-page-prev").click(function(){
-    owlFeaturePageSLider.trigger('owl.prev');
-});
+
 
 /*======================== End Page Slider =============================*/
 
@@ -24,7 +24,8 @@ $(".feature-page-prev").click(function(){
 
 var owlHeaderFooterBlog = $("#blog-page-slider");
 owlHeaderFooterBlog.owlCarousel({
-    items:4,
+    items:columnItem,
+    slideSpeed : 3000,
     itemsDesktop:[1199,3],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,1],
@@ -32,15 +33,13 @@ owlHeaderFooterBlog.owlCarousel({
     paginationNumbers: false,
     autoPlay:false,
     rewindNav:false,
+    navigation:true,
+    navigationText: [
+        "<a id='blog-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='blog-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 });
 
-// Custom Navigation Events
-$(".blog-page-next").click(function(){
-    owlHeaderFooterBlog.trigger('owl.next');
-});
-$(".blog-page-prev").click(function(){
-    owlHeaderFooterBlog.trigger('owl.prev');
-});
 
 /*======================== End Blog Slider =============================*/
 
@@ -48,7 +47,8 @@ $(".blog-page-prev").click(function(){
 
 var owlHeaderFooterBranch = $("#branch-page-slider");
 owlHeaderFooterBranch.owlCarousel({
-    items:4,
+    items:columnItem,
+    slideSpeed : 3000,
     itemsDesktop:[1199,3],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,1],
@@ -56,15 +56,13 @@ owlHeaderFooterBranch.owlCarousel({
     paginationNumbers: false,
     autoPlay:false,
     rewindNav:false,
+    navigation:true,
+    navigationText: [
+        "<a id='branch-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='branch-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 });
 
-// Custom Navigation Events
-$(".branch-page-next").click(function(){
-    owlHeaderFooterBranch.trigger('owl.next');
-});
-$(".branch-page-prev").click(function(){
-    owlHeaderFooterBranch.trigger('owl.prev');
-});
 
 /*======================== End Branch Slider =============================*/
 
@@ -73,22 +71,22 @@ $(".branch-page-prev").click(function(){
 var owlHeaderFooterClient = $("#client-page-slider");
 owlHeaderFooterClient.owlCarousel({
     items:6,
+    slideSpeed : 3000,
     itemsDesktop:[1199,2],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,2],
     pagination: false,
     paginationNumbers: false,
     autoPlay:false,
-    rewindNav:false
+    rewindNav:false,
+    navigation:true,
+    navigationText: [
+        "<a id='client-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='client-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 });
 
-// Custom Navigation Events
-$(".client-page-next").click(function(){
-    owlHeaderFooterClient.trigger('owl.next');
-});
-$(".client-page-prev").click(function(){
-    owlHeaderFooterClient.trigger('owl.prev');
-});
+
 
 /*======================== End Client Slider =============================*/
 
@@ -97,7 +95,8 @@ $(".client-page-prev").click(function(){
 
 var owlHeaderFooterEvent = $("#event-page-slider");
 owlHeaderFooterEvent.owlCarousel({
-    items:4,
+    items:columnItem,
+    slideSpeed : 3000,
     itemsDesktop:[1199,3],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,1],
@@ -105,20 +104,40 @@ owlHeaderFooterEvent.owlCarousel({
     paginationNumbers: false,
     autoPlay:false,
     rewindNav:false,
+    navigation:true,
+    navigationText: [
+        "<a id='event-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='event-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 });
-// Custom Navigation Events
-$(".event-page-next").click(function(){
-    owlHeaderFooterEvent.trigger('owl.next');
-});
-$(".event-page-prev").click(function(){
-    owlHeaderFooterEvent.trigger('owl.prev');
+
+
+/*======================== News Slider =============================*/
+
+var owlHeaderFooterNews = $("#news-page-slider");
+owlHeaderFooterNews.owlCarousel({
+    items:columnItem,
+    slideSpeed : 3000,
+    itemsDesktop:[1199,3],
+    itemsDesktopSmall:[979,2],
+    itemsTablet:[768,1],
+    pagination: false,
+    paginationNumbers: false,
+    autoPlay:false,
+    rewindNav:false,
+    navigation:true,
+    navigationText: [
+        "<a id='news-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='news-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 });
 
 /*======================== Notice Slider =============================*/
 
 var owlHeaderFooterNotice = $("#notice-page-slider");
 owlHeaderFooterNotice.owlCarousel({
-    items:4,
+    items:columnItem,
+    slideSpeed : 3000,
     itemsDesktop:[1199,3],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,1],
@@ -126,13 +145,11 @@ owlHeaderFooterNotice.owlCarousel({
     paginationNumbers: false,
     autoPlay:false,
     rewindNav:false,
-});
-// Custom Navigation Events
-$(".notice-page-next").click(function(){
-    owlHeaderFooterNotice.trigger('owl.next');
-});
-$(".notice-page-prev").click(function(){
-    owlHeaderFooterNotice.trigger('owl.prev');
+    navigation:true,
+    navigationText: [
+        "<a id='notice-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='notice-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 });
 
 
@@ -140,7 +157,8 @@ $(".notice-page-prev").click(function(){
 
 var owlHeaderFooterPortfolio = $("#portfolio-page-slider");
 owlHeaderFooterPortfolio.owlCarousel({
-    items:4,
+    items:columnItem,
+    slideSpeed : 3000,
     itemsDesktop:[1199,3],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,1],
@@ -148,14 +166,12 @@ owlHeaderFooterPortfolio.owlCarousel({
     paginationNumbers: false,
     autoPlay:false,
     rewindNav:false,
+    navigation:true,
+    navigationText: [
+        "<a id='portfolio-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='portfolio-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 
-});
-// Custom Navigation Events
-$(".portfolio-page-next").click(function(){
-    owlHeaderFooterPortfolio.trigger('owl.next');
-});
-$(".portfolio-page-prev").click(function(){
-    owlHeaderFooterPortfolio.trigger('owl.prev');
 });
 
 
@@ -163,7 +179,8 @@ $(".portfolio-page-prev").click(function(){
 
 var owlHeaderFooterService = $("#service-page-slider");
 owlHeaderFooterService.owlCarousel({
-    items:4,
+    items:columnItem,
+    slideSpeed : 3000,
     itemsDesktop:[1199,3],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,1],
@@ -171,22 +188,21 @@ owlHeaderFooterService.owlCarousel({
     paginationNumbers: false,
     autoPlay:false,
     rewindNav:false,
+    navigation:true,
+    navigationText: [
+        "<a id='service-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='service-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 
-});
-// Custom Navigation Events
-$(".service-page-next").click(function(){
-    owlHeaderFooterService.trigger('owl.next');
-});
-$(".service-page-prev").click(function(){
-    owlHeaderFooterService.trigger('owl.prev');
 });
 
 
 /*======================== Sponsor Slider =============================*/
 
 var owlHeaderFooterSponsor = $("#sponsor-page-slider");
-owlHeaderFooterService.owlCarousel({
+owlHeaderFooterSponsor.owlCarousel({
     items:6,
+    slideSpeed : 3000,
     itemsDesktop:[1199,3],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,1],
@@ -194,23 +210,20 @@ owlHeaderFooterService.owlCarousel({
     paginationNumbers: false,
     autoPlay:false,
     rewindNav:false,
+    navigation:true,
+    navigationText: [
+        "<a id='sponsor-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='sponsor-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 
 });
-// Custom Navigation Events
-$(".sponsor-page-next").click(function(){
-    owlHeaderFooterService.trigger('owl.next');
-});
-$(".sponsor-page-prev").click(function(){
-    owlHeaderFooterService.trigger('owl.prev');
-});
-
 
 /*======================== Team Slider =============================*/
 
 var owlHeaderFooterTeam = $("#team-page-slider");
-
 owlHeaderFooterTeam.owlCarousel({
-    items:4,
+    items:columnItem,
+    slideSpeed : 3000,
     itemsDesktop:[1199,3],
     itemsDesktopSmall:[979,2],
     itemsTablet:[768,1],
@@ -218,16 +231,14 @@ owlHeaderFooterTeam.owlCarousel({
     paginationNumbers: false,
     autoPlay:false,
     rewindNav:false,
+    navigation:true,
+    navigationText: [
+        "<a id='team-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='team-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
+
 
 });
-// Custom Navigation Events
-$(".team-page-next").click(function(){
-    owlHeaderFooterTeam.trigger('owl.next');
-});
-$(".team-page-prev").click(function(){
-    owlHeaderFooterTeam.trigger('owl.prev');
-});
-
 
 /*======================== Testimonial Slider =============================*/
 
@@ -235,25 +246,19 @@ var owlHeaderFooterTestimonial = $("#testimonial-page-slider");
 
 owlHeaderFooterTestimonial.owlCarousel({
     items:1,
+    slideSpeed : 3000,
     itemsDesktop:[1000,2],
     itemsDesktopSmall:[979,1],
     itemsTablet:[768,1],
     pagination:false,
-    navigation:false,
-    slideSpeed:1000,
     singleItem:true,
     transitionStyle:"backSlide",
-    navigationText:["",""],
     autoPlay:false,
     rewindNav : false,
+    navigation:true,
+    navigationText: [
+        "<a id='testimonial-page-prev' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='testimonial-page-next' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
 
 });
-// Custom Navigation Events
-$(".testimonial-page-next").click(function(){
-    owlHeaderFooterTestimonial.trigger('owl.next');
-});
-$(".testimonial-page-prev").click(function(){
-    owlHeaderFooterTestimonial.trigger('owl.prev');
-});
-
-

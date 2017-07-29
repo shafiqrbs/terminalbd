@@ -536,37 +536,6 @@ ul.dropdown-cart li .item-right button {
     height: 33px !important;
 }
 
-.owl-prev, .owl-next {opacity: 0 !important;}
-.owl-carousel:hover .owl-controls .owl-buttons .owl-prev {opacity: 1 !important;}
-.owl-carousel:hover .owl-controls .owl-buttons .owl-next {opacity: 1 !important;}
-.owl-carousel:hover .owl-controls .owl-buttons .owl-next .btn , .owl-carousel:hover .owl-controls .owl-buttons .owl-prev .btn{
-    border-radius: 50%;
-    width: 42px;
-    height: 42px;
-    line-height: 36px;
-    padding: 0;
-    margin: 0;
-
-}
-.owl-carousel:hover .owl-controls .owl-buttons .owl-next .btn:hover,
-.owl-carousel:hover .owl-controls .owl-buttons .owl-prev .btn:hover{
-    background-color: #002842
-}
-
-
-.owl-theme .owl-controls .owl-buttons div.owl-next {
-    right: 25px;
-}
-.owl-theme .owl-controls .owl-buttons div.owl-prev {
-    left: 25px;
-}
-.owl-theme .owl-controls .owl-buttons div.owl-prev,
-.owl-theme .owl-controls .owl-buttons div.owl-next{
-    top: 31%;
-    position: absolute;
-    padding: 0!important;
-    background: rgba(255,255,255,.8)!important;
-}
 
 .panel{
     border-radius: 0;

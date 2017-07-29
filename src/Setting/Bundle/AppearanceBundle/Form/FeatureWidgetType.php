@@ -64,7 +64,8 @@ class FeatureWidgetType extends AbstractType
                     'body-bottom'               => 'Body Bottom',
                     'sidebar-top'               => 'Sidebar Top',
                     'sidebar-bottom'            => 'Sidebar Bottom',
-                    'footer'                    => 'Footer',
+                    'footer-top'                => 'Footer Top',
+                    'footer-bottom'             => 'Footer Bottom',
                 ),
             ))
             ->add('category', 'entity', array(
@@ -132,7 +133,7 @@ class FeatureWidgetType extends AbstractType
                         ->orderBy('e.name','ASC');
                 },
             ))
-            ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap','rows' => 6)))
+            ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap wysihtml5','rows' => 6)))
             ->add('sliderFeature', 'choice', array(
                 'attr'=>array('class'=>'span12  m-wrap targetTo'),
                 'empty_value' => '---Slider with Feature ---',
@@ -151,6 +152,66 @@ class FeatureWidgetType extends AbstractType
                     'left'               => 'Left',
                     'right'             => 'Right',
                 ),
+            ))
+            ->add('pageFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))
+            ->add('moduleFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))
+            ->add('moduleShowLimit','number', array('attr'=>array('class'=>'span12 m-wrap')))
+            ->add('moduleShowType', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'list'                => 'List',
+                    'grid'                => 'Grid',
+                    'slider'              => 'Slider',
+                ),
+            ))
+
+            ->add('pageShowType', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'list'                => 'List',
+                    'grid'                => 'Grid',
+                    'slider'              => 'Slider',
+                ),
+            ))
+
+
+            ->add('page', 'entity', array(
+                'required'    => false,
+                'multiple'    => true,
+                'class' => 'Setting\Bundle\ContentBundle\Entity\Page',
+                'empty_value' => '---Select Page---',
+                'property' => 'name',
+                'attr'=>array('class'=>'m-wrap span12 select2'),
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.module = 12")
+                        ->andWhere("e.globalOption = $this->globalId")
+                        ->orderBy('e.name','ASC');
+                },
+            ))
+
+            ->add('module', 'entity', array(
+                'required'    => false,
+                'multiple'    => false,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\Module',
+                'empty_value' => '---Select page module---',
+                'property' => 'name',
+                'attr'=>array('class'=>'m-wrap span12 select2'),
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->join('e.nav' ,'n')
+                        ->where("e.status = 1")
+                        ->andWhere("e.isSingle != 1")
+                        ->andWhere("n.module != 12")
+                        ->andWhere("n.module is not NULL")
+                        ->andWhere("n.globalOption = $this->globalId")
+                        ->orderBy('e.name','ASC');
+                },
             ))
             ->add('featureBrand')
             ->add('featureCategory')

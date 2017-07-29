@@ -229,6 +229,7 @@ class WebsiteWidgetController extends Controller
         $data = $request->request->all();
         if ($editForm->isValid()) {
 
+            $entity->setPageName($entity->getMenu()->getSlug());
             $name = $entity->getPageName().'-'.$entity->getPosition();
             $entity->setName($name);
             $em->flush();

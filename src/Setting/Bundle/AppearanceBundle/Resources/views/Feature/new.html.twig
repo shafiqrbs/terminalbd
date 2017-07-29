@@ -137,13 +137,25 @@
                                     </div>
 
                                 </div>
+                                <div class="row-fluid {% if entity.targetTo != 'Brand' %}hide{% endif %}" id="Brand">
+                                    <div class="span12 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Brand</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.brand) }}
+                                                {{ form_errors(form.brand) }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
                                 <div class="row-fluid {% if entity.targetTo != 'Page' %}hide{% endif %}" id="Page">
                                     <div class="span12 ">
                                         <div class="control-group">
                                             <label class="control-label" >Page</label>
                                             <div class="controls">
-                                                {{ form_widget(form.page) }}
-                                                {{ form_errors(form.page) }}
+                                                {{ form_widget(form.menu) }}
+                                                {{ form_errors(form.menu) }}
                                             </div>
                                         </div>
                                     </div>
@@ -251,7 +263,6 @@
                         <div class="form-actions portlet box grey">
                             <div class="pull-center">
                                 <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
-                                <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
                                 {% if(entity.id > 0 ) %}
                                     <a href="{{ path('appearancefeature_delete',{'id': entity.id} ) }}"  class="btn red confirm" title="Are you sure went to delete?"><i class="icon-remove"></i> Delete</a>
                                 {% endif %}

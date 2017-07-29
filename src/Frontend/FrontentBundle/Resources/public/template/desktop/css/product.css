@@ -1,3 +1,8 @@
+
+.panel-filter{
+    width: 95%;
+}
+
 .product-item{
     margin-bottom: 20px;
 }
@@ -112,10 +117,13 @@
 .product-feature-box:hover .social li a{
     opacity: 1;
 }
+/*
 .product-feature-box .social li a:hover{
     background: #ff002e;
     color: #fff;
 }
+*/
+
 @media only screen and (max-width:990px){
     .product-feature-box{ margin-bottom: 30px; }
 }

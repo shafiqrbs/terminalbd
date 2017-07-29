@@ -6,22 +6,12 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if widget.page is not empty %}
-<div class="blog-sidebar">
+<div class="blog-sidebar page-carousel">
     {% if  widget.pageFeatureName is not empty or widget.pageShowType == 'slider' %}
         <div class="page-title-bar">
             {% if  widget.pageFeatureName is not empty %}
-                <div class="col-md-9" >
+                <div class="col-md-12" >
                     <div class="page-title"><i class="fa fa-book"></i>&nbsp;{{ widget.pageFeatureName }}</div>
-                </div>
-            {% endif %}
-            {% if widget.pageShowType == 'slider' %}
-                <div class="col-md-3 text-right owl-position" >
-                    <a class='feature-page-prev' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-left'></span>
-                    </a>
-                    <a class='feature-page-next' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-right'></span>
-                    </a>
                 </div>
             {% endif %}
         </div>
@@ -52,7 +42,7 @@
         </div>
     {% elseif widget.pageShowType == 'slider' %}
         <div class="row">
-            <div id="feature-sidebar-slider" class="owl-carousel">
+            <div id="feature-sidebar-slider" class="">
                 {% for entity in  widget.page  %}
                     <div class="col-md-12 wow fadeInDown" data-wow-delay="2s" >
                         <div class="sidebar-blog">
@@ -90,23 +80,13 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if entities is defined and entities is not empty and widget.module.slug == 'blog' %}
-    <div class="blog-sidebar">
+    <div class="blog-sidebar page-carousel">
 
         {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
             <div class="page-title-bar">
                 {% if  widget.moduleFeatureName is not empty %}
-                    <div class="col-md-9" >
+                    <div class="col-md-12" >
                         <div class="page-title"><i class="fa fa-book"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-                    </div>
-                {% endif %}
-                {% if widget.moduleShowType == 'slider' %}
-                    <div class="col-md-3 text-right owl-position" >
-                        <a class='blog-sidebar-prev' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-left'></span>
-                        </a>
-                        <a class='blog-sidebar-next' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-right'></span>
-                        </a>
                     </div>
                 {% endif %}
             </div>
@@ -129,36 +109,36 @@
                 {% endfor %}
             </div>
         {% elseif widget.moduleShowType == 'slider' %}
-            <div class="row card-grid">
-                <div class="col-md-12">
-                <div id="blog-sidebar-slider" class="owl-carousel">
+            <div class="row">
+                <div id="blog-sidebar-slider" class="">
                     {% for entity in entities  %}
-                        <div class="sidebar-blog">
-                            <div class="post-img">
-                                <img src="{{ image(entity.webPath).resize(400,400) }}" alt="">
-                                <div class="over-layer">
-                                    <ul class="post-link">
-                                        <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'blog','slug':entity.slug }) }}" class="fa fa-link"></a></li>
+                        <div class="col-md-12">
+                            <div class="sidebar-blog">
+                                <div class="post-img">
+                                    <img src="{{ image(entity.webPath).resize(400,400) }}" alt="">
+                                    <div class="over-layer">
+                                        <ul class="post-link">
+                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'blog','slug':entity.slug }) }}" class="fa fa-link"></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="post-review">
+                                    <h5 class="post-title"><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'blog','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                                    <ul class="post-info">
+                                        <li><i class="fa fa-calendar"></i> {{ entity.updated|date("d F, Y") }}</li>
+                                        <li><i class="fa fa-user"></i> {{ entity.authorName }}</li>
+                                        <li><i class="fa fa-tags"></i></li>
+                                        <li>{% if entity.moduleCategory is defined and entity.moduleCategory is not empty %}
+                                                {% for  cat in entity.moduleCategory %}
+                                                    <a href="{{  path(globalOption.subDomain ~ '_webservice_module_category',{'module': 'news','slug':cat.slug }) }}">{{ cat.name }}</a>{% if not loop.last %},{% endif %}
+                                                {% endfor %}
+                                            {% endif %}</li>
                                     </ul>
                                 </div>
-                            </div>
-                            <div class="post-review">
-                                <h5 class="post-title"><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'blog','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
-                                <ul class="post-info">
-                                    <li><i class="fa fa-calendar"></i> {{ entity.updated|date("d F, Y") }}</li>
-                                    <li><i class="fa fa-user"></i> {{ entity.authorName }}</li>
-                                    <li><i class="fa fa-tags"></i></li>
-                                    <li>{% if entity.moduleCategory is defined and entity.moduleCategory is not empty %}
-                                            {% for  cat in entity.moduleCategory %}
-                                                <a href="{{  path(globalOption.subDomain ~ '_webservice_module_category',{'module': 'news','slug':cat.slug }) }}">{{ cat.name }}</a>{% if not loop.last %},{% endif %}
-                                            {% endfor %}
-                                        {% endif %}</li>
-                                </ul>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
-            </div>
             </div>
         {% else %}
              <div class="col-md-12">
@@ -174,23 +154,13 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if entities is defined and entities is not empty and widget.module.slug == 'branch' %}
-    <div class="blog-sidebar">
+    <div class="blog-sidebar page-carousel">
 
         {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
             <div class="page-title-bar">
                 {% if  widget.moduleFeatureName is not empty %}
-                    <div class="col-md-9" >
+                    <div class="col-md-12" >
                         <div class="page-title"><i class="fa fa-map-marker"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-                    </div>
-                {% endif %}
-                {% if widget.moduleShowType == 'slider' %}
-                    <div class="col-md-3 text-right owl-position" >
-                        <a class='branch-sidebar-prev' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-left'></span>
-                        </a>
-                        <a class='branch-sidebar-next' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-right'></span>
-                        </a>
                     </div>
                 {% endif %}
             </div>
@@ -213,21 +183,21 @@
             </div>
         {% elseif widget.moduleShowType == 'slider'  %}
             <div class="row">
-                <div class="col-md-12">
-                    <div id="branch-sidebar-slider" class="owl-carousel">
-                        {% for  entity in entities %}
-                            <div class="sidebar-branch">
-                                <span class="text-center branch-head" >{{ entity.name }}</span>
-                                <dl>
-                                    <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
-                                    <dd><i class="fa fa-mobile"></i>&nbsp;+ 088 {{ entity.mobile|raw }}</dd>
-                                    {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
-                                    <dd class="text-center"><a class="btn btn-sm  btn-info" target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}">Direction</a></dd>
-                                </dl>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
+               <div id="branch-sidebar-slider" class="">
+                   {% for  entity in entities %}
+                       <div class="col-md-12">
+                           <div class="sidebar-branch">
+                               <span class="text-center branch-head" >{{ entity.name }}</span>
+                               <dl>
+                                   <dd><i class="fa fa-home"></i>&nbsp;{{ entity.address|raw }}</dd>
+                                   <dd><i class="fa fa-mobile"></i>&nbsp;+ 088 {{ entity.mobile|raw }}</dd>
+                                   {% if(entity.email) %}<dd><i class="fa fa-envelope-o"></i>&nbsp;{{ entity.email|raw }}</dd>{% endif %}
+                                   <dd class="text-center"><a class="btn btn-sm  btn-info" target="_blank" href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}">Direction</a></dd>
+                               </dl>
+                           </div>
+                       </div>
+                   {% endfor %}
+               </div>
             </div>
         {% else %}
             <div class="col-md-12">
@@ -243,29 +213,19 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if entities is defined and entities is not empty  and widget.module.slug == 'client' %}
-    <div class="blog-sidebar blog-sidebar-override" >
+    <div class="blog-sidebar blog-sidebar-override page-carousel" >
         {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
             <div class="page-title-bar">
                 {% if  widget.moduleFeatureName is not empty %}
-                    <div class="col-md-9" >
+                    <div class="col-md-12" >
                         <div class="page-title"><i class="fa fa-building"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-                    </div>
-                {% endif %}
-                {% if widget.moduleShowType == 'slider' %}
-                    <div class="col-md-3 text-right owl-position" >
-                        <a class='client-sidebar-prev' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-left'></span>
-                        </a>
-                        <a class='client-sidebar-next' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-right'></span>
-                        </a>
                     </div>
                 {% endif %}
             </div>
         {% endif %}
         <div class="row">
             {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
-                <div id="client-sidebar-slider" class="owl-carousel">
+                <div id="client-sidebar-slider" class="">
                     {% for key,entity in entities  %}
                         <div class="col-md-12 col-sm-12">
                             <div class="client-sidebar">
@@ -295,29 +255,20 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if entities is defined and entities is not empty  and widget.module.slug == 'event' %}
-    <div class="blog-sidebar blog-sidebar-override" >
+    <div class="blog-sidebar blog-sidebar-override page-carousel" >
         {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
             <div class="page-title-bar">
                 {% if  widget.moduleFeatureName is not empty %}
-                    <div class="col-md-9" >
+                    <div class="col-md-12" >
                         <div class="page-title"><i class="fa fa-building"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
                     </div>
                 {% endif %}
-                {% if widget.moduleShowType == 'slider' %}
-                    <div class="col-md-3 text-right owl-position" >
-                        <a class='event-sidebar-prev' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-left'></span>
-                        </a>
-                        <a class='event-sidebar-next' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-right'></span>
-                        </a>
-                    </div>
-                {% endif %}
+
             </div>
         {% endif %}
         {% if  widget.moduleShowType == 'slider' %}
             <div class="row">
-                <div id="event-sidebar-slider" class="owl-carousel">
+                <div id="event-sidebar-slider" class="">
                     {% for entity in entities  %}
                         <div class="col-md-12">
                             <div class="event-sidebar">
@@ -381,7 +332,7 @@
             <div class="page-title-bar">
                 {% if  widget.moduleFeatureName is not empty %}
                     <div class="col-md-12" >
-                        <div class="page-title"><i class="fa fa-building"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
+                        <div class="page-title"><i class="fa fa-comments"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
                     </div>
                 {% endif %}
             </div>
@@ -412,22 +363,12 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if entities is defined and entities is not empty and widget.module.slug == 'news' %}
-    <div class="blog-sidebar">
+    <div class="blog-sidebar page-carousel">
         {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
             <div class="page-title-bar">
                 {% if  widget.moduleFeatureName is not empty %}
-                    <div class="col-md-9" >
+                    <div class="col-md-12" >
                         <div class="page-title"><i class="fa fa-newspaper-o"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-                    </div>
-                {% endif %}
-                {% if widget.moduleShowType == 'slider' %}
-                    <div class="col-md-3 text-right owl-position" >
-                        <a class='news-sidebar-prev' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-left'></span>
-                        </a>
-                        <a class='news-sidebar-next' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-right'></span>
-                        </a>
                     </div>
                 {% endif %}
             </div>
@@ -452,7 +393,7 @@
             </div>
         {% elseif widget.moduleShowType == 'slider' %}
             <div class="row">
-               <div id="news-sidebar-slider" class="owl-carousel">
+               <div id="news-sidebar-slider" class="">
                         {% for entity in entities  %}
                         <div class="col-md-12">
                             <div class="sidebar-blog">
@@ -496,29 +437,19 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if entities is defined and entities is not empty and widget.module.slug == 'noticeboard' %}
-    <div class="blog-sidebar blog-sidebar-override">
+    <div class="blog-sidebar blog-sidebar-override page-carousel">
         {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
             <div class="page-title-bar">
                 {% if  widget.moduleFeatureName is not empty %}
-                    <div class="col-md-9" >
+                    <div class="col-md-12" >
                         <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-                    </div>
-                {% endif %}
-                {% if widget.moduleShowType == 'slider' %}
-                    <div class="col-md-3 text-right owl-position" >
-                        <a class='notice-sidebar-prev' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-left'></span>
-                        </a>
-                        <a class='notice-sidebar-next' href='javascript:'>
-                            <span class='glyphicon glyphicon-chevron-right'></span>
-                        </a>
                     </div>
                 {% endif %}
             </div>
         {% endif %}
     {% if widget.moduleShowType == 'slider' %}
         <div class="row">
-            <div id="notice-sidebar-slider" class="owl-carousel">
+            <div id="notice-sidebar-slider" class="">
                 {% for entity in entities  %}
                     <div class="col-md-12">
                         <div class="notice-list">
@@ -557,26 +488,16 @@
     </div>
 {% endif %}
 {% if entities is defined and entities is not empty  and widget.module.slug == 'portfolio' %}
-    <div class="blog-sidebar blog-sidebar-override">
+    <div class="blog-sidebar blog-sidebar-override page-carousel">
         <div class="page-title-bar">
-            <div class="col-md-9" >
+            <div class="col-md-12" >
                 <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
             </div>
-            {% if widget.moduleShowType == 'slider' %}
-                <div class="col-md-3 text-right owl-position" >
-                    <a class='portfolio-sidebar-prev' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-left'></span>
-                    </a>
-                    <a class='portfolio-sidebar-next' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-right'></span>
-                    </a>
-                </div>
-            {% endif %}
         </div>
         <div class="clearfix"></div>
         {% if widget.moduleShowType == 'slider' %}
             <div class="row">
-                <div id="portfolio-sidebar-slider" class="owl-carousel">
+                <div id="portfolio-sidebar-slider" class="">
                     {% for key,portfolio in entities  %}
                         <div class="col-md-12 col-sm-12">
                             <div class="our-portfolio">
@@ -611,26 +532,16 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty  and widget.module.slug == 'service' %}
-    <div class="blog-sidebar blog-sidebar-override">
+    <div class="blog-sidebar blog-sidebar-override page-carousel">
         <div class="page-title-bar">
-            <div class="col-md-9" >
+            <div class="col-md-12" >
                 <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
             </div>
-            {% if widget.moduleShowType == 'slider' %}
-                <div class="col-md-3 text-right owl-position" >
-                    <a class='service-sidebar-prev' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-left'></span>
-                    </a>
-                    <a class='service-sidebar-next' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-right'></span>
-                    </a>
-                </div>
-            {% endif %}
         </div>
         <div class="clearfix"></div>
         {% if widget.moduleShowType == 'slider' %}
             <div class="row">
-                <div id="service-sidebar-slider" class="owl-carousel">
+                <div id="service-sidebar-slider" class="">
                     {% for entity in entities  %}
                         <div class="col-md-12">
                             <div class="sidebar-serviceBox">
@@ -666,26 +577,16 @@
     </div>
 {% endif %}
 {% if entities is defined and entities is not empty  and widget.module.slug == 'sponsor' %}
-    <div class="blog-sidebar blog-sidebar-override">
+    <div class="blog-sidebar blog-sidebar-override page-carousel">
         <div class="page-title-bar">
-            <div class="col-md-9" >
+            <div class="col-md-12" >
                 <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
             </div>
-            {% if widget.moduleShowType == 'slider' %}
-                <div class="col-md-3 text-right owl-position" >
-                    <a class='sponsor-sidebar-prev' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-left'></span>
-                    </a>
-                    <a class='sponsor-sidebar-next' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-right'></span>
-                    </a>
-                </div>
-            {% endif %}
         </div>
         <div class="clearfix"></div>
         {% if widget.moduleShowType == 'slider' %}
             <div class="row">
-                <div id="sponsor-sidebar-slider" class="owl-carousel">
+                <div id="sponsor-sidebar-slider" class="">
                     {% for entity in entities  %}
                         <div class="col-md-12">
                             <div class="box-sidebar-portfolio">
@@ -716,26 +617,16 @@
     </div>
 {% endif %}
 {% if entities is defined and entities is not empty and widget.module.slug == 'team' %}
-    <div class="blog-sidebar blog-sidebar-override">
+    <div class="blog-sidebar blog-sidebar-override page-carousel">
         <div class="page-title-bar">
-            <div class="col-md-9" >
+            <div class="col-md-12" >
                 <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
             </div>
-            {% if widget.moduleShowType == 'slider' %}
-                <div class="col-md-3 text-right owl-position" >
-                    <a class='team-sidebar-prev' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-left'></span>
-                    </a>
-                    <a class='team-sidebar-next' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-right'></span>
-                    </a>
-                </div>
-            {% endif %}
         </div>
         <div class="clearfix"></div>
         <div class="row">
             {% if widget.moduleShowType == 'slider' %}
-                <div id="team-sidebar-slider" class="owl-carousel">
+                <div id="team-sidebar-slider" class="">
                     {% for key,team in entities  %}
                         <div class="col-md-12">
                             <div class="our-team">
@@ -803,21 +694,11 @@
     </div>
 {% endif %}
 {% if entities is defined and entities is not empty  and widget.module.slug == 'testimonial' %}
-    <div class="blog-sidebar blog-sidebar-override">
+    <div class="blog-sidebar blog-sidebar-override page-carousel">
         <div class="page-title-bar">
-            <div class="col-md-9" >
+            <div class="col-md-12" >
                 <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
             </div>
-            {% if widget.moduleShowType == 'slider' %}
-                <div class="col-md-3 text-right owl-position" >
-                    <a class='testimonial-sidebar-prev' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-left'></span>
-                    </a>
-                    <a class='testimonial-sidebar-next' href='javascript:'>
-                        <span class='glyphicon glyphicon-chevron-right'></span>
-                    </a>
-                </div>
-            {% endif %}
         </div>
         <div class="row">
             {% if widget.moduleShowType == 'slider' %}

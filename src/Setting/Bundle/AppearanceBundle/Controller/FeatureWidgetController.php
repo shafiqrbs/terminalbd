@@ -70,6 +70,7 @@ class FeatureWidgetController extends Controller
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
             $entity->setGlobalOption($user->getGlobalOption());
+            $entity->setPageName($entity->getMenu()->getMenu());
             $name = $entity->getPageName().'-'.$entity->getPosition();
             $entity->setName($name);
             $entity->setWidgetFor('e-commerce');
@@ -228,6 +229,7 @@ class FeatureWidgetController extends Controller
         $data = $request->request->all();
         if ($editForm->isValid()) {
 
+            $entity->setPageName($entity->getMenu()->getMenu());
             $name = $entity->getPageName().'-'.$entity->getPosition();
             $entity->setName($name);
             $em->flush();

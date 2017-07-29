@@ -414,10 +414,29 @@ class Menu
 
         $data = false;
         if (!empty($this->featureWidgets)){
+
             foreach ($this->featureWidgets as $feature) {
 
                 /* @var FeatureWidget $feature */
                 if ($feature->getPosition() == 'sidebar-top' || $feature->getPosition() == 'sidebar-bottom') {
+                    $data = true;
+                }
+            }
+        }
+        return $data;
+
+    }
+
+    public function getFeatureWidgetPositionExist($position)
+    {
+
+        $data = false;
+        if (!empty($this->featureWidgets)){
+
+            foreach ($this->featureWidgets as $feature) {
+
+                /* @var FeatureWidget $feature */
+                if ($feature->getPosition() == $position ) {
                     $data = true;
                 }
             }

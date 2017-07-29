@@ -12,6 +12,80 @@
             cursor: pointer;
         }
     {% endif %}
+    {% if globalOption.templateCustomize.buttonBgColor is not empty %}
+        .product-feature-box .social li a{
+            background-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
+        }
+    {% endif %}
+    {% if globalOption.templateCustomize.buttonBgColorHover is not empty %}
+        .product-feature-box .social li a:hover{
+            background-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;
+        }
+    {% endif %}
+
+    .page-title-bar{
+
+        {% if globalOption.templateCustomize.titleHeight is not empty %}
+            height: {{ globalOption.templateCustomize.titleHeight }}px!important;
+        {% endif %}
+        {% if globalOption.templateCustomize.titleFontColor is not empty %}
+            color: {{ globalOption.templateCustomize.titleFontColor }}!important;
+        {% endif %}
+        {% if globalOption.templateCustomize.titleBorderColor is not empty %}
+            border: 1px solid  {{ globalOption.templateCustomize.titleBorderColor }}!important;
+        {% endif %}
+        {% if globalOption.templateCustomize.titleBgColor is not empty %}
+            background-color: {{ globalOption.templateCustomize.titleBgColor }}!important;
+        {% endif %}
+        {% if globalOption.templateCustomize.titleFontSize is not empty %}
+            font-size: {{ globalOption.templateCustomize.titleFontSize }}!important;
+        {% endif %}
+        {% if globalOption.templateCustomize.titleMarginBottom is not empty %}
+            margin-bottom: {{ globalOption.templateCustomize.titleMarginBottom }}px!important;
+        {% endif %}
+        {% if globalOption.templateCustomize.titleTextAlign is not empty %}
+            text-align:{{ globalOption.templateCustomize.titleTextAlign }}!important;
+        {% endif %}
+
+
+    }
+    .page-title{
+
+        {% if globalOption.templateCustomize.titleHeight is not empty %}
+            line-height: {{ globalOption.templateCustomize.titleHeight }}px!important;
+        {% endif %}
+        {% if globalOption.templateCustomize.titleFontSize is not empty %}
+            font-size: {{ globalOption.templateCustomize.titleFontSize }}!important;
+        {% endif %}
+    }
+
+    .feature-carousel .owl-controls {
+        {% if globalOption.templateCustomize.sliderTopPosition is not empty %}
+            top: {{ globalOption.templateCustomize.sliderTopPosition }}%!important;
+        {% endif %}
+        {% if globalOption.templateCustomize.sliderRightPosition is not empty %}
+            right: {{ globalOption.templateCustomize.sliderRightPosition }}%!important;
+        {% endif %}
+    }
+
+
+    {% if globalOption.templateCustomize.homeBgColor is not empty %}
+    .home{
+        background-color: {{ globalOption.templateCustomize.homeBgColor }} !important;
+    }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.homeAnchorColor is not empty %}
+    .home a{
+        color: {{ globalOption.templateCustomize.homeAnchorColor }} !important;
+    }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.homeAnchorColorHover is not empty %}
+    .home a:hover{
+        color: {{ globalOption.templateCustomize.homeAnchorColorHover }} !important;
+    }
+    {% endif %}
 
     /* Customize Template for Customer demand*/
     {% if globalOption.templateCustomize.siteBgColor is not empty %}
@@ -70,6 +144,17 @@
         min-height:520px;
         min-width: 320px;
     }
+    {% if globalOption.templateCustomize.bodyColor  is not empty%}
+    .bodyColor{
+        background-color: {{ globalOption.templateCustomize.bodyColor }}!important ;
+    }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.siteBgColor  is not empty%}
+    .siteBgColor{
+        background-color: {{ globalOption.templateCustomize.siteBgColor }}!important ;
+    }
+    {% endif %}
 
     .header-line-center , .header-line-center-bottom, .header-line-right, .header-double-line-right {
         color: {{ globalOption.templateCustomize.dividerTitleColor }}!important;

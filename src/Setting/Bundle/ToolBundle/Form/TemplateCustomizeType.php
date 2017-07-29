@@ -29,9 +29,51 @@ class TemplateCustomizeType extends AbstractType
                 'placeholder'=>'')
             ))
 
+            ->add('homeBgColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+
+            ->add('homeAnchorColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+
+            ->add('homeAnchorColorHover','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+
+
             ->add('siteFontSize', 'choice', array(
                 'attr'=>array('class'=>'selectbox span12'),
                 'choices' => array('10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
+            ))
+
+            ->add('titleTextAlign', 'choice', array(
+                'attr'=>array('class'=>'selectbox span12'),
+                'choices' => array('left' => 'Left',  'center' => 'Center', 'right' => 'Right'),
+            ))
+
+            ->add('titleHeight','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Title height')))
+            ->add('titleMarginBottom','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Title border margin')))
+            ->add('sliderTopPosition','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Slider Top')))
+            ->add('sliderRightPosition','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Slider Right')))
+            ->add('titleBgColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            ->add('titleFontColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            ->add('titleBorderColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            ->add('titleFontSize', 'choice', array(
+                'attr'=>array('class'=>'selectbox span12'),
+                'choices' => array('' => 'Font Size', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px', ),
             ))
 
             ->add('siteFontFamily', 'choice', array(

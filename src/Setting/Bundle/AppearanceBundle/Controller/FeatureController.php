@@ -42,11 +42,13 @@ class FeatureController extends Controller
         $appModules = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getAppmoduleArray($globalOption);
         $result = array_intersect($appModules, array('Ecommerce'));
         if (!empty($result)) {
-            $form   = $this->createPageEditForm($entity);
-            $twig ='page';
-        }else{
             $form   = $this->createCreateForm($entity);
             $twig ='new';
+
+        }else{
+
+            $form   = $this->createPageCreateForm($entity);
+            $twig ='page';
         }
         $form->handleRequest($request);
 
@@ -128,12 +130,15 @@ class FeatureController extends Controller
 
         $appModules = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getAppmoduleArray($globalOption);
         $result = array_intersect($appModules, array('Ecommerce'));
+
         if (!empty($result)) {
-            $form   = $this->createPageCreateForm($entity);
-            $twig ='page';
-        }else{
             $form   = $this->createCreateForm($entity);
             $twig ='new';
+
+        }else{
+
+            $form   = $this->createPageCreateForm($entity);
+            $twig ='page';
         }
 
         return $this->render('SettingAppearanceBundle:Feature:'. $twig .'.html.twig', array(
@@ -181,11 +186,13 @@ class FeatureController extends Controller
         $appModules = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getAppmoduleArray($globalOption);
         $result = array_intersect($appModules, array('Ecommerce'));
         if (!empty($result)) {
-            $form   = $this->createPageEditForm($entity);
-            $twig ='page';
-        }else{
             $form   = $this->createEditForm($entity);
             $twig ='new';
+
+        }else{
+
+            $form   = $this->createPageEditForm($entity);
+            $twig ='page';
         }
         return $this->render('SettingAppearanceBundle:Feature:'.$twig.'.html.twig', array(
             'entity'        => $entity,
@@ -239,10 +246,9 @@ class FeatureController extends Controller
      * Edits an existing Feature entity.
      *
      */
-    public function updateAction(Request $request, $id)
+    public function updateAction(Request $request, Feature $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SettingAppearanceBundle:Feature')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Feature entity.');
@@ -252,19 +258,21 @@ class FeatureController extends Controller
         $appModules = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->getAppmoduleArray($globalOption);
         $result = array_intersect($appModules, array('Ecommerce'));
         if (!empty($result)) {
-            $editForm   = $this->createPageEditForm($entity);
-            $twig ='page';
-        }else{
-            $editForm   = $this->createCreateForm($entity);
+            $form   = $this->createEditForm($entity);
             $twig ='new';
-        }
-        $editForm->handleRequest($request);
 
-        if ($editForm->isValid()) {
+        }else{
+
+            $form   = $this->createPageEditForm($entity);
+            $twig ='page';
+        }
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
             if($entity->upload()){
                 $entity->removeUpload();
             }
-
             $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -275,7 +283,7 @@ class FeatureController extends Controller
         return $this->render('SettingAppearanceBundle:Feature:'.$twig.'.html.twig', array(
 
             'entity'      => $entity,
-            'form'   => $editForm->createView(),
+            'form'   => $form->createView(),
         ));
     }
 
