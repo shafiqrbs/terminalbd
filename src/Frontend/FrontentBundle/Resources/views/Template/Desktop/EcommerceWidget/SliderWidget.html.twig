@@ -40,15 +40,16 @@
         top: 50%;
 
         /* number background */
-        background: #87ceeb;
+        background: #222;
         height: 2em;
         width: 2em;
         margin-top: -1em;
-        line-height: 1.5em;
+        line-height: 1.3em;
         border: .3em solid #fff;
         text-align: center;
         font-weight: bold;
         border-radius: 2em;
+        color: #ffffff;
     }
 
     .widget-feature-center {
@@ -62,9 +63,27 @@
 
     }
 
+    .slider-left{
+        position: relative;
+        margin-right: -15px;
+        margin-left: 15px;
+    }
+    .slider-right{
+        position: relative;
+        margin-left: -15px;
+    }
+
+    ui-slider-tabs-list li.selected a:before {
+        border-color: rgba(194, 225, 245, 0);
+        border-bottom-color: #ccc;
+        border-width: 12px;
+        margin-left: -14px;
+    }
+
+
 
 </style>
-<div class="col-md-3" data-match-height="slider-height" style="position: relative;">
+<div class="col-md-3 {% if position == 'left' %} slider-left {% else %} slider-right {% endif %} " data-match-height="slider-height">
 
     {% if feature == 'promotion' %}
         <div class="widget-feature-center">
@@ -80,7 +99,7 @@
         <div class="widget-feature-center">
             {% for entity in entities %}
             <div class="thumbnail wow fadeInDown" data-wow-delay="2s">
-             <a href="{{ path(globalOption.subDomain ~ '_webservice_product_tag',{'id':entity.promotion.id}) }}"  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt=""></a>
+             <a href="{{ path(globalOption.subDomain ~ '_webservice_product_tag',{'id':entity.tag.id}) }}"  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt=""></a>
             </div>
                 {% endfor %}
         </div>
@@ -97,12 +116,10 @@
     {% endif %}
 
     {% if feature == 'featureProduct' %}
-        <div class="widget-feature-center" style="margin-top: 10px">
+        <div class="widget-feature-center">
             {% for product in entities %}
-            <div class="thumbnail wow fadeInDown" data-wow-delay="2s">
                 <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"  > <img class="img-responsive" style="height: 137px"   src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt=""></a>
-            </div>
-                {% endfor %}
+            {% endfor %}
         </div>
     {% endif %}
 

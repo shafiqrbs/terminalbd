@@ -169,7 +169,7 @@ class EcommerceWidgetController extends Controller
         ));
     }
 
-    public function categoryShortWidgetAction(GlobalOption $globalOption)
+    public function categoryShortWidgetAction(GlobalOption $globalOption , $position)
     {
 
 
@@ -183,12 +183,13 @@ class EcommerceWidgetController extends Controller
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
             'entities'                  => $entities,
             'globalOption'              => $globalOption,
+            'position'                  => $position,
             'feature'                   => 'category',
         ));
 
     }
 
-    public function brandShortWidgetAction(GlobalOption $globalOption)
+    public function brandShortWidgetAction(GlobalOption $globalOption , $position)
     {
 
         $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureBrand')->getSliderFeatureBrand($globalOption);
@@ -201,13 +202,14 @@ class EcommerceWidgetController extends Controller
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
             'entities'                  => $entities,
             'globalOption'              => $globalOption,
+            'position'                   => $position,
             'feature'                   => 'brand',
         ));
 
     }
 
 
-    public function featureProductShortWidgetAction(GlobalOption $globalOption)
+    public function featureProductShortWidgetAction(GlobalOption $globalOption,$position)
     {
 
         $entities  = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->getSliderFeatureProduct($globalOption->getInventoryConfig());
@@ -220,12 +222,13 @@ class EcommerceWidgetController extends Controller
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
             'entities'                  => $entities,
             'globalOption'              => $globalOption,
+            'position'                  => $position,
             'feature'                   => 'featureProduct',
         ));
 
     }
 
-    public function promotionShortWidgetAction(GlobalOption $globalOption)
+    public function promotionShortWidgetAction(GlobalOption $globalOption ,$position)
     {
 
         $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->getSliderFeaturePromotion($globalOption,'Promotion');
@@ -238,12 +241,13 @@ class EcommerceWidgetController extends Controller
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
             'entities'                  => $entities,
             'globalOption'              => $globalOption,
+            'position'                   => $position,
             'feature'                   => 'promotion',
         ));
 
     }
 
-    public function tagShortWidgetAction(GlobalOption $globalOption)
+    public function tagShortWidgetAction(GlobalOption $globalOption,$position)
     {
 
         $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->getSliderFeaturePromotion($globalOption,'Tag');
@@ -256,13 +260,14 @@ class EcommerceWidgetController extends Controller
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
             'entities'                  => $entities,
             'globalOption'              => $globalOption,
+            'position'              => $position,
             'feature'                   => 'tag',
         ));
 
     }
 
 
-    public function discountShortWidgetAction(GlobalOption $globalOption)
+    public function discountShortWidgetAction(GlobalOption $globalOption,$position)
     {
 
         $entities  = $this->getDoctrine()->getRepository('SettingAppearanceBundle:Feature')->getSliderFeaturePromotion($globalOption,'Discount');
@@ -275,6 +280,7 @@ class EcommerceWidgetController extends Controller
         return $this->render('@Frontend/'.$theme.'.html.twig', array(
             'entities'                  => $entities,
             'globalOption'              => $globalOption,
+            'position'                   => $position,
             'feature'                   => 'discount',
         ));
 

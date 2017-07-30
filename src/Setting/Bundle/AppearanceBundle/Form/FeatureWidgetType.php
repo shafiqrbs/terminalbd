@@ -135,12 +135,17 @@ class FeatureWidgetType extends AbstractType
             ))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap wysihtml5','rows' => 6)))
             ->add('sliderFeature', 'choice', array(
-                'attr'=>array('class'=>'span12  m-wrap targetTo'),
+                'attr'=>array('class'=>'span12  m-wrap'),
                 'empty_value' => '---Slider with Feature ---',
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
                     'category'          => 'Category',
+                    'brand'             => 'Brand',
+                    'discount'          => 'Discount',
+                    'featureProduct'    => 'Feature Product',
+                    'promotion'         => 'Promotion',
+                    'tag'               => 'Tag',
                 ),
             ))
             ->add('sliderFeaturePosition', 'choice', array(

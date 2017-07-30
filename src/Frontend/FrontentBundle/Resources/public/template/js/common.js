@@ -1,13 +1,13 @@
 
 $('#main-carousel').carousel({
     wrap:true,
-    interval:5000
+    interval:15000
 });
 
 var owlMainPageSlider = $("#main-page-slider");
 owlMainPageSlider.owlCarousel({
     slideSpeed : 10000,
-    paginationSpeed : 14000,
+    paginationSpeed : 10000,
     pagination:true,
     singleItem:true
 });
@@ -20,9 +20,12 @@ $("#main-page-prev").click(function(){
     owlMainPageSlider.trigger('owl.prev');
 });
 
+$('#topTabCarousel').carousel({
+    interval:   10000
+});
 
 $('#bottomTabCarousel').carousel({
-    interval:   4000
+    interval:   10000
 });
 
 var clickEvent = false;

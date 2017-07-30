@@ -61,7 +61,7 @@ class PurchaseVendorItemRepository extends EntityRepository
     }
 
 
-    public function getSliderFeatureProduct($inventory,$limit = 3)
+    public function getSliderFeatureProduct($inventory, $limit = 3)
     {
 
         $qb = $this->createQueryBuilder('product');
