@@ -282,7 +282,7 @@ class GoodsItemRepository extends EntityRepository
         }
     }
 
-    public function insertProductToEcommerce($entity){
+    public function insertProductToEcommerce(PurchaseVendorItem $entity){
 
         $em = $this->_em;
         $rows=array();
@@ -365,7 +365,7 @@ class GoodsItemRepository extends EntityRepository
         }
     }
 
-    public function updateProductToEcommerce($entity){
+    public function updateProductToEcommerce(PurchaseVendorItem $entity){
 
         $em = $this->_em;
         $rows=array();
