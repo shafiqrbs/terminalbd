@@ -347,7 +347,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="promotion-slider-{{ loopId }}" >
+                    <div class="promotion-slider" >
                         {% for product in  widget.promotion.purchaseVendorItems |slice(0,12)  %}
                             <div class="col-md-12">
                                 <div class="thumbnail" data-match-height="item-promotion">
@@ -393,7 +393,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="tag-slider-{{ loopId }}" >
+                    <div class="tag-slider" >
                         {% for product in  widget.tag.purchaseVendorItems |slice(0,12)  %}
                             <div class="col-md-12">
                                 <div class="thumbnail" data-match-height="item-promotion">
@@ -439,7 +439,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="discount-slider-{{ loopId }}" class="">
+                    <div class="discount-slider" class="">
                         {% for product in  widget.discount.purchaseVendorItems |slice(0,12)  %}
                             <div class="col-md-12">
                                 <div class="thumbnail" data-match-height="item-promotion">
@@ -512,7 +512,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="brand-slider-{{ loopId }}">
+                    <div class="brand-slider">
                         {% for brand in  widget.globalOption.featureBrands  %}
                             <div class="col-md-12">
                                 <div class="thumbnail" data-match-height="feature-brand">
