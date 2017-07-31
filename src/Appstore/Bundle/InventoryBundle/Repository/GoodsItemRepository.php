@@ -339,7 +339,7 @@ class GoodsItemRepository extends EntityRepository
                     $goods->setMasterItem(1);
                 }
                 $em->persist($goods);
-                $em->flush();
+                $em->flush($goods);
                 $i ++ ;
 
             }
@@ -361,7 +361,7 @@ class GoodsItemRepository extends EntityRepository
                 $entity->setMasterQuantity($qunt);
             }
             $em->persist($goods);
-            $em->flush();
+            $em->flush($goods);
         }
     }
 
@@ -421,7 +421,7 @@ class GoodsItemRepository extends EntityRepository
                     $goods->setMasterItem(1);
                 }
                 $em->persist($goods);
-                $em->flush();
+                $em->flush($goods);
                 $i ++ ;
 
             }
@@ -442,7 +442,7 @@ class GoodsItemRepository extends EntityRepository
                 $entity->setMasterQuantity($qunt);
             }
             $em->persist($goods);
-            $em->flush();
+            $em->flush($goods);
         }
     }
 
