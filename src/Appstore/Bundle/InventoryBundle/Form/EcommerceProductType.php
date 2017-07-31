@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class GoodsType extends AbstractType
+class EcommerceProductType extends AbstractType
 {
 
     /** @var  InventoryConfig */
@@ -102,13 +102,7 @@ class GoodsType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add sales price'))
             )))
-            /*->add('webPrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'web price'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add web price'))
-                )))
-            */
             ->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
-            ->add('file')
             ->add('itemColors', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemColor',

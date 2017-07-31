@@ -131,7 +131,7 @@ class EcommerceWidgetController extends Controller
     public function featureWidgetAction(GlobalOption $globalOption , $menu ='', $position ='' )
     {
 
-        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
+        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption,'widgetFor'=>'e-commerce', 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
 
         /* Device Detection code desktop or mobile */
 
@@ -208,7 +208,6 @@ class EcommerceWidgetController extends Controller
 
     }
 
-
     public function featureProductShortWidgetAction(GlobalOption $globalOption,$position)
     {
 
@@ -266,7 +265,6 @@ class EcommerceWidgetController extends Controller
 
     }
 
-
     public function discountShortWidgetAction(GlobalOption $globalOption,$position)
     {
 
@@ -285,8 +283,6 @@ class EcommerceWidgetController extends Controller
         ));
 
     }
-
-
 
     public function homeTopWidgetAction(GlobalOption $globalOption , $position='' )
     {
@@ -307,6 +303,30 @@ class EcommerceWidgetController extends Controller
         $footerMenu = $this->get('setting.menuTreeSettingRepo')->getEcommerceFooterMenuTree($menus,$globalOption->getSubDomain());
         return $this->render('@Frontend/Template/Desktop/Widget/FooterMenu.html.twig', array(
             'footerMenu'           => $footerMenu,
+        ));
+    }
+
+
+    /* =================================================Template Base Widget===================*/
+
+    public function featureTemplateWidgetAction(GlobalOption $globalOption , $menu ='', $position ='' )
+    {
+
+        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
+        $siteEntity = $globalOption->getSiteSetting();
+        $themeName = $siteEntity->getTheme()->getFolderName();
+        /* Device Detection code desktop or mobile */
+
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/FeatureWidget';
+        }else{
+            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/FeatureWidget';
+        }
+
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'features'                  => $features,
+            'globalOption'              => $globalOption,
         ));
     }
 

@@ -141,7 +141,7 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="purchasePrice">Purchase Price</label>
+                                            <label class="control-label" for="purchasePrice">Purchase Price <span class="required">*</span></label>
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-money"></i>
@@ -169,7 +169,7 @@
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
-                                            <label class="control-label" for="salesPrice">Sales Price</label>
+                                            <label class="control-label" for="salesPrice">Sales Price <span class="required">*</span></label>
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-money"></i>
@@ -214,41 +214,7 @@
                                 </div>
 
                             </div>
-                             <div class="span4">
-                                 <div class="row-fluid">
-                                     <div class="span12">
-                                         <div class="control-group">
-                                             <label class="control-label" >Feature image</label>
-                                             <div class="controls">
 
-                                             </div>
-                                             <div class="controls">
-                                                 <div data-provides="fileupload" class="fileupload fileupload-new">
-                                                     <div  class="fileupload-new thumbnail">
-                                                         {% if(entity.webPath) %}
-                                                             <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="{{ image(entity.webPath).resize(100,100) }}">
-                                                         {% else %}
-                                                             <img alt="" src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image">
-                                                         {% endif %}
-                                                     </div>
-                                                     <div  class="fileupload-preview fileupload-exists thumbnail"></div>
-                                                     <div>
-                                                        <span class="btn btn-file">
-                                                            <span class="fileupload-new">Select image</span>
-                                                            <span class="fileupload-exists">Change</span>
-                                                            {{ form_widget(form.file) }}
-                                                            {{ form_errors(form.file) }}
-                                                        </span>
-                                                         <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
-                                                     </div>
-                                                 </div>
-
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-
-                             </div>
                         </div>
                         <div class="form-actions portlet box grey">
                             <div class="pull-center">

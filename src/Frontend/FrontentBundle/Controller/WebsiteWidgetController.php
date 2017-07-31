@@ -27,7 +27,7 @@ class WebsiteWidgetController extends Controller
     public function featureWidgetAction(GlobalOption $globalOption , Menu $menu , $position ='' )
     {
 
-        $widgets                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption,'menu' => $menu ,'position' => $position ),array('sorting'=>'ASC'));
+        $widgets                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'widgetFor'=>'website','menu' => $menu ,'position' => $position ),array('sorting'=>'ASC'));
         /* Device Detection code desktop or mobile */
 
         $detect = new MobileDetect();

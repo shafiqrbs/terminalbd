@@ -8,6 +8,8 @@ use Appstore\Bundle\InventoryBundle\Entity\ItemGallery;
 use Appstore\Bundle\InventoryBundle\Entity\ItemKeyValue;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
+use Appstore\Bundle\InventoryBundle\Form\EcommerceProductEditType;
+use Appstore\Bundle\InventoryBundle\Form\EcommerceProductType;
 use Appstore\Bundle\InventoryBundle\Form\GoodsType;
 use Appstore\Bundle\InventoryBundle\Form\InventoryGoodsType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -117,7 +119,7 @@ class GoodsController extends Controller
     {
         $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
-        $form = $this->createForm(new GoodsType($em,$inventoryConfig), $entity, array(
+        $form = $this->createForm(new EcommerceProductType($em,$inventoryConfig), $entity, array(
             'action' => $this->generateUrl('inventory_goods_create'),
             'method' => 'POST',
             'attr' => array(
@@ -212,7 +214,7 @@ class GoodsController extends Controller
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
         $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
-        $form = $this->createForm(new GoodsType($em,$inventory), $entity, array(
+        $form = $this->createForm(new EcommerceProductEditType($em,$inventory), $entity, array(
             'action' => $this->generateUrl('inventory_goods_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

@@ -1,5 +1,5 @@
 <style>
-
+    
     .header-line-center h1:before, .header-line-center h2:before, .header-line-center h3:before, .header-line-center h4:before, .header-line-center h5:before, .header-line-center h6:before {
         position: absolute;
         content: "";
@@ -82,7 +82,6 @@
     }
     .carousel-tab-img{
         height: 359px;
-        max-height:359px;
         width: 100%
     }
 
@@ -141,7 +140,6 @@
 </style>
 {% if features is defined and features is not empty  %}
     {% for widget in features %}
-        {% set loopId = loop.index %}
     {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'slider' %}
         <div class="row">
         {% if widget.sliderFeature is not empty and widget.sliderFeaturePosition == 'left' %}
@@ -160,7 +158,7 @@
                 <div class="carousel-inner">
                     {% for slide in widget.featureWidgetItems %}
                         <div class="item {% if loop.index-1 == 1 %} active {% endif %}">
-                            <img class="image {% if widget.sliderFeature is empty %}  carousel-img {% else %} carousel-tab-img {% endif %}"  src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath)}}{% endif %}" alt="...">
+                            <img class="image carousel-img"  src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath).resize(1024,359,'black') }}{% endif %}" alt="...">
                             <div class="carousel-caption {#caption-{{ slide.feature.captionPosition }}#}" style="background-color: {{ slide.feature.captionBgColor }}">
                                 {% if slide.feature.name is not empty %}<h4 class="animated fadeInLeftBig slide-delay-1" >{{ slide.feature.name }}{% endif %}</h4>
                                 {% if slide.feature.content is not empty %}<span class="animated fadeInUpBig slide-delay-2" >{{ slide.feature.content|raw }}</span>{% endif %}
@@ -214,7 +212,7 @@
                         <div class="carousel-inner">
                             {% for slide in widget.featureWidgetItems %}
                                 <div class="item {% if loop.index-1 == 0 %} active {% endif %}">
-                                    <img class="image {% if widget.sliderFeature is empty %}  carousel-img {% else %} carousel-tab-img {% endif %}" src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath).resize() }}{% endif %}"  alt="...">
+                                    <img class="image carousel-tab-img" src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath).resize(870,359,'black') }}{% endif %}"  alt="...">
                                     <div class="carousel-caption" >
                                         {% if slide.feature.targetTo == 'Category' and slide.feature.category is not empty %}
                                             <a class="btn btn-mini " style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':slide.feature.category.id}) }}">{{ slide.feature.buttonName }}</a>
@@ -256,7 +254,7 @@
                     <div class="carousel-inner">
                         {% for slide in widget.featureWidgetItems %}
                             <div class="item {% if loop.index-1 == 0 %} active {% endif %}">
-                                <img class="image {% if widget.sliderFeature is empty %}  carousel-img {% else %} carousel-tab-img {% endif %}"  src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath).resize() }}{% endif %}" alt="...">
+                                <img class="image carousel-tab-img"  src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath).resize(870,359,'black') }}{% endif %}" alt="...">
                                 <div class="carousel-caption">
                                     {% if slide.feature.targetTo == 'Category' and slide.feature.category is not empty %}
                                         <a class="btn btn-mini " style="background-color: {{ slide.feature.buttonBg }}" href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':slide.feature.category.id}) }}">{{ slide.feature.buttonName }}</a>
@@ -334,7 +332,19 @@
                 </div>
             </div>
             <div class="row">
-                {% render controller("FrontendBundle:EcommerceWidget:categoryWidget",{'globalOption':globalOption.id, 'category':widget.category.id,'sliderId':loopId }) %}
+                <div class="col-md-3">
+                    <div class="thumbnail" data-match-height="feature-category">
+                        <div class="product-preview group" >
+                            <img class="img-responsive" src="{{ image(widget.category.webPath).resize(250,200, 'white') }}" alt="">
+                        </div>
+                    </div>
+                    <div class="caption">
+                        <p class="group inner product-name text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'subdomain': globalOption.subDomain,'id':widget.category.id }) }}"><strong>{{ widget.category.name }}</strong></a> </p>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    {% render controller("FrontendBundle:EcommerceWidget:categoryWidget",{'globalOption':globalOption.id, 'category':widget.category.id,'sliderId':loop.index}) %}
+                </div>
             </div>
         </div>
     {% endif %}
@@ -347,7 +357,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="promotion-slider-{{ loopId }}" >
+                    <div id="promotion-slider-{{ loop.index }}" >
                         {% for product in  widget.promotion.purchaseVendorItems |slice(0,12)  %}
                             <div class="col-md-12">
                                 <div class="thumbnail" data-match-height="item-promotion">
@@ -393,7 +403,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="tag-slider-{{ loopId }}" >
+                    <div id="tag-slider-{{ loop.index }}" >
                         {% for product in  widget.tag.purchaseVendorItems |slice(0,12)  %}
                             <div class="col-md-12">
                                 <div class="thumbnail" data-match-height="item-promotion">
@@ -439,7 +449,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="discount-slider-{{ loopId }}" class="">
+                    <div id="discount-slider-{{ loop.index }}" class="">
                         {% for product in  widget.discount.purchaseVendorItems |slice(0,12)  %}
                             <div class="col-md-12">
                                 <div class="thumbnail" data-match-height="item-promotion">
@@ -485,7 +495,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div id="feature-category-{{ loopId }}" class="">
+                    <div id="feature-category-{{ loop.index }}" class="">
                         {% for category in  widget.globalOption.featureCategories  %}
                             <div class="col-md-12">
                                 <div class="thumbnail" data-match-height="feature-category">
@@ -504,15 +514,14 @@
     {% endif %}
 
     {% if widget.featureBrand is defined and widget.featureBrand is not empty %}
-
-        <div class="wow fadeInDown feature-carousel" data-wow-delay="2s" >
+            <div class="wow fadeInDown feature-carousel" data-wow-delay="2s" >
                 <div class="page-title-bar">
                     <div class="col-md-12" >
                         <div class="page-title">Feature Brands</div>
                     </div>
                 </div>
                 <div class="row">
-                    <div id="brand-slider-{{ loopId }}">
+                    <div id="brand-slider-{{ loop.index }}">
                         {% for brand in  widget.globalOption.featureBrands  %}
                             <div class="col-md-12">
                                 <div class="thumbnail" data-match-height="feature-brand">

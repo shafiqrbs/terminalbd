@@ -1,0 +1,197 @@
+{% extends ':frontend/template:ecommerce-base.html.twig' %}
+{% block body %}
+    <div class="clearfix"></div>
+    <section id="breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a href="{{ path('ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class="active"><span>Cart Details</span></li>
+            </ol>
+        </div>
+    </section>
+    <div class="clearfix"></div>
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+        <section class="feature-widget-body-top" >
+            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':'ProductDetails','position':'body-top'}) %}
+        </section>
+    {% endif %}
+    <div class="clearfix"></div>
+
+    <style>
+
+        #products .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{
+        }
+        .media-left, .media>.pull-left{
+            margin-right: 10px;
+        }
+        .media{
+            border-bottom: none;
+        }
+
+    </style>
+    <section >
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-md-8">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th class="text-center">Price</th>
+                            <th class="text-center">Total</th>
+                            <th> </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in cart.contents %}
+                            <tr>
+                                <td class="col-sm-8 col-md-6">
+                                    <div class="media">
+                                        {% if product.productImg is not empty %}
+                                            <a class="thumbnail pull-left" href="#"> <img class="media-object" src="{{ product.productImg }}" style="width: 72px; height: 72px;"> </a>
+                                        {% else %}
+                                            <a class="thumbnail pull-left" href="#"> <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" style="width: 72px; height: 72px;"> </a>
+                                        {% endif %}
+                                        <div class="media-body">
+                                            <h4 class="media-heading">{{ product.name }}</h4>
+                                            <h5 class="media-heading">Size of Product: {{ product.size }}</h5>
+                                            {% if product.color is not empty %}<h5 class="media-heading">Color: {{ product.color }}</h5>{% endif %}
+                                            {% if product.brand is not empty %}<h5 class="media-heading"> by {{ product.brand }}</h5>{% endif %}
+                                            <span>Status: </span><span class="text-success"><strong>In Stock</strong></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="col-sm-1 col-md-1" style="text-align: center">
+                                    <input type="text"  class="form-control" data-url="" id="{{ product.rowid }}" value="{{ product.quantity }}">
+                                </td>
+                                <td class="col-sm-1 col-md-1 text-center"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.price }}</strong></td>
+                                <td class="col-sm-1 col-md-1 text-center"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.price * product.quantity |number_format  }}</strong></td>
+                                <td class="col-sm-1 col-md-1 text-right">
+                                    <a  class="btn btn-info update-cart btn-sm" id="{{ product.rowid }}" data-url="{{ path('webservice_product_cart_update',{'cartid':product.rowid}) }}" data-id="{{ product.price }}" data-value="{{ product.quantity }}" >
+                                        <span class="glyphicon glyphicon-pencil " ></span>&nbsp;
+                                    </a>
+                                    <a  class="btn btn-danger remove-cart btn-sm" data-url="{{ path('webservice_product_cart_remove',{'cartid':product.rowid}) }}">
+                                        <span class="glyphicon glyphicon-trash " ></span>&nbsp;
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        <tr>
+                            <td>   </td>
+                            <td>   </td>
+                            <td>   </td>
+                            <td>   </td>
+                            <td class="text-right">
+                                <a href="{{ path('webservice_product') }}" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
+                                </a>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-4 col-md-4">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Cart Totals</th>
+                            <th> </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><h5>Subtotal</h5></td>
+                            <td class="text-right"><h5><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cart.total }}</strong></h5></td>
+                        </tr>
+                        <tr>
+                            <td><h3>Grand Total</h3></td>
+                            <td class="text-right"><h3><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cart.total }}</strong></h3></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Coupon Code</strong></td>
+                            <td class="text-right"><input type="text" class="form-control" name="couponCode" id="couponCode"></td>
+                        </tr>
+                        <tr>
+                            <td>
+
+                            </td>
+                            <td class="text-right">
+                                {% if  app.user %}
+                                    <a href="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" type="button" class="btn btn-success">
+                                        Checkout <span class="glyphicon glyphicon-play"></span>
+                                    </a>
+                                {% else %}
+                                    <button type="button" class="btn btn-success login-preview">
+                                        Login & Checkout <span class="glyphicon glyphicon-play"></span>
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <div class="clearfix"></div>
+
+    <!-- Modal -->
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/desktop/css/common.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/js/product.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    $('.hanger-remove-cart').click( function() {
+
+        var url = $(this).attr("data-url");
+        var id = $(this).attr("id");
+        alert(id);
+        $.ajax({
+        url:url ,
+        type: 'GET',
+        success: function(response){
+        obj = JSON.parse(response);
+        $('.item-remove-'+id).remove();
+        $('.totalItem').html(obj['totalItem']);
+        $('.totalAmount').html(obj['cartTotal']);
+        $('.item-list').html(obj['salesItem']);
+        $('.vsidebar .txt').html(obj['cartResult']);
+        }
+        });
+        e.preventDefault();
+
+    });
+
+    $('#newsLetter').submit( function(e) {
+
+        $.ajax({
+            url         : $('#newsLetter').attr( 'action' ),
+            type        : $('#newsLetter').attr( 'method' ),
+            data: new FormData( this ),
+            processData : false,
+            contentType : false,
+            success: function(response) {
+            alert(response);
+            },
+
+        });
+
+    });
+{% endblock %}
