@@ -293,7 +293,7 @@ class PurchaseVendorItemController extends Controller
      * Status a PurchaseVendorItem entity.
      *
      */
-    public function webStatusAction($id)
+    public function webStatusAction(Request $request , $id)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -316,7 +316,8 @@ class PurchaseVendorItemController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Data has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('inventory_purchasevendoritem'));
+        return $this->redirect($request->headers->get('referer'));
+
     }
 
 
