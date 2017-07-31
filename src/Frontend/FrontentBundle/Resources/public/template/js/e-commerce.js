@@ -49,7 +49,7 @@ owlPromotion.owlCarousel({
 
 /* ======================================== Start Feature Product ========================================================*/
 
-var owlTag = $("#tag-slider");
+var owlTag = $(".tag-slider");
 owlTag.owlCarousel({
     items: 4 ,
     slideSpeed : 5000,
@@ -75,7 +75,7 @@ owlTag.owlCarousel({
 
 /* ======================================== Start Discount Product ========================================================*/
 
-var owlDiscount = $("#discount-slider");
+var owlDiscount = $(".discount-slider");
 owlDiscount.owlCarousel({
     items: 4 ,
     slideSpeed : 5000,
@@ -100,7 +100,7 @@ owlDiscount.owlCarousel({
 
 /* ======================================== Start Feature Product ========================================================*/
 
-var owlBrand = $("#brand-slider");
+var owlBrand = $(".brand-slider");
 owlBrand.owlCarousel({
     items: 6 ,
     slideSpeed : 5000,
@@ -126,7 +126,7 @@ owlBrand.owlCarousel({
 
 /* ======================================== Start Feature Category ========================================================*/
 
-var owlFeatureCategory = $("#feature-category");
+var owlFeatureCategory = $(".feature-category");
 owlFeatureCategory.owlCarousel({
     items: 6 ,
     slideSpeed : 5000,
