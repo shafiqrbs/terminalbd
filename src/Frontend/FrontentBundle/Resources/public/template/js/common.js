@@ -144,16 +144,18 @@ $('#topTabCarousel').on('click', '.nav a', function() {
     });
 
     $('.login-preview').click(function () {
-
         $('#registerModal').modal('hide');
         $('#forgetModal').modal('hide');
         $('#loginModal').modal('toggle');
+
     });
+
     $('.register-btn').click(function () {
 
         $('#loginModal').modal('hide');
         $('#forgetModal').modal('hide');
         $('#registerModal').modal('toggle');
+
     });
     $('#forget-password').click(function () {
 

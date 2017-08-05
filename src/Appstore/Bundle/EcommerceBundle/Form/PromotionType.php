@@ -16,9 +16,9 @@ class PromotionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Add your promotion name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Add your promotion/tag name'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Add your promotion name'))
+                    new NotBlank(array('message'=>'Add your promotion/tag name'))
                 )))
             ->add('type', 'choice', array(
                 'attr'=>array('class'=>'check-list'),
@@ -28,7 +28,8 @@ class PromotionType extends AbstractType
                     'Tag'       => 'Tag',
                     'Promotion'       => 'Promotion'
                 ),
-            ));
+            ))
+            ->add('file','file', array('attr'=>array('class'=>'default')));
     }
     
     /**

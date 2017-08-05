@@ -16,13 +16,12 @@ class PromotionRepository extends EntityRepository
 
     public function getTypeBasePromotion($config,$type)
     {
-
-        $qb = $this->createQueryBuilder('promot');
-        $qb ->where("promot.status = 1")
-/*            ->andWhere('promot.type IN (:type)')
-            ->setParameter('type', array($type))*/
-            ->andWhere("promot.ecommerceConfig =".$config)
-            ->orderBy('promot.name','ASC');
+        $qb = $this->createQueryBuilder('e');
+        $qb ->where("e.status = 1");
+        $qb->andWhere($qb->expr()->like('e.type', ':type'));
+        $qb->setParameter('type','%Promotion%');
+        $qb->andWhere("e.ecommerceConfig =".$config);
+        $qb->orderBy('e.name','ASC');
         $result = $qb->getQuery()->getResult();
 
         return $result;

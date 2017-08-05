@@ -6,21 +6,22 @@ use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Appstore\Bundle\InventoryBundle\Entity\ItemAttribute;
 use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\AppearanceBundle\Entity\Feature;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureCategory;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\ContentBundle\Entity\MallConnect;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Category
  *
  * @Gedmo\Tree(type="materializedPath")
  * @ORM\Table(name="categories")
+ * @UniqueEntity(fields="name",message="This category name is already exist")
  * @ORM\Entity(repositoryClass="Product\Bundle\ProductBundle\Entity\CategoryRepository")
  */
 class Category
@@ -105,9 +106,9 @@ class Category
     protected $features;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureCategory", mappedBy="category" )
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureCategory", mappedBy="category" )
      **/
-    protected $featureCategories;
+    protected $featureCategory;
 
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\Branding", mappedBy="categories" )
@@ -580,6 +581,14 @@ class Category
     public function getParticulars()
     {
         return $this->particulars;
+    }
+
+    /**
+     * @return FeatureCategory
+     */
+    public function getFeatureCategory()
+    {
+        return $this->featureCategory;
     }
 
 

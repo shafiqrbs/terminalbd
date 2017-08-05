@@ -34,8 +34,7 @@ class FeatureBrand
     private  $globalOption;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="featureBrands")
-     * @ORM\OrderBy({"sorting" = "ASC"})
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemBrand", inversedBy="featureBrand")
      */
     protected $brand;
 

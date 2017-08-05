@@ -77,6 +77,20 @@ class FeatureWidgetType extends AbstractType
                 'choices'=> $this->categoryChoiceList()
             ))
 
+            ->add('brand', 'entity', array(
+                'required'    => true,
+                'empty_value' => '---Select brand---',
+                'attr'=>array('class'=>'m-wrap span12 select2 '),
+                'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',
+                'property' => 'name',
+                'query_builder' => function(\Doctrine\ORM\EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where("e.status = 1")
+                        ->andWhere("e.inventoryConfig =".$this->globalOption->getInventoryConfig()->getId())
+                        ->orderBy('e.name','ASC');
+                },
+            ))
+
             ->add('discount', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Discount',
@@ -158,9 +172,126 @@ class FeatureWidgetType extends AbstractType
                     'right'             => 'Right',
                 ),
             ))
+            ->add('categoryLimit', 'choice', array(
+                'attr'=>array('class'=>'span12  m-wrap'),
+                'empty_value' => '--- Limit ---',
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    '6'                 => '6',
+                    '8'                 => '8',
+                    '12'                => '12',
+                    '16'                => '16',
+                ),
+            ))
+            ->add('brandLimit', 'choice', array(
+                'attr'=>array('class'=>'span12  m-wrap'),
+                'empty_value' => '--- Limit ---',
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    '6'                 => '6',
+                    '8'                 => '8',
+                    '12'                => '12',
+                    '16'                => '16',
+                ),
+            ))
+            ->add('promotionLimit', 'choice', array(
+                'attr'=>array('class'=>'span12  m-wrap'),
+                'empty_value' => '--- Limit ---',
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    '6'                 => '6',
+                    '8'                 => '8',
+                    '12'                => '12',
+                    '16'                => '16',
+                ),
+            ))
+            ->add('tagLimit', 'choice', array(
+                'attr'=>array('class'=>'span12  m-wrap'),
+                'empty_value' => '--- Limit ---',
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    '6'                 => '6',
+                    '8'                 => '8',
+                    '12'                => '12',
+                    '16'                => '16',
+                ),
+            ))
+            ->add('discountLimit', 'choice', array(
+                'attr'=>array('class'=>'span12  m-wrap'),
+                'empty_value' => '--- Limit ---',
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    '6'                 => '6',
+                    '8'                 => '8',
+                    '12'                => '12',
+                    '16'                => '16',
+                ),
+            ))
             ->add('pageFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))
             ->add('moduleFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))
             ->add('moduleShowLimit','number', array('attr'=>array('class'=>'span12 m-wrap')))
+            ->add('categoryShow', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'slider'                => 'Slider',
+                    'imageProduct'                => 'Category image with product',
+                    'categorySubCategory'         => 'Category & Sub-category',
+                    'subCategoryProduct'         => 'Sub-category with product',
+                    'grid'                       => 'Product Grid',
+                ),
+            ))
+
+            ->add('brandShow', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'slider'              => 'Product slider',
+                    'imageProduct'        => 'Brand image with product',
+                    'grid'                => 'Product grid',
+                ),
+            ))
+
+            ->add('promotionShow', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'slider'              => 'Product slider',
+                    'imageProduct'        => 'Promotion image with product',
+                    'grid'                => 'Product grid',
+                ),
+            ))
+
+            ->add('discountShow', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'slider'              => 'Product slider',
+                    'imageProduct'        => 'Discount image with product',
+                    'grid'                => 'Product grid',
+                ),
+            ))
+
+            ->add('tagShow', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'slider'              => 'Product slider',
+                    'imageProduct'        => 'Tag image with product',
+                    'grid'                => 'Product grid',
+                ),
+            ))
+
             ->add('moduleShowType', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),
                 'expanded'      =>false,

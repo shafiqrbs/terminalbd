@@ -104,6 +104,37 @@ class EcommerceProductEditType extends AbstractType
             )))
             ->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
             ->add('file')
+            ->add('tag', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
+                'empty_value' => '-Choose a tags-',
+                'property' => 'name',
+                'multiple' => 'multiple',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                     $qb = $er->createQueryBuilder('p');
+                     $qb->where("p.status = 1");
+                     $qb->andWhere($qb->expr()->like('p.type', ':type'));
+                     $qb->setParameter('type','%Tag%');
+                     $qb->orderBy("p.name","ASC");
+                     return $qb;
+                },
+            ))
+            ->add('promotion', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
+                'empty_value' => '-Choose a promotion-',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                     $qb = $er->createQueryBuilder('p');
+                     $qb->where("p.status = 1");
+                     $qb->andWhere($qb->expr()->like('p.type', ':type'));
+                     $qb->setParameter('type','%Promotion%');
+                     $qb->orderBy("p.name","ASC");
+                     return $qb;
+                },
+            ))
             ->add('itemColors', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemColor',

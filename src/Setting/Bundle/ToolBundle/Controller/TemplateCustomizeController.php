@@ -103,11 +103,8 @@ class TemplateCustomizeController extends Controller
             throw $this->createNotFoundException('Unable to find TemplateCustomize entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('SettingToolBundle:TemplateCustomize:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -197,44 +194,54 @@ class TemplateCustomizeController extends Controller
             'form'   => $editForm->createView(),
         ));
     }
-    /**
-     * Deletes a TemplateCustomize entity.
-     *
-     */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SettingToolBundle:TemplateCustomize')->find($id);
+    public function resetAction(TemplateCustomize $entity){
+        $em = $this->getDoctrine()->getManager();
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find TemplateCustomize entity.');
-            }
+        $entity->setAnchorColor(NULL);
+        $entity->setAnchorHoverColor(NULL);
+        $entity->setBgImage(NULL);
+        $entity->setBodyColor(NULL);
+        $entity->setBorderColor(NULL);
+        $entity->setButtonBgColorHover(NULL);
+        $entity->setDividerColor(NULL);
+        $entity->setDividerTitleColor(NULL);
+        $entity->setDividerBgColor(NULL);
+        $entity->setFooterBgColor(NULL);
+        $entity->setButtonBgColor(NULL);
+        $entity->setFooterTextColor(NULL);
+        $entity->setHeaderBgColor(NULL);
+        $entity->setHomeAnchorColor(NULL);
+        $entity->setHomeAnchorColorHover(NULL);
+        $entity->setHomeBgColor(NULL);
+        $entity->setMenuBgColor(NULL);
+        $entity->setMenuFontSize(NULL);
+        $entity->setMenuLia(NULL);
+        $entity->setMenuLiAColor(NULL);
+        $entity->setMenuLiAHoverColor(NULL);
+        $entity->setMenuLiHovera(NULL);
+        $entity->setSiteBgColor(NULL);
+        $entity->setSiteNameColor(NULL);
+        $entity->setSiteFontSize(NULL);
+        $entity->setSiteFontFamily(NULL);
+        $entity->setSiteH1TextSize(NULL);
+        $entity->setSiteH2TextSize(NULL);
+        $entity->setSiteH3TextSize(NULL);
+        $entity->setSiteH4TextSize(NULL);
+        $entity->setSiteTitleBgColor(NULL);
+        $entity->setTitleBgColor(NULL);
+        $entity->setTitleBorderColor(NULL);
+        $entity->setTitleFontColor(NULL);
+        $entity->setTitleFontSize(NULL);
+        $entity->setTitleHeight(NULL);
+        $entity->setTitleMarginBottom(NULL);
+        $entity->setTitleTextAlign(NULL);
+        $em->persist($entity);
+        $em->flush($entity);
 
-            $em->remove($entity);
-            $em->flush();
-        }
+        return $this->redirect($this->generateUrl('templatecustomize_edit', array('id' => $entity->getGlobalOption()->getId())));
 
-        return $this->redirect($this->generateUrl('templatecustomize'));
     }
 
-    /**
-     * Creates a form to delete a TemplateCustomize entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('templatecustomize_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
-    }
+
 }

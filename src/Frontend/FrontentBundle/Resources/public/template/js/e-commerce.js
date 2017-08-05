@@ -1,6 +1,27 @@
-var owlCategoryx = $(".category-slider");
-owlCategoryx.owlCarousel({
+var owlCategory = $(".category-slider");
+owlCategory.owlCarousel({
     items: 4 ,
+    slideSpeed : 5000,
+    itemsCustom : false,
+    itemsDesktop : [1199,4],
+    itemsDesktopSmall : [980,3],
+    itemsTablet: [768,2],
+    itemsTabletSmall: false,
+    itemsMobile : [479,1],
+    itemsScaleUp : false,
+    autoPlay:false,
+    navigation : true,
+    navigationText: [
+        "<a id='prevCatItem-1' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='nextCatItem-1' class='glyphicon glyphicon-chevron-right'></a>"
+    ],
+    rewindNav : false,
+    pagination : false,
+});
+
+var owlCategory3 = $(".category-slider-3");
+owlCategory3.owlCarousel({
+    items: 3 ,
     slideSpeed : 5000,
     itemsCustom : false,
     itemsDesktop : [1199,4],
@@ -126,7 +147,7 @@ owlBrand.owlCarousel({
 
 /* ======================================== Start Feature Category ========================================================*/
 
-var owlFeatureCategory = $(".feature-category");
+var owlFeatureCategory = $(".feature-category-slider");
 owlFeatureCategory.owlCarousel({
     items: 6 ,
     slideSpeed : 5000,
@@ -140,8 +161,8 @@ owlFeatureCategory.owlCarousel({
     autoPlay:false,
     navigation : true,
     navigationText: [
-        "<a id='prevCategory-1' class='glyphicon glyphicon-chevron-left'></a>",
-        "<a id='nextCategory-1' class='glyphicon glyphicon-chevron-right'></a>"
+        "<a id='featureCategorySlider' class='glyphicon glyphicon-chevron-left'></a>",
+        "<a id='featureCategorySlider' class='glyphicon glyphicon-chevron-right'></a>"
     ],
     rewindNav : false,
     pagination : false,

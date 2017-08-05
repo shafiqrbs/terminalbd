@@ -58,9 +58,9 @@ class ItemBrand  implements CodeAwareEntity
     private $featureWidgets;
 
     /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureBrand", mappedBy="brand")
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\FeatureBrand", mappedBy="brand")
      **/
-    private $featureBrands;
+    private $featureBrand;
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="brand")
@@ -280,14 +280,6 @@ class ItemBrand  implements CodeAwareEntity
     }
 
     /**
-     * @return FeatureBrand
-     */
-    public function getFeatureBrands()
-    {
-        return $this->featureBrands;
-    }
-
-    /**
      * @return Feature
      */
     public function getFeatures()
@@ -301,6 +293,14 @@ class ItemBrand  implements CodeAwareEntity
     public function getStockItems()
     {
         return $this->stockItems;
+    }
+
+    /**
+     * @return FeatureBrand
+     */
+    public function getFeatureBrand()
+    {
+        return $this->featureBrand;
     }
 
 

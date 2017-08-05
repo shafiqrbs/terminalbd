@@ -38,6 +38,10 @@ webservice_product_cart_update:
     options:
             expose: true
 
+webservice_product_cart_details:
+    path:      /cart/product-details
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productCartDetails }
+
 webservice_product_cart_remove:
     path:      /cart/product-remove/{cartid}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productRemoveCart }

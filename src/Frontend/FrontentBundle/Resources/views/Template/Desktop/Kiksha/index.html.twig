@@ -1,8 +1,8 @@
 {% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
-    <section class="home" style="background:#222">
-        <!-- Header Carousel -->
+    <section class="home">
 
+        <!-- Header Carousel -->
         {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-top')  %}
             <div class="container container-margin">
                 {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-top'}) %}
@@ -13,18 +13,6 @@
                 {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'header-bottom'}) %}
             </div>
         {% endif %}
-        <div class="container">
-            <div class="row">
-                <div class="col-md-10 col-md-offset-1"  style="margin-top: 15px; margin-bottom:15px">
-                    <div class="col-md-10" >
-                        <div class="order-widget-block">
-                            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> PLACE YOUR ORDER NOW - RECEIVE YOUR ITEMS WITHIN 72 HOURS
-                        </div>
-                    </div>
-                    <div class="col-md-2"><a class="btn shop-now" href="{{ path(globalOption.subDomain ~ '_webservice_product') }}">SHOP NOW</a></div>
-                </div>
-            </div>
-        </div>
         {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
             <div class="container container-margin">
                 {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'body-bottom'}) %}
@@ -36,6 +24,8 @@
             </div>
         {% endif %}
     </section>
+
+<script> var columnItem = 4 </script>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -50,7 +40,6 @@
     '@FrontendBundle/Resources/public/template/js/common.js'
     '@FrontendBundle/Resources/public/template/js/product.js'
     '@FrontendBundle/Resources/public/template/js/e-commerce.js'
-    '@FrontendBundle/Resources/public/template/js/sidebar.js'
     '@FrontendBundle/Resources/public/template/js/page.js'
     '@FrontendBundle/Resources/public/template/js/headerfooter.js'
     %}
@@ -59,6 +48,13 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+
+    $('.login-preview').click(function () {
+        $('#registerModal').modal('hide');
+        $('#forgetModal').modal('hide');
+        $('#loginModal').modal('toggle');
+    });
+
 {% endblock %}
 
 

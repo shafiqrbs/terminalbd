@@ -50,6 +50,7 @@ class DiscountController extends Controller
             $em = $this->getDoctrine()->getManager();
             $inventory = $this->getUser()->getGlobalOption()->getEcommerceConfig();
             $entity->setEcommerceConfig($inventory);
+            $entity->upload();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -121,6 +122,10 @@ class DiscountController extends Controller
         $form = $this->createForm(new DiscountType(), $entity, array(
             'action' => $this->generateUrl('ecommerce_discount_update', array('id' => $entity->getId())),
             'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
         ));
         return $form;
     }
@@ -175,6 +180,7 @@ class DiscountController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Discount entity.');
         }
+        $entity->removeUpload();
         $em->remove($entity);
         $em->flush();
         return $this->redirect($this->generateUrl('ecommerce_discount'));

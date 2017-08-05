@@ -122,6 +122,10 @@ class PromotionController extends Controller
         $form = $this->createForm(new PromotionType(), $entity, array(
             'action' => $this->generateUrl('ecommerce_promotion_update', array('id' => $entity->getId())),
             'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
         ));
         return $form;
     }

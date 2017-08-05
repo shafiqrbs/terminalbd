@@ -68,6 +68,8 @@ input[type="color"]:focus,
 
 /*=================================== HEADER =====================================*/
 
+
+
 .input-group-field {
     display: table-cell;
     vertical-align: middle;
@@ -392,6 +394,230 @@ ul.dropdown-cart li .item-right button {
 .container-margin{
     margin-bottom: 30px;
 }
+
+/*======================== Slider Feature ======================================*/
+
+.header-line-center h1:before, .header-line-center h2:before, .header-line-center h3:before, .header-line-center h4:before, .header-line-center h5:before, .header-line-center h6:before {
+    position: absolute;
+    content: "";
+    height: 2px;
+    width: 50%;
+    left: -50%;
+    top: 50%;
+    margin-top: -1px;
+    background: #0a70e3;
+}
+.header-line-center h1:after, .header-line-center h2:after, .header-line-center h3:after, .header-line-center h4:after, .header-line-center h5:after, .header-line-center h6:after {
+    position: absolute;
+    content: "";
+    background: #0a70e3;
+    height: 2px;
+    width: 50%;
+    right: -50.5%;
+    top: 50%;
+    margin-top: -1px;
+}
+
+.tabCarousel .nav a small
+{
+    display: block;
+}
+.tabCarousel .nav
+{
+    background: #eee;
+}
+.tabCarousel .nav-justified > li > a
+{
+    border-radius: 0px;
+}
+
+.slider-feature-thumbnail {
+    border: 2px solid red !important;
+    height: 141px;
+    width: 100%;
+    display: block;
+}
+
+.carousel-caption{
+    bottom: 0;
+    opacity: 0.8;
+}
+
+.carousel-post-control.carousel-right {
+    text-align: right;
+    float: right;
+    display: inline-block;
+    left: auto!important;
+    right: 10px !important;
+}
+
+.carousel-post-control.carousel-left {
+    text-align: left;
+    float: left;
+    text-decoration: none!important;
+}
+
+.carousel-post-control.carousel-right , .carousel-post-control.carousel-left {
+    opacity: 0 !important;
+    transition: transform 8s ease-out 0s;
+}
+#main-carousel:hover .carousel-post-control.carousel-left {
+    transform: scale(1,1);
+    transition: transform 8s ease-in 5s;
+    opacity: 1 !important;
+}
+#main-carousel:hover .carousel-post-control.carousel-right {
+    transform: scale(1,1);
+    transition: transform 8s ease-in 5s;
+    opacity: 1 !important;
+}
+
+.carousel-img{
+    max-height:512px;
+    height: 512px;
+    width:100%
+}
+.carousel-tab-img{
+    height: 359px;
+    max-height:359px;
+    width: 100%
+}
+
+
+#topTabCarousel .nav-pills>li>a{
+    border-radius: 0;
+    height: 60px;
+    overflow: hidden;
+}
+
+#topTabCarousel .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{
+    background-color:#ffffff;
+    color:#222222!important;
+}
+
+#topTabCarousel .tab-nav li.active:after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 48%;
+    bottom: 100%;
+    width: 0;
+    height: 0;
+    border-bottom: 10px solid  #ffffff;
+    border-top: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}
+
+
+#bottomTabCarousel .nav-pills>li>a{
+    border-radius: 0;
+    height: 60px;
+    overflow: hidden;
+}
+
+#bottomTabCarousel .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{
+    background-color:#ffffff;
+    color:#222222!important;
+}
+
+#bottomTabCarousel .tab-nav li.active:after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 48%;
+    bottom: 100%;
+    width: 0;
+    height: 0;
+    border-bottom: 10px solid #ffffff;
+    border-top: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}
+
+/* list */
+.rounded-list{
+    width: 100%;
+    margin-top: 15px;
+}
+.rounded-list ol
+{
+    counter-reset:li; /* Initiate a counter */
+    margin-left:0; /* Remove the default left margin */
+    padding-left:0; /* Remove the default left padding */
+}
+
+
+/* item  */
+.rounded-list ol > li
+{
+    position:relative; /* Create a positioning context */
+    list-style:none; /* Disable the normal item numbering */
+    background:#f6f6f6; /* Item background color */
+    margin:0; /* Give each list item a left margin to make room for the numbers */
+    padding-left: 10px; /* Add some spacing around the content */
+    padding-bottom:0px;
+    padding-top:0px;
+    margin-left: 25px;
+}
+
+
+.rounded-list ol > li:first-child{
+    margin-top: 5px;
+}
+
+/* number  */
+.rounded-list ol > li p:before
+{
+    content: counter(li);
+    counter-increment: li;
+    position: absolute;
+    left: -25px;
+    top: 50%;
+
+    /* number background */
+    background: #222;
+    height: 2em;
+    width: 2em;
+    margin-top: -1em;
+    line-height: 1.3em;
+    border: .3em solid #fff;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 2em;
+    color: #ffffff;
+}
+
+.widget-feature-center {
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    float: left;
+
+}
+
+.slider-left{
+    position: relative;
+    margin-right: -15px;
+    margin-left: 15px;
+}
+.slider-right{
+    position: relative;
+    margin-left: -15px;
+}
+
+.ui-slider-tabs-list li.selected a:before {
+    border-color: rgba(194, 225, 245, 0);
+    border-bottom-color: #ccc;
+    border-width: 12px;
+    margin-left: -14px;
+}
+
+
+/* ======================================= End Slider Feature ========================================*/
 
 
 .order-widget{

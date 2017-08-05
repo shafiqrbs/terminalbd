@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 class CustomCategoryType extends AbstractType
 {
@@ -48,7 +49,6 @@ class CustomCategoryType extends AbstractType
                 'property' => 'nestedLabel',
                 'choices'=> $this->categoryChoiceList()
             ))
-            ->add('file')
         ;
     }
     

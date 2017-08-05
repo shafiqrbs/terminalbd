@@ -21,7 +21,7 @@ class TemplateCustomizeType extends AbstractType
             ->add('sidebarTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sidebar title')))
             ->add('sidebarPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
-                'choices' => array('left' => 'left',  'right' => 'right'),
+                'choices' => array('' => '---Select One---','left' => 'left',  'right' => 'right'),
             ))
 
             ->add('siteBgColor','text', array('attr'=>array(
@@ -47,12 +47,17 @@ class TemplateCustomizeType extends AbstractType
 
             ->add('siteFontSize', 'choice', array(
                 'attr'=>array('class'=>'selectbox span12'),
-                'choices' => array('10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
+                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
             ))
 
             ->add('titleTextAlign', 'choice', array(
                 'attr'=>array('class'=>'selectbox span12'),
-                'choices' => array('left' => 'Left',  'center' => 'Center', 'right' => 'Right'),
+                'choices' => array('' => '---Select One---','left' => 'Left',  'center' => 'Center', 'right' => 'Right'),
+            ))
+
+            ->add('pagination', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array('bootstrap' => 'Bootstrap',  'nextPrev' => 'Next Previous', 'nextPrevDropDown' => 'Next Previous with drop down'),
             ))
 
             ->add('titleHeight','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Title height')))
@@ -79,6 +84,7 @@ class TemplateCustomizeType extends AbstractType
             ->add('siteFontFamily', 'choice', array(
                 'attr'=>array('class'=>'selectbox span12'),
                 'choices' => array(
+                    '' => '---Select font family---',
                     'Open Sans, sans-serif' => 'Open Sans, sans-serif',
                     'Helvetica, sans-serif' => 'Helvetica, sans-serif',
                     'Verdana' => 'Verdana',
@@ -132,21 +138,21 @@ class TemplateCustomizeType extends AbstractType
 
             ->add('siteH1TextSize', 'choice', array(
                 'attr'=>array('class'=>'selectbox span12'),
-                'choices' => array('10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
+                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
             ))
 
 
             ->add('siteH2TextSize', 'choice', array(
                 'attr'=>array('class'=>'selectbox span12'),
-                'choices' => array('10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
+                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
             ))
             ->add('siteH3TextSize', 'choice', array(
                 'attr'=>array('class'=>'selectbox span12'),
-                'choices' => array('10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
+                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
             ))
             ->add('siteH4TextSize', 'choice', array(
                 'attr'=>array('class'=>'selectbox span12'),
-                'choices' => array('10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
+                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
             ))
 
 

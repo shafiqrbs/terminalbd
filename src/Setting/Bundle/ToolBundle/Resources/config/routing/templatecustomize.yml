@@ -19,6 +19,10 @@ templatecustomize_edit:
     path:     /{id}/edit
     defaults: { _controller: "SettingToolBundle:TemplateCustomize:edit" }
 
+templatecustomize_reset:
+    path:     /{id}/reset
+    defaults: { _controller: "SettingToolBundle:TemplateCustomize:reset" }
+
 templatecustomize_update:
     path:     /{id}/update
     defaults: { _controller: "SettingToolBundle:TemplateCustomize:update" }

@@ -489,12 +489,24 @@ class GoodsController extends Controller
             $discountPrice = $em->getRepository('InventoryBundle:PurchaseVendorItem')->getCulculationDiscountPrice($entity,$setValue);
             $entity->setDiscountPrice($discountPrice);
             $em->getRepository('InventoryBundle:GoodsItem')->subItemDiscountPrice($entity,$setValue);
+            $entity->$setName($setValue);
+        }elseif($data['name'] == 'Promotion'){
+
+            $setValue = $em->getRepository('EcommerceBundle:Promotion')->find($data['value']);
+            $entity->$setName($setValue);
 
         }else{
-            $setValue = $em->getRepository('EcommerceBundle:Promotion')->find($data['value']);
+
+            $entity->$setName($data['value']);
+            if(!empty($entity->getDiscount())){
+                $discountPrice = $em->getRepository('InventoryBundle:PurchaseVendorItem')->getCulculationDiscountPrice($entity,$entity->getDiscount());
+                $entity->setDiscountPrice($discountPrice);
+                $em->getRepository('InventoryBundle:GoodsItem')->subItemDiscountPrice($entity,$entity->getDiscount());
+            }
+
         }
-        $entity->$setName($setValue);
-        $em->flush();
+        $em->persist($entity);
+        $em->flush($entity);
         exit;
 
     }

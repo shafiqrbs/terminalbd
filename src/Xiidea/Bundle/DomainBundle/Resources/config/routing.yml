@@ -1,7 +1,12 @@
-_main_domain:
+_www_main_domain:
     prefix: /
     resource: "@BinduBundle/Resources/config/main.yml"
     host: "www.%domain.main%"
+
+_main_domain:
+    prefix: /
+    resource: "@BinduBundle/Resources/config/main.yml"
+    host: "%domain.main%"
 
 _xiidea_main_domain_app:
     prefix:     /

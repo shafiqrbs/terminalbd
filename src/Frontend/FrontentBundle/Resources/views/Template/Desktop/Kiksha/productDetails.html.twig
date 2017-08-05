@@ -72,7 +72,7 @@
                         <div class="row">
                             <div class="col-md-12 paginate">
                                 <div class="btn-group pull-left">
-                                    <div class="product-title"><span class="glyphicon glyphicon-filter"></span>&nbsp;REFINE RESULTS</div>
+                                    <div class="product-title"><span class="glyphicon glyphicon-filter"></span>&nbsp;REFINE</div>
                                 </div>
                             </div>
                         </div>
@@ -203,7 +203,7 @@
                                                     {% if  globalOption.ecommerceConfig.cart == 1 %}
                                                         <input type="hidden" name="productImg"  value="{% if product.webPath is not empty %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
                                                         <button type="submit" class="btn btn-lg btn-info cartSubmit" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : subitem.id }) }}">
-                                                            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to cart
+                                                            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to Buy
                                                         </button>
                                                     {% endif %}
                                             </span>
@@ -277,32 +277,17 @@
                                 <div id="tag-category-carousel" class="">
                                     {% for product in products  %}
                                         <div class="col-md-12 wow fadeInDown" data-wow-delay="1s">
-                                            <div class="thumbnail" data-match-height="item-promotion">
-                                                <div class="product-preview group list-group-image product-equal-height" >
-                                                    <img class="img-responsive" src="{{ image(product.webPath).resize(400,400, 'white') }}" alt="">
-                                                    <div class="team-content">
-                                                        <h3 class="team-prof">
-                                                            <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.name }}</a>
-                                                            <small>{#{{ product.price|number_format }}#}</small>
-                                                        </h3>
-                                                        <ul class="social-link">
-                                                            <li><a target="_blank" href="https://www.facebook.com/share.php?u={{ app.request.getSchemeAndHttpHost() }}/product/{{ product.slug }}&picture={{ app.request.getSchemeAndHttpHost() }}/{{ product.webPath }}&title={{ product.webName }}&description={{ product.content }}"  class="fa fa-facebook"></a></li>
-                                                            <li><a target="_blank" href="https://plus.google.com/share?url={{ app.request.getSchemeAndHttpHost() }}/product/{{ product.slug }}"  class="fa fa-google-plus"></a></li>
-                                                            <li><a target="_blank" href=" http://twitter.com/intent/tweet?status={{ product.webName }}+{{ app.request.getSchemeAndHttpHost() }}/product/{{ product.slug }}"  class="fa fa-twitter"></a></li>
-                                                        </ul>
-                                                    </div>
+                                            <div class="product-canvas">
+                                                <a data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  class="btn btn-info preview product-eye"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                                <a class="btn btn-warning product-buy" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                                                <a class="img-card" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
+                                                    <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
+                                                </a>
+                                                <div class="card-content" data-match-height="item-product">
+                                                    <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</a>
                                                 </div>
-                                                <div class="caption">
-                                                    {% if globalOption.ecommerceConfig.showBrand == 1 and product.brand is not empty %}
-                                                        <p class="group inner brand text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':product.brand.id }) }}"><span>{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></a> </p>
-                                                    {% endif %}
-                                                    <p class="group inner product-name text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></a> </p>
-                                                    <div class="row">
-                                                        <div class="row-fluid">
-                                                            <div class="col-xs-8 col-md-8 text-right"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}</div>
-                                                            <div class="col-xs-4 col-md-4 text-left"><strong>{{ product.quantity }}&nbsp;{% if  product.masterItem.productUnit is defined and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</strong></div>
-                                                        </div>
-                                                    </div>
+                                                <div class="card-read-more text-center">
+                                                    <strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}
                                                 </div>
                                             </div>
                                         </div>
@@ -324,7 +309,7 @@
                 {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
                     <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
                     <div class="row div-vertical-center">
-                    <button  class="btn btn-info ladda-button" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
+                    <button  class="btn btn-info ladda-button" id="filter" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
                     </div>
                 </div>
                 {% endif %}
@@ -373,7 +358,7 @@
                 {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
                     <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
                         <div class="row div-vertical-center">
-                            <button  class="btn btn-info ladda-button" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
+                            <button  class="btn btn-info ladda-button" id="filter" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
                         </div>
                     </div>
                 {% endif %}
@@ -383,7 +368,7 @@
         <section>
         {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
             <div class="container  bodyColor">
-                {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'menu':menu.id,'position':'footer-top'}) %}
+                {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'footer-top'}) %}
             </div>
         {% endif %}
         {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer-top') %}
@@ -392,58 +377,19 @@
             </div>
         {% endif %}
         </section>
-
-
         <div class="clearfix"></div>
         <!-- Modal -->
-        <script>
-            {% if globalOption.templateCustomize.showSidebar == 1 %}
-                var item =  3;
-            {% else %}
-                var item =  4;
-            {% endif %}
+<script>
+    {% if globalOption.templateCustomize.showSidebar == 1 %}
+        var item =  3;
+    {% else %}
+        var item =  4;
+    {% endif %}
 
-        </script>
-        <style>
+</script>
 
-            .product-nav > li{
-                float: left;
-                list-style: none;
-                margin-bottom: 0;
-                height: auto;
+</section>
 
-            }
-            .dropdown-menu > li > a {
-                color:#428bca;
-            }
-            .product-dropdown  ul.dropdown-menu {
-                border-radius:4px;
-                box-shadow:none;
-                margin-top:20px;
-            }
-            .product-dropdown  ul.dropdown-menu:before {
-                content: "";
-                border-bottom: 10px solid #fff;
-                border-right: 10px solid transparent;
-                border-left: 10px solid transparent;
-                position: absolute;
-                top: -10px;
-                right: 16px;
-                z-index: 10;
-            }
-            .product-dropdown  ul.dropdown-menu:after {
-                content: "";
-                border-bottom: 12px solid #ccc;
-                border-right: 12px solid transparent;
-                border-left: 12px solid transparent;
-                position: absolute;
-                top: -12px;
-                right: 14px;
-                z-index: 9;
-            }
-
-        </style>
-    </section>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

@@ -41,7 +41,7 @@
                             <div class="row-fluid">
                                 <div class="span4">
                                     <div class="control-group">
-                                        <label class="control-label" for="firstName">Discount Amount</label>
+                                        <label class="control-label" for="firstName">Discount Title</label>
                                         <div class="controls">
                                             <div class="input-icon left">
                                                 <i class="icon-font"></i>
@@ -50,8 +50,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Discount Amount</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-font"></i>
+                                                {{ form_widget(form.discountAmount) }}
+                                                {{ form_errors(form.discountAmount) }}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="span4">
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Type</label>
                                         <div class="controls">
@@ -61,6 +71,33 @@
                                     </div>
                                 </div>
                                 <div class="span4">
+                                    <div class="control-group">
+                                        <label class="control-label" >Feature image</label>
+                                        <div class="controls">
+                                            <div data-provides="fileupload" class="fileupload fileupload-new">
+                                                <div  class="fileupload-new thumbnail">
+                                                    {% if(entity.webPath) %}
+                                                        <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.webPath }}">
+                                                    {% else %}
+                                                        <img alt="" src="http://www.placehold.it/1024x512/EFEFEF/AAAAAA&amp;text=no+image">
+                                                    {% endif %}
+                                                </div>
+                                                <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                                <div>
+													<span class="btn btn-file">
+                                                        <span class="fileupload-new">Select image</span>
+													    <span class="fileupload-exists">Change</span>
+                                                        {{ form_widget(form.file) }}
+                                                        {{ form_errors(form.file) }}
+                                                    </span>
+                                                    <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">&nbsp;</label>
                                         <div class="controls">
@@ -100,6 +137,7 @@
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
                                     <th class="numeric" >Name </th>
+                                    <th class="numeric" >Discount Amount</th>
                                     <th class="numeric" >Type</th>
                                     <th class="numeric" >Status</th>
                                     <th class="numeric" >Action</th>
@@ -111,12 +149,12 @@
                                     <tr>
 
                                         <td class="numeric" ><a href="{{ path('itemcolor_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
+                                        <td class="numeric" >{{ entity.discountAmount  }}</td>
                                         <td class="numeric" >{{ entity.type  }}</td>
                                         <td class="numeric" >{% if entity.status == 1 %}Active {% else %}In-active {% endif %}</td>
                                         <td class="numeric" >
-                                            <a href="{{ path('itemcolor_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                            <a href="{{ path('itemcolor_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                            <a title="Are you sure went to delete ?" href="{{ path('itemcolor_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            <a href="{{ path('ecommerce_discount_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+                                            <a title="Are you sure went to delete ?" href="{{ path('ecommerce_discount_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

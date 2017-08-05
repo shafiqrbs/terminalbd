@@ -34,10 +34,9 @@ class FeatureCategory
     private  $globalOption;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="featureCategories" )
-     * @ORM\OrderBy({"sorting" = "ASC"})
+     * @ORM\OneToOne(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="featureCategory" )
      **/
-    private  $category;
+     private  $category;
 
     /**
      * @var smallint

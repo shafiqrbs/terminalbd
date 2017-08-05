@@ -134,7 +134,7 @@
         <div class="col-xs-3 col-md-3">
         <div class="btn-group" role="group" aria-label="...">
             {% if  globalOption.ecommerceConfig.cart == 1  %}
-                <button type="button" class="btn btn-success cartSubmit" data-style="zoom-in" data-url="{{ path('webservice_product_cart',{'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : subItem.id }) }}">Add To Cart</button>
+                <button type="button" class="btn btn-info cartSubmit" data-style="zoom-in" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart',{'product' : product.id,'subitem' : subItem.id }) }}">Add To Buy</button>
                 <input type="hidden" name="productImg" value="{% if product.webPath is not empty  %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
             {% endif %}
             <button class="btn btn-danger"  data-dismiss="modal" >Close</button>

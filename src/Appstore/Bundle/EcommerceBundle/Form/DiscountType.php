@@ -5,6 +5,7 @@ namespace Appstore\Bundle\EcommerceBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class DiscountType extends AbstractType
 {
@@ -16,14 +17,19 @@ class DiscountType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Add your discount amount percentage/flat')))
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Discount title')))
+            ->add('discountAmount','text', array('attr'=>array('class'=>'m-wrap span6 numeric','placeholder'=>'Add discount amount percentage/flat'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Add discount amount percentage/flat'))
+                )))
             ->add('type', 'choice', array(
-                'attr'=>array('class'=>'span6'),
+                'attr'=>array('class'=>'span12'),
                 'choices' => array(
                     'percentage'       => 'Percentage',
                     'flat'       => 'Flat'
                 ),
             ))
+            ->add('file','file', array('attr'=>array('class'=>'default')));
 
         ;
     }

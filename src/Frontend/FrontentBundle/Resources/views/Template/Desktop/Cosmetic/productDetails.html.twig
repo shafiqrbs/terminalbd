@@ -324,7 +324,7 @@
                 {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
                     <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
                     <div class="row div-vertical-center">
-                    <button  class="btn btn-info ladda-button" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
+                    <button  class="btn btn-info ladda-button" id="filter" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
                     </div>
                 </div>
                 {% endif %}
@@ -373,7 +373,7 @@
                 {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
                     <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
                         <div class="row div-vertical-center">
-                            <button  class="btn btn-info ladda-button" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
+                            <button  class="btn btn-info ladda-button" id="filter" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
                         </div>
                     </div>
                 {% endif %}
@@ -392,58 +392,18 @@
             </div>
         {% endif %}
         </section>
-
-
         <div class="clearfix"></div>
         <!-- Modal -->
-        <script>
-            {% if globalOption.templateCustomize.showSidebar == 1 %}
-                var item =  3;
-            {% else %}
-                var item =  4;
-            {% endif %}
+<script>
+    {% if globalOption.templateCustomize.showSidebar == 1 %}
+        var item =  3;
+    {% else %}
+        var item =  4;
+    {% endif %}
 
-        </script>
-        <style>
+</script>
 
-            .product-nav > li{
-                float: left;
-                list-style: none;
-                margin-bottom: 0;
-                height: auto;
-
-            }
-            .dropdown-menu > li > a {
-                color:#428bca;
-            }
-            .product-dropdown  ul.dropdown-menu {
-                border-radius:4px;
-                box-shadow:none;
-                margin-top:20px;
-            }
-            .product-dropdown  ul.dropdown-menu:before {
-                content: "";
-                border-bottom: 10px solid #fff;
-                border-right: 10px solid transparent;
-                border-left: 10px solid transparent;
-                position: absolute;
-                top: -10px;
-                right: 16px;
-                z-index: 10;
-            }
-            .product-dropdown  ul.dropdown-menu:after {
-                content: "";
-                border-bottom: 12px solid #ccc;
-                border-right: 12px solid transparent;
-                border-left: 12px solid transparent;
-                position: absolute;
-                top: -12px;
-                right: 14px;
-                z-index: 9;
-            }
-
-        </style>
-    </section>
+</section>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

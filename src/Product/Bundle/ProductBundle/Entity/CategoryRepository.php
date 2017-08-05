@@ -596,7 +596,7 @@ class CategoryRepository extends MaterializedPathRepository
 
             $categories = $inventroy->getItemTypeGrouping()->getCategories();
             foreach($categories as $category){
-                $orX->add("node.path like '" . $category->getId() . "/%'");
+                $orX->add("node.path like '" .$category->getId() . "/%'");
             }
 
             $results = $qb
@@ -658,4 +658,21 @@ class CategoryRepository extends MaterializedPathRepository
         return $query->getQuery()->getResult();
 
     }
+
+
+    public function getChildIds($catId)
+    {
+
+        $query = $this->createQueryBuilder('e');
+        $orX = $query->expr()->orX();
+        $query->select('e.id as id');
+        $orX->add("e.path like '%" .$catId."/%'");
+        $query->where($orX);
+        $result = $query->getQuery();
+        $res = $result->getArrayResult();
+        return $res;
+
+    }
+
+
 }

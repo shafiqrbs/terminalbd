@@ -53,12 +53,12 @@ class DomainController extends Controller
         file_put_contents(realpath(WEB_PATH . "/../app/config/dynamic/sites.yml"), $routesString);
 
         return $this->redirect($this->generateUrl('tools_domain'));
+
     }
 
 
     public function paginate($entities)
     {
-
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $entities,

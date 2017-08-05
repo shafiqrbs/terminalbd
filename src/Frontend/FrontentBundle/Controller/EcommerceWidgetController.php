@@ -1,11 +1,15 @@
 <?php
 
 namespace Frontend\FrontentBundle\Controller;
+use Appstore\Bundle\EcommerceBundle\Entity\Discount;
+use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
+use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\CustomerRegisterType;
 use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\ContentBundle\Entity\PageModule;
 use Setting\Bundle\ToolBundle\Entity\Branding;
 use Product\Bundle\ProductBundle\Entity\Product;
@@ -330,5 +334,128 @@ class EcommerceWidgetController extends Controller
         ));
     }
 
+    public function categoryTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, Category $category)
+    {
+
+        $data = array('category' => $category->getId());
+        $datalimit = $widget->getCategoryLimit();
+        $limit = $datalimit > 0 ? $datalimit : 12;
+        $inventory = $globalOption->getInventoryConfig()->getId();
+        $categoryProducts = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $siteEntity = $globalOption->getSiteSetting();
+        $themeName = $siteEntity->getTheme()->getFolderName();
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/CategoryWidget';
+        }else{
+            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/CategoryWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'products'          => $categoryProducts->getResult(),
+            'globalOption'              => $globalOption,
+            'widget'                    => $widget,
+            'category'                  => $category,
+        ));
+    }
+
+    public function brandTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, ItemBrand $brand)
+    {
+
+        $data = array('brand' => $brand);
+        $datalimit = $widget->getBrandLimit();
+        $limit = $datalimit > 0 ? $datalimit : 12;
+        $inventory = $globalOption->getInventoryConfig()->getId();
+        $products = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $siteEntity = $globalOption->getSiteSetting();
+        $themeName = $siteEntity->getTheme()->getFolderName();
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/BrandWidget';
+        }else{
+            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/BrandWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'products'                  => $products->getResult(),
+            'globalOption'                  => $globalOption,
+            'widget'                        => $widget,
+            'brand'                     => $brand,
+        ));
+    }
+
+    public function promotionTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, Promotion $promotion)
+    {
+
+        $data = array('promotion' => $promotion);
+        $datalimit = $widget->getPromotionLimit();
+        $limit = $datalimit > 0 ? $datalimit : 12;
+        $inventory = $globalOption->getInventoryConfig()->getId();
+        $products = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $siteEntity = $globalOption->getSiteSetting();
+        $themeName = $siteEntity->getTheme()->getFolderName();
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/PromotionWidget';
+        }else{
+            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/PromotionWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'products'              => $products->getResult(),
+            'globalOption'                  => $globalOption,
+            'widget'                        => $widget,
+            'promotion'                     => $promotion,
+        ));
+    }
+
+    public function tagTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, Promotion $promotion)
+    {
+
+        $data = array('tag' => $promotion);
+        $datalimit = $widget->getTagLimit();
+        $limit = $datalimit > 0 ? $datalimit :12;
+        $inventory = $globalOption->getInventoryConfig()->getId();
+        $products = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $siteEntity = $globalOption->getSiteSetting();
+        $themeName = $siteEntity->getTheme()->getFolderName();
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/TagWidget';
+        }else{
+            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/TagWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'products'              => $products->getResult(),
+            'globalOption'                  => $globalOption,
+            'widget'                        => $widget,
+            'promotion'                     => $promotion,
+        ));
+    }
+    public function discountTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, Discount $discount)
+    {
+
+        $data = array('discount' => $discount);
+        $datalimit = $widget->getTagLimit();
+        $limit = $datalimit > 0 ? $datalimit :12;
+        $inventory = $globalOption->getInventoryConfig()->getId();
+        $products = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data,$limit);
+        $siteEntity = $globalOption->getSiteSetting();
+        $themeName = $siteEntity->getTheme()->getFolderName();
+        /* Device Detection code desktop or mobile */
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/DiscountWidget';
+        }else{
+            $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/DiscountWidget';
+        }
+        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+            'products'              => $products->getResult(),
+            'globalOption'                  => $globalOption,
+            'widget'                        => $widget,
+            'discount'                      => $discount,
+        ));
+    }
 
 }

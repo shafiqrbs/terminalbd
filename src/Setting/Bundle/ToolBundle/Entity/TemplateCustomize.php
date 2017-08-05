@@ -189,6 +189,13 @@ class TemplateCustomize
      */
     private $titleTextAlign;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pagination", type="string", length=25, nullable=true)
+     */
+    private $pagination ='bootstrap';
+
 
     /**
      * @var string
@@ -1448,6 +1455,22 @@ class TemplateCustomize
     public function setTitleTextAlign($titleTextAlign)
     {
         $this->titleTextAlign = $titleTextAlign;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPagination()
+    {
+        return $this->pagination;
+    }
+
+    /**
+     * @param string $pagination
+     */
+    public function setPagination($pagination)
+    {
+        $this->pagination = $pagination;
     }
 
 

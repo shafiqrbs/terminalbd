@@ -122,6 +122,79 @@ class FeatureWidget
      */
     private $sliderFeaturePosition;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="categoryShow", type="string",length=50 ,nullable=true)
+     */
+    private $categoryShow;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="categoryLimit", type="smallint",length=2 ,nullable=true)
+     */
+    private $categoryLimit;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="promotionShow", type="string",length=50 ,nullable=true)
+     */
+    private $promotionShow;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="promotionLimit", type="smallint",length=2 ,nullable=true)
+     */
+    private $promotionLimit;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="discountShow", type="string",length=50 ,nullable=true)
+     */
+    private $discountShow;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="discountLimit", type="smallint",length=2 ,nullable=true)
+     */
+    private $discountLimit;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tagShow", type="string",length=50 ,nullable=true)
+     */
+    private $tagShow;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="tagLimit", type="smallint",length=2 ,nullable=true)
+     */
+    private $tagLimit;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="brandShow", type="string",length=50 ,nullable=true)
+     */
+    private $brandShow;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="brandLimit", type="smallint",length=2 ,nullable=true)
+     */
+    private $brandLimit;
+
+
 
     /**
      * @var string
@@ -746,5 +819,165 @@ class FeatureWidget
     public function setModuleFeatureName($moduleFeatureName)
     {
         $this->moduleFeatureName = $moduleFeatureName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryShow()
+    {
+        return $this->categoryShow;
+    }
+
+    /**
+     * @param string $categoryShow
+     */
+    public function setCategoryShow($categoryShow)
+    {
+        $this->categoryShow = $categoryShow;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPromotionShow()
+    {
+        return $this->promotionShow;
+    }
+
+    /**
+     * @param string $promotionShow
+     */
+    public function setPromotionShow($promotionShow)
+    {
+        $this->promotionShow = $promotionShow;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiscountShow()
+    {
+        return $this->discountShow;
+    }
+
+    /**
+     * @param string $discountShow
+     */
+    public function setDiscountShow($discountShow)
+    {
+        $this->discountShow = $discountShow;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTagShow()
+    {
+        return $this->tagShow;
+    }
+
+    /**
+     * @param string $tagShow
+     */
+    public function setTagShow($tagShow)
+    {
+        $this->tagShow = $tagShow;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBrandShow()
+    {
+        return $this->brandShow;
+    }
+
+    /**
+     * @param string $brandShow
+     */
+    public function setBrandShow($brandShow)
+    {
+        $this->brandShow = $brandShow;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCategoryLimit()
+    {
+        return $this->categoryLimit;
+    }
+
+    /**
+     * @param int $categoryLimit
+     */
+    public function setCategoryLimit($categoryLimit)
+    {
+        $this->categoryLimit = $categoryLimit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPromotionLimit()
+    {
+        return $this->promotionLimit;
+    }
+
+    /**
+     * @param int $promotionLimit
+     */
+    public function setPromotionLimit($promotionLimit)
+    {
+        $this->promotionLimit = $promotionLimit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDiscountLimit()
+    {
+        return $this->discountLimit;
+    }
+
+    /**
+     * @param int $discountLimit
+     */
+    public function setDiscountLimit($discountLimit)
+    {
+        $this->discountLimit = $discountLimit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTagLimit()
+    {
+        return $this->tagLimit;
+    }
+
+    /**
+     * @param int $tagLimit
+     */
+    public function setTagLimit($tagLimit)
+    {
+        $this->tagLimit = $tagLimit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBrandLimit()
+    {
+        return $this->brandLimit;
+    }
+
+    /**
+     * @param int $brandLimit
+     */
+    public function setBrandLimit($brandLimit)
+    {
+        $this->brandLimit = $brandLimit;
     }
 }

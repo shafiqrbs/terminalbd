@@ -18,7 +18,7 @@
                         <a href="{{ path('templatecustomize') }}">Template Customize</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Form Components</a></li>
+                    <li><a href="#">Template Components</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -37,6 +37,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Template Customize Information</div>
                         <div class="actions">
                             <div class="btn-group">
+                                <a class="btn purple" target="_blank" href="http://www.htmlcsscolor.com">Color Plate</a>
                                 <a class="btn blue" href="{{ path('globaloption_modify') }}">
                                     <i class="icon-cogs"></i>
                                     Setting
@@ -66,7 +67,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span6">
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Sidebar Title</label>
                                         <div class="controls">
@@ -91,6 +92,18 @@
                                             <div class="input-icon left">
                                                 {{ form_widget(form.sidebarTooltip) }}
                                                 {{ form_errors(form.sidebarTooltip) }}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" >Pagination</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                {{ form_widget(form.pagination) }}
+                                                {{ form_errors(form.pagination) }}
                                             </div>
 
                                         </div>
@@ -742,7 +755,7 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-center">
                                     <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
-                                    <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
+                                    <a href="{{ path('templatecustomize_reset',{'id':entity.id}) }}" type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</a>
                                 </div>
                             </div>
                             {{ form_end(form) }}

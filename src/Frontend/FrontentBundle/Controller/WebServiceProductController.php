@@ -22,7 +22,7 @@ use Core\UserBundle\Entity\User;
 class WebServiceProductController extends Controller
 {
 
-    public function paginate($entities,$limit)
+    public function paginate($entities, $limit , $template = '')
     {
 
         $paginator  = $this->get('knp_paginator');
@@ -33,9 +33,15 @@ class WebServiceProductController extends Controller
         );
         $detect = new MobileDetect();
         if( $detect->isMobile() || $detect->isTablet() ) {
-            $pagination->setTemplate('FrontendBundle:Template/Desktop/Widget:mobilePagination.html.twig');
+            $pagination->setTemplate('FrontendBundle:Template/Desktop/Pagination:nextPrev.html.twig');
         }else{
-            $pagination->setTemplate('FrontendBundle:Template/Desktop/Widget:mobilePagination.html.twig');
+            if($template =='nextPrev'){
+                $pagination->setTemplate('FrontendBundle:Template/Desktop/Pagination:nextPrev.html.twig');
+            }elseif($template =='nextPrevDropDown') {
+                $pagination->setTemplate('FrontendBundle:Template/Desktop/Pagination:nextPrevDropDown.html.twig');
+            }else{
+                $pagination->setTemplate('FrontendBundle:Template/Desktop/Pagination:bootstrap.html.twig');
+            }
         }
         return $pagination;
     }
@@ -57,7 +63,7 @@ class WebServiceProductController extends Controller
             $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
-            $pagination = $this->paginate($entities, $limit);
+            $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
 
@@ -108,7 +114,7 @@ class WebServiceProductController extends Controller
             $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
-            $pagination = $this->paginate($entities, $limit);
+            $pagination = $this->paginate($entities, $limit , $globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
 
@@ -160,7 +166,7 @@ class WebServiceProductController extends Controller
             $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
-            $pagination = $this->paginate($entities, $limit);
+            $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
 
@@ -206,10 +212,10 @@ class WebServiceProductController extends Controller
 
             $data = $_REQUEST;
             $inventory = $globalOption->getInventoryConfig();
-            $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
+            $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
             $ecommerce = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
-            $pagination = $this->paginate($entities,$limit);
+            $pagination = $this->paginate($entities,$limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
 
@@ -256,10 +262,10 @@ class WebServiceProductController extends Controller
 
             $data = $_REQUEST;
             $inventory = $globalOption->getInventoryConfig();
-            $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
+            $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
             $ecommerce = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
-            $pagination = $this->paginate($entities,$limit);
+            $pagination = $this->paginate($entities,$limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
 
@@ -306,10 +312,10 @@ class WebServiceProductController extends Controller
 
             $data = $_REQUEST;
             $inventory = $globalOption->getInventoryConfig();
-            $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
+            $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
             $ecommerce = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
-            $pagination = $this->paginate($entities,$limit);
+            $pagination = $this->paginate($entities,$limit,$globalOption->getTemplateCustomize()->getPagination());
 
             /* Device Detection code desktop or mobile */
 
@@ -363,9 +369,9 @@ class WebServiceProductController extends Controller
             if(!empty($entity->getMasterItem()) && !empty ($entity->getMasterItem()->getCategory())){
 
                 $cat = $entity->getMasterItem()->getCategory()->getId();
-                $data = array('cat' => $cat);
-                $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
-                $products = $this->paginate($entities,$limit=12);
+                $data = array('category' => $cat);
+                $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
+                $products = $this->paginate($entities, $limit = 12 , $globalOption->getTemplateCustomize()->getPagination());
             }
 
             $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
@@ -514,7 +520,7 @@ class WebServiceProductController extends Controller
 
         $showMaster = $globalOption->getEcommerceConfig()->getShowMasterName();
 
-        echo $masterItem = !empty($product->getMasterItem()) and $showMaster == 1 ? $product->getMasterItem()->getName().'-':'';
+        $masterItem = !empty($product->getMasterItem()) and $showMaster == 1 ? $product->getMasterItem()->getName().'-':'';
 
         $data = array(
 
@@ -530,12 +536,13 @@ class WebServiceProductController extends Controller
             'productImg' => $productImg
         );
         $cart->insert($data);
-        $cartTotal = $cart->total();
-        $totalItems = $cart->total_items();
+        $cartTotal = (string)$cart->total();
+        $totalItems = (string)$cart->total_items();
         $cartResult = $cartTotal.'('.$totalItems.')';
         $salesItems = $this->getCartItem($globalOption,$cart->contents());
-        return new Response(json_encode(array('cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems, 'salesItem' => $salesItems)));
-
+        $array =(json_encode(array('cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems, 'salesItem' => $salesItems)));
+        echo $array;
+        exit;
 
     }
 
@@ -548,29 +555,35 @@ class WebServiceProductController extends Controller
 
        foreach ($salesItems as $product ) {
 
-            $items .= '<li id="item-remove-'.$product['rowid'].'" ><div class="item">';
-            $items .= '<div class="col-md-12 cart-product-title">'.$product['name'].'</div>';
-            $items .= '<div class="col-md-6">';
-            $items .= '<img height="100" width="160" src="'.$product['productImg'] . '">';
-            $items .= '</div>';
-            $items .= '<div class="col-md-6">';
-            $items .= '<div class="input-group">';
-            $items .= '<span class="input-group-addon">'.$currency .' '. $product['price'].'</span>';
-            $items .= '<input type="text" class="form-control" width="80" value="' . $product['quantity'] . '">';
-            $items .= '</div>';
-            $items .= '<div class="btn-group text-right col-md-12" role="group" >';
-            $items .= '<button id="'.$product['rowid'].'"  data-url="/cart/product-remove/'.$product['rowid'] .'"
-                                                            class="btn btn-danger pull-right hunger-remove-cart"><span class="glyphicon glyphicon-trash"></span>
-                                                    </button>';
-            $items .= '<button id="'.$product['rowid'].'"  data-url="/cart/product-update/'.$product['rowid'] .'" data-id="'. $product['price'] .'" data-value="'.$product['quantity'].'" 
-                                                            class="btn btn-success pull-right hunger-update-cart"><span class="glyphicon glyphicon-pencil"></span>
-                                                    </button>';
-            $items .= '</div>';
-            $items .= '</div>';
-            $items .= '</div></li>';
+            $items .= '<li id="item-remove-'.$product['rowid'].'" >';
+            $items .= '<span class="item">';
+            $items .= '<span class="item-left">';
+            $items .= '<img height="50" width="50" src="'.$product['productImg'] . '">';
+            $items .= '<span class="item-info">';
+            $items .= '<span>'.$product['name'] .'</span>';
+            $items .= '<span>Qnt '.$product['quantity'].'</span>';
+            $items .= '<span><strong>'.$currency .' '. $product['price'].'</strong></span>';
+            $items .= '</span>';
+            $items .= '</span>';
+            $items .= '<span class="item-right">';
+            $items .= '<button id="'.$product['rowid'].'" data-url="/cart/product-remove/'.$product['rowid'] .'"
+             class="btn btn-xs btn-danger pull-right hunger-remove-cart"><span class="glyphicon glyphicon-trash"></span></button>';
+            $items .= '</span>';
+            $items .= '</span>';
+            $items .= '</li>';
         }
         return $items;
 
+   }
+
+    public function productCartDetailsAction(Request $request, $subdomain){
+
+        $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $salesItems = $this->getCartItem($globalOption,$cart->contents());
+        return $salesItems;
+        exit;
     }
 
     public function productUpdateCartAction(Request $request , $cartid)

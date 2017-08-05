@@ -38,7 +38,7 @@
                             {{ form_row(form._token) }}
 
                             <div class="row-fluid">
-                                <div class="span6 ">
+                                <div class="span6">
                                     <div class="control-group">
                                         <label class="control-label" for="">Name</label>
                                         <div class="controls">
@@ -50,12 +50,39 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span4">
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="">Type</label>
                                         <div class="controls">
                                             {{ form_widget(form.type) }}
                                             {{ form_errors(form.type) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span4">
+                                    <div class="control-group">
+                                        <label class="control-label" >Feature image</label>
+                                        <div class="controls">
+                                            <div data-provides="fileupload" class="fileupload fileupload-new">
+                                                <div  class="fileupload-new thumbnail">
+                                                    {% if(entity.webPath) %}
+                                                        <img class="fileupload-preview fileupload-exists thumbnail" alt="" src="/{{ entity.webPath }}">
+                                                    {% else %}
+                                                        <img alt="" src="http://www.placehold.it/1024x512/EFEFEF/AAAAAA&amp;text=no+image">
+                                                    {% endif %}
+                                                </div>
+                                                <div  class="fileupload-preview fileupload-exists thumbnail"></div>
+                                                <div>
+													<span class="btn btn-file">
+                                                        <span class="fileupload-new">Select image</span>
+													    <span class="fileupload-exists">Change</span>
+                                                        {{ form_widget(form.file) }}
+                                                        {{ form_errors(form.file) }}
+                                                    </span>
+                                                    <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

@@ -94,7 +94,7 @@ class TemplateWidgetController extends Controller
         if( $detect->isMobile() || $detect->isTablet() ) {
             $template = 'Template/Mobile/Widget/';
         }else{
-            $template = 'Template/Mobile/Widget/';
+            $template = 'Template/Desktop/Widget/';
         }
         return $this->render('@Frontend/'.$template.'/modalLogin.html.twig', array(
             'globalOption'             => $globalOption,

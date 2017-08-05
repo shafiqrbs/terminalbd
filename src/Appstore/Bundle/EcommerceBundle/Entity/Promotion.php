@@ -154,8 +154,6 @@ class Promotion
     private $feature = false;
 
 
-
-
     /**
      * Get id
      *

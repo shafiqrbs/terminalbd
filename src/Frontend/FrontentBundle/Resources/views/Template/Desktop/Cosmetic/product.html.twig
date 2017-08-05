@@ -35,25 +35,10 @@
                     <div class="col-md-6">
                         <div class="btn-group pull-left">
                             <div class="product-title"><span class="glyphicon glyphicon-list"></span>&nbsp;{% if titleName is defined and titleName is not empty %}{{ titleName }}{% else %}ALL PRODUCT{% endif %}</div>
-
-                   {#         <a href="#" id="list" class="btn btn-default btn-sm page-button"><span class="glyphicon glyphicon-th-list"></span></a>
-                            <a href="#" id="grid" class="btn btn-default btn-sm page-button"><span class="glyphicon glyphicon-th"></span></a>
-#}                        </div>
+                   </div>
                     </div>
                     <div class="col-md-6 navbar-right">
                         <form class="form-inline">
-                            {#<div class="form-group paginate-form-group" >
-                                <label for="exampleInputEmail2">Show: </label>
-                                {% set limit = app.request.get('limit') %}
-                                <select id="limit" name="limit" class="input-selector"  onchange='this.form.submit()'>
-                                    <option {% if limit == 15  %} selected="selected" {% endif %} value="15">15</option>
-                                    <option {% if limit == 16  %} selected="selected" {% endif %} value="16">16</option>
-                                    <option {% if limit == 20  %} selected="selected" {% endif %} value="20">20</option>
-                                    <option {% if limit == 21  %} selected="selected" {% endif %} value="21">21</option>
-                                    <option {% if limit == 28  %} selected="selected" {% endif %} value="28">28</option>
-                                    <option {% if limit == 30  %} selected="selected" {% endif %} value="30">30</option>
-                                </select>
-                            </div>#}
                             <div class="form-group paginate-form-group">
                                 <label for="exampleInputName2">Sort By: </label>
                                 {% set sortBy = app.request.get('sortBy') %}
@@ -144,7 +129,7 @@
             {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
                 <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
                 <div class="row div-vertical-center">
-                    <button  class="btn btn-info ladda-button" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
+                    <button  class="btn btn-info ladda-button" id="filter" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
                 </div>
             </div>
             {% endif %}
@@ -161,7 +146,7 @@
             {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
                 <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
                     <div class="row div-vertical-center">
-                        <button  class="btn btn-info ladda-button" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
+                        <button  class="btn btn-info ladda-button" id="filter" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
                     </div>
                 </div>
             {% endif %}
