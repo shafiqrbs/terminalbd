@@ -227,7 +227,7 @@ $(document).on( "click", ".cartSubmit", function(e){
             obj = JSON.parse(response);
             $('.totalItem').html(obj['totalItem']);
             $('.totalAmount').html(obj['cartTotal']);
-            $('.item-list').html(obj['salesItem']);
+            $('.dropdown-cart').html(obj['salesItem']);
             $('.vsidebar .txt').html(obj['cartResult']);
 
         }
@@ -236,25 +236,7 @@ $(document).on( "click", ".cartSubmit", function(e){
 
 });
 
-$(document).on( "mouserHover", "#view-cart-data", function(e){
 
-    var url = $(this).attr("data-url");
-    $.ajax({
-        url:url ,
-        type: 'POST',
-        data:data,
-        success: function(response){
-            obj = JSON.parse(response);
-            $('.totalItem').html(obj['totalItem']);
-            $('.totalAmount').html(obj['cartTotal']);
-            $('.item-list').html(obj['salesItem']);
-            $('.vsidebar .txt').html(obj['cartResult']);
-
-        }
-    });
-    e.preventDefault();
-
-});
 
 
 $(document).on( "click", ".hunger-remove-cart", function(e){

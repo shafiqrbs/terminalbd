@@ -266,6 +266,13 @@ ul.dropdown-cart li .item-right button {
     padding: 0;
     margin: 0;
 }
+.navbar-inverse .navbar-nav>li>a {
+    color: #FFFFff;
+}
+
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover{
+    background-color: #F88216;
+}
 
 .mega-dropdown-menu > li > ul > li {
     list-style: none;
@@ -273,7 +280,6 @@ ul.dropdown-cart li .item-right button {
 
 .mega-dropdown-menu > li > ul > li > a {
     display: block;
-    color: #222;
     padding: 3px 5px;
 }
 
@@ -284,7 +290,7 @@ ul.dropdown-cart li .item-right button {
 
 .mega-dropdown-menu .dropdown-header {
     font-size: 18px;
-    color: #ff3546;
+    color: #222222;
     padding: 5px 60px 5px 5px;
     line-height: 30px;
 }
@@ -328,7 +334,7 @@ ul.dropdown-cart li .item-right button {
     left:90.2%;
 }
 .menu-carousel-inner{
-    min-height:auto !important;
+    min-height:100% !important;
     margin-top:10px;
 }
 .menu-slider h4 small{
@@ -582,8 +588,8 @@ ul.dropdown-cart li .item-right button {
     background:#f6f6f6; /* Item background color */
     margin:0; /* Give each list item a left margin to make room for the numbers */
     padding-left: 10px; /* Add some spacing around the content */
-    padding-bottom:0px;
-    padding-top:0px;
+    padding-bottom:0;
+    padding-top:0;
     margin-left: 25px;
 }
 

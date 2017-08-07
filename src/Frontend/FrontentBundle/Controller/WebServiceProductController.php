@@ -548,19 +548,21 @@ class WebServiceProductController extends Controller
 
     public function getCartItem(GlobalOption $globalOption , $salesItems){
 
-
-        $currency = $globalOption->getEcommerceConfig()->getCurrency();
-
+       $currency = $globalOption->getEcommerceConfig()->getCurrency();
        $items = '';
 
        foreach ($salesItems as $product ) {
+
+           $str = $product['name'];
+           if (strlen($str) > 15)
+               $str = substr($str, 0, 15) . '..';
 
             $items .= '<li id="item-remove-'.$product['rowid'].'" >';
             $items .= '<span class="item">';
             $items .= '<span class="item-left">';
             $items .= '<img height="50" width="50" src="'.$product['productImg'] . '">';
             $items .= '<span class="item-info">';
-            $items .= '<span>'.$product['name'] .'</span>';
+            $items .= '<span>'.$str.'</span>';
             $items .= '<span>Qnt '.$product['quantity'].'</span>';
             $items .= '<span><strong>'.$currency .' '. $product['price'].'</strong></span>';
             $items .= '</span>';
@@ -582,7 +584,7 @@ class WebServiceProductController extends Controller
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         $salesItems = $this->getCartItem($globalOption,$cart->contents());
-        return $salesItems;
+        echo $salesItems;
         exit;
     }
 

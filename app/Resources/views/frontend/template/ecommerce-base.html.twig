@@ -20,7 +20,7 @@
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}">
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
-    <!-- Google fonts - witch you want to use - (rest you can just remove) -->
+     <!-- Google fonts - witch you want to use - (rest you can just remove) -->
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,800,700italic,700,600italic,600,400italic,300italic,300|Roboto:100,300,400,500,700&amp;subset=latin,latin-ext' type='text/css' />
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -46,19 +46,15 @@
     'assets/template/plugin/range-slider/bootstrap-slider.css'
     'assets/template/plugin/ladda/ladda-themeless.min.css'
     'assets/template/desktop/css/module.css'
-    'assets/template/desktop/kiksha/css/style.css'
-
     %}
 
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
-{#      <link href="/assets/template/desktop/{{ template }}/css/style.css" rel="stylesheet" /> #}
-
+      <link href="/assets/template/desktop/{{ template }}/css/style.css" rel="stylesheet" />
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
     {% block cssBlock %}{% endblock %}
 </head>
 <body data-spy="scroll">

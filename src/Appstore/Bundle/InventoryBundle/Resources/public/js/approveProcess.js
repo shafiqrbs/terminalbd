@@ -40,23 +40,34 @@ function ApproveProcess(){
 
     })
 
-    $(document).on("click", ".approve", function() {
+    $(".approve").confirm({
 
-        $(this).removeClass('approve');
-        var id = $(this).attr("data-id");
-        var url = $(this).attr("data-url");
-        $('#action-'+id).hide();
-        $('#delete-'+id).hide();
-        $.ajax({
-            url: url,
-            type: 'GET',
-            /*beforeSend: function() {
-                $('.tabbable').show().addClass('ajax-loading').fadeIn(3000);
-            },*/
-            success: function (response) {
-                location.reload();
+            text: "Are you sure you want to delete that comment?",
+            title: "Confirmation required",
+            confirm: function(button) {
+
+                $(this).removeClass('approve');
+                var id = $(this).attr("data-id");
+                var url = $(this).attr("data-url");
+                $('#action-'+id).hide();
+                $('#delete-'+id).hide();
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (response) {
+                        location.reload();
+                    },
+                })
             },
-        })
+            cancel: function(button) {
+                // nothing to do
+            },
+            confirmButton: "Yes I am",
+            cancelButton: "No",
+            post: true,
+            confirmButtonClass: "btn-danger",
+            cancelButtonClass: "btn-default",
+            dialogClass: "modal-dialog modal-lg" // Bootstrap classes for large modal
     });
 
     $(".select2Item").select2({

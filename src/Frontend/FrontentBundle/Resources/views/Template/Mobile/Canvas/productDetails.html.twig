@@ -1,0 +1,182 @@
+{% extends ':frontend/template/mobile:base.html.twig' %}
+{% block body %}
+    <div id="cat-search">
+        {% render controller("FrontendBundle:EcommerceWidget:header",{'globalOption':globalOption, 'pageName':'product'}) %}
+    </div>
+    <br/>
+
+    <div id="content" class="content-margin">
+        <article>
+            <div class="col-xs-12 col-md-12 text-center" style="padding-bottom: 20px">
+                <h3>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</h3>
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <a href="#" class="thumbnail">
+                    <img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}"  alt=""/>
+                </a>
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <div class="module-title">
+                    <i class="fa fa-dribbble"></i>&nbsp;{% if product.brand is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subDomain,'brand':product.brand.id }) }}">{{ product.brand.name }}</a>{% endif %}&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-tag"></i>&nbsp;{% if product.masterItem.category is defined and product.masterItem.category is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subDomain,'category':product.masterItem.category.id }) }}">{{ product.masterItem.category.name }}</a>{% endif %}
+                    {% if product.itemGalleries is defined and product.itemGalleries is not empty %} <i class="fa fa-file-image-o"></i>&nbsp;<a href="{{ image(product.webPath()).resize() }}">Preview</a> {% endif %}
+                    {% if product.itemGalleries is defined and product.itemGalleries is not empty %}
+                        <div id="Gallery">
+                            <i class="fa fa-file-image-o"></i>&nbsp;<a href="{{ image(product.webPath()).resize() }}">Preview</a>
+                            {% for photo in product.itemGalleries %}
+                                <a href="/{{ photo.getWebPath(product.purchase.inventoryConfig.globalOption.id,product.id) }}" rel="external"></a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                {#<div class="product-single-meta" style="margin-top:20px; margin-bottom: 20px">
+                    <div class="p-single-meta-likes">
+                        <iframe src="https://www.facebook.com/plugins/share_button.php?href=http://www.tlsbd.org&layout=button_count&size=small&mobile_iframe=true&appId=369724209850316&width=88&height=20" width="88" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+                    </div>
+                    <div class="p-single-meta-share">
+                        <iframe src="https://www.facebook.com/plugins/like.php?href=http://www.tlsbd.org&width=150&layout=standard&action=like&size=small&show_faces=false&share=false&height=20&appId=369724209850316" width="150" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+                    </div>
+                </div>
+                #}
+                <div class="product">
+                    <div class="product-details" style="border-top: none; padding: 0">
+                            <table>
+                                {% set quantity = 1 %}
+                                <tr><td colspan="2"><strong>Product Details</strong></td></tr>
+                                <tr><td>Price</td><td class="left">BDT <strong>{{ product.webPrice|format }}</strong></td></tr>
+                                {% if product.sku   %}
+                                    <tr><td><strong>SKU</strong></td><td class="left-text"><strong>{{ product.sku  }}</strong></td></tr>
+                                {% endif %}
+                                <tr><td>Stock in</td><td class="left"><strong>{{ product.purchaseStockItem  }}</strong></td></tr>
+                                {% if product.gender is not empty %}<tr><td>Gender</td><td class="left">{{ product.gender }}</td></tr>{% endif %}
+                                {% if product.ageGroup is not empty %}<tr><td>Age Group</td><td class="left">{{ product.ageGroup }}</td></tr>{% endif %}
+                                {% if product.brand is not empty %}<tr><td>Brand</td><td class="left">{{ product.brand.name }}</td></tr>{% endif %}
+                                {% if product.country is not empty %}<tr><td>Made in</td><td class="left">{{ product.country.name }}</td></tr>{% endif %}
+                                <tr><td class="left" colspan="2"><strong>Attributes</strong></td></tr>
+                                {%  for attribute in product.itemMetaAttributes %}
+                                    {% if  attribute.value %}
+                                        <tr><td>{{ attribute.itemAttribute.name }}</td><td class="left">
+                                                {% if attribute.itemAttribute.dropDown == 1 %}
+                                                    {% set vals = attribute.value |split('|') %}
+                                                    <select name="metaValue[]">
+                                                        {% for val in vals %}
+                                                            <option value="val">{{ val }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <input type="hidden" name="metaKey[]" value="{{ attribute.itemAttribute.id }}" >
+                                                {% else %}
+                                                    {{ attribute.value }}
+                                                {% endif %}
+
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                <tr><td valign="top">Description</td><td class="left">{{ product.content|raw }}</td></tr>
+                            </table>
+                            {#<div class="left" style="width: 100%">
+                                <input  type="number" value="1" id="numberBox"  min="1" max="{{ product.purchaseStockItem  }}" class="numeric" maxlength="{{ product.purchaseStockItem  }}">
+                                <select class="dropdown" id="color" name="color">
+                                    <option value="">---Color/Shade---</option>
+                                    {% for color in product.colors  %}
+                                    <option value="{{ color }}">{{ color }}</option>
+                                    {% endfor %}
+                                </select>
+                                <select class="dropdown" id="size" name="size">
+                                    <option value="">---Size/Weight/Dimension---</option>
+                                    {% for size in product.sizes  %}
+                                        <option value="{{ size }}">{{ size }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>#}
+                            {#     <div class="center" style="width:100%; text-align: center"><a href="javascript:" id="cart" data-content="" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart',{'subdomain':globalOption.subDomain,'cart':'cart','item':product.id}) }}" class="o-buttons green"><i class="fa fa-cart-plus"></i>&nbsp;Add to cart</a><a href="{{ path(globalOption.subDomain ~ '_webservice_product_wishlist',{'subdomain':globalOption.subDomain,'wishlist':'wishlist','item':product.id}) }}" class="o-buttons firoza wishlist">Wish list</a></div>
+                            #}
+                          <form class="addCart" style="margin-top: 30px">
+                            <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-lg btn-danger btn-number" data-type="minus" data-field="quantity">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                            </button>
+                                        </span>
+                                        <input type="text" name="quantity" id="quantiy" class="form-control input-lg input-number" style="text-align: center; font-weight: bold" value="1" min="1" max="{{ product.masterQuantity }}">
+                                        <span class="input-group-btn">
+                                              <button type="button" class="btn btn-lg btn-success btn-number" data-type="plus" data-field="quantity">
+                                                  <span class="glyphicon glyphicon-plus"></span>
+                                              </button>
+                                        {% if  globalOption.ecommerceConfig.cart == 1 %}
+                                            <input type="hidden" name="productImg"  value="/{% if product.webPath is not empty %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
+                                            <button type="submit" class="btn btn-lg btn-info cartSubmit" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : subitem.id }) }}">
+                                            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to cart</button>
+                                        {% endif %}
+
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </article>
+        <div class="clearfix"></div>
+        {% if(products) %}
+            {% if product.masterItem is not empty and product.masterItem.category is not empty and product.masterItem.category is defined %}
+                <br>
+                <div class="clear"></div>
+                <div class="col-md-12" >
+                    <div class="bs-callout bs-callout-info">
+                        <h4 class="title"><i class="fa fa-tag"></i>&nbsp;{{ product.masterItem.category.name }}</h4>
+                    </div>
+                </div>
+                <div id="product" class="">
+                    {% for product in products  %}
+                        {% set paymentID = globalOption.id~'-ecommerce-product-'~product.id %}
+                        <div class="outer-div">
+                            <div class="inner-div">
+                                <div id="" class="ic_container capslide_img_cont ">
+                                    <div class="col-xs-12 col-md-12">
+                                        <a href="#" class="thumbnail">
+                                            <img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}"  alt=""/>
+                                        </a>
+                                    </div>
+                                    <div class="ic_caption">
+                                        <p class="title"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}"  >{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></p>
+                                        <div class="product-short-details">
+                                            <span>{{ globalOption.ecommerceConfig.currency }}&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</span>
+                                        </div>
+                                        <div class="media-body">
+                                            <ul class="list-inline list-unstyled">
+                                                <li><span><i class="fa fa-dribbble" aria-hidden="true"></i>&nbsp;{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></li>
+                                                <li>|</li>
+                                                <li><span><span class="badge"><span class="fos-comment-count" data-fos-comment-thread-id="{{ paymentID }}">#</span></span> comments</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
+
+    </div>
+{% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@FrontendBundle/Resources/public/template/mobile/css/product-cosmetic.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
+{% block javascriptBlock %}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/mobile/js/product.js'
+    '@FrontendBundle/Resources/public/template/mobile/js/common.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+{% endblock %}
+
+

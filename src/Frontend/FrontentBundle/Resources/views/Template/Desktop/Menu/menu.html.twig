@@ -80,7 +80,6 @@
                             </li>
                         {% endif %}
                         {% if menu.categories is not empty %}
-
                             {% if menu.features is empty and menu.promotions is empty and menu.discounts is empty and menu.tags is  empty and  menu.brands is empty %}
                                 {% set column   = "col-sm-3" %}
                                 {% set class    = "col-sm-12" %}
@@ -93,7 +92,6 @@
                             {% else %}
                                 {% set class    = "col-sm-6" %}
                             {% endif %}
-
                             <li class="{{ class }}" data-match-height="menu-content" style="border-right:1px solid #d6d9dd">
                                 {% render controller("FrontendBundle:EcommerceWidget:returnMegaCategoryMenu",{globalOption:globalOption, categories: menu.categories,column:column}) %}
                             </li>
@@ -105,6 +103,18 @@
                                     {% for brand in menu.brands %}
                                         <li class="{% if menu.categories is empty %} col-sm-3 {% endif %}" ><a href="{{ path('webservice_product_brand',{'id' : brand.id}) }}">{{ brand.name }}</a></li>
                                     {% endfor %}
+                                </ul>
+                            </li>
+                        {% endif %}
+                        {% if menu.childMenus is not empty %}
+                            <li data-match-height="menu-content" class="{% if (menu.features is empty or menu.promotions is empty or menu.discounts is empty or menu.tags is  empty ) and  menu.categories is empty %} col-sm-12 {% elseif menu.categories is empty %} col-sm-9 {% else %} col-sm-3 {% endif %}">
+                                <ul class="col-sm-12">
+                                    <li class="dropdown-header">Page's</li>
+                                    {% if menu.childMenus is not empty %}
+                                        {% for childMenu in  menu.childMenus %}
+                                            <li class="{% if menu.categories is empty %} col-sm-3 {% endif %}"  ><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'module':childMenu.slug}) }}">{{ childMenu.menu }}</a></li>
+                                        {% endfor %}
+                                    {% endif %}
                                 </ul>
                             </li>
                         {% endif %}

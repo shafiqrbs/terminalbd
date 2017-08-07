@@ -298,4 +298,14 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+
+    $("#view-cart-datax" ).mouseover(function(e) {
+
+        var url = $(this).attr("data-url");
+        $.get( url , function( data ) {
+            $('.dropdown-cart').html(data);
+        });
+
+
+    });
 {% endblock %}

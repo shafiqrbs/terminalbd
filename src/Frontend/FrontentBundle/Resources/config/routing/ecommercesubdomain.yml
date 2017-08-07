@@ -38,7 +38,7 @@ webservice_product_cart_update:
     options:
             expose: true
 
-webservice_product_cart_details:
+webservice_product_cart_ajax_details:
     path:      /cart/product-details
     defaults: { _controller: FrontendBundle:WebServiceProduct:productCartDetails }
 

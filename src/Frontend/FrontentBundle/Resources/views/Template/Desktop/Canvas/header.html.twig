@@ -30,17 +30,17 @@
                                 </form>
                             </div>
                             <div class="col-md-2 col-lg-2">
-                                <div class="input-group dropdown navbar-right" id="view-cart-data"  data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}">
+                                <div class="input-group dropdown navbar-right"  >
                                     <div class="input-group-btn">
-                                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" class="btn btn-group btn-cart dropdown-toggle search-box-bg" data-toggle="dropdown"  aria-expanded="false"><span
+                                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_ajax_details') }}" id="view-cart-data"  class="btn btn-group btn-cart dropdown-toggle search-box-bg" data-toggle="dropdown"  aria-expanded="false"><span
                                                     class="glyphicon glyphicon-shopping-cart"></span></a>
                                         <a  href="javascript:" class="btn dropdown-toggle btn-warning" data-toggle="dropdown" role="button"
                                             aria-expanded="false"> <span class="label label-warning badge totalItem "  >{{ cart.total_items }}</span></a>
                                         <a style="border-left: 1px solid #dddddd" type="button" class="btn btn-group search-box-bg login-preview" ><span class="glyphicon glyphicon-lock"></span></a>
                                         <div class="item-list">
-                                            {% if  cart.contents is not empty %}
-                                                <ul class="dropdown-menu dropdown-cart" role="navbar-right">
-                                                    {% for product in cart.contents %}
+                                            <ul class="dropdown-menu dropdown-cart" role="navbar-right">
+                                                {% if  cart.contents is not empty %}
+                                                     {% for product in cart.contents %}
                                                         <li id="item-remove-{{ product.rowid }}">
                                                               <span class="item">
                                                                 <span class="item-left">
@@ -63,10 +63,10 @@
                                                             </span>
                                                         </li>
                                                     {% endfor %}
-                                                    <li class="divider"></li>
-                                                    <li><a class="text-center" href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}">View to Busket</a></li>
-                                                </ul>
-                                            {% endif %}
+                                                {% endif %}
+                                                <li class="divider"></li>
+                                                <li><a class="text-center" href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}">View to Busket</a></li>
+                                            </ul>
                                         </div>
                                      </div><!-- /btn-group -->
                                 </div><!-- /input-group -->

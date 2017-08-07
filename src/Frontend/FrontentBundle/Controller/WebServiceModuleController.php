@@ -208,8 +208,6 @@ class WebServiceModuleController extends Controller
             }
 
         }
-
-        $branches = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findBy(array('status'=>1,'globalOption'=>$globalOption,'module'=>6),array('name'=>'ASC'));
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
@@ -220,7 +218,9 @@ class WebServiceModuleController extends Controller
         return $this->render('FrontendBundle:'.$theme.':contact.html.twig',
             array(
                 'globalOption'        => $globalOption,
-                'branches'        => $branches,
+                'menu'              => $menu,
+                'page'              => $globalOption->getContactPage(),
+                'pageName'      => 'pageName',
               )
         );
 
