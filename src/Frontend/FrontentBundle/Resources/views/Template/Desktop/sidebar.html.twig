@@ -1,9 +1,9 @@
-{link: 'http://{{ globalOption.subDomain }}.kintethako.dev',id: '1','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-home.png') }}','label':'Home'},
-{link: '{{ path('webservice_contact',{'subdomain':globalOption.subDomain}) }}#contact',id: '2','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-envelope.png') }}','label':'{{ globalOption.email }}'},
+{link: 'http://{{ globalOption.domain }}',id: '1','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-home.png') }}','label':'Home'},
+{link: '{{ path(globalOption.subDomain ~ '_webservice_contact') }}#contact',id: '2','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-envelope.png') }}','label':'{{ globalOption.email }}'},
 {link: 'javascript:',id: '3','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-sms.png') }}','label':'{{ globalOption.mobile }}'},
 {% if  globalOption.location is defined and globalOption.location is not empty %}
-{link: '{{ path('webservice_contact',{'subdomain':globalOption.subDomain}) }}',id: '4','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-map.png') }}','label':'{{ globalOption.location.name }}'},
+{link: '{{ path(globalOption.subDomain ~ '_webservice_contact') }}',id: '4','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-map.png') }}','label':'{{ globalOption.location.name }}'},
 {% endif %}
 {% if cartResult is defined and cartResult is not empty and globalOption.ecommerceConfig.currency is not empty %}
-{link: '{{ path('webservice_product_cart_details',{'subdomain':globalOption.subDomain}) }}',id: '5','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-cart.png') }}','label':'{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cartResult }}'}
+{link: '{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}',id: '5','iconUrl':'{{ asset('assets/template/plugin/side.toolbar/images/icon-cart.png') }}','label':'{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cartResult }}'}
 {% endif %}

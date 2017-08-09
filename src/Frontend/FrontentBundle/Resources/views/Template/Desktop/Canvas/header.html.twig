@@ -17,7 +17,7 @@
                     {% if globalOption.templateCustomize.showSearch == 0 %}
                         <div class="row bs-example-form" id="header-form">
                             <div class="col-md-10 col-lg-10">
-                                <form class="bs-example" action="{{ path('webservice_product',{'subdomain':globalOption.subDomain}) }}"  method="get" data-example-id="input-group-segmented-buttons">
+                                <form class="bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product') }}"  method="get" data-example-id="input-group-segmented-buttons">
                                     <div class='input-group search-box' >
                                         <div class='input-group-field'>
                                             {{ categoryTree|raw }}

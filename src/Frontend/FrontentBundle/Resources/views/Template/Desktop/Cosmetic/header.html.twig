@@ -32,7 +32,7 @@
                             {% endif %}
                             {% if globalOption.ecommerceConfig.cart == 1 %}
                                 <li>
-                                    <a href="{{ path('webservice_product_cart_details',{'subdomain':globalOption.subDomain}) }}"
+                                    <a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}"
                                        class=""><i class="fa fa-shopping-cart"></i></a></li>
                             {% endif %}
                         </ul>
@@ -59,7 +59,7 @@
                     {% if globalOption.templateCustomize.showSearch == 0 %}
                         <div class="row bs-example-form" id="header-form">
                             <div class="col-lg-10">
-                                <form class="bs-example" action="{{ path('webservice_product',{'subdomain':globalOption.subDomain}) }}"  method="get" data-example-id="input-group-segmented-buttons">
+                                <form class="bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product') }}"  method="get" data-example-id="input-group-segmented-buttons">
                                     <div class='input-group search-box' >
                                         <div class='input-group-field'>
                                             {{ categoryTree|raw }}
@@ -99,7 +99,7 @@
                                                                 </span>
                                                                 <span class="item-right">
                                                                     <button id="{{ product.rowid }}"
-                                                                            data-url="{{ path('webservice_product_cart_remove',{'cartid':product.rowid}) }}"
+                                                                            data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_remove',{'cartid':product.rowid}) }}"
                                                                             class="btn btn-xs btn-danger pull-right hunger-remove-cart"><span
                                                                                 class="glyphicon glyphicon-trash"></span></button>
                                                                 </span>
@@ -107,7 +107,7 @@
                                                         </li>
                                                     {% endfor %}
                                                     <li class="divider"></li>
-                                                    <li><a class="text-center" href="{{ path('webservice_product_cart_details') }}">View Cart</a></li>
+                                                    <li><a class="text-center" href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}">View Cart</a></li>
                                                 </ul>
                                             {% endif %}
                                         </div>

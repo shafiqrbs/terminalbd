@@ -20,7 +20,7 @@
                     {% if(details.email) %}<li><span><i class="fa fa-envelope"></i></span>{{ details.email|raw }}</li>{% endif %}
                 </ul>
                 <br />
-                <p class="center"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'branch','slug':details.slug }) }}" class="o-buttons green"><i class="fa fa-map-marker"></i> Direction</a></p>
+                <p class="center"><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'branch','slug':details.slug }) }}" class="o-buttons green"><i class="fa fa-map-marker"></i> Direction</a></p>
             </div>
         </article>
     {% endfor %}

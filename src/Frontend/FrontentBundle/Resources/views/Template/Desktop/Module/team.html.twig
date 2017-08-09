@@ -6,7 +6,7 @@
                 <img src="{{ image(entity.webPath).scaleResize(263,200) }}">
                 <div class="over-layer">
                     <ul class="social-links">
-                        <li><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'team','slug':entity.slug }) }}"><i class="fa fa-link"></i></a></li>
+                        <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'team','slug':entity.slug }) }}"><i class="fa fa-link"></i></a></li>
                         {% if entity.facebook is not empty  %}
                             <li><a href="https://facebook.com/{{ entity.facebook }}"><i class="fa fa-facebook"></i></a></li>
                         {% endif %}

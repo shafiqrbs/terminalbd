@@ -352,7 +352,7 @@
                                 <li><i class="fa fa-map-marker"></i> <simple>{{ entity.location.name }}</simple></li>
                             </ul>
                             <div class="clearfix"></div>
-                            <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                            <h5 class="post-title"><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
                             <p class="post-description">{{ entity.content|truncate(120)|raw }}</p>
                         </div>
                     </div>
@@ -377,7 +377,7 @@
                                 <li><i class="fa fa-map-marker"></i> <simple>{{ entity.location.name }}</simple></li>
                             </ul>
                             <div class="clearfix"></div>
-                            <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                            <h5 class="post-title"><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
                             <p class="post-description">{{ entity.content|truncate(120)|raw }}</p>
                         </div>
                     </div>
@@ -825,7 +825,7 @@
                                     <img src="{{ image(team.webPath).scaleResize(263,200) }}">
                                     <div class="over-layer">
                                         <ul class="social-links">
-                                            <li><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'team','slug':team.slug }) }}"><i class="fa fa-link"></i></a></li>
+                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'team','slug':team.slug }) }}"><i class="fa fa-link"></i></a></li>
                                             {% if team.facebook is not empty  %}
                                             <li><a href="https://facebook.com/{{ team.facebook }}"><i class="fa fa-facebook"></i></a></li>
                                             {% endif %}
@@ -857,7 +857,7 @@
                             <img src="{{ image(team.webPath).scaleResize(263,200) }}">
                             <div class="over-layer">
                                 <ul class="social-links">
-                                    <li><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'team','slug':team.slug }) }}"><i class="fa fa-link"></i></a></li>
+                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'team','slug':team.slug }) }}"><i class="fa fa-link"></i></a></li>
                                     {% if team.facebook is not empty  %}
                                     <li><a href="https://facebook.com/{{ team.facebook }}"><i class="fa fa-facebook"></i></a></li>
                                     {% endif %}

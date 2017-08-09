@@ -8,7 +8,7 @@
 <div id="content" class="content-margin">
     {% for  details in globalOption.testimonials %}
         <article>
-            <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': moduleName|lower,'slug':details.slug }) }}">
+            <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': moduleName|lower,'slug':details.slug }) }}">
                 <div class="article-img-pane">
                     <img src="{{ image(details.webPath()).resize(136,120) }}" />
                 </div>

@@ -355,7 +355,7 @@
                                 <li><i class="fa fa-map-marker"></i> <simple>{{ entity.location.name }}</simple></li>
                             </ul>
                             <div class="clearfix"></div>
-                            <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                            <h5 class="post-title"><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
                             <p class="post-description">{{ entity.content|truncate(120)|raw }}</p>
                         </div>
                     </div>
@@ -381,7 +381,7 @@
                                 <li><i class="fa fa-map-marker"></i> <simple>{{ entity.location.name }}</simple></li>
                             </ul>
                             <div class="clearfix"></div>
-                            <h5 class="post-title"><a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
+                            <h5 class="post-title"><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}">{{ entity.name }}</a></h5>
                             <p class="post-description">{{ entity.content|truncate(120)|raw }}</p>
                         </div>
                     </div>

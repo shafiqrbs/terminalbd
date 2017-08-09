@@ -30,6 +30,5 @@ class PasswordChangeDomainSmsListener extends BaseSmsAwareListener
         $mobile = "+88".$option->getMobile();
         $this->gateway->send($msg, $mobile);
 
-
     }
 }

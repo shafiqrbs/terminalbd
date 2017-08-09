@@ -263,9 +263,8 @@ class Builder extends ContainerAware
 
             $menu['Manage Appearance']->addChild('Customize Template', array('route' => 'templatecustomize_edit', 'routeParameters' => array('id' => $globalOption->getId())));
             $menu['Manage Appearance']->addChild('Feature & Widget')->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
-            $menu['Manage Appearance']['Feature & Widget']->addChild('Sidebar Widget', array('route' => 'sidebarwidget'));
-            if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
-                $menu['Manage Appearance']['Feature & Widget']->addChild('E-commerce Widget', array('route' => 'appearancefeaturewidget'));
+            if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG') && $securityContext->isGranted('ROLE_ECOMMERCE')){
+               $menu['Manage Appearance']['Feature & Widget']->addChild('E-commerce Widget', array('route' => 'appearancefeaturewidget'));
             }
             $menu['Manage Appearance']['Feature & Widget']->addChild('Website Widget', array('route' => 'appearancewebsitewidget'));
             $menu['Manage Appearance']['Feature & Widget']->addChild('Create Feature', array('route' => 'appearancefeature'));

@@ -232,9 +232,6 @@ class FeatureWidgetType extends AbstractType
                     '16'                => '16',
                 ),
             ))
-            ->add('pageFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))
-            ->add('moduleFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))
-            ->add('moduleShowLimit','number', array('attr'=>array('class'=>'span12 m-wrap')))
             ->add('categoryShow', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),
                 'expanded'      =>false,
@@ -292,6 +289,11 @@ class FeatureWidgetType extends AbstractType
                 ),
             ))
 
+           /* ->add('pageFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))
+            ->add('moduleFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))
+            ->add('moduleShowLimit','number', array('attr'=>array('class'=>'span12 m-wrap')))
+
+
             ->add('moduleShowType', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),
                 'expanded'      =>false,
@@ -348,7 +350,7 @@ class FeatureWidgetType extends AbstractType
                         ->andWhere("n.globalOption = $this->globalId")
                         ->orderBy('e.name','ASC');
                 },
-            ))
+            ))*/
             ->add('featureBrand')
             ->add('featureCategory')
         ;

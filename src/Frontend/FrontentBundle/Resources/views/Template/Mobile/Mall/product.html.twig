@@ -33,7 +33,7 @@
                         <img src="{{ image(product.webPath()).resize() }}"  alt=""/>
                         <div class="overlay"></div>
                         <div class="ic_caption">
-                            <p class="left title"><a href="{{ path('webservice_product_details',{'subdomain':globalOption.subDomain,'product':'product','item':product.id}) }}"  >{% if product.masterItem %}{{ product.masterItem.name }}{% endif %}{% if product.webName %} - {{ product.webName }}{% endif %}</a></p>
+                            <p class="left title"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'subdomain':globalOption.subDomain,'product':'product','item':product.id}) }}"  >{% if product.masterItem %}{{ product.masterItem.name }}{% endif %}{% if product.webName %} - {{ product.webName }}{% endif %}</a></p>
                             <div class="product-short-details">
                                 <span class="left">BDT {{ product.webPrice|format }}</span>
                                 <span class="right">{{ product.purchaseStockItem }}</span>

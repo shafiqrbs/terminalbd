@@ -8,7 +8,7 @@
 <div id="content">
     {% for details in pagination %}
         <article>
-            <a href="{{ path('webservice_module_page',{'subdomain': globalOption.subDomain,'module':'noticeboard','slug':details.slug }) }}">
+            <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module':'noticeboard','slug':details.slug }) }}">
                 <p class="posts-summary">
                     {{ details.name }}
                 </p>
