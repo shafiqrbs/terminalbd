@@ -213,20 +213,10 @@ class Builder extends ContainerAware
     {
 
         $securityContext = $this->container->get('security.context');
-        $userObj = ($securityContext->getToken()->getUser());
-        $domain = $userObj->getGlobalOption()->getSubDomain();
-
 
         if ($securityContext->isGranted('ROLE_DOMAIN_WEBSITE_MANAGER')) {
 
-            $menu
-                ->addChild($domain)
-                ->setAttribute('icon', 'fa fa-bookmark')
-                ->setAttribute('dropdown', true);
-            $menu[$domain]->addChild('Home', array('route' => 'homepage_modify'));
-            $menu[$domain]->addChild('Contact', array('route' => 'contactpage_modify'));
             $option = $this->container->get('security.context')->getToken()->getUser()->getGlobalOption();
-
             $menu
                 ->addChild('Manage Content')
                 ->setAttribute('icon', 'fa fa-bookmark')
@@ -253,7 +243,11 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'fa fa-bookmark')
                 ->setAttribute('dropdown', true);
 
+            $menu['Manage Content']->addChild('Contact', array('route' => 'contactpage_modify'));
             $menu['Media']->addChild('Galleries', array('route' => 'gallery'));
+        }
+        if ($securityContext->isGranted('ROLE_DOMAIN_WEBSITE_SETTING')) {
+
             $securityContext = $this->container->get('security.context');
             $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
             $menu
@@ -268,14 +262,15 @@ class Builder extends ContainerAware
             }
             $menu['Manage Appearance']['Feature & Widget']->addChild('Website Widget', array('route' => 'appearancewebsitewidget'));
             $menu['Manage Appearance']['Feature & Widget']->addChild('Create Feature', array('route' => 'appearancefeature'));
-            $menu['Manage Appearance']->addChild('Menu', array('route' => 'menu_manage'));
-            $menu['Manage Appearance']->addChild('Menu Grouping', array('route' => 'menugrouping'));
             if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
                 $menu['Manage Appearance']->addChild('E-commerce Menu', array('route' => 'ecommercemenu'));
             }
+            $menu['Manage Appearance']->addChild('Menu', array('route' => 'menu_manage'));
+            $menu['Manage Appearance']->addChild('Menu Grouping', array('route' => 'menugrouping'));
+
         }
 
-        if ($securityContext->isGranted('ROLE_DOMAIN_WEBSITE_SETTING')) {
+        if ($securityContext->isGranted('ROLE_DOMAIN')) {
             $menu['Manage Appearance']->addChild('Settings', array('route' => 'globaloption_modify'));
         }
         return $menu;

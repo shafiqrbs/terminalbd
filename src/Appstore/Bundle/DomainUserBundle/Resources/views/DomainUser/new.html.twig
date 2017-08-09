@@ -302,7 +302,7 @@
                                                     <div data-provides="fileupload" class="fileupload fileupload-new">
                                                         <div style="width: 200px; height: 150px;"
                                                              class="fileupload-new thumbnail">
-                                                            {% if entity.profile is defined and entity.profile.webPath is defined %}
+                                                            {% if entity.profile is defined and entity.profile.id is defined %}
                                                                 <img class="fileupload-preview fileupload-exists thumbnail"
                                                                      alt="" src="/{{ entity.profile.webPath }}">
                                                             {% else %}
@@ -312,14 +312,13 @@
                                                         </div>
                                                         <div class="fileupload-preview fileupload-exists thumbnail"></div>
                                                         <div>
-													<span class="btn btn-file">
-                                                        <span class="fileupload-new">Select image</span>
-													    <span class="fileupload-exists">Change</span>
-                                                        {{ form_widget(form.profile.file) }}
-                                                        {{ form_errors(form.profile.file) }}
-                                                    </span>
-                                                            <a data-dismiss="fileupload" class="btn fileupload-exists"
-                                                               href="#">Remove</a>
+                                                            <span class="btn btn-file">
+                                                                <span class="fileupload-new">Select image</span>
+                                                                <span class="fileupload-exists">Change</span>
+                                                                {{ form_widget(form.profile.file) }}
+                                                                {{ form_errors(form.profile.file) }}
+                                                            </span>
+                                                            <a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a>
                                                         </div>
                                                     </div>
 

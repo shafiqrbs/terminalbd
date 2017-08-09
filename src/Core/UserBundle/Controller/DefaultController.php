@@ -29,10 +29,13 @@ class DefaultController extends Controller
         }
 
 
+
         if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($this->generateUrl('admin'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable == 1) {
             return $this->redirect($this->generateUrl('domain'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1) {
+            return $this->redirect($this->generateUrl('website'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {
             return $this->redirect($this->generateUrl('bindu_build'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') && $enable == 1 ) {
@@ -111,6 +114,16 @@ class DefaultController extends Controller
             'todaySalesOverview' => $todaySalesOverview
         ));
     }
+
+    public function websiteAction()
+    {
+
+        $user = $this->getUser();
+        return $this->render('UserBundle:Default:website.html.twig', array(
+            'user' => $user,
+        ));
+    }
+
 
     public function pendingAction()
     {

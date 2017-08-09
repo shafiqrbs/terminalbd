@@ -122,3 +122,4 @@ SettingContentBundle_admissioncomment:
 SettingContentBundle_blogcomment:
     resource: "@SettingContentBundle/Resources/config/routing/blogcomment.yml"
     prefix:   /website/blogcomment
+

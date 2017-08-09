@@ -73,8 +73,11 @@ class UserRepository extends EntityRepository
         if (!empty($result)) {
 
             $array['Website'] = array(
-                'ROLE_DOMAIN_USER' => 'Domain User',
-                'ROLE_DOMAIN_MANAGER' => 'Domain Manager'
+                'ROLE_WEBSITE'                  => 'Website',
+                'ROLE_DOMAIN_WEBSITE_CUSTOMER'  => 'Website Customer',
+                'ROLE_DOMAIN_WEBSITE_MANAGER'   => 'Website Manager',
+                'ROLE_DOMAIN_WEBSITE_SETTING'   => 'Website Setting',
+                'ROLE_DOMAIN_WEBSITE'           => 'Website Admin',
             );
         }
 

@@ -12,14 +12,17 @@ security:
         ROLE_ADMIN_OPERATION_MANAGER:                   [ROLE_USER]
         ROLE_DOMAIN_CUSTOMER:                           [ROLE_USER]
         ROLE_DOMAIN_USER:                               [ROLE_USER]
+        ROLE_DOMAIN_USER:                               [ROLE_DOAMIN]
+        ROLE_WEBSITE:                                   [ROLE_WEBSITE]
+        ROLE_APPEARANCE:                                   [ROLE_APPEARANCE]
 
         # THIS IS PART OF WEBSITE MANAGE
 
-        ROLE_WEBSITE:                                   [ROLE_WEBSITE]
+
         ROLE_DOMAIN_WEBSITE_CUSTOMER:                   [ROLE_DOMAIN_WEBSITE_CUSTOMER]
         ROLE_DOMAIN_WEBSITE_MANAGER:                    [ROLE_DOMAIN_WEBSITE_MANAGER]
-        ROLE_DOMAIN_WEBSITE_SETTING:                    [ROLE_DOMAIN_WEBSITE_SETTING]
-        ROLE_DOMAIN_WEBSITE:                            [ROLE_WEBSITE,ROLE_DOMAIN_WEBSITE_CUSTOMER,ROLE_DOMAIN_WEBSITE_SETTING,ROLE_DOMAIN_WEBSITE_MANAGER]
+        ROLE_DOMAIN_WEBSITE_SETTING:                    [ROLE_DOMAIN_WEBSITE_SETTING,ROLE_APPEARANCE]
+        ROLE_DOMAIN_WEBSITE:                            [ROLE_APPEARANCE,ROLE_WEBSITE,ROLE_DOMAIN_WEBSITE_CUSTOMER,ROLE_DOMAIN_WEBSITE_SETTING,ROLE_DOMAIN_WEBSITE_MANAGER,ROLE_DOMAIN_USER]
 
         # THIS IS PART OF ACCOUNTING MANAGE
 
@@ -77,7 +80,7 @@ security:
         ROLE_ECOMMERCE:                                 [ROLE_ECOMMERCE]
         ROLE_DOMAIN_ECOMMERCE_PRODUCT:                  [ROLE_DOMAIN_ECOMMERCE_PRODUCT]
         ROLE_DOMAIN_ECOMMERCE_ORDER:                    [ROLE_DOMAIN_ECOMMERCE_ORDER]
-        ROLE_DOMAIN_ECOMMERCE_CONFIG:                   [ROLE_DOMAIN_ECOMMERCE_CONFIG]
+        ROLE_DOMAIN_ECOMMERCE_CONFIG:                   [ROLE_DOMAIN_ECOMMERCE_CONFIG,ROLE_APPEARANCE]
         ROLE_DOMAIN_ECOMMERCE:                          [ROLE_ECOMMERCE,ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN_ECOMMERCE_ORDER,ROLE_DOMAIN_ECOMMERCE_CONFIG]
 
 
@@ -95,9 +98,9 @@ security:
         ROLE_DOMAIN_SERVICE_MANAGER:                    [ROLE_DOMAIN_SERVICE,ROLE_DOMAIN_SERVICE_MANAGER]
 
 
-        ROLE_HOSPITAL:                                   [ROLE_HOSPITAL]
-        ROLE_DOMAIN_HOSPITAL:                            [ROLE_HOSPITAL,ROLE_DOMAIN_HOSPITAL]
-        ROLE_DOMAIN_HOSPITAL_MANAGER:                    [ROLE_DOMAIN_SERVICE,ROLE_DOMAIN_HOSPITAL_MANAGER]
+        ROLE_HOSPITAL:                                  [ROLE_HOSPITAL]
+        ROLE_DOMAIN_HOSPITAL:                           [ROLE_HOSPITAL,ROLE_DOMAIN_HOSPITAL]
+        ROLE_DOMAIN_HOSPITAL_MANAGER:                   [ROLE_DOMAIN_SERVICE,ROLE_DOMAIN_HOSPITAL_MANAGER]
 
 
         ROLE_DOMAIN_PURCHASE:                           [ROLE_DOMAIN_PURCHASE]
@@ -107,7 +110,7 @@ security:
         # THIS IS PART OF MAIN DOMAIN MANAGE
 
         ROLE_DOMAIN_MANAGER:                            []
-        ROLE_DOMAIN:                                    [ROLE_DOMAIN,ROLE_AGENT,ROLE_FOOD,ROLE_SERVICE,ROLE_HOSPITAL,ROLE_GOODS,ROLE_DOMAIN_WEBSITE,ROLE_DOMAIN_INVENTORY,ROLE_DOMAIN_HR_PAYROLL,ROLE_DOMAIN_ACCOUNTING,ROLE_DOMAIN_ECOMMERCE,ROLE_APP_SETTING]
+        ROLE_DOMAIN:                                    [ROLE_DOMAIN,ROLE_AGENT,ROLE_FOOD,ROLE_SERVICE,ROLE_HOSPITAL,ROLE_GOODS,ROLE_DOMAIN_WEBSITE,ROLE_DOMAIN_INVENTORY,ROLE_DOMAIN_HR_PAYROLL,ROLE_DOMAIN_ACCOUNTING,ROLE_DOMAIN_ECOMMERCE,ROLE_APP_SETTING,ROLE_APPEARANCE]
 
         ROLE_ADMIN_OPERATION_USER:                      [ROLE_ADMIN_OPERATION_USER,ROLE_DOMAIN]
         ROLE_ADMIN_OPERATION_MANAGER:                   [ROLE_ADMIN_OPERATION_MANAGER,ROLE_ADMIN_OPERATION_USER]
@@ -141,6 +144,7 @@ security:
         - { path: ^/admin,              role: ROLE_SUPER_ADMIN }
         - { path: ^/domain,             role: ROLE_DOMAIN }
         - { path: ^/website,            role: ROLE_WEBSITE }
+        - { path: ^/appearance/,        role: ROLE_APPEARANCE }
         - { path: ^/finance,            role: ROLE_ACCOUNTING }
         - { path: ^/hr/employee,        role: ROLE_USER }
         - { path: ^/hr,                 role: ROLE_HR }

@@ -10,6 +10,10 @@ domain:
     pattern: /domain
     defaults: { _controller: UserBundle:Default:domain }
 
+website:
+    pattern: /website
+    defaults: { _controller: UserBundle:Default:website }
+
 customer:
     pattern: /customer
     defaults:  { _controller: CustomerBundle:Customer:index }
