@@ -1,6 +1,5 @@
 {% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
-    <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&key=AIzaSyDmior4xLqsriysUeQhtdSawc8yjDyaWaw"></script>
     <div class="clearfix"></div>
     <section id="breadcrumb">
         <div class="container">
@@ -49,7 +48,7 @@
                     <div class="clearfix"></div>
                     <div>
                         {% if page.latitude is not empty and page.longitude is not empty %}
-                            <div id="gmap_canvas" class="gmap">
+                            <div id="kmaps" class="gmap">
                                 <div class="Lat">{{ page.latitude }}</div>
                                 <div class="Lng">{{ page.longitude }}</div>
                                 <div class="imgMap">{{ asset('assets/img/placeholder.png') }}</div>
@@ -231,6 +230,7 @@
     {% javascripts
     '@FrontendBundle/Resources/public/template/js/common.js'
     '@FrontendBundle/Resources/public/js/kmaps.min.js'
+
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -238,5 +238,6 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    $('.gmap_canvas').kmaps();
+    $('#kmaps').kmaps();
+  {#  runExample3();#}
 {% endblock %}

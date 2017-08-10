@@ -1,38 +1,29 @@
-(function($) {
-    $("#map-1").easymap();
+function runExample3() {
+    $("#gmap_canvas").mapsed({
+        showOnLoad:
+            [
+                // City Varieties
+                {
+                    // flag that this place should have the tooltip shown when the map is first loaded
+                    autoShow: true,
+                    // flags the user can edit this place
+                    canEdit: false,
+                    lat: 53.798823,
+                    lng:-1.5426760000000286,
+                    reference: "CoQBfAAAAPw-5BTCS53grSLDwX8rwo5BnWnEWnA72lmOjxdgWg2ODGfC5lLjGyoz428IEaln1vJ6rq1jI96Npzlm-N-wmPH2jdJMGfOLxno_rmgnajAnMPzNzuI8UjexIOdHVZPBPvQGloC-tRhudGeKkbdTT-IWNP5hp4DIl4XOLWuYFOVYEhBxNPxaXZdW9uhKIETXf60hGhTc9yKchnS6oO-6z5XZJkK2ekewYQ"
+                },
+                // Random made up CUSTOM place
+                {
+                    // flag that this place should have the tooltip shown when the map is first loaded
+                    autoShow: true,
+                    lat: 53.79,
+                    lng:-1.5426760000000286,
+                    name: "Somewhere",
+                    street: "Over the rainbow, Up high way",
+                    userData: 99
+                }
 
-    $("#map-2").easymap({
-        size: ['100%', '300px'],
-        control: {
-            zoom: 4,
-            center: [46.60611, 1.87528]
-        }
-    });
+            ]
 
-    $("#map-3").easymap({
-        size: ['600px', '450px'],
-        control: {
-            zoom: 6,
-            center: [46.60611, 1.87528],
-            disableDefault: true,
-            zoomControl: false,
-            mapTypeControl: false
-        }
     });
-
-    $("#map-4").easymap({
-        size: ['600px', '450px'],
-        control: {
-            zoom: 6,
-            center: [46.60611, 1.87528]
-        },
-        markers: [
-            {"latitude":47.614444,"longitude":1.366389,"ville":"BLOIS", "icone": "img/archery.png"},
-            {"latitude":46.3333,"longitude":5.25,"ville":"MARBOZ"},
-            {"latitude":48.2167,"longitude":-4.16667,"ville":"DINEAULT"},
-            {"latitude":47.1667,"longitude":3.33333,"ville":"PREMERY"},
-            {"latitude":43.604482,"longitude":1.443962,"ville":"TOULOUSE", "icone": "img/beachvolleyball.png"},
-            {"latitude":48.856578,"longitude":2.351828,"ville":"PARIS", "icone": "img/boardercross.png"}
-        ]
-    });
-})(jQuery);
+}
