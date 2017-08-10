@@ -1,5 +1,7 @@
 function runExample3() {
+
     $("#gmap_canvas").mapsed({
+        
         showOnLoad:
             [
                 // City Varieties
@@ -21,6 +23,7 @@ function runExample3() {
                     name: "Somewhere",
                     street: "Over the rainbow, Up high way",
                     userData: 99
+
                 }
 
             ]

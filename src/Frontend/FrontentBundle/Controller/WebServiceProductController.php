@@ -73,7 +73,7 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
-            //$category = isset($data['category']) ? $data['category'] :0;
+
 
             $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
             $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
@@ -82,22 +82,23 @@ class WebServiceProductController extends Controller
 
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
-                    'globalOption'  => $globalOption,
-                    'cart'                  => $cart,
-                    'categorySidebar'  => $categorySidebar,
-                    'brands'        => $brands,
-                    'products'      => $pagination,
-                    'menu'          => $menu,
-                    'pageName'      => 'Product'
 
+                    'globalOption'      => $globalOption,
+                    'cart'              => $cart,
+                    'categorySidebar'   => $categorySidebar,
+                    'brands'            => $brands,
+                    'products'          => $pagination,
+                    'menu'              => $menu,
+                    'pageName'          => 'Product',
                 )
             );
         }
     }
 
-    public function brandAction($subdomain,ItemBrand $brand)
+    public function brandAction(Request $request , $subdomain,ItemBrand $brand)
     {
 
+        $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
 
@@ -125,8 +126,6 @@ class WebServiceProductController extends Controller
                 $theme = 'Template/Desktop/'.$themeName;
             }
 
-            //$category = isset($data['category']) ? $data['category'] :0;
-
             $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
             $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
             $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
@@ -135,6 +134,7 @@ class WebServiceProductController extends Controller
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
                     'globalOption'  => $globalOption,
+                    'cart'              => $cart,
                     'categorySidebar'  => $categorySidebar,
                     'brands'        => $brands,
                     'products'      => $pagination,
@@ -147,9 +147,10 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function categoryAction($subdomain,Category $category)
+    public function categoryAction(Request $request , $subdomain,Category $category)
     {
 
+        $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
 
@@ -160,7 +161,7 @@ class WebServiceProductController extends Controller
 
             $data = $_REQUEST;
             if(empty($data)){
-                $data = array('category' => $category);
+                $data = array('category' => $category->getId());
             }
             $ecommerce = $globalOption->getEcommerceConfig();
             $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
@@ -176,9 +177,6 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
-
-            //$category = isset($data['category']) ? $data['category'] :0;
-
             $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
             $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
             $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
@@ -187,19 +185,20 @@ class WebServiceProductController extends Controller
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
                     'globalOption'          => $globalOption,
+                    'cart'              => $cart,
                     'categorySidebar'       => $categorySidebar,
                     'brands'                => $brands,
                     'products'              => $pagination,
                     'menu'                  => $menu,
                     'pageName'              => 'Product',
-                    'data'                  => $data['limit']= 4,
+                    'data'                  => $data['limit']= 20,
                     'titleName'             => 'Category: '.$category->getName(),
                 )
             );
         }
     }
 
-    public function promotionAction($subdomain, Promotion $promotion)
+    public function promotionAction(Request $request , $subdomain, Promotion $promotion)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -248,7 +247,7 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function tagAction($subdomain)
+    public function tagAction(Request $request , $subdomain, Promotion $tag)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -298,7 +297,7 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function discountAction($subdomain)
+    public function discountAction(Request $request , $subdomain)
     {
 
         $em = $this->getDoctrine()->getManager();

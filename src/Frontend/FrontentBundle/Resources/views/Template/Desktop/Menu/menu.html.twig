@@ -101,7 +101,7 @@
                                 <ul class="col-sm-12">
                                     <li class="dropdown-header">Brand's</li>
                                     {% for brand in menu.brands %}
-                                        <li class="{% if menu.categories is empty %} col-sm-3 {% endif %}" ><a href="{{ path('webservice_product_brand',{'id' : brand.id}) }}">{{ brand.name }}</a></li>
+                                        <li class="{% if menu.categories is empty %} col-sm-3 {% endif %}" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id' : brand.id}) }}" >{{ brand.name }}</a></li>
                                     {% endfor %}
                                 </ul>
                             </li>
