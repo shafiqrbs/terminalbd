@@ -512,7 +512,7 @@
                                 {{ notice.content|truncate(200)|raw }}
                             </p>
                         </div>
-                        <ul class="post-bar">
+                        <ul class="post-bar" data-match-height="notice-post-bar">
                             {% if notice.webPath is not empty %}<li> <i class="fa fa-file"></i> <a target="_blank" href="{{ notice.webPath }}">Download</a> </li>{% endif %}
                         </ul>
                     </div>
@@ -524,8 +524,8 @@
             <div id="notice-page-slider" class="owl-carousel">
                 {% for key,notice in entities  %}
                     <div class="col-md-12">
-                        <div class="notice-slide" >
-                            <div class="post-content">
+                        <div class="notice-slide"   >
+                            <div class="post-content" data-match-height="notice-content">
                                 <div class="post-date">
                                     <span class="month">{{ notice.updated|date('F') }}</span>
                                     <span class="date">{{ notice.updated|date('d') }}</span>
@@ -535,28 +535,12 @@
                                     {{ notice.content|truncate(200)|raw }}
                                 </p>
                             </div>
-                            <ul class="post-bar">
+                            <ul class="post-bar" data-match-height="notice-post-bar">
                                 {% if notice.webPath is not empty %}<li> <i class="fa fa-file"></i> <a target="_blank" href="{{ notice.webPath }}">Download</a> </li>{% endif %}
                             </ul>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="notice-slide" >
-                            <div class="post-content">
-                                <div class="post-date">
-                                    <span class="month">{{ notice.updated|date('F') }}</span>
-                                    <span class="date">{{ notice.updated|date('d') }}</span>
-                                </div>
-                                <h5 class="post-title"><a href="{{  path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'noticeBoard','slug':notice.slug }) }}"> {{ notice.name }}</a></h5>
-                                <p class="post-description">
-                                    {{ notice.content|truncate(200)|raw }}
-                                </p>
-                            </div>
-                            <ul class="post-bar">
-                                {% if notice.webPath is not empty %}<li> <i class="fa fa-file"></i> <a target="_blank" href="{{ notice.webPath }}">Download</a> </li>{% endif %}
-                            </ul>
-                        </div>
-                    </div>
+
                 {% endfor %}
             </div>
         </div>

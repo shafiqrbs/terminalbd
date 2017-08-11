@@ -1,0 +1,152 @@
+<nav class="navbar navbar-inverse ">
+    <section id="top-bar">
+        <div class="container" >
+            <div class="row">
+                <div class="col-md-6 text-left">
+                    <div class="box">
+                        <ul class="info-links">
+                            {% if globalOption.templateCustomize.showCalendar == 1 %}
+                                <li><i class="fa fa-calendar"></i> {{ "now"|date("j M, Y") }}</li>
+                            {% endif %}
+                            {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
+                                <li><i class="fa fa-envelope"></i> {{ globalOption.email }}</li>
+                            {% endif %}
+                            {% if globalOption.templateCustomize.showMobile == 1 %}
+                                <li><i class="fa fa-mobile"></i> {{ globalOption.mobile }}</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class=" col-md-6 text-right">
+                    <div class="box">
+                        <ul class="social-links">
+                            {% if globalOption.facebookPageUrl is not empty %}
+                                <li><a target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>
+                            {% endif %}
+                            {% if globalOption.twitterUrl is not empty %}
+                                <li><a target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-twitter"></i></a></li>
+                            {% endif %}
+                            {% if globalOption.googlePlus is not empty %}
+                                <li><a target="_blank" href="{{ globalOption.googlePlus }}"><i class="fa fa-google-plus"></i></a></li>
+                            {% endif %}
+                            {% if globalOption.instagramPageUrl is not empty %}
+                                <li><a target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-instagram"></i></a></li>
+                            {% endif %}
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+        <section class="feature-widget-header-top" >
+            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':pageName,'position':'header-top'}) %}
+        </section>
+    {% endif %}
+    <section id="header"  class="sticky" >
+        <div class="container">
+            <div class="navbar-header" >
+                <div class="col-md-2">
+                    <a class="img-logo"
+                       href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.webPath('logo') is not empty %}
+                            <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"
+                                 alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}</a>
+                </div>
+                <div class="col-md-10">
+                    <div id="menu" class="header-inner-menu">
+                        <div class="row">
+                            <nav id="header-menu">{{ menuTree|raw }}</nav>
+                            {% if globalOption.templateCustomize.showSearch == 1 %}
+                            <form action="" class="search-form pull-right">
+                                <div class="form-group has-feedback">
+                                    <label for="search" class="sr-only">Search</label>
+                                    <input type="text" class="form-control" name="search" id="search" placeholder="search">
+                                    <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                </div>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</nav>
+<!-- BEGIN NAVIGATION -->
+
+<!-- END NAVIGATION -->
+
+<style>
+    .navbar{
+        margin-bottom:0 !important;
+        min-height:40px!important;
+    }
+    #header{
+        position: fixed;
+        width: 100%;
+        background: #efc47D;
+        text-align: left;
+        z-index: 999;
+        top: 40px;
+        opacity:0.8;
+    }
+    .search-form{
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    .search-form .form-group {
+        float: right !important;
+        transition: all 0.35s, border-radius 0s;
+        width: 32px;
+        height: 32px;
+        background-color: #fff;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+        border: 1px solid #ccc;
+        margin-bottom: 0!important;
+
+    }
+    .search-form .form-group input.form-control {
+        padding-right: 20px;
+        border: 0 none;
+        background: transparent;
+        box-shadow: none;
+        display:block;
+    }
+    .search-form .form-group input.form-control::-webkit-input-placeholder {
+        display: none;
+    }
+    .search-form .form-group input.form-control:-moz-placeholder {
+        /* Firefox 18- */
+        display: none;
+    }
+    .search-form .form-group input.form-control::-moz-placeholder {
+        /* Firefox 19+ */
+        display: none;
+    }
+    .search-form .form-group input.form-control:-ms-input-placeholder {
+        display: none;
+    }
+    .search-form .form-group:hover,
+    .search-form .form-group.hover {
+        width: 100%;
+    }
+    .search-form .form-group span.form-control-feedback {
+        position: absolute;
+        top: -1px;
+        right: -2px;
+        z-index: 2;
+        display: block;
+        width: 34px;
+        height: 34px;
+        line-height: 34px;
+        text-align: center;
+        color: #3596e0;
+        left: initial;
+        font-size: 14px;
+    }
+
+
+</style>
+

@@ -1,115 +1,163 @@
-{% extends ':frontend/template:base.html.twig' %}
+{% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
-    <div class="clearfix"></div>
+<div class="clearfix"></div>
     <section id="breadcrumb">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    {% if page.parent is not empty %}
-                        <div class="crumb">&nbsp;<a href="{{ path('ecommercesubdomain') }}">Home</a> <i>/</i> <a href="{{ path('webservice_module',{'subdomain':globalOption.subDomain,'module': page.parent.nav.slug}) }}">{{ page.parent.name }}</a> <i>/</i> {{ page.name }}</div>
-                    {% else %}
-                        <div class="crumb">&nbsp;<a href="{{ path('ecommercesubdomain') }}">Home</a> <i>/</i> {{ page.name }}</div>
-                    {% endif %}
-                </div>
-            </div>
+            <ol class="breadcrumb">
+                <li><a href="{{ path('ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class="active"><span>{{ page.name }}</span></li>
+            </ol>
         </div>
     </section>
-    <div class="container blog">
-        <div class="row js-equal-height">
-            <article class="col-md-8 ">
-                <div class="page-header sidebar-title"><h2>{{ page.name }}</h2></div>
-                {% if page.webPath is not empty %}
-                    <img class="img-responsive displayed" src="{{ image(page.webPath).resize() }}" alt="" />
-                {% endif %}
-                <div class="page-content">{{ page.content|raw }}</div>
-                <div class="mysharing">
-                    <!-- Twitter -->
-                    <a href="http://twitter.com/home?status=" title="Share on Twitter" target="_blank" class="btn btn-twitter"><i class="fa fa-twitter"></i> Twitter</a>
-                    <!-- Facebook -->
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=" title="Share on Facebook" target="_blank" class="btn btn-facebook"><i class="fa fa-facebook"></i> Facebook</a>
-                    <!-- Google+ -->
-                    <a href="https://plus.google.com/share?url=" title="Share on Google+" target="_blank" class="btn btn-googleplus"><i class="fa fa-google-plus"></i> Google+</a>
-                    <!-- LinkedIn -->
-                    <a href="http://www.linkedin.com/shareArticle?mini=true" title="Share on LinkedIn" target="_blank" class="btn btn-linkedin"><i class="fa fa-linkedin"></i> LinkedIn</a>
-                </div>
-                <div class="row">
-                {% if sidebar is not empty and sidebar.feature is not empty %}
-                    {% for entity in sidebar.feature %}
-                        <div class="col-md-3 sidebar-feature ">
-                            <img src="{{ image(entity.webPath).resize() }}" alt="">
-                            <div class="over-layer">
-                                <ul class="social-links">
-                                   {% if entity.targetTo == 'Page' %}
-                                    <li><a href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':entity.page.module.slug,'slug':entity.page.slug}) }}" class="fa fa-link"></a></li>
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                </div>
-                {% if sidebar is not empty %}
-                    {% for module in sidebar.module %}
-                        {% render controller("FrontendBundle:TemplateWidget:pageBaseModuleContent",{'globalOption':globalOption.id,'module':module.id}) %}
-                    {% endfor %}
-                {% endif %}
-            </article>
-            <!-- Blog Sidebar Column -->
-            <aside class="col-md-4 sidebar-padding js-equal-height" style="background: #FBFCFE">
-                <!-- Blog Categories -->
-                <div class="blog-sidebar">
-                    {% if page.parent is not empty %}
-                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;{{ page.parent.name }}</h4>
-                    {% else %}
-                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;{{ page.name }}</h4>
-                    {% endif %}
-                    <hr>
-                    <div class="list-group">
-                        {% if page.children is not empty %}
-                            {% for subPage in page.children %}
-                                <a class="list-group-item" href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':'page','slug':subPage.nav.slug}) }}"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;{{ subPage.name }}</a>
-                            {% endfor %}
-                        {% elseif page.parent.children is defined and page.parent.children is not empty %}
-                            {% for subPage in page.parent.children %}
-                                <a class="list-group-item" href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':'page','slug':subPage.nav.slug}) }}"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;{{ subPage.name }}</a>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                    {% if sidebar is not empty and sidebar.feature is not empty %}
-                        {% for entity in sidebar.feature %}
-                            <div class="sidebar-feature">
-                                <img src="{{ image(entity.webPath).resize() }}" alt="">
-                                <div class="over-layer">
-                                    <ul class="social-links">
-                                        {% if entity.targetTo == 'Page' %}
-                                            <li class=""><a  href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':entity.page.module.slug,'slug':entity.page.slug}) }}" class="fa fa-link"></a></li>
-                                        {% endif %}
-                                    </ul>
+    <div class="clearfix"></div>
+    <section>
+        <div class="container">
+            {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header-bottom'}) %}
+            {% endif %}
+        </div>
+    </section>
+    <div class="clearfix"></div>
+    <section class="contain-section">
+        <div class="container">
+            <div class="row">
+               {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' and menu.featureWidgetExist == 'ture' %}
+                    <div class="col-md-3"  >
+                        {% if globalOption.templateCustomize.sidebarTitle is not empty %}
+                        <div class="page-title-bar">
+                            <div class="col-md-12">
+                                <div class="btn-group pull-left">
+                                    <div class="page-title"><span class="glyphicon glyphicon-tag"></span>&nbsp;{{ globalOption.templateCustomize.sidebarTitle }}</div>
                                 </div>
                             </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                {% if sidebar is not empty and sidebar.page is not empty %}
-                    <div class="blog-sidebar">
-                        <h4 class="sidebar-title"><i class="fa fa-align-left"></i>&nbsp;Our Pages</h4>
-                        <hr>
-                        <ul class="sidebar-list">
-                            {% for subPage in sidebar.page %}
-                                <li><a class="anchorjs-link " href="{{ path('webservice_module_page',{'subdomain':globalOption.subDomain,'module':'page','slug':subPage.nav.slug}) }}">{{ subPage.name }}</a></li>
-                            {% endfor %}
-                        </ul>
+                        </div>
+                        {% endif %}
+                        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'sidebar-top'}) %}
+                        {% endif %}
                     </div>
                 {% endif %}
-                {% if sidebar is not empty and sidebar is not empty %}
-                    {% for module in sidebar.module %}
-                        {% render controller("FrontendBundle:TemplateWidget:moduleSidebarBaseContent",{'globalOption':globalOption.id,'module':module.id}) %}
-                    {% endfor %}
+                <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true'  %} col-md-9 {% else %} col-md-12 {% endif %}"  >
+
+                    {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'body-top'}) %}
+                    {% endif %}
+
+                    <div class="page-title-bar">
+                        <div class="col-md-12">
+                            <div class="btn-group pull-left">
+                                <div class="page-title"><span class="glyphicon glyphicon-bookmark"></span>&nbsp;{{ page.name }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if page.photoGallery is not empty %}
+                        <div class="carousel-container">
+                            <div id="carousel" class="carousel slide carousel-fade" style="width: 100%">
+                                <div class="carousel-inner">
+                                {% if page.webPath is not empty %}
+                                    <div class="carousel-item item active">
+                                        <img class="img-responsive"  data-slide-no="0" src="{{ image(page.webPath).scaleResize(1024,512,'#000000') }}" alt="{{ page.name }}" />
+                                        <div class="carousel-caption " >
+                                            <h4>{{ page.name }}</h4>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% for slide in page.photoGallery.galleryImages %}
+                                    <div  class="carousel-item item {% if loop.index-1 == 0 and page.webPath is empty %} active  {% endif %}"  {% if loop.index-1 == 0 and page.webPath is empty %} data-slide-no="{{ loop.index-1 }}"  {% endif %} >
+                                        <img class="img-responsive" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,512,'#000000') }}" alt="...">
+                                        <div class="carousel-caption " >
+                                            {% if slide.caption is not empty %}<h4>{{ slide.caption }}{% endif %}</h4>
+                                            {% if slide.description is not empty %}<p>{{ slide.description|raw }}</p>{% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <!-- Navigation -->
+                              <a class="carousel-post-control left" href="#carousel" data-slide="prev">‹</a>
+                              <a class="carousel-post-control right" href="#carousel" data-slide="next">›</a>
+                            </div>
+                        </div>
+                        <hr><br/></hr>
+                    {% elseif page.webPath is not empty %}
+                        <img class="img-responsive"  data-slide-no="0" src="{{ image(page.webPath).scaleResize(1024,512,'#000000') }}" alt="{{ page.name }}" />
+                        <hr><br/></hr>
+                    {% endif %}
+                    <div class="clearfix"></div>
+                    <div>{{ page.content|raw }}</div>
+                    <div class="clearfix"><br/></div>
+                    <ul class="mbm_social">
+                        <li><a class="social-facebook" target="_blank" href="https://www.facebook.com/share.php?u={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}&picture={{ app.request.getSchemeAndHttpHost() }}/{{ page.webPath }}&title={{ page.name }}&description={{ page.content|truncate(250)|raw }}">
+                                <i class="fa fa-facebook"></i>
+                                <div class="tooltip"><span>facebook</span></div>
+                            </a>
+                        </li>
+                        <li><a class="social-linkedin" target="_blank" href="//www.linkedin.com/shareArticle?mini=true&url={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}">
+                                <i class="fa  fa-linkedin"></i>
+                                <div class="tooltip"><span>LinkedIn</span></div>
+                            </a>
+                        </li>
+                        <li><a class="social-google-plus" target="_blank" href="//plus.google.com/share?url={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}">
+                                <i class="fa fa-google-plus"></i>
+                                <div class="tooltip"><span>Google</span></div>
+                            </a>
+                        </li>
+                        <li><a class="social-twitter" target="_blank" href="//twitter.com/share?url={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}">
+                                <i class="fa fa-twitter"></i>
+                                <div class="tooltip"><span>Twitter</span></div>
+                            </a>
+                        </li>
+                        <li><a class="social-instagram" target="_blank" href="//instagram.com/share?url={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}">
+                                <i class="fa  fa-instagram"></i>
+                                <div class="tooltip"><span>Instagram</span></div>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"><br/></div>
+                    {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'body-bottom'}) %}
+                    {% endif %}
+                </div>
+                {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' and menu.featureWidgetExist == 'true'  %}
+                    <div class="col-md-3">
+                        {% if globalOption.templateCustomize.sidebarTitle is not empty %}
+                            <div class="page-title-bar row">
+                                <div class="col-md-12">
+                                    <div class="btn-group pull-left">
+                                        <div class="page-title"><span class="glyphicon glyphicon-tag"></span>&nbsp;{{ globalOption.templateCustomize.sidebarTitle }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'sidebar-top'}) %}
+                        {% endif %}
+                        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'sidebar-bottom'}) %}
+                        {% endif %}
+                    </div>
                 {% endif %}
-            </aside>
+            </div>
+
         </div>
-    </div>
-{% endblock %}
+    </section>
+    <div class="clearfix"></div>
+    <section>
+        <div class="container">
+            {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'footer-top'}) %}
+            {% endif %}
+            <div class="clearfix"><br></div>
+        </div>
+    </section>
+    <div class="clearfix"></div>
+<script>
+    {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
+    var columnItem = 3;
+    {% else %}
+    var columnItem = 4;
+    {% endif %}
+</script>
+ {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
     '@FrontendBundle/Resources/public/template/desktop/css/sidebar.css'
@@ -119,13 +167,35 @@
 {% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
+
     {% javascripts
     '@FrontendBundle/Resources/public/template/js/sidebar.js'
+    '@FrontendBundle/Resources/public/template/js/page.js'
+    '@FrontendBundle/Resources/public/template/js/headerfooter.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 {% block documentready %}
+
     {{ parent() }}
+
+    $(".carousel").carousel({
+        interval: 10000,
+        wrap:true
+    });
+    $(".carousel").on("slid", function() {
+        var to_slide;
+        to_slide = $(".carousel-item.active").attr("data-slide-no");
+        $(".myCarousel-target.active").removeClass("active");
+        $(".carousel-indicators [data-slide-to=" + to_slide + "]").addClass("active");
+        });
+        $(".myCarousel-target").on("click", function() {
+        $(this).preventDefault();
+        $(".carousel").carousel(parseInt($(this).attr("data-slide-to")));
+        $(".myCarousel-target.active").removeClass("active");
+        $(this).addClass("active");
+    });
+
 {% endblock %}
 

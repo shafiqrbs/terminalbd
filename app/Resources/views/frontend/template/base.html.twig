@@ -42,6 +42,7 @@
     'assets/template/desktop/font-awesome/css/font-awesome.min.css'
     'assets/template/plugin/owl.carousel/owl.carousel.min.css'
     'assets/template/plugin/owl.carousel/owl.theme.min.css'
+    'assets/template/plugin/owl.carousel/owl.transitions.css'
     'assets/template/plugin/side.toolbar/vcore.sidebar.css'
     'assets/template/plugin/pgslider/pgwslider.min.css'
     'assets/template/plugin/revolution_slider/css/rs-style.css'
@@ -50,7 +51,6 @@
     'assets/template/plugin/wow/css/animate.css'
     'assets/template/plugin/select2/select2.css'
     'assets/template/plugin/range-slider/bootstrap-slider.css'
-    'assets/template/plugin/ladda/ladda-themeless.min.css'
     'assets/template/desktop/css/module.css'
     %}
 
@@ -71,91 +71,6 @@
 {% render controller("FrontendBundle:TemplateWidget:header",{'globalOption':globalOption.id, 'pageName':pageName}) %}
 <div class="clearfix"></div>
 {% block body %}{% endblock %}
-{#<section class="footer-menu">
-    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-        <section class="feature-widget-footer">
-            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':pageName,'position':'footer'}) %}
-        </section>
-    {% endif %}
-    <div class="container social-payment" >
-        <div class="row">
-            <div class="col-sm-5">
-                <div class="bs-callout" >
-                    <h4>PAYMENT METHOD</h4>
-                    <p><img src="{{ asset('assets/img/credit-card.png') }}" ></p>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <h4>NEWS LETTER</h4>
-                <div class="social-tooltip">
-                    <div class="input-group"> <input class="form-control" placeholder="Enter your e-mail" aria-label="Text input with multiple buttons"> <div class="input-group-btn"> <button type="button" class="btn blue btn-default" aria-label="Help"><span data-toggle="tooltip" title="Are you interest new product & offer to send please your e-mail." class="glyphicon glyphicon-question-sign"></span></button> <button type="button" class="btn btn-default green"><span class="glyphicon glyphicon-saved"></span></button> </div> </div> </div>
-
-            </div>
-            <div class="col-sm-3">
-                <h4>KEEP IN TOUCH</h4>
-                <div class="social-tooltip">
-                    <a data-toggle="tooltip" id="facebook" title="Follow on Facebook" target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook fa-fw  "></i></a>
-                    <a data-toggle="tooltip" id="twitter" title="Follow on Twitter" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-twitter fa-fw  "></i></a>
-                    <a data-toggle="tooltip" id="instagram" title="Follow on Instagram" target="_blank" href="{{ globalOption.twitterUrl }}"><i class="fa fa-instagram fa-fw  "></i></a>
-                    <a data-toggle="tooltip" id="email" title="Send as an email" target="_blank"  href="mailto:{{ globalOption.email }}"><i class="fa fa-envelope fa-fw  "></i></a>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    <div class="container" id="footer-menu" >
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="bs-callout" >
-                    <h4>WHO WE ARE</h4>
-                    <p>
-                     {% render controller("FrontendBundle:TemplateWidget:about",{'globalOption':globalOption.id,'wordlimit':300}) %}
-                    </p>
-                </div>
-
-            </div>
-            <div class="col-sm-3">
-                <h4>{{ globalOption.name }}</h4>
-                {% render controller("FrontendBundle:TemplateWidget:footerMenu",{'globalOption':globalOption.id,'menuGroup':3}) %}
-            </div>
-            <div class="col-sm-2">
-                <h4>HELP</h4>
-                {% render controller("FrontendBundle:TemplateWidget:footerMenu",{'globalOption':globalOption.id,'menuGroup':7}) %}
-            </div>
-            <div class="col-sm-3">
-                <h4>SHOP/OFFICE ADDRESS</h4>
-                <address>
-                    {% if globalOption.contactPage.address1 is not empty %}
-
-                                 <p style="font-weight: bolder"> <i class="fa fa-home"></i>&nbsp;{{ globalOption.contactPage.address1 }}<br>
-                        {% if globalOption.contactPage.location is defined and globalOption.contactPage.location %}
-                            {{ globalOption.contactPage.location.name }}, {{ globalOption.contactPage.location.parent.name }}
-                        {% endif %}
-                        {% if globalOption.contactPage.postalCode is defined and globalOption.contactPage.postalCode %}
-                            -{{ globalOption.contactPage.postalCode }}
-                        {% endif %}
-                                 </p>
-                    {% endif %}
-                    {% if globalOption.contactPage.startHour %}
-                        <i class="fa fa-clock-o"></i>&nbsp;<strong>{{ globalOption.contactPage.startHour }} To {{ globalOption.contactPage.endHour }}</strong>
-                    {% endif %}
-                    {% if globalOption.contactPage.weeklyOffDay is not empty %}
-                        <br><i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;<strong>
-                                    {% for day in globalOption.contactPage.weeklyOffDay %}
-                                        {{ day }}
-                                        {% if not loop.last %},{% endif %}
-                                    {% endfor %}
-                                </strong>
-                    {% endif %}
-                    <br>
-                                <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
-                                <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=23.801422,90.352599">Direction</a>
-
-                </address>
-            </div>
-        </div>
-    </div>
-</section>#}
 <footer id="footer">
      <div class="container">
         <div class="row myfooter">
@@ -190,21 +105,17 @@
 'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
 'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
 'assets/template/plugin/owl.carousel/owl.carousel.min.js'
+'assets/template/plugin/select2/select2.js'
+'assets/template/plugin/wow/js/wow.min.js'
+'assets/template/plugin/treeview/treeview.js'
+'assets/template/plugin/matchHeight/height-match.js'
 'assets/template/plugin/side.toolbar/vcore.sidebar.js'
-'assets/template/plugin/pgslider/imagezoom.js'
-'assets/template/plugin/pgslider/pgwslider.js'
-'assets/template/plugin/revolution_slider/rs-plugin/js/jquery.themepunch.plugins.min.js'
-'assets/template/plugin/revolution_slider/rs-plugin/js/jquery.themepunch.revolution.min.js'
+'assets/template/plugin/range-slider/bootstrap-slider.min.js'
 'assets/template/plugin/textillate/assets/jquery.fittext.js'
 'assets/template/plugin/textillate/assets/jquery.lettering.js'
-'assets/template/plugin/matchHeight/height-match.js'
-'assets/template/plugin/select2/select2.js'
-'assets/template/plugin/range-slider/bootstrap-slider.min.js'
-'assets/template/plugin/ladda/spin.min.js'
-'assets/template/plugin/ladda/ladda.min.js'
-'assets/template/plugin/treeview/treeview.js'
+'assets/template/desktop/js/jquery.scrollbar.min.js'
 'assets/template/plugin/jquery-zoom/zoom.js'
-'assets/template/plugin/wow/js/wow.min.js'
+
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
@@ -227,6 +138,14 @@
          $('.bs-example-form').css({
              'margin-top':(navbar/2 - mins)
          });
+         $('.header-inner-menu').css({
+            'margin-top':(navbar - 40)
+         });
+         $('#breadcrumb').css({
+            'margin-top':(navbar+20)
+         });
+
+
 
         var stickyOffset = $('.sticky').offset().top;
 
@@ -258,12 +177,7 @@
             $(this).addClass(index % 2 ? 'odd' : 'even');
         });
 
-        $('.side-toolbar').vSidebar({
-            'items': [
-                {% render controller("FrontendBundle:TemplateWidget:sidebar",{'globalOption':globalOption.id}) %}
-            ],
-            'position': 'right bottom'
-        });
+
 
          $(".dropdown").hover(
                  function() {
@@ -275,66 +189,6 @@
                      $(this).toggleClass('open');
                  }
          );
-
-        var owlProduct = $("#preview-slider");
-        owlProduct.owlCarousel({
-            items:3,
-            itemsDesktop:[1199,3],
-            itemsDesktopSmall:[979,2],
-            itemsTablet:[768,1],
-            pagination: false,
-            paginationNumbers: false,
-            autoPlay:false,
-            rewindNav:false
-        });
-        // Custom Navigation Events
-        $(".preview-next").click(function(){
-            owlProduct.trigger('owl.next');
-        })
-
-        $(".preview-prev").click(function(){
-            owlProduct.trigger('owl.prev');
-        })
-
-        var owlClient = $("#client-slider");
-        owlClient.owlCarousel({
-            items:5,
-            itemsDesktop:[1199,5],
-            itemsDesktopSmall:[979,3],
-            itemsTablet:[768,1],
-            pagination: false,
-            paginationNumbers: false,
-            autoPlay:true,
-            rewindNav:false
-        });
-
-        // Custom Navigation Events
-        $(".next-client").click(function(){
-            owlClient.trigger('owl.next');
-        })
-
-        $(".prev-client").click(function(){
-            owlClient.trigger('owl.prev');
-        })
-
-        $("#testimonial-single-slider").owlCarousel({
-            items:1,
-            itemsDesktop:[1000,1],
-            itemsDesktopSmall:[979,1],
-            itemsTablet:[768,1],
-            pagination: true,
-            autoPlay:false
-        });
-
-        $("#news-slider").owlCarousel({
-            items :3,
-            itemsDesktop:[1000,1],
-            itemsDesktopSmall:[980,1],
-            navigation : false,
-            pagination:false,
-            autoPlay : true
-        });
-
 
         $('#list').click(function(event){event.preventDefault();$('#product .item').addClass('list-group-item');});
         $('#grid').click(function(event){event.preventDefault();$('#product .item').removeClass('list-group-item');$('#products .item').addClass('grid-group-item');});

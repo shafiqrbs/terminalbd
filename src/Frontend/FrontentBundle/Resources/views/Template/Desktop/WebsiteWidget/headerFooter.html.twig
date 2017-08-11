@@ -1,6 +1,7 @@
 {% if widget.jsFeature is not empty %}
     {% render controller("FrontendBundle:WebsiteWidget:pageBaseFeatureWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
 {% endif %}
+<div class="container">
 {% if widget.content is not empty %}
     <div class="clearfix"><br/></div>
     <div class="row"> <div class="col-md-12 text-justify">{{ widget.content|raw }}</div></div>
@@ -8,14 +9,6 @@
 {% endif %}
 {% if widget.page is not empty %}
 <div class="page-block page-carousel" >
-    {% if widget.jsFeature is not empty %}
-        {% render controller("FrontendBundle:WebsiteWidget:pageBaseFeatureWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
-    {% endif %}
-    {% if widget.content is not empty %}
-        <div class="clearfix"><br/></div>
-        <div class="row"> <div class="col-md-12 text-justify">{{ widget.content|raw }}</div></div>
-        <div class="clearfix"><br/></div>
-    {% endif %}
     {% if  widget.pageFeatureName is not empty or widget.pageShowType == 'slider' %}
         <div class="page-title-bar">
             {% if  widget.pageFeatureName is not empty %}
@@ -29,7 +22,7 @@
        <div class="row row-flex">
             {% for key,entity in widget.page  %}
                 <div class="col-md-3 wow fadeInDown" data-wow-delay="1s" >
-                    <div class="sidebar-serviceBox">
+                    <div class="sidebar-serviceBox" data-match-height="serviceBox" >
                         <div class="service-icon">
                             <i class="fa {% if entity.icon is defined and entity.icon is not empty  %}{{ entity.icon.className }} {% endif %}"></i>
                         </div>
@@ -820,3 +813,4 @@
             </div>
     </div>
 {% endif %}
+</div>

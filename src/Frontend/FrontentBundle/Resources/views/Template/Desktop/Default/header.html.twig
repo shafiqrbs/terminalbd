@@ -1,59 +1,134 @@
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse ">
     <section id="top-bar">
         <div class="container" id="menu">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="col-md-6 text-left">
-                        <div class="box">
-                            <ul class="info-links">
-                                {% if globalOption.templateCustomize.showCalendar == 1 %}<li><i class="fa fa-calendar"></i>&nbsp;{{ "now"|date("F j, Y") }}</li>{% endif %}
-                                {% if globalOption.templateCustomize.showEmail == 1 %}<li><i class="fa fa-envelope"></i>&nbsp;{{ globalOption.email }}</li>{% endif %}
-                                {% if globalOption.templateCustomize.showMobile == 1 %}<li><i class="fa fa-mobile"></i>&nbsp;{{ globalOption.mobile }}</li>{% endif %}
-                            </ul>
-                        </div>
+                <div class="col-md-6 text-left">
+                    <div class="box">
+                        <ul class="info-links">
+                            {% if globalOption.templateCustomize.showCalendar == 1 %}
+                                <li><i class="fa fa-calendar"></i>&nbsp;{{ "now"|date("F j, Y") }}</li>{% endif %}
+                            {% if globalOption.templateCustomize.showEmail == 1 and globalOption.email is not empty %}
+                                <li><i class="fa fa-envelope"></i>&nbsp;{{ globalOption.email }}</li>{% endif %}
+                            {% if globalOption.templateCustomize.showMobile == 1 %}
+                                <li><i class="fa fa-mobile"></i>&nbsp;{{ globalOption.mobile }}</li>{% endif %}
+                        </ul>
                     </div>
-                    <div class=" col-md-6 text-right">
-                        <div class="box">
-                            <ul class="social-links">
-                                {% if globalOption.facebookPageUrl == 1 %}<li><a href="https://{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a></li>{% endif %}
-                                {% if globalOption.templateCustomize.showSearch == 1 %}<li><a href="javascript:" id="searchEvent"><i class="fa fa-search"></i></a></li>{% endif %}
-                                <li><a href="javascript:" class="register-btn" ><i class="fa fa-sign-in"></i></a></li>
-                                {% if  app.user %}
-                                    <li><a href="{{ path('fos_user_security_logout') }}" class="" ><i class="fa fa-unlock-alt"></i></a></li>
-                                    <li><a href="{{ path('customer',{'generated':globalOption.uniqueCode}) }}" class="" ><i class="fa fa-user"></i></a></li>
-                                {% else %}
-                                    <li><a href="javascript:" class="login-preview" ><i class="fa fa-lock"></i></a></li>
-                                {% endif %}
-                                {% if globalOption.ecommerceConfig.cart == 1 %}
-                                <li><a href="{{ path('webservice_product_cart_details',{'subdomain':globalOption.subDomain}) }}" class="" ><i class="fa fa-shopping-cart"></i></a></li>
-                                {% endif %}
-                            </ul>
-                        </div>
+                </div>
+                <div class=" col-md-6 text-right">
+                    <div class="box">
+                        <ul class="social-links">
+                            {% if globalOption.facebookPageUrl == 1 %}
+                                <li><a href="https://{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook"></i></a>
+                                </li>{% endif %}
+                            {% if globalOption.templateCustomize.showSearch == 1 %}
+                                <li><a href="javascript:" id="searchEvent"><i class="fa fa-search"></i></a>
+                                </li>{% endif %}
+                            <li><a href="javascript:" class="register-btn"><i class="fa fa-sign-in"></i></a></li>
+                            {% if  app.user %}
+                                <li><a href="{{ path('fos_user_security_logout') }}" class=""><i
+                                                class="fa fa-unlock-alt"></i></a></li>
+                            {% else %}
+                                <li><a href="javascript:" class="login-preview"><i class="fa fa-lock"></i></a></li>
+                            {% endif %}
+                            {% if globalOption.ecommerceConfig.cart == 1 %}
+                                <li>
+                                    <a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}"
+                                       class=""><i class="fa fa-shopping-cart"></i></a></li>
+                            {% endif %}
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <div class="container" id="header">
-        <div class="navbar-header col-md-12" >
-            <a class="img-logo" href="{{ path('ecommercesubdomain') }}">{% if globalOption.templateCustomize.webPath('logo') is not empty %}<img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" alt="company logo" />{% else %}{{ globalOption.name }}{% endif %}</a>
-        </div>
-    </div>
-    <section id="menu-bar" class="default" >
-        <div class="container" id="menu">
-            <div class="row">
-                <div class=" {% if globalOption.templateCustomize.showSearch == 1 %} col-md-8 {% else %}col-md-12 {% endif %}">
-                    <nav id="header-menu">{{ menuTree|raw }}</nav>
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+        <section class="feature-widget-header-top" >
+            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':pageName,'position':'header-top'}) %}
+        </section>
+    {% endif %}
+    <section id="header">
+        <div class="container">
+            <div class="row navbar-header">
+                <div class="col-md-3">
+                    <a class="img-logo"
+                       href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{% if globalOption.templateCustomize.webPath('logo') is not empty %}
+                            <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"
+                                 alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}</a>
                 </div>
-                {% if globalOption.templateCustomize.showSearch == 1 %}
-                    <div class="input-group searchbar col-md-3" id="nav-search">
-                        <input type="text" class="form-control searchbar" placeholder="Search for...">
-		                        <span class="input-group-btn">
-		                        <button class="btn btn-default glyphicon glyphicon-search" type="button"></button>
-		                </span>
-                    </div>
-                {% endif %}
+                <div class="col-md-9">
+                    {% if globalOption.templateCustomize.showSearch == 0 %}
+                        <div class="row bs-example-form" id="header-form">
+                            <div class="col-lg-10">
+                                <form class="bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product') }}"  method="get" data-example-id="input-group-segmented-buttons">
+                                    <div class='input-group search-box' >
+                                        <div class='input-group-field'>
+                                            {{ categoryTree|raw }}
+                                        </div>
+                                        <input type='text' class='form-control input-group-lg' style="width: 351px" name="product" id="product" value="{% if searchForm.product is defined %}{{ searchForm.product }}{% endif %}"  placeholder="Find Your Favorite Products"/>
+                                        <span class="input-group-btn">
+                                                <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                            </span>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="input-group dropdown navbar-right">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-group btn-cart dropdown-toggle search-box-bg" data-toggle="dropdown"  aria-expanded="false"><span
+                                                    class="glyphicon glyphicon-shopping-cart"></span></button>
+                                        <a  style=" border:1px solid #000; border-left:none" href="#" class="btn dropdown-toggle search-box-bg" data-toggle="dropdown" role="button"
+                                            aria-expanded="false"> <span class="label-success badge totalItem" >{{ cart.total_items }}</span>
+                                            &nbsp;<span class="label label-warning">৳ <em class="totalAmount">&nbsp;{{ cart.total }}</em></span></a>
+                                        <div class="item-list">
+                                            {% if  cart.contents is not empty %}
+                                                <ul class="dropdown-menu dropdown-cart" role="menavbar-rightnu">
+                                                    {% for product in cart.contents %}
+                                                        <li id="item-remove-{{ product.rowid }}">
+                                                              <span class="item">
+                                                                <span class="item-left">
+                                                                    {% if product.productImg is not empty %}
+                                                                        <img src="{{ image(product.productImg).scaleResize(50,50) }}"
+                                                                             alt=""/>
+                                                                    {% endif %}
+                                                                    <span class="item-info">
+                                                                        <span>{{ product.name|truncate(15) }}</span>
+                                                                        <span>Qnt&nbsp;{{ product.quantity }}</span>
+                                                                        <span><strong>{{ globalOption.ecommerceConfig.currency }}
+                                                                                &nbsp;{{ product.price }}</strong></span>
+                                                                    </span>
+                                                                </span>
+                                                                <span class="item-right">
+                                                                    <button id="{{ product.rowid }}"
+                                                                            data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_remove',{'cartid':product.rowid}) }}"
+                                                                            class="btn btn-xs btn-danger pull-right hunger-remove-cart"><span
+                                                                                class="glyphicon glyphicon-trash"></span></button>
+                                                                </span>
+                                                            </span>
+                                                        </li>
+                                                    {% endfor %}
+                                                    <li class="divider"></li>
+                                                    <li><a class="text-center" href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}">View Cart</a></li>
+                                                </ul>
+                                            {% endif %}
+                                        </div>
+                                    </div><!-- /btn-group -->
+                                </div><!-- /input-group -->
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
             </div>
+        </div>
+    </section>
+    <section id="menu-bar" class="sticky">
+        <div class="container">
+            {{ include('FrontendBundle:Template/Desktop/Menu:menu.html.twig')}}
         </div>
     </section>
 </nav>
+<!-- BEGIN NAVIGATION -->
+
+<!-- END NAVIGATION -->
+
+

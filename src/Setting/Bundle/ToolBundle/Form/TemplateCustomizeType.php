@@ -16,6 +16,10 @@ class TemplateCustomizeType extends AbstractType
     {
         $builder
 
+            ->add('showCalendar')
+            ->add('showEmail')
+            ->add('showMobile')
+            ->add('showSearch')
             ->add('showSidebar')
             ->add('sidebarTooltip')
             ->add('sidebarTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sidebar title')))

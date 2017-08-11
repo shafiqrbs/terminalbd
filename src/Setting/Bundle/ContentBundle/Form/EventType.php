@@ -75,8 +75,8 @@ class EventType extends AbstractType
                 'format' => 'yyyy-MM-dd',
 
             ))
-            ->add('startHour','text', array('attr'=>array('class'=>'m-wrap small clockface_1 span10')))
-            ->add('endHour','text', array('attr'=>array('class'=>'m-wrap small clockface_1 span10')))
+            ->add('startHour','text', array('attr'=>array('class'=>'m-wrap small clockface_1 span10', 'data-format' => 'hh:mm A','placeholder'=>'Start hour')))
+            ->add('endHour','text', array('attr'=>array('class'=>'m-wrap small clockface_1 span10', 'data-format' => 'hh:mm A', 'placeholder'=>'End hour')))
             ->add('photo_gallery', 'entity', array(
                 'required'    => false,
                 'class' => 'Setting\Bundle\MediaBundle\Entity\PhotoGallery',

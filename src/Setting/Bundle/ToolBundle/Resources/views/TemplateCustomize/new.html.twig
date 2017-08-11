@@ -58,44 +58,27 @@
 
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" for="firstName">Sidebar</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.showSidebar) }}
-                                            {{ form_errors(form.showSidebar) }}
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="span3">
                                     <div class="control-group">
-                                        <label class="control-label" for="firstName">Sidebar Title</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.sidebarTitle) }}
-                                            {{ form_errors(form.sidebarTitle) }}
-                                        </div>
+                                        {{ form_widget(form.showCalendar) }}
+                                        {{ form_errors(form.showCalendar) }}
+                                        Show Calender
                                     </div>
                                 </div>
                                 <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" for="firstName">Sidebar Position</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.sidebarPosition) }}
-                                            {{ form_errors(form.sidebarPosition) }}
-                                        </div>
-                                    </div>
+                                    {{ form_widget(form.showEmail) }}
+                                    {{ form_errors(form.showEmail) }}
+                                    Show Email
                                 </div>
                                 <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" >Sidebar Tooltip</label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                {{ form_widget(form.sidebarTooltip) }}
-                                                {{ form_errors(form.sidebarTooltip) }}
-                                            </div>
-
-                                        </div>
-                                    </div>
+                                    {{ form_widget(form.showMobile) }}
+                                    {{ form_errors(form.showMobile) }}
+                                    Show Mobile
+                                </div>
+                                <div class="span2">
+                                    {{ form_widget(form.showSearch) }}
+                                    {{ form_errors(form.showSearch) }}
+                                    Show Search
                                 </div>
                                 <div class="span3">
                                     <div class="control-group">
@@ -109,6 +92,42 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        {{ form_widget(form.showSidebar) }}
+                                        {{ form_errors(form.showSidebar) }}
+                                        Sidebar
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        {{ form_widget(form.sidebarTooltip) }}
+                                        {{ form_errors(form.sidebarTooltip) }}
+                                        Sidebar Tooltip
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Sidebar Title</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.sidebarTitle) }}
+                                            {{ form_errors(form.sidebarTitle) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Sidebar Position</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.sidebarPosition) }}
+                                            {{ form_errors(form.sidebarPosition) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box blue">

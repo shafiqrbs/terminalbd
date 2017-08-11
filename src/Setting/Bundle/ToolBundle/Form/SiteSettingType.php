@@ -46,7 +46,7 @@ class SiteSettingType extends AbstractType
                  },
               ))
 
-              ->add('syndicateModules', 'entity', array(
+              /*->add('syndicateModules', 'entity', array(
                   'required'      => true,
                   'expanded'      =>true,
                   'multiple'      =>true,
@@ -61,7 +61,7 @@ class SiteSettingType extends AbstractType
                               ->setParameter('syndicate', $this->syndicateId);
                       },
 
-              ))
+              ))*/
 
             ->add('modules', 'entity', array(
                 'required'      => true,

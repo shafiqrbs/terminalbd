@@ -297,41 +297,29 @@
                         <div class="clearfix">&nbsp;</div>
                         <!--/row-->
                         <div class="row-fluid">
-                            <div class="span6 ">
+                            <div class="span4 ">
                                 <div class="control-group">
-                                    <label class="control-label" ></label>
-                                    <div class="controls">
-                                        <div class="input-icon left">
-                                            {{ form_widget(edit_form.customizeDesign) }}
-                                            {{ form_errors(edit_form.customizeDesign) }}
-                                            Template Customize
-                                        </div>
-
-                                    </div>
+                                    {{ form_widget(edit_form.customizeDesign) }}
+                                    {{ form_errors(edit_form.customizeDesign) }}
+                                    Template Customize
+                                </div>
+                                <div class="control-group">
+                                    {{ form_widget(edit_form.promotion) }}
+                                    {{ form_errors(edit_form.promotion) }}
+                                    Promotion
                                 </div>
                             </div>
                             <!--/span-->
-                            <div class="span6 ">
-                                <div class="control-group">
-                                    <label class="control-label" ></label>
-                                    <div class="controls">
-                                        <div class="input-icon left">
-                                            {{ form_widget(edit_form.promotion) }}
-                                            {{ form_errors(edit_form.promotion) }}
-                                            Promotion
-                                        </div>
+                            <div class="span8">
 
-                                    </div>
-                                </div>
                                 <div class="control-group">
                                     <label class="control-label" >Instagram Page</label>
                                     <div class="controls">
                                         <div class="input-icon left">
+                                            <i class=" icon-instagram"></i>
                                             {{ form_widget(edit_form.instagramPageUrl) }}
                                             {{ form_errors(edit_form.instagramPageUrl) }}
-                                            Promotion
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -340,26 +328,20 @@
                         <!--/row-->
                         <!--/row-->
                         <div class="row-fluid">
-                            <div class="span6 ">
+                            <div class="span4 ">
                                 <div class="control-group">
-                                    <label class="control-label" ></label>
-                                    <div class="controls">
-                                        <div class="input-icon left">
-                                            {{ form_widget(edit_form.facebookApps) }}
-                                            {{ form_errors(edit_form.facebookApps) }}
-                                            FaceBook apps
-                                        </div>
-
-                                    </div>
+                                    {{ form_widget(edit_form.facebookApps) }}
+                                    {{ form_errors(edit_form.facebookApps) }}
+                                    FaceBook apps
                                 </div>
                             </div>
                             <!--/span-->
-                            <div class="span6 ">
+                            <div class="span8 ">
                                 <div class="control-group">
                                     <label class="control-label" >FaceBook URL</label>
                                     <div class="controls">
                                         <div class="input-icon left">
-                                            <i class="icon-font"></i>
+                                            <i class="icon-facebook"></i>
                                             {{ form_widget(edit_form.facebookPageUrl) }}
                                             {{ form_errors(edit_form.facebookPageUrl) }}
 
@@ -372,24 +354,20 @@
                         </div>
                         <!--/row-->
                         <div class="row-fluid">
-                            <div class="span6 ">
+                            <div class="span4 ">
                                 <div class="control-group">
-                                    <div class="controls">
-                                        <div class="input-icon left">
-                                            {{ form_widget(edit_form.facebookAds) }}
-                                            {{ form_errors(edit_form.facebookAds) }}
-                                            Facebook Ads
-                                        </div>
-                                    </div>
+                                    {{ form_widget(edit_form.facebookAds) }}
+                                    {{ form_errors(edit_form.facebookAds) }}
+                                    Facebook Ads
                                 </div>
                             </div>
                             <!--/span-->
-                            <div class="span6 ">
+                            <div class="span8 ">
                                 <div class="control-group">
                                     <label class="control-label" >Twitter URL</label>
                                     <div class="controls">
                                         <div class="input-icon left">
-                                            <i class="icon-font"></i>
+                                            <i class="icon-twitter"></i>
                                             {{ form_widget(edit_form.twitterUrl) }}
                                             {{ form_errors(edit_form.twitterUrl) }}
                                         </div>
@@ -402,37 +380,29 @@
                         <!--/row-->
                         <!--/row-->
                         <div class="row-fluid">
-                            <div class="span6 ">
+                            <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label" ></label>
-                                    <div class="controls">
-                                        <div class="input-icon left">
-                                            {{ form_widget(edit_form.googleAds) }}
-                                            {{ form_errors(edit_form.googleAds) }}
-                                            Google Ads
-                                        </div>
-
-                                    </div>
+                                    {{ form_widget(edit_form.googleAds) }}
+                                    {{ form_errors(edit_form.googleAds) }}
+                                    Google Ads
                                 </div>
                             </div>
                             <!--/span-->
-                            <div class="span6 ">
+                            <div class="span8">
                                 <div class="control-group">
                                     <label class="control-label" > Google URL</label>
                                     <div class="controls">
                                         <div class="input-icon left">
+                                            <i class=" icon-google-plus"></i>
                                             {{ form_widget(edit_form.googlePlus) }}
                                             {{ form_errors(edit_form.googlePlus) }}
-
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                             <!--/span-->
                         </div>
                         <!--/row-->
-
                         <div class="form-actions portlet box grey">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i><a name="call-me-back">SMS & Email Integration</a></div>
@@ -630,23 +600,10 @@
                             <!--/span-->
                             <div class="span6 ">
                                 <div class="control-group">
-                                    <label class="control-label" >Syndicate Modules</label>
-                                    <div class="controls">
-
-                                        {{ form_widget(edit_form.siteSetting.syndicateModules) }}
-                                        {{ form_errors(edit_form.siteSetting.syndicateModules) }}
-
-
-                                    </div>
-                                </div>
-                                <div class="control-group">
                                     <label class="control-label" >App Modules</label>
                                     <div class="controls">
-
                                         {{ form_widget(edit_form.siteSetting.appModules) }}
                                         {{ form_errors(edit_form.siteSetting.appModules) }}
-
-
                                     </div>
                                 </div>
                             </div>

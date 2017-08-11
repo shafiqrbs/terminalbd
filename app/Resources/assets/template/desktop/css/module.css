@@ -92,6 +92,87 @@
     display: inline-block;
 }
 
+#header-menu {
+    display: table;
+    float: left;
+}
+
+#header-menu ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#header-menu ul ul {
+    opacity: 0;
+    position: absolute;
+    top: 160%;
+    visibility: hidden;
+    transition: all .4s ease;
+    -webkit-transition: all .4s ease;
+}
+
+#header-menu ul ul ul {
+    top: 0%;
+    left: 160%;
+}
+
+#header-menu ul ul li:hover > ul {
+    top: 0%;
+    left: 100%;
+    opacity: 1;
+    visibility: visible;
+}
+
+#header-menu ul li:hover > ul {
+    opacity: 1;
+    top: 100%;
+    visibility: visible;
+}
+
+#header-menu ul li {
+    float: left;
+    position: relative;
+    z-index:9;
+
+}
+
+#header-menu  ul ul li {
+    float: none;
+    background-color: #17202A;
+    min-width: 200px;
+    cursor: pointer;
+}
+
+#header-menu ul li {
+    cursor: pointer;
+}
+
+#header-menu ul a {
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+    text-align: left;
+    color: #ffffff;
+    text-transform:uppercase;
+    font-size: 13px;
+
+}
+
+#header-menu ul li:hover { background-color: #17202A; }
+
+#header-menu ul li a:hover { background-color: #1C2833; }
+@media screen and (max-width: 600px){
+    #header-menu{
+        display: none;
+    }
+    .box .info-links{
+        display: none;
+    }
+}
+
+
+
 .tm-title {
     text-transform: uppercase;
     margin: 0 0 15px 0;
@@ -218,6 +299,295 @@
 #nav-search .searchbar:focus{
     border: 1px solid #ccc;
 }
+
+/*========================== SLIDER ====================================*/
+
+
+.carousel-post-control {
+    position: absolute;
+    top: 45%;
+    left: 15px;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    font-size: 60px;
+    font-weight: 100;
+    line-height: 30px;
+    color: #ffffff;
+    text-align: center;
+    background: #222222;
+    border: 3px solid #ffffff;
+    -webkit-border-radius: 23px;
+    -moz-border-radius: 23px;
+    border-radius: 23px;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+.carousel-post-control.right {
+    right: 0;
+    left: auto;
+    text-decoration: none!important;
+}
+
+.carousel-post-control.left {
+    text-align: left;
+    float: left;
+    text-decoration: none!important;
+}
+
+.carousel-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 15px;
+    background: #333333;
+    background: rgba(0, 0, 0, 0.75);
+}
+.carousel-post-control {
+    width: 60px;
+    height: 0;
+    margin-top: -20px;
+    font-size: 100px;
+    background: none;
+    border: none;
+    font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 300;
+}
+.carousel-caption {
+    padding: 25px;
+    text-align: center;
+    width: 100%!important;
+    max-width: 100%!important;
+}
+.carousel-caption h4 {
+    font-weight: 100;
+    font-size: 25px;
+}
+.carousel-caption p {
+    font-size: 14px;
+    margin-bottom: -8px;
+    font-weight: 300;
+    line-height: 18px;
+}
+.carousel-fade .carousel-inner .item {
+    opacity: 0;
+    -webkit-transition-property: opacity;
+    -moz-transition-property: opacity;
+    -o-transition-property: opacity;
+    transition-property: opacity;
+}
+.carousel-fade .carousel-inner .active { opacity: 1 }
+.carousel-fade .carousel-inner .active.left,
+.carousel-fade .carousel-inner .active.right {
+    left: 0;
+    opacity: 0;
+    z-index: 1;
+}
+.carousel-fade .carousel-inner .next.left,
+.carousel-fade .carousel-inner .prev.right { opacity: 1 }
+.carousel-fade .carousel-post-control { z-index: 2 }
+@media only screen and (max-width:767px) {
+    h1 { font-size: 30px !important }
+    .carousel-caption {
+        padding: 15px;
+        text-align: center;
+    }
+    .carousel-caption h4 { font-size: 30px }
+    .carousel-caption p {
+        margin-top: 10px;
+        font-size: 10px;
+        margin-bottom: -10px;
+    }
+
+    .carousel { margin-bottom: 0 }
+    .hero-unit { padding-bottom: 60px }
+    .hero-unit p { font-size: 16px }
+}
+
+/*======================== Slider Feature ======================================*/
+
+.header-line-center h1:before, .header-line-center h2:before, .header-line-center h3:before, .header-line-center h4:before, .header-line-center h5:before, .header-line-center h6:before {
+    position: absolute;
+    content: "";
+    height: 2px;
+    width: 50%;
+    left: -50%;
+    top: 50%;
+    margin-top: -1px;
+    background: #0a70e3;
+}
+.header-line-center h1:after, .header-line-center h2:after, .header-line-center h3:after, .header-line-center h4:after, .header-line-center h5:after, .header-line-center h6:after {
+    position: absolute;
+    content: "";
+    background: #0a70e3;
+    height: 2px;
+    width: 50%;
+    right: -50.5%;
+    top: 50%;
+    margin-top: -1px;
+}
+
+.owl-prev, .owl-next {opacity: 0 !important;}
+.owl-carousel:hover .owl-controls .owl-buttons .owl-prev {opacity: 1 !important;}
+.owl-carousel:hover .owl-controls .owl-buttons .owl-next {opacity: 1 !important;}
+.owl-carousel .owl-controls .owl-buttons .owl-next , .owl-carousel .owl-controls .owl-buttons .owl-prev{}
+
+.owl-carousel{
+    position: inherit!important;
+}
+.feature-carousel , .page-carousel{
+    position: relative!important;
+}
+.feature-carousel .owl-controls , .page-carousel .owl-controls {
+    text-align: right;
+    float: right;
+    top: 0;
+    position: absolute;
+    right:5px;
+    margin-top: -3px!important;
+}
+.feature-carousel .owl-buttons div , .page-carousel .owl-buttons div{
+    position: relative;
+    border-radius: 0;
+    background: #807b87;
+    padding: 7px 15px;
+    transition: all 0.5s ease 0s;
+}
+.owl-theme .owl-controls .owl-buttons div{
+    -webkit-border-radius:1px;
+    border-radius:1px;
+    padding: 5px 10px;
+    font-size: 15px;
+
+}
+
+.feature-carousel .owl-prev:before, .owl-next:before , .page-carousel .owl-prev:before, .owl-next:before{
+    content: normal;
+}
+
+.feature-carousel .owl-next:before , .page-carousel .owl-next:before{
+    content: normal;
+}
+
+.tabCarousel .nav a small
+{
+    display: block;
+}
+.tabCarousel .nav
+{
+    background: #eee;
+}
+.tabCarousel .nav-justified > li > a
+{
+    border-radius: 0px;
+}
+
+.slider-feature-thumbnail {
+    border: 2px solid red !important;
+    height: 141px;
+    width: 100%;
+    display: block;
+}
+
+.carousel-caption{
+    bottom: 0;
+    opacity: 0.8;
+}
+
+.carousel-post-control.carousel-right {
+    text-align: right;
+    float: right;
+    display: inline-block;
+    left: auto!important;
+    right: 10px !important;
+}
+
+.carousel-post-control.carousel-left {
+    text-align: left;
+    float: left;
+    text-decoration: none!important;
+}
+
+.carousel-post-control.carousel-right , .carousel-post-control.carousel-left {
+    opacity: 0 !important;
+    transition: transform 8s ease-out 0s;
+}
+#main-carousel:hover .carousel-post-control.carousel-left {
+    transform: scale(1,1);
+    transition: transform 8s ease-in 5s;
+    opacity: 1 !important;
+}
+#main-carousel:hover .carousel-post-control.carousel-right {
+    transform: scale(1,1);
+    transition: transform 8s ease-in 5s;
+    opacity: 1 !important;
+}
+
+.carousel-img{
+    max-height:512px;
+    height: 512px;
+    width:100%
+}
+.carousel-tab-img{
+    height: 359px;
+    max-height:359px;
+    width: 100%
+}
+
+
+#topTabCarousel .nav-pills>li>a{
+    border-radius: 0;
+    height: 60px;
+    overflow: hidden;
+}
+
+#topTabCarousel .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{
+    background-color:#ffffff;
+    color:#222222!important;
+}
+
+#topTabCarousel .tab-nav li.active:after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 48%;
+    bottom: 100%;
+    width: 0;
+    height: 0;
+    border-bottom: 10px solid  #ffffff;
+    border-top: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}
+
+
+#bottomTabCarousel .nav-pills>li>a{
+    border-radius: 0;
+    height: 60px;
+    overflow: hidden;
+}
+
+#bottomTabCarousel .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{
+    background-color:#ffffff;
+    color:#222222!important;
+}
+
+#bottomTabCarousel .tab-nav li.active:after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 48%;
+    bottom: 100%;
+    width: 0;
+    height: 0;
+    border-bottom: 10px solid #ffffff;
+    border-top: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}
+
 
 /*========================== PAGINATION====================================*/
 
@@ -456,85 +826,6 @@
     border: 1px solid #3d3030;
 }
 
-
-#header-menu {
-    display: table;
-    float: left;
-}
-
-#header-menu ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-#header-menu ul ul {
-    opacity: 0;
-    position: absolute;
-    top: 160%;
-    visibility: hidden;
-    transition: all .4s ease;
-    -webkit-transition: all .4s ease;
-}
-
-#header-menu ul ul ul {
-    top: 0%;
-    left: 160%;
-}
-
-#header-menu ul ul li:hover > ul {
-    top: 0%;
-    left: 100%;
-    opacity: 1;
-    visibility: visible;
-}
-
-#header-menu ul li:hover > ul {
-    opacity: 1;
-    top: 100%;
-    visibility: visible;
-}
-
-#header-menu ul li {
-    float: left;
-    position: relative;
-    z-index:9;
-
-}
-
-#header-menu  ul ul li {
-    float: none;
-    background-color: #17202A;
-    min-width: 200px;
-    cursor: pointer;
-}
-
-#header-menu ul li {
-    cursor: pointer;
-}
-
-#header-menu ul a {
-    text-decoration: none;
-    display: block;
-    padding: 10px 15px;
-    text-align: left;
-    color: #ffffff;
-    text-transform:uppercase;
-    font-size: 13px;
-
-}
-
-#header-menu ul li:hover { background-color: #17202A; }
-
-#header-menu ul li a:hover { background-color: #1C2833; }
-@media screen and (max-width: 600px){
-    #header-menu{
-        display: none;
-    }
-    .box .info-links{
-        display: none;
-    }
-}
 
 
 
@@ -1742,7 +2033,7 @@
     font-weight: bold;
     color: #fff;
     padding: 0 10px;
-    background: #14bf9b;;
+    background: #555555;;
     text-transform: uppercase;
 }
 .notice-slide .date{
@@ -1770,7 +2061,7 @@
     padding: 15px 0;
     list-style: none;
     text-align: center;
-    background: #14bf9b;
+    background: #555555;
 }
 .notice-slide .post-bar li{
     display: inline-block;
@@ -2203,111 +2494,8 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     line-height: 35px;
     font-size: 14px;
     font-weight: bold;
-    color: #FFFFff;
 }
 
-.carousel-post-control {
-    position: absolute;
-    top: 45%;
-    left: 15px;
-    width: 40px;
-    height: 40px;
-    margin-top: -20px;
-    font-size: 60px;
-    font-weight: 100;
-    line-height: 30px;
-    color: #ffffff;
-    text-align: center;
-    background: #222222;
-    border: 3px solid #ffffff;
-    -webkit-border-radius: 23px;
-    -moz-border-radius: 23px;
-    border-radius: 23px;
-    opacity: 0.5;
-    filter: alpha(opacity=50);
-}
-
-.carousel-post-control.right {
-    right: 0;
-    left: auto;
-    text-decoration: none!important;
-}
-
-.carousel-post-control.left {
-    text-align: left;
-    float: left;
-    text-decoration: none!important;
-}
-
-.carousel-caption {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 15px;
-    background: #333333;
-    background: rgba(0, 0, 0, 0.75);
-}
-.carousel-post-control {
-    width: 60px;
-    height: 0;
-    margin-top: -20px;
-    font-size: 100px;
-    background: none;
-    border: none;
-    font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-weight: 300;
-}
-.carousel-caption {
-    padding: 25px;
-    text-align: center;
-    width: 100%!important;
-    max-width: 100%!important;
-}
-.carousel-caption h4 {
-    font-weight: 100;
-    font-size: 25px;
-}
-.carousel-caption p {
-    font-size: 14px;
-    margin-bottom: -8px;
-    font-weight: 300;
-    line-height: 18px;
-}
-.carousel-fade .carousel-inner .item {
-    opacity: 0;
-    -webkit-transition-property: opacity;
-    -moz-transition-property: opacity;
-    -o-transition-property: opacity;
-    transition-property: opacity;
-}
-.carousel-fade .carousel-inner .active { opacity: 1 }
-.carousel-fade .carousel-inner .active.left,
-.carousel-fade .carousel-inner .active.right {
-    left: 0;
-    opacity: 0;
-    z-index: 1;
-}
-.carousel-fade .carousel-inner .next.left,
-.carousel-fade .carousel-inner .prev.right { opacity: 1 }
-.carousel-fade .carousel-post-control { z-index: 2 }
-@media only screen and (max-width:767px) {
-    h1 { font-size: 30px !important }
-    .carousel-caption {
-        padding: 15px;
-        text-align: center;
-    }
-    .carousel-caption h4 { font-size: 30px }
-    .carousel-caption p {
-        margin-top: 10px;
-        font-size: 10px;
-        margin-bottom: -10px;
-    }
-
-    .carousel { margin-bottom: 0 }
-    .hero-unit { padding-bottom: 60px }
-    .hero-unit p { font-size: 16px }
-}
 
 .footer-links li, .list-line li{
     list-style: none;
@@ -2352,23 +2540,6 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     display: flex;
     text-align: center;
     padding-left: 20px;
-}
-.event-sidebar .post-comment li:after {
-    content: "";
-    border-bottom: 1px solid lightgray;
-    margin-bottom: 5px;
-    display: block;
-    margin-top: 5px;
-}
-.post-comment simple{
-    font-size: 13px;
-    color: #0b0e23;
-}
-.event-sidebar .post-title{
-    padding-left: 15px;
-}
-.event-sidebar .post-description{
-    padding-left: 15px;
 }
 
 .mysharing{
@@ -2654,6 +2825,25 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
 
 /** #####################################  End Sidebar Client & Sponsor  ####################################### */
 /** #####################################  Sidebar Event  ####################################### */
+
+.event-sidebar .post-comment li:after {
+    content: "";
+    border-bottom: 1px solid lightgray;
+    margin-bottom: 5px;
+    display: block;
+    margin-top: 5px;
+}
+.post-comment simple{
+    font-size: 13px;
+    color: #0b0e23;
+}
+.event-sidebar .post-title{
+    padding-left: 15px;
+}
+.event-sidebar .post-description{
+    padding-left: 15px;
+}
+
 
 .event-sidebar{
     position:relative;
@@ -3014,10 +3204,7 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
 @media only screen and (max-width: 990px){
     .sidebar-serviceBox{ margin-bottom: 30px; }
 }
-a:hover,a:focus{
-    text-decoration: none;
-    outline: none;
-}
+
 
 
 .owl-theme .owl-buttons div{
@@ -3083,6 +3270,7 @@ a:hover,a:focus{
     color:#00abf1;
     text-underline: none;
 }
+
 .box-sidebar-portfolio .over-layer{
     width: 100%;
     padding: 15px;
