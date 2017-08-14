@@ -364,6 +364,11 @@ ul.dropdown-cart li .item-right button {
     line-height: 30px;
 }
 
+.container-margin{
+    margin-bottom: 30px;
+}
+
+
 .carousel-control {
     width: 30px;
     height: 30px;
@@ -553,77 +558,21 @@ ul.dropdown-cart li .item-right button {
     border-radius: 0;
 }
 
-.footer-menu{
-    padding-bottom: 30px;
-    background: #555;
-    color: #FFFFff;
-}
-.footer-menu h4{
-    text-transform: uppercase;
-}
+
+/* ================================ Footer Menu==================================*/
 
 .footer-menu a{
-    color: #ffc400;
-}
-.footer-menu a:hover{
     color: #FFFFff;
 }
-
-.social-payment{
-    padding-bottom: 20px;
-    padding-top: 20px;
-    margin-bottom: 30px;
+.footer-menu a:hover{
+    color: #ffc400;
 }
 
 .social-payment .input-group .form-control:hover ,.bs-example-form .input-group .form-control:hover , .social-payment .input-group .form-control:active, .social-payment .input-group .form-control:focus , .bs-example-form .input-group .form-control:focus {
     background-color: #ffffee;
     color: #0b0e23;
 }
-.input-group-lg>.form-control, .input-group-lg>.input-group-addon, .input-group-lg>.input-group-btn>.btn{
-    font-size: 14px;
-}
 
-.social-payment .social-tooltip{
-    margin-top: -2px;
-    text-align: center;
-}
-.social-payment .social-tooltip a{
-
-    height: 36px;
-    width: 36px;
-    background: #000;
-    display: inline-block;
-    text-align: center;
-    line-height: 36px;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.2);
-    transition: all 0.15s ease;
-    font-size: 18px;
-
-}
-.social-payment .social-tooltip a#facebook{
-    background: linear-gradient(#4562a0, #3b5998);
-    color:#ffffff
-}
-.social-payment .social-tooltip a#facebook:hover{
-    background: linear-gradient(#3c5899, #3c5899);
-    transition: all 1s ease;
-}
-.social-payment .social-tooltip a#twitter{
-    background: linear-gradient(#00a0d1, #00a0d1);
-    color:#ffffff
-}
-.social-payment .social-tooltip a#instagram{
-    background: linear-gradient(#5b85aa, #4e799e);
-    color:#ffffff
-}
-.social-payment .social-tooltip a#email{
-    background: linear-gradient(#db4a39, #db4a39);
-    color:#ffffff
-}
-
-.container-margin{
-    margin-bottom: 30px;
-}
 
 /* ================================ Menu Search ==================================*/
 

@@ -471,6 +471,20 @@ class TemplateCustomize
      */
     private $footerTextColor;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="footerAnchorColor", type="string", length=15, nullable=true)
+     */
+    private $footerAnchorColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="footerAnchorColorHover", type="string", length=15, nullable=true)
+     */
+    private $footerAnchorColorHover;
+
 
     /**
      * @Assert\File(maxSize="8388608")
@@ -1587,6 +1601,38 @@ class TemplateCustomize
     public function setCarouselPosition($carouselPosition)
     {
         $this->carouselPosition = $carouselPosition;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFooterAnchorColor()
+    {
+        return $this->footerAnchorColor;
+    }
+
+    /**
+     * @param mixed $footerAnchorColor
+     */
+    public function setFooterAnchorColor($footerAnchorColor)
+    {
+        $this->footerAnchorColor = $footerAnchorColor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFooterAnchorColorHover()
+    {
+        return $this->footerAnchorColorHover;
+    }
+
+    /**
+     * @param mixed $footerAnchorColorHover
+     */
+    public function setFooterAnchorColorHover($footerAnchorColorHover)
+    {
+        $this->footerAnchorColorHover = $footerAnchorColorHover;
     }
 
 

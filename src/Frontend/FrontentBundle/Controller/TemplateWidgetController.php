@@ -53,7 +53,7 @@ class TemplateWidgetController extends Controller
         /* Device Detection code desktop or mobile */
 
         $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'parent'=>NULL,'menuGroup'=> $menuGroup ),array('sorting'=>'asc'));
-        $footerMenu = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
+        $footerMenu = $this->get('setting.menuTreeSettingRepo')->getFooterMenu($menus,$globalOption->getSubDomain());
         return $this->render('@Frontend/Template/Desktop/Widget/FooterMenu.html.twig', array(
             'footerMenu'           => $footerMenu,
         ));

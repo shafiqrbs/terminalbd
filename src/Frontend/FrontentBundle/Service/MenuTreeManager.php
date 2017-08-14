@@ -93,7 +93,6 @@ class MenuTreeManager
                 }else{
                     $value .= '<li><a href="/'.$val->getMenu()->getSlug().'">' . $val->getMenu()->getMenu().'</a>';
                 }
-
                 $value .= '</li>';
             } else {
                 $value .= '<li><a href="/'.$val->getMenu()->getSlug().'">'.$val->getMenu()->getMenu() . '</a></li>';
@@ -170,7 +169,7 @@ class MenuTreeManager
         foreach ($menus as $val) {
             $menu = $val->getMenu()->getMenu();
             if (!empty($menu)) {
-                $value .= '<li><a href="/'. $val->getMenu()->getSlug() . '">' . $val->getMenu()->getMenu() . '</a></li>';
+                $value .= '<li><a href="/'. $val->getMenu()->getSlug() . '"><i class="fa fa-angle-right"></i> ' . $val->getMenu()->getMenu() . '</a></li>';
             }
         }
         $value .='</ul>';

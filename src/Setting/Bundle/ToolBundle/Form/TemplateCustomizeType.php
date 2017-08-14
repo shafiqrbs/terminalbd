@@ -72,13 +72,13 @@ class TemplateCustomizeType extends AbstractType
             ->add('carouselPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(
-                    'top-left' => 'Top-Left',
-                    'top-center' => 'Top-Center',
-                    'top-right' => 'Top-Right',
-                    'vertical' => 'Vertical',
-                    'bottom-left' => 'Bottom-Left',
+                    'top-left'      => 'Top-Left',
+                    'top-center'    => 'Top-Center',
+                    'top-right'     => 'Top-Right',
+                    'vertical'      => 'Vertical',
+                    'bottom-left'   => 'Bottom-Left',
                     'bottom-center' => 'Bottom-Center',
-                    'bottom-right' => 'Bottom-Right'
+                    'bottom-right'  => 'Bottom-Right'
                 ),
             ))
             ->add('sliderTopPosition','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Slider Top/Bottom')))
@@ -118,8 +118,6 @@ class TemplateCustomizeType extends AbstractType
             ))
 
             ->add('logoDisplayWebsite')
-
-
             ->add('anchorColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
@@ -175,8 +173,6 @@ class TemplateCustomizeType extends AbstractType
                 'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
             ))
 
-
-
             ->add('siteTitleBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
@@ -186,7 +182,6 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
             ))
-
 
             ->add('headerBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
@@ -217,13 +212,13 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
             ))
-
-
-            ->add('footerBgColor','text', array('attr'=>array(
+            
+            ->add('borderColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
             ))
-            ->add('borderColor','text', array('attr'=>array(
+
+            ->add('footerBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
             ))
@@ -231,7 +226,17 @@ class TemplateCustomizeType extends AbstractType
             ->add('footerTextColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
-            ));
+            ))
+            ->add('footerAnchorColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            ->add('footerAnchorColorHover','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+
+        ;
     }
     
     /**

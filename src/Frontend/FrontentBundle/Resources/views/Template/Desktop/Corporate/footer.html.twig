@@ -53,7 +53,9 @@
             </div>
             <div class="col-sm-4">
                 <h6 class="text-uppercase bottom-line">{{ globalOption.name }}</h6>
-                {% render controller("FrontendBundle:TemplateWidget:footerMenu",{'globalOption':globalOption.id,'menuGroup':3}) %}
+                <div>
+                    {% render controller("FrontendBundle:TemplateWidget:footerMenu",{'globalOption':globalOption.id,'menuGroup':3}) %}
+                </div>
             </div>
             <div class="col-sm-4">
                 <h6 class="text-uppercase bottom-line">Contact Us</h6>
