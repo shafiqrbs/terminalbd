@@ -35,13 +35,14 @@
                 </div>
             {% endfor %}
         </div>
-        <a class="carousel-post-control carousel-left" href="#main-carousel" data-slide="prev">‹</a>
-        <a class="carousel-post-control carousel-right" href="#main-carousel" data-slide="next">›</a>
+        <a class="carousel-main-control carousel-left" href="#main-carousel" data-slide="prev">‹</a>
+        <a class="carousel-main-control carousel-right" href="#main-carousel" data-slide="next">›</a>
     </div>
     <div class="clearfix"></div>
-    <div class="header-line-center">
-        <h1 class="tm-title-border">WELCOME TO {{ globalOption.name }}</h1>
+    <div class="section-header">
+        <h3>WELCOME TO {{ globalOption.name }}</h3>
     </div>
+
 {% endif %}
     {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'top-tab-slider' %}
         <div class="container">

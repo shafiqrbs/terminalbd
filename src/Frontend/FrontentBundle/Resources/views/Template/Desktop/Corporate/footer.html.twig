@@ -3,31 +3,34 @@
         {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':pageName,'position':'footer'}) %}
     </section>
 {% endif %}
+
 <section class="footer-menu">
     <div class="container social-payment" >
         <div class="row">
-            <div class="col-sm-5">
-                <div class="bs-callout" >
-                    <h4>PAYMENT METHOD</h4>
-                    <p><img src="{{ asset('assets/img/credit-card.png') }}" ></p>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <h4>NEWS LETTER</h4>
+
+            <div class="col-sm-8">
+                <h6 class="text-uppercase bottom-line">News Letter</h6>
                 <div class="social-tooltip">
                     <form name="newsLetter" method="post" id="newsLetter" action="{{ path(globalOption.subDomain ~ '_webservice_email_receive') }}">
-                        <div class="input-group">
-                            <input class="form-control" type="email" name="email" id="email" data-toggle="tooltip" required="required" title="Enter valid e-mail address" placeholder="Enter your e-mail" aria-label="Text input with multiple buttons">
-                            <div class="input-group-btn"> <button type="button" class="btn btn-info" aria-label="Help"><span data-toggle="tooltip" title="Are you interest new product & offer to send please your e-mail." class="glyphicon glyphicon-question-sign"></span></button>
-                            <button type="button" class="btn btn-primary emailSender"><span class="glyphicon glyphicon-saved"></span></button>
+                        <div class="row">
+                            <div class=" col-xs-6 col-md-6">
+                                <input class="form-control col-xs-12 col-md-12" type="text" name="name" id="name" data-toggle="tooltip" required="required" title="Enter your name" placeholder="Enter your name" aria-label="Text input with multiple buttons">
+                            </div>
+                            <div class=" col-xs-6 col-md-6">
+                                <div class="input-group">
+                                    <input class="form-control" type="email" name="email" id="email" data-toggle="tooltip" required="required" title="Enter valid e-mail address" placeholder="Enter your e-mail" aria-label="Text input with multiple buttons">
+                                    <div class="input-group-btn"> <button type="button" class="btn btn-info" aria-label="Help"><span data-toggle="tooltip" title="Are you interest new product & offer to send please your e-mail." class="glyphicon glyphicon-question-sign"></span></button>
+                                        <button type="button" class="btn btn-primary emailSender"><span class="glyphicon glyphicon-saved"></span></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <span id="email-success"></span>
                     </form>
                 </div>
             </div>
-            <div class="col-sm-3">
-                <h4>KEEP IN TOUCH</h4>
+            <div class="col-sm-4">
+                <h6 class="text-uppercase bottom-line">KEEP IN TOUCH</h6>
                 <div class="social-tooltip">
                     <a data-toggle="tooltip" id="facebook" title="Follow on Facebook" target="_blank" href="{{ globalOption.facebookPageUrl }}"><i class="fa fa-facebook fa-fw  "></i></a>
                     <a data-toggle="tooltip" id="twitter" title="Follow on Twitter" target="_blank" href="{{ globalOption.instagramPageUrl }}"><i class="fa fa-twitter fa-fw  "></i></a>
@@ -42,23 +45,18 @@
         <div class="row">
             <div class="col-sm-4">
                 <div class="bs-callout" >
-                    <h4>WHO WE ARE</h4>
+                    <h6 class="text-uppercase bottom-line">About</h6>
                     <p>
                         {% render controller("FrontendBundle:TemplateWidget:about",{'globalOption':globalOption.id,'wordlimit':300}) %}
                     </p>
                 </div>
-
             </div>
-            <div class="col-sm-3">
-                <h4>{{ globalOption.name }}</h4>
+            <div class="col-sm-4">
+                <h6 class="text-uppercase bottom-line">{{ globalOption.name }}</h6>
                 {% render controller("FrontendBundle:TemplateWidget:footerMenu",{'globalOption':globalOption.id,'menuGroup':3}) %}
             </div>
-            <div class="col-sm-2">
-                <h4>HELP</h4>
-                {% render controller("FrontendBundle:TemplateWidget:footerMenu",{'globalOption':globalOption.id,'menuGroup':7}) %}
-            </div>
-            <div class="col-sm-3">
-                <h4>SHOP/OFFICE ADDRESS</h4>
+            <div class="col-sm-4">
+                <h6 class="text-uppercase bottom-line">Contact Us</h6>
                 <address>
                     {% if globalOption.contactPage.address1 is not empty %}
 
@@ -91,17 +89,3 @@
         </div>
     </div>
 </section>
-<footer id="footer">
-    <div class="container">
-        <div class="row myfooter">
-            <div class="col-sm-6">
-                <div class="pull-left">
-                    &copy; Copyright {{ globalOption.name }} {{ "now"|date('Y') }}
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="pull-right">Designed & Developed by <a target="_blank" href="http://www.terminalbd.com">{{ portal_design_development }}</a></div>
-            </div>
-        </div>
-    </div>
-</footer>

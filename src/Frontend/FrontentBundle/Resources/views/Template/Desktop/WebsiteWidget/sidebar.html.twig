@@ -6,16 +6,10 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if widget.page is not empty %}
-<div class="blog-sidebar page-carousel">
-    {% if  widget.pageFeatureName is not empty or widget.pageShowType == 'slider' %}
-        <div class="page-title-bar">
-            {% if  widget.pageFeatureName is not empty %}
-                <div class="col-md-12" >
-                    <div class="page-title"><i class="fa fa-book"></i>&nbsp;{{ widget.pageFeatureName }}</div>
-                </div>
-            {% endif %}
-        </div>
-    {% endif %}
+<div class="blog-sidebar page-carousel-{{ globalOption.templateCustomize.carouselPosition }}">
+        {% if  widget.pageFeatureName is not empty %}
+                <div class="page-title">{{ widget.pageFeatureName }}</div>
+        {% endif %}
     {% if widget.pageShowType == 'grid' %}
         <div class="row">
             {% for entity in widget.page %}
@@ -80,16 +74,9 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if entities is defined and entities is not empty and widget.module.slug == 'blog' %}
-    <div class="blog-sidebar page-carousel">
-
-        {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
-            <div class="page-title-bar">
-                {% if  widget.moduleFeatureName is not empty %}
-                    <div class="col-md-12" >
-                        <div class="page-title"><i class="fa fa-book"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-                    </div>
-                {% endif %}
-            </div>
+    <div class="blog-sidebar page-carousel-{{ globalOption.templateCustomize.carouselPosition }}">
+        {% if  widget.moduleFeatureName is not empty %}
+            <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
         {% if widget.moduleShowType == 'grid' %}
             <div class="col-md-12">
@@ -154,16 +141,10 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if entities is defined and entities is not empty and widget.module.slug == 'branch' %}
-    <div class="blog-sidebar page-carousel">
+    <div class="blog-sidebar page-carousel-{{ globalOption.templateCustomize.carouselPosition }}">
 
-        {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
-            <div class="page-title-bar">
-                {% if  widget.moduleFeatureName is not empty %}
-                    <div class="col-md-12" >
-                        <div class="page-title"><i class="fa fa-map-marker"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-                    </div>
-                {% endif %}
-            </div>
+        {% if  widget.moduleFeatureName is not empty %}
+            <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
         {% if widget.moduleShowType == 'grid' %}
             <div class="row">
@@ -213,15 +194,9 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if entities is defined and entities is not empty  and widget.module.slug == 'client' %}
-    <div class="blog-sidebar blog-sidebar-override page-carousel" >
-        {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
-            <div class="page-title-bar">
-                {% if  widget.moduleFeatureName is not empty %}
-                    <div class="col-md-12" >
-                        <div class="page-title"><i class="fa fa-building"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-                    </div>
-                {% endif %}
-            </div>
+    <div class="blog-sidebar blog-sidebar-override page-carousel-{{ globalOption.templateCustomize.carouselPosition }}" >
+        {% if  widget.moduleFeatureName is not empty %}
+            <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
         <div class="row">
             {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
@@ -255,16 +230,9 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if entities is defined and entities is not empty  and widget.module.slug == 'event' %}
-    <div class="blog-sidebar blog-sidebar-override page-carousel" >
-        {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
-            <div class="page-title-bar">
-                {% if  widget.moduleFeatureName is not empty %}
-                    <div class="col-md-12" >
-                        <div class="page-title"><i class="fa fa-building"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-                    </div>
-                {% endif %}
-
-            </div>
+    <div class="blog-sidebar blog-sidebar-override page-carousel-{{ globalOption.templateCustomize.carouselPosition }}" >
+        {% if  widget.moduleFeatureName is not empty %}
+            <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
         {% if  widget.moduleShowType == 'slider' %}
             <div class="row">
@@ -329,13 +297,7 @@
 {% if entities is defined and entities is not empty  and widget.module.slug == 'faq' %}
     <div class="blog-sidebar">
         {% if  widget.moduleFeatureName is not empty %}
-            <div class="page-title-bar">
-                {% if  widget.moduleFeatureName is not empty %}
-                    <div class="col-md-12" >
-                        <div class="page-title"><i class="fa fa-comments"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-                    </div>
-                {% endif %}
-            </div>
+            <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
         <div class="row">
             <div class="col-md-12">
@@ -363,15 +325,9 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if entities is defined and entities is not empty and widget.module.slug == 'news' %}
-    <div class="blog-sidebar page-carousel">
-        {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
-            <div class="page-title-bar">
-                {% if  widget.moduleFeatureName is not empty %}
-                    <div class="col-md-12" >
-                        <div class="page-title"><i class="fa fa-newspaper-o"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-                    </div>
-                {% endif %}
-            </div>
+    <div class="blog-sidebar page-carousel-{{ globalOption.templateCustomize.carouselPosition }}">
+        {% if  widget.moduleFeatureName is not empty %}
+            <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
         {% if widget.moduleShowType == 'grid' %}
             <div class="col-md-12">
@@ -437,15 +393,9 @@
 {% endif %}
 <div class="clearfix"></div>
 {% if entities is defined and entities is not empty and widget.module.slug == 'noticeboard' %}
-    <div class="blog-sidebar blog-sidebar-override page-carousel">
-        {% if  widget.moduleFeatureName is not empty or widget.moduleShowType == 'slider' %}
-            <div class="page-title-bar">
-                {% if  widget.moduleFeatureName is not empty %}
-                    <div class="col-md-12" >
-                        <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-                    </div>
-                {% endif %}
-            </div>
+    <div class="blog-sidebar blog-sidebar-override page-carousel-{{ globalOption.templateCustomize.carouselPosition }}">
+        {% if  widget.moduleFeatureName is not empty %}
+            <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
     {% if widget.moduleShowType == 'slider' %}
         <div class="row">
@@ -488,13 +438,10 @@
     </div>
 {% endif %}
 {% if entities is defined and entities is not empty  and widget.module.slug == 'portfolio' %}
-    <div class="blog-sidebar blog-sidebar-override page-carousel">
-        <div class="page-title-bar">
-            <div class="col-md-12" >
-                <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-            </div>
-        </div>
-        <div class="clearfix"></div>
+    <div class="blog-sidebar blog-sidebar-override page-carousel-{{ globalOption.templateCustomize.carouselPosition }}">
+        {% if  widget.moduleFeatureName is not empty %}
+            <div class="page-title">{{ widget.moduleFeatureName }}</div>
+        {% endif %}
         {% if widget.moduleShowType == 'slider' %}
             <div class="row">
                 <div id="portfolio-sidebar-slider" class="">
@@ -532,13 +479,10 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty  and widget.module.slug == 'service' %}
-    <div class="blog-sidebar blog-sidebar-override page-carousel">
-        <div class="page-title-bar">
-            <div class="col-md-12" >
-                <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-            </div>
-        </div>
-        <div class="clearfix"></div>
+    <div class="blog-sidebar blog-sidebar-override page-carousel-{{ globalOption.templateCustomize.carouselPosition }}">
+        {% if  widget.moduleFeatureName is not empty %}
+            <div class="page-title">{{ widget.moduleFeatureName }}</div>
+        {% endif %}
         {% if widget.moduleShowType == 'slider' %}
             <div class="row">
                 <div id="service-sidebar-slider" class="">
@@ -577,13 +521,10 @@
     </div>
 {% endif %}
 {% if entities is defined and entities is not empty  and widget.module.slug == 'sponsor' %}
-    <div class="blog-sidebar blog-sidebar-override page-carousel">
-        <div class="page-title-bar">
-            <div class="col-md-12" >
-                <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-            </div>
-        </div>
-        <div class="clearfix"></div>
+    <div class="blog-sidebar blog-sidebar-override page-carousel-{{ globalOption.templateCustomize.carouselPosition }}">
+        {% if  widget.moduleFeatureName is not empty %}
+            <div class="page-title">{{ widget.moduleFeatureName }}</div>
+        {% endif %}
         {% if widget.moduleShowType == 'slider' %}
             <div class="row">
                 <div id="sponsor-sidebar-slider" class="">
@@ -617,13 +558,10 @@
     </div>
 {% endif %}
 {% if entities is defined and entities is not empty and widget.module.slug == 'team' %}
-    <div class="blog-sidebar blog-sidebar-override page-carousel">
-        <div class="page-title-bar">
-            <div class="col-md-12" >
-                <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-            </div>
-        </div>
-        <div class="clearfix"></div>
+    <div class="blog-sidebar blog-sidebar-override page-carousel-{{ globalOption.templateCustomize.carouselPosition }}">
+        {% if  widget.moduleFeatureName is not empty %}
+            <div class="page-title">{{ widget.moduleFeatureName }}</div>
+        {% endif %}
         <div class="row">
             {% if widget.moduleShowType == 'slider' %}
                 <div id="team-sidebar-slider" class="">
@@ -694,12 +632,10 @@
     </div>
 {% endif %}
 {% if entities is defined and entities is not empty  and widget.module.slug == 'testimonial' %}
-    <div class="blog-sidebar blog-sidebar-override page-carousel">
-        <div class="page-title-bar">
-            <div class="col-md-12" >
-                <div class="page-title"><i class="fa fa-tasks"></i>&nbsp;{{ widget.moduleFeatureName }}</div>
-            </div>
-        </div>
+    <div class="blog-sidebar blog-sidebar-override page-carousel-{{ globalOption.templateCustomize.carouselPosition }}">
+        {% if  widget.moduleFeatureName is not empty %}
+            <div class="page-title">{{ widget.moduleFeatureName }}</div>
+        {% endif %}
         <div class="row">
             {% if widget.moduleShowType == 'slider' %}
                 <div id="testimonial-sidebar-slider" class="owl-carousel">

@@ -33,6 +33,20 @@ class TemplateCustomize
     /**
      * @var boolean
      *
+     * @ORM\Column(name="topBar", type="boolean", nullable=true)
+     */
+    private $topBar = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="footerBlock", type="boolean", nullable=true)
+     */
+    private $footerBlock = true;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="showCalendar", type="boolean", nullable=true)
      */
     private $showCalendar = true;
@@ -86,6 +100,13 @@ class TemplateCustomize
      * @ORM\Column(name="showEmail", type="boolean", nullable=true)
      */
     private $showEmail = true;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="carouselPosition", type="string", length=20, nullable=true)
+     */
+    private $carouselPosition='top-right';
 
 
     /**
@@ -305,43 +326,58 @@ class TemplateCustomize
     /**
      * @var string
      *
-     * @ORM\Column(name="headerBgColor", type="string", length=50, nullable=true)
+     * @ORM\Column(name="headerBgColor", type="string", length=20, nullable=true)
      */
     private $headerBgColor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="headerBgImage", type="string", length=50, nullable=true)
+     * @ORM\Column(name="headerBgImage", type="string", length=20, nullable=true)
      */
     private $headerBgImage;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="dividerBgColor", type="string", length=50, nullable=true)
+     * @ORM\Column(name="dividerBgColor", type="string", length=20, nullable=true)
      */
     private $dividerBgColor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="dividerColor", type="string", length=50, nullable=true)
+     * @ORM\Column(name="dividerColor", type="string", length=20, nullable=true)
      */
     private $dividerColor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="borderColor", type="string", length=50, nullable=true)
+     * @ORM\Column(name="borderColor", type="string", length=20, nullable=true)
      */
     private $borderColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dividerBeforeColor", type="string", length=20, nullable=true)
+     */
+    private $dividerBeforeColor;
 
 
     /**
      * @var string
      *
-     * @ORM\Column(name="dividerTitleColor", type="string", length=50, nullable=true)
+     * @ORM\Column(name="dividerAfterColor", type="string", length=20, nullable=true)
+     */
+    private $dividerAfterColor;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dividerTitleColor", type="string", length=20, nullable=true)
      */
     private $dividerTitleColor;
 
@@ -1471,6 +1507,86 @@ class TemplateCustomize
     public function setPagination($pagination)
     {
         $this->pagination = $pagination;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getTopBar()
+    {
+        return $this->topBar;
+    }
+
+    /**
+     * @param boolean $topBar
+     */
+    public function setTopBar($topBar)
+    {
+        $this->topBar = $topBar;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getFooterBlock()
+    {
+        return $this->footerBlock;
+    }
+
+    /**
+     * @param boolean $footerBlock
+     */
+    public function setFooterBlock($footerBlock)
+    {
+        $this->footerBlock = $footerBlock;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDividerBeforeColor()
+    {
+        return $this->dividerBeforeColor;
+    }
+
+    /**
+     * @param string $dividerBeforeColor
+     */
+    public function setDividerBeforeColor($dividerBeforeColor)
+    {
+        $this->dividerBeforeColor = $dividerBeforeColor;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDividerAfterColor()
+    {
+        return $this->dividerAfterColor;
+    }
+
+    /**
+     * @param mixed $dividerAfterColor
+     */
+    public function setDividerAfterColor($dividerAfterColor)
+    {
+        $this->dividerAfterColor = $dividerAfterColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCarouselPosition()
+    {
+        return $this->carouselPosition;
+    }
+
+    /**
+     * @param string $carouselPosition
+     */
+    public function setCarouselPosition($carouselPosition)
+    {
+        $this->carouselPosition = $carouselPosition;
     }
 
 

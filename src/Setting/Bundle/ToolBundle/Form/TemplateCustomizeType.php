@@ -16,6 +16,8 @@ class TemplateCustomizeType extends AbstractType
     {
         $builder
 
+            ->add('topBar')
+            ->add('footerBlock')
             ->add('showCalendar')
             ->add('showEmail')
             ->add('showMobile')
@@ -27,6 +29,7 @@ class TemplateCustomizeType extends AbstractType
                 'attr'=>array('class'=>'span12'),
                 'choices' => array('' => '---Select One---','left' => 'left',  'right' => 'right'),
             ))
+
 
             ->add('siteBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
@@ -66,8 +69,21 @@ class TemplateCustomizeType extends AbstractType
 
             ->add('titleHeight','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Title height')))
             ->add('titleMarginBottom','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Title border margin')))
-            ->add('sliderTopPosition','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Slider Top')))
-            ->add('sliderRightPosition','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Slider Right')))
+            ->add('carouselPosition', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    'top-left' => 'Top-Left',
+                    'top-center' => 'Top-Center',
+                    'top-right' => 'Top-Right',
+                    'vertical' => 'Vertical',
+                    'bottom-left' => 'Bottom-Left',
+                    'bottom-center' => 'Bottom-Center',
+                    'bottom-right' => 'Bottom-Right'
+                ),
+            ))
+            ->add('sliderTopPosition','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Slider Top/Bottom')))
+            ->add('sliderRightPosition','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Slider Left/Right')))
+
             ->add('titleBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')

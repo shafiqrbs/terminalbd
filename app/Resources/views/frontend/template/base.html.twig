@@ -71,6 +71,9 @@
 {% render controller("FrontendBundle:TemplateWidget:header",{'globalOption':globalOption.id, 'pageName':pageName}) %}
 <div class="clearfix"></div>
 {% block body %}{% endblock %}
+{% if globalOption.templateCustomize.footerBlock == 1 %}
+{{ include('@Frontend/Template/Desktop/'~globalOption.siteSetting.theme.folderName~'/footer.html.twig') }}
+{% endif %}
 <footer id="footer">
      <div class="container">
         <div class="row myfooter">

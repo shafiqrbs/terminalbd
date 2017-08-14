@@ -8,6 +8,16 @@ _main_domain:
     resource: "@BinduBundle/Resources/config/main.yml"
     host: "%domain.main%"
 
+_www_main_terminal_domain:
+    prefix: /
+    resource: "@BinduBundle/Resources/config/main.yml"
+    host: "www.%domain.terminal%"
+
+_main_terminal_domain:
+    prefix: /
+    resource: "@BinduBundle/Resources/config/main.yml"
+    host: "%domain.terminal%"
+
 _xiidea_main_domain_app:
     prefix:     /
     host: "{subdomain}.%domain.main%"

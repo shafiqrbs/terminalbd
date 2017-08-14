@@ -6,9 +6,6 @@
             {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header-bottom'}) %}
         {% endif %}
     </section>
-    <div class="clearfix"></div>
-
-    <div class="clearfix"></div>
     <script>
         {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
         var columnItem = 3;
@@ -55,6 +52,8 @@
     $(".myCarousel-target.active").removeClass("active");
     $(this).addClass("active");
     });
+
+
 
 {% endblock %}
 
