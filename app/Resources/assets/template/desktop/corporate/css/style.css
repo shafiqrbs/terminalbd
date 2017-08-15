@@ -633,21 +633,21 @@ ul.dropdown-cart li .item-right button {
 }
 
 .page-title:after {
-    border-bottom: 2px solid #ffc400;
+    background-color:#ffc400;
 }
 .page-title:before {
-    border-bottom: 2px solid #222;
+    background-color:#222;
 }
 
 .bottom-line:after {
-    border-bottom: 2px solid #222222;
+    background-color:#222222;
 }
 .bottom-line:before {
-    border-bottom: 2px solid #eeeeee;
+    background-color:#eeeeee;
 }
 
 .bottom-line:after {
-    border-bottom: 2px solid #222222;
+    background-color:#222222;
 }
 .section-header::before {
     background-color: #555555;

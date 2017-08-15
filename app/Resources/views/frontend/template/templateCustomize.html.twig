@@ -123,6 +123,7 @@
     }
 
     {% if globalOption.templateCustomize.dividerFontColor  is not empty%}
+
         .header-line-center .header-line-border{
             border: 2px solid {{ globalOption.templateCustomize.dividerFontColor }}!important;
         }
@@ -134,89 +135,57 @@
         }
     {% endif %}
 
-    .page-title{
-        {% if globalOption.templateCustomize.dividerFontColor  is not empty%}
+    .section-header , .bottom-line , .page-title{
+
+        {% if globalOption.templateCustomize.dividerFontColor  is not empty %}
             color:{{ globalOption.templateCustomize.dividerFontColor }}!important;
         {% endif %}
-        {% if globalOption.templateCustomize.dividerFontSize  is not empty%}
+        {% if globalOption.templateCustomize.dividerFontSize  is not empty %}
             font-size:{{ globalOption.templateCustomize.dividerFontSize }}!important;
         {% endif %}
     }
 
-    {% if globalOption.templateCustomize.dividerAfterColor  is not empty%}
-        .page-title:after{
-            border-bottom: {{ globalOption.templateCustomize.dividerAfterColor }}!important;
-        }
-    {% endif %}
+    .section-header:after , .bottom-line:after ,  .page-title:after{
 
-    {% if globalOption.templateCustomize.dividerBeforeColor  is not empty%}
-        .page-title:before{
-            border-bottom: 2px solid {{ globalOption.templateCustomize.dividerBeforeColor }}!important;
-        }
-    {% endif %}
-
-    .bottom-line{
-        {% if globalOption.templateCustomize.dividerFontColor  is not empty%}
-            color:{{ globalOption.templateCustomize.dividerFontColor }}!important;
+        {% if globalOption.templateCustomize.dividerAfterColor  is not empty %}
+            background-color:{{ globalOption.templateCustomize.dividerAfterColor }}!important;
         {% endif %}
-        {% if globalOption.templateCustomize.dividerFontSize  is not empty%}
-            font-size:{{ globalOption.templateCustomize.dividerFontSize }}!important;
+        {% if globalOption.templateCustomize.dividerBorder  is not empty %}
+            height:{{ globalOption.templateCustomize.dividerBorder }}px!important;
         {% endif %}
     }
 
-    {% if globalOption.templateCustomize.dividerAfterColor  is not empty%}
-        .bottom-line:after{
-            border-bottom: {{ globalOption.templateCustomize.dividerAfterColor }}!important;
-        }
-    {% endif %}
+    .section-header:before , .bottom-line:before , .page-title:before {
 
-    {% if globalOption.templateCustomize.dividerBeforeColor  is not empty%}
-        .bottom-line:before{
-            border-bottom: 2px solid {{ globalOption.templateCustomize.dividerBeforeColor }}!important;
-        }
-    {% endif %}
-
-    .section-header{
-        {% if globalOption.templateCustomize.dividerFontColor  is not empty%}
-            color:{{ globalOption.templateCustomize.dividerFontColor }}!important;
+        {% if globalOption.templateCustomize.dividerBeforeColor  is not empty %}
+            background-color:{{ globalOption.templateCustomize.dividerBeforeColor }}!important;
         {% endif %}
-        {% if globalOption.templateCustomize.dividerFontSize  is not empty%}
-            font-size:{{ globalOption.templateCustomize.dividerFontSize }}!important;
+        {% if globalOption.templateCustomize.dividerBorder  is not empty %}
+            height:{{ globalOption.templateCustomize.dividerBorder }}px!important;
         {% endif %}
     }
 
-    {% if globalOption.templateCustomize.dividerAfterColor  is not empty%}
-        .section-header:after{
-            border-bottom: {{ globalOption.templateCustomize.dividerAfterColor }}!important;
-        }
-    {% endif %}
 
-    {% if globalOption.templateCustomize.dividerBeforeColor  is not empty%}
-        .section-header:before{
-            border-bottom: 2px solid {{ globalOption.templateCustomize.dividerBeforeColor }}!important;
+    {% if globalOption.templateCustomize.borderColor  is not empty %}
+        .social-payment{
+            border-bottom: 1px solid {{ globalOption.templateCustomize.borderColor }}!important;
         }
-    {% endif %}
-
-    {% if globalOption.templateCustomize.borderColor  is not empty%}
-    .social-payment{
-        border-bottom: 1px solid {{ globalOption.templateCustomize.borderColor }}!important;
-    }
     {% endif %}
 
     .feature-carousel-vertical .owl-controls .owl-buttons .owl-prev , .page-carousel-vertical .owl-controls .owl-buttons .owl-prev {
-        {% if globalOption.templateCustomize.sliderLeftRightPosition  is not empty%}
+        {% if globalOption.templateCustomize.sliderLeftRightPosition  is not empty %}
             left: {{ globalOption.templateCustomize.sliderLeftRightPosition }}%!important;
         {% endif %}
-        {% if globalOption.templateCustomize.sliderTopBottomPosition  is not empty%}
+        {% if globalOption.templateCustomize.sliderTopBottomPosition  is not empty %}
             top: {{ globalOption.templateCustomize.sliderTopBottomPosition }}%!important;
         {% endif %}
     }
 
     .feature-carousel-vertical .owl-controls .owl-buttons .owl-next , .page-carousel-vertical .owl-controls .owl-buttons .owl-next{
-        {% if globalOption.templateCustomize.sliderLeftRightPosition  is not empty%}
+        {% if globalOption.templateCustomize.sliderLeftRightPosition  is not empty %}
             right: {{ globalOption.templateCustomize.sliderLeftRightPosition }}%!important;
         {% endif %}
-        {% if globalOption.templateCustomize.sliderTopBottomPosition  is not empty%}
+        {% if globalOption.templateCustomize.sliderTopBottomPosition  is not empty %}
             top: {{ globalOption.templateCustomize.sliderTopBottomPosition }}%!important;
         {% endif %}
     }

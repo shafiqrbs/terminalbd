@@ -309,6 +309,14 @@ class TemplateCustomize
     private $borderColor;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="dividerBorder", type="float", nullable=true)
+     */
+    private $dividerBorder;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="dividerBeforeColor", type="string", length=20, nullable=true)
@@ -1448,6 +1456,22 @@ class TemplateCustomize
     public function setSliderLeftRightPosition($sliderLeftRightPosition)
     {
         $this->sliderLeftRightPosition = $sliderLeftRightPosition;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDividerBorder()
+    {
+        return $this->dividerBorder;
+    }
+
+    /**
+     * @param float $dividerBorder
+     */
+    public function setDividerBorder($dividerBorder)
+    {
+        $this->dividerBorder = $dividerBorder;
     }
 
 
