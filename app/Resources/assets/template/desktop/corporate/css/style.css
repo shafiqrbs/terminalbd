@@ -1682,6 +1682,35 @@ div.treeview, .treeview ul {
 
 /* ==================================== MODULE OVERRIDE ======================================= */
 
+.pageFeature {
+    border:1px solid #ffc400;
+}
+.pageFeature:hover .pageFeature-icon{
+    background:#ffc400;
+    color:#fff;
+}
+.pageFeature-image{
+    background:#fff;
+    color:#ffc400;
+}
+.pageFeature .pageFeature-image > a > img{
+    border: 3px solid #ffc400;
+}
+
+.pageFeature h3 {
+    color:#555;
+}
+.pageFeature h3:before{
+    background:#ffc400;
+}
+.pageFeature h3:after{
+    background:#ffc400;
+}
+.pageFeature:hover .pageFeature-image > a > img{
+    border: 3px solid #555;
+}
+
+
 .sidebar-serviceBox{
     border: 1px solid #ededed;
 }
@@ -1870,7 +1899,7 @@ div.treeview, .treeview ul {
     background: rgba(0, 0, 0, 0.6);
 }
 .event-sidebar .overlay > i{
-    color:#e74c3c;
+    color:#ffc400;
 }
 
 .event-sidebar .post-review{
@@ -1880,6 +1909,7 @@ div.treeview, .treeview ul {
 .event-sidebar .post-comment li{
     color:darkgray;
 }
+
 .event-sidebar:hover .post-comment li{
     color:#ffc400;
 }

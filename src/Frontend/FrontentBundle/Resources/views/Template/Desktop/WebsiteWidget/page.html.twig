@@ -9,7 +9,7 @@
 </div>
 {% endif %}
 {% if widget.page is not empty %}
-<div class="page-block page-carousel-{{ globalOption.templateCustomize.carouselPosition }}" >
+<div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
     {% if  widget.pageFeatureName is not empty or widget.pageShowType == 'slider' %}
         {% if  widget.pageFeatureName is not empty %}
             <div class="page-title">{{ widget.pageFeatureName }}</div>
@@ -18,15 +18,17 @@
     {% if widget.pageShowType == 'grid' %}
         <div class="row">
             {% for entity in widget.page %}
-                <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} wow fadeInDown grid" data-wow-delay="2s"  >
-                    <div class="sidebar-serviceBox">
-                        <div class="service-icon">
-                            <i class="fa {% if entity.icon is defined and entity.icon is not empty  %}{{ entity.icon.className }} {% endif %}"></i>
+                <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} wow fadeInDown grid" data-wow-delay="1s"  >
+                    <div class="pageFeature">
+                        <div class="pageFeature-image" data-match-height="pageFeature" >
+                            <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}">
+                                <img src="{{ image(entity.webPath).forceResize(80,80,'#000000') }}" alt="">
+                            </a>
                         </div>
-                        <div class="service-Content">
+                        <div class="pageFeature-content">
                             <h3 class="title">{{ entity.name }}</h3>
                             <p class="description">{{ entity.content|raw|truncate(180) }}</p>
-                            <a  href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}" class="read-more pull-right">Read more <i class="fa fa-angle-double-right"></i></a>
+                            <a  href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}" class="read-more pull-center">Read more <i class="fa fa-angle-double-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -36,15 +38,17 @@
         <div class="row">
             <div id="feature-page-slider" class="owl-carousel">
                 {% for entity in  widget.page  %}
-                    <div class="col-md-12 wow fadeInDown grid" data-wow-delay="2s" >
-                        <div class="sidebar-serviceBox">
-                            <div class="service-icon">
-                                <i class="fa {% if entity.icon is defined and entity.icon is not empty  %}{{ entity.icon.className }} {% endif %}"></i>
+                    <div class="col-md-12 wow fadeInDown grid" data-wow-delay="1s" >
+                        <div class="pageFeature" data-match-height="pageFeature">
+                            <div class="pageFeature-image">
+                                <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}">
+                                    <img src="{{ image(entity.webPath).forceResize(80,80,'#000000') }}" alt="">
+                                </a>
                             </div>
-                            <div class="service-Content">
+                            <div class="pageFeature-content">
                                 <h3 class="title">{{ entity.name }}</h3>
                                 <p class="description">{{ entity.content|raw|truncate(180) }}</p>
-                                <a  href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}" class="read-more pull-right">Read more <i class="fa fa-angle-double-right"></i></a>
+                                <a   href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}" class="read-more pull-center">Read more <i class="fa fa-angle-double-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -76,14 +80,14 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'blog' %}
-    <div class="page-block page-carousel-{{ globalOption.templateCustomize.carouselPosition }}" >
+    <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
         {% if  widget.moduleFeatureName is not empty %}
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
         {% if widget.moduleShowType == 'grid' %}
             <div class="row">
                 {% for entity in entities  %}
-                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} grid wow fadeInDown" data-wow-delay="2s" >
+                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} grid wow fadeInDown" data-wow-delay="1s" >
                         <div class="sidebar-blog">
                             <div class="post-img">
                                 <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
@@ -116,7 +120,7 @@
             <div class="row">
                 <div id="blog-page-slider" class="owl-carousel">
                     {% for entity in entities  %}
-                        <div class="col-md-12 wow fadeInDown grid" data-wow-delay="2s" >
+                        <div class="col-md-12 wow fadeInDown grid" data-wow-delay="1s" >
                             <div class="sidebar-blog">
                                 <div class="post-img">
                                     <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
@@ -172,7 +176,7 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'branch' %}
-    <div class="page-block page-carousel-{{ globalOption.templateCustomize.carouselPosition }}">
+    <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}">
         {% if  widget.moduleFeatureName is not empty %}
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
@@ -222,7 +226,7 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty  and widget.module.slug == 'client' %}
-    <div class="page-block page-carousel-{{ globalOption.templateCustomize.carouselPosition }}" >
+    <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
         {% if  widget.moduleFeatureName is not empty %}
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
@@ -261,7 +265,7 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty  and widget.module.slug == 'event' %}
-    <div class="page-block page-carousel-{{ globalOption.templateCustomize.carouselPosition }}" >
+    <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
         {% if  widget.moduleFeatureName is not empty %}
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
@@ -371,14 +375,14 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'news' %}
-    <div class="page-block page-carousel-{{ globalOption.templateCustomize.carouselPosition }}" >
+    <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
         {% if  widget.moduleFeatureName is not empty %}
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
         {% if widget.moduleShowType == 'grid' %}
             <div class="row">
                 {% for entity in entities  %}
-                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} grid wow fadeInDown" data-wow-delay="2s" >
+                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} grid wow fadeInDown" data-wow-delay="1s" >
                         <div class="sidebar-blog">
                             <div class="post-img">
                                 <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
@@ -417,7 +421,7 @@
             <div class="row">
                 <div id="news-page-slider" class="owl-carousel">
                     {% for entity in entities  %}
-                        <div class="col-md-12 wow fadeInDown grid" data-wow-delay="2s" >
+                        <div class="col-md-12 wow fadeInDown grid" data-wow-delay="1s" >
                             <div class="sidebar-blog">
                                 <div class="post-img">
                                     <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
@@ -473,7 +477,7 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'noticeboard' %}
-    <div class="page-block page-carousel-{{ globalOption.templateCustomize.carouselPosition }}" >
+    <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
         {% if  widget.moduleFeatureName is not empty %}
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
@@ -543,7 +547,7 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'portfolio' %}
- <div class="page-block page-carousel-{{ globalOption.templateCustomize.carouselPosition }}" >
+ <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
          {% if  widget.moduleFeatureName is not empty %}
              <div class="page-title">{{ widget.moduleFeatureName }}</div>
          {% endif %}
@@ -588,7 +592,7 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'service' %}
- <div class="page-block page-carousel-{{ globalOption.templateCustomize.carouselPosition }}" >
+ <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
 
             <div class="page-title">{% if  widget.moduleFeatureName is not empty %}{{ widget.moduleFeatureName }}{% endif %}</div>
 
@@ -633,7 +637,7 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'sponsor' %}
-    <div class="page-block page-carousel-{{ globalOption.templateCustomize.carouselPosition }}" >
+    <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
         {% if  widget.moduleFeatureName is not empty %}
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
@@ -670,7 +674,7 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'team' %}
-    <div class="page-block page-carousel-{{ globalOption.templateCustomize.carouselPosition }}" >
+    <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
         {% if  widget.moduleFeatureName is not empty %}
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
@@ -745,7 +749,7 @@
 {% endif %}
 
 {% if entities is defined and entities is not empty and widget.module.slug == 'testimonial' %}
-    <div class="page-block page-carousel-{{ globalOption.templateCustomize.carouselPosition }}" >
+    <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
         {% if  widget.moduleFeatureName is not empty %}
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}

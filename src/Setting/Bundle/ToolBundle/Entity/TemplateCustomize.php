@@ -101,13 +101,6 @@ class TemplateCustomize
      */
     private $showEmail = true;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="carouselPosition", type="string", length=20, nullable=true)
-     */
-    private $carouselPosition='top-right';
-
 
     /**
      * @var string
@@ -168,49 +161,6 @@ class TemplateCustomize
 
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="titleHeight", type="integer", length=3, nullable=true)
-     */
-    private $titleHeight;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="titleMarginBottom", type="integer", length=3, nullable=true)
-     */
-    private $titleMarginBottom;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="sliderTopPosition", type="integer", length=3, nullable=true)
-     */
-    private $sliderTopPosition;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="sliderRightPosition", type="integer", length=3, nullable=true)
-     */
-    private $sliderRightPosition;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="titleFontSize", type="string", length=10, nullable=true)
-     */
-    private $titleFontSize;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="titleTextAlign", type="string", length=10, nullable=true)
-     */
-    private $titleTextAlign;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="pagination", type="string", length=25, nullable=true)
@@ -219,26 +169,25 @@ class TemplateCustomize
 
 
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="titleBgColor", type="string", length=20 ,nullable=true)
+     * @ORM\Column(name="sliderTopBottomPosition", type="float", nullable=true)
      */
-    private $titleBgColor;
+    private $sliderTopBottomPosition;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="sliderLeftRightPosition", type="float", nullable=true)
+     */
+    private $sliderLeftRightPosition;
+
+     /**
      * @var string
      *
-     * @ORM\Column(name="titleFontColor", type="string", length=20, nullable=true)
+     * @ORM\Column(name="sliderPosition", type="string", length=20, nullable=true)
      */
-    private $titleFontColor;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="titleBorderColor", type="string", length=20 ,nullable=true)
-     */
-    private $titleBorderColor;
-
+    private $sliderPosition='top-right';
 
     /**
      * @var string
@@ -340,16 +289,17 @@ class TemplateCustomize
     /**
      * @var string
      *
-     * @ORM\Column(name="dividerBgColor", type="string", length=20, nullable=true)
+     * @ORM\Column(name="dividerFontSize", type="string", length=10, nullable=true)
      */
-    private $dividerBgColor;
+    private $dividerFontSize;
+
 
     /**
      * @var string
      *
-     * @ORM\Column(name="dividerColor", type="string", length=20, nullable=true)
+     * @ORM\Column(name="dividerFontColor", type="string", length=20, nullable=true)
      */
-    private $dividerColor;
+    private $dividerFontColor;
 
     /**
      * @var string
@@ -373,13 +323,6 @@ class TemplateCustomize
      */
     private $dividerAfterColor;
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="dividerTitleColor", type="string", length=20, nullable=true)
-     */
-    private $dividerTitleColor;
 
 
     /**
@@ -1202,54 +1145,6 @@ class TemplateCustomize
     }
 
     /**
-     * @return mixed
-     */
-    public function getDividerBgColor()
-    {
-        return $this->dividerBgColor;
-    }
-
-    /**
-     * @param mixed $dividerBgColor
-     */
-    public function setDividerBgColor($dividerBgColor)
-    {
-        $this->dividerBgColor = $dividerBgColor;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDividerColor()
-    {
-        return $this->dividerColor;
-    }
-
-    /**
-     * @param string $dividerColor
-     */
-    public function setDividerColor($dividerColor)
-    {
-        $this->dividerColor = $dividerColor;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDividerTitleColor()
-    {
-        return $this->dividerTitleColor;
-    }
-
-    /**
-     * @param string $dividerTitleColor
-     */
-    public function setDividerTitleColor($dividerTitleColor)
-    {
-        $this->dividerTitleColor = $dividerTitleColor;
-    }
-
-    /**
      * @return string
      */
     public function getBorderColor()
@@ -1364,150 +1259,6 @@ class TemplateCustomize
     }
 
     /**
-     * @return int
-     */
-    public function getTitleHeight()
-    {
-        return $this->titleHeight;
-    }
-
-    /**
-     * @param int $titleHeight
-     */
-    public function setTitleHeight($titleHeight)
-    {
-        $this->titleHeight = $titleHeight;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTitleFontSize()
-    {
-        return $this->titleFontSize;
-    }
-
-    /**
-     * @param int $titleFontSize
-     */
-    public function setTitleFontSize($titleFontSize)
-    {
-        $this->titleFontSize = $titleFontSize;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitleBgColor()
-    {
-        return $this->titleBgColor;
-    }
-
-    /**
-     * @param string $titleBgColor
-     */
-    public function setTitleBgColor($titleBgColor)
-    {
-        $this->titleBgColor = $titleBgColor;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitleFontColor()
-    {
-        return $this->titleFontColor;
-    }
-
-    /**
-     * @param string $titleFontColor
-     */
-    public function setTitleFontColor($titleFontColor)
-    {
-        $this->titleFontColor = $titleFontColor;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitleBorderColor()
-    {
-        return $this->titleBorderColor;
-    }
-
-    /**
-     * @param string $titleBorderColor
-     */
-    public function setTitleBorderColor($titleBorderColor)
-    {
-        $this->titleBorderColor = $titleBorderColor;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTitleMarginBottom()
-    {
-        return $this->titleMarginBottom;
-    }
-
-    /**
-     * @param int $titleMarginBottom
-     */
-    public function setTitleMarginBottom($titleMarginBottom)
-    {
-        $this->titleMarginBottom = $titleMarginBottom;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSliderTopPosition()
-    {
-        return $this->sliderTopPosition;
-    }
-
-    /**
-     * @param int $sliderTopPosition
-     */
-    public function setSliderTopPosition($sliderTopPosition)
-    {
-        $this->sliderTopPosition = $sliderTopPosition;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSliderRightPosition()
-    {
-        return $this->sliderRightPosition;
-    }
-
-    /**
-     * @param int $sliderRightPosition
-     */
-    public function setSliderRightPosition($sliderRightPosition)
-    {
-        $this->sliderRightPosition = $sliderRightPosition;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitleTextAlign()
-    {
-        return $this->titleTextAlign;
-    }
-
-    /**
-     * @param string $titleTextAlign
-     */
-    public function setTitleTextAlign($titleTextAlign)
-    {
-        $this->titleTextAlign = $titleTextAlign;
-    }
-
-    /**
      * @return string
      */
     public function getPagination()
@@ -1588,22 +1339,6 @@ class TemplateCustomize
     }
 
     /**
-     * @return string
-     */
-    public function getCarouselPosition()
-    {
-        return $this->carouselPosition;
-    }
-
-    /**
-     * @param string $carouselPosition
-     */
-    public function setCarouselPosition($carouselPosition)
-    {
-        $this->carouselPosition = $carouselPosition;
-    }
-
-    /**
      * @return mixed
      */
     public function getFooterAnchorColor()
@@ -1633,6 +1368,86 @@ class TemplateCustomize
     public function setFooterAnchorColorHover($footerAnchorColorHover)
     {
         $this->footerAnchorColorHover = $footerAnchorColorHover;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDividerFontSize()
+    {
+        return $this->dividerFontSize;
+    }
+
+    /**
+     * @param string $dividerFontSize
+     */
+    public function setDividerFontSize($dividerFontSize)
+    {
+        $this->dividerFontSize = $dividerFontSize;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDividerFontColor()
+    {
+        return $this->dividerFontColor;
+    }
+
+    /**
+     * @param string $dividerFontColor
+     */
+    public function setDividerFontColor($dividerFontColor)
+    {
+        $this->dividerFontColor = $dividerFontColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSliderPosition()
+    {
+        return $this->sliderPosition;
+    }
+
+    /**
+     * @param string $sliderPosition
+     */
+    public function setSliderPosition($sliderPosition)
+    {
+        $this->sliderPosition = $sliderPosition;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSliderTopBottomPosition()
+    {
+        return $this->sliderTopBottomPosition;
+    }
+
+    /**
+     * @param float $sliderTopBottomPosition
+     */
+    public function setSliderTopBottomPosition($sliderTopBottomPosition)
+    {
+        $this->sliderTopBottomPosition = $sliderTopBottomPosition;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSliderLeftRightPosition()
+    {
+        return $this->sliderLeftRightPosition;
+    }
+
+    /**
+     * @param float $sliderLeftRightPosition
+     */
+    public function setSliderLeftRightPosition($sliderLeftRightPosition)
+    {
+        $this->sliderLeftRightPosition = $sliderLeftRightPosition;
     }
 
 

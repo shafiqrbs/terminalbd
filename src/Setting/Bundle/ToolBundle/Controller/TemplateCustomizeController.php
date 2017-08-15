@@ -204,9 +204,6 @@ class TemplateCustomizeController extends Controller
         $entity->setBodyColor(NULL);
         $entity->setBorderColor(NULL);
         $entity->setButtonBgColorHover(NULL);
-        $entity->setDividerColor(NULL);
-        $entity->setDividerTitleColor(NULL);
-        $entity->setDividerBgColor(NULL);
         $entity->setFooterBgColor(NULL);
         $entity->setButtonBgColor(NULL);
         $entity->setFooterTextColor(NULL);
@@ -229,13 +226,13 @@ class TemplateCustomizeController extends Controller
         $entity->setSiteH3TextSize(NULL);
         $entity->setSiteH4TextSize(NULL);
         $entity->setSiteTitleBgColor(NULL);
-        $entity->setTitleBgColor(NULL);
-        $entity->setTitleBorderColor(NULL);
-        $entity->setTitleFontColor(NULL);
-        $entity->setTitleFontSize(NULL);
-        $entity->setTitleHeight(NULL);
-        $entity->setTitleMarginBottom(NULL);
-        $entity->setTitleTextAlign(NULL);
+        $entity->setDividerAfterColor(NULL);
+        $entity->setDividerBeforeColor(NULL);
+        $entity->setDividerFontColor(NULL);
+        $entity->setDividerFontSize(NULL);
+        $entity->setSliderPosition('top-right');
+        $entity->setSliderTopBottomPosition(NULL);
+        $entity->setSliderLeftRightPosition(NULL);
         $em->persist($entity);
         $em->flush($entity);
 

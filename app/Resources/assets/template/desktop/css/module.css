@@ -284,30 +284,6 @@
     color: #FFD700;
 }
 
-.header-double-line-right {
-    overflow: hidden;
-}
-
-.header-line-center h1:before, .header-line-center h2:before, .header-line-center h3:before, .header-line-center h4:before, .header-line-center h5:before, .header-line-center h6:before {
-    position: absolute;
-    content: "";
-    height: 2px;
-    width: 15%;
-    left: -15%;
-    top: 50%;
-    margin-top: -1px;
-    background: #0a70e3;
-}
-.header-line-center h1:after, .header-line-center h2:after, .header-line-center h3:after, .header-line-center h4:after, .header-line-center h5:after, .header-line-center h6:after {
-    position: absolute;
-    content: "";
-    background: #0a70e3;
-    height: 2px;
-    width: 15%;
-    right: -15%;
-    top: 50%;
-    margin-top: -1px;
-}
 
 /* Bootstrap Override */
 
@@ -551,7 +527,7 @@
     float: left;
     top: 0;
     position: absolute;
-    left:5px;
+    left:1%;
 }
 .feature-carousel-top-center .owl-controls , .page-carousel-top-center .owl-controls {
     text-align: center;
@@ -564,14 +540,15 @@
     float: right;
     top: 0;
     position: absolute;
-    right:5px;
+    right:1%;
 }
+
 .feature-carousel-bottom-left .owl-controls , .page-carousel-bottom-left .owl-controls {
     text-align: left;
     float: left;
     bottom: 0;
     position: absolute;
-    left:5px;
+    left:1%;
 
 }
 .feature-carousel-bottom-center .owl-controls , .page-carousel-bottom-center .owl-controls {
@@ -583,9 +560,9 @@
 .feature-carousel-bottom-right .owl-controls , .page-carousel-bottom-right .owl-controls {
     text-align: right;
     float: right;
-    top: 0;
+    bottom: 0;
     position: absolute;
-    right:5px;
+    right:1%;
 }
 
 
@@ -1162,6 +1139,8 @@
 
 
 /* ######################### END BUTTON FOR PAGE #####################################*/
+
+
 /* ######################### SIGN UP INPUT  #####################################*/
 
 .input-group-addon
@@ -1183,6 +1162,112 @@
 
 
 /* ######################### END SIGN UP INPUT  #####################################*/
+
+
+/* ######################### PAGE BLOCK #####################################*/
+
+.pageFeature {
+    padding: 15px 15px 25px;
+    margin:40px auto 0;
+    text-align: center;
+    cursor: pointer;
+    background:#fff;
+    border:1px solid #222222;
+    border-bottom-width:3px ;
+    position:relative;
+}
+.pageFeature .pageFeature-icon{
+    width:70px;
+    height:70px;
+    line-height:70px;
+    border:1px solid #222222;
+    background:#fff;
+    color:#222222;
+    margin:-48px auto 20px;
+}
+.pageFeature .pageFeature-icon i {
+    display: inline-block;
+    font-size:3em;
+    line-height:70px;
+}
+.pageFeature:hover .pageFeature-icon{
+    background:#222222;
+    color:#fff;
+}
+.pageFeature-image{
+    width:80px;
+    height:80px;
+    background:#fff;
+    color:#222222;
+    margin:-55px auto 20px;
+}
+.pageFeature .pageFeature-image > a > img{
+    width: 80px;
+    height:80px;
+    transition: all 0.2s ease-in-out 0s;
+    border: 3px solid #222222;
+}
+
+.pageFeature h3 {
+    font-size: 20px;
+    font-weight:normal;
+    letter-spacing:0.7px;
+    position: relative;
+    margin:20px 0 10px 0;
+    padding:10px 0;
+    background:none;
+    overflow:hidden;
+    color:#555;
+}
+.pageFeature h3:before{
+    content:"";
+    background:#222222;
+    width:0;
+    height:2px;
+    position:absolute;
+    bottom:0;
+    left:50%;
+}
+.pageFeature h3:after{
+    content:"";
+    background:#222222;
+    width:0;
+    height:2px;
+    position:absolute;
+    bottom:0;
+    right:50%;
+}
+.pageFeature:hover h3:after,
+.pageFeature:hover h3:before{
+    width:100%;
+}
+
+.pageFeature:hover .pageFeature-image > a > img{
+    padding: 8px;
+    border: 3px solid #ef965c;
+    transition: all 0.2s ease-in-out 0s;
+}
+
+.pageFeature,
+.pageFeature-icon,
+.pageFeature .pageFeature-icon i,
+.pageFeature h3:before,
+.pageFeature h3:after,
+.pageFeature .read{
+    transition: all 0.5s ease-in-out;
+}
+.pageFeature p {
+    font-size: 14px;
+    margin:0 0 15px;
+}
+.pageFeature .read{
+    color:#222222;
+}
+@media screen and (max-width: 990px){
+    .pageFeature{
+        margin:60px auto 0;
+    }
+}
 
 
 /* ######################### HOME BLOCK #####################################*/
@@ -3235,6 +3320,8 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
 
 
 /** #####################################  End Sidebar faq  ####################################### */
+
+
 /** #####################################  Sidebar Notice Board  ####################################### */
 
 .notice-list{

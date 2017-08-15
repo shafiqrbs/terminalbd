@@ -53,23 +53,14 @@ class TemplateCustomizeType extends AbstractType
 
 
             ->add('siteFontSize', 'choice', array(
-                'attr'=>array('class'=>'selectbox span12'),
+                'attr'=>array('class'=>'span12'),
                 'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
             ))
-
-            ->add('titleTextAlign', 'choice', array(
-                'attr'=>array('class'=>'selectbox span12'),
-                'choices' => array('' => '---Select One---','left' => 'Left',  'center' => 'Center', 'right' => 'Right'),
-            ))
-
             ->add('pagination', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array('bootstrap' => 'Bootstrap',  'nextPrev' => 'Next Previous', 'nextPrevDropDown' => 'Next Previous with drop down'),
             ))
-
-            ->add('titleHeight','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Title height')))
-            ->add('titleMarginBottom','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Title border margin')))
-            ->add('carouselPosition', 'choice', array(
+            ->add('sliderPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(
                     'top-left'      => 'Top-Left',
@@ -81,28 +72,10 @@ class TemplateCustomizeType extends AbstractType
                     'bottom-right'  => 'Bottom-Right'
                 ),
             ))
-            ->add('sliderTopPosition','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Slider Top/Bottom')))
-            ->add('sliderRightPosition','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Slider Left/Right')))
-
-            ->add('titleBgColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
-                'placeholder'=>'')
-            ))
-            ->add('titleFontColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
-                'placeholder'=>'')
-            ))
-            ->add('titleBorderColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
-                'placeholder'=>'')
-            ))
-            ->add('titleFontSize', 'choice', array(
-                'attr'=>array('class'=>'selectbox span12'),
-                'choices' => array('' => 'Font Size', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px', ),
-            ))
-
+            ->add('sliderLeftRightPosition','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Slider Top/Bottom')))
+            ->add('sliderTopBottomPosition','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Slider Left/Right')))
             ->add('siteFontFamily', 'choice', array(
-                'attr'=>array('class'=>'selectbox span12'),
+                'attr'=>array('class'=>'span12'),
                 'choices' => array(
                     '' => '---Select font family---',
                     'Open Sans, sans-serif' => 'Open Sans, sans-serif',
@@ -138,39 +111,41 @@ class TemplateCustomizeType extends AbstractType
                 'placeholder'=>'')
             ))
 
-            ->add('dividerBgColor','text', array('attr'=>array(
+            ->add('dividerAfterColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
             ))
 
-            ->add('dividerColor','text', array('attr'=>array(
+            ->add('dividerBeforeColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
             ))
 
-            ->add('dividerTitleColor','text', array('attr'=>array(
+            ->add('dividerFontColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
             ))
-
+            ->add('dividerFontSize', 'choice', array(
+                'attr'=>array('class'=>' span12'),
+                'choices' => array('' => 'Font Size', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px', ),
+            ))
 
             ->add('siteH1TextSize', 'choice', array(
-                'attr'=>array('class'=>'selectbox span12'),
-                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
+                'attr'=>array('class'=>' span12'),
+                'choices' => array('' => '---Select One---', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px', '26px' => '26px','28px' => '28px', '30px' => '30px', '32px' => '32px','34px' => '34px', '36px' => '36px'),
             ))
-
 
             ->add('siteH2TextSize', 'choice', array(
-                'attr'=>array('class'=>'selectbox span12'),
-                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
+                'attr'=>array('class'=>' span12'),
+                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px', '26px' => '26px','28px' => '28px', '30px' => '30px', '32px' => '32px','34px' => '34px', '36px' => '36px'),
             ))
             ->add('siteH3TextSize', 'choice', array(
-                'attr'=>array('class'=>'selectbox span12'),
-                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
+                'attr'=>array('class'=>' span12'),
+                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px', '26px' => '26px','28px' => '28px', '30px' => '30px', '32px' => '32px','34px' => '34px', '36px' => '36px'),
             ))
             ->add('siteH4TextSize', 'choice', array(
-                'attr'=>array('class'=>'selectbox span12'),
-                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
+                'attr'=>array('class'=>' span12'),
+                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px', '26px' => '26px','28px' => '28px', '30px' => '30px', '32px' => '32px','34px' => '34px', '36px' => '36px'),
             ))
 
             ->add('siteTitleBgColor','text', array('attr'=>array(
@@ -204,7 +179,7 @@ class TemplateCustomizeType extends AbstractType
             ))
 
             ->add('menuFontSize', 'choice', array(
-                'attr'=>array('class'=>'selectbox span12'),
+                'attr'=>array('class'=>'span12'),
                 'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
             ))
 
@@ -212,7 +187,7 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
             ))
-            
+
             ->add('borderColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
