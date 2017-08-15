@@ -8,15 +8,15 @@ _main_domain:
     resource: "@BinduBundle/Resources/config/main.yml"
     host: "%domain.main%"
 
-_www_main_terminal_domain:
+_www_uipoka_domain:
     prefix: /
     resource: "@BinduBundle/Resources/config/main.yml"
-    host: "www.%domain.terminal%"
+    host: "www.%domain.uipoka%"
 
-_main_terminal_domain:
+_uipoka_domain:
     prefix: /
     resource: "@BinduBundle/Resources/config/main.yml"
-    host: "%domain.terminal%"
+    host: "%domain.uipoka%"
 
 _xiidea_main_domain_app:
     prefix:     /
