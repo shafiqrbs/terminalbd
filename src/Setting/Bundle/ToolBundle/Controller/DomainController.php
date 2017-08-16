@@ -45,14 +45,14 @@ class DomainController extends Controller
                     'subdomain' => $data->getSubDomain()
                 )
             );
-            $routes['_domain_app_' . strtolower(str_replace('.', '_', $data->getDomain()))] = array(
+           /* $routes['_domain_app_' . strtolower(str_replace('.', '_', $data->getDomain()))] = array(
                 'resource' => $resource ,
                 'host' => $data->getDomain(),
                 'name_prefix' => $data->getSubDomain() . "_",
                 'defaults' => array(
                     'subdomain' => $data->getSubDomain()
                 )
-            );
+            );*/
 
         }
 
