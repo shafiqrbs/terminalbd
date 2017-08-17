@@ -95,7 +95,6 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
             ))
-
             ->add('anchorHoverColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
@@ -158,7 +157,10 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
             ))
-
+            ->add('topBgColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
             ->add('headerBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')

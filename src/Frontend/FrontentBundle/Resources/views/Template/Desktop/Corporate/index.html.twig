@@ -5,6 +5,11 @@
         {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
             {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header-bottom'}) %}
         {% endif %}
+        <div class="container">
+            <div class="section-header">
+                <h3>WELCOME TO {{ globalOption.name }}</h3>
+            </div>
+        </div>
     </section>
     <script>
         {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}

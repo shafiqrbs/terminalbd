@@ -129,6 +129,7 @@ class TemplateCustomize
      */
     private $homeBgColor;
 
+
     /**
      * @var string
      *
@@ -270,6 +271,13 @@ class TemplateCustomize
      * @ORM\Column(name="siteH4TextSize", type="string", length=50, nullable=true)
      */
     private $siteH4TextSize;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="topBgColor", type="string", length=20, nullable=true)
+     */
+    private $topBgColor;
 
 
     /**
@@ -1472,6 +1480,22 @@ class TemplateCustomize
     public function setDividerBorder($dividerBorder)
     {
         $this->dividerBorder = $dividerBorder;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTopBgColor()
+    {
+        return $this->topBgColor;
+    }
+
+    /**
+     * @param string $topBgColor
+     */
+    public function setTopBgColor($topBgColor)
+    {
+        $this->topBgColor = $topBgColor;
     }
 
 
