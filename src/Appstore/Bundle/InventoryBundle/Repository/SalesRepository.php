@@ -37,15 +37,16 @@ class SalesRepository extends EntityRepository
             $paymentStatus =    isset($data['paymentStatus'])? $data['paymentStatus'] :'';
             $mode =    isset($data['mode'])? $data['mode'] :'';
 
-
             if (!empty($startDate)) {
-                $start = date('Y-m-d',strtotime($data['startDate']));
+               // $start = $startDate->format('Y-m-d 00:00:00');
+                $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
                 $qb->andWhere("s.updated >= :startDate");
                 $qb->setParameter('startDate',$start);
             }
 
             if (!empty($endDate)) {
-                $end = date('Y-m-d',strtotime($data['endDate']));
+                //$end = $startDate->format('Y-m-d 00:00:00');
+                $end = date('Y-m-d 23:59:59',strtotime($data['endDate']));
                 $qb->andWhere("s.updated <= :endDate");
                 $qb->setParameter('endDate',$end);
             }
@@ -130,7 +131,7 @@ class SalesRepository extends EntityRepository
             $qb->andWhere("s.createdBy =".$user->getId());
         }
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('s.updated','DESC');
+        $qb->orderBy('s.created','DESC');
         $result = $qb->getQuery();
         return $result;
 

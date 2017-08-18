@@ -417,6 +417,7 @@ class SalesOnlineController extends Controller
             }
             if ($entity->getTransactionMethod()->getId() != 4) {
                 $entity->setApprovedBy($this->getUser());
+                $entity->setProcess('Done');
             } else if ($entity->getTransactionMethod()->getId() == 4) {
                 $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
                 $entity->setPaymentInWord($amountInWords);
@@ -447,7 +448,6 @@ class SalesOnlineController extends Controller
             }
 
         }
-
         $user = $this->getUser();
         $todaySales = $em->getRepository('InventoryBundle:Sales')->todaySales($user , $mode='online');
         $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($user,$mode='online');
@@ -502,8 +502,6 @@ class SalesOnlineController extends Controller
 
     public function deleteAction(Sales $sales)
     {
-
-
         $em = $this->getDoctrine()->getManager();
         if (!$sales) {
             throw $this->createNotFoundException('Unable to find Sales entity.');
@@ -1225,6 +1223,23 @@ class SalesOnlineController extends Controller
             $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);
             return $this->redirect($this->generateUrl('inventory_salesonline_new'));
         }
+    }
+
+    public function reverseAction(Sales $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $em->getRepository('InventoryBundle:Item')->itemReverse($entity);
+        $em->getRepository('InventoryBundle:StockItem')->itemStockReverse($entity);
+        $em->getRepository('InventoryBundle:GoodsItem')->ecommerceItemReverse($entity);
+        $accountSales = $em->getRepository('AccountingBundle:AccountSales')->accountSalesReverse($entity);
+
+
+        /*       $em->getRepository('InventoryBundle:Item')->getItemSalesUpdate($entity);
+               $em->getRepository('InventoryBundle:StockItem')->insertSalesStockItem($entity);
+               $em->getRepository('InventoryBundle:GoodsItem')->updateEcommerceItem($entity);
+               $accountSales = $em->getRepository('AccountingBundle:AccountSales')->insertAccountSales($entity);
+               $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountSales);*/
     }
 
 }

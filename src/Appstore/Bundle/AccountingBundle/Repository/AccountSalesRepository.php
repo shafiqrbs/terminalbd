@@ -65,39 +65,45 @@ class AccountSalesRepository extends EntityRepository
 
     protected function handleSearchBetween($qb,$data)
     {
-        if(empty($data))
+
+        if(!empty($data))
         {
-             $datetime = new \DateTime("now");
-             $startDate = $datetime->format('Y-m-d 00:00:00');
-             $endDate = $datetime->format('Y-m-d 23:59:59');
-
-            /*
-             $qb->andWhere("e.updated >= :startDate");
-             $qb->setParameter('startDate', $startDate);
-             $qb->andWhere("e.updated <= :endDate");
-             $qb->setParameter('endDate', $endDate);*/
-
-        }else{
-
             $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
             $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
             $mobile =    isset($data['mobile'])? $data['mobile'] :'';
+            $invoice =    isset($data['invoice'])? $data['invoice'] :'';
+            $transaction =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
             $account =    isset($data['accountHead'])? $data['accountHead'] :'';
+            $sales =    isset($data['sales'])? $data['sales'] :'';
 
-            if (!empty($data['startDate']) ) {
-
+            if (!empty($startDate) ) {
+                $start = date('Y-m-d 00:00:00',strtotime($data['startDate']));
                 $qb->andWhere("e.updated >= :startDate");
-                $qb->setParameter('startDate', $startDate.' 00:00:00');
+                $qb->setParameter('startDate', $start);
             }
-            if (!empty($data['endDate'])) {
-
+            if (!empty($endDate)) {
+                $end = date('Y-m-d 23:59:59',strtotime($data['endDate']));
                 $qb->andWhere("e.updated <= :endDate");
-                $qb->setParameter('endDate', $endDate.' 23:59:59');
+                $qb->setParameter('endDate',$end);
             }
-            if (!empty($mobile)) {
+
+            if (!empty($transaction)) {
+                $qb->andWhere("e.transactionMethod = :transaction");
+                $qb->setParameter('transaction', $transaction);
+            }
+           if (!empty($mobile)) {
                 $qb->join('e.customer','c');
                 $qb->andWhere("c.mobile = :mobile");
                 $qb->setParameter('mobile', $mobile);
+            }
+            if (!empty($invoice)) {
+                $qb->join('e.sales','s');
+                $qb->andWhere("s.invoice = :invoice");
+                $qb->setParameter('invoice', $invoice);
+            }
+            if (!empty($sales)) {
+                $qb->andWhere("e.sales = :sales");
+                $qb->setParameter('sales', $sales);
             }
             if (!empty($account)) {
                 $qb->join('e.accountHead','a');
@@ -202,8 +208,6 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
-
-
     public function reportHmsIncome($globalOption,$data)
     {
         if(empty($data)){
@@ -260,6 +264,26 @@ class AccountSalesRepository extends EntityRepository
     public function reportHmsTransactionIncome()
     {
 
+    }
+
+    public function accountSalesReverse(Sales $sales)
+    {
+/*        $em = $this->_em;
+
+        $data = array('sales' => $sales->getId());
+        $result = $this->salesOverview($sales->getApprovedBy(), $data);
+        $balance = ($result['totalAmount'] -  $result['receiveAmount']);
+        $lastBalance = ($balance + $entity->getDue());
+        $accountSales->setBalance($lastBalance);
+
+        $accountSales->setApprovedBy($entity->getApprovedBy());
+        if(!empty($entity->getApprovedBy()->getProfile()->getBranches())){
+            $accountSales->setBranches($entity->getApprovedBy()->getProfile()->getBranches());
+        }
+        $accountSales->setProcessHead('Sales');
+        $accountSales->setProcess('approved');
+        $em->persist($accountSales);
+        $em->flush();*/
     }
 
 

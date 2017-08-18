@@ -4,6 +4,8 @@ namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
+use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Appstore\Bundle\InventoryBundle\Entity\StockItem;
 use Doctrine\ORM\EntityRepository;
@@ -1378,6 +1380,16 @@ class StockItemRepository extends EntityRepository
     }
 
 
+    public function itemStockReverse(Sales $sales)
+    {
+        $em = $this->_em;
+        /* @var SalesItem $item */
+
+        foreach ($sales->getSalesItems() as $item ){
+            $StockItem = $em->createQuery('DELETE InventoryBundle:StockItem e WHERE e.salesItem = '.$item->getId());
+            $StockItem->execute();
+        }
+    }
 
 
 }

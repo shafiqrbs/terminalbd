@@ -14,8 +14,8 @@
         <div class="row">
             {% for entity in widget.page %}
                 <div class="col-md-12 wow fadeInDown grid" data-wow-delay="2s"  >
-                    <div class="pageFeature">
-                        <div class="pageFeature-image" data-match-height="pageFeature" >
+                    <div class="pageFeature" data-match-height="pageFeature" >
+                        <div class="pageFeature-image" >
                             <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}">
                                 <img src="{{ image(entity.webPath).forceResize(80,80,'#000000') }}" alt="">
                             </a>
@@ -34,8 +34,8 @@
             <div id="feature-sidebar-slider" class="">
                 {% for entity in  widget.page  %}
                     <div class="col-md-12 wow fadeInDown" data-wow-delay="2s" >
-                        <div class="pageFeature">
-                            <div class="pageFeature-image" data-match-height="pageFeature" >
+                        <div class="pageFeature" data-match-height="pageFeature">
+                            <div class="pageFeature-image"  >
                                 <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}">
                                     <img src="{{ image(entity.webPath).forceResize(80,80,'#000000') }}" alt="">
                                 </a>

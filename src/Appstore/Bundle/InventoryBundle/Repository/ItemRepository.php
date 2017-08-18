@@ -7,6 +7,7 @@ use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Core\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\Container;
@@ -257,7 +258,7 @@ class ItemRepository extends EntityRepository
             $qnt = ($entity->getSalesQuantity() + $salesItem->getQuantity());
             $entity->setSalesQuantity($qnt);
             $em->persist($entity);
-            $em->flush();
+            $em->flush($entity);
 
         }
 
@@ -272,7 +273,7 @@ class ItemRepository extends EntityRepository
             $qnt = ($entity->getSalesQuantityReturn() + $salesItem->getQuantity());
             $entity->setSalesQuantityReturn($qnt);
             $em->persist($entity);
-            $em->flush();
+            $em->flush($entity);
         }
 
 
@@ -287,7 +288,7 @@ class ItemRepository extends EntityRepository
             $qnt = ($entity->getOnlineOrderQuantity() + $orderItem->getQuantity());
             $entity->setOnlineOrderQuantity($qnt);
             $em->persist($entity);
-            $em->flush();
+            $em->flush($entity);
         }
 
     }
@@ -302,7 +303,7 @@ class ItemRepository extends EntityRepository
             $qnt = ($entity->getDamageQuantity() + $damage->getQuantity());
             $entity->setDamageQuantity($qnt);
             $em->persist($entity);
-            $em->flush();
+            $em->flush($entity);
 
     }
 
@@ -378,6 +379,26 @@ class ItemRepository extends EntityRepository
         }
 
         return $data;
+    }
+
+    public function itemReverse(Sales $sales){
+
+        $em = $this->_em;
+
+        /* @var SalesItem $item */
+
+        foreach ($sales->getSalesItems() as $item ){
+
+            /* @var Item $itemEntity */
+
+            $itemEntity = $item->getItem();
+            $current = ( $itemEntity->getSalesQuantity() - $item->getQuantity() );
+            $itemEntity->setSalesQuantity($current);
+            $em->persist($itemEntity);
+            $em->flush($itemEntity);
+
+        }
+
     }
 
 

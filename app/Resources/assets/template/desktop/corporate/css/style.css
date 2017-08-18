@@ -305,7 +305,7 @@ ul.dropdown-cart li .item-right button {
     text-align: left;
     z-index: 999;
     top:0!important;
-    opacity: 10!important;
+    opacity: 1 !important;
 }
 
 #header{

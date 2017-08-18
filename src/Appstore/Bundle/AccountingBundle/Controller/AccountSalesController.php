@@ -148,7 +148,6 @@ class AccountSalesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new AccountSales();
 
-
         $entity->setGlobalOption( $this->getUser()->getGlobalOption());
         $entity->setSales($sales);
         $entity->setCustomer($sales->getCustomer());
@@ -275,7 +274,7 @@ class AccountSalesController extends Controller
         }
         $lastBalance = $em->getRepository('AccountingBundle:AccountSales')->lastInsertSales($this->getUser()->getGlobalOption(),$entity);
         $entity->setAmount($data['value']);
-        $entity->setBalance($lastBalance - floatval($data['value']));
+        //$entity->setBalance($lastBalance - floatval($data['value']));
         $em->flush();
         exit;
     }

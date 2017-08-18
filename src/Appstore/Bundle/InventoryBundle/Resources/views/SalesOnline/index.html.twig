@@ -73,7 +73,7 @@
                                         <select name="transactionMethod" id="transactionMethod" class="span12 m-wrap">
                                             <option value="">Transaction Method</option>
                                             {% for method in transactionMethods %}
-                                                <option {% if searchForm.method is defined and searchForm.method == method.id %} selected="selected" {% endif %} value="{{ method.id }}" >{{ method.name }}</option>
+                                                <option {% if searchForm.transactionMethod is defined and searchForm.transactionMethod == method.id %} selected="selected" {% endif %} value="{{ method.id }}" >{{ method.name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -106,9 +106,9 @@
                                     <th class="numeric" ><i class="icon-list"></i>&nbsp;Invoice</th>
                                     <th class="numeric" >Date</th>
                                     <th class="numeric" >Net Total</th>
+                                    <th class="numeric" >Payment</th>
                                     <th class="numeric" >Customer</th>
                                     {% if inventoryConfig.isBranch == 1 %}<td class="numeric">Branch</td>{% endif %}
-                                    <th class="numeric" >Created By</th>
                                     <th class="numeric" >Courier &  Process</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -117,10 +117,10 @@
                                 {% for entity in entities %}
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.invoice }}</td>
-                                        <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
+                                        <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <th class="numeric" >{{ entity.total|number_format  }}</th>
+                                        <th class="numeric" >{{ entity.payment|number_format }}</th>
                                         <td class="numeric" >{% if entity.customer %}<a href="{{ path('inventory_customer_show',{'id':entity.customer.id}) }}" target="_blank"  class="btn mini blue">{{ entity.customer.mobile }}</a>{% endif %}</td>
-                                        <td class="numeric" >{% if entity.createdBy %}{{ entity.createdBy }}{% endif %}</td>
                                         {% if inventoryConfig.isBranch == 1 %}<td class="numeric">{% if entity.branches is not empty %}{{ entity.branches.name }} {% else %}Central{% endif %}</td>{% endif %}
                                         <td class="numeric" >
                                             {% if entity.process == 'Done' %}

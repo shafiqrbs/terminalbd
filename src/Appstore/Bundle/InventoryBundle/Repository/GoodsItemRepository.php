@@ -8,6 +8,7 @@ use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
+use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Validator\Constraints\Null;
@@ -459,6 +460,26 @@ class GoodsItemRepository extends EntityRepository
         return $discountPrice;
 
     }
+
+    public function ecommerceItemReverse(Sales $entity , $calculation ='')
+    {
+        /* @var SalesItem $item */
+
+        foreach ($entity->getSalesItems() as $row){
+
+            $purchaseVendorItem = $row->getPurchaseItem()->getPurchaseVendorItem();
+            if($purchaseVendorItem->getIsWeb() == 1 ){
+                $qnt = $row->getQuantity();
+                if(!empty($row->getItem()->getSize())){
+                    $size = $row->getItem()->getSize();
+                    $this->webItemQuantityUpdate($calculation , $purchaseVendorItem , $size , $qnt);
+                }else{
+                    $this->webItemQuantityUpdate($calculation , $purchaseVendorItem , $size = 0 , $qnt);
+                }
+            }
+        }
+    }
+
 
 
 

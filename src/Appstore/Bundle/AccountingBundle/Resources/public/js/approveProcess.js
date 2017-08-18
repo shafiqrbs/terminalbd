@@ -1,14 +1,18 @@
 function AccountingApproveProcess(){
 
 
-    $( ".date-picker" ).datepicker({
-        dateFormat: "dd-mm-yy"
-    });
+    $( ".date-picker" ).datepicker({dateFormat: "dd-mm-yy"});
     // Getter
     var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
-
     // Setter
     $( ".date-picker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
+
+
+    $( ".dateCalendar" ).datepicker({ dateFormat: "dd-mm-yy" });
+    // Getter
+    $( ".dateCalendar" ).datepicker( "option", "dateFormat" );
+    // Setter
+    $( ".dateCalendar" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
 
     $(document).on("click", ".editable-submit", function() {
         setTimeout(pageReload, 3000);
@@ -33,7 +37,7 @@ function AccountingApproveProcess(){
 
     })
 
-    $(document).on("click", ".approvex", function() {
+    $(document).on("click", ".approve", function() {
 
         $(this).removeClass('approve');
         var id = $(this).attr("data-id");
@@ -50,7 +54,7 @@ function AccountingApproveProcess(){
 
     });
 
-    $(".approve").confirm({
+    $(".approvex").confirm({
 
         text: "Are you sure you want to approve this operation?",
         title: "Confirmation required",
