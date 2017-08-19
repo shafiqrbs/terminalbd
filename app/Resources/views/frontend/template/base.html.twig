@@ -23,9 +23,10 @@
     <meta property="og:image" content="http://sharethis.com/images/logo.jpg" />
     <meta property="og:description" content="ShareThis is its people. It's imperative that we hire smart,innovative people who can work intelligently as we continue to disrupt the very category we created. Come join us!" />
     <meta property="og:site_name" content="ShareThis" />
-
     <title>{{ globalOption.name }}</title>
-    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}">
+    {% if globalOption.templateCustomize.favicon is not empty %}
+    <link  rel="shortcut icon" href="/uploads/domain/{{ globalOption.id }}/customizeTemplate/{{ globalOption.templateCustomize.favicon }}">
+    {% endif %}
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     <!-- Google fonts - witch you want to use - (rest you can just remove) -->
@@ -140,23 +141,6 @@
          var mins = 22;
          $('.bs-example-form').css({
              'margin-top':(navbar/2 - mins)
-         });
-         $('.header-inner-menu').css({
-            'margin-top':(navbar - 40)
-         });
-         $('#breadcrumb').css({
-            'margin-top':(navbar+20)
-         });
-
-
-
-        var stickyOffset = $('.sticky').offset().top;
-
-         $(window).scroll(function(){
-             var sticky = $('.sticky'),
-                 scroll = $(window).scrollTop();
-             if (scroll >= stickyOffset) sticky.addClass('fixed');
-             else sticky.removeClass('fixed');
          });
 
         $('.social-tooltip').tooltip({

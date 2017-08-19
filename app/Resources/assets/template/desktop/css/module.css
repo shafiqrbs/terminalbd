@@ -1,3 +1,216 @@
+@import url('https://fonts.googleapis.com/css?family=Almendra|Amita|Archivo|Cormorant+Upright|Croissant+One|Dynalight|Elsie|Elsie+Swash+Caps|Felipa|Germania+One|Great+Vibes|Italianno|Katibeh|Lovers+Quarrel|Marko+One|Meie+Script|Miss+Fajardose|Monsieur+La+Doulaise|Mrs+Sheppards|Niconne|Nova+Script|Pattaya|Petrona|Playball|Quintessential|Redressed|Roboto|Rochester|Romanesco|Sail|Saira+Semi+Condensed|Sevillana|Slabo+27px|Snippet|Sofia|Spirax|Stalemate|Tangerine');
+/*============================== Common CSS ===============================*/
+
+.btn-info{
+    color: #FFFFff!important;
+}
+.btn-info:hover{
+    color: #FBFBFB !important;
+}
+
+/*================== Social  Share Button ====================================*/
+
+
+.mbm_social {
+    font-size: 0;
+    float:left;
+    width:100%;
+    background:#fff;
+    text-align:left;
+    margin-top: 20px;
+    padding-left: 0;
+}
+.mbm_social li {
+    display: inline-block;
+    list-style: outside none none;
+    margin: 0 8px 0 0;
+    padding: 0;
+    text-transform: uppercase;
+}
+.mbm_social > li:last-child {
+    margin: 0;
+}
+.mbm_social a {
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    color: #ffffff !important;;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin: 0;
+    width: 50px;
+    height: 31px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    -webkit-transition: all .15s ease;
+    transition: all .15s ease;
+    z-index: 2;
+    text-transform: uppercase;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+.mbm_social a:hover {
+    color: #FBFBFB !important;
+}
+.mbm_social a:hover .tooltip {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    -webkit-transform: translate(0, -33px);
+    transform: translate(0, -33px);
+}
+.mbm_social a:active {
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5) inset;
+}
+.mbm_social .tooltip {
+    opacity: 0;
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    z-index: 1;
+    -webkit-transition: all .15s ease;
+    transition: all .15s ease;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+.mbm_social .tooltip span {
+    font-size: 10px;
+    font-weight: bold;
+    left: -50%;
+    line-height: 1;
+    padding: 6px 8px 5px;
+    position: relative;
+    text-transform: uppercase;
+    z-index: 1;
+}
+.mbm_social .tooltip span:after {
+    position: absolute;
+    content: " ";
+    width: 0;
+    height: 0;
+    top: 100%;
+    left: 50%;
+    margin-left: -8px;
+    border: 8px solid transparent;
+}
+.mbm_social .social-twitter {
+    background: #00abdc;
+    background: -webkit-linear-gradient(#00abdc, #00abdc);
+    background: linear-gradient(#00abdc, #00abdc);
+    border-bottom: 1px solid #00abdc;
+}
+.mbm_social .social-twitter:hover {
+    color: #fff;
+    text-shadow: 0px 1px 0px #00abdc;
+}
+.mbm_social .social-twitter span {
+    background: #00abdc ;
+    background: -webkit-linear-gradient(#00abdc, #00abdc);
+    background: linear-gradient(#00abdc, #00abdc);
+    color: #fff;
+}
+.mbm_social .social-twitter span:after {
+    border-top-color: #00abdc;
+}
+.mbm_social .social-linkedin {
+    background: #286580 ;
+    background: -webkit-linear-gradient(#286580, #286580);
+    background: linear-gradient(#286580, #286580);
+    border-bottom: 1px solid #286580;
+}
+.mbm_social .social-linkedin:hover {
+    color: #fff ;
+    text-shadow: 0px 1px 0px #286580;
+}
+.mbm_social .social-linkedin span {
+    background: #286580 ;
+    background: -webkit-linear-gradient(#286580, #286580);
+    background: linear-gradient(#286580, #286580);
+    color: #fff;
+}
+.mbm_social .social-linkedin span:after {
+    border-top-color: #286580 ;
+}
+.mbm_social .social-facebook {
+    background: #325c94 ;
+    background: -webkit-linear-gradient(#4562a0, #385693);
+    background: linear-gradient(#4562a0, #385693);
+    border-bottom: 1px solid #2f487c;
+}
+.mbm_social .social-facebook:hover {
+    color: #fff;
+    text-shadow: 0px 1px 0px #2f487c;
+}
+.mbm_social .social-facebook span {
+    background: #3b5a9b;
+    background: -webkit-linear-gradient(#5873aa, #3b5a9b);
+    background: linear-gradient(#5873aa, #3b5a9b);
+    color: #fff;
+}
+.mbm_social .social-facebook span:after {
+    border-top-color: #325c94;
+}
+.mbm_social .social-google-plus {
+    background: #ea4335;
+    background: -webkit-linear-gradient(#ea4335, #ea4335);
+    background: linear-gradient(#ea4335, #ea4335);
+    border-bottom: 1px solid #ea4335;
+}
+.mbm_social .social-google-plus:hover {
+    color: #fff ;
+    text-shadow: 0px 1px 0px #ea4335;
+}
+.mbm_social .social-google-plus span {
+    background: #ea4335;
+    background: -webkit-linear-gradient(#ea4335, #ea4335);
+    background: linear-gradient(#ea4335, #ea4335);
+    color: #fff ;
+}
+.mbm_social .social-google-plus span:after {
+    border-top-color: #ea4335 ;
+}
+
+
+.mbm_social .social-instagram {
+    background: #3f729b;
+    background: -webkit-linear-gradient(#3f729b, #3f729b);
+    background: linear-gradient(#3f729b, #3f729b);
+    border-bottom: 1px solid #3f729b;
+}
+.mbm_social .social-instagram:hover {
+    color: #fff ;
+    text-shadow: 0px 1px 0px #3f729b;
+}
+.mbm_social .social-instagram span {
+    background: #3f729b;
+    background: -webkit-linear-gradient(#3f729b, #3f729b);
+    background: linear-gradient(#3f729b, #3f729b);
+    color: #fff ;
+}
+.mbm_social .social-instagram span:after {
+    border-top-color: #3f729b ;
+}
+
+.mbm_social i {
+    position: relative;
+    top: 1px;
+    font-size: 14px;
+}
+.mbm_social small {
+    font-size: 14px;
+    margin: 0 0 0 9px;
+    vertical-align: middle;
+}
+
+
 /*  ========================== HEADER LABEL CSS==========================*/
 .tooltip{
     z-index: 1000!important;
@@ -152,6 +365,13 @@
     text-transform: uppercase;
 }
 
+.section-header p{
+    display: inline-block;
+    text-transform: capitalize;
+    font-size: 14px;
+    color: #222222;
+}
+
 .section-header::after {
     background-color: #222;
     content: "";
@@ -256,8 +476,20 @@
 
 /*  ========================== HEADER LABEL CSS==========================*/
 
+.img-logo{
+    max-height: 160px!important;
+    max-width: 280px!important;
+    white-space: nowrap;
+    text-align: left;
+    margin: 15px 0;
+    display:inline-block;
+
+}
+
 .img-logo img{
-    max-height: 120px;
+    vertical-align: middle;
+    max-height: 160px;
+    max-width: 280px;
 }
 .section-divide{
     margin-top:20px ;
@@ -660,6 +892,23 @@
 
 }
 
+.owl-theme .owl-buttons div{
+    position:relative;
+    border-radius: 0;
+    background:#807b87;
+    padding: 7px 15px;
+    transition: all 0.5s ease 0s;
+}
+
+.owl-theme .owl-controls .owl-buttons div a{
+    color: #FFFFff !important;
+}
+
+@media only screen and (max-width: 990px) {
+    .blog-slide .post-info li { margin-right: 5px; }
+    .owl-theme .owl-buttons div{ display:none; }
+}
+
 .feature-carousel .owl-prev:before, .owl-next:before , .page-carousel .owl-prev:before, .owl-next:before{
     content: normal;
 }
@@ -792,6 +1041,7 @@
     background: #555;
     color: #FFFFff;
     text-align: justify;
+    margin-top:30px
 }
 .footer-menu h4{
     text-transform: uppercase;
@@ -847,7 +1097,7 @@
 }
 .social-payment .social-tooltip a#facebook{
     background: linear-gradient(#4562a0, #3b5998);
-    color:#ffffff
+    color:#ffffff !important;
 }
 .social-payment .social-tooltip a#facebook:hover{
     background: linear-gradient(#3c5899, #3c5899);
@@ -855,15 +1105,15 @@
 }
 .social-payment .social-tooltip a#twitter{
     background: linear-gradient(#00a0d1, #00a0d1);
-    color:#ffffff
+    color:#ffffff !important;
 }
 .social-payment .social-tooltip a#instagram{
     background: linear-gradient(#5b85aa, #4e799e);
-    color:#ffffff
+    color:#ffffff !important;
 }
 .social-payment .social-tooltip a#email{
     background: linear-gradient(#db4a39, #db4a39);
-    color:#ffffff
+    color:#ffffff !important;
 }
 
 
@@ -1104,7 +1354,7 @@
     line-height: 30px;
     border-radius: 50%;
     font-size: 17px;
-    color: #f9eee8;
+    color: #f9eee8 !important;
     border: 1px solid #f9eee8;
     transition: all 0.5s ease 0s;
     text-align: center;
@@ -1113,8 +1363,6 @@
     background: #3d3030;
     border: 1px solid #3d3030;
 }
-
-
 
 
 /* ######################### BUTTON FOR PAGE #####################################*/
@@ -2044,8 +2292,11 @@
     border-radius: 50%;
     display: block;
     font-size: 13px;
-    color: #fff;
+    color: #fff!important;
     background: rgba(11, 32, 56, 0.7);
+}
+.our-team .social-links li a:hover {
+    color:#FBFBFB !important
 }
 .our-team .team-content{
     background: #f3f5f7;
@@ -2466,12 +2717,12 @@
 .notice-slide .post-bar li a{
     text-transform: capitalize;
     font-size: 12px;
-    color: #fff;
+    color: #fff !important;
     transition:0.2s ease;
 }
 .notice-slide .post-bar li a:hover{
     text-decoration: none;
-    color:#333;
+    color:#999 !important;
 }
 .notice-slide .post-bar li i{
     color:#fff;
@@ -2525,7 +2776,7 @@
     display: block;
     font-size: 13px;
     font-weight: bold;
-    color: #DFE1E1;
+    color: #FFFFff !important;
     padding: 15px 48px 15px 20px;
     background: #2B2D30;
     position: relative;
@@ -2996,7 +3247,7 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     height: 60px;
     line-height: 59px;
     border-radius: 50%;
-    color:#fff;
+    color:#fff !important;
     background:#e74c3c;
     font-size:20px;
     transform: scale(1,1);
@@ -3084,6 +3335,10 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     width: 25px;
 
 }
+.sidebar-branch p{
+    border-top: 1px solid #d2d2d2;
+    padding-top: 10px;
+}
 
 /** ##################################### End Sidebar Branch ####################################### */
 
@@ -3155,7 +3410,7 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     padding: 0;
     list-style: none;
     position: absolute;
-    top: 30%;
+    top: 37%;
     text-align: center;
     opacity: 0;
     transition: opacity 0.40s linear 0s ;
@@ -3173,7 +3428,7 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     height: 30px;
     border-radius: 50%;
     line-height: 30px;
-    color: #ffffff;
+    color: #ffffff!important;
     text-align: center;
     background: #e74c3c;
 }
@@ -3181,7 +3436,7 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     text-decoration: none;
 }
 .client-sidebar .social-links li .fa-link:hover{
-    color: #ffffff;
+    color: #ffffff!important;
     text-underline: none;
 }
 .client-sidebar .over-layer{
@@ -3206,7 +3461,7 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     border-bottom: 1px solid lightgray;
     margin-bottom: 5px;
     display: block;
-    margin-top: 5px;
+    margin-top: 15px;
 }
 .post-comment simple{
     font-size: 13px;
@@ -3582,19 +3837,6 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
 }
 
 
-
-.owl-theme .owl-buttons div{
-    position:relative;
-    border-radius: 0;
-    background:#807b87;
-    padding: 7px 15px;
-    transition: all 0.5s ease 0s;
-}
-
-@media only screen and (max-width: 990px) {
-    .blog-slide .post-info li { margin-right: 5px; }
-    .owl-theme .owl-buttons div{ display:none; }
-}
 @media only screen and (max-width: 767px) {
     .blog-slide .post-link li a{
         width: 40px;
@@ -3617,7 +3859,7 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     padding: 0;
     list-style: none;
     position: absolute;
-    top: 30%;
+    top: 40%;
     text-align: center;
     opacity: 0;
     transition: opacity 0.40s linear 0s ;
@@ -3635,7 +3877,7 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     height: 30px;
     border-radius: 50%;
     line-height: 30px;
-    color: #808080;
+    color: #FFFFff!important;
     text-align: center;
     background: #fff;
 }
@@ -3643,7 +3885,7 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     text-decoration: none;
 }
 .box-sidebar-portfolio .social-links li .fa-link:hover{
-    color:#00abf1;
+    color:#FBFBFB!important;
     text-underline: none;
 }
 

@@ -36,6 +36,12 @@ class TemplateCustomizeType extends AbstractType
                 'placeholder'=>'')
             ))
 
+            ->add('siteTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Site page welcome text')))
+            ->add('siteTitleSize', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array('H1' => 'H1','H2' => 'H2','H3' => 'H3','H4' => 'H4'),
+            ))
+            ->add('siteSlogan','textarea', array('attr'=>array('class'=>'m-wrap span12','row'=> 4,'placeholder'=>'Site slogan')))
             ->add('homeBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
@@ -90,7 +96,6 @@ class TemplateCustomizeType extends AbstractType
                     )
             ))
 
-            ->add('logoDisplayWebsite')
             ->add('anchorColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
@@ -132,20 +137,20 @@ class TemplateCustomizeType extends AbstractType
 
             ->add('siteH1TextSize', 'choice', array(
                 'attr'=>array('class'=>' span12'),
-                'choices' => array('' => '---Select One---', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px', '26px' => '26px','28px' => '28px', '30px' => '30px', '32px' => '32px','34px' => '34px', '36px' => '36px'),
+                'choices' => array('' => '---Select One---','30px' => '30px', '32px' => '32px','34px' => '34px', '36px' => '36px','38px' => '38px', '40px' => '40px','42px' => '42px', '44px' => '44px','46px' => '46px','48px' => '48px', '50px' => '50px'),
             ))
 
             ->add('siteH2TextSize', 'choice', array(
                 'attr'=>array('class'=>' span12'),
-                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px', '26px' => '26px','28px' => '28px', '30px' => '30px', '32px' => '32px','34px' => '34px', '36px' => '36px'),
+                'choices' => array('' => '---Select One---','24px' => '24px',  '26px' => '26px','28px' => '28px', '30px' => '30px','32px' => '32px',  '34px' => '34px','36px' => '36px'),
             ))
             ->add('siteH3TextSize', 'choice', array(
                 'attr'=>array('class'=>' span12'),
-                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px', '26px' => '26px','28px' => '28px', '30px' => '30px', '32px' => '32px','34px' => '34px', '36px' => '36px'),
+                'choices' => array('' => '---Select One---','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px', '26px' => '26px','28px' => '28px', '30px' => '30px'),
             ))
             ->add('siteH4TextSize', 'choice', array(
                 'attr'=>array('class'=>' span12'),
-                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px', '26px' => '26px','28px' => '28px', '30px' => '30px', '32px' => '32px','34px' => '34px', '36px' => '36px'),
+                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px'),
             ))
 
             ->add('siteTitleBgColor','text', array('attr'=>array(
@@ -171,6 +176,11 @@ class TemplateCustomizeType extends AbstractType
                 'placeholder'=>'')
             ))
 
+            ->add('menuBgColorHover','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+
             ->add('menuLiAColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
@@ -192,6 +202,11 @@ class TemplateCustomizeType extends AbstractType
             ))
 
             ->add('borderColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+
+            ->add('borderColorHover','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
             ))

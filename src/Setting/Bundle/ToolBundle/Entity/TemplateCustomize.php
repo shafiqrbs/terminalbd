@@ -102,18 +102,7 @@ class TemplateCustomize
     private $showEmail = true;
 
 
-    /**
-     * @var string
-     *
-     *
-     * @ORM\Column(name="logo", type="string", length=255, nullable=true)
-     */
-    private $logo;
 
-    /**
-     * @Assert\File(maxSize="8388608")
-     */
-    protected $logoFile;
 
     /**
      * @var boolean
@@ -125,10 +114,40 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="siteTitle", type="string", length=255, nullable=true)
+     */
+    private $siteTitle;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="siteTitleSize", type="string", length=20, nullable=true)
+     */
+    private $siteTitleSize;
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="siteSlogan", type="text" , nullable=true)
+     */
+    private $siteSlogan;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="homeTitle", type="string", length=20, nullable=true)
+     */
+    private $homeTitle;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="homeBgColor", type="string", length=20, nullable=true)
      */
     private $homeBgColor;
-
 
     /**
      * @var string
@@ -190,17 +209,6 @@ class TemplateCustomize
      */
     private $sliderPosition='top-right';
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="bgImage", type="string", length=50, nullable=true)
-     */
-    private $bgImage;
-
-    /**
-     * @Assert\File(maxSize="8388608")
-     */
-    protected $bgImageFile;
 
     /**
      * @var string
@@ -247,30 +255,30 @@ class TemplateCustomize
     /**
      * @var string
      *
-     * @ORM\Column(name="siteH1TextSize", type="string", length=50, nullable=true)
+     * @ORM\Column(name="siteH1TextSize", type="string", length=10, nullable=true)
      */
-    private $siteH1TextSize;
+    private $siteH1TextSize = '36px';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="siteH2TextSize", type="string", length=50, nullable=true)
+     * @ORM\Column(name="siteH2TextSize", type="string", length=10, nullable=true)
      */
-    private $siteH2TextSize;
+    private $siteH2TextSize = '30px';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="siteH3TextSize", type="string", length=50, nullable=true)
+     * @ORM\Column(name="siteH3TextSize", type="string", length=10, nullable=true)
      */
-    private $siteH3TextSize;
+    private $siteH3TextSize='24px';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="siteH4TextSize", type="string", length=50, nullable=true)
+     * @ORM\Column(name="siteH4TextSize", type="string", length=10, nullable=true)
      */
-    private $siteH4TextSize;
+    private $siteH4TextSize ='18px';
 
     /**
      * @var string
@@ -287,12 +295,6 @@ class TemplateCustomize
      */
     private $headerBgColor;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="headerBgImage", type="string", length=20, nullable=true)
-     */
-    private $headerBgImage;
 
     /**
      * @var string
@@ -317,6 +319,15 @@ class TemplateCustomize
     private $borderColor;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="borderColorHover", type="string", length=20, nullable=true)
+     */
+    private $borderColorHover;
+
+
+
+    /**
      * @var float
      *
      * @ORM\Column(name="dividerBorder", type="float", nullable=true)
@@ -339,6 +350,41 @@ class TemplateCustomize
      */
     private $dividerAfterColor;
 
+    /**
+     * @var string
+     *
+     *
+     * @ORM\Column(name="logo", type="string", length=255, nullable=true)
+     */
+    private $logo;
+
+
+    /**
+     * @Assert\File(maxSize="8388608")
+     */
+    protected $logoFile;
+
+
+    /**
+     * @var string
+     *
+     *
+     * @ORM\Column(name="favicon", type="string", length=255, nullable=true)
+     */
+    private $favicon;
+
+
+    /**
+     * @Assert\File(maxSize="1024")
+     */
+    protected $faviconFile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="headerBgImage", type="string", length=255, nullable=true)
+     */
+    private $headerBgImage;
 
 
     /**
@@ -347,13 +393,32 @@ class TemplateCustomize
     protected $headerBgImageFile;
 
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="bgImage", type="string", length=255, nullable=true)
+     */
+    private $bgImage;
+
+    /**
+     * @Assert\File(maxSize="8388608")
+     */
+    protected $bgImageFile;
+
 
     /**
      * @var string
      *
-     * @ORM\Column(name="menuBgColor", type="string", length=50, nullable=true)
+     * @ORM\Column(name="menuBgColor", type="string", length=20, nullable=true)
      */
     private $menuBgColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="menuBgColorHover", type="string", length=20, nullable=true)
+     */
+    private $menuBgColorHover;
 
     /**
      * @var string
@@ -480,21 +545,6 @@ class TemplateCustomize
     }
 
 
-    /**
-     * @return string
-     */
-    public function getLogo()
-    {
-        return $this->logo;
-    }
-
-    /**
-     * @param string $logo
-     */
-    public function setLogo($logo)
-    {
-        $this->logo = $logo;
-    }
 
     /**
      * @return string
@@ -512,21 +562,7 @@ class TemplateCustomize
         $this->siteBgColor = $siteBgColor;
     }
 
-    /**
-     * @return string
-     */
-    public function getBgImage()
-    {
-        return $this->bgImage;
-    }
 
-    /**
-     * @param string $bgImage
-     */
-    public function setBgImage($bgImage)
-    {
-        $this->bgImage = $bgImage;
-    }
 
     /**
      * @return string
@@ -704,21 +740,9 @@ class TemplateCustomize
         $this->headerBgColor = $headerBgColor;
     }
 
-    /**
-     * @return string
-     */
-    public function getHeaderBgImage()
-    {
-        return $this->headerBgImage;
-    }
 
-    /**
-     * @param string $headerBgImage
-     */
-    public function setHeaderBgImage($headerBgImage)
-    {
-        $this->headerBgImage = $headerBgImage;
-    }
+
+
 
     /**
      * @return string
@@ -896,6 +920,18 @@ class TemplateCustomize
         }
     }
 
+    public function removeFavicon()
+    {
+
+        $path = null === $this->faviconFile
+        ? null
+        : $this->getUploadRootDir().'/'.$this->faviconFile;
+
+        if ($file = $path) {
+            unlink($file);
+        }
+    }
+
     public function removeHeaderImage()
     {
         $path = null === $this->headerBgImage
@@ -968,6 +1004,7 @@ class TemplateCustomize
         $this->file = null;
     }
 
+
     /**
      * @return boolean
      */
@@ -993,15 +1030,84 @@ class TemplateCustomize
     }
 
     /**
-     * @param mixed $logoFile
+     * @param UploadedFile $logoFile
      */
     public function setLogoFile(UploadedFile $logoFile)
     {
         $this->logoFile = $logoFile;
     }
 
+
     /**
-     * @return mixed
+     * @return string
+     */
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+    /**
+     * @param string $logo
+     */
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
+    }
+
+
+
+    /**
+     * @return string
+     */
+    public function getFavicon()
+    {
+        return $this->favicon;
+    }
+
+    /**
+     * @param string $favicon
+     */
+    public function setFavicon($favicon)
+    {
+        $this->favicon = $favicon;
+    }
+
+    /**
+     * @return UploadedFile
+     */
+    public function getFaviconFile()
+    {
+        return $this->faviconFile;
+    }
+
+    /**
+     * @param UploadedFile $faviconFile
+     */
+    public function setFaviconFile(UploadedFile $faviconFile)
+    {
+        $this->faviconFile = $faviconFile;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getHeaderBgImage()
+    {
+        return $this->headerBgImage;
+    }
+
+    /**
+     * @param string $headerBgImage
+     */
+    public function setHeaderBgImage($headerBgImage)
+    {
+        $this->headerBgImage = $headerBgImage;
+    }
+
+
+    /**
+     * @return UploadedFile
      */
     public function getHeaderBgImageFile()
     {
@@ -1009,7 +1115,7 @@ class TemplateCustomize
     }
 
     /**
-     * @param mixed $headerBgImageFile
+     * @param UploadedFile $headerBgImageFile
      */
     public function setHeaderBgImageFile(UploadedFile $headerBgImageFile)
     {
@@ -1017,7 +1123,23 @@ class TemplateCustomize
     }
 
     /**
-     * @return mixed
+     * @return string
+     */
+    public function getBgImage()
+    {
+        return $this->bgImage;
+    }
+
+    /**
+     * @param string $bgImage
+     */
+    public function setBgImage($bgImage)
+    {
+        $this->bgImage = $bgImage;
+    }
+
+    /**
+     * @return UploadedFile
      */
     public function getBgImageFile()
     {
@@ -1025,12 +1147,14 @@ class TemplateCustomize
     }
 
     /**
-     * @param mixed $bgImageFile
+     * @param UploadedFile $bgImageFile
      */
     public function setBgImageFile(UploadedFile $bgImageFile)
     {
         $this->bgImageFile = $bgImageFile;
     }
+
+
 
     /**
      * @return boolean
@@ -1498,6 +1622,85 @@ class TemplateCustomize
         $this->topBgColor = $topBgColor;
     }
 
+    /**
+     * @return string
+     */
+    public function getBorderColorHover()
+    {
+        return $this->borderColorHover;
+    }
+
+    /**
+     * @param string $borderColorHover
+     */
+    public function setBorderColorHover($borderColorHover)
+    {
+        $this->borderColorHover = $borderColorHover;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSiteTitle()
+    {
+        return $this->siteTitle;
+    }
+
+    /**
+     * @param string $siteTitle
+     */
+    public function setSiteTitle($siteTitle)
+    {
+        $this->siteTitle = $siteTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSiteTitleSize()
+    {
+        return $this->siteTitleSize;
+    }
+
+    /**
+     * @param string $siteTitleSize
+     */
+    public function setSiteTitleSize($siteTitleSize)
+    {
+        $this->siteTitleSize = $siteTitleSize;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSiteSlogan()
+    {
+        return $this->siteSlogan;
+    }
+
+    /**
+     * @param string $siteSlogan
+     */
+    public function setSiteSlogan($siteSlogan)
+    {
+        $this->siteSlogan = $siteSlogan;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenuBgColorHover()
+    {
+        return $this->menuBgColorHover;
+    }
+
+    /**
+     * @param string $menuBgColorHover
+     */
+    public function setMenuBgColorHover($menuBgColorHover)
+    {
+        $this->menuBgColorHover = $menuBgColorHover;
+    }
 
 }
 

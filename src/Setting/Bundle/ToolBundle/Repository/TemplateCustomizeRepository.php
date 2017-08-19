@@ -101,29 +101,41 @@ class TemplateCustomizeRepository extends EntityRepository {
     public function fileUploader($entity, $file = '')
     {
         $em = $this->_em;
-        if(isset($file['logo'])){
+        if(isset($file['logoFile'])){
 
-             $img = $file['logo'];
+             $img = $file['logoFile'];
              $fileName = $img->getClientOriginalName();
              $imgName =  uniqid(). '.' .$fileName;
              $img->move($entity->getUploadDir(), $imgName);
              $entity->setLogo($imgName);
         }
 
-        if(isset($file['bgImage'])){
-             $img = $file['bgImage'];
+        if(isset($file['faviconFile'])){
+
+             $img = $file['faviconFile'];
+             $fileName = $img->getClientOriginalName();
+             $imgName =  uniqid(). '.' .$fileName;
+             $img->move($entity->getUploadDir(), $imgName);
+             $entity->setFavicon($imgName);
+
+        }
+
+  /*      if(isset($file['bgImageFile'])){
+
+             $img = $file['bgImageFile'];
              $fileName = $img->getClientOriginalName();
              $imgName =  uniqid(). '.' .$fileName;
              $img->move($entity->getUploadDir(), $imgName);
              $entity->setBgImage($imgName);
-        }
+        }*/
 
-        if(isset($file['headerBgImage'])){
-             $img = $file['headerBgImage'];
+        if(isset($file['bgImageFile'])){
+
+             $img = $file['bgImageFile'];
              $fileName = $img->getClientOriginalName();
              $imgName =  uniqid(). '.' .$fileName;
              $img->move($entity->getUploadDir(), $imgName);
-             $entity->setHeaderBgImage($imgName);
+             $entity->setBgImage($imgName);
         }
 
         $em->persist($entity);

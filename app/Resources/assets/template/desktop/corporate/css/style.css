@@ -138,10 +138,18 @@ input[type="color"],
 #header-menu ul li:hover { background-color: #ffc400; }
 #header-menu ul li a:hover { background-color: #ffc400; }
 #header-menu ul > li > ul{
-   padding-top: 12px;
+   padding-top: 16px;
 }
+#header-menu ul > li > ul > li:first-child{
+    border-top: 1px solid #ffc400;
+}
+
 #header-menu ul ul li:hover > ul {
     padding-top:0;
+    border:none;
+}
+#header-menu ul ul li:hover > ul > li:first-child{
+    border-top:none!important;
 }
 
 .input-group-field {
@@ -487,8 +495,8 @@ ul.dropdown-cart li .item-right button {
 }
 
 .carousel-img{
-    max-height:512px;
-    height: 512px;
+    max-height:800px;
+    height: 800px;
     width:100%
 }
 .carousel-tab-img{
@@ -1454,207 +1462,6 @@ div.treeview, .treeview ul {
 
 /*================== Product Details ====================================*/
 
-/*================== Product Details Share Button ====================================*/
-
-
-.mbm_social {
-    font-size: 0;
-    float:left;
-    width:100%;
-    background:#fff;
-    text-align:left;
-    margin-top: 20px;
-    padding-left: 0;
-}
-.mbm_social li {
-    display: inline-block;
-    list-style: outside none none;
-    margin: 0 8px 0 0;
-    padding: 0;
-    text-transform: uppercase;
-}
-.mbm_social > li:last-child {
-    margin: 0;
-}
-.mbm_social a {
-    position: relative;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    color:#fff;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    margin: 0;
-    width: 50px;
-    height: 31px;
-    text-decoration: none;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-    -webkit-transition: all .15s ease;
-    transition: all .15s ease;
-    z-index: 2;
-    text-transform: uppercase;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-.mbm_social a:hover {
-    color: #fff;
-}
-.mbm_social a:hover .tooltip {
-    display: block;
-    visibility: visible;
-    opacity: 1;
-    -webkit-transform: translate(0, -33px);
-    transform: translate(0, -33px);
-}
-.mbm_social a:active {
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5) inset;
-}
-.mbm_social .tooltip {
-    opacity: 0;
-    position: absolute;
-    top: 2px;
-    left: 50%;
-    z-index: 1;
-    -webkit-transition: all .15s ease;
-    transition: all .15s ease;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-.mbm_social .tooltip span {
-    font-size: 10px;
-    font-weight: bold;
-    left: -50%;
-    line-height: 1;
-    padding: 6px 8px 5px;
-    position: relative;
-    text-transform: uppercase;
-    z-index: 1;
-}
-.mbm_social .tooltip span:after {
-    position: absolute;
-    content: " ";
-    width: 0;
-    height: 0;
-    top: 100%;
-    left: 50%;
-    margin-left: -8px;
-    border: 8px solid transparent;
-}
-.mbm_social .social-twitter {
-    background: #00abdc;
-    background: -webkit-linear-gradient(#00abdc, #00abdc);
-    background: linear-gradient(#00abdc, #00abdc);
-    border-bottom: 1px solid #00abdc;
-}
-.mbm_social .social-twitter:hover {
-    color: #fff;
-    text-shadow: 0px 1px 0px #00abdc;
-}
-.mbm_social .social-twitter span {
-    background: #00abdc ;
-    background: -webkit-linear-gradient(#00abdc, #00abdc);
-    background: linear-gradient(#00abdc, #00abdc);
-    color: #fff;
-}
-.mbm_social .social-twitter span:after {
-    border-top-color: #00abdc;
-}
-.mbm_social .social-linkedin {
-    background: #286580 ;
-    background: -webkit-linear-gradient(#286580, #286580);
-    background: linear-gradient(#286580, #286580);
-    border-bottom: 1px solid #286580;
-}
-.mbm_social .social-linkedin:hover {
-    color: #fff ;
-    text-shadow: 0px 1px 0px #286580;
-}
-.mbm_social .social-linkedin span {
-    background: #286580 ;
-    background: -webkit-linear-gradient(#286580, #286580);
-    background: linear-gradient(#286580, #286580);
-    color: #fff;
-}
-.mbm_social .social-linkedin span:after {
-    border-top-color: #286580 ;
-}
-.mbm_social .social-facebook {
-    background: #325c94 ;
-    background: -webkit-linear-gradient(#4562a0, #385693);
-    background: linear-gradient(#4562a0, #385693);
-    border-bottom: 1px solid #2f487c;
-}
-.mbm_social .social-facebook:hover {
-    color: #fff;
-    text-shadow: 0px 1px 0px #2f487c;
-}
-.mbm_social .social-facebook span {
-    background: #3b5a9b;
-    background: -webkit-linear-gradient(#5873aa, #3b5a9b);
-    background: linear-gradient(#5873aa, #3b5a9b);
-    color: #fff;
-}
-.mbm_social .social-facebook span:after {
-    border-top-color: #325c94;
-}
-.mbm_social .social-google-plus {
-    background: #ea4335;
-    background: -webkit-linear-gradient(#ea4335, #ea4335);
-    background: linear-gradient(#ea4335, #ea4335);
-    border-bottom: 1px solid #ea4335;
-}
-.mbm_social .social-google-plus:hover {
-    color: #fff ;
-    text-shadow: 0px 1px 0px #ea4335;
-}
-.mbm_social .social-google-plus span {
-    background: #ea4335;
-    background: -webkit-linear-gradient(#ea4335, #ea4335);
-    background: linear-gradient(#ea4335, #ea4335);
-    color: #fff ;
-}
-.mbm_social .social-google-plus span:after {
-    border-top-color: #ea4335 ;
-}
-
-
-.mbm_social .social-instagram {
-    background: #3f729b;
-    background: -webkit-linear-gradient(#3f729b, #3f729b);
-    background: linear-gradient(#3f729b, #3f729b);
-    border-bottom: 1px solid #3f729b;
-}
-.mbm_social .social-instagram:hover {
-    color: #fff ;
-    text-shadow: 0px 1px 0px #3f729b;
-}
-.mbm_social .social-instagram span {
-    background: #3f729b;
-    background: -webkit-linear-gradient(#3f729b, #3f729b);
-    background: linear-gradient(#3f729b, #3f729b);
-    color: #fff ;
-}
-.mbm_social .social-instagram span:after {
-    border-top-color: #3f729b ;
-}
-
-.mbm_social i {
-    position: relative;
-    top: 1px;
-    font-size: 14px;
-}
-.mbm_social small {
-    font-size: 14px;
-    margin: 0 0 0 9px;
-    vertical-align: middle;
-}
 
 /* ==================================== MODULE OVERRIDE ======================================= */
 
@@ -1685,7 +1492,6 @@ div.treeview, .treeview ul {
 .pageFeature:hover .pageFeature-image > a > img{
     border: 3px solid #555;
 }
-
 
 .sidebar-serviceBox{
     border: 1px solid #ededed;

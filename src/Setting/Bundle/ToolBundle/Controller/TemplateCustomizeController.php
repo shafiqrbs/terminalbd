@@ -41,10 +41,10 @@ class TemplateCustomizeController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-
             return $this->redirect($this->generateUrl('templatecustomize_show', array('id' => $entity->getId())));
         }
 
@@ -174,15 +174,18 @@ class TemplateCustomizeController extends Controller
                 $entity->removeLogo();
                 $entity->setLogo(NULL);
             }
-            if(isset($data['removeHeaderImage']) || ( isset($file['removeHeaderImage']) && !empty($entity->getHeaderBgImage())) ){
+            if(isset($data['removeFavicon']) || (isset($file['faviconFile']) && !empty($entity->getFavicon()))  ){
+                $entity->removeFavicon();
+                $entity->setFavicon(NULL);
+            }
+            if(isset($data['removeHeaderImage']) || (isset($file['removeHeaderImage']) && !empty($entity->getHeaderBgImage())) ){
                 $entity->removeHeaderImage();
                 $entity->setHeaderBgImage(NULL);
             }
-            if(isset($data['removeBodyImage']) || ( isset($file['removeBodyImage']) && !empty($entity->getBgImage())) ){
+            if(isset($data['removeBodyImage']) || (isset($file['removeBodyImage']) && !empty($entity->getBgImage())) ){
                 $entity->removeBodyImage();
                 $entity->setBgImage(NULL);
             }
-
             $entity->upload();
             $em->flush();
             $this->getDoctrine()->getRepository('SettingToolBundle:TemplateCustomize')->fileUploader($entity,$file);

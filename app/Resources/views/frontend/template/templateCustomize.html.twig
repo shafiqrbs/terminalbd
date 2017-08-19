@@ -7,12 +7,119 @@
     {% endif %}
 
     {% if globalOption.templateCustomize.anchorHoverColor is not empty %}
-        a:hover, a:focus{
-            color: {{ globalOption.templateCustomize.anchorHoverColor }} !important;
-            cursor: pointer;
+    a:hover, a:focus{
+        color: {{ globalOption.templateCustomize.anchorHoverColor }} !important;
+        cursor: pointer;
+    }
+    {% endif %}
+
+    #header-menu ul a{
+        color: {{ globalOption.templateCustomize.menuLiAColor }} !important;
+    }
+    #header-menu ul a:hover{
+        color: {{ globalOption.templateCustomize.menuLiAHoverColor }} !important;
+    }
+    #header-menu  ul ul li{
+        background-color: {{ globalOption.templateCustomize.menuBgColor }} !important;
+    }
+    #header-menu ul li:hover{
+        background-color: {{ globalOption.templateCustomize.menuBgColorHover }} !important;
+    }
+    #header-menu ul li a:hover{
+        background-color: {{ globalOption.templateCustomize.menuBgColorHover }} !important;
+    }
+    #header-menu ul > li > ul > li:first-child{
+        border-color: {{ globalOption.templateCustomize.menuBgColorHover }} !important;
+    }
+
+    .search-form .form-group input.form-control{
+        border-color: {{ globalOption.templateCustomize.borderColor }} !important;
+    }
+    .search-form .form-group span.form-control-feedback{
+        color: {{ globalOption.templateCustomize.borderColor }} !important;
+    }
+
+    {% if globalOption.templateCustomize.buttonBgColor is not empty %}
+        .btn-info{
+            background-color: {{ globalOption.templateCustomize.buttonBgColor }} !important;
+            border-color: {{ globalOption.templateCustomize.buttonBgColor }} !important;
         }
     {% endif %}
+    {% if globalOption.templateCustomize.buttonBgColorHover is not empty %}
+        .btn-info:hover {
+            background-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;
+            border-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;
+        }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.anchorColor is not empty %}
+        .carousel-main-control {
+            color:{{ globalOption.templateCustomize.anchorColor }} !important;
+        }
+    {% endif %}
+
+    .footer-menu ul li a{
+        color:{{ globalOption.templateCustomize.footerAnchorColor }} !important;
+    }
+
+     .footer-menu ul li a:hover{
+        color:{{ globalOption.templateCustomize.footerAnchorColorHover }} !important;
+    }
+
+    .footer-menu a{
+        color:{{ globalOption.templateCustomize.footerAnchorColor }} !important;
+    }
+
+    .footer-menu a:hover{
+        color:{{ globalOption.templateCustomize.footerAnchorColorHover }} !important;
+    }
+
+    {% if globalOption.templateCustomize.siteH1TextSize is not empty %}
+        .h1, h1{
+            font-size:{{ globalOption.templateCustomize.siteH1TextSize }} !important;
+        }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.siteH2TextSize is not empty %}
+        .h2, h2{
+            font-size:{{ globalOption.templateCustomize.siteH2TextSize }} !important;
+        }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.siteH3TextSize is not empty %}
+        .h3, h3{
+            font-size:{{ globalOption.templateCustomize.siteH3TextSize }} !important;
+        }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.siteH4TextSize is not empty %}
+        .h4, h4{
+            font-size:{{ globalOption.templateCustomize.siteH4TextSize }} !important;
+        }
+    {% endif %}
+
+    #toTop{
+        background-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
+        border-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
+    }
+    #toTop:hover{
+        background-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;
+        border-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;
+    }
+
+
     {% if globalOption.templateCustomize.buttonBgColor is not empty %}
+        .owl-theme .owl-controls .owl-buttons div{
+            background-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
+        }
+    {% endif %}
+    {% if globalOption.templateCustomize.buttonBgColorHover is not empty %}
+        .owl-theme .owl-controls .owl-buttons div:hover{
+            background-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;
+        }
+    {% endif %}
+
+     {% if globalOption.templateCustomize.buttonBgColor is not empty %}
         .product-feature-box .social li a{
             background-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
         }
@@ -22,8 +129,6 @@
             background-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;
         }
     {% endif %}
-
-
 
     {% if globalOption.templateCustomize.homeBgColor is not empty %}
     .home{
@@ -85,8 +190,6 @@
     }
     #header{
         background-color: {{ globalOption.templateCustomize.headerBgColor }}!important;
-        padding-bottom: 10px;
-        padding-top: 10px;
     }
     #mobile-footer ul.footer-icon li a{
         color: {{ globalOption.templateCustomize.footerTextColor }}!important;
@@ -202,7 +305,6 @@
         {% endif %}
     }
 
-
     .feature-carousel-top-left .owl-controls , .page-carousel-top-left .owl-controls {
         {% if globalOption.templateCustomize.sliderLeftRightPosition  is not empty%}
             left: {{ globalOption.templateCustomize.sliderLeftRightPosition }}%!important;
@@ -252,6 +354,183 @@
             bottom: {{ globalOption.templateCustomize.sliderTopBottomPosition }}%!important;
         {% endif %}
     }
+
+    a.thumbnail{
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    a.thumbnail.active, a.thumbnail:focus, a.thumbnail:hover{
+        border-color:{{ globalOption.templateCustomize.borderColorHover }}!important;
+    }
+
+    {% if globalOption.templateCustomize.borderColor  is not empty%}
+        .pageFeature {
+            border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+        }
+    {% endif %}
+    .pageFeature:hover .pageFeature-icon{
+        background:{{ globalOption.templateCustomize.borderColorHover }}!important;
+    }
+
+    .pageFeature .pageFeature-image > a > img{
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+
+    .pageFeature h3:before{
+        background:{{ globalOption.templateCustomize.borderColorHover }}!important;
+    }
+    .pageFeature h3:after{
+        background:{{ globalOption.templateCustomize.borderColorHover }}!important;
+    }
+    .pageFeature:hover .pageFeature-image > a > img{
+        border-color:{{ globalOption.templateCustomize.borderColorHover }}!important;
+    }
+
+    .sidebar-blog .post-link li a{
+        background:{{ globalOption.templateCustomize.buttonBgColor }}!important;
+    }
+    .sidebar-blog .post-link li a:hover{
+        background:{{ globalOption.templateCustomize.buttonBgColorHover }}!important;
+    }
+    .sidebar-blog {
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    .sidebar-blog:hover{
+        border-color:{{ globalOption.templateCustomize.borderColorHover }}!important;
+    }
+
+    .sidebar-blog .post-info {
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    .sidebar-blog .post-info:hover{
+        border-color:{{ globalOption.templateCustomize.borderColorHover }}!important;
+    }
+    .sidebar-blog .tag-info {
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    .sidebar-blog .tag-info:hover{
+        border-color:{{ globalOption.templateCustomize.borderColorHover }}!important;
+    }
+
+    .sidebar-branch {
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    .branch-head{
+        background:{{ globalOption.templateCustomize.borderColorHover }}!important
+    }
+    .sidebar-branch p{
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+
+    .client-sidebar .thumbnail{
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+
+    .client-sidebar .thumbnail:hover{
+        border-color:{{ globalOption.templateCustomize.borderColorHover }}!important;
+    }
+    .client-sidebar .social-links li a{
+        background-color:{{ globalOption.templateCustomize.buttonBgColor }}!important;
+    }
+    .client-sidebar .social-links li a:hover{
+        background-color:{{ globalOption.templateCustomize.buttonBgColorHover }}!important;
+    }
+    .event-sidebar{
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    .event-sidebar .post-comment li:after{
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    .event-sidebar .overlay > i{
+        color:{{ globalOption.templateCustomize.buttonBgColor }}!important;
+    }
+
+    .event-sidebar:hover .post-comment li{
+        color:{{ globalOption.templateCustomize.anchorColor }}!important;
+    }
+
+    #accordion .panel-title a{
+        background:{{ globalOption.templateCustomize.buttonBgColor }}!important;
+    }
+    #accordion .panel-title a.collapsed{
+        background:{{ globalOption.templateCustomize.buttonBgColorHover }}!important;
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    #accordion .panel-title a:after,
+    #accordion .panel-title a.collapsed:after{
+        background:{{ globalOption.templateCustomize.buttonBgColorHover }}!important;
+    }
+    #accordion .panel-title a.collapsed:after{
+        background:{{ globalOption.templateCustomize.buttonBgColor }}!important;
+    }
+    #accordion .panel-title a:before,
+    #accordion .panel-title a.collapsed:before{
+        background: #FBFBFB;
+    }
+    #accordion .panel-title a:before, #accordion .panel-title a.collapsed:before{
+        color:{{ globalOption.templateCustomize.buttonBgColor }}!important;
+    }
+    .notice-slide .post-content{
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    .notice-slide .month{
+        background-color:{{ globalOption.templateCustomize.buttonBgColor }}!important;
+    }
+    .notice-slide .post-date{
+        background-color:{{ globalOption.templateCustomize.buttonBgColorHover }}!important;
+    }
+    .notice-slide .post-bar{
+        background-color:{{ globalOption.templateCustomize.buttonBgColor }}!important;
+    }
+    .sidebar-serviceBox{
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    .sidebar-serviceBox:hover{
+        border-color: {{ globalOption.templateCustomize.borderColorHover }}!important;
+    }
+    .sidebar-serviceBox:before, .sidebar-serviceBox:after{
+        background-color: {{ globalOption.templateCustomize.borderColorHover }}!important;
+    }
+    .sidebar-serviceBox .service-icon{
+        color: {{ globalOption.templateCustomize.anchorColor }}!important;
+    }
+
+    .our-portfolio{
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    .box-sidebar-portfolio .social-links li a{
+        background-color:{{ globalOption.templateCustomize.buttonBgColor }}!important;
+    }
+    .box-sidebar-portfolio .social-links li .fa-link:hover{
+        background-color:{{ globalOption.templateCustomize.buttonBgColorHover }}!important;
+    }
+
+    .our-team{
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    .our-team .team-content{
+        background-color:{{ globalOption.templateCustomize.buttonBgColor }}!important;
+    }
+    .our-team .over-layer{
+        background-color:{{ globalOption.templateCustomize.buttonBgColorHover }}!important;
+    }
+    .our-team .over-layer:before {
+        border-color:{{ globalOption.templateCustomize.buttonBgColor }}!important;
+    }
+    .our-team .social-links li a{
+        background-color:#fff!important;
+        color: #000!important;
+    }
+    .our-team .social-links li a:hover{
+        background-color:{{ globalOption.templateCustomize.buttonBgColor }}!important;
+    }
+
+    .testimonial-list .pic:before , .testimonial-list .pic:after {
+        border-color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+    .testimonial-list .testimonial-list-title{
+        color:{{ globalOption.templateCustomize.borderColor }}!important;
+    }
+
 
 
 </style>

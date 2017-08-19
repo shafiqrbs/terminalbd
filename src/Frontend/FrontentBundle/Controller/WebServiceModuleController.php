@@ -44,12 +44,11 @@ class WebServiceModuleController extends Controller
                 }else{
 
                     $page = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption,'slug' => $module));
-                    if($page->getMenuCustom()->getId() == 1){
+                    if(!empty($page->getMenuCustom()) and $page->getMenuCustom()->getId() == 1){
                         $twigName = "index";
                     }else{
                         $twigName = "content";
                     }
-
                 }
             }
 

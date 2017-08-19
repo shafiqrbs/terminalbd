@@ -5,11 +5,6 @@
         {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
             {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header-bottom'}) %}
         {% endif %}
-        <div class="container">
-            <div class="section-header">
-                <h3>WELCOME TO {{ globalOption.name }}</h3>
-            </div>
-        </div>
     </section>
     <script>
         {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
@@ -30,35 +25,16 @@
     {{ parent() }}
 
     {% javascripts
-    '@FrontendBundle/Resources/public/template/js/sidebar.js'
-    '@FrontendBundle/Resources/public/template/js/page.js'
-    '@FrontendBundle/Resources/public/template/js/headerfooter.js'
+        '@FrontendBundle/Resources/public/template/js/common.js'
+        '@FrontendBundle/Resources/public/template/desktop/js/sidebar.js'
+        '@FrontendBundle/Resources/public/template/desktop/js/page.js'
+        '@FrontendBundle/Resources/public/template/desktop/js/headerfooter.js'
+        '@FrontendBundle/Resources/public/template/js/corporate.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 {% block documentready %}
-
     {{ parent() }}
-
-    $(".carousel").carousel({
-    interval: 10000,
-    wrap:true
-    });
-    $(".carousel").on("slid", function() {
-    var to_slide;
-    to_slide = $(".carousel-item.active").attr("data-slide-no");
-    $(".myCarousel-target.active").removeClass("active");
-    $(".carousel-indicators [data-slide-to=" + to_slide + "]").addClass("active");
-    });
-    $(".myCarousel-target").on("click", function() {
-    $(this).preventDefault();
-    $(".carousel").carousel(parseInt($(this).attr("data-slide-to")));
-    $(".myCarousel-target.active").removeClass("active");
-    $(this).addClass("active");
-    });
-
-
-
 {% endblock %}
 
