@@ -664,7 +664,83 @@
                                 </div>
                             </div>
 
-                             <div class="clearfix">&nbsp;</div>
+                            <div class="clearfix">&nbsp;</div>
+                            <!--/row-->
+                            <div class="form-actions portlet box grey">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-reorder"></i>Braedcrumb</div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        Breadcrumb{{ form_widget(form.breadcrumb) }}
+                                        {{ form_errors(form.breadcrumb) }}
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Breadcrumb Font Size</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.breadcrumbFontSize) }}
+                                            {{ form_errors(form.breadcrumbFontSize) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Breadcrumb Bg</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.breadcrumbBg) }}
+                                                {{ form_errors(form.breadcrumbBg) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Breadcrumb Active Bg</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.breadcrumbActiveBg) }}
+                                                {{ form_errors(form.breadcrumbActiveBg) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Breadcrumb Active Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.breadcrumbActiveColor) }}
+                                                {{ form_errors(form.breadcrumbActiveColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Breadcrumb Border Color</label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-magic"></i>
+                                                {{ form_widget(form.breadcrumbBorderColor) }}
+                                                {{ form_errors(form.breadcrumbBorderColor) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix">&nbsp;</div>
                             <!--/row-->
                             <div class="form-actions portlet box grey">
                                 <div class="portlet-title">

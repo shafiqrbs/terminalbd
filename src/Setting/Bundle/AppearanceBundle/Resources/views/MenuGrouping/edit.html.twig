@@ -60,7 +60,7 @@
 
                                                     {% for entity in entities %}
                                                         <li class="dd-item dd3-item">
-                                                            <div style="padding-left: 10px" class="dd3-content"><input type="checkbox" name="menuid[]"  {% if( entity.id in groupings ) %} checked="checked" {% endif %} value="{{ entity.id }}">{{ entity.menu }}
+                                                            <div style="padding-left: 10px" class="dd3-content"><input class="tooltip" title="Add menu list" type="checkbox" name="menuid[]"  {% if( entity.id in groupings ) %} checked="checked" {% endif %} value="{{ entity.id }}">{{ entity.menu }}
                                                                 {% if( entity.id in groupings ) %}
                                                                     <div style="float: right; margin-top: -3px"><span class="btn mini red-stripe btn-action"><input type="checkbox" name="delete[]" value="{{ entity.id }}"> Remove</span></div>
                                                                 {% endif %}

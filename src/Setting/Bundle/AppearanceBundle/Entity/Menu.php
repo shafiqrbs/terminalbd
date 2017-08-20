@@ -362,7 +362,7 @@ class Menu
     }
 
     /**
-     * @return mixed
+     * @return MenuCustom
      */
     public function getMenuCustom()
     {
@@ -370,7 +370,7 @@ class Menu
     }
 
     /**
-     * @param mixed $menuCustom
+     * @param MenuCustom $menuCustom
      */
     public function setMenuCustom($menuCustom)
     {

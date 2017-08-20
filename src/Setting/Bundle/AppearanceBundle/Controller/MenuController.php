@@ -158,6 +158,33 @@ class MenuController extends Controller
         return $this->redirect($this->generateUrl('menu_manage'));
     }
 
+    public function resetMenuAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
+        $entities = $em->getRepository('SettingAppearanceBundle:MenuCustom')->findAll();
+        foreach( $entities as $custom){
+
+            $exist = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('menuCustom' => $custom));
+            if(empty($exist)){
+
+                $menu = new Menu();
+                $menu->setGlobalOption($globalOption);
+                $menu->setMenuCustom($custom);
+                $menu->setMenu($custom->getMenu());
+                $menu->setMenuSlug($globalOption->getSlug().'-'.$custom->getSlug());
+                $menu->setSlug($custom->getSlug());
+                $menu->setStatus(0);
+                $em->persist($menu);
+                $em->flush($menu);
+            }
+        }
+        $this->get('session')->getFlashBag()->add(
+            'success',"Reset menu has been updated successfully"
+        );
+        return $this->redirect($this->generateUrl('menu_manage'));
+    }
+
 
 
 

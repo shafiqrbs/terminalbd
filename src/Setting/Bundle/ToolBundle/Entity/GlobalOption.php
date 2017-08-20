@@ -22,6 +22,7 @@ use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureBrand;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureCategory;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
+use Setting\Bundle\AppearanceBundle\Entity\Menu;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidget;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel;
 use Setting\Bundle\ContentBundle\Entity\Admission;
@@ -1558,6 +1559,14 @@ class GlobalOption
     public function getHospitalConfig()
     {
         return $this->hospitalConfig;
+    }
+
+    /**
+     * @return Menu
+     */
+    public function getMenus()
+    {
+        return $this->menus;
     }
 
 

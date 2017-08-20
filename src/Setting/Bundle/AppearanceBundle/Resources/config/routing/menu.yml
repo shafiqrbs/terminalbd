@@ -2,32 +2,10 @@ menu:
     path:     /
     defaults: { _controller: "SettingAppearanceBundle:Menu:index" }
 
-menu_show:
-    path:     /{id}/show
-    defaults: { _controller: "SettingAppearanceBundle:Menu:show" }
-
-menu_new:
-    path:     /new
-    defaults: { _controller: "SettingAppearanceBundle:Menu:new" }
-
-menu_create:
-    path:     /create
-    defaults: { _controller: "SettingAppearanceBundle:Menu:create" }
-    requirements: { _method: post }
-
-menu_edit:
-    path:     /{user}/edit
-    defaults: { _controller: "SettingAppearanceBundle:Menu:edit" }
-
 menu_update:
     path:     /{id}/update
     defaults: { _controller: "SettingAppearanceBundle:Menu:update" }
     requirements: { _method: post|put }
-
-menu_delete:
-    path:     /{id}/delete
-    defaults: { _controller: "SettingAppearanceBundle:Menu:delete" }
-    requirements: { _method: post|delete }
 
 menu_manage:
     path:     /manage
@@ -44,5 +22,10 @@ menu_stopMenu:
 menu_status:
     path:     /{globalOption}/{id}/status
     defaults: { _controller: "SettingAppearanceBundle:Menu:status" }
+
+
+menu_reset:
+    path:     /reset-default-menu
+    defaults: { _controller: "SettingAppearanceBundle:Menu:resetMenu" }
 
 

@@ -85,6 +85,7 @@ class MenuTreeManager
         foreach ($arr as $val) {
 
             $menu = $val->getMenu()->getMenu();
+            
             if (!empty($menu)) {
                 $subIcon = (count($val->getChildren()) > 0 ) ? 1 : 2 ;
                 if($subIcon == 1){
