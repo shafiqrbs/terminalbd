@@ -98,7 +98,7 @@
                                         <strong><i class="fa fa-power-off"></i></strong>&nbsp;{% for day in page.weeklyOffDay %}{{ day }}{{ loop.last ? '' : ', ' }}{% endfor %}<br>
                                     {% endif %}
                                     <strong><i class="fa fa-mobile"></i></strong>&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">+ 088 {{ globalOption.mobile }}</a></br>
-                                    <strong><i class="fa fa-envelope"></i></strong>&nbsp;<a href="mailto:{{ page.email }}" class="contact-email">{{ page.email }}</a></br>
+                                    <strong><i class="fa fa-envelope"></i></strong>&nbsp;<a href="mailto:{{ globalOption.email }}" class="contact-email">{{ globalOption.email }}</a></br>
                                     <strong><i class="fa fa-fax"></i></strong>&nbsp;{% if(page.fax) %}<a href="javascript:">Fax: + 02{{ page.fax|raw }}</a>{% endif %}
 
                             </div>
