@@ -162,12 +162,13 @@ class MenuController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
+        $globalOption->getId();
         $entities = $em->getRepository('SettingAppearanceBundle:MenuCustom')->findAll();
         foreach( $entities as $custom){
 
-            $exist = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('menuCustom' => $custom));
-            if(empty($exist)){
+            $exist = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=>$globalOption,'menuCustom' => $custom->getId()));
 
+            if(empty($exist)){
                 $menu = new Menu();
                 $menu->setGlobalOption($globalOption);
                 $menu->setMenuCustom($custom);

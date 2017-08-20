@@ -140,13 +140,6 @@
         </div>
     </section>
     <div class="clearfix"></div>
-<script>
-    {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
-    var columnItem = 3;
-    {% else %}
-    var columnItem = 4;
-    {% endif %}
-</script>
  {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -169,25 +162,6 @@
     {% endjavascripts %}
 {% endblock %}
 {% block documentready %}
-
     {{ parent() }}
-
-    $(".carousel").carousel({
-        interval: 10000,
-        wrap:true
-    });
-    $(".carousel").on("slid", function() {
-        var to_slide;
-        to_slide = $(".carousel-item.active").attr("data-slide-no");
-        $(".myCarousel-target.active").removeClass("active");
-        $(".carousel-indicators [data-slide-to=" + to_slide + "]").addClass("active");
-        });
-        $(".myCarousel-target").on("click", function() {
-        $(this).preventDefault();
-        $(".carousel").carousel(parseInt($(this).attr("data-slide-to")));
-        $(".myCarousel-target.active").removeClass("active");
-        $(this).addClass("active");
-    });
-
-{% endblock %}
+% endblock %}
 
