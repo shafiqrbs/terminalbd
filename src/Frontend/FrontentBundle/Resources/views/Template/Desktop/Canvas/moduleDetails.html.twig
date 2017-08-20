@@ -3,11 +3,11 @@
     <div class="clearfix"></div>
     <section id="breadcrumb">
         <div class="container">
-            <ol class="breadcrumb">
-                <li><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
+            <ul class="breadcrumb">
+                <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
                 <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain':globalOption.subDomain,'module': menu.module.slug }) }}"> {{ menu.module.name }}</a></li>
-                <li class="active"><span>{{ page.name }}</span></li>
-            </ol>
+                <li class="active"><a href="javascript:void(0);">{{ page.name }}</a></li>
+            </ul>
         </div>
     </section>
     <div class="clearfix"></div>
