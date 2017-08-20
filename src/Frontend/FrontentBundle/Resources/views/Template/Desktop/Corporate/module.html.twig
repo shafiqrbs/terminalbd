@@ -3,10 +3,10 @@
     <div class="clearfix"></div>
     <section id="breadcrumb">
         <div class="container">
-            <ol class="breadcrumb">
-                <li><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
-                <li class="active"><span>{{ menu.menu }}</span></li>
-            </ol>
+            <ul class="breadcrumb">
+                <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class="active"><a href="javascript:void(0);">{{ menu.menu }}</a></li>
+            </ul>
         </div>
     </section>
     <div class="clearfix"></div>

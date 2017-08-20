@@ -4,9 +4,8 @@
     <section id="breadcrumb">
         <div class="container">
             <ul class="breadcrumb">
-                <li class="home"><a href="{{ path('ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
                 <li class="active"><a href="javascript:void(0);">{{ page.name }}</a></li>
-                <li><a href="javascript:void(0);">{{ page.name }}</a></li>
             </ul>
 
         </div>
