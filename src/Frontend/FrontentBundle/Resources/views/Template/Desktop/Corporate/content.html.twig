@@ -150,7 +150,6 @@
 {% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
-
     {% javascripts
     '@FrontendBundle/Resources/public/template/js/common.js'
     '@FrontendBundle/Resources/public/template/desktop/js/sidebar.js'
@@ -161,7 +160,5 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
-{% block documentready %}
-    {{ parent() }}
-% endblock %}
+
 
