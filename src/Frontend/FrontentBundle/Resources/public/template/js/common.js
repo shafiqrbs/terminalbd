@@ -279,6 +279,40 @@ $('#topTabCarousel').on('click', '.nav a', function() {
         }
     });
 
+    $("#contactUs").validate({
+
+        rules: {
+            "name": {required: true},
+            "mobile": {required: true}
+        },
+        messages: {
+            "name": "Enter your mobile no",
+            "mobile": "Enter valid mobile no"
+        },
+        tooltip_options: {
+            "name": {placement:'top',html:true},
+            "mobile": {placement:'top',html:true}
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+
+                url         : $(form).attr( 'action' ),
+                type        : $(form).attr( 'method' ),
+                data        : new FormData(form),
+                processData : false,
+                contentType : false,
+                success: function(response) {
+                    console.log('Ok');
+                },
+                complete: function(){
+
+                }
+            });
+        }
+
+    });
+
     $("div.list-group > a").click(function(e) {
         e.preventDefault();
         $(this).siblings('a.active').removeClass("active");

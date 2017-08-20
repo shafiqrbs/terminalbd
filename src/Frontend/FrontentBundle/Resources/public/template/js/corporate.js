@@ -1,9 +1,4 @@
 var navbar = $('.navbar-header').outerHeight(true);
-var mins = 22;
-$('.bs-example-form').css({
-    'margin-top':(navbar/2 - mins)
-});
-
 $('.header-inner-menu').css({
     'margin-top':(navbar - 54)
 });
