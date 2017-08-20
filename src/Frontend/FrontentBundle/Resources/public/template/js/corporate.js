@@ -1,3 +1,17 @@
+var navbar = $('.navbar-header').outerHeight(true);
+var mins = 22;
+$('.bs-example-form').css({
+    'margin-top':(navbar/2 - mins)
+});
+
+$('.header-inner-menu').css({
+    'margin-top':(navbar - 54)
+});
+$('#breadcrumb').css({
+    'margin-top':(navbar+20)
+});
+
+
 var stickyOffset = $('.sticky').offset().top;
 $(window).scroll(function(){
     var sticky = $('.sticky'),
@@ -6,13 +20,6 @@ $(window).scroll(function(){
     else sticky.removeClass('fixed');
 });
 
-
-$('.header-inner-menu').css({
-    'margin-top':(navbar - 54)
-});
-$('#breadcrumb').css({
-    'margin-top':(navbar+20)
-});
 
 
 $(".carousel").carousel({

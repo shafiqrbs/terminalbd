@@ -102,8 +102,6 @@ class TemplateCustomize
     private $showEmail = true;
 
 
-
-
     /**
      * @var boolean
      *
@@ -119,6 +117,49 @@ class TemplateCustomize
     private $siteTitle;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="breadcrumb", type="boolean")
+     */
+    private $breadcrumb = true;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="breadcrumbBg", type="string", length=20, nullable=true)
+     */
+    private $breadcrumbBg;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="breadcrumbActiveBg", type="string", length=20, nullable=true)
+     */
+     private $breadcrumbActiveBg;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="breadcrumbActiveColor", type="string", length=20, nullable=true)
+     */
+     private $breadcrumbActiveColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="breadcrumbFontSize", type="string", length=10, nullable=true)
+     */
+     private $breadcrumbFontSize;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="breadcrumbBorderColor",type="string", length=20, nullable=true)
+     */
+     private $breadcrumbBorderColor;
+
+
+      /**
      * @var string
      *
      * @ORM\Column(name="siteTitleSize", type="string", length=20, nullable=true)
@@ -1701,6 +1742,103 @@ class TemplateCustomize
     {
         $this->menuBgColorHover = $menuBgColorHover;
     }
+
+    /**
+     * @return boolean
+     */
+    public function getBreadcrumb()
+    {
+        return $this->breadcrumb;
+    }
+
+    /**
+     * @param boolean $breadcrumb
+     */
+    public function setBreadcrumb($breadcrumb)
+    {
+        $this->breadcrumb = $breadcrumb;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBreadcrumbBg()
+    {
+        return $this->breadcrumbBg;
+    }
+
+    /**
+     * @param string $breadcrumbBg
+     */
+    public function setBreadcrumbBg($breadcrumbBg)
+    {
+        $this->breadcrumbBg = $breadcrumbBg;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBreadcrumbActiveBg()
+    {
+        return $this->breadcrumbActiveBg;
+    }
+
+    /**
+     * @param string $breadcrumbActiveBg
+     */
+    public function setBreadcrumbActiveBg($breadcrumbActiveBg)
+    {
+        $this->breadcrumbActiveBg = $breadcrumbActiveBg;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBreadcrumbActiveColor()
+    {
+        return $this->breadcrumbActiveColor;
+    }
+
+    /**
+     * @param string $breadcrumbActiveColor
+     */
+    public function setBreadcrumbActiveColor($breadcrumbActiveColor)
+    {
+        $this->breadcrumbActiveColor = $breadcrumbActiveColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBreadcrumbFontSize()
+    {
+        return $this->breadcrumbFontSize;
+    }
+
+    /**
+     * @param string $breadcrumbFontSize
+     */
+    public function setBreadcrumbFontSize($breadcrumbFontSize)
+    {
+        $this->breadcrumbFontSize = $breadcrumbFontSize;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBreadcrumbBorderColor()
+    {
+        return $this->breadcrumbBorderColor;
+    }
+
+    /**
+     * @param string $breadcrumbBorderColor
+     */
+    public function setBreadcrumbBorderColor($breadcrumbBorderColor)
+    {
+        $this->breadcrumbBorderColor = $breadcrumbBorderColor;
+    }
+
 
 }
 

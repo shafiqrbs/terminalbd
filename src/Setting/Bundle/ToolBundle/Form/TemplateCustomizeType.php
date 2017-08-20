@@ -24,13 +24,35 @@ class TemplateCustomizeType extends AbstractType
             ->add('showSearch')
             ->add('showSidebar')
             ->add('sidebarTooltip')
+
             ->add('sidebarTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sidebar title')))
             ->add('sidebarPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array('' => '---Select One---','left' => 'left',  'right' => 'right'),
             ))
 
-
+            ->add('breadcrumb')
+            ->add('breadcrumbFontSize', 'choice', array(
+                'attr'=>array('class'=>' span12'),
+                'choices' => array('' => 'Font Size', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px','22px' => '22px', '24px' => '24px', '26px' => '26px','28px' => '28px', '30px' => '30px','32px' => '32px',  '34px' => '34px','36px' => '36px'),
+            ))
+            ->add('breadcrumbBg','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            ->add('breadcrumbActiveBg','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            ->add('breadcrumbActiveColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            ->add('breadcrumbBorderColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            
             ->add('siteBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
