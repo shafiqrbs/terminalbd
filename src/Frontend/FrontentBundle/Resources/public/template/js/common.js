@@ -283,17 +283,17 @@ $('#topTabCarousel').on('click', '.nav a', function() {
 
         rules: {
             "name": {required: true},
-            "mobile": {required: true}
+            "mobile": {required: true},
             "message": {required: true}
         },
         messages: {
             "name": "Enter your name",
-            "mobile": "Enter valid mobile no"
+            "mobile": "Enter valid mobile no",
             "message": "Enter text message"
         },
         tooltip_options: {
             "name": {placement:'top',html:true},
-            "mobile": {placement:'top',html:true}
+            "mobile": {placement:'top',html:true},
             "message": {placement:'top',html:true}
         },
         submitHandler: function(form) {
