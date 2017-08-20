@@ -38,147 +38,149 @@
                     </div>
                 {% endif %}
                 <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true'  %} col-md-9 {% else %} col-md-12 {% endif %}"  >
-                    <div class="page-title-bar">
+                    <div class="page-title-bar row">
                         <div class="col-md-12">
-                            <div class="btn-group pull-left">
-                                <div class="page-title"><span class="glyphicon glyphicon-home"></span>&nbsp;Contact Us</div>
+                            <div class="page-title"><span class="glyphicon glyphicon-home"></span>&nbsp;Contact Us
+                                <div class="pull-right">
+                                    <ul class="mbm_social">
+                                        <li><a class="social-facebook" target="_blank" href="https://www.facebook.com/share.php?u={{ app.request.getSchemeAndHttpHost() }}/{{ menu.slug }}&title={{ page.name }}">
+                                                <i class="fa fa-facebook"></i>
+                                                <div class="tooltip"><span>facebook</span></div>
+                                            </a>
+                                        </li>
+                                        <li><a class="social-linkedin" target="_blank" href="//www.linkedin.com/shareArticle?mini=true&url={{ app.request.getSchemeAndHttpHost() }}/{{ menu.slug }}">
+                                                <i class="fa  fa-linkedin"></i>
+                                                <div class="tooltip"><span>LinkedIn</span></div>
+                                            </a>
+                                        </li>
+                                        <li><a class="social-google-plus" target="_blank" href="//plus.google.com/share?url={{ app.request.getSchemeAndHttpHost() }}/{{menu.slug }}">
+                                                <i class="fa fa-google-plus"></i>
+                                                <div class="tooltip"><span>Google</span></div>
+                                            </a>
+                                        </li>
+                                        <li><a class="social-twitter" target="_blank" href="//twitter.com/share?url={{ app.request.getSchemeAndHttpHost() }}/{{ menu.slug }}">
+                                                <i class="fa fa-twitter"></i>
+                                                <div class="tooltip"><span>Twitter</span></div>
+                                            </a>
+                                        </li>
+                                        <li><a class="social-instagram" target="_blank" href="//instagram.com/share?url={{ app.request.getSchemeAndHttpHost() }}/{{ menu.slug }}">
+                                                <i class="fa  fa-instagram"></i>
+                                                <div class="tooltip"><span>Instagram</span></div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="clearfix"></div>
-                    <div>
-                        {% if page.latitude is not empty and page.longitude is not empty %}
-                            <div id="gmap_canvas" class="gmap">
-                                <div class="Lat">{{ page.latitude }}</div>
-                                <div class="Lng">{{ page.longitude }}</div>
-                                <div class="imgMap">{{ asset('assets/img/placeholder.png') }}</div>
-                                <address>Address Here</address>
-                                <div class="infoWindow">
-                            <span>{% if page.address1 is not empty %}
-                                    <i class="fa fa-home"></i>&nbsp;{{ page.address1 }}<br>
-                                    {% if page.thana is defined and page.thana %}
-                                        {{ page.thana.name }},
-                                    {% endif %}
-                                    {% if page.district is defined and page.district %}
-                                        {{ page.district.name }} {% endif %}-{{ page.postalCode }}
-                                {% endif %}
-                                {% if page.startHour %}
-                                    <br><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ page.startHour }} To {{ page.endHour }}</strong>
-                                {% endif %}
-                                <br>
-                                <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
-                                <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=23.801422,90.352599">Direction</a>
-
-                            </span>
-                                </div>
-                            </div>
-                        {% elseif page.googleMap is not empty %}
-                            {{ page.googleMap|raw }}
-                        {% endif %}
-                        <hr>
+                    <div class="col-md-4">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-12">
                                 <strong><i class="fa fa-home"></i>&nbsp;Office</strong><br>
                                 {{ page.address1 }}
                                 {% if page.location is defined and page.location %}
-                                    ,{{ page.location.name }}<br>
+                                    ,{{ page.location.name }}
                                 {% endif %}
                                 {% if page.location is defined and page.location %}
-                                    {{ page.location.parent.name }} {% endif %}-{{ page.postalCode }}<br>
+                                   ,{{ page.location.parent.name }} {% endif %}-{{ page.postalCode }}<br>
                             </div>
-                            <div class="col-md-4">
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-12">
                                 <strong><i class="fa fa-hand-o-right"></i>&nbsp;Communication</strong><br>
-                                {% if page.startHour %}
-                                    <strong><i class="fa fa-clock-o"></i></strong>&nbsp;{{ page.startHour }} To {{ page.endHour }}
-                                {% endif %}
-                                {% if page.weeklyOffDay %}
-                                    <br/>
-                                    <strong><i class="fa fa-power-off"></i></strong>&nbsp;{% for day in page.weeklyOffDay %}{{ day }}{{ loop.last ? '' : ', ' }}{% endfor %}<br>
-                                {% endif %}
-                                {% if(page.displayPhone == 1) %}
+                                    {% if page.startHour %}
+                                        <strong><i class="fa fa-clock-o"></i></strong>&nbsp;{{ page.startHour }} To {{ page.endHour }}
+                                    {% endif %}
+                                    {% if page.weeklyOffDay %}
+                                        <br/>
+                                        <strong><i class="fa fa-power-off"></i></strong>&nbsp;{% for day in page.weeklyOffDay %}{{ day }}{{ loop.last ? '' : ', ' }}{% endfor %}<br>
+                                    {% endif %}
                                     <strong><i class="fa fa-mobile"></i></strong>&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">+ 088 {{ globalOption.mobile }}</a></br>
-                                {% endif %}
-                                {% if(page.displayEmail == 1) %}
                                     <strong><i class="fa fa-envelope"></i></strong>&nbsp;<a href="mailto:{{ page.email }}" class="contact-email">{{ page.email }}</a></br>
-                                {% endif %}
-                                {% if page.fax %}
                                     <strong><i class="fa fa-fax"></i></strong>&nbsp;{% if(page.fax) %}<a href="javascript:">Fax: + 02{{ page.fax|raw }}</a>{% endif %}
-                                {% endif %}
+
                             </div>
-                            <div class="col-md-4">
+                         </div>
+                        <hr>
+                        {% if(page.isContactForm == false) %}
+                            <div class="row">
+                            <div class="col-md-12">
                                 <strong><i class="fa fa-user"></i>&nbsp;Contact Information</strong><br>
                                 <em>{{ page.contactPerson|raw }}</em><br/>
                                 {% if page.designation %}{{ page.designation }}{% endif %}</br>
                                 {% if(page.additionalPhone) %}<a href="javascript:" ><strong><i class="fa fa-phone"></i></strong>&nbsp;{{ page.additionalPhone|raw }}</a></br>{% endif %}
                                 {% if(page.additionalEmail) %}<a href="javascript:" ><strong><i class="fa fa-envelope"></i></strong>&nbsp;{{ page.additionalEmail|raw }}</a></br>{% endif %}
-
                             </div>
                         </div>
-                        <div class="row">
+                        {% else %}
+                            <div class="row">
                             <div class="col-md-12">
-                                {% if(page.isContactForm == true) %}
-                                    <h3>Contact <strong>Form</strong></h3>
-                                    <form action="" method="post">
-
-                                        <fieldset>
-
-                                            <label for="name" class="blocklabel">Your Name*</label>
-                                            <p class="" ><input name="yourname" class="input_bg" type="text" id="name" value=''/></p>
-                                            <label for="mobile" class="blocklabel">Mobile</label>
-                                            <p><input name="mobile" class="input_bg" type="text" id="mobile" value=""/></p>
-                                            {% if(page.askForEmail == 1) %}
-                                                <label for="email" class="blocklabel">E-Mail</label>
-                                                <p class="" ><input name="email" class="input_bg" type="text" id="email" value='' /></p>
-                                            {% endif %}
-                                            <label for="message" class="blocklabel">Your Message*</label>
-                                            <p class=""><textarea name="message" class="textarea_bg" id="message" cols="20" rows="" ></textarea></p>
-                                            <p>
-                                                <input type="hidden" id="myemail" name="myemail" value="" />
-                                                <input type="hidden" id="myblogname" name="myblogname" value="" />
-                                            <div class="clearfix"></div>
-                                            <input name="Send" type="submit" value="SUBMIT" class="comment_submit" id="send"/></p>
-
-                                            {#           <div class="success">
-                                                           <div class="message-box-wrap">
-                                                               Your message has been <strong>Received Successfully!</strong> Thank you!</div>
-                                                       </div>
-                               #}
-
-                                        </fieldset>
-
+                                <div class="well well-sm">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="name">Name</label>
+                                                    <input type="text" class="form-control" id="name" placeholder="Enter name" required="required" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="email">Mobile no</label>
+                                                    <input type="number" class="form-control" id="mobile" placeholder="Enter mobile no" required="required" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="name">Message</label>
+                                                    <textarea name="message" id="message" class="form-control" rows="3" cols="25" required="required" placeholder="Message"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <button type="submit" class="btn btn-primary pull-right" id="btnContactUs">Send Message</button>
+                                            </div>
+                                        </div>
                                     </form>
-                                {% endif %}
+                                </div>
                             </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            {% if page.latitude is not empty and page.longitude is not empty %}
+                                <div id="gmap_canvas" class="gmap">
+                                    <div class="Lat">{{ page.latitude }}</div>
+                                    <div class="Lng">{{ page.longitude }}</div>
+                                    <div class="imgMap">{{ asset('assets/img/placeholder.png') }}</div>
+                                    <address>Address Here</address>
+                                    <div class="infoWindow">
+                                    <span>{% if page.address1 is not empty %}
+                                        <i class="fa fa-home"></i>&nbsp;{{ page.address1 }}<br>
+                                            {% if page.thana is defined and page.thana %}
+                                                {{ page.thana.name }},
+                                            {% endif %}
+                                            {% if page.district is defined and page.district %}
+                                                {{ page.district.name }} {% endif %}-{{ page.postalCode }}
+                                        {% endif %}
+                                        {% if page.startHour %}
+                                            <br><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ page.startHour }} To {{ page.endHour }}</strong>
+                                        {% endif %}
+                                        <br>
+                                        <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
+                                        <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=23.801422,90.352599">Direction</a>
+                                    </span>
+                                    </div>
+                                </div>
+                            {% elseif page.googleMap is not empty %}
+                                {{ page.googleMap|raw }}
+                            {% endif %}
                         </div>
                     </div>
-                    <div class="clearfix"><br/></div>
-                    <ul class="mbm_social">
-                        <li><a class="social-facebook" target="_blank" href="https://www.facebook.com/share.php?u={{ app.request.getSchemeAndHttpHost() }}/{{ menu.slug }}&title={{ page.name }}">
-                                <i class="fa fa-facebook"></i>
-                                <div class="tooltip"><span>facebook</span></div>
-                            </a>
-                        </li>
-                        <li><a class="social-linkedin" target="_blank" href="//www.linkedin.com/shareArticle?mini=true&url={{ app.request.getSchemeAndHttpHost() }}/{{ menu.slug }}">
-                                <i class="fa  fa-linkedin"></i>
-                                <div class="tooltip"><span>LinkedIn</span></div>
-                            </a>
-                        </li>
-                        <li><a class="social-google-plus" target="_blank" href="//plus.google.com/share?url={{ app.request.getSchemeAndHttpHost() }}/{{menu.slug }}">
-                                <i class="fa fa-google-plus"></i>
-                                <div class="tooltip"><span>Google</span></div>
-                            </a>
-                        </li>
-                        <li><a class="social-twitter" target="_blank" href="//twitter.com/share?url={{ app.request.getSchemeAndHttpHost() }}/{{ menu.slug }}">
-                                <i class="fa fa-twitter"></i>
-                                <div class="tooltip"><span>Twitter</span></div>
-                            </a>
-                        </li>
-                        <li><a class="social-instagram" target="_blank" href="//instagram.com/share?url={{ app.request.getSchemeAndHttpHost() }}/{{ menu.slug }}">
-                                <i class="fa  fa-instagram"></i>
-                                <div class="tooltip"><span>Instagram</span></div>
-                            </a>
-                        </li>
-                    </ul>
                     <div class="clearfix"><br/></div>
                 </div>
                 {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' and menu.featureWidgetExist == 'true'  %}

@@ -1,7 +1,5 @@
 function sliderPageOwl(columnItem) {
 
-    alert(columnItem);
-
     var owlFeaturePageSlider = $("#feature-page-slider");
     owlFeaturePageSlider.owlCarousel({
         items:columnItem,
