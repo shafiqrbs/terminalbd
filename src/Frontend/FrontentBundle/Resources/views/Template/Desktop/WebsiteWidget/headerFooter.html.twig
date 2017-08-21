@@ -568,7 +568,7 @@
             {% else %}
                 <div class="row">
                     {% for key,portfolio in entities  %}
-                        <div class="col-md-3">
+                        <div class="col-md-3 grid">
                             <div class="our-portfolio">
                                 <img src="{{ image(portfolio.webPath).scaleResize(380,266) }}" alt="">
                                 <div class="team-content">
@@ -626,7 +626,7 @@
             {% else %}
                 <div class="row">
                     {% for key,entity in entities  %}
-                        <div class="col-md-4">
+                        <div class="col-md-3 grid">
                             <div class="sidebar-serviceBox">
                                 <div class="service-icon">
                                     <i class="fa {% if entity.icon is defined and entity.icon is not empty  %}{{ entity.icon.className }} {% endif %}"></i>
@@ -724,7 +724,7 @@
                 </div>
             {% else %}
                 {% for key,team in entities  %}
-                    <div class="col-md-3">
+                    <div class="col-md-3 grid">
                         <div class="our-team">
                         <div class="pic">
                             <img src="{{ image(team.webPath).scaleResize(263,200) }}">

@@ -58,10 +58,10 @@
                         <div class="row" id="menu-bar">
                             <nav id="header-menu">{{ menuTree|raw }}</nav>
                             {% if globalOption.templateCustomize.showSearch == 1 %}
-                            <form action="" class="search-form pull-right">
+                            <form action="{{ path(globalOption.subDomain ~ '_webservice_search') }}" class="search-form pull-right" method="get">
                                 <div class="form-group has-feedback">
                                     <label for="search" class="sr-only">Search</label>
-                                    <input type="text" class="form-control" name="search" id="search" placeholder="search" autocomplete="off">
+                                    <input type="text" class="form-control" name="keyword" id="keyword" value="" placeholder="search" autocomplete="off">
                                     <span class="glyphicon glyphicon-search form-control-feedback"></span>
                                 </div>
                             </form>

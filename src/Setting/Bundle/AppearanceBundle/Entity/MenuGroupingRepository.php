@@ -18,12 +18,11 @@ class MenuGroupingRepository extends EntityRepository
 
         $i = 1;
         $em = $this->_em;
+        $menuGroup = $em->getRepository('SettingAppearanceBundle:MenuGroup')->find($menuGroup);
         if(!empty($posts['menuid'])){
             foreach ($posts['menuid'] as $post ){
 
                 $menu = $em->getRepository('SettingAppearanceBundle:Menu')->find($post);
-                $menuGroup = $em->getRepository('SettingAppearanceBundle:MenuGroup')->find($menuGroup);
-
                 $menuGroups = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'menuGroup'=>$menuGroup,'menu'=>$post));
                 if(empty($menuGroups)){
                     $entity = new MenuGrouping();
@@ -45,29 +44,36 @@ class MenuGroupingRepository extends EntityRepository
     public function removeMenuGrouping($posts,$globalOption,$menuGroup)
     {
         $em = $this->_em;
+
         if(!empty($posts['delete'])){
             foreach ($posts['delete'] as $post ){
-
-                $menuGroups = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=>$globalOption,'menuGroup'=>$menuGroup,'menu'=>$post));
-                if(!empty($menuGroups)){
-
-                    foreach($menuGroups as $menu){
-
-                        $id = $menu->getId();
-                        $entity = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->find($id);
-                        $em->remove($entity);
+                $menu = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->findOneBy(array('globalOption' => $globalOption,'menuGroup' => $menuGroup->getId() ,'menu' => $post));
+                if(!empty($menu)) {
+                    if(!empty($menu->getChildren())){
+                        $this->childrenMenu($menu);
                     }
-
-                    $em->flush();
-
+                    $remove = $em->createQuery('DELETE SettingAppearanceBundle:MenuGrouping e WHERE e.id = '.$menu->getId() );
+                    $remove->execute();
                 }
             }
         }
-
-
     }
 
-
+    private function childrenMenu($menu)
+    {
+        $em = $this->_em;
+        foreach ($menu->getChildren() as $val) {
+            $child = $val->getChildren();
+            if(!empty($child)){
+                 $this->childrenMenu($val);
+                 $childRemove = $em->createQuery('DELETE SettingAppearanceBundle:MenuGrouping e WHERE e.id = '.$val->getId() );
+                 $childRemove->execute();
+            } else {
+               $childRemove = $em->createQuery('DELETE SettingAppearanceBundle:MenuGrouping e WHERE e.id = '.$val->getId() );
+               $childRemove->execute();
+            }
+        }
+    }
 
     public function setMenuOrdering($data)
     {
@@ -75,7 +81,6 @@ class MenuGroupingRepository extends EntityRepository
         $i = 1;
         $em = $this->_em;
         $qb = $em->createQueryBuilder();
-
         foreach ($data as $key => $value){
             $val = ($value) ? $value: 0 ;
             $q = $qb->update('SettingAppearanceBundle:MenuGrouping', 'mg')
@@ -88,14 +93,10 @@ class MenuGroupingRepository extends EntityRepository
             $i++;
 
         }
-
-
     }
-
 
     public function getMenuTree($arr)
     {
-
         $value ='';
         $value .='<ol class="dd-list sortable">';
         foreach ($arr as $val) {

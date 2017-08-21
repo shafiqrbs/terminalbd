@@ -148,5 +148,17 @@ class PageRepository extends EntityRepository
             return $query;
     }
 
+    public function searchResult($globalOption,$keyword)
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.globalOption = :option')
+            ->setParameter('option', $globalOption->getId())
+            ->andWhere('p.name LIKE :searchTerm OR p.content LIKE :searchTerm')
+            ->setParameter('searchTerm', '%'.$keyword.'%')
+            ->orderBy('p.updated','DESC')
+            ->getQuery();
+        return $qb;
+    }
+
 
 }

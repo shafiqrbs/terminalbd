@@ -24,7 +24,7 @@ class MenuGrouping
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="MenuGrouping", inversedBy="children", cascade={"detach","merge"})
+     * @ORM\ManyToOne(targetEntity="MenuGrouping", inversedBy="children",  cascade={"remove"})
      * @ORM\JoinColumn(name="parent", referencedColumnName="id", onDelete="SET NULL" , nullable = true)
      */
     protected $parent;

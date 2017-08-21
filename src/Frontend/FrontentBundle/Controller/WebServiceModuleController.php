@@ -282,6 +282,52 @@ class WebServiceModuleController extends Controller
 
     }
 
+    public function searchAction($subdomain)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $page ='';
+        $pagination ='';
+
+        $keywrod = $_REQUEST['keyword'];
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $siteEntity = $globalOption->getSiteSetting();
+        if(!empty($siteEntity)){
+            $themeName = $siteEntity->getTheme()->getFolderName();
+        }else{
+            $themeName ='Default';
+        }
+
+        if(!empty($globalOption)){
+            $pagination = $em->getRepository('SettingContentBundle:Page')->searchResult($globalOption,$keywrod);
+            $pagination = $this->paginate( $pagination,$limit= 10 );
+            foreach ($pagination as $pagination){
+                echo $pagination->getId();
+            }
+
+            $twigName = "search";
+        }
+
+        exit;
+
+        /* Device Detection code desktop or mobile */
+
+        $detect = new MobileDetect();
+        if( $detect->isMobile() ||  $detect->isTablet() ) {
+            $theme = 'Template/Mobile/'.$themeName;
+        }else{
+            $theme = 'Template/Desktop/'.$themeName;
+        }
+        return $this->render('FrontendBundle:'.$theme.':content.html.twig',
+            array(
+
+                'globalOption'  => $globalOption,
+                'pagination'    => $pagination,
+            )
+        );
+
+    }
+
     public function paginate($entities,$limit = 10)
     {
 

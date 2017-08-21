@@ -132,6 +132,10 @@ webservice_login:
     path:     /customer-login
     defaults: { _controller: FrontendBundle:WebServiceCustomer:confirm }
 
+webservice_search:
+    path:     /content-search
+    defaults: { _controller: FrontendBundle:WebServiceModule:search }
+
 webservice_module:
     path:     /{module}
     defaults: { _controller: FrontendBundle:WebServiceModule:module }

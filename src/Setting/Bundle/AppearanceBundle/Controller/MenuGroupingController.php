@@ -50,7 +50,6 @@ class MenuGroupingController extends Controller
         if ($form->isValid()) {
 
             $menuGroup = $request->request->get('menuGroup');
-
             $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->insertMenuGrouping($posts,$globalOption,$menuGroup);
             return $this->redirect($this->generateUrl('menugrouping_sorting', array('menuGroup' => $menuGroup )));
         }
@@ -192,6 +191,7 @@ class MenuGroupingController extends Controller
     public function sortedAction(Request $request)
     {
         $data = $request ->request->get('menuItem');
+        var_dump($data);
         $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->setMenuOrdering($data);
         exit;
 
