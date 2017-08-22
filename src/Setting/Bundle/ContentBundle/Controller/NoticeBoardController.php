@@ -199,21 +199,20 @@ class NoticeBoardController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+    
     /**
      * Deletes a Page entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Page $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find NoticeBoard entity.');
+        if(!empty($entity->getFile())){
+            $entity->removeUpload();
         }
-        $entity->removeUpload();
         $em->remove($entity);
         $em->flush();
+        $this->get('session')->getFlashBag()->add('success',"Data has been deleted successfully");
         return $this->redirect($this->generateUrl('noticeboard'));
     }
 

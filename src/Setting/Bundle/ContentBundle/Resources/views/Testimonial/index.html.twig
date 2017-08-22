@@ -78,7 +78,7 @@
                                             {% endif %}
                                             <a class="btn mini green-stripe btn-action" href="{{ path('testimonial_edit', { 'id': entity.id }) }}">Edit</a>
                                             <a class="btn mini blue-stripe btn-action" href="{{ path('testimonial_show', { 'id': entity.id }) }}">View</a>
-                                            <a class="btn mini red-stripe btn-action delete" href="javascript:" rel="{{ path('testimonial_delete', { 'id': entity.id }) }}" >Delete</a>
+                                            <a class="btn mini red-stripe btn-action delete" href="{{ path('testimonial_delete', { 'id': entity.id }) }}" rel="" >Delete</a>
                                         </td>
                                     </tr>
                                 {% endfor %}

@@ -195,13 +195,9 @@ class TeamController extends Controller
             if( $entity->upload()){
                 $entity->removeUpload();
             }
-
             $entity->upload();
             $em->flush();
-
-            $this->get('session')->getFlashBag()->add(
-                'success',"Data has been updated successfully"
-            );
+            $this->get('session')->getFlashBag()->add('success',"Data has been updated successfully");
             return $this->redirect($this->generateUrl('team_edit', array('id' => $id)));
         }
 
@@ -215,18 +211,15 @@ class TeamController extends Controller
      * Deletes a Page entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Page $entity)
     {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Team entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-
+        $em = $this->getDoctrine()->getManager();
+        if(!empty($entity->getFile())){
+            $entity->removeUpload();
+        }
+        $em->remove($entity);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add('success',"Data has been deleted successfully");
         return $this->redirect($this->generateUrl('team'));
     }
 

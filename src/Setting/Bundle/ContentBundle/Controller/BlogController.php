@@ -219,18 +219,15 @@ class BlogController extends Controller
      * Deletes a Page entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Page $entity)
     {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SettingContentBundle:Blog')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Blog entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-
+        $em = $this->getDoctrine()->getManager();
+        if(!empty($entity->getFile())){
+            $entity->removeUpload();
+        }
+        $em->remove($entity);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add('success',"Data has been updated successfully");
         return $this->redirect($this->generateUrl('blog'));
     }
 
@@ -247,8 +244,7 @@ class BlogController extends Controller
             ->setAction($this->generateUrl('blog_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-            ;
+            ->getForm();
     }
 
     /**

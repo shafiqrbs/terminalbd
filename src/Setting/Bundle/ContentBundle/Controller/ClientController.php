@@ -219,18 +219,15 @@ class ClientController extends Controller
      * Deletes a Team entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Page $entity)
     {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SettingContentBundle:Client')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Team entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-
+        $em = $this->getDoctrine()->getManager();
+        if(!empty($entity->getFile())){
+            $entity->removeUpload();
+        }
+        $em->remove($entity);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add('success',"Data has been updated successfully");
         return $this->redirect($this->generateUrl('client'));
     }
 

@@ -193,7 +193,7 @@ class PageController extends Controller
         $data = $request->request->all();
         if ($editForm->isValid()) {
 
-            if($entity->upload()){
+            if($entity->upload() && !empty($entity->getFile())){
                 $entity->removeUpload();
             }
             $entity->upload();
@@ -218,13 +218,17 @@ class PageController extends Controller
      * Deletes a Page entity.
      *
      */
-    public function deleteAction(Request $request, Page $entity)
+    public function deleteAction(Page $entity)
     {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($entity);
-            $em->flush();
-            return $this->redirect($this->generateUrl('page'));
-    }
+        $em = $this->getDoctrine()->getManager();
+        if(!empty($entity->getFile())){
+            $entity->removeUpload();
+        }
+        $em->remove($entity);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add('success',"Data has been updated successfully");
+        return $this->redirect($this->generateUrl('page'));
+}
 
     /**
      * Status a Page entity.

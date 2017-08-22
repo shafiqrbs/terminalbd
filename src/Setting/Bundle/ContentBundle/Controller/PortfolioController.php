@@ -191,24 +191,15 @@ class PortfolioController extends Controller
      * Deletes a Page entity.
      *
      */
-    public function deleteAction($id)
+    public function deleteAction(Page $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $this->getUser()->getGlobalOption();
-        $entity = $em->getRepository('SettingContentBundle:Page')->findOneBy(array('globalOption'=>$globalOption,'id'=>$id));
-        if (!empty($entity)) {
-
+        if(!empty($entity->getFile())){
             $entity->removeUpload();
-            $em->remove($entity);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'success',"Status has been deleted successfully"
-            );
-        }else{
-            $this->get('session')->getFlashBag()->add(
-                'error',"Sorry! Data not deleted"
-            );
         }
+        $em->remove($entity);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add('success',"Data has been deleted successfully");
         return $this->redirect($this->generateUrl('portfolio'));
     }
 

@@ -193,23 +193,15 @@ class FaqController extends Controller
      * Deletes a Page entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Page $entity)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('SettingContentBundle:Page')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Faq entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
+        if(!empty($entity->getFile())){
+            $entity->removeUpload();
         }
-
+        $em->remove($entity);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add('success',"Data has been updated successfully");
         return $this->redirect($this->generateUrl('faq'));
     }
 

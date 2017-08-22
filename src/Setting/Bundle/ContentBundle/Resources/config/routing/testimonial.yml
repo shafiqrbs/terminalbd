@@ -27,7 +27,7 @@ testimonial_update:
 testimonial_delete:
     path:     /{id}/delete
     defaults: { _controller: "SettingContentBundle:Testimonial:delete" }
-    requirements: { _method: post|delete }
+
 
 testimonial_status:
     path:     /{id}/status

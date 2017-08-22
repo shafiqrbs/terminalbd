@@ -592,7 +592,7 @@
                     <div id="service-header-footer-slider" class="owl-carousel">
                         {% for key,entity in entities  %}
                             <div class="col-md-12">
-                                <div class="sidebar-serviceBox">
+                                <div class="sidebar-serviceBox" data-match-height="service-header-footer" >
                                     <div class="service-icon">
                                         <i class="fa {% if entity.icon is defined and entity.icon is not empty  %}{{ entity.icon.className }} {% endif %}"></i>
                                     </div>
@@ -610,7 +610,7 @@
                 <div class="row grid">
                     {% for key,entity in entities  %}
                         <div class="col-md-3 grid">
-                            <div class="sidebar-serviceBox">
+                            <div class="sidebar-serviceBox" data-match-height="service-header-footer" >
                                 <div class="service-icon">
                                     <i class="fa {% if entity.icon is defined and entity.icon is not empty  %}{{ entity.icon.className }} {% endif %}"></i>
                                 </div>
