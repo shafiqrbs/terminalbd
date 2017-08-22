@@ -1058,7 +1058,18 @@
     border-radius: 0;
     height: 60px;
     overflow: hidden;
+    color: #FFFFff!important;
 }
+
+#topTabCarousel .nav-pills>li>a:hover{
+    background-color:#d2d2d2;
+    color:#222222!important;
+}
+
+#topTabCarousel .carousel-inner  , #bottomTabCarousel .carousel-inner{
+    max-height:450px;
+}
+
 
 #topTabCarousel .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{
     background-color:#ffffff;
@@ -1084,6 +1095,12 @@
     border-radius: 0;
     height: 60px;
     overflow: hidden;
+    color: #FFFFff!important;
+}
+
+#bottomTabCarousel .nav-pills>li>a:hover{
+    background-color:#d2d2d2;
+    color:#222222!important;
 }
 
 #bottomTabCarousel .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{

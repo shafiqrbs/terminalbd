@@ -2,10 +2,12 @@ var navbar = $('.navbar-header').outerHeight(true);
 $('.header-inner-menu').css({
     'margin-top':(navbar - 54)
 });
+$('#topTabCarousel').css({
+    'margin-top':(navbar-1)
+});
 $('#breadcrumb').css({
     'margin-top':(navbar+20)
 });
-
 
 var stickyOffset = $('.sticky').offset().top;
 $(window).scroll(function(){
@@ -14,8 +16,6 @@ $(window).scroll(function(){
     if (scroll >= stickyOffset) sticky.addClass('fixed');
     else sticky.removeClass('fixed');
 });
-
-
 
 $(".carousel").carousel({
     interval: 10000,
