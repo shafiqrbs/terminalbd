@@ -17,7 +17,7 @@
     {% if widget.pageShowType == 'grid' %}
        <div class="row row-flex">
             {% for key,entity in widget.page  %}
-                <div class="col-md-3 wow fadeInDown" data-wow-delay="1s" >
+                <div class="{% if widget.page|length > 3  %} col-md-3 {% else %} col-md-4 {% endif %} wow fadeInDown grid" data-wow-delay="1s" >
                     <div class="pageFeature" data-match-height="feature-header-footer" >
                         <div class="pageFeature-image" >
                             <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}">
@@ -34,7 +34,7 @@
             {% endfor %}
        </div>
     {% elseif widget.pageShowType == 'slider' %}
-        <div class="row">
+        <div class="row grid">
             <div id="feature-header-footer-slider" class="owl-carousel">
                 {% for entity in  widget.page  %}
                     <div class="col-md-12 wow fadeInDown" data-wow-delay="1s" >
@@ -116,7 +116,7 @@
                 {% endfor %}
             </div>
         {% elseif widget.moduleShowType == 'slider' %}
-            <div class="row">
+            <div class="row grid">
                 <div id="blog-header-footer-slider" class="owl-carousel">
                     {% for entity in entities  %}
                         <div class="col-md-12 wow fadeInDown" data-wow-delay="2s" >
@@ -150,7 +150,7 @@
                 </div>
             </div>
         {% else  %}
-            <div class="row">
+            <div class="row grid">
                 <div class="col-md-12">
                     <div id="catlist">
                         {% for list in entities  %}
@@ -180,7 +180,7 @@
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
         {% if widget.moduleShowType == 'slider' %}
-            <div class="row">
+            <div class="row grid">
                 <div id="branch-header-footer-slider" class="owl-carousel">
                     {% for  entity in entities %}
                         <div class="col-md-12">
@@ -201,9 +201,9 @@
                 </div>
             </div>
         {% else %}
-            <div class="row">
+            <div class="row ">
                 {% for  entity in entities %}
-                    <div class="col-md-3">
+                    <div class="col-md-3 grid">
                         <div class="sidebar-branch" data-match-height="branch-content">
                             <h5 class="text-center branch-head" ><strong>{{ entity.name }}</strong></h5>
                             <dl>
@@ -231,7 +231,7 @@
         {% if widget.moduleShowType == 'grid' %}
         <div class="row">
             {% for key,entity in entities  %}
-                <div class="col-md-2 col-sm-2 ">
+                <div class="col-md-2 col-sm-2 grid">
                     <div class="client-sidebar">
                         <a class="thumbnail"><img src="{{ image(entity.webPath).resize(150,150) }}" alt=""></a>
                         <ul class="social-links">
@@ -243,7 +243,7 @@
             {% endfor %}
         </div>
         {% else %}
-        <div class="row">
+        <div class="row grid">
             <div id="client-header-footer-slider" class="owl-carousel">
                 {% for key,entity in entities  %}
                     <div class="col-md-12 col-sm-12 ">
@@ -267,10 +267,10 @@
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
         {% if widget.moduleShowType == 'grid' %}
-        <div class="row">
+        <div class="row ">
 
             {% for entity in entities  %}
-                <div class="col-md-3">
+                <div class="col-md-3 grid">
                     <div class="event-sidebar">
                         <div class="post-img">
                             <img src="{{ image(entity.webPath).resize(320,200) }}" alt="" class="img-responsive">
@@ -292,7 +292,7 @@
 
         </div>
         {% elseif widget.moduleShowType == 'slider' %}
-        <div class="row">
+        <div class="row grid">
             <div id="event-header-footer-slider" class="owl-carousel">
                 {% for key,entity in entities  %}
                     <div class="col-md-12 col-sm-12 ">
@@ -317,7 +317,7 @@
             </div>
         </div>
         {% else %}
-            <div class="row">
+            <div class="row grid">
                 <div class="col-md-12">
                     <div id="catlist">
                         {% for entity in entities  %}
@@ -344,7 +344,7 @@
         {% if  widget.moduleFeatureName is not empty %}
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
-        <div class="row">
+        <div class="row grid">
             <div class="col-md-12" >
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                     {% for key,faq in entities  %}
@@ -376,7 +376,7 @@
         {% if widget.moduleShowType == 'grid' %}
             <div class="row">
                 {% for entity in entities  %}
-                    <div class="col-md-3 wow fadeInDown" data-wow-delay="2s" >
+                    <div class="col-md-3 wow fadeInDown grid" data-wow-delay="2s" >
                         <div class="sidebar-blog">
                             <div class="post-img">
                                 <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
@@ -412,7 +412,7 @@
                 {% endfor %}
             </div>
         {% elseif widget.moduleShowType == 'slider' %}
-            <div class="row">
+            <div class="row grid">
                 <div id="news-header-footer-slider" class="owl-carousel">
                     {% for entity in entities  %}
                         <div class="col-md-12 wow fadeInDown" data-wow-delay="2s" >
@@ -447,7 +447,7 @@
                 </div>
             </div>
         {% else  %}
-            <div class="row">
+            <div class="row grid">
                 <div class="col-md-12">
                     <div id="catlist">
                         {% for list in entities  %}
@@ -479,7 +479,7 @@
     {% if widget.moduleShowType == 'grid' %}
         <div class="row">
             {% for key,notice in entities  %}
-                <div class="col-md-3">
+                <div class="col-md-3 grid">
                     <div class="notice-slide" >
                         <div class="post-content" data-match-height="notice-content">
                             <div class="post-date">
@@ -499,7 +499,7 @@
             {% endfor %}
         </div>
     {% elseif widget.moduleShowType == 'slider' %}
-     <div class="row">
+     <div class="row grid">
         <div id="notice-header-footer-slider" class="owl-carousel">
             {% for key,notice in entities  %}
                 <div class="col-md-12">
@@ -523,7 +523,7 @@
         </div>
      </div>
     {% else %}
-        <div class="row">
+        <div class="row grid">
             <div class="col-md-12">
                 <div id="catlist" data-match-height="notice-content" >
                     {% for list in entities  %}
@@ -546,7 +546,7 @@
              {% endif %}
             <div class="clearfix"></div>
             {% if widget.moduleShowType == 'slider' %}
-                <div class="row">
+                <div class="row grid">
                 <div id="portfolio-header-footer-slider" class="owl-carousel">
                     {% for key,portfolio in entities  %}
                         <div class="col-md-12">
@@ -593,21 +593,9 @@
              {% endif %}
             <div class="clearfix"></div>
             {% if widget.moduleShowType == 'slider' %}
-                <div class="row">
+                <div class="row grid">
                     <div id="service-header-footer-slider" class="owl-carousel">
                         {% for key,entity in entities  %}
-                            <div class="col-md-12">
-                                <div class="sidebar-serviceBox">
-                                    <div class="service-icon">
-                                        <i class="fa {% if entity.icon is defined and entity.icon is not empty  %}{{ entity.icon.className }} {% endif %}"></i>
-                                    </div>
-                                    <div class="service-Content">
-                                        <h3 class="title">{{ entity.name }}</h3>
-                                        <p class="description">{{ entity.content|raw|truncate(180) }}</p>
-                                        <a  href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}" class="read-more pull-right">Read more <i class="fa fa-angle-double-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-md-12">
                                 <div class="sidebar-serviceBox">
                                     <div class="service-icon">
@@ -624,7 +612,7 @@
                     </div>
                 </div>
             {% else %}
-                <div class="row">
+                <div class="row grid">
                     {% for key,entity in entities  %}
                         <div class="col-md-3 grid">
                             <div class="sidebar-serviceBox">
@@ -651,10 +639,10 @@
             {% endif %}
             <div class="clearfix"></div>
             {% if widget.moduleShowType == 'slider' %}
-                    <div class="row">
+                    <div class="row grid">
                         <div id="sponsor-header-footer-slider" class="owl-carousel">
                             {% for entity in entities  %}
-                                <div class="col-md-12">
+                                <div class="col-md-12" >
                                     <div class="box-sidebar-portfolio">
                                         <a class="thumbnail"><img src="{{ image(entity.webPath).resize(171,180) }}" alt=""></a>
                                         <ul class="social-links">
@@ -668,7 +656,7 @@
             {% else %}
                     <div class="row">
                         {% for entity in entities  %}
-                            <div class="col-md-2 col-sm-2">
+                            <div class="col-md-2 col-sm-2 grid">
                                 <div class="box-sidebar-portfolio">
                                     <a class="thumbnail"><img src="{{ image(entity.webPath).resize(171,180) }}" alt=""></a>
                                     <ul class="social-links">
@@ -688,7 +676,7 @@
                 <div class="page-title">{{ widget.moduleFeatureName }}</div>
             {% endif %}
             <div class="clearfix"></div>
-            <div class="row">
+            <div class="row grid">
             {% if widget.moduleShowType == 'slider' %}
                 <div id="team-header-footer-slider" class="owl-carousel">
                    {% for key,team in entities  %}
@@ -765,7 +753,7 @@
                 <div class="page-title">{{ widget.moduleFeatureName }}</div>
             {% endif %}
             <div class="clearfix"></div>
-            <div class="row">
+            <div class="row grid">
                 {% if widget.moduleShowType == 'slider' %}
                     <div id="testimonial-header-footer-slider" class="owl-carousel">
                        {% for key,testimonial in entities  %}

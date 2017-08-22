@@ -18,7 +18,7 @@
     {% if widget.pageShowType == 'grid' %}
         <div class="row">
             {% for entity in widget.page %}
-                <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} wow fadeInDown grid" data-wow-delay="1s"  >
+                <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} wow fadeInDown grid" data-wow-delay="1s"  >
                     <div class="pageFeature" data-match-height="pageFeature">
                         <div class="pageFeature-image"  >
                             <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}">
@@ -87,7 +87,7 @@
         {% if widget.moduleShowType == 'grid' %}
             <div class="row">
                 {% for entity in entities  %}
-                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} grid wow fadeInDown" data-wow-delay="1s" >
+                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid wow fadeInDown" data-wow-delay="1s" >
                         <div class="sidebar-blog">
                             <div class="post-img">
                                 <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
@@ -120,7 +120,7 @@
             <div class="row">
                 <div id="blog-page-slider" class="owl-carousel">
                     {% for entity in entities  %}
-                        <div class="col-md-12 wow fadeInDown grid" data-wow-delay="1s" >
+                        <div class="col-md-12 wow fadeInDown grid grid" data-wow-delay="1s" >
                             <div class="sidebar-blog">
                                 <div class="post-img">
                                     <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
@@ -203,7 +203,7 @@
         {% else %}
             <div class="row">
             {% for  entity in entities %}
-                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
+                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
                         <div class="sidebar-branch wow fadeInDown" data-wow-delay="1s"  data-match-height="pageBranch">
                             <h5 class="text-center branch-head" ><strong>{{ entity.name }}</strong></h5>
                             <dl>
@@ -246,7 +246,7 @@
         {% else %}
         <div class="row">
             {% for key,entity in entities  %}
-                <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-3 {% else %}  col-md-2 {% endif %} grid">
+                <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %} col-md-3 {% else %}  col-md-2 {% endif %} grid">
                     <div class="client-sidebar">
                         <a class="thumbnail"><img src="{{ image(entity.webPath).resize(150,150) }}" alt=""></a>
                         <ul class="social-links">
@@ -270,7 +270,7 @@
         <div class="row">
 
             {% for entity in entities  %}
-                <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
+                <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
                     <div class="event-sidebar">
                         <div class="post-img">
                             <img src="{{ image(entity.webPath).resize(320,200) }}" alt="" class="img-responsive">
@@ -346,7 +346,7 @@
         {% if  widget.moduleFeatureName is not empty %}
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
-        <div class="row">
+        <div class="row grid">
             <div class="col-md-12" >
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                     {% for key,faq in entities  %}
@@ -379,7 +379,7 @@
         {% if widget.moduleShowType == 'grid' %}
             <div class="row">
                 {% for entity in entities  %}
-                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} grid wow fadeInDown" data-wow-delay="1s" >
+                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid wow fadeInDown" data-wow-delay="1s" >
                         <div class="sidebar-blog">
                             <div class="post-img">
                                 <img src="{{ image(entity.webPath).resize(320,200) }}" alt="">
@@ -481,7 +481,7 @@
     {% if widget.moduleShowType == 'grid' %}
         <div class="row">
             {% for key,notice in entities  %}
-                <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
+                <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
                     <div class="notice-slide" >
                         <div class="post-content" data-match-height="notice-content">
                             <div class="post-date">
@@ -504,7 +504,7 @@
         <div class="row">
             <div id="notice-page-slider" class="owl-carousel">
                 {% for key,notice in entities  %}
-                    <div class="col-md-12">
+                    <div class="col-md-12 grid">
                         <div class="notice-slide"   >
                             <div class="post-content" data-match-height="notice-content">
                                 <div class="post-date">
@@ -570,7 +570,7 @@
             {% else %}
                 <div class="row">
                     {% for key,portfolio in entities  %}
-                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
+                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
                         <div class="our-portfolio">
                             <img src="{{ image(portfolio.webPath).scaleResize(380,266) }}" alt="">
                             <div class="team-content">
@@ -615,7 +615,7 @@
             {% else %}
                 <div class="row">
                     {% for key,entity in entities  %}
-                        <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
+                        <div class="{% if globalOption.templateCustomize.showSidebar == 1  and menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
                             <div class="sidebar-serviceBox">
                                 <div class="service-icon">
                                     <i class="fa {% if entity.icon is defined and entity.icon is not empty  %}{{ entity.icon.className }} {% endif %}"></i>
@@ -642,7 +642,7 @@
                     <div class="row">
                         <div id="sponsor-page-slider" class="owl-carousel">
                             {% for entity in entities  %}
-                                <div class="col-md-12">
+                                <div class="col-md-12 grid">
                                     <div class="box-sidebar-portfolio">
                                         <a class="thumbnail"><img src="{{ image(entity.webPath).resize(171,180) }}" alt=""></a>
                                         <ul class="social-links">
@@ -656,7 +656,7 @@
             {% else %}
                     <div class="row">
                         {% for entity in entities  %}
-                            <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-3 {% else %}  col-md-2 {% endif %}">
+                            <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %} col-md-3 {% else %}  col-md-2 {% endif %} grid">
                                 <div class="box-sidebar-portfolio">
                                     <a class="thumbnail"><img src="{{ image(entity.webPath).resize(171,180) }}" alt=""></a>
                                     <ul class="social-links">
@@ -679,7 +679,7 @@
             {% if widget.moduleShowType == 'slider' %}
                 <div id="team-page-slider" class="owl-carousel">
                    {% for key,team in entities  %}
-                        <div class="col-md-12">
+                        <div class="col-md-12 grid">
                             <div class="our-team">
                                 <div class="pic">
                                     <img src="{{ image(team.webPath).scaleResize(263,200) }}">
@@ -711,7 +711,7 @@
                 </div>
             {% else %}
                 {% for key,team in entities  %}
-                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-4 {% else %}  col-md-3 {% endif %}">
+                    <div class="{% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %} col-md-4 {% else %}  col-md-3 {% endif %} grid">
                         <div class="our-team">
                         <div class="pic">
                             <img src="{{ image(team.webPath).scaleResize(263,200) }}">
@@ -750,7 +750,7 @@
         {% if  widget.moduleFeatureName is not empty %}
             <div class="page-title">{{ widget.moduleFeatureName }}</div>
         {% endif %}
-            <div class="row">
+            <div class="row grid">
             {% if widget.moduleShowType == 'slider' %}
                 <div id="testimonial-page-slider" class="owl-carousel">
                    {% for key,testimonial in entities  %}

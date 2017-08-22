@@ -34,12 +34,7 @@ class FeatureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'span12 m-wrap','placeholder'=>'Enter full name'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-
-                )
-            ))
+            ->add('name','text', array('attr'=>array('class'=>'span12 m-wrap','placeholder'=>'Enter Feature Title Information')))
             ->add('file','file', array('attr'=>array('class'=>'default')))
             ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap')))
 
@@ -148,9 +143,9 @@ class FeatureType extends AbstractType
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
+                    'Page'              => 'Page',
                     'Category'          => 'Category',
                     'Brand'             => 'Brand',
-                    'Page'              => 'Page',
                     'Promotion'         => 'Promotion',
                     'Tag'               => 'Tag',
                     'Discount'          => 'Discount'

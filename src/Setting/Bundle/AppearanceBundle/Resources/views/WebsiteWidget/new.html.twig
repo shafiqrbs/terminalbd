@@ -227,6 +227,7 @@
                                     <label class="control-label">
                                         {% if(feature.targetTo) %}{{ feature.targetTo }}{% endif %} -
                                         {% if feature.targetTo == 'Category' and feature.category is not empty %}{{ feature.category.name }}{% endif %}
+                                        {% if feature.targetTo == 'Page' and feature.menu is not empty %}{{ feature.menu.menu }}{% endif %}
                                     </label>
                                 </div>
                             </div>

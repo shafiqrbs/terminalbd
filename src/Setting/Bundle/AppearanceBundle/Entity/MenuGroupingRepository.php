@@ -50,7 +50,7 @@ class MenuGroupingRepository extends EntityRepository
                 $menu = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->findOneBy(array('globalOption' => $globalOption,'menuGroup' => $menuGroup->getId() ,'menu' => $post));
                 if(!empty($menu)) {
                     if(!empty($menu->getChildren())){
-                        $this->childrenMenu($menu);
+                        $this->childrenMenuRemove($menu);
                     }
                     $remove = $em->createQuery('DELETE SettingAppearanceBundle:MenuGrouping e WHERE e.id = '.$menu->getId() );
                     $remove->execute();
@@ -59,13 +59,13 @@ class MenuGroupingRepository extends EntityRepository
         }
     }
 
-    private function childrenMenu($menu)
+    private function childrenMenuRemove($menu)
     {
         $em = $this->_em;
         foreach ($menu->getChildren() as $val) {
             $child = $val->getChildren();
             if(!empty($child)){
-                 $this->childrenMenu($val);
+                 $this->childrenMenuRemove($val);
                  $childRemove = $em->createQuery('DELETE SettingAppearanceBundle:MenuGrouping e WHERE e.id = '.$val->getId() );
                  $childRemove->execute();
             } else {
@@ -83,7 +83,7 @@ class MenuGroupingRepository extends EntityRepository
         $qb = $em->createQueryBuilder();
         foreach ($data as $key => $value){
             $val = ($value) ? $value: 0 ;
-            $q = $qb->update('SettingAppearanceBundle:MenuGrouping', 'mg')
+            $qb->update('SettingAppearanceBundle:MenuGrouping', 'mg')
                 ->set('mg.parent', $val)
                 ->set('mg.sorting', $i)
                 ->where('mg.id = :id')
@@ -133,7 +133,6 @@ class MenuGroupingRepository extends EntityRepository
         $em = $this->_em;
         $entity = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('menuGroup'=>3));
         if(!empty($entity)){
-
             return $entity;
         }
         return false;

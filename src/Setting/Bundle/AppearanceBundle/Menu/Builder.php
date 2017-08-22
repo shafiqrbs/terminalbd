@@ -92,7 +92,7 @@ class Builder extends ContainerAware
             $result = array_intersect($menuName, array('Website'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_WEBSITE')){
-                    $menu = $this->WebsiteMenu($menu);
+                    $menu = $this->WebsiteMenu($menu,$menuName);
                 }
             }
 
@@ -127,61 +127,7 @@ class Builder extends ContainerAware
                 $menu = $this->manageCustomerOrderMenu($menu);
             }
 
-            /* if ($securityContext->isGranted('ROLE_DOMAIN') || $securityContext->isGranted('ROLE_DOMAIN_MANAGER')) {
 
-
-                 $modules = $globalOption->getSiteSetting()->getAppModules();
-                 $arrSlugs = array();
-                 if (!empty($globalOption->getSiteSetting()) and !empty($modules)) {
-                     foreach ($globalOption->getSiteSetting()->getAppModules() as $mod) {
-                         if (!empty($mod->getModuleClass())) {
-                             $menuName = $mod->getModuleClass() . 'Menu';
-                             $menu = $this->$menuName($menu);
-                             $arrSlugs[] = $mod->getSlug();
-                         }
-
-                     }
-                 }
-
-                 $applications = array('accounting', 'e-commerce', 'inventory');
-                 $result = array_intersect($arrSlugs, $applications);
-                 if (!empty($result)) {
-                     $menu = $this->applicationSettingMenu($menu);
-                 }
-                 $menu = $this->manageDomainInvoiceMenu($menu);
-             }
-
-             if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE') || $securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES')) {
-
-                 $modules = $globalOption->getSiteSetting()->getAppModules();
-                 $arrSlugs = array();
-                 if (!empty($globalOption->getSiteSetting()) and !empty($modules)) {
-                     foreach ($globalOption->getSiteSetting()->getAppModules() as $mod) {
-                         if (!empty($mod->getModuleClass())) {
-                             if ($mod->getSlug() == 'inventory') {
-                                 $menuName = $mod->getModuleClass() . 'Menu';
-                                 $menu = $this->$menuName($menu);
-                             }
-                             $arrSlugs[] = $mod->getSlug();
-                         }
-                     }
-                 }
-
-                 $applications = array('accounting', 'e-commerce', 'inventory');
-                 $result = array_intersect($arrSlugs, $applications);
-                 if (!empty($result)) {
-                     $menu = $this->applicationSettingMenu($menu);
-                 }
-
-                 //exit(\Doctrine\Common\Util\Debug::dump($modules));
-             }
-
-             if ($securityContext->isGranted('ROLE_DOMAIN') || $securityContext->isGranted('ROLE_DOMAIN_INVENTORY') AND !$securityContext->isGranted('ROLE_DOMAIN_INVENTORY_SALES')) {
-
-             }
-             if ($securityContext->isGranted('ROLE_DOMAIN')) {
-
-             }*/
 
         }
         return $menu;
@@ -209,7 +155,7 @@ class Builder extends ContainerAware
         return $menu;
     }
 
-    public function WebsiteMenu($menu)
+    public function WebsiteMenu($menu,$menuName)
     {
 
         $securityContext = $this->container->get('security.context');
@@ -248,6 +194,7 @@ class Builder extends ContainerAware
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_WEBSITE_SETTING')) {
 
+            $result = array_intersect($menuName, array('e-commerce'));
             $securityContext = $this->container->get('security.context');
             $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
             $menu
@@ -257,13 +204,17 @@ class Builder extends ContainerAware
 
             $menu['Manage Appearance']->addChild('Customize Template', array('route' => 'templatecustomize_edit', 'routeParameters' => array('id' => $globalOption->getId())));
             $menu['Manage Appearance']->addChild('Feature & Widget')->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
-            if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG') && $securityContext->isGranted('ROLE_ECOMMERCE')){
-               $menu['Manage Appearance']['Feature & Widget']->addChild('E-commerce Widget', array('route' => 'appearancefeaturewidget'));
+            if (!empty($result)) {
+                if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG') && $securityContext->isGranted('ROLE_ECOMMERCE')){
+                    $menu['Manage Appearance']['Feature & Widget']->addChild('E-commerce Widget', array('route' => 'appearancefeaturewidget'));
+                }
             }
             $menu['Manage Appearance']['Feature & Widget']->addChild('Website Widget', array('route' => 'appearancewebsitewidget'));
             $menu['Manage Appearance']['Feature & Widget']->addChild('Create Feature', array('route' => 'appearancefeature'));
-            if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
-                $menu['Manage Appearance']->addChild('E-commerce Menu', array('route' => 'ecommercemenu'));
+            if (!empty($result)) {
+                if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG') && $securityContext->isGranted('ROLE_ECOMMERCE')) {
+                    $menu['Manage Appearance']->addChild('E-commerce Menu', array('route' => 'ecommercemenu'));
+                }
             }
             $menu['Manage Appearance']->addChild('Menu', array('route' => 'menu_manage'));
             $menu['Manage Appearance']->addChild('Menu Grouping', array('route' => 'menugrouping'));
