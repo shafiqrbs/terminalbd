@@ -2,11 +2,6 @@
     {% render controller("FrontendBundle:WebsiteWidget:pageBaseFeatureWidget",{'globalOption':globalOption.id,'widget':widget.id}) %}
 {% endif %}
 <div class="container">
-{% if widget.content is not empty %}
-    <div class="clearfix"><br/></div>
-    <div class="row"> <div class="col-md-12 text-justify">{{ widget.content|raw }}</div></div>
-    <div class="clearfix"><br/></div>
-{% endif %}
 {% if widget.page is not empty %}
 <div class="page-block page-carousel-{{ globalOption.templateCustomize.sliderPosition }}" >
     {% if  widget.moduleFeatureName is not empty or widget.pageShowType == 'slider' %}

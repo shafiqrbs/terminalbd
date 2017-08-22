@@ -200,3 +200,10 @@
         </div>
         </div>
     {% endif %}
+    {% if widget.content is not empty %}
+        <div class="page-block" >
+            <div class="clearfix"><br/></div>
+            <div class="row"> <div class="col-md-12 text-justify">{{ widget.content|raw }}</div></div>
+            <div class="clearfix"><br/></div>
+        </div>
+    {% endif %}
