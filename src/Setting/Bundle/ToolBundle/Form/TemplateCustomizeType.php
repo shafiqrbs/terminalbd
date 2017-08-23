@@ -44,7 +44,11 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
             ))
-            ->add('breadcrumbActiveColor','text', array('attr'=>array(
+            ->add('breadcrumbHome','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+            ->add('breadcrumbColor','text', array('attr'=>array(
                 'class'=>'m-wrap span12 colorpicker-default',
                 'placeholder'=>'')
             ))

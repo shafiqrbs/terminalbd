@@ -50,7 +50,20 @@ $(document).ready(function(){
         
         $('#list').click(function(event){event.preventDefault();$('#product .item').addClass('list-group-item');});
         $('#grid').click(function(event){event.preventDefault();$('#product .item').removeClass('list-group-item');$('#products .item').addClass('grid-group-item');});
-        
+
+        $('body').append('<div id="toTop" class="btn btn-primary color1"><span class="glyphicon glyphicon-chevron-up"></span></div>');
+        $(window).scroll(function () {
+            if ($(this).scrollTop() != 0) {
+                $('#toTop').fadeIn();
+            } else {
+                $('#toTop').fadeOut();
+            }
+        });
+        $('#toTop').click(function(){
+            $("html, body").animate({ scrollTop: 0 }, 700);
+            return false;
+        });
+
         $('.custom-menu a[href^="#"], .intro-scroller .inner-link').on('click',function (e) {
         
             e.preventDefault();
@@ -92,6 +105,11 @@ $(document).ready(function(){
                 mobile: {placement:'top',html:true}
             },
 
+        });
+
+
+        $("#price-range").slider({
+            tooltip: 'always'
         });
 
 

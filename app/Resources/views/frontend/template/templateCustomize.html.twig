@@ -13,6 +13,55 @@
     }
     {% endif %}
 
+    {% if globalOption.templateCustomize.breadcrumbBg is not empty %}
+    .breadcrumb{
+        background-color: {{ globalOption.templateCustomize.breadcrumbBg }} !important;
+    }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.breadcrumbHome is not empty %}
+    .breadcrumb li.home a{
+        background-color: {{ globalOption.templateCustomize.breadcrumbHome }} !important;
+    }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.breadcrumbHome is not empty %}
+    .breadcrumb li.home a:after {
+        border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbHome }} !important;
+    }
+    {% endif %}
+    {% if globalOption.templateCustomize.breadcrumbBorderColor is not empty %}
+    .breadcrumb li a:before {
+        border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbBorderColor }} !important;
+    }
+    {% endif %}
+    {% if globalOption.templateCustomize.breadcrumbBg is not empty %}
+    .breadcrumb li a:after {
+        border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbBg }} !important;
+    }
+    {% endif %}
+    {% if globalOption.templateCustomize.breadcrumbActiveBg is not empty %}
+    .breadcrumb li.active a{
+        background-color: {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
+    }
+    {% endif %}
+    {% if globalOption.templateCustomize.breadcrumbActiveBg is not empty %}
+    .breadcrumb li.active a:after{
+        border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
+    }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.breadcrumbActiveBg is not empty %}
+    .breadcrumb li a:hover{
+        background-color: {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
+    }
+    {% endif %}
+    {% if globalOption.templateCustomize.breadcrumbActiveBg is not empty %}
+    .breadcrumb li a:hover:after{
+        border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
+    }
+    {% endif %}
+
     #header-menu ul a{
         color: {{ globalOption.templateCustomize.menuLiAColor }} !important;
     }

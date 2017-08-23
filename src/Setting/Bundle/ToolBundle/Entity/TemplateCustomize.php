@@ -126,6 +126,13 @@ class TemplateCustomize
     /**
      * @var string
      *
+     * @ORM\Column(name="breadcrumbHome", type="string", length=20, nullable=true)
+     */
+    private $breadcrumbHome;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="breadcrumbBg", type="string", length=20, nullable=true)
      */
     private $breadcrumbBg;
@@ -140,9 +147,9 @@ class TemplateCustomize
     /**
      * @var string
      *
-     * @ORM\Column(name="breadcrumbActiveColor", type="string", length=20, nullable=true)
+     * @ORM\Column(name="breadcrumbColor", type="string", length=20, nullable=true)
      */
-     private $breadcrumbActiveColor;
+     private $breadcrumbColor;
 
     /**
      * @var string
@@ -1794,22 +1801,6 @@ class TemplateCustomize
     /**
      * @return string
      */
-    public function getBreadcrumbActiveColor()
-    {
-        return $this->breadcrumbActiveColor;
-    }
-
-    /**
-     * @param string $breadcrumbActiveColor
-     */
-    public function setBreadcrumbActiveColor($breadcrumbActiveColor)
-    {
-        $this->breadcrumbActiveColor = $breadcrumbActiveColor;
-    }
-
-    /**
-     * @return string
-     */
     public function getBreadcrumbFontSize()
     {
         return $this->breadcrumbFontSize;
@@ -1837,6 +1828,38 @@ class TemplateCustomize
     public function setBreadcrumbBorderColor($breadcrumbBorderColor)
     {
         $this->breadcrumbBorderColor = $breadcrumbBorderColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBreadcrumbHome()
+    {
+        return $this->breadcrumbHome;
+    }
+
+    /**
+     * @param string $breadcrumbHome
+     */
+    public function setBreadcrumbHome($breadcrumbHome)
+    {
+        $this->breadcrumbHome = $breadcrumbHome;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBreadcrumbColor()
+    {
+        return $this->breadcrumbColor;
+    }
+
+    /**
+     * @param string $breadcrumbColor
+     */
+    public function setBreadcrumbColor($breadcrumbColor)
+    {
+        $this->breadcrumbColor = $breadcrumbColor;
     }
 
 

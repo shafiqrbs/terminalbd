@@ -339,14 +339,13 @@ class SiteSettingRepository extends EntityRepository
                 * Menu grouping remove syndicate related.
                 * **/
 
-                $groupingEntity = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('menu'=>$id));
+                $groupingEntity = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('menu' => $id));
                 if(!$groupingEntity){
                     foreach($groupingEntity as $remove){
-                        $groupingEntity = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->find($id);
+                        $groupingEntity = $em->getRepository('SettingAppearanceBundle:MenuGrouping')->find($remove);
                         if (!empty($groupingEntity)) {
                             $em->remove($groupingEntity);
                         }
-
                     }
 
                 }
