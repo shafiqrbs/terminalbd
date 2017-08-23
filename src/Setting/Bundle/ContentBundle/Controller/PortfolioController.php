@@ -171,7 +171,7 @@ class PortfolioController extends Controller
 
         if ($editForm->isValid()) {
             $data = $request->request->all();
-            if($entity->upload()){
+            if( $entity->upload() and !empty($entity->getFile())){
                 $entity->removeUpload();
             }
             $entity->upload();

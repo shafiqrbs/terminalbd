@@ -189,7 +189,7 @@ class EventController extends Controller
             $mobile = $entity->getMobile();
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($mobile);
             $entity->setMobile($mobile);
-            if(!empty($entity->upload())){
+            if( $entity->upload() and !empty($entity->getFile())){
                 $entity->removeUpload();
             }
             $entity->upload();

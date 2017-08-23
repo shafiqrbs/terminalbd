@@ -196,10 +196,9 @@ class ClientController extends Controller
 
         if ($editForm->isValid()) {
 
-            if( $entity->upload()){
+            if( $entity->upload() and !empty($entity->getFile())){
                 $entity->removeUpload();
             }
-
             $entity->upload();
             $em->flush();
 

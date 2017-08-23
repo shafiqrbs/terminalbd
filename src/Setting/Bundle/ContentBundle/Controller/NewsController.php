@@ -192,7 +192,7 @@ class NewsController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            if(!empty($entity->upload())){
+            if( $entity->upload() and !empty($entity->getFile())){
                 $entity->removeUpload();
             }
             $entity->upload();

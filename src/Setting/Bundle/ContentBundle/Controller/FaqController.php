@@ -179,7 +179,6 @@ class FaqController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-
             return $this->redirect($this->generateUrl('faq_edit', array('id' => $id)));
         }
 
