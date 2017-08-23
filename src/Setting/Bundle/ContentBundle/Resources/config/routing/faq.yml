@@ -27,7 +27,6 @@ faq_update:
 faq_delete:
     path:     /{id}/delete
     defaults: { _controller: "SettingContentBundle:Faq:delete" }
-    methods:  [POST, DELETE]
 
 faq_status:
     path:     /{id}/status

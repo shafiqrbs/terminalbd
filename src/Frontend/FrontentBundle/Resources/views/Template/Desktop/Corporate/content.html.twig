@@ -45,8 +45,8 @@
                             <div id="carousel" class="carousel slide carousel-fade" style="width: 100%">
                                 <div class="carousel-inner">
                                 {% if page.webPath is not empty %}
-                                    <div class="carousel-item item active">
-                                        <img class="img-responsive"  data-slide-no="0" src="{{ image(page.webPath).scaleResize(1024,512,'#000000') }}" alt="{{ page.name }}" />
+                                    <div class="carousel-item item active" data-slide-no="0">
+                                        <img class="img-responsive"   src="{{ image(page.webPath).scaleResize(1024,512,'#000000') }}" alt="{{ page.name }}" />
                                         <div class="carousel-caption " >
                                             <h4>{{ page.name }}</h4>
                                         </div>

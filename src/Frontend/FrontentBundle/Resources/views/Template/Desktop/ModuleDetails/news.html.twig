@@ -25,8 +25,8 @@
                 <div id="carousel" class="carousel slide carousel-fade" style="width: 100%" >
                     <div class="carousel-inner">
                         {% if page.webPath is not empty %}
-                            <div class="carousel-item item active">
-                                <img class="img-responsive"  data-slide-no="0" src="{{ image(page.webPath).scaleResize(1024,512,'#000000') }}" alt="{{ page.name }}" />
+                            <div class="carousel-item item active" data-slide-no="0">
+                                <img class="img-responsive"   src="{{ image(page.webPath).scaleResize(1024,512,'#000000') }}" alt="{{ page.name }}" />
                                 <div class="carousel-caption " >
                                     <h4>{{ page.name }}</h4>
                                     <p>Place an order on DhakaBrand and enter your address during checkout. We provide cash on delivery system it is only applicable only for Dhaka Metropolitan city. Our customer service</p>
@@ -34,7 +34,7 @@
                             </div>
                         {% endif %}
                         {% for slide in page.photoGallery.galleryImages %}
-                            <div  class="carousel-item item {% if loop.index-1 == 0 and page.webPath is empty %} active  {% endif %}"  {% if loop.index-1 == 0 and page.webPath is empty %} data-slide-no="{{ loop.index-1 }}"  {% endif %} >
+                            <div  class="carousel-item item " data-slide-no="{{ loop.index }}" >
                                 <img class="img-responsive" src="{{ image(slide.getAbsolutePath(page.globalOption.id,page.photoGallery.id)).scaleResize(1024,512,'#000000') }}" alt="...">
                                 <div class="carousel-caption " >
                                     {% if slide.caption is not empty %}<h4>{{ slide.caption }}{% endif %}</h4>

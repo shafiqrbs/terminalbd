@@ -37,27 +37,3 @@ branch_print_list:
     path:     /print-list
     defaults: { _controller: "SettingContentBundle::printList" }
 
-branch_pdf_list:
-    path:     /pdf-list
-    defaults: { _controller: "SettingContentBundle:Branch:pdfList" }
-
-branch_export_list:
-    path:     /export-list
-    defaults: { _controller: "SettingContentBundle:Branch:exportList" }
-
-branch_print:
-    path:     /{id}/print-details
-    defaults: { _controller: "SettingContentBundle:Branch:printDetails" }
-
-branch_pdf:
-    path:     /{id}/pdf-details
-    defaults: { _controller: "SettingContentBundle:Branch:pdfDetails" }
-
-branch_import:
-    path:     /import
-    defaults: { _controller: "SettingContentBundle:Branch:import" }
-
-branch_export:
-    path:     /{id}/export-details
-    defaults: { _controller: "SettingContentBundle:Branch:exportDetails" }
-
