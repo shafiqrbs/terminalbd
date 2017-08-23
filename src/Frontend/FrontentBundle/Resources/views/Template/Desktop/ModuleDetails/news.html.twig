@@ -29,7 +29,7 @@
                                 <img class="img-responsive"   src="{{ image(page.webPath).scaleResize(1024,512,'#000000') }}" alt="{{ page.name }}" />
                                 <div class="carousel-caption " >
                                     <h4>{{ page.name }}</h4>
-                                    <p>Place an order on DhakaBrand and enter your address during checkout. We provide cash on delivery system it is only applicable only for Dhaka Metropolitan city. Our customer service</p>
+                                    <p>{{ page.content|truncate(150)|raw }}</p>
                                 </div>
                             </div>
                         {% endif %}
@@ -49,7 +49,7 @@
                 </div>
             </div>
         {% elseif page.webPath is not empty %}
-            <img class="img-responsive"  data-slide-no="0" src="{{ image(page.webPath).scaleResize(1024,512,'#000000') }}" alt="{{ page.name }}" />
+            <img class="img-responsive"  src="{{ image(page.webPath).forceResize(640,359) }}" alt="{{ page.name }}" />
         {% endif %}
     </div>
 </div>
