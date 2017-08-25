@@ -93,7 +93,6 @@ $(document).on('change', '#particular', function() {
         alert('You have to add particulars from drop down');
         return false;
     }
-    alert(url);
     $.ajax({
         url: url,
         type: 'GET',
