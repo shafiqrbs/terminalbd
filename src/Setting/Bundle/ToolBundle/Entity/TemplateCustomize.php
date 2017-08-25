@@ -515,6 +515,14 @@ class TemplateCustomize
     private $bodyColor;
 
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="sidebarColor", type="string", length=50, nullable=true)
+     */
+    private $sidebarColor;
+
+
     /**
      * @var string
      *
@@ -1860,6 +1868,22 @@ class TemplateCustomize
     public function setBreadcrumbColor($breadcrumbColor)
     {
         $this->breadcrumbColor = $breadcrumbColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSidebarColor()
+    {
+        return $this->sidebarColor;
+    }
+
+    /**
+     * @param string $sidebarColor
+     */
+    public function setSidebarColor($sidebarColor)
+    {
+        $this->sidebarColor = $sidebarColor;
     }
 
 

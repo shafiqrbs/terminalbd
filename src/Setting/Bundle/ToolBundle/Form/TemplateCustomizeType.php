@@ -62,6 +62,11 @@ class TemplateCustomizeType extends AbstractType
                 'placeholder'=>'')
             ))
 
+            ->add('sidebarColor','text', array('attr'=>array(
+                'class'=>'m-wrap span12 colorpicker-default',
+                'placeholder'=>'')
+            ))
+
             ->add('siteTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Site page welcome text')))
             ->add('siteTitleSize', 'choice', array(
                 'attr'=>array('class'=>'span12'),

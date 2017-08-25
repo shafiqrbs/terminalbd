@@ -31,7 +31,6 @@
         'assets/plugins/chosen-bootstrap/chosen/chosen.css'
         'assets/plugins/select2/select2_metro.css'
         'assets/plugins/clockface/css/clockface.css'
-        'assets/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css'
         'assets/plugins/bootstrap-datepicker/css/datepicker.css'
         'assets/plugins/bootstrap-timepicker/compiled/timepicker.css'
         'assets/plugins/bootstrap-colorpicker/css/colorpicker.css'
@@ -144,6 +143,7 @@
 'assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js'
 'assets/plugins/select2/select2.min.js'
 'assets/plugins/chosen-bootstrap/chosen/chosen.jquery.min.js'
+'assets/plugins/ckeditor/ckeditor.js'
 'assets/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js'
 'assets/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js'
 'assets/plugins/bootstrap-toggle-buttons/static/js/jquery.toggle.buttons.js'
@@ -347,32 +347,20 @@
     setTimeout(function () { // set 1 second timeout for having all fonts loaded
         heightsEqualizer('.js-equal-height');
     }, 1000);
+    /*
+
+        if(CKEDITOR) {
+            CKEDITOR.replace('setting_bundle_appearancebundle_featurewidget_content', {
+                'extraPlugins': 'doksoft_backup,doksoft_stat,zoom,justify',
+                filebrowserBrowseUrl : 'ckeditor/plugins/filemanager/filemanager/dialog.php?type=2&editor=ckeditor&fldr=',
+                filebrowserImageBrowseUrl : 'ckeditor/plugins/filemanager/filemanager/dialog.php?type=1&editor=ckeditor&fldr='
+            });
+        }
+    */
 
 </script>
 <style>
-    ul.page-sidebar-menu > li.current_ancestor > ul > li.current_ancestor > a{
-        background: #000!important;
-    }
-    @media (max-width: 979px) {
-        .navbar .brand {
-            display: none !important;
-        }
-        ul.page-sidebar-menu > li.current_ancestor > ul > li.current_ancestor > a{
-            background: #000!important;
-        }
-        .page-content .breadcrumb{
-            display:none !important;
-        }
-        .page-title{
-            margin: 0!important;
-        }
-        .showing-overview{
-            display: none !important;
-        }
-        .pagination ul>li>a, .pagination ul>li>span{
-            padding: 4px 23px;
-        }
-    }
+
 </style>
 {#{% block footer %}
     <div class="footer">
@@ -387,7 +375,7 @@
     </div>
 {% endblock footer %}#}
 <!-- WhatsHelp.io widget -->
-<script type="text/javascript">
+{#<script type="text/javascript">
 
 
     window.fbAsyncInit = function() {
@@ -407,7 +395,7 @@
     }(document, 'script', 'facebook-jssdk'));
 
 
-</script>
+</script>#}
 <style>
     .fb-messenger , .calculator-messenger {
         position: fixed;
@@ -438,9 +426,33 @@
         margin-top: 10px;
     }
 
+    ul.page-sidebar-menu > li.current_ancestor > ul > li.current_ancestor > a{
+        background: #000!important;
+    }
+    @media (max-width: 979px) {
+        .navbar .brand {
+            display: none !important;
+        }
+        ul.page-sidebar-menu > li.current_ancestor > ul > li.current_ancestor > a{
+            background: #000!important;
+        }
+        .page-content .breadcrumb{
+            display:none !important;
+        }
+        .page-title{
+            margin: 0!important;
+        }
+        .showing-overview{
+            display: none !important;
+        }
+        .pagination ul>li>a, .pagination ul>li>span{
+            padding: 4px 23px;
+        }
+    }
+
 
 </style>
-<div class="fb-messenger">
+{#<div class="fb-messenger">
     <div id="messenger-block">
         <div class="panel panel-messenger">
             <div class="panel-heading"><b>Facebook Messenger</b> <a id="fb-msg-close"  class="pull-right btn red mini"><i class="icon-remove icon-white"></i></a></div>
@@ -463,7 +475,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>#}
 <div class="calculator-messenger">
     <div id="calculator-block">
         <div id="micalc"></div>

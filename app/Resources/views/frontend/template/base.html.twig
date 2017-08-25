@@ -134,6 +134,13 @@
 
       {% block documentready %}{% endblock %}
     });
+    if(CKEDITOR) {
+        CKEDITOR.replace('content', {
+            'extraPlugins': 'doksoft_backup,doksoft_stat,zoom,justify',
+            filebrowserBrowseUrl : 'ckeditor/plugins/filemanager/filemanager/dialog.php?type=2&editor=ckeditor&fldr=',
+            filebrowserImageBrowseUrl : 'ckeditor/plugins/filemanager/filemanager/dialog.php?type=1&editor=ckeditor&fldr='
+        });
+    }
 </script>
 </body>
 </html>

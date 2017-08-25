@@ -62,7 +62,6 @@
     }
     {% endif %}
 
-
     #header-menu ul a{
         color: {{ globalOption.templateCustomize.menuLiAColor }} !important;
     }
@@ -210,6 +209,10 @@
     {% if globalOption.templateCustomize.siteBgColor is not empty %}
     .siteBgColor{
         background-color: {{ globalOption.templateCustomize.siteBgColor }}!important;
+    }
+    {% if globalOption.templateCustomize.sidebarColor is not empty %}
+    .page-sidebar{
+        background-color: {{ globalOption.templateCustomize.sidebarColor }}!important;
     }
     {% endif %}
     .mm-ismenu{
