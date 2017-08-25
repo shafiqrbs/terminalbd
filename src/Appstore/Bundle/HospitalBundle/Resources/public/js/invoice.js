@@ -88,7 +88,12 @@ $(".receivePayment").click(function(){
 
 $(document).on('change', '#particular', function() {
 
-    var url = $('#addParticular').attr('data-url');
+    var url = $(this).val();
+    if(url == ''){
+        alert('You have to add particulars from drop down');
+        return false;
+    }
+    alert(url);
     $.ajax({
         url: url,
         type: 'GET',
@@ -98,6 +103,7 @@ $(document).on('change', '#particular', function() {
             $('#quantity').val(obj['quantity']);
             $('#price').val(obj['price']);
             $('#instruction').html(obj['instruction']);
+            $('#addParticular').attr("disabled", false);
         }
     })
 });
@@ -126,6 +132,7 @@ $(document).on('click', '#addParticular', function() {
             $('#invoiceTransaction').html(obj['invoiceTransaction']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
+            $('#addParticular').attr("disabled", true);
         }
     })
 });

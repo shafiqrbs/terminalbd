@@ -18,7 +18,7 @@
                     <a href="{{ path('hms_invoice') }}">Patient Invoice</a>
                     <span class="icon-angle-right"></span>
                 </li>
-                <li><a href="#">Manage Patient Invoice</a></li>
+                <li><a href="#">Manage Patient Diagnostic Invoice</a></li>
                 <li class="pull-right btn blue disabled mini">
                     <i class="fa fa-calendar"></i>
                     {{ "now"|date("d-F-Y") }}
@@ -33,7 +33,7 @@
 
     <div class="portlet box green tabbable">
         <div class="portlet-title">
-            <div class="caption"><i class="icon-reorder"></i>Patient Invoice Information</div>
+            <div class="caption"><i class="icon-reorder"></i>Patient Invoice Diagnostic Information</div>
             <div class="actions">
                 <div class="btn-group">
                     <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -215,7 +215,7 @@
             <div class="clearfix">&nbsp;</div>
             <div class="form-actions portlet box purple">
                 <div class="pull-left span2">
-                    <a class="btn black span12 pull-left" style="text-align: left" ><i class="icon-plus"></i>&nbsp;Add Particular</a>
+                    <a class="btn black span12 pull-left" style="text-align: left" > Add Particular</a>
                 </div>
                 <div class="pull-left span5 msg-hidden" style="display: none">
                     <a class="btn yellow span12 pull-left" ><span id="msg"></span></a>
@@ -288,7 +288,7 @@
                                 <div class="span2"><input type="text" class="m-wrap span12" id="price" name="price" value="" maxlength="8"></div>
                                 <div class="span1">
                                     <input type="hidden" id="particularId" name="particularId" value="">
-                                    <button type="button" class="btn blue" id="addParticular" data-url="{{ path('hms_invoice_particular_add',{'invoice':entity.id}) }}" >Add</button>
+                                    <button type="button" class="btn blue" disabled="disabled" id="addParticular" data-url="{{ path('hms_invoice_particular_add',{'invoice':entity.id}) }}" >Add</button>
                                 </div>
                             </div>
                         </div>
@@ -531,7 +531,7 @@
                     <input type="hidden" name="netTotal" class="" id="netTotal" value="{{ entity.total }}">
                     <input type="hidden" name="due" class="" id="due" value="{{ entity.due }}">
 
-                    <button type="submit" class="btn blue span12" id="receiveBtn"><i class="icon-ok"></i> Received with Print</button>
+                    <button type="submit" class="btn blue span11" id="receiveBtn"><i class="icon-ok"></i> Received with Print</button>
                 </div>
             </div>
             {{ form_end(form) }}
