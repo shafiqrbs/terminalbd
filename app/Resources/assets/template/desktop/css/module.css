@@ -3129,6 +3129,9 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active){
     background: #FFFFff;
 }
 
+.blog-sidebar{
+    background: #FFFFff;
+}
 .post-grid{
     display: flex;
     border-bottom:1px solid #0b0e23 ;

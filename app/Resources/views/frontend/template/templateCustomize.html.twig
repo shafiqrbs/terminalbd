@@ -211,7 +211,7 @@
         background-color: {{ globalOption.templateCustomize.siteBgColor }}!important;
     }
     {% if globalOption.templateCustomize.sidebarColor is not empty %}
-    .page-sidebar{
+    .page-sidebar , .blog-sidebar{
         background-color: {{ globalOption.templateCustomize.sidebarColor }}!important;
     }
     {% endif %}
@@ -263,10 +263,6 @@
 
     }
 
-    #gmap_canvas{
-        min-height:520px;
-        min-width: 320px;
-    }
     {% if globalOption.templateCustomize.bodyColor  is not empty%}
     .bodyColor{
         background-color: {{ globalOption.templateCustomize.bodyColor }}!important ;
