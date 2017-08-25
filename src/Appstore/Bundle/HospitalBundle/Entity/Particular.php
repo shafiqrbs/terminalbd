@@ -107,7 +107,7 @@ class Particular
      *
      * @ORM\Column(name="quantity", type="smallint", length=3, nullable=true)
      */
-    private $quantity = 0;
+    private $quantity = 1;
 
     /**
      * @var integer

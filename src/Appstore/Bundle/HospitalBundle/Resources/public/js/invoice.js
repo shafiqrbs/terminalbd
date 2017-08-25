@@ -110,8 +110,8 @@ $(document).on('change', '#particular', function() {
 $(document).on('click', '#addParticular', function() {
 
     var particularId = $('#particularId').val();
-    var quantity = $('#quantity').val();
-    var price = $('#price').val();
+    var quantity = parseInt($('#quantity').val());
+    var price = parseInt($('#price').val());
     var url = $('#addParticular').attr('data-url');
     $.ajax({
         url: url,
