@@ -9,10 +9,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * InvoiceParticularReport
  *
- * @ORM\Table( name = "hms_invoice_particular_report")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\HospitalBundle\Repository\InvoiceParticularRepository")
+ * @ORM\Table( name = "hms_invoice_pathological_report")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\HospitalBundle\Repository\InvoicePathologicalReportRepository")
  */
-class InvoiceParticularReport
+class InvoicePathologicalReport
 {
     /**
      * @var integer
@@ -25,9 +25,21 @@ class InvoiceParticularReport
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", inversedBy="invoiceParticularReports")
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", inversedBy="invoicePathologicalReport")
      **/
     private $invoiceParticular;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", inversedBy="invoicePathologicalReports")
+     **/
+    private $pathologicalReport;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="result", type="string", length=100, nullable=true)
+     */
+    private $result;
 
     /**
      * @var string
@@ -43,6 +55,14 @@ class InvoiceParticularReport
      */
     private $metaValue;
 
+    /**
+     * @var text
+     *
+     * @ORM\Column(name="remark", type="text", nullable=true)
+     */
+    private $remark;
+
+
 
 
     /**
@@ -54,8 +74,6 @@ class InvoiceParticularReport
     {
         return $this->id;
     }
-
-
 
     /**
      * @return mixed
@@ -103,6 +121,54 @@ class InvoiceParticularReport
     public function setMetaValue($metaValue)
     {
         $this->metaValue = $metaValue;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPathologicalReport()
+    {
+        return $this->pathologicalReport;
+    }
+
+    /**
+     * @param mixed $pathologicalReport
+     */
+    public function setPathologicalReport($pathologicalReport)
+    {
+        $this->pathologicalReport = $pathologicalReport;
+    }
+
+    /**
+     * @return text
+     */
+    public function getRemark()
+    {
+        return $this->remark;
+    }
+
+    /**
+     * @param text $remark
+     */
+    public function setRemark($remark)
+    {
+        $this->remark = $remark;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param string $result
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
     }
 
 

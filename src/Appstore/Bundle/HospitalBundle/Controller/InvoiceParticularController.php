@@ -45,24 +45,41 @@ class InvoiceParticularController extends Controller
         $data = $_REQUEST;
 
         $user = $this->getUser();
-        $entities = $em->getRepository('HospitalBundle:InvoiceParticular')->invoiceParticularLists($user,$data);
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        $data = array('process'=>'In-progress');
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'pathology' , $data);
         $pagination = $this->paginate($entities);
+        $overview = $em->getRepository('HospitalBundle:DoctorInvoice')->findWithOverview($user,$data);
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
+
         return $this->render('HospitalBundle:InvoiceParticular:index.html.twig', array(
             'entities' => $pagination,
+            'assignDoctors' => $assignDoctors,
+            'referredDoctors' => $referredDoctors,
             'searchForm' => $data,
         ));
     }
 
-    public function editAction(InvoiceParticular $entity)
+    public function showAction(Invoice $entity)
+    {
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        return $this->render('HospitalBundle:InvoiceParticular:show.html.twig', array(
+            'entity' => $entity,
+        ));
+    }
+
+
+    public function preparetionAction(InvoiceParticular $entity)
     {
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $editForm = $this->createEditForm($entity);
-        /*if ($entity->getProcess() != "In-progress") {
-            return $this->redirect($this->generateUrl('hms_invoice_particular'));
-        }*/
         return $this->render('HospitalBundle:InvoiceParticular:new.html.twig', array(
             'entity' => $entity,
             'form' => $editForm->createView(),
@@ -133,7 +150,7 @@ class InvoiceParticularController extends Controller
         return $this->redirect($this->generateUrl('hms_invoice_confirm', array('id' => $entity->getInvoice()->getId())));
     }
 
-    public function salesSelectAction()
+    public function reportStatusSelectAction()
     {
         $items  = array();
         $items[]= array('value' => 'In-progress','text'=>'In-progress');

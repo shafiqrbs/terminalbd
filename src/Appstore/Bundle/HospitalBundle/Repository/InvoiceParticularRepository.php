@@ -21,7 +21,7 @@ class InvoiceParticularRepository extends EntityRepository
         $particular = $this->_em->getRepository('HospitalBundle:Particular')->find($data['particularId']);
         $em = $this->_em;
         $entity = new InvoiceParticular();
-        $entity->setInvoice($invoice);
+        $entity->setHmsInvoice($invoice);
         $entity->setParticular($particular);
         $entity->setEstimatePrice($particular->getPrice());
         $entity->setSalesPrice($data['price']);
@@ -79,7 +79,7 @@ class InvoiceParticularRepository extends EntityRepository
 
             $qb = $this->createQueryBuilder('e');
             $qb->select('e');
-            $qb->join('e.invoice','invoice');
+            $qb->join('e.hmsInvoice','invoice');
             $qb->join('e.particular','particular');
             $qb->join('particular.category','category');
             $qb->where('particular.service = :service')->setParameter('service',1) ;

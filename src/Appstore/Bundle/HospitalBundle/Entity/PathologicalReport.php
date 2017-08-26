@@ -8,8 +8,8 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 /**
  * PathologicalReport
  *
- * @ORM\Table( name ="hms_particular_report")
- * @ORM\Entity(repositoryClass="")
+ * @ORM\Table( name ="hms_pathological_report")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\HospitalBundle\Repository\PathologicalReportRepository")
  */
 class PathologicalReport
 {
@@ -23,9 +23,33 @@ class PathologicalReport
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="PathologicalReport", inversedBy="children", cascade={"detach","merge"})
+     * @ORM\JoinColumn(name="parent", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PathologicalReport" , mappedBy="parent")
+     * @ORM\OrderBy({"name" = "ASC"})
+     **/
+    private $children;
+
+
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="pathologicalReport" , cascade={"persist", "remove"})
      **/
     private $hospitalConfig;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="pathologicalReports")
+     **/
+    private $particular;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoicePathologicalReport", mappedBy="pathologicalReport")
+     **/
+    private $invoicePathologicalReports;
 
     /**
      * @var string
@@ -41,16 +65,22 @@ class PathologicalReport
      */
     private $code;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="referenceValue", type="text", nullable=true)
+     */
+    private $referenceValue;
+
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="pathologicalReport")
-     **/
-    private $particular;
+     * @var string
+     *
+     * @ORM\Column(name="unit", type="string", length=50, nullable=true)
+     */
+    private $unit;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="pathologicalReport")
-     **/
-    private $invoiceParticulars;
+
 
     /**
      * @var boolean
@@ -121,22 +151,6 @@ class PathologicalReport
 
 
     /**
-     * @return mixed
-     */
-    public function getParticular()
-    {
-        return $this->particular;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getInvoiceParticulars()
-    {
-        return $this->invoiceParticulars;
-    }
-
-    /**
      * @return HospitalConfig
      */
     public function getHospitalConfig()
@@ -150,6 +164,86 @@ class PathologicalReport
     public function setHospitalConfig($hospitalConfig)
     {
         $this->hospitalConfig = $hospitalConfig;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParticular()
+    {
+        return $this->particular;
+    }
+
+    /**
+     * @param mixed $particular
+     */
+    public function setParticular($particular)
+    {
+        $this->particular = $particular;
+    }
+
+    /**
+     * @return PathologicalReport
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param PathologicalReport $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return PathologicalReport
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReferenceValue()
+    {
+        return $this->referenceValue;
+    }
+
+    /**
+     * @param string $referenceValue
+     */
+    public function setReferenceValue($referenceValue)
+    {
+        $this->referenceValue = $referenceValue;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    /**
+     * @param string $unit
+     */
+    public function setUnit($unit)
+    {
+        $this->unit = $unit;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInvoicePathologicalReports()
+    {
+        return $this->invoicePathologicalReports;
     }
 
 

@@ -30,6 +30,10 @@ hospital_pathology:
     resource: "@HospitalBundle/Resources/config/routing/pathology.yml"
     prefix:   /pathology
 
+hospital_pathologicalreport:
+    resource: "@HospitalBundle/Resources/config/routing/pathologicalreport.yml"
+    prefix:    /pathological-report
+
 hospital_doctor:
     resource: "@HospitalBundle/Resources/config/routing/doctor.yml"
     prefix:   /doctor

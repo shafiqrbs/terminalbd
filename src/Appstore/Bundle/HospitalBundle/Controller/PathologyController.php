@@ -3,7 +3,9 @@
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
+use Appstore\Bundle\HospitalBundle\Entity\PathologicalReport;
 use Appstore\Bundle\HospitalBundle\Form\ParticularType;
+use Appstore\Bundle\HospitalBundle\Form\PathologicalReportType;
 use Appstore\Bundle\HospitalBundle\Form\PathologyType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -149,6 +151,7 @@ class PathologyController extends Controller
         ));
     }
 
+
     /**
      * Creates a form to edit a Particular entity.
      *
@@ -171,6 +174,7 @@ class PathologyController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing Particular entity.
      *
@@ -207,9 +211,11 @@ class PathologyController extends Controller
      * Deletes a Particular entity.
      *
      */
-    public function deleteAction(Particular $entity)
+    public function deleteAction($id)
     {
+
         $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }

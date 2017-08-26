@@ -77,7 +77,7 @@ class Menu
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Feature", mappedBy="menu" , cascade={"persist", "remove"})
      */
-    protected $feature;
+    protected $features;
 
 
     /**
@@ -396,9 +396,9 @@ class Menu
     /**
      * @return Feature
      */
-    public function getFeature()
+    public function getFeatures()
     {
-        return $this->feature;
+        return $this->features;
     }
 
     /**

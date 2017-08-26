@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\LocationBundle\Entity\Location;
@@ -41,6 +42,10 @@ class Particular
      **/
     private $hmsInvoiceCabin;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsPurchaseItem", mappedBy="particular")
+     **/
+    private $purchaseItems;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="particulars" , cascade={"persist", "remove"})
@@ -48,10 +53,9 @@ class Particular
     private $service;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", inversedBy="particular" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", mappedBy="particular" , cascade={"persist", "remove"})
      **/
-    private $pathologicalReport;
-
+    private $pathologicalReports;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="particulars" , cascade={"persist", "remove"})
@@ -64,9 +68,14 @@ class Particular
     private $department;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="assignDoctor" , cascade={"persist", "remove"})
+     * @ORM\OneTomany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="assignDoctor")
      **/
-    private $hmsInvoiceDoctor;
+    private $doctorInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="assignDoctor")
+     **/
+    private $assignDoctorInvoices;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="particular" )
@@ -74,10 +83,6 @@ class Particular
      **/
     private  $invoiceParticular;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularDoctor" )
-     **/
-    private  $assignDoctor;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularOperator" )
@@ -492,7 +497,7 @@ class Particular
     }
 
     /**
-     * @param mixed $assignOperator
+     * @param User $assignOperator
      */
     public function setAssignOperator($assignOperator)
     {
@@ -861,22 +866,6 @@ class Particular
     }
 
     /**
-     * @return mixed
-     */
-    public function getPathologicalReport()
-    {
-        return $this->pathologicalReport;
-    }
-
-    /**
-     * @param mixed $pathologicalReport
-     */
-    public function setPathologicalReport($pathologicalReport)
-    {
-        $this->pathologicalReport = $pathologicalReport;
-    }
-
-    /**
      * @return string
      */
     public function getInstruction()
@@ -933,6 +922,37 @@ class Particular
         $this->salesQuantity = $salesQuantity;
     }
 
+    /**
+     * @return DoctorInvoice
+     */
+    public function getDoctorInvoices()
+    {
+        return $this->doctorInvoices;
+    }
+
+    /**
+     * @return Invoice
+     */
+    public function getAssignDoctorInvoices()
+    {
+        return $this->assignDoctorInvoices;
+    }
+
+    /**
+     * @return HmsPurchaseItem
+     */
+    public function getPurchaseItems()
+    {
+        return $this->purchaseItems;
+    }
+
+    /**
+     * @return PathologicalReport
+     */
+    public function getPathologicalReports()
+    {
+        return $this->pathologicalReports;
+    }
 
 
 }

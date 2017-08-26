@@ -48,7 +48,7 @@ class DoctorInvoice
     private $hmsCommission;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="doctorInvoiceDoctor", cascade={"persist"}  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="doctorInvoices", cascade={"persist", "remove"}  )
      **/
     private  $assignDoctor;
 
@@ -74,23 +74,23 @@ class DoctorInvoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="hmsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="doctorInvoices" )
      **/
     private  $transactionMethod;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="hmsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="doctorInvoices" )
      **/
     private  $bank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="hmsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="doctorInvoices" )
      **/
     private  $accountBank;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="hmsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="doctorInvoices" )
      **/
     private  $accountMobileBank;
 
@@ -281,23 +281,6 @@ class DoctorInvoice
     {
         $this->code = $code;
     }
-
-    /**
-     * @return string
-     */
-    public function getInvoice()
-    {
-        return $this->invoice;
-    }
-
-    /**
-     * @param string $invoice
-     */
-    public function setInvoice($invoice)
-    {
-        $this->invoice = $invoice;
-    }
-
 
     /**
      * @return string

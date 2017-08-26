@@ -6,9 +6,9 @@ hms_invoice_particular_show:
     path:     /{id}/show
     defaults: { _controller: "HospitalBundle:InvoiceParticular:show" }
 
-hms_invoice_particular_new:
-    path:     /new
-    defaults: { _controller: "HospitalBundle:InvoiceParticular:new" }
+hms_invoice_particular_preparetion:
+    path:     /{id}/preparetion
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:preparetion" }
 
 hms_invoice_particular_edit:
     path:     /{id}/edit

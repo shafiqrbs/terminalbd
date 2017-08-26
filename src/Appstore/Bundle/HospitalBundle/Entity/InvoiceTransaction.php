@@ -34,7 +34,7 @@ class InvoiceTransaction
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="invoiceTransactions" , cascade={"persist", "remove"})
      **/
-    private $invoice;
+    private $hmsInvoice;
 
 
     /**
@@ -44,31 +44,26 @@ class InvoiceTransaction
     private  $createdBy;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="hmsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="invoiceTransactions" )
      **/
     private  $transactionMethod;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="hmsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="invoiceTransactions" )
      **/
     private  $bank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="hmsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="invoiceTransactions" )
      **/
     private  $accountBank;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="hmsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="invoiceTransactions" )
      **/
     private  $accountMobileBank;
 
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\paymentCard", inversedBy="hmsInvoice" )
-     **/
-    private  $paymentCard;
 
     /**
      * @var string
@@ -158,21 +153,6 @@ class InvoiceTransaction
         return $this->id;
     }
 
-    /**
-     * @return Invoice
-     */
-    public function getInvoice()
-    {
-        return $this->invoice;
-    }
-
-    /**
-     * @param Invoice $invoice
-     */
-    public function setInvoice($invoice)
-    {
-        $this->invoice = $invoice;
-    }
 
     /**
      * @return mixed
@@ -200,7 +180,7 @@ class InvoiceTransaction
     }
 
     /**
-     * @param mixed $transactionMethod
+     * @param TransactionMethod $transactionMethod
      */
     public function setTransactionMethod($transactionMethod)
     {
@@ -216,7 +196,7 @@ class InvoiceTransaction
     }
 
     /**
-     * @param mixed $bank
+     * @param Bank $bank
      */
     public function setBank($bank)
     {
@@ -429,6 +409,22 @@ class InvoiceTransaction
     public function setVat($vat)
     {
         $this->vat = $vat;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHmsInvoice()
+    {
+        return $this->hmsInvoice;
+    }
+
+    /**
+     * @param mixed $hmsInvoice
+     */
+    public function setHmsInvoice($hmsInvoice)
+    {
+        $this->hmsInvoice = $hmsInvoice;
     }
 
 

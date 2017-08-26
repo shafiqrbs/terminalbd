@@ -114,8 +114,8 @@ class InvoiceRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
-        $qb->orderBy('e.updated','DESC');
         $this->handleSearchBetween($qb,$data);
+        $qb->orderBy('e.updated','DESC');
         $qb->getQuery();
         return  $qb;
     }
@@ -139,7 +139,7 @@ class InvoiceRepository extends EntityRepository
         $total = $em->createQueryBuilder()
             ->from('HospitalBundle:InvoiceParticular','si')
             ->select('sum(si.subTotal) as subTotal')
-            ->where('si.invoice = :invoice')
+            ->where('si.hmsInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();
 
@@ -180,7 +180,7 @@ class InvoiceRepository extends EntityRepository
         $res = $em->createQueryBuilder()
             ->from('HospitalBundle:InvoiceTransaction','si')
             ->select('sum(si.payment) as payment , sum(si.discount) as discount, sum(si.vat) as vat')
-            ->where('si.invoice = :invoice')
+            ->where('si.hmsInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();
         $payment = !empty($res['payment']) ? $res['payment'] :0;

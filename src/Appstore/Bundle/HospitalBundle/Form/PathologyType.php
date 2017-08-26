@@ -109,8 +109,7 @@ class PathologyType extends AbstractType
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
                 'choices'=> $this->PathologyChoiceList()
-            ))
-        ;
+            ));
     }
     
     /**

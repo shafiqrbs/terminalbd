@@ -21,7 +21,7 @@ class DoctorInvoiceParticularRepository extends EntityRepository
         $particular = $this->_em->getRepository('HospitalBundle:Particular')->find($data['particularId']);
         $em = $this->_em;
         $entity = new InvoiceParticular();
-        $entity->setInvoice($invoice);
+        $entity->setHmsInvoice($invoice);
         $entity->setParticular($particular);
         $entity->setEstimatePrice($particular->getPrice());
         $entity->setSalesPrice($data['price']);

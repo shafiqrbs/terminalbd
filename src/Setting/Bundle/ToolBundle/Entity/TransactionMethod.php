@@ -9,7 +9,9 @@ use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
@@ -119,7 +121,17 @@ class TransactionMethod
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="transactionMethod" , cascade={"persist", "remove"})
      */
-    protected $hmsInvoice;
+    protected $hmsInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="transactionMethod" , cascade={"persist", "remove"})
+     */
+    protected $doctorInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction", mappedBy="transactionMethod" )
+     */
+    protected $invoiceTransactions;
 
     /**
      * @var string
@@ -350,12 +362,29 @@ class TransactionMethod
         return $this->invoiceSmsEmails;
     }
 
+
     /**
      * @return Invoice
      */
-    public function getHmsInvoice()
+    public function getHmsInvoices()
     {
-        return $this->hmsInvoice;
+        return $this->hmsInvoices;
+    }
+
+    /**
+     * @return DoctorInvoice
+     */
+    public function getDoctorInvoices()
+    {
+        return $this->doctorInvoices;
+    }
+
+    /**
+     * @return InvoiceTransaction
+     */
+    public function getInvoiceTransactions()
+    {
+        return $this->invoiceTransactions;
     }
 }
 

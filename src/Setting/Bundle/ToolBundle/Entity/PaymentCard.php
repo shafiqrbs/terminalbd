@@ -2,6 +2,8 @@
 
 namespace Setting\Bundle\ToolBundle\Entity;
 
+use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
+use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,11 @@ class PaymentCard
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $serviceSales;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="paymentCard")
+     */
+    protected $hmsInvoices;
 
     /**
      * @var string
@@ -120,5 +127,14 @@ class PaymentCard
     {
         return $this->serviceSales;
     }
+
+    /**
+     * @return Invoice
+     */
+    public function getHmsInvoices()
+    {
+        return $this->hmsInvoices;
+    }
+
 }
 

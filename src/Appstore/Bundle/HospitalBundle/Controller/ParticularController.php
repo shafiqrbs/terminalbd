@@ -206,6 +206,9 @@ class ParticularController extends Controller
         }
         $em->remove($entity);
         $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'error',"Data has been deleted successfully"
+        );
         return $this->redirect($this->generateUrl('hms_particular'));
     }
 

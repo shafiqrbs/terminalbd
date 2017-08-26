@@ -6,6 +6,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\Branch;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\Delivery;
@@ -533,11 +534,6 @@ class User extends BaseUser
     /* ==================================== HMS =========================================**/
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="referencedBy" , cascade={"persist", "remove"})
-     */
-    protected $hmsInvoiceReferencedBy;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="deliveredBy" , cascade={"persist", "remove"})
      */
     protected $hmsInvoiceDeliveredBy;
@@ -546,6 +542,34 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="createdBy" , cascade={"persist", "remove"})
      */
     protected $hmsInvoiceCreatedBy;
+
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="particularDeliveredBy" , cascade={"persist", "remove"})
+     */
+    protected $hmsInvoiceParticularDelivered;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="particularPreparedBy" , cascade={"persist", "remove"})
+     */
+    protected $hmsInvoiceParticularPrepared;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="assignOperator" , cascade={"persist", "remove"})
+     */
+    protected $particularOperator;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $doctorInvoiceCreatedBy;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="approvedBy" , cascade={"persist", "remove"})
+     */
+    protected $doctorInvoiceApprovedBy;
+
 
 
     public function isGranted($role)
@@ -1172,6 +1196,14 @@ class User extends BaseUser
     public function setAgent($agent)
     {
         $this->agent = $agent;
+    }
+
+    /**
+     * @return Particular
+     */
+    public function getParticularOperator()
+    {
+        return $this->particularOperator;
     }
 
 

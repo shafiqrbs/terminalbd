@@ -11,6 +11,7 @@ use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\Bank;
+use Setting\Bundle\ToolBundle\Entity\PaymentCard;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**
@@ -32,12 +33,12 @@ class Invoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="invoices" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="hmsInvoices" , cascade={"persist", "remove"})
      **/
     private $hospitalConfig;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction", mappedBy="invoice" , cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction", mappedBy="hmsInvoice" , cascade={"remove"})
      * @ORM\OrderBy({"updated" = "DESC"})
      **/
     private $invoiceTransactions;
@@ -49,19 +50,13 @@ class Invoice
     private $doctorInvoices;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="invoices" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="hmsInvoices" , cascade={"persist", "remove"})
      **/
     private $service;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Branches", inversedBy="hmsInvoice" )
-     **/
-
-    private  $branches;
-
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="invoice" , cascade={"remove"} )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="hmsInvoice" , cascade={"remove"} )
      * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $invoiceParticulars;
@@ -85,7 +80,7 @@ class Invoice
     private  $referredDoctor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="hmsInvoiceDoctor", cascade={"persist"}  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="assignDoctorInvoices", cascade={"persist"}  )
      **/
     private  $assignDoctor;
 
@@ -110,7 +105,7 @@ class Invoice
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceDeliveredBy" )
      **/
-    private  $approvedBy;
+    private  $deliveredBy;
 
     /**
      * @var string
@@ -121,29 +116,29 @@ class Invoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="hmsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="hmsInvoices" )
      **/
     private  $transactionMethod;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="hmsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="hmsInvoices" )
      **/
     private  $bank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="hmsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="hmsInvoices" )
      **/
     private  $accountBank;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="hmsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="hmsInvoices" )
      **/
     private  $accountMobileBank;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\paymentCard", inversedBy="hmsInvoice" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PaymentCard", inversedBy="hmsInvoices" )
      **/
     private  $paymentCard;
 
@@ -173,7 +168,7 @@ class Invoice
      *
      * @ORM\Column(name="process", type="string", length=50, nullable=true)
      */
-    private $process ='In-progress';
+    private $process ='Created';
 
     /**
      * @var string
@@ -399,22 +394,6 @@ class Invoice
 
 
     /**
-     * @return Branches
-     */
-    public function getBranches()
-    {
-        return $this->branches;
-    }
-
-    /**
-     * @param Branches $branches
-     */
-    public function setBranches($branches)
-    {
-        $this->branches = $branches;
-    }
-
-    /**
      * @return InvoiceParticular
      */
     public function getInvoiceParticulars()
@@ -574,7 +553,7 @@ class Invoice
     }
 
     /**
-     * @param mixed $paymentCard
+     * @param PaymentCard $paymentCard
      */
     public function setPaymentCard($paymentCard)
     {
@@ -715,22 +694,6 @@ class Invoice
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
-    }
-
-    /**
-     * @return User
-     */
-    public function getApprovedBy()
-    {
-        return $this->approvedBy;
-    }
-
-    /**
-     * @param User $approvedBy
-     */
-    public function setApprovedBy($approvedBy)
-    {
-        $this->approvedBy = $approvedBy;
     }
 
     /**
@@ -1195,6 +1158,22 @@ class Invoice
     public function setCommissionApproved($commissionApproved)
     {
         $this->commissionApproved = $commissionApproved;
+    }
+
+    /**
+     * @return User
+     */
+    public function getDeliveredBy()
+    {
+        return $this->deliveredBy;
+    }
+
+    /**
+     * @param User $deliveredBy
+     */
+    public function setDeliveredBy($deliveredBy)
+    {
+        $this->deliveredBy = $deliveredBy;
     }
 
 

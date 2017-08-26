@@ -45,7 +45,7 @@ class Service
      /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="service")
      **/
-    private $invoices;
+    private $hmsInvoices;
 
     /**
      * @var boolean
@@ -124,9 +124,9 @@ class Service
     /**
      * @return Invoice
      */
-    public function getInvoices()
+    public function getHmsInvoices()
     {
-        return $this->invoices;
+        return $this->hmsInvoices;
     }
 
 

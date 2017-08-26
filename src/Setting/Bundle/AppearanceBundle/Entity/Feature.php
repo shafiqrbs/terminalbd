@@ -81,14 +81,10 @@ class Feature
     protected $ecommerceMenu;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="feature")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="features")
      */
     protected $menu;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", mappedBy="featureWidgets")
-     */
-    protected $menuWidget;
 
 
     /**

@@ -19,7 +19,7 @@ class InvoiceTransactionRepository extends EntityRepository
         if ($data['payment'] > 0 || $data['discount'] > 0) {
 
             $entity = New InvoiceTransaction();
-            $entity->setInvoice($invoice);
+            $entity->setHmsInvoice($invoice);
             $entity->setPayment($data['payment']);
             $entity->setTransactionMethod($invoice->getTransactionMethod());
             $entity->setDiscount($data['discount']);
@@ -58,13 +58,11 @@ class InvoiceTransactionRepository extends EntityRepository
         foreach ($entity->getInvoiceTransactions() as $transaction) {
 
             if( empty($transaction->getPayment()) and empty($transaction->getDiscount())){
-                //echo $transaction->getId();
 
                 $qb = $this->_em->createQueryBuilder();
                 $qb->delete('HospitalBundle:InvoiceTransaction', 'trans')
                     ->where($qb->expr()->eq('trans.id', ':id'))
                     ->setParameter('id', $transaction->getId());
-
                 $qb->getQuery()->execute();
             }
 

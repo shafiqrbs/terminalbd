@@ -30,7 +30,17 @@ class HospitalConfig
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="hospitalConfig")
      **/
-    private $invoices;
+    private $hmsInvoices;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCommission", mappedBy="hospitalConfig")
+     **/
+    private $hmsCommissions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="hospitalConfig")
+     **/
+    private $doctorInvoices;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", mappedBy="hospitalConfig")
@@ -685,11 +695,27 @@ class HospitalConfig
     }
 
     /**
-     * @return mixed
+     * @return PathologicalReport
      */
     public function getPathologicalReport()
     {
         return $this->pathologicalReport;
+    }
+
+    /**
+     * @return DoctorInvoice
+     */
+    public function getDoctorInvoices()
+    {
+        return $this->doctorInvoices;
+    }
+
+    /**
+     * @return Invoice
+     */
+    public function getHmsInvoices()
+    {
+        return $this->hmsInvoices;
     }
 
 

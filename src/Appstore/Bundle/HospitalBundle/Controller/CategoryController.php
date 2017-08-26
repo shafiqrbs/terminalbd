@@ -37,7 +37,7 @@ class CategoryController extends Controller
         $data = $_REQUEST;
         $entities = $em->getRepository('HospitalBundle:HmsCategory')->findWithSearch($data);
         $pagination = $this->paginate($entities);
-        $categories = $em->getRepository('HospitalBundle:Category')->findBy(array('level'=>1),array('name' =>'asc' ));
+        $categories = $em->getRepository('HospitalBundle:HmsCategory')->findBy(array('level'=> 1),array('name' =>'asc' ));
         return $this->render('HospitalBundle:Category:index.html.twig', array(
             'entities' => $pagination,
             'categories' => $categories,

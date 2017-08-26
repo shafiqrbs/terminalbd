@@ -28,7 +28,7 @@ class HmsCommission
     private  $doctorInvoices;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="hmsCommission" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="hmsCommissions" )
      **/
     private  $hospitalConfig;
 

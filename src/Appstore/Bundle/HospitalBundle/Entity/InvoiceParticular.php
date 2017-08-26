@@ -27,7 +27,7 @@ class InvoiceParticular
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="invoiceParticulars")
      **/
-    private $invoice;
+    private $hmsInvoice;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="invoiceParticular")
@@ -35,14 +35,19 @@ class InvoiceParticular
     private $particular;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", inversedBy="invoiceParticular")
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoicePathologicalReport", mappedBy="invoiceParticular")
      **/
-    private $pathologicalReport;
+    private $invoicePathologicalReport;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticularReport", mappedBy="invoiceParticular")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceParticularDelivered" )
      **/
-    private $invoiceParticularReports;
+    private  $particularDeliveredBy;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceParticularPrepared" )
+     **/
+    private  $particularPreparedBy;
 
 
     /**
@@ -82,16 +87,6 @@ class InvoiceParticular
      * @ORM\Column(name="subTotal", type="float")
      */
     private $subTotal;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceParticularDelivered" )
-     **/
-    private  $particularDeliveredBy;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceParticularPrepared" )
-     **/
-    private  $particularPreparedBy;
 
     /**
      * @var string
@@ -232,22 +227,6 @@ class InvoiceParticular
     }
 
     /**
-     * @return Invoice
-     */
-    public function getInvoice()
-    {
-        return $this->invoice;
-    }
-
-    /**
-     * @param Invoice $invoice
-     */
-    public function setInvoice($invoice)
-    {
-        $this->invoice = $invoice;
-    }
-
-    /**
      * @return User
      */
     public function getParticularPreparedBy()
@@ -344,19 +323,28 @@ class InvoiceParticular
     }
 
     /**
-     * @return PathologicalReport
+     * @return Invoice
      */
-    public function getPathologicalReport()
+    public function getHmsInvoice()
     {
-        return $this->pathologicalReport;
+        return $this->hmsInvoice;
     }
 
     /**
-     * @param PathologicalReport $pathologicalReport
+     * @param Invoice $hmsInvoice
      */
-    public function setPathologicalReport($pathologicalReport)
+    public function setHmsInvoice($hmsInvoice)
     {
-        $this->pathologicalReport = $pathologicalReport;
+        $this->hmsInvoice = $hmsInvoice;
+    }
+
+
+    /**
+     * @return InvoicePathologicalReport
+     */
+    public function getInvoicePathologicalReport()
+    {
+        return $this->invoicePathologicalReport;
     }
 
 

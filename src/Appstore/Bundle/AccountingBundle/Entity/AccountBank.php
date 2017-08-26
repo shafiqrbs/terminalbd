@@ -4,7 +4,9 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\ServiceSales;
 use Doctrine\ORM\Mapping as ORM;
@@ -108,9 +110,19 @@ class AccountBank
     private  $preOrders;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="accountBank" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="accountBank")
      */
-    protected $hmsInvoice;
+    protected $hmsInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="accountBank" )
+     */
+    protected $doctorInvoices;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction", mappedBy="accountBank" )
+     */
+    protected $invoiceTransactions;
 
 
     /**
@@ -457,12 +469,29 @@ class AccountBank
         return $this->accountOnlineOrders;
     }
 
+
     /**
      * @return Invoice
      */
-    public function getHmsInvoice()
+    public function getHmsInvoices()
     {
-        return $this->hmsInvoice;
+        return $this->hmsInvoices;
+    }
+
+    /**
+     * @return DoctorInvoice
+     */
+    public function getDoctorInvoices()
+    {
+        return $this->doctorInvoices;
+    }
+
+    /**
+     * @return InvoiceTransaction
+     */
+    public function getInvoiceTransactions()
+    {
+        return $this->invoiceTransactions;
     }
 
 }
