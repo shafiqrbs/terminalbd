@@ -12,7 +12,7 @@ var EditableInit = function () {
 }
 
 var count = 0;
-$('.addmore').click(function(){
+$('.addMore').click(function(){
 
     var $el = $(this);
     var $cloneBlock = $('#clone-block');
