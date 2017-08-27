@@ -83,7 +83,7 @@ class CategoryController extends Controller
     private function createCreateForm(HmsCategory $entity, $globalOption)
     {
 
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:Category');
+        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
         $form = $this->createForm(new CategoryType($em,$globalOption), $entity, array(
             'action' => $this->generateUrl('hms_category_create', array('id' => $entity->getId())),
             'method' => 'POST',
@@ -230,7 +230,7 @@ class CategoryController extends Controller
     public function sortedAction(Request $request){
 
         $data = $request->request->get('menuItem');
-        $this->getDoctrine()->getRepository('HospitalBundle:Category')->setFeatureOrdering($data);
+        $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->setFeatureOrdering($data);
         exit;
 
     }

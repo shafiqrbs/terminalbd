@@ -62,11 +62,6 @@ class HospitalConfig
      **/
     private $particulars;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Damage", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
-     */
-    protected $damages;
-
 
     /**
      * @var string

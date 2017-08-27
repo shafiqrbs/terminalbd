@@ -4,6 +4,7 @@ namespace Appstore\Bundle\InventoryBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderReturnItem;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\ProductUnit;
@@ -337,7 +338,7 @@ class StockItem
     }
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getCreatedBy()
     {
@@ -345,7 +346,7 @@ class StockItem
     }
 
     /**
-     * @param mixed $createdBy
+     * @param User $createdBy
      */
     public function setCreatedBy($createdBy)
     {

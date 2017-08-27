@@ -4,9 +4,7 @@ namespace Appstore\Bundle\HospitalBundle\Entity;
 
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
-use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\LocationBundle\Entity\Location;
-use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 /**
@@ -28,7 +26,7 @@ class Particular
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="particulars" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="particulars")
      **/
     private $hospitalConfig;
 
@@ -48,22 +46,22 @@ class Particular
     private $purchaseItems;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="particulars" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="particulars" )
      **/
     private $service;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", mappedBy="particular" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", mappedBy="particular")
      **/
     private $pathologicalReports;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="particulars" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="particulars")
      **/
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="particularDepartments" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="particularDepartments")
      **/
     private $department;
 
@@ -475,22 +473,6 @@ class Particular
     /**
      * @return mixed
      */
-    public function getAssignDoctor()
-    {
-        return $this->assignDoctor;
-    }
-
-    /**
-     * @param mixed $assignDoctor
-     */
-    public function setAssignDoctor($assignDoctor)
-    {
-        $this->assignDoctor = $assignDoctor;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getAssignOperator()
     {
         return $this->assignOperator;
@@ -585,8 +567,6 @@ class Particular
     {
         $this->room = $room;
     }
-
-
 
     /**
      * @return string

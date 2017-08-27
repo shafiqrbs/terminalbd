@@ -52,24 +52,6 @@ class PathologyType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-
-            ->add('assignDoctor', 'entity', array(
-                'required'    => false,
-                'class' => 'Core\UserBundle\Entity\User',
-                'property' => 'userFullName',
-                'attr'=>array('class'=>'span12 select2'),
-                'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.enabled = 1")
-                        ->andWhere("e.globalOption =".$this->globalOption->getId())
-                   /*     ->join('e.profile','p')*/
-                   /*     ->join('p.designation','designation')*/
-                   /*     ->where("e.enabled = 1")*/
-                   /*     ->andWhere("designation.slug = 'doctor'")*/
-                        ->orderBy("e.id","ASC");
-                }
-            ))
-
             ->add('assignOperator', 'entity', array(
                 'required'    => false,
                 'class' => 'Core\UserBundle\Entity\User',
