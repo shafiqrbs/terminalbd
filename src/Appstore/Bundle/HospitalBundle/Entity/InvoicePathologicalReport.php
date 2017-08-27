@@ -25,7 +25,7 @@ class InvoicePathologicalReport
 
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", inversedBy="invoicePathologicalReport")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", inversedBy="invoicePathologicalReports")
      **/
     private $invoiceParticular;
 

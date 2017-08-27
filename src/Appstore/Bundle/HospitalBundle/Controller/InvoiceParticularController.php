@@ -4,6 +4,7 @@ namespace Appstore\Bundle\HospitalBundle\Controller;
 
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
+use Appstore\Bundle\HospitalBundle\Entity\InvoicePathologicalReport;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceParticularType;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
@@ -73,16 +74,31 @@ class InvoiceParticularController extends Controller
     }
 
 
-    public function preparetionAction(InvoiceParticular $entity)
+    public function preparationAction(InvoiceParticular $entity)
     {
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Invoice entity.');
+            throw $this->createNotFoundException('Unable to find Invoice entity preparation.');
         }
-        $editForm = $this->createEditForm($entity);
+        $form = $this->createEditForm($entity);
+
+        /** @var  $reportArr */
+        $reportArr = array();
+
+        /** @var InvoicePathologicalReport $row */
+
+        if (!empty($entity->getInvoicePathologicalReports())){
+            foreach ($entity->getInvoicePathologicalReports() as $row):
+                if(!empty($row->getPathologicalReport())){
+                    $reportArr[$row->getPathologicalReport()->getId()] = $row;
+                }
+            endforeach;
+        }
+
         return $this->render('HospitalBundle:InvoiceParticular:new.html.twig', array(
             'entity' => $entity,
-            'form' => $editForm->createView(),
+            'report' => $reportArr,
+            'form' => $form->createView(),
         ));
     }
 
@@ -96,7 +112,8 @@ class InvoiceParticularController extends Controller
     private function createEditForm(InvoiceParticular $entity)
     {
 
-        $form = $this->createForm(new InvoiceParticularType(), $entity, array(
+        $hospitalConfig = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $form = $this->createForm(new InvoiceParticularType($hospitalConfig), $entity, array(
             'action' => $this->generateUrl('hms_invoice_particular_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -123,14 +140,17 @@ class InvoiceParticularController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+        $data = $request->request->all();
 
         if ($editForm->isValid()) {
             $entity->setParticularPreparedBy($this->getUser());
             $em->flush();
+            $this->getDoctrine()->getRepository('HospitalBundle:InvoicePathologicalReport')->insert($entity,$data);
             $this->get('session')->getFlashBag()->add(
-                'success',"Data has been updated successfully"
+                'success',"Report has been created successfully"
             );
-            return $this->redirect($this->generateUrl('hms_invoice_particular'));
+
+            return $this->redirect($this->generateUrl('hms_invoice_particular_preparation',array('id'=> $entity->getId())));
         }
 
         return $this->render('HospitalBundle:Pathology:new.html.twig', array(

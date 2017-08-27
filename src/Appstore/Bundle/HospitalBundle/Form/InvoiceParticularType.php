@@ -3,6 +3,8 @@
 namespace Appstore\Bundle\HospitalBundle\Form;
 
 
+use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -10,6 +12,18 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class InvoiceParticularType extends AbstractType
 {
+
+    /** @var  HospitalConfig */
+    private $hospitalConfig;
+
+
+
+    function __construct(HospitalConfig $hospitalConfig)
+    {
+        $this->hospitalConfig  = $hospitalConfig;
+    }
+
+
 
 
     /**
@@ -20,6 +34,19 @@ class InvoiceParticularType extends AbstractType
     {
         $builder
 
+            ->add('assignDoctor', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+                'property' => 'referred',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('e')
+                        ->where('e.hospitalConfig ='.$this->hospitalConfig->getId())
+                        ->andWhere("e.service = 5")
+                        ->andWhere("e.status = 1")
+                        ->orderBy("e.name","ASC");
+                }
+            ))
             ->add('process', 'choice', array(
                 'attr'=>array('class'=>'span12 select-custom'),
                 'expanded'      =>false,

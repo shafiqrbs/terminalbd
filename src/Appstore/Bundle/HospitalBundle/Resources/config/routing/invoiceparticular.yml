@@ -6,24 +6,9 @@ hms_invoice_particular_show:
     path:     /{id}/show
     defaults: { _controller: "HospitalBundle:InvoiceParticular:show" }
 
-hms_invoice_particular_preparetion:
-    path:     /{id}/preparetion
-    defaults: { _controller: "HospitalBundle:InvoiceParticular:preparetion" }
-
-hms_invoice_particular_edit:
-    path:     /{id}/edit
-    defaults: { _controller: "HospitalBundle:InvoiceParticular:edit" }
-
-hms_invoice_particular_particular_search:
-    path:     /{id}/particular-search
-    defaults: { _controller: "HospitalBundle:InvoiceParticular:particularSearch" }
-
-hms_invoice_particular_discount_update:
-    path:     /invoice/invoice-dicount-update
-    defaults: { _controller: "HospitalBundle:InvoiceParticular:invoiceDiscountUpdate" }
-    methods:  POST
-    options:
-            expose: true
+hms_invoice_particular_preparation:
+    path:     /{id}/preparation
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:preparation" }
 
 hms_invoice_particular_update:
     path:     /{id}/update

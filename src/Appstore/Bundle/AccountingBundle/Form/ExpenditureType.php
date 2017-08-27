@@ -83,6 +83,9 @@ class ExpenditureType extends AbstractType
 
             ->add('expenseCategory', 'entity', array(
                 'required'    => true,
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please select category'))
+                ),
                 'empty_value' => '---Select expense category---',
                 'attr'=>array('class'=>'ExpenseCategory m-wrap span12 select2'),
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory',

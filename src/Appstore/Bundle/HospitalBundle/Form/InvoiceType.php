@@ -79,6 +79,7 @@ class InvoiceType extends AbstractType
                       return $er->createQueryBuilder('e')
                           ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
                           ->andWhere("e.service = 6")
+                          ->andWhere("e.status = 1")
                           ->orderBy("e.name","ASC");
                   }
 

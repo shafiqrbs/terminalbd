@@ -35,9 +35,15 @@ class InvoiceParticular
     private $particular;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoicePathologicalReport", mappedBy="invoiceParticular")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="invoiceParticularDoctor")
      **/
-    private $invoicePathologicalReport;
+    private $assignDoctor;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoicePathologicalReport", mappedBy="invoiceParticular")
+     **/
+    private $invoicePathologicalReports;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceParticularDelivered" )
@@ -48,6 +54,8 @@ class InvoiceParticular
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceParticularPrepared" )
      **/
     private  $particularPreparedBy;
+
+
 
 
     /**
@@ -340,11 +348,27 @@ class InvoiceParticular
 
 
     /**
+     * @return Particular
+     */
+    public function getAssignDoctor()
+    {
+        return $this->assignDoctor;
+    }
+
+    /**
+     * @param Particular $assignDoctor
+     */
+    public function setAssignDoctor($assignDoctor)
+    {
+        $this->assignDoctor = $assignDoctor;
+    }
+
+    /**
      * @return InvoicePathologicalReport
      */
-    public function getInvoicePathologicalReport()
+    public function getInvoicePathologicalReports()
     {
-        return $this->invoicePathologicalReport;
+        return $this->invoicePathologicalReports;
     }
 
 
