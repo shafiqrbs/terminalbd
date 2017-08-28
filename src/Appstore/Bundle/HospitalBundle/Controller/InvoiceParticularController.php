@@ -143,6 +143,7 @@ class InvoiceParticularController extends Controller
         $data = $request->request->all();
 
         if ($editForm->isValid()) {
+            
             $entity->setParticularPreparedBy($this->getUser());
             $em->flush();
             $this->getDoctrine()->getRepository('HospitalBundle:InvoicePathologicalReport')->insert($entity,$data);
@@ -168,6 +169,19 @@ class InvoiceParticularController extends Controller
             $em->flush();
         }
         return $this->redirect($this->generateUrl('hms_invoice_confirm', array('id' => $entity->getInvoice()->getId())));
+    }
+
+    public function pathologicalReportDeleteAction(InvoicePathologicalReport $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Particular entity.');
+        }
+        $em->remove($entity);
+        $em->flush();
+        return new  JsonResponse('success');
+        exit;
+
     }
 
     public function reportStatusSelectAction()

@@ -58,6 +58,10 @@ hospital_category:
     resource: "@HospitalBundle/Resources/config/routing/category.yml"
     prefix:   /category
 
+hospital_config:
+    resource: "@HospitalBundle/Resources/config/routing/config.yml"
+    prefix:   /config
+
 hospital_homepage:
     path:     /
     defaults: { _controller: HospitalBundle:Default:index }

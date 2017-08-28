@@ -150,7 +150,7 @@
                     </div>
                     <div class="span8">
                         <div class="control-group">
-                            <textarea name="metaValue[]" rows="3" class="m-wrap span12" placeholder="Label value" value=""></textarea>
+                            <textarea name="metaValue[]" class="m-wrap span12" placeholder="Label value"></textarea>
                         </div>
                     </div>
                     <div class="span1">
@@ -174,7 +174,7 @@
                             </div>
                         </div>
                         <div class="span1">
-                            <a href="javascript:" id="{{ meta.id }}"  data-url="{{ path('page_meta_delete',{'id':meta.id}) }}" class="btn red  remove mini"><i class="icon-trash"></i></a>
+                            <a href="javascript:" id="{{ meta.id }}"  data-url="{{ path('hms_invoice_pathological_report_delete',{'id':meta.id}) }}" class="btn red  remove mini"><i class="icon-trash"></i></a>
                         </div>
                     </div>
                     {% endif %}
@@ -272,7 +272,7 @@
         type: 'GET',
         success: function (response) {
         if ('success' == response) {
-        location.reload();
+            location.reload();
         }
         },
         })

@@ -87,6 +87,11 @@ class Particular
      **/
     private  $assignOperator;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularDoctor" )
+     **/
+    private  $assignDoctor;
+
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="particulars" )
      **/
@@ -932,6 +937,22 @@ class Particular
     public function getPathologicalReports()
     {
         return $this->pathologicalReports;
+    }
+
+    /**
+     * @return User
+     */
+    public function getAssignDoctor()
+    {
+        return $this->assignDoctor;
+    }
+
+    /**
+     * @param User $assignDoctor
+     */
+    public function setAssignDoctor($assignDoctor)
+    {
+        $this->assignDoctor = $assignDoctor;
     }
 
 

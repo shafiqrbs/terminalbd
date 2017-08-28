@@ -556,6 +556,11 @@ class User extends BaseUser
 
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="assignDoctor" , cascade={"persist", "remove"})
+     */
+    protected $particularDoctor;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="assignOperator" , cascade={"persist", "remove"})
      */
     protected $particularOperator;

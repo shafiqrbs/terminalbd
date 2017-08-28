@@ -110,7 +110,7 @@
                                         <td class="numeric" >{{ entity.mobile }}</td>
                                         <td class="numeric">{% if entity.department is not empty %}{{ entity.department.name|default('---') }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.commission|number_format }}<span class="required">&nbsp;%</span></td>
-                                        <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name|default('---') }}{% endif %}</td>
+                                        <td class="numeric">{% if entity.location is not empty %}{{ entity.location.name|default('---') }},{{ entity.location.parent.name|default('---') }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
                                                 <a class="btn mini blue btn-action" href="{{ path('hms_referreddoctor_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>

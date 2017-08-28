@@ -20,5 +20,10 @@ hms_invoice_particular_delivery:
     defaults: { _controller: "HospitalBundle:InvoiceParticular:delivery" }
 
 
+hms_invoice_pathological_report_delete:
+    path:     /{id}/pathological-report-delete
+    defaults: { _controller: "HospitalBundle:InvoiceParticular:pathologicalReportDelete" }
+
+
 
 
