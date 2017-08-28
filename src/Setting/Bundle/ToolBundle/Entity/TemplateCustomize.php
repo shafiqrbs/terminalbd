@@ -260,9 +260,9 @@ class TemplateCustomize
      /**
      * @var string
      *
-     * @ORM\Column(name="carousel", type="string", length=10, nullable=true)
+     * @ORM\Column(name="carouselHeight", type="string", length=10, nullable=true)
      */
-    private $carousel = '720px';
+    private $carouselHeight = '720px';
 
 
     /**
@@ -1893,20 +1893,21 @@ class TemplateCustomize
         $this->sidebarColor = $sidebarColor;
     }
 
+
     /**
      * @return string
      */
-    public function getCarousel()
+    public function getCarouselHeight()
     {
-        return $this->carousel;
+        return $this->carouselHeight;
     }
 
     /**
-     * @param string $carousel
+     * @param string $carouselHeight
      */
-    public function setCarousel($carousel)
+    public function setCarouselHeight($carouselHeight)
     {
-        $this->carousel = $carousel;
+        $this->carouselHeight = $carouselHeight;
     }
 
 

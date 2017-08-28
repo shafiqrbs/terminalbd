@@ -97,7 +97,7 @@ class TemplateCustomizeType extends AbstractType
                 'attr'=>array('class'=>'span12'),
                 'choices' => array('bootstrap' => 'Bootstrap',  'nextPrev' => 'Next Previous', 'nextPrevDropDown' => 'Next Previous with drop down'),
             ))
-            ->add('carousel', 'choice', array(
+            ->add('carouselHeight', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(
                     '720px'     => '720px',

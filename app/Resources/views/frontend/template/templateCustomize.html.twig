@@ -340,6 +340,12 @@
         }
     {% endif %}
 
+     {% if globalOption.templateCustomize.carouselHeight  is not empty %}
+        .carousel-img , .carousel-tab-img{
+            height:{{ globalOption.templateCustomize.carouselHeight }}!important;
+        }
+    {% endif %}
+
     .feature-carousel-vertical .owl-controls .owl-buttons .owl-prev , .page-carousel-vertical .owl-controls .owl-buttons .owl-prev {
         {% if globalOption.templateCustomize.sliderLeftRightPosition  is not empty %}
             left: {{ globalOption.templateCustomize.sliderLeftRightPosition }}%!important;
