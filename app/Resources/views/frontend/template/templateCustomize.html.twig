@@ -30,21 +30,25 @@
         border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbHome }} !important;
     }
     {% endif %}
+
     {% if globalOption.templateCustomize.breadcrumbBorderColor is not empty %}
     .breadcrumb li a:before {
         border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbBorderColor }} !important;
     }
     {% endif %}
+
     {% if globalOption.templateCustomize.breadcrumbBg is not empty %}
     .breadcrumb li a:after {
         border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbBg }} !important;
     }
     {% endif %}
+
     {% if globalOption.templateCustomize.breadcrumbActiveBg is not empty %}
     .breadcrumb li.active a{
         background-color: {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
     }
     {% endif %}
+
     {% if globalOption.templateCustomize.breadcrumbActiveBg is not empty %}
     .breadcrumb li.active a:after{
         border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
@@ -56,6 +60,7 @@
         background-color: {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
     }
     {% endif %}
+
     {% if globalOption.templateCustomize.breadcrumbActiveBg is not empty %}
     .breadcrumb li a:hover:after{
         border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
@@ -210,6 +215,7 @@
     .siteBgColor{
         background-color: {{ globalOption.templateCustomize.siteBgColor }}!important;
     }
+    {% endif %}
     {% if globalOption.templateCustomize.sidebarColor is not empty %}
     .page-sidebar , .blog-sidebar{
         background-color: {{ globalOption.templateCustomize.sidebarColor }}!important;
@@ -682,11 +688,8 @@
     {% endif %}
     }
     .testimonial-list .testimonial-list-title{
-    {% if globalOption.templateCustomize.borderColor  is not empty%}
-        color:{{ globalOption.templateCustomize.borderColor }}!important;
-    {% endif %}
+        {% if globalOption.templateCustomize.borderColor  is not empty%}
+            color:{{ globalOption.templateCustomize.borderColor }}!important;
+        {% endif %}
     }
-
-
-
 </style>
