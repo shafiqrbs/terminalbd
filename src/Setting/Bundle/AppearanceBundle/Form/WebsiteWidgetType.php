@@ -137,7 +137,7 @@ class WebsiteWidgetType extends AbstractType
                 },
             ))
 
-            ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap wysihtml5','id'=>'content-ckeditor','rows' => 6)))
+            ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap ckeditor','rows' => 6)))
             ->add('sliderFeature', 'choice', array(
                 'attr'=>array('class'=>'span12  m-wrap targetTo'),
                 'empty_value' => '---Slider with Feature ---',

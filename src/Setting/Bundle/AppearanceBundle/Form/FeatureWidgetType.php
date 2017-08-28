@@ -147,7 +147,7 @@ class FeatureWidgetType extends AbstractType
                         ->orderBy('e.name','ASC');
                 },
             ))
-            ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap wysihtml5','rows' => 6)))
+            ->add('content','textarea', array('attr'=>array('class'=>'span12 m-wrap ckeditor','rows' => 6)))
             ->add('sliderFeature', 'choice', array(
                 'attr'=>array('class'=>'span12  m-wrap'),
                 'empty_value' => '---Slider with Feature ---',

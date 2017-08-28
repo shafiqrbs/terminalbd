@@ -30,15 +30,6 @@
         <!-- BEGIN PAGE CONTENT-->
         <div class="row-fluid">
             <div class="span12">
-                {#    <div class="btn-group pull-right">
-                        {% if entity.id > 0  %}
-                            <a class="btn black" target="_blank" href="{{ path('page_print',{'id': entity.id}) }}">Print</a>
-                            <a class="btn yellow" target="_blank" href="{{ path('page_pdf',{'id': entity.id}) }}">PDF</a>
-                            <a class="btn blue" target="_blank" href="{{ path('page_export',{'id': entity.id}) }}">Export</a>
-                        {% else %}
-                            <a class="btn purple" href="{{ path('page_import') }}">Import</a>
-                        {% endif %}
-                    </div>#}
                 <div class="portlet box green">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Page Information</div>

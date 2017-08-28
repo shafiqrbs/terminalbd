@@ -41,7 +41,7 @@ class PageType extends AbstractType
                 )
             ))
             ->add('file','file', array('attr'=>array('class'=>'default')))
-            ->add('content','textarea', array('attr'=>array('class'=>'span12 wysihtml5 m-wrap','rows'=>15)))
+            ->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap','rows'=>15)))
 
             ->add('parent', 'entity', array(
                 'required'    => false,

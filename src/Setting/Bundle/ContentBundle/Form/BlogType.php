@@ -41,7 +41,7 @@ class BlogType extends AbstractType
             ->add('authorName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter author name')))
             ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter author designation')))
             ->add('file','file', array('attr'=>array('class'=>'default')))
-            ->add('content','textarea', array('attr'=>array('class'=>'span12 wysihtml5 m-wrap','rows'=>15)))
+            ->add('content','textarea', array('attr'=>array('class'=>'span12 ckeditor m-wrap','rows'=>15)))
             ->add('category', 'entity', array(
                 'required'    => false,
                 'class' => 'Setting\Bundle\ContentBundle\Entity\ModuleCategory',

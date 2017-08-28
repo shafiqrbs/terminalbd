@@ -36,7 +36,7 @@ class NewsType extends AbstractType
             ->add('authorName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter author name')))
             ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter author designation')))
             ->add('file','file', array('attr'=>array('class'=>'default')))
-            ->add('content','textarea', array('attr'=>array('class'=>'wysihtml5 m-wrap span12','rows'=>8)))
+            ->add('content','textarea', array('attr'=>array('class'=>'ckeditor m-wrap span12','rows'=>8)))
             ->add('moduleCategory', 'entity', array(
                 'expanded'      =>true,
                 'multiple'      =>true,

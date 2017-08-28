@@ -143,7 +143,6 @@
 'assets/plugins/bootstrap-fileupload/bootstrap-fileupload.js'
 'assets/plugins/select2/select2.min.js'
 'assets/plugins/chosen-bootstrap/chosen/chosen.jquery.min.js'
-'assets/plugins/ckeditor/ckeditor.js'
 'assets/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js'
 'assets/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js'
 'assets/plugins/bootstrap-toggle-buttons/static/js/jquery.toggle.buttons.js'
@@ -202,7 +201,7 @@
 
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/ckeditor/ckeditor.js') }}"></script>
 {% endjavascripts %}
 {% block javascriptBlock %}
 {% endblock %}
@@ -347,18 +346,20 @@
     setTimeout(function () { // set 1 second timeout for having all fonts loaded
         heightsEqualizer('.js-equal-height');
     }, 1000);
-    /*
 
-        if(CKEDITOR) {
-            CKEDITOR.replace('setting_bundle_appearancebundle_featurewidget_content', {
-                'extraPlugins': 'doksoft_backup,doksoft_stat,zoom,justify',
-                filebrowserBrowseUrl : 'ckeditor/plugins/filemanager/filemanager/dialog.php?type=2&editor=ckeditor&fldr=',
-                filebrowserImageBrowseUrl : 'ckeditor/plugins/filemanager/filemanager/dialog.php?type=1&editor=ckeditor&fldr='
-            });
-        }
-    */
 
-</script>
+    /*if(CKEDITOR) {
+        CKEDITOR.replace('page_content', {
+            extraPlugins = 'doksoft_backup,doksoft_stat,zoom,justify';
+            filebrowserBrowseUrl : '/assets/plugins/ckeditor/plugins/filemanager/filemanager/dialog.php?type=2&editor=ckeditor&fldr=',
+            filebrowserImageBrowseUrl : '/assets/plugins/ckeditor/plugins/filemanager/filemanager/dialog.php?type=1&editor=ckeditor&fldr='
+        });
+    }*/
+
+
+
+
+</script>{##}
 <style>
 
 </style>

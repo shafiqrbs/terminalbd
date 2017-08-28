@@ -267,27 +267,12 @@
         </div>
     </div>
     </div>
+<script>
+
+</script>
 <style>
     .row-fluid .span4:nth-child(4) , .row-fluid .span4:nth-child(7), .row-fluid .span4:nth-child(10), .row-fluid .span4:nth-child(13){
         margin-left: 0;
     }
 </style>
-{% endblock %}
-{% block documentready %}
-
-    {{ parent() }}
-
-    NestSortable.init();
-    $('#serialize').click(function(){
-
-        serialized = $('ol.sortable').nestedSortable('serialize');
-        $.ajax({
-            url: '{{ path('menugrouping_sorted') }}',
-            type: "POST",
-            data: serialized
-        }).done(function(data){
-            ('#sorting').submit();
-        });
-    })
-
 {% endblock %}

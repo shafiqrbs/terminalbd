@@ -51,7 +51,7 @@ class EventType extends AbstractType
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter email address')))
             ->add('website','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter website')))
             ->add('price','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Enter event price')))
-            ->add('content','textarea', array('attr'=>array('class'=>'wysihtml5 m-wrap span12','rows' => 12)))
+            ->add('content','textarea', array('attr'=>array('class'=>'ckeditor m-wrap span12','rows' => 12)))
             ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12','rows' => 9)))
             ->add('additionalPhone','text', array('attr'=>array('class'=>'m-wrap span12')))
             ->add('file','file', array('attr'=>array('class'=>'default')))
