@@ -103,7 +103,7 @@ class InvoiceAdmissionController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        if ($entity->getProcess() != "In-progress" or $entity->getProcess() != "Created") {
+        if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created") {
             return $this->redirect($this->generateUrl('hms_invoice_admission_show', array('id' => $entity->getId())));
         }
         $particulars = $em->getRepository('HospitalBundle:Particular')->getServiceWithParticular($hospital);
