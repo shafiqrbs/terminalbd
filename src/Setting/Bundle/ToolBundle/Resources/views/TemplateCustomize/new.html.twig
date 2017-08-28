@@ -643,6 +643,15 @@
                             <div class="row-fluid">
                                 <div class="span3">
                                     <div class="control-group">
+                                        <label class="control-label" for="firstName">Carousel Height</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.carousel) }}
+                                            {{ form_errors(form.carousel) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
                                         <label class="control-label" for="firstName">Slider Position</label>
                                         <div class="controls">
                                             {{ form_widget(form.sliderPosition) }}
@@ -680,7 +689,7 @@
                             <!--/row-->
                             <div class="form-actions portlet box grey">
                                 <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>Braedcrumb</div>
+                                    <div class="caption"><i class="icon-reorder"></i>Breadcrumb</div>
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>

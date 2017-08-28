@@ -235,6 +235,13 @@ class TemplateCustomize
      */
     private $pagination ='bootstrap';
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sliderPosition", type="string", length=20, nullable=true)
+     */
+    private $sliderPosition='top-right';
+
 
     /**
      * @var float
@@ -253,9 +260,9 @@ class TemplateCustomize
      /**
      * @var string
      *
-     * @ORM\Column(name="sliderPosition", type="string", length=20, nullable=true)
+     * @ORM\Column(name="carousel", type="string", length=10, nullable=true)
      */
-    private $sliderPosition='top-right';
+    private $carousel = '720px';
 
 
     /**
@@ -1884,6 +1891,22 @@ class TemplateCustomize
     public function setSidebarColor($sidebarColor)
     {
         $this->sidebarColor = $sidebarColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCarousel()
+    {
+        return $this->carousel;
+    }
+
+    /**
+     * @param string $carousel
+     */
+    public function setCarousel($carousel)
+    {
+        $this->carousel = $carousel;
     }
 
 
