@@ -1,21 +1,18 @@
 {% extends ':frontend/template/mobile:base.html.twig' %}
 {% block body %}
     <!--/welcome-->
-    <div class="w3agile welcome">
-        <div class="b-bottom">
-            <div class="col-md-12">
-                <h3>{{ globalOption.homePage.name }}</h3>
-
-                <p><i>{{ globalOption.homePage.content|raw }}</p>
-
-                <div class="wthree_more wthree_more1">
-                    <a href="{{ path('mobile_content_page',{'subdomain':globalOption.subDomain,'slug':'about-us'}) }}"
-                       class="button--wayra button--border-thick button--text-upper button--size-s">More About
-                    </a>
-                </div>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-    </div>
+    {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+        {% render controller("FrontendBundle:WebsiteWidget:featureMobileWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'mobile'}) %}
+    {% endif %}
     <!--//welcome-->
+{% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/mobile/js/common.js'
+    '@FrontendBundle/Resources/public/template/mobile/js/page.js'
+    '@FrontendBundle/Resources/public/template/mobile/js/corporate.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

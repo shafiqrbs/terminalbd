@@ -3,7 +3,7 @@
     <div class="clearfix"></div>
     <section>
         {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
-            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header-bottom'}) %}
+            {% render controller("FrontendBundle:WebsiteWidget:featureMobileWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header-bottom'}) %}
         {% endif %}
     </section>
     <section>
@@ -76,11 +76,11 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-        '@FrontendBundle/Resources/public/template/js/common.js'
+        '@FrontendBundle/Resources/public/template/desktop/js/common.js'
         '@FrontendBundle/Resources/public/template/desktop/js/sidebar.js'
         '@FrontendBundle/Resources/public/template/desktop/js/page.js'
         '@FrontendBundle/Resources/public/template/desktop/js/headerfooter.js'
-        '@FrontendBundle/Resources/public/template/js/corporate.js'
+        '@FrontendBundle/Resources/public/template/desktop/js/corporate.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

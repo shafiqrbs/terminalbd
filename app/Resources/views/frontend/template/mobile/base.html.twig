@@ -18,7 +18,9 @@
     <meta property="og:type" content="website">
     <meta property="og:image" content="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"><!-- link to image for socio -->
     <meta property="og:url" content="{{ globalOption.domain }}">
-    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}">
+    {% if globalOption.templateCustomize.favicon is not empty %}
+        <link  rel="shortcut icon" href="/uploads/domain/{{ globalOption.id }}/customizeTemplate/{{ globalOption.templateCustomize.favicon }}">
+    {% endif %}
     <script type="application/x-javascript"> addEventListener("load", function() {setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
@@ -27,6 +29,11 @@
     'assets/template/mobile/css/font-awesome.min.css'
     'assets/template/mobile/css/jquery.mmenu.all.css'
     'assets/template/plugin/wow/css/animate.css'
+    'assets/template/plugin/owl.carousel/owl.carousel.min.css'
+    'assets/template/plugin/owl.carousel/owl.theme.min.css'
+    'assets/template/plugin/owl.carousel/owl.transitions.css'
+    'assets/template/plugin/textillate/assets/animate.css'
+    'assets/template/desktop/css/module.css'
     'assets/template/mobile/css/style.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
@@ -53,18 +60,9 @@
                 <div class="clearfix"></div>
             </div>
             <!-- banner -->
-            <div class="details-grid">
-                <div class="details-shade">
-                    <div class="details-right">
-                       {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
-                        <h3>Welcome</h3>
-                     </div>
-                </div>
-
-            </div>
-            <!-- //banner -->
             {% block body %}{% endblock %}
             <!--/footer-->
+            {% if globalOption.templateCustomize.topBar is not empty %}
             <div id="side-bar-panel" class="left-shadow-overlay" >
                 <div class="handle">
                     <span class="glyphicon glyphicon-chevron-right"></span>
@@ -117,6 +115,7 @@
                     {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
                 </div>
             </div>
+            {% endif %}
             <div class="w3agile">
                 <!-- modal -->
                 <div id="email-modal" class="mfp-hide">
@@ -219,7 +218,12 @@
 'assets/template/mobile/js/jquery.mmenu.min.all.js'
 'assets/template/mobile/js/jquery.nicescroll.min.js'
 'assets/template/mobile/js/jquery.slidereveal.min.js'
+'assets/template/plugin/owl.carousel/owl.carousel.min.js'
+'assets/template/plugin/matchHeight/height-match.js'
 'assets/template/plugin/wow/js/wow.min.js'
+'assets/template/plugin/textillate/assets/jquery.fittext.js'
+'assets/template/plugin/textillate/assets/jquery.lettering.js'
+'assets/template/desktop/js/jquery.scrollbar.min.js'
 'assets/template/mobile/js/scripts.js'
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -427,6 +431,16 @@
         margin-bottom:15px;
         clear: both;
     }
+    .mm-list.mm-panel{
+        padding-top:5px !important;
+    }
+
+    .mm-list a.mm-subclose:before {
+        border-right: none;
+        border-bottom: none;
+        margin-bottom: -13px;
+        left: 22px;
+    }
 
     ul.cart-list{
         list-style: none;
@@ -476,6 +490,50 @@
         -o-transition: 200ms ease all;
         transition: 200ms ease all;
     }
+
+    .carousel-main-control.carousel-left {
+        left: 6% !important;
+        text-decoration: none!important;
+    }
+
+    .carousel-main-control.carousel-right {
+        right: 6% !important;
+        text-decoration: none!important;
+    }
+    .carousel-inner{
+        height: 320px;
+        position: relative;
+    }
+    .carousel-img {
+        width: auto;
+        height: 225px;
+        max-height: 225px;
+    }
+    .carousel-cover{
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        position: fixed;
+        min-height: 100%;
+        height: 100%;
+        width: 100%;
+    }
+    .carousel-caption a{
+        font-weight: bold;
+    }
+    #mobile-logo{
+        left: 50%;
+        position: absolute;
+        z-index: 99;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+        top:15px
+    }
+    .feature-box{
+        padding: 5px !important;
+        position: relative;
+    }
+
 </style>
 </body>
 </html>

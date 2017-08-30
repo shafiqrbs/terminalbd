@@ -15,24 +15,16 @@ class WebServiceController extends Controller
     public function indexAction(Request $request , $subdomain)
     {
 
-
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
 
         if(!empty($globalOption)){
+
             $cart = new Cart($request->getSession());
 
             $siteEntity = $globalOption->getSiteSetting();
             $themeName = $siteEntity->getTheme()->getFolderName();
-            $homeEntity = $em->getRepository('SettingContentBundle:HomePage')->findOneBy(array('globalOption'=>$globalOption));
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'home'));
-            $array = array();
-            foreach ($globalOption->getHomesliders() as $slide)
-            {
-                $array[] = $slide->getWebPath();
-            }
-            $selectedBlockBg = rand(0, count($array)-1); // generate random number size of the array
-            //$selectedBlockBg = $array[$i]; // set variable equal to which random filename was chosen
 
             /* Device Detection code desktop or mobile */
             $detect = new MobileDetect();
@@ -46,8 +38,6 @@ class WebServiceController extends Controller
                 array(
                     'entity'    => $globalOption,
                     'globalOption'    => $globalOption,
-                    'homeEntity'    => $homeEntity,
-                    'selectedBlockBg'    => $array,
                     'pageName'    => 'Home',
                     'menu'    => $menu,
                     'cart'    => $cart,

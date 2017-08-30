@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    View Lists
+                    Menu Grouping Lists
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -17,7 +17,7 @@
                         <a href="{{ path('menugrouping') }}">Menu Grouping</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">View Lists</a></li>
+                    <li><a href="#">Menu Grouping Lists</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -33,44 +33,37 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Menu Grouping</div>
                     </div>
 
-                    <div class="portlet-body">
+                    <div class="portlet-body flip-scroll">
+                        {% include('flash-message.html.twig')  %}
+                        <table class="table table-bordered table-striped table-condensed flip-content ">
 
-                        <div class="tabbable portlet-tabs">
-                            <div class="tab-content">
-                                <div class="portlet-body flip-scroll">
-                                    {% include('flash-message.html.twig')  %}
-                                    <table class="table table-bordered table-striped table-condensed flip-content ">
+                            <thead class="flip-content ">
+                            <tr class="head-grey">
+                                <th class="numeric" >Name</th>
+                                <th class="numeric" >Action</th>
 
-                                        <thead class="flip-content ">
-                                        <tr class="head-grey">
-                                            <th class="numeric" >Name</th>
-                                            <th class="numeric" >Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                                        </tr>
-                                        </thead>
-                                        <tbody>
+                            {% for entity in entities %}
+                                <tr>
+                                    <td class="numeric">{{ entity.name }}</td>
+                                    <td class="numeric">
 
-                                        {% for entity in entities %}
-                                            <tr>
-                                                <td class="numeric">{{ entity.name }}</td>
-                                                <td class="numeric">
+                                        <a class="btn mini green-stripe btn-action" href="{{ path('menugrouping_new', { 'id': entity.id }) }}">Menu setting</a>
+                                        <a class="btn mini purple-stripe btn-action" href="{{ path('menugrouping_sorting', { 'menuGroup': entity.id }) }}">Menu sorting</a>
 
-                                                    <a class="btn mini green-stripe btn-action" href="{{ path('menugrouping_new', { 'id': entity.id }) }}">Menu setting</a>
-                                                    <a class="btn mini purple-stripe btn-action" href="{{ path('menugrouping_sorting', { 'menuGroup': entity.id }) }}">Menu sorting</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
 
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
+                            </tbody>
+                        </table>
 
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 

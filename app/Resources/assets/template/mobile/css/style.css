@@ -4,10 +4,19 @@ Author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 */
+a{
+    color: #ffc400;
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: none;
+    color: #555555;
+}
+
 h4, h5, h6,
 h1, h2, h3 {
 	margin: 0;
-	}
+}
 ul, ol, li{margin: 0; padding: 0;}
 p {margin: 0;padding: 0;}
 body{	
@@ -24,10 +33,7 @@ body p{
 h1,h2,h3,h4,h5,h6{
 	font-family: 'Open Sans', sans-serif;
 }
-@font-face{
-	font-family: 'Source Sans Pro';
-	src:url(../fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf) format('truetype');
-}
+
 .side-nav.leftside-navigation {
     top: 64px;
     overflow: hidden;
@@ -174,9 +180,10 @@ h5.pro-link a:hover{
 }
 .menu-notify {
   padding: 12px 0;
-  background:#2ad2c9!important;
+  background:#222!important;
 }
 
+/*
 .panel {
     margin-bottom: 0px;
        background: rgb(30, 31, 33);
@@ -191,6 +198,7 @@ h5.pro-link a:hover{
     padding: 34px 0px 0px;
 	z-index:999;
 }
+*/
 .profile-menu img{
 	width:46%;
 }
@@ -276,7 +284,7 @@ h5.pro-link a:hover{
 }
 
 .logo .link--yaku:hover span {
-	color: #2ad2c9;
+	color: #222;
 	-webkit-transform: perspective(1000px) rotate3d(0,1,0,360deg);
 	transform: perspective(1000px) rotate3d(0,1,0,360deg);
 }
@@ -311,14 +319,14 @@ h5.pro-link a:hover{
 color:#EA6153;
 }
 .logo a.active{
-	color: #2ad2c9;
+	color: #222;
 }
 .logo li {
     list-style: none;
     margin-bottom:20px;
 	}
 	.main-row h1 span {
-    color: #2ad2c9;
+    color: #222;
 }
 .main-row h1 {
       text-align: center;
@@ -407,69 +415,14 @@ p {
 }
 
 .details-grid {
-    background: url(../images/banner-h.jpg) no-repeat 0px 0px;
+    background: url(../images/banner-h.jpg) no-repeat 0 0;
     background-size: cover;
 	-webkit-background-size: cover;
 	 -moz-background-size: cover;
     -ms-background-size: cover;
     -o-background-size: cover;
 }
-.details-grid.gal {
-    background: url(../images/banner-g.jpg) no-repeat 0px 0px;
-    background-size: cover;
-	-webkit-background-size: cover;
-	 -moz-background-size: cover;
-    -ms-background-size: cover;
-    -o-background-size: cover;
-}
-.details-grid.con{
-    background: url(../images/banner-c.jpg) no-repeat 0px 0px;
-    background-size: cover;
-	-webkit-background-size: cover;
-	 -moz-background-size: cover;
-    -ms-background-size: cover;
-    -o-background-size: cover;
-}
-.details-grid.flight{
-    background: url(../images/banner-flight.jpg) no-repeat 0px 0px;
-    background-size: cover;
-	-webkit-background-size: cover;
-	 -moz-background-size: cover;
-    -ms-background-size: cover;
-    -o-background-size: cover;
-}
-.details-grid.tr{
-    background: url(../images/banner-tr.jpg) no-repeat 0px 0px;
-    background-size: cover;
-	-webkit-background-size: cover;
-	 -moz-background-size: cover;
-    -ms-background-size: cover;
-    -o-background-size: cover;
-}
-.details-grid.bus{
-    background: url(../images/banner-bus.jpg) no-repeat 0px 0px;
-    background-size: cover;
-	-webkit-background-size: cover;
-	 -moz-background-size: cover;
-    -ms-background-size: cover;
-    -o-background-size: cover;
-}
-.details-grid.ht{
-	  background: url(../images/banner-hotel.jpg) no-repeat 0px 0px;
-    background-size: cover;
-	-webkit-background-size: cover;
-	 -moz-background-size: cover;
-    -ms-background-size: cover;
-    -o-background-size: cover;
-}
-.details-grid.pay {
-    background: url(../images/banner-pay.jpg) no-repeat 0px 0px;
-    background-size: cover;
-	-webkit-background-size: cover;
-	 -moz-background-size: cover;
-    -ms-background-size: cover;
-    -o-background-size: cover;
-}
+
 .details-shade {
     padding: 58px 0 0;
     background: rgba(22, 21, 23, 0.6);
@@ -489,7 +442,7 @@ p {
     color: #9E9391;
 }
 .details-right h4 {
-       color: #2ad2c9;
+       color: #222;
     font-size: 16px;
     margin-bottom: 13px;
 }
@@ -535,7 +488,7 @@ background: #020202 url(../images/search.png) no-repeat 17px 8px;
         font-family: 'Open Sans', sans-serif;
     text-decoration: none;
     color: #fff;
-    background: #2ad2c9;
+    background: #222;
 }
 .banner-bottom ul  li.active a {
     color: #fff;
@@ -558,7 +511,7 @@ background: #020202 url(../images/search.png) no-repeat 17px 8px;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
   overflow: hidden;
-  background: #2ad2c9;
+  background: #222;
   -webkit-transition-property: color;
   transition-property: color;
   -webkit-transition-duration: 0.3s;
@@ -678,7 +631,7 @@ background: #020202 url(../images/search.png) no-repeat 17px 8px;
 }
 .agile_text_box h3{
 	    font-size: 1.2em;
-    color: #2ad2c9;
+    color: #222;
     line-height: 1.5em;
     margin: 1em 0 .5em;
     text-transform: uppercase;
@@ -696,7 +649,7 @@ background: #020202 url(../images/search.png) no-repeat 17px 8px;
     text-transform: capitalize;
 }
 .banner_bottom_left p i{
-	color:#2ad2c9;
+	color:#222;
 	display:block;
 	margin:.5em 0 1em;
 }
@@ -740,7 +693,7 @@ background: #020202 url(../images/search.png) no-repeat 17px 8px;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: #2ad2c9;
+	background: #222;
 	z-index: -1;
 	-webkit-transform: rotate3d(0, 0, 1, -45deg) translate3d(0, -3em, 0);
 	transform: rotate3d(0, 0, 1, -45deg) translate3d(0, -3em, 0);
@@ -751,7 +704,7 @@ background: #020202 url(../images/search.png) no-repeat 17px 8px;
 }
 .button--wayra:hover {
 	color: #fff;
-	border-color:#2ad2c9;
+	border-color:#222;
 }
 .button--wayra.button--inverted:hover {
 	color: #3f51b5;
@@ -759,7 +712,7 @@ background: #020202 url(../images/search.png) no-repeat 17px 8px;
 }
 .button--wayra:hover::before {
 	opacity: 1;
-	background-color:#2ad2c9;
+	background-color:#222;
 	-webkit-transform: rotate3d(0, 0, 1, 0deg);
 	transform: rotate3d(0, 0, 1, 0deg);
 	-webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
@@ -838,7 +791,7 @@ background: #020202 url(../images/search.png) no-repeat 17px 8px;
     font-size: 16px;
     text-indent: 0;
     color: #fff;
-    background-color: #2ad2c9;
+    background-color: #222;
     border: 0;
     -webkit-transition: all .2s;
     -moz-transition: all .2s;
@@ -961,7 +914,7 @@ ul.simplefilter {
 .simplefilter li {
     background: none;
     border: 2px solid #020202;
-    color: #2ad2c9;
+    color: #222;
 }
 .simplefilter li.active {
     background-color: #020202;
@@ -1037,7 +990,7 @@ a.seat-button {
 }
 a.seat-button:hover {
 	text-decoration:none;
-	background-color:#2ad2c9;
+	background-color:#222;
 }
 a.seat-button.two {
     padding: 0 0!important;
@@ -1088,7 +1041,7 @@ a.seat-button.two {
 	z-index:9999;
 }
 .main-booking input[type="submit"]:hover {
-    background: #2ad2c9;
+    background: #222;
 }
 .main-booking p {
     font-size: 1em;
@@ -1135,7 +1088,7 @@ a.seat-button.two {
 
 }
 .choose-grid i{
-    color: #2ad2c9;
+    color: #222;
     font-size: 28px;
     top: 3px;
     margin-right: 20px;
@@ -1163,7 +1116,7 @@ a.seat-button.two {
     position: absolute;
     bottom: -70%;
     right: 0;
-    background-color: #2ad2c9;
+    background-color: #222;
     text-align: center;
     -o-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
@@ -1375,7 +1328,7 @@ select#country3 option{
     font-size: 13px;
         border: 1px solid #ccc;
     outline: none;
-    color:777;
+    color:#777;
     margin-bottom:15px;
 }
 .pay-form form input.card_logo[type="text"] {
@@ -1390,7 +1343,7 @@ select#country3 option{
     color: #fff;
     font-weight: bold;
     margin-bottom: 0.5em;
-    background: #2ad2c9;
+    background: #222;
     padding: 10px 0;
     text-align: center;
 }
@@ -1424,7 +1377,7 @@ input.text_box {
     width: 52%;
 }
 .pay-form form input[type="submit"] {
-    background:#2ad2c9;
+    background:#222;
     color: #FFFFFF;
     text-align: center;
         padding: 10px 0;
@@ -1432,7 +1385,7 @@ input.text_box {
     font-size: 16px;
     outline: none;
     width: 100%;
-	webkit-appearance:none
+	webkit-appearance:none;
 	    transition: 0.5s all;
     -webkit-transition: 0.5s all;
     -moz-transition: 0.5s all;
@@ -1549,7 +1502,7 @@ span.seatCharts-legendDescription {
     display: block;
     margin: 10px 0;
     font-size: 16px;
-    background: #2ad2c9;
+    background: #222;
     border: none;
     color: #fff;
     padding: 8px 23px;
@@ -1581,7 +1534,7 @@ span.seatCharts-legendDescription {
     width: 100%;
 	max-height: 130px;
 	overflow-y: scroll;
-	overflow-x: none;
+	overflow-x: hidden;
 }
 div.seatCharts-cell {
     color: #182C4E;
@@ -1697,7 +1650,7 @@ input.go-to-pay {
 }
 input.go-to-pay:hover {
     color: #000;
-    background-color: #2ad2c9;
+    background-color: #222;
 }
 img.pp-img {
 	width: 100%;
@@ -1819,7 +1772,7 @@ ul.tabs-menu li a{
 	    margin-bottom: 5px;
 }
 ul.tabs-menu li a:hover{
-	    background: #2ad2c9;
+	    background: #222;
     color: #fff;
 	transition: 0.5s all ease;
 	-webkit-transition: 0.5s all ease;
@@ -1866,8 +1819,8 @@ ul.tabs-menu li a:hover{
 }
 .btn-primary.active, .btn-primary.focus, .btn-primary:active, .btn-primary:focus, .btn-primary:hover, .open>.dropdown-toggle.btn-primary {
     color: #fff;
-    background-color: #2ad2c9!important;
-    border-color: #2ad2c9!important;
+    background-color: #222!important;
+    border-color: #222!important;
 }
 /*-- tabs-responsive --*/
 @media(max-width:1366px){
@@ -2106,7 +2059,7 @@ ul.tabs-menu li a:hover{
 	position:absolute;
 	bottom:0%;
 	left:0%;
-	background: #2ad2c9;
+	background: #222;
     width: 25%;
 	height:2px;
 }
@@ -2123,7 +2076,7 @@ h3.logo a{
 	text-decoration:none;
 }
 h3.logo span {
-    color: #2ad2c9;
+    color: #222;
 }
 .w3agile_footer_grid{
 	color:#999;
@@ -2147,7 +2100,7 @@ h3.logo span {
     -o-transform: rotate(-180deg);
     -ms-transform: rotate(-180deg);
     display: inline-block;
-    color: #2ad2c9;
+    color: #222;
 	line-height: 1;
 }
 .w3agile_footer_grid ul li{
@@ -2159,7 +2112,7 @@ h3.logo span {
 	text-decoration:none;
 }
 .w3agile_footer_grid ul li a:hover{
-	color: #2ad2c9;
+	color: #222;
 }
 .w3agile_footer_grid:nth-child(2) {
     border-left: 1px solid #5c5c5c;
@@ -2205,7 +2158,7 @@ ul.w3agile_footer_grid_list li span i{
     border: none;
     outline: none;
     padding: 9px 12px;
-    background:#2ad2c9;
+    background:#222;
     transition: 0.5s all;
     -webkit-transition: 0.5s all;
     -moz-transition: 0.5s all;
@@ -2218,7 +2171,7 @@ ul.w3agile_footer_grid_list li span i{
 	background: #020202;
 }
 .agileinfo_copy_right{
-	   background: #2ad2c9;
+	   background: #222;
 	   padding: 1.5em 2em 0.4em 2em;
 }
 .agileinfo_copy_right_left{
@@ -2355,7 +2308,7 @@ ul.social li{
 	font-size:0.9em;
 }
 .copy-right p a {
-       color: #2ad2c9;
+       color: #222;
 }
 /*-- //footer --*/
 /*-- Magnific Popup CSS --*/
@@ -2519,7 +2472,7 @@ button.mfp-arrow {
 	font-weight:800;
 }
 .booking-info h3 span {
-	color:#2ad2c9;
+	color:#222;
 }
 .booking-info h3 a {
    color:#020202;
@@ -2562,7 +2515,7 @@ button.mfp-arrow {
     text-transform: uppercase;
 }
 .login-form p a {
-    color: #2ad2c9;
+    color: #222;
     margin-left: 5px;
 	-webkit-transition:.5s all;
 	-moz-transition:.5s all;
@@ -2595,7 +2548,7 @@ button.mfp-arrow {
 .wthree-text input[type="checkbox"]+label span:first-child {
     width: 16px;
     height: 16px;
-    border: 2px solid #2ad2c9;
+    border: 2px solid #222;
     position: absolute;
     left: 0;
     top: 1px;
@@ -2648,7 +2601,7 @@ button.mfp-arrow {
 }
 .login-form input[type="submit"]:hover,.contact-form input[type="submit"]:hover {
 
-	   background: #2ad2c9;
+	   background: #222;
 }
 .login-form.signup-form label {
     text-align: left;

@@ -401,9 +401,10 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@FrontendBundle/Resources/public/template/js/product.js'
-    '@FrontendBundle/Resources/public/template/js/e-commerce.js'
-    '@FrontendBundle/Resources/public/template/js/common.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/product.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/e-commerce.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/common.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/corporate.js'
 
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

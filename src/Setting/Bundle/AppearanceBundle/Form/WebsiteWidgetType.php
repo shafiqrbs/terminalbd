@@ -61,6 +61,7 @@ class WebsiteWidgetType extends AbstractType
                     'sidebar-bottom'            => 'Sidebar Bottom',
                     'footer-top'                => 'Footer Top',
                     'footer-bottom'             => 'Footer Bottom',
+                    'mobile'                    => 'Mobile',
                 ),
             ))
             ->add('pageFeatureName','text', array('attr'=>array('class'=>'span12 m-wrap')))

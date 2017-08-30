@@ -29,19 +29,12 @@ class WebsiteWidgetController extends Controller
 
         $widgets                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'widgetFor'=>'website','menu' => $menu ,'position' => $position ),array('sorting'=>'ASC'));
         /* Device Detection code desktop or mobile */
-
-        $detect = new MobileDetect();
-        if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $theme = 'Template/Mobile/WebsiteWidget/widget';
-        }else{
-            $theme = 'Template/Desktop/WebsiteWidget/widget';
-        }
-
-        return $this->render('@Frontend/'.$theme.'.html.twig', array(
+        return $this->render('@Frontend/Template/Desktop/WebsiteWidget/widget.html.twig', array(
             'widgets'                  => $widgets,
             'globalOption'            => $globalOption,
         ));
     }
+
 
     public function pageBaseFeatureWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
     {
@@ -201,6 +194,37 @@ class WebsiteWidgetController extends Controller
             $path = 'Template/Desktop/'.$theme.'/WebsiteWidget/';
         }
         return $this->render('@Frontend/'.$path.'/headerFooter.html.twig', array(
+            'entities'              => $entities,
+            'widget'                => $widget,
+            'globalOption'          => $globalOption,
+        ));
+    }
+
+    public function featureMobileWidgetAction(GlobalOption $globalOption , Menu $menu , $position ='' )
+    {
+
+        $widgets                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'widgetFor'=>'website','menu' => $menu,'position' => $position ),array('sorting'=>'ASC'));
+
+        return $this->render('@Frontend/Template/Mobile/WebsiteWidget/widget.html.twig', array(
+            'widgets'                  => $widgets,
+            'globalOption'            => $globalOption,
+        ));
+    }
+
+    public function sliderMobileFeatureWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
+    {
+        return $this->render('@Frontend/Template/Mobile/WebsiteWidget/feature.html.twig', array(
+            'widget'                => $widget,
+            'globalOption'          => $globalOption,
+
+        ));
+    }
+
+    public function pageMobileFeatureWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
+    {
+        $limit = $widget->getModuleShowLimit() > 0 ? $widget->getModuleShowLimit() : 10;
+        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(), $widget->getModule() ,$limit);
+        return $this->render('@Frontend/Template/Mobile/WebsiteWidget/page.html.twig', array(
             'entities'              => $entities,
             'widget'                => $widget,
             'globalOption'          => $globalOption,

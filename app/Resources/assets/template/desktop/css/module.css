@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Almendra|Amita|Archivo|Cormorant+Upright|Croissant+One|Dynalight|Elsie|Elsie+Swash+Caps|Felipa|Germania+One|Great+Vibes|Italianno|Katibeh|Lovers+Quarrel|Marko+One|Meie+Script|Miss+Fajardose|Monsieur+La+Doulaise|Mrs+Sheppards|Niconne|Nova+Script|Pattaya|Petrona|Playball|Quintessential|Redressed|Roboto|Rochester|Romanesco|Sail|Saira+Semi+Condensed|Sevillana|Slabo+27px|Snippet|Sofia|Spirax|Stalemate|Tangerine');
 /*============================== Common CSS ===============================*/
+a{
+    color: #ffc400;
+    text-decoration: none;
+}
+a:hover , a:visited, a:focus{
+    text-decoration: none;
+    color: #555555;
+}
 
 .btn-info{
     color: #FFFFff!important;
@@ -860,6 +868,7 @@
 
 
 
+.mobile-carousel .owl-prev, .mobile-carousel .owl-next {opacity: 1 !important;}
 .owl-prev, .owl-next {opacity: 0 !important;}
 .owl-carousel:hover .owl-controls .owl-buttons .owl-prev {opacity: 1 !important;}
 .owl-carousel:hover .owl-controls .owl-buttons .owl-next {opacity: 1 !important;}
@@ -868,7 +877,7 @@
 .owl-carousel{
     position: inherit!important;
 }
-.feature-carousel , .page-carousel ,
+.feature-carousel , .page-carousel, .mobile-carousel ,
 .feature-carousel-top-left , .feature-carousel-top-center , .feature-carousel-top-right , .feature-carousel-bottom-left ,.feature-carousel-bottom-center , .feature-carousel-bottom-right,
 .page-carousel-top-left , .page-carousel-top-center , .page-carousel-top-right , .page-carousel-bottom-left ,.page-carousel-bottom-center , .page-carousel-bottom-right{
     position: relative!important;
@@ -977,6 +986,7 @@
 
 .owl-theme .owl-controls .owl-buttons div a{
     color: #FFFFff !important;
+    text-decoration: none!important;
 }
 
 @media only screen and (max-width: 990px) {
