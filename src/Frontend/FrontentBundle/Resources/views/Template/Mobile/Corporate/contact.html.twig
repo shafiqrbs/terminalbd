@@ -122,7 +122,7 @@
         </div>
     </div>
     {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
-        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'mobile'}) %}
+        {% render controller("FrontendBundle:WebsiteWidget:featureMobileWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'mobile'}) %}
     {% endif %}
 {% endblock %}
 {% block javascriptBlock %}
