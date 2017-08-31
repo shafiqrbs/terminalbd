@@ -2,7 +2,7 @@
     {% if pagination is not empty %}
     {% for entity in pagination %}
         <dl class="entity-list">
-            <dt><img src="{{ image(entity.webPath).resize(250,200) }}" alt="{{ entity.name }}" /><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':entity.slug }) }}">{{ entity.name }}</a></dt>
+            <dt><img src="{{ image(entity.webPath).resize(310,223) }}" alt="{{ entity.name }}" /><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':entity.slug }) }}">{{ entity.name }}</a></dt>
 
             <dd><i class="fa fa-user"></i>&nbsp;{{ entity.authorName }} <i class="fa fa-calendar"></i> {{ entity.updated|date('d F, Y') }} </dd>
             <dd>

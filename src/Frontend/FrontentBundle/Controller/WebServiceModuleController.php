@@ -216,7 +216,7 @@ class WebServiceModuleController extends Controller
         if( $detect->isMobile() ||  $detect->isTablet() ) {
             $theme = 'Template/Mobile/'.$themeName;
         }else{
-            $theme = 'Template/Desktop/'.$themeName;
+            $theme = 'Template/Mobile/'.$themeName;
         }
         return $this->render('FrontendBundle:'.$theme.':contact.html.twig',
             array(

@@ -1,29 +1,22 @@
-
-    <div class="content">
-        <div class="container" style="position: relative">
-            <h1>Event</h1><button id="slidx_button" >Lists</button>
-            <div class="decoration"></div>
-            <div class="col-xs-12">
-                <ul>
-                    {% for row in entity.user.events %}
-                        <li><div class="one-responsive">
-                                <div class="big-notification dark-notification">
-                                    <h4>{{ row.name }} <br/><em>{{ row.startDate|date('F j, Y H:m a') }}</em> To <em>{{ row.endDate|date('F j, Y H:m a') }}</em></h4>
-                                    <p><a href="{{ path('mobile_module',{'subdomain': entity.user.globalOption.subDomain,'module': moduleName|lower,'slug':row.slug }) }}">{{ row.content | truncate(100, true) }}</a></p>
-                                </div>
-                            </div></li>
+<div id="catlist">
+    {% for entity in pagination  %}
+        <div class="col-xs-12 col-sm-6 col-md-6">
+            <dl>
+            <p><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}"><img src="{{ image(entity.webPath).resize(310,223) }}" alt="{{ entity.name }}" /></a></p>
+            <dd><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'event','slug':entity.slug }) }}"><h4>{{ entity.name }}</h4></a></dd>
+            <dd><i class="fa fa-calendar"></i> {{ entity.updated|date('d F, Y') }}&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-map-marker"></i> <a target="_blank"  href="http://maps.google.com/?q={{ entity.latitude }},{{ entity.longitude }}"> {{ entity.location.name }}</a>&nbsp;&nbsp;|&nbsp;&nbsp;<i class="fa fa-retweet"></i> {{ entity.eventType }} </dd>
+            <dd><p>{{ entity.content|truncate(250)|raw }}&nbsp;&nbsp;<a class="more-link" href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'event','slug':entity.slug }) }}">Read more <i class="fa fa-angle-double-right"></i></a></p>
+                <span><i class="fa fa-tags"></i>
+                    {% for cat in entity.moduleCategory %}
+                        <a href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module':module.name|lower ,'slug':cat.slug }) }}">{{ cat.name }}</a>
                     {% endfor %}
-                </ul>
-            </div>
+                </span>
+            </dd>
+        </dl>
         </div>
-    </div>
-    <nav id="slidx_menu">
-        <ul>
-            {% for row in entity.user.events %}
-                <li>
-                    <a href="{{ path('mobile_module',{'subdomain': entity.user.globalOption.subDomain,'module': moduleName|lower,'slug':row.slug }) }}">{{ row.name | truncate(50, true) }}</a>
-                </li>
-            {% endfor %}
+    {% endfor %}
+</div>
+<div class="pagination pull-center"  >
+    {{ knp_pagination_render(pagination) }}
+</div>
 
-        </ul>
-    </nav>
