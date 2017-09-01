@@ -9,15 +9,7 @@
 <div class="container">
     {% set commentID = globalOption.id~'-'~menu.module.slug~'-'~page.id %}
     <div class="row"><div class="col-md-12"><h4>{{ page.name }}</h4></div></div>
-    <div class="clearfix"></div>
-    <div id="catlist">
-        <dl class="entity-list">
-            <dd>
-                <i class="fa fa-user"></i>&nbsp;{{ page.authorName }} <i class="fa fa-calendar"></i> {{ page.updated|date('d F, Y') }}  {% if page.webPath is not empty %}<i class="fa fa-cloud-download"></i>  <a target="_blank" href="{{ page.webPath }}">Download</a>{% endif %}
-            </dd>
-        </dl>
-    </div>
-    <div class="clearfix"></div>
+    <div class="clearfix"><hr></div>
     <div class="row">
         <div class="col-md-12">
             <div class="text-content">{{ page.content|raw }}</div>

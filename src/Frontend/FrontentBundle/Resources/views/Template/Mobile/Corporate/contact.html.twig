@@ -1,5 +1,12 @@
 {% extends ':frontend/template/mobile:base.html.twig' %}
 {% block body %}
+    <div class="details-grid">
+        <div class="details-shade">
+            <div class="details-right">
+                {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div class="row">
 
