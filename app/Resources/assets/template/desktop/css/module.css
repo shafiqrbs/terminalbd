@@ -16,6 +16,23 @@ a:hover , a:visited, a:focus{
     color: #FBFBFB !important;
 }
 
+.gmap{
+    height: 504px!important;
+}
+
+.msg-area {
+    padding: 6px;
+    border: 1px solid transparent;
+}
+
+#contactMsg{
+    display: none;
+}
+
+.comment{
+    padding:15px;
+}
+
 /*================== Social  Share Button ====================================*/
 
 

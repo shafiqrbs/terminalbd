@@ -30,6 +30,7 @@
 
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCKjLTXdq6Db3Xit_pW_GK4EXuPRtnod4o"></script>
     <!-- Google fonts - witch you want to use - (rest you can just remove) -->
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,800,700italic,700,600italic,600,400italic,300italic,300|Roboto:100,300,400,500,700&amp;subset=latin,latin-ext' type='text/css' />
@@ -125,22 +126,11 @@
 
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
+
+{#<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>#}
 {% endjavascripts %}
-
 <script>  subdomain = "{{ globalOption.subDomain }}"; </script>
-{% block javascriptBlock %}{% endblock %}
-<script>
-    $(document).ready(function(){
 
-      {% block documentready %}{% endblock %}
-    });
-    if(CKEDITOR) {
-        CKEDITOR.replace('content', {
-            'extraPlugins': 'doksoft_backup,doksoft_stat,zoom,justify',
-            filebrowserBrowseUrl : 'ckeditor/plugins/filemanager/filemanager/dialog.php?type=2&editor=ckeditor&fldr=',
-            filebrowserImageBrowseUrl : 'ckeditor/plugins/filemanager/filemanager/dialog.php?type=1&editor=ckeditor&fldr='
-        });
-    }
-</script>
+{% block javascriptBlock %}{% endblock %}
 </body>
 </html>

@@ -15,6 +15,13 @@ webservice_email_receive:
     options:
             expose: true
 
+webservice_captch:
+    path:     /captcha/recheck
+    defaults: { _controller: FrontendBundle:SmsEmailReceive:captcha}
+    methods:  POST
+    options:
+            expose: true
+
 webservice_product_details:
     path:     /product/{item}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productDetails }

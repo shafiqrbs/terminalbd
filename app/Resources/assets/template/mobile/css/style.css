@@ -53,9 +53,28 @@ p {
     font-size: 15px;
 }
 /*--fonts--*/
+
 h1,h2,h3,h4,h5,h6{
 	font-family: 'Open Sans', sans-serif;
 }
+
+.siteBgColor{
+    background-color: #FFFFff!important;
+}
+
+.site-name{
+    color: #ffffff!important;
+    font-size: 16px!important;
+    font-weight: bold!important;
+    line-height: 20px!important;
+    text-transform: uppercase;
+}
+
+
+.gmap{
+    height: 350px!important;
+}
+
 
 .side-nav.leftside-navigation {
     top: 64px;
@@ -161,16 +180,18 @@ position:relative;
     text-align: center;
     color: #fff; 
 }
-.Profile-mid {
+.bar-mid {
     float: left;
-    width: 33.333%;
+    width: 70%;
     text-align: center;
 }
-.profile-left {
+.bar-left {
     float: left;
-    width: 33.3333%;
+    width: 15%;
     text-align: center;
+    padding-left:0;
 }
+
 h5.pro-link a{
     text-align: center;
     font-family: 'Open Sans', sans-serif;
@@ -182,21 +203,21 @@ h5.pro-link a{
 h5.pro-link a:hover{
 	text-decoration:none;
 }
-.Profile-right {
+.bar-right {
     float: right;
     width: 33.3333%;
     text-align: center;
 }
-.Profile-right i{
+.bar-right i{
     font-size: 20px;
     color: #fff;
 }
-.profile-left i{
-       font-size: 20px;
+.bar-left i{
+    font-size: 20px;
     color: #fff;
 }
 
-.Profile-right span{
+.bar-right span{
 	color:#fff;
 	font-size:15px;
 	right:0;
@@ -204,6 +225,21 @@ h5.pro-link a:hover{
 .menu-notify {
   padding: 12px 0;
   background:#222!important;
+}
+
+#mobile-footer {
+    bottom:0;
+    color: #EEE;
+    left: 0;
+    margin: 0;
+    position: fixed;
+    right: 0;
+    z-index: 99999;
+    display: block;
+    height: 36px;
+    text-align: center;
+    background: #cccccc;
+
 }
 
 /*

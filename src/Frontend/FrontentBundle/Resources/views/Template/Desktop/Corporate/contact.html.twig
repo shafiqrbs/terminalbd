@@ -116,12 +116,12 @@
                             <div class="row">
                             <div class="col-md-12">
                                 <div class="well well-sm">
-                                    <form id="contactUs" name="contactUsx" method="post" action="{{ path(globalOption.subDomain ~ '_webservice_email_receive') }}">
+                                    <form id="contactUs" name="contactUs" method="post" action="{{ path(globalOption.subDomain ~ '_webservice_email_receive') }}">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="name">Name</label>
-                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter name"  />
+                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter name or company"  />
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -134,12 +134,36 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label for="name">Message</label>
-                                                    <textarea name="message" id="message" name="message" class="form-control" rows="3" cols="25"  placeholder="Message"></textarea>
+                                                    <label for="name">Email Address</label>
+                                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter valid email address ie. user@domain.com"  />
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-md-12">
-                                                <button type="submit" class="btn btn-info pull-right" id="contactFormx">Send Message</button>
+                                                <div class="form-group">
+                                                    <label for="name">Message</label>
+                                                    <textarea name="message" id="message"  class="form-control" rows="3" cols="25"  placeholder="Message"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12" style="margin-bottom:15px">
+                                                <input type="hidden" class="hiddenRecaptcha required" name="hiddenRecaptcha" id="hiddenRecaptcha">
+                                                <div class="g-recaptcha" data-sitekey="6LdSLy8UAAAAAO3p8W8JcrplH4x-bcXFOOJ9ZJhL"></div>
+                                                {#<div id="captcha"></div>#}
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div id="contactMsg" class="msg-area alert-success" role="alert">
+                                                    Thanks! receive your msg.
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <button type="submit" class="btn btn-info pull-right" id="contactForm" ><i class="fa fa-send"></i> Send</button>
                                             </div>
                                         </div>
                                     </form>

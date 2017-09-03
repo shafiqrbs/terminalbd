@@ -59,4 +59,17 @@ class SmsEmailReceiveController extends Controller
 
     }
 
+    public function captchaAction(Request $request){
+        $data = $request->request->all();
+        $data1 = $data['recaptcha_challenge_field'];
+        $data2 = $data['recaptcha_response_field'];
+
+        if($data1 == $data2){
+            return new Response('true');
+        }else{
+            return new Response('false');
+        }
+        exit;
+    }
+
 }

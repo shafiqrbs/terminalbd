@@ -39,7 +39,6 @@ class InvoiceParticular
      **/
     private $assignDoctor;
 
-
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoicePathologicalReport", mappedBy="invoiceParticular")
      **/

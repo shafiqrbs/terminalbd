@@ -1,25 +1,25 @@
 <style>
 
     /* Customize Template for Customer demand*/
-    {% if globalOption.templateCustomize.siteBgColor is not empty %}
-    .siteBgColor{
-        background-color: {{ globalOption.templateCustomize.siteBgColor }}!important;
-    }
-    {% endif %}
+
 
     .site-name{
-        color: {{ globalOption.templateCustomize.siteNameColor }}!important;
+        {% if globalOption.templateCustomize.siteNameColor %}
+            color: {{ globalOption.templateCustomize.siteNameColor }}!important;
+        {% endif %}
         font-size: 16px!important;
         font-weight: bold!important;
         line-height: 20px!important;
         text-transform: uppercase;
     }
+
+
     {% if globalOption.templateCustomize.webPath('bgImage') %}
-    .details-grid{
-        background-image: url("{{ image(globalOption.templateCustomize.webPath('bgImage')).resize() }}")!important;
-        background-position: center center;
-        background-size: 100%;
-    }
+        .details-grid{
+            background-image: url("{{ image(globalOption.templateCustomize.webPath('bgImage')).resize() }}")!important;
+            background-position: center center;
+            background-size: cover;
+        }
     {% endif %}
 
     .menu-notify{
@@ -51,12 +51,11 @@
     #side-bar-panel .handle:hover{
         background-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;
     }
-
-
+    {% if globalOption.templateCustomize.headerBgColor %}
     .footer-bg{
         background-color: {{ globalOption.templateCustomize.headerBgColor }}!important;
     }
-
+    {% endif %}
     #mobile-footer ul.footer-icon li a{
         color: {{ globalOption.templateCustomize.footerAnchorColor }}!important;
         background: {{ globalOption.templateCustomize.footerBgColor }}!important;
@@ -64,32 +63,6 @@
 
     #mobile-footer ul.footer-icon li a:hover{
         color: {{ globalOption.templateCustomize.footerAnchorColorHover }}!important;
-    }
-
-    .main-menu:link, .main-menu:visited {
-        color: #fff;
-        background: rgba(0, 0, 0, .4);
-        border-radius: 4px;
-        padding: .6em .6em;
-    }
-    .profile-left {
-        text-align: left;
-        padding-left: 7%;
-    }
-    #mobile-footer {
-
-        bottom:0;
-        color: #EEE;
-        left: 0;
-        margin: 0;
-        position: fixed;
-        right: 0;
-        z-index: 99999;
-        display: block;
-        height: 36px;
-        text-align: center;
-        background: #cccccc;
-
     }
 
     #mobile-footer ul.footer-icon{
@@ -119,7 +92,6 @@
     }
 
     .agileinfo_copy_right{
-
         background: {{ globalOption.templateCustomize.footerBgColor }}!important;
     }
     #mobile-footer ul.footer-icon li a:hover{
@@ -139,12 +111,11 @@
     }
 
 
-    <style>
-
      {% if globalOption.templateCustomize.anchorColor is not empty %}
      a{
          color: {{ globalOption.templateCustomize.anchorColor }} !important;
      }
+
     {% endif %}
 
     {% if globalOption.templateCustomize.anchorHoverColor is not empty %}
@@ -153,80 +124,6 @@
         cursor: pointer;
     }
     {% endif %}
-
-    {% if globalOption.templateCustomize.breadcrumbBg is not empty %}
-    .breadcrumb{
-        background-color: {{ globalOption.templateCustomize.breadcrumbBg }} !important;
-    }
-    {% endif %}
-
-    {% if globalOption.templateCustomize.breadcrumbHome is not empty %}
-    .breadcrumb li.home a{
-        background-color: {{ globalOption.templateCustomize.breadcrumbHome }} !important;
-    }
-    {% endif %}
-
-    {% if globalOption.templateCustomize.breadcrumbHome is not empty %}
-    .breadcrumb li.home a:after {
-        border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbHome }} !important;
-    }
-    {% endif %}
-
-    {% if globalOption.templateCustomize.breadcrumbBorderColor is not empty %}
-    .breadcrumb li a:before {
-        border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbBorderColor }} !important;
-    }
-    {% endif %}
-
-    {% if globalOption.templateCustomize.breadcrumbBg is not empty %}
-    .breadcrumb li a:after {
-        border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbBg }} !important;
-    }
-    {% endif %}
-
-    {% if globalOption.templateCustomize.breadcrumbActiveBg is not empty %}
-    .breadcrumb li.active a{
-        background-color: {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
-    }
-    {% endif %}
-
-    {% if globalOption.templateCustomize.breadcrumbActiveBg is not empty %}
-    .breadcrumb li.active a:after{
-        border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
-    }
-    {% endif %}
-
-    {% if globalOption.templateCustomize.breadcrumbActiveBg is not empty %}
-    .breadcrumb li a:hover{
-        background-color: {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
-    }
-    {% endif %}
-
-    {% if globalOption.templateCustomize.breadcrumbActiveBg is not empty %}
-    .breadcrumb li a:hover:after{
-        border-left: 30px solid {{ globalOption.templateCustomize.breadcrumbActiveBg }} !important;
-    }
-    {% endif %}
-
-    #header-menu ul a{
-        color: {{ globalOption.templateCustomize.menuLiAColor }} !important;
-    }
-    #header-menu ul a:hover{
-        color: {{ globalOption.templateCustomize.menuLiAHoverColor }} !important;
-    }
-    #header-menu  ul ul li{
-        background-color: {{ globalOption.templateCustomize.menuBgColor }} !important;
-    }
-    #header-menu ul li:hover{
-        background-color: {{ globalOption.templateCustomize.menuBgColorHover }} !important;
-    }
-    #header-menu ul li a:hover{
-        background-color: {{ globalOption.templateCustomize.menuBgColorHover }} !important;
-    }
-    #header-menu ul > li > ul > li:first-child{
-        border-color: {{ globalOption.templateCustomize.menuBgColorHover }} !important;
-    }
-
     .search-form .form-group input.form-control{
         border-color: {{ globalOption.templateCustomize.borderColor }} !important;
     }
@@ -253,12 +150,6 @@
     }
     {% endif %}
 
-    .breadcrumb{
-
-    }
-    .breadcrumb > li > a, .breadcrumb>.active{
-
-    }
 
     .footer-menu ul li a{
         color:{{ globalOption.templateCustomize.footerAnchorColor }} !important;
@@ -300,16 +191,6 @@
     }
     {% endif %}
 
-    #toTop{
-        background-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
-        border-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
-    }
-    #toTop:hover{
-        background-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;
-        border-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;
-    }
-
-
     {% if globalOption.templateCustomize.buttonBgColor is not empty %}
     .owl-theme .owl-controls .owl-buttons div{
         background-color:{{ globalOption.templateCustomize.buttonBgColor }} !important;
@@ -332,23 +213,6 @@
     }
     {% endif %}
 
-    {% if globalOption.templateCustomize.homeBgColor is not empty %}
-    .home{
-        background-color: {{ globalOption.templateCustomize.homeBgColor }} !important;
-    }
-    {% endif %}
-
-    {% if globalOption.templateCustomize.homeAnchorColor is not empty %}
-    .home a{
-        color: {{ globalOption.templateCustomize.homeAnchorColor }} !important;
-    }
-    {% endif %}
-
-    {% if globalOption.templateCustomize.homeAnchorColorHover is not empty %}
-    .home a:hover{
-        color: {{ globalOption.templateCustomize.homeAnchorColorHover }} !important;
-    }
-    {% endif %}
 
     /* Customize Template for Customer demand*/
 
@@ -357,26 +221,21 @@
         background-color: {{ globalOption.templateCustomize.siteBgColor }}!important;
     }
     {% endif %}
+
     {% if globalOption.templateCustomize.sidebarColor is not empty %}
     .page-sidebar , .blog-sidebar{
         background-color: {{ globalOption.templateCustomize.sidebarColor }}!important;
     }
     {% endif %}
-    .mm-ismenu{
-        background-color: {{ globalOption.templateCustomize.headerBgColor }}!important;
-    }
-    .mm-list a{
-        background-color: {{ globalOption.templateCustomize.menuLia }}!important;
-    }
-    .mm-list a:hover{
-        background-color: {{ globalOption.templateCustomize.menuLiHovera }}!important;
-    }
+
+
     #top-bar, #menu-bar{
         background-color: {{ globalOption.templateCustomize.topBgColor }}!important;
     }
     #menu-bar{
         background-color: {{ globalOption.templateCustomize.menuBgColor }}!important;
     }
+
     .footer-menu{
     {% if globalOption.templateCustomize.footerTextColor is not empty %}
         color: {{ globalOption.templateCustomize.footerTextColor }}!important;
@@ -385,30 +244,13 @@
         background-color: {{ globalOption.templateCustomize.footerBgColor }}!important;
     {% endif %}
     }
-    .site-name{
-        color: {{ globalOption.templateCustomize.siteNameColor }}!important;
-        font-size: 20px!important;
-        font-weight: bold!important;
-        text-transform: uppercase;
-    }
-    .details-grid{
-        background-image: url("{{ image(globalOption.templateCustomize.webPath('bgImage')).resize() }}")!important;
-        background-position: center center;
-        background-size: cover;
-    }
+
     #header{
         background-color: {{ globalOption.templateCustomize.headerBgColor }}!important;
     }
     #mobile-footer ul.footer-icon li a{
         color: {{ globalOption.templateCustomize.footerTextColor }}!important;
         background: {{ globalOption.templateCustomize.footerBgColor }}!important;
-    }
-
-    .fos_comment_comment_metas{
-
-    }
-    .fos_comment_submit input[type="submit"]{
-
     }
 
     {% if globalOption.templateCustomize.bodyColor  is not empty%}
@@ -447,40 +289,34 @@
 
     .section-header , .bottom-line , .page-title{
 
-    {% if globalOption.templateCustomize.dividerFontColor  is not empty %}
-        color:{{ globalOption.templateCustomize.dividerFontColor }}!important;
-    {% endif %}
-    {% if globalOption.templateCustomize.dividerFontSize  is not empty %}
-        font-size:{{ globalOption.templateCustomize.dividerFontSize }}!important;
-    {% endif %}
+        {% if globalOption.templateCustomize.dividerFontColor  is not empty %}
+            color:{{ globalOption.templateCustomize.dividerFontColor }}!important;
+        {% endif %}
+        {% if globalOption.templateCustomize.dividerFontSize  is not empty %}
+            font-size:{{ globalOption.templateCustomize.dividerFontSize }}!important;
+        {% endif %}
     }
 
     .section-header:after , .bottom-line:after ,  .page-title:after{
 
-    {% if globalOption.templateCustomize.dividerAfterColor  is not empty %}
-        background-color:{{ globalOption.templateCustomize.dividerAfterColor }}!important;
-    {% endif %}
-    {% if globalOption.templateCustomize.dividerBorder  is not empty %}
-        height:{{ globalOption.templateCustomize.dividerBorder }}px!important;
-    {% endif %}
+        {% if globalOption.templateCustomize.dividerAfterColor  is not empty %}
+            background-color:{{ globalOption.templateCustomize.dividerAfterColor }}!important;
+        {% endif %}
+        {% if globalOption.templateCustomize.dividerBorder  is not empty %}
+            height:{{ globalOption.templateCustomize.dividerBorder }}px!important;
+        {% endif %}
     }
 
     .section-header:before , .bottom-line:before , .page-title:before {
 
-    {% if globalOption.templateCustomize.dividerBeforeColor  is not empty %}
-        background-color:{{ globalOption.templateCustomize.dividerBeforeColor }}!important;
-    {% endif %}
-    {% if globalOption.templateCustomize.dividerBorder  is not empty %}
-        height:{{ globalOption.templateCustomize.dividerBorder }}px!important;
-    {% endif %}
+        {% if globalOption.templateCustomize.dividerBeforeColor  is not empty %}
+            background-color:{{ globalOption.templateCustomize.dividerBeforeColor }}!important;
+        {% endif %}
+        {% if globalOption.templateCustomize.dividerBorder  is not empty %}
+            height:{{ globalOption.templateCustomize.dividerBorder }}px!important;
+        {% endif %}
     }
 
-
-    {% if globalOption.templateCustomize.borderColor  is not empty %}
-    .social-payment{
-        border-bottom: 1px solid {{ globalOption.templateCustomize.borderColor }}!important;
-    }
-    {% endif %}
 
     {% if globalOption.templateCustomize.carouselHeight  is not empty %}
     .carousel-img , .carousel-tab-img{

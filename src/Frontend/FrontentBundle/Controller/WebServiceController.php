@@ -21,10 +21,9 @@ class WebServiceController extends Controller
         if(!empty($globalOption)){
 
             $cart = new Cart($request->getSession());
-
             $siteEntity = $globalOption->getSiteSetting();
             $themeName = $siteEntity->getTheme()->getFolderName();
-            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'home'));
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => 'home'));
 
             /* Device Detection code desktop or mobile */
             $detect = new MobileDetect();

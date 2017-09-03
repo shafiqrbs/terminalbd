@@ -371,11 +371,4 @@
     }
 </style>
 {% endblock %}
-{% block documentready %}
-    {{ parent() }}
-    if(CKEDITOR) {
-    CKEDITOR.replace('setting_bundle_appearancebundle_featurewidget_content', {
-        extraPlugins : 'doksoft_backup,doksoft_stat,zoom,justify'
-    });
-    }
-{% endblock %}
+

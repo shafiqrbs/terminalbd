@@ -1,0 +1,56 @@
+<!-- modal -->
+<div id="email-modal" class="mfp-hide">
+    <div class="login-modal">
+        <div class="booking-info">
+            <h3><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{{ globalOption.name }}</a></h3>
+        </div>
+        <div class="login-form">
+            <form action="{{ path(globalOption.subDomain ~ '_webservice_email_receive') }}" id="sendEmail" name="sendEmail" method="post">
+                <div class="input-group ">
+                    <span class="input-group-addon" ><i class="fa fa-user"></i></span>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name/company" aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group ">
+                    <span class="input-group-addon" ><i class="fa fa-mobile"></i></span>
+                    <input type="text" class="form-control mobile" id="mobile" name="mobile" placeholder="Enter your mobile no" aria-describedby="basic-addon1">
+                </div>
+                <div class="input-group ">
+                    <span class="input-group-addon" ><i class="fa fa-envelope"></i></span>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Enter your valid email address" aria-describedby="basic-addon1">
+                </div>
+                <div>
+                    <textarea class="col-md-12 comment" name="content" id="content" placeholder="Enter any comment"></textarea>
+                </div>
+                <div class="clearfix"></div>
+                <p>
+                    <input type="hidden" class="hiddenRecaptcha required" name="mobileRecaptcha" id="mobileRecaptcha">
+                <div class="g-recaptcha" data-sitekey="6LdSLy8UAAAAAO3p8W8JcrplH4x-bcXFOOJ9ZJhL"></div>
+                </p>
+                <div class="clearfix"></div>
+                <p class="text-center"><button class="btn comment col-md-12 label-primary"  type="submit" value="Sign In"><i class="fa fa-send"></i>&nbsp;Send</button></p>
+            </form>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<div id="sms-modal" class="mfp-hide">
+    <div class="login-modal">
+        <div class="booking-info">
+            <h3><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{{ globalOption.name }}</a></h3>
+        </div>
+        <div class="login-form">
+            <form action="{{ path(globalOption.subDomain ~ '_webservice_sms_receive') }}" id="sendSms" name="sendSms" method="post">
+                <div class="input-group ">
+                    <span class="input-group-addon" ><i class="fa fa-mobile"></i></span>
+                    <input type="text" class="form-control mobile" name="mobile" id="mobile" placeholder="Enter your mobile no" aria-describedby="basic-addon1">
+                </div>
+                <div>
+                    <textarea class="col-md-12 comment sms-content" name="content" maxlength="140" id="content" placeholder="Enter any comment"></textarea>
+                </div>
+                <p class="text-center"><button class="comment btn col-md-12 label-primary"  type="submit" value="Sign In"><i class="fa fa-send"></i>&nbsp;Send</button></p>
+            </form>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<!-- //modal -->

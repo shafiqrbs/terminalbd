@@ -76,6 +76,11 @@ class Particular
     private $assignDoctorInvoices;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\invoiceParticular", mappedBy="assignDoctor")
+     **/
+    private $invoiceParticularDoctor;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="particular" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
@@ -953,6 +958,14 @@ class Particular
     public function setAssignDoctor($assignDoctor)
     {
         $this->assignDoctor = $assignDoctor;
+    }
+
+    /**
+     * @return InvoiceParticular
+     */
+    public function getInvoiceParticularDoctor()
+    {
+        return $this->invoiceParticularDoctor;
     }
 
 

@@ -91,19 +91,130 @@ $(document).ready(function(){
         });
 
         $("#contactMsg").validate({
-
+            ignore: ".ignore",
             rules: {
                 name: {required: true},
                 mobile: {required: true}
             },
             messages: {
-                name: "Just check the box<h5 class='text-danger'>You aren't going to read the EULA</h5>",
+                name: "Enter your name or company",
                 mobile: "Enter valid mobile no"
             },
             tooltip_options: {
-                name: {trigger:'focus'},
+                name: {trigger:'focus',placement:'top',html:true},
                 mobile: {placement:'top',html:true}
             },
+            submitHandler: function(form) {
+
+                $.ajax({
+
+                    url         : $(form).attr( 'action' ),
+                    type        : $(form).attr( 'method' ),
+                    data        : new FormData(form),
+                    processData : false,
+                    contentType : false,
+                    success: function(response) {
+                       console.log(response);
+                    },
+                    complete: function(){
+
+                    }
+                });
+            }
+
+        });
+
+       /* Recaptcha.create("6LdSLy8UAAAAAO3p8W8JcrplH4x-bcXFOOJ9ZJhL", "captcha", {
+            theme: "red",
+            callback: Recaptcha.focus_response_field
+        });
+
+        var onloadCallback = function() {
+            grecaptcha.render('captcha', {
+                'sitekey' : '6LdSLy8UAAAAAO3p8W8JcrplH4x-bcXFOOJ9ZJhL'
+            });
+        };
+        onloadCallback();
+
+        jQuery.validator.addMethod("checkCaptcha", (function() {
+            var isCaptchaValid;
+            isCaptchaValid = false;
+            $.ajax({
+                url: "/captcha/recheck",
+                type: "POST",
+                async: false,
+                data: {
+                    recaptcha_challenge_field: Recaptcha.get_challenge(),
+                    recaptcha_response_field: Recaptcha.get_response()
+                },
+                success: function(resp) {
+                    if (resp === "true") {
+                        isCaptchaValid = true;
+                    } else {
+                        Recaptcha.reload();
+                    }
+                }
+            });
+            return isCaptchaValid;
+        }), "");*/
+
+        $("#contactUs").validate({
+
+                rules: {
+                    name: {required: true},
+                    mobile: {required: true,maxlength:13,minlength:13},
+                    message: {required: true,maxlength:512},
+                    email: {email: true},
+                    hiddenRecaptcha: {
+                        required: function() {
+                            if(grecaptcha.getResponse() == '') {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
+                },
+                messages: {
+                    name: "Enter name or company",
+                    mobile: "Enter valid mobile no",
+                    email: "Please enter a valid email address.",
+                    message: "Please enter comments",
+                    hiddenRecaptcha: {
+                        checkCaptcha: "Your Captcha response was incorrect. Please try again."
+                    }
+                },
+
+                tooltip_options: {
+                    name: {trigger:'focus',placement:'top',html:true},
+                    mobile: {trigger:'focus',placement:'top',html:true},
+                    email: {trigger:'focus',placement:'top',html:true},
+                    message: {trigger:'focus',placement:'top',html:true},
+                    hiddenRecaptcha: {trigger:'focus',placement:'top',html:true}
+                },
+
+                submitHandler: function(form) {
+
+                    if(grecaptcha.getResponse() == "") {
+                        alert("Your Captcha response was incorrect. Please try again.");
+                        return false;
+                    }
+                    $.ajax({
+
+                        url         : $(form).attr( 'action' ),
+                        type        : $(form).attr( 'method' ),
+                        data        : new FormData(form),
+                        processData : false,
+                        contentType : false,
+                        success: function(response) {
+                            $("form").trigger("reset");
+                            grecaptcha.reset();
+                        },
+                        complete: function(){
+                            $('#contactMsg').show();
+                        }
+                    });
+                }
 
         });
 

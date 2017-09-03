@@ -76,7 +76,7 @@
            <dl>
                <dd><i class="fa fa-user"></i>&nbsp;{{ page.authorName }} <i class="fa fa-calendar"></i> {{ page.updated|date('d F, Y') }} <span><i class="fa fa-tags"></i>
                        {% for cat in page.moduleCategory %}
-                           <a href="{{ path('webservice_module_category',{'subdomain': globalOption.subDomain,'module':'news' ,'slug':cat.slug }) }}">{{ cat.name }}</a>{% if not loop.last %},{% endif %}
+                           <a href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'module':'news' ,'slug':cat.slug }) }}">{{ cat.name }}</a>{% if not loop.last %},{% endif %}
                        {% endfor %}
             </span>
                </dd>
