@@ -78,11 +78,14 @@ $(document).ready(function(){
             // autoEscape: false,
             shown: function (obj) {
                 obj.find(".handle").html('<span class="glyphicon glyphicon-chevron-right"></span>');
+                obj.find(".handle").addClass('handle-right');
                 obj.addClass("left-shadow-overlay");
             },
             hidden: function (obj) {
                 obj.find(".handle").html('<span class="glyphicon glyphicon-chevron-left"></span>');
+                obj.find(".handle").removeClass('handle-right');
                 obj.removeClass("left-shadow-overlay");
+
                 $('#registerModal').hide();
                 $('#forgetModal').hide();
                 $('#loginModal').hide();

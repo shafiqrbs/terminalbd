@@ -13,7 +13,6 @@
         text-transform: uppercase;
     }
 
-
     {% if globalOption.templateCustomize.webPath('bgImage') %}
         .details-grid{
             background-image: url("{{ image(globalOption.templateCustomize.webPath('bgImage')).resize() }}")!important;
@@ -51,6 +50,7 @@
     #side-bar-panel .handle:hover{
         background-color:{{ globalOption.templateCustomize.buttonBgColorHover }} !important;
     }
+
     {% if globalOption.templateCustomize.headerBgColor %}
     .footer-bg{
         background-color: {{ globalOption.templateCustomize.headerBgColor }}!important;
@@ -104,14 +104,7 @@
     .comment{
         width: 100%;
     }
-
-    #gmap_canvas{
-        min-height:420px;
-        min-width: 320px;
-    }
-
-
-     {% if globalOption.templateCustomize.anchorColor is not empty %}
+    {% if globalOption.templateCustomize.anchorColor is not empty %}
      a{
          color: {{ globalOption.templateCustomize.anchorColor }} !important;
      }
