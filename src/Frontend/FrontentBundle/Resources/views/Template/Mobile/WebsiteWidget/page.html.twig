@@ -435,14 +435,14 @@
                         {% for key,portfolio in entities  %}
                             <div class="col-md-12 col-sm-12">
                                 <div class="our-portfolio" data-match-height="mobilePortfolio">
-                                    <img src="{{ image(portfolio.webPath).scaleResize(380,266) }}" alt="">
+                                    <img class="img-thumbnail" src="{{ image(portfolio.webPath).scaleResize(380,266) }}" alt="">
                                     <div class="team-content">
                                         <h3 class="team-prof">
                                             <a href="http://{{ portfolio.website }}">{{ portfolio.name }}</a>
                                             {% if portfolio.category is not empty %}<small>{{ portfolio.category.name }}</small>{% endif %}
                                         </h3>
                                     </div>
-                                    <p><a href="http://{{ portfolio.website }}">{{ portfolio.name }}</a></p>
+                                    <p class="text-center" ><a target="_blank" href="http://{{ portfolio.website }}"><b>{{ portfolio.name }}</b></a></p>
                                 </div>
                             </div>
                         {% endfor %}
@@ -452,11 +452,15 @@
                 <div class="row">
                     {% for key,portfolio in entities  %}
                         <div class="col-md-6 col-sm-6">
-                            <div class="box-sidebar-portfolio" data-match-height="mobileSponsor">
-                                <a class="thumbnail"><img src="{{ image(portfolio.webPath).resize(171,180) }}" alt=""></a>
-                                <ul class="social-links">
-                                    <li><a target="_blank" href="http://{{ portfolio.website }}" class="fa fa-link"></a></li>
-                                </ul>
+                            <div class="our-portfolio" data-match-height="mobilePortfolio">
+                                <img class="img-thumbnail" src="{{ image(portfolio.webPath).scaleResize(380,266) }}" alt="">
+                                <div class="team-content">
+                                    <h3 class="team-prof">
+                                        <a href="http://{{ portfolio.website }}">{{ portfolio.name }}</a>
+                                        {% if portfolio.category is not empty %}<small>{{ portfolio.category.name }}</small>{% endif %}
+                                    </h3>
+                                </div>
+                                <p class="text-center" ><a target="_blank" href="http://{{ portfolio.website }}"><b>{{ portfolio.name }}</b></a></p>
                             </div>
                         </div>
                     {% endfor %}
@@ -631,7 +635,7 @@
                                 <div class="box-sidebar-testimonial" >
                                     <div class="content">
                                         <div class="testimonial-pic">
-                                            <img src="{{ image(testimonial.webPath).resize(80,80) }}" alt="">
+                                            <img class="img-thumbnail"  src="{{ image(testimonial.webPath).scaleResize(380,266) }}">
                                         </div>
                                         <div class="testimonial-prof">
                                             <h3 class="testimonial-title">{{ testimonial.name }}</h3>
@@ -649,7 +653,7 @@
                             <div class="box-sidebar-testimonial" >
                                 <div class="content">
                                     <div class="testimonial-pic">
-                                        <img src="{{ image(testimonial.webPath).resize(80,80) }}" alt="">
+                                        <img class="img-thumbnail"  src="{{ image(testimonial.webPath).scaleResize(380,266) }}">
                                     </div>
                                     <div class="testimonial-prof">
                                         <h3 class="testimonial-title">{{ testimonial.name }}</h3>

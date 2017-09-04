@@ -242,22 +242,7 @@ h5.pro-link a:hover{
 
 }
 
-/*
-.panel {
-    margin-bottom: 0px;
-       background: rgb(30, 31, 33);
-    width: auto;
-    height: 780px !important;
-    width: 15.625em !important;
-    border: 0 solid transparent !important;
-    border-radius: 0 !important;
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
-    text-align: left;
-    padding: 34px 0px 0px;
-	z-index:999;
-}
-*/
+
 .profile-menu img{
 	width:46%;
 }
@@ -1289,7 +1274,18 @@ h2.typoh2{
 .label {
     font-size: 53%;
 }
+
+.img-thumbnail{
+    border:0;
+    border-radius:0;
+}
+
+.mbm_social{
+    text-align: center!important;
+}
 /*-- //short-codes --*/
+
+
 /*--/hotel-single--*/
 .hotel-left-one img {
     width: 100%;
