@@ -19,7 +19,7 @@
     </div>
 <hr>
 {% else %}
-<div class="header-grid"  {% elseif page.webPath is not empty %} style="background-image:url('{{ image(page.webPath) }}')!important;" {% endif %} >
+<div class="header-grid"  {% if page.webPath is not empty %} style="background-image:url('{{ image(page.webPath) }}')!important;" {% endif %} >
     <a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}" id="mobile-logo">
         {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
     </a>
