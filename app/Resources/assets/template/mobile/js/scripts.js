@@ -23,10 +23,14 @@ $(document).ready(function(){
         }
 
         $("#mm-menu").mmenu();
-        $(window).load(function() {
-            $('#gmap_canvas').show();
-        });
 
+        var stickyOffset = $('.sticky').offset().top;
+        $(window).scroll(function(){
+            var sticky = $('.sticky'),
+                scroll = $(window).scrollTop();
+            if (scroll >= stickyOffset) sticky.addClass('fixed');
+            else sticky.removeClass('fixed');
+        });
 
         $('.popup-top-anim').magnificPopup({
             type: 'inline',
@@ -93,19 +97,16 @@ $(document).ready(function(){
             }
         });
 
-
         $('.social-tooltip').tooltip({
             selector: "[data-toggle=tooltip]",
             container: "body"
         });
 
-        $(".numeric").numeric();
-        $(".mobile").inputmask("mask", {"mask": "99999-999-999"}); //specifying fn & options
         $('#searchEvent').click(function(){
             $('#nav-search').slideToggle('slow');
         });
 
-        $('#catlist').children('.news-list').each(function(index) {
+        $('#catlist').children('.list-grid').each(function(index) {
             $(this).addClass(index % 2 ? 'odd' : 'even');
         });
 
@@ -119,6 +120,12 @@ $(document).ready(function(){
                 $(this).toggleClass('open');
             }
         );
+
+        $('.modalOpen').click(function(){
+            var id = $(this).attr('id');
+            var inst = $("[data-remodal-id=modal"+id+"]").remodal();
+            inst.open();
+        });
 
         $("#sendSms").validate({
             ignore: ".ignore",
@@ -274,62 +281,86 @@ $(document).ready(function(){
 
         });
 
-        $("#signupx").validate({
+        $("#signup").validate({
 
-            rules: {
+        rules: {
 
-                "Core_userbundle_user[globalOption][name]": {required: true},
-                "Core_userbundle_user[profile][mobile]": {
-                    required: true,
-                    remote: Routing.generate('webservice_customer_checking',{'subdomain':subdomain})
-                },
-                "Core_userbundle_user[globalOption][syndicate]": {required: true},
-                "Core_userbundle_user[globalOption][location]": {required: true},
-                "Core_userbundle_user[globalOption][status]": {required: true}
+            "Core_userbundle_user[globalOption][name]": {required: true},
+            "Core_userbundle_user[profile][mobile]": {
+                required: true,
+                remote: Routing.generate('webservice_customer_checking',{'subdomain':subdomain})
             },
+            "Core_userbundle_user[globalOption][syndicate]": {required: true},
+            "Core_userbundle_user[globalOption][location]": {required: true},
+            "Core_userbundle_user[globalOption][status]": {required: true}
+        },
 
-            messages: {
+        messages: {
 
-                "Core_userbundle_user[globalOption][name]":"Enter your organization name",
-                "Core_userbundle_user[profile][mobile]":{
-                    required: "Enter valid mobile no",
-                    remote: "This mobile no is already registered. Please try to another no."
-                },
-                "Core_userbundle_user[profile][syndicate]": "Enter your professional",
-                "Core_userbundle_user[profile][location]": "Enter your location",
-                "Core_userbundle_user[globalOption][status]": "Please read terms & condition and agree"
+            "Core_userbundle_user[globalOption][name]":"Enter your organization name",
+            "Core_userbundle_user[profile][mobile]":{
+                required: "Enter valid mobile no",
+                remote: "This mobile no is already registered. Please try to another no."
             },
+            "Core_userbundle_user[profile][syndicate]": "Enter your professional",
+            "Core_userbundle_user[profile][location]": "Enter your location",
+            "Core_userbundle_user[globalOption][status]": "Please read terms & condition and agree"
+        },
 
-            tooltip_options: {
+        tooltip_options: {
 
-                "Core_userbundle_user[globalOption][name]": {placement:'top',html:true},
-                "Core_userbundle_user[profile][mobile]": {placement:'top',html:true},
-                "Core_userbundle_user[globalOption][syndicate]": {placement:'top',html:true},
-                "Core_userbundle_user[globalOption][location]": {placement:'top',html:true},
-                "Core_userbundle_user[globalOption][status]":{placement:'right',html:true},
-            },
-            submitHandler: function(form) {
+            "Core_userbundle_user[globalOption][name]": {placement:'top',html:true},
+            "Core_userbundle_user[profile][mobile]": {placement:'top',html:true},
+            "Core_userbundle_user[globalOption][syndicate]": {placement:'top',html:true},
+            "Core_userbundle_user[globalOption][location]": {placement:'top',html:true},
+            "Core_userbundle_user[globalOption][status]":{placement:'right',html:true},
+        },
+        submitHandler: function(form) {
 
-                $.ajax({
+            $.ajax({
 
-                    url         : $(form).attr( 'action' ),
-                    type        : $(form).attr( 'method' ),
-                    data        : new FormData(form),
-                    processData : false,
-                    contentType : false,
-                    success: function(response) {
-                        if(response == 'valid'){
-                            $('#registerModal').modal('hide');
-                            $('#forgetModal').modal('hide');
-                            $('#loginModal').modal('toggle');
-                        }
-                    },
-                    complete: function(){
-
+                url         : $(form).attr( 'action' ),
+                type        : $(form).attr( 'method' ),
+                data        : new FormData(form),
+                processData : false,
+                contentType : false,
+                success: function(response) {
+                    if(response == 'valid'){
+                        $('#registerModal').modal('hide');
+                        $('#forgetModal').modal('hide');
+                        $('#loginModal').modal('toggle');
                     }
-                });
+                },
+                complete: function(){
+
+                }
+            });
+        }
+    });
+
+        $.validator.setDefaults({
+
+        errorElement: "span",
+        errorClass: "help-block",
+        //	validClass: 'stay',
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass(errorClass); //.removeClass(errorClass);
+            $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass(errorClass); //.addClass(validClass);
+            $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+        },
+        errorPlacement: function (error, element) {
+            if (element.parent('.input-group').length) {
+                error.insertAfter(element.parent());
+            } else if (element.hasClass('select2')) {
+                error.insertAfter(element.next('span'));
+            } else {
+                error.insertAfter(element);
             }
-        });
+        }
+    });
 });
 
 

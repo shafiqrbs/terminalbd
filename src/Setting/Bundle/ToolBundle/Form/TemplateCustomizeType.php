@@ -106,6 +106,15 @@ class TemplateCustomizeType extends AbstractType
                     '360px'     => '360px',
                 ),
             ))
+            ->add('mobileCarouselHeight', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    '280px'     => '280px',
+                    '320px'     => '320px',
+                    '380px'     => '380px',
+                    '420px'     => '420px',
+                ),
+            ))
             ->add('sliderPosition', 'choice', array(
                 'attr'=>array('class'=>'span12'),
                 'choices' => array(

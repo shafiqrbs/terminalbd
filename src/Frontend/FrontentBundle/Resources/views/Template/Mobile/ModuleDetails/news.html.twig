@@ -3,9 +3,9 @@
     <div class="carousel-container">
         <div id="carousel" class="carousel slide carousel-fade">
             <div class="carousel-inner">
-                <div id="mobile-logo">
+                <a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}" id="mobile-logo">
                     {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
-                </div>
+                </a>
                 {% if page.webPath is not empty %}
                     <div class="carousel-cover item active" data-slide-no="0" style="background-image: url('{{ image(page.webPath) }}')!important;"></div>
                 {% endif %}
@@ -18,24 +18,14 @@
             <a class="carousel-post-control right" href="#carousel" data-slide="next">›</a>
         </div>
     </div>
-    <hr><br/></hr>
-{% elseif page.webPath is not empty %}
-    <div class="details-grid" style="background-image:url('{{ image(page.webPath) }}')!important;" >
-        <div class="details-shade">
-            <div class="details-right">
-                {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
-            </div>
-        </div>
-    </div>
-    <hr><br/></hr>
+<hr>
 {% else %}
-    <div class="details-grid">
-        <div class="details-shade">
-            <div class="details-right">
-                {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
-            </div>
-        </div>
-    </div>
+<div class="header-grid"  {% elseif page.webPath is not empty %} style="background-image:url('{{ image(page.webPath) }}')!important;" {% endif %} >
+    <a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}" id="mobile-logo">
+        {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
+    </a>
+</div>
+<hr>
 {% endif %}
 <div class="container">
 <div class="row">

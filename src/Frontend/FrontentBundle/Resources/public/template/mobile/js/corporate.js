@@ -10,6 +10,7 @@ $(".carousel").on("slid", function() {
     $(".myCarousel-target.active").removeClass("active");
     $(".carousel-indicators [data-slide-to=" + to_slide + "]").addClass("active");
 });
+
 $(".myCarousel-target").on("click", function() {
     $(this).preventDefault();
     $(".carousel").carousel(parseInt($(this).attr("data-slide-to")));

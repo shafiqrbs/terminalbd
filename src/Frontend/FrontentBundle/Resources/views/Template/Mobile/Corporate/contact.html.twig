@@ -1,12 +1,11 @@
 {% extends ':frontend/template/mobile:base.html.twig' %}
 {% block body %}
-    <div class="details-grid">
-        <div class="details-shade">
-            <div class="details-right">
-                {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
-            </div>
-        </div>
+    <div class="header-grid">
+        <a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}" id="mobile-logo">
+            {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
+        </a>
     </div>
+    <hr>
     <div class="container">
         <div class="row">
 
@@ -17,15 +16,14 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
-                <div class="col-md-12">
-                    <div class="row">
-                        {% if page.latitude is not empty and page.longitude is not empty %}
-                            <div id="gmap_canvas" class="gmap">
-                                <div class="Lat">{{ page.latitude }}</div>
-                                <div class="Lng">{{ page.longitude }}</div>
-                                <div class="imgMap">{{ asset('assets/img/placeholder.png') }}</div>
-                                <address>Address Here</address>
-                                <div class="infoWindow">
+                <div class="row">
+                    {% if page.latitude is not empty and page.longitude is not empty %}
+                        <div id="gmap_canvas" class="gmap">
+                            <div class="Lat">{{ page.latitude }}</div>
+                            <div class="Lng">{{ page.longitude }}</div>
+                            <div class="imgMap">{{ asset('assets/img/placeholder.png') }}</div>
+                            <address>Address Here</address>
+                            <div class="infoWindow">
                                     <span>{% if page.address1 is not empty %}
                                         <i class="fa fa-home"></i>&nbsp;{{ page.address1 }}<br>
                                             {% if page.thana is defined and page.thana %}
@@ -41,116 +39,114 @@
                                         <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
                                         <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=23.801422,90.352599">Direction</a>
                                     </span>
-                                </div>
-                            </div>
-                        {% elseif page.googleMap is not empty %}
-                            {{ page.googleMap|raw }}
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <strong><i class="fa fa-home"></i>&nbsp;Office</strong><br>
-                            {{ page.address1 }}
-                            {% if page.location is defined and page.location %}
-                                ,{{ page.location.name }}
-                            {% endif %}
-                            {% if page.location is defined and page.location %}
-                            ,{{ page.location.parent.name }} {% endif %}-{{ page.postalCode }}<br>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <strong><i class="fa fa-hand-o-right"></i>&nbsp;Communication</strong><br>
-                            {% if page.startHour %}
-                                <strong><i class="fa fa-clock-o"></i></strong>&nbsp;{{ page.startHour }} To {{ page.endHour }}
-                            {% endif %}
-                            {% if page.weeklyOffDay %}
-                                <br/>
-                                <strong><i class="fa fa-power-off"></i></strong>&nbsp;{% for day in page.weeklyOffDay %}{{ day }}{{ loop.last ? '' : ', ' }}{% endfor %}<br>
-                            {% endif %}
-                            <strong><i class="fa fa-mobile"></i></strong>&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">+ 088 {{ globalOption.mobile }}</a></br>
-                            <strong><i class="fa fa-envelope"></i></strong>&nbsp;<a href="mailto:{{ globalOption.email }}" class="contact-email">{{ globalOption.email }}</a></br>
-                            <strong><i class="fa fa-fax"></i></strong>&nbsp;{% if(page.fax) %}<a href="javascript:">Fax: + 02{{ page.fax|raw }}</a>{% endif %}
-
-                        </div>
-                    </div>
-                    <hr>
-                    {% if(page.isContactForm == false) %}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <strong><i class="fa fa-user"></i>&nbsp;Contact Information</strong><br>
-                                <em>{{ page.contactPerson|raw }}</em><br/>
-                                {% if page.designation %}{{ page.designation }}{% endif %}</br>
-                                {% if(page.additionalPhone) %}<a href="javascript:" ><strong><i class="fa fa-phone"></i></strong>&nbsp;{{ page.additionalPhone|raw }}</a></br>{% endif %}
-                                {% if(page.additionalEmail) %}<a href="javascript:" ><strong><i class="fa fa-envelope"></i></strong>&nbsp;{{ page.additionalEmail|raw }}</a></br>{% endif %}
                             </div>
                         </div>
-                    {% else %}
-                        <div class="row">
-                            <div class="col-md-12">
-                                <strong><h4><i class="fa fa-user"></i>&nbsp;Contact Information</strong></h4><br>
-                                <div class="well well-sm">
-                                    <form id="contactUs" name="contactUs" method="post" action="{{ path(globalOption.subDomain ~ '_webservice_email_receive') }}">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="name">Name</label>
-                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter name or company"  />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="email">Mobile no</label>
-                                                    <input type="text" class="form-control mobile" id="mobile" name="mobile" placeholder="Enter mobile no" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="name">Email Address</label>
-                                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter valid email address ie. user@domain.com"  />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label for="name">Message</label>
-                                                    <textarea name="message" id="message"  class="form-control" rows="3" cols="25"  placeholder="Message"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-12" style="margin-bottom:15px">
-                                                <input type="hidden" class="hiddenRecaptcha required" name="hiddenRecaptcha" id="hiddenRecaptcha">
-                                                <div class="g-recaptcha" data-sitekey="6LdSLy8UAAAAAO3p8W8JcrplH4x-bcXFOOJ9ZJhL"></div>
-                                                {#<div id="captcha"></div>#}
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-8">
-                                                <div id="contactMsg" class="msg-area alert-success" role="alert">
-                                                    Thanks! receive your msg.
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <button type="submit" class="btn btn-info pull-right" id="contactForm" ><i class="fa fa-send"></i> Send</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                    {% elseif page.googleMap is not empty %}
+                        {{ page.googleMap|raw }}
                     {% endif %}
                 </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong><i class="fa fa-home"></i>&nbsp;Office</strong><br>
+                        {{ page.address1 }}
+                        {% if page.location is defined and page.location %}
+                            ,{{ page.location.name }}
+                        {% endif %}
+                        {% if page.location is defined and page.location %}
+                        ,{{ page.location.parent.name }} {% endif %}-{{ page.postalCode }}<br>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <strong><i class="fa fa-hand-o-right"></i>&nbsp;Communication</strong><br>
+                        {% if page.startHour %}
+                            <strong><i class="fa fa-clock-o"></i></strong>&nbsp;{{ page.startHour }} To {{ page.endHour }}
+                        {% endif %}
+                        {% if page.weeklyOffDay %}
+                            <br/>
+                            <strong><i class="fa fa-power-off"></i></strong>&nbsp;{% for day in page.weeklyOffDay %}{{ day }}{{ loop.last ? '' : ', ' }}{% endfor %}<br>
+                        {% endif %}
+                        <strong><i class="fa fa-mobile"></i></strong>&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">+ 088 {{ globalOption.mobile }}</a></br>
+                        <strong><i class="fa fa-envelope"></i></strong>&nbsp;<a href="mailto:{{ globalOption.email }}" class="contact-email">{{ globalOption.email }}</a></br>
+                        <strong><i class="fa fa-fax"></i></strong>&nbsp;{% if(page.fax) %}<a href="javascript:">Fax: + 02{{ page.fax|raw }}</a>{% endif %}
+
+                    </div>
+                </div>
+                <hr>
+                {% if(page.isContactForm == false) %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong><i class="fa fa-user"></i>&nbsp;Contact Information</strong><br>
+                            <em>{{ page.contactPerson|raw }}</em><br/>
+                            {% if page.designation %}{{ page.designation }}{% endif %}</br>
+                            {% if(page.additionalPhone) %}<a href="javascript:" ><strong><i class="fa fa-phone"></i></strong>&nbsp;{{ page.additionalPhone|raw }}</a></br>{% endif %}
+                            {% if(page.additionalEmail) %}<a href="javascript:" ><strong><i class="fa fa-envelope"></i></strong>&nbsp;{{ page.additionalEmail|raw }}</a></br>{% endif %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong><h4><i class="fa fa-user"></i>&nbsp;Contact Information</strong></h4><br>
+                            <div class="well well-sm">
+                                <form id="contactUs" name="contactUs" method="post" action="{{ path(globalOption.subDomain ~ '_webservice_email_receive') }}">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="name">Name</label>
+                                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter name or company"  />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="email">Mobile no</label>
+                                                <input type="text" class="form-control mobile" id="mobile" name="mobile" placeholder="Enter mobile no" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="name">Email Address</label>
+                                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter valid email address ie. user@domain.com"  />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="name">Message</label>
+                                                <textarea name="message" id="message"  class="form-control" rows="3" cols="25"  placeholder="Message"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12" style="margin-bottom:15px">
+                                            <input type="hidden" class="hiddenRecaptcha required" name="hiddenRecaptcha" id="hiddenRecaptcha">
+                                            <div class="g-recaptcha" data-sitekey="6LdSLy8UAAAAAO3p8W8JcrplH4x-bcXFOOJ9ZJhL"></div>
+                                            {#<div id="captcha"></div>#}
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div id="contactMsg" class="msg-area alert-success" role="alert">
+                                                Thanks! receive your msg.
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button type="submit" class="btn btn-info pull-right" id="contactForm" ><i class="fa fa-send"></i> Send</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
                 <div class="clearfix"><br/></div>
             </div>
         </div>

@@ -19,6 +19,18 @@ h1, h2, h3 {
 }
 ul, ol, li{margin: 0; padding: 0;}
 p {margin: 0;padding: 0;}
+
+
+.fixed {
+    position: fixed;
+    width: 100%;
+    background: #222;
+    text-align: left;
+    z-index: 999;
+    top:0!important;
+    opacity: 1 !important;
+}
+
 body{
     background: #043d67;
 	font-family: 'Open Sans', sans-serif;
@@ -458,8 +470,18 @@ p {
     text-align: center;
 }
 
+.header-grid {
+    background: url(../images/image-2.jpg) no-repeat 0 0;
+    background-size: cover;
+	-webkit-background-size: cover;
+	 -moz-background-size: cover;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+}
+
+
 .details-grid {
-    background: url(../images/banner-h.jpg) no-repeat 0 0;
+    background: url(../images/image-2.jpg) no-repeat 0 0;
     background-size: cover;
 	-webkit-background-size: cover;
 	 -moz-background-size: cover;

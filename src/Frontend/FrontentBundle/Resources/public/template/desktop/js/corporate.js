@@ -9,14 +9,6 @@ $('#breadcrumb').css({
     'margin-top':(navbar+20)
 });
 
-var stickyOffset = $('.sticky').offset().top;
-$(window).scroll(function(){
-    var sticky = $('.sticky'),
-        scroll = $(window).scrollTop();
-    if (scroll >= stickyOffset) sticky.addClass('fixed');
-    else sticky.removeClass('fixed');
-});
-
 $(".carousel").carousel({
     interval: 10000,
     wrap:true

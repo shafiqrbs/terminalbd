@@ -264,6 +264,13 @@ class TemplateCustomize
      */
     private $carouselHeight = '720px';
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobileCarouselHeight", type="string", length=10, nullable=true)
+     */
+    private $mobileCarouselHeight = '320px';
+
 
     /**
      * @var string
@@ -1908,6 +1915,22 @@ class TemplateCustomize
     public function setCarouselHeight($carouselHeight)
     {
         $this->carouselHeight = $carouselHeight;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMobileCarouselHeight()
+    {
+        return $this->mobileCarouselHeight;
+    }
+
+    /**
+     * @param string $mobileCarouselHeight
+     */
+    public function setMobileCarouselHeight($mobileCarouselHeight)
+    {
+        $this->mobileCarouselHeight = $mobileCarouselHeight;
     }
 
 

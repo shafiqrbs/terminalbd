@@ -643,7 +643,7 @@
                             <div class="row-fluid">
                                 <div class="span3">
                                     <div class="control-group">
-                                        <label class="control-label" for="firstName">Carousel Height</label>
+                                        <label class="control-label" for="firstName">Desktop Home Carousel Height</label>
                                         <div class="controls">
                                             {{ form_widget(form.carouselHeight) }}
                                             {{ form_errors(form.carouselHeight) }}
@@ -651,6 +651,18 @@
                                     </div>
                                 </div>
                                 <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Mobile Feature/Carousel Height</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.mobileCarouselHeight) }}
+                                            {{ form_errors(form.mobileCarouselHeight) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row-fluid">
+                               <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Slider Position</label>
                                         <div class="controls">
@@ -902,9 +914,9 @@
                                 </div>
                             </div>
                             <!--/span-->
-                            {#<div class="form-actions portlet box blue">
+                            <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
-                                    <div class="caption"><i class="icon-reorder"></i>Header Image</div>
+                                    <div class="caption"><i class="icon-reorder"></i>Mobile Header Image</div>
                                     <div class="pull-right">Remove Header Image<input type="checkbox" class="checkbox" id="removeHeaderImage" name="removeHeaderImage" value="1"></div>
                                 </div>
                             </div>
@@ -914,10 +926,9 @@
 
                                 <div class="span12">
                                     <div class="control-group">
-
                                         <div class="controls">
                                             <div data-provides="fileupload" class="fileupload fileupload-new">
-                                                <div style="height: 150px;" class="fileupload-new thumbnail span12">
+                                                <div style="height:450px;" class="fileupload-new thumbnail span12">
                                                     {% if(entity.webPath('headerBgImage') is defined ) %}
                                                         <img class="fileupload-preview fileupload-exists thumbnail span12" alt="" src="/{{ entity.webPath('headerBgImage') }}">
                                                     {% else %}
@@ -936,13 +947,10 @@
                                             </div>
                                             <span class="label label-important">NOTE!</span>
                                             <span> Image size must be use 1024px x 450 px or more</span>
-
                                         </div>
                                     </div>
                                 </div>
-
-
-                            </div>#}
+                            </div>
                             <!--/span-->
                             <div class="form-actions portlet box blue">
                                 <div class="portlet-title">

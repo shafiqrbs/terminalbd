@@ -10,7 +10,7 @@
             {% if widget.pageShowType == 'grid' %}
                 <div class="row">
                     {% for entity in widget.page %}
-                        <div class="col-md-12 wow fadeInDown grid" data-wow-delay="2s"  >
+                        <div class="col-md-12 wow fadeInDown grid" data-wow-delay="1s"  >
                             <div class="pageFeature" data-match-height="pageFeature" >
                                 <div class="pageFeature-image" >
                                     <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}">
@@ -30,7 +30,7 @@
                 <div class="row">
                     <div id="feature-mobile-slider" class="">
                         {% for entity in  widget.page  %}
-                            <div class="col-md-12 wow fadeInDown" data-wow-delay="2s" >
+                            <div class="col-md-12 wow fadeInDown" data-wow-delay="1s" >
                                 <div class="pageFeature" data-match-height="pageFeature">
                                     <div class="pageFeature-image"  >
                                         <a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}">

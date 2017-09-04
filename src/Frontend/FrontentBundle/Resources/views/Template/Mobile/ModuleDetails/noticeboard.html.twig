@@ -1,11 +1,9 @@
-<div class="details-grid">
-    <div class="details-shade">
-        <div class="details-right">
-            {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
-        </div>
-    </div>
+<div class="header-grid">
+    <a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}" id="mobile-logo">
+        {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
+    </a>
 </div>
-<div class="clearfixTopMargin" ></div>
+<hr>
 <div class="container">
     {% set commentID = globalOption.id~'-'~menu.module.slug~'-'~page.id %}
     <div class="row"><div class="col-md-12"><h4>{{ page.name }}</h4></div></div>

@@ -120,14 +120,14 @@ class TemplateCustomizeRepository extends EntityRepository {
 
         }
 
-  /*      if(isset($file['bgImageFile'])){
+        if(isset($file['headerBgImage'])){
 
-             $img = $file['bgImageFile'];
+             $img = $file['headerBgImage'];
              $fileName = $img->getClientOriginalName();
              $imgName =  uniqid(). '.' .$fileName;
              $img->move($entity->getUploadDir(), $imgName);
-             $entity->setBgImage($imgName);
-        }*/
+             $entity->setHeaderBgImage($imgName);
+        }
 
         if(isset($file['bgImageFile'])){
 
