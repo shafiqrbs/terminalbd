@@ -24,7 +24,7 @@
                 <div class="item carousel-cover {% if loop.index-1 == 0 %} active {% endif %}" style="background-image: url('{{ image(slide.feature.webPath) }}')!important;">
                     <div class="carousel-caption" >
                         {% if slide.feature.targetTo == 'Page' and slide.feature.menu is not empty %}
-                        <a class=""  href="{{ path(globalOption.subDomain ~ '_webservice_module',{'slug':slide.feature.menu.slug}) }}">{{ slide.feature.name }} <i class="fa fa-angle-double-right"></i></a>
+                        <a class=""  href="{{ path(globalOption.subDomain ~ '_webservice_module',{'module':slide.feature.menu.slug}) }}">{{ slide.feature.name }} <i class="fa fa-angle-double-right"></i></a>
                     {% endif %}
                     </div>
                 </div>
