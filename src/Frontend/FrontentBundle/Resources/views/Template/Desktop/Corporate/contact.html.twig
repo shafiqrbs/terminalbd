@@ -189,14 +189,27 @@
                                             {% if page.district is defined and page.district %}
                                                 {{ page.district.name }} {% endif %}-{{ page.postalCode }}
                                         {% endif %}
+
                                         {% if page.startHour %}
                                             <br><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ page.startHour }} To {{ page.endHour }}</strong>
                                         {% endif %}
                                         <br>
                                         <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
-                                        <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=23.801422,90.352599">Direction</a>
+                                        <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr={{ page.address1 }},Bangladesh&daddr={{ page.latitude }},{{ page.longitude }}">Direction</a>
                                     </span>
+
                                     </div>
+                                    <div class="mapCenter">true</div>
+                                    <div class="infoWidth">200</div>
+                                    <div class="mapStyle">black</div>
+                                    <div class="mapZoom">15</div>
+                                    <div class="scrollwheel">true</div>
+                                    <div class="disableDoubleClickZoom">true</div>
+                                    <div class="fullscreenControl">true</div>
+                                    <div class="disableOpenURL">false</div>
+                                    <div class="OpenURL">View full map</div>
+                                    <div class="draggable">true</div>
+                                    <div class="disableDefaultUI">false</div>
                                 </div>
                             {% elseif page.googleMap is not empty %}
                                 {{ page.googleMap|raw }}
