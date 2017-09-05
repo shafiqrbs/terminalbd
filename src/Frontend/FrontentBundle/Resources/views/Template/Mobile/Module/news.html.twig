@@ -1,7 +1,7 @@
 <div id="catlist">
     {% if pagination is not empty %}
         {% for entity in pagination %}
-            <div class="col-md-12 col-xs-12">
+            <div class="col-md-12 col-xs-12 list-grid">
                 <dl>
                     <p><img class="img-responsive" src="{{ image(entity.webPath).resize(310,223) }}" alt="{{ entity.name }}" /></p>
                     <dd><a href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': 'news','slug':entity.slug }) }}"><h4>{{ entity.name }}</h4></a></dd>

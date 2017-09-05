@@ -320,6 +320,11 @@ ul.dropdown-cart li .item-right button {
     top: 40px;
 }
 
+.fixed-top{
+    top:0!important;
+    opacity: 1!important;
+}
+
 .mega-dropdown {
     position: static !important;
 }

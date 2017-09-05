@@ -11,7 +11,15 @@ wow = new WOW(
 wow.init();
 $(document).ready(function(){
 
-        var navbar = $('.navbar-header').outerHeight(true);
+    var stickyOffset = $('.sticky').offset().top;
+    $(window).scroll(function(){
+        var sticky = $('.sticky'),
+            scroll = $(window).scrollTop();
+        if (scroll >= stickyOffset) sticky.addClass('fixed-top');
+        else sticky.removeClass('fixed-top');
+    });
+
+    var navbar = $('.navbar-header').outerHeight(true);
         var mins = 22;
         $('.bs-example-form').css({
             'margin-top':(navbar/2 - mins)
@@ -30,10 +38,15 @@ $(document).ready(function(){
         
         $(".numeric").numeric();
         $(".mobile").inputmask("mask", {"mask": "99999-999-999"}); //specifying fn & options
+
         $('#searchEvent').click(function(){
             $('#nav-search').slideToggle('slow');
         });
-        
+
+        $(document).on("click", ".searchBtnSelector", function() {
+            $('#search-area').slideToggle('slow');
+        });
+
         $('#catlist').children('.news-list').each(function(index) {
             $(this).addClass(index % 2 ? 'odd' : 'even');
         });
@@ -124,40 +137,7 @@ $(document).ready(function(){
 
         });
 
-       /* Recaptcha.create("6LdSLy8UAAAAAO3p8W8JcrplH4x-bcXFOOJ9ZJhL", "captcha", {
-            theme: "red",
-            callback: Recaptcha.focus_response_field
-        });
-
-        var onloadCallback = function() {
-            grecaptcha.render('captcha', {
-                'sitekey' : '6LdSLy8UAAAAAO3p8W8JcrplH4x-bcXFOOJ9ZJhL'
-            });
-        };
-        onloadCallback();
-
-        jQuery.validator.addMethod("checkCaptcha", (function() {
-            var isCaptchaValid;
-            isCaptchaValid = false;
-            $.ajax({
-                url: "/captcha/recheck",
-                type: "POST",
-                async: false,
-                data: {
-                    recaptcha_challenge_field: Recaptcha.get_challenge(),
-                    recaptcha_response_field: Recaptcha.get_response()
-                },
-                success: function(resp) {
-                    if (resp === "true") {
-                        isCaptchaValid = true;
-                    } else {
-                        Recaptcha.reload();
-                    }
-                }
-            });
-            return isCaptchaValid;
-        }), "");*/
-
+      
         $("#contactUs").validate({
 
                 rules: {

@@ -194,9 +194,6 @@ class WebServiceModuleController extends Controller
     }
 
 
-
-
-
     public function contactAction($subdomain){
 
         $em = $this->getDoctrine()->getManager();
@@ -288,7 +285,7 @@ class WebServiceModuleController extends Controller
         $page ='';
         $pagination ='';
 
-        $keywrod = $_REQUEST['keyword'];
+        $data = $_REQUEST;
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         $siteEntity = $globalOption->getSiteSetting();
         if(!empty($siteEntity)){
@@ -298,17 +295,9 @@ class WebServiceModuleController extends Controller
         }
 
         if(!empty($globalOption)){
-            $pagination = $em->getRepository('SettingContentBundle:Page')->searchResult($globalOption,$keywrod);
+            $pagination = $em->getRepository('SettingContentBundle:Page')->searchResult($globalOption,$data['keyword']);
             $pagination = $this->paginate( $pagination,$limit= 10 );
-            foreach ($pagination as $pagination){
-                echo $pagination->getId();
-            }
-
-            $twigName = "search";
         }
-
-        exit;
-
         /* Device Detection code desktop or mobile */
 
         $detect = new MobileDetect();
@@ -317,11 +306,13 @@ class WebServiceModuleController extends Controller
         }else{
             $theme = 'Template/Desktop/'.$themeName;
         }
-        return $this->render('FrontendBundle:'.$theme.':content.html.twig',
+        return $this->render('FrontendBundle:'.$theme.':search.html.twig',
             array(
 
                 'globalOption'  => $globalOption,
                 'pagination'    => $pagination,
+                'searchForm' => $data,
+                'pageName'      => 'Search',
             )
         );
 

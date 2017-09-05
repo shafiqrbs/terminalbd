@@ -32,6 +32,25 @@ a:hover , a:visited, a:focus{
 .comment{
     padding:15px;
 }
+.searchBtn{
+    background-color: #fff;
+    height: 37px;
+    width: 40px;
+}
+.search-btn{
+    background-color: #FFFFff;
+    border: 1px solid #d2d2d2;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    z-index: 2;
+    display: block;
+    width: 32px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    pointer-events: none;
+}
 
 /*================== Social  Share Button ====================================*/
 
