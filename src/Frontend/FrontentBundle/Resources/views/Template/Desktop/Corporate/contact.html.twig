@@ -179,32 +179,29 @@
                                     <div class="Lat">{{ page.latitude }}</div>
                                     <div class="Lng">{{ page.longitude }}</div>
                                     <div class="imgMap">{{ asset('assets/img/placeholder.png') }}</div>
-                                    <address>Address Here</address>
                                     <div class="infoWindow">
-                                    <span>{% if page.address1 is not empty %}
-                                        <i class="fa fa-home"></i>&nbsp;{{ page.address1 }}<br>
-                                            {% if page.thana is defined and page.thana %}
-                                                {{ page.thana.name }},
+                                        <span>{% if page.address1 is not empty %}
+                                                <i class="fa fa-home"></i>&nbsp;{{ page.address1 }}<br>
+                                                {% if page.thana is defined and page.thana %}
+                                                    {{ page.thana.name }},
+                                                {% endif %}
+                                                {% if page.district is defined and page.district %}
+                                                    {{ page.district.name }} {% endif %}-{{ page.postalCode }}
                                             {% endif %}
-                                            {% if page.district is defined and page.district %}
-                                                {{ page.district.name }} {% endif %}-{{ page.postalCode }}
-                                        {% endif %}
-
-                                        {% if page.startHour %}
-                                            <br><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ page.startHour }} To {{ page.endHour }}</strong>
-                                        {% endif %}
-                                        <br>
-                                        <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
-                                        <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr={{ page.address1 }},Bangladesh&daddr={{ page.latitude }},{{ page.longitude }}">Direction</a>
-                                    </span>
-
+                                            {% if page.startHour %}
+                                                <br><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ page.startHour }} To {{ page.endHour }}</strong>
+                                            {% endif %}
+                                            <br>
+                                            <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
+                                            <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=23.801422,90.352599">Direction</a>
+                                        </span>
                                     </div>
                                     <div class="mapCenter">true</div>
+                                    <div class="Title">{{ globalOption.name }}</div>
                                     <div class="infoWidth">200</div>
-                                    <div class="mapStyle">black</div>
                                     <div class="mapZoom">15</div>
                                     <div class="scrollwheel">true</div>
-                                    <div class="disableDoubleClickZoom">true</div>
+                                    <div class="disableDoubleClickZoom">false</div>
                                     <div class="fullscreenControl">true</div>
                                     <div class="disableOpenURL">false</div>
                                     <div class="OpenURL">View full map</div>
@@ -275,6 +272,13 @@
 {% block documentready %}
     {{ parent() }}
     $('#gmap_canvas').kmaps();
+    var map;
+    function initializeNewMap() {
+        // add your code
+        map = new google.maps.Map(document.getElementById("gmap_canvas"), myOptions);
+        google.maps.event.trigger(map, 'resize');
+    }
+
     {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
         sliderPageOwl(3);
     {% else %}

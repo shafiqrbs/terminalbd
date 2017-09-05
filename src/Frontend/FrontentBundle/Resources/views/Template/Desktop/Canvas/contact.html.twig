@@ -52,24 +52,23 @@
                                 <div class="Lat">{{ page.latitude }}</div>
                                 <div class="Lng">{{ page.longitude }}</div>
                                 <div class="imgMap">{{ asset('assets/img/placeholder.png') }}</div>
-                                <address>Address Here</address>
                                 <div class="infoWindow">
-                            <span>{% if page.address1 is not empty %}
-                                    <i class="fa fa-home"></i>&nbsp;{{ page.address1 }}<br>
-                                    {% if page.thana is defined and page.thana %}
-                                        {{ page.thana.name }},
+                                    <span>{% if page.address1 is not empty %}
+                                        <i class="fa fa-home"></i>&nbsp;{{ page.address1 }}<br>
+                                        {% if page.thana is defined and page.thana %}
+                                            {{ page.thana.name }},
+                                        {% endif %}
+                                        {% if page.district is defined and page.district %}
+                                            {{ page.district.name }} {% endif %}-{{ page.postalCode }}
                                     {% endif %}
-                                    {% if page.district is defined and page.district %}
-                                        {{ page.district.name }} {% endif %}-{{ page.postalCode }}
-                                {% endif %}
-                                {% if page.startHour %}
-                                    <br><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ page.startHour }} To {{ page.endHour }}</strong>
-                                {% endif %}
-                                <br>
-                                <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
-                                <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=23.801422,90.352599">Direction</a>
+                                    {% if page.startHour %}
+                                        <br><i class="fa fa-clock-o"></i>&nbsp;<strong>{{ page.startHour }} To {{ page.endHour }}</strong>
+                                    {% endif %}
+                                    <br>
+                                    <i class="fa fa-mobile-phone"></i>&nbsp;+ 088&nbsp;<a href="tel:+ 088 {{ globalOption.mobile }}" class="contact-call">{{ globalOption.mobile }}</a>
+                                    <i class="fa fa-map-pin"></i>&nbsp;<a target="_blank" href="https://maps.google.com?saddr=Current+Location&daddr=23.801422,90.352599">Direction</a>
 
-                            </span>
+                                    </span>
                                 </div>
                             </div>
                         {% elseif page.googleMap is not empty %}
