@@ -194,10 +194,9 @@ class Builder extends ContainerAware
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_WEBSITE_SETTING')) {
 
-            $result = array_intersect($menuName, array('e-commerce'));
+            $result = array_intersect($menuName, array('Ecommerce'));
             $securityContext = $this->container->get('security.context');
             $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
-
             $menu
                 ->addChild('Manage Appearance')
                 ->setAttribute('icon', 'fa fa-bookmark')
