@@ -32,12 +32,12 @@ class ProfileType extends AbstractType
                     new Length(array('max'=>200))
                     ))
                 )
-                ->add('address','text', array('required' => false,'attr'=>array('class'=>'m-wrap span12 form-control','placeholder'=>'Enter your full address'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter your address required')),
-                    new Length(array('max'=>200))
-                    ))
-                )
+               ->add('mobile','text', array('attr'=>array('class'=>'mobile form-control','placeholder'=>'Enter your mobile no'),
+                       'constraints' =>array(
+                           new NotBlank(array('message'=>'Enter your mobile no required')),
+                           new Length(array('max'=>200))
+                       ))
+               )
                ->add('location', 'entity', array(
                    'constraints' =>array(
                        new NotBlank(array('message'=>'Enter your location name required'))
@@ -56,9 +56,9 @@ class ProfileType extends AbstractType
                            ->orderBy('d.name','ASC');
                    }
                ))
-                ->add('mobile','text', array('attr'=>array('class'=>'mobile form-control','placeholder'=>'Enter your mobile no'),
+                ->add('address','text', array('required' => false,'attr'=>array('class'=>'m-wrap span12 form-control','placeholder'=>'Enter your full address'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter your mobile no required')),
+                    new NotBlank(array('message'=>'Enter your address required')),
                     new Length(array('max'=>200))
                     ))
                 )

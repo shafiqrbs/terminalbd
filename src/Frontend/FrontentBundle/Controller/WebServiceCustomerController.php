@@ -37,6 +37,7 @@ class WebServiceCustomerController extends Controller
             return $this->render('FrontendBundle:'.$theme.':register.html.twig',
                 array(
                     'globalOption'  => $globalOption,
+                    'pageName'      => 'register',
                     'form'   => $form->createView(),
                  )
             );
@@ -54,7 +55,7 @@ class WebServiceCustomerController extends Controller
     private function createCreateForm($subdomain,User $entity)
     {
         $form = $this->createForm(new CustomerRegisterType(), $entity, array(
-            'action' => $this->generateUrl($subdomain.'_webservice_customer_create', array('subdomain' => $subdomain)),
+            'action' => $this->generateUrl($subdomain.'_webservice_customer_create'),
             'method' => 'POST',
             'attr' => array(
                 'id' => 'signup',
@@ -75,7 +76,7 @@ class WebServiceCustomerController extends Controller
         $intlMobile = $request->query->get('Core_userbundle_user[profile][mobile]',NULL,true);
         $em = $this->getDoctrine()->getManager();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
-        $entity = $em->getRepository('UserBundle:User')->findBy(array('username'=>$mobile));
+        $entity = $em->getRepository('UserBundle:User')->findBy(array('username'=> $mobile));
 
         if( count($entity) > 0 ){
             $valid = 'false';
@@ -98,13 +99,11 @@ class WebServiceCustomerController extends Controller
         $entity = new User();
         $form = $this->createCreateForm($subdomain,$entity);
         $form->handleRequest($request);
-        $intlMobile = $entity->getProfile()->getMobile();
-        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
-
-        $data = $request->request->all();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         if ($form->isValid()) {
 
+            $intlMobile = $entity->getProfile()->getMobile();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
             $entity->setPlainPassword("1234");
             $entity->setEnabled(true);
             $entity->setUsername($mobile);
@@ -119,6 +118,7 @@ class WebServiceCustomerController extends Controller
             //$dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
             return $this->redirect($this->generateUrl('webservice_customer_confirm',array('subdomain' => $subdomain)));
         }
+        var_dump($form->getErrors());
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
@@ -133,6 +133,7 @@ class WebServiceCustomerController extends Controller
             return $this->render('FrontendBundle:'.$theme.':register.html.twig',
                 array(
                     'globalOption'  => $globalOption,
+                    'pageName'      => 'register',
                     'form'   => $form->createView(),
                 )
             );
@@ -142,15 +143,15 @@ class WebServiceCustomerController extends Controller
 
     public function insertAction($subdomain, Request $request)
     {
-        //$data = $request->request->all();
+
         $em = $this->getDoctrine()->getManager();
         $entity = new User();
         $form = $this->createCreateForm($subdomain,$entity);
         $form->handleRequest($request);
-        $intlMobile = $entity->getProfile()->getMobile();
-        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
         if ($form->isValid()) {
 
+            $intlMobile = $entity->getProfile()->getMobile();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
             $entity->setPlainPassword("1234");
             $entity->setEnabled(true);
             $entity->setUsername($mobile);
@@ -160,11 +161,12 @@ class WebServiceCustomerController extends Controller
             $entity->setRoles(array('ROLE_CUSTOMER'));
             $em->persist($entity);
             $em->flush();
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
+            //$dispatcher = $this->container->get('event_dispatcher');
+            //$dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
             return new Response('success');
 
         }else{
+
             return new Response('invalid');
         }
 
@@ -199,6 +201,7 @@ class WebServiceCustomerController extends Controller
                 'globalOption'  => $globalOption,
                 'entity' => $entity,
                 'error' => '',
+                'pageName'      => 'login',
                 'csrf_token' => $csrfToken,
             )
         );

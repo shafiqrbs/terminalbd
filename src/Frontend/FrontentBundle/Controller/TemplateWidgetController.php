@@ -128,7 +128,7 @@ class TemplateWidgetController extends Controller
     private function createCreateForm($subdomain,User $entity)
     {
         $form = $this->createForm(new CustomerRegisterType(), $entity, array(
-            'action' => $this->generateUrl($subdomain.'_webservice_customer_insert',array('subdomain'=>$subdomain)),
+            'action' => $this->generateUrl($subdomain.'_webservice_customer_insert'),
             'method' => 'POST',
             'attr' => array(
                 'id' => 'signup',

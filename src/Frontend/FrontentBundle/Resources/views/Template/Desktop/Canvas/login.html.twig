@@ -1,11 +1,13 @@
 {% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
+<section class="siteBgColor">
     <div class="clearfix"></div>
     <section id="breadcrumb">
         <div class="container">
-            <div class="col-md-12">
-                <div class="crumb">&nbsp;<a href="{{ path('homepage') }}">Home</a> <i>/</i>Login</div>
-            </div>
+            <ul class="breadcrumb">
+                <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class="active"><a href="javascript:void(0);">Login</a></li>
+            </ul>
         </div>
     </section>
     <section id="">
@@ -44,19 +46,6 @@
             </div>
         </div>
     </section>
+ </section>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@FrontendBundle/Resources/public/template/desktop/css/common.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
-{% block javascriptBlock %}
-    {{ parent() }}
-    {% javascripts
-    '@FrontendBundle/Resources/public/template/js/common.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock %}
+
