@@ -276,7 +276,9 @@ $(document).ready(function(){
                         }
                     },
                     complete: function(){
-
+                        $("form").trigger("reset");
+                        $('#error').addClass('alert-success');
+                        $('.alert-success').html('Dear Customer, Registration success, User name mobile no & Password is 1234');
                     }
                 });
             }
