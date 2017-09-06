@@ -11,15 +11,15 @@ wow = new WOW(
 wow.init();
 $(document).ready(function(){
 
-    var stickyOffset = $('.sticky').offset().top;
-    $(window).scroll(function(){
-        var sticky = $('.sticky'),
-            scroll = $(window).scrollTop();
-        if (scroll >= stickyOffset) sticky.addClass('fixed-top');
-        else sticky.removeClass('fixed-top');
-    });
+        var stickyOffset = $('.sticky').offset().top;
+        $(window).scroll(function(){
+            var sticky = $('.sticky'),
+                scroll = $(window).scrollTop();
+            if (scroll >= stickyOffset) sticky.addClass('fixed-top');
+            else sticky.removeClass('fixed-top');
+        });
 
-    var navbar = $('.navbar-header').outerHeight(true);
+        var navbar = $('.navbar-header').outerHeight(true);
         var mins = 22;
         $('.bs-example-form').css({
             'margin-top':(navbar/2 - mins)
@@ -103,7 +103,37 @@ $(document).ready(function(){
             $(this).parent().addClass("active");
         });
 
+        $("#price-range").slider({
+            tooltip: 'always'
+        });
+
+        $( "#viewed" ).click(function() {
+            $( "#viewed-item" ).slideToggle( "slow" );
+        });
+
+        $('.login-preview').click(function () {
+            $('#registerModal').modal('hide');
+            $('#forgetModal').modal('hide');
+            $('#loginModal').modal('toggle');
+
+        });
+
+        $('.register-btn').click(function () {
+
+            $('#loginModal').modal('hide');
+            $('#forgetModal').modal('hide');
+            $('#registerModal').modal('toggle');
+
+        });
+        $('#forget-password').click(function () {
+
+            $('#loginModal').modal('hide');
+            $('#registerModal').modal('hide');
+            $('#forgetModal').modal('toggle');
+        });
+
         $("#contactMsg").validate({
+
             ignore: ".ignore",
             rules: {
                 name: {required: true},
@@ -198,20 +228,14 @@ $(document).ready(function(){
 
         });
 
-
-        $("#price-range").slider({
-            tooltip: 'always'
-        });
-
-
-        $("#signupx").validate({
+        $("#signup").validate({
     
             rules: {
     
                 "Core_userbundle_user[globalOption][name]": {required: true},
                 "Core_userbundle_user[profile][mobile]": {
                     required: true,
-                    remote: Routing.generate('webservice_customer_checking',{'subdomain':subdomain})
+                    remote:'/checking-username'
                 },
                 "Core_userbundle_user[globalOption][syndicate]": {required: true},
                 "Core_userbundle_user[globalOption][location]": {required: true},

@@ -14,7 +14,7 @@
                                  alt="{{ globalOption.name }}" />{% else %}{{ globalOption.name }}{% endif %}</a>
                 </div>
                 <div class="col-md-9">
-                    {% if globalOption.templateCustomize.showSearch == 0 %}
+                    {% if globalOption.templateCustomize.showSearch == 1 %}
                         <div class="row bs-example-form" id="header-form">
                             <div class="col-md-10 col-lg-10">
                                 <form class="bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product') }}"  method="get" data-example-id="input-group-segmented-buttons">
