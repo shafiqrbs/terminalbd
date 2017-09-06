@@ -54,7 +54,7 @@ class WebServiceCustomerController extends Controller
     private function createCreateForm($subdomain,User $entity)
     {
         $form = $this->createForm(new CustomerRegisterType(), $entity, array(
-            'action' => $this->generateUrl('webservice_customer_create', array('subdomain' => $subdomain)),
+            'action' => $this->generateUrl($subdomain.'_webservice_customer_create', array('subdomain' => $subdomain)),
             'method' => 'POST',
             'attr' => array(
                 'id' => 'signup',
@@ -149,7 +149,6 @@ class WebServiceCustomerController extends Controller
         $form->handleRequest($request);
         $intlMobile = $entity->getProfile()->getMobile();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
-        var_dump($subdomain->getId());
         if ($form->isValid()) {
 
             $entity->setPlainPassword("1234");
