@@ -38,8 +38,6 @@ class ProfileType extends AbstractType
                     new Length(array('max'=>200))
                     ))
                 )
-               /* ->add('additionalPhone','text', array('required' => false,'attr'=>array('class'=>'m-wrap span12 form-control','placeholder'=>'Enter your additional phone')))
-               */
                ->add('location', 'entity', array(
                    'constraints' =>array(
                        new NotBlank(array('message'=>'Enter your location name required'))

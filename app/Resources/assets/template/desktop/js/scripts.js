@@ -232,35 +232,32 @@ $(document).ready(function(){
     
             rules: {
     
-                "Core_userbundle_user[globalOption][name]": {required: true},
+                "Core_userbundle_user[profile][name]": {required: true},
                 "Core_userbundle_user[profile][mobile]": {
                     required: true,
                     remote:'/checking-username'
                 },
-                "Core_userbundle_user[globalOption][syndicate]": {required: true},
-                "Core_userbundle_user[globalOption][location]": {required: true},
-                "Core_userbundle_user[globalOption][status]": {required: true}
+                "Core_userbundle_user[profile][location]": {required: true},
+                "Core_userbundle_user[profile][termsConditionAccept]": {required: true}
             },
     
             messages: {
     
-                "Core_userbundle_user[globalOption][name]":"Enter your organization name",
+                "Core_userbundle_user[profile][name]":"Enter your full name",
                 "Core_userbundle_user[profile][mobile]":{
                     required: "Enter valid mobile no",
                     remote: "This mobile no is already registered. Please try to another no."
                 },
-                "Core_userbundle_user[profile][syndicate]": "Enter your professional",
                 "Core_userbundle_user[profile][location]": "Enter your location",
-                "Core_userbundle_user[globalOption][status]": "Please read terms & condition and agree"
+                "Core_userbundle_user[profile][termsConditionAccept]": "Please read terms & condition and agree"
             },
     
             tooltip_options: {
-    
-                "Core_userbundle_user[globalOption][name]": {placement:'top',html:true},
+
+                "Core_userbundle_user[profile][name]": {placement:'top',html:true},
                 "Core_userbundle_user[profile][mobile]": {placement:'top',html:true},
-                "Core_userbundle_user[globalOption][syndicate]": {placement:'top',html:true},
-                "Core_userbundle_user[globalOption][location]": {placement:'top',html:true},
-                "Core_userbundle_user[globalOption][status]":{placement:'right',html:true},
+                "Core_userbundle_user[profile][location]": {placement:'top',html:true},
+                "Core_userbundle_user[profile][status]":{placement:'right',html:true},
             },
             submitHandler: function(form) {
     
@@ -272,14 +269,14 @@ $(document).ready(function(){
                     processData : false,
                     contentType : false,
                     success: function(response) {
-                        if(response == 'valid'){
+                        if(response == 'success'){
                             $('#registerModal').modal('hide');
                             $('#forgetModal').modal('hide');
                             $('#loginModal').modal('toggle');
                         }
                     },
                     complete: function(){
-    
+
                     }
                 });
             }

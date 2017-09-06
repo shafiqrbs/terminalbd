@@ -149,7 +149,7 @@ class WebServiceCustomerController extends Controller
         $form->handleRequest($request);
         $intlMobile = $entity->getProfile()->getMobile();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
-
+        var_dump($subdomain->getId());
         if ($form->isValid()) {
 
             $entity->setPlainPassword("1234");
@@ -161,13 +161,15 @@ class WebServiceCustomerController extends Controller
             $entity->setRoles(array('ROLE_CUSTOMER'));
             $em->persist($entity);
             $em->flush();
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
             return new Response('success');
 
-            //$dispatcher = $this->container->get('event_dispatcher');
-            //$dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
         }else{
             return new Response('invalid');
         }
+
+        exit;
 
 
     }

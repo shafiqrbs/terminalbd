@@ -1,21 +1,14 @@
 {% if globalOption.ecommerceConfig.menuType == 'Mega' %}
 {#  ==================== Start Mega Menu ================================== #}
 <nav class="navbar navbar-mega-menu">
-    <div class="navbar-header">
-        <button class="navbar-toggle" type="button" data-toggle="collapse"
-                data-target=".js-navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-    </div>
     <div class="collapse navbar-collapse js-navbar-collapse">
         <ul class="nav navbar-nav">
             {% for  menu in globalOption.ecommerceMenus  %}
                 <li class="dropdown mega-dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ menu.name }}<span
-                                class="caret"></span></a>
+                    {% if menu.menu is not empty %}
+                    <a href="{% if menu.menu is not empty %}/{{ menu.menu.slug }}{% endif %}" class="" >{{ menu.name }}</a>
+                    {% else %}
+                    <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown">{{ menu.name }}<span class="caret"></span></a>
                     <ul class="dropdown-menu mega-dropdown-menu">
                         {% if menu.features is not empty or menu.promotions is not empty or menu.discounts is not empty or menu.tags is not empty %}
                             <li class="col-sm-3" data-match-height="menu-content" style="background-color: #f9f9f9; border-right:1px solid #d6d9dd">
@@ -119,10 +112,10 @@
                             </li>
                         {% endif %}
                     </ul>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
-
     </div><!-- /.nav-collapse -->
 </nav>
 {#  ==================== End Mega Menu ================================== #}
