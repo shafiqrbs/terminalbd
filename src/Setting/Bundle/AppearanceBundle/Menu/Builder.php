@@ -197,6 +197,7 @@ class Builder extends ContainerAware
             $result = array_intersect($menuName, array('e-commerce'));
             $securityContext = $this->container->get('security.context');
             $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
+
             $menu
                 ->addChild('Manage Appearance')
                 ->setAttribute('icon', 'fa fa-bookmark')

@@ -1,4 +1,4 @@
-{% extends ':frontend/template:ecommerce-base.html.twig' %}
+{% extends ':frontend/template:base.html.twig' %}
 {% block body %}
     {% set paymentID = globalOption.id~'-ecommerce-product-'~product.id %}
     <section class="siteBgColor">
@@ -8,7 +8,7 @@
                 <ul class="breadcrumb">
                     <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
                     <li class=""><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subdomain}) }}">Product</a></li>
-                    <li class="active"><a href="javascript:void(0);">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</a></li>
+                    <li class="active"><a href="javascript:void(0);">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></li>
                 </ul>
             </div>
         </section>
@@ -284,7 +284,7 @@
                                                     <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
                                                 </a>
                                                 <div class="card-content" data-match-height="item-product">
-                                                    <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</a>
+                                                    <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a>
                                                 </div>
                                                 <div class="card-read-more text-center">
                                                     <strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}

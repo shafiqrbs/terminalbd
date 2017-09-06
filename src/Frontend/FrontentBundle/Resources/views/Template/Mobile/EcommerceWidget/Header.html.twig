@@ -183,7 +183,7 @@
                                     <img class="img-responsive" src="{{ image(product.webPath).scaleResize(400.250) }}" alt="">
                                     <div class="team-content">
                                         <h3 class="team-prof">
-                                            <a href="#">{{ product.name }}</a>
+                                            <a href="#">{{ product.webName }}</a>
                                             <small>{{ product.price|number_format }}</small>
                                         </h3>
                                         <ul class="social-link">
@@ -195,7 +195,7 @@
                                 </div>
                                 <div class="caption">
                                     <h4 class="group inner list-group-item-heading">
-                                        {{ product.name }}</h4>
+                                        {{ product.webName }}</h4>
                                     <p class="group inner list-group-item-text">
                                         {{ product.content|raw|truncate(100) }}</p>
                                     <div class="row">

@@ -353,7 +353,7 @@
                                         <img class="img-responsive" src="{{ image(product.webPath).resize(400,400, 'white') }}" alt="">
                                         <div class="team-content">
                                             <h3 class="team-prof">
-                                                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.name }}</a>
+                                                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.webName }}</a>
                                                 <small>{#{{ product.price|number_format }}#}</small>
                                             </h3>
                                             <ul class="social-link">
@@ -367,7 +367,7 @@
                                         {% if globalOption.ecommerceConfig.showBrand == 1 and product.brand is not empty %}
                                             <p class="group inner brand text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':product.brand.id }) }}"><span>{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></a> </p>
                                         {% endif %}
-                                        <p class="group inner product-name text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></a> </p>
+                                        <p class="group inner product-name text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</strong></a> </p>
                                         <div class="row">
                                             <div class="row-fluid">
                                                 <div class="col-xs-8 col-md-8 text-right"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}</div>
@@ -399,7 +399,7 @@
                                         <img class="img-responsive" src="{{ image(product.webPath).resize(400,400, 'white') }}" alt="">
                                         <div class="team-content">
                                             <h3 class="team-prof">
-                                                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.name }}</a>
+                                                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.webName }}</a>
                                                 <small>{#{{ product.price|number_format }}#}</small>
                                             </h3>
                                             <ul class="social-link">
@@ -413,7 +413,7 @@
                                         {% if globalOption.ecommerceConfig.showBrand == 1 and product.brand is not empty %}
                                             <p class="group inner brand text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':product.brand.id }) }}"><span>{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></a> </p>
                                         {% endif %}
-                                        <p class="group inner product-name text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></a> </p>
+                                        <p class="group inner product-name text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</strong></a> </p>
                                         <div class="row">
                                             <div class="row-fluid">
                                                 <div class="col-xs-8 col-md-8 text-right"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}</div>
@@ -445,7 +445,7 @@
                                         <img class="img-responsive" src="{{ image(product.webPath).resize(400,400, 'white') }}" alt="">
                                         <div class="team-content">
                                             <h3 class="team-prof">
-                                                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.name }}</a>
+                                                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.webName }}</a>
                                                 <small>{#{{ product.price|number_format }}#}</small>
                                             </h3>
                                             <ul class="social-link">
@@ -459,7 +459,7 @@
                                         {% if globalOption.ecommerceConfig.showBrand == 1 and product.brand is not empty %}
                                             <p class="group inner brand text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':product.brand.id }) }}"><span>{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></a> </p>
                                         {% endif %}
-                                        <p class="group inner product-name text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.name }}</strong></a> </p>
+                                        <p class="group inner product-name text-center" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"><strong>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</strong></a> </p>
                                         <div class="row">
                                             <div class="row-fluid">
                                                 <div class="col-xs-8 col-md-8 text-right"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}</div>
