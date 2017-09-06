@@ -548,6 +548,8 @@ class Builder extends ContainerAware
             $menu['E-commerce']['Product']->addChild('Promotion', array('route' => 'ecommerce_promotion'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Discount', array('route' => 'ecommerce_discount'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Coupon', array('route' => 'ecommerce_coupon'))->setAttribute('icon', 'icon-tags');
+            $menu['E-commerce']['Product']->addChild('Feature Category', array('route' => 'featurecategory'))->setAttribute('icon', 'icon-th-list');
+            $menu['E-commerce']['Product']->addChild('Feature Brand', array('route' => 'featurebrand'))->setAttribute('icon', 'icon-th-list');
         }
 
         /*$menu['E-commerce']->addChild('Transaction', array('route' => ''))
@@ -568,20 +570,7 @@ class Builder extends ContainerAware
 
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
-
-            /*
-             $menu['E-commerce']->addChild('E-commerce Template', array('route' => ''))
-                ->setAttribute('icon', 'fa fa-bookmark')
-                ->setAttribute('dropdown', true);
-            $menu['E-commerce']['E-commerce Template']->addChild('Home View', array('route' => 'ecommercehome'))->setAttribute('icon', 'fa fa-th-list');
-            $menu['E-commerce']['E-commerce Template']->addChild('Mange Template', array('route' => 'ecommercetemplate'))->setAttribute('icon', 'fa fa-th-list');*/
-            $menu['E-commerce']->addChild('Setting', array('route' => ''))
-                ->setAttribute('icon', 'fa fa-bookmark')
-                ->setAttribute('dropdown', true);
-            $menu['E-commerce']['Setting']->addChild('E-commerce Config', array('route' => 'ecommerce_config_modify'))->setAttribute('icon', 'fa fa-cog');
-            $menu['E-commerce']->addChild('Feature & Widget')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
-            $menu['E-commerce']['Feature & Widget']->addChild('Feature Category', array('route' => 'featurecategory'));
-            $menu['E-commerce']['Feature & Widget']->addChild('Feature Brand', array('route' => 'featurebrand'));
+            $menu['E-commerce']->addChild('Configuration', array('route' => 'ecommerce_config_modify'))->setAttribute('icon', 'fa fa-cog');
         }
         return $menu;
     }
