@@ -130,12 +130,6 @@
 
     $(document).ready(function(){
 
-        $('.select2').select2({
-            placeholder: "Filter by category",
-            allowClear: true,
-            color: "black"
-        });
-
         var navbar = $('.navbar-header').outerHeight(true);
         var mins = 22;
         $('#header-form').css({
@@ -150,8 +144,8 @@
 
         $(".numeric").numeric();
         $(".mobile").inputmask("mask", {"mask": "99999-999-999"});
-        var stickyOffset = $('.sticky').offset().top;
 
+        var stickyOffset = $('.sticky').offset().top;
         $(window).scroll(function(){
             var sticky = $('.sticky'),
                 scroll = $(window).scrollTop();
