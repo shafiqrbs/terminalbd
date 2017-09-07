@@ -41,7 +41,7 @@ webservice_product_cart:
 webservice_product_cart_update:
     path:     /cart/product-update/{cartid}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productUpdateCart }
-    methods:  GET
+    methods:  POST
     options:
             expose: true
 

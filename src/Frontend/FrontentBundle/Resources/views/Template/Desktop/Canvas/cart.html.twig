@@ -66,7 +66,7 @@
                                     <input type="text"  class="form-control" data-url="" id="{{ product.rowid }}" value="{{ product.quantity }}">
                                 </td>
                                 <td class="col-sm-1 col-md-1 text-center"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.price }}</strong></td>
-                                <td class="col-sm-1 col-md-1 text-center"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.price * product.quantity |number_format  }}</strong></td>
+                                <td class="col-sm-1 col-md-1 text-center"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.quantity }}</strong></td>
                                 <td class="col-sm-1 col-md-1 text-right">
                                     <a  class="btn btn-info update-cart btn-sm" id="{{ product.rowid }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_update',{'cartid':product.rowid}) }}" data-id="{{ product.price }}" data-value="{{ product.quantity }}" >
                                         <span class="glyphicon glyphicon-pencil " ></span>&nbsp;

@@ -196,18 +196,19 @@ $(document).on( "click", ".addCartx", function(e){
 
 });
 
-$('.update-cart').click( function() {
+$('.update-cart').click( function(e) {
 
     var url = $(this).attr("data-url");
     var price = $(this).attr("data-id");
     var rowid = $(this).attr("id");
     var quantity = $('#'+rowid).val();
+    alert(quantity);
     $.ajax({
         url:url ,
-        type: 'GET',
-        data:'price='+price+'&quantity='+quantity,
+        type: 'POST',
+        data:'price='+ price +'&quantity ='+ quantity,
         success: function(response){
-            location.reload();
+            //location.reload();
         }
     });
     e.preventDefault();

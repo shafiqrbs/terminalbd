@@ -27,6 +27,7 @@ class CustomerController extends Controller
 
     public function indexAction(Request $request)
     {
+
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $shop = $request->request->get('shop');

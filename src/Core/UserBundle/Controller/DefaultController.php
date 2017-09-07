@@ -20,14 +20,11 @@ class DefaultController extends Controller
 
         $user = $this->getUser();
 
-
-
         if( $user->getGlobalOption()){
             $enable = $user->getGlobalOption()->getStatus();
         }else{
-            $enable=0;
+            $enable = 0;
         }
-
 
 
         if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {

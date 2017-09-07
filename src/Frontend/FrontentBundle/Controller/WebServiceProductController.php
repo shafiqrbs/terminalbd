@@ -590,18 +590,20 @@ class WebServiceProductController extends Controller
     public function productUpdateCartAction(Request $request , $cartid)
     {
         $cart = new Cart($request->getSession());
-        $quantity = $_REQUEST['quantity'];
-        $price =$_REQUEST['price'];
+       echo  $quantity = (int)$_REQUEST['quantity'];
+       echo $price = (float)$_REQUEST['price'];
         $data = array(
 
             'rowid' => $cartid,
-            'price'=>$price,
+            'price'=> $price * $quantity ,
             'quantity' => $quantity,
         );
         $cart->update($data);
         $cartTotal = $cart->total();
         $totalItems = $cart->total_items();
         $cartResult = $cartTotal.'('.$totalItems.')';
+
+        exit;
         return new Response($cartResult);
 
     }

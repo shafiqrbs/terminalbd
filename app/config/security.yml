@@ -153,8 +153,8 @@ security:
         - { path: ^/hms,                role: ROLE_HOSPITAL }
         - { path: ^/vendor,             role: ROLE_DOMAIN }
         - { path: ^/web-builder/build,  role: ROLE_DOMAIN }
-        - { path: ^/customer,           role: ROLE_AGENT }
         - { path: ^/customer,           role: ROLE_CUSTOMER }
+        - { path: ^/agent,              role: ROLE_AGENT }
         - { path: ^/user,               role: ROLE_USER }
         - { path: ^/general,            role: ROLE_USER }
         - { path: ^/e-commerce,         role: ROLE_ECOMMERCE }
