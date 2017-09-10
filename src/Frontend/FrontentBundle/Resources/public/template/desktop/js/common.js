@@ -188,7 +188,7 @@ $('#topTabCarousel').on('click', '.nav a', function() {
         $(this).valid();
     });
 
-    $("#commentform").submit(function (e) {
+    $("#loginForm").submit(function (e) {
 
         e.preventDefault();
         var $this = $(e.currentTarget),
@@ -250,7 +250,7 @@ $('#topTabCarousel').on('click', '.nav a', function() {
             "Core_userbundle_user[profile][mobile]": {placement:'top',html:true},
             "Core_userbundle_user[globalOption][syndicate]": {placement:'top',html:true},
             "Core_userbundle_user[globalOption][location]": {placement:'top',html:true},
-            "Core_userbundle_user[globalOption][status]":{placement:'right',html:true},
+            "Core_userbundle_user[globalOption][status]":{placement:'right',html:true}
         },
         submitHandler: function(form) {
 

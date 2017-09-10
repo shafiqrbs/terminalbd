@@ -2,7 +2,7 @@
 <div id="loginModal" class="modal fade" tabindex="-10" role="dialog" >
     <div class="modal-dialog" role="document">
         <div class="modal-content  col-xs-12 col-md-12">
-            <form class="register" id="commentform" action="{{ path("fos_user_security_check") }}" method="post" novalidate="novalidate">
+            <form class="register" id="loginForm" action="{{ path("fos_user_security_check") }}" method="post" novalidate="novalidate">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">LOGIN</h4>
@@ -12,12 +12,11 @@
                     <div class="panel panel-default">
 
                         <div class="panel-body">
-                            <span id="error"></span>
+                            <div id="loginMsg"></div>
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
                                     <input type="text" id="_username" name="_username" required="required" class="form-control" placeholder="Enter your mobile no">
-
                                 </div>
                             </div>
                             <div class="form-group">

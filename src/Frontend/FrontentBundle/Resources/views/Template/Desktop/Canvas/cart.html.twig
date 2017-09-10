@@ -24,37 +24,66 @@
         .media-left, .media>.pull-left{
             margin-right: 10px;
         }
-        .media{
+        .table .media{
             border-bottom: none;
         }
+        .table .input-group {
+            width: 154px;
+        }
+        .input-group .input-number{
+            width:75px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .table h5.media-heading {
+            color: #786767;
+        }
+        .table .media-object{
+            width:95px;
+            height:85px;
+            border: 1px solid #d2d2d2;
+        }
+        #loginMsg{
+            border: 1px solid transparent;
+            margin-bottom: 10px;
+            padding: 6px;
+            width: 100%;
+        }
+
 
     </style>
     <section >
         <div class="container">
             <div class="row">
-                <div class="col-sm-8 col-md-8">
-                    <table class="table table-hover">
+                <style>
+                    .media{
+                        padding-bottom: 0;
+                    }
+                </style>
+                <div class="col-sm-12 col-md-12">
+                    <table class="table table-hover table-striped table-bordered table-list">
                         <thead>
                         <tr>
-                            <th>Product</th>
-                            <th>Quantity</th>
+                            <th>Product Name</th>
                             <th class="text-center">Price</th>
-                            <th class="text-center">Total</th>
+                            <th>Quantity</th>
+                            <th class="text-left">SubTotal</th>
                             <th> </th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for product in cart.contents %}
+
                             <tr>
                                 <td class="col-sm-8 col-md-6">
                                     <div class="media">
                                         {% if product.productImg is not empty %}
-                                            <a class="thumbnail pull-left" href="#"> <img class="media-object" src="{{ product.productImg }}" style="width: 72px; height: 72px;"> </a>
+                                            <a class="pull-left" href="#"> <img class="media-object" src="{{ product.productImg }}"> </a>
                                         {% else %}
-                                            <a class="thumbnail pull-left" href="#"> <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" style="width: 72px; height: 72px;"> </a>
+                                            <a class="pull-left" href="#"> <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" > </a>
                                         {% endif %}
                                         <div class="media-body">
-                                            <h4 class="media-heading">{{ product.name }}</h4>
+                                            <h5 class="media-heading">{{ product.name }}</h5>
                                             <h5 class="media-heading">Size of Product: {{ product.size }}</h5>
                                             {% if product.color is not empty %}<h5 class="media-heading">Color: {{ product.color }}</h5>{% endif %}
                                             {% if product.brand is not empty %}<h5 class="media-heading"> by {{ product.brand }}</h5>{% endif %}
@@ -62,63 +91,54 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="col-sm-1 col-md-1" style="text-align: center">
-                                    <input type="text"  class="form-control" data-url="" id="{{ product.rowid }}" value="{{ product.quantity }}">
-                                </td>
                                 <td class="col-sm-1 col-md-1 text-center"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.price }}</strong></td>
-                                <td class="col-sm-1 col-md-1 text-center"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.quantity }}</strong></td>
-                                <td class="col-sm-1 col-md-1 text-right">
-                                    <a  class="btn btn-info update-cart btn-sm" id="{{ product.rowid }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_update',{'cartid':product.rowid}) }}" data-id="{{ product.price }}" data-value="{{ product.quantity }}" >
-                                        <span class="glyphicon glyphicon-pencil " ></span>&nbsp;
-                                    </a>
+                                <td class="col-sm-1 col-md-1 text-center" >
+                                    <form class="addCart">
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quantity" data-id="{{ product.rowid }}" data-url="/cart/product-update/{{ product.rowid }}" data-text="{{ product.id }}" data-title="{{ product.price }}">
+                                                    <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                            </span>
+                                            <input type="text" name="quantity" id="quantity-{{ product.rowid }}" class="form-control input-number" value="{{ product.quantity }}" min="1" max="100" >
+                                            <span class="input-group-btn">
+                                                  <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quantity" data-id="{{ product.rowid }}"  data-url="/cart/product-update/{{ product.rowid }}" data-text="{{ product.id }}" data-title="{{ product.price }}">
+                                                      <span class="glyphicon glyphicon-plus"></span>
+                                                  </button>
+                                            </span>
+                                        </div>
+                                    </form>
+                                </td>
+                                <td class="col-sm-1 col-md-1 text-left"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.price*product.quantity }}</strong></td>
+                                <td class="col-sm-1 col-md-1 text-left">
                                     <a  class="btn btn-danger remove-cart btn-sm" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_remove',{'cartid':product.rowid}) }}">
                                         <span class="glyphicon glyphicon-trash " ></span>&nbsp;
                                     </a>
                                 </td>
                             </tr>
                         {% endfor %}
-
                         <tr>
-                            <td>   </td>
-                            <td>   </td>
-                            <td>   </td>
-                            <td>   </td>
-                            <td class="text-right">
+                            <th colspan="3" class="col-sm-12 col-md-12"><h3>Shopping  Total Amount</h3></th>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="col-sm-1 col-md-1"><h5>Subtotal</h5></td>
+                            <td colspan="2" class="text-left col-sm-1 col-md-1"><h5><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cart.total }}</strong></h5></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="col-sm-1 col-md-1"><strong>Coupon Code</strong></td>
+                            <td colspan="2" class="text-left col-sm-1 col-md-1"><input type="text" style="width:150px; border-radius:0" class="form-control" name="couponCode" id="couponCode"></td>
+                        </tr>
+                        <tr>
+                            <td  colspan="3" class="col-sm-1 col-md-1"><strong>Grand Total</strong></td>
+                            <td colspan="2" class="col-sm-1 col-md-1 text-left"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cart.total }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-right" >
                                 <a href="{{ path(globalOption.subDomain ~'_webservice_product') }}" class="btn btn-info">
                                     <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
                                 </a>
                             </td>
-
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="col-sm-4 col-md-4">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>Cart Totals</th>
-                            <th> </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td><h5>Subtotal</h5></td>
-                            <td class="text-right"><h5><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cart.total }}</strong></h5></td>
-                        </tr>
-                        <tr>
-                            <td><h3>Grand Total</h3></td>
-                            <td class="text-right"><h3><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cart.total }}</strong></h3></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Coupon Code</strong></td>
-                            <td class="text-right"><input type="text" class="form-control" name="couponCode" id="couponCode"></td>
-                        </tr>
-                        <tr>
-                            <td>
-
-                            </td>
-                            <td class="text-right">
+                            <td colspan="2" class="text-left" >
                                 {% if  app.user %}
                                     <a href="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" type="button" class="btn btn-success">
                                         Checkout <span class="glyphicon glyphicon-play"></span>
@@ -130,7 +150,7 @@
                                 {% endif %}
                             </td>
                         </tr>
-                        </tbody>
+                         </tbody>
                     </table>
                 </div>
             </div>
@@ -164,7 +184,6 @@
 
         var url = $(this).attr("data-url");
         var id = $(this).attr("id");
-        alert(id);
         $.ajax({
         url:url ,
         type: 'GET',
@@ -181,4 +200,210 @@
 
     });
 
+    $("#loginForm").validate({
+
+        rules: {
+            "_username": {required: true},
+            "_password": {required: true},
+        },
+
+        messages: {
+
+            "_username":"Enter your mobile name",
+            "_password": "Enter valid password",
+
+        },
+
+        tooltip_options: {
+            "_username": {placement:'top',html:true},
+            "_password": {placement:'top',html:true},
+        },
+        submitHandler: function(form) {
+
+            $.ajax({
+
+                url         : $(form).attr( 'action' ),
+                type        : $(form).attr( 'method' ),
+                data        : new FormData(form),
+                processData : false,
+                contentType : false,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.has_error) {
+                        $('#loginMsg').addClass('alert-danger');
+                        $('.alert-danger').html('There was an error with your Mobile no/Password combination. Please try again.');
+                    }else {
+                        $('#loginMsg').removeClass('alert-danger');
+                        $('#loginMsg').addClass('alert-success');
+                        $('.alert-success').html('Yor are login success.');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 3000)
+
+                    }
+                }
+            });
+        }
+    });
+
+
+    $("#loginformxyz").submit(function (e) {
+
+        e.preventDefault();
+        var $this = $(e.currentTarget),
+        inputs = {};
+
+        // Send all form's inputs
+        $.each($this.find('input'), function (i, item) {
+        var $item = $(item);
+        inputs[$item.attr('name')] = $item.val();
+        });
+
+        // Send form into ajax
+        $.ajax({
+        url: $this.attr('action'),
+        type: 'POST',
+        dataType: 'json',
+        data: inputs,
+        success     : function(data, status, object) {
+            alert('Success');
+            $('#loginMsg').addClass('alert-success');
+            $('.alert-success').html('Your login successfuly')
+
+        },
+        error: function(data, status, object){
+            alert('Invalid');
+            $('#loginMsg').addClass('alert-danger');
+            $('.alert-danger').html(data.error)
+        }
+
+        });
+    });
+
+
+    $('.btn-number').click(function(e){
+
+        e.preventDefault();
+
+        url = $(this).attr('data-url');
+        productId = $(this).attr('data-text');
+        price = $(this).attr('data-title');
+        fieldId = $(this).attr('data-id');
+        fieldName = $(this).attr('data-field');
+        type      = $(this).attr('data-type');
+        var input = $('#quantity-'+$(this).attr('data-id'));
+        var currentVal = parseInt(input.val());
+        if (!isNaN(currentVal)) {
+            if(type == 'minus') {
+                if(currentVal > input.attr('min')) {
+                    var existVal = (currentVal - 1);
+                    input.val(existVal).change();
+                    $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                    .done(function( data ) {
+                        location.reload();
+                    });
+                }
+                if(parseInt(input.val()) == input.attr('min')) {
+                    $(this).attr('disabled', true);
+                }
+
+            } else if(type == 'plus') {
+
+                if(currentVal < input.attr('max')) {
+                    var existVal = (currentVal + 1);
+                    input.val(existVal).change();
+                    $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                    .done(function(data){
+                        if(data == 'success'){
+                            location.reload();
+                        }else{
+                            input.val(existVal-1).change();
+                            alert('This product quantity  is not over current quantity.')
+                        }
+
+                    });
+                }
+                if(parseInt(input.val()) == input.attr('max')) {
+                    $(this).attr('disabled', true);
+                }
+
+            }
+        } else {
+            input.val(0);
+        }
+    });
+
+
+    $('.input-number').focusin(function(){
+    $(this).data('oldValue', $(this).val());
+    });
+    $('.input-number').change(function() {
+
+    minValue =  parseInt($(this).attr('min'));
+    maxValue =  parseInt($(this).attr('max'));
+    valueCurrent = parseInt($(this).val());
+
+    name = $(this).attr('name');
+    if(valueCurrent >= minValue) {
+    $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+    alert('Sorry, the minimum value was reached');
+    $(this).val($(this).data('oldValue'));
+    }
+    if(valueCurrent <= maxValue) {
+    $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+    alert('Sorry, the maximum value was reached');
+    $(this).val($(this).data('oldValue'));
+    }
+
+
+    });
+    $(".input-number").keydown(function (e) {
+
+    // Allow: backspace, delete, tab, escape, enter and .
+    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+    // Allow: Ctrl+A
+    (e.keyCode == 65 && e.ctrlKey === true) ||
+    // Allow: home, end, left, right
+    (e.keyCode >= 35 && e.keyCode <= 39)) {
+    // let it happen, don't do anything
+    return;
+    }
+    // Ensure that it is a number and stop the keypress
+    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+    e.preventDefault();
+    }
+    });
+
+  {#  $("#plus").click(function(){
+
+    var newValuePlus = parseInt($("#textnumber").val()) + 1;
+    if ( newValuePlus > 100 ) return;
+
+    $("#textnumber").val(newValuePlus);
+
+    });
+
+
+    $("#minus").click(function(){
+
+    var newValueMinus = parseInt($("#textnumber").val()) - 1;
+    if ( newValueMinus < 0 ) return;
+
+    $("#textnumber").val(newValueMinus);
+    });
+
+    $("#points").change(function(){
+
+    var newValue = $(this).val();
+    $("#textnumber").val(newValue);
+
+    });
+    $("#textnumber").change(function(){
+
+    var newValue = $(this).val();
+    $("#points").val(newValue);
+
+    });#}
 {% endblock %}

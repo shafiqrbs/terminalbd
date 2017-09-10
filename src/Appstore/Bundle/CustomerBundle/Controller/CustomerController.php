@@ -25,14 +25,12 @@ class CustomerController extends Controller
         return $pagination;
     }
 
-    public function indexAction(Request $request)
+    public function indexAction($subdomain)
     {
 
         $user = $this->getUser();
-        $em = $this->getDoctrine()->getManager();
-        $shop = $request->request->get('shop');
-        if(!empty($globalOption)){
-            $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
+        if(!empty($subdomain)){
+            $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $subdomain));
         }else{
             $globalOption ='';
         }

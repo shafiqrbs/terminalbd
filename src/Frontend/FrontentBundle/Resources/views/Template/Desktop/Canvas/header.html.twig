@@ -16,65 +16,36 @@
                 <div class="col-md-9">
                     {% if globalOption.templateCustomize.showSearch == 1 %}
                         <div class="row bs-example-form" id="header-form">
-                            <div class="col-md-10 col-lg-10">
+                            <div class="col-md-9 col-lg-9">
                                 <form class="bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product') }}"  method="get" data-example-id="input-group-segmented-buttons">
                                     <div class='input-group search-box' >
                                         <div class='input-group-field'>
                                             {{ categoryTree|raw }}
                                         </div>
-                                        <input type='text' class='form-control serarch-keyword' style="width: 351px" name="product" id="product" value="{% if searchForm.product is defined %}{{ searchForm.product }}{% endif %}"  placeholder="Find Your Favorite Products"/>
+                                        <input type='text' class='form-control serarch-keyword' style="width: 300px" name="product" id="product" value="{% if searchForm.product is defined %}{{ searchForm.product }}{% endif %}"  placeholder="Find Your Favorite Products"/>
                                         <span class="input-group-btn">
                                                 <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
                                             </span>
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-md-2 col-lg-2">
-                                <div class="input-group dropdown navbar-right"  >
+                            <div class="col-md-3 col-lg-3">
+                                <div class="input-group text-right" style="margin-top: 2px" >
                                     <div class="input-group-btn">
-                                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_ajax_details') }}" id="view-cart-data"  class="btn btn-group btn-cart dropdown-toggle search-box-bg" data-toggle="dropdown"  aria-expanded="false"><span
-                                                    class="glyphicon glyphicon-shopping-cart"></span></a>
-                                        <a  href="javascript:" class="btn dropdown-toggle btn-warning" data-toggle="dropdown" role="button"
-                                            aria-expanded="false"> <span class="label label-warning badge totalItem "  >{{ cart.total_items }}</span></a>
-                                        <a style="border-left: 1px solid #dddddd" type="button" class="btn btn-group search-box-bg login-preview" ><span class="glyphicon glyphicon-lock"></span></a>
-                                        <div class="item-list">
-                                            <ul class="dropdown-menu dropdown-cart" role="navbar-right">
-                                                {% if  cart.contents is not empty %}
-                                                     {% for product in cart.contents %}
-                                                        <li id="item-remove-{{ product.rowid }}">
-                                                              <span class="item">
-                                                                <span class="item-left">
-                                                                    {% if product.productImg is not empty %}
-                                                                        <img src="{{ image(product.productImg).scaleResize(50,50) }}" alt=""/>
-                                                                    {% endif %}
-                                                                    <span class="item-info">
-                                                                        <span>{{ product.name|truncate(15) }}</span>
-                                                                        <span>Qnt&nbsp;{{ product.quantity }}</span>
-                                                                        <span><strong>{{ globalOption.ecommerceConfig.currency }}
-                                                                                &nbsp;{{ product.price }}</strong></span>
-                                                                    </span>
-                                                                </span>
-                                                                <span class="item-right">
-                                                                    <button id="{{ product.rowid }}"
-                                                                            data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart_remove',{'cartid':product.rowid}) }}"
-                                                                            class="btn btn-xs btn-danger pull-right hunger-remove-cart"><span
-                                                                                class="glyphicon glyphicon-trash"></span></button>
-                                                                </span>
-                                                            </span>
-                                                        </li>
-                                                    {% endfor %}
-                                                {% endif %}
-                                                <li class="divider"></li>
-                                                <li><a class="text-center" href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}">View to Busket</a></li>
-                                            </ul>
-                                        </div>
-                                     </div><!-- /btn-group -->
+                                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" data-toggle="tooltip" data-original-title="View Shopping Bag Details"  class="btn btn-group btn-success"><span  class="glyphicon glyphicon-shopping-cart"></span></a>
+                                        <a  href="javascript:" data-toggle="tooltip" data-original-title="View Shopping Items"  id="cartItem"  class="btn btn-warning"> <span class="label label-warning badge totalItem "  >{{ cart.total_items }}</span></a>
+                                        {% if app.user %}
+                                            <a href="/logout" type="button" data-toggle="tooltip" data-original-title="System Logout" class="btn btn-group btn-danger" ><span class="glyphicon glyphicon-lock"></span></a>
+                                            <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}" data-toggle="tooltip" data-original-title="Go To Your Order Panel" type="button" class="btn btn-group btn-primary" ><span class="glyphicon glyphicon-user"></span></a>
+                                        {% else %}
+                                            <a type="button" class="btn btn-group btn-primary login-preview"  title="" data-toggle="tooltip" data-original-title="System Login" ><span class="glyphicon glyphicon-lock"></span></a>
+                                        {% endif %}
+                                    </div><!-- /btn-group -->
                                 </div><!-- /input-group -->
                             </div>
                         </div>
                     {% endif %}
                 </div>
-
             </div>
         </div>
     </section>
@@ -84,6 +55,7 @@
         </div>
     </section>
 </nav>
+
 <!-- BEGIN NAVIGATION -->
 
 <!-- END NAVIGATION -->

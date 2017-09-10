@@ -1,8 +1,17 @@
+<style>
+    .header .brand {
+        color: #fff;
+        width: auto;
+        margin-left: 0;
+        font-weight: bold;
+    }
+</style>
 <div class="header navbar navbar-inverse navbar-fixed-top">
     <!-- BEGIN TOP NAVIGATION BAR -->
     <div class="navbar-inner">
         <div class="container-fluid">
             <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+            <a class="brand" href="/">WelCome:  {{ globalOption.name }}</a>
             <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
                 <img src="assets/img/menu-toggler.png" alt="" />
             </a>

@@ -237,9 +237,6 @@ $(document).on( "click", ".cartSubmit", function(e){
 
 });
 
-
-
-
 $(document).on( "click", ".hunger-remove-cart", function(e){
     var url = $(this).attr("data-url");
     var id = $(this).attr("id");
@@ -257,7 +254,7 @@ $(document).on( "click", ".hunger-remove-cart", function(e){
     e.preventDefault();
 });
 
-$('.remove-cart').click( function() {
+$('.remove-cart').click( function(e) {
 
     var url = $(this).attr("data-url");
     $.ajax({

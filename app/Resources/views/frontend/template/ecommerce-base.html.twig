@@ -6,7 +6,6 @@
 <head>
     {% set currentPath = path(app.request.attributes.get('_route'),
     app.request.attributes.get('_route_params')) %}
-
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -18,10 +17,10 @@
     <meta property="og:image"         content="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" />
     <title>{{ globalOption.name }}</title>
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}">
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCKjLTXdq6Db3Xit_pW_GK4EXuPRtnod4o"></script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
-     <!-- Google fonts - witch you want to use - (rest you can just remove) -->
+    <!-- Google fonts - witch you want to use - (rest you can just remove) -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCKjLTXdq6Db3Xit_pW_GK4EXuPRtnod4o"></script>
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Open+Sans:400,800,700italic,700,600italic,600,400italic,300italic,300|Roboto:100,300,400,500,700&amp;subset=latin,latin-ext' type='text/css' />
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -45,6 +44,7 @@
     'assets/template/plugin/wow/css/animate.css'
     'assets/template/plugin/select2/select2.css'
     'assets/template/plugin/range-slider/bootstrap-slider.css'
+    'assets/plugins/pop-modal/popModal.min.css'
     'assets/template/desktop/css/module.css'
     %}
 
@@ -108,6 +108,7 @@
 'assets/template/plugin/range-slider/bootstrap-slider.min.js'
 'assets/template/plugin/textillate/assets/jquery.fittext.js'
 'assets/template/plugin/textillate/assets/jquery.lettering.js'
+'assets/plugins/pop-modal/popModal.js'
 'assets/template/desktop/js/jquery.scrollbar.min.js'
 'assets/template/plugin/jquery-zoom/zoom.js'
 'assets/template/desktop/js/scripts.js'

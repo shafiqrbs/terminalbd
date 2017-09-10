@@ -89,6 +89,7 @@ class ProductController extends Controller
             'quantity' => $quantity,
             'productImg' => $productImg
         );
+        
         $cart->insert($data);
         $cartTotal = $cart->total();
         $totalItems = $cart->total_items();

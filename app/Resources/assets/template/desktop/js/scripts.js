@@ -228,6 +228,7 @@ $(document).ready(function(){
 
         });
 
+        
         $("#signup").validate({
     
             rules: {
@@ -268,17 +269,16 @@ $(document).ready(function(){
                     data        : new FormData(form),
                     processData : false,
                     contentType : false,
-                    success: function(response) {
-                        if(response == 'success'){
-                            $('#registerModal').modal('hide');
-                            $('#forgetModal').modal('hide');
-                            $('#loginModal').modal('toggle');
-                        }
-                    },
+                    success: function(response) {},
                     complete: function(){
+
+                        $('#registerModal').modal('hide');
+                        $('#forgetModal').modal('hide');
+                        $('#loginModal').modal('toggle');
                         $("form").trigger("reset");
                         $('#error').addClass('alert-success');
                         $('.alert-success').html('Dear Customer, Registration success, User name mobile no & Password is 1234');
+
                     }
                 });
             }

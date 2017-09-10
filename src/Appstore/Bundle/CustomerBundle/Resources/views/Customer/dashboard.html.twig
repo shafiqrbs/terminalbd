@@ -6,12 +6,11 @@
             <div class="span12">
                 <h3 class="page-title">
                     {{ user.profile.name }}
-
                 </h3>
                 <ul class="breadcrumb">
                     <li>
                         <i class="icon-home"></i>
-                        <a href="{{ path('domain_customer_homepage') }}">Home</a>
+                        <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Dashboard</a></li>

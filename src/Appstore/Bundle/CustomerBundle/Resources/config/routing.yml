@@ -27,7 +27,7 @@ agent_client:
     prefix:   /agent
 
 domain_customer_homepage:
-    path:     /dashboard/
+    path:     /{shop}/dashboard/
     defaults: { _controller: "CustomerBundle:Customer:index" }
 
 

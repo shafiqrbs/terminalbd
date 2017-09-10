@@ -545,78 +545,82 @@ class WebServiceProductController extends Controller
 
     }
 
-    public function getCartItem(GlobalOption $globalOption , $salesItems){
-
-       $currency = $globalOption->getEcommerceConfig()->getCurrency();
-       $items = '';
-
-       foreach ($salesItems as $product ) {
-
-           $str = $product['name'];
-           if (strlen($str) > 15)
-               $str = substr($str, 0, 15) . '..';
-
-            $items .= '<li id="item-remove-'.$product['rowid'].'" >';
-            $items .= '<span class="item">';
-            $items .= '<span class="item-left">';
-            $items .= '<img height="50" width="50" src="'.$product['productImg'] . '">';
-            $items .= '<span class="item-info">';
-            $items .= '<span>'.$str.'</span>';
-            $items .= '<span>Qnt '.$product['quantity'].'</span>';
-            $items .= '<span><strong>'.$currency .' '. $product['price'].'</strong></span>';
-            $items .= '</span>';
-            $items .= '</span>';
-            $items .= '<span class="item-right">';
-            $items .= '<button id="'.$product['rowid'].'" data-url="/cart/product-remove/'.$product['rowid'] .'"
-             class="btn btn-xs btn-danger pull-right hunger-remove-cart"><span class="glyphicon glyphicon-trash"></span></button>';
-            $items .= '</span>';
-            $items .= '</span>';
-            $items .= '</li>';
-        }
-        return $items;
-
-   }
 
     public function productCartDetailsAction(Request $request, $subdomain){
+
 
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        $salesItems = $this->getCartItem($globalOption,$cart->contents());
-        echo $salesItems;
-        exit;
+        return $this->render('FrontendBundle:Template/Desktop/EcommerceWidget:ajaxCart.html.twig',
+            array(
+                'cart' => $cart,
+                'globalOption' => $globalOption
+                )
+        );
     }
+
 
     public function productUpdateCartAction(Request $request , $cartid)
     {
+        $em = $this->getDoctrine()->getManager();
         $cart = new Cart($request->getSession());
-       echo  $quantity = (int)$_REQUEST['quantity'];
-       echo $price = (float)$_REQUEST['price'];
-        $data = array(
-
-            'rowid' => $cartid,
-            'price'=> $price * $quantity ,
-            'quantity' => $quantity,
-        );
-        $cart->update($data);
-        $cartTotal = $cart->total();
-        $totalItems = $cart->total_items();
-        $cartResult = $cartTotal.'('.$totalItems.')';
-
+        $quantity = (int)$_REQUEST['quantity'];
+        $productId = (int)$_REQUEST['productId'];
+        $price = (float)$_REQUEST['price'];
+        $item = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->find($productId);
+        if (!empty($item) and  $item->getQuantity() >= $quantity){
+            $data = array(
+                'rowid' => $cartid,
+                'price' => $price,
+                'quantity' => $quantity,
+            );
+            $cart->update($data);
+            return new Response('success');
+        }else{
+            return new Response('invalid');
+        }
         exit;
-        return new Response($cartResult);
+
 
     }
 
-    public function productRemoveCartAction(Request $request , $cartid)
+    public function getCartItem(GlobalOption $globalOption , Cart $cart){
+
+        $currency = $globalOption->getEcommerceConfig()->getCurrency();
+        $items = '';
+
+        foreach ($cart->contents() as $product ) {
+
+            $items .= '<dl id="item-remove-'.$product['rowid'].'" >';
+            $items .= '<dt>';
+            $items .= '<img height="80" width="80" src="/'.$product['productImg'].'">';
+            $items .= '<span class="dd-span-name">'.$product['name'].'</span>';
+            $items .= '</dt>';
+            $items .= '<dd>';
+            $items .= '<span class="dd-span-action">';
+            $items .= '<button id="'.$product['rowid'].'" data-url="/cart/product-remove/'.$product['rowid'] .'"
+             class="btn btn-xs btn-danger pull-right hunger-remove-cart"><span class="glyphicon glyphicon-trash"></span></button>';
+            $items .= '</span>';
+            $items .= '<span class="dd-span-price">'.$product['price'].'x'.$product['quantity'].'='.$currency .' '. $product['price'] * $product['quantity'].'</span>';
+            $items .= '</dd>';
+            $items .= '</dl>';
+        }
+        return $items;
+
+    }
+
+    public function productRemoveCartAction(Request $request , $subdomain , $cartid)
     {
         $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         $cart->remove($cartid);
         $cartTotal = $cart->total();
         $totalItems = $cart->total_items();
         $cartResult = $cartTotal.'('.$totalItems.')';
-        $salesItems = $this->getCartItem($cart);
-        return new Response(json_encode(array('cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems, 'salesItem' => $salesItems)));
+        $cartItems = $this->getCartItem($globalOption ,$cart);
+        return new Response(json_encode(array('cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems,'cartItem' => $cartItems)));
 
 
     }

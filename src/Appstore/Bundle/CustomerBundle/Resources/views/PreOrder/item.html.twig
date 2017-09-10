@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('preorder') }}">Manage Pre-order Item</a>
+                        <a href="{{ path('preorder',{'shop':globalOption.slug}) }}">Manage Pre-order Item</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Manage Pre-order new/edit</a></li>
@@ -42,8 +42,8 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('preorder_new',{'domain':entity.ecommerceConfig.globalOption.slug}) }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('preorder') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('preorder_new',{'shop':globalOption.slug}) }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                    <li><a href="{{ path('preorder',{'shop':globalOption.slug}) }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -345,7 +345,7 @@
                                              <div class="span2">
                                                 <div class="control-group">
                                                     <div class="controls" style="margin-top: 20px">
-                                                        <button type="button" id="submitProcess" name="submitProcess"  data-url="{{ path('preorder_process',{id:entity.id,'process':'in-progress'}) }}"  class="btn blue"><i class="icon-refresh"></i>&nbsp;Process</button>
+                                                        <button type="button" id="submitProcess" name="submitProcess"  data-url="{{ path('preorder_process',{'shop':globalOption.slug,id:entity.id,'process':'in-progress'}) }}"  class="btn blue"><i class="icon-refresh"></i>&nbsp;Process</button>
                                                     </div>
                                                 </div>
                                             </div>

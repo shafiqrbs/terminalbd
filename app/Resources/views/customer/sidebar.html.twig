@@ -5,56 +5,13 @@
         <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
     </li>
 
-    <li class="start " >
-        <a href="javascript:">
-            <i class="icon-umbrella"></i>
-            <span class="title">Agent Client</span>
-            <span class="arrow "></span>
-        </a>
-        <ul class="sub-menu">
-            <li >
-                <a href="{{ path('agentclient') }}">
-                    <i class="icon-cloud"></i>
-                    <span class="title">Client</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ path('agentclient_new') }}">
-                    <i class="icon-shopping-cart"></i>
-                    <span class="title">New Client</span>
-                </a>
-            </li>
-        </ul>
-    </li>
+
     {% if globalOption is not empty %}
-
-    <li >
-        <a href="javascript:">
-            <i class="icon-umbrella"></i>
-            <span class="title">All Domain</span>
-            <span class="arrow "></span>
+    <li class="start ">
+        <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}">
+            <i class="icon-home"></i>
+            <span class="title">Dashboard</span>
         </a>
-        <ul class="sub-menu">
-            <li >
-                <a href="{{ path('customer_domain',{'shop':globalOption.slug}) }}">
-                    <i class="icon-cloud"></i>
-                    <span class="title">All Domain</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ path('allproduct',{'shop':globalOption.slug}) }}">
-                    <i class="icon-shopping-cart"></i>
-                    <span class="title">All Product</span>
-                </a>
-            </li>
-            <li >
-                <a href="{{ path('customer_domain_bookmark',{'shop':globalOption.slug}) }}">
-                    <i class="icon-bookmark"></i>
-                    <span class="title">Bookmark Domain</span>
-                </a>
-            </li>
-
-        </ul>
     </li>
     <li >
         <a href="javascript:">
@@ -102,6 +59,18 @@
 
         </ul>
     </li>
+    <li >
+        <a href="{{ path('order_product', { 'shop': globalOption.slug}) }}">
+            <i class="icon-shopping-cart"></i>
+            <span class="title">New Shopping</span>
+        </a>
+    </li>
+    <li >
+        <a href="{{ path('preorder_new', { 'shop': globalOption.slug}) }}">
+            <i class="icon-shopping-cart"></i>
+            <span class="title">New Pre Order</span>
+        </a>
+    </li>
     {% else %}
 
         <li class="start ">
@@ -110,6 +79,27 @@
                 <span class="title">Dashboard</span>
             </a>
         </li>
+        <li class="start " >
+            <a href="javascript:">
+                <i class="icon-umbrella"></i>
+                <span class="title">Agent Client</span>
+                <span class="arrow "></span>
+            </a>
+            <ul class="sub-menu">
+                <li >
+                    <a href="{{ path('agentclient') }}">
+                        <i class="icon-cloud"></i>
+                        <span class="title">Client</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('agentclient_new') }}">
+                        <i class="icon-shopping-cart"></i>
+                        <span class="title">New Client</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
         <li >
             <a href="javascript:">
                 <i class="icon-umbrella"></i>
@@ -117,10 +107,10 @@
                 <span class="arrow "></span>
             </a>
             <ul class="sub-menu">
-                <li >
+               {# <li >
                     <a href="{{ path('customer_domain') }}">
                         <i class="icon-cloud"></i>
-                        <span class="title">All Domain</span>
+                        <span class="title">All Shop</span>
                     </a>
                 </li>
                 <li>
@@ -134,9 +124,15 @@
                         <i class="icon-bookmark"></i>
                         <span class="title">Bookmark Domain</span>
                     </a>
-                </li>
+                </li>#}
 
             </ul>
         </li>
     {% endif %}
+{#    <li class="start ">
+        <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}">
+            <i class="icon-cog"></i>
+            <span class="title">Configuration</span>
+        </a>
+    </li>#}
 </ul>

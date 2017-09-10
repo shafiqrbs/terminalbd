@@ -32,14 +32,12 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
+                                    <i class="icon-shopping-cart"></i>&nbsp;View Shopping
                                     <i class="icon-tasks"></i>
                                 </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('customer_domain') }}"><i class="icon-plus-sign"></i>&nbsp;All Domain</a></li>
-                                </ul>
+
                                 <a class="dropdown-toggle btn purple cart" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" href="{{ path('order_cart',{'shop':globalOption.slug}) }}">
-                                    <i class="icon-shopping-cart"></i>&nbsp;BDT. (<span>{{ cart.total|number_format }}</span>)
+                                    BDT. (<span>{{ cart.total|number_format }}</span>)
                                 </a>
                                 <ul class="dropdown-menu extended inbox">
                                     <li>
@@ -103,13 +101,13 @@
                                     </div>
                                     <br>
                                     <div class="row-fluid">
-                                        <div class="span4">
+                                        <div class="span6">
                                             <input type="text" id="brand" name="brand"  class="leftMargin span12 select2Brand" value="{% if searchForm.brand is defined %}{{ searchForm.brand }}{% endif %}"  autocomplete="off" placeholder="Product brand name">
                                         </div>
-                                        <div class="span4">
+                                        <div class="span3">
                                             <input type="text" id="startDate" name="startDate"  class="span12 m-wrap date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
                                         </div>
-                                        <div class="span4">
+                                        <div class="span3">
                                             <div class="controls">
                                                 <div class="input-append span10">
                                                     <input type="text" id="endDate" name="endDate"  class="span12 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
@@ -124,7 +122,7 @@
                             </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
-                                <tr class="head-grey">
+                                <tr class="head-blue">
                                     <th class="numeric" >Product name</th>
                                     <th class="numeric" >Category</th>
                                     <th class="numeric" >Brand</th>
@@ -275,7 +273,7 @@
         })
 
     });
-    $(document).on("click", ".addCart", function() {
+    {#$(document).on("click", ".addCart", function() {
 
         var id = $(this).attr("id");
         var url = $(this).attr("data-url");
@@ -290,7 +288,7 @@
         },
         })
 
-    });
+    });#}
 
 {% endblock %}
 
