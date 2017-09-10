@@ -7,7 +7,7 @@
             </div>
             <div class="service-Content">
                 <h3 class="title">{{ entity.name }}</h3>
-                <p class="description">{{ entity.content|raw|truncate(180) }}</p>
+                <p class="description">{{ entity.content|truncate(180)|raw }}</p>
                 <a  href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'module': 'service','slug':entity.slug }) }}" class="read-more pull-right">Read more <i class="fa fa-angle-double-right"></i></a>
             </div>
         </div>

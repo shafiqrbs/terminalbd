@@ -160,12 +160,14 @@ $('.addCart').submit( function(e) {
         processData: false,
         contentType: false,
         success: function(response){
-
             obj = JSON.parse(response);
-            $('.totalItem').html(obj['totalItem']);
-            $('.totalAmount').html(obj['cartTotal']);
-            $('.item-list').html(obj['salesItem']);
-            $('.vsidebar .txt').html(obj['cartResult']);
+            if(obj['process'] == 'invalid'){
+                alert('There is not enough product in stock at this moment');
+            }else{
+                $('.totalItem').html(obj['totalItem']);
+                $('.totalAmount').html(obj['cartTotal']);
+                $('.vsidebar .txt').html(obj['cartResult']);
+            }
         }
     });
     e.preventDefault();
@@ -173,48 +175,16 @@ $('.addCart').submit( function(e) {
 });
 
 
-$(document).on( "click", ".addCartx", function(e){
-
-    var url = $('.cartSubmit').attr("data-url");
-    $.ajax({
-        url:url ,
-        type: 'POST',
-        data: new FormData(this),
-        processData: false,
-        contentType: false,
-        success: function(response){
-
-            obj = JSON.parse(response);
-            $('.totalItem').html(obj['totalItem']);
-            $('.totalAmount').html(obj['cartTotal']);
-            $('.item-list').html(obj['salesItem']);
-            $('.vsidebar .txt').html(obj['cartResult']);
-
+$('#cartItem').click(function(){
+    $('#cartItem').popModal({
+        html : function(callback) {
+            $.ajax({url:'/cart/product-details'}).done(function(content){
+                callback(content);
+            });
         }
     });
-    e.preventDefault();
 
 });
-
-$('.update-cart').click( function(e) {
-
-    var url = $(this).attr("data-url");
-    var price = $(this).attr("data-id");
-    var rowid = $(this).attr("id");
-    var quantity = $('#'+rowid).val();
-    alert(quantity);
-    $.ajax({
-        url:url ,
-        type: 'POST',
-        data:'price='+ price +'&quantity ='+ quantity,
-        success: function(response){
-            //location.reload();
-        }
-    });
-    e.preventDefault();
-
-});
-
 
 $(document).on( "click", ".cartSubmit", function(e){
 
@@ -246,13 +216,16 @@ $(document).on( "click", ".hunger-remove-cart", function(e){
         type: 'GET',
         success: function(response){
             obj = JSON.parse(response);
+            $('#cart-item-list-box').html(obj['cartItem']);
             $('.totalItem').html(obj['totalItem']);
             $('.totalAmount').html(obj['cartTotal']);
             $('.vsidebar .txt').html(obj['cartResult']);
+
         }
     });
     e.preventDefault();
 });
+
 
 $('.remove-cart').click( function(e) {
 
@@ -268,16 +241,143 @@ $('.remove-cart').click( function(e) {
 
 });
 
-$('.preview').click(function () {
+$('.product-preview').click(function () {
 
     var url = $(this).attr("data-url");
-    $('.modal-body').html('');
     $.ajax({
         url: url,
         type: 'GET',
         success: function (response) {
-            $('.modal-content').html(response);
-            $('#myModal').modal('toggle')
+            $('.product-modal-content').html(response);
+            $('#product-modal').modal('toggle');
         }
     })
 });
+
+$('.btn-number-cart').click(function(e){
+
+    e.preventDefault();
+
+    url = $(this).attr('data-url');
+    productId = $(this).attr('data-text');
+    price = $(this).attr('data-title');
+    fieldId = $(this).attr('data-id');
+    fieldName = $(this).attr('data-field');
+    type      = $(this).attr('data-type');
+    var input = $('#quantity-'+$(this).attr('data-id'));
+    var currentVal = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if(type == 'minus') {
+            if(currentVal > input.attr('min')) {
+                var existVal = (currentVal - 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                    .done(function( data ) {
+                        location.reload();
+                    });
+            }
+            if(parseInt(input.val()) == input.attr('min')) {
+                $(this).attr('disabled', true);
+            }
+
+        } else if(type == 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                var existVal = (currentVal + 1);
+                input.val(existVal).change();
+                $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                    .done(function(data){
+                        if(data == 'success'){
+                            location.reload();
+                        }else{
+                            input.val(existVal-1).change();
+                            alert('There is not enough product in stock at this moment')
+                        }
+
+                    });
+            }
+            if(parseInt(input.val()) == input.attr('max')) {
+                $(this).attr('disabled', true);
+            }
+
+        }
+    } else {
+        input.val(0);
+    }
+});
+
+$('.btn-number').click(function(e){
+
+    e.preventDefault();
+
+    fieldName = $(this).attr('data-field');
+    type      = $(this).attr('data-type');
+    var input = $("input[name='"+fieldName+"']");
+    var currentVal = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if(type == 'minus') {
+
+            if(currentVal > input.attr('min')) {
+                input.val(currentVal - 1).change();
+            }
+            if(parseInt(input.val()) == input.attr('min')) {
+                $(this).attr('disabled', true);
+            }
+        } else if(type == 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                input.val(currentVal + 1).change();
+            }
+            if(parseInt(input.val()) == input.attr('max')) {
+                $(this).attr('disabled', true);
+            }
+        }
+    } else {
+        input.val(0);
+    }
+});
+/*
+
+
+$('.input-number').focusin(function(){
+    $(this).data('oldValue', $(this).val());
+});
+$('.input-number').change(function() {
+
+    minValue =  parseInt($(this).attr('min'));
+    maxValue =  parseInt($(this).attr('max'));
+    valueCurrent = parseInt($(this).val());
+
+    name = $(this).attr('name');
+    if(valueCurrent >= minValue) {
+        $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+        alert('Sorry, the minimum value was reached');
+        $(this).val($(this).data('oldValue'));
+    }
+    if(valueCurrent <= maxValue) {
+        $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+        alert('Sorry, the maximum value was reached');
+        $(this).val($(this).data('oldValue'));
+    }
+
+
+});
+$(".input-number").keydown(function (e) {
+
+    // Allow: backspace, delete, tab, escape, enter and .
+    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+        // Allow: Ctrl+A
+        (e.keyCode == 65 && e.ctrlKey === true) ||
+        // Allow: home, end, left, right
+        (e.keyCode >= 35 && e.keyCode <= 39)) {
+        // let it happen, don't do anything
+        return;
+    }
+    // Ensure that it is a number and stop the keypress
+    if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+        e.preventDefault();
+    }
+});
+*/

@@ -56,6 +56,18 @@ class Cart {
     }
 
     /**
+     * Get cart item: Returns a specific cart item details
+     * @param	integer	$item
+     * @return	array
+     */
+    public function getItem($item){
+        return (in_array($item, array('total_items', 'cart_total'), TRUE) OR ! isset($this->cart_contents[$item]))
+            ? FALSE
+            : $this->cart_contents[$item];
+    }
+
+
+    /**
      * Total Items: Returns the total item count
      * @return	int
      */

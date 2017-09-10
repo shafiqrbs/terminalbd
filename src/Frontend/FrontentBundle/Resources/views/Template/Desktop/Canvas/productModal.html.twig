@@ -1,21 +1,12 @@
 <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <button type="button" class="close-btn btn btn-danger btn-sm" data-dismiss="modal">&times;</button>
     <h4 class="modal-title">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</h4>
 </div>
-<style>
-    .left-modal .carousel-control {
-        right: 30px;
-        left: inherit;
-    }
-    .right-modal .carousel-control {
-        left: inherit;
-    }
-</style>
 <div class="modal-body">
     <div class="row">
         <div class="col-xs-5 col-md-5">
             <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner" role="listbox">
+                <div class="carousel-inner" style="height:380px" role="listbox">
                     <div class="item active">
                         <img class="img-responsive "  data-match-height="image-gallery" src="{% if product.webPath is not empty  %}{{ image(product.webPath).resize(450,450) }}{% else %}{{ image(product.masterItem.webPath) }}{% endif %}" alt="img">
                     </div>

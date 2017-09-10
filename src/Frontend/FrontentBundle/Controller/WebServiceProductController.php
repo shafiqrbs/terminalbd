@@ -503,43 +503,44 @@ class WebServiceProductController extends Controller
 
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
 
         $quantity = $request->request->get('quantity');
         $color = $request->request->get('color');
         $productImg = $request->request->get('productImg');
 
         $color = !empty($color) ? $color : 0;
-        if($color > 0){
+        if ($color > 0) {
             $colorName = $this->getDoctrine()->getRepository('InventoryBundle:ItemColor')->find($color)->getName();
-        }else{
-            $colorName ='';
+        } else {
+            $colorName = '';
         }
         /** @var GlobalOption $globalOption */
 
         $showMaster = $globalOption->getEcommerceConfig()->getShowMasterName();
 
-        $masterItem = !empty($product->getMasterItem()) and $showMaster == 1 ? $product->getMasterItem()->getName().'-':'';
-
-        $data = array(
-
-            'id' => $subitem->getId(),
-            'name'=> $masterItem.' '.$product->getWebName(),
-            'brand'=> !empty($product->getBrand()) ? $product->getBrand()->getName():'',
-            'category'=> !empty($product->getMasterItem()->getCategory()) ? $product->getMasterItem()->getCategory()->getName():'',
-            'size'=>!empty($subitem->getSize()) ? $subitem->getSize()->getName():0 ,
-            'color'=> $colorName ,
-            'colorId'=> $color,
-            'price'=> $subitem->getSalesPrice(),
-            'quantity' => $quantity,
-            'productImg' => $productImg
-        );
-        $cart->insert($data);
-        $cartTotal = (string)$cart->total();
-        $totalItems = (string)$cart->total_items();
-        $cartResult = $cartTotal.'('.$totalItems.')';
-        $salesItems = $this->getCartItem($globalOption,$cart->contents());
-        $array =(json_encode(array('cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems, 'salesItem' => $salesItems)));
+        $masterItem = !empty($product->getMasterItem()) and $showMaster == 1 ? $product->getMasterItem()->getName() . '-' : '';
+        if (!empty($subitem) and $subitem->getQuantity() >= $quantity) {
+            $data = array(
+                'id' => $subitem->getId(),
+                'name' => $masterItem . ' ' . $product->getWebName(),
+                'brand' => !empty($product->getBrand()) ? $product->getBrand()->getName() : '',
+                'category' => !empty($product->getMasterItem()->getCategory()) ? $product->getMasterItem()->getCategory()->getName() : '',
+                'size' => !empty($subitem->getSize()) ? $subitem->getSize()->getName() : 0,
+                'color' => $colorName,
+                'colorId' => $color,
+                'price' => $subitem->getSalesPrice(),
+                'quantity' => $quantity,
+                'productImg' => $productImg
+            );
+            $cart->insert($data);
+            $cartTotal = (string)$cart->total();
+            $totalItems = (string)$cart->total_items();
+            $cartResult = $cartTotal.'('.$totalItems.')';
+            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems)));
+        }else{
+            $array =(json_encode(array('process'=>'invalid')));
+        }
         echo $array;
         exit;
 
@@ -556,7 +557,7 @@ class WebServiceProductController extends Controller
             array(
                 'cart' => $cart,
                 'globalOption' => $globalOption
-                )
+            )
         );
     }
 

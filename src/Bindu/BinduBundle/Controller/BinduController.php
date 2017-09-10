@@ -18,7 +18,7 @@ class BinduController extends Controller
 
     public function indexAction()
     {
-
+        
         $slides = $this->getDoctrine()->getRepository('SettingContentBundle:SiteSlider')->findBy(array(),array('id'=>'DESC'));
         $entity = new User();
         $form   = $this->createCreateForm($entity);

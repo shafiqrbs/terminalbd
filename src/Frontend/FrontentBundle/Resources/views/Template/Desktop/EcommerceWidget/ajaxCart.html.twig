@@ -25,12 +25,12 @@
         <span class="dd-span pull-right"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;<span class="totalAmount">{{ cart.total }}</span></strong></span>
     </div>
     <div class="bottom">
-        <span class="dd-span pull-left"><a><span class="glyphicon glyphicon-shopping-cart"></span> View Buy</a></span>
+        <span class="dd-span pull-left"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" class="btn btn-success"><span class="glyphicon glyphicon-shopping-cart"></span> View Buy</a></span>
         <span class="dd-span pull-right">
-            {% if  app.user %}
+            {% if app.user %}
                 <a href="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" type="button" class="btn btn-success">Checkout <span class="glyphicon glyphicon-play"></span></a>
             {% else %}
-                <button type="button" class="btn search-box-bg login-preview"> Login & Checkout <span class="glyphicon glyphicon-play"></span></button>
+                <button type="button" class="btn btn-primary login-preview"> Login & Checkout <span class="glyphicon glyphicon-play"></span></button>
             {% endif %}
         </span>
     </div>
@@ -81,13 +81,6 @@
         margin-top: 10px;
         overflow: auto;
         text-align: center;
-    }
-    #cart-item-list .bottom a{
-        color: #222222!important;
-    }
-
-    #cart-item-list .bottom a:hover{
-        color: #000000!important;
     }
 
     #cart-item-list .top {

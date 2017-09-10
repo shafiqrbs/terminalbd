@@ -4,15 +4,16 @@ a{
     color: #ffc400;
     text-decoration: none;
 }
+
 a:hover , a:visited, a:focus{
     text-decoration: none;
     color: #555555;
 }
 
-.btn-info{
+.btn{
     color: #FFFFff!important;
 }
-.btn-info:hover{
+.btn:hover{
     color: #FBFBFB !important;
 }
 
