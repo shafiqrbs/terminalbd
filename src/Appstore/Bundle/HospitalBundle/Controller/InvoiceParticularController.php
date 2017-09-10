@@ -168,7 +168,7 @@ class InvoiceParticularController extends Controller
             $entity->setParticularDeliveredBy($this->getUser());
             $em->flush();
         }
-        return $this->redirect($this->generateUrl('hms_invoice_confirm', array('id' => $entity->getInvoice()->getId())));
+        return $this->redirect($this->generateUrl('hms_invoice_confirm', array('id' => $entity->getHmsInvoice()->getId())));
     }
 
     public function pathologicalReportDeleteAction(InvoicePathologicalReport $entity)

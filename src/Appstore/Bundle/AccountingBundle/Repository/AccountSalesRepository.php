@@ -242,9 +242,9 @@ class AccountSalesRepository extends EntityRepository
 
         $accountSales->setAccountBank($entity->getAccountBank());
         $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
-        $accountSales->setGlobalOption($entity->getInvoice()->getHospitalConfig()->getGlobalOption());
-        $accountSales->setHmsInvoices($entity->getInvoice());
-        $accountSales->setCustomer($entity->getInvoice()->getCustomer());
+        $accountSales->setGlobalOption($entity->getHmsInvoice()->getHospitalConfig()->getGlobalOption());
+        $accountSales->setHmsInvoices($entity->getHmsInvoice());
+        $accountSales->setCustomer($entity->getHmsInvoice()->getCustomer());
         $accountSales->setTransactionMethod($entity->getTransactionMethod());
         $accountSales->setTotalAmount($entity->getPayment());
         $accountSales->setAmount($entity->getPayment());

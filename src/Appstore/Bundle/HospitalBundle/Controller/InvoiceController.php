@@ -392,7 +392,6 @@ class InvoiceController extends Controller
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess($process);
-            $entity->setApprovedBy($this->getUser());
             $em->flush();
             if($payment > 0 || $discount > 0) {
                 $transactionData = array('payment' => $payment, 'discount' => $discount);
