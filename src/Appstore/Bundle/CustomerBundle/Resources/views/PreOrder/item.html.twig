@@ -455,8 +455,10 @@
                                 {{ form_end(preOrderform) }}
                             {% endif %}
                         </div>
+                        {% if entity.preOrderItems is not empty %}
                         {% set paymentID = entity.globalOption.id~'-pre-order-'~entity.id %}
                         {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': paymentID } %}
+                        {% endif %}
                     </div>
 
                 </div>
@@ -483,5 +485,9 @@
 {% block documentready %}
     {{ parent() }}
     ApproveProcess();
+    $('#fos_comment_comment_body').addClass('span12');
+    $('.fos_comment_submit input[type="submit"]').addClass('btn blue');
+
+    $("");
 {% endblock %}
 
