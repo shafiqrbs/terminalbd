@@ -130,7 +130,19 @@
             <div class="row-fluid">
                 <div class="span8">
                     <div class="row-fluid">
-                        <div class="span12">
+                        <div class="span6">
+                            <div class="control-group">
+                                <label class="control-label" for="name">Designation</label>
+                                <div class="controls">
+                                    <div class="input-icon left">
+                                        <i class="icon-font"></i>
+                                        {{ form_widget(form.designation) }}
+                                        {{ form_errors(form.designation) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span6">
                             <div class="control-group">
                                 <label class="control-label" for="name">Current Job</label>
                                 <div class="controls">

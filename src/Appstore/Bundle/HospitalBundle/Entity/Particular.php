@@ -52,6 +52,7 @@ class Particular
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", mappedBy="particular")
+     * @ORM\OrderBy({"name" = "ASC"})
      **/
     private $pathologicalReports;
 
@@ -148,6 +149,14 @@ class Particular
     /**
      * @var string
      *
+     * @ORM\Column(name="sepcimen", type="string", length=255, nullable=true)
+     */
+    private $sepcimen;
+
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="content", type="text", nullable=true)
      */
     private $content;
@@ -233,9 +242,16 @@ class Particular
     /**
      * @var string
      *
-     * @ORM\Column(name="currentJob", type="string", length=128, nullable=true)
+     * @ORM\Column(name="currentJob", type="string", length=256, nullable=true)
      */
     private $currentJob;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="designation", type="string", length=256, nullable=true)
+     */
+    private $designation;
 
 
     /**
@@ -966,6 +982,38 @@ class Particular
     public function getInvoiceParticularDoctor()
     {
         return $this->invoiceParticularDoctor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSepcimen()
+    {
+        return $this->sepcimen;
+    }
+
+    /**
+     * @param string $sepcimen
+     */
+    public function setSepcimen($sepcimen)
+    {
+        $this->sepcimen = $sepcimen;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDesignation()
+    {
+        return $this->designation;
+    }
+
+    /**
+     * @param string $designation
+     */
+    public function setDesignation($designation)
+    {
+        $this->designation = $designation;
     }
 
 

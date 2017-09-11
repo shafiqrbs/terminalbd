@@ -53,6 +53,7 @@
         'assets/plugins/jquery-tree/src/css/jquery.tree.css'
         'assets/plugins/bootstrap-modal/css/bootstrap-modal.css'
         'assets/plugins/calculator/SimpleCalculadorajQuery.css'
+        'assets/plugins/pop-modal/popModal.min.css'
         'assets/css/comments.css'
         'assets/css/overwrite.css'
 
@@ -122,6 +123,15 @@
     <div class="page-content" >
         {% block body %}{% endblock %}
     </div>
+    <div id="confirm-content" style="display:none">
+        <div class="confirmModal_content">
+            Are you sure went to confirm this record?
+        </div>
+        <div class="confirmModal_footer">
+            <button type="button" class="btn red" data-confirmmodal-but="cancel">Cancel</button>
+            <button type="button" class="btn green" data-confirmmodal-but="ok">Confirm</button>
+        </div>
+    </div>
 </div>
 
 {% javascripts
@@ -182,6 +192,7 @@
 'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
 'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
 'assets/plugins/jquery.confirm.min.js'
+'assets/plugins/pop-modal/popModal.js'
 'assets/plugins/plupload/js/plupload.full.js'
 'assets/plugins/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js'
 'assets/plugins/fancybox/source/jquery.fancybox.pack.js'
@@ -429,6 +440,10 @@
 
     ul.page-sidebar-menu > li.current_ancestor > ul > li.current_ancestor > a{
         background: #000!important;
+    }
+
+    .confirmModal .confirmModal_body{
+        border: 1px solid #0362fd;
     }
     @media (max-width: 979px) {
         .navbar .brand {

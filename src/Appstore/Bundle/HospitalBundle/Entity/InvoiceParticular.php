@@ -54,8 +54,10 @@ class InvoiceParticular
      **/
     private  $particularPreparedBy;
 
-
-
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceParticularCollected" )
+     **/
+    private  $sampleCollectedBy;
 
     /**
      * @var integer
@@ -111,6 +113,12 @@ class InvoiceParticular
 
 
     /**
+     * @var \DateTime
+     * @ORM\Column(name="collectionDate", type="datetime")
+     */
+    private $collectionDate;
+
+     /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created", type="datetime")
@@ -368,6 +376,38 @@ class InvoiceParticular
     public function getInvoicePathologicalReports()
     {
         return $this->invoicePathologicalReports;
+    }
+
+    /**
+     * @return User
+     */
+    public function getSampleCollectedBy()
+    {
+        return $this->sampleCollectedBy;
+    }
+
+    /**
+     * @param User $sampleCollectedBy
+     */
+    public function setSampleCollectedBy($sampleCollectedBy)
+    {
+        $this->sampleCollectedBy = $sampleCollectedBy;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCollectionDate()
+    {
+        return $this->collectionDate;
+    }
+
+    /**
+     * @param \DateTime $collectionDate
+     */
+    public function setCollectionDate($collectionDate)
+    {
+        $this->collectionDate = $collectionDate;
     }
 
 

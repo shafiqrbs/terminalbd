@@ -90,7 +90,8 @@
                                             <th class="numeric">Particular</th>
                                             <th class="numeric">Service</th>
                                             <th class="numeric">Qnt</th>
-                                            <th class="numeric">Report Progress</th>
+                                            <th class="numeric">Progress</th>
+                                            <th class="numeric">Sepcimen/Sample</th>
                                             <th class="numeric">Action</th>
                                         </tr>
                                         </thead>
@@ -103,16 +104,14 @@
                                                 <td class="numeric">{{ item.particular.name }}</td>
                                                 <td class="numeric">{{ item.particular.service.name }}</td>
                                                 <td class="numeric">{{ item.quantity }}</td>
-                                                <th class="numeric">{% if item.particular.service.id == 1 %}<span class="tooltips" data-trigger ='hover' data-original-title='Collected by: {% if item.sampleCollectedBy is not empty %}{{ item.sampleCollectedBy }}{% endif %} , Prepared by: {% if item.particularPreparedBy is not empty %}{{ item.particularPreparedBy }}{% endif %}, Assign Doctor: {% if item.assignDoctor is not empty %}{{ item.assignDoctor.name }}{% endif %}'>{{ item.process }}</span>{% endif %}</th>
+                                                <th class="numeric">{% if item.particular.service.id == 1 and item.sampleCollectedBy is not empty %} <span class="tooltips" data-trigger ='hover' data-original-title='Collected by {{ item.sampleCollectedBy }}'>{{ item.process }}</span>{% endif %}</th>
+                                                <td class="numeric">{{ item.particular.sepcimen }}</td>
                                                 <td class="numeric">
                                                     {% if item.particular.service.id == 1 and item.sampleCollectedBy is empty %}
                                                         <a class="btn mini blue confirm"  data-url="{{ path('hms_invoice_particular_collection_confirm',{'id':item.id}) }}" href="javascript:"><i class="icon-ok"></i>&nbsp;Confirm</a>
-                                                        <a class="btn mini green"  href="{{ path('hms_invoice_particular_collection_barcode',{'id':item.id}) }}" ><i class="icon-barcode"></i> Tag Print</a>
-                                                    {% elseif item.particular.service.id == 1 and item.process == 'Collected' %}
-                                                        <a class="btn mini green " href="{{ path('hms_invoice_particular_preparation', {'id': item.id}) }}"><i class="icon-retweet"></i>&nbsp;Preparation</a>
                                                         <a target="_blank" class="btn mini purple"  href="{{ path('hms_invoice_particular_collection_barcode',{'id':item.id}) }}" ><i class="icon-barcode"></i> Tag Print</a>
-                                                    {% elseif item.particular.service.id == 1 %}
-                                                        <a target="_blank" class="btn mini blue"  href="{{ path('hms_invoice_particular_report_print',{'id':item.id}) }}" ><i class="icon-print"></i> Report Print</a>
+                                                    {% elseif item.particular.service.id == 1 and item.process == 'Collected' %}
+                                                        {{ item.collectionDate|date('d-m-Y h:i:s A') }}
                                                     {% endif %}
                                                 </td>
                                             </tr>
@@ -121,28 +120,8 @@
                                                     <td colspan="11">
                                                         <table class="table table-bordered table-striped table-condensed flip-content ">
                                                             <tr class="">
-                                                                <th class="span3" >Sepcimen/Sample</th>
-                                                                <td class="span9" >{{ item.particular.sepcimen }}</td>
-                                                            </tr>
-                                                            <tr class="">
-                                                                <th class="span3" >Assign Doctor By</th>
-                                                                <td class="span9" >{% if item.assignDoctor is not empty %}{{ item.assignDoctor.name }}{% endif %}</td>
-                                                            </tr>
-                                                            <tr class="">
-                                                                <th class="span3" >Prepared By</th>
-                                                                <td class="span9" >{% if item.particularPreparedBy is not empty %}{{ item.particularPreparedBy }}{% endif %}</td>
-                                                            </tr>
-                                                            <tr class="">
-                                                                <th class="span3" >Collected By & Collection Date</th>
-                                                                <td class="span9" >{% if item.sampleCollectedBy is not empty %}{{ item.sampleCollectedBy }}{% endif %} / {{ item.collectionDate|date('d-m-Y h:i:s A') }}</td>
-                                                            </tr>
-                                                            <tr class="">
                                                                 <th class="span3" >Instruction</th>
                                                                 <td class="span9" >{{ item.particular.instruction }}</td>
-                                                            </tr>
-                                                            <tr class="">
-                                                                <th class="span3" >Pathological Comment</th>
-                                                                <td class="span9" >{{ item.comment }}</td>
                                                             </tr>
                                                         </table>
                                                     </td>
@@ -162,22 +141,13 @@
         </div>
     </div>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@HospitalBundle/Resources/public/css/invoice.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/invoice.js'
-    '@HospitalBundle/Resources/public/js/approveProcess.js'
-    %}
+    '@HospitalBundle/Resources/public/js/approveProcess.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-{% endblock  %}
+{% endblock %}
 {% block documentready %}
     {{ parent() }}
 {% endblock %}

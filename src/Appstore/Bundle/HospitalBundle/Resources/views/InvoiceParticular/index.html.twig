@@ -145,6 +145,7 @@
                                         <td class="numeric" ></td>
                                         <td class="numeric" >
                                             <a  href="{{ path('hms_invoice_particular_show',{'id':entity.id}) }}"  class="btn purple mini" ><i class=" icon-plus"></i> Report Process</a>
+                                            <a class="btn mini blue " href="{{ path('hms_invoice_particular_collection', {'id': entity.id}) }}"><i class="icon-retweet"></i>&nbsp;Collection</a>
                                         </td>
                                     </tr>
                                 {% endfor %}

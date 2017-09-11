@@ -15,7 +15,7 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('hms_invoice_particular') }}">Pathological Report Prepared</a>
+                    <a href="{{ path('hms_invoice_particular_show',{'id':entity.id}) }}">Pathological Report Prepared</a>
                     <span class="icon-angle-right"></span>
                 </li>
                 <li><a href="#">Manage Pathological Report Prepared</a></li>
@@ -36,14 +36,7 @@
             <div class="caption"><i class="icon-reorder"></i>Pathological Report Prepared</div>
             <div class="actions">
                 <div class="btn-group">
-                    <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                        <i class="icon-cogs"></i>&nbsp;Tools
-                        <i class="icon-tasks"></i>
-                    </a>
-                    <ul class="dropdown-menu pull-right">
-                         <li><a href="{{ path('hms_invoice_particular') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-
-                    </ul>
+                    <a href="{{ path('hms_invoice_particular_show',{'id':entity.id}) }}" class="btn" ><i class="icon-backward"></i>&nbsp;Back To Show</a>
                 </div>
             </div>
         </div>
@@ -224,6 +217,9 @@
             <div class="form-actions portlet box grey">
                 <div class="pull-right">
                     <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
+                    {% if entity.process == "Done" %}
+                    <a href="{{ path('hms_invoice_particular_report', {'id': entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a>
+                    {% endif %}
                 </div>
             </div>
             {{ form_end(form) }}

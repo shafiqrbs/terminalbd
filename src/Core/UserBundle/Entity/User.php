@@ -6,6 +6,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\Branch;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
@@ -553,6 +554,11 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="particularPreparedBy" , cascade={"persist", "remove"})
      */
     protected $hmsInvoiceParticularPrepared;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="sampleCollectedBy" , cascade={"persist", "remove"})
+     */
+    protected $hmsInvoiceParticularCollected;
 
 
     /**
@@ -1209,6 +1215,14 @@ class User extends BaseUser
     public function getParticularOperator()
     {
         return $this->particularOperator;
+    }
+
+    /**
+     * @return InvoiceParticular
+     */
+    public function getHmsInvoiceParticularCollected()
+    {
+        return $this->hmsInvoiceParticularCollected;
     }
 
 

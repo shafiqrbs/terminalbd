@@ -44,6 +44,11 @@ class DoctorType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
+            ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter doctor designation'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required')),
+                )
+            ))
             ->add('commission','text', array('attr'=>array('class'=>'m-wrap span12 numeric','autocomplete'=>'off','placeholder'=>'Commission no')))
             ->add('phoneNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter additional phone no')))
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter valid email')))

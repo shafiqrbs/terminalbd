@@ -293,7 +293,6 @@ $('.btn-number-cart').click(function(e){
                             input.val(existVal-1).change();
                             alert('There is not enough product in stock at this moment')
                         }
-
                     });
             }
             if(parseInt(input.val()) == input.attr('max')) {

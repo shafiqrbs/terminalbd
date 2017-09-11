@@ -7,14 +7,7 @@ use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\InvoicePathologicalReport;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\InvoiceParticularType;
-use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
-use Frontend\FrontentBundle\Service\MobileDetect;
-use JMS\SecurityExtraBundle\Annotation\Secure;
-use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
-use Mike42\Escpos\Printer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -71,6 +64,59 @@ class InvoiceParticularController extends Controller
         return $this->render('HospitalBundle:InvoiceParticular:show.html.twig', array(
             'entity' => $entity,
         ));
+    }
+
+    public function sampleCollectionAction(Invoice $entity)
+    {
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity preparation.');
+        }
+        return $this->render('HospitalBundle:InvoiceParticular:sampleCollection.html.twig', array(
+            'entity' => $entity,
+        ));
+    }
+
+    public function getBarcode($barcodePrint)
+    {
+       
+        $barcode = new BarcodeGenerator();
+        $barcode->setText($barcodePrint);
+        $barcode->setType(BarcodeGenerator::Code11);
+        $barcode->setScale(1);
+        $barcode->setThickness(25);
+        $barcode->setFontSize(10);
+        $code = $barcode->generate();
+        $data = '';
+        $data .= '<img src="data:image/png;base64,'.$code .'" />';
+        return $data;
+    }
+
+    public function sampleCollectionBarcodeAction(InvoiceParticular $entity)
+    {
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice entity preparation.');
+        }
+        $barcodePrint = $entity->getHmsInvoice()->getInvoice().'-'.$entity->getParticular()->getParticularCode();
+        $barcodeReport = $this->getBarcode($barcodePrint);
+        return $this->render('HospitalBundle:InvoiceParticular:sampleCollectionBarcode.html.twig', array(
+            'entity' => $entity,
+            'barcode' => $barcodeReport,
+        ));
+    }
+
+    public function sampleCollectionConfirmAction(InvoiceParticular $entity)
+    {
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Invoice Particular entity preparation.');
+        }
+        if (!empty($entity)) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setProcess('Collected');
+            $entity->setSampleCollectedBy($this->getUser());
+            $entity->setCollectionDate(new \DateTime());
+            $em->flush();
+        }
+        exit;
     }
 
 
@@ -170,6 +216,35 @@ class InvoiceParticularController extends Controller
         }
         return $this->redirect($this->generateUrl('hms_invoice_confirm', array('id' => $entity->getHmsInvoice()->getId())));
     }
+
+     public function pathologicalReportPrintAction(InvoiceParticular $entity)
+    {
+        /** @var  $reportArr */
+        $reportArr = array();
+
+        /** @var InvoicePathologicalReport $row */
+        $barcodePrint = $entity->getHmsInvoice()->getInvoice();
+        $barcodeInvoice = $this->getBarcode($barcodePrint);
+        $barcodePrint = $entity->getHmsInvoice()->getInvoice().'-'.$entity->getParticular()->getParticularCode();
+        $barcodeReport = $this->getBarcode($barcodePrint);
+        
+        if (!empty($entity->getInvoicePathologicalReports())){
+            foreach ($entity->getInvoicePathologicalReports() as $row):
+                if(!empty($row->getPathologicalReport())){
+                    $reportArr[$row->getPathologicalReport()->getId()] = $row;
+                }
+            endforeach;
+        }
+
+        return $this->render('HospitalBundle:InvoiceParticular:pathologicalReportPrint.html.twig', array(
+            'entity'      => $entity,
+            'barcodeInvoice'      => $barcodeInvoice,
+            'barcodeReport'      => $barcodeReport,
+            'report'      => $reportArr,
+        ));
+    }
+
+
 
     public function pathologicalReportDeleteAction(InvoicePathologicalReport $entity)
     {
