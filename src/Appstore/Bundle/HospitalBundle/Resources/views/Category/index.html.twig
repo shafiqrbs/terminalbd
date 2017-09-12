@@ -101,7 +101,7 @@
                                             {% if( entity.status == 1) %}
                                                 <a class="btn mini blue btn-action" href="{{ path('hms_category_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
                                             {% else %}
-                                                <a class="btn mini red btn-action" href="{{ path('hms_category_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
+                                                <a class="btn mini red btn-action" href="{{ path('hms_category_status', { 'id': entity.id}) }}">x</a>
                                             {% endif %}
                                             <a href="{{ path('hms_category_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
                                             <a title="Are you sure went to delete ?" href="{{ path('hms_category_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>

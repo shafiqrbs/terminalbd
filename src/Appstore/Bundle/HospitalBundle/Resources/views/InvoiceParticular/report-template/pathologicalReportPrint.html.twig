@@ -74,7 +74,7 @@
             <tbody>
             {% for item in entity.particular.pathologicalReports %}
                 <tr>
-                    <td  class="numeric">{{ item.name }}</td>
+                    <td class="numeric">{{ item.name }}</td>
                     <td class="numeric text-right">{% if item.children is empty %}{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }}{% endif %}{% endif %}</td>
                     <td class="numeric">{{ item.unit }}</td>
                     <td class="numeric">{{ item.referenceValue }}</td>
@@ -97,14 +97,14 @@
                 <ul class="unstyled">
                     <li>Prepared By</li>
                     <li><strong>{{ entity.particularPreparedBy.profile.name }}</strong></li>
-                    <li>{% if entity.particularPreparedBy.profile.designation is not empty %}{{ entity.particularPreparedBy.profile.designation.name }}{% endif %}</li>
+                    <li>{{ entity.particularPreparedBy.profile.designation.name }}</li>
                   </ul>
             </td>
             <td class="center span4">
                 <ul class="unstyled">
                     <li>Printed By</li>
-                    <li><strong>{{ printUser.profile.name }}</strong></li>
-                    <li>{% if entity.particularPreparedBy.profile.designation is not empty %}{{ printUser.profile.designation.name }}{% endif %}</li>
+                    <li><strong>{{ printUser.username }}</strong></li>
+                    <li>{{ {{ printUser.username.profile.designation.name }} }}</li>
                   </ul>
             </td>
             <td class="right span4">

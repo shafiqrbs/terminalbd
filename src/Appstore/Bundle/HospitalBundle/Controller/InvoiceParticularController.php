@@ -238,6 +238,7 @@ class InvoiceParticularController extends Controller
 
         return $this->render('HospitalBundle:InvoiceParticular:pathologicalReportPrint.html.twig', array(
             'entity'      => $entity,
+            'printUser'      => $this->getUser(),
             'barcodeInvoice'      => $barcodeInvoice,
             'barcodeReport'      => $barcodeReport,
             'report'      => $reportArr,
