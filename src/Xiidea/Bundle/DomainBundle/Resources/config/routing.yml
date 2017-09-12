@@ -18,7 +18,7 @@ _xiidea_ecommerce_domain:
     prefix: /
     name_prefix: "ecom_"
     host: "{domain_name}"
-    resource: "@FrontendBundle/Resources/config/routing/main.yml"
+    resource: "@BinduBundle/Resources/config/main.yml"
     requirements:
         domain_name: www.%domain.ecommerce%|%domain.ecommerce%
 
