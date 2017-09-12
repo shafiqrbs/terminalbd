@@ -42,7 +42,8 @@ class DomainController extends Controller
                 'host' => '{domain_name}',
                 'name_prefix' => $data->getSubDomain() . "_",
                 'defaults' => array(
-                    'subdomain' => $data->getSubDomain()
+                    'subdomain' => $data->getSubDomain(),
+                    'domain_name' => 'www'.$data->getSubDomain()
                 ),
                 'requirements' => array(
                     'domain_name' => sprintf('www.%s|%s', $data->getDomain(), $data->getDomain())
