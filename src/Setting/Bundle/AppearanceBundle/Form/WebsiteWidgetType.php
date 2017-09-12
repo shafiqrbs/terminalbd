@@ -59,8 +59,7 @@ class WebsiteWidgetType extends AbstractType
                     'body-bottom'               => 'Body Bottom',
                     'sidebar-top'               => 'Sidebar Top',
                     'sidebar-bottom'            => 'Sidebar Bottom',
-                    'footer-top'                => 'Footer Top',
-                    'footer-bottom'             => 'Footer Bottom',
+                    'footer'                    => 'Footer',
                     'mobile'                    => 'Mobile',
                 ),
             ))

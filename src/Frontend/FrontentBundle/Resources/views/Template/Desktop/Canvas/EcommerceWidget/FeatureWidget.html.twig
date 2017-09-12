@@ -1,3 +1,4 @@
+
 {% if features is defined and features is not empty  %}
     {% for widget in features %}
         {% set loopId = loop.index %}
@@ -219,9 +220,26 @@
             </div>
         </div>
     {% endif %}
+    <div class="container">
+        <div class="container">
+            {% if globalOption.templateCustomize.siteTitle is not empty %}
+                <div class="container wow fadeInDown grid" data-wow-delay="2s" >
+                    <div class="section-header" style="margin-top:60px">
+                        <{{ globalOption.templateCustomize.siteTitleSize }} class="animated fadeInLeftBig slide-delay-1" >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
+                    {% if globalOption.templateCustomize.siteSlogan is not empty %}
+                        <p class="animated fadeInUpBig slide-delay-3" >{{  globalOption.templateCustomize.siteSlogan }}</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if widget.content is not empty %}
+                <div class="clearfix"><br/></div>
+                <div class="row grid wow fadeInDown" data-wow-delay="2s"> <div class="col-md-12 text-justify">{{ widget.content|raw }}</div></div>
+                <div class="clearfix"><br/></div>
+            {% endif %}
+        </div>
         <div class="clearfix"></div>
         {% if widget.featureCategory is defined and widget.featureCategory is not empty %}
-            <div class="wow fadeInDown feature-carousel"   data-wow-delay="2s" >
+            <div class="wow fadeInDown feature-carousel"   data-wow-delay="1s" >
                 <div class="page-title-bar">
                     <div class="col-md-12" >
                         <div class="page-title">Feature Category</div>
@@ -260,7 +278,7 @@
         {% endif %}
         <div class="clearfix"></div>
         {% if widget.featureBrand is defined and widget.featureBrand is not empty %}
-            <div class="wow fadeInDown feature-carousel" data-wow-delay="2s" >
+            <div class="wow fadeInDown feature-carousel" data-wow-delay="1s" >
                 <div class="page-title-bar">
                     <div class="col-md-12" >
                         <div class="page-title">Feature Brands</div>
@@ -336,7 +354,7 @@
                     </div>
                 </div>
         {% endif %}
-
-
+    </div>
     {% endfor %}
 {% endif %}
+
