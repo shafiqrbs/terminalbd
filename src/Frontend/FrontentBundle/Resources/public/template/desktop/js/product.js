@@ -241,7 +241,7 @@ $('.remove-cart').click( function(e) {
 
 });
 
-$('.product-preview').click(function () {
+$('.product-preview , .preview').click(function () {
 
     var url = $(this).attr("data-url");
     $.ajax({

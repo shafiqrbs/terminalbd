@@ -1,39 +1,30 @@
-_main_domain:
+_www_main_domain:
     prefix: /
+    name_prefix: "main_"
     resource: "@BinduBundle/Resources/config/main.yml"
-    host: "%domain.main%"
-
+    host: "{domain_name}"
+    requirements:
+      domain_name: www.%domain.main%|%domain.main%
 
 _xiidea_main_domain_app:
-    prefix:     /
+    prefix: /
     host: "{subdomain}.%domain.main%"
     resource: "@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml"
-    name_prefix: "main_"
+    name_prefix: "main_app_"
     defaults:
         subdomain: ""
 
-_www_main_domain:
-    prefix: /
-    resource: "@BinduBundle/Resources/config/main.yml"
-    host: "www.%domain.main%"
-
-_uipoka_domain:
-    prefix: /
-    resource: "@BinduBundle/Resources/config/main.yml"
-    host: "%domain.uipoka%"
-
-_www_uipoka_domain:
-    prefix: /
-    resource: "@BinduBundle/Resources/config/main.yml"
-    host: "www.%domain.uipoka%"
-
 _xiidea_ecommerce_domain:
     prefix: /
+    name_prefix: "ecom_"
+    host: "{domain_name}"
     resource: "@FrontendBundle/Resources/config/routing/ecommerce.yml"
-    host: "www.%domain.ecommerce%"
+    requirements:
+        domain_name: www.%domain.ecommerce%|%domain.ecommerce%
 
 _xiidea_ecommerce_domain_app:
     prefix:     /
+    name_prefix: "ecom_app_"
     host: "{subdomain}.%domain.ecommerce%"
     resource: "@FrontendBundle/Resources/config/routing/ecommercesubdomain.yml"
     defaults:
