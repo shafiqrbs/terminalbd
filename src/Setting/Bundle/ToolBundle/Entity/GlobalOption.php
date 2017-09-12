@@ -104,6 +104,7 @@ class GlobalOption
 
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu", mappedBy="globalOption" , cascade={"persist", "remove"} )
+     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     protected $ecommerceMenus;
 

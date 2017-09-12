@@ -1,7 +1,10 @@
 {% extends ':frontend/template:ecommerce-base.html.twig' %}
 {% block body %}
+    <!-- Header Carousel -->
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header-bottom')  %}
+            {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-top'}) %}
+    {% endif %}
     <section class="home">
-
         <!-- Header Carousel -->
         {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-top')  %}
             <div class="container container-margin">
@@ -24,6 +27,9 @@
             </div>
         {% endif %}
     </section>
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-top')  %}
+        {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-top'}) %}
+    {% endif %}
 
 <script> var columnItem = 4 </script>
 {% endblock %}
