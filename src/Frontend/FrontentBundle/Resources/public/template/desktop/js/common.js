@@ -211,7 +211,7 @@ $('#topTabCarousel').on('click', '.nav a', function() {
             "Core_userbundle_user[globalOption][name]": {required: true},
             "Core_userbundle_user[profile][mobile]": {
                 required: true,
-                remote: Routing.generate('webservice_customer_checking',{'subdomain':subdomain})
+                remote:'/checking-username'
             },
             "Core_userbundle_user[globalOption][syndicate]": {required: true},
             "Core_userbundle_user[globalOption][location]": {required: true},

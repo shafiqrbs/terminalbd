@@ -43,4 +43,3 @@ hms_vendor_status:
 hms_vendor_delete:
     path:     /{id}/delete
     defaults: { _controller: "HospitalBundle:Vendor:delete" }
-    methods:  [POST, DELETE]

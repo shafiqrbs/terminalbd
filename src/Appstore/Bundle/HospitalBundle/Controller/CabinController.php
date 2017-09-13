@@ -215,7 +215,7 @@ class CabinController extends Controller
         }
         $em->remove($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('hms_referreddoctor'));
+        return $this->redirect($this->generateUrl('hms_cabin'));
     }
 
    
@@ -241,6 +241,6 @@ class CabinController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('hms_referreddoctor'));
+        return $this->redirect($this->generateUrl('hms_cabin'));
     }
 }

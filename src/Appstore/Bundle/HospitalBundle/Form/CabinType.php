@@ -38,9 +38,9 @@ class CabinType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter cabin name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter surgery name'),
                     'constraints' =>array(
-                        new NotBlank(array('message'=>'Please enter cabin name'))
+                        new NotBlank(array('message'=>'Please enter surgery name'))
                     ))
             )
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
