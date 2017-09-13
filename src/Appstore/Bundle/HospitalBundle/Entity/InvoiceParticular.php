@@ -114,7 +114,7 @@ class InvoiceParticular
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="collectionDate", type="datetime")
+     * @ORM\Column(name="collectionDate", type="datetime", nullable=true)
      */
     private $collectionDate;
 
