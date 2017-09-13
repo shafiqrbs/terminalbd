@@ -203,21 +203,24 @@ class Builder extends ContainerAware
                 ->setAttribute('dropdown', true);
 
             $menu['Manage Appearance']->addChild('Customize Template', array('route' => 'templatecustomize_edit', 'routeParameters' => array('id' => $globalOption->getId())));
-            $menu['Manage Appearance']->addChild('Feature & Widget')->setAttribute('icon', 'icon-money')->setAttribute('dropdown', true);
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG') && $securityContext->isGranted('ROLE_ECOMMERCE')){
-                    $menu['Manage Appearance']['Feature & Widget']->addChild('E-commerce Widget', array('route' => 'appearancefeaturewidget'));
+                    $menu['Manage Appearance']->addChild('E-commerce')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
+                    $menu['Manage Appearance']['E-commerce']->addChild('E-commerce Widget', array('route' => 'appearancefeaturewidget'))->setAttribute('icon', 'icon-th-list');
+                    $menu['Manage Appearance']['E-commerce']->addChild('Feature', array('route' => 'appearancefeature'))->setAttribute('icon', 'icon-th-list');
+                    $menu['Manage Appearance']['E-commerce']->addChild('Feature Category', array('route' => 'featurecategory'))->setAttribute('icon', 'icon-th-list');
+                    $menu['Manage Appearance']['E-commerce']->addChild('Feature Brand', array('route' => 'featurebrand'))->setAttribute('icon', 'icon-th-list');
                 }
             }
-            $menu['Manage Appearance']['Feature & Widget']->addChild('Website Widget', array('route' => 'appearancewebsitewidget'));
-            $menu['Manage Appearance']['Feature & Widget']->addChild('Create Feature', array('route' => 'appearancefeature'));
-            if (!empty($result)) {
-                if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG') && $securityContext->isGranted('ROLE_ECOMMERCE')) {
-                    $menu['Manage Appearance']->addChild('E-commerce Menu', array('route' => 'ecommercemenu'));
-                }
+            $menu['Manage Appearance']->addChild('Website')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
+            $menu['Manage Appearance']['Website']->addChild('Website Widget', array('route' => 'appearancewebsitewidget'))->setAttribute('icon', 'icon-th-list');
+            $menu['Manage Appearance']['Website']->addChild('Feature', array('route' => 'appearancewebsitewidget'))->setAttribute('icon', 'icon-th-list');
+            $menu['Manage Appearance']->addChild('Menu')->setAttribute('icon', 'icon-th-list')->setAttribute('dropdown', true);
+            if (!empty($result) and $securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG') && $securityContext->isGranted('ROLE_ECOMMERCE')) {
+                $menu['Manage Appearance']['Menu']->addChild('E-commerce Menu', array('route' => 'ecommercemenu'))->setAttribute('icon', 'icon-th-list');
             }
-            $menu['Manage Appearance']->addChild('Menu', array('route' => 'menu_manage'));
-            $menu['Manage Appearance']->addChild('Menu Grouping', array('route' => 'menugrouping'));
+            $menu['Manage Appearance']['Menu']->addChild('Website Menu', array('route' => 'menu_manage'))->setAttribute('icon', 'icon-th-list');
+            $menu['Manage Appearance']['Menu']->addChild('Menu Grouping', array('route' => 'menugrouping'))->setAttribute('icon', 'icon-th-list');
 
         }
 
@@ -548,8 +551,6 @@ class Builder extends ContainerAware
             $menu['E-commerce']['Product']->addChild('Promotion', array('route' => 'ecommerce_promotion'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Discount', array('route' => 'ecommerce_discount'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Coupon', array('route' => 'ecommerce_coupon'))->setAttribute('icon', 'icon-tags');
-            $menu['E-commerce']['Product']->addChild('Feature Category', array('route' => 'featurecategory'))->setAttribute('icon', 'icon-th-list');
-            $menu['E-commerce']['Product']->addChild('Feature Brand', array('route' => 'featurebrand'))->setAttribute('icon', 'icon-th-list');
         }
 
         /*$menu['E-commerce']->addChild('Transaction', array('route' => ''))

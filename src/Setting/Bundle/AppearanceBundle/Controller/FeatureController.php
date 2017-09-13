@@ -296,14 +296,15 @@ class FeatureController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entity = $em->getRepository('AppearanceBundle:Feature')->findOneBy(array('globalOption'=>$globalOption,'id'=>$id));
+        $entity = $em->getRepository('SettingAppearanceBundle:Feature')->findOneBy(array('globalOption' => $globalOption,'id'=>$id));
         if (!empty($entity)) {
-
-            $entity->removeUpload();
+            if($entity->getFile()){
+                $entity->removeUpload();
+            }
             $em->remove($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
-                'success',"Status has been deleted successfully"
+                'success',"Data has been deleted successfully"
             );
         }else{
             $this->get('session')->getFlashBag()->add(
@@ -328,6 +329,8 @@ class FeatureController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm();
     }
+    
+    
 
     /**
      * Status a news entity.
