@@ -3,7 +3,7 @@
     {% for widget in features %}
         {% set loopId = loop.index %}
     {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'slider' %}
-        <div class="row">
+        <div {% if widget.sliderFeature is not empty  %} class="container" {% endif %}>
         {% if widget.sliderFeature is not empty and widget.sliderFeaturePosition == 'left' %}
             {% render controller("FrontendBundle:EcommerceWidget:"~widget.sliderFeature~"ShortWidget",{'globalOption':globalOption.id,'position':widget.sliderFeaturePosition}) %}
         {% endif %}
@@ -15,7 +15,6 @@
                         <li data-target="#main-carousel" data-slide-to="{{ loop.index-1 }}" class="{% if loop.index - 1 == 1 %} active {% endif %}"></li>
                     {% endfor %}
                 </ol>
-
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner">
                     {% for slide in widget.featureWidgetItems %}
@@ -67,11 +66,28 @@
         {% if widget.sliderFeature is not empty and widget.sliderFeaturePosition == 'right' %}
             {% render controller("FrontendBundle:EcommerceWidget:"~widget.sliderFeature~"ShortWidget",{'globalOption':globalOption.id,'position':widget.sliderFeaturePosition}) %}
         {% endif %}
+        <div class="clearfix"></div>
+         <div class="container">
+         {% if globalOption.templateCustomize.siteTitle is not empty %}
+             <div class="container wow fadeInDown grid" data-wow-delay="" >
+                 <div class="section-header" style="margin-top:60px">
+                     <{{ globalOption.templateCustomize.siteTitleSize }} class="animated fadeInLeftBig slide-delay-1" >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
+                 {% if globalOption.templateCustomize.siteSlogan is not empty %}
+                     <p class="animated fadeInUpBig slide-delay-3" >{{  globalOption.templateCustomize.siteSlogan }}</p>
+                 {% endif %}
+             </div>
+         {% endif %}
+         {% if widget.content is not empty %}
+             <div class="clearfix"><br/></div>
+             <div class="row grid wow fadeInDown" data-wow-delay=""> <div class="col-md-12 text-justify">{{ widget.content|raw }}</div></div>
+             <div class="clearfix"><br/></div>
+         {% endif %}
+        </div>
         </div>
         <div class="clearfix"></div>
     {% endif %}
     {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'top-tab-slider' %}
-        <div class="row top-tab-slider">
+        <div  class="container top-tab-slider">
             {% if widget.sliderFeature is not empty and widget.sliderFeaturePosition == 'left' %}
                 {% render controller("FrontendBundle:EcommerceWidget:"~widget.sliderFeature~"ShortWidget",{'globalOption':globalOption.id,'position':widget.sliderFeaturePosition}) %}
             {% endif %}
@@ -130,7 +146,7 @@
         <div class="clearfix"></div>
     {% endif %}
     {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'bottom-tab-slider' %}
-        <div class="row bottom-tab-slider" >
+        <div class="container bottom-tab-slider" >
             {% if widget.sliderFeature is not empty and widget.sliderFeaturePosition == 'left' %}
                 {% render controller("FrontendBundle:EcommerceWidget:"~widget.sliderFeature~"ShortWidget",{'globalOption':globalOption.id,'position':widget.sliderFeaturePosition}) %}
             {% endif %}
@@ -187,8 +203,8 @@
     {% endif %}
     {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'feature' %}
 
-        <div class="wow fadeInDown" data-wow-delay="">
-            <div class="row">
+        <div class="container">
+            <div class="wow fadeInDown" data-wow-delay=""">
             {% for slide in widget.featureWidgetItems %}
                 {% if(slide.feature.webPath) %}
 
@@ -221,22 +237,6 @@
         </div>
     {% endif %}
     <div class="container">
-        <div class="container">
-            {% if globalOption.templateCustomize.siteTitle is not empty %}
-                <div class="container wow fadeInDown grid" data-wow-delay="" >
-                    <div class="section-header" style="margin-top:60px">
-                        <{{ globalOption.templateCustomize.siteTitleSize }} class="animated fadeInLeftBig slide-delay-1" >{{ globalOption.templateCustomize.siteTitle }}</{{ globalOption.templateCustomize.siteTitleSize }}>
-                    {% if globalOption.templateCustomize.siteSlogan is not empty %}
-                        <p class="animated fadeInUpBig slide-delay-3" >{{  globalOption.templateCustomize.siteSlogan }}</p>
-                    {% endif %}
-                </div>
-            {% endif %}
-            {% if widget.content is not empty %}
-                <div class="clearfix"><br/></div>
-                <div class="row grid wow fadeInDown" data-wow-delay=""> <div class="col-md-12 text-justify">{{ widget.content|raw }}</div></div>
-                <div class="clearfix"><br/></div>
-            {% endif %}
-        </div>
         <div class="clearfix"></div>
         {% if widget.featureCategory is defined and widget.featureCategory is not empty %}
             <div class="wow fadeInDown feature-carousel"   data-wow-delay="" >
@@ -245,7 +245,7 @@
                         <div class="page-title">Feature Category</div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="">
                     <div class="feature-category-slider" class="">
                         {% for category in  widget.globalOption.featureCategories  %}
                             <div class="col-md-12">
@@ -284,7 +284,7 @@
                         <div class="page-title">Feature Brands</div>
                     </div>
                 </div>
-                <div class="row">
+                <div>
                     <div class="brand-slider">
                         {% for brand in  widget.globalOption.featureBrands  %}
                             <div class="col-md-12">

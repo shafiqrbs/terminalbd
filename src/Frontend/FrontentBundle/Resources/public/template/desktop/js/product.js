@@ -254,8 +254,7 @@ $('.product-preview').click(function () {
     })
 });
 
-$('.preview').click(function () {
-
+$(document).on( "click", ".preview", function(e){
     var url = $(this).attr("data-url");
     $.ajax({
         url: url,

@@ -14,7 +14,7 @@
         </div>
         {% endif %}
         <div class="{% if category.featureCategory is not empty %} col-md-8 {% else %} col-md-12 {% endif %}" id="categoryProductRight"  >
-            <div class="row" >
+            <div class="" >
             {% for product in  products  %}
                 <div class="col-xs-12 col-sm-4">
                     <div class="product-canvas">
@@ -36,7 +36,7 @@
         </div>
     </div>
     {% elseif widget.categoryShow == 'subCategoryProduct' %}
-        <div class="row">
+        <div class="">
             {% if category.children is not empty %}
                 <div class="col-md-3">
                     <div id="subCategoryProductLeft">
@@ -85,7 +85,7 @@
                 </div>
             {% endif %}
             <div class="col-md-8" id="categorySubCategoryRight">
-            <div class="row">
+            <div class="">
                 {% for child in category.children|slice(0,6) %}
                     {% if child.featureCategory is not empty %}
                         <div class="col-xs-12 col-sm-4">
@@ -104,7 +104,7 @@
         </div>
     </div>
     {% elseif widget.categoryShow == 'slider' %}
-    <div class="row">
+    <div class="">
         <div id="" class="category-slider">
             {% for product in  products  %}
                 <div class="col-xs-12">
