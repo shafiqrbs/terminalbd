@@ -96,9 +96,11 @@
                             </td>
                             <td colspan="2" class="text-left" >
                                 {% if  app.user %}
+                                    {% if cart.total > 0 %}
                                     <a href="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" type="button" class="btn btn-success">
                                         Checkout <span class="glyphicon glyphicon-play"></span>
                                     </a>
+                                    {% endif %}
                                 {% else %}
                                     <button type="button" class="btn search-box-bg login-preview">
                                         Login & Checkout <span class="glyphicon glyphicon-play"></span>
@@ -110,7 +112,6 @@
                     </table>
                 </div>
             </div>
-
         </div>
     </section>
     <div class="clearfix"></div>

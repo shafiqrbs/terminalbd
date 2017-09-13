@@ -166,8 +166,6 @@ class MedicineController extends Controller
                 'novalidate' => 'novalidate',
             )
         ));
-
-
         return $form;
     }
     /**

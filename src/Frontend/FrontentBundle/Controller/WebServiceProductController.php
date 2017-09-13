@@ -630,23 +630,10 @@ class WebServiceProductController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        $data = $_REQUEST;
-        $products ='';
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
-            $inventory = $globalOption->getInventoryConfig();
-
-            /*==========Related Product===============================*/
-
-            // if(!empty($entity->getMasterItem())){
-
-
-            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
-            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
-            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
-            $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
-
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=>$globalOption ,'slug' => 'basket'));
 
             /* Device Detection code desktop or mobile */
 
@@ -658,16 +645,10 @@ class WebServiceProductController extends Controller
             }
 
             $cart = new Cart($request->getSession());
-
-            //$quantity = $request->request->get('quantity');
-            //$data = array('id' => $subitem->getId(), 'name'=>$product->getName(),'size'=>$subitem->getSize()->getName(), 'price'=>$subitem->getSalesPrice(),'qty' => $quantity);
-
-
-
             return $this->render('FrontendBundle:'.$theme.':cart.html.twig',
                 array(
                     'globalOption'      => $globalOption,
-                    'brands'            => $brands,
+                    'menu'             => $menu,
                     'cart'             => $cart,
                     'pageName'          => 'Cart',
                 )

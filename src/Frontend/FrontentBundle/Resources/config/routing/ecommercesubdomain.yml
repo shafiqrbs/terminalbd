@@ -98,7 +98,7 @@ webservice_contact:
     defaults: { _controller: FrontendBundle:WebServiceModule:contact }
 
 webservice_product_cart_details:
-    path:     /cart-details
+    path:     /basket
     defaults: { _controller: FrontendBundle:WebServiceProduct:productCart }
 
 webservice_product:
