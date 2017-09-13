@@ -241,7 +241,20 @@ $('.remove-cart').click( function(e) {
 
 });
 
-$('.product-preview , .preview').click(function () {
+$('.product-preview').click(function () {
+
+    var url = $(this).attr("data-url");
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (response) {
+            $('.product-modal-content').html(response);
+            $('#product-modal').modal('toggle');
+        }
+    })
+});
+
+$('.preview').click(function () {
 
     var url = $(this).attr("data-url");
     $.ajax({
