@@ -56,10 +56,16 @@ class PurchaseVendorItemRepository extends EntityRepository
         }
 
         if (!empty($data['category'])) {
-            $catIds = $this->_em->getRepository('ProductProductBundle:Category')->getChildIds($data['category']);
-            $qb->andWhere("masterItem.category IN (:category)");
-            $qb->setParameter('category', $catIds);
+            $qb
+                ->join('masterItem.category', 'category')
+                ->andWhere(
+                    $qb->expr()->orX(
+                        $qb->expr()->like('category.path', "'". intval($data['category']) . "/%'"),
+                        $qb->expr()->like('category.path', "'%/" . intval($data['category']) . "/%'")
+                    )
+                );
         }
+
 
         if (!empty($data['product'])) {
              $search = strtolower($data['product']);
