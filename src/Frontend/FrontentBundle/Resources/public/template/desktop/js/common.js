@@ -63,21 +63,7 @@ $('#topTabCarousel').on('click', '.nav a', function() {
     clickEvent = false;
 });
 
-    $(document).on( "click", ".emailSender", function(e){
-
-        $.ajax({
-            url         : $('#newsLetter').attr( 'action' ),
-            type        : $('#newsLetter').attr( 'method' ),
-            data        : $('#newsLetter').serialize(),
-            success: function(response) {
-                $('#newsLetter').find("input[type=text]").val("");
-                $('#email-success').html('Your e-mail is sending successfuly');
-            },
-
-        });
-
-    });
-
+    
     $('#contactForm').on('submit', function(e){
 
         e.preventDefault();

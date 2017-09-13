@@ -37,13 +37,6 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-
-    $('.login-preview').click(function () {
-        $('#registerModal').modal('hide');
-        $('#forgetModal').modal('hide');
-        $('#loginModal').modal('toggle');
-    });
-
 {% endblock %}
 
 

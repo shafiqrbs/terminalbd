@@ -167,8 +167,24 @@ $(document).ready(function(){
 
         });
 
-      
-        $("#contactUs").validate({
+        $(document).on( "click", ".emailSender", function(e){
+
+            $.ajax({
+                url         : $('#newsLetter').attr( 'action' ),
+                type        : $('#newsLetter').attr( 'method' ),
+                data        : $('#newsLetter').serialize(),
+                success: function(response) {
+                    $('#newsLetter').find("input[type=text]").val("");
+                    $('#email-success').html('Your e-mail is sending successfuly');
+                },
+
+            });
+    
+        });
+
+
+
+    $("#contactUs").validate({
 
                 rules: {
                     name: {required: true},

@@ -175,8 +175,8 @@
     {{ parent() }}
     {% javascripts
     '@FrontendBundle/Resources/public/template/desktop/js/e-commerce.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/page.js'
     '@FrontendBundle/Resources/public/template/desktop/js/product.js'
-    '@FrontendBundle/Resources/public/template/desktop/js/common.js'
     '@FrontendBundle/Resources/public/template/desktop/js/corporate.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -184,14 +184,9 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-
-    $("#view-cart-datax" ).mouseover(function(e) {
-
-        var url = $(this).attr("data-url");
-        $.get( url , function( data ) {
-            $('.dropdown-cart').html(data);
-        });
-
-
-    });
+    {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
+        sliderPageOwl(3);
+    {% else %}
+        sliderPageOwl(4);
+    {% endif %}
 {% endblock %}

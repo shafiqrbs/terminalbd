@@ -19,15 +19,15 @@
                                             {% for feature in  menu.features %}
                                                 {% if(feature.webPath) %}
                                                     {% if feature.targetTo == 'Promotion' %}
-                                                        {% set path = path('webservice_product_promotion',{'id':feature.id}) %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':feature.id}) %}
                                                     {% elseif feature.targetTo == 'Tag' %}
-                                                        {% set path = path('webservice_product_tag',{'id':feature.tag.id}) %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':feature.tag.id}) %}
                                                     {% elseif feature.targetTo == 'Discount' %}
-                                                        {% set path = path('webservice_product_tag',{'id':feature.discount.id}) %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':feature.discount.id}) %}
                                                     {% elseif feature.targetTo == 'Brand' %}
-                                                        {% set path = path('webservice_product') %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
                                                     {% else %}
-                                                        {% set path = path('webservice_product') %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
                                                     {% endif %}
                                                     <div class="item menu-slider {% if loop.index == 1 %} active {% endif %}">
                                                         <a href="{{ path }}"><img  src="{{ image(feature.webPath).forceResize(220,160) }}"  style="height: 160px!important;" class="img-responsive" alt="{{ feature.name }}"></a>
@@ -50,7 +50,7 @@
                                     <ul class="col-sm-12">
                                         <li class="dropdown-header">Promotion's</li>
                                         {% for promotion in  menu.promotions %}
-                                            <li><a href="{{ path('webservice_product',{'promotion':promotion.id}) }}">{{ promotion.name }}</a></li>
+                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'promotion':promotion.id}) }}">{{ promotion.name }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 {% endif %}
@@ -58,7 +58,7 @@
                                     <ul class="col-sm-12">
                                         <li class="dropdown-header">Discount Offer's</li>
                                         {% for discount in  menu.discounts %}
-                                            <li><a href="{{ path('webservice_product',{'discount':discount.id}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
+                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'discount':discount.id}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 {% endif %}
@@ -66,7 +66,7 @@
                                     <ul class="col-sm-12">
                                         <li class="dropdown-header">Popular Tag's</li>
                                         {% for tag in  menu.tags %}
-                                            <li><a href="{{ path('webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>
+                                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 {% endif %}
@@ -216,15 +216,15 @@
                             <ul>
                                 {% for feature in  menu.features %}
                                     {% if feature.targetTo == 'Promotion' %}
-                                        {% set path = path('webservice_product_promotion',{'id':feature.id}) %}
+                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':feature.id}) %}
                                     {% elseif feature.targetTo == 'Tag' %}
-                                        {% set path = path('webservice_product_tag',{'id':feature.tag.id}) %}
+                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':feature.tag.id}) %}
                                     {% elseif feature.targetTo == 'Discount' %}
-                                        {% set path = path('webservice_product_tag',{'id':feature.discount.id}) %}
+                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':feature.discount.id}) %}
                                     {% elseif feature.targetTo == 'Brand' %}
-                                        {% set path = path('webservice_product') %}
+                                        {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
                                     {% else %}
-                                        {% set path = path('webservice_product') %}
+                                        {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
                                     {% endif %}
                                     <li><a href="{{ path }}">{{ feature.name }}</a></li>
                                 {% endfor %}
@@ -235,7 +235,7 @@
                         <li><a href="#">Promotion's</a>
                             <ul>
                                 {% for promotion in  menu.promotions %}
-                                    <li><a href="{{ path('webservice_product',{'promotion':promotion.id}) }}">{{ promotion.name }}</a></li>
+                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'promotion':promotion.id}) }}">{{ promotion.name }}</a></li>
                                 {% endfor %}
                             </ul>
                         </li>
@@ -244,7 +244,7 @@
                         <li><a href="#">Discount Offer's</a></li>
                         <ul>
                             {% for discount in  menu.discounts %}
-                                <li><a href="{{ path('webservice_product',{'discount':discount.id}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
+                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'discount':discount.id}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
                             {% endfor %}
                         </ul>
                     {% endif %}
@@ -252,7 +252,7 @@
                         <li><a href="#">Popular Tag's</a></li>
                         <ul>
                             {% for tag in  menu.tags %}
-                                <li><a href="{{ path('webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>
+                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>
                             {% endfor %}
                         </ul>
                     {% endif %}
@@ -263,7 +263,7 @@
                     {% endif %}
                     {% if menu.brands is not empty %}
                         {% for brand in menu.brands %}
-                            <li><a href="{{ path('webservice_product_brand',{'id' : brand.id}) }}">{{ brand.name }}</a></li>
+                            <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id' : brand.id}) }}">{{ brand.name }}</a></li>
                         {% endfor %}
                     {% endif %}
 

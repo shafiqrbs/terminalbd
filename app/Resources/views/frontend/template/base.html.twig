@@ -18,11 +18,11 @@
     <meta property="og:image"         content="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" />
 #}
 
-    <meta property="og:title" content="Join the best company in the world!" />
-    <meta property="og:url" content="http://www.sharethis.com" />
-    <meta property="og:image" content="http://sharethis.com/images/logo.jpg" />
-    <meta property="og:description" content="ShareThis is its people. It's imperative that we hire smart,innovative people who can work intelligently as we continue to disrupt the very category we created. Come join us!" />
-    <meta property="og:site_name" content="ShareThis" />
+    <meta property="og:title" content="{{ globalOption.name }}" />
+    <meta property="og:url" content="http://{{ globalOption.domain }}" />
+    <meta property="og:image" content="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" />
+    <meta property="og:description" content="{{ globalOption.name }}" />
+    <meta property="og:site_name" content="{{ globalOption.name }}" />
     <title>{{ globalOption.name }}</title>
     {% if globalOption.templateCustomize.favicon is not empty %}
     <link  rel="shortcut icon" href="/uploads/domain/{{ globalOption.id }}/customizeTemplate/{{ globalOption.templateCustomize.favicon }}">
