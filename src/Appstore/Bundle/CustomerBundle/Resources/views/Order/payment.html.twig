@@ -178,7 +178,7 @@
                                         <td class="numeric" >=&nbsp;{{ item.subTotal }}</td>
                                         <td class="numeric" >
                                             {% if entity.process == 'Created'  %}
-                                                <a title="Are you sure went to delete ?" data-id="{{ item.id }}" data-url="{{ path('order_item_delete',{'shop':globalOption.slug,'order':entity.id,'id':item.id}) }}" class="btn red mini remove" ><i class="icon-trash"></i></a>
+                                                <a title="Are you sure went to delete ?"  data-id="{{ item.id }}" data-url="{{ path('order_item_delete',{'shop':globalOption.slug,'order':entity.id,'id':item.id}) }}" class="btn red mini remove" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>

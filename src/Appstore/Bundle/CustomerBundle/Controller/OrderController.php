@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\CustomerBundle\Controller;
 
+use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Form\OrderType;
@@ -209,15 +210,17 @@ class OrderController extends Controller
         return new Response('success');
     }
 
-    public function itemDeleteAction(Order $entity)
+    public function itemDeleteAction($order , OrderItem $item)
     {
         $em = $this->getDoctrine()->getManager();
-
-        if (!$entity) {
+        $orderEntity = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->find($order);
+        if (!$item) {
             throw $this->createNotFoundException('Unable to find Expenditure entity.');
         }
-        $em->remove($entity);
+        $em->remove($item);
         $em->flush();
+
+        $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($orderEntity);
         $this->get('session')->getFlashBag()->add(
             'error',"Data has been deleted successfully"
         );

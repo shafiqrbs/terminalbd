@@ -31,7 +31,7 @@ order_delete:
     defaults: { _controller: "CustomerBundle:Order:delete" }
 
 order_item_delete:
-    path:      /{id}/order-item-delete
+    path:      /{order}/{id}/order-item-delete
     defaults: { _controller: "CustomerBundle:Order:itemDelete" }
 
 order_print_invoice:
