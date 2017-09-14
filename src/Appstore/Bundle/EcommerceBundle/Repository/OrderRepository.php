@@ -90,10 +90,10 @@ class OrderRepository extends EntityRepository
 
     }
 
-    public function getDomainCustomer(User $user,GlobalOption $globalOption)
+    public function getDomainCustomer($user,GlobalOption $globalOption)
     {
 
-        $customer = $this->_em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption,'mobile' => $user));
+        $customer = $this->_em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption,'mobile' => $user->getUsername()));
         if(!empty($customer)){
 
             return $customer;

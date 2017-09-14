@@ -1,0 +1,29 @@
+customer_self:
+    path:     /
+    defaults: { _controller: "CustomerBundle:AgentClient:index" }
+
+customer_self_show:
+    path:     /{id}/show
+    defaults: { _controller: "CustomerBundle:AgentClient:show" }
+
+customer_self_new:
+    path:     /new
+    defaults: { _controller: "CustomerBundle:AgentClient:new" }
+
+customer_self_create:
+    path:     /create
+    defaults: { _controller: "CustomerBundle:AgentClient:create" }
+    methods:  POST
+
+customer_self_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "CustomerBundle:AgentClient:edit" }
+
+customer_self_invoice:
+    path:     /invoice
+    defaults: { _controller: "CustomerBundle:AgentClient:edit" }
+
+customer_self_update:
+    path:     /{id}/update
+    defaults: { _controller: "CustomerBundle:AgentClient:update" }
+    methods:  [POST, PUT]

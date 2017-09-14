@@ -7,8 +7,8 @@ order_to_cart:
     defaults: { _controller: "CustomerBundle:Order:cartToOrder" }
 
 order_checkout:
-    path:     /cart-to-order
-    defaults: { _controller: "CustomerBundle:Order:cartToOrder" }
+    path:     /wish-to-order
+    defaults: { _controller: "CustomerBundle:Order:wishToOrder" }
 
 order_cart:
     path:     /order-cart

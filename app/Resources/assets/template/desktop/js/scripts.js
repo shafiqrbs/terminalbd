@@ -165,31 +165,6 @@ $(document).ready(function(){
             }
 
         });
-
-
-        $(document).on( "click", ".emailSenderxx", function(e){
-
-            $.ajax({
-                url         : $('#newsLetter').attr( 'action' ),
-                type        : $('#newsLetter').attr( 'method' ),
-                data        : $('#newsLetter').serialize(),
-                success: function(response) {
-                    $("form").trigger("reset");
-                    $('#email-confirm').notifyModal({
-                        duration : 3000,
-                        placement : 'center',
-                        overlay : true,
-                        type : 'notify',
-                        icon : false
-                    });
-                },
-
-            });
-    
-        });
-
-
-
         $("#contactUs").validate({
 
                 rules: {
