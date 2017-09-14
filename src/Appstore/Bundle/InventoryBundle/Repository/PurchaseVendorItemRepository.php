@@ -85,6 +85,32 @@ class PurchaseVendorItemRepository extends EntityRepository
 
     }
 
+    public function insertCopyPurchaseItem(PurchaseVendorItem $entity, PurchaseVendorItem $copyEntity)
+    {
+        $em = $this->_em;
+        $entity->setMasterItem($copyEntity->getMasterItem());
+        $entity->setName($copyEntity->getName());
+        $entity->setWebName($copyEntity->getWebName());
+        $entity->setSubProduct(true);
+        $entity->setQuantity($copyEntity->getQuantity());
+        $entity->setMasterQuantity($copyEntity->getMasterQuantity());
+        $entity->setPurchasePrice($copyEntity->getPurchase());
+        $entity->setSalesPrice($copyEntity->getSalesPrice());
+        $entity->setOverHeadCost($copyEntity->getOverHeadCost());
+        $entity->setSize($copyEntity->getSize());
+        $entity->setItemColors($copyEntity->getItemColors());
+        $entity->setBrand($copyEntity->getBrand());
+        $entity->setDiscount($copyEntity->getDiscount());
+        $entity->setDiscountPrice($copyEntity->getDiscountPrice());
+        $entity->setContent($copyEntity->getContent());
+        $entity->setTag($copyEntity->getTag());
+        $entity->setPromotion($copyEntity->getPromotion());
+        $entity->setCountry($copyEntity->getCountry());
+        $entity->setSource('goods');
+        $em->persist($entity);
+        $em->flush();
+    }
+
 
     public function getSliderFeatureProduct($inventory, $limit = 3)
     {

@@ -93,11 +93,11 @@
                                 </thead>
                                 <tbody id="purchaseentity" >
                                 {% for entity in entities %}
-                                    <tr class="remove-vendor-item-{{ entity.id }}">
+                                    <tr class="remove-{{ entity.id }}">
                                         <td> {% if entity.goodsItems is defined and  entity.goodsItems is not empty  %}<span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{% if entity.masterItem %}{{ entity.masterItem.name }} - {% endif %}{{ entity.webName }}<br/>
-                                            <span class="abel label-important">&nbsp;{% if entity.masterItem and entity.masterItem.category is not empty %}{{ entity.masterItem.category.name }}{% endif %}&nbsp;</span>
+                                            {% if entity.masterItem and entity.masterItem.category is not empty %}<span class="abel label-info"> {{ entity.masterItem.category.name }}</span>{% endif %}
                                         </td>
                                         <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >{{ entity.masterQuantity }}</td>
@@ -110,10 +110,16 @@
                                              <a  data-type="select" class="editable" id="promotion" data-name="Promotion" href="#" data-source="{{ path('inventory_product_inline_tag_search') }}"  data-url="{{ path('inventory_goods_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.tag is defined and entity.tag is not empty %}{{ entity.id }}{% endif %}" data-original-title="Enter promotion name">{% if entity.promotion is defined and entity.promotion is not empty %}{{ entity.promotion.name }}{% endif %}</a>
                                          </td>
                                         <td class="numeric" >
+                                            {% if entity.status == 1 %}
+                                                <a href="{{ path('inventory_goods_status', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-ok"></i>&nbsp;</a>
+                                            {% else %}
+                                                <a href="{{ path('inventory_goods_status', { 'id': entity.id }) }}" class="btn red mini" >x</a>
+                                            {% endif %}
                                             <a href="{{ path('inventory_goods_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i>&nbsp;</a>
                                             <a href="{{ path('inventory_goods_show',{'id':entity.id}) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                             {% if entity.source != 'inventory' %}
-                                            <a href="{{ path('inventory_goods_copy',{'id':entity.id}) }}" class="btn blue mini" ><i class="icon-copy"></i>&nbsp;Copy</a>
+                                                <a href="javascript:" id="{{ entity.id }}"  class="btn red mini remove" ><i class="icon-trash"></i></a>
+                                                <a target="_blank" href="{{ path('inventory_goods_copy',{'id':entity.id}) }}" class="btn blue mini" ><i class="icon-copy"></i>&nbsp;Copy</a>
                                             {% endif %}
                                         </td>
                                     </tr>

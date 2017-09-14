@@ -297,6 +297,7 @@ class PurchaseVendorItemController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
+        /* @var $entity PurchaseVendorItem  **/
         $entity = $em->getRepository('InventoryBundle:PurchaseVendorItem')->find($id);
 
         if (!$entity) {

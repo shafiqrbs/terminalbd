@@ -319,21 +319,21 @@ var InventoryItemEditPage = function (item) {
         });
 
     }
-    $(document).on("click", ".barcode", function() {
 
-        var id = $(this).attr("data-id");
-        var url = $(this).attr("data-url");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                if ('success' == response ) {
-                    location.reload();
-                }
+    $(document).on("click", ".remove, .delete", function() {
+        var url = $(this).attr('data-url');
+        var id = $(this).attr('data-id');
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get(url, function( data ) {
+                    $('#remove-'+id).hide();
+                });
             }
-        })
-
+        });
     });
+
 
     $(document).on("click", ".addSubProduct", function() {
 

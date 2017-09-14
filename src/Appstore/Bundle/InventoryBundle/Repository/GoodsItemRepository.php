@@ -42,6 +42,7 @@ class GoodsItemRepository extends EntityRepository
         $em->flush();
     }
 
+
     public function initialUpdateSubProduct(PurchaseVendorItem $reEntity)
     {
 

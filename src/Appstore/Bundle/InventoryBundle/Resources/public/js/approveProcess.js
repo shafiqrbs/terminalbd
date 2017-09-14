@@ -40,34 +40,33 @@ function ApproveProcess(){
 
     })
 
-    $(".approve").confirm({
+    $(document).on("click", ".remove, .delete", function() {
+        var url = $(this).attr('data-url');
+        var id = $(this).attr('data-id');
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get(url, function( data ) {
+                    $('#remove-'+id).hide();
+                });
+            }
+        });
+    });
 
-            text: "Are you sure you want to delete that comment?",
-            title: "Confirmation required",
-            confirm: function(button) {
 
-                $(this).removeClass('approve');
-                var id = $(this).attr("data-id");
-                var url = $(this).attr("data-url");
-                $('#action-'+id).hide();
-                $('#delete-'+id).hide();
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function (response) {
-                        location.reload();
-                    },
-                })
-            },
-            cancel: function(button) {
-                // nothing to do
-            },
-            confirmButton: "Yes I am",
-            cancelButton: "No",
-            post: true,
-            confirmButtonClass: "btn-danger",
-            cancelButtonClass: "btn-default",
-            dialogClass: "modal-dialog modal-lg" // Bootstrap classes for large modal
+     $(document).on("click", ".approve", function() {
+        var url = $(this).attr('data-url');
+        var id = $(this).attr('data-id');
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get(url, function( data ) {
+                    location.reload();
+                });
+            }
+        });
     });
 
     $(".select2Item").select2({

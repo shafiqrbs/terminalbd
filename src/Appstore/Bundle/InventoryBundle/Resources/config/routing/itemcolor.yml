@@ -39,4 +39,4 @@ itemcolor_update:
 itemcolor_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:ItemColor:delete" }
-    methods:  [POST, DELETE]
+

@@ -46,7 +46,6 @@ class ItemBrandController extends Controller
             $em = $this->getDoctrine()->getManager();
             $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
             $entity->setInventoryConfig($inventory);
-            $entity->upload();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -174,10 +173,6 @@ class ItemBrandController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            if(!empty($entity->upload())) {
-                $entity->removeUpload();
-            }
-            $entity->upload();
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

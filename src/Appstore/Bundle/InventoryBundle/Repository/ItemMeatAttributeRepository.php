@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\ItemMetaAttribute;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -45,6 +46,26 @@ class ItemMeatAttributeRepository extends EntityRepository
             $em = $this->_em;
             $metaAttribute->setValue($value);
             $em->flush();
+    }
+
+    public function insertCopyProductAttribute(PurchaseVendorItem $purchaseVendorItem , PurchaseVendorItem $item)
+    {
+        $em = $this->_em;
+        $i=0;
+
+        if(!empty($item->getItemMetaAttributes())){
+            /* @var ItemMetaAttribute $attribute */
+            foreach ($item->getItemMetaAttributes() as $attribute) {
+                $entity = new ItemMetaAttribute();
+                $entity->setValue($attribute->getValue());
+                $entity->setItemAttribute($attribute);
+                $entity->setPurchaseVendorItem($purchaseVendorItem);
+                $em->persist($entity);
+                $em->flush($entity);
+
+            }
+
+        }
     }
 
 }

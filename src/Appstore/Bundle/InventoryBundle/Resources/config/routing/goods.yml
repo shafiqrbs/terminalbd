@@ -30,8 +30,8 @@ inventory_goods_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:Goods:delete" }
 
-inventory_vendoritem_status:
-    path:     /{id}/web-status
+inventory_goods_status:
+    path:     /{id}/product-status
     defaults: { _controller: "InventoryBundle:Goods:webStatus" }
 
 inventory_goods_copy:

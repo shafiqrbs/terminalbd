@@ -12,7 +12,11 @@
     <meta content="" name="description"/>
     <meta content="" name="author"/>
     <meta name="MobileOptimized" content="320">
+    {% if app.user.globaloption is not empty and app.user.globaloption is defined and app.user.globalOption.templateCustomize.favicon is not empty %}
+    <link  rel="shortcut icon" href="/uploads/domain/{{ app.user.globalOption.id }}/customizeTemplate/{{ app.user.globalOption.templateCustomize.favicon }}">
+    {% else %}
     <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}">
+    {% endif %}
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 

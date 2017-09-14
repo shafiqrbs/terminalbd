@@ -495,7 +495,7 @@
                                     <div class="span1">
                                         <div class="control-group">
                                             <div class="controls">
-                                                <a href="javascript:" id="{{ meta.id }}"
+                                                <a href="javascript:" data-id="{{ meta.id }}"
                                                    data-url="{{ path('inventory_goods_itemkeyvalue_delete',{'id':meta.id}) }}"
                                                    class="btn red  remove mini"><i class="icon-trash"></i></a>
                                             </div>
@@ -613,6 +613,19 @@
     });
 
 
+    $(document).on("click", ".remove, .delete", function() {
+        var url = $(this).attr('data-url');
+        var id = $(this).attr('data-id');
+        $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+        $.get(url, function( data ) {
+        $('#remove-'+id).hide();
+        });
+        }
+        });
+    });
 
     InventoryItemEditPage({{ entity.id ? entity.id : 0 }});
 {% endblock %}

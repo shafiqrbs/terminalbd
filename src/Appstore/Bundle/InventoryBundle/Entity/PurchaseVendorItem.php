@@ -229,6 +229,13 @@ class PurchaseVendorItem
      */
     private $isWeb = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean", nullable = true)
+     */
+    private $status = true;
+
 
      /**
      * @var boolean
@@ -526,7 +533,7 @@ class PurchaseVendorItem
     }
 
     /**
-     * @return mixed
+     * @return Product
      */
     public function getMasterItem()
     {
@@ -534,7 +541,7 @@ class PurchaseVendorItem
     }
 
     /**
-     * @param mixed $masterItem
+     * @param Product $masterItem
      */
     public function setMasterItem($masterItem)
     {
@@ -1129,6 +1136,22 @@ class PurchaseVendorItem
     {
         $code = str_pad($this->getCode(),6, '0', STR_PAD_LEFT);
         return $code;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param boolean $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 
 

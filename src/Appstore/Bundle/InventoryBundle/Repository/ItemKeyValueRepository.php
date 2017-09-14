@@ -54,4 +54,25 @@ class ItemKeyValueRepository extends EntityRepository
             $em->flush();
     }
 
+    public function insertCopyItemKeyValue(PurchaseVendorItem $purchaseVendorItem , PurchaseVendorItem $item)
+    {
+        $em = $this->_em;
+        $i=0;
+
+        if(!empty($item->getItemKeyValues())){
+
+            /* @var ItemKeyValue $attribute */
+            foreach ($item->getItemKeyValues() as $attribute) {
+                $entity = new ItemKeyValue();
+                $entity->setMetaKey($attribute->getMetaKey());
+                $entity->setMetaValue($attribute->getMetaValue());
+                $entity->setPurchaseVendorItem($purchaseVendorItem);
+                $em->persist($entity);
+                $em->flush($entity);
+
+            }
+
+        }
+    }
+
 }

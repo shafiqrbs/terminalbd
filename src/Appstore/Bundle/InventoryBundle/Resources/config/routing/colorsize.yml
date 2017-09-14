@@ -27,4 +27,4 @@ colorsize_update:
 colorsize_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:ColorSize:delete" }
-    methods:  [POST, DELETE]
+

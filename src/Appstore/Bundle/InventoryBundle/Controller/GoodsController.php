@@ -3,15 +3,13 @@
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
-use Appstore\Bundle\InventoryBundle\Entity\ItemAttribute;
 use Appstore\Bundle\InventoryBundle\Entity\ItemGallery;
 use Appstore\Bundle\InventoryBundle\Entity\ItemKeyValue;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
-use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Form\EcommerceProductEditType;
 use Appstore\Bundle\InventoryBundle\Form\EcommerceProductType;
-use Appstore\Bundle\InventoryBundle\Form\GoodsType;
 use Appstore\Bundle\InventoryBundle\Form\InventoryGoodsType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -73,6 +71,7 @@ class GoodsController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setInventoryConfig($inventory);
+            $entity->setQuantity($entity->getMasterQuantity());
             $entity->setSource('goods');
             $entity->setSubProduct(true);
             $entity->setIsWeb(true);
@@ -162,14 +161,10 @@ class GoodsController extends Controller
             throw $this->createNotFoundException('Unable to find PurchaseVendorItem entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('InventoryBundle:Goods:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
-
     /**
      * Displays a form to edit an existing PurchaseVendorItem entity.
      * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
@@ -338,32 +333,33 @@ class GoodsController extends Controller
     public function deleteAction(PurchaseVendorItem $vendorItem)
     {
 
-        if($vendorItem){
+
+        $em = $this->getDoctrine()->getManager();
+        if (!$vendorItem) {
+            throw $this->createNotFoundException('Unable to find Product entity.');
+        }
+        try {
             $em = $this->getDoctrine()->getManager();
             $vendorItem->deleteImageDirectory();
             $em->remove($vendorItem);
             $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
             return new Response('success');
-        }else{
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+            return new Response('failed');
+        }catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice', 'Please contact system administrator further notification.'
+            );
             return new Response('failed');
         }
-    }
 
-    /**
-     * Creates a form to delete a PurchaseVendorItem entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('inventory_goods_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-            ;
     }
 
     /**
@@ -380,11 +376,11 @@ class GoodsController extends Controller
             throw $this->createNotFoundException('Unable to find District entity.');
         }
 
-        $status = $entity->getIsWeb();
+        $status = $entity->getStatus();
         if($status == 1){
-            $entity->setIsWeb(0);
+            $entity->setStatus(0);
         } else{
-            $entity->setIsWeb(1);
+            $entity->setStatus(1);
         }
         $em->flush();
         $this->get('session')->getFlashBag()->add(
@@ -426,22 +422,38 @@ class GoodsController extends Controller
         }
     }
 
-    public function itemCopyAction(PurchaseVendorItem $item)
+    public function itemCopyAction(PurchaseVendorItem $copyEntity)
     {
-
         $em = $this->getDoctrine()->getManager();
         $entity = new PurchaseVendorItem();
-        $entity->setInventoryConfig($item->getInventoryConfig());
-        $entity->setName($item->getName());
-        $entity->setSubProduct(true);
-        $entity->setQuantity($item->getQuantity());
-        $entity->setPurchasePrice($item->getPurchase());
-        $entity->setSalesPrice($item->getSalesPrice());
-        $entity->setSize($item->getSize());
-        $entity->setCountry($item->getCountry());
+        $entity->setMasterItem($copyEntity->getMasterItem());
+        $entity->setName($copyEntity->getName());
+        $entity->setWebName($copyEntity->getWebName());
+        $entity->setSubProduct(false);
+        $entity->setQuantity($copyEntity->getQuantity());
+        $entity->setMasterQuantity($copyEntity->getMasterQuantity());
+        $entity->setPurchasePrice($copyEntity->getPurchasePrice());
+        $entity->setSalesPrice($copyEntity->getSalesPrice());
+        $entity->setOverHeadCost($copyEntity->getOverHeadCost());
+        $entity->setSize($copyEntity->getSize());
+        $entity->setItemColors($copyEntity->getItemColors());
+        $entity->setBrand($copyEntity->getBrand());
+        $entity->setDiscount($copyEntity->getDiscount());
+        $entity->setDiscountPrice($copyEntity->getDiscountPrice());
+        $entity->setContent($copyEntity->getContent());
+        $entity->setTag($copyEntity->getTag());
+        $entity->setPromotion($copyEntity->getPromotion());
+        $entity->setCountry($copyEntity->getCountry());
+        $entity->setInventoryConfig($copyEntity->getInventoryConfig());
+        $entity->setIsWeb(true);
+        $entity->setStatus(true);
         $entity->setSource('goods');
         $em->persist($entity);
         $em->flush();
+     //   $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->insertCopyPurchaseItem($entity,$item);
+        $this->getDoctrine()->getRepository('InventoryBundle:ItemMetaAttribute')->insertCopyProductAttribute($entity,$copyEntity);
+        $this->getDoctrine()->getRepository('InventoryBundle:ItemKeyValue')->insertCopyItemKeyValue($entity,$copyEntity);
+        $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->initialInsertSubProduct($entity);
         return $this->redirect($this->generateUrl('inventory_goods_edit', array('id' => $entity->getId())));
 
 
@@ -511,8 +523,6 @@ class GoodsController extends Controller
         exit;
 
     }
-
-
 
 
 }
