@@ -16,7 +16,10 @@
     <meta property="og:description"   content="{{ globalOption.name }}" />
     <meta property="og:image"         content="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" />
     <title>{{ globalOption.name }}</title>
-    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}">
+    {% if globalOption.templateCustomize.favicon is not empty %}
+        <link  rel="shortcut icon" href="/uploads/domain/{{ globalOption.id }}/customizeTemplate/{{ globalOption.templateCustomize.favicon }}">
+    {% endif %}
+
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     <!-- Google fonts - witch you want to use - (rest you can just remove) -->

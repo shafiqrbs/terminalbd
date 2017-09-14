@@ -54,6 +54,7 @@
     'assets/template/plugin/textillate/assets/animate.css'
     'assets/template/plugin/wow/css/animate.css'
     'assets/template/plugin/select2/select2.css'
+    'assets/plugins/pop-modal/popModal.min.css'
     'assets/template/plugin/range-slider/bootstrap-slider.css'
     'assets/template/desktop/css/module.css'
     %}
@@ -97,6 +98,12 @@
         <div class="modal-content"></div>
     </div>
 </div>
+<div id="product-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="product-modal-content modal-content"></div>
+    </div>
+</div>
+<div id="email-confirm" style="display:none">Thank you for your interest in {{ globalOption.domain }}. Your email has been sent successfully to our customer service department.</div>
 {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
 {% if globalOption.templateCustomize.showSidebar == 1 %}
     <div class="side-toolbar" style=""></div>
@@ -122,6 +129,7 @@
 'assets/template/plugin/textillate/assets/jquery.lettering.js'
 'assets/template/desktop/js/jquery.scrollbar.min.js'
 'assets/template/plugin/jquery-zoom/zoom.js'
+'assets/plugins/pop-modal/popModal.js'
 'assets/template/desktop/js/scripts.js'
 
 %}
