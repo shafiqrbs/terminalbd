@@ -132,50 +132,56 @@ $(document).ready(function(){
             $('#forgetModal').modal('toggle');
         });
 
-        $("#contactMsg").validate({
+        $("#newsLetter").validate({
 
             ignore: ".ignore",
             rules: {
-                name: {required: true},
-                mobile: {required: true}
+                email: {required: true,email: true}
             },
             messages: {
-                name: "Enter your name or company",
-                mobile: "Enter valid mobile no"
+                email: "Please enter a valid email address."
             },
             tooltip_options: {
-                name: {trigger:'focus',placement:'top',html:true},
-                mobile: {placement:'top',html:true}
+                email: {trigger:'focus',placement:'top',html:true},
             },
             submitHandler: function(form) {
-
                 $.ajax({
-
-                    url         : $(form).attr( 'action' ),
-                    type        : $(form).attr( 'method' ),
-                    data        : new FormData(form),
-                    processData : false,
-                    contentType : false,
+                    url         : $('#newsLetter').attr( 'action' ),
+                    type        : $('#newsLetter').attr( 'method' ),
+                    data        : $('#newsLetter').serialize(),
                     success: function(response) {
-                       console.log(response);
+                        $("form").trigger("reset");
+                        $('#email-confirm').notifyModal({
+                            duration : 3000,
+                            placement : 'center',
+                            overlay : true,
+                            type : 'notify',
+                            icon : false
+                        });
                     },
-                    complete: function(){
 
-                    }
                 });
+
             }
 
         });
 
-        $(document).on( "click", ".emailSender", function(e){
+
+        $(document).on( "click", ".emailSenderxx", function(e){
 
             $.ajax({
                 url         : $('#newsLetter').attr( 'action' ),
                 type        : $('#newsLetter').attr( 'method' ),
                 data        : $('#newsLetter').serialize(),
                 success: function(response) {
-                    $('#newsLetter').find("input[type=text]").val("");
-                    $('#email-success').html('Your e-mail is sending successfuly');
+                    $("form").trigger("reset");
+                    $('#email-confirm').notifyModal({
+                        duration : 3000,
+                        placement : 'center',
+                        overlay : true,
+                        type : 'notify',
+                        icon : false
+                    });
                 },
 
             });
@@ -184,7 +190,7 @@ $(document).ready(function(){
 
 
 
-    $("#contactUs").validate({
+        $("#contactUs").validate({
 
                 rules: {
                     name: {required: true},
