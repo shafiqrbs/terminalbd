@@ -15,6 +15,20 @@ use Doctrine\ORM\EntityRepository;
 class OrderItemRepository extends EntityRepository
 {
 
+
+    public function getItemOverview(Order $order){
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.subTotal) AS totalAmount,SUM(e.quantity) AS totalQuantity');
+        $qb->where("e.order = :order");
+        $qb->andWhere("e.status = 1");
+        $qb->setParameter('order', $order->getId());
+        $result = $qb->getQuery()->getSingleResult();
+        return $result;
+
+    }
+
+    
     public function totalItemAmount(Order $order){
 
         $qb = $this->createQueryBuilder('e');

@@ -2,13 +2,22 @@ order:
     path:     /
     defaults: { _controller: "CustomerBundle:Order:index" }
 
+shoppingbag_to_order:
+    path:     /shopping-bag-to-order
+    defaults: { _controller: "CustomerBundle:Order:wishToOrder" }
+
+wishlist_to_cart:
+    path:     /wishlist-to-order
+    defaults: { _controller: "CustomerBundle:Order:wishToOrder" }
+
+
 order_to_cart:
-    path:     /cart-to-order
+    path:     /inbox-to-order
     defaults: { _controller: "CustomerBundle:Order:cartToOrder" }
 
 order_checkout:
-    path:     /wish-to-order
-    defaults: { _controller: "CustomerBundle:Order:wishToOrder" }
+    path:     /cart-to-order
+    defaults: { _controller: "CustomerBundle:Order:cartToOrder" }
 
 order_cart:
     path:     /order-cart
@@ -29,6 +38,10 @@ order_show:
 order_delete:
     path:      /{id}/order-delete
     defaults: { _controller: "CustomerBundle:Order:delete" }
+
+order_item_update:
+    path:      /{order}/{id}/order-item-update
+    defaults: { _controller: "CustomerBundle:Order:itemUpdate" }
 
 order_item_delete:
     path:      /{order}/{id}/order-item-delete

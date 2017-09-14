@@ -230,14 +230,18 @@ class OrderController extends Controller
         return new Response('success');
     }
 
-    public function itemDeleteAction($order , OrderItem $item)
+    public function itemUpdateAction($order , OrderItem $item)
     {
+
         $em = $this->getDoctrine()->getManager();
         $orderEntity = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->find($order);
         if (!$item) {
             throw $this->createNotFoundException('Unable to find Expenditure entity.');
         }
-        $em->remove($item);
+        $data = $_REQUEST;
+        $item->setQuantity($data['quantity']);
+        $item->setSubTotal($item->getPrice() * $data['quantity']);
+        $em->persist($item);
         $em->flush();
 
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($orderEntity);
@@ -246,6 +250,30 @@ class OrderController extends Controller
         );
         return new Response('success');
     }
+
+    public function itemDeleteAction($order , OrderItem $item)
+    {
+        $msg ='itemDelete';
+        $em = $this->getDoctrine()->getManager();
+        /* @var Order $orderEntity */
+        $orderEntity = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->find($order);
+        if (!$item) {
+            throw $this->createNotFoundException('Unable to find Expenditure entity.');
+        }
+        $em->remove($item);
+        $em->flush();
+        $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($orderEntity);
+        if($orderEntity->getTotalAmount() == 0 and $orderEntity->getItem() == 0 ){
+            $em->remove($orderEntity);
+            $em->flush();
+            $msg ='orderDelete';
+        }
+        $this->get('session')->getFlashBag()->add(
+            'error',"Data has been deleted successfully"
+        );
+        return new Response($msg);
+    }
+
 
     public function pdfAction($invoice)
     {

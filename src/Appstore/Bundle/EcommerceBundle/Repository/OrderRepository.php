@@ -152,8 +152,11 @@ class OrderRepository extends EntityRepository
     public function updateOrder(Order $order)
     {
         $em = $this->_em;
-        $totalAmount = $em->getRepository('EcommerceBundle:OrderItem')->totalItemAmount($order);
+        $orderItem = $em->getRepository('EcommerceBundle:OrderItem')->getItemOverview($order);
+        $totalAmount = $orderItem['totalAmount'];
+        $totalItem = $orderItem['totalQuantity'];
         $order->setTotalAmount($totalAmount);
+        $order->setItem($totalItem);
         $vat = $this->getCulculationVat($order->getGlobalOption(),$totalAmount);
         $grandTotal = $totalAmount + $order->getShippingCharge() + $vat;
         $order->setVat($vat);

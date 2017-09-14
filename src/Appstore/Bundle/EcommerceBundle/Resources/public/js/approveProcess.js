@@ -41,19 +41,76 @@ function ApproveProcess(){
 
     $(document).on("click", ".remove", function() {
         var url = $(this).attr('data-url');
+        var subDomain = $(this).attr('data-value');
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',
             onOkBut: function(event, el) {
                 $.get(url, function( data ) {
-                    console.log(data);
-                    //location.reload();
+                    if(data == 'itemDelete'){
+                        location.reload();
+                    }else{
+                        top.location.href="/customer/"+subDomain+"/order";//redirection
+                    }
                 });
             }
         });
     });
 
-   $(document).on("click", ".item-disable", function() {
+    $('.btn-number').click(function(e){
+
+        e.preventDefault();
+
+        url = $(this).attr('data-url');
+        productId = $(this).attr('data-text');
+        price = $(this).attr('data-title');
+        fieldId = $(this).attr('data-id');
+        fieldName = $(this).attr('data-field');
+        type      = $(this).attr('data-type');
+        var input = $('#quantity-'+$(this).attr('data-id'));
+        var currentVal = parseInt(input.val());
+        if (!isNaN(currentVal)) {
+            if(type == 'minus') {
+                if(currentVal > input.attr('min')) {
+                    var existVal = (currentVal - 1);
+                    input.val(existVal).change();
+                    $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                        .done(function( data ) {
+                            location.reload();
+                        });
+                }
+                if(parseInt(input.val()) == input.attr('min')) {
+                    $(this).attr('disabled', true);
+                }
+
+            } else if(type == 'plus') {
+
+                if(currentVal < input.attr('max')) {
+                    var existVal = (currentVal + 1);
+                    input.val(existVal).change();
+                    $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                        .done(function(data){
+                            if(data == 'success'){
+                                location.reload();
+                            }else{
+                                input.val(existVal-1).change();
+                                alert('There is not enough product in stock at this moment')
+                            }
+                        });
+                }
+                if(parseInt(input.val()) == input.attr('max')) {
+                    $(this).attr('disabled', true);
+                }
+
+            }
+        } else {
+            input.val(0);
+        }
+    });
+
+    
+
+    $(document).on("click", ".item-disable", function() {
 
         var id = $(this).attr("data-id");
         var url = $(this).attr("data-url");

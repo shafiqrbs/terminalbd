@@ -57,8 +57,7 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Delivery</th>
                                     <th class="numeric" >Invoice</th>
-                                    <th class="numeric" >Store Name</th>
-                                    <th class="numeric" >Item</th>
+                                    <th class="numeric" >Quantity</th>
                                     <th class="numeric" >Grand Total</th>
                                     <th class="numeric" >Payment</th>
                                     <th class="numeric" >Due/Return</th>
@@ -74,7 +73,6 @@
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.deliveryDate|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
-                                        <td class="numeric" >{{ entity.ecommerceConfig.globalOption.name }}</td>
                                         <td class="numeric" >{{ entity.item }}</td>
                                         <td class="numeric" >{{ entity.grandTotalAmount }}</td>
                                         <td class="numeric" >{{ entity.paidAmount }}</td>
@@ -121,7 +119,7 @@
                                                         <td class="numeric" >{{ item.subTotal }}</td>
                                                         <td class="numeric" >
                                                             {% if entity.process == 'Created'  %}
-                                                                <a title="Are you sure went to delete ?" data-id="{{ item.id }}" data-url="{{ path('order_item_delete',{'shop':entity.globalOption.slug, 'preOrder':entity.id,'id':item.id}) }}" class="btn red mini remove" ><i class="icon-trash"></i></a>
+                                                                <a title="Are you sure went to delete ?" data-id="{{ item.id }}" data-url="{{ path('order_item_delete',{'shop':globalOption.slug,'order':entity.id,'id':item.id}) }}" class="btn red mini remove" ><i class="icon-trash"></i></a>
                                                             {% endif %}
                                                         </td>
                                                     </tr>
@@ -150,6 +148,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@EcommerceBundle/Resources/public/js/*'
     '@EcommerceBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

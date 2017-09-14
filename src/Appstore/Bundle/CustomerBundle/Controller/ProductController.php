@@ -5,6 +5,7 @@ namespace Appstore\Bundle\CustomerBundle\Controller;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Form\OrderType;
 use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Frontend\FrontentBundle\Service\Cart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -118,14 +119,20 @@ class ProductController extends Controller
 
     }
 
-    public function showAction(Order $entity)
+    public function showAction(Request $request ,$shop , PurchaseVendorItem $entity)
     {
-
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
+        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem' => $entity->getId(),'masterItem'=>1));
+        $cart = new Cart($request->getSession());
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Expenditure entity.');
         }
-        return $this->render('CustomerBundle:Order:show.html.twig', array(
-            'entity' => $entity,
+        return $this->render('CustomerBundle:Product:show.html.twig', array(
+            'product'           => $entity,
+            'subitem'           => $subItem,
+            'cart'              => $cart,
+            'globalOption'      => $globalOption,
         ));
 
     }

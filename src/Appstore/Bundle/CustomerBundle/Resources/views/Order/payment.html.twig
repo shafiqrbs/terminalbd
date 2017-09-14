@@ -109,7 +109,7 @@
                                             <ul class="unstyled" >
                                                 <li><strong>Name</strong>:&nbsp;{{ entity.createdBy.profile.name }}</li>
                                                 <li><strong>Mobile</strong>:&nbsp;{{ entity.createdBy.profile.mobile }}</li>
-                                                <li><strong>Location</strong>:&nbsp;{{ entity.createdBy.profile.location.name }}</li>
+                                                <li><strong>Location</strong>:&nbsp;{{ entity.createdBy.profile.location.name }},{{ entity.createdBy.profile.location.parent.name }}</li>
                                                 <li>{{ entity.address }}</li>
                                             </ul>
                                         </div>
@@ -171,14 +171,33 @@
                                             {% if entity.process == 'Confirm'  %}
                                                 {{ item.quantity }}
                                             {% else %}
-                                                <input class="m-wrap span6" min="1" type="number" autocomplete="off" name="quantity[]" id="quantity" value="{{ item.quantity }}" max="{{ item.goodsItem.quantity }}">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn red btn-number" data-type="minus" data-field="quantity" data-id="{{ item.id }}" data-url="{{ path('order_item_update',{'shop':globalOption.slug,'order':entity.id,'id':item.id}) }}" data-text="{{ item.id }}" data-title="{{ item.price }}">
+                                                              <span class="add-on"><i class="icon-minus"></i></span>
+                                                        </button>
+                                                    </span>
+                                                    <input type="text" readonly="readonly" name="quantity" id="quantity-{{ item.id }}" class="form-control m-wrap  span4 input-number" value="{{ item.quantity }}" min="1" max="100" >
+                                                    <span class="input-group-btn">
+                                                          <button type="button" class="btn blue btn-number" data-type="plus" data-field="quantity" data-id="{{ item.id }}"  data-url="{{ path('order_item_update',{'shop':globalOption.slug,'order':entity.id,'id':item.id}) }}" data-text="{{ item.id }}" data-title="{{ item.price }}">
+                                                              <span class="add-on"><i class="icon-plus"></i></span>
+                                                          </button>
+                                                    </span>
+                                                    {% if item.purchaseVendorItem.masterItem.productUnit is not empty %}
+                                                    <span class="input-group-btn">
+                                                          <button type="button" class="btn green">
+                                                              <span class="add-on">{{ item.purchaseVendorItem.masterItem.productUnit.name }}</span>
+                                                          </button>
+                                                    </span>
+                                                    {% endif %}
+                                                </div>
                                             {% endif %}
-                                            &nbsp;{% if item.purchaseVendorItem.masterItem.productUnit is not empty %}{{ item.purchaseVendorItem.masterItem.productUnit.name }}{% endif %}</td>
+                                            </td>
                                         <td class="numeric" >{{ item.price }}</td>
                                         <td class="numeric" >=&nbsp;{{ item.subTotal }}</td>
                                         <td class="numeric" >
                                             {% if entity.process == 'Created'  %}
-                                                <a title="Are you sure went to delete ?"  data-id="{{ item.id }}" data-url="{{ path('order_item_delete',{'shop':globalOption.slug,'order':entity.id,'id':item.id}) }}" class="btn red mini remove" ><i class="icon-trash"></i></a>
+                                                <a title="Are you sure went to delete ?"  data-id="{{ item.id }}" data-url="{{ path('order_item_delete',{'shop':globalOption.slug,'order':entity.id,'id':item.id}) }}" data-value="{{ globalOption.slug }}" class="btn red remove" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -378,11 +397,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-
     $(".editable").editable();
-    ApproveProcess();
-    $("#refresh").click(function(evt) {
-    $("#randomdiv").load("index.php")
-    evt.preventDefault();
+        ApproveProcess();
     })
 {% endblock %}
