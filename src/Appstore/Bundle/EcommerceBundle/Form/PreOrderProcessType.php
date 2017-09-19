@@ -48,6 +48,21 @@ class PreOrderProcessType extends AbstractType
 
             ))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sms content for pre-order','data-original-title'=>'Enter sms content for pre-order','autocomplete'=>'off')))
+            ->add('process', 'choice', array(
+                'attr'=>array('class'=>'span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'empty_value' => '---Select Current Process---',
+                'choices' => array(
+                    'in-progress'       => 'in-progress',
+                    'confirm'       => 'Confirm',
+                    'send-delivery'       => 'Send Delivery',
+                    'return'       => 'Return',
+                    'delivered'       => 'Delivered',
+                    'cancel'       => 'Cancel',
+                    'delete'       => 'Delete'
+                ),
+            ))
             ->add('cashOnDelivery');
         }
 

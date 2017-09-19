@@ -16,7 +16,7 @@ website:
 
 customer:
     pattern: /customer
-    defaults:  { _controller: CustomerBundle:Customer:index }
+    defaults:  { _controller: CustomerBundle:Domain:index }
 
 domain_pendig:
     pattern: /domain-pendeing

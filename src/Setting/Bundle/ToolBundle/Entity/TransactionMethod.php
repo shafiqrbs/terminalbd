@@ -9,6 +9,7 @@ use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
@@ -114,9 +115,9 @@ class TransactionMethod
     protected $orders;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="transactionMethod" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", mappedBy="transactionMethod" , cascade={"persist", "remove"})
      */
-    protected $preOrders;
+    protected $preOrderPayments;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="transactionMethod" , cascade={"persist", "remove"})
@@ -385,6 +386,14 @@ class TransactionMethod
     public function getInvoiceTransactions()
     {
         return $this->invoiceTransactions;
+    }
+
+    /**
+     * @return PreOrderPayment
+     */
+    public function getPreOrderPayments()
+    {
+        return $this->preOrderPayments;
     }
 }
 

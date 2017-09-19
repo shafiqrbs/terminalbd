@@ -90,7 +90,7 @@ $(document).on('change', '#particular', function() {
 
     var url = $(this).val();
     if(url == ''){
-        alert('You have to add particulars from drop down');
+        alert('You have to add particulars from drop down and this not service item');
         return false;
     }
     $.ajax({
@@ -99,7 +99,7 @@ $(document).on('change', '#particular', function() {
         success: function (response) {
             obj = JSON.parse(response);
             $('#particularId').val(obj['particularId']);
-            $('#quantity').val(obj['quantity']);
+            $('#quantity').val(obj['quantity']).focus();
             $('#price').val(obj['price']);
             $('#instruction').html(obj['instruction']);
             $('#addParticular').attr("disabled", false);
@@ -131,6 +131,9 @@ $(document).on('click', '#addParticular', function() {
             $('#invoiceTransaction').html(obj['invoiceTransaction']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
+            $('#particular').prop('selectedIndex',0);
+            $('#price').val('');
+            $('#quantity').val('1');
             $('#addParticular').attr("disabled", true);
         }
     })
@@ -193,31 +196,34 @@ $(document).on("click", ".removeDiscount", function() {
     })
 });
 
-$('#invoiceParticulars').on("click", ".delete", function() {
+$(document).on("click", ".delete", function() {
 
+    var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
-    var id = $(this).attr("id");
     $('#remove-'+id).hide();
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('#netTotal').val(obj['netTotal']);
-            $('.paymentAmount').html(obj['payment']);
-            $('.vat').html(obj['vat']);
-            $('.due').html(obj['due']);
-            $('#due').val(obj['due']);
-            $('.discountAmount').html(obj['discount']);
-            $('.discount').val('').attr( "placeholder", obj['discount'] );
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('#invoiceTransaction').html(obj['invoiceTransaction']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
+
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                obj = JSON.parse(data);
+                $('.subTotal').html(obj['subTotal']);
+                $('.netTotal').html(obj['netTotal']);
+                $('#netTotal').val(obj['netTotal']);
+                $('.paymentAmount').html(obj['payment']);
+                $('.vat').html(obj['vat']);
+                $('.due').html(obj['due']);
+                $('#due').val(obj['due']);
+                $('.discountAmount').html(obj['discount']);
+                $('.discount').val('').attr( "placeholder", obj['discount'] );
+                $('#invoiceParticulars').html(obj['invoiceParticulars']);
+                $('#invoiceTransaction').html(obj['invoiceTransaction']);
+                $('.msg-hidden').show();
+                $('#msg').html(obj['msg']);
+            });
         }
-    })
+    });
 });
 
 $(document).on('click', '#addPayment', function() {
@@ -251,15 +257,34 @@ $(document).on('change', '#appstore_bundle_hospitalbundle_invoice_payment', func
     }
 });
 
+
+
+$('.particular-info').on('keypress', 'input', function (e) {
+    if (e.which == 13) {
+        e.preventDefault();
+        switch (this.id) {
+
+            case 'quantity':
+                $('#price').focus();
+                break;
+
+            case 'price':
+                $('#addParticular').trigger('click');
+                $('#particular').focus();
+                break;
+        }
+    }
+});
+
+
 $('form.horizontal-form').on('keypress', 'input', function (e) {
 
     if (e.which == 13) {
         e.preventDefault();
 
         switch (this.id) {
-
-            case 'discount':
-                $('#paymentAmount').focus();
+            case 'appstore_bundle_hospitalbundle_invoice_discount':
+                $('#appstore_bundle_hospitalbundle_invoice_payment').focus();
                 break;
 
             case 'paymentAmount':

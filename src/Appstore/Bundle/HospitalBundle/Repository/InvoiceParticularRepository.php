@@ -21,12 +21,19 @@ class InvoiceParticularRepository extends EntityRepository
         $particular = $this->_em->getRepository('HospitalBundle:Particular')->find($data['particularId']);
         $em = $this->_em;
         $entity = new InvoiceParticular();
+        $invoiceParticular = $this->_em->getRepository('HospitalBundle:InvoiceParticular')->findOneBy(array('hmsInvoice'=>$invoice ,'particular' => $particular));
+        if(!empty($invoiceParticular)){
+            $entity = $invoiceParticular;
+            $entity->setQuantity($invoiceParticular->getQuantity() + $data['quantity']);
+            $entity->setSubTotal($data['price'] * $entity->getQuantity());
+        }else{
+            $entity->setQuantity($data['quantity']);
+            $entity->setSalesPrice($data['price']);
+            $entity->setSubTotal($data['price'] * $data['quantity']);
+        }
         $entity->setHmsInvoice($invoice);
         $entity->setParticular($particular);
         $entity->setEstimatePrice($particular->getPrice());
-        $entity->setSalesPrice($data['price']);
-        $entity->setQuantity($data['quantity']);
-        $entity->setSubTotal($data['price'] * $data['quantity']);
         $em->persist($entity);
         $em->flush();
 
@@ -39,7 +46,7 @@ class InvoiceParticularRepository extends EntityRepository
         $i = 1;
         foreach ($entities as $entity) {
             $data .= '<tr id="remove-'. $entity->getId() . '">';
-            $data .= '<td class="span1"><span class="badge badge-warning toggle badge-custom" id=' . $i . '" ><span>[+]</span></span></td>';
+            $data .= '<td class="span1"><span class="badge badge-warning toggle badge-custom" id='. $entity->getId() .'" ><span>[+]</span></span></td>';
             $data .= '<td class="span1" >' . $i . '</td>';
             $data .= '<td class="span1" >' . $entity->getParticular()->getParticularCode() . '</td>';
             $data .= '<td class="span4" >' . $entity->getParticular()->getName() . '</td>';
@@ -51,7 +58,7 @@ class InvoiceParticularRepository extends EntityRepository
                      </td>';
             $data .= '</tr>';
             if ($entity->getParticular()->getService()->getId() == 1 ){
-                $data .= '<tr id="show-'. $entity->getId() . '" class="showing-overview">';
+                $data .= '<tr id="show-'.$entity->getId() .'" class="showing-overview">';
                 $data .= '<td colspan="7">';
                 $data .= '<table class="table table-bordered table-striped table-condensed flip-content ">';
                 $data .= '<tr class="">';

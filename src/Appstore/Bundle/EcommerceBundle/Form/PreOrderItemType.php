@@ -28,10 +28,20 @@ class PreOrderItemType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add  quantity'))
                 )))
-            ->add('dollar','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Dollar price'),
+            ->add('unitPrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'unit price'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add  item price as dollar'))
+                    new NotBlank(array('message'=>'Enter item price'))
                 )))
+            ->add('currencyType', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'bdt'       => 'BDT Taka',
+                    'dollar'       => 'Dollar',
+                    'euro'       => 'Euro'
+                ),
+            ))
             ->add('details','textarea', array('attr'=>array('class'=>'m-wrap span12','row'=>3,'placeholder'=>'Notes...')))
         ;
     }

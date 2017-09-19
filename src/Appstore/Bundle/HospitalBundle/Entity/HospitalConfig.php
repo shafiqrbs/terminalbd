@@ -38,6 +38,11 @@ class HospitalConfig
     private $hmsCommissions;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsReverse", mappedBy="hospitalConfig")
+     **/
+    private $hmsReverses;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="hospitalConfig")
      **/
     private $doctorInvoices;
@@ -711,6 +716,14 @@ class HospitalConfig
     public function getHmsInvoices()
     {
         return $this->hmsInvoices;
+    }
+
+    /**
+     * @return HmsReverse
+     */
+    public function getHmsReverses()
+    {
+        return $this->hmsReverses;
     }
 
 

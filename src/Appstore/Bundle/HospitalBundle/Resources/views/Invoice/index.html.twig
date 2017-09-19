@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('hms_invoice') }}">Invoice</a>
+                        <a href="{{ path('hms_invoice') }}"> Patient Pathological Invoice</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -43,6 +43,7 @@
                                 <ul class="dropdown-menu pull-right">
                                     <li><a href="{{ path('hms_invoice_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
                                     <li><a href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('hms_invoice_empty_delete') }}"><i class="icon-th-list"></i>&nbsp;Delete Empty Invoice</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -138,7 +139,7 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
-                                <tr class="head-blue">
+                                <tr class="head-green">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice No</th>
                                     <th class="numeric" >Name</th>
@@ -167,19 +168,26 @@
                                         <td class="numeric" >{{ entity.paymentStatus }}</td>
                                         <td class="numeric" >{{ entity.process }}</td>
                                         <td class="numeric" >
-                                            {% if entity.paymentStatus == 'Pending' %}
-                                            <a href="{{ path('hms_invoice_edit', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
-                                            <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
-                                            {% endif %}
-                                            {% if entity.paymentStatus == 'Paid' or entity.paymentStatus == 'Due' %}
-                                            <a href="{{ path('hms_invoice_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                            <a  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}"  class="btn green mini" ><i class="icon-print"></i></a>
-                                            <a  href="{{ path('hms_invoice_confirm',{'id':entity.id}) }}"  class="btn yellow mini" ><i class=" icon-retweet"></i></a>
-                                            {% endif %}
-                                            {% if entity.paymentStatus == 'Due' %}
-                                                <a href="{{ path('hms_invoice_show', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-money"></i></a>
-                                            {% endif %}
-
+                                            <div class="btn-group">
+                                                <a class="btn blue mini" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                                   Action
+                                                    <i class="icon-tasks"></i>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right action">
+                                                    {% if entity.paymentStatus == 'Pending' or entity.process == "Revised" %}
+                                                    <li><a href="{{ path('hms_invoice_edit', { 'id': entity.id }) }}" class="btn green  " ><i class="icon-pencil"></i> Edit & Update</a></li>
+                                                    <li><a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red  delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a></li>
+                                                    {% endif %}
+                                                    {% if entity.paymentStatus == 'Paid' or entity.paymentStatus == 'Due' %}
+                                                    <li><a href="{{ path('hms_invoice_show', { 'id': entity.id }) }}" class="btn purple"><i class="icon-eye-open"></i> View</a></li>
+                                                    <li><a  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a></li>
+                                                    <li><a  href="{{ path('hms_invoice_confirm',{'id':entity.id}) }}"  class="btn yellow" ><i class=" icon-truck"></i> Delivery</a></li>
+                                                    {% endif %}
+                                                    {% if entity.process != 'Done' and entity.process == 'In-progress' %}
+                                                    <li><a  id="{{ entity.id }}"  href="{{ path('hms_invoice_reverse', { 'id': entity.id }) }}" class="btn black tooltips" data-trigger = "hover" data-original-title ="Are you sure went to reverse this invoice ?" ><i class="icon-retweet"></i> Reverse</a></li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
                                         </td>
                                     </tr>
                                 {% endfor %}

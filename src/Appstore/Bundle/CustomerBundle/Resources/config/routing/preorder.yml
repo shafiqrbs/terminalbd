@@ -51,9 +51,9 @@ preorder_item_confirm:
     path:     /{preOrder}/{id}/confirm-item
     defaults: { _controller: "CustomerBundle:PreOrder:confirmItem" }
 
-ecommerce_preorder_ajax_payment:
+preorder_ajax_payment:
     path:      /{id}/order-payment
-    defaults: { _controller: "CustomerBundle:PreOrder:payment" }
+    defaults: { _controller: "EcommerceBundle:PreOrder:payment" }
     methods:  [POST]
 
 preorder_invoice:

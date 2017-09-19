@@ -17,24 +17,23 @@ class PreOrderRepository extends EntityRepository
         $em = $this->_em;
         $total = $em->createQueryBuilder()
             ->from('EcommerceBundle:PreOrderItem','e')
-            ->select('sum(e.total) as total , sum(e.totalDollar) as dollar , sum(e.shippingCharge) as shippingCharge , count(e.id) as item, sum(e.quantity) as quantity')
+            ->select('sum(e.convertTotal) as convertTotal , sum(e.convertSubTotal) as convertSubTotal , sum(e.subTotal) as subTotal , sum(e.shippingCharge) as shippingCharge , count(e.id) as item, sum(e.quantity) as quantity')
             ->where('e.preOrder = :preOrder')
             ->andWhere('e.status = :status')
             ->setParameter('preOrder', $entity ->getId())
             ->setParameter('status', 1)
             ->getQuery()->getSingleResult();
 
-        $entity->setTotalAmount($total['total']);
-        $entity->setDollar($total['dollar']);
+        $entity->setTotalAmount(floatval($total['convertTotal']));
         $entity->setTotalShippingCharge($total['shippingCharge']);
         $entity->setItem($total['item']);
         $entity->setQuantity($total['quantity']);
-        $vat = $this->getCulculationVat($entity->getGlobalOption(),$total['total']);
+        $vat = $this->getCulculationVat($entity->getGlobalOption(),$total['convertTotal']);
         $entity->setVat($vat);
-        $entity->setGrandTotalAmount($total['total'] + $total['shippingCharge'] + $vat + $entity->getDeliveryCharge() - $entity->getDiscountAmount());
+        $grandTotal = floatval($total['convertTotal'] + $vat + $entity->getDeliveryCharge() - $entity->getDiscountAmount());
+        $entity->setGrandTotalAmount($grandTotal);
         $grandTotal = $entity->getGrandTotalAmount();
         $payment = $entity->getAdvanceAmount() + $entity->getPaidAmount();
-
         if($payment > $grandTotal ){
             $entity->setReturnAmount( $payment - $grandTotal);
             $entity->setDueAmount(0);
@@ -42,6 +41,25 @@ class PreOrderRepository extends EntityRepository
             $entity->setReturnAmount(0);
             $entity->setDueAmount($grandTotal - $payment);
         }
+        $em->persist($entity);
+        $em->flush();
+    }
+
+    public function updatePreOderPayment(PreOrder $entity)
+    {
+        $em = $this->_em;
+        $total = $em->createQueryBuilder()
+            ->from('EcommerceBundle:PreOrderPayment','e')
+            ->select('sum(e.amount) as totalAmount')
+            ->where('e.preOrder = :preOrder')
+            ->andWhere('e.status = :status')
+            ->setParameter('preOrder', $entity ->getId())
+            ->setParameter('status', 1)
+            ->getQuery()->getSingleResult();
+
+        $entity->setPaidAmount(floatval($total['totalAmount']));
+        $due = $entity->getGrandTotalAmount() - $entity->getPaidAmount();
+        $entity->setDueAmount($due);
         $em->persist($entity);
         $em->flush();
     }

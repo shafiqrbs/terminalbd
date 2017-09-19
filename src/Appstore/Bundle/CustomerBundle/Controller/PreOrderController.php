@@ -2,7 +2,9 @@
 
 namespace Appstore\Bundle\CustomerBundle\Controller;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderItem;
+use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\EcommerceBundle\Form\PreOrderItemType;
+use Appstore\Bundle\EcommerceBundle\Form\PreOrderPaymentType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -35,14 +37,17 @@ class PreOrderController extends Controller
      * Lists all PreOrder entities.
      *
      */
-    public function indexAction()
+    public function indexAction($shop)
     {
+
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $entities = $em->getRepository('EcommerceBundle:PreOrder')->findBy(array('createdBy' => $user), array('updated' => 'desc'));
+        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug' => $shop));
+        $entities = $em->getRepository('EcommerceBundle:PreOrder')->findBy(array('createdBy' => $user,'globalOption' => $globalOption), array('updated' => 'desc'));
         $pagination = $this->paginate($entities);
         return $this->render('CustomerBundle:PreOrder:index.html.twig', array(
             'entities' => $pagination,
+            'globalOption' => $globalOption,
         ));
     }
 
@@ -95,17 +100,14 @@ class PreOrderController extends Controller
      * Finds and displays a PreOrder entity.
      *
      */
-    public function showAction($id)
+    public function showAction(PreOrder $entity)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('EcommerceBundle:PreOrder')->find($id);
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PreOrder entity.');
         }
         return $this->render('CustomerBundle:PreOrder:show.html.twig', array(
             'entity' => $entity,
+            'globalOption' => $entity->getGlobalOption(),
 
         ));
     }
@@ -135,16 +137,43 @@ class PreOrderController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(PreOrder $entity)
-    {
 
+    private function createEditForm(PreOrderPayment $entity,PreOrder $preOrder)
+    {
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new PreOrderType($entity->getGlobalOption(),$location), $entity, array(
-            'action' => $this->generateUrl('preorder_update', array('shop' => $entity->getGlobalOption()->getSlug(),'id' => $entity->getId())),
-            'method' => 'PUT',
+        $form = $this->createForm(new PreOrderPaymentType($preOrder->getGlobalOption(),$location), $entity, array(
+            'action' => $this->generateUrl('preorder_ajax_payment', array('shop' => $preOrder->getGlobalOption()->getSlug(),'id' => $preOrder->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'id' => 'pre-order-payment',
+                'novalidate' => 'novalidate',
+            )
         ));
         return $form;
     }
+
+
+    public function itemAction(PreOrder $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PreOrder entity.');
+        }
+        $preOrderItem = new PreOrderItem();
+        $form = $this->createItemForm($preOrderItem,$entity);
+        $paymentEntity = new  PreOrderPayment();
+        $preOrderform = $this->createEditForm($paymentEntity,$entity);
+        return $this->render('CustomerBundle:PreOrder:item.html.twig', array(
+            'entity'      => $entity,
+            'globalOption' => $entity->getGlobalOption(),
+            'form'   => $form->createView(),
+            'paymentForm'   => $preOrderform->createView(),
+        ));
+
+
+    }
+
+
 
     /**
      * Edits an existing PreOrder entity.
@@ -203,7 +232,7 @@ class PreOrderController extends Controller
         }
     }
 
-    private function createItemForm(PreOrderItem $entity,$preOrder)
+    private function createItemForm(PreOrderItem $entity,PreOrder $preOrder)
     {
         $form = $this->createForm(new PreOrderItemType(), $entity, array(
             'action' => $this->generateUrl('preorder_item_create', array('shop' => $preOrder->getGlobalOption()->getSlug(),'id' => $preOrder->getId())),
@@ -216,49 +245,28 @@ class PreOrderController extends Controller
         return $form;
     }
 
-    public function itemAction(PreOrder $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find PreOrder entity.');
-        }
-        $preOrderItem = new PreOrderItem();
-        $form = $this->createItemForm($preOrderItem,$entity);
-        $preOrderform = $this->createEditForm($entity);
-/*
-        $banks = $this->getDoctrine()->getRepository('EcommerceBundle:BankAccount')->findBy(array('status'=>1),array('name'=>'asc'));
-        $bkashs = $this->getDoctrine()->getRepository('EcommerceBundle:BkashAccount')->findBy(array('status'=>1),array('name'=>'asc'));
-        $paymentTypes = $this->getDoctrine()->getRepository('SettingToolBundle:PaymentType')->findBy(array('status'=>1),array('name'=>'asc'));*/
-        return $this->render('CustomerBundle:PreOrder:item.html.twig', array(
-            'entity'      => $entity,
-            'globalOption' => $entity->getGlobalOption(),
-/*            'banks'      => $banks,
-            'bkashs'      => $bkashs,
-            'paymentTypes'      => $paymentTypes,*/
-            'form'   => $form->createView(),
-            'preOrderform'   => $preOrderform->createView(),
-        ));
-    }
-
     public function createItemAction(Request $request,PreOrder $preOrder)
     {
+        $globalOption = $preOrder->getEcommerceConfig()->getGlobalOption()->getSlug();
         $preOrderItem = new PreOrderItem();
-        $form = $this->createItemForm($preOrderItem,$preOrder->getId());
+        $form = $this->createItemForm($preOrderItem,$preOrder);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+
             $em = $this->getDoctrine()->getManager();
             $preOrderItem->setPreOrder($preOrder);
-            $preOrderItem->setTotal($preOrderItem->getQuantity() * $preOrderItem->getPrice());
-            $preOrderItem->setTotalDollar($preOrderItem->getQuantity() * $preOrderItem->getDollar());
+            $preOrderItem->setSubTotal($preOrderItem->getQuantity() * $preOrderItem->getUnitPrice());
             $em->persist($preOrderItem);
             $em->flush();
             $this->getDoctrine()->getRepository('EcommerceBundle:PreOrder')->updatePreOder($preOrder);
-            return $this->redirect($this->generateUrl('preorder_item', array('id' => $preOrder->getId())));
+            return $this->redirect($this->generateUrl('preorder_item', array('shop'=> $globalOption,'id' => $preOrder->getId())));
+
         }
 
         return $this->render('CustomerBundle:PreOrder:item.html.twig', array(
             'entity' => $preOrder,
+            'globalOption' => $preOrder->getGlobalOption(),
             'form'   => $form->createView(),
         ));
     }

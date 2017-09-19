@@ -203,7 +203,7 @@ class TemplateWidgetController extends Controller
 
         return $this->render('@Frontend/Template/Desktop/Widget/page.html.twig', array(
             'entities'              => $entities,
-            'widget'            => $widget,
+            'widget'                => $widget,
             'globalOption'          => $globalOption,
         ));
     }

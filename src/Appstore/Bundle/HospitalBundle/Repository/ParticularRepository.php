@@ -62,6 +62,31 @@ class ParticularRepository extends EntityRepository
         return  $qb;
     }
 
+    public function getServices($hospital){
+
+
+        $particulars = $this->getServiceWithParticular($hospital);
+
+        $data = '';
+        $service = '';
+        foreach ($particulars as $particular) {
+            if ($service != $particular['serviceName']) {
+                if ($service != '') {
+                    $data .= '</optgroup>';
+                }
+                $data .= '<optgroup label="'.$particular['serviceCode'].'-'.ucfirst($particular['serviceName']).' Backgrounds">';
+            }
+            $data .= '<option value="/hms/invoice/'.$particular['id'].'/particular-search">'.$particular['particularCode'] .' - '.htmlspecialchars($particular['name']).'</option>';
+            $service = $particular['serviceName'];
+        }
+        if ($service != '') {
+            $data .= '</optgroup>';
+        }
+        return $data ;
+
+    }
+
+
     public function getServiceWithParticular($hospital){
 
         $qb = $this->createQueryBuilder('e')

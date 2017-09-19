@@ -101,14 +101,15 @@ class InvoiceController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created") {
+        if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created" and $entity->getRevised() != 1) {
             return $this->redirect($this->generateUrl('hms_invoice_show', array('id' => $entity->getId())));
         }
-        $particulars = $em->getRepository('HospitalBundle:Particular')->getServiceWithParticular($hospital);
-        $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
+      //  $services           = $em->getRepository('HospitalBundle:Service')->findBy(array('hospitalConfig' => $hospital,'status' => 1));
+        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital);
+        $referredDoctors    = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
         return $this->render('HospitalBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
-            'particulars' => $particulars,
+            'partcularService' => $services,
             'referredDoctors' => $referredDoctors,
             'form' => $editForm->createView(),
         ));
@@ -426,6 +427,20 @@ class InvoiceController extends Controller
         exit;
     }
 
+    public function pathologicalInvoiceReverseAction(Invoice $entity){
+        $em = $this->getDoctrine()->getManager();
+        $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsSalesTransactionReverse($entity);
+        $em = $this->getDoctrine()->getManager();
+        $entity->setRevised(true);
+        $em->flush();
+        $template = $this->get('twig')->render('HospitalBundle:Invoice:reverse.html.twig',array(
+            'entity' => $entity,
+        ));
+        $em->getRepository('HospitalBundle:HmsReverse')->insertInvoice($entity,$template);
+        return $this->redirect($this->generateUrl('hms_invoice'));
+
+    }
+
 
     public function getBarcode($invoice)
     {
@@ -443,8 +458,8 @@ class InvoiceController extends Controller
 
     public function deleteEmptyInvoiceAction()
     {
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findBy(array('inventoryConfig' => $inventory, 'paymentStatus' => 'Pending'));
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findBy(array('hospitalConfig' => $hospital, 'process' => 'Created'));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity) {
             $em->remove($entity);

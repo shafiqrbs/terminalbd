@@ -66,78 +66,15 @@ class PreOrder
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderItem", mappedBy="preOrder"  , cascade={"persist", "remove"} )
-     * @ORM\OrderBy({"updated" = "DESC"})
+     * @ORM\OrderBy({"created" = "ASC"})
      **/
     private  $preOrderItems;
 
-
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="preOrder" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", mappedBy="preOrder"  , cascade={"persist", "remove"} )
+     * @ORM\OrderBy({"created" = "ASC"})
      **/
-    private  $accountCash;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="preOrders" )
-     **/
-    private  $accountBank;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="preOrders" )
-     **/
-    private  $accountMobileBank;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="preOrders" )
-     **/
-    private  $transactionMethod;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="mobileAccount", type="string", length=50 , nullable = true)
-     */
-    private $mobileAccount;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="accountType", type="string", length=255 , nullable = true)
-     */
-    private $accountType;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="transaction", type="string", length=255 , nullable = true)
-     */
-    private $transaction;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="accountName", type="string", length=50 , nullable = true)
-     */
-    private $accountName;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="accountNo", type="string", length=255 , nullable = true)
-     */
-    private $accountNo;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="bankBranch", type="string", length=255 , nullable = true)
-     */
-    private $bankBranch;
-
+    private  $preOrderPayments;
 
 
     /**
@@ -153,14 +90,6 @@ class PreOrder
      * @ORM\Column(name="item", type="integer",  nullable=true)
      */
     private $item;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="dollar", type="float",  nullable=true)
-     */
-    private $dollar;
-
 
     /**
      * @var float
@@ -625,23 +554,6 @@ class PreOrder
 
 
     /**
-     * @return float
-     */
-    public function getDollar()
-    {
-        return $this->dollar;
-    }
-
-    /**
-     * @param float $dollar
-     */
-    public function setDollar($dollar)
-    {
-        $this->dollar = $dollar;
-    }
-
-
-    /**
      * @return EcommerceConfig
      */
     public function getEcommerceConfig()
@@ -726,54 +638,6 @@ class PreOrder
     }
 
     /**
-     * @return AccountCash
-     */
-    public function getAccountCash()
-    {
-        return $this->accountCash;
-    }
-
-    /**
-     * @param AccountCash $accountCash
-     */
-    public function setAccountCash($accountCash)
-    {
-        $this->accountCash = $accountCash;
-    }
-
-    /**
-     * @return AccountBank
-     */
-    public function getAccountBank()
-    {
-        return $this->accountBank;
-    }
-
-    /**
-     * @param AccountBank $accountBank
-     */
-    public function setAccountBank($accountBank)
-    {
-        $this->accountBank = $accountBank;
-    }
-
-    /**
-     * @return TransactionMethod
-     */
-    public function getTransactionMethod()
-    {
-        return $this->transactionMethod;
-    }
-
-    /**
-     * @param TransactionMethod $transactionMethod
-     */
-    public function setTransactionMethod($transactionMethod)
-    {
-        $this->transactionMethod = $transactionMethod;
-    }
-
-    /**
      * @return Location
      */
     public function getLocation()
@@ -805,117 +669,7 @@ class PreOrder
         $this->globalOption = $globalOption;
     }
 
-    /**
-     * @return AccountMobileBank
-     */
-    public function getAccountMobileBank()
-    {
-        return $this->accountMobileBank;
-    }
-
-    /**
-     * @param AccountMobileBank $accountMobileBank
-     */
-    public function setAccountMobileBank($accountMobileBank)
-    {
-        $this->accountMobileBank = $accountMobileBank;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMobileAccount()
-    {
-        return $this->mobileAccount;
-    }
-
-    /**
-     * @param string $mobileAccount
-     */
-    public function setMobileAccount($mobileAccount)
-    {
-        $this->mobileAccount = $mobileAccount;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAccountType()
-    {
-        return $this->accountType;
-    }
-
-    /**
-     * @param string $accountType
-     */
-    public function setAccountType($accountType)
-    {
-        $this->accountType = $accountType;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTransaction()
-    {
-        return $this->transaction;
-    }
-
-    /**
-     * @param string $transaction
-     */
-    public function setTransaction($transaction)
-    {
-        $this->transaction = $transaction;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAccountName()
-    {
-        return $this->accountName;
-    }
-
-    /**
-     * @param string $accountName
-     */
-    public function setAccountName($accountName)
-    {
-        $this->accountName = $accountName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAccountNo()
-    {
-        return $this->accountNo;
-    }
-
-    /**
-     * @param string $accountNo
-     */
-    public function setAccountNo($accountNo)
-    {
-        $this->accountNo = $accountNo;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBankBranch()
-    {
-        return $this->bankBranch;
-    }
-
-    /**
-     * @param string $bankBranch
-     */
-    public function setBankBranch($bankBranch)
-    {
-        $this->bankBranch = $bankBranch;
-    }
+   
 
     /**
      * @return boolean
@@ -1075,6 +829,14 @@ class PreOrder
     public function setPrePaidAmount($prePaidAmount)
     {
         $this->prePaidAmount = $prePaidAmount;
+    }
+
+    /**
+     * @return PreOrderPayment
+     */
+    public function getPreOrderPayments()
+    {
+        return $this->preOrderPayments;
     }
 
 

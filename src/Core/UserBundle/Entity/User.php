@@ -581,6 +581,10 @@ class User extends BaseUser
      */
     protected $doctorInvoiceApprovedBy;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsReverse", mappedBy="createdBy" , cascade={"persist", "remove"})
+     */
+    protected $hmsReverse;
 
 
     public function isGranted($role)

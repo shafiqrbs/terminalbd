@@ -1,365 +1,479 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
-    <div class="container-fluid">
-        <!-- BEGIN inventory_damage HEADER-->
-        <div class="row-fluid">
-            <div class="span12">
-                <h3 class="inventory_damage-title">
-                    Manage Pre-order Item
-                </h3>
-                <ul class="breadcrumb">
-                    <li>
-                        <i class="icon-home"></i>
-                        <a href="{{ path('homepage') }}">Home</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
-                    <li>
-                        <a href="{{ path('customer_preorder') }}">Manage Pre-order Item</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
-                    <li><a href="#">Manage Pre-order new/edit</a></li>
-                    <li class="pull-right btn blue disabled mini">
-                        <i class="fa fa-calendar"></i>
-                        {{ "now"|date("d-F-Y") }}
-                    </li>
-                </ul>
-            </div>
+<div class="container-fluid">
+    <!-- BEGIN inventory_damage HEADER-->
+    <div class="row-fluid">
+        <div class="span12">
+            <h3 class="inventory_damage-title">
+                Manage Pre-order Item
+            </h3>
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="{{ path('homepage') }}">Home</a>
+                    <span class="icon-angle-right"></span>
+                </li>
+                <li>
+                    <a href="{{ path('customer_preorder') }}">Manage Pre-order Item</a>
+                    <span class="icon-angle-right"></span>
+                </li>
+                <li><a href="#">Manage Pre-order new/edit</a></li>
+                <li class="pull-right btn blue disabled mini">
+                    <i class="fa fa-calendar"></i>
+                    {{ "now"|date("d-F-Y") }}
+                </li>
+            </ul>
         </div>
-        <!-- END inventory_damage HEADER-->
-        <!-- BEGIN inventory_damage CONTENT-->
-        <div class="row-fluid">
-            <div class="span12">
-
-                <div class="portlet box green">
-                      <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Pre-order Information</div>
-                        <div class="actions">
-                            <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('customer_preorder') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+    </div>
+    <!-- END inventory_damage HEADER-->
+    <!-- BEGIN inventory_damage CONTENT-->
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="portlet box green">
+                <div class="portlet-title">
+                    <div class="caption"><i class="icon-reorder"></i>Manage Pre-order Information</div>
+                    <div class="actions">
+                        <div class="btn-group">
+                            <a  href="{{ path('customer_preorder_invoice',{id:entity.id}) }}" target="_blank" data-url=""  class="btn blue process"><i class="icon-truck"></i>&nbsp;Delivery Invoice</a>
+                            <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <i class="icon-cogs"></i>&nbsp;Tools
+                                <i class="icon-tasks"></i>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="{{ path('customer_preorder') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <label><strong>Bill Overview</strong></label>
+                                    <ul class="unstyled" >
+                                        <li><strong>Invoice</strong>:#&nbsp;{{ entity.invoice }}</li>
+                                        <li><strong>Grand Total</strong>:&nbsp;{{ entity.grandTotalAmount|number_format }}</li>
+                                        <li><sub>Grand Total(Total,Shipping,Tax,Vat Etc)</sub></li>
+                                        <li><strong>Pre-paid</strong>:&nbsp;{{ entity.prePaidAmount|number_format }}</li>
+                                        <li><strong>Paid</strong>:&nbsp;{{ entity.paidAmount|number_format }}</li>
+                                        {% if entity.paidAmount <  entity.grandTotalAmount and entity.dueAmount > 0 %}
+                                            <li><strong>Due</strong>:&nbsp;{{ entity.dueAmount|number_format }}</li>
+                                        {% elseif entity.paidAmount >  entity.grandTotalAmount and entity.returnAmount > 0 %}
+                                            <li><strong>Return</strong>:&nbsp;{{ entity.returnAmount|number_format }}</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
                             </div>
                         </div>
+                        <div class="span4">
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <label><strong>Payment Details</strong></label>
+                                    <ul class="unstyled" >
+                                        {% if entity.cashOnDelivery == 1 %}
+                                            <li><strong>Payment Method</strong>:&nbsp;Cash On Delivery</li>
+                                        {% endif %}
+                                        <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery }}</li>
+                                        <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
 
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span4">
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <label><strong>{{ entity.delivery|capitalize }} Address</strong></label>
+                                    <ul class="unstyled" >
+                                        <li><strong>Name</strong>:&nbsp;{{ entity.createdBy.profile.name }}</li>
+                                        <li><strong>Mobile</strong>:&nbsp;{{ entity.createdBy.profile.mobile }}</li>
+                                        <li><strong>Location</strong>:&nbsp;{{ entity.createdBy.profile.location.name }}</li>
+                                        <li>{{ entity.address }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                     <div class="portlet-body">
-                         <div class="row-fluid">
-                             <div class="span4">
-                                 <div class="row-fluid">
-                                     <div class="span12">
-                                         <label><strong>Bill Overview</strong></label>
-                                         <ul class="unstyled" >
-                                             <li><strong>Invoice</strong>:#&nbsp;{{ entity.grandTotalAmount }}</li>
-                                             <li><strong>Grand Total</strong>:&nbsp;{{ entity.grandTotalAmount }}</li>
-                                             <li><sub>Grand Total(Total,Shipping,Tax,Vat Etc)</sub></li>
-                                             <li><strong>Pre-paid</strong>:&nbsp;{{ entity.prePaidAmount }}</li>
-                                             <li><strong>Paid</strong>:&nbsp;{{ entity.paidAmount }}</li>
-                                             {% if entity.paidAmount <  entity.grandTotalAmount and entity.dueAmount > 0 %}
-                                                 <li><strong>Due</strong>:&nbsp;{{ entity.dueAmount }}</li>
-                                             {% elseif entity.paidAmount >  entity.grandTotalAmount and entity.returnAmount > 0 %}
-                                                 <li><strong>Return</strong>:&nbsp;{{ entity.returnAmount }}</li>
-                                             {% endif %}
-                                         </ul>
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="span4">
-                                 <div class="row-fluid">
-                                     <div class="span12">
-                                         <label><strong>Payment Details</strong></label>
-                                         <ul class="unstyled" >
-                                             {% if entity.cashOnDelivery == 1 %}
-                                                 <li><strong>Payment Method</strong>:&nbsp;Cash On Delivery</li>
-                                             {% elseif entity.transactionMethod is not empty %}
-                                                 <li><strong>Payment Method</strong>:&nbsp;{{ entity.transactionMethod.name }}</li>
-                                             {% endif %}
-                                             <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery }}</li>
-                                             <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
-
-                                             {% if entity.accountMobileBank is not empty %}
-                                                 <li><strong>Received</strong>:&nbsp;{{ entity.accountMobileBank.mobile }},{{ entity.accountMobileBank.serviceName }},{{ entity.accountMobileBank.authorised }}</li>
-                                             {% endif %}
-                                             {% if entity.mobileAccount is not empty %}
-                                                 <li><strong>Mobile</strong>:&nbsp;{{ entity.mobileAccount }}</li>
-                                             {% endif %}
-                                             {% if entity.accountType is not empty %}
-                                                 <li><strong>Account Type</strong>:&nbsp;{{ entity.accountType }}</li>
-                                             {% endif %}
-                                             {% if entity.transaction is not empty %}
-                                                 <li><strong>Transaction ID</strong>:&nbsp;{{ entity.transaction }}</li>
-                                             {% endif %}
-                                         </ul>
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="span4">
-                                 <div class="row-fluid">
-                                     <div class="span12">
-                                         <label><strong>{{ entity.delivery|capitalize }} Address</strong></label>
-                                         <ul class="unstyled" >
-                                             <li><strong>Name</strong>:&nbsp;{{ entity.createdBy.profile.name }}</li>
-                                             <li><strong>Mobile</strong>:&nbsp;{{ entity.createdBy.profile.mobile }}</li>
-                                             <li><strong>Location</strong>:&nbsp;{{ entity.createdBy.profile.location.name }}</li>
-                                             <li>{{ entity.address }}</li>
-                                         </ul>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                      {{ form_start(form) }}
-                      {{ form_row(form._token) }}
-                         <div class="portlet-body flip-scroll">
-                            <table class="table table-bordered table-striped table-condensed flip-content ">
-                                <thead class="flip-content ">
-                                <tr class="head-grey">
-                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                    <th class="numeric" >Name</th>
-                                    <th class="numeric" >Quantity</th>
-                                    <th class="numeric" >USD</th>
-                                    <th class="numeric" >TotalUSD</th>
-                                    <th class="numeric" >Unit price</th>
-                                    <th class="numeric" >Sub-total</th>
-                                    <th class="numeric" >Tax&Shipping</th>
-                                    <th class="numeric" >Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for item in entity.preOrderItems %}
-                                    <tr id="remove-{{ item.id }}">
-                                        <td>
-                                            {% if item.details %}
+                    <div class="portlet-body flip-scroll">
+                        <table class="table table-bordered table-striped table-condensed flip-content ">
+                            <thead class="flip-content ">
+                            <tr class="head-green">
+                                <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
+                                <th class="numeric" >Name</th>
+                                <th class="numeric" >Quantity</th>
+                                <th class="numeric" >Currency</th>
+                                <th class="numeric" >Unit Price</th>
+                                <th class="numeric" >Sub-Total</th>
+                                <th class="numeric" >Convert Rate(BDT)</th>
+                                <th class="numeric" >Convert Sub-Total</th>
+                                <th class="numeric" >Tax&Shipping</th>
+                                <th class="numeric" >Convert Total</th>
+                                <th class="numeric" >Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in entity.preOrderItems %}
+                                <tr id="remove-{{ item.id }}">
+                                    <td>
+                                        {% if item.details %}
                                             <span class="badge badge-warning toggle badge-custom" id="{{ item.id  }}" ><span>[+]</span></span>
-                                            {% endif %}
-                                        </td>
-                                        <td class="numeric" ><a target="_blank" href="{{ item.url }}"> {{ item.name|truncate(20) }}</a></td>
-                                        <td class="numeric" >
+                                        {% endif %}
+                                    </td>
+                                    <td class="numeric" ><a target="_blank" href="{{ item.url }}"> {{ item.name|truncate(50) }}</a></td>
+                                    <td class="numeric" >
+                                        {{ item.quantity }}</td>
+                                    <td class="numeric" >{{ item.currencyType|capitalize }}</td>
+                                    <td class="numeric" >{{ item.unitPrice }}</td>
+                                    <td class="numeric" >={{ item.subTotal|number_format }}</td>
+                                    <td class="numeric" style="width:80px!important;"><input type="text" class="span12 price td-input" rel="{{ item.id }}"  name="convertRate[]" id="convertRate-{{ item.id }}"  value="{{ item.convertRate }}"></td>
+                                    <td class="numeric" id="convertSubTotal-{{ item.id }}" >={{ item.convertSubTotal|number_format }}</td>
+                                    <td class="numeric" style="width:80px!important;">
+                                        <input type="text" class="span12 shippingCharge td-input"  rel="{{ item.id }}" name="shippingCharge[]" id="shippingCharge-{{ item.id }}"  value="{{ item.shippingCharge }}">
                                         <input type="hidden" name="item[]" id="item-{{ item.id }}" value="{{ item.id }}" >
                                         <input type="hidden" name="quantity[]" id="quantity-{{ item.id }}" value="{{ item.quantity }}">
-                                        {{ item.quantity }}</td>
-                                        <td class="numeric" >{{ item.dollar }}</td>
-                                        <td class="numeric" >{{ item.totalDollar }}</td>
-                                        <td class="numeric" style="width:80px!important;"><input type="text" class="span12 price td-input" rel="{{ item.id }}"  name="price[]" id="price-{{ item.id }}"  value="{{ item.price }}"></td>
-                                        <td class="numeric" id="subTotal-{{ item.id }}" >{{ item.total|number_format }}</td>
-                                        <td class="numeric" style="width:80px!important;"><input type="text" class="span12 shippingCharge td-input"  rel="{{ item.id }}" name="shippingCharge[]" id="shippingCharge-{{ item.id }}"  value="{{ item.shippingCharge }}"></td>
-                                        <td class="numeric" >
-                                        {% if entity.process == 'created'  %}
-                                            <a title="Are you sure went to delete ?" data-id="{{ item.id }}" data-url="{{ path('customer_preorder_item_delete',{'preOrder':entity.id,'id':item.id}) }}" class="btn red mini remove" ><i class="icon-trash"></i></a>
-                                        {% elseif entity.process == 'in-progress' and entity.checkRoleEcommercePreorder(app.user.role) == true  %}
-                                            <a data-title="Confirm item" data-id="{{ item.id }}" data-url="{{ path('customer_preorder_item_confirm',{'preOrder':entity.id,'id':item.id}) }}" class="btn  mini confirm {% if item.status == 1 %} green {% else %} red {% endif %} " ><i class="icon-ok"></i>{% if item.status == 1 %} Accept {% else %} Deny {% endif %}</a>
+                                    </td>
+                                    <td class="numeric" >={{ item.convertTotal|number_format }}</td>
+                                    <td class="numeric" >
+                                        {% if item.status == 1 %}
+                                            <a class="btn  mini green" ><i class=" icon-thumbs-up"></i> Accept</a>
+                                        {% elseif item.status == 2 %}
+                                            <a class="btn  mini yellow " ><i class="icon-thumbs-down"></i> Rejected</a>
+                                        {% else %}
+                                            <a class="btn  mini purple" ><i class="icon-filter"></i> In-progress</a>
                                         {% endif %}
-                                        </td>
-                                    </tr>
-                                    <tr id="show-{{ item.id }}" class="showing-overview">
-                                        <td colspan="9">{{ item.details }}</td>
-                                    </tr>
-                                {% endfor %}
-                                <tr>
-                                        <td class="numeric" colspan="4"><span class="pull-right">Total USD</span></td>
-                                        <td class="" >{{ entity.dollar }}</td>
-                                        <td class="numeric"><span class="pull-right">Sub-total</span></td>
-                                        <td class="numeric" id="itemTotalTk">{{ entity.totalAmount|number_format }}
-                                            <input type="hidden" name="itemTotalTk" id="itemTotalAmount" value="{{ entity.totalAmount }}">
-                                        </td>
-                                        <td>{{ entity.totalShippingCharge|number_format }} </td>
-                                        <td></td>
+                                        {% if item.status == 0 and entity.process == 'in-progress' and entity.checkRoleEcommercePreorder(app.user.role) == true  %}
+                                            <div class="btn-group">
+                                                <button class="blue btn mini dropdown-toggle" data-toggle="dropdown">
+                                                    Action&nbsp; <i class="icon-tasks"></i>
+                                                </button>
+                                                <ul class="dropdown-menu pull-right action">
+                                                    <li><a data-title="Confirm item" data-id="{{ item.id }}" data-url="{{ path('customer_preorder_item_confirm',{'preOrder':entity.id,'id':item.id,'status':1}) }}" class="btn green itemProcess tooltips" data-trigger = "hover" data-original-title ="Are you sure went to delivery this item ?"><i class="icon-ok-circle"></i> Accept</a></li>
+                                                    <li><a data-title="Deny item" data-id="{{ item.id }}" data-url="{{ path('customer_preorder_item_confirm',{'preOrder':entity.id,'id':item.id,'status':2}) }}" class="btn red itemProcess tooltips" data-trigger = "hover" data-original-title ="Are you sure went to reject this item ?"><i class="icon-trash"></i> Deny</a></li>
+                                                </ul>
+                                            </div>
+                                        {% endif %}
+                                    </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="9"><br/></td>
+                                <tr id="show-{{ item.id }}" class="showing-overview">
+                                    <td colspan="9">{{ item.details }}</td>
                                 </tr>
-                                <tr>
-                                    <td class="numeric" colspan="8" ><span class="pull-right">TotalAmount</span></td>
-                                    <td class="numeric" >=&nbsp;{{ entity.totalAmount|number_format }}</td>
-                                </tr>
-                                 <tr>
-                                    <td class="numeric" colspan="8" ><span class="pull-right">Shipping & Tax</span></td>
-                                    <td class="numeric" >=&nbsp;{{ entity.totalShippingCharge|number_format }}</td>
-                                </tr>
-                                {% if entity.delivery != 'pickup'  %}
-                                    <tr>
-                                        <td class="numeric" colspan="8" ><span class="pull-right">Delivery Charge</span></td>
-                                        <td class="numeric">=&nbsp;{{ entity.deliveryCharge|number_format }}</td>
-                                    </tr>
-                                {% endif %}
+                            {% endfor %}
 
-                                {% if entity.ecommerceConfig.vatEnable == 1 %}
-                                    <tr>
-                                        <td class="numeric" colspan="8" ><span class="pull-right">Vat & Tax</span></td>
-                                        <td class="numeric">=&nbsp;{{ entity.vat }}</td>
-                                    </tr>
-                                {% endif %}
-                                {% if  entity.discountAmount > 0 %}
+                            <tr>
+                                <td colspan="11"><br/></td>
+                            </tr>
+                            <tr>
+                                <td class="numeric" colspan="9" ><span class="pull-right">Total Amount</span></td>
+                                <td class="numeric" >=&nbsp;{{ entity.totalAmount|number_format }}</td>
+                                <td class="numeric" ></td>
+                            </tr>
+                            <tr>
+                                <td class="numeric" colspan="9" ><span class="pull-right">Shipping & Tax</span></td>
+                                <td class="numeric" >=&nbsp;{{ entity.totalShippingCharge|number_format }}</td>
+                                <td class="numeric" ></td>
+                            </tr>
+                            {% if entity.delivery != 'pickup'  %}
                                 <tr>
-                                    <td class="numeric" colspan="8" ><span class="pull-right">Discount Amount</span></td>
+                                    <td class="numeric" colspan="9" ><span class="pull-right">Delivery Charge</span></td>
+                                    <td class="numeric">=&nbsp;{{ entity.deliveryCharge|number_format }}</td>
+                                    <td class="numeric" ></td>
+                                </tr>
+                            {% endif %}
+
+                            {% if entity.ecommerceConfig.vatEnable == 1 %}
+                                <tr>
+                                    <td class="numeric" colspan="9" ><span class="pull-right">Vat & Tax</span></td>
+                                    <td class="numeric">=&nbsp;{{ entity.vat }}</td>
+                                    <td class="numeric" ></td>
+                                </tr>
+                            {% endif %}
+                            {% if  entity.discountAmount > 0 %}
+                                <tr>
+                                    <td class="numeric" colspan="9" ><span class="pull-right">Discount Amount</span></td>
                                     <td class="numeric"><strong>=&nbsp;{{  entity.discountAmount|number_format }}</strong></td>
+                                    <td class="numeric" ></td>
                                 </tr>
-                                {% endif %}
+                            {% endif %}
+                            <tr>
+                                <td class="numeric" colspan="9" ><span class="pull-right">Grand Total</span></td>
+                                <td class="numeric"><strong>=&nbsp;{{ ( entity.grandTotalAmount)|number_format }}</strong></td>
+                                <td class="numeric" ></td>
+                            </tr>
+                            <tr>
+                                <td class="numeric" colspan="9" ><span class="pull-right">Paid Amount</span></td>
+                                <td class="numeric"><strong>=&nbsp;{{ ( entity.paidAmount)|number_format }}</strong></td>
+                                <td class="numeric" ></td>
+                            </tr>
+                            {% if entity.advanceAmount  > 0 %}
                                 <tr>
-                                    <td class="numeric" colspan="8" ><span class="pull-right">Grand Total</span></td>
-                                    <td class="numeric"><strong>=&nbsp;{{ ( entity.grandTotalAmount)|number_format }}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td class="numeric" colspan="8" ><span class="pull-right">Paid Amount</span></td>
-                                    <td class="numeric"><strong>=&nbsp;{{ ( entity.paidAmount)|number_format }}</strong></td>
-                                </tr>
-                                {% if entity.advanceAmount  > 0 %}
-                                <tr>
-                                    <td class="numeric" colspan="8" ><span class="pull-right" >Advance Amount</span></td>
+                                    <td class="numeric" colspan="9" ><span class="pull-right" >Advance Amount</span></td>
                                     <td class="numeric" >=&nbsp;{{ ( entity.advanceAmount)|number_format }}</td>
-                               </tr>
-                                {% endif %}
-                                {% if entity.dueAmount  > 0 %}
+                                    <td class="numeric" ></td>
+                                </tr>
+                            {% endif %}
+                            {% if entity.dueAmount  > 0 %}
                                 <tr>
-                                    <td class="numeric" colspan="8" ><span class="pull-right" >Due Amount</span></td>
+                                    <td class="numeric" colspan="9" ><span class="pull-right" >Due Amount</span></td>
                                     <td class="numeric" >=&nbsp;{{ ( entity.dueAmount)|number_format }}</td>
-                               </tr>
-                                {% endif %}
-                                </tbody>
-                            </table>
+                                    <td class="numeric" ></td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
 
-                        </div>
-                         <!--/span-->
-                         <div class="form-actions" style="background-color: #FFFFff">
-                             <div class="row-fluid">
-                                 <div class="span9">
-                                     <div class="row-fluid">
-                                         <div class="span12">
-                                             <div class="row-fluid">
-                                                 <div class="span3">
-                                                     <div class="control-group">
-                                                         <label style="margin-top: 6px; margin-bottom: 27px">Cash on Delivery&nbsp;{{ form_widget(form.cashOnDelivery) }}</label>
-                                                     </div>
-                                                 </div>
-                                                 <div class="span3">
-                                                     <div class="control-group">
-                                                         {{ form_widget(form.prePaidAmount) }}
-                                                         {{ form_errors(form.prePaidAmount) }}
-                                                     </div>
-                                                 </div>
-                                                 <div class="span3">
-                                                     <div class="control-group">
-                                                         {{ form_widget(form.deliveryCharge) }}
-                                                         {{ form_errors(form.deliveryCharge) }}
-                                                     </div>
-                                                 </div>
-                                                 <div class="span3">
-                                                     <div class="control-group">
-                                                         {{ form_widget(form.discountAmount) }}
-                                                         {{ form_errors(form.discountAmount) }}
-                                                     </div>
-                                                 </div>
-
-
-                                             </div>
-                                         </div>
-                                     </div>
-                                     <div class="row-fluid">
-                                         <div class="span12">
-                                             <div class="row-fluid">
-                                                 <div class="span12">
-                                                     <div class="row-fluid">
-                                                         <div class="span12">
-                                                             <div class="control-group">
-                                                                 {{ form_widget(form.comment) }}
-                                                                 {{ form_errors(form.comment) }}
-                                                             </div>
-                                                         </div>
-                                                     </div>
-                                                 </div>
-                                             </div>
-
-                                         </div>
-                                     </div>
-
-                                 </div>
-                                 <div class="span3">
-                                     <div class="row-fluid">
-                                         <div class="span12">
-                                             <div class="control-group">
-                                                 <div class="controls">
-                                                     {{ form_widget(form.deliveryDate) }}
-                                                     {{ form_errors(form.deliveryDate) }}
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-                                     <div class="row-fluid" style="margin-top: 14px">
-                                         <div class="span12">
-                                             <div class="control-group">
-                                                 <div class="input-append">
-                                                     <div class="btn-group">
-                                                         <button class="green btn dropdown-toggle" data-toggle="dropdown">
-                                                             Way of Process&nbsp;<span class="caret"></span>
-                                                         </button>
-                                                         <ul class="dropdown-menu">
-                                                             <li><button  type="submit" id="submitProcess" name="submitProcess" value="verified"   class="btn purple span12"><i class="icon-ok-circle"></i>&nbsp;Verified</button></li>
-                                                             <li><button  type="submit" id="submitProcess" name="submitProcess" value="canceled"   class="btn red span12" ><i class="icon-remove-circle"></i>&nbsp;Cancel</button></li>
-                                                         </ul>
-                                                     </div>
-                                                 </div>
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-
-                             <!-- END FORM-->
-                         </div>
-                       {{ form_end(form) }}
                     </div>
+                    <div class="form-actions portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="icon-reorder"></i>Payment Information</div>
+                        </div>
+                    </div>
+                    <div class="clearfix"><br/> </div>
+                    <table class="table table-bordered table-striped table-condensed flip-content ">
+                        <thead class="flip-content ">
+                        <tr class="head-green">
+                            <th class="numeric" >Date</th>
+                            <th class="numeric" >Transaction Type</th>
+                            <th class="numeric" >Payment Mobile</th>
+                            <th class="numeric" >Transaction ID</th>
+                            <th class="numeric" >Receive Mobile</th>
+                            <th class="numeric" >Receive Amount</th>
+                            <th class="numeric" >Return Amount</th>
+                            <th class="numeric" >Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for payment in entity.preOrderPayments %}
+                            <tr id="remove-{{ payment.id }}">
+                                <td>{{ payment.updated|date('d-m-Y') }}</td>
+                                <td class="numeric" >{{ payment.transactionType }}</td>
+                                <td class="numeric" >{{ payment.mobileAccount }}</td>
+                                <td class="numeric" >{{ payment.transaction }}</td>
+                                <td class="numeric" >{{ payment.accountMobileBank.name }}</td>
+                                <td class="numeric" >{% if payment.transactionType =='Receive' %}{{ payment.amount|number_format }}{% endif %}</td>
+                                <td class="numeric" >{% if payment.transactionType =='Return' %}{{ payment.amount|number_format }}{% endif %}</td>
+                                <td class="numeric" >
+                                    {% if payment.status == 1  %}
+                                    <a class="btn  mini green" data-url="" ><i class=" icon-thumbs-up"></i> Accept</a></td>
+                                {% else %}
+                                    <a class="btn  mini yellow process"  data-url="{{ path('customer_preorder_payment_confirm',{'id':payment.id}) }}" ><i class=" icon-refresh"></i> Waiting</a></td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
 
-                    <div class="form-actions" style="background-color: #FFFFff">
-                        <div>
-                        {% if entity.process == 'payment'  %}
-                                <form id="process" name="process" action="{{ path('customer_preorder_confirm',{'id':entity.id}) }}" method="post">
+                        <tr>
+                            <td colspan="8"><br/></td>
+                        </tr>
+                        <tr>
+                            <td class="numeric" colspan="6" ><span class="pull-right"><strong>Grand Total </strong></span></td>
+                            <td class="numeric" >=&nbsp;{{ entity.grandTotalAmount|number_format }}</td>
+                            <td class="numeric" ></td>
+                        </tr>
+                        <tr>
+                            <td class="numeric" colspan="6" ><span class="pull-right"><strong>Total Receive</strong></span></td>
+                            <td class="numeric" >=&nbsp;{{ entity.paidAmount|number_format }}</td>
+                            <td class="numeric" ></td>
+                        </tr>
+
+                        <tr>
+                            <td class="numeric" colspan="6" ><span class="pull-right"><strong>Due Amount</strong></span></td>
+                            <td class="numeric" >=&nbsp;{{ entity.dueAmount|number_format }}</td>
+                            <td class="numeric" ></td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                    <div class="clearfix"> </div>
+                    <div class="form-actions portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="icon-reorder"></i>Payment Process</div>
+                        </div>
+                    </div>
+                    <div class="clearfix"><br/> </div>
+                    {{ form_start(paymentForm) }}
+                    {{ form_row(paymentForm._token) }}
+                    <div class="row-fluid">
+                        <div class="span10">
+                            <div class="row-fluid">
+                                <div class="span12">
                                     <div class="row-fluid">
-                                        <div class="span12">
+                                        <div class="span4">
                                             <div class="row-fluid">
-                                                <div class="span10">
-                                                    <input type="text" id="comment" name="comment" class="span12 m-wrap tooltips"  data-trigger ="hover"  data-original-title="Enter sms content for order." placeholder="Enter sms content for order." value="" >
+                                                <div class="span12">
+                                                    <div class="control-group">
+                                                        {{ form_widget(paymentForm.amount) }}
+                                                        {{ form_errors(paymentForm.amount) }}
+                                                    </div>
                                                 </div>
-                                                <div class="span2">
-                                                    <div class="input-append">
-                                                        <div class="btn-group">
-                                                            <button class="green btn dropdown-toggle" data-toggle="dropdown">
-                                                                Way of Delivery&nbsp;<span class="caret"></span>
-                                                            </button>
-                                                            <ul class="dropdown-menu">
-                                                                <li><button  type="submit" id="submitProcess" name="submitProcess" value="confirm"   class="btn purple span12"><i class="icon-ok-circle"></i>&nbsp;Confirm</button></li>
-                                                                <li><button type="submit" id="submitProcess" name="submitProcess"  value="return" class="btn yellow span12"   ><i class="icon-circle-arrow-left"></i>&nbsp;Return</button></li>
-                                                                <li><button  type="submit" id="submitProcess" name="submitProcess" value="canceled"   class="btn red span12" ><i class="icon-remove-circle"></i>&nbsp;Cancel</button></li>
-                                                            </ul>
+                                            </div>
+                                        </div>
+                                        <div class="span8">
+                                            <div class="row-fluid">
+                                                <div class="span4">
+                                                    <div class="control-group">
+                                                        {{ form_widget(paymentForm.transactionType) }}
+                                                        {{ form_errors(paymentForm.transactionType) }}
+                                                    </div>
+                                                </div>
+                                                <div class="span8">
+                                                    <div class="control-group">
+                                                        {{ form_widget(paymentForm.accountMobileBank) }}
+                                                        {{ form_errors(paymentForm.accountMobileBank) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row-fluid">
+                                                <div class="span4">
+                                                    <div class="control-group">
+                                                        <div class="controls">
+                                                            {{ form_widget(paymentForm.mobileAccount) }}
+                                                            {{ form_errors(paymentForm.mobileAccount) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="span8">
+                                                    <div class="control-group">
+                                                        <div class="controls">
+                                                            {{ form_widget(paymentForm.transaction) }}
+                                                            {{ form_errors(paymentForm.transaction) }}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </form>
-                                <div class="pull-center">
-                                    <a  href="{{ path('customer_preorder_invoice',{id:entity.id}) }}" target="_blank" data-url=""  class="btn blue process"><i class="icon-truck"></i>&nbsp;Delivery Invoice</a>
+
                                 </div>
-                            {% endif %}
+                            </div>
+
                         </div>
-                        {% set paymentID = entity.globalOption.id~'-pre-order-'~entity.id %}
-                        {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': paymentID } %}
+                        <div class="span2">
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="control-group">
+                                        <div class="controls">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid" style="margin-top: 25px">
+                                <div class="span12">
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <button type="button" id="submitPayment" name="submitPayment" value="payment"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+                    {{ form_end(paymentForm) }}
+
+                    <div class="clearfix"><br/> </div>
+                    <div class="form-actions portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="icon-reorder"></i>Confirm Process</div>
+                        </div>
+                    </div>
+                    <div class="clearfix"><br/> </div>
+                    {{ form_start(processForm) }}
+                    {{ form_row(processForm._token) }}
+                    <div class="row-fluid">
+                        <div class="span9">
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="row-fluid">
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                <label style="margin-top: 6px; margin-bottom: 27px">Cash on Delivery&nbsp;{{ form_widget(processForm.cashOnDelivery) }}</label>
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                {{ form_widget(processForm.prePaidAmount) }}
+                                                {{ form_errors(processForm.prePaidAmount) }}
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                {{ form_widget(processForm.deliveryCharge) }}
+                                                {{ form_errors(processForm.deliveryCharge) }}
+                                            </div>
+                                        </div>
+                                        <div class="span3">
+                                            <div class="control-group">
+                                                {{ form_widget(processForm.discountAmount) }}
+                                                {{ form_errors(processForm.discountAmount) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span9">
+                                    <div class="control-group">
+                                        {{ form_widget(processForm.comment) }}
+                                        {{ form_errors(processForm.comment) }}
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        {{ form_widget(processForm.process) }}
+                                        {{ form_errors(processForm.process) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span3">
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            {{ form_widget(processForm.deliveryDate) }}
+                                            {{ form_errors(processForm.deliveryDate) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid" style="margin-top: 14px">
+                                <div class="span12">
+                                    <button  type="submit" id="submitProcess" name="submitProcess" value="confirm"   class="btn purple span12"><i class="icon-refresh"></i>&nbsp;Process</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form_end(processForm) }}
+                    <div class="clearfix"><br/> </div>
+                    {% set arr = {'payment': 'payment' ,'confirm':'confirm'} %}
+                    {% if entity.process in  arr|keys %}
+                    {% endif %}
+                    <div class="form-actions portlet box yellow">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="icon-reorder"></i>Payment Process</div>
+                        </div>
+                    </div>
+                    <div class="clearfix"><br/> </div>
+                    {% set paymentID = entity.globalOption.id~'-pre-order-'~entity.id %}
+                    {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': paymentID } %}
+                    <div class="clearfix"><br/> </div>
 
                 </div>
+            </div>
         </div>
-        </div>
-    <style>
-        .td-input{
-            min-height:25px !important;
-            margin:0 !important;
-            padding:2px !important;
-            width: 80px!important;
-        }
-    </style>
+    </div>
+</div>
+<style>
+    .td-input{
+        min-height:25px !important;
+        margin:0 !important;
+        padding:2px !important;
+        width: 80px!important;
+    }
+</style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -379,22 +493,69 @@
 {% block documentready %}
     {{ parent() }}
     ApproveProcess();
+    $('body').addClass('page-sidebar-closed');
 
-    $(document).on('change', '.price , .shippingCharge ', function() {
+    $('.itemProcess').click(function(e){
+    var rel = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    var quantity = $('#quantity-'+rel).val() != '' ? $('#quantity-'+rel).val() : 1;
+    var convertRate = $('#convertRate-'+rel).val() != '' ? parseFloat($('#convertRate-'+rel).val()) : 0;
+    var shippingCharge = $('#shippingCharge-'+rel).val() != '' ? $('#shippingCharge-'+rel).val() : 0;
+    $('#confirm-content').confirmModal({
+    topOffset: 0,
+    top: '25%',
+    onOkBut: function(event, el) {
+    $.get( url,{quantity:quantity,'convertRate':convertRate,'shippingCharge':shippingCharge})
+    .done(function(data){
+    if(data == 'success'){
+    location.reload();
+    }
+    });
+    }
+    });
+    e.preventDefault();
+    });
 
-        var rel = $(this).attr('rel');
+    $('#submitPayment').click( function( e ) {
 
-        var quantity = parseInt($('#quantity-'+rel).val() != '' ? $('#quantity-'+rel).val() : 1);
-        var price = parseInt($('#price-'+rel).val() != '' ? $('#price-'+rel).val() : 0);
-        var shippingCharge = parseInt($('#shippingCharge-'+rel).val() != '' ? $('#shippingCharge-'+rel).val() : 0);
-        var subTotal  = (quantity * price);
-        $("#subTotal-"+rel).html(subTotal);
-        var total = (parseInt($("#itemTotalAmount").val()) + subTotal );
-        $("#itemTotalTk").html(total);
-        $("#itemTotalAmount").val(total);
-
-    })
-
-
+    var url = $('#pre-order-payment').attr("action");
+    alert(url);
+    var amount = $('#appstore_bundle_ecommercebundle_preorder_amount').val();
+    if( amount == "" ){
+    alert( "Please add payment amount" );
+    return false;
+    }
+    var transactionType = $('#appstore_bundle_ecommercebundle_preorder_transactionType').val();
+    if( transactionType == "" ){
+    alert( "Please select transaction type" );
+    return false;
+    }
+    var accountMobileBank = $('#appstore_bundle_ecommercebundle_preorder_accountMobileBank').val();
+    if( accountMobileBank == "" ){
+    alert( "Please payment mobile account" );
+    return false;
+    }
+    var mobileAccount = $('#appstore_bundle_ecommercebundle_preorder_mobileAccount').val();
+    if( mobileAccount == "" ){
+    alert( "Please add payment mobile no" );
+    return false;
+    }
+    var transaction = $('#appstore_bundle_ecommercebundle_preorder_transaction').val();
+    if( transaction == "" ){
+    alert( "Please add payment transaction no" );
+    return false;
+    }
+    $('#confirm-content').confirmModal({
+    topOffset: 0,
+    top: '25%',
+    onOkBut: function(event, el) {
+    $.post( url,{amount:amount,transactionType:transactionType,'accountMobileBank':accountMobileBank,'mobileAccount':mobileAccount,'transaction':transaction})
+    .done(function(data){
+    location.reload();
+    });
+    }
+    });
+    e.preventDefault();
+    });
 {% endblock %}
 

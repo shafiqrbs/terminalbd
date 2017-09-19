@@ -139,14 +139,14 @@
                                                 <li>
                                                     <p>{% if entity.masterItem %}{{ entity.masterItem.name }}-{% endif %}{{ entity.name }}</p>
                                                 </li>
-                                                <li><img src="{% if entity.webPath is not empty  %}{{ image(entity.webPath).scaleResize(300,300) }}{% else %}{{ image(entity.masterItem.webPath).scaleResize(300,300) }}{% endif %}" alt="" />
+                                                <li><img src="{% if entity.webPath is not empty  %}{{ image(entity.webPath).scaleResize(300,300) }}{% elseif entity.masterItem is not empty  %}{{ image(entity.masterItem.webPath).scaleResize(300,300) }}{% endif %}" alt="" />
 
                                                 </li>
                                             </ul>
                                         </td>
-                                        <td class="numeric"> {% if entity.masterItem.category is not empty %}{{ entity.masterItem.category.name }}{% endif %}</td>
+                                        <td class="numeric"> {% if entity.masterItem is not empty and entity.masterItem.category is not empty %}{{ entity.masterItem.category.name }}{% endif %}</td>
                                         <td class="numeric"> {% if entity.brand is not empty %}{{ entity.brand.name }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.subProductQuantity }}&nbsp;{% if entity.masterItem.productUnit is not empty %}{{ entity.masterItem.productUnit.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.subProductQuantity }}&nbsp;{% if entity.masterItem is not empty and entity.masterItem.productUnit is not empty %}{{ entity.masterItem.productUnit.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.discount is not empty  %}<strike>{% endif %}{{ entity.salesPrice|number_format() }}{% if entity.discount is not empty  %}</strike>{% endif %}{% if entity.discount is not empty  %}{{ entity.discountPrice|number_format() }}{% endif %}</td>
                                         <td class="numeric" >
                                             <a href="{{ path('order_product_show',{'shop':globalOption.slug,'slug':entity.slug}) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
@@ -159,13 +159,13 @@
                                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                                 <tr>
                                                     <td class="numeric span3" >
-                                                        <img src="{% if entity.webPath is not empty  %}{{ image(entity.webPath).scaleResize(300,300) }}{% else %}{{ image(entity.masterItem.webPath).scaleResize(300,300) }}{% endif %}" alt="" />
+                                                        <img src="{% if entity.webPath is not empty  %}{{ image(entity.webPath).scaleResize(300,300) }}{% elseif entity.masterItem is not empty %}{{ image(entity.masterItem.webPath).scaleResize(300,300) }}{% endif %}" alt="" />
                                                     </td>
                                                     <td class="numeric span4" >
                                                         <ul class="dropdown-menu-list" >
                                                             <li><strong>{{ entity.inventoryConfig.globalOption.ecommerceConfig.currency }}&nbsp;{{ entity.salesPrice|number_format }}</strong></li>
-                                                            <li><strong>{{ entity.quantity  }}</strong>&nbsp;{% if entity.masterItem.productUnit is not empty %}{{ entity.masterItem.productUnit.name }}{% endif %}</li>
-                                                            {% if entity.masterItem.category is not empty %}<li>{{ entity.masterItem.category.name }}</li>{% endif %}
+                                                            <li><strong>{{ entity.quantity  }}</strong>&nbsp;{% if entity.masterItem is not empty and entity.masterItem.productUnit is not empty %}{{ entity.masterItem.productUnit.name }}{% endif %}</li>
+                                                            {% if entity.masterItem is not empty and entity.masterItem.category is not empty %}<li>{{ entity.masterItem.category.name }}</li>{% endif %}
                                                             {% if entity.gender is not empty %}<li>{{ entity.gender }}</li>{% endif %}
                                                             {% if entity.ageGroup is not empty %}<li>{{ entity.ageGroup }}</li>{% endif %}
                                                             {% if entity.brand is not empty %}<li>{{ entity.brand.name }}</li>{% endif %}

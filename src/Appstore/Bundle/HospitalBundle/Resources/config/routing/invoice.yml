@@ -53,6 +53,10 @@ hms_invoice_delete:
     path:     /{id}/delete
     defaults: { _controller: "HospitalBundle:Invoice:delete" }
 
+hms_invoice_reverse:
+    path:     /{id}/invoice-reverse
+    defaults: { _controller: "HospitalBundle:Invoice:pathologicalInvoiceReverse" }
+
 hms_invoice_discount_delete:
     path:     /{id}/discount-delete
     defaults: { _controller: "HospitalBundle:Invoice:discountDelete" }
@@ -83,3 +87,6 @@ hms_invoice_status_select:
     options:
            expose: true
 
+hms_invoice_empty_delete:
+    path:     /delete/empty-invoice
+    defaults: { _controller: "HospitalBundle:Invoice:deleteEmptyInvoice" }

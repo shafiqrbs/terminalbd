@@ -27,17 +27,16 @@ function ApproveProcess(){
 
         var id = $(this).attr("data-id");
         var url = $(this).attr("data-url");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                if ('success' == response ) {
-                   location.reload();
-                }
-            },
-        })
-
-    })
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get(url, function( data ) {
+                    location.reload();
+                });
+            }
+        });
+    });
 
     $(document).on("click", ".remove", function() {
         var url = $(this).attr('data-url');
@@ -114,14 +113,15 @@ function ApproveProcess(){
 
         var id = $(this).attr("data-id");
         var url = $(this).attr("data-url");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                  location.reload();
-            },
-        })
-
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get(url, function( data ) {
+                    location.reload();
+                });
+            }
+        });
     });
 
 
@@ -131,46 +131,92 @@ function ApproveProcess(){
 
         var id = $(this).attr("data-id");
         var url = $(this).attr("data-url");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                if ('success' == response ) {
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get(url, function( data ) {
                     location.reload();
-                }
-            },
-        })
+                });
+            }
+        });
 
     });
     $(document).on("click", ".process", function() {
 
         var url = $(this).attr("data-url");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                if ('success' == response ) {
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get(url, function( data ) {
                     location.reload();
-                }
-            },
+                });
+            }
         });
 
+    });
+
+    $('#submitPayment').click( function( e ) {
+        var url = $('#pre-order-payment').attr("action");
+        var amount = $('#appstore_bundle_ecommercebundle_preorder_amount').val();
+        if( amount == "" ){
+            alert( "Please add payment amount" );
+            return false;
+        }
+        var transactionType = $('#appstore_bundle_ecommercebundle_preorder_transactionType').val();
+        if( transactionType == "" ){
+            alert( "Please select transaction type" );
+            return false;
+        }
+        var accountMobileBank = $('#appstore_bundle_ecommercebundle_preorder_accountMobileBank').val();
+        if( accountMobileBank == "" ){
+            alert( "Please payment mobile account" );
+            return false;
+        }
+        var mobileAccount = $('#appstore_bundle_ecommercebundle_preorder_mobileAccount').val();
+        if( mobileAccount == "" ){
+            alert( "Please add payment mobile no" );
+            return false;
+        }
+        var transaction = $('#appstore_bundle_ecommercebundle_preorder_transaction').val();
+        if( transaction == "" ){
+            alert( "Please add payment transaction no" );
+            return false;
+        }
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.post( url,{amount:amount,transactionType:transactionType,'accountMobileBank':accountMobileBank,'mobileAccount':mobileAccount,'transaction':transaction})
+                    .done(function(data){
+                        location.reload();
+                    });
+            }
+        });
+        e.preventDefault();
     });
 
     $('#wfc').submit( function( e ) {
 
         var url = $('#confirm').attr("data-url");
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                if ('success' == response ) {
-                    location.reload();
-                }
-            },
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: new FormData(this),
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if ('success' == response ) {
+                            location.reload();
+                        }
+                    },
+                });
+            }
         });
         e.preventDefault();
 

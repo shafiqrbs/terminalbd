@@ -1041,7 +1041,7 @@ class TransactionRepository extends EntityRepository
 
     }
 
-    private function insertHmsSalesVatAccountPayable(Invoice $entity, AccountSales $accountSales)
+    private function insertHmsSalesVatAccountPayable(InvoiceTransaction $entity, AccountSales $accountSales)
     {
 
         $amount = $entity->getVat();

@@ -30,6 +30,10 @@ domain_customer_homepage:
     path:     /{shop}/dashboard/
     defaults: { _controller: "CustomerBundle:Customer:index" }
 
+domain_customer_domainpage:
+    path:     /domaindas-hboard/
+    defaults: { _controller: "CustomerBundle:Customer:customerDomain" }
+
 
 
 

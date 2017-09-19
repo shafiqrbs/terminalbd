@@ -37,9 +37,46 @@ class PreOrderItem
     /**
      * @var string
      *
-     * @ORM\Column(name="currencyType", type="string", length=255, nullable = true)
+     * @ORM\Column(name="currencyType", type="string", length=20, nullable = true)
      */
     private $currencyType;
+
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="unitPrice", type="float",  nullable=true)
+     */
+    private $unitPrice;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="subTotal", type="float",  nullable=true)
+     */
+    private $subTotal;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="convertRate", type="float",  nullable=true)
+     */
+     private $convertRate;
+
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="convertUnitPrice", type="float",  nullable=true)
+     */
+     private $convertUnitPrice;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="convertSubTotal", type="float",  nullable=true)
+     */
+    private $convertSubTotal;
+
 
     /**
      * @var text
@@ -58,46 +95,16 @@ class PreOrderItem
     /**
      * @var float
      *
-     * @ORM\Column(name="dollar", type="float" , nullable = true)
-     */
-    private $dollar;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="totalDollar", type="float" , nullable = true)
-     */
-    private $totalDollar;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="price", type="float" , nullable = true)
-     */
-    private $price;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="total", type="float" , nullable = true)
-     */
-    private $total;
-
-
-    /**
-     * @var float
-     *
      * @ORM\Column(name="shippingCharge", type="float", nullable = true)
      */
     private $shippingCharge;
 
-
     /**
-     * @var string
+     * @var float
      *
-     * @ORM\Column(name="color", type="string", length=255, nullable = true)
+     * @ORM\Column(name="convertTotal", type="float" , nullable = true)
      */
-    private $color;
+    private $convertTotal;
 
     /**
      * @var string
@@ -121,11 +128,11 @@ class PreOrderItem
     private $updated;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="status", type="boolean")
+     * @ORM\Column(name="status", type="smallint" ,length=1 ,nullable = true)
      */
-    private $status = true;
+    private $status = 0;
 
 
     /**
@@ -208,54 +215,6 @@ class PreOrderItem
     public function getQuantity()
     {
         return $this->quantity;
-    }
-
-    /**
-     * Set price
-     *
-     * @param float $price
-     *
-     * @return PreOrderItem
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    /**
-     * Get price
-     *
-     * @return float
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
-    /**
-     * Set color
-     *
-     * @param string $color
-     *
-     * @return PreOrderItem
-     */
-    public function setColor($color)
-    {
-        $this->color = $color;
-
-        return $this;
-    }
-
-    /**
-     * Get color
-     *
-     * @return string
-     */
-    public function getColor()
-    {
-        return $this->color;
     }
 
     /**
@@ -365,61 +324,109 @@ class PreOrderItem
     /**
      * @return float
      */
-    public function getTotal()
+    public function getUnitPrice()
     {
-        return $this->total;
+        return $this->unitPrice;
     }
 
     /**
-     * @param float $total
+     * @param float $unitPrice
      */
-    public function setTotal($total)
+    public function setUnitPrice($unitPrice)
     {
-        $this->total = $total;
-    }
-
-    /**
-     * @return float
-     */
-    public function getTotalDollar()
-    {
-        return $this->totalDollar;
-    }
-
-    /**
-     * @param float $totalDollar
-     */
-    public function setTotalDollar($totalDollar)
-    {
-        $this->totalDollar = $totalDollar;
+        $this->unitPrice = $unitPrice;
     }
 
     /**
      * @return float
      */
-    public function getDollar()
+    public function getConvertTotal()
     {
-        return $this->dollar;
+        return $this->convertTotal;
     }
 
     /**
-     * @param float $dollar
+     * @param float $convertTotal
      */
-    public function setDollar($dollar)
+    public function setConvertTotal($convertTotal)
     {
-        $this->dollar = $dollar;
+        $this->convertTotal = $convertTotal;
     }
 
     /**
-     * @return boolean
+     * @return float
      */
-    public function isStatus()
+    public function getSubTotal()
+    {
+        return $this->subTotal;
+    }
+
+    /**
+     * @param float $subTotal
+     */
+    public function setSubTotal($subTotal)
+    {
+        $this->subTotal = $subTotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getConvertUnitPrice()
+    {
+        return $this->convertUnitPrice;
+    }
+
+    /**
+     * @param float $convertUnitPrice
+     */
+    public function setConvertUnitPrice($convertUnitPrice)
+    {
+        $this->convertUnitPrice = $convertUnitPrice;
+    }
+
+    /**
+     * @return float
+     */
+    public function getConvertSubTotal()
+    {
+        return $this->convertSubTotal;
+    }
+
+    /**
+     * @param float $convertSubTotal
+     */
+    public function setConvertSubTotal($convertSubTotal)
+    {
+        $this->convertSubTotal = $convertSubTotal;
+    }
+
+    /**
+     * @return float
+     */
+    public function getConvertRate()
+    {
+        return $this->convertRate;
+    }
+
+    /**
+     * @param float $convertRate
+     */
+    public function setConvertRate($convertRate)
+    {
+        $this->convertRate = $convertRate;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus()
     {
         return $this->status;
     }
 
     /**
-     * @param boolean $status
+     * @param int $status
      */
     public function setStatus($status)
     {

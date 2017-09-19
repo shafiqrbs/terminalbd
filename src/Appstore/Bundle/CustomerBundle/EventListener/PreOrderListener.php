@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\EcommerceBundle\EventListener;
+namespace Appstore\Bundle\CustomerBundle\EventListener;
 
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -9,8 +9,7 @@ class PreOrderListener
 {
     public function prePersist(LifecycleEventArgs $args)
     {
-        var_dump($args);
-        exit;
+
         $this->createCode($args);
     }
 

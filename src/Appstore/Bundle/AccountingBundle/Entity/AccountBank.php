@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
@@ -105,9 +106,9 @@ class AccountBank
     private  $orders;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="accountBank"  )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", mappedBy="accountBank"  )
      **/
-    private  $preOrders;
+    private  $preOrderPayments;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="accountBank")
@@ -406,14 +407,6 @@ class AccountBank
     }
 
     /**
-     * @return PreOrder
-     */
-    public function getPreOrders()
-    {
-        return $this->preOrders;
-    }
-
-    /**
      * @return string
      */
     public function getAccountType()
@@ -492,6 +485,14 @@ class AccountBank
     public function getInvoiceTransactions()
     {
         return $this->invoiceTransactions;
+    }
+
+    /**
+     * @return PreOrderPayment
+     */
+    public function getPreOrderPayments()
+    {
+        return $this->preOrderPayments;
     }
 
 }

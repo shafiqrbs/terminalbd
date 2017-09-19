@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
@@ -100,9 +101,9 @@ class AccountMobileBank
     private  $orders;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", mappedBy="accountMobileBank"  )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", mappedBy="accountMobileBank"  )
      **/
-    private  $preOrders;
+    private  $preOrderPayments;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="accountMobileBank" , cascade={"persist", "remove"})
@@ -320,22 +321,6 @@ class AccountMobileBank
     }
 
     /**
-     * @return Order
-     */
-    public function getOrders()
-    {
-        return $this->orders;
-    }
-
-    /**
-     * @return PreOrder
-     */
-    public function getPreOrders()
-    {
-        return $this->preOrders;
-    }
-
-    /**
      * @return Sales
      */
     public function getSales()
@@ -453,6 +438,14 @@ class AccountMobileBank
     public function getInvoiceTransactions()
     {
         return $this->invoiceTransactions;
+    }
+
+    /**
+     * @return PreOrderPayment
+     */
+    public function getPreOrderPayments()
+    {
+        return $this->preOrderPayments;
     }
 
 

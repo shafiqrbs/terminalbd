@@ -329,7 +329,6 @@ class AccountCashRepository extends EntityRepository
         $cash->setProcessHead('Sales');
         $cash->setAccountRefNo($entity->getAccountRefNo());
         $cash->setUpdated($entity->getUpdated());
-
         $cash->setBalance($balance + $entity->getAmount() );
         $cash->setDebit($entity->getAmount());
         $em->persist($cash);

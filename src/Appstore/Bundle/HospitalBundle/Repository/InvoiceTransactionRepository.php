@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Doctrine\ORM\EntityRepository;
@@ -44,6 +45,34 @@ class InvoiceTransactionRepository extends EntityRepository
         }
     }
 
+    public function hmsSalesTransactionReverse(Invoice $entity)
+    {
+        $em = $this->_em;
+
+        if(!empty($entity->getAccountSales())){
+            /* @var AccountSales $sales*/
+            foreach ($entity->getAccountSales() as $sales ){
+
+                $globalOption = $sales->getGlobalOption()->getId();
+                $accountRefNo = $sales->getAccountRefNo();
+                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+                $transaction->execute();
+                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+                $accountCash->execute();
+            }
+        }
+
+        $accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.hmsInvoices = '.$entity->getId());
+        if(!empty($accountCash)){
+            $accountCash->execute();
+        }
+
+        $transaction = $em->createQuery('DELETE HospitalBundle:InvoiceTransaction e WHERE e.hmsInvoice = '.$entity->getId());
+        if(!empty($transaction)) {
+            $transaction->execute();
+        }
+    }
+
     public function updateInvoiceTransactionDiscount(Invoice $entity)
     {
 
@@ -69,7 +98,6 @@ class InvoiceTransactionRepository extends EntityRepository
         }
 
     }
-
 
     public function getCulculationVat(Invoice $sales, $totalAmount)
     {

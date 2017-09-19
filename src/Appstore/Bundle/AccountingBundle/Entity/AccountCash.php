@@ -5,6 +5,7 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -118,10 +119,10 @@ class AccountCash
     private  $order;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", inversedBy="accountCash"  )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", inversedBy="accountCash"  )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    private  $preOrder;
+    private  $preOrderPayments;
 
     /**
      * @var string
@@ -477,14 +478,6 @@ class AccountCash
     }
 
     /**
-     * @return PreOrder
-     */
-    public function getPreOrder()
-    {
-        return $this->preOrder;
-    }
-
-    /**
      * @param PreOrder $preOrder
      */
     public function setPreOrder($preOrder)
@@ -626,6 +619,14 @@ class AccountCash
     public function setBranches($branches)
     {
         $this->branches = $branches;
+    }
+
+    /**
+     * @return PreOrderPayment
+     */
+    public function getPreOrderPayments()
+    {
+        return $this->preOrderPayments;
     }
 
 

@@ -33,7 +33,7 @@ class Invoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="hmsInvoices" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="hmsInvoices")
      **/
     private $hospitalConfig;
 
@@ -50,7 +50,7 @@ class Invoice
     private $doctorInvoices;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="hmsInvoices" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="hmsInvoices")
      **/
     private $service;
 
@@ -309,6 +309,14 @@ class Invoice
      * @ORM\Column(name="due", type="decimal", nullable=true)
      */
     private $due;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="revised", type="boolean" )
+     */
+    private $revised = false;
+
 
     /**
      * @var string
@@ -1174,6 +1182,22 @@ class Invoice
     public function setDeliveredBy($deliveredBy)
     {
         $this->deliveredBy = $deliveredBy;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getRevised()
+    {
+        return $this->revised;
+    }
+
+    /**
+     * @param boolean $revised
+     */
+    public function setRevised($revised)
+    {
+        $this->revised = $revised;
     }
 
 
