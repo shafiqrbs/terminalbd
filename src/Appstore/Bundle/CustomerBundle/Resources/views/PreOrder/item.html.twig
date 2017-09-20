@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="portlet box green">
-            {# {% if entity.process == 'created'  %}#}
+            {% if entity.process == 'created'  %}
             <div class="portlet-title">
                 <div class="caption"><i class="icon-reorder"></i>Manage Pre-order Information</div>
                 <div class="actions">
@@ -136,6 +136,7 @@
                 {{ form_end(form) }}
                 <!-- END FORM-->
             </div>
+            {% endif %}
             <div class="portlet-body form">
                 <div class="row-fluid">
                     <div class="span4">
@@ -478,7 +479,7 @@
                                     <input type="text" name="address" id="address" class="m-wrap span12  tooltips" data-original-title = "Enter  delivery address ie: Unit,Floor,House,Road,Area,Thana,District Etc" placeholder = "Enter  delivery address ie: Unit,Floor,House,Road,Area,Thana,District Etc" data-trigger = "hover"   value="{% if entity.delivery == 'pickup'  %}{{ entity.ecommerceConfig.pickupLocation }}{% else %}{{ entity.address }}{% endif %}" />
                                 </div>
                                 <div class="span2">
-                                    <button type="button" id="submitProcess" name="submitProcess"  data-url="{{ path('preorder_process',{'shop':globalOption.slug,id:entity.id,'process':'in-progress'}) }}"  class="btn blue"><i class="icon-save"></i>&nbsp;Save</button>
+                                    <button type="button" id="addAddress" name="addAddress"  data-url="{{ path('preorder_process',{'shop':globalOption.slug,id:entity.id,'process':'in-progress'}) }}"  class="btn blue"><i class="icon-save"></i>&nbsp;Save</button>
                                 </div>
                             </div>
                         </form>

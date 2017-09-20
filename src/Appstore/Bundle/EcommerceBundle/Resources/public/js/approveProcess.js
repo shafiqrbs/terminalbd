@@ -197,6 +197,25 @@ function ApproveProcess(){
         e.preventDefault();
     });
 
+    $('#addAddress').click(function(e){
+        var url = $(this).attr("data-url");
+        var delivery = $('#delivery').val()
+        var address = $('#address').val()
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get( url,{delivery:delivery,'address':address})
+                    .done(function(data){
+                        if(data == 'success'){
+                            location.reload();
+                        }
+                    });
+            }
+        });
+        e.preventDefault();
+    });
+
     $('#wfc').submit( function( e ) {
 
         var url = $('#confirm').attr("data-url");

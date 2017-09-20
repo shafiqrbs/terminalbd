@@ -290,7 +290,6 @@ class PreOrderController extends Controller
     {
         $data = $_REQUEST;
         $em = $this->getDoctrine()->getManager();
-        $preOrder->setProcess($process);
         if(!empty( $_GET['delivery'])){
             $address = $data['address'];
             $preOrder->setAddress($address);
