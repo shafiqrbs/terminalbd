@@ -129,7 +129,8 @@
                 <!--/span-->
                 <div class="form-actions portlet box grey">
                     <div class="pull-right">
-                        <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
+                        <span class="btn purple"><input type="checkbox" name="process" id="process" value="in-progress"> <button type="submit" value="" class="btn blue"><i class="icon-shopping-cart"></i> Checkout</button> </span>
+                        <button type="submit" value="" class="btn green"><i class="icon-plus"></i> Add Product</button>
                     </div>
                 </div>
                 <div class="clearfix"><br/> </div>
@@ -168,6 +169,7 @@
                                     {% endif %}
                                     <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery }}</li>
                                     <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
+                                    <li><strong>Process</strong>:&nbsp;<strong>{{ entity.process|capitalize }}</strong></li>
 
 
                                 </ul>
@@ -216,19 +218,15 @@
                                 <td class="numeric" ><a target="_blank" href="{{ item.url }}"> {{ item.name|truncate(50) }}</a></td>
                                 <td class="numeric" >
                                     {{ item.quantity }}</td>
-                                <td class="numeric" >{{ item.currencyType|capitalize }}</td>
-                                <td class="numeric" >{{ item.unitPrice }}</td>
-                                <td class="numeric" >={{ item.subTotal|number_format }}</td>
-                                <td class="numeric" style="width:80px!important;"><input type="text" class="span12 price td-input" rel="{{ item.id }}"  name="convertRate[]" id="convertRate-{{ item.id }}"  value="{{ item.convertRate }}"></td>
-                                <td class="numeric" id="convertSubTotal-{{ item.id }}" >={{ item.convertSubTotal|number_format }}</td>
-                                <td class="numeric" style="width:80px!important;">
-                                    <input type="text" class="span12 shippingCharge td-input"  rel="{{ item.id }}" name="shippingCharge[]" id="shippingCharge-{{ item.id }}"  value="{{ item.shippingCharge }}">
-                                    <input type="hidden" name="item[]" id="item-{{ item.id }}" value="{{ item.id }}" >
-                                    <input type="hidden" name="quantity[]" id="quantity-{{ item.id }}" value="{{ item.quantity }}">
-                                </td>
+                                <td class="numeric">{{ item.currencyType|capitalize }}</td>
+                                <td class="numeric">{{ item.unitPrice }}</td>
+                                <td class="numeric">={{ item.subTotal|number_format }}</td>
+                                <td class="numeric">{{ item.convertRate }}</td>
+                                <td class="numeric">={{ item.convertSubTotal|number_format }}</td>
+                                <td class="numeric">{{ item.shippingCharge }}</td>
                                 <td class="numeric" >={{ item.convertTotal|number_format }}</td>
                                 <td class="numeric" >
-                                    {% set arr = {'payment': 'payment' ,'confirm':'confirm'} %}
+                                    {% set arr = {'payment': 'payment' ,'confirm':'confirm','delivered':'delivered'} %}
                                     {% if entity.process not in  arr|keys %}
                                         <a title="Are you sure went to delete ?" data-id="{{ item.id }}" data-url="{{ path('preorder_item_delete',{'shop':globalOption.slug,'preOrder':entity.id,'id':item.id}) }}" class="btn red mini remove" ><i class="icon-trash"></i></a>
                                     {% endif %}
@@ -274,13 +272,16 @@
                                 <td class="numeric" ></td>
                             </tr>
                         {% endif %}
-                        {% if  entity.discountAmount > 0 %}
                             <tr>
                                 <td class="numeric" colspan="9" ><span class="pull-right">Discount Amount</span></td>
                                 <td class="numeric"><strong>=&nbsp;{{  entity.discountAmount|number_format }}</strong></td>
                                 <td class="numeric" ></td>
                             </tr>
-                        {% endif %}
+                            <tr>
+                                <td class="numeric" colspan="9" ><span class="pull-right">Delivery Charge</span></td>
+                                <td class="numeric"><strong>=&nbsp;{{  entity.deliveryCharge|number_format }}</strong></td>
+                                <td class="numeric" ></td>
+                            </tr>
                         <tr>
                             <td class="numeric" colspan="9" ><span class="pull-right">Grand Total</span></td>
                             <td class="numeric"><strong>=&nbsp;{{ ( entity.grandTotalAmount)|number_format }}</strong></td>
@@ -337,7 +338,7 @@
                             <td class="numeric" >{{ payment.mobileAccount }}</td>
                             <td class="numeric" >{{ payment.transaction }}</td>
                             <td class="numeric" >{{ payment.accountMobileBank.name }}</td>
-                            <td class="numeric" >{% if payment.transactionType =='Receive' %}{{ payment.amount|number_format }}{% endif %}</td>
+                            <td class="numeric" >{% if payment.transactionType =='Payment' %}{{ payment.amount|number_format }}{% endif %}</td>
                             <td class="numeric" >{% if payment.transactionType =='Return' %}{{ payment.amount|number_format }}{% endif %}</td>
                             <td class="numeric" >
                                 {% if payment.status == 1  %}
@@ -371,7 +372,9 @@
                     </tbody>
                 </table>
                 <div class="clearfix"> </div>
-                <div class="form-actions portlet box blue">
+                {% set arr = {'cancel': 'cancel' ,'return':'return','delivered':'delivered'} %}
+                {% if entity.process not in  arr|keys %}
+                <div class="form-actions portlet box green">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Payment Process</div>
                     </div>
@@ -396,13 +399,7 @@
                                     </div>
                                     <div class="span8">
                                         <div class="row-fluid">
-                                            <div class="span4">
-                                                <div class="control-group">
-                                                    {{ form_widget(paymentForm.transactionType) }}
-                                                    {{ form_errors(paymentForm.transactionType) }}
-                                                </div>
-                                            </div>
-                                            <div class="span8">
+                                            <div class="span12">
                                                 <div class="control-group">
                                                     {{ form_widget(paymentForm.accountMobileBank) }}
                                                     {{ form_errors(paymentForm.accountMobileBank) }}
@@ -448,7 +445,9 @@
                             <div class="span12">
                                 <div class="control-group">
                                     <div class="controls">
-                                        <button type="button" id="submitPayment" name="submitPayment" value="payment"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
+                                        {% if entity.process != 'created' %}
+                                        <button type="button" id="submitPayment" name="submitPayment" value="payment"  class="btn green"><i class="icon-save"></i>&nbsp;Payment</button>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -459,6 +458,7 @@
                 {{ form_end(paymentForm) }}
 
                 <div class="clearfix"><br/> </div>
+
                 <div class="clearfix"> </div>
                 <div class="form-actions portlet box red">
                     <div class="portlet-title">
@@ -469,7 +469,7 @@
                 <div class="row-fluid">
                         <form id="process" name="process">
                             <div class="span12">
-                                <select class="span12 m-wrap" name="delivery" id="delivery">
+                                <select class="span11 m-wrap" name="delivery" id="delivery">
                                     <option value="pickup" {% if entity.delivery == 'pickup'  %} selected="selected" {% endif %}>Pickup address: [ {{ entity.ecommerceConfig.pickupLocation }} ]</option>
                                     <option value="delivery" {% if entity.delivery == 'delivery'  %} selected="selected" {% endif %} >Delivery address</option>
                                 </select>
@@ -483,13 +483,36 @@
                                 </div>
                             </div>
                         </form>
+                </div>
+                {% endif %}
+                <div class="clearfix"> </div>
+                <div class="form-actions portlet box blue">
+                    <div class="portlet-title">
+                        <div class="caption"><i class="icon-reorder"></i>Comments Information</div>
                     </div>
+                </div>
+                <div class="clearfix"><br/> </div>
+                {% if entity.preOrderItems is not empty %}
+                {% set paymentID = entity.globalOption.id~'-pre-order-'~entity.id %}
+                {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': paymentID } %}
+                {% endif %}
+                <div class="clearfix"><br/> </div>
+
 
             </div>
         </div>
         <!-- END inventory_damage HEADER-->
         <!-- BEGIN inventory_damage CONTENT-->
 
+    </div>
+    <div id="checkout-confirm" style="display:none">
+        <div class="confirmModal_content">
+            Are you sure went to checkout & process next?
+        </div>
+        <div class="confirmModal_footer">
+            <button type="button" class="btn red" data-confirmmodal-but="cancel">Cancel</button>
+            <button type="button" class="btn green" data-confirmmodal-but="ok">Confirm</button>
+        </div>
     </div>
 {% endblock %}
 {% block cssBlock %}
@@ -509,6 +532,19 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+
+    $('#process').click(function(e){
+        $('#process').attr('checked', true);
+        $('#checkout-confirm').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {},
+            onCancelBut : function(event, el) {
+                $('#process').attr('checked', false);
+                $('#process').prop('checked', false);
+            },
+        });
+    });
     ApproveProcess();
     $('body').addClass('page-sidebar-closed');
     $('#fos_comment_comment_body').addClass('span12');

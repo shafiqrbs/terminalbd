@@ -156,6 +156,20 @@
                                         <td class="numeric">=&nbsp;{{ entity.vat }}</td>
                                     </tr>
                                 {% endif %}
+                                {% if entity.discountAmount > 0 %}
+                                    <tr>
+                                        <td class="numeric" colspan="6" ><span class="pull-right">Discount Amount</span></td>
+                                        <td class="numeric">=&nbsp;{{ ( entity.discountAmount)|number_format }}</td>
+                                        <td></td>
+                                    </tr>
+                                {% endif %}
+                                {% if entity.coupon is not empty %}
+                                    <tr>
+                                        <td class="numeric" colspan="6" ><span class="pull-right">Coupon Code({{ entity.coupon.couponCode }})</span></td>
+                                        <td class="numeric">=&nbsp;{{ entity.couponAmount }}</td>
+                                        <td></td>
+                                    </tr>
+                                {% endif %}
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Grand Total</span></td>
                                     <td class="numeric"><strong>=&nbsp;{{ ( entity.grandTotalAmount)|number_format }}</strong></td>
@@ -163,10 +177,6 @@
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Paid Amount</span></td>
                                     <td class="numeric"><strong>=&nbsp;{{ ( entity.paidAmount)|number_format }}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td class="numeric" colspan="6" ><span class="pull-right">Discount Amount</span></td>
-                                    <td class="numeric">=&nbsp;{{ ( entity.discountAmount)|number_format }}</td>
                                 </tr>
                                 {% if entity.dueAmount  > 0 %}
                                     <tr>

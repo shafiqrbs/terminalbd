@@ -4,6 +4,7 @@ namespace Appstore\Bundle\CustomerBundle\Controller;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderItem;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\EcommerceBundle\Form\PreOrderItemType;
+use Appstore\Bundle\EcommerceBundle\Form\PreOrderPaymentCustomeerType;
 use Appstore\Bundle\EcommerceBundle\Form\PreOrderPaymentType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -138,10 +139,10 @@ class PreOrderController extends Controller
      * @return \Symfony\Component\Form\Form The form
      */
 
-    private function createEditForm(PreOrderPayment $entity,PreOrder $preOrder)
+    private function createPaymentForm(PreOrderPayment $entity,PreOrder $preOrder)
     {
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new PreOrderPaymentType($preOrder->getGlobalOption(),$location), $entity, array(
+        $form = $this->createForm(new PreOrderPaymentCustomeerType($preOrder->getGlobalOption(),$location), $entity, array(
             'action' => $this->generateUrl('preorder_ajax_payment', array('shop' => $preOrder->getGlobalOption()->getSlug(),'id' => $preOrder->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -162,7 +163,7 @@ class PreOrderController extends Controller
         $preOrderItem = new PreOrderItem();
         $form = $this->createItemForm($preOrderItem,$entity);
         $paymentEntity = new  PreOrderPayment();
-        $preOrderform = $this->createEditForm($paymentEntity,$entity);
+        $preOrderform = $this->createPaymentForm($paymentEntity,$entity);
         return $this->render('CustomerBundle:PreOrder:item.html.twig', array(
             'entity'      => $entity,
             'globalOption' => $entity->getGlobalOption(),
@@ -251,7 +252,7 @@ class PreOrderController extends Controller
         $preOrderItem = new PreOrderItem();
         $form = $this->createItemForm($preOrderItem,$preOrder);
         $form->handleRequest($request);
-
+        $process = $request->request->get('process');
         if ($form->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
@@ -259,15 +260,17 @@ class PreOrderController extends Controller
             $preOrderItem->setSubTotal($preOrderItem->getQuantity() * $preOrderItem->getUnitPrice());
             $em->persist($preOrderItem);
             $em->flush();
-            $this->getDoctrine()->getRepository('EcommerceBundle:PreOrder')->updatePreOder($preOrder);
+            $this->getDoctrine()->getRepository('EcommerceBundle:PreOrder')->updatePreOder($preOrder,$process );
             return $this->redirect($this->generateUrl('preorder_item', array('shop'=> $globalOption,'id' => $preOrder->getId())));
 
         }
-
+        $paymentEntity = new  PreOrderPayment();
+        $preOrderform = $this->createPaymentForm($paymentEntity,$preOrder);
         return $this->render('CustomerBundle:PreOrder:item.html.twig', array(
             'entity' => $preOrder,
             'globalOption' => $preOrder->getGlobalOption(),
             'form'   => $form->createView(),
+            'paymentForm'   => $preOrderform->createView(),
         ));
     }
 

@@ -81,7 +81,7 @@ class PreOrderItem
     /**
      * @var text
      *
-     * @ORM\Column(name="url", type="text", length=255 , nullable = true)
+     * @ORM\Column(name="url", type="text",  nullable = true)
      */
     private $url;
 

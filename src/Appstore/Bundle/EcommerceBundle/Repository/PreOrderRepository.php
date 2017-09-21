@@ -12,8 +12,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class PreOrderRepository extends EntityRepository
 {
-    public function updatePreOder(PreOrder $entity)
+    public function updatePreOder(PreOrder $entity,$process = '')
     {
+
         $em = $this->_em;
         $total = $em->createQueryBuilder()
             ->from('EcommerceBundle:PreOrderItem','e')
@@ -24,22 +25,36 @@ class PreOrderRepository extends EntityRepository
             ->setParameter('status', 1)
             ->getQuery()->getSingleResult();
 
-        $entity->setTotalAmount(floatval($total['convertTotal']));
-        $entity->setTotalShippingCharge($total['shippingCharge']);
-        $entity->setItem($total['item']);
-        $entity->setQuantity($total['quantity']);
-        $vat = $this->getCulculationVat($entity->getGlobalOption(),$total['convertTotal']);
-        $entity->setVat($vat);
-        $grandTotal = floatval($total['convertTotal'] + $vat + $entity->getDeliveryCharge() - $entity->getDiscountAmount());
-        $entity->setGrandTotalAmount($grandTotal);
-        $grandTotal = $entity->getGrandTotalAmount();
-        $payment = $entity->getAdvanceAmount() + $entity->getPaidAmount();
-        if($payment > $grandTotal ){
-            $entity->setReturnAmount( $payment - $grandTotal);
-            $entity->setDueAmount(0);
-        }elseif($payment < $grandTotal ){
+
+        if($process == 'in-progress'){
+            $entity->setProcess($process);
+        }
+        if($total['item'] > 0){
+            $entity->setTotalAmount(floatval($total['convertTotal']));
+            $entity->setTotalShippingCharge($total['shippingCharge']);
+            $entity->setItem($total['item']);
+            $entity->setQuantity($total['quantity']);
+            $vat = $this->getCulculationVat($entity->getGlobalOption(),$total['convertTotal']);
+            $entity->setVat($vat);
+            $grandTotal = floatval($total['convertTotal'] + $vat + $entity->getDeliveryCharge() - $entity->getDiscountAmount());
+            $entity->setGrandTotalAmount($grandTotal);
+            $grandTotal = $entity->getGrandTotalAmount();
+            $payment = $entity->getAdvanceAmount() + $entity->getPaidAmount();
+            if($payment > $grandTotal ){
+                $entity->setReturnAmount( $payment - $grandTotal);
+                $entity->setDueAmount(0);
+            }elseif($payment < $grandTotal ){
+                $entity->setReturnAmount(0);
+                $entity->setDueAmount($grandTotal - $payment);
+            }
+        }else{
+            $entity->setTotalAmount(0);
+            $entity->setTotalShippingCharge(0);
+            $entity->setItem(0);
+            $entity->setQuantity(0);
+            $entity->setGrandTotalAmount(0);
             $entity->setReturnAmount(0);
-            $entity->setDueAmount($grandTotal - $payment);
+            $entity->setDueAmount(0);
         }
         $em->persist($entity);
         $em->flush();

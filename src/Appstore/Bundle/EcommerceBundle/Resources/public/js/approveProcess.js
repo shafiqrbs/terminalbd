@@ -157,6 +157,27 @@ function ApproveProcess(){
 
     });
 
+    $('.itemProcess').click(function(e){
+        var rel = $(this).attr("data-id");
+        var url = $(this).attr("data-url");
+        var quantity = $('#quantity-'+rel).val() != '' ? $('#quantity-'+rel).val() : 1;
+        var convertRate = $('#convertRate-'+rel).val() != '' ? parseFloat($('#convertRate-'+rel).val()) : 0;
+        var shippingCharge = $('#shippingCharge-'+rel).val() != '' ? $('#shippingCharge-'+rel).val() : 0;
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get( url,{quantity:quantity,'convertRate':convertRate,'shippingCharge':shippingCharge})
+                    .done(function(data){
+                        if(data == 'success'){
+                            location.reload();
+                        }
+                    });
+            }
+        });
+        e.preventDefault();
+    });
+
     $('#submitPayment').click( function( e ) {
         var url = $('#pre-order-payment').attr("action");
         var amount = $('#appstore_bundle_ecommercebundle_preorder_amount').val();

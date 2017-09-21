@@ -9,12 +9,14 @@ use Setting\Bundle\AppearanceBundle\Entity\EcommerceMenu;
 use Setting\Bundle\AppearanceBundle\Entity\Feature;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Coupon
  *
- * @ORM\Table()
+ * @ORM\Table("ems_coupon")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\CouponRepository")
+ * @UniqueEntity(fields="couponCode",message="This coupon code already existing,Please try again.")
  */
 
 class Coupon
@@ -34,16 +36,25 @@ class Coupon
     protected $ecommerceConfig;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\CouponCode", mappedBy="coupon", cascade={"persist", "remove"} )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="coupon")
      */
-    protected $couponCodes;
+    protected $orders;
+
 
     /**
      * @var float
      *
-     * @ORM\Column(name="discountAmount", type="float", nullable = true)
+     * @ORM\Column(name="amount", type="float", nullable = true)
      */
-    private $discountAmount;
+    private $amount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="amountLimit", type="float", nullable = true)
+     */
+    private $amountLimit;
+
 
     /**
      * @var float
@@ -63,9 +74,33 @@ class Coupon
     /**
      * @var string
      *
-     * @ORM\Column(name="quantity", type="string", length=255)
+     * @ORM\Column(name="couponCode", type="string", length=255)
+     */
+    private $couponCode;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="quantity", type="integer", length=5, nullable = true)
      */
     private $quantity;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="remainingQuantity", type="integer", length=5, nullable = true)
+     */
+    private $remainingQuantity;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="percentage", type="boolean")
+     */
+    private $percentage = false;
 
 
     /**
@@ -118,7 +153,7 @@ class Coupon
      *
      * @param string $name
      *
-     * @return CouponCode
+     * @return string
      */
     public function setName($name)
     {
@@ -186,30 +221,6 @@ class Coupon
     }
 
     /**
-     * @return CouponCode
-     */
-    public function getCouponCodes()
-    {
-        return $this->couponCodes;
-    }
-
-    /**
-     * @return string
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * @param string $quantity
-     */
-    public function setQuantity($quantity)
-    {
-        $this->quantity = $quantity;
-    }
-
-    /**
      * @return \DateTime
      */
     public function getStartDate()
@@ -242,22 +253,6 @@ class Coupon
     }
 
     /**
-     * @return float
-     */
-    public function getDiscountAmount()
-    {
-        return $this->discountAmount;
-    }
-
-    /**
-     * @param float $discountAmount
-     */
-    public function setDiscountAmount($discountAmount)
-    {
-        $this->discountAmount = $discountAmount;
-    }
-
-    /**
      * @return EcommerceConfig
      */
     public function getEcommerceConfig()
@@ -287,6 +282,110 @@ class Coupon
     public function setValidAmount($validAmount)
     {
         $this->validAmount = $validAmount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param float $amount
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAmountLimit()
+    {
+        return $this->amountLimit;
+    }
+
+    /**
+     * @param float $amountLimit
+     */
+    public function setAmountLimit($amountLimit)
+    {
+        $this->amountLimit = $amountLimit;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getPercentage()
+    {
+        return $this->percentage;
+    }
+
+    /**
+     * @param boolean $percentage
+     */
+    public function setPercentage($percentage)
+    {
+        $this->percentage = $percentage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCouponCode()
+    {
+        return $this->couponCode;
+    }
+
+    /**
+     * @param string $couponCode
+     */
+    public function setCouponCode($couponCode)
+    {
+        $this->couponCode = $couponCode;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param int $quantity
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRemainingQuantity()
+    {
+        return $this->remainingQuantity;
+    }
+
+    /**
+     * @param int $remainingQuantity
+     */
+    public function setRemainingQuantity($remainingQuantity)
+    {
+        $this->remainingQuantity = $remainingQuantity;
     }
 
 

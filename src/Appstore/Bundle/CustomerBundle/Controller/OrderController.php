@@ -75,10 +75,11 @@ class OrderController extends Controller
      */
     public function cartToOrderAction($shop , Request $request)
     {
+        $couponCode = $_REQUEST['couponCode'];
         $em = $this->getDoctrine()->getManager();
         $cart = new Cart($request->getSession());
         $user = $this->getUser();
-        $order = $em->getRepository('EcommerceBundle:Order')->insertNewCustomerOrder($user,$shop,$cart);
+        $order = $em->getRepository('EcommerceBundle:Order')->insertNewCustomerOrder($user,$shop,$cart,$couponCode);
         $cart->destroy();
         return $this->redirect($this->generateUrl('order_payment',array('id' => $order->getId(),'shop' => $order->getGlobalOption()->getUniqueCode())));
 
@@ -105,7 +106,6 @@ class OrderController extends Controller
 
     public function showAction(Order $entity)
     {
-
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Expenditure entity.');
         }
@@ -113,7 +113,6 @@ class OrderController extends Controller
             'globalOption' => $entity->getGlobalOption(),
             'entity' => $entity,
         ));
-
     }
 
     public function paymentAction($id)
@@ -127,7 +126,6 @@ class OrderController extends Controller
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
-
     }
 
     /**
@@ -157,7 +155,6 @@ class OrderController extends Controller
     {
 
             $data = $request->request->all();
-
             $editForm = $this->createEditForm($order);
             $editForm->handleRequest($request);
             if ($editForm->isValid()) {
@@ -174,7 +171,6 @@ class OrderController extends Controller
                 $order->setReturnAmount(($order->getPaidAmount() + $order->getDiscountAmount()) - $grandTotal);
                 $order->setDueAmount(0);
             }elseif($order->getPaidAmount() < $grandTotal ){
-
                 $order->setReturnAmount(0);
                 $due = (int)$grandTotal - ((int) $order->getPaidAmount() + $order->getDiscountAmount());
                 $order->setDueAmount($due);

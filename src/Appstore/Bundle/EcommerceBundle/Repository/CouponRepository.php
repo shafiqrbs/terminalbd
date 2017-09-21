@@ -13,12 +13,21 @@ use Doctrine\ORM\EntityRepository;
 class CouponRepository extends EntityRepository
 {
 
-    public function getCouponId(){
+    public function getValidCouponCode($globalOption , $code)
+    {
+        $datetime = new \DateTime("now");
+        $date = $datetime->format('Y-m-d');
+        $qb = $this->createQueryBuilder('coupon');
+        $qb->where("coupon.status = 1");
+        $qb->andWhere("coupon.couponCode =".$code);
+        $qb->andWhere("coupon.ecommerceConfig =". $globalOption->getEcommerceConfig());
+        $qb->andWhere('coupon.startDate >= :startDate');
+        $qb->andWhere('coupon.endDate <= :endDate');
+        $qb->setParameter('startDate', $date);
+        $qb->setParameter('endDate', $date);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
 
-        $passcode =substr(str_shuffle(str_repeat('0123456789',5)),0,4);
-        $t = microtime(true);
-        $micro = ($passcode + floor($t));
-        return $micro;
     }
 
 }

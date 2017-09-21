@@ -561,7 +561,7 @@ class TransactionRepository extends EntityRepository
     private function insertOnlineOrderItem($entity , AccountOnlineOrder $onlineOrder)
     {
 
-        $amount =  $entity->getGrandTotal();
+        $amount =  $entity->getGrandTotalAmount();
         $transaction = new Transaction();
         $transaction->setGlobalOption($onlineOrder->getGlobalOption());
         $transaction->setAccountRefNo($onlineOrder->getAccountRefNo());

@@ -54,7 +54,7 @@ class PreOrderProcessType extends AbstractType
                 'multiple'      =>false,
                 'empty_value' => '---Select Current Process---',
                 'choices' => array(
-                    'in-progress'       => 'in-progress',
+                    'in-progress'       => 'In-progress',
                     'confirm'       => 'Confirm',
                     'send-delivery'       => 'Send Delivery',
                     'return'       => 'Return',

@@ -5,6 +5,7 @@ namespace Appstore\Bundle\EcommerceBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CouponType extends AbstractType
 {
@@ -16,9 +17,32 @@ class CouponType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add coupon name')))
-            ->add('discountAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Add discount amount ')))
-            ->add('validAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Add valid more then amount ')))
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Add coupon name'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Add coupon name'))
+                )))
+            ->add('couponCode','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Add coupon code unique'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Add coupon code unique'))
+                )))
+            ->add('amount','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Add discount amount'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Add discount amount'))
+                )))
+            ->add('amountLimit','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Add discount amount limit'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Add discount amount limit'))
+                )))
+            ->add('validAmount','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Add valid more then amount'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Add valid more then amount'))
+                )))
+            ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span12 ','placeholder'=>'Add coupon quantity'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Add coupon quantity'))
+                )))
+
+            ->add('percentage')
             ->add('startDate', 'date', array(
                 'widget' => 'single_text',
                 'placeholder' => array(
@@ -37,7 +61,7 @@ class CouponType extends AbstractType
                 'format' => 'dd-MM-yyyy',
                 'attr' => array('class'=>'m-wrap span5 datePicker'),
                 'view_timezone' => 'Asia/Dhaka'))
-            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add no of coupon')))
+
         ;
     }
     

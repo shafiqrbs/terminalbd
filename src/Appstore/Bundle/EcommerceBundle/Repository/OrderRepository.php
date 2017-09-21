@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Appstore\Bundle\EcommerceBundle\Entity\Coupon;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Core\UserBundle\Entity\User;
@@ -59,30 +60,40 @@ class OrderRepository extends EntityRepository
         return $lastCode;
     }
 
-    public function insertNewCustomerOrder(User $user,$shop, $cart){
-
+    public function insertNewCustomerOrder(User $user,$shop, $cart, $couponCode ='')
+    {
 
         $em = $this->_em;
+
         $order = new Order();
         $globalOption = $this->_em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('uniqueCode' => $shop));
         $order->setGlobalOption($globalOption);
-        $customer = $this->getDomainCustomer($user,$globalOption);
+        $customer = $this->getDomainCustomer($user, $globalOption);
         $order->setCustomer($customer);
         $order->setTransactionMethod($this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(3));
         $order->setEcommerceConfig($globalOption->getEcommerceConfig());
         $order->setShippingCharge($globalOption->getEcommerceConfig()->getShippingCharge());
-        $vat = $this->getCulculationVat($globalOption,$cart->total());
-
+        $vat = $this->getCulculationVat($globalOption, $cart->total());
         $datetime = new \DateTime("now");
         $lastCode = $this->getLastCode($datetime, $globalOption);
-        $order->setCode($lastCode+1);
-        $order->setInvoice(sprintf("%s%s", $datetime->format('Ymd'), str_pad($order->getCode(),3, '0', STR_PAD_LEFT)));
+        $order->setCode($lastCode + 1);
+        $order->setInvoice(sprintf("%s%s", $datetime->format('Ymd'), str_pad($order->getCode(), 3, '0', STR_PAD_LEFT)));
         $order->setVat($vat);
         $order->setCreatedBy($user);
         $order->setTotalAmount($cart->total());
-        $grandTotal = $cart->total() + $globalOption->getEcommerceConfig()->getShippingCharge() + $vat;
-        $order->setGrandTotalAmount($grandTotal);
         $order->setItem($cart->total_items());
+        $grandTotal = $cart->total() + $globalOption->getEcommerceConfig()->getShippingCharge() + $vat;
+        if (!empty($couponCode)) {
+            $coupon = $this->_em->getRepository('EcommerceBundle:Coupon')->getValidCouponCode($globalOption,$couponCode);
+            if (!empty($coupon)){
+            $couponAmount = $this->getCalculatorCouponAmount($order, $coupon);
+            $order->setGrandTotalAmount($grandTotal - $couponAmount);
+            $order->setCoupon($coupon);
+            $order->setCouponAmount($couponAmount);
+            }
+        }else{
+            $order->setGrandTotalAmount($grandTotal);
+        }
         $em->persist($order);
         $em->flush();
         $this->insertOrderItem($order,$cart);
@@ -148,6 +159,24 @@ class OrderRepository extends EntityRepository
         return $totalVat;
 
     }
+
+    public function getCalculatorCouponAmount(Order $order, Coupon $coupon)
+    {
+        $couponAmount = 0;
+        if ($coupon->getPercentage() == 1 ){
+            $percentage = round(($order->getGrandTotalAmount()  * $coupon->getAmount() )/100);
+            if($percentage >= $coupon->getValidAmount()){
+                $couponAmount = $coupon->getValidAmount();
+            }else{
+                $couponAmount = $percentage;
+            }
+        }else{
+            $couponAmount = $coupon->getAmount();
+        }
+
+        return $couponAmount;
+    }
+
 
     public function updateOrder(Order $order)
     {

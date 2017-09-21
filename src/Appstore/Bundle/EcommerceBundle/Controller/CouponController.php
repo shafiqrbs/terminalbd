@@ -50,7 +50,6 @@ class CouponController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            $this->getDoctrine()->getRepository('EcommerceBundle:CouponCode')->insert($entity);
             return $this->redirect($this->generateUrl('ecommerce_coupon'));
         }
 
@@ -63,7 +62,7 @@ class CouponController extends Controller
     /**
      * Creates a form to create a ItemSize entity.
      *
-     * @param ItemSize $entity The entity
+     * @param  $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */

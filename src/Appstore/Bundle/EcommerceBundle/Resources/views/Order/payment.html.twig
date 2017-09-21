@@ -168,6 +168,20 @@
                                         <td></td>
                                     </tr>
                                 {% endif %}
+                                {% if entity.discountAmount > 0 %}
+                                    <tr>
+                                        <td class="numeric" colspan="6" ><span class="pull-right">Discount Amount</span></td>
+                                        <td class="numeric">=&nbsp;{{ ( entity.discountAmount)|number_format }}</td>
+                                        <td></td>
+                                    </tr>
+                                {% endif %}
+                                {% if entity.coupon is not empty %}
+                                    <tr>
+                                        <td class="numeric" colspan="6" ><span class="pull-right">Coupon Code({{ entity.coupon.couponCode }})</span></td>
+                                        <td class="numeric">=&nbsp;{{ entity.couponAmount }}</td>
+                                        <td></td>
+                                    </tr>
+                                {% endif %}
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Grand Total</span></td>
                                     <td class="numeric"><strong>=&nbsp;{{ ( entity.grandTotalAmount)|number_format }}</strong></td>
@@ -176,11 +190,6 @@
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Paid Amount</span></td>
                                     <td class="numeric"><strong>=&nbsp;{{ ( entity.paidAmount)|number_format }}</strong></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td class="numeric" colspan="6" ><span class="pull-right">Discount Amount</span></td>
-                                    <td class="numeric">=&nbsp;{{ ( entity.discountAmount)|number_format }}</td>
                                     <td></td>
                                 </tr>
                                 {% if entity.dueAmount  > 0 %}
@@ -220,9 +229,9 @@
                                                                 <input type="datetime" name="deliveryDate" id="deliveryDate" class="date-picker span6 m-wrap" value="{{ "now"|date("d-m-Y") }}" placeholder="{{ "now"|date("d-m-Y") }}" >
                                                                 <div class="btn-group">
                                                                     <button class="blue btn dropdown-toggle" data-toggle="dropdown">
-                                                                        Action <span class="caret"></span>
+                                                                        Action <span class="tasks"></span>
                                                                     </button>
-                                                                    <ul class="dropdown-menu">
+                                                                    <ul class="dropdown-menu pull-right action">
                                                                         <li><button type="submit" id="submitProcess" name="submitProcess" data-name="confirm" value="confirm"  class="btn blue span12"><i class="icon-ok"></i>&nbsp;Confirm</button>
                                                                         </li>
                                                                         <li><button type="submit" id="submitProcess" name="submitProcess" data-name="sms" class="btn purple span12" value="sms"><i class="icon-comments"></i>&nbsp;SMS</button>
@@ -236,7 +245,7 @@
                                         </div>
                                     </form>
                                 </div>
-                                {% elseif entity.process == 'Confirm'  %}
+                                {% elseif entity.process == 'confirm'  %}
                                 <div class="clearfix"><br/></div>
                                     <form id="process" name="process" action="{{ path('customer_order_confirm',{'id':entity.id}) }}" method="post">
                                         <div class="row-fluid">
@@ -249,11 +258,11 @@
                                                         <div class="input-append">
                                                             <div class="btn-group">
                                                                 <button class="green btn dropdown-toggle" data-toggle="dropdown">
-                                                                    Way of Delivery&nbsp;<span class="caret"></span>
+                                                                    Way of Delivery&nbsp;<span class="tasks"></span>
                                                                 </button>
-                                                                <ul class="dropdown-menu">
+                                                                <ul class="dropdown-menu pull-right action">
                                                                     <li><button  type="submit" id="submitProcess" name="submitProcess" value="done"   class="btn purple span12"><i class="icon-ok-circle"></i>&nbsp;Delivered</button></li>
-                                                                    <li><button type="submit" id="submitProcess" name="submitProcess"  value="return" class="btn yellow span12"   ><i class="icon-circle-arrow-left"></i>&nbsp;Return</button></li>
+                                                                    <li><button type="submit" id="submitProcess" name="submitProcess"  value="return" class="btn blue span12"   ><i class="icon-circle-arrow-left"></i>&nbsp;Return</button></li>
                                                                     <li><button  type="submit" id="submitProcess" name="submitProcess" value="cancel"   class="btn red span12" ><i class="icon-remove-circle"></i>&nbsp;Cancel</button></li>
                                                                 </ul>
                                                             </div>

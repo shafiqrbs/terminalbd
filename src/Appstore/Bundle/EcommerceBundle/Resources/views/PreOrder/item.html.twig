@@ -77,8 +77,7 @@
                                         {% endif %}
                                         <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery }}</li>
                                         <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
-
-
+                                        <li><strong>Process</strong>:&nbsp;<strong>{{ entity.process|capitalize }}</strong></li>
                                     </ul>
                                 </div>
                             </div>
@@ -107,7 +106,7 @@
                                 <th class="numeric" >Currency</th>
                                 <th class="numeric" >Unit Price</th>
                                 <th class="numeric" >Sub-Total</th>
-                                <th class="numeric" >Convert Rate(BDT)</th>
+                                <th class="numeric" >Convert Rate (BDT)</th>
                                 <th class="numeric" >Convert Sub-Total</th>
                                 <th class="numeric" >Tax&Shipping</th>
                                 <th class="numeric" >Convert Total</th>
@@ -190,13 +189,16 @@
                                     <td class="numeric" ></td>
                                 </tr>
                             {% endif %}
-                            {% if  entity.discountAmount > 0 %}
-                                <tr>
-                                    <td class="numeric" colspan="9" ><span class="pull-right">Discount Amount</span></td>
-                                    <td class="numeric"><strong>=&nbsp;{{  entity.discountAmount|number_format }}</strong></td>
-                                    <td class="numeric" ></td>
-                                </tr>
-                            {% endif %}
+                            <tr>
+                                <td class="numeric" colspan="9" ><span class="pull-right">Discount Amount</span></td>
+                                <td class="numeric"><strong>=&nbsp;{{  entity.discountAmount|number_format }}</strong></td>
+                                <td class="numeric" ></td>
+                            </tr>
+                            <tr>
+                                <td class="numeric" colspan="9" ><span class="pull-right">Delivery Charge</span></td>
+                                <td class="numeric"><strong>=&nbsp;{{  entity.deliveryCharge|number_format }}</strong></td>
+                                <td class="numeric" ></td>
+                            </tr>
                             <tr>
                                 <td class="numeric" colspan="9" ><span class="pull-right">Grand Total</span></td>
                                 <td class="numeric"><strong>=&nbsp;{{ ( entity.grandTotalAmount)|number_format }}</strong></td>
@@ -252,7 +254,7 @@
                                 <td class="numeric" >{{ payment.mobileAccount }}</td>
                                 <td class="numeric" >{{ payment.transaction }}</td>
                                 <td class="numeric" >{{ payment.accountMobileBank.name }}</td>
-                                <td class="numeric" >{% if payment.transactionType =='Receive' %}{{ payment.amount|number_format }}{% endif %}</td>
+                                <td class="numeric" >{% if payment.transactionType =='Payment' %}{{ payment.amount|number_format }}{% endif %}</td>
                                 <td class="numeric" >{% if payment.transactionType =='Return' %}{{ payment.amount|number_format }}{% endif %}</td>
                                 <td class="numeric" >
                                     {% if payment.status == 1  %}
@@ -286,6 +288,8 @@
                         </tbody>
                     </table>
                     <div class="clearfix"> </div>
+                    {% set arr = {'delivered':'delivered'} %}
+                    {% if entity.process not in  arr|keys %}
                     <div class="form-actions portlet box blue">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-reorder"></i>Payment Process</div>
@@ -447,6 +451,7 @@
                         </div>
                     </div>
                     {{ form_end(processForm) }}
+                    {% endif %}
                     <div class="clearfix"><br/> </div>
                     {% set arr = {'payment': 'payment' ,'confirm':'confirm'} %}
                     {% if entity.process in  arr|keys %}
@@ -454,6 +459,12 @@
                     <div class="form-actions portlet box yellow">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-reorder"></i>Payment Process</div>
+                        </div>
+                    </div>
+                    <div class="clearfix"> </div>
+                    <div class="form-actions portlet box blue">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="icon-reorder"></i>Comments Information</div>
                         </div>
                     </div>
                     <div class="clearfix"><br/> </div>
@@ -494,68 +505,5 @@
     {{ parent() }}
     ApproveProcess();
     $('body').addClass('page-sidebar-closed');
-
-    $('.itemProcess').click(function(e){
-    var rel = $(this).attr("data-id");
-    var url = $(this).attr("data-url");
-    var quantity = $('#quantity-'+rel).val() != '' ? $('#quantity-'+rel).val() : 1;
-    var convertRate = $('#convertRate-'+rel).val() != '' ? parseFloat($('#convertRate-'+rel).val()) : 0;
-    var shippingCharge = $('#shippingCharge-'+rel).val() != '' ? $('#shippingCharge-'+rel).val() : 0;
-    $('#confirm-content').confirmModal({
-    topOffset: 0,
-    top: '25%',
-    onOkBut: function(event, el) {
-    $.get( url,{quantity:quantity,'convertRate':convertRate,'shippingCharge':shippingCharge})
-    .done(function(data){
-    if(data == 'success'){
-    location.reload();
-    }
-    });
-    }
-    });
-    e.preventDefault();
-    });
-
-    $('#submitPayment').click( function( e ) {
-
-    var url = $('#pre-order-payment').attr("action");
-    alert(url);
-    var amount = $('#appstore_bundle_ecommercebundle_preorder_amount').val();
-    if( amount == "" ){
-    alert( "Please add payment amount" );
-    return false;
-    }
-    var transactionType = $('#appstore_bundle_ecommercebundle_preorder_transactionType').val();
-    if( transactionType == "" ){
-    alert( "Please select transaction type" );
-    return false;
-    }
-    var accountMobileBank = $('#appstore_bundle_ecommercebundle_preorder_accountMobileBank').val();
-    if( accountMobileBank == "" ){
-    alert( "Please payment mobile account" );
-    return false;
-    }
-    var mobileAccount = $('#appstore_bundle_ecommercebundle_preorder_mobileAccount').val();
-    if( mobileAccount == "" ){
-    alert( "Please add payment mobile no" );
-    return false;
-    }
-    var transaction = $('#appstore_bundle_ecommercebundle_preorder_transaction').val();
-    if( transaction == "" ){
-    alert( "Please add payment transaction no" );
-    return false;
-    }
-    $('#confirm-content').confirmModal({
-    topOffset: 0,
-    top: '25%',
-    onOkBut: function(event, el) {
-    $.post( url,{amount:amount,transactionType:transactionType,'accountMobileBank':accountMobileBank,'mobileAccount':mobileAccount,'transaction':transaction})
-    .done(function(data){
-    location.reload();
-    });
-    }
-    });
-    e.preventDefault();
-    });
 {% endblock %}
 

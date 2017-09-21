@@ -58,7 +58,7 @@ class OrderItemRepository extends EntityRepository
 
     public function itemOrderUpdate($order,$data)
     {
-        $em = $this->_em;
+       /* $em = $this->_em;
         $i = 0;
         foreach ($data['itemId'] as $row ){
             $entity = $em->getRepository('EcommerceBundle:OrderItem')->find($data['itemId'][$i]);
@@ -72,7 +72,7 @@ class OrderItemRepository extends EntityRepository
             $em->persist($entity);
             $em->flush();
             $i++;
-        }
+        }*/
     }
 
     public function itemOrderUpdateBarcode(Order $order)

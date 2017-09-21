@@ -217,11 +217,12 @@ class PreOrderController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new PreOrderPayment();
         $entity->setPreOrder($preOrder);
-        $entity->setTransactionType($data['transactionType']);
-        if($entity->getTransactionType() == 'Receive'){
-            $entity->setAmount($data['amount']);
-        }else{
+        if($entity->getTransactionType() == 'Return'){
+            $entity->setTransactionType('Return');
             $entity->setAmount('-'.$data['amount']);
+        }else{
+            $entity->setTransactionType('Payment');
+            $entity->setAmount($data['amount']);
         }
         $accountMobileBank =$this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->find($data['accountMobileBank']);
         $entity->setAccountMobileBank($accountMobileBank);
@@ -241,10 +242,10 @@ class PreOrderController extends Controller
         $em->flush();
 
         if($entity->getStatus() == true ){
-
-            $this->get('session')->getFlashBag()->add('success',"Customer has been confirmed");
+            $this->getDoctrine()->getRepository('EcommerceBundle:PreOrder')->updatePreOderPayment($entity->getPreOrder());
+          /*  $this->get('session')->getFlashBag()->add('success',"Customer has been confirmed");
             $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.preorder_confirm', new \Setting\Bundle\ToolBundle\Event\EcommercePreOrderConfirmEvent($entity));
+            $dispatcher->dispatch('setting_tool.post.preorder_confirm', new \Setting\Bundle\ToolBundle\Event\EcommercePreOrderConfirmEvent($entity));*/
 
         }
         return $this->redirect($this->generateUrl('customer_preorder'));
@@ -256,14 +257,16 @@ class PreOrderController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
+        if($data['status'] == 1 ) {
+            $preOrderItem->setConvertRate($data['convertRate']);
+            $preOrderItem->setConvertUnitPrice($preOrderItem->getUnitPrice() * $data['convertRate']);
+            $convertSubTotal = floatval($preOrderItem->getSubTotal() * $data['convertRate']);
+            $preOrderItem->setConvertSubTotal($convertSubTotal);
+            $preOrderItem->setShippingCharge($data['shippingCharge']);
+            $convertTotal = floatval($preOrderItem->getConvertSubTotal() + $preOrderItem->getShippingCharge());
+            $preOrderItem->setConvertTotal($convertTotal);
+        }
         $preOrderItem->setStatus($data['status']);
-        $preOrderItem->setConvertRate($data['convertRate']);
-        $preOrderItem->setConvertUnitPrice($preOrderItem->getUnitPrice() * $data['convertRate']);
-        $convertSubTotal = floatval($preOrderItem->getSubTotal() * $data['convertRate']);
-        $preOrderItem->setConvertSubTotal($convertSubTotal);
-        $preOrderItem->setShippingCharge($data['shippingCharge']);
-        $convertTotal = floatval($preOrderItem->getConvertSubTotal() + $preOrderItem->getShippingCharge());
-        $preOrderItem->setConvertTotal($convertTotal);
         $em->persist($preOrderItem);
         $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:PreOrder')->updatePreOder($preOrder);

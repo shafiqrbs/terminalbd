@@ -18,11 +18,12 @@
     <div class="clearfix"></div>
     <section >
         <div class="container">
+            <form class="" action="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" method="post">
             <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <table class="table table-hover table-striped table-bordered table-list">
                         <thead>
-                        <tr>
+                        <tr style="background-color:#000">
                             <th>Product Name</th>
                             <th class="text-center">Price</th>
                             <th>Quantity</th>
@@ -97,9 +98,9 @@
                             <td colspan="2" class="text-left" >
                                 {% if  app.user %}
                                     {% if cart.total > 0 %}
-                                    <a href="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" type="button" class="btn btn-success">
+                                    <button  type="submit" class="btn btn-success">
                                         Checkout <span class="glyphicon glyphicon-play"></span>
-                                    </a>
+                                    </button>
                                     {% endif %}
                                 {% else %}
                                     <button type="button" class="btn search-box-bg login-preview">
@@ -112,6 +113,7 @@
                     </table>
                 </div>
             </div>
+            </form>
         </div>
     </section>
     <div class="clearfix"></div>

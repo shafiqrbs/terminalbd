@@ -57,7 +57,7 @@
                                         <div class="span12">
                                             <label><strong>Bill Overview</strong></label>
                                             <ul class="unstyled" >
-                                                <li><strong>Invoice</strong>:#&nbsp;{{ entity.grandTotalAmount }}</li>
+                                                <li><strong>Invoice</strong>:#&nbsp;{{ entity.invoice }}</li>
                                                 <li><strong>Grand Total</strong>:&nbsp;{{ entity.grandTotalAmount }}</li>
                                                 {% if entity.discountAmount > 0 %}
                                                 <li><strong>Discount</strong>:&nbsp;{{ entity.discountAmount }}</li>
@@ -220,6 +220,20 @@
                                         <td></td>
                                     </tr>
                                 {% endif %}
+                                {% if entity.discountAmount > 0 %}
+                                    <tr>
+                                        <td class="numeric" colspan="6" ><span class="pull-right">Discount Amount</span></td>
+                                        <td class="numeric">=&nbsp;{{ ( entity.discountAmount)|number_format }}</td>
+                                        <td></td>
+                                    </tr>
+                                {% endif %}
+                                {% if entity.coupon is not empty %}
+                                    <tr>
+                                        <td class="numeric" colspan="6" ><span class="pull-right">Coupon Code({{ entity.coupon.couponCode }})</span></td>
+                                        <td class="numeric">=&nbsp;{{ entity.couponAmount }}</td>
+                                        <td></td>
+                                    </tr>
+                                {% endif %}
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Grand Total</span></td>
                                     <td class="numeric"><strong>=&nbsp;{{ ( entity.grandTotalAmount)|number_format }}</strong></td>
@@ -230,13 +244,7 @@
                                     <td class="numeric"><strong>=&nbsp;{{ ( entity.paidAmount)|number_format }}</strong></td>
                                     <td></td>
                                 </tr>
-                                {% if entity.discountAmount > 0 %}
-                                <tr>
-                                    <td class="numeric" colspan="6" ><span class="pull-right">Discount Amount</span></td>
-                                    <td class="numeric">=&nbsp;{{ ( entity.discountAmount)|number_format }}</td>
-                                    <td></td>
-                                </tr>
-                                {% endif %}
+
                                 {% if entity.dueAmount  > 0 %}
                                     <tr>
                                         <td class="numeric" colspan="6" ><span class="pull-right">Due Amount</span></td>

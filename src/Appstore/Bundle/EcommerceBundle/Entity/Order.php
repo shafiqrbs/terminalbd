@@ -64,9 +64,9 @@ class Order
     private  $accountOnlineOrder;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\CouponCode", inversedBy="order" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Coupon", inversedBy="order" )
      **/
-    private  $couponCode;
+    private  $coupon;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="order" )
@@ -238,6 +238,13 @@ class Order
      * @ORM\Column(name="dueAmount", type="float" , nullable = true)
      */
     private $dueAmount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="couponAmount", type="float" , nullable = true)
+     */
+    private $couponAmount;
 
     /**
      * @var float
@@ -936,20 +943,37 @@ class Order
     }
 
     /**
-     * @return mixed
+     * @return Coupon
      */
-    public function getCouponCode()
+    public function getCoupon()
     {
-        return $this->couponCode;
+        return $this->coupon;
     }
 
     /**
-     * @param mixed $couponCode
+     * @param Coupon $coupon
      */
-    public function setCouponCode($couponCode)
+    public function setCoupon($coupon)
     {
-        $this->couponCode = $couponCode;
+        $this->coupon = $coupon;
     }
+
+    /**
+     * @return float
+     */
+    public function getCouponAmount()
+    {
+        return $this->couponAmount;
+    }
+
+    /**
+     * @param float $couponAmount
+     */
+    public function setCouponAmount($couponAmount)
+    {
+        $this->couponAmount = $couponAmount;
+    }
+
 
 }
 
