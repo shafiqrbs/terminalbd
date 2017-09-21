@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * PreOrderItem
  *
- * @ORM\Table()
+ * @ORM\Table("ems_pre_order_item")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\PreOrderItemRepository")
  */
 class PreOrderItem

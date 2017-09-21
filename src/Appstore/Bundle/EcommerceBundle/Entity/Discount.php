@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Discount
  *
- * @ORM\Table()
+ * @ORM\Table("ems_discount")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\DiscountRepository")
  */
 

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * OrderItem
  *
- * @ORM\Table("order_items")
+ * @ORM\Table("ems_order_item")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\OrderItemRepository")
  */
 class OrderItem

@@ -17,7 +17,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 /**
  * Order
  *
- * @ORM\Table("orders")
+ * @ORM\Table("ems_order")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\OrderRepository")
  */
 class Order
