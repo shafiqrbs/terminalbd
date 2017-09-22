@@ -35,7 +35,7 @@ class EcommerceWidgetController extends Controller
     }
 */
 
-    public function headerAction(Request $request , GlobalOption $globalOption , $pageName ='' )
+    public function headerAction(Request $request , GlobalOption $globalOption , $menu ='' )
     {
         /* Device Detection code desktop or mobile */
 
@@ -58,7 +58,7 @@ class EcommerceWidgetController extends Controller
         return $this->render('@Frontend/'.$theme.'/header.html.twig', array(
             'globalOption'          => $globalOption,
             'categoryTree'          => $categoryTree,
-            'pageName'              => $pageName,
+            'menu'                  => $menu,
             'cart'                  => $cart,
             'searchForm'            => $data
         ));

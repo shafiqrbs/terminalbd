@@ -172,7 +172,7 @@ class GoodsItemRepository extends EntityRepository
         $em = $this->_em;
         /** @var GoodsItem $item */
         foreach( $entity->getGoodsItems() as $item){
-            $discountPrice = $this->getCulculationDiscountPrice($entity,$discount);
+            $discountPrice = $this->getCulculationDiscountPrice($item,$discount);
             $item->setDiscountPrice($discountPrice);
         }
         $em->flush();
@@ -449,7 +449,7 @@ class GoodsItemRepository extends EntityRepository
     }
 
 
-    public function getCulculationDiscountPrice(PurchaseVendorItem $purchase , Discount $discount)
+    public function getCulculationDiscountPrice(GoodsItem $purchase , Discount $discount)
     {
         if($discount->getType() == 'percentage'){
             $price = ( ($purchase->getSalesPrice() * (int)$discount->getName())/100 );

@@ -31,6 +31,7 @@ class PurchaseVendorItemRepository extends EntityRepository
         $qb->leftJoin("product.masterItem",'masterItem');
         $qb->leftJoin('product.brand','brand');
         $qb->where("product.isWeb = 1");
+        $qb->andWhere("product.status = 1");
         $qb->andWhere("product.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory);
 

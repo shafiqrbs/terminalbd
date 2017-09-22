@@ -333,7 +333,6 @@ class GoodsController extends Controller
     public function deleteAction(PurchaseVendorItem $vendorItem)
     {
 
-
         $em = $this->getDoctrine()->getManager();
         if (!$vendorItem) {
             throw $this->createNotFoundException('Unable to find Product entity.');
@@ -359,6 +358,7 @@ class GoodsController extends Controller
             );
             return new Response('failed');
         }
+        exit;
 
     }
 
@@ -386,7 +386,7 @@ class GoodsController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('inventory_purchasevendoritem'));
+        return $this->redirect($this->generateUrl('inventory_goods'));
     }
 
 
@@ -465,9 +465,14 @@ class GoodsController extends Controller
         $entities = $this->getDoctrine()->getRepository('EcommerceBundle:Discount')->findBy(
             array('ecommerceConfig'=>$getEcommerceConfig,'status'=>1)
         );
+        $type = '';
         $items = array();
+        $items[]=array('value' => '','text'=> '---add discount---');
         foreach ($entities as $entity):
-            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName().ucfirst($entity->getType()));
+            if($entity->getType() != "flat"){
+                $type ='%';
+            }
+            $items[]=array('value' => $entity->getId(),'text'=> $entity->getName().'('.$entity->getDiscountAmount().')'.$type);
         endforeach;
         return new JsonResponse($items);
 

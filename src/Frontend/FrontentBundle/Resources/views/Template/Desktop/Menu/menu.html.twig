@@ -18,13 +18,13 @@
                                         <div class="carousel-inner menu-carousel-inner" role="listbox">
                                             {% for feature in  menu.features %}
                                                 {% if(feature.webPath) %}
-                                                    {% if feature.targetTo == 'Promotion' %}
-                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':feature.id}) %}
-                                                    {% elseif feature.targetTo == 'Tag' %}
+                                                    {% if feature.targetTo == 'Promotion' and feature.promotion is not empty %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':feature.promotion.id}) %}
+                                                    {% elseif feature.targetTo == 'Tag' and feature.tag is not empty %}
                                                         {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':feature.tag.id}) %}
-                                                    {% elseif feature.targetTo == 'Discount' %}
+                                                    {% elseif feature.targetTo == 'Discount' and feature.discount is not empty %}
                                                         {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':feature.discount.id}) %}
-                                                    {% elseif feature.targetTo == 'Brand' %}
+                                                    {% elseif feature.targetTo == 'Brand' and feature.tag is not empty %}
                                                         {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
                                                     {% else %}
                                                         {% set path = path(globalOption.subDomain ~ '_webservice_product') %}

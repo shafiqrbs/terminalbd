@@ -40,7 +40,7 @@ function ApproveProcess(){
 
     })
 
-    $(document).on("click", ".remove, .delete", function() {
+    $(".remove, .delete").click(function() {
         var url = $(this).attr('data-url');
         var id = $(this).attr('data-id');
         $('#confirm-content').confirmModal({
@@ -48,14 +48,14 @@ function ApproveProcess(){
             top: '25%',
             onOkBut: function(event, el) {
                 $.get(url, function( data ) {
-                    $('#remove-'+id).hide();
+                    location.reload();
                 });
             }
         });
     });
 
 
-     $(document).on("click", ".approve", function() {
+    $(document).on("click", ".approve", function() {
         var url = $(this).attr('data-url');
         var id = $(this).attr('data-id');
         $('#confirm-content').confirmModal({

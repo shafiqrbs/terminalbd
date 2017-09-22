@@ -129,7 +129,8 @@
                         </div>
                         <div class="col-xs-6 col-md-6">
                             <table class="list-table">
-                                <tr><td><h4>Current Price</h4></td><td class="left-text"><h4>{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ product.salesPrice|number_format }}</h4></td></tr>
+                                <tr><td><h4>Price: </h4></td><td class="left-text"><h4><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}
+                                        </h4></td></tr>
                                 <tr><td colspan="2" class="left-text">
 
                                         <div class="btn-group">
@@ -374,15 +375,6 @@
         </section>
         <div class="clearfix"></div>
         <!-- Modal -->
-<script>
-    {% if globalOption.templateCustomize.showSidebar == 1 %}
-        var item =  3;
-    {% else %}
-        var item =  4;
-    {% endif %}
-
-</script>
-
 </section>
 
 {% endblock %}
@@ -405,41 +397,12 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-
+    {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
+        var item =  3;
+    {% else %}
+        var item =  4;
+    {% endif %}
    {# $("#zoom").elevateZoom({ zoomType    : "inner", cursor: "crosshair" });#}
-    var owlTagCategory = $("#tag-category-carousel");
-    owlTagCategory.owlCarousel({
-
-        items: item ,
-        slideSpeed : 5000,
-        itemsCustom : false,
-        itemsDesktop : [1199,4],
-        itemsDesktopSmall : [980,3],
-        itemsTablet: [768,2],
-        itemsTabletSmall: false,
-        itemsMobile : [479,1],
-        itemsScaleUp : false,
-        autoPlay:false,
-        navigation : true,
-        navigationText: [
-        "<a id='prevTagCategory' class='glyphicon glyphicon-chevron-left'></a>",
-        "<a id='nextTagCategory' class='glyphicon glyphicon-chevron-right'></a>"
-        ],
-        rewindNav : false,
-        pagination : false,
-
-    });
-
-    // Custom Navigation Events
-    $(".nextTagCategory").click(function(){
-        owlTagCategory.trigger('owl.next');
-    })
-
-    $(".prevTagCategory").click(function(){
-        owlTagCategory.trigger('owl.prev');
-    })
-
-
 {% endblock %}
 
 

@@ -3,9 +3,11 @@
     {% if feature == 'promotion' %}
         <div class="widget-feature-center">
         {% for entity in entities %}
+            {% if entity.promotion is not empty %}
             <div class="thumbnail wow fadeInDown" data-wow-delay="2s">
                 <a  href="{{ path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':entity.promotion.id}) }}" class=""  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt=""></a>
             </div>
+            {% endif %}
         {% endfor %}
         </div>
     {% endif %}
@@ -13,27 +15,33 @@
     {% if feature == 'tag' %}
         <div class="widget-feature-center">
             {% for entity in entities %}
+            {% if entity.tag is not empty %}
             <div class="thumbnail wow fadeInDown" data-wow-delay="2s">
              <a href="{{ path(globalOption.subDomain ~ '_webservice_product_tag',{'id':entity.tag.id}) }}"  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt=""></a>
             </div>
-                {% endfor %}
+            {% endif %}
+            {% endfor %}
         </div>
     {% endif %}
 
     {% if feature == 'discount' %}
         <div class="widget-feature-center">
             {% for entity in entities %}
+            {% if entity.discount is not empty %}
             <div class="thumbnail wow fadeInDown" data-wow-delay="2s">
                 <a href="{{ path(globalOption.subDomain ~ '_webservice_product_tag',{'id':entity.discount.id}) }}"  > <img class="img-responsive" style="height: 137px"   src="{{ image(entity.webPath).forceResize(350,137) }}" alt=""></a>
             </div>
-                {% endfor %}
+            {% endif %}
+            {% endfor %}
         </div>
     {% endif %}
 
     {% if feature == 'featureProduct' %}
         <div class="widget-feature-center">
             {% for product in entities %}
+            {% if entity.webPath is not empty %}
                 <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"  > <img class="img-responsive" style="height: 137px"   src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt=""></a>
+            {% endif %}
             {% endfor %}
         </div>
     {% endif %}
@@ -46,7 +54,9 @@
             <td>
                 <ol class="scrollbar-inner wow fadeInDown" data-wow-delay="2s" style="overflow: hidden">
                     {% for entity in entities %}
+                    {% if entity.category is not empty %}
                         <li><p><a href="{{ path(globalOption.subDomain ~ '_webservice_product_category',{'id':entity.category.id}) }}" class="" >{{ entity.category.name }}</a></p></li>
+                    {% endif %}
                     {% endfor %}
                 </ol>
             </td>
@@ -57,16 +67,13 @@
     {% if feature == 'brand' %}
         <div class="widget-feature-center">
            {% for entity in entities %}
+            {% if entity.brand is not empty %}
                 <div class="col-md-6  wow fadeInDown" data-wow-delay="2s" >
                     <div class="thumbnail">
                         <a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':entity.brand.id}) }}" class="" > <img class="img-responsive"    src="{{ image(entity.webPath).forceResize(120,75) }}" alt=""></a>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="thumbnail">
-                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'id':entity.brand.id}) }}" class="" > <img class="img-responsive"    src="{{ image(entity.webPath).forceResize(120,75) }}" alt=""></a>
-                    </div>
-                </div>
+            {% endif %}
             {% endfor %}
         </div>
     {% endif %}

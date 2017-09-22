@@ -1105,6 +1105,9 @@ a:hover , a:visited, a:focus{
 }
 
 
+#topTabCarousel .nav-pills>li{
+    background-color: #222222;
+}
 #topTabCarousel .nav-pills>li>a{
     border-radius: 0;
     height: 60px;
@@ -1125,6 +1128,8 @@ a:hover , a:visited, a:focus{
 #topTabCarousel .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{
     background-color:#ffffff;
     color:#222222!important;
+    border:1px solid #d2d2d2;
+    border-bottom:none;
 }
 
 #topTabCarousel .tab-nav li.active:after {
@@ -1141,6 +1146,9 @@ a:hover , a:visited, a:focus{
     border-right: 10px solid transparent;
 }
 
+#bottomTabCarousel .nav-pills>li{
+    background-color: #222222;
+}
 
 #bottomTabCarousel .nav-pills>li>a{
     border-radius: 0;
@@ -1152,11 +1160,14 @@ a:hover , a:visited, a:focus{
 #bottomTabCarousel .nav-pills>li>a:hover{
     background-color:#d2d2d2;
     color:#222222!important;
+
 }
 
 #bottomTabCarousel .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{
     background-color:#ffffff;
     color:#222222!important;
+    border: 1px solid #d2d2d2;
+    border-top: none;
 }
 
 #bottomTabCarousel .tab-nav li.active:after {

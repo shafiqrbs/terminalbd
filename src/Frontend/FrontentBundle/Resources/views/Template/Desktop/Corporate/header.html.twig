@@ -43,7 +43,7 @@
     {% endif %}
     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
         <section class="feature-widget-header-top" >
-            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':pageName,'position':'header-top'}) %}
+            {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu,'position':'header-top'}) %}
         </section>
     {% endif %}
     <section id="header"  class="sticky {% if globalOption.templateCustomize.topBar is not empty %}header-position{% endif %}" >
@@ -80,5 +80,10 @@
 
         </div>
     </section>
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+        <section class="feature-widget-header-top" >
+            {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu,'position':'header-bottom'}) %}
+        </section>
+    {% endif %}
 </nav>
 

@@ -552,7 +552,8 @@ class Builder extends ContainerAware
             $menu['E-commerce']['Product']->addChild('Product', array('route' => 'inventory_goods'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Promotion', array('route' => 'ecommerce_promotion'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Discount', array('route' => 'ecommerce_discount'))->setAttribute('icon', 'icon-th-list');
-            $menu['E-commerce']['Product']->addChild('Coupon', array('route' => 'ecommerce_coupon'))->setAttribute('icon', 'icon-tags');
+            $menu['E-commerce']['Product']->addChild('Item Attribute', array('route' => 'itemattribute'))->setAttribute('icon', 'icon-th-list');
+
         }
 
         /*$menu['E-commerce']->addChild('Transaction', array('route' => ''))
@@ -572,6 +573,7 @@ class Builder extends ContainerAware
             $menu['E-commerce']['Order']->addChild('Pre-order', array('route' => 'customer_preorder'))->setAttribute('icon', 'icon-truck');
 
         }
+        $menu['E-commerce']->addChild('Coupon', array('route' => 'ecommerce_coupon'))->setAttribute('icon', 'icon-tags');
         if ($securityContext->isGranted('ROLE_DOMAIN_ECOMMERCE_CONFIG')) {
             $menu['E-commerce']->addChild('Configuration', array('route' => 'ecommerce_config_modify'))->setAttribute('icon', 'fa fa-cog');
         }
@@ -653,7 +655,6 @@ class Builder extends ContainerAware
                     $menu['Application Setting']['E-commerce']->addChild('Custom category', array('route' => 'inventory_category'))->setAttribute('icon', 'icon-th-list');
                     $menu['Application Setting']['E-commerce']->addChild('Brand', array('route' => 'itembrand'))->setAttribute('icon', 'icon-th-list');
                 }
-                $menu['Application Setting']['E-commerce']->addChild('Item Attribute', array('route' => 'itemattribute'))->setAttribute('icon', 'icon-th-list');
 
             }
         }

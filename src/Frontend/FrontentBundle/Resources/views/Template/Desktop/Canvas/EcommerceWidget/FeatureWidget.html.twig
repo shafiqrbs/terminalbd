@@ -1,4 +1,3 @@
-
 {% if features is defined and features is not empty  %}
     {% for widget in features %}
         {% set loopId = loop.index %}
@@ -12,7 +11,7 @@
                 <!-- Indicators -->
                 <ol class="carousel-indicators">
                     {% for slide in widget.featureWidgetItems %}
-                        <li data-target="#main-carousel" data-slide-to="{{ loop.index-1 }}" class="{% if loop.index - 1 == 1 %} active {% endif %}"></li>
+                        <li data-target="#main-carousel" data-slide-to="{{ loop.index-1 }}" class="{% if loop.index - 1 == 0 %} active {% endif %}"></li>
                     {% endfor %}
                 </ol>
                 <!-- Wrapper for slides -->
@@ -32,7 +31,7 @@
                             {% set path =  path(globalOption.subDomain ~ '_webservice_product_brand',{'id':slide.feature.brand.id})  %}
                         {% endif %}
 
-                        <div class="item {% if loop.index-1 == 1 %} active {% endif %}">
+                        <div class="item {% if loop.index-1 == 0 %} active {% endif %}">
                             <a href="{{ path }}"><img class="image {% if widget.sliderFeature is empty %}  carousel-img {% else %} carousel-tab-img {% endif %}"  src="{% if slide.feature.webPath is not empty  %} {{ image(slide.feature.webPath)}}{% endif %}" alt="..."></a>
                             {% if slide.feature.captionBgColor is not empty %}
                                 <div class="carousel-caption {#caption-{{ slide.feature.captionPosition }}#}" style="background-color: {{ slide.feature.captionBgColor }}">
