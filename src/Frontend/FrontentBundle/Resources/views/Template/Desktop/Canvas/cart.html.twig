@@ -10,10 +10,12 @@
         </div>
     </section>
     <div class="clearfix"></div>
-    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-        <section class="feature-widget-body-top" >
-            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'pageName':'ProductDetails','position':'body-top'}) %}
-        </section>
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-top')  %}
+        {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-top'}) %}
+    {% endif %}
+    <div class="clearfix"></div>
+    {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-top') %}
+        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'body-top'}) %}
     {% endif %}
     <div class="clearfix"></div>
     <section >
@@ -23,7 +25,7 @@
                 <div class="col-sm-12 col-md-12">
                     <table class="table table-hover table-striped table-bordered table-list">
                         <thead>
-                        <tr style="background-color:#000">
+                        <tr style="background-color:#269abc; color:#ffffff">
                             <th>Product Name</th>
                             <th class="text-center">Price</th>
                             <th>Quantity</th>
@@ -117,7 +119,15 @@
         </div>
     </section>
     <div class="clearfix"></div>
-
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-bottom')  %}
+        {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-bottom'}) %}
+    {% endif %}
+    <div class="clearfix"></div>
+    {% if menu.featureWidgets is defined and menu.featureWidgets is not empty  and menu.getFeatureWidgetPositionExist('body-bottom')  %}
+        <div class="container">
+        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'body-bottom'}) %}
+        </div>
+    {% endif %}
     <!-- Modal -->
 {% endblock %}
 {% block cssBlock %}
@@ -128,14 +138,24 @@
     {% endstylesheets %}
 {% endblock  %}
 {% block javascriptBlock %}
+    {{ parent() }}
     {% javascripts
+    '@FrontendBundle/Resources/public/template/desktop/js/page.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/headerfooter.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/sidebar.js'
     '@FrontendBundle/Resources/public/template/desktop/js/product.js'
     '@FrontendBundle/Resources/public/template/desktop/js/e-commerce.js'
-    '@FrontendBundle/Resources/public/template/desktop/js/headerfooter.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
+        sliderPageOwl(3);
+        sliderTagCategoryOwl(3);
+    {% else %}
+        sliderPageOwl(4);
+        sliderTagCategoryOwl(4);
+    {% endif %}
 {% endblock %}

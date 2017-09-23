@@ -120,11 +120,22 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@FrontendBundle/Resources/public/template/desktop/js/page.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/headerfooter.js'
+    '@FrontendBundle/Resources/public/template/desktop/js/sidebar.js'
     '@FrontendBundle/Resources/public/template/desktop/js/product.js'
     '@FrontendBundle/Resources/public/template/desktop/js/e-commerce.js'
-    '@FrontendBundle/Resources/public/template/desktop/js/headerfooter.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
+        sliderPageOwl(3);
+    {% else %}
+        sliderPageOwl(4);
+    {% endif %}
+{% endblock %}
+
 

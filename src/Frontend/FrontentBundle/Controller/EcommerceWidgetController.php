@@ -10,6 +10,7 @@ use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
+use Setting\Bundle\AppearanceBundle\Entity\Menu;
 use Setting\Bundle\ContentBundle\Entity\PageModule;
 use Setting\Bundle\ToolBundle\Entity\Branding;
 use Product\Bundle\ProductBundle\Entity\Product;
@@ -35,7 +36,7 @@ class EcommerceWidgetController extends Controller
     }
 */
 
-    public function headerAction(Request $request , GlobalOption $globalOption , $menu ='' )
+    public function headerAction(Request $request , GlobalOption $globalOption , Menu $menu )
     {
         /* Device Detection code desktop or mobile */
 

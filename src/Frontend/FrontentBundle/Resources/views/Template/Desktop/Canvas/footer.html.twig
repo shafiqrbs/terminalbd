@@ -1,10 +1,8 @@
-{% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-    <section class="feature-widget-footer">
-        {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'footer'}) %}
-    </section>
-{% endif %}
-{% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-    <section class="feature-widget-footer">
+ {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer')  %}
+     {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'footer'}) %}
+ {% endif %}
+{% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer')  %}
+    <section class="container">
         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'footer'}) %}
     </section>
 {% endif %}
