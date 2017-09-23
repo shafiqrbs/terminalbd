@@ -224,12 +224,6 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
-            $categoryTree = $this->getDoctrine()->getRepository('InventoryBundle:Product')->getProductCategories($globalOption->getInventoryConfig());
-            // $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->build_child();
-
-
-            $array = array();
-            $productCategories = $em->getRepository('ProductProductBundle:Category')->findBy(array('status'=>1),array('name'=>'asc'));
             $category = isset($data['category']) ? $data['category'] :0;
             $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($category);
             $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
@@ -274,12 +268,6 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
-            $categoryTree = $this->getDoctrine()->getRepository('InventoryBundle:Product')->getProductCategories($globalOption->getInventoryConfig());
-            // $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->build_child();
-
-
-            $array = array();
-            $productCategories = $em->getRepository('ProductProductBundle:Category')->findBy(array('status'=>1),array('name'=>'asc'));
             $category = isset($data['category']) ? $data['category'] :0;
             $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($category);
             $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
@@ -324,12 +312,6 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
-            $categoryTree = $this->getDoctrine()->getRepository('InventoryBundle:Product')->getProductCategories($globalOption->getInventoryConfig());
-            // $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->build_child();
-
-
-            $array = array();
-            $productCategories = $em->getRepository('ProductProductBundle:Category')->findBy(array('status'=>1),array('name'=>'asc'));
             $category = isset($data['category']) ? $data['category'] :0;
             $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($category);
             $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
@@ -400,7 +382,7 @@ class WebServiceProductController extends Controller
                     'brands'            => $brands,
                     'product'           => $entity,
                     'products'          => $products,
-                    'subitem'           => $subItem,
+                    'subItem'           => $subItem,
                     'next'              => $next,
                     'previous'          => $previous,
                     'menu'          => $menu,
@@ -518,6 +500,7 @@ class WebServiceProductController extends Controller
         /** @var GlobalOption $globalOption */
 
         $showMaster = $globalOption->getEcommerceConfig()->getShowMasterName();
+        $salesPrice = $subitem->getDiscountPrice() == null ?  $subitem->getSalesPrice() : $subitem->getDiscountPrice();
 
         $masterItem = !empty($product->getMasterItem()) and $showMaster == 1 ? $product->getMasterItem()->getName() . '-' : '';
             /* if (!empty($subitem) and $subitem->getQuantity() >= $quantity) {*/
@@ -529,7 +512,7 @@ class WebServiceProductController extends Controller
                 'size' => !empty($subitem->getSize()) ? $subitem->getSize()->getName() : 0,
                 'color' => $colorName,
                 'colorId' => $color,
-                'price' => $subitem->getSalesPrice(),
+                'price' => $salesPrice,
                 'quantity' => $quantity,
                 'productImg' => $productImg
             );

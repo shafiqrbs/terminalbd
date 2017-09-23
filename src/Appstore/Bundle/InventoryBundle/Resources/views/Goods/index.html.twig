@@ -104,7 +104,7 @@
                                         <td class="numeric" >{{ entity.purchasePrice }}</td>
                                         <td class="numeric" >{% if entity.discount is not empty  %}<strike>{% endif %} <a  data-type="text" class="editable" id="{{ entity.id }}" data-name="SalesPrice" href="#"   data-url="{{ path('inventory_goods_inline_update') }}" data-pk="{{ entity.id }}" data-value="{{ entity.salesPrice }}" data-original-title="Enter sales price">{{ entity.salesPrice }}</a>{% if entity.discount is not empty  %}</strike>{% endif %} {% if entity.discount is not empty  %}{{ entity.discountPrice|number_format() }}{% endif %}</td>
                                         <td class="numeric" >
-                                            <a  data-type="select" class="editable" id="discount" data-name="Discount" href="#" data-source="{{ path('inventory_product_inline_discount_search') }}"  data-url="{{ path('inventory_goods_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.discount is not empty %}{{ entity.discount.id }}{% endif %}" data-original-title="Enter discount method">{% if entity.discount is not empty %}{{ entity.discount.name }}-{{ entity.discount.discountAmount }} {% if  entity.discount.type == 'percentage' %}%{% endif %}{% endif %}</a>
+                                            <a  data-type="select" class="editable" id="discount" data-name="Discount" href="#" data-source="{{ path('inventory_product_inline_discount_search') }}"  data-url="{{ path('inventory_goods_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.discount is not empty %}{{ entity.discount.id }}{% endif %}" data-original-title="Enter discount method">{% if entity.discount is not empty %}{{ entity.discount.name }}-({{ entity.discount.discountAmount }}) {% if  entity.discount.type == 'percentage' %}%{% endif %}{% endif %}</a>
                                         </td>
                                          <td class="numeric" >
                                              <a  data-type="select" class="editable" id="promotion" data-name="Promotion" href="#" data-source="{{ path('inventory_product_inline_tag_search') }}"  data-url="{{ path('inventory_goods_inline_update') }}" data-pk="{{ entity.id }}" data-value="{% if entity.tag is defined and entity.tag is not empty %}{{ entity.id }}{% endif %}" data-original-title="Enter promotion name">{% if entity.promotion is defined and entity.promotion is not empty %}{{ entity.promotion.name }}{% endif %}</a>
@@ -187,6 +187,5 @@
     {{ parent() }}
     EditableInit();
     ApproveProcess();
-
 {% endblock %}
 

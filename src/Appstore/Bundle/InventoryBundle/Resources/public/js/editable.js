@@ -8,5 +8,11 @@ var EditableInit = function () {
         $.fn.editableform.buttons += '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';
     }
     $(".editable").editable(initEditables());
+   /* $(document).on("click", ".editable-submit", function() {
+        setTimeout(pageReload, 3000);
+    });
+    function pageReload() {
+        location.reload();
+    }*/
 
 }

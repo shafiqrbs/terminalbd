@@ -469,7 +469,7 @@ class GoodsController extends Controller
         $items = array();
         $items[]=array('value' => '','text'=> '---add discount---');
         foreach ($entities as $entity):
-            if($entity->getType() != "flat"){
+            if($entity->getType() == "percentage"){
                 $type ='%';
             }
             $items[]=array('value' => $entity->getId(),'text'=> $entity->getName().'('.$entity->getDiscountAmount().')'.$type);
@@ -503,11 +503,11 @@ class GoodsController extends Controller
         $setName = 'set'.$data['name'];
         if($data['name'] == 'Discount'){
 
-            $setValue = $em->getRepository('EcommerceBundle:Discount')->find($data['value']);
-            $discountPrice = $em->getRepository('InventoryBundle:PurchaseVendorItem')->getCulculationDiscountPrice($entity,$setValue);
+            $discount = $em->getRepository('EcommerceBundle:Discount')->find($data['value']);
+            $discountPrice = $em->getRepository('InventoryBundle:PurchaseVendorItem')->getCulculationDiscountPrice($entity,$discount);
             $entity->setDiscountPrice($discountPrice);
-            $em->getRepository('InventoryBundle:GoodsItem')->subItemDiscountPrice($entity,$setValue);
-            $entity->$setName($setValue);
+            $em->getRepository('InventoryBundle:GoodsItem')->subItemDiscountPrice($entity,$discount);
+            $entity->$setName($discount);
         }elseif($data['name'] == 'Promotion'){
 
             $setValue = $em->getRepository('EcommerceBundle:Promotion')->find($data['value']);
