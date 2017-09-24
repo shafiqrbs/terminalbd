@@ -15,18 +15,25 @@ class CouponRepository extends EntityRepository
 
     public function getValidCouponCode($globalOption , $code)
     {
+
+        $ecommerceConfig = $globalOption->getEcommerceConfig()->getId();
         $datetime = new \DateTime("now");
-        $date = $datetime->format('Y-m-d');
+        $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
+        $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
+
+
         $qb = $this->createQueryBuilder('coupon');
         $qb->where("coupon.status = 1");
-        $qb->andWhere("coupon.couponCode =".$code);
-        $qb->andWhere("coupon.ecommerceConfig =". $globalOption->getEcommerceConfig());
-        $qb->andWhere('coupon.startDate >= :startDate');
-        $qb->andWhere('coupon.endDate <= :endDate');
-        $qb->setParameter('startDate', $date);
-        $qb->setParameter('endDate', $date);
+        $qb->andWhere("coupon.ecommerceConfig =".$ecommerceConfig );
+        $qb->andWhere("coupon.couponCode = :couponCode");
+        $qb->setParameter('couponCode', $code);
+        $qb->andWhere('coupon.startDate <= :startDate');
+        $qb->setParameter('startDate', $today_startdatetime);
+        $qb->andWhere('coupon.endDate >= :endDate');
+        $qb->setParameter('endDate', $today_enddatetime);
         $result = $qb->getQuery()->getOneOrNullResult();
         return $result;
+
 
     }
 

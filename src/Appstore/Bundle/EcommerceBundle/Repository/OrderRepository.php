@@ -86,7 +86,7 @@ class OrderRepository extends EntityRepository
         if (!empty($couponCode)) {
             $coupon = $this->_em->getRepository('EcommerceBundle:Coupon')->getValidCouponCode($globalOption,$couponCode);
             if (!empty($coupon)){
-            $couponAmount = $this->getCalculatorCouponAmount($order, $coupon);
+            $couponAmount = $this->getCalculatorCouponAmount($grandTotal, $coupon);
             $order->setGrandTotalAmount($grandTotal - $couponAmount);
             $order->setCoupon($coupon);
             $order->setCouponAmount($couponAmount);
@@ -160,11 +160,10 @@ class OrderRepository extends EntityRepository
 
     }
 
-    public function getCalculatorCouponAmount(Order $order, Coupon $coupon)
+    public function getCalculatorCouponAmount( $grandTotal = 0, Coupon $coupon)
     {
-        $couponAmount = 0;
         if ($coupon->getPercentage() == 1 ){
-            $percentage = round(($order->getGrandTotalAmount()  * $coupon->getAmount() )/100);
+            $percentage = round(($grandTotal  * $coupon->getAmount() )/100);
             if($percentage >= $coupon->getValidAmount()){
                 $couponAmount = $coupon->getValidAmount();
             }else{
@@ -173,7 +172,6 @@ class OrderRepository extends EntityRepository
         }else{
             $couponAmount = $coupon->getAmount();
         }
-
         return $couponAmount;
     }
 
