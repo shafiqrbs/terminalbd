@@ -11,11 +11,11 @@
     </section>
     <div class="clearfix"></div>
     <section>
-        <div class="container">
-            {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
-                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header-bottom'}) %}
-            {% endif %}
-        </div>
+        <div class="clearfix"></div>
+        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-bottom')  %}
+            {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-bottom'}) %}
+        {% endif %}
+        <div class="clearfix"></div>
     </section>
     <div class="clearfix"></div>
     <section class="contain-section">
@@ -131,12 +131,11 @@
     </section>
     <div class="clearfix"></div>
     <section>
-        <div class="container">
-            {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
-                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'footer-top'}) %}
-            {% endif %}
-            <div class="clearfix"><br></div>
-        </div>
+        <div class="clearfix"></div>
+        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-bottom')  %}
+            {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-bottom'}) %}
+        {% endif %}
+        <div class="clearfix"></div>
     </section>
     <div class="clearfix"></div>
 {% endblock %}
@@ -167,5 +166,3 @@
         sliderPageOwl(4);
     {% endif %}
 {% endblock %}
-
-

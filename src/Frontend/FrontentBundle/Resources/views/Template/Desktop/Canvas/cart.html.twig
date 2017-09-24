@@ -128,6 +128,7 @@
         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'body-bottom'}) %}
         </div>
     {% endif %}
+    <div class="clearfix"></div>
     <!-- Modal -->
 {% endblock %}
 {% block cssBlock %}
@@ -151,11 +152,5 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
-        sliderPageOwl(3);
-        sliderTagCategoryOwl(3);
-    {% else %}
-        sliderPageOwl(4);
-        sliderTagCategoryOwl(4);
-    {% endif %}
+    sliderPageOwl(4);
 {% endblock %}

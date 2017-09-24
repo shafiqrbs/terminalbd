@@ -2,9 +2,7 @@
      {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'footer'}) %}
  {% endif %}
 {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer')  %}
-    <section class="container">
-        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'footer'}) %}
-    </section>
+    {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'footer'}) %}
 {% endif %}
 <section class="footer-menu">
     <div class="container social-payment" >

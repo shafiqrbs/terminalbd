@@ -11,11 +11,14 @@
     </section>
     <div class="clearfix"></div>
     <section>
-        <div class="container">
-            {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
-                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header-bottom'}) %}
-            {% endif %}
-        </div>
+        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-top')  %}
+            {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-top'}) %}
+        {% endif %}
+        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-top') %}
+            <div class="container">
+                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'body-top'}) %}
+            </div>
+        {% endif %}
     </section>
     <div class="clearfix"></div>
     <section class="contain-section">
@@ -203,12 +206,14 @@
     </section>
     <div class="clearfix"></div>
     <section>
-        <div class="container">
-            {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
-                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'footer-top'}) %}
-            {% endif %}
-            <div class="clearfix"><br></div>
-        </div>
+        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-bottom')  %}
+            {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-bottom'}) %}
+        {% endif %}
+        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-bottom') %}
+            <div class="container">
+                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'body-bottom'}) %}
+            </div>
+        {% endif %}
     </section>
     <div class="clearfix"></div>
 {% endblock %}
@@ -235,10 +240,6 @@
 {% block documentready %}
     {{ parent() }}
     $('#gmap_canvas').kmaps();
-    {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
-        sliderPageOwl(3);
-    {% else %}
-        sliderPageOwl(4);
-    {% endif %}
+    sliderPageOwl(4);
 {% endblock %}
 

@@ -268,7 +268,7 @@ class GoodsController extends Controller
 
         if ($editForm->isValid()) {
 
-            if(!empty($entity->getFile()) and !empty($entity->upload())) {
+            if($entity->upload() && !empty($entity->getFile())){
                 $entity->removeUpload();
             }
             $entity->upload();

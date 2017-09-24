@@ -11,15 +11,17 @@
         </div>
     </section>
     <div class="clearfix"></div>
-
-{#    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-        <div class="container bodyColor" >
-            {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id ,'position':'header-bottom'}) %}
+        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-top')  %}
+            {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-top'}) %}
+        {% endif %}
+        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-top') %}
+        <div class="container" >
+            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'body-top'}) %}
         </div>
-    {% endif %}#}
+         {% endif %}
     <div class="clearfix"></div>
     <section>
-        <div class="container bodyColor" >
+        <div class="container " >
             {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
             <div class="col-md-3 sidebar-top" >
                 <div class="row">
@@ -75,13 +77,14 @@
     </section>
     <div class="clearfix"></div>
     <section id="products">
-        <div class="container bodyColor">
+        <div class="container ">
             {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
                 <div class="col-md-3" data-match-height="body-content" >
                     {{ include('@Frontend/Template/Desktop/Cosmetic/sidebar.html.twig')}}
                 </div>
             {% endif %}
             <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="body-content" style="margin-top: 30px"  >
+
                 <div class="row row-flex">
                     {% for product in products %}
                         <div  class="product-item col-xs-{{ globalOption.ecommerceConfig.perColumn }} col-lg-{{ globalOption.ecommerceConfig.perColumn }}">
@@ -102,10 +105,6 @@
                     {% endfor %}
                 </div>
                 <div class="clearfix"></div>
-{#                {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-                    {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'body-bottom'}) %}
-                {% endif %}#}
-                <div class="clearfix"></div>
             </div>
             {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
                 <div class="col-md-3" data-match-height="body-content" >
@@ -117,7 +116,7 @@
     </section>
     <div class="clearfix"></div>
     <section>
-        <div class="container bodyColor" >
+        <div class="container " >
             {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
                 <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
                 <div class="row div-vertical-center">
@@ -150,27 +149,17 @@
         </div>
     </section>
     <div class="clearfix"></div>
-{#    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-        <div class="container bodyColor">
-            {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id ,'position':'footer-top'}) %}
-        </div>
-    {% endif %}#}
-    <div class="clearfix"></div>
-    {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('footer-top') %}
-        <div class="container bodyColor">
-            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'footer-top'}) %}
-        </div>
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-bottom')  %}
+        {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'body-bottom'}) %}
+    {% endif %}
+    {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('body-bottom') %}
+       <div class="container">
+        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'body-bottom'}) %}
+       </div>
     {% endif %}
     <div class="clearfix"></div>
     <!-- Modal -->
 </section>
-<script>
-    {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
-    var item =  3;
-    {% else %}
-    var item =  4;
-    {% endif %}
-</script>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -193,9 +182,5 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    {% if globalOption.templateCustomize.showSidebar == 1 %}
-        sliderPageOwl(3);
-    {% else %}
-        sliderPageOwl(4);
-    {% endif %}
+    sliderPageOwl(4);
 {% endblock %}
