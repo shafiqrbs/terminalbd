@@ -7,6 +7,7 @@ use Frontend\FrontentBundle\Service\Cart;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use Product\Bundle\ProductBundle\Entity\Category;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
+use Setting\Bundle\AppearanceBundle\Entity\Menu;
 use Setting\Bundle\ContentBundle\Entity\PageModule;
 use Setting\Bundle\ToolBundle\Entity\Branding;
 use Product\Bundle\ProductBundle\Entity\Product;
@@ -32,7 +33,7 @@ class TemplateWidgetController extends Controller
         ));
     }
 
-    public function headerAction(GlobalOption $globalOption, $pageName = '' ,Request $request)
+    public function headerAction(GlobalOption $globalOption, Menu $menu ,Request $request)
     {
         /* Device Detection code desktop or mobile */
         $em = $this->getDoctrine()->getManager();
@@ -43,7 +44,7 @@ class TemplateWidgetController extends Controller
         return $this->render('@Frontend/Template/Desktop/'.$themeName.'/header.html.twig', array(
             'menuTree'              => $menuTree,
             'globalOption'          => $globalOption,
-            'pageName'              => $pageName,
+            'menu'                  => $menu,
 
         ));
     }

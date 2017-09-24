@@ -92,12 +92,13 @@ class OrderItemRepository extends EntityRepository
     public function getOrderPurchaseItem(OrderItem $orderItem)
     {
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.purchaseVendorItem','pvi');
         $qb->join('pvi.purchaseItems','pi');
         $qb->join('pi.item','i');
         $qb->select('pi.id');
         $qb->where("e.id = :orderItemId");
         $qb->setParameter('orderItemId', $orderItem);
+        $qb->andWhere("pi.purchaseVendorItem = :purchaseVendorItem");
+        $qb->setParameter('purchaseVendorItem', $orderItem->getPurchaseVendorItem());
         if(!empty($orderItem->getSize())){
             $qb->andWhere("i.size = :size");
             $qb->setParameter('size', $orderItem->getSize());
@@ -106,9 +107,10 @@ class OrderItemRepository extends EntityRepository
             $qb->andWhere("i.color = :color");
             $qb->setParameter('color', $orderItem->getColor());
         }
-        $result = $qb->getQuery()->getArrayResult();
+
+        $result = $qb->getQuery()->getOneOrNullResult();
         if(!empty($result)){
-            return $this->_em->getRepository('InventoryBundle:PurchaseItem')->find($result[0]['id']);
+            return $this->_em->getRepository('InventoryBundle:PurchaseItem')->find($result['id']);
         }else{
             return false;
         }

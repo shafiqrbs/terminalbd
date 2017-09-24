@@ -73,7 +73,7 @@
 <body data-spy="scroll">
 {{ include('frontend/template/templateCustomize.html.twig')}}
 <!-- Navigation -->
-{% render controller("FrontendBundle:EcommerceWidget:header",{'globalOption':globalOption, 'menu':menu.id}) %}
+{% render controller("FrontendBundle:TemplateWidget:header",{'globalOption':globalOption, 'menu':menu.id}) %}
 <div class="clearfix"></div>
 {% block body %}{% endblock %}
 {% if globalOption.templateCustomize.footerBlock == 1 %}
