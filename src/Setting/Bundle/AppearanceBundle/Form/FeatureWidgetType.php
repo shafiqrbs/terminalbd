@@ -62,8 +62,6 @@ class FeatureWidgetType extends AbstractType
                     'header-bottom'             => 'Header Bottom',
                     'body-top'                  => 'Body Top',
                     'body-bottom'               => 'Body Bottom',
-                    'sidebar-top'               => 'Sidebar Top',
-                    'sidebar-bottom'            => 'Sidebar Bottom',
                     'footer'                    => 'Footer',
                     'mobile'                    => 'Mobile',
                 ),
