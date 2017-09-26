@@ -35,7 +35,7 @@ class OrderRepository extends EntityRepository
      * @param $entity
      * @return int|mixed
      */
-    public function getLastCode($datetime, $entity)
+    /*public function getLastCode($datetime, $entity)
     {
         $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
         $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
@@ -58,7 +58,8 @@ class OrderRepository extends EntityRepository
         }
 
         return $lastCode;
-    }
+    }*/
+
 
     public function insertNewCustomerOrder(User $user,$shop, $cart, $couponCode ='')
     {
@@ -70,14 +71,10 @@ class OrderRepository extends EntityRepository
         $order->setGlobalOption($globalOption);
         $customer = $this->getDomainCustomer($user, $globalOption);
         $order->setCustomer($customer);
-        $order->setTransactionMethod($this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(3));
         $order->setEcommerceConfig($globalOption->getEcommerceConfig());
         $order->setShippingCharge($globalOption->getEcommerceConfig()->getShippingCharge());
         $vat = $this->getCulculationVat($globalOption, $cart->total());
-        $datetime = new \DateTime("now");
-        $lastCode = $this->getLastCode($datetime, $globalOption);
-        $order->setCode($lastCode + 1);
-        $order->setInvoice(sprintf("%s%s", $datetime->format('Ymd'), str_pad($order->getCode(), 3, '0', STR_PAD_LEFT)));
+        $order->setDeliveryDate(new \DateTime("now"));
         $order->setVat($vat);
         $order->setCreatedBy($user);
         $order->setTotalAmount($cart->total());
@@ -86,10 +83,10 @@ class OrderRepository extends EntityRepository
         if (!empty($couponCode)) {
             $coupon = $this->_em->getRepository('EcommerceBundle:Coupon')->getValidCouponCode($globalOption,$couponCode);
             if (!empty($coupon)){
-            $couponAmount = $this->getCalculatorCouponAmount($grandTotal, $coupon);
-            $order->setGrandTotalAmount($grandTotal - $couponAmount);
-            $order->setCoupon($coupon);
-            $order->setCouponAmount($couponAmount);
+                $couponAmount = $this->getCalculatorCouponAmount($order->getTotalAmount(), $coupon);
+                $order->setGrandTotalAmount($grandTotal - $couponAmount);
+                $order->setCoupon($coupon);
+                $order->setCouponAmount($couponAmount);
             }
         }else{
             $order->setGrandTotalAmount($grandTotal);
@@ -164,8 +161,8 @@ class OrderRepository extends EntityRepository
     {
         if ($coupon->getPercentage() == 1 ){
             $percentage = round(($grandTotal  * $coupon->getAmount() )/100);
-            if($percentage >= $coupon->getValidAmount()){
-                $couponAmount = $coupon->getValidAmount();
+            if($percentage >= $coupon->getAmountLimit()){
+                $couponAmount = $coupon->getAmountLimit();
             }else{
                 $couponAmount = $percentage;
             }
@@ -188,6 +185,14 @@ class OrderRepository extends EntityRepository
         $grandTotal = $totalAmount + $order->getShippingCharge() + $vat;
         $order->setVat($vat);
         $order->setGrandTotalAmount($grandTotal);
+        if (!empty($order->getCoupon())) {
+            $couponAmount = $this->getCalculatorCouponAmount($totalAmount, $order->getCoupon());
+            $order->setGrandTotalAmount($grandTotal - $couponAmount);
+            $order->setCouponAmount($couponAmount);
+        }else{
+            $order->setGrandTotalAmount($grandTotal);
+        }
+
         if($order->getPaidAmount() > $grandTotal ){
             $order->setReturnAmount(($order->getPaidAmount() + $order->getDiscountAmount()) - $grandTotal);
             $order->setDueAmount(0);
@@ -196,6 +201,25 @@ class OrderRepository extends EntityRepository
             $due = (int)$grandTotal - ((int) $order->getPaidAmount() + $order->getDiscountAmount());
             $order->setDueAmount($due);
         }
+        $em->flush();
+    }
+
+    public function updateOrderPayment(Order $entity)
+    {
+        $em = $this->_em;
+        $total = $em->createQueryBuilder()
+            ->from('EcommerceBundle:OrderPayment','e')
+            ->select('sum(e.amount) as totalAmount')
+            ->where('e.order = :order')
+            ->andWhere('e.status = :status')
+            ->setParameter('order', $entity ->getId())
+            ->setParameter('status', 1)
+            ->getQuery()->getSingleResult();
+
+        $entity->setPaidAmount(floatval($total['totalAmount']));
+        $due = $entity->getGrandTotalAmount() - $entity->getPaidAmount();
+        $entity->setDueAmount($due);
+        $em->persist($entity);
         $em->flush();
     }
 

@@ -23,7 +23,7 @@ function ApproveProcess(){
     });
 
 
-    $(document).on("click", ".remove-tr", function() {
+    $(document).on("click", " .approve, .confirm, .remove , .process , .remove-tr , .item-disable", function() {
 
         var id = $(this).attr("data-id");
         var url = $(this).attr("data-url");
@@ -36,9 +36,11 @@ function ApproveProcess(){
                 });
             }
         });
+
     });
 
-    $(document).on("click", ".remove", function() {
+
+    $(document).on("click", ".item-remove", function() {
         var url = $(this).attr('data-url');
         var subDomain = $(this).attr('data-value');
         $('#confirm-content').confirmModal({
@@ -61,11 +63,13 @@ function ApproveProcess(){
         e.preventDefault();
 
         url = $(this).attr('data-url');
-        productId = $(this).attr('data-text');
-        price = $(this).attr('data-title');
+        var productId = $(this).attr('data-text');
+        var price = $(this).attr('data-title');
         fieldId = $(this).attr('data-id');
         fieldName = $(this).attr('data-field');
         type      = $(this).attr('data-type');
+        var size = $('#size-'+fieldId);
+        var color = $('#color-'+fieldId);
         var input = $('#quantity-'+$(this).attr('data-id'));
         var currentVal = parseInt(input.val());
         if (!isNaN(currentVal)) {
@@ -73,7 +77,7 @@ function ApproveProcess(){
                 if(currentVal > input.attr('min')) {
                     var existVal = (currentVal - 1);
                     input.val(existVal).change();
-                    $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                    $.get( url,{ quantity:existVal,'productId':productId,'price':price,'size':size,'color':color})
                         .done(function( data ) {
                             location.reload();
                         });
@@ -87,7 +91,7 @@ function ApproveProcess(){
                 if(currentVal < input.attr('max')) {
                     var existVal = (currentVal + 1);
                     input.val(existVal).change();
-                    $.get( url,{ quantity:existVal,'productId':productId,'price':price})
+                    $.get( url,{ quantity:existVal,'productId':productId,'price':price,'size':size,'color':color})
                         .done(function(data){
                             if(data == 'success'){
                                 location.reload();
@@ -107,57 +111,11 @@ function ApproveProcess(){
         }
     });
 
-    
-
-    $(document).on("click", ".item-disable", function() {
-
-        var id = $(this).attr("data-id");
-        var url = $(this).attr("data-url");
-        $('#confirm-content').confirmModal({
-            topOffset: 0,
-            top: '25%',
-            onOkBut: function(event, el) {
-                $.get(url, function( data ) {
-                    location.reload();
-                });
-            }
-        });
-    });
 
 
-
-
-    $(document).on("click", ".approve, .confirm", function() {
-
-        var id = $(this).attr("data-id");
-        var url = $(this).attr("data-url");
-        $('#confirm-content').confirmModal({
-            topOffset: 0,
-            top: '25%',
-            onOkBut: function(event, el) {
-                $.get(url, function( data ) {
-                    location.reload();
-                });
-            }
-        });
-
-    });
-    $(document).on("click", ".process", function() {
-
-        var url = $(this).attr("data-url");
-        $('#confirm-content').confirmModal({
-            topOffset: 0,
-            top: '25%',
-            onOkBut: function(event, el) {
-                $.get(url, function( data ) {
-                    location.reload();
-                });
-            }
-        });
-
-    });
 
     $('.itemProcess').click(function(e){
+        
         var rel = $(this).attr("data-id");
         var url = $(this).attr("data-url");
         var quantity = $('#quantity-'+rel).val() != '' ? $('#quantity-'+rel).val() : 1;
@@ -167,7 +125,7 @@ function ApproveProcess(){
             topOffset: 0,
             top: '25%',
             onOkBut: function(event, el) {
-                $.get( url,{quantity:quantity,'convertRate':convertRate,'shippingCharge':shippingCharge})
+                $.get( url,{quantity:quantity,convertRate:convertRate,shippingCharge:shippingCharge})
                     .done(function(data){
                         if(data == 'success'){
                             location.reload();
@@ -178,29 +136,52 @@ function ApproveProcess(){
         e.preventDefault();
     });
 
+    $('.orderItemProcess').click(function(e){
+        
+        var id = $(this).attr("data-id");
+        var url = $(this).attr("data-url");
+        var quantity = $('#quantity-'+id).val() != '' ? $('#quantity-'+id).val() :1;
+        var size = $('#size-'+id).val() != '' ? $('#size-'+id).val() : '';
+        var color = $('#color-'+id).val() != '' ? $('#color-'+id).val() : '';
+
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get( url,'quantity='+quantity+'&size='+size+'&color='+color)
+                    .done(function(data){
+                        location.reload();
+                    });
+            }
+        });
+        e.preventDefault();
+    });
+
     $('#submitPayment').click( function( e ) {
-        var url = $('#pre-order-payment').attr("action");
-        var amount = $('#appstore_bundle_ecommercebundle_preorder_amount').val();
+
+        var url = $('#ecommerce-payment').attr("action");
+
+        var amount = $('#ecommerce_payment_amount').val();
         if( amount == "" ){
             alert( "Please add payment amount" );
             return false;
         }
-        var transactionType = $('#appstore_bundle_ecommercebundle_preorder_transactionType').val();
+        var transactionType = $('#ecommerce_payment_transactionType').val();
         if( transactionType == "" ){
             alert( "Please select transaction type" );
             return false;
         }
-        var accountMobileBank = $('#appstore_bundle_ecommercebundle_preorder_accountMobileBank').val();
+        var accountMobileBank = $('#ecommerce_payment_accountMobileBank').val();
         if( accountMobileBank == "" ){
             alert( "Please payment mobile account" );
             return false;
         }
-        var mobileAccount = $('#appstore_bundle_ecommercebundle_preorder_mobileAccount').val();
+        var mobileAccount = $('#ecommerce_payment_mobileAccount').val();
         if( mobileAccount == "" ){
             alert( "Please add payment mobile no" );
             return false;
         }
-        var transaction = $('#appstore_bundle_ecommercebundle_preorder_transaction').val();
+        var transaction = $('#ecommerce_payment_transaction').val();
         if( transaction == "" ){
             alert( "Please add payment transaction no" );
             return false;
@@ -211,11 +192,12 @@ function ApproveProcess(){
             onOkBut: function(event, el) {
                 $.post( url,{amount:amount,transactionType:transactionType,'accountMobileBank':accountMobileBank,'mobileAccount':mobileAccount,'transaction':transaction})
                     .done(function(data){
-                        location.reload();
-                    });
+                         location.reload();
+                });
             }
         });
         e.preventDefault();
+
     });
 
     $('#addAddress').click(function(e){
@@ -237,68 +219,30 @@ function ApproveProcess(){
         e.preventDefault();
     });
 
-    $('#wfc').submit( function( e ) {
+    $('#orderProcess').submit( function( e ) {
 
-        var url = $('#confirm').attr("data-url");
+        var url = $('#orderProcess').attr("action");
+        var comment = $('#ecommerce_order_comment').val();
+        var address = $('#ecommerce_order_address').val();
+        var location = $('#ecommerce_order_location').val();
+        var process = $('#ecommerce_order_process').val();
+        var deliveryDate = $('#ecommerce_order_deliveryDate').val();
+        var cashOnDelivery = $('#ecommerce_order_cashOnDelivery').val();
+
+
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',
             onOkBut: function(event, el) {
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: new FormData(this),
-                    processData: false,
-                    contentType: false,
-                    success: function (response) {
-                        if ('success' == response ) {
-                            location.reload();
-                        }
-                    },
+                $.post( url,{comment:comment,process:process,deliveryDate:deliveryDate,address:address,location:location,cashOnDelivery:cashOnDelivery})
+                    .done(function(data){
+                        location.reload();
                 });
             }
         });
         e.preventDefault();
 
     });
-
-    $('#payment').submit( function( e ) {
-
-        var url = $('#submitted').attr("data-url");
-        var paymentMethod = $('#paymentType').val();
-        var bank = $('#bank').val();
-        var bkash = $('#bkash').val();
-        if( paymentMethod == "" ){
-            alert( "Please select payment type!" );
-            return false;
-        }
-        if( paymentMethod == 'cash-on-bank' && bank == ''){
-            alert( "Please select payment bank account no" );
-            return false;
-        }
-        if( paymentMethod == 'cash-on-bkash' && bkash == ''){
-            alert( "Please select payment bkash account" );
-            return false;
-        }
-        $.ajax({
-            url:url,
-            type: 'POST',
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            beforeSend: function() {
-                $('.ajax-loading').show().addClass('loading').fadeIn(3000);
-            },
-            success: function(response) {
-                location.reload();
-            }
-        });
-
-        e.preventDefault();
-
-    });
-
-
 
 }
 

@@ -290,7 +290,7 @@
                     <div class="clearfix"> </div>
                     {% set arr = {'delivered':'delivered'} %}
                     {% if entity.process not in  arr|keys %}
-                    <div class="form-actions portlet box blue">
+                    <div class="form-actions portlet box yellow">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-reorder"></i>Payment Process</div>
                         </div>
@@ -456,11 +456,6 @@
                     {% set arr = {'payment': 'payment' ,'confirm':'confirm'} %}
                     {% if entity.process in  arr|keys %}
                     {% endif %}
-                    <div class="form-actions portlet box yellow">
-                        <div class="portlet-title">
-                            <div class="caption"><i class="icon-reorder"></i>Payment Process</div>
-                        </div>
-                    </div>
                     <div class="clearfix"> </div>
                     <div class="form-actions portlet box blue">
                         <div class="portlet-title">

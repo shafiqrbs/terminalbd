@@ -104,7 +104,7 @@ class NotificationConfig
     /**
      * @return boolean
      */
-    public function isOnlineOrder()
+    public function getOnlineOrder()
     {
         return $this->onlineOrder;
     }

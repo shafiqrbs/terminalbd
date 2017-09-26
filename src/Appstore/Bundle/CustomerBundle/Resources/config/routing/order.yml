@@ -29,7 +29,7 @@ order_payment:
 
 order_process:
     path:      /{id}/order-process
-    defaults: { _controller: "CustomerBundle:Order:process" }
+    defaults: { _controller: "CustomerBundle:Order:processConfirm" }
 
 order_show:
     path:      /{id}/order-show
@@ -50,3 +50,13 @@ order_item_delete:
 order_print_invoice:
     path:     /{invoice}/invoice-print
     defaults: { _controller: "CustomerBundle:Order:print" }
+
+order_ajax_payment:
+    path:      /{id}/order-payment
+    defaults: { _controller: "CustomerBundle:Order:paymentProcess" }
+    methods:  [POST]
+
+order_payment_delete:
+    path:      /{id}/order-payment-delete
+    defaults: { _controller: "CustomerBundle:Order:paymentDelete" }
+

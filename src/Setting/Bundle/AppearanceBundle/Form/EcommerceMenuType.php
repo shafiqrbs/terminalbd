@@ -151,6 +151,7 @@ class EcommerceMenuType extends AbstractType
                         ->orderBy('e.name','ASC');
                 },
             ))
+            ->add('singleMenu')
 
           ;
     }

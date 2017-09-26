@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Form Components
+                    E-commerce Mega Menu
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -18,7 +18,7 @@
                         <a href="{{ path('ecommercemenu') }}">Mega menu</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Form Components</a></li>
+                    <li><a href="#"> E-commerce Mega Menu Components</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -35,7 +35,7 @@
                 </div>
                 <div class="portlet box green tabbable">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
+                        <div class="caption"><i class="icon-reorder"></i> E-commerce Mega Menu Information</div>
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -57,7 +57,7 @@
                             {{ form_row(form._token) }}
 
                             <div class="row-fluid">
-                                <div class="span6 ">
+                                <div class="span5">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Title <span class="required">*</span></label>
                                         <div class="controls">
@@ -69,12 +69,22 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span6 ">
+                                <div class="span5">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Menu</label>
                                         <div class="controls">
                                             {{ form_widget(form.menu) }}
                                             {{ form_errors(form.menu) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">&nbsp;</label>
+                                        <div class="controls">
+                                            Single Drop down
+                                            {{ form_widget(form.singleMenu) }}
+                                            {{ form_errors(form.singleMenu) }}
                                         </div>
                                     </div>
                                 </div>

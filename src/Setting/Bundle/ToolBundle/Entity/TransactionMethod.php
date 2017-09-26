@@ -8,6 +8,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\AccountingBundle\Entity\Expenditure;
 use Appstore\Bundle\AccountingBundle\Entity\PaymentSalary;
 use Appstore\Bundle\AccountingBundle\Entity\PettyCash;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice;
@@ -110,9 +111,9 @@ class TransactionMethod
     protected $pettyCash;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", mappedBy="transactionMethod" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderPayment", mappedBy="transactionMethod" , cascade={"persist", "remove"})
      */
-    protected $orders;
+    protected $orderPayments;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", mappedBy="transactionMethod" , cascade={"persist", "remove"})
@@ -221,13 +222,6 @@ class TransactionMethod
         return $this->status;
     }
 
-    /**
-     * @return PreOrder
-     */
-    public function getPreOrders()
-    {
-        return $this->preOrders;
-    }
 
     /**
      * @return mixed
@@ -243,14 +237,6 @@ class TransactionMethod
     public function setSlug($slug)
     {
         $this->slug = $slug;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOrders()
-    {
-        return $this->orders;
     }
 
     /**
@@ -394,6 +380,14 @@ class TransactionMethod
     public function getPreOrderPayments()
     {
         return $this->preOrderPayments;
+    }
+
+    /**
+     * @return OrderPayment
+     */
+    public function getOrderPayments()
+    {
+        return $this->orderPayments;
     }
 }
 

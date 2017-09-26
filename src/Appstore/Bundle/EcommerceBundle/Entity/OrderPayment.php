@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\EcommerceBundle\Entity;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
+use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,10 +13,10 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 /**
  * PreOrderPayment
  *
- * @ORM\Table("ems_preorder_payment")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\PreOrderPaymentRepository")
+ * @ORM\Table("ems_order_payment")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\EcommerceBundle\Repository\OrderPaymentRepository")
  */
-class PreOrderPayment
+class OrderPayment
 {
     /**
      * @var integer
@@ -27,33 +28,33 @@ class PreOrderPayment
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrder", inversedBy="preOrderPayments"  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="orderPayments"  )
      **/
-    private  $preOrder;
+    private  $order;
 
     /**
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="PreOrderPayment" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="orderPayment" )
      **/
     private  $createdBy;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="preOrderPayments" )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="orderPayments" )
      **/
     private  $accountCash;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="preOrderPayments" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="orderPayments" )
      **/
     private  $accountBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="preOrderPayments" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="orderPayments" )
      **/
     private  $accountMobileBank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="preOrderPayments" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="orderPayments" )
      **/
     private  $transactionMethod;
 
@@ -182,22 +183,6 @@ class PreOrderPayment
     }
 
     /**
-     * @return PreOrder
-     */
-    public function getPreOrder()
-    {
-        return $this->preOrder;
-    }
-
-    /**
-     * @param PreOrder $preOrder
-     */
-    public function setPreOrder($preOrder)
-    {
-        $this->preOrder = $preOrder;
-    }
-
-     /**
      * @return User
      */
     public function getCreatedBy()
@@ -350,7 +335,7 @@ class PreOrderPayment
     }
 
     /**
-     * @param mixed $accountCash
+     * @param AccountCash $accountCash
      */
     public function setAccountCash($accountCash)
     {
@@ -419,6 +404,22 @@ class PreOrderPayment
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return Order
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param Order $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
     }
 
 

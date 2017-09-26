@@ -45,9 +45,9 @@ class PosOrderSmsListener extends BaseSmsAwareListener
         $sales = $event->getSales();
         if(!empty($sales->getCustomer())) {
             if ($sales->getCustomer()->getLocation()->getParent()->getName() == 'Dhaka') {
-                $customer = "Dear Customer your order is processing and you will get your product within 1 working days. Thanks " . $sales->getInventoryConfig()->getGlobalOption()->getName();
+                $customerMsg = "Dear Customer your order is processing and you will get your product within 1 working days. Thanks " . $sales->getInventoryConfig()->getGlobalOption()->getName();
             } else {
-                $customer = "Dear Customer your order is processing and you will get your product within 3 working days. Thanks " . $sales->getInventoryConfig()->getGlobalOption()->getName();
+                $customerMsg = "Dear Customer your order is processing and you will get your product within 3 working days. Thanks " . $sales->getInventoryConfig()->getGlobalOption()->getName();
             }
             if ($sales->getCustomer()->getLocation()) {
                 $location = "and Location " . $sales->getCustomer()->getLocation()->getName() . "," . $sales->getCustomer()->getLocation()->getParent()->getName();
@@ -63,7 +63,7 @@ class PosOrderSmsListener extends BaseSmsAwareListener
         if(!empty($sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()) and $sales->getInventoryConfig()->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1){
 
             if(!empty($customerMobile)){
-                $status = $this->gateway->send($customer , $customerMobile);
+                $status = $this->gateway->send($customerMsg , $customerMobile);
                 $this->em->getRepository('SettingToolBundle:SmsSender')->insertSalesSenderSms($sales,$status);
             }
             if(!empty($sales->getInventoryConfig()->getGlobalOption()->getNotificationConfig()->getMobile())) {

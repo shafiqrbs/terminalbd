@@ -3,6 +3,10 @@
 namespace Appstore\Bundle\CustomerBundle\Controller;
 
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
+use Appstore\Bundle\EcommerceBundle\Form\CustomerOrderPaymentType;
+use Appstore\Bundle\EcommerceBundle\Form\CustomerOrderType;
+use Appstore\Bundle\EcommerceBundle\Form\OrderPaymentType;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Form\OrderType;
@@ -10,6 +14,7 @@ use Frontend\FrontentBundle\Service\Cart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Date;
 
 class OrderController extends Controller
 {
@@ -60,12 +65,10 @@ class OrderController extends Controller
 
     public function cartAction(Request $request)
     {
-
         $cart = new Cart($request->getSession());
         return $this->render('CustomerBundle:Order:cart.html.twig', array(
-            'cart'             => $cart,
+            'cart'   => $cart,
         ));
-
     }
 
     /**
@@ -115,17 +118,44 @@ class OrderController extends Controller
         ));
     }
 
+    /**
+     * Creates a form to edit a PreOrder entity.
+     *
+     * @param Order $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditPaymentForm(OrderPayment $entity,Order $order)
+    {
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new CustomerOrderPaymentType($order->getGlobalOption(),$location), $entity, array(
+            'action' => $this->generateUrl('order_ajax_payment', array('shop' => $order->getGlobalOption()->getUniqueCode(),'id' => $order->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'id' => 'ecommerce-payment',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+
     public function paymentAction($id)
     {
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy' => $user,'id' => $id));
-        $editForm = $this->createEditForm($entity);
+        $paymentEntity = new  OrderPayment();
+        $order = $this->createEditForm($entity);
+        $payment = $this->createEditPaymentForm($paymentEntity,$entity);
+
         return $this->render('CustomerBundle:Order:payment.html.twig', array(
             'globalOption' => $entity->getGlobalOption(),
             'entity'      => $entity,
-            'form'   => $editForm->createView(),
+            'orderForm'   => $order->createView(),
+            'paymentForm'   => $payment->createView(),
         ));
+
     }
 
     /**
@@ -139,10 +169,11 @@ class OrderController extends Controller
     {
         $globalOption = $entity->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new OrderType($globalOption,$location), $entity, array(
+        $form = $this->createForm(new CustomerOrderType($globalOption,$location), $entity, array(
             'action' => $this->generateUrl('order_process', array('shop' => $entity->getGlobalOption()->getUniqueCode(),'id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
+                'id' => 'orderProcess',
                 'class' => 'horizontal-form',
                 'novalidate' => 'novalidate',
             )
@@ -150,66 +181,68 @@ class OrderController extends Controller
         return $form;
     }
 
-
-    public function processAction(Request $request , Order $order)
-    {
-
-            $data = $request->request->all();
-            $editForm = $this->createEditForm($order);
-            $editForm->handleRequest($request);
-            if ($editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-
-            $em->getRepository('EcommerceBundle:OrderItem')->itemOrderUpdate($order,$data);
-            $totalAmount = $em->getRepository('EcommerceBundle:OrderItem')->totalItemAmount($order);
-            $order->setTotalAmount($totalAmount);
-            $vat = $em->getRepository('EcommerceBundle:Order')->getCulculationVat($order->getGlobalOption(),$totalAmount);
-            $grandTotal = (int)$totalAmount + $order->getShippingCharge() + (int)$vat;
-            $order->setVat($vat);
-            $order->setGrandTotalAmount($grandTotal);
-            if($order->getPaidAmount() > $grandTotal ){
-                $order->setReturnAmount(($order->getPaidAmount() + $order->getDiscountAmount()) - $grandTotal);
-                $order->setDueAmount(0);
-            }elseif($order->getPaidAmount() < $grandTotal ){
-                $order->setReturnAmount(0);
-                $due = (int)$grandTotal - ((int) $order->getPaidAmount() + $order->getDiscountAmount());
-                $order->setDueAmount($due);
-            }
-
-            $order->setProcess('WfC');
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'success', "Order has been process successfully"
-            );
-            }
-            return $this->redirect($this->generateUrl('order',array('shop'=>$order->getGlobalOption()->getSlug())));
-
-    }
-
-    public function payAction(Request $request ,Order $order)
+    public function paymentProcessAction(Request $request ,Order $order)
     {
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
-        if(!empty( $data['transactionMethod'])){
-            $transactionMethod =     $paymentTypes = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->find($data['transactionMethod']);
-            $order->setTransactionMethod($transactionMethod);
-            if($transactionMethod  == 2 ){
-                $bank = $this->getDoctrine()->getRepository('AccountingBundle:AccountBank')->find($data['accountBank']);
-                $order->setAccountBank($bank);
+        $entity = new OrderPayment();
+        if($data['amount']){
+            $entity->setOrder($order);
+            $entity->setTransactionType('Payment');
+            $entity->setAmount($data['amount']);
+            if(!empty($data['accountMobileBank'])){
+                $accountMobileBank =$this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->find($data['accountMobileBank']);
+                $entity->setAccountMobileBank($accountMobileBank);
             }
-            if($transactionMethod == 3 ){
-                $accountMobileBank = $this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->find($data['accountMobileBank']);
-                $order->setAccountMobileBank($accountMobileBank);
-            }
-            $order->setProcess('wfc');
-            $date = strtotime($data['deliveryDate']);
-            $deliveryDate = date('d-m-Y H:i:s',$date);
-            $order->setDeliveryDate(new \DateTime(($deliveryDate)));
-            $em->persist($order);
+            $entity->setMobileAccount($data['mobileAccount']);
+            $entity->setTransaction($data['transaction']);
+            $em->persist($entity);
             $em->flush();
+            $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.order_payment_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderPaymentSmsEvent($entity));
+
             return new Response('success');
+        }else{
+            return new Response('invalid');
         }
+
     }
+
+    public function processConfirmAction(Request $request ,Order $order)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $order->setProcess($data['process']);
+        if(isset($data['address']) and !empty($data['address'])){
+            $order->setAddress($data['address']);
+        }
+        if(isset($data['location']) and !empty($data['location'])){
+            $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location')->find($data['location']);
+            $order->setLocation($location);
+        }
+        if($data['cashOnDelivery'] == 1){
+            $order->setCashOnDelivery(true);
+        }
+        $order->setDeliveryDate(new \DateTime($data['deliveryDate']));
+        $em->persist($order);
+        $em->flush();
+
+        $created = $order->getCreated()->format('d-m-Y');
+        $invoice = $order->getInvoice();
+        $items = $order->getItem();
+        
+        if($data['process'] == 'wfc'){
+            $this->get('session')->getFlashBag()->add('success',"Dear customer, We have received your order form '.$invoice.' for ('.$items.') dated '.$created.' and we thank you very much.");
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.order_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
+        //    $dispatcher->dispatch('setting_tool.post.order_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
+
+        }
+        return new Response('success');
+
+    }
+
 
     public function deleteAction(Order $entity)
     {
@@ -226,25 +259,53 @@ class OrderController extends Controller
         return new Response('success');
     }
 
-    public function itemUpdateAction($order , OrderItem $item)
+    public function paymentDeleteAction(OrderPayment $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Expenditure entity.');
+        }
+        $em->remove($entity);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'error',"Data has been deleted successfully"
+        );
+        return new Response('success');
+    }
+
+    public function itemUpdateAction(Order $order , OrderItem $item)
     {
 
         $em = $this->getDoctrine()->getManager();
-        $orderEntity = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->find($order);
         if (!$item) {
             throw $this->createNotFoundException('Unable to find Expenditure entity.');
         }
         $data = $_REQUEST;
         $item->setQuantity($data['quantity']);
         $item->setSubTotal($item->getPrice() * $data['quantity']);
-        $em->persist($item);
-        $em->flush();
+        if($data['size']){
+            $itemSize = $data['size'];
+            $goodsItem = $em->getRepository('InventoryBundle:GoodsItem')->find($itemSize);
+            $item->setGoodsItem($goodsItem);
+            $item->setSize($goodsItem ->getSize());
+            $item->setPrice($goodsItem ->getSalesPrice());
+            $qnt = (int)$data['quantity'];
+            $item->setSubTotal($goodsItem->getSalesPrice() * $qnt );
+        }
 
-        $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($orderEntity);
+        if($data['color']){
+            $color = $em->getRepository('InventoryBundle:ItemColor')->find($data['color']);
+            $item->setColor($color);
+        }
+        $em->persist($item);
+        $em->flush($item);
+        $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($order);
+
         $this->get('session')->getFlashBag()->add(
-            'error',"Data has been deleted successfully"
+            'success',"Item has been updated successfully"
         );
         return new Response('success');
+        exit;
     }
 
     public function itemDeleteAction($order , OrderItem $item)

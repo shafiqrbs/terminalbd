@@ -146,7 +146,7 @@ class PreOrderController extends Controller
             'action' => $this->generateUrl('preorder_ajax_payment', array('shop' => $preOrder->getGlobalOption()->getSlug(),'id' => $preOrder->getId())),
             'method' => 'POST',
             'attr' => array(
-                'id' => 'pre-order-payment',
+                'id' => 'ecommerce-payment',
                 'novalidate' => 'novalidate',
             )
         ));

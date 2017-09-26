@@ -25,12 +25,8 @@ class EcommerceOrderConfirmListener extends BaseSmsAwareListener
          */
 
         $post = $event->getOrder();
-
-        //$date = new DateTime($post->getDeliveryDate());
-        //$result = date_format($date,"Y/m/d H:i:s");;
-       // echo $deliveryDate = strtotime($post->getDeliveryDate());
-       // echo $date = date('d-m-Y',$deliveryDate);
-        $msg = "Dear Customer, Your invoice no:".$post->getInvoice().'order is confirmed  and Delivery Date:';
+        $deliveryDate = $post->getDeliveryDate()->format('d-m-Y');
+        $msg = "Dear Customer, Your invoice no:".$post->getInvoice().'order is confirmed  and Delivery Date:'.$deliveryDate;
        // $mobile = "88".$post->getCreatedBy()->getProfile()->getMobile();
         $mobile = "8801828148148";
         $this->gateway->send($msg, $mobile);

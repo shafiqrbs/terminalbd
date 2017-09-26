@@ -52,6 +52,11 @@ class Order
      **/
     private  $createdBy;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderPayment", mappedBy="order"  , cascade={"persist", "remove"} )
+     * @ORM\OrderBy({"created" = "ASC"})
+     **/
+    private  $orderPayments;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderItem", mappedBy="order"  , cascade={"persist", "remove"} )
@@ -67,26 +72,6 @@ class Order
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Coupon", inversedBy="order" )
      **/
     private  $coupon;
-
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountCash", mappedBy="order" )
-     **/
-    private  $accountCash;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="orders" )
-     **/
-    private  $accountBank;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="orders" )
-     **/
-    private  $accountMobileBank;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="orders" )
-     **/
-    private  $transactionMethod;
 
 
     /**
@@ -112,7 +97,7 @@ class Order
      *
      * @ORM\Column(name="process", type="string", length=50,  nullable=true)
      */
-    private $process = 'Created';
+    private $process = 'created';
 
     /**
      * @var string
@@ -646,71 +631,7 @@ class Order
         $this->comment = $comment;
     }
 
-    /**
-     * @return AccountCash
-     */
-    public function getAccountCash()
-    {
-        return $this->accountCash;
-    }
-
-    /**
-     * @param AccountCash $accountCash
-     */
-    public function setAccountCash($accountCash)
-    {
-        $this->accountCash = $accountCash;
-    }
-
-    /**
-     * @return AccountBank
-     */
-    public function getAccountBank()
-    {
-        return $this->accountBank;
-    }
-
-    /**
-     * @param AccountBank $accountBank
-     */
-    public function setAccountBank($accountBank)
-    {
-        $this->accountBank = $accountBank;
-    }
-
-    /**
-     * @return TransactionMethod
-     */
-    public function getTransactionMethod()
-    {
-        return $this->transactionMethod;
-    }
-
-    /**
-     * @param TransactionMethod $transactionMethod
-     */
-    public function setTransactionMethod($transactionMethod)
-    {
-        $this->transactionMethod = $transactionMethod;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAccountMobileBank()
-    {
-        return $this->accountMobileBank;
-    }
-
-    /**
-     * @param mixed $accountMobileBank
-     */
-    public function setAccountMobileBank($accountMobileBank)
-    {
-        $this->accountMobileBank = $accountMobileBank;
-    }
-
-    /**
+      /**
      * @return GlobalOption
      */
     public function getGlobalOption()
@@ -972,6 +893,34 @@ class Order
     public function setCouponAmount($couponAmount)
     {
         $this->couponAmount = $couponAmount;
+    }
+
+    public function getCheckRoleEcommerceOrder($role = NULL)
+    {
+
+        $roles = array(
+            'ROLE_DOMAIN_INVENTORY_ECOMMERCE',
+            'ROLE_DOMAIN_INVENTORY_ECOMMERCE_MANAGER',
+            'ROLE_DOMAIN_INVENTORY_MANAGER',
+            'ROLE_DOMAIN_INVENTORY_APPROVE',
+            'ROLE_DOMAIN_MANAGER',
+            'ROLE_DOMAIN'
+        );
+
+        if(in_array($role,$roles)){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    /**
+     * @return OrderPayment
+     */
+    public function getOrderPayments()
+    {
+        return $this->orderPayments;
     }
 
 

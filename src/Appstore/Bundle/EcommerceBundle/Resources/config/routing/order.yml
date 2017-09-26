@@ -12,7 +12,7 @@ customer_order_update_inline:
 
 customer_order_data_source:
     path:     /order-process-sourcess
-    defaults: { _controller: "EcommerceBundle:Order:orderProcesSource" }
+    defaults: { _controller: "EcommerceBundle:Order:orderProcessSource" }
 
 
 customer_order_add_item:
@@ -27,10 +27,14 @@ customer_order_shipping_charge:
     path:     /order-shiping-charge-inline/{id}
     defaults: { _controller: "EcommerceBundle:Order:shippingCharge" }
 
-
 customer_order_confirm:
-    path:     /order-confirm/{id}
+    path:     /{id}/order-confirm
     defaults: { _controller: "EcommerceBundle:Order:confirm" }
+    methods:  POST
+
+customer_order_item_confirm:
+    path:     /{order}/{id}/order-item-confirm
+    defaults: { _controller: "EcommerceBundle:Order:confirmItem" }
 
 
 customer_order_print_invoice:
@@ -45,21 +49,28 @@ customer_order_show:
     path:     /{id}/show
     defaults: { _controller: "EcommerceBundle:Order:show" }
 
-customer_order_new:
-    path:     /new
-    defaults: { _controller: "EcommerceBundle:Order:new" }
 
-customer_order_create:
-    path:     /create
-    defaults: { _controller: "EcommerceBundle:Order:create" }
+customer_order_purchase_item_search:
+    path:     /{id}/inline-purchase-item-search
+    defaults: { _controller: "EcommerceBundle:Order:purchaseItemSelect" }
+    options:
+           expose: true
+
+customer_order_purchase_item_add:
+    path:     /{id}/inline-purchase-item-add
+    defaults: { _controller: "EcommerceBundle:Order:purchaseItemAdd" }
     methods:  POST
+    options:
+            expose: true
 
-customer_order_edit:
-    path:     /{id}/edit
-    defaults: { _controller: "EcommerceBundle:Order:edit" }
+customer_order_payment_confirm:
+    path:     /{id}/payment-confirm
+    defaults: { _controller: "EcommerceBundle:Order:confirmPayment" }
 
-customer_order_update:
-    path:     /{id}/update
-    defaults: { _controller: "EcommerceBundle:Order:update" }
-    methods:  [POST, PUT]
+customer_order_ajax_payment:
+    path:      /{id}/order-payment
+    defaults: { _controller: "EcommerceBundle:Order:paymentProcess" }
+    methods:  [POST]
+
+
 

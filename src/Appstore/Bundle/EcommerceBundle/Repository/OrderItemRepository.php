@@ -21,7 +21,7 @@ class OrderItemRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.subTotal) AS totalAmount,SUM(e.quantity) AS totalQuantity');
         $qb->where("e.order = :order");
-        $qb->andWhere("e.status = 1");
+        $qb->andWhere("e.status = 0 OR e.status = 1");
         $qb->setParameter('order', $order->getId());
         $result = $qb->getQuery()->getSingleResult();
         return $result;
@@ -34,7 +34,7 @@ class OrderItemRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->select('SUM(e.subTotal) AS totalAmount');
         $qb->where("e.order = :order");
-        $qb->andWhere("e.status = 1");
+        $qb->andWhere("e.status = 0 OR e.status = 1");
         $qb->setParameter('order', $order->getId());
         $result = $qb->getQuery()->getSingleResult();
         $total = $result['totalAmount'];
@@ -58,7 +58,7 @@ class OrderItemRepository extends EntityRepository
 
     public function itemOrderUpdate($order,$data)
     {
-       /* $em = $this->_em;
+        $em = $this->_em;
         $i = 0;
         foreach ($data['itemId'] as $row ){
             $entity = $em->getRepository('EcommerceBundle:OrderItem')->find($data['itemId'][$i]);
@@ -72,7 +72,7 @@ class OrderItemRepository extends EntityRepository
             $em->persist($entity);
             $em->flush();
             $i++;
-        }*/
+        }
     }
 
     public function itemOrderUpdateBarcode(Order $order)
@@ -107,7 +107,6 @@ class OrderItemRepository extends EntityRepository
             $qb->andWhere("i.color = :color");
             $qb->setParameter('color', $orderItem->getColor());
         }
-
         $result = $qb->getQuery()->getOneOrNullResult();
         if(!empty($result)){
             return $this->_em->getRepository('InventoryBundle:PurchaseItem')->find($result['id']);
@@ -117,6 +116,45 @@ class OrderItemRepository extends EntityRepository
 
 
     }
+
+    public function getPurchaseVendorItemList(OrderItem $orderItem)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:PurchaseItem','pi');
+        $qb->select('pi.id AS id');
+        $qb->addSelect('pi.barcode as barcode');
+        $qb->addSelect('pi.quantity as quantity');
+        $qb->andWhere("pi.purchaseVendorItem = :purchaseVendorItem");
+        $qb->setParameter('purchaseVendorItem', $orderItem->getPurchaseVendorItem());
+        $result = $qb->getQuery()->getResult();
+        if(!empty($result)){
+            return $result;
+        }else{
+            return false;
+        }
+
+
+    }
+
+    public function getPurchaseItemList( $orderItem)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:PurchaseItem','pi');
+        $qb->select('pi.id AS id');
+        $qb->addSelect('pi.barcode as barcode');
+        $qb->andWhere("pi.purchaseVendorItem = :purchaseVendorItem");
+        $qb->setParameter('purchaseVendorItem', $orderItem->getPurchaseVendorItem());
+        $result = $qb->getQuery()->getResult();
+        if(!empty($result)){
+            return $result;
+        }else{
+            return false;
+        }
+
+
+    }
+
+
 
 
 }

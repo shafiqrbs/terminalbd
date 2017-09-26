@@ -29,7 +29,7 @@
         <!-- BEGIN PAGE CONTENT-->
         <div class="row-fluid">
             <div class="span12">
-                <div class="portlet box green tabbable">
+                <div class="portlet box green">
 
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Manage Order Information</div>
@@ -46,9 +46,8 @@
                         </div>
                     </div>
 
-                    <div class="portlet-body">
-                        <div class="">
-                            <div class="row-fluid">
+                    <div class="portlet-body form">
+                        <div class="row-fluid">
                                 <div class="span4">
                                     <div class="row-fluid">
                                         <div class="span12">
@@ -82,19 +81,9 @@
                                                 {% endif %}
                                                 <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery }}</li>
                                                 <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
+                                                <li><strong>Process Status</strong>:&nbsp;{{ entity.process|capitalize }}</li>
 
-                                                {% if entity.accountMobileBank is not empty %}
-                                                    <li><strong>Received</strong>:&nbsp;{{ entity.accountMobileBank.mobile }},{{ entity.accountMobileBank.serviceName }},{{ entity.accountMobileBank.authorised }}</li>
-                                                {% endif %}
-                                                {% if entity.mobileAccount is not empty %}
-                                                    <li><strong>Mobile</strong>:&nbsp;{{ entity.mobileAccount }}</li>
-                                                {% endif %}
-                                                {% if entity.accountType is not empty %}
-                                                    <li><strong>Account Type</strong>:&nbsp;{{ entity.accountType }}</li>
-                                                {% endif %}
-                                                {% if entity.transaction is not empty %}
-                                                    <li><strong>Transaction ID</strong>:&nbsp;{{ entity.transaction }}</li>
-                                                {% endif %}
+
                                             </ul>
                                         </div>
                                     </div>
@@ -113,8 +102,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         <div class="portlet-body flip-scroll">
+                            {% include('flash-message.html.twig')  %}
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
@@ -126,6 +115,7 @@
                                     <th class="numeric" >Unit Price</th>
                                     <th class="numeric" >Total Price</th>
                                     <th class="numeric" >Barcode</th>
+                                    <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -136,17 +126,44 @@
                                         <td class="numeric" >{% if item.goodsItem.size is not empty %}{{ item.goodsItem.size.name }}{% endif %}</td>
                                         <td class="numeric" >{% if item.color is not empty %}{{ item.color.name }}{% endif %}</td>
                                         <td class="numeric" >
-                                        {{ item.quantity }}&nbsp;{{ item.purchaseVendorItem.masterItem.productUnit.name }}</td>
+                                        {{ item.quantity }}&nbsp;{% if item.purchaseVendorItem.masterItem is not empty and item.purchaseVendorItem.masterItem.productUnit is not empty %}{{ item.purchaseVendorItem.masterItem.productUnit.name }}{% endif %}</td>
                                         <td class="numeric" >{{ item.price }}</td>
                                         <td class="numeric" >=&nbsp;{{ item.subTotal }}</td>
                                         <td class="numeric" >
-                                            {% if item.purchaseItem is not empty %}{{ item.purchaseItem.barcode }}{% endif %}
+                                            {% if item.purchaseVendorItem.source == 'inventory' and entity.process != 'confirm'  %}
+                                            <a  data-type="select" class="editable" id="purchaseItem" data-name="purchaseItem" href="#" data-source="{{ path('customer_order_purchase_item_search',{'id':item.id }) }}"  data-url="{{ path('customer_order_purchase_item_add',{'id':item.id }) }}" data-pk="{{ item.id }}" data-value="{% if item.purchaseItem is not empty %}{{ item.purchaseItem.id }}{% endif %}" data-original-title="Enter Barcode no">{% if item.purchaseItem is not empty %}{{ item.purchaseItem.barcode }}{% endif %}</a>
+                                            {% elseif item.purchaseVendorItem.source == 'inventory' and entity.process == 'confirm' %}
+                                               {% if item.purchaseItem is not empty  %} {{ item.purchaseItem.barcode }}{% endif %}
+                                            {% else %}
+                                                Anonymous Item
+                                            {% endif %}
+                                        </td>
+                                        <td class="numeric">
+                                            {% if item.status == 1 %}
+                                                <a class="btn  mini green" ><i class=" icon-thumbs-up"></i> Accept</a>
+                                            {% elseif item.status == 2 %}
+                                                <a class="btn  mini yellow " ><i class="icon-thumbs-down"></i> Rejected</a>
+                                            {% else %}
+                                                <a class="btn  mini purple" ><i class="icon-filter"></i> In-progress</a>
+                                            {% endif %}
+                                            {% if item.status == 0 and entity.process == 'wfc' and entity.checkRoleEcommerceOrder(app.user.role) == true  %}
+                                                <div class="btn-group">
+                                                    <button class="blue btn mini dropdown-toggle" data-toggle="dropdown">
+                                                        Action&nbsp; <i class="icon-tasks"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu pull-right action">
+                                                        <li><a data-title="Confirm item" data-id="{{ item.id }}" data-url="{{ path('customer_order_item_confirm',{'order':entity.id,'id':item.id,'status':1}) }}" class="btn green confirm tooltips" data-trigger = "hover" data-original-title ="Are you sure went to delivery this item ?"><i class="icon-ok-circle"></i> Accept</a></li>
+                                                        <li><a data-title="Deny item" data-id="{{ item.id }}" data-url="{{ path('customer_order_item_confirm',{'order':entity.id,'id':item.id,'status':2}) }}" class="btn red confirm tooltips" data-trigger = "hover" data-original-title ="Are you sure went to reject this item ?"><i class="icon-trash"></i> Deny</a></li>
+                                                    </ul>
+                                                </div>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Total</span></td>
                                     <td class="numeric" colspan="1" >=&nbsp;{{ entity.totalAmount|number_format }}</td>
+                                    <td></td>
                                     <td></td>
                                 </tr>
                                 <tr>
@@ -159,8 +176,8 @@
                                         {% endif %}
                                     </td>
                                     <td></td>
+                                    <td></td>
                                 </tr>
-
                                 {% if entity.ecommerceConfig.vatEnable == 1 %}
                                     <tr>
                                         <td class="numeric" colspan="6" ><span class="pull-right">Vat & Tax</span></td>
@@ -173,6 +190,7 @@
                                         <td class="numeric" colspan="6" ><span class="pull-right">Discount Amount</span></td>
                                         <td class="numeric">=&nbsp;{{ ( entity.discountAmount)|number_format }}</td>
                                         <td></td>
+                                        <td></td>
                                     </tr>
                                 {% endif %}
                                 {% if entity.coupon is not empty %}
@@ -180,22 +198,26 @@
                                         <td class="numeric" colspan="6" ><span class="pull-right">Coupon Code({{ entity.coupon.couponCode }})</span></td>
                                         <td class="numeric">=&nbsp;{{ entity.couponAmount }}</td>
                                         <td></td>
+                                        <td></td>
                                     </tr>
                                 {% endif %}
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Grand Total</span></td>
                                     <td class="numeric"><strong>=&nbsp;{{ ( entity.grandTotalAmount)|number_format }}</strong></td>
                                     <td></td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Paid Amount</span></td>
                                     <td class="numeric"><strong>=&nbsp;{{ ( entity.paidAmount)|number_format }}</strong></td>
+                                    <td></td>
                                     <td></td>
                                 </tr>
                                 {% if entity.dueAmount  > 0 %}
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Due Amount</span></td>
                                     <td class="numeric" >=&nbsp;{{ ( entity.dueAmount)|number_format }}</td>
+                                    <td></td>
                                     <td></td>
                                 </tr>
                                 {% endif %}
@@ -204,6 +226,7 @@
                                     <td class="numeric" colspan="6" ><span class="pull-right">Return Amount</span></td>
                                     <td class="numeric">=&nbsp;{{ ( entity.returnAmount)|number_format }}</td>
                                     <td></td>
+                                    <td></td>
                                 </tr>
                                 {% endif %}
                                 </tbody>
@@ -211,82 +234,221 @@
 
                         </div>
                         <div class="clearfix"><br/></div>
-                        <!--/span-->
-                    </div>
-                    <div class="form-actions" style="background-color: #FFFFff">
-                        <div class="">
-                            {% if entity.process == 'WfC' %}
-                                <div>
-                                    <form id="process" name="process" action="{{ path('customer_order_confirm',{'id':entity.id,'process':'in-progress'}) }}" method="post">
+                        <div class="clearfix"> </div>
+                        <div class="form-actions portlet box blue">
+                            <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Order Process</div></div>
+                        </div>
+                        <div class="clearfix"><br/> </div>
+                        <div>
+
+                            {{ form_start(orderForm) }}
+                            {{ form_row(orderForm._token) }}
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    {{ form_widget(orderForm.comment) }}
+                                    {{ form_errors(orderForm.comment) }}
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span6">
+
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group pull-right">
+                                    {{ form_widget(orderForm.deliveryDate) }}
+                                    {{ form_errors(orderForm.deliveryDate) }}
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <div class="input-append">
+                                                {{ form_widget(orderForm.process) }}
+                                                {{ form_errors(orderForm.process) }}
+                                                <div class="btn-group"> <button type="submit" id="submitProcess" name="submitProcess"  class="btn blue"><i class="icon-refresh"></i>&nbsp;Process</button></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ form_end(orderForm) }}
+                        </div>
+                        <div class="clearfix"><br/> </div>
+                        <div class="form-actions portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="icon-reorder"></i>Payment Information</div>
+                            </div>
+                        </div>
+                        <div class="clearfix"><br/> </div>
+                        <table class="table table-bordered table-striped table-condensed flip-content ">
+                            <thead class="flip-content ">
+                            <tr class="head-green">
+                                <th class="numeric" >Date</th>
+                                <th class="numeric" >Transaction Type</th>
+                                <th class="numeric" >Payment Mobile</th>
+                                <th class="numeric" >Transaction ID</th>
+                                <th class="numeric" >Receive Mobile</th>
+                                <th class="numeric" >Receive Amount</th>
+                                <th class="numeric" >Return Amount</th>
+                                <th class="numeric" >Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for payment in entity.orderPayments %}
+                                <tr id="remove-{{ payment.id }}">
+                                    <td>{{ payment.updated|date('d-m-Y') }}</td>
+                                    <td class="numeric" >{{ payment.transactionType }}</td>
+                                    <td class="numeric" >{{ payment.mobileAccount }}</td>
+                                    <td class="numeric" >{{ payment.transaction }}</td>
+                                    <td class="numeric" >{{ payment.accountMobileBank.name }}</td>
+                                    <td class="numeric" >{% if payment.transactionType =='Payment' %}{{ payment.amount|number_format }}{% endif %}</td>
+                                    <td class="numeric" >{% if payment.transactionType =='Return' %}{{ payment.amount|number_format }}{% endif %}</td>
+                                    <td class="numeric" >
+                                    {% if payment.status == 1  %}
+                                        <a class="btn  mini green" data-url="" ><i class=" icon-thumbs-up"></i> Accept</a></td>
+                                    {% else %}
+                                        <a class="btn  mini yellow process"  data-url="{{ path('customer_order_payment_confirm',{'id':payment.id}) }}" ><i class=" icon-refresh"></i> Waiting</a></td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+
+                            <tr>
+                                <td colspan="8"><br/></td>
+                            </tr>
+                            <tr>
+                                <td class="numeric" colspan="6" ><span class="pull-right"><strong>Grand Total </strong></span></td>
+                                <td class="numeric" >=&nbsp;{{ entity.grandTotalAmount|number_format }}</td>
+                                <td class="numeric" ></td>
+                            </tr>
+                            <tr>
+                                <td class="numeric" colspan="6" ><span class="pull-right"><strong>Total Receive</strong></span></td>
+                                <td class="numeric" >=&nbsp;{{ entity.paidAmount|number_format }}</td>
+                                <td class="numeric" ></td>
+                            </tr>
+
+                            <tr>
+                                <td class="numeric" colspan="6" ><span class="pull-right"><strong>Due Amount</strong></span></td>
+                                <td class="numeric" >=&nbsp;{{ entity.dueAmount|number_format }}</td>
+                                <td class="numeric" ></td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                        <div class="clearfix"> </div>
+                        <div class="form-actions portlet box green">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="icon-reorder"></i>Payment Process</div>
+                            </div>
+                        </div>
+                        <div class="clearfix"><br/> </div>
+                        {{ form_start(paymentForm) }}
+                        {{ form_row(paymentForm._token) }}
+                        <div class="row-fluid">
+                            <div class="span10">
+                                <div class="row-fluid">
+                                    <div class="span12">
                                         <div class="row-fluid">
-                                                <div class="span12">
-                                                    <div class="row-fluid">
-                                                        <div class="span9">
-                                                            <input type="text" id="comment" name="comment" class="span12 m-wrap tooltips"  data-trigger ="hover"  data-original-title="Enter sms content for order." placeholder="Enter sms content for order." value="" >
+                                            <div class="span4">
+                                                <div class="row-fluid">
+                                                    <div class="span12">
+                                                        <div class="control-group">
+                                                            {{ form_widget(paymentForm.amount) }}
+                                                            {{ form_errors(paymentForm.amount) }}
                                                         </div>
-                                                        <div class="span3">
-                                                            <div class="input-append">
-                                                                <input type="datetime" name="deliveryDate" id="deliveryDate" class="date-picker span6 m-wrap" value="{{ "now"|date("d-m-Y") }}" placeholder="{{ "now"|date("d-m-Y") }}" >
-                                                                <div class="btn-group">
-                                                                    <button class="blue btn dropdown-toggle" data-toggle="dropdown">
-                                                                        Action <span class="tasks"></span>
-                                                                    </button>
-                                                                    <ul class="dropdown-menu pull-right action">
-                                                                        <li><button type="submit" id="submitProcess" name="submitProcess" data-name="confirm" value="confirm"  class="btn blue span12"><i class="icon-ok"></i>&nbsp;Confirm</button>
-                                                                        </li>
-                                                                        <li><button type="submit" id="submitProcess" name="submitProcess" data-name="sms" class="btn purple span12" value="sms"><i class="icon-comments"></i>&nbsp;SMS</button>
-                                                                        </li>
-                                                                     </ul>
-                                                                </div>
-                                                            </div>
-                                                         </div>
                                                     </div>
                                                 </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                {% elseif entity.process == 'confirm'  %}
-                                <div class="clearfix"><br/></div>
-                                    <form id="process" name="process" action="{{ path('customer_order_confirm',{'id':entity.id}) }}" method="post">
-                                        <div class="row-fluid">
-                                            <div class="span12">
+                                            </div>
+                                            <div class="span8">
                                                 <div class="row-fluid">
-                                                    <div class="span10">
-                                                        <input type="text" id="comment" name="comment" class="span12 m-wrap tooltips"  data-trigger ="hover"  data-original-title="Enter sms content for order." placeholder="Enter sms content for order." value="" >
+                                                    <div class="span4">
+                                                        <div class="control-group">
+                                                            {{ form_widget(paymentForm.transactionType) }}
+                                                            {{ form_errors(paymentForm.transactionType) }}
+                                                        </div>
                                                     </div>
-                                                    <div class="span2">
-                                                        <div class="input-append">
-                                                            <div class="btn-group">
-                                                                <button class="green btn dropdown-toggle" data-toggle="dropdown">
-                                                                    Way of Delivery&nbsp;<span class="tasks"></span>
-                                                                </button>
-                                                                <ul class="dropdown-menu pull-right action">
-                                                                    <li><button  type="submit" id="submitProcess" name="submitProcess" value="done"   class="btn purple span12"><i class="icon-ok-circle"></i>&nbsp;Delivered</button></li>
-                                                                    <li><button type="submit" id="submitProcess" name="submitProcess"  value="return" class="btn blue span12"   ><i class="icon-circle-arrow-left"></i>&nbsp;Return</button></li>
-                                                                    <li><button  type="submit" id="submitProcess" name="submitProcess" value="cancel"   class="btn red span12" ><i class="icon-remove-circle"></i>&nbsp;Cancel</button></li>
-                                                                </ul>
+                                                    <div class="span8">
+                                                        <div class="control-group">
+                                                            {{ form_widget(paymentForm.accountMobileBank) }}
+                                                            {{ form_errors(paymentForm.accountMobileBank) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row-fluid">
+                                                    <div class="span4">
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                {{ form_widget(paymentForm.mobileAccount) }}
+                                                                {{ form_errors(paymentForm.mobileAccount) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="span8">
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                {{ form_widget(paymentForm.transaction) }}
+                                                                {{ form_errors(paymentForm.transaction) }}
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
-                                <div class="pull-center">
-                                    <a  href="{{ path('customer_order_print_invoice',{id:entity.id}) }}" target="_blank" data-url=""  class="btn blue process"><i class="icon-truck"></i>&nbsp;Delivery Invoice</a>
+
+                                    </div>
                                 </div>
-                            {% endif %}
+                            </div>
+                            <div class="span2">
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <div class="controls">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid" style="margin-top: 25px">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <button type="button" id="submitPayment" name="submitPayment" value="payment"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
-                    </div>
-                    <div class="form-actions" >
+                        {{ form_end(paymentForm) }}
+
+                        <div class="clearfix"><br/> </div>
+
+                        <div class="form-actions portlet box yellow">
+                            <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Comments Information</div></div>
+                        </div>
+                        <div class="clearfix"> </div>
                         {% set paymentID = entity.globalOption.id~'-ecommerce-payment-'~entity.id %}
                         {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': paymentID } %}
+                        <div class="clearfix"> </div>
+                        <!--/span-->
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+    <style>
+        .editable-input{
+           margin-top: 4px !important;
+        }
+        .input-medium{
+          width:160px
+        }
+        .popover-content{
+            width:275px!important;
+        }
+    </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -298,6 +460,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@EcommerceBundle/Resources/public/js/editable.js'
     '@EcommerceBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -307,4 +470,5 @@
     {{ parent() }}
     $(".editable").editable();
     ApproveProcess();
+    $('body').addClass('page-sidebar-closed');
 {% endblock %}

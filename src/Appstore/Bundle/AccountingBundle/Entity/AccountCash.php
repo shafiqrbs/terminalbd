@@ -4,6 +4,7 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Doctrine\ORM\Mapping as ORM;
@@ -113,10 +114,10 @@ class AccountCash
     protected $pettyCash;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Order", inversedBy="accountCash"  )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderPayment", inversedBy="accountCash"  )
      * @ORM\JoinColumn(onDelete="CASCADE")
      **/
-    private  $order;
+    private  $orderPayments;
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment", inversedBy="accountCash"  )
@@ -461,30 +462,7 @@ class AccountCash
         return $this->expenditure;
     }
 
-    /**
-     * @return Order
-     */
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    /**
-     * @param Order $order
-     */
-    public function setOrder($order)
-    {
-        $this->order = $order;
-    }
-
-    /**
-     * @param PreOrder $preOrder
-     */
-    public function setPreOrder($preOrder)
-    {
-        $this->preOrder = $preOrder;
-    }
-
+  
     /**
      * @return AccountSales
      */
@@ -627,6 +605,22 @@ class AccountCash
     public function getPreOrderPayments()
     {
         return $this->preOrderPayments;
+    }
+
+    /**
+     * @return OrderPayment
+     */
+    public function getOrderPayments()
+    {
+        return $this->orderPayments;
+    }
+
+    /**
+     * @param OrderPayment $orderPayments
+     */
+    public function setOrderPayments($orderPayments)
+    {
+        $this->orderPayments = $orderPayments;
     }
 
 

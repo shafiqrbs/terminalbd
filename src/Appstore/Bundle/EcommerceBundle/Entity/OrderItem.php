@@ -85,11 +85,11 @@ class OrderItem
     private $subTotal;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="status", type="boolean")
+     * @ORM\Column(name="status", type="smallint" ,length=1 ,nullable = true)
      */
-    private $status = true;
+    private $status = 0;
 
 
     /**
@@ -254,21 +254,6 @@ class OrderItem
         $this->purchaseItem = $purchaseItem;
     }
 
-    /**
-     * @return boolean
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param boolean $status
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-    }
 
     /**
      * @return ItemSIze
@@ -292,6 +277,22 @@ class OrderItem
     public function getStockItems()
     {
         return $this->stockItems;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 
 

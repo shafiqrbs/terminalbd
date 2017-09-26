@@ -2,6 +2,9 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Controller;
 
+use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
+use Appstore\Bundle\EcommerceBundle\Form\OrderPaymentType;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -46,62 +49,6 @@ class OrderController extends Controller
             'entities' => $pagination,
         ));
     }
-    /**
-     * Creates a new Order entity.
-     *
-     */
-    public function createAction(Request $request)
-    {
-        $entity = new Order();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-            return $this->redirect($this->generateUrl('customer_order_show', array('id' => $entity->getId())));
-        }
-
-        return $this->render('EcommerceBundle:Order:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
-    }
-
-    /**
-     * Creates a form to create a Order entity.
-     *
-     * @param Order $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(Order $entity)
-    {
-        $form = $this->createForm(new OrderType(), $entity, array(
-            'action' => $this->generateUrl('customer_order_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
-    }
-
-    /**
-     * Displays a form to create a new Order entity.
-     *
-     */
-    public function newAction()
-    {
-        $entity = new Order();
-        $form   = $this->createCreateForm($entity);
-
-        return $this->render('EcommerceBundle:Order:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
-    }
 
     /**
      * Finds and displays a Order entity.
@@ -121,27 +68,6 @@ class OrderController extends Controller
         ));
     }
 
-    /**
-     * Displays a form to edit an existing Order entity.
-     *
-     */
-    public function editAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('EcommerceBundle:Order')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Order entity.');
-        }
-
-        $editForm = $this->createEditForm($entity);
-
-        return $this->render('EcommerceBundle:Order:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-        ));
-    }
 
     /**
     * Creates a form to edit a Order entity.
@@ -152,95 +78,81 @@ class OrderController extends Controller
     */
     private function createEditForm(Order $entity)
     {
-        $form = $this->createForm(new OrderType(), $entity, array(
-            'action' => $this->generateUrl('customer_order_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
+        $globalOption = $entity->getGlobalOption();
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new OrderType($globalOption,$location), $entity, array(
+            'action' => $this->generateUrl('customer_order_confirm', array('id' => $entity->getId())),
+            'method' => 'post',
+            'attr' => array(
+                'id' => 'orderProcess',
+                'novalidate' => 'novalidate',
+            )
         ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
         return $form;
     }
-    /**
-     * Edits an existing Order entity.
-     *
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('EcommerceBundle:Order')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Order entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isValid()) {
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('customer_order_edit', array('id' => $id)));
-        }
-
-        return $this->render('EcommerceBundle:Order:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-    /**
-     * Deletes a Order entity.
-     *
-     */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('EcommerceBundle:Order')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Order entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('customer_order'));
-    }
 
     /**
-     * Creates a form to delete a Order entity by id.
+     * Creates a form to edit a PreOrder entity.
      *
-     * @param mixed $id The entity id
+     * @param Order $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm($id)
+    private function createEditPaymentForm(OrderPayment $entity,Order $order)
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('customer_order_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new OrderPaymentType($order->getGlobalOption(),$location), $entity, array(
+            'action' => $this->generateUrl('customer_order_ajax_payment', array('id' => $order->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'id' => 'ecommerce-payment',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
     }
 
     public function paymentAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $order = $em->getRepository('EcommerceBundle:Order')->find($id);
+        $paymentEntity = new  OrderPayment();
+        $orderForm = $this->createEditForm($order);
+        $payment = $this->createEditPaymentForm($paymentEntity,$order);
+
         return $this->render('EcommerceBundle:Order:payment.html.twig', array(
             'entity'                => $order,
+            'orderForm'             => $orderForm->createView(),
+            'paymentForm'           => $payment->createView(),
         ));
 
     }
+
+    public function paymentProcessAction(Request $request ,Order $order)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = new OrderPayment();
+        $entity->setOrder($order);
+        if($data['transactionType'] == 'Return'){
+            $entity->setTransactionType('Return');
+            $entity->setAmount('-'.$data['amount']);
+        }else{
+            $entity->setTransactionType('Payment');
+            $entity->setAmount($data['amount']);
+        }
+        if(!empty($data['accountMobileBank'])){
+            $accountMobileBank =$this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->find($data['accountMobileBank']);
+            $entity->setAccountMobileBank($accountMobileBank);
+        }
+        $entity->setMobileAccount($data['mobileAccount']);
+        $entity->setTransaction($data['transaction']);
+        $em->persist($entity);
+        $em->flush();
+        $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
+        return new Response('success');
+    }
+
 
 
     /**
@@ -310,58 +222,50 @@ class OrderController extends Controller
     {
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
-        if($data['submitProcess'] == 'confirm'){
-            $order->setProcess('confirm');
-            $em->getRepository('EcommerceBundle:OrderItem')->itemOrderUpdateBarcode($order);
-        }else{
-            $order->setProcess($data['submitProcess']);
+        if($data['process'] != 'sms'){
+            $order->setProcess($data['process']);
         }
         if(isset($data['comment']) and !empty($data['comment'])){
             $order->setComment($data['comment']);
         }else{
             $order->setComment(null);
         }
+        $order->setDeliveryDate(new \DateTime($data['deliveryDate']));
         $em->persist($order);
         $em->flush();
 
-        if($data['submitProcess'] == 'confirm'){
+        if($data['process'] == 'confirm'){
 
-            $em->getRepository('InventoryBundle:Item')->onlineOrderUpdate($order);
-            $em->getRepository('InventoryBundle:StockItem')->insertOnlineOrder($order);
+            //$em->getRepository('InventoryBundle:Item')->onlineOrderUpdate($order);
+           // $em->getRepository('InventoryBundle:StockItem')->insertOnlineOrder($order);
             $online = $em->getRepository('AccountingBundle:AccountOnlineOrder')->insertAccountOnlineOrder($order);
             $em->getRepository('AccountingBundle:Transaction')->onlineOrderTransaction($order,$online);
 
-            $this->get('session')->getFlashBag()->add(
-                'success',"Customer has been confirmed"
-            );
-
+            $this->get('session')->getFlashBag()->add('success',"Customer has been confirmed");
             $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.order_confirm', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderConfirmEvent($order));
+            $dispatcher->dispatch('setting_tool.post.order_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
 
         }else{
 
-            $this->get('session')->getFlashBag()->add(
-                'success',"Message has been sent successfully"
-            );
-
+            $this->get('session')->getFlashBag()->add('success',"Message has been sent successfully");
             $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.order_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
+            $dispatcher->dispatch('setting_tool.post.order_comment_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
 
         }
-        return $this->redirect($this->generateUrl('customer_order'));
+        return new Response('success');
 
     }
 
-    public function orderProcesSourceAction()
+    public function orderProcessSourceAction()
     {
 
-        $items[]=array('value' => 'Created','text'=> 'Created');
-        $items[]=array('value' => 'WfC','text'=> 'WfC');
-        $items[]=array('value' => 'Confirm','text'=> 'Confirm');
-        $items[]=array('value' => 'Delivered','text'=> 'Delivered');
-        $items[]=array('value' => 'Returned','text'=> 'Returned');
-        $items[]=array('value' => 'Cancel','text'=> 'Cancel');
-        $items[]=array('value' => 'Delete','text'=> 'Delete');
+        $items[]=array('value' => 'created','text'=> 'Created');
+        $items[]=array('value' => 'wfc','text'=> 'Waiting for Confirm');
+        $items[]=array('value' => 'confirm','text'=> 'Confirm');
+        $items[]=array('value' => 'delivered','text'=> 'Delivered');
+        $items[]=array('value' => 'returned','text'=> 'Returned');
+        $items[]=array('value' => 'cancel','text'=> 'Cancel');
+        $items[]=array('value' => 'delete','text'=> 'Delete');
         return new JsonResponse($items);
 
     }
@@ -409,8 +313,56 @@ class OrderController extends Controller
 
     }
 
+    public function purchaseItemSelectAction(OrderItem $orderItem)
+    {
+
+        $entities = $this->getDoctrine()->getRepository('EcommerceBundle:OrderItem')->getPurchaseVendorItemList($orderItem);
+        $items = array();
+        $items[]=array('value' => '','text'=> 'Add Inventory Item');
+        foreach ($entities as $entity):
+            $items[]=array('value' => $entity['id'],'text'=> $entity['barcode'].'('.$entity['quantity'].')');
+        endforeach;
+        return new JsonResponse($items);
+    }
+
+    public function purchaseItemAddAction(Request $request , OrderItem $entity)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $purchaseItem = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseItem')->find($data['value']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Order entity.');
+        }
+        $entity->setPurchaseItem($purchaseItem);
+        $em->flush();
+        exit;
+    }
 
 
+    public function confirmItemAction(Order $order, OrderItem $orderItem)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $orderItem->setStatus($data['status']);
+        $em->persist($orderItem);
+        $em->flush();
+        $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrder($order);
+        return new Response('success');
 
+    }
+
+    public function confirmPaymentAction(OrderPayment $payment)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $payment->setStatus(1);
+        $em->persist($payment);
+        $em->flush();
+        $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($payment->getOrder());
+        $dispatcher = $this->container->get('event_dispatcher');
+        $dispatcher->dispatch('setting_tool.post.order_payment_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderPaymentSmsEvent($payment));
+
+        return new Response('success');
+
+    }
 
 }

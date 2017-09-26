@@ -113,6 +113,13 @@ class EcommerceMenu
      */
     private $sorting;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="singleMenu", type="boolean")
+     */
+    private $singleMenu = false;
+
 
     /**
      * Get id
@@ -351,6 +358,22 @@ class EcommerceMenu
     public function setChildMenus($childMenus)
     {
         $this->childMenus = $childMenus;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getSingleMenu()
+    {
+        return $this->singleMenu;
+    }
+
+    /**
+     * @param boolean $singleMenu
+     */
+    public function setSingleMenu($singleMenu)
+    {
+        $this->singleMenu = $singleMenu;
     }
 
 

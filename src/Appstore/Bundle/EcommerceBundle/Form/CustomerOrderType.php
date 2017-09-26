@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class OrderType extends AbstractType
+class CustomerOrderType extends AbstractType
 {
 
 
@@ -34,9 +34,18 @@ class OrderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12 tooltips', 'data-trigger' => 'hover','placeholder'=>'Enter sms content for order.','data-original-title'=>'Enter sms content for order.','autocomplete'=>'off')))
+            ->add('address','text', array('attr'=>array('class'=>'m-wrap span12 tooltips', 'data-trigger' => 'hover','placeholder'=>'Enter  delivery address ie: Unit,Floor,House,Road,Area,Thana,District Etc','data-original-title'=>'Enter  delivery address ie: Unit,Floor,House,Road,Area,Thana,District Etc','autocomplete'=>'off')))
             ->add('deliveryDate','date', array('attr'=>array('class'=>'m-wrap span12 tooltips', 'data-trigger' => 'hover','placeholder'=>'Receive your product date(Approximately)','data-original-title'=>'Please receive your product date(Approximately).',),
                 'constraints' =>array(new NotBlank(array('message'=>'Please input required')))
+            ))
+            ->add('location', 'entity', array(
+                'required'    => false,
+                'empty_value' => '---Select Location---',
+                'attr'=>array('class'=>'select2 span12'),
+                'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
+                'choices'=> $this->LocationChoiceList(),
+                'choices_as_values' => true,
+                'choice_label' => 'nestedLabel',
             ))
             ->add('process', 'choice', array(
                 'attr'=>array('class'=>'span8 m-wrap'),
@@ -44,16 +53,12 @@ class OrderType extends AbstractType
                 'multiple'      =>false,
                 'empty_value' => '---Process Status---',
                 'choices' => array(
-                    'sms'       => 'Send SMS',
                     'created'       => 'Created',
-                    'confirm'       => 'Confirm',
-                    'wfc'       => 'Wait for Confirm',
-                    'delivered'       => 'Delivered',
-                    'returned'       => 'Returned',
-                    'cancel'       => 'Cancel',
-                    'delete'       => 'Delete',
-                )
-            ));
+                    'in-progress'       => 'In-progress',
+                    'wfc'       => 'Wait for Confirm'
+                ),
+            ))
+            ->add('cashOnDelivery');
 
     }
     

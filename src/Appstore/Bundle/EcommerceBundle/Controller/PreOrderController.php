@@ -105,7 +105,7 @@ class PreOrderController extends Controller
             'action' => $this->generateUrl('ecommerce_preorder_ajax_payment', array('id' => $preOrder->getId())),
             'method' => 'POST',
             'attr' => array(
-                'id' => 'pre-order-payment',
+                'id' => 'ecommerce-payment',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -217,7 +217,7 @@ class PreOrderController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new PreOrderPayment();
         $entity->setPreOrder($preOrder);
-        if($entity->getTransactionType() == 'Return'){
+        if($data['transactionType'] == 'Return'){
             $entity->setTransactionType('Return');
             $entity->setAmount('-'.$data['amount']);
         }else{
