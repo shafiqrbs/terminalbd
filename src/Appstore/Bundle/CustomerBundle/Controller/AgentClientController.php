@@ -4,7 +4,10 @@ namespace Appstore\Bundle\CustomerBundle\Controller;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Form\OrderType;
+use Core\UserBundle\Entity\Profile;
 use Core\UserBundle\Entity\User;
+use Core\UserBundle\Form\AgentProfileType;
+use Core\UserBundle\Form\CustomerEditProfileType;
 use Core\UserBundle\Form\SignupType;
 use Frontend\FrontentBundle\Service\Cart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -119,6 +122,82 @@ class AgentClientController extends Controller
             'form'   => $form->createView(),
         ));
     }
+
+
+    /**
+     * Creates a form to edit a DomainUser entity.
+     *
+     * @param User $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditProfileForm(Profile $entity)
+    {
+
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new AgentProfileType($location), $entity, array(
+            'action' => $this->generateUrl('customer_self_update_profile'),
+            'method' => 'PUT',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    /**
+     * Displays a form to edit an existing DomainUser entity.
+     *
+     */
+    public function editAction()
+    {
+
+        $user = $this->getUser();
+        $editForm = $this->createEditProfileForm($user->getProfile());
+        return $this->render('DomainUserBundle:Agent:profile.html.twig', array(
+            'globalOption' => '',
+            'entity'      => $user,
+            'form'   => $editForm->createView(),
+        ));
+    }
+
+    public function profileUpdateAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $this->getUser();
+
+        /* @var Profile $entity */
+
+        $entity = $this->getUser()->getProfile();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find DomainUser entity.');
+        }
+
+        $editForm = $this->createEditProfileForm($entity);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isValid()) {
+            if($entity->upload() &&  !empty($entity->getFile()) and !empty($entity->getPath()) ){
+                $entity->removeUpload();
+            }
+            $entity->upload();
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been updated successfully"
+            );
+            return $this->redirect($this->generateUrl('customer_self_edit_profile'));
+        }
+
+        return $this->render('DomainUserBundle:Agent:profile.html.twig', array(
+            'globalOption' => '',
+            'entity'      => $user,
+            'form'   => $editForm->createView(),
+
+        ));
+    }
+
 
 
 }

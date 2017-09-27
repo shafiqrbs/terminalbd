@@ -2,7 +2,7 @@
 
 namespace Core\UserBundle\Form;
 
-
+use Core\UserBundle\Form\Type\ProfileType;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -14,16 +14,19 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 
-class AgentProfileType extends AbstractType
+class CustomerEditProfileType extends AbstractType
 {
 
+    /** @var  GlobalOption */
+    private $globalOption;
 
     /** @var  LocationRepository */
     private $location;
 
 
-    function __construct(LocationRepository $location)
+    function __construct(GlobalOption $globalOption, LocationRepository $location)
     {
+        $this->globalOption = $globalOption;
         $this->location = $location;
     }
 
@@ -46,19 +49,12 @@ class AgentProfileType extends AbstractType
                     new NotBlank(array('message'=>'Please input user mobile no'))
                 )
             ))
-            ->add('email','email', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your email address', 'data-original-title' =>'Enter your email address' , 'data-trigger' => 'hover'),
-
-            ))
-             ->add('facebookId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter your facebook id', 'data-original-title' =>'Enter your facebook id' , 'data-trigger' => 'hover'),
-
-            ))
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address'),
-            'constraints' =>array(
+                'constraints' =>array(
                     new NotBlank(array('message'=>'Please input address'))
-            )
+                )
             ))
-            ->add('postalCode','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter postal code')))
-            ->add('additionalPhone','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter additional phone no')))
+            ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no')))
             ->add('location', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select Location---',

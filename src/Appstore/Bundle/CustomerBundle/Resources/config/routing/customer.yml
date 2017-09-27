@@ -15,15 +15,19 @@ customer_self_create:
     defaults: { _controller: "CustomerBundle:AgentClient:create" }
     methods:  POST
 
-customer_self_edit:
-    path:     /{id}/edit
+customer_self_edit_profile:
+    path:     /edit-profile
     defaults: { _controller: "CustomerBundle:AgentClient:edit" }
 
-customer_self_invoice:
-    path:     /invoice
-    defaults: { _controller: "CustomerBundle:AgentClient:edit" }
-
-customer_self_update:
-    path:     /{id}/update
-    defaults: { _controller: "CustomerBundle:AgentClient:update" }
+customer_self_update_profile:
+    path:     /update-profile
+    defaults: { _controller: "CustomerBundle:AgentClient:profileUpdate" }
     methods:  [POST, PUT]
+
+customer_self_change_password:
+    path:     /change-password
+    defaults: { _controller: "UserBundle:ChangePassword:customerChangePassword" }
+
+customer_self_forget_password:
+    path:     /{id}/forget-user-password
+    defaults: { _controller: "DomainUserBundle:DomainUser:forgetPassword" }

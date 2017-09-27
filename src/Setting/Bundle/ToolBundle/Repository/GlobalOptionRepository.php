@@ -43,7 +43,6 @@ class GlobalOptionRepository extends EntityRepository
             $qb->setParameter('location', $data['location']);
         }
         if(!empty($data['syndicate'])){
-            var_dump($data);
             $qb->andWhere("e.syndicate = :syndicate");
             $qb->setParameter('syndicate', $data['syndicate']);
         }
@@ -89,8 +88,8 @@ class GlobalOptionRepository extends EntityRepository
     function getActiveDomainList($form = array()) {
 
 
-        $location = $form->get('location')->getData();
-        $syndicate = $form->get('syndicate')->getData();
+        $location = !empty($form->get('location')->getData()) ? $form->get('location')->getData()->getId():'';
+        $syndicate = !empty($form->get('syndicate')->getData()) ? $form->get('syndicate')->getData()->getId() :'';
         $name = $form->get('name')->getData();
         $data = array('location'=>$location,'syndicate' => $syndicate,'name' => $name);
         $qb  = $this->createQueryBuilder('e');

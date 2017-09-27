@@ -86,6 +86,13 @@ class Profile
      */
     private $email;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facebookId", type="string", nullable=true)
+     */
+    private $facebookId;
+
 
      /**
      * @var string
@@ -312,7 +319,7 @@ class Profile
     {
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
-        return 'uploads/domain/'.$this->getUser()->getGlobalOption()->getId().'/user/';
+        return 'uploads/domain/user/';
 
     }
 
@@ -558,21 +565,6 @@ class Profile
         $this->domainUser = $domainUser;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getDistrict()
-    {
-        return $this->district;
-    }
-
-    /**
-     * @param mixed $district
-     */
-    public function setDistrict($district)
-    {
-        $this->district = $district;
-    }
 
     /**
      * @return string
@@ -749,6 +741,22 @@ class Profile
     public function setDesignation($designation)
     {
         $this->designation = $designation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFacebookId()
+    {
+        return $this->facebookId;
+    }
+
+    /**
+     * @param string $facebookId
+     */
+    public function setFacebookId($facebookId)
+    {
+        $this->facebookId = $facebookId;
     }
 
 
