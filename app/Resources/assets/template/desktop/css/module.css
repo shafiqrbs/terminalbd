@@ -111,6 +111,9 @@ a:hover , a:visited, a:focus{
 .mega-dropdown-menu > li ul > li > a:focus {
     text-decoration: none;
 }
+.dropdown{
+    height: 45px;
+}
 
 .mega-dropdown-menu .dropdown-header {
     font-size: 18px;
@@ -122,6 +125,7 @@ a:hover , a:visited, a:focus{
 .single-dropdown-menu{
     padding-left: 0!important;
     margin-left: 0!important;
+    margin-top: 5px;
 }
 .single-dropdown-menu .col-sm-12 {
     width: 240px;

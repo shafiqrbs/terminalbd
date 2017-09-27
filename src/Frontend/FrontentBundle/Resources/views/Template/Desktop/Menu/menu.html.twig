@@ -22,10 +22,14 @@
                                                         {% set path = path(globalOption.subDomain ~ '_webservice_product_promotion',{'id':feature.promotion.id}) %}
                                                     {% elseif feature.targetTo == 'Tag' and feature.tag is not empty %}
                                                         {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':feature.tag.id}) %}
+                                                    {% elseif feature.targetTo == 'Category' and feature.category is not empty %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_category',{'id':feature.category.id}) %}
                                                     {% elseif feature.targetTo == 'Discount' and feature.discount is not empty %}
-                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_tag',{'id':feature.discount.id}) %}
-                                                    {% elseif feature.targetTo == 'Brand' and feature.tag is not empty %}
-                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_discount',{'id':feature.discount.id}) %}
+                                                    {% elseif feature.targetTo == 'Brand' and feature.brand is not empty %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_product_brand',{'id':feature.brand.id}) %}
+                                                    {% elseif feature.targetTo == 'Page' and feature.page is not empty %}
+                                                        {% set path = path(globalOption.subDomain ~ '_webservice_module',{'id':feature.page.slug}) %}
                                                     {% else %}
                                                         {% set path = path(globalOption.subDomain ~ '_webservice_product') %}
                                                     {% endif %}
