@@ -43,10 +43,10 @@ strike{
 .dropdown-menu > li > a {
     color:#428bca;
 }
-.product-dropdown .dropdown{
+/*.product-dropdown .dropdown{
     height: 35px;
     margin-bottom: 5px;
-}
+}*/
 .product-dropdown  ul.dropdown-menu {
     border-radius:4px;
     box-shadow:none;

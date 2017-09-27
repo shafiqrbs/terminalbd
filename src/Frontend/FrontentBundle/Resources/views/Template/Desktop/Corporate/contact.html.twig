@@ -271,13 +271,6 @@
 {% block documentready %}
     {{ parent() }}
     $('#gmap_canvas').kmaps();
-    var map;
-    function initializeNewMap() {
-        // add your code
-        map = new google.maps.Map(document.getElementById("gmap_canvas"), myOptions);
-        google.maps.event.trigger(map, 'resize');
-    }
-
     {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
         sliderPageOwl(3);
     {% else %}
