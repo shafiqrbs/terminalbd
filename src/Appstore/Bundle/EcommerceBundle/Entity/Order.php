@@ -37,7 +37,7 @@ class Order
     protected $ecommerceConfig;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="orders" , cascade={"persist", "remove"} )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="orders")
      **/
     protected $location;
 
