@@ -2,11 +2,11 @@
     {% for widget in features %}
         {% set loopId = loop.index %}
     {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'slider' %}
-        <div {% if widget.sliderFeature is not empty  %} class="container" {% endif %}>
+        <div {% if widget.sliderFeature is not empty  %} class="container" {% endif %} >
         {% if widget.sliderFeature is not empty and widget.sliderFeaturePosition == 'left' %}
             {% render controller("FrontendBundle:EcommerceWidget:"~widget.sliderFeature~"ShortWidget",{'globalOption':globalOption.id,'position':widget.sliderFeaturePosition}) %}
         {% endif %}
-        <div class="{% if widget.sliderFeature is not empty %} col-md-9 {% else %} col-md-12 {% endif %}">
+        <div class="{% if widget.sliderFeature is not empty %} col-md-9 {% endif %}">
             <div id="main-carousel" class="carousel slide" data-ride="carousel" data-match-height="slider-height">
                 <!-- Indicators -->
                 <ol class="carousel-indicators">

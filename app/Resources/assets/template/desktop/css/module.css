@@ -125,7 +125,7 @@ a:hover , a:visited, a:focus{
 .single-dropdown-menu{
     padding-left: 0!important;
     margin-left: 0!important;
-    margin-top: 5px;
+    margin-top: 5px!important;
 }
 .single-dropdown-menu .col-sm-12 {
     width: 240px;
@@ -1268,8 +1268,13 @@ a:hover , a:visited, a:focus{
     color:#222222!important;
 }
 
+#topTabCarousel, #bottomTabCarousel{
+    margin-top: 2px!important;
+}
+
 #topTabCarousel .carousel-inner  , #bottomTabCarousel .carousel-inner{
     max-height:450px;
+    margin-top: 2px!important;
 }
 
 
