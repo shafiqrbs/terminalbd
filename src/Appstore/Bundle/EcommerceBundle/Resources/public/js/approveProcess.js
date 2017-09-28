@@ -63,15 +63,17 @@ function ApproveProcess(){
         e.preventDefault();
 
         url = $(this).attr('data-url');
+        alert(url);
         var productId = $(this).attr('data-text');
         var price = $(this).attr('data-title');
         fieldId = $(this).attr('data-id');
         fieldName = $(this).attr('data-field');
         type      = $(this).attr('data-type');
-        var size = $('#size-'+fieldId);
-        var color = $('#color-'+fieldId);
+        var size = $('#size-'+fieldId).val() != '' ? $('#size-'+fieldId).val() : '';
+        var color = $('#color-'+fieldId).val() != '' ? $('#color-'+fieldId).val() : '';
         var input = $('#quantity-'+$(this).attr('data-id'));
         var currentVal = parseInt(input.val());
+        alert(size);
         if (!isNaN(currentVal)) {
             if(type == 'minus') {
                 if(currentVal > input.attr('min')) {
@@ -110,9 +112,6 @@ function ApproveProcess(){
             input.val(0);
         }
     });
-
-
-
 
     $('.itemProcess').click(function(e){
         
@@ -228,7 +227,6 @@ function ApproveProcess(){
         var process = $('#ecommerce_order_process').val();
         var deliveryDate = $('#ecommerce_order_deliveryDate').val();
         var cashOnDelivery = $('#ecommerce_order_cashOnDelivery').val();
-
 
         $('#confirm-content').confirmModal({
             topOffset: 0,

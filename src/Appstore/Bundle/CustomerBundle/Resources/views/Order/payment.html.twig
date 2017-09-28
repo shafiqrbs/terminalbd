@@ -151,7 +151,6 @@
                                         </td>
                                         <td class="numeric" >
                                             {% if entity.process == 'created' and item.status == 0  %}
-
                                                 <div class="input-group">
                                                     <span class="input-group-btn">
                                                         <button type="button" class="btn red btn-number" data-type="minus" data-field="quantity" data-id="{{ item.id }}" data-url="{{ path('order_item_update',{'shop':globalOption.slug,'order':entity.id,'id':item.id}) }}" data-text="{{ item.id }}" data-title="{{ item.price }}">
@@ -447,7 +446,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>

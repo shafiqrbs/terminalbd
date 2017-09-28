@@ -7,6 +7,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Form\CustomerOrderPaymentType;
 use Appstore\Bundle\EcommerceBundle\Form\CustomerOrderType;
 use Appstore\Bundle\EcommerceBundle\Form\OrderPaymentType;
+use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Knp\Snappy\Pdf;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Form\OrderType;
@@ -283,7 +284,7 @@ class OrderController extends Controller
         $data = $_REQUEST;
         $item->setQuantity($data['quantity']);
         $item->setSubTotal($item->getPrice() * $data['quantity']);
-        if($data['size']){
+        if(!empty($data['size']) and $data['size'] !='undefined'){
             $itemSize = $data['size'];
             $goodsItem = $em->getRepository('InventoryBundle:GoodsItem')->find($itemSize);
             $item->setGoodsItem($goodsItem);
@@ -292,8 +293,7 @@ class OrderController extends Controller
             $qnt = (int)$data['quantity'];
             $item->setSubTotal($goodsItem->getSalesPrice() * $qnt );
         }
-
-        if($data['color']){
+        if(!empty($data['color']) and $data['color'] !='undefined'){
             $color = $em->getRepository('InventoryBundle:ItemColor')->find($data['color']);
             $item->setColor($color);
         }
@@ -352,35 +352,69 @@ class OrderController extends Controller
         echo $pdf;
         return new Response('');
 
-    }
 
-    public function printAction($invoice)
-    {
-
-/*        $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy'=>$this->getUser(),'invoice'=>$invoice));
-        return $this->render('CustomerBundle:Order:invoice.html.twig', array(
-            'globalOption' => $order->getGlobalOption(),
-            'entity' => $order,
-            'print' => '<script>window.print();</script>'
-        ));*/
+        /* @var Order $order */
 
         $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy'=>$this->getUser(),'invoice'=>$invoice));
-
-        $html = $this->renderView(
+        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($order->getGrandTotalAmount());
+        $barcode = $this->getBarcode($order->getInvoice());
+        return  $this->renderView(
             'CustomerBundle:Order:invoice.html.twig', array(
                 'globalOption' => $order->getGlobalOption(),
                 'entity' => $order,
-                'print' => ''
+                'amountInWords' => $amountInWords,
+                'barcode' => $barcode,
             )
         );
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        /*
+                $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+                $snappy          = new Pdf($wkhtmltopdfPath);
+                $pdf             = $snappy->getOutputFromHtml($html);
+
+                header('Content-Type: application/pdf');
+                header('Content-Disposition: attachment; filename="online-oredr-invoice-'.$invoice.'.pdf"');
+                echo $pdf;
+                return new Response('');*/
+
+    }
+    public function getBarcode($invoice)
+    {
+        $barcode = new BarcodeGenerator();
+        $barcode->setText($invoice);
+        $barcode->setType(BarcodeGenerator::Code128);
+        $barcode->setScale(1);
+        $barcode->setThickness(32);
+        $barcode->setFontSize(7);
+        $code = $barcode->generate();
+        $data = '';
+        $data .= '<img src="data:image/png;base64,' . $code . '" />';
+        return $data;
+    }
+
+
+    public function printAction($invoice)
+    {
+        /* @var Order $order */
+        $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy'=>$this->getUser(),'invoice'=>$invoice));
+        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($order->getGrandTotalAmount());
+        $barcode = $this->getBarcode($order->getInvoice());
+        return $this->render('CustomerBundle:Order:invoice.html.twig', array(
+            'globalOption' => $order->getGlobalOption(),
+            'entity' => $order,
+            'amountInWords' => $amountInWords,
+            'barcode' => $barcode,
+            'print' => ''
+        ));
+
+       /* $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
         $snappy          = new Pdf($wkhtmltopdfPath);
         $pdf             = $snappy->getOutputFromHtml($html);
 
         header('Content-Type: application/pdf');
         header('Content-Disposition: attachment; filename="online-oredr-invoice-'.$invoice.'.pdf"');
         echo $pdf;
-        return new Response('');
+        exit;*/
+
 
     }
 
