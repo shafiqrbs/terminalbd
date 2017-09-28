@@ -84,7 +84,7 @@ class PreOrderController extends Controller
             'action' => $this->generateUrl('customer_preorder_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'id' => 'pre-order-process',
+                'id' => 'process',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -182,6 +182,8 @@ class PreOrderController extends Controller
             return new Response('failed');
         }
     }
+    
+    
     public function processAction(PreOrder $preOrder,$process)
     {
         $data = $_REQUEST;
@@ -213,7 +215,6 @@ class PreOrderController extends Controller
     public function paymentAction(Request $request ,PreOrder $preOrder)
     {
         $data = $request->request->all();
-        var_dump($data);
         $em = $this->getDoctrine()->getManager();
         $entity = new PreOrderPayment();
         $entity->setPreOrder($preOrder);

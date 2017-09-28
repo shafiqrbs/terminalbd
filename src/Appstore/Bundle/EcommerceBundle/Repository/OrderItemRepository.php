@@ -28,6 +28,20 @@ class OrderItemRepository extends EntityRepository
 
     }
 
+    public function updateOrderItem(Order $order)
+    {
+        $em = $this->_em;
+        foreach ($order->getOrderItems() as $item){
+            /* @var $item OrderItem */
+
+            if($item->getStatus() == 0 ){
+                $item->setStatus(1);
+                $em->persist($item);
+                $em->flush($item);
+            }
+        }
+    }
+
     
     public function totalItemAmount(Order $order){
 

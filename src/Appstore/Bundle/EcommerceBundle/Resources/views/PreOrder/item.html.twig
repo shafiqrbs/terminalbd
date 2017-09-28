@@ -127,12 +127,21 @@
                                     <td class="numeric" >{{ item.currencyType|capitalize }}</td>
                                     <td class="numeric" >{{ item.unitPrice }}</td>
                                     <td class="numeric" >={{ item.subTotal|number_format }}</td>
-                                    <td class="numeric" style="width:80px!important;"><input type="text" class="span12 price td-input" rel="{{ item.id }}"  name="convertRate[]" id="convertRate-{{ item.id }}"  value="{{ item.convertRate }}"></td>
+                                    <td class="numeric" style="width:80px!important;">
+                                        {% if item.status == 0 %}
+                                            <input type="text" class="span12 price td-input" rel="{{ item.id }}"  name="convertRate[]" id="convertRate-{{ item.id }}"  value="{{ item.convertRate is not empty ? item.convertRate : 1 }}"></td>
+                                        {% else %}
+                                            {{ item.convertRate is not empty ? item.convertRate : 1 }}
+                                        {% endif %}
                                     <td class="numeric" id="convertSubTotal-{{ item.id }}" >={{ item.convertSubTotal|number_format }}</td>
                                     <td class="numeric" style="width:80px!important;">
-                                        <input type="text" class="span12 shippingCharge td-input"  rel="{{ item.id }}" name="shippingCharge[]" id="shippingCharge-{{ item.id }}"  value="{{ item.shippingCharge }}">
-                                        <input type="hidden" name="item[]" id="item-{{ item.id }}" value="{{ item.id }}" >
-                                        <input type="hidden" name="quantity[]" id="quantity-{{ item.id }}" value="{{ item.quantity }}">
+                                        {% if item.status == 0 %}
+                                            <input type="text" class="span12 shippingCharge td-input"  rel="{{ item.id }}" name="shippingCharge[]" id="shippingCharge-{{ item.id }}"  value="{{ item.shippingCharge }}">
+                                            <input type="hidden" name="item[]" id="item-{{ item.id }}" value="{{ item.id }}" >
+                                            <input type="hidden" name="quantity[]" id="quantity-{{ item.id }}" value="{{ item.quantity }}">
+                                        {% else %}
+                                            {{ item.shippingCharge }}
+                                        {% endif %}
                                     </td>
                                     <td class="numeric" >={{ item.convertTotal|number_format }}</td>
                                     <td class="numeric" >
@@ -140,8 +149,6 @@
                                             <a class="btn  mini green" ><i class=" icon-thumbs-up"></i> Accept</a>
                                         {% elseif item.status == 2 %}
                                             <a class="btn  mini yellow " ><i class="icon-thumbs-down"></i> Rejected</a>
-                                        {% else %}
-                                            <a class="btn  mini purple" ><i class="icon-filter"></i> In-progress</a>
                                         {% endif %}
                                         {% if item.status == 0 and entity.process == 'in-progress' and entity.checkRoleEcommercePreorder(app.user.role) == true  %}
                                             <div class="btn-group">
@@ -157,7 +164,7 @@
                                     </td>
                                 </tr>
                                 <tr id="show-{{ item.id }}" class="showing-overview">
-                                    <td colspan="9">{{ item.details }}</td>
+                                    <td colspan="11">{{ item.details }}</td>
                                 </tr>
                             {% endfor %}
 
@@ -367,7 +374,7 @@
                                 <div class="span12">
                                     <div class="control-group">
                                         <div class="controls">
-                                            <button type="button" id="submitPayment" name="submitPayment" value="payment"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
+                                            <button type="button" id="adminSubmitPayment" name="adminSubmitPayment" value="payment"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -491,6 +498,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@EcommerceBundle/Resources/public/js/editable.js'
     '@EcommerceBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -498,7 +506,9 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    $(".editable").editable();
     ApproveProcess();
     $('body').addClass('page-sidebar-closed');
 {% endblock %}
+
 

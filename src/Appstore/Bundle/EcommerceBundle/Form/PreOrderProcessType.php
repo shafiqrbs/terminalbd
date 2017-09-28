@@ -54,13 +54,15 @@ class PreOrderProcessType extends AbstractType
                 'multiple'      =>false,
                 'empty_value' => '---Select Current Process---',
                 'choices' => array(
-                    'in-progress'       => 'In-progress',
+                    'sms'       => 'Send SMS',
+                    'created'       => 'Created',
                     'confirm'       => 'Confirm',
+                    'wfc'       => 'Wait for Confirm',
                     'send-delivery'       => 'Send Delivery',
-                    'return'       => 'Return',
                     'delivered'       => 'Delivered',
+                    'returned'       => 'Returned',
                     'cancel'       => 'Cancel',
-                    'delete'       => 'Delete'
+                    'delete'       => 'Delete',
                 ),
             ))
             ->add('cashOnDelivery');

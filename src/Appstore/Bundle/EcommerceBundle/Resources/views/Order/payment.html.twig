@@ -76,10 +76,8 @@
                                             <ul class="unstyled" >
                                                 {% if entity.cashOnDelivery == 1 %}
                                                     <li><strong>Payment Method</strong>:&nbsp;Cash On Delivery</li>
-                                                {% elseif entity.transactionMethod is not empty %}
-                                                    <li><strong>Payment Method</strong>:&nbsp;{{ entity.transactionMethod.name }}</li>
-                                                {% endif %}
-                                                <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery }}</li>
+                                                 {% endif %}
+                                                <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery|capitalize }}</li>
                                                 <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
                                                 <li><strong>Process Status</strong>:&nbsp;{{ entity.process|capitalize }}</li>
 
@@ -143,8 +141,6 @@
                                                 <a class="btn  mini green" ><i class=" icon-thumbs-up"></i> Accept</a>
                                             {% elseif item.status == 2 %}
                                                 <a class="btn  mini yellow " ><i class="icon-thumbs-down"></i> Rejected</a>
-                                            {% else %}
-                                                <a class="btn  mini purple" ><i class="icon-filter"></i> In-progress</a>
                                             {% endif %}
                                             {% if item.status == 0 and entity.process == 'wfc' and entity.checkRoleEcommerceOrder(app.user.role) == true  %}
                                                 <div class="btn-group">
@@ -152,8 +148,8 @@
                                                         Action&nbsp; <i class="icon-tasks"></i>
                                                     </button>
                                                     <ul class="dropdown-menu pull-right action">
-                                                        <li><a data-title="Confirm item" data-id="{{ item.id }}" data-url="{{ path('customer_order_item_confirm',{'order':entity.id,'id':item.id,'status':1}) }}" class="btn green confirm tooltips" data-trigger = "hover" data-original-title ="Are you sure went to delivery this item ?"><i class="icon-ok-circle"></i> Accept</a></li>
-                                                        <li><a data-title="Deny item" data-id="{{ item.id }}" data-url="{{ path('customer_order_item_confirm',{'order':entity.id,'id':item.id,'status':2}) }}" class="btn red confirm tooltips" data-trigger = "hover" data-original-title ="Are you sure went to reject this item ?"><i class="icon-trash"></i> Deny</a></li>
+                                                        <li><a data-title="Confirm item" data-id="{{ item.id }}" data-url="{{ path('customer_order_item_confirm',{'order':entity.id,'id':item.id,'status':1}) }}" class="btn green mini confirm tooltips" data-trigger = "hover" data-original-title ="Are you sure went to delivery this item ?"><i class="icon-ok-circle"></i> Accept</a></li>
+                                                        <li><a data-title="Deny item" data-id="{{ item.id }}" data-url="{{ path('customer_order_item_confirm',{'order':entity.id,'id':item.id,'status':2}) }}" class="btn red mini confirm tooltips" data-trigger = "hover" data-original-title ="Are you sure went to reject this item ?"><i class="icon-trash"></i> Deny</a></li>
                                                     </ul>
                                                 </div>
                                             {% endif %}
@@ -234,47 +230,7 @@
 
                         </div>
                         <div class="clearfix"><br/></div>
-                        <div class="clearfix"> </div>
-                        <div class="form-actions portlet box blue">
-                            <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Order Process</div></div>
-                        </div>
-                        <div class="clearfix"><br/> </div>
-                        <div>
 
-                            {{ form_start(orderForm) }}
-                            {{ form_row(orderForm._token) }}
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    {{ form_widget(orderForm.comment) }}
-                                    {{ form_errors(orderForm.comment) }}
-                                </div>
-                            </div>
-                            <div class="row-fluid">
-                                <div class="span6">
-
-                                </div>
-                                <div class="span3">
-                                    <div class="control-group pull-right">
-                                    {{ form_widget(orderForm.deliveryDate) }}
-                                    {{ form_errors(orderForm.deliveryDate) }}
-                                    </div>
-                                </div>
-                                <div class="span3">
-                                    <div class="control-group">
-                                        <div class="controls">
-                                            <div class="input-append">
-                                                {{ form_widget(orderForm.process) }}
-                                                {{ form_errors(orderForm.process) }}
-                                                <div class="btn-group"> <button type="submit" id="submitProcess" name="submitProcess"  class="btn blue"><i class="icon-refresh"></i>&nbsp;Process</button></div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{ form_end(orderForm) }}
-                        </div>
-                        <div class="clearfix"><br/> </div>
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i>Payment Information</div>
@@ -412,7 +368,7 @@
                                     <div class="span12">
                                         <div class="control-group">
                                             <div class="controls">
-                                                <button type="button" id="submitPayment" name="submitPayment" value="payment"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
+                                                <button type="button" id="adminSubmitPayment" name="adminSubmitPayment" value="payment"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
                                             </div>
                                         </div>
                                     </div>
@@ -423,7 +379,47 @@
                         {{ form_end(paymentForm) }}
 
                         <div class="clearfix"><br/> </div>
+                        <div class="clearfix"> </div>
+                        <div class="form-actions portlet box blue">
+                            <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Order Process</div></div>
+                        </div>
+                        <div class="clearfix"><br/> </div>
+                        <div>
 
+                            {{ form_start(orderForm) }}
+                            {{ form_row(orderForm._token) }}
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    {{ form_widget(orderForm.comment) }}
+                                    {{ form_errors(orderForm.comment) }}
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span6">
+
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group pull-right">
+                                        {{ form_widget(orderForm.deliveryDate) }}
+                                        {{ form_errors(orderForm.deliveryDate) }}
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <div class="input-append">
+                                                {{ form_widget(orderForm.process) }}
+                                                {{ form_errors(orderForm.process) }}
+                                                <div class="btn-group"> <button type="submit" id="submitProcess" name="submitProcess"  class="btn blue"><i class="icon-refresh"></i>&nbsp;Process</button></div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ form_end(orderForm) }}
+                        </div>
+                        <div class="clearfix"><br/> </div>
                         <div class="form-actions portlet box yellow">
                             <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Comments Information</div></div>
                         </div>

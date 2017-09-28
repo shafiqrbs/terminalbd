@@ -71,7 +71,6 @@ class EcommerceConfigType extends AbstractType
             ->add('isSize')
             ->add('cart')
             ->add('promotion')
-
             ->add('printBy')
             ->add('isPrintHeader')
             ->add('isPrintFooter')
@@ -88,6 +87,7 @@ class EcommerceConfigType extends AbstractType
                     'expanded'  => false,
                     'empty_data'  => null,
                 ))
+            ->add('vatEnable')
             ->add('vat','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('vatRegNo','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))

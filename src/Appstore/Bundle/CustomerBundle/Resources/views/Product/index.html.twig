@@ -31,8 +31,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Product Lists</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-shopping-cart"></i>&nbsp;View Shopping
+                                <a class="btn blue" href="{{ path('shoppingbag_to_order',{'shop':globalOption.slug}) }}">
+                                    <i class="icon-shopping-cart"></i>&nbsp;Shopping Bag
                                     <i class="icon-tasks"></i>
                                 </a>
 
@@ -60,10 +60,8 @@
                                             {% endfor %}
                                         </ul>
                                     </li>
-                                    <li class="external">
-                                        <span class="pull-right">
-                                            <a class="btn green"  href="{{ path('shoppingbag_to_order',{'shop':globalOption.slug}) }}">Order Place&nbsp;<i class="m-icon-swapright"></i></a>
-                                        </span>
+                                    <li>
+                                       <p class="pull-right"><a class="green"  href="{{ path('shoppingbag_to_order',{'shop':globalOption.slug}) }}">Order Place&nbsp;<i class="m-icon-swapright"></i></a></p>
                                     </li>
                                 </ul>
 
@@ -270,22 +268,5 @@
         })
 
     });
-    {#$(document).on("click", ".addCart", function() {
-
-        var id = $(this).attr("id");
-        var url = $(this).attr("data-url");
-        var color = $("#color-"+id).val();
-        var quantity = $("#quantity-"+id).val();
-        $.ajax({
-        url: url,
-        type: 'POST',
-        data:'color='+color+'&quantity='+quantity,
-        success: function (response) {
-        $('.cart span').html(response);
-        },
-        })
-
-    });#}
-
 {% endblock %}
 

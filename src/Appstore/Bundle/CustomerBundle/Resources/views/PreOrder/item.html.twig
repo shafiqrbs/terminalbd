@@ -27,11 +27,14 @@
             </div>
         </div>
         <div class="portlet box green">
-            {% if entity.process == 'created'  %}
+
             <div class="portlet-title">
                 <div class="caption"><i class="icon-reorder"></i>Manage Pre-order Information</div>
                 <div class="actions">
                     <div class="btn-group">
+                        {% if entity.process == 'created'  %}
+                        <a class="btn blue confirm" data-url="{{ path('preorder_approve',{'shop':globalOption.slug,id:entity.id}) }}" ><i class="icon-shopping-cart"></i> Checkout</button> </a>
+                       {% endif %}
                         <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                             <i class="icon-cogs"></i>&nbsp;Tools
                             <i class="icon-tasks"></i>
@@ -43,6 +46,7 @@
                     </div>
                 </div>
             </div>
+            {% if entity.process == 'created'  %}
             <div class="portlet-body form">
                 {% include('flash-message.html.twig')  %}
                 <!-- BEGIN FORM-->
@@ -129,7 +133,6 @@
                 <!--/span-->
                 <div class="form-actions portlet box grey">
                     <div class="pull-right">
-                        <span class="btn purple"><input type="checkbox" name="process" id="process" value="in-progress"> <button type="submit" value="" class="btn blue"><i class="icon-shopping-cart"></i> Checkout</button> </span>
                         <button type="submit" value="" class="btn green"><i class="icon-plus"></i> Add Product</button>
                     </div>
                 </div>
@@ -234,8 +237,6 @@
                                         <a class="btn  mini green" ><i class=" icon-thumbs-up"></i> Accept</a>
                                     {% elseif item.status == 2 %}
                                         <a class="btn  mini yellow " ><i class="icon-thumbs-down"></i> Rejected</a>
-                                    {% else %}
-                                        <a class="btn  mini purple" ><i class="icon-filter"></i> In-progress</a>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -310,7 +311,10 @@
                     </table>
 
                 </div>
+
                 <div class="clearfix"> </div>
+                {% set arr = {'created': 'created' ,'in-progress': 'in-progress' ,'cancel': 'cancel' ,'return':'return','delivered':'delivered'} %}
+                {% if entity.process not in  arr|keys %}
                 <div class="form-actions portlet box blue">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Payment Information</div>
@@ -342,10 +346,15 @@
                             <td class="numeric" >{% if payment.transactionType =='Return' %}{{ payment.amount|number_format }}{% endif %}</td>
                             <td class="numeric" >
                                 {% if payment.status == 1  %}
-                                <a class="btn  mini green"><i class=" icon-thumbs-up"></i> Accept</a></td>
-                            {% else %}
-                                <a class="btn  mini yellow"><i class=" icon-refresh"></i> Waiting</a></td>
-                            {% endif %}
+                                <a class="btn  mini green"><i class=" icon-thumbs-up"></i> Accept</a>
+                                {% else %}
+                                <a class="btn  mini yellow"><i class=" icon-refresh"></i> Waiting</a>
+                                {% endif %}
+                                {% set postCondition = {'wfc': 'wfc' ,'created':'created','confirm':'confirm'} %}
+                                {% if entity.process in  postCondition|keys %}
+                                    <a class="btn  mini red remove" data-url="{{ path('preorder_payment_delete',{'shop':globalOption.slug,'id':payment.id}) }}"  data-id="{{ payment.id }}" ><i class=" icon-trash"></i> Delete</a>
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
 
@@ -372,8 +381,7 @@
                     </tbody>
                 </table>
                 <div class="clearfix"> </div>
-                {% set arr = {'cancel': 'cancel' ,'return':'return','delivered':'delivered'} %}
-                {% if entity.process not in  arr|keys %}
+
                 <div class="form-actions portlet box green">
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Payment Process</div>
@@ -446,7 +454,7 @@
                                 <div class="control-group">
                                     <div class="controls">
                                         {% if entity.process != 'created' %}
-                                        <button type="button" id="submitPayment" name="submitPayment" value="payment"  class="btn green"><i class="icon-save"></i>&nbsp;Payment</button>
+                                        <button type="button" id="customerSubmitPayment" name="customerSubmitPayment" value="payment"  class="btn green"><i class="icon-save"></i>&nbsp;Payment</button>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -456,18 +464,15 @@
 
                 </div>
                 {{ form_end(paymentForm) }}
-
                 <div class="clearfix"><br/> </div>
-
+                {% endif %}
                 <div class="clearfix"> </div>
                 <div class="form-actions portlet box red">
-                    <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Delivery Address</div>
-                    </div>
+                    <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Delivery Address</div></div>
                 </div>
                 <div class="clearfix"><br/> </div>
                 <div class="row-fluid">
-                        <form id="process" name="process">
+                        <form id="process" name="process" action="{{ path('preorder_process',{'shop':globalOption.slug,id:entity.id}) }}">
                             <div class="span12">
                                 <select class="span11 m-wrap" name="delivery" id="delivery">
                                     <option value="pickup" {% if entity.delivery == 'pickup'  %} selected="selected" {% endif %}>Pickup address: [ {{ entity.ecommerceConfig.pickupLocation }} ]</option>
@@ -479,12 +484,12 @@
                                     <input type="text" name="address" id="address" class="m-wrap span12  tooltips" data-original-title = "Enter  delivery address ie: Unit,Floor,House,Road,Area,Thana,District Etc" placeholder = "Enter  delivery address ie: Unit,Floor,House,Road,Area,Thana,District Etc" data-trigger = "hover"   value="{% if entity.delivery == 'pickup'  %}{{ entity.ecommerceConfig.pickupLocation }}{% else %}{{ entity.address }}{% endif %}" />
                                 </div>
                                 <div class="span2">
-                                    <button type="button" id="addAddress" name="addAddress"  data-url="{{ path('preorder_process',{'shop':globalOption.slug,id:entity.id,'process':'in-progress'}) }}"  class="btn blue"><i class="icon-save"></i>&nbsp;Save</button>
+                                    <button type="button" id="submitProcess" name="submitProcess"  data-url=""  class="btn blue"><i class="icon-save"></i>&nbsp;Save</button>
                                 </div>
                             </div>
+                            <div class="clearfix"><br/> </div>
                         </form>
                 </div>
-                {% endif %}
                 <div class="clearfix"> </div>
                 <div class="form-actions portlet box blue">
                     <div class="portlet-title">
@@ -504,16 +509,7 @@
         <!-- END inventory_damage HEADER-->
         <!-- BEGIN inventory_damage CONTENT-->
 
-    </div>
-    <div id="checkout-confirm" style="display:none">
-        <div class="confirmModal_content">
-            Are you sure went to checkout & process next?
-        </div>
-        <div class="confirmModal_footer">
-            <button type="button" class="btn red" data-confirmmodal-but="cancel">Cancel</button>
-            <button type="button" class="btn green" data-confirmmodal-but="ok">Confirm</button>
-        </div>
-    </div>
+    </div
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -525,6 +521,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
+    '@EcommerceBundle/Resources/public/js/editable.js'
     '@EcommerceBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -532,19 +529,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-
-    $('#process').click(function(e){
-        $('#process').attr('checked', true);
-        $('#checkout-confirm').confirmModal({
-            topOffset: 0,
-            top: '25%',
-            onOkBut: function(event, el) {},
-            onCancelBut : function(event, el) {
-                $('#process').attr('checked', false);
-                $('#process').prop('checked', false);
-            },
-        });
-    });
+    $(".editable").editable();
     ApproveProcess();
     $('body').addClass('page-sidebar-closed');
     $('#fos_comment_comment_body').addClass('span12');

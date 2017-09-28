@@ -54,7 +54,6 @@ class CustomerOrderType extends AbstractType
                 'empty_value' => '---Process Status---',
                 'choices' => array(
                     'created'       => 'Created',
-                    'in-progress'       => 'In-progress',
                     'wfc'       => 'Wait for Confirm'
                 ),
             ))

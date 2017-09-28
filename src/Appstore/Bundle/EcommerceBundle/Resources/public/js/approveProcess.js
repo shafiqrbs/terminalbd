@@ -11,15 +11,22 @@ function ApproveProcess(){
 
     $(document).on("click", "#submitProcess", function() {
 
+        var url = $('#process').attr("action");
         var serialized = $('form#process').serialize();
-        $.ajax({
-            url: url,
-            type: "GET",
-            data: serialized
-        }).done(function(data){
-           /*location.reload();*/
-        });
 
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    data: serialized
+                }).done(function(data){
+                    location.reload();
+                });
+            }
+        });
     });
 
 
@@ -63,7 +70,6 @@ function ApproveProcess(){
         e.preventDefault();
 
         url = $(this).attr('data-url');
-        alert(url);
         var productId = $(this).attr('data-text');
         var price = $(this).attr('data-title');
         fieldId = $(this).attr('data-id');
@@ -73,7 +79,6 @@ function ApproveProcess(){
         var color = $('#color-'+fieldId).val() != '' ? $('#color-'+fieldId).val() : '';
         var input = $('#quantity-'+$(this).attr('data-id'));
         var currentVal = parseInt(input.val());
-        alert(size);
         if (!isNaN(currentVal)) {
             if(type == 'minus') {
                 if(currentVal > input.attr('min')) {
@@ -156,40 +161,38 @@ function ApproveProcess(){
         e.preventDefault();
     });
 
-    $('#submitPayment').click( function( e ) {
+    $('#customerSubmitPayment').click( function( e ) {
 
         var url = $('#ecommerce-payment').attr("action");
-
         var amount = $('#ecommerce_payment_amount').val();
         if( amount == "" ){
             alert( "Please add payment amount" );
-            return false;
-        }
-        var transactionType = $('#ecommerce_payment_transactionType').val();
-        if( transactionType == "" ){
-            alert( "Please select transaction type" );
+            $('#ecommerce_payment_amount').focus();
             return false;
         }
         var accountMobileBank = $('#ecommerce_payment_accountMobileBank').val();
         if( accountMobileBank == "" ){
             alert( "Please payment mobile account" );
+            $('#ecommerce_payment_accountMobileBank').focus();
             return false;
         }
         var mobileAccount = $('#ecommerce_payment_mobileAccount').val();
         if( mobileAccount == "" ){
             alert( "Please add payment mobile no" );
+            $('#ecommerce_payment_mobileAccount').focus();
             return false;
         }
         var transaction = $('#ecommerce_payment_transaction').val();
         if( transaction == "" ){
             alert( "Please add payment transaction no" );
+            $('#ecommerce_payment_transaction').focus();
             return false;
         }
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',
             onOkBut: function(event, el) {
-                $.post( url,{amount:amount,transactionType:transactionType,'accountMobileBank':accountMobileBank,'mobileAccount':mobileAccount,'transaction':transaction})
+                $.post( url,{amount:amount,'accountMobileBank':accountMobileBank,'mobileAccount':mobileAccount,'transaction':transaction})
                     .done(function(data){
                          location.reload();
                 });
@@ -199,23 +202,55 @@ function ApproveProcess(){
 
     });
 
-    $('#addAddress').click(function(e){
-        var url = $(this).attr("data-url");
-        var delivery = $('#delivery').val()
-        var address = $('#address').val()
+    $('#adminSubmitPayment').click( function( e ) {
+
+        var url = $('#ecommerce-payment').attr("action");
+
+        var amount = $('#ecommerce_payment_amount').val();
+        if( amount == "" ){
+            alert( "Please add payment amount" );
+            $('#ecommerce_payment_amount').focus();
+            return false;
+        }
+        var transactionType = $('#ecommerce_payment_transactionType').val();
+        if( transactionType == "" ){
+            alert( "Please select transaction type" );
+            $('#ecommerce_payment_transactionType').focus();
+            return false;
+        }
+
+        var accountMobileBank = $('#ecommerce_payment_accountMobileBank').val();
+        if( accountMobileBank == "" ){
+            alert( "Please payment mobile account" );
+            $('#ecommerce_payment_accountMobileBank').focus();
+            return false;
+        }
+
+        var mobileAccount = $('#ecommerce_payment_mobileAccount').val();
+        if( mobileAccount == "" ){
+            alert( "Please add payment mobile no" );
+            $('#ecommerce_payment_mobileAccount').focus();
+            return false;
+        }
+        var transaction = $('#ecommerce_payment_transaction').val();
+        if( transaction == "" ){
+            alert( "Please add payment transaction no" );
+            $('#ecommerce_payment_transaction').focus();
+            return false;
+        }
+
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',
             onOkBut: function(event, el) {
-                $.get( url,{delivery:delivery,'address':address})
+                $.post( url,{amount:amount,transactionType:transactionType,'accountMobileBank':accountMobileBank,'mobileAccount':mobileAccount,'transaction':transaction})
                     .done(function(data){
-                        if(data == 'success'){
-                            location.reload();
-                        }
+                        location.reload();
                     });
             }
         });
         e.preventDefault();
+
     });
 
     $('#orderProcess').submit( function( e ) {

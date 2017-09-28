@@ -1,6 +1,8 @@
 <?php
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
+use Appstore\Bundle\EcommerceBundle\Entity\Order;
+use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Doctrine\ORM\EntityRepository;
 
@@ -12,11 +14,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class OrderPaymentRepository extends EntityRepository
 {
-    public function updateOrder(PreOrder $entity)
+
+    public function updateOrderPayment(Order $order)
     {
         $em = $this->_em;
+        foreach ($order->getOrderPayments() as $item){
+
+            /* @var $item OrderPayment */
+
+            if($item->getStatus() == 0 ){
+                $item->setStatus(1);
+                $em->persist($item);
+                $em->flush($item);
+            }
+        }
     }
-
-
 
 }

@@ -196,8 +196,7 @@ class PreOrderController extends Controller
 
         if ($editForm->isValid()) {
 
-            $entity->setProcess($data['submitProcess']);
-            $entity->setComment('Confirm your order within short time');
+
             $em->flush();
             return $this->redirect($this->generateUrl('preorder_item', array('id' => $id)));
         }
@@ -225,9 +224,7 @@ class PreOrderController extends Controller
             $em->remove($preOrder);
             $em->flush();
             return new Response('success');
-
         }else{
-
             return new Response('failed');
 
         }
@@ -269,7 +266,7 @@ class PreOrderController extends Controller
         return $this->render('CustomerBundle:PreOrder:item.html.twig', array(
             'entity' => $preOrder,
             'globalOption' => $preOrder->getGlobalOption(),
-            'form'   => $form->createView(),
+            'form'=> $form->createView(),
             'paymentForm'   => $preOrderform->createView(),
         ));
     }
@@ -289,14 +286,14 @@ class PreOrderController extends Controller
     }
 
 
-    public function processAction(PreOrder $preOrder,$process)
+    public function processAction(Request $request , PreOrder $preOrder)
     {
         $data = $_REQUEST;
         $em = $this->getDoctrine()->getManager();
-        if(!empty( $_GET['delivery'])){
+        if(!empty( $data['delivery'])){
             $address = $data['address'];
             $preOrder->setAddress($address);
-            $delivery = $_GET['delivery'];
+            $delivery = $data['delivery'];
             $preOrder->setDelivery($delivery);
         }
         $em->persist($preOrder);
@@ -309,9 +306,14 @@ class PreOrderController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $preOrder->setApprovedBy($this->getUser());
-        $preOrder->setProcess('approved');
+        $preOrder->setProcess('wfc');
+        $preOrder->setComment('Confirm your order within short time');
         $em->persist($preOrder);
         $em->flush();
+        $this->get('session')->getFlashBag()->add('success',"Customer has been confirmed");
+       // $dispatcher = $this->container->get('event_dispatcher');
+       // $dispatcher->dispatch('setting_tool.post.order_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($preOrder));
+
         return new Response('success');
 
     }
@@ -336,33 +338,38 @@ class PreOrderController extends Controller
     {
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
-        if(!empty( $data['paymentType'])){
-            $paymentType =     $paymentTypes = $this->getDoctrine()->getRepository('SettingToolBundle:PaymentType')->findOneBy(array('slug'=>$data['paymentType']));
-            $preOrder->setPaymentType($paymentType);
-            if($data['paymentType'] == 'cash-on-hand'){}
-            if($data['paymentType'] == 'cash-on-delivery'){}
-            if($data['paymentType'] == 'cash-on-bank'){
-                $bank =     $paymentTypes = $this->getDoctrine()->getRepository('EcommerceBundle:BankAccount')->find($data['bank']);
-                $preOrder->setBankAccount($bank);
-            }
-            if($data['paymentType'] == 'cash-on-bkash'){
-                $bkash =     $paymentTypes = $this->getDoctrine()->getRepository('EcommerceBundle:BkashAccount')->find($data['bkash']);
-                $preOrder->setBankAccount($bkash);
-            }
-            if($data['paymentType'] == 'cash-on-mobile-bank'){}
-        }
-        if(!empty( $data['advanceAmount']) && $preOrder->getGrandTotal() >  $data['advanceAmount'] ){
-            $advanceAmount = $data['advanceAmount'];
-            $preOrder->setAdvanceAmount($advanceAmount);
-            $preOrder->setProcess('wfc');
-            $date = strtotime($data['deliveryDate']);
-            $deliveryDate = date('d-m-Y H:i:s',$date);
-            $preOrder->setDeliveryDate(new \DateTime(($deliveryDate)));
-        }
-        $em->persist($preOrder);
+        $entity = new PreOrderPayment();
+        $entity->setPreOrder($preOrder);
+        $entity->setTransactionType('Payment');
+        $entity->setAmount($data['amount']);
+        $accountMobileBank =$this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->find($data['accountMobileBank']);
+        $entity->setAccountMobileBank($accountMobileBank);
+        $entity->setMobileAccount($data['mobileAccount']);
+        $entity->setTransaction($data['transaction']);
+        $em->persist($entity);
         $em->flush();
+        $this->getDoctrine()->getRepository('EcommerceBundle:PreOrder')->updatePreOderPayment($preOrder);
+       // $dispatcher = $this->container->get('event_dispatcher');
+       // $dispatcher->dispatch('setting_tool.post.order_payment_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderPaymentSmsEvent($entity));
+
+        return new Response('success');
+
+    }
+
+    public function paymentDeleteAction(PreOrderPayment $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Expenditure entity.');
+        }
+        $em->remove($entity);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'error',"Data has been deleted successfully"
+        );
         return new Response('success');
     }
+
 
     public function invoiceAction(PreOrder $preOrder)
     {

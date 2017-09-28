@@ -130,7 +130,7 @@ class OrderController extends Controller
     {
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $form = $this->createForm(new CustomerOrderPaymentType($order->getGlobalOption(),$location), $entity, array(
-            'action' => $this->generateUrl('order_ajax_payment', array('shop' => $order->getGlobalOption()->getUniqueCode(),'id' => $order->getId())),
+            'action' => $this->generateUrl('order_ajax_payment', array('shop' => $order->getGlobalOption()->getSlug(),'id' => $order->getId())),
             'method' => 'POST',
             'attr' => array(
                 'id' => 'ecommerce-payment',

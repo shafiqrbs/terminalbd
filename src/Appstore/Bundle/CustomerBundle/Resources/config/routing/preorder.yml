@@ -37,8 +37,12 @@ preorder_item_create:
     defaults: { _controller: "CustomerBundle:PreOrder:createItem" }
     methods:  POST
 
+preorder_approve:
+    path:      /{id}/pre-order-process
+    defaults: { _controller: "CustomerBundle:PreOrder:approve" }
+
 preorder_process:
-    path:      /{id}/{process}/order-process
+    path:      /{id}/order-process
     defaults: { _controller: "CustomerBundle:PreOrder:process" }
     methods:  [GET, PUT]
 
@@ -46,15 +50,18 @@ preorder_item_delete:
     path:     /{preOrder}/{id}/delete-item
     defaults: { _controller: "CustomerBundle:PreOrder:deleteItem" }
 
-
 preorder_item_confirm:
     path:     /{preOrder}/{id}/confirm-item
     defaults: { _controller: "CustomerBundle:PreOrder:confirmItem" }
 
 preorder_ajax_payment:
-    path:      /{id}/order-payment
-    defaults: { _controller: "EcommerceBundle:PreOrder:payment" }
+    path:      /{id}/pre-order-payment
+    defaults: { _controller: "CustomerBundle:PreOrder:payment" }
     methods:  [POST]
+
+preorder_payment_delete:
+    path:     /{id}/payment-delete
+    defaults: { _controller: "CustomerBundle:PreOrder:paymentDelete" }
 
 preorder_invoice:
     path:      /{id}/preorder-invoice

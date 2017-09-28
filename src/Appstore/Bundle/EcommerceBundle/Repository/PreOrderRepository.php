@@ -1,8 +1,10 @@
 <?php
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
+use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * PreOrderRepository
@@ -24,19 +26,19 @@ class PreOrderRepository extends EntityRepository
             ->setParameter('preOrder', $entity ->getId())
             ->setParameter('status', 1)
             ->getQuery()->getSingleResult();
-
-
         if($process == 'in-progress'){
             $entity->setProcess($process);
         }
+        
         if($total['item'] > 0){
             $entity->setTotalAmount(floatval($total['convertTotal']));
             $entity->setTotalShippingCharge($total['shippingCharge']);
             $entity->setItem($total['item']);
             $entity->setQuantity($total['quantity']);
+            $entity->setDeliveryDate(new \DateTime("now"));
             $vat = $this->getCulculationVat($entity->getGlobalOption(),$total['convertTotal']);
             $entity->setVat($vat);
-            $grandTotal = floatval($total['convertTotal'] + $vat + $entity->getDeliveryCharge() - $entity->getDiscountAmount());
+            $grandTotal = floatval($total['convertTotal'] + $vat + $entity->getDeliveryCharge() + $entity->getTotalShippingCharge() - $entity->getDiscountAmount());
             $entity->setGrandTotalAmount($grandTotal);
             $grandTotal = $entity->getGrandTotalAmount();
             $payment = $entity->getAdvanceAmount() + $entity->getPaidAmount();
@@ -79,12 +81,19 @@ class PreOrderRepository extends EntityRepository
         $em->flush();
     }
 
-    public function getCulculationVat($globalOption,$total)
+    public function getCulculationVat(GlobalOption $globalOption,$total)
     {
 
-        $vat = $globalOption->getEcommerceConfig()->getVat();
-        $totalVat = round(($total  * $vat )/100);
+        /* @var EcommerceConfig $config */
+
+        $totalVat = 0;
+        $config = $globalOption->getEcommerceConfig();
+        if($config->isVatEnable() == 1 and $config->getVat() > 0 ){
+            $vat = $config->getVat();
+            $totalVat = round(($total  * $vat )/100);
+        }
         return $totalVat;
+
 
     }
 

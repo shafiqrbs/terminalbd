@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\EcommerceBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\Coupon;
+use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Core\UserBundle\Entity\User;
@@ -71,10 +72,16 @@ class OrderRepository extends EntityRepository
         $order->setGlobalOption($globalOption);
         $customer = $this->getDomainCustomer($user, $globalOption);
         $order->setCustomer($customer);
+        if($user->getProfile()->getLocation()){
+            $order->setLocation($user->getProfile()->getLocation());
+        }
+        $address = $user->getProfile()->getAddress().'-'.$user->getProfile()->getPostalCode();
+        $order->setAddress($address);
+
         $order->setEcommerceConfig($globalOption->getEcommerceConfig());
         $order->setShippingCharge($globalOption->getEcommerceConfig()->getShippingCharge());
-        $vat = $this->getCulculationVat($globalOption, $cart->total());
         $order->setDeliveryDate(new \DateTime("now"));
+        $vat = $this->getCulculationVat($globalOption, $cart->total());
         $order->setVat($vat);
         $order->setCreatedBy($user);
         $order->setTotalAmount($cart->total());
@@ -148,12 +155,17 @@ class OrderRepository extends EntityRepository
         }
     }
 
-    public function getCulculationVat($globalOption,$total)
+    public function getCulculationVat(GlobalOption $globalOption,$total)
     {
-
-        $vat = $globalOption->getEcommerceConfig()->getVat();
-        $totalVat = round(($total  * $vat )/100);
+        /* @var EcommerceConfig $config */
+        $totalVat = 0;
+        $config = $globalOption->getEcommerceConfig();
+        if($config->isVatEnable() == 1 and $config->getVat() > 0 ){
+            $vat = $config->getVat();
+            $totalVat = round(($total  * $vat )/100);
+        }
         return $totalVat;
+
 
     }
 

@@ -67,7 +67,7 @@ class PreOrderPaymentCustomeerType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_ecommercebundle_preorder';
+        return 'ecommerce_payment';
     }
 
 }

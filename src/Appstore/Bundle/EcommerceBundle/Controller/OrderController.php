@@ -237,10 +237,15 @@ class OrderController extends Controller
 
         if($data['process'] == 'confirm'){
 
+            $em->getRepository('EcommerceBundle:OrderItem')->updateOrderItem($order);
+            $em->getRepository('EcommerceBundle:Order')->updateOrder($order);
+            $em->getRepository('EcommerceBundle:OrderPayment')->updateOrderPayment($order);
+            $em->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
+
             //$em->getRepository('InventoryBundle:Item')->onlineOrderUpdate($order);
-           // $em->getRepository('InventoryBundle:StockItem')->insertOnlineOrder($order);
-            $online = $em->getRepository('AccountingBundle:AccountOnlineOrder')->insertAccountOnlineOrder($order);
-            $em->getRepository('AccountingBundle:Transaction')->onlineOrderTransaction($order,$online);
+            //$em->getRepository('InventoryBundle:StockItem')->insertOnlineOrder($order);
+            //$online = $em->getRepository('AccountingBundle:AccountOnlineOrder')->insertAccountOnlineOrder($order);
+            //$em->getRepository('AccountingBundle:Transaction')->onlineOrderTransaction($order,$online);
 
             $this->get('session')->getFlashBag()->add('success',"Customer has been confirmed");
             $dispatcher = $this->container->get('event_dispatcher');
