@@ -335,48 +335,31 @@ class OrderController extends Controller
     public function pdfAction($invoice)
     {
 
-        $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy'=>$this->getUser(),'invoice'=>$invoice));
+        /* @var Order $order */
 
-        $html = $this->renderView(
-            'CustomerBundle:Order:invoice.html.twig', array(
-                'entity' => $order,
-                'print' => ''
-            )
-        );
+        $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy' => $this->getUser(),'invoice'=>$invoice));
+        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($order->getGrandTotalAmount());
+        $barcode = $this->getBarcode($order->getInvoice());
+        return  $this->renderView('CustomerBundle:Order:invoice.html.twig', array(
+            'globalOption' => $order->getGlobalOption(),
+            'entity' => $order,
+            'amountInWords' => $amountInWords,
+            'barcode' => $barcode,
+            'print' => ''
+        ));
+
         $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+
         $snappy          = new Pdf($wkhtmltopdfPath);
         $pdf             = $snappy->getOutputFromHtml($html);
 
         header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="incomePdf.pdf"');
+        header('Content-Disposition: attachment; filename="online-invoice-'.$invoice.'.pdf"');
         echo $pdf;
         return new Response('');
 
-
-        /* @var Order $order */
-
-        $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy'=>$this->getUser(),'invoice'=>$invoice));
-        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($order->getGrandTotalAmount());
-        $barcode = $this->getBarcode($order->getInvoice());
-        return  $this->renderView(
-            'CustomerBundle:Order:invoice.html.twig', array(
-                'globalOption' => $order->getGlobalOption(),
-                'entity' => $order,
-                'amountInWords' => $amountInWords,
-                'barcode' => $barcode,
-            )
-        );
-        /*
-                $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-                $snappy          = new Pdf($wkhtmltopdfPath);
-                $pdf             = $snappy->getOutputFromHtml($html);
-
-                header('Content-Type: application/pdf');
-                header('Content-Disposition: attachment; filename="online-oredr-invoice-'.$invoice.'.pdf"');
-                echo $pdf;
-                return new Response('');*/
-
     }
+    
     public function getBarcode($invoice)
     {
         $barcode = new BarcodeGenerator();
@@ -395,10 +378,11 @@ class OrderController extends Controller
     public function printAction($invoice)
     {
         /* @var Order $order */
-        $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy'=>$this->getUser(),'invoice'=>$invoice));
+
+        $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy' => $this->getUser(),'invoice'=>$invoice));
         $amountInWords = $this->get('settong.toolManageRepo')->intToWords($order->getGrandTotalAmount());
         $barcode = $this->getBarcode($order->getInvoice());
-        return $this->render('CustomerBundle:Order:invoice.html.twig', array(
+        return  $this->renderView('CustomerBundle:Order:invoice.html.twig', array(
             'globalOption' => $order->getGlobalOption(),
             'entity' => $order,
             'amountInWords' => $amountInWords,
@@ -406,14 +390,15 @@ class OrderController extends Controller
             'print' => ''
         ));
 
-       /* $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+
         $snappy          = new Pdf($wkhtmltopdfPath);
         $pdf             = $snappy->getOutputFromHtml($html);
 
         header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="online-oredr-invoice-'.$invoice.'.pdf"');
+        header('Content-Disposition: attachment; filename="online-invoice-'.$invoice.'.pdf"');
         echo $pdf;
-        exit;*/
+        return new Response('');
 
 
     }

@@ -5,6 +5,7 @@ namespace Appstore\Bundle\EcommerceBundle\Controller;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderPayment;
 use Appstore\Bundle\EcommerceBundle\Form\OrderPaymentType;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
+use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -284,34 +285,7 @@ class OrderController extends Controller
 
     }
 
-    public function pdfAction(Order $order)
-    {
 
-        $html = $this->renderView(
-            'EcommerceBundle:Order:invoice.html.twig', array(
-                'entity' => $order,
-                'print' => ''
-            )
-        );
-        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
-        $snappy          = new Pdf($wkhtmltopdfPath);
-        $pdf             = $snappy->getOutputFromHtml($html);
-
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="incomePdf.pdf"');
-        echo $pdf;
-        return new Response('');
-
-    }
-
-    public function printAction(Order $order)
-    {
-        return $this->render('EcommerceBundle:Order:invoice.html.twig', array(
-            'entity' => $order,
-            'print' => '<script>window.print();</script>'
-        ));
-
-    }
 
     public function purchaseItemSelectAction(OrderItem $orderItem)
     {
@@ -364,5 +338,62 @@ class OrderController extends Controller
         return new Response('success');
 
     }
+
+
+    public function getBarcode($invoice)
+    {
+        $barcode = new BarcodeGenerator();
+        $barcode->setText($invoice);
+        $barcode->setType(BarcodeGenerator::Code128);
+        $barcode->setScale(1);
+        $barcode->setThickness(32);
+        $barcode->setFontSize(7);
+        $code = $barcode->generate();
+        $data = '';
+        $data .= '<img src="data:image/png;base64,' . $code . '" />';
+        return $data;
+    }
+
+    public function pdfAction(Order $order)
+    {
+
+
+        /* @var Order $order */
+
+        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($order->getGrandTotalAmount());
+        $barcode = $this->getBarcode($order->getInvoice());
+        $html = $this->renderView( 'CustomerBundle:Order:invoice.html.twig', array(
+            'globalOption' => $order->getGlobalOption(),
+            'entity' => $order,
+            'amountInWords' => $amountInWords,
+            'barcode' => $barcode,
+            'print' => ''
+        ));
+
+        $wkhtmltopdfPath = 'xvfb-run --server-args="-screen 0, 1280x1024x24" /usr/bin/wkhtmltopdf --use-xserver';
+        $snappy          = new Pdf($wkhtmltopdfPath);
+        $pdf             = $snappy->getOutputFromHtml($html);
+
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="online-invoice-'.$order->getInvoice().'.pdf"');
+        echo $pdf;
+        return new Response('');
+
+    }
+
+    public function printAction(Order $order)
+    {
+        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($order->getGrandTotalAmount());
+        $barcode = $this->getBarcode($order->getInvoice());
+        return $this->render('EcommerceBundle:Order:invoice.html.twig', array(
+            'globalOption' => $order->getGlobalOption(),
+            'entity' => $order,
+            'amountInWords' => $amountInWords,
+            'barcode' => $barcode,
+            'print' => ''
+        ));
+
+    }
+
 
 }

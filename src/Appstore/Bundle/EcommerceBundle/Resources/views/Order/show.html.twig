@@ -78,24 +78,8 @@
                                             <ul class="unstyled" >
                                                 {% if entity.cashOnDelivery == 1 %}
                                                     <li><strong>Payment Method</strong>:&nbsp;Cash On Delivery</li>
-                                                {% elseif entity.transactionMethod is not empty %}
-                                                    <li><strong>Payment Method</strong>:&nbsp;{{ entity.transactionMethod.name }}</li>
                                                 {% endif %}
                                                 <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery }}</li>
-                                                <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
-
-                                                {% if entity.accountMobileBank is not empty %}
-                                                    <li><strong>Received</strong>:&nbsp;{{ entity.accountMobileBank.mobile }},{{ entity.accountMobileBank.serviceName }},{{ entity.accountMobileBank.authorised }}</li>
-                                                {% endif %}
-                                                {% if entity.mobileAccount is not empty %}
-                                                    <li><strong>Mobile</strong>:&nbsp;{{ entity.mobileAccount }}</li>
-                                                {% endif %}
-                                                {% if entity.accountType is not empty %}
-                                                    <li><strong>Account Type</strong>:&nbsp;{{ entity.accountType }}</li>
-                                                {% endif %}
-                                                {% if entity.transaction is not empty %}
-                                                    <li><strong>Transaction ID</strong>:&nbsp;{{ entity.transaction }}</li>
-                                                {% endif %}
                                             </ul>
                                         </div>
                                     </div>
