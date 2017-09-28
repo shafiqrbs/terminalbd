@@ -247,6 +247,114 @@
                                 </div>
                             </div>
                             <div class="clearfix"><br/></div>
+                            <div class="form-actions portlet box blue">
+                                <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Manage Vat & Tax</div></div>
+                            </div>
+                            <div class="clearfix"><br/> </div>
+                            <div class="row-fluid">
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="notes">Vat Registration No</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.vatRegNo) }}
+                                            {{ form_errors(form.vatRegNo) }}
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="notes">Vat Amount</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.vat) }}
+                                            {{ form_errors(form.vat) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"><br/></div>
+                            <div class="form-actions portlet box blue">
+                                <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Manage Printer</div></div>
+                            </div>
+                            <div class="clearfix"><br/> </div>
+                            <div class="row-fluid">
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="notes">Printer</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.printer) }}
+                                            {{ form_errors(form.printer) }}
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="notes">Is Printer Head</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.isPrintHeader) }}
+                                            {{ form_errors(form.isPrintHeader) }}
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="notes">Is Printer Buttom</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.isPrintFooter) }}
+                                            {{ form_errors(form.isPrintFooter) }}
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="span3 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="notes">Print By</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.printBy) }}
+                                            {{ form_errors(form.printBy) }}
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span4 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="notes">Left Margin</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.printLeftMargin) }}
+                                            {{ form_errors(form.printLeftMargin) }}
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span4 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="notes">Top Margin</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.printTopMargin) }}
+                                            {{ form_errors(form.printTopMargin) }}
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span4 ">
+                                    <div class="control-group">
+                                        <label class="control-label" for="notes">Margin Bottom</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.printMarginBottom) }}
+                                            {{ form_errors(form.printMarginBottom) }}
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="clearfix"><br/></div>
                             <!--/span-->
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">

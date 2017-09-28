@@ -340,7 +340,7 @@ class OrderController extends Controller
         $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy' => $this->getUser(),'invoice'=>$invoice));
         $amountInWords = $this->get('settong.toolManageRepo')->intToWords($order->getGrandTotalAmount());
         $barcode = $this->getBarcode($order->getInvoice());
-        return  $this->renderView('CustomerBundle:Order:invoice.html.twig', array(
+        $html =  $this->renderView('CustomerBundle:Order:invoice.html.twig', array(
             'globalOption' => $order->getGlobalOption(),
             'entity' => $order,
             'amountInWords' => $amountInWords,
@@ -382,7 +382,7 @@ class OrderController extends Controller
         $order = $this->getDoctrine()->getRepository('EcommerceBundle:Order')->findOneBy(array('createdBy' => $this->getUser(),'invoice'=>$invoice));
         $amountInWords = $this->get('settong.toolManageRepo')->intToWords($order->getGrandTotalAmount());
         $barcode = $this->getBarcode($order->getInvoice());
-        return  $this->renderView('CustomerBundle:Order:invoice.html.twig', array(
+        $html =  $this->renderView('CustomerBundle:Order:invoice.html.twig', array(
             'globalOption' => $order->getGlobalOption(),
             'entity' => $order,
             'amountInWords' => $amountInWords,

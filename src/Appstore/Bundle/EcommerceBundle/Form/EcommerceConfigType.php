@@ -70,7 +70,31 @@ class EcommerceConfigType extends AbstractType
             ->add('isColor')
             ->add('isSize')
             ->add('cart')
-            ->add('promotion');
+            ->add('promotion')
+
+            ->add('printBy')
+            ->add('isPrintHeader')
+            ->add('isPrintFooter')
+            ->add('printer',
+                'choice', array(
+                    'attr'=>array('class'=>'m-wrap span12'),
+                    'choices' => array(
+                        'save'          => 'Save',
+                        'printer'       => 'Printer',
+                        'pos'           => 'Pos Printer',
+                    ),
+                    'required'    => true,
+                    'multiple'    => false,
+                    'expanded'  => false,
+                    'empty_data'  => null,
+                ))
+            ->add('vat','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
+            ->add('vatRegNo','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
+            ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
+            ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
+            ->add('printMarginBottom','text',array('attr'=>array('class'=>'m-wrap numeric span8')))
+
+        ;
     }
     
     /**

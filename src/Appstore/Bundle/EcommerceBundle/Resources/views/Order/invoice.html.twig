@@ -1,5 +1,6 @@
 {% extends '::print.html.twig' %}
 {% block body %}
+    {% if globalOption.ecommerceConfig.isPrintHeader == 1 %}
     <table class="table">
         <tr>
             <td>
@@ -20,6 +21,7 @@
             </td>
         </tr>
     </table>
+{% endif %}
     <table class="table table-border" >
         <tr class="print-header">
             <td class="span3">
@@ -130,9 +132,16 @@
                 </tr>
             {% endif %}
             <tr><td colspan="7" style="text-align:right"><strong>In word TK.</strong>({{ amountInWords|raw }} only).</td></tr>
-            {# <tr><td colspan="6" style="text-align:center">{{ portal_power }}</td></tr>#}
             </tfoot>
         </table>
     {% endif %}
+    <table class="table">
+        {% if globalOption.ecommerceConfig.printBy == 1 %}
+            <tr><td colspan="7" style="text-align:right!important;">Printed By. {{ app.user.profile.name }}</td></tr>
+        {% endif %}
+        {% if globalOption.ecommerceConfig.isPrintFooter == 1 %}
+            <tr><td colspan="7" style="text-align:center!important; font-weight:bold">{{ portal_power }}</td></tr>
+        {% endif %}
+    </table>
 {% endblock %}
 

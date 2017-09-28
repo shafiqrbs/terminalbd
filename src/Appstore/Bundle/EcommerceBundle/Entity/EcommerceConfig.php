@@ -222,6 +222,66 @@ class EcommerceConfig
      */
     private $vatEnable = false;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="printBy", type="boolean",  nullable=true)
+     */
+    private $printBy = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="printer", type="string", length=50,nullable = true)
+     */
+    private $printer;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="vatRegNo", type="string",  nullable=true)
+     */
+    private $vatRegNo;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="printMarginTop", type="smallint",  nullable=true)
+     */
+    private $printTopMargin = 0;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="printMarginBottom", type="smallint",  nullable=true)
+     */
+    private $printMarginBottom = 0;
+
+
+     /**
+     * @var smallint
+     *
+     * @ORM\Column(name="printLeftMargin", type="smallint",  nullable=true)
+     */
+    private $printLeftMargin = 0;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPrintHeader", type="boolean",  nullable=true)
+     */
+    private $isPrintHeader = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isPrintFooter", type="boolean",  nullable=true)
+     */
+    private $isPrintFooter = true;
+
+
 
 
     /**
@@ -695,6 +755,135 @@ class EcommerceConfig
     public function setMenuType($menuType)
     {
         $this->menuType = $menuType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrinter()
+    {
+        return $this->printer;
+    }
+
+    /**
+     * @param string $printer
+     */
+    public function setPrinter($printer)
+    {
+        $this->printer = $printer;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVatRegNo()
+    {
+        return $this->vatRegNo;
+    }
+
+    /**
+     * @param string $vatRegNo
+     */
+    public function setVatRegNo($vatRegNo)
+    {
+        $this->vatRegNo = $vatRegNo;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getPrintTopMargin()
+    {
+        return $this->printTopMargin;
+    }
+
+    /**
+     * @param smallint $printTopMargin
+     */
+    public function setPrintTopMargin($printTopMargin)
+    {
+        $this->printTopMargin = $printTopMargin;
+    }
+
+
+    /**
+     * @return smallint
+     */
+    public function getPrintMarginBottom()
+    {
+        return $this->printMarginBottom;
+    }
+
+    /**
+     * @param smallint $printMarginBottom
+     */
+    public function setPrintMarginBottom($printMarginBottom)
+    {
+        $this->printMarginBottom = $printMarginBottom;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIsPrintHeader()
+    {
+        return $this->isPrintHeader;
+    }
+
+    /**
+     * @param boolean $isPrintHeader
+     */
+    public function setIsPrintHeader($isPrintHeader)
+    {
+        $this->isPrintHeader = $isPrintHeader;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIsPrintFooter()
+    {
+        return $this->isPrintFooter;
+    }
+
+    /**
+     * @param boolean $isPrintFooter
+     */
+    public function setIsPrintFooter($isPrintFooter)
+    {
+        $this->isPrintFooter = $isPrintFooter;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getPrintLeftMargin()
+    {
+        return $this->printLeftMargin;
+    }
+
+    /**
+     * @param smallint $printLeftMargin
+     */
+    public function setPrintLeftMargin($printLeftMargin)
+    {
+        $this->printLeftMargin = $printLeftMargin;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getPrintBy()
+    {
+        return $this->printBy;
+    }
+
+    /**
+     * @param boolean $printBy
+     */
+    public function setPrintBy($printBy)
+    {
+        $this->printBy = $printBy;
     }
 
 }
