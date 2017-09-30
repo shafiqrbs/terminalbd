@@ -182,8 +182,6 @@
                                                 <a class="btn  mini green" ><i class=" icon-thumbs-up"></i> Accept</a>
                                             {% elseif item.status == 2 %}
                                                 <a class="btn  mini yellow " ><i class="icon-thumbs-down"></i> Rejected</a>
-                                            {% else %}
-                                                <a class="btn  mini purple" ><i class="icon-filter"></i> In-progress</a>
                                             {% endif %}
                                             {% if entity.process == 'created'  %}
                                                 <a title="Are you sure went to add ?"  data-id="{{ item.id }}" data-url="{{ path('order_item_update',{'shop':globalOption.slug,'order':entity.id,'id':item.id}) }}" data-value="{{ globalOption.slug }}" class="btn blue orderItemProcess" ><i class="icon-save"></i></a>
@@ -299,7 +297,6 @@
                                         <a class="btn  mini red remove" data-url="{{ path('order_payment_delete',{'shop':globalOption.slug,'id':payment.id}) }}"  data-id="{{ payment.id }}" ><i class=" icon-trash"></i> Delete</a>
                                         {% endif %}
                                     </td>
-
                                 </tr>
                             {% endfor %}
 
@@ -477,12 +474,10 @@
 
                         {% endif %}
                         <div class="clearfix"><br/> </div>
-
                         <div class="form-actions portlet box yellow">
                             <div class="portlet-title"><div class="caption"><i class="icon-reorder"></i>Comments Information</div></div>
                         </div>
                         <div class="clearfix"><br/> </div>
-
                         {% set paymentID = entity.globalOption.id~'-ecommerce-payment-'~entity.id %}
                         {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': paymentID } %}
                         <div class="clearfix"><br/> </div>
@@ -515,4 +510,6 @@
     $(".editable").editable();
     ApproveProcess();
     $('body').addClass('page-sidebar-closed');
+    $('#fos_comment_comment_body').addClass('span12');
+    $('.fos_comment_submit input[type="submit"]').addClass('btn blue');
 {% endblock %}

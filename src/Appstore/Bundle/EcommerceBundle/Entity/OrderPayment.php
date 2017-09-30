@@ -120,11 +120,12 @@ class OrderPayment
     private $transactionType;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="status", type="boolean")
+     * @ORM\Column(name="status", type="smallint" ,length=1 ,nullable = true)
      */
-    private $status = false;
+    private $status = 0;
+
 
     /**
      * @var \DateTime
@@ -391,22 +392,6 @@ class OrderPayment
     }
 
     /**
-     * @return boolean
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param boolean $status
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-    }
-
-    /**
      * @return Order
      */
     public function getOrder()
@@ -420,6 +405,22 @@ class OrderPayment
     public function setOrder($order)
     {
         $this->order = $order;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 
 

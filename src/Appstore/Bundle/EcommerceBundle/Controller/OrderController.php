@@ -83,7 +83,7 @@ class OrderController extends Controller
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $form = $this->createForm(new OrderType($globalOption,$location), $entity, array(
             'action' => $this->generateUrl('customer_order_confirm', array('id' => $entity->getId())),
-            'method' => 'post',
+            'method' => 'PUT',
             'attr' => array(
                 'id' => 'orderProcess',
                 'novalidate' => 'novalidate',
@@ -221,44 +221,49 @@ class OrderController extends Controller
 
     public function confirmAction(Request $request ,Order $order)
     {
-        $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
-        if($data['process'] != 'sms'){
-            $order->setProcess($data['process']);
+        $process = $order->getProcess();
+        $paymentEntity = new  OrderPayment();
+        $orderForm = $this->createEditForm($order);
+        $payment = $this->createEditPaymentForm($paymentEntity,$order);
+        $orderForm->handleRequest($request);
+        if ($orderForm->isValid()) {
+            $em->persist($order);
+            if($order->getProcess() == 'sms'){
+                $order->setProcess($process);
+            }
+            $em->flush();
+            if($order->getProcess() == 'confirm'){
+
+                $em->getRepository('EcommerceBundle:OrderItem')->updateOrderItem($order);
+                $em->getRepository('EcommerceBundle:Order')->updateOrder($order);
+                $em->getRepository('EcommerceBundle:OrderPayment')->updateOrderPayment($order);
+                $em->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
+
+                //$em->getRepository('InventoryBundle:Item')->onlineOrderUpdate($order);
+                //$em->getRepository('InventoryBundle:StockItem')->insertOnlineOrder($order);
+                //$online = $em->getRepository('AccountingBundle:AccountOnlineOrder')->insertAccountOnlineOrder($order);
+                //$em->getRepository('AccountingBundle:Transaction')->onlineOrderTransaction($order,$online);
+
+                $this->get('session')->getFlashBag()->add('success',"Customer has been confirmed");
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.order_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
+
+            }else{
+
+                $this->get('session')->getFlashBag()->add('success',"Message has been sent successfully");
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.order_comment_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
+
+            }
+            return $this->redirect($this->generateUrl('customer_order_payment',array('id' => $order->getId())));
         }
-        if(isset($data['comment']) and !empty($data['comment'])){
-            $order->setComment($data['comment']);
-        }else{
-            $order->setComment(null);
-        }
-        $order->setDeliveryDate(new \DateTime($data['deliveryDate']));
-        $em->persist($order);
-        $em->flush();
+        return $this->render('EcommerceBundle:Order:payment.html.twig', array(
+            'entity'                => $order,
+            'orderForm'             => $orderForm->createView(),
+            'paymentForm'           => $payment->createView(),
+        ));
 
-        if($data['process'] == 'confirm'){
-
-            $em->getRepository('EcommerceBundle:OrderItem')->updateOrderItem($order);
-            $em->getRepository('EcommerceBundle:Order')->updateOrder($order);
-            $em->getRepository('EcommerceBundle:OrderPayment')->updateOrderPayment($order);
-            $em->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
-
-            //$em->getRepository('InventoryBundle:Item')->onlineOrderUpdate($order);
-            //$em->getRepository('InventoryBundle:StockItem')->insertOnlineOrder($order);
-            //$online = $em->getRepository('AccountingBundle:AccountOnlineOrder')->insertAccountOnlineOrder($order);
-            //$em->getRepository('AccountingBundle:Transaction')->onlineOrderTransaction($order,$online);
-
-            $this->get('session')->getFlashBag()->add('success',"Customer has been confirmed");
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.order_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
-
-        }else{
-
-            $this->get('session')->getFlashBag()->add('success',"Message has been sent successfully");
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.order_comment_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
-
-        }
-        return new Response('success');
 
     }
 
@@ -280,17 +285,26 @@ class OrderController extends Controller
     {
         $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('EcommerceBundle:Order')->find($data['pk']);
-        if (!$entity) {
+        $order = $em->getRepository('EcommerceBundle:Order')->find($data['pk']);
+        if (!$order) {
             throw $this->createNotFoundException('Unable to find Order entity.');
         }
-        $entity->setProcess($data['value']);
+        $order->setProcess($data['value']);
         $em->flush();
+
+        if($order->getProcess() == 'confirm') {
+
+            $em->getRepository('EcommerceBundle:OrderItem')->updateOrderItem($order);
+            $em->getRepository('EcommerceBundle:Order')->updateOrder($order);
+            $em->getRepository('EcommerceBundle:OrderPayment')->updateOrderPayment($order);
+            $em->getRepository('EcommerceBundle:Order')->updateOrderPayment($order);
+
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.order_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
+        }
         exit;
 
     }
-
-
 
     public function purchaseItemSelectAction(OrderItem $orderItem)
     {
@@ -330,10 +344,10 @@ class OrderController extends Controller
 
     }
 
-    public function confirmPaymentAction(OrderPayment $payment)
+    public function confirmPaymentAction(OrderPayment $payment, $process)
     {
         $em = $this->getDoctrine()->getManager();
-        $payment->setStatus(1);
+        $payment->setStatus($process);
         $em->persist($payment);
         $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:Order')->updateOrderPayment($payment->getOrder());

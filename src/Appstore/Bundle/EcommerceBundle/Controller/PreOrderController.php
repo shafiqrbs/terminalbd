@@ -84,7 +84,7 @@ class PreOrderController extends Controller
             'action' => $this->generateUrl('customer_preorder_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
-                'id' => 'process',
+                'id' => 'orderProcess',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -143,26 +143,35 @@ class PreOrderController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PreOrder entity.');
         }
+        $process = $entity->getProcess();
         $editForm = $this->createEditProcessForm($entity);
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
+            if($entity->getProcess() == 'sms'){
+                $entity->setProcess($process);
+            }
             $em->flush();
+            $this->getDoctrine()->getRepository('EcommerceBundle:PreOrder')->updatePreOder($entity);
+            if($entity->getProcess() == 'confirm'){
+                $em->getRepository('EcommerceBundle:PreOrderItem')->updatePreOrderItem($entity);
+                $em->getRepository('EcommerceBundle:PreOrder')->updatePreOder($entity);
+                $em->getRepository('EcommerceBundle:PreOrderPayment')->updatePreOrderPayment($entity);
+                $em->getRepository('EcommerceBundle:PreOrder')->updatePreOderPayment($entity);
+
+                $this->get('session')->getFlashBag()->add('success',"Customer has been verified");
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.pre_order_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommercePreOrderSmsEvent($entity));
+            }else{
+                $this->get('session')->getFlashBag()->add('success',"Message has been sent successfully");
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.pre_order_comment_sms', new \Setting\Bundle\ToolBundle\Event\EcommercePreOrderSmsEvent($entity));
+
+            }
             return $this->redirect($this->generateUrl('customer_preorder_item', array('id' => $id)));
         }
 
-       /* if($data['submitProcess'] == 'verified'){
 
-            $this->get('session')->getFlashBag()->add('success',"Customer has been verified");
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.order_confirm', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderConfirmEvent($entity));
 
-        }else{
-
-            $this->get('session')->getFlashBag()->add('success',"Message has been sent successfully");
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.order_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($entity));
-
-        }*/
 
     }
 
@@ -235,21 +244,22 @@ class PreOrderController extends Controller
         return new Response('success');
     }
 
-    public function confirmAction(PreOrderPayment $entity)
+    public function paymentConfirmAction(PreOrderPayment $entity,$process)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity->setStatus(true);
+        $entity->setStatus($process);
         $em->persist($entity);
         $em->flush();
-
-        if($entity->getStatus() == true ){
+        if($entity->getStatus() == 1 ){
             $this->getDoctrine()->getRepository('EcommerceBundle:PreOrder')->updatePreOderPayment($entity->getPreOrder());
-          /*  $this->get('session')->getFlashBag()->add('success',"Customer has been confirmed");
             $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.preorder_confirm', new \Setting\Bundle\ToolBundle\Event\EcommercePreOrderConfirmEvent($entity));*/
-
+            $dispatcher->dispatch('setting_tool.post.pre_order_payment_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommercePreOrderPaymentSmsEvent($entity));
+        }else{
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.pre_order_payment_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommercePreOrderPaymentSmsEvent($entity));
         }
-        return $this->redirect($this->generateUrl('customer_preorder'));
+        return new Response('success');
+        exit;
 
 
     }

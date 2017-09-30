@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\EcommerceBundle\Repository;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
+use Appstore\Bundle\EcommerceBundle\Entity\PreOrderPayment;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,9 +13,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class PreOrderPaymentRepository extends EntityRepository
 {
-    public function updatePreOder(PreOrder $entity)
+
+    public function updatePreOrderPayment(PreOrder $order)
     {
         $em = $this->_em;
+        foreach ($order->getPreOrderPayments() as $item){
+
+            /* @var $item PreOrderPayment */
+            if($item->getStatus() == 0 ){
+                $item->setStatus(2);
+                $em->persist($item);
+                $em->flush($item);
+            }
+        }
     }
 
 

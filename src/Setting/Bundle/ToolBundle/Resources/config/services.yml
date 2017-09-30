@@ -123,16 +123,35 @@ services:
           - { name: kernel.event_listener, event: setting_tool.post.order_payment_confirm_sms , method: sendPaymentConfirmSms }
 
   setting_tool.listener.pre_order_confirm.ecommerce:
-        class: Setting\Bundle\ToolBundle\EventListener\EcommercePreOrderConfirmListener
-        arguments: [@setting_tool.sms_gateWay]
+          class: Setting\Bundle\ToolBundle\EventListener\EcommercePreOrderSmsListener
+          arguments: [@doctrine ,@setting_tool.sms_gateWay]
+          tags:
+            - { name: kernel.event_listener, event: setting_tool.post.pre_order_confirm_sms , method: sendConfirm }
+
+  setting_tool.listener.pre_order_comment.ecommerce:
+        class: Setting\Bundle\ToolBundle\EventListener\EcommercePreOrderSmsListener
+        arguments: [@doctrine ,@setting_tool.sms_gateWay]
         tags:
-          - { name: kernel.event_listener, event: setting_tool.post.preorder_confirm , method: sendSms }
+          - { name: kernel.event_listener, event: setting_tool.post.pre_order_comment_sms , method: sendComment }
 
   setting_tool.listener.pre_order_sms.ecommerce:
         class: Setting\Bundle\ToolBundle\EventListener\EcommercePreOrderSmsListener
-        arguments: [@setting_tool.sms_gateWay]
+        arguments: [@doctrine ,@setting_tool.sms_gateWay]
         tags:
-          - { name: kernel.event_listener, event: setting_tool.post.preorder_sms , method: sendSms }
+          - { name: kernel.event_listener, event: setting_tool.post.pre_order_sms , method: sendSms }
+
+
+  setting_tool.listener.pre_order_sms_payment.ecommerce:
+          class: Setting\Bundle\ToolBundle\EventListener\EcommercePreOrderPaymentSmsListener
+          arguments: [@doctrine ,@setting_tool.sms_gateWay]
+          tags:
+            - { name: kernel.event_listener, event: setting_tool.post.pre_order_payment_sms , method: sendSms }
+
+  setting_tool.listener.pre_order_sms_payment_confirm.ecommerce:
+        class: Setting\Bundle\ToolBundle\EventListener\EcommercePreOrderPaymentSmsListener
+        arguments: [@doctrine ,@setting_tool.sms_gateWay]
+        tags:
+          - { name: kernel.event_listener, event: setting_tool.post.pre_order_payment_confirm_sms , method: sendPaymentConfirmSms }
 
 
   setting_tool.listener.pos_order_sms:

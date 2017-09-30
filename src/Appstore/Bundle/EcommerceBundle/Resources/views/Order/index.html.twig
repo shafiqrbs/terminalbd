@@ -78,14 +78,18 @@
                                         <td class="numeric" >{{ entity.shippingCharge }}</td>
                                         <td class="numeric" >{{ entity.grandTotalAmount }}</td>
                                         <td class="numeric" >
-                                            {% if entity.process == 'delivered'  %}
-                                                <span class="btn mini blue">{{ entity.process }}</span>
+                                            {% set postCondition = {'delivered': 'delivered' ,'cancel':'cancel','returend':'returend','delete':'delete'} %}
+                                            {% if entity.process in  postCondition|keys %}
+                                                <span class="btn mini blue">{{ entity.process|capitalize }}</span>
                                             {% else %}
-                                                <a  data-type="select" class="editable" id="discount" data-name="Discount" href="#" data-source="{{ path('customer_order_data_source') }}"  data-url="{{ path('customer_order_update_inline') }}" data-pk="{{ entity.id }}" data-value="{{ entity.process }}" data-original-title="Select Order Process Status">{{ entity.process }}</a>
+                                                <a  data-type="select" class="btn mini editable" id="discount" data-name="Discount" href="#" data-source="{{ path('customer_order_data_source') }}"  data-url="{{ path('customer_order_update_inline') }}" data-pk="{{ entity.id }}" data-value="{{ entity.process }}" data-original-title="Select Order Process Status">{{ entity.process|capitalize }}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
+                                            {% set postCondition = {'delivered': 'delivered' ,'cancel':'cancel','returend':'returend','delete':'delete'} %}
+                                            {% if entity.process not in  postCondition|keys %}
                                             <a title="Are you sure went to payment ?" href="{{ path('customer_order_payment', { 'id': entity.id }) }}" class="btn blue mini " ><i class="icon-money"></i>&nbsp;Payment</a>
+                                            {% endif %}
                                             <a href="{{ path('customer_order_show', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-eye-open"></i>&nbsp;</a>
                                             <a  href="{{ path('customer_order_print_invoice',{id:entity.id}) }}" target="_blank" data-url=""  class="btn mini purple"><i class="icon-print"></i></a>
                                         </td>

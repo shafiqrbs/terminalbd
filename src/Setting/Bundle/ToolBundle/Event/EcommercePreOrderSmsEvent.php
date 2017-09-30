@@ -28,9 +28,9 @@ class EcommercePreOrderSmsEvent extends Event
 
 
     /**
-     * @return Order
+     * @return PreOrder
      */
-    public function getOrder()
+    public function getPreOrder()
     {
         return $this->preOrder;
     }

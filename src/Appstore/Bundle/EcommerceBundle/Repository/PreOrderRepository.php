@@ -26,16 +26,12 @@ class PreOrderRepository extends EntityRepository
             ->setParameter('preOrder', $entity ->getId())
             ->setParameter('status', 1)
             ->getQuery()->getSingleResult();
-        if($process == 'in-progress'){
-            $entity->setProcess($process);
-        }
-        
         if($total['item'] > 0){
+            
             $entity->setTotalAmount(floatval($total['convertTotal']));
             $entity->setTotalShippingCharge($total['shippingCharge']);
             $entity->setItem($total['item']);
             $entity->setQuantity($total['quantity']);
-            $entity->setDeliveryDate(new \DateTime("now"));
             $vat = $this->getCulculationVat($entity->getGlobalOption(),$total['convertTotal']);
             $entity->setVat($vat);
             $grandTotal = floatval($total['convertTotal'] + $vat + $entity->getDeliveryCharge() + $entity->getTotalShippingCharge() - $entity->getDiscountAmount());
@@ -50,6 +46,7 @@ class PreOrderRepository extends EntityRepository
                 $entity->setDueAmount($grandTotal - $payment);
             }
         }else{
+            
             $entity->setTotalAmount(0);
             $entity->setTotalShippingCharge(0);
             $entity->setItem(0);

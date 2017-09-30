@@ -12,10 +12,11 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Event\EcommerceOrderPaymentSmsEvent;
 use Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent;
+use Setting\Bundle\ToolBundle\Event\EcommercePreOrderPaymentSmsEvent;
 use Setting\Bundle\ToolBundle\Service\SmsGateWay;
 
 
-class EcommerceOrderPaymentSmsListener extends BaseSmsAwareListener
+class EcommercePreOrderPaymentSmsListener extends BaseSmsAwareListener
 {
 
     /**
@@ -38,11 +39,11 @@ class EcommerceOrderPaymentSmsListener extends BaseSmsAwareListener
     }
 
 
-    public function sendSms(EcommerceOrderPaymentSmsEvent $event)
+    public function sendSms(EcommercePreOrderPaymentSmsEvent $event)
     {
 
             /**
-             * @var EcommerceOrderPaymentSmsEvent $event
+             * @var EcommercePreOrderPaymentSmsEvent $event
              */
 
             $payment = $event->getPayment();
@@ -50,29 +51,30 @@ class EcommerceOrderPaymentSmsListener extends BaseSmsAwareListener
             $method = $payment->getAccountMobileBank()->getName().'/'.$payment->getTransaction();
             $created = $payment->getCreated()->format('d-m-Y');
 
-            $post = $event->getPayment()->getOrder();
-            $administratorMobile = "+88".$post->getGlobalOption()->getNotificationConfig()->getMobile();
+            $post = $event->getPayment()->getPreOrder();
+            $globalOption = $post->getGlobalOption();
+            $administratorMobile = "+88".$globalOption->getNotificationConfig()->getMobile();
 
             $invoice = $post->getInvoice();
             $amount = $post->getGrandTotalAmount();
             $paid = $post->getPaidAmount();
-            $administratorMsg = "You have received BDT $paymentAmount , created $created , Transaction $method order no $invoice total amount BDT $amount & total paid amount BDT $paid ";
+            $administratorMsg = "You have received BDT $paymentAmount , created $created , Transaction $method pre-order no $invoice total amount BDT $amount & total paid amount BDT $paid ";
 
-            if(!empty($post->getGlobalOption()->getSmsSenderTotal()) and $post->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $post->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1 and $post->getGlobalOption()->getNotificationConfig()->getOnlineOrder() == 1){
+            if(!empty($globalOption->getSmsSenderTotal()) and $globalOption->getSmsSenderTotal()->getRemaining() > 0 and $globalOption->getNotificationConfig()->getSmsActive() == 1 and $globalOption->getNotificationConfig()->getOnlineOrder() == 1){
 
                 if(!empty($post->getGlobalOption()->getNotificationConfig()->getMobile())) {
                     $status = $this->gateway->send($administratorMsg, $administratorMobile);
-                    $this->em->getRepository('SettingToolBundle:SmsSender')->insertAdminEcommercePaymentSms($post->getGlobalOption(),$administratorMobile,$administratorMsg,'Order',$status);
+                    $this->em->getRepository('SettingToolBundle:SmsSender')->insertAdminEcommercePaymentSms($globalOption,$administratorMobile,$administratorMsg,'Pre-order',$status);
                 }
             }
 
     }
 
-    public function sendPaymentConfirmSms(EcommerceOrderPaymentSmsEvent $event)
+    public function sendPaymentConfirmSms(EcommercePreOrderPaymentSmsEvent $event)
     {
 
         /**
-         * @var EcommerceOrderPaymentSmsEvent $event
+         * @var EcommercePreOrderPaymentSmsEvent $event
          */
 
         $payment = $event->getPayment();
@@ -81,20 +83,25 @@ class EcommerceOrderPaymentSmsListener extends BaseSmsAwareListener
         $created = $payment->getCreated()->format('d-m-Y');
 
 
-        $post = $event->getPayment()->getOrder();
+        $post = $event->getPayment()->getPreOrder();
+
         $domainName = 'www.'.$post->getGlobalOption()->getDomain();
         $customerMobile = "88".$post->getCreatedBy()->getProfile()->getMobile();
 
         $invoice = $post->getInvoice();
-        $amount = $post->getGrandTotalAmount();
         $paid = $post->getPaidAmount();
-        $customerMsg = "You have received BDT $paymentAmount , created $created , Transaction $method order no $invoice total amount BDT $amount & total paid amount BDT $paid. Thanks for using $domainName.";
+
+        if($payment->getStatus() == 2 ){
+            $customerMsg = "We have no received BDT $paymentAmount ,Transaction $method pre-order no $invoice  & total paid amount BDT $paid. Thanks for using $domainName.";
+        }else{
+            $customerMsg = "We have received BDT $paymentAmount ,Transaction $method pre-order no $invoice & total paid amount BDT $paid. Thanks for using $domainName.";
+        }
 
         if(!empty($post->getGlobalOption()->getSmsSenderTotal()) and $post->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $post->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1 and $post->getGlobalOption()->getNotificationConfig()->getOnlineOrder() == 1){
 
             if(!empty($post->getGlobalOption()->getNotificationConfig()->getMobile())) {
                 $status = $this->gateway->send($customerMsg, $customerMobile);
-                $this->em->getRepository('SettingToolBundle:SmsSender')->insertAdminEcommercePaymentConfirmSms($post->getGlobalOption(),$customerMobile,$customerMsg,'Order',$status);
+                $this->em->getRepository('SettingToolBundle:SmsSender')->insertAdminEcommercePaymentConfirmSms($post->getGlobalOption(),$customerMobile,$customerMsg,'Pre-order',$status);
             }
         }
 

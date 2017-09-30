@@ -200,7 +200,7 @@
                                                                                 </select>
                                                                             {% endif %}
                                                                         </td>
-                                                                        <td class="numeric" ><input type="number" class="span12 m-wrap" name="quantity" id="quantity-{{ purchaseItem.id }}" value="{{ purchaseItem.quantity }}" max="{{ purchaseItem.quantity }}" min="1"></td>
+                                                                        <td class="numeric" ><input type="number" class="span12 m-wrap" name="quantity" id="quantity-{{ purchaseItem.id }}" value="1" max="{{ purchaseItem.quantity }}" min="1"></td>
                                                                        <td class="numeric" >
                                                                             <a href="javascript:" data-url="{{ path('order_cart_to_add',{'shop':globalOption.slug,'id':purchaseItem.id}) }}" id="{{ purchaseItem.id }}" class="btn blue mini addCart" ><i class="icon-shopping-cart"></i></a>
                                                                         </td>

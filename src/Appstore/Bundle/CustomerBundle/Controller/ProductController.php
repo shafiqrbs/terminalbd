@@ -115,6 +115,7 @@ class ProductController extends Controller
         $cart = new Cart($request->getSession());
         $user = $this->getUser();
         $order = $em->getRepository('EcommerceBundle:Order')->insertNewCustomerOrder($user,$shop,$cart);
+        $cart->destroy();
         return $this->redirect($this->generateUrl('order_payment',array('id' => $order->getId())));
 
     }

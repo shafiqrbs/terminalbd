@@ -75,7 +75,7 @@
                                         {% if entity.cashOnDelivery == 1 %}
                                             <li><strong>Payment Method</strong>:&nbsp;Cash On Delivery</li>
                                         {% endif %}
-                                        <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery }}</li>
+                                        <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery|capitalize }}</li>
                                         <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
                                         <li><strong>Process</strong>:&nbsp;<strong>{{ entity.process|capitalize }}</strong></li>
                                     </ul>
@@ -148,9 +148,9 @@
                                         {% if item.status == 1 %}
                                             <a class="btn  mini green" ><i class=" icon-thumbs-up"></i> Accept</a>
                                         {% elseif item.status == 2 %}
-                                            <a class="btn  mini yellow " ><i class="icon-thumbs-down"></i> Rejected</a>
+                                            <a class="btn  mini yellow " ><i class="icon-thumbs-down"></i> Deny</a>
                                         {% endif %}
-                                        {% if item.status == 0 and entity.process == 'in-progress' and entity.checkRoleEcommercePreorder(app.user.role) == true  %}
+                                        {% if item.status == 0 and entity.process == 'wfc' and entity.checkRoleEcommercePreorder(app.user.role) == true  %}
                                             <div class="btn-group">
                                                 <button class="blue btn mini dropdown-toggle" data-toggle="dropdown">
                                                     Action&nbsp; <i class="icon-tasks"></i>
@@ -264,10 +264,21 @@
                                 <td class="numeric" >{% if payment.transactionType =='Payment' %}{{ payment.amount|number_format }}{% endif %}</td>
                                 <td class="numeric" >{% if payment.transactionType =='Return' %}{{ payment.amount|number_format }}{% endif %}</td>
                                 <td class="numeric" >
-                                    {% if payment.status == 1  %}
-                                    <a class="btn  mini green" data-url="" ><i class=" icon-thumbs-up"></i> Accept</a></td>
-                                {% else %}
-                                    <a class="btn  mini yellow process"  data-url="{{ path('customer_preorder_payment_confirm',{'id':payment.id}) }}" ><i class=" icon-refresh"></i> Waiting</a></td>
+                                {% if payment.status == 1  %}
+                                    <a class="btn  mini green" data-url="" ><i class=" icon-thumbs-up"></i> Accept</a>
+                                {% elseif payment.status == 2 %}
+                                    <a class="btn  mini red" data-url="" ><i class=" icon-thumbs-down"></i> Deny</a>
+                                {% endif %}
+                                {% if payment.status == 0 and entity.process == 'wfc' and entity.checkRoleEcommercePreorder(app.user.role) == true  %}
+                                    <div class="btn-group">
+                                        <button class="yellow btn mini dropdown-toggle" data-toggle="dropdown">
+                                            <i class="icon-refresh"></i> Action&nbsp; <i class="icon-tasks"></i>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right action">
+                                            <li><a data-title="Confirm item" data-id="{{ payment.id }}" data-url="{{ path('customer_preorder_payment_confirm',{'id':payment.id,'process':1}) }}" class="btn green  confirm tooltips" data-trigger = "hover" data-original-title ="Are you sure went to receive this amount ?"><i class="icon-ok-circle"></i> Accept</a></li>
+                                            <li><a data-title="Deny item" data-id="{{ payment.id }}" data-url="{{ path('customer_preorder_payment_confirm',{'id':payment.id,'process':2}) }}" class="btn red  confirm tooltips" data-trigger = "hover" data-original-title ="Are you sure went to reject this amount ?"><i class="icon-trash"></i> Deny</a></li>
+                                        </ul>
+                                    </div>
                                 {% endif %}
                             </tr>
                         {% endfor %}
@@ -297,7 +308,7 @@
                     <div class="clearfix"> </div>
                     {% set arr = {'delivered':'delivered'} %}
                     {% if entity.process not in  arr|keys %}
-                    <div class="form-actions portlet box yellow">
+                    <div class="form-actions portlet box green">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-reorder"></i>Payment Process</div>
                         </div>
@@ -374,7 +385,7 @@
                                 <div class="span12">
                                     <div class="control-group">
                                         <div class="controls">
-                                            <button type="button" id="adminSubmitPayment" name="adminSubmitPayment" value="payment"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
+                                            <button type="button" id="adminSubmitPayment" name="submitPayment" value="payment"  class="btn green"><i class="icon-save"></i>&nbsp;Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -385,7 +396,7 @@
                     {{ form_end(paymentForm) }}
 
                     <div class="clearfix"><br/> </div>
-                    <div class="form-actions portlet box blue">
+                    <div class="form-actions portlet box red">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-reorder"></i>Confirm Process</div>
                         </div>
@@ -464,7 +475,7 @@
                     {% if entity.process in  arr|keys %}
                     {% endif %}
                     <div class="clearfix"> </div>
-                    <div class="form-actions portlet box blue">
+                    <div class="form-actions portlet box yellow">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-reorder"></i>Comments Information</div>
                         </div>
@@ -509,6 +520,7 @@
     $(".editable").editable();
     ApproveProcess();
     $('body').addClass('page-sidebar-closed');
+    $('#fos_comment_comment_body').addClass('span12');
+    $('.fos_comment_submit input[type="submit"]').addClass('btn blue');
 {% endblock %}
-
 

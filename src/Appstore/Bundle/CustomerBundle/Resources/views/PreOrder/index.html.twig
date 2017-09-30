@@ -64,6 +64,7 @@
                                     <th class="numeric" >Delivery Charge</th>
                                     <th class="numeric" >Grand Total</th>
                                     <th class="numeric" >Pre-paid</th>
+                                    <th class="numeric" >Paid</th>
                                     <th class="numeric" >Status</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
@@ -83,11 +84,12 @@
                                         <td class="numeric" >{{ entity.deliveryCharge }}</td>
                                         <td class="numeric" >{{ entity.grandTotalAmount|number_format }}</td>
                                         <td class="numeric" >{{ entity.prePaidAmount|number_format }}</td>
-                                        <td class="numeric" >{{ entity.process|capitalize }}</td>
+                                        <td class="numeric" >{{ entity.paidAmount|number_format }}</td>
+                                        <td class="numeric" ><span class="btn blue mini">{{ entity.process|capitalize }}</span></td>
                                         <td class="numeric" >
                                             {% set postProcess = {'confirm': 'confirm' ,'send-delivery':'send-delivery'} %}
                                             {% if entity.process == 'created' %}
-                                                <a href="{{ path('preorder_item', { 'shop':globalOption.slug, 'id': entity.id }) }}" class="btn blue mini"><i class="icon-plus-sign"></i></a>
+                                                <a href="{{ path('preorder_item', { 'shop':globalOption.slug, 'id': entity.id }) }}" class="btn blue mini"><i class="icon-plus-sign"></i> Add</a>
                                                 <a title="Are you sure went to delete ?" data-id="{{ entity.id }}" data-url="{{ path('preorder_delete', { 'shop':globalOption.slug,'id': entity.id }) }}" class="btn red mini remove-tr" ><i class="icon-trash"></i></a>
                                             {% elseif entity.process == 'in-progress' %}
                                                 <a href="{{ path('preorder_item', { 'shop':globalOption.slug, 'id': entity.id }) }}" class="btn blue mini"><i class="icon-plus-sign"></i></a>

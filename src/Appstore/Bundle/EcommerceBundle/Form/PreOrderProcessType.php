@@ -56,8 +56,8 @@ class PreOrderProcessType extends AbstractType
                 'choices' => array(
                     'sms'       => 'Send SMS',
                     'created'       => 'Created',
-                    'confirm'       => 'Confirm',
                     'wfc'       => 'Wait for Confirm',
+                    'confirm'       => 'Confirm',
                     'send-delivery'       => 'Send Delivery',
                     'delivered'       => 'Delivered',
                     'returned'       => 'Returned',

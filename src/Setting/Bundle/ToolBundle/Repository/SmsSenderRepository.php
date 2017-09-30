@@ -17,26 +17,14 @@ use Setting\Bundle\ToolBundle\Entity\SmsSender;
 
 class SmsSenderRepository extends EntityRepository {
 
-    public function insertEcommerceSenderSms(Order $post,$status)
+    public function insertEcommerceSenderSms(GlobalOption $globalOption , $customerMobile , $remark, $process, $status)
     {
-        $globalOption = $post->getGlobalOption();
-        $shopName = $post->getGlobalOption()->getName();
-        $customerMobile = "88".$post->getCreatedBy()->getProfile()->getMobile();
-
-        $deliveryDate = $post->getDeliveryDate()->format('d-m-Y');
-        $created = $post->getCreated()->format('d-m-Y');
-        $invoice = $post->getInvoice();
-        $items = $post->getItem();
-        $amount = $post->getGrandTotalAmount();
-        $process = strtoupper($post->getProcess());
-
-        $remark = "You have received new order $invoice on $shopName for $items item(s) totaling $amount and delivery date $deliveryDate , created date $created and process status $process";
 
         $entity = new SmsSender();
         $entity->setMobile($customerMobile);
         $entity->setGlobalOption($globalOption);
         $entity->setStatus($status);
-        $entity->setProcess('E-commerce');
+        $entity->setProcess('E-commerce for'.$process);
         $entity->setReceiver('Customer');
         $entity->setRemark($remark);
         $this->_em->persist($entity);
@@ -46,25 +34,14 @@ class SmsSenderRepository extends EntityRepository {
         }
     }
 
-    public function insertAdminEcommerceSenderSms(Order $post,$administratorMobile,$status)
+    public function insertAdminEcommerceSenderSms(GlobalOption $globalOption , $administratorMobile , $remark, $process, $status)
     {
-        $globalOption = $post->getGlobalOption();
-        $shopName = $post->getGlobalOption()->getName();
-
-        $deliveryDate = $post->getDeliveryDate()->format('d-m-Y');
-        $created = $post->getCreated()->format('d-m-Y');
-        $invoice = $post->getInvoice();
-        $items = $post->getItem();
-        $amount = $post->getGrandTotalAmount();
-        $process = strtoupper($post->getProcess());
-
-        $remark = "You have received new order $invoice on $shopName for $items item(s) totaling $amount and delivery date $deliveryDate , created date $created and process status $process";
 
         $entity = new SmsSender();
         $entity->setMobile($administratorMobile);
         $entity->setGlobalOption($globalOption);
         $entity->setStatus($status);
-        $entity->setProcess('E-commerce');
+        $entity->setProcess('E-commerce:'.$process);
         $entity->setReceiver('Admin');
         $entity->setRemark($remark);
         $this->_em->persist($entity);
@@ -74,7 +51,7 @@ class SmsSenderRepository extends EntityRepository {
         }
     }
 
-    public function insertEcommerceOrderConfirmSms(GlobalOption $globalOption ,$mobile, $remark , $status)
+    public function insertEcommerceOrderConfirmSms(GlobalOption $globalOption ,$mobile, $remark , $process, $status)
     {
 
 
@@ -82,7 +59,7 @@ class SmsSenderRepository extends EntityRepository {
         $entity->setMobile($mobile);
         $entity->setGlobalOption($globalOption);
         $entity->setStatus($status);
-        $entity->setProcess('E-commerce Confirm');
+        $entity->setProcess('E-commerce'.$process);
         $entity->setReceiver('Customer');
         $entity->setRemark($remark);
         $this->_em->persist($entity);
@@ -93,15 +70,14 @@ class SmsSenderRepository extends EntityRepository {
     }
 
 
-     public function insertEcommerceOrderCommentSms(GlobalOption $globalOption ,$mobile, $remark , $status)
+    public function insertEcommerceOrderCommentSms(GlobalOption $globalOption ,$mobile, $remark , $process,$status)
     {
-
 
         $entity = new SmsSender();
         $entity->setMobile($mobile);
         $entity->setGlobalOption($globalOption);
         $entity->setStatus($status);
-        $entity->setProcess('E-commerce Comment');
+        $entity->setProcess('E-commerce'.$process);
         $entity->setReceiver('Customer');
         $entity->setRemark($remark);
         $this->_em->persist($entity);
@@ -112,7 +88,7 @@ class SmsSenderRepository extends EntityRepository {
     }
 
 
-    public function insertAdminEcommercePaymentSms(GlobalOption $globalOption , $mobile, $remark , $status)
+    public function insertAdminEcommercePaymentSms(GlobalOption $globalOption , $mobile, $remark , $process, $status)
     {
 
 
@@ -120,7 +96,7 @@ class SmsSenderRepository extends EntityRepository {
         $entity->setMobile($mobile);
         $entity->setGlobalOption($globalOption);
         $entity->setStatus($status);
-        $entity->setProcess('E-commerce Payment');
+        $entity->setProcess('E-commerce Payment For'.$process);
         $entity->setReceiver('Customer');
         $entity->setRemark($remark);
         $this->_em->persist($entity);
@@ -130,7 +106,7 @@ class SmsSenderRepository extends EntityRepository {
         }
     }
 
-    public function insertAdminEcommercePaymentConfirmSms(GlobalOption $globalOption , $mobile, $remark , $status)
+    public function insertAdminEcommercePaymentConfirmSms(GlobalOption $globalOption , $mobile, $remark ,$process, $status)
     {
 
 
@@ -138,7 +114,7 @@ class SmsSenderRepository extends EntityRepository {
         $entity->setMobile($mobile);
         $entity->setGlobalOption($globalOption);
         $entity->setStatus($status);
-        $entity->setProcess('E-commerce Payment');
+        $entity->setProcess('E-commerce Payment for'.$process);
         $entity->setReceiver('Customer');
         $entity->setRemark($remark);
         $this->_em->persist($entity);

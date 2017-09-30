@@ -49,29 +49,6 @@ class OrderController extends Controller
 
     }
 
-    public function productAction($domain)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('slug'=>$domain));
-        $inventory = $globalOption->getInventoryConfig();
-        $entities = $em->getRepository('InventoryBundle:PurchaseVendorItem')->findGoodsWithSearch($inventory,$data);
-        $pagination = $this->paginate($entities);
-        return $this->render('CustomerBundle:Order:product.html.twig', array(
-            'entities' => $pagination,
-            'searchForm' => $data,
-        ));
-
-    }
-
-    public function cartAction(Request $request)
-    {
-        $cart = new Cart($request->getSession());
-        return $this->render('CustomerBundle:Order:cart.html.twig', array(
-            'cart'   => $cart,
-        ));
-    }
-
     /**
      * @param $shop
      * @param Request $request
@@ -212,35 +189,33 @@ class OrderController extends Controller
 
     public function processConfirmAction(Request $request ,Order $order)
     {
-        $data = $request->request->all();
+
         $em = $this->getDoctrine()->getManager();
-        $order->setProcess($data['process']);
-        if(isset($data['address']) and !empty($data['address'])){
-            $order->setAddress($data['address']);
-        }
-        if(isset($data['location']) and !empty($data['location'])){
-            $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location')->find($data['location']);
-            $order->setLocation($location);
-        }
-        if($data['cashOnDelivery'] == 1){
-            $order->setCashOnDelivery(true);
-        }
-        $order->setDeliveryDate(new \DateTime($data['deliveryDate']));
-        $em->persist($order);
-        $em->flush();
+        $paymentEntity = new  OrderPayment();
+        $orderForm = $this->createEditForm($order);
+        $payment = $this->createEditPaymentForm($paymentEntity,$order);
+        $orderForm->handleRequest($request);
+        if ($orderForm->isValid()) {
+            $em->persist($order);
+            $em->flush();
+            $created = $order->getCreated()->format('d-m-Y');
+            $invoice = $order->getInvoice();
+            $items = $order->getItem();
 
-        $created = $order->getCreated()->format('d-m-Y');
-        $invoice = $order->getInvoice();
-        $items = $order->getItem();
-        
-        if($data['process'] == 'wfc'){
-            $this->get('session')->getFlashBag()->add('success',"Dear customer, We have received your order form '.$invoice.' for ('.$items.') dated '.$created.' and we thank you very much.");
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.order_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
-        //    $dispatcher->dispatch('setting_tool.post.order_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
+            if($order->getProcess() == 'wfc'){
+                $this->get('session')->getFlashBag()->add('success',"Dear customer, We have received your order form '.$invoice.' for ('.$items.') dated '.$created.' and we thank you very much.");
+                $dispatcher = $this->container->get('event_dispatcher');
+                $dispatcher->dispatch('setting_tool.post.order_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($order));
+            }
+            return $this->redirect($this->generateUrl('order_payment',array('id' => $order->getId(),'shop' => $order->getGlobalOption()->getUniqueCode())));
 
         }
-        return new Response('success');
+        return $this->render('EcommerceBundle:Order:payment.html.twig', array(
+            'entity'                => $order,
+            'orderForm'             => $orderForm->createView(),
+            'paymentForm'           => $payment->createView(),
+        ));
+
 
     }
 

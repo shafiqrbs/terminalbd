@@ -26,8 +26,8 @@ customer_preorder_process:
     methods:  [GET, PUT]
 
 customer_preorder_payment_confirm:
-    path:     /{id}/preorder-payment-confirm
-    defaults: { _controller: "EcommerceBundle:PreOrder:confirm" }
+    path:     /{id}/{process}/preorder-payment-confirm
+    defaults: { _controller: "EcommerceBundle:PreOrder:paymentConfirm" }
 
 
 customer_preorder_item_confirm:

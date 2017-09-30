@@ -140,12 +140,12 @@
                                             {% if item.status == 1 %}
                                                 <a class="btn  mini green" ><i class=" icon-thumbs-up"></i> Accept</a>
                                             {% elseif item.status == 2 %}
-                                                <a class="btn  mini yellow " ><i class="icon-thumbs-down"></i> Rejected</a>
+                                                <a class="btn  mini red " ><i class="icon-thumbs-down"></i> Deny</a>
                                             {% endif %}
                                             {% if item.status == 0 and entity.process == 'wfc' and entity.checkRoleEcommerceOrder(app.user.role) == true  %}
                                                 <div class="btn-group">
-                                                    <button class="blue btn mini dropdown-toggle" data-toggle="dropdown">
-                                                        Action&nbsp; <i class="icon-tasks"></i>
+                                                    <button class="yellow btn mini dropdown-toggle" data-toggle="dropdown">
+                                                        <i class="icon-refresh"></i> Action&nbsp; <i class="icon-tasks"></i>
                                                     </button>
                                                     <ul class="dropdown-menu pull-right action">
                                                         <li><a data-title="Confirm item" data-id="{{ item.id }}" data-url="{{ path('customer_order_item_confirm',{'order':entity.id,'id':item.id,'status':1}) }}" class="btn green mini confirm tooltips" data-trigger = "hover" data-original-title ="Are you sure went to delivery this item ?"><i class="icon-ok-circle"></i> Accept</a></li>
@@ -165,7 +165,7 @@
                                 <tr>
                                     <td class="numeric" colspan="6" ><span class="pull-right">Delivery Charge</span></td>
                                     <td class="numeric">=&nbsp;
-                                        {% if entity.process == 'WfC'  %}
+                                        {% if entity.process == 'wfc'  %}
                                             <a data-mode="inline" class="editable" data-name="amount" href="#"  data-url="{{ path('customer_order_shipping_charge',{'id':entity.id}) }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your delivery charge">{{ entity.shippingCharge }}</a>
                                         {% else %}
                                             {{ entity.shippingCharge }}
@@ -261,11 +261,23 @@
                                     <td class="numeric" >{% if payment.transactionType =='Payment' %}{{ payment.amount|number_format }}{% endif %}</td>
                                     <td class="numeric" >{% if payment.transactionType =='Return' %}{{ payment.amount|number_format }}{% endif %}</td>
                                     <td class="numeric" >
-                                    {% if payment.status == 1  %}
-                                        <a class="btn  mini green" data-url="" ><i class=" icon-thumbs-up"></i> Accept</a></td>
-                                    {% else %}
-                                        <a class="btn  mini yellow process"  data-url="{{ path('customer_order_payment_confirm',{'id':payment.id}) }}" ><i class=" icon-refresh"></i> Waiting</a></td>
-                                    {% endif %}
+                                        {% if payment.status == 1  %}
+                                            <a class="btn  mini green" data-url="" ><i class=" icon-thumbs-up"></i> Accept</a>
+                                        {% ifelse payment.status == 2  %}
+                                            <a class="btn  mini red" data-url="" ><i class=" icon-thumbs-down"></i> Deny</a>
+                                        {% endif %}
+                                        {% if payment.status == 0 and entity.process == 'wfc' and entity.checkRoleEcommerceOrder(app.user.role) == true  %}
+                                            <div class="btn-group">
+                                                <button class="yellow btn mini dropdown-toggle" data-toggle="dropdown">
+                                                    <i class="icon-refresh"></i> Action&nbsp; <i class="icon-tasks"></i>
+                                                </button>
+                                                <ul class="dropdown-menu pull-right action">
+                                                    <li><a data-title="Confirm item" data-id="{{ payment.id }}" data-url="{{ path('customer_order_payment_confirm',{'id':payment.id,'status':1}) }}" class="btn green mini confirm tooltips" data-trigger = "hover" data-original-title ="Are you sure went to receive this payment ?"><i class="icon-ok-circle"></i> Accept</a></li>
+                                                    <li><a data-title="Deny item" data-id="{{ payment.id }}" data-url="{{ path('customer_order_payment_confirm',{'id':payment.id,'status':2}) }}" class="btn red mini confirm tooltips" data-trigger = "hover" data-original-title ="Are you sure went to reject this payment ?"><i class="icon-trash"></i> Deny</a></li>
+                                                </ul>
+                                            </div>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% endfor %}
 
@@ -467,4 +479,6 @@
     $(".editable").editable();
     ApproveProcess();
     $('body').addClass('page-sidebar-closed');
+    $('#fos_comment_comment_body').addClass('span12');
+    $('.fos_comment_submit input[type="submit"]').addClass('btn blue');
 {% endblock %}

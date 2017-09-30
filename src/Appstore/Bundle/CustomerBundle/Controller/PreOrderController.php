@@ -298,7 +298,7 @@ class PreOrderController extends Controller
         }
         $em->persist($preOrder);
         $em->flush();
-        return new Response('success');
+        return $this->redirect($this->generateUrl('preorder_item', array('shop'=> $preOrder->getGlobalOption()->getSlug(),'id' => $preOrder->getId())));
     }
 
     public function approveAction(PreOrder $preOrder)
@@ -311,8 +311,8 @@ class PreOrderController extends Controller
         $em->persist($preOrder);
         $em->flush();
         $this->get('session')->getFlashBag()->add('success',"Customer has been confirmed");
-       // $dispatcher = $this->container->get('event_dispatcher');
-       // $dispatcher->dispatch('setting_tool.post.order_confirm_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderSmsEvent($preOrder));
+        $dispatcher = $this->container->get('event_dispatcher');
+        $dispatcher->dispatch('setting_tool.post.pre_order_sms', new \Setting\Bundle\ToolBundle\Event\EcommercePreOrderSmsEvent($preOrder));
 
         return new Response('success');
 
@@ -349,8 +349,8 @@ class PreOrderController extends Controller
         $em->persist($entity);
         $em->flush();
         $this->getDoctrine()->getRepository('EcommerceBundle:PreOrder')->updatePreOderPayment($preOrder);
-       // $dispatcher = $this->container->get('event_dispatcher');
-       // $dispatcher->dispatch('setting_tool.post.order_payment_sms', new \Setting\Bundle\ToolBundle\Event\EcommerceOrderPaymentSmsEvent($entity));
+        $dispatcher = $this->container->get('event_dispatcher');
+        $dispatcher->dispatch('setting_tool.post.pre_order_payment_sms', new \Setting\Bundle\ToolBundle\Event\EcommercePreOrderPaymentSmsEvent($entity));
 
         return new Response('success');
 

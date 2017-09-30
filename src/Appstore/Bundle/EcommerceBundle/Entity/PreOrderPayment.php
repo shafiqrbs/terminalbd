@@ -119,11 +119,11 @@ class PreOrderPayment
     private $transactionType;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="status", type="boolean")
+     * @ORM\Column(name="status", type="smallint" ,length=1 ,nullable = true)
      */
-    private $status = false;
+    private $status = 0;
 
     /**
      * @var \DateTime
@@ -406,7 +406,7 @@ class PreOrderPayment
     }
 
     /**
-     * @return boolean
+     * @return int
      */
     public function getStatus()
     {
@@ -414,7 +414,7 @@ class PreOrderPayment
     }
 
     /**
-     * @param boolean $status
+     * @param int $status
      */
     public function setStatus($status)
     {

@@ -9,24 +9,16 @@ function ApproveProcess(){
     // Setter
     $( ".date-picker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
 
-    $(document).on("click", "#submitProcess", function() {
-
-        var url = $('#process').attr("action");
-        var serialized = $('form#process').serialize();
+    $(document).on("click", "#submitProcess", function(e) {
 
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',
             onOkBut: function(event, el) {
-                $.ajax({
-                    url: url,
-                    type: "GET",
-                    data: serialized
-                }).done(function(data){
-                    location.reload();
-                });
+                $('form#orderProcess').submit();
             }
         });
+        e.preventDefault();
     });
 
 
@@ -131,9 +123,7 @@ function ApproveProcess(){
             onOkBut: function(event, el) {
                 $.get( url,{quantity:quantity,convertRate:convertRate,shippingCharge:shippingCharge})
                     .done(function(data){
-                        if(data == 'success'){
-                            location.reload();
-                        }
+                        location.reload();
                     });
             }
         });
@@ -253,9 +243,10 @@ function ApproveProcess(){
 
     });
 
-    $('#orderProcess').submit( function( e ) {
+    /*$('#orderProcess').submit( function( e ) {
 
         var url = $('#orderProcess').attr("action");
+
         var comment = $('#ecommerce_order_comment').val();
         var address = $('#ecommerce_order_address').val();
         var location = $('#ecommerce_order_location').val();
@@ -275,7 +266,7 @@ function ApproveProcess(){
         });
         e.preventDefault();
 
-    });
+    });*/
 
 }
 

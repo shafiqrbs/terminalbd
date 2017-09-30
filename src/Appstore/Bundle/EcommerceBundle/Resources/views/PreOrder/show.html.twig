@@ -73,25 +73,10 @@
                                         <ul class="unstyled" >
                                             {% if entity.cashOnDelivery == 1 %}
                                                 <li><strong>Payment Method</strong>:&nbsp;Cash On Delivery</li>
-                                            {% elseif entity.transactionMethod is not empty %}
-                                                <li><strong>Payment Method</strong>:&nbsp;{{ entity.transactionMethod.name }}</li>
-                                            {% endif %}
+                                             {% endif %}
                                             <li><strong>Shipping Method</strong>:&nbsp;{{ entity.delivery }}</li>
                                             <li><strong>Delivery Date</strong>:&nbsp;{{ entity.deliveryDate|date('d-m-Y') }}</li>
-
-                                            {% if entity.accountMobileBank is not empty %}
-                                                <li><strong>Received</strong>:&nbsp;{{ entity.accountMobileBank.mobile }},{{ entity.accountMobileBank.serviceName }},{{ entity.accountMobileBank.authorised }}</li>
-                                            {% endif %}
-                                            {% if entity.mobileAccount is not empty %}
-                                                <li><strong>Mobile</strong>:&nbsp;{{ entity.mobileAccount }}</li>
-                                            {% endif %}
-                                            {% if entity.accountType is not empty %}
-                                                <li><strong>Account Type</strong>:&nbsp;{{ entity.accountType }}</li>
-                                            {% endif %}
-                                            {% if entity.transaction is not empty %}
-                                                <li><strong>Transaction ID</strong>:&nbsp;{{ entity.transaction }}</li>
-                                            {% endif %}
-                                        </ul>
+                                           </ul>
                                     </div>
                                 </div>
                             </div>
@@ -143,9 +128,7 @@
                                             {% if item.status == 1 %}
                                                 <a class="btn  mini green" ><i class=" icon-thumbs-up"></i> Accept</a>
                                             {% elseif item.status == 2 %}
-                                                <a class="btn  mini yellow " ><i class="icon-thumbs-down"></i> Rejected</a>
-                                            {% else %}
-                                                <a class="btn  mini purple" ><i class="icon-filter"></i> In-progress</a>
+                                                <a class="btn  mini red " ><i class="icon-thumbs-down"></i> Deny</a>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -246,10 +229,10 @@
                                     <td class="numeric" >{% if payment.transactionType =='Payment' %}{{ payment.amount|number_format }}{% endif %}</td>
                                     <td class="numeric" >{% if payment.transactionType =='Return' %}{{ payment.amount|number_format }}{% endif %}</td>
                                     <td class="numeric" >
-                                        {% if payment.status == 1  %}
+                                    {% if payment.status == 1  %}
                                         <a class="btn  mini green"><i class=" icon-thumbs-up"></i> Accept</a></td>
-                                    {% else %}
-                                        <a class="btn  mini yellow"><i class=" icon-refresh"></i> Waiting</a></td>
+                                    {% elseif payment.status == 2 %}
+                                        <a class="btn  mini red"><i class=" icon-thumbs-down"></i> Deny</a></td>
                                     {% endif %}
                                 </tr>
                             {% endfor %}

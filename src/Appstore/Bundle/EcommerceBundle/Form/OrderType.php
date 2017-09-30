@@ -46,8 +46,8 @@ class OrderType extends AbstractType
                 'choices' => array(
                     'sms'       => 'Send SMS',
                     'created'       => 'Created',
-                    'confirm'       => 'Confirm',
                     'wfc'       => 'Wait for Confirm',
+                    'confirm'       => 'Confirm',
                     'delivered'       => 'Delivered',
                     'returned'       => 'Returned',
                     'cancel'       => 'Cancel',
