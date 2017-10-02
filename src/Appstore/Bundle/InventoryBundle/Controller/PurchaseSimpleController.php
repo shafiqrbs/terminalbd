@@ -9,6 +9,7 @@ use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Appstore\Bundle\InventoryBundle\Form\ItemType;
 use Appstore\Bundle\InventoryBundle\Form\PurchaseApproveType;
+use Appstore\Bundle\InventoryBundle\Form\PurchaseItemSimpleType;
 use Appstore\Bundle\InventoryBundle\Form\PurchaseItemType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -186,7 +187,7 @@ class PurchaseSimpleController extends Controller
     private function createPurchaseItemForm(PurchaseItem $purchaseItem , Purchase $entity)
     {
         $inventoryConfig =  $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $form = $this->createForm(new PurchaseItemType($inventoryConfig), $purchaseItem, array(
+        $form = $this->createForm(new PurchaseItemSimpleType($inventoryConfig), $purchaseItem, array(
             'action' => $this->generateUrl('inventory_purchasesimple_create', array('purchase' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
