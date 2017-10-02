@@ -25,15 +25,10 @@
                                 </li>{% endif %}
                             <li><a href="javascript:" class="register-btn"><i class="fa fa-sign-in"></i></a></li>
                             {% if  app.user %}
-                                <li><a href="{{ path('fos_user_security_logout') }}" class=""><i
-                                                class="fa fa-unlock-alt"></i></a></li>
-                            {% else %}
-                                <li><a href="javascript:" class="login-preview"><i class="fa fa-lock"></i></a></li>
+                                <li><a href="{{ path('fos_user_security_logout') }}" class=""> <i class="fa fa-unlock-alt"></i></a></li>
                             {% endif %}
                             {% if globalOption.ecommerceConfig.cart == 1 %}
-                                <li>
-                                    <a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}"
-                                       class=""><i class="fa fa-shopping-cart"></i></a></li>
+                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" class="" ><i class="fa fa-shopping-cart"></i></a></li>
                             {% endif %}
                         </ul>
                     </div>

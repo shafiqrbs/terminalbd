@@ -37,7 +37,7 @@
                     <div class="caption"><i class="icon-reorder"></i>Purchase Information</div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn red" href="javascript:"><i class="icon-plus-sign"></i>&nbsp; Add Inventory Item</a>
+                            <a class="btn red" id="addInventory" href="javascript:"><i class="icon-plus-sign"></i>&nbsp; Add Inventory Item</a>
                             <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <i class="icon-cogs"></i>&nbsp;Tools
                                 <i class="icon-tasks"></i>
@@ -469,6 +469,10 @@
             height: 30px !important;
             line-height: 30px !important;
         }
+        #inventoryItem{
+            display: none;
+        }
+
     </style>
     {% endblock %}
     {% block javascriptBlock %}
@@ -512,12 +516,12 @@
         top: '25%',
         onOkBut: function(event, el) {
         $.ajax({
-        url: url,
-        type: 'POST',
-        data : $('#inventoryItem').serialize(),
-        success: function (response) {
-            {#location.reload();#}
-        },
+            url: url,
+            type: 'POST',
+            data : $('#inventoryItem').serialize(),
+            success: function (response) {
+                {#location.reload();#}
+            },
         });
         }
         });
@@ -535,7 +539,10 @@
         });
         e.preventDefault();
     });
-
-
+    $('#addInventory').click(function(e) {
+        $( "#inventoryItem" ).fadeToggle( "slow", function() {
+            // Animation complete.
+        });
+    });
 
 {% endblock %}
