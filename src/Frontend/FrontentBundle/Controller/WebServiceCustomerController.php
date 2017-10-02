@@ -104,6 +104,7 @@ class WebServiceCustomerController extends Controller
 
             $intlMobile = $entity->getProfile()->getMobile();
             $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+            
             $entity->setPlainPassword("1234");
             $entity->setEnabled(true);
             $entity->setUsername($mobile);
@@ -118,7 +119,6 @@ class WebServiceCustomerController extends Controller
             //$dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
             return $this->redirect($this->generateUrl('webservice_customer_confirm',array('subdomain' => $subdomain)));
         }
-        var_dump($form->getErrors());
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
@@ -148,10 +148,11 @@ class WebServiceCustomerController extends Controller
         $entity = new User();
         $form = $this->createCreateForm($subdomain,$entity);
         $form->handleRequest($request);
-        if ($form->isValid()) {
 
-            $intlMobile = $entity->getProfile()->getMobile();
-            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $intlMobile = $entity->getProfile()->getMobile();
+        $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+        $entity->getProfile()->setMobile($mobile);
+        if ($form->isValid()) {
             $entity->setPlainPassword("1234");
             $entity->setEnabled(true);
             $entity->setUsername($mobile);
@@ -161,8 +162,8 @@ class WebServiceCustomerController extends Controller
             $entity->setRoles(array('ROLE_CUSTOMER'));
             $em->persist($entity);
             $em->flush();
-            //$dispatcher = $this->container->get('event_dispatcher');
-            //$dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
             return new Response('success');
 
         }else{

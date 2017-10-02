@@ -460,6 +460,17 @@ class Builder extends ContainerAware
         }
 
 
+        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
+
+            $menu['Inventory']->addChild('Simple Purchase', array('route' => 'purchase'))
+                ->setAttribute('icon', 'icon icon-shopping-cart')
+                ->setAttribute('dropdown', true);
+            $menu['Inventory']['Simple Purchase']->addChild('Purchase', array('route' =>'inventory_purchasesimple'))
+                ->setAttribute('icon', 'icon-th-list');
+
+        }
+
+
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_STOCK')) {
 
             $menu['Inventory']->addChild('Manage Stock')->setAttribute('icon', 'icon icon-reorder')->setAttribute('dropdown', true);

@@ -41,8 +41,8 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('purchase_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('purchase') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                    <li><a href="{{ path('inventory_purchasesimple_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
+                                    <li><a href="{{ path('inventory_purchasesimple') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                     <li><a href="{{ path('account_purchase_new') }}"><i class="icon-th-list"></i>&nbsp;Purchase payment</a></li>
                                 </ul>
                             </div>
@@ -77,7 +77,7 @@
                                 </div>#}
                                 <div class="span4">
                                     <ul class="unstyled">
-                                        <li><strong>Purhase Qnt:</strong> &nbsp;{{ purchaseOverview.quantity }}</li>
+                                        <li><strong>Purchase Qnt:</strong> &nbsp;{{ purchaseOverview.quantity }}</li>
                                     </ul>
                                 </div>
 
@@ -98,17 +98,19 @@
                                             <div class="controls">
                                                 <input type="text" id="memo" name="memo"  class="span12 m-wrap" value="{% if searchForm.memo is defined %}{{ searchForm.memo }}{% endif %}"  autocomplete="off" placeholder="memo no">
                                                 <div class="btn-group">
-                                                    <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+
                             </form>
                             <table class="table table-bordered table-striped table-condensed flip-content">
 
                                 <thead>
                                 <tr class="head-green">
-                                    <th class="numeric" >Received date</th>
+                                    <th class="numeric" >Received Date</th>
                                     <th class="numeric" >GRN</th>
                                     <th class="numeric" >Memo</th>
                                     <th class="numeric" >Vendor</th>
@@ -137,84 +139,6 @@
                                             {% include "@Inventory/Purchase/action.html.twig" %}
                                         </td>
                                     </tr>
-                                    {#<tr id="show-{{ entity.id }}" class="showing-overview">
-                                        <td colspan="11">
-                                            <table class="table table-bordered table-striped table-condensed flip-content ">
-
-                                                <thead class="flip-content ">
-                                                <tr class="head-grey">
-                                                    <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
-                                                    <th class="numeric" >Vendor item name</th>
-                                                    <th class="numeric" >Qnt</th>
-                                                    <th class="numeric" >Unit</th>
-                                                    <th class="numeric" >Purchase</th>
-                                                    <th class="numeric" >Sub-total</th>
-                                                    <th class="numeric" >Sales</th>
-                                                    <th class="numeric" >Sub-total</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="purchaseVendorItem" >
-                                                {% for vendorItem in entity.purchaseVendorItems %}
-                                                    <tr class="remove-vendor-item-{{ vendorItem.id }}">
-                                                        <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span class="badge badge-success toggle badge-custom" id="{{ entity.id  }}-{{ vendorItem.id  }}" ><span>[+]</span></span>{% endif %}</td>
-                                                        <td class="numeric" >{{ vendorItem.name }}</td>
-                                                        <td class="numeric" >{{ vendorItem.quantity }}</td>
-                                                        <td class="numeric" >{% if vendorItem.masterItem.productUnit is defined and vendorItem.masterItem.productUnit is not empty %}{{  vendorItem.masterItem.productUnit.name }}{% endif %}</td>
-                                                        <td class="numeric" >{{ vendorItem.purchasePrice }}</td>
-                                                        <td class="numeric" >{{ (vendorItem.purchasePrice * vendorItem.quantity) }}</td>
-                                                        <td class="numeric" >{{ vendorItem.salesPrice }}</td>
-                                                        <td class="numeric" >{{ (vendorItem.salesPrice * vendorItem.quantity) }}</td>
-
-                                                    </tr>
-
-                                                    <tr id="show-{{ entity.id  }}-{{ vendorItem.id }}" class="showing-overview remove-vendor-item-{{ vendorItem.id }}">
-                                                        <td colspan="9">
-                                                            {% if vendorItem.purchaseItems is defined and  vendorItem.purchaseItems is not empty  %}
-                                                                <table class="table table-bordered table-striped table-condensed flip-content ">
-
-                                                                    <thead class="flip-content ">
-                                                                    <tr class="head-green">
-                                                                        <th class="numeric" >Barcode</th>
-                                                                        <th class="numeric" >Item</th>
-                                                                        <th class="numeric" >Qnt</th>
-                                                                        <th class="numeric" >Unit</th>
-                                                                        <th class="numeric" >Sales</th>
-                                                                        <th class="numeric" >Sub-total</th>
-                                                                    </tr>
-                                                                    </thead>
-                                                                    <tbody id="purchaseItem" >
-                                                                    {% for purchaseItem in vendorItem.purchaseItems %}
-                                                                        <tr id="remove-purchase-item-{{ purchaseItem.id }}">
-                                                                            <td class="numeric" >{{ purchaseItem.barcode }}</td>
-                                                                            <td class="numeric" >{{ purchaseItem.item.name }}</td>
-                                                                            <td class="numeric" >{{ purchaseItem.quantity }}</td>
-                                                                            <td class="numeric" >{% if purchaseItem.item.masterItem.productUnit is not empty %}{{  purchaseItem.item.masterItem.productUnit.name }}{% endif %}</td>
-                                                                            <td class="numeric" >
-                                                                                {% if entity.process != "approved" %}
-                                                                                    <a class="editable" data-name="SalesPrice" href="#"  data-url="{{ path('inventory_purchaseitem_inline_update') }}" data-type="text" data-pk="{{ purchaseItem.id }}" data-original-title="Enter sales price">{{purchaseItem.salesPrice}}</a>
-                                                                                {% else %}
-                                                                                    {{purchaseItem.salesPrice}}
-                                                                                {% endif %}
-                                                                            </td>
-                                                                            <td class="numeric" >{{  purchaseItem.salesPrice * purchaseItem.quantity|number_format() }}</td>
-                                                                        </tr>
-                                                                    {% endfor %}
-
-                                                                    </tbody>
-
-                                                                </table>
-                                                            {% endif %}
-                                                        </td>
-                                                    </tr>
-
-                                                {% endfor %}
-
-                                                </tbody>
-                                            </table>
-
-
-                                        </td>
-                                    </tr>#}
                                 {% endfor %}
 
                                 </tbody>

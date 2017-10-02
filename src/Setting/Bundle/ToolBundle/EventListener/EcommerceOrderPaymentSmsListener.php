@@ -88,8 +88,12 @@ class EcommerceOrderPaymentSmsListener extends BaseSmsAwareListener
         $invoice = $post->getInvoice();
         $amount = $post->getGrandTotalAmount();
         $paid = $post->getPaidAmount();
-        $customerMsg = "You have received BDT $paymentAmount , created $created , Transaction $method order no $invoice total amount BDT $amount & total paid amount BDT $paid. Thanks for using $domainName.";
 
+        if($payment->getStatus() == 2 ) {
+            $customerMsg = "You have no received BDT $paymentAmount , created $created , Transaction $method order no $invoice total paid amount BDT $paid. Thanks for using $domainName.";
+        }else{
+            $customerMsg = "You have received BDT $paymentAmount , created $created , Transaction $method order no $invoice total paid amount BDT $paid. Thanks for using $domainName.";
+        }
         if(!empty($post->getGlobalOption()->getSmsSenderTotal()) and $post->getGlobalOption()->getSmsSenderTotal()->getRemaining() > 0 and $post->getGlobalOption()->getNotificationConfig()->getSmsActive() == 1 and $post->getGlobalOption()->getNotificationConfig()->getOnlineOrder() == 1){
 
             if(!empty($post->getGlobalOption()->getNotificationConfig()->getMobile())) {

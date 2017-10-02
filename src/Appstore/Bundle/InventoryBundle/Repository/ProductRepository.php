@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -84,6 +85,17 @@ class ProductRepository extends EntityRepository
         $query->orderBy('category.name', 'ASC');
         return $query->getQuery()->getResult();
 
+    }
+
+    public function createNewProduct(InventoryConfig $inventory,$name)
+    {
+        $em = $this->_em;
+        $entity = new Product();
+        $entity->setInventoryConfig($inventory);
+        $entity->setName($name);
+        $em->persist($entity);
+        $em->flush($entity);
+        return $entity;
     }
 
 

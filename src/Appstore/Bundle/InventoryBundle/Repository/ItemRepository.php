@@ -91,9 +91,56 @@ class ItemRepository extends EntityRepository
             $qb->andWhere('item.brand = :itemBrand');
             $qb->setParameter('itemBrand', $itemBrand);
         }
-        $count = $qb->getQuery()->getArrayResult();
-        $result = $count[0]['totalNumber'];
+        $count = $qb->getQuery()->getOneOrNullResult();
+        $result = $count['totalNumber'];
         return $result;
+
+    }
+
+    public function checkInstantDuplicateSKU(InventoryConfig $inventory,$data)
+    {
+
+
+        $masterItem = $data['masterItem'];
+        $vendor = isset($data['vendor']) ? $data['vendor'] :'NULL';
+        $itemColor = isset ($data['color']) ? $data['color']:'NULL';
+        $itemSize = isset($data['size']) ? $data['size'] : 'NULL';
+        $itemBrand = isset($data['brand'])? $data['brand']:'NULL';
+
+        $qb = $this->createQueryBuilder('item');
+        $qb->join('item.masterItem', 'm');
+        $qb->select('COUNT(item.id) AS totalNumber');
+        $qb->where("item.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+
+        $existMasterItem = $this->_em->getRepository('InventoryBundle:Product')->findOneBy(array('name'=> $data['masterItem']))->getId();
+        $qb->andWhere('item.masterItem = :masterId');
+        $qb->setParameter('masterId', $existMasterItem);
+
+        if($inventory->getIsSize() == 1) {
+            $itemSize = $this->_em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('name'=> $itemSize ));
+            $qb->andWhere('item.size = :itemSize');
+            $qb->setParameter('itemSize', $itemSize);
+        }
+        if($inventory->getIsColor() == 1) {
+            $itemColor = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('name'=> $itemColor));
+            $qb->andWhere('item.color = :itemColor');
+            $qb->setParameter('itemColor', $itemColor);
+        }
+        if($inventory->getIsVendor() == 1) {
+            $vendor = $this->_em->getRepository('InventoryBundle:Vendor')->findOneBy(array('inventoryConfig'=> $inventory,'name'=> $vendor ));
+            $qb->andWhere('item.vendor = :vendor');
+            $qb->setParameter('vendor', $vendor);
+        }
+        if($inventory->getIsBrand() == 1) {
+            $itemBrand = $this->_em->getRepository('InventoryBundle:ItemBrand')->findOneBy(array('inventoryConfig'=> $inventory,'name'=> $itemBrand ));
+            $qb->andWhere('item.brand = :itemBrand');
+            $qb->setParameter('itemBrand', $itemBrand);
+        }
+        $count = $qb->getQuery()->getOneOrNullResult();
+        $result = $count['totalNumber'];
+        return $result;
+
 
     }
 
@@ -178,6 +225,26 @@ class ItemRepository extends EntityRepository
         $query->addSelect('SUM(stockItem.quantity) as remainingQuantity');
         $query->where($query->expr()->like("i.skuSlug", "'%$search%'"  ));
         $query->andWhere("i.purchaseQuantity > 0 ");
+        $query->andWhere("ic.id = :inventory");
+        $query->setParameter('inventory', $inventory->getId());
+        $query->groupBy('i.id');
+        $query->orderBy('i.sku', 'ASC');
+        $query->setMaxResults( '30' );
+        return $query->getQuery()->getResult();
+
+    }
+
+     public function searchAutoCompleteAllItem($item, InventoryConfig $inventory)
+    {
+
+        $search = strtolower($item);
+        $query = $this->createQueryBuilder('i');
+        $query->join('i.inventoryConfig', 'ic');
+        $query->select('i.id as id');
+        $query->addSelect('i.name as name');
+        $query->addSelect('i.skuSlug as text');
+        $query->addSelect('i.sku as sku');
+        $query->where($query->expr()->like("i.skuSlug", "'%$search%'"  ));
         $query->andWhere("ic.id = :inventory");
         $query->setParameter('inventory', $inventory->getId());
         $query->groupBy('i.id');

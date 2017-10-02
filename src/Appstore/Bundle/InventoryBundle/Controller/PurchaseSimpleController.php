@@ -3,9 +3,13 @@
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
+use Appstore\Bundle\InventoryBundle\Form\ItemType;
 use Appstore\Bundle\InventoryBundle\Form\PurchaseApproveType;
+use Appstore\Bundle\InventoryBundle\Form\PurchaseItemType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -46,111 +50,51 @@ class PurchaseSimpleController extends Controller
         $purchaseOverview = $this->getDoctrine()->getRepository('InventoryBundle:Purchase')->purchaseOverview($inventory,$data);
         $pagination = $this->paginate($entities);
 
-        return $this->render('InventoryBundle:Purchase:index.html.twig', array(
+        return $this->render('InventoryBundle:PurchaseSimple:index.html.twig', array(
             'entities' => $pagination,
             'purchaseOverview' => $purchaseOverview,
             'searchForm' => $data
         ));
     }
+
     /**
      * Creates a new Purchase entity.
      *
      */
-    public function createAction(Request $request)
+    public function createPurchaseItemAction(Request $request, Purchase $purchase)
     {
-        $entity = new Purchase();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $purchase = $this->getDoctrine()->getRepository('InventoryBundle:Purchase')->findOneBy(array('inventoryConfig' => $inventory,'vendor' => $entity->getVendor(),'memo' => $entity->getMemo()));
-            if($purchase){
-
-                $this->get('session')->getFlashBag()->add(
-                    'notice', "Purchase memo no duplicate for this vendor/supplier"
-                );
-                return $this->render('InventoryBundle:Purchase:new.html.twig', array(
-                    'entity' => $entity,
-                    'form'   => $form->createView(),
-                ));
-            }
-            $entity->setInventoryConfig($inventory);
-            $due = ($entity->getTotalAmount() - $entity->getPaymentAmount());
-            $entity->setDueAmount($due);
-            $entity->setProcess('created');
-            $entity->upload();
-            $em->persist($entity);
-            $em->flush();
-           // $em->getRepository('InventoryBundle:PurchaseVendorItem')->insertPurchaseVendorItem($entity,$data);
-            return $this->redirect($this->generateUrl('inventory_purchasevendoritem_new', array('purchase' => $entity->getId())));
-        }
-
-        return $this->render('InventoryBundle:Purchase:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
-    }
-
-
-
-    public function checkItemQuantityAction(Request $request)
-    {
+        $em = $this->getDoctrine()->getManager();
         $data = $request->request->all();
-        $itemQnt = 0;
-        $purchasePrice = 0;
-        $salesPrice = 0;
-        $countItem=0;
-        foreach ($data['quantity'] as $key=>$quantity) {
-            $itemQnt += $quantity;
-            $purchasePrice += $data['purchasePrice'][$key];
-            $salesPrice += $data['salesPrice'][$key];
-            $countItem++;
+        $purchaseItem = new PurchaseItem();
+        $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$purchase);
+        $editForm = $this->createEditForm($purchase);
+        $purchaseItemForm->handleRequest($request);
+        if ($purchaseItemForm->isValid()) {
+            $purchaseItem->setPurchase($purchase);
+            $getItem = $data["appstore_bundle_inventorybundle_purchaseitem"]["name"];
+            $quantity = $data["appstore_bundle_inventorybundle_purchaseitem"]["quantity"];
+            $item = $em->getRepository('InventoryBundle:Item')->find($getItem);
+            $purchaseItem->setName($item->getName());
+            $purchaseItem->setItem($item);
+            $purchaseItem->setQuantity($quantity);
+            $purchaseSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getPurchasePrice());
+            $purchaseItem->setPurchaseSubTotal($purchaseSubTotal);
+            $salesSubTotal = ($purchaseItem->getQuantity() * $purchaseItem->getSalesPrice());
+            $purchaseItem->setSalesSubTotal($salesSubTotal);
+            $em->persist($purchaseItem);
+            $em->flush();
+            $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($purchase);
+            return $this->redirect($this->generateUrl('inventory_purchasesimple_edit', array('id' => $purchase->getId())));
         }
-        if( $data["appstore_bundle_inventorybundle_purchase"]["totalQnt"] != $itemQnt ){
-            $msg = "Purchase total quantity and added item quantity does not match";
-        }elseif ($countItem != $data["appstore_bundle_inventorybundle_purchase"]["totalItem"]){
-            $msg = "Purchase total item and added item does not match";
-        }elseif ($purchasePrice != $data["appstore_bundle_inventorybundle_purchase"]["totalAmount"]){
-            $msg = "Purchase total item price and total amount does not match";
-        }elseif($purchasePrice == 0){
-            $msg = "Purchase item amount does not blank";
-        }elseif ( $data["appstore_bundle_inventorybundle_purchase"]["totalAmount"] == 0){
-            $msg = "Purchase total amount does not blank";
-        }elseif ( $salesPrice < $data["appstore_bundle_inventorybundle_purchase"]["totalAmount"]){
-            $msg = "Sales amount must be more then purchase price";
-        }elseif ( $salesPrice == 0){
-            $msg = "Purchase sales price does not blank";;
-        }else{
-            $msg = 'success';
-        }
-        return new Response($msg);
-        exit;
 
-    }
-
-
-    /**
-     * Creates a form to create a Purchase entity.
-     *
-     * @param Purchase $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(Purchase $entity)
-    {
-        $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $form = $this->createForm(new PurchaseType($inventoryConfig), $entity, array(
-            'action' => $this->generateUrl('purchase_create'),
-            'method' => 'POST',
-            'attr' => array(
-                'class' => 'horizontal-form purchase',
-                'novalidate' => 'novalidate',
-            )
+        return $this->render('InventoryBundle:PurchaseSimple:new.html.twig', array(
+            'entity' => $purchase,
+            'form'   => $editForm->createView(),
+            'purchaseItemForm'   => $purchaseItemForm->createView(),
         ));
-       return $form;
+
     }
+
 
     /**
      * Displays a form to create a new Purchase entity.
@@ -158,13 +102,14 @@ class PurchaseSimpleController extends Controller
      */
     public function newAction()
     {
+        $em = $this->getDoctrine()->getManager();
         $entity = new Purchase();
-        $form   = $this->createCreateForm($entity);
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $entity->setInventoryConfig($inventory);
+        $em->persist($entity);
+        $em->flush();
+        return $this->redirect($this->generateUrl('inventory_purchasesimple_edit', array('id' => $entity->getId())));
 
-        return $this->render('InventoryBundle:Purchase:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
     }
 
     /**
@@ -180,7 +125,7 @@ class PurchaseSimpleController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Purchase entity.');
         }
-        return $this->render('InventoryBundle:Purchase:show.html.twig', array(
+        return $this->render('InventoryBundle:PurchaseSimple:show.html.twig', array(
             'entity'      => $entity,
         ));
     }
@@ -193,15 +138,18 @@ class PurchaseSimpleController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('InventoryBundle:Purchase')->find($id);
+        $purchase = $em->getRepository('InventoryBundle:Purchase')->find($id);
 
-        if (!$entity) {
+        if (!$purchase) {
             throw $this->createNotFoundException('Unable to find Purchase entity.');
         }
-        $editForm = $this->createEditForm($entity);
+        $purchaseItem = new PurchaseItem();
+        $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$purchase);
+        $editForm = $this->createEditForm($purchase);
 
-        return $this->render('InventoryBundle:Purchase:new.html.twig', array(
-            'entity'      => $entity,
+        return $this->render('InventoryBundle:PurchaseSimple:new.html.twig', array(
+            'entity'      => $purchase,
+            'purchaseItemForm'   => $purchaseItemForm->createView(),
             'form'   => $editForm->createView(),
         ));
     }
@@ -217,7 +165,7 @@ class PurchaseSimpleController extends Controller
     {
         $inventoryConfig =  $this->getUser()->getGlobalOption()->getInventoryConfig();
         $form = $this->createForm(new PurchaseType($inventoryConfig), $entity, array(
-            'action' => $this->generateUrl('purchase_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('inventory_purchasesimple_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form purchase',
@@ -227,6 +175,30 @@ class PurchaseSimpleController extends Controller
         ));
         return $form;
     }
+
+    /**
+    * Creates a form to edit a Purchase entity.
+    *
+    * @param Purchase $entity The entity
+    *
+    * @return \Symfony\Component\Form\Form The form
+    */
+    private function createPurchaseItemForm(PurchaseItem $purchaseItem , Purchase $entity)
+    {
+        $inventoryConfig =  $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $form = $this->createForm(new PurchaseItemType($inventoryConfig), $purchaseItem, array(
+            'action' => $this->generateUrl('inventory_purchasesimple_create', array('purchase' => $entity->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'id' => 'purchaseForm',
+                'class' => 'horizontal-form purchase',
+                'novalidate' => 'novalidate',
+            )
+
+        ));
+        return $form;
+    }
+
     /**
      * Edits an existing Purchase entity.
      *
@@ -237,15 +209,20 @@ class PurchaseSimpleController extends Controller
 
         $entity = $em->getRepository('InventoryBundle:Purchase')->find($id);
         $editForm = $this->createEditForm($entity);
+        $purchaseItem = new PurchaseItem();
+        $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$entity);
         $editForm->handleRequest($request);
+         $em->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($entity);
+        exit;
 
         if ($editForm->isValid()) {
             $em->flush();
-            return $this->redirect($this->generateUrl('purchase_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('inventory_purchasesimple_edit', array('id' => $id)));
         }
 
-        return $this->render('InventoryBundle:Purchase:edit.html.twig', array(
+        return $this->render('InventoryBundle:PurchaseSimple:edit.html.twig', array(
             'entity'      => $entity,
+            'purchaseItemForm'   => $purchaseItemForm->createView(),
             'edit_form'   => $editForm->createView(),
 
         ));
@@ -284,6 +261,7 @@ class PurchaseSimpleController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($purchase);
             $em->flush();
+            $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($purchase);
             return new Response('success');
         }else{
             return new Response('failed');
@@ -292,36 +270,15 @@ class PurchaseSimpleController extends Controller
         exit;
     }
 
-    /**
-     * Deletes a PurchaseVendorItem entity.
-     *
-     */
-    public function deleteVendorAction(PurchaseVendorItem $vendorItem)
-    {
-
-        if($vendorItem){
-            $this->updatePurchaseStatus($vendorItem->getPurchase(),'created');
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($vendorItem);
-            $em->flush();
-            return new Response('success');
-        }else{
-            return new Response('failed');
-        }
-
-        exit;
-
-    }
 
     /**
      * Deletes a PurchaseItem entity.
      *
      */
-    public function deleteItemAction(PurchaseItem $purchaseItem)
+    public function deleteItemAction(Purchase $purchase , PurchaseItem $purchaseItem)
     {
 
         if($purchaseItem){
-            $this->updatePurchaseStatus($purchaseItem->getPurchase(),'wfs');
             $em = $this->getDoctrine()->getManager();
             $em->remove($purchaseItem);
             $em->flush();
@@ -376,7 +333,7 @@ class PurchaseSimpleController extends Controller
         $em->getRepository('InventoryBundle:Purchase')->getSumPurchase($this->getUser(),$inventory);
         $editForm = $this->createEditApproveForm($entity);
 
-        return $this->render('InventoryBundle:Purchase:editApprove.html.twig', array(
+        return $this->render('InventoryBundle:PurchaseSimple:editApprove.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -417,6 +374,7 @@ class PurchaseSimpleController extends Controller
         $editForm = $this->createEditApproveForm($entity);
         $editForm->handleRequest($request);
 
+
         if ($editForm->isValid()) {
 
             $entity->setApprovedBy($this->getUser());
@@ -436,7 +394,7 @@ class PurchaseSimpleController extends Controller
             return $this->redirect($this->generateUrl('purchase'));
         }
 
-        return $this->render('InventoryBundle:Purchase:editApprove.html.twig', array(
+        return $this->render('InventoryBundle:PurchaseSimple:editApprove.html.twig', array(
             'entity'        => $entity,
             'form'          => $editForm->createView(),
 
@@ -557,6 +515,46 @@ class PurchaseSimpleController extends Controller
          *
          * */
 
+
+    }
+
+
+
+    public function createStockItemAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all();
+
+        /* @var InventoryConfig $inventory*/
+
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        if(!empty($data['masterItem'])){
+
+            $entity = new Item();
+            $existMasterItem = $em->getRepository('InventoryBundle:Product')->findOneBy(array('name'=> $data['masterItem']));
+            if(empty($existMasterItem)){
+                $existMasterItem = $em->getRepository('InventoryBundle:Product')->createNewProduct($inventory,$data['masterItem']);
+            }
+            $checkData = $this->getDoctrine()->getRepository('InventoryBundle:Item')->checkInstantDuplicateSKU($inventory,$data);
+            if($checkData == 0 ) {
+                $entity->setInventoryConfig($inventory);
+                $entity->setMasterItem($existMasterItem);
+                $entity->setName($existMasterItem->getName());
+                if($inventory->getIsColor() == 1) {
+                    $itemColor = $em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('name'=> $data['color'] ));
+                    $entity->setColor($itemColor);
+                }
+                $em->persist($entity);
+                $em->flush();
+                $msg = "Item has been added successfully";
+            }else{
+                $msg = "Item already exist, Please change add another item name";
+
+            }
+        }
+        echo $msg;
+        exit;
 
     }
 

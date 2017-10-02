@@ -134,6 +134,10 @@ inventory_purchase:
     resource: "@InventoryBundle/Resources/config/routing/purchase.yml"
     prefix:   /inventory/purchase
 
+inventory_purchasesimple:
+    resource: "@InventoryBundle/Resources/config/routing/purchasesimple.yml"
+    prefix:   /inventory/purchase-simple
+
 inventory_vendor:
     resource: "@InventoryBundle/Resources/config/routing/vendor.yml"
     prefix:   /inventory/vendor

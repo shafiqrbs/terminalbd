@@ -28,7 +28,7 @@ function InventoryPurchasePage(){
                 }
             },
         })
-    })
+    });
 
     $(document).on("click", ".purchaseItemDelete", function() {
 
@@ -43,8 +43,9 @@ function InventoryPurchasePage(){
                 }
             },
         })
-    })
+    });
 
+    
 
     $('#appstore_bundle_inventorybundle_purchase_memo').attr("required", true);
     $('#appstore_bundle_inventorybundle_purchase_dueAmount').attr("disabled", true);

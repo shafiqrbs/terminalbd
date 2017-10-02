@@ -133,7 +133,6 @@ class AgentClientController extends Controller
      */
     private function createEditProfileForm(Profile $entity)
     {
-
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
         $form = $this->createForm(new AgentProfileType($location), $entity, array(
             'action' => $this->generateUrl('customer_self_update_profile'),
@@ -152,7 +151,6 @@ class AgentClientController extends Controller
      */
     public function editAction()
     {
-
         $user = $this->getUser();
         $editForm = $this->createEditProfileForm($user->getProfile());
         return $this->render('DomainUserBundle:Agent:profile.html.twig', array(
@@ -179,6 +177,9 @@ class AgentClientController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $intlMobile = $entity->getMobile();
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
+            $entity->setMobile($mobile);
             if($entity->upload() &&  !empty($entity->getFile()) and !empty($entity->getPath()) ){
                 $entity->removeUpload();
             }

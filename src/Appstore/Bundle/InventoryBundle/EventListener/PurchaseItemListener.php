@@ -61,27 +61,35 @@ class PurchaseItemListener
     public function getBarcode(PurchaseItem $entity){
 
         $masterItemCode = $entity->getItem()->getMasterItem()->getSTRPadCode();
-        if($entity->getPurchase()->getInventoryConfig()->getIsColor() == 1 )
+        if($entity->getPurchase()->getInventoryConfig()->getIsColor() == 1 and !empty( $entity->getItem()->getColor()) )
         {
             $masterItemColor =  $entity->getItem()->getColor()->getSTRPadCode();
         }else{
             $masterItemColor ='';
         }
 
-        if($entity->getPurchase()->getInventoryConfig()->getIsSize() == 1 )
+        if($entity->getPurchase()->getInventoryConfig()->getIsSize() == 1 and !empty( $entity->getItem()->getBrand()) )
         {
             $masterItemSize =  $entity->getItem()->getSize()->getSTRPadCode();
         }else{
             $masterItemSize ='';
         }
 
-        if($entity->getPurchase()->getInventoryConfig()->getIsBrand() == 1 )
+        if($entity->getPurchase()->getInventoryConfig()->getIsBrand() == 1 and !empty( $entity->getItem()->getBrand()) )
         {
             $masterItemBrand = $entity->getItem()->getBrand()->getSTRPadCode();
         }else{
             $masterItemBrand ='';
         }
-        return $masterItemCode.$masterItemColor.$masterItemSize.$masterItemBrand.$this->getStrPad($entity->getCode(),6);
+
+        if($entity->getPurchase()->getInventoryConfig()->getIsVendor() == 1 and !empty( $entity->getItem()->getVendor()) )
+        {
+            $masterItemVendor = $entity->getItem()->getVendor()->getSTRPadCode();
+        }else{
+            $masterItemVendor ='';
+        }
+
+        return $masterItemCode.$masterItemColor.$masterItemSize.$masterItemBrand.$masterItemVendor.$this->getStrPad($entity->getCode(),6);
 
 
     }

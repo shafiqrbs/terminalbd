@@ -15,6 +15,7 @@ function ApproveProcess(){
     $( ".dateCalendar" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
 
    
+
     $(document).on("click", ".delete", function() {
 
         var id = $(this).attr("data-id");
@@ -24,17 +25,15 @@ function ApproveProcess(){
         $.ajax({
             url: url,
             type: 'GET',
-            /*beforeSend: function() {
-                $('.tabbable').show().addClass('ajax-loading').fadeIn(3000);
-            },*/
             success: function (response) {
                 location.reload();
             },
         })
 
-    })
+    });
 
     $(".remove, .delete").click(function() {
+
         var url = $(this).attr('data-url');
         var id = $(this).attr('data-id');
         $('#confirm-content').confirmModal({
@@ -62,6 +61,44 @@ function ApproveProcess(){
             }
         });
     });
+
+    $(".select2AllItem").select2({
+
+        placeholder: "Search item, color, size & brand name",
+        ajax: {
+            url: Routing.generate('item_search_all'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function(item){
+
+            //return item.name +' => '+ (item.remainingQuantity)
+            return item.name
+
+        }, // omitted for brevity, see the source of this page
+        formatSelection: function(item){return item.name + ' / ' + item.sku}, // omitted for brevity, see the source of this page
+        initSelection: function(element, callback) {
+            var id = $(element).val();
+        },
+        allowClear: true,
+        minimumInputLength:1
+    });
+
 
     $(".select2Item").select2({
 
@@ -134,7 +171,7 @@ function ApproveProcess(){
             var id = $(element).val();
         },
         allowClear: true,
-        minimumInputLength:1
+        minimumInputLength:2
     });
 
 
@@ -168,7 +205,7 @@ function ApproveProcess(){
             var id = $(element).val();
         },
         allowClear: true,
-        minimumInputLength:1
+        minimumInputLength:2
     });
 
     $(".select2Barcode").select2({
@@ -208,7 +245,7 @@ function ApproveProcess(){
 
         },
         allowClear: true,
-        minimumInputLength:1
+        minimumInputLength:2
 
     });
 
@@ -254,7 +291,7 @@ function ApproveProcess(){
 
         },
         allowClear: true,
-        minimumInputLength: 1
+        minimumInputLength:2
     });
 
     $(".select2Product").select2({
@@ -298,7 +335,7 @@ function ApproveProcess(){
 
         },
         allowClear: true,
-        minimumInputLength: 1
+        minimumInputLength:2
     });
 
     $(".select2Category").select2({
@@ -342,7 +379,7 @@ function ApproveProcess(){
 
         },
         allowClear: true,
-        minimumInputLength: 1
+        minimumInputLength: 2
     });
 
     $(".select2Unit").select2({
@@ -381,7 +418,7 @@ function ApproveProcess(){
 
         },
         allowClear: true,
-        minimumInputLength: 1
+        minimumInputLength:2
 
     });
 
@@ -424,7 +461,7 @@ function ApproveProcess(){
             });
         },
         allowClear: true,
-        minimumInputLength: 1
+        minimumInputLength:2
     });
 
     $(".select2Size").select2({
@@ -468,7 +505,7 @@ function ApproveProcess(){
 
         },
         allowClear: true,
-        minimumInputLength: 1
+        minimumInputLength:2
     });
 
     $(".select2Vendor").select2({
@@ -507,7 +544,7 @@ function ApproveProcess(){
 
         },
         allowClear: true,
-        minimumInputLength: 1
+        minimumInputLength:2
 
     });
 
@@ -551,7 +588,7 @@ function ApproveProcess(){
             });
         },
         allowClear: true,
-        minimumInputLength: 1
+        minimumInputLength: 2
 
     });
 
@@ -593,7 +630,7 @@ function ApproveProcess(){
             });
         },
         allowClear: true,
-        minimumInputLength: 1
+        minimumInputLength:2
     });
 
     $(".select2Customer").select2({
@@ -634,7 +671,7 @@ function ApproveProcess(){
             });
         },
         allowClear: true,
-        minimumInputLength: 1
+        minimumInputLength: 2
     });
 
     $(".select2Location").select2({
@@ -675,7 +712,7 @@ function ApproveProcess(){
             });
         },
         allowClear: true,
-        minimumInputLength: 1
+        minimumInputLength: 2
     });
 
 
@@ -770,7 +807,7 @@ function ApproveProcess(){
             });
         },
         allowClear: true,
-        minimumInputLength:1
+        minimumInputLength:2
     });
 
 

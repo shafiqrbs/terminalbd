@@ -27,6 +27,24 @@ class PurchaseItemType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder
+
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 select2AllItem','placeholder'=>'Search inventory item '),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'add inventory item')))))
+
+            ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span8','placeholder'=>'Item quantity'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Add item quantity')))))
+
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Item sales price'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Add sales price')))))
+
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Item purchase price'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Add purchase price')))))
+            ;
 
     }
     

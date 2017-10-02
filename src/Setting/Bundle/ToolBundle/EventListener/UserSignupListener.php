@@ -37,8 +37,9 @@ class UserSignupListener extends BaseSmsAwareListener
          */
 
         $post = $event->getUser();
+
         $msg = "Your account is create, Confirmation code is 1234";
-        $mobile = "88".$post->getGlobalOption()->getMobile();
+        $mobile = "88".$post->getProfile()->getMobile();
         $this->gateway->send($msg, $mobile);
 
     }

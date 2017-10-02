@@ -2,6 +2,9 @@
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\InventoryBundle\Entity\Purchase;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -289,5 +292,53 @@ class PurchaseItemRepository extends EntityRepository
         return $qb->getQuery()->getResult();
 
     }
+
+    public function generatePurchaseVendorItem(Purchase $purchase)
+    {
+        $qb = $this->createQueryBuilder('pi');
+        $qb->join('pi.purchase', 'p');
+        $qb->join('pi.item','item');
+        $qb->join('item.masterItem','product');
+        $qb->select('SUM(pi.quantity) as quantity');
+        $qb->addSelect('product.id as productId');
+        $qb->addSelect('product.name as productName');
+        $qb->addSelect('AVG(pi.purchasePrice) as purchase');
+        $qb->addSelect('AVG(pi.salesPrice) as sales');
+        $qb->where("p.id = :id");
+        $qb->setParameter('id', $purchase->getId());
+        $qb->groupBy('item.masterItem');
+        $data = $qb->getQuery()->getArrayResult();
+
+        foreach ($data as $row){
+
+           $product = $this->_em->getRepository('InventoryBundle:Product')->find($row['productId']);
+           $entity = new PurchaseVendorItem();
+           $entity->setPurchase($purchase);
+           $entity->setInventoryConfig($purchase->getInventoryConfig());
+           $entity->setMasterItem($product);
+           $entity->setName($row['productName']);
+           $entity->setPurchasePrice($row['purchase']);
+           $entity->setSalesPrice($row['sales']);
+           $entity->setQuantity($row['quantity']);
+           $entity->setMasterQuantity($row['quantity']);
+           $this->_em->persist($entity);
+           $this->_em->flush($entity);
+
+       }
+
+        /* @var PurchaseItem $item*/
+        foreach ($purchase->getPurchaseItems() as $item){
+
+            $masterItem = $item->getItem()->getMasterItem();
+            $purchaseVendorItem = $this->_em->getRepository('InventoryBundle:PurchaseVendorItem')->findOneBy(array('purchase' => $purchase ,'masterItem' => $masterItem));
+            $item->setPurchaseVendorItem($purchaseVendorItem);
+            $this->_em->persist($item);
+            $this->_em->flush($item);
+        }
+
+
+    }
+
+
 
 }

@@ -92,7 +92,7 @@ class PurchaseItem
      *
      * @ORM\Column(name="name", type="string", length=255, nullable = true)
      */
-    private $Name;
+    private $name;
 
 
     /**
@@ -173,15 +173,15 @@ class PurchaseItem
      */
     public function getName()
     {
-        return $this->Name;
+        return $this->name;
     }
 
     /**
-     * @param string $Name
+     * @param string $name
      */
-    public function setName($Name)
+    public function setName($name)
     {
-        $this->Name = $Name;
+        $this->name = $name;
     }
 
     /**

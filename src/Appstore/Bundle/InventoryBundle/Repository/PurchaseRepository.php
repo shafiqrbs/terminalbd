@@ -2,6 +2,7 @@
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\EntityRepository;
 
@@ -127,7 +128,29 @@ class PurchaseRepository extends EntityRepository
 
    }
 
-    public  function purchaseModifyUpdate($purchase){
+    public  function purchaseSimpleUpdate(Purchase $purchase){
+
+        $qb = $this->createQueryBuilder('p');
+        $qb->join('p.purchaseItems', 'pvi');
+        $qb->select('p.id as id');
+        $qb->addSelect('SUM(pvi.quantity) AS quantity ');
+        $qb->addSelect('COUNT(pvi.id) AS item ');
+        $qb->addSelect('SUM(pvi.purchaseSubTotal) AS total');
+        $qb->where("p.id = :purchaseId");
+        $qb->setParameter('purchaseId', $purchase);
+        $row = $qb->getQuery()->getOneOrNullResult();
+
+        $purchase->setTotalQnt($row['quantity']);
+        $purchase->setTotalItem($row['item']);
+        $purchase->setTotalAmount($row['total']);
+        $purchase->setPaymentAmount($row['total']);
+        $this->_em->persist($purchase);
+        $this->_em->flush($purchase);
+
+    }
+
+
+    public  function purchaseModifyUpdate(Purchase $purchase){
 
         $qb = $this->createQueryBuilder('p');
         $qb->join('p.purchaseVendorItems', 'pvi');
@@ -145,7 +168,7 @@ class PurchaseRepository extends EntityRepository
         $purchase->setTotalAmount($row['total']);
         $purchase->setPaymentAmount($row['total']);
         $this->_em->persist($purchase);
-        $this->_em->flush();
+        $this->_em->flush($purchase);
     }
 
 
