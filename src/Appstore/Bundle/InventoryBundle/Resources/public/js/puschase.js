@@ -1,5 +1,60 @@
 function InventoryPurchasePage(){
 
+    $( "#masterItem" ).autocomplete({
+        source: function( request, response ) {
+            $.ajax( {
+                url: Routing.generate('inventory_product_masteritem_search'),
+                data: {
+                    term: request.term
+                },
+                success: function( data ) {
+                    response( data );
+                }
+            } );
+        },
+        minLength: 2,
+        select: function( event, ui ) {
+        }
+    });
+
+    $('#addStockItem').click(function(e) {
+
+        var url =  $('#inventoryItem').attr("action");
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data : $('#inventoryItem').serialize(),
+                    success: function (response) {
+                        location.reload();
+                    },
+                });
+            }
+        });
+        e.preventDefault();
+    });
+
+    $('#addPurchaseForm , #action-button').click(function(e) {
+
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $('#purchaseForm').submit()
+            }
+        });
+        e.preventDefault();
+    });
+
+    $('#addInventory').click(function(e) {
+        $( "#inventoryItem" ).fadeToggle( "slow", function() {
+            // Animation complete.
+        });
+    });
+
     $('#purchase').on("click", ".delete", function() {
 
         var url = $(this).attr("rel");
@@ -13,7 +68,7 @@ function InventoryPurchasePage(){
                 }
             },
         })
-    })
+    });
 
     $(document).on("click", ".vendorItemDelete", function() {
 
