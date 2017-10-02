@@ -263,7 +263,7 @@
                                     <td class="numeric" >
                                         {% if payment.status == 1  %}
                                             <a class="btn  mini green" data-url="" ><i class=" icon-thumbs-up"></i> Accept</a>
-                                        {% ifelse payment.status == 2  %}
+                                        {% elseif payment.status == 2  %}
                                             <a class="btn  mini red" data-url="" ><i class=" icon-thumbs-down"></i> Deny</a>
                                         {% endif %}
                                         {% if payment.status == 0 and entity.process == 'wfc' and entity.checkRoleEcommerceOrder(app.user.role) == true  %}
@@ -280,7 +280,6 @@
                                     </td>
                                 </tr>
                             {% endfor %}
-
                             <tr>
                                 <td colspan="8"><br/></td>
                             </tr>

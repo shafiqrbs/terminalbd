@@ -15,7 +15,7 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('purchase') }}">Purchase</a>
+                    <a href="{{ path('inventory_purchasesimple') }}">Purchase</a>
                     <span class="icon-angle-right"></span>
                 </li>
                 <li><a href="#">Add/Edit purchase</a></li>
@@ -37,17 +37,17 @@
                     <div class="caption"><i class="icon-reorder"></i>Purchase Information</div>
                     <div class="actions">
                         <div class="btn-group">
-                            <a class="btn red" href="{{ path('purchase_new') }}"><i class="icon-plus-sign"></i>&nbsp; Add Inventory Item</a>
+                            <a class="btn red" href="javascript:"><i class="icon-plus-sign"></i>&nbsp; Add Inventory Item</a>
                             <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <i class="icon-cogs"></i>&nbsp;Tools
                                 <i class="icon-tasks"></i>
                             </a>
                             <ul class="dropdown-menu pull-right">
                                 <li><a href="{{ path('inventory_purchasesimple_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                <li><a href="{{ path('purchase') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                                <li><a href="{{ path('inventory_purchasesimple') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 {% if(entity.id > 0 ) %}
-                                    <li><a href="{{ path('purchase_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                    <li><a href="{{ path('purchase_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
+                                    <li><a href="{{ path('inventory_purchasesimple_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
+                                    <li><a href="{{ path('inventory_purchasesimple_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
                                 {% endif %}
                             </ul>
                         </div>

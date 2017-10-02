@@ -311,8 +311,12 @@ class PurchaseItemRepository extends EntityRepository
 
         foreach ($data as $row){
 
-           $product = $this->_em->getRepository('InventoryBundle:Product')->find($row['productId']);
+           $purchaseVendorItem = $this->_em->getRepository('InventoryBundle:PurchaseVendorItem')->findOneBy(array('purchase' => $purchase ,'masterItem' => $row['productId']));
            $entity = new PurchaseVendorItem();
+           if(!empty($purchaseVendorItem)){
+               $entity = $purchaseVendorItem;
+           }
+           $product = $this->_em->getRepository('InventoryBundle:Product')->find($row['productId']);
            $entity->setPurchase($purchase);
            $entity->setInventoryConfig($purchase->getInventoryConfig());
            $entity->setMasterItem($product);
@@ -326,7 +330,8 @@ class PurchaseItemRepository extends EntityRepository
 
        }
 
-        /* @var PurchaseItem $item*/
+        /* @var PurchaseItem $item */
+
         foreach ($purchase->getPurchaseItems() as $item){
 
             $masterItem = $item->getItem()->getMasterItem();

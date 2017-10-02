@@ -15,7 +15,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('purchase') }}">Purchase</a>
+                        <a href="{{ path('inventory_purchasesimple') }}">Purchase</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">Purchase Lists</a></li>
@@ -104,7 +104,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </form>
                             <table class="table table-bordered table-striped table-condensed flip-content">
 
@@ -136,7 +135,7 @@
                                         <td class="numeric" >{{ entity.totalItem }}/{{ entity.totalQnt }}</td>
                                         <td class="numeric pull-center" ><a title="Approve" href="javascript:" class="btn green disabled mini" >&nbsp;{{ entity.process|capitalize }}</a></td>
                                         <td class="numeric" id="action-{{ entity.id }}"  >
-                                            {% include "@Inventory/Purchase/action.html.twig" %}
+                                            {% include "@Inventory/PurchaseSimple/action.html.twig" %}
                                         </td>
                                     </tr>
                                 {% endfor %}

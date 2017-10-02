@@ -210,11 +210,9 @@ class PurchaseSimpleController extends Controller
         $entity = $em->getRepository('InventoryBundle:Purchase')->find($id);
         $editForm = $this->createEditForm($entity);
         $purchaseItem = new PurchaseItem();
+        $em->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($entity);
         $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$entity);
         $editForm->handleRequest($request);
-        $em->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($entity);
-        exit;
-
         if ($editForm->isValid()) {
             $em->flush();
             return $this->redirect($this->generateUrl('inventory_purchasesimple_edit', array('id' => $id)));
@@ -237,7 +235,7 @@ class PurchaseSimpleController extends Controller
         $purchase->setProcess('approved');
         $em->persist($purchase);
         $em->flush();
-
+        $em->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($purchase);
         $em->getRepository('InventoryBundle:Item')->getItemUpdatePriceQnt($purchase);
         $em->getRepository('InventoryBundle:StockItem')->insertPurchaseStockItem($purchase);
         if($purchase->getAsInvestment() == 1){
@@ -282,6 +280,8 @@ class PurchaseSimpleController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($purchaseItem);
             $em->flush();
+            $em->getRepository('InventoryBundle:Purchase')->purchaseSimpleUpdate($purchase);
+            $em->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($purchase);
             return new Response('success');
         }else{
             return new Response('failed');
