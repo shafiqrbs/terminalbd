@@ -212,7 +212,7 @@ class PurchaseSimpleController extends Controller
         $purchaseItem = new PurchaseItem();
         $purchaseItemForm = $this->createPurchaseItemForm($purchaseItem,$entity);
         $editForm->handleRequest($request);
-         $em->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($entity);
+        $em->getRepository('InventoryBundle:PurchaseItem')->generatePurchaseVendorItem($entity);
         exit;
 
         if ($editForm->isValid()) {

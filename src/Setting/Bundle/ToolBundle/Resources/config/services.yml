@@ -62,6 +62,14 @@ services:
       tags:
         - { name: kernel.event_listener, event: setting_tool.post.user_signup_msg, method: onUserSignup }
 
+  setting_tool.listener.customer_signup:
+      class: Setting\Bundle\ToolBundle\EventListener\CustomerSignupListener
+      arguments: [@setting_tool.sms_gateWay]
+      calls:
+        - [setMailer, [@setting_tool.easy_email]]
+      tags:
+        - { name: kernel.event_listener, event: setting_tool.post.customer_signup_msg, method: onCustomerSignup }
+
   setting_tool.listener.changepassword:
       class: Setting\Bundle\ToolBundle\EventListener\PasswordChangeSmsListener
       arguments: [@setting_tool.sms_gateWay]

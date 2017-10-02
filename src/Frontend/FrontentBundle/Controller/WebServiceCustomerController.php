@@ -148,7 +148,7 @@ class WebServiceCustomerController extends Controller
         $entity = new User();
         $form = $this->createCreateForm($subdomain,$entity);
         $form->handleRequest($request);
-
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         $intlMobile = $entity->getProfile()->getMobile();
         $mobile = $this->get('settong.toolManageRepo')->specialExpClean($intlMobile);
         $entity->getProfile()->setMobile($mobile);
@@ -163,7 +163,7 @@ class WebServiceCustomerController extends Controller
             $em->persist($entity);
             $em->flush();
             $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.user_signup_msg', new \Setting\Bundle\ToolBundle\Event\UserSignup($entity));
+            $dispatcher->dispatch('setting_tool.post.customer_signup_msg', new \Setting\Bundle\ToolBundle\Event\CustomerSignup($entity,$globalOption));
             return new Response('success');
 
         }else{
