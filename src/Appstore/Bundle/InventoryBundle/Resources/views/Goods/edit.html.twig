@@ -348,7 +348,7 @@
                                                             <td class="numeric" >{{ subItem.salesPrice|number_format() }}</td>
                                                             <td>
                                                                 {% if  subItem.masterItem == 0 %}
-                                                                <a class="btn red removeProduct mini" data-url="{{ path('inventory_goods_subItem_delete',{'id':subItem.id}) }}"><i class="icon-trash"></i> Delete</a>
+                                                                <a class="btn red removeProduct mini" data-id="{{ subItem.id }}" data-url="{{ path('inventory_goods_subItem_delete',{'id':subItem.id}) }}"><i class="icon-trash"></i> Delete</a>
                                                                 {% endif %}
                                                             </td>
                                                         </tr>
