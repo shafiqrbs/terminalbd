@@ -56,4 +56,18 @@ class ItemSizeRepository extends EntityRepository
         return $query->getQuery()->getResult();
 
     }
+
+    public function getGroupSizes($categories,$array = array() ){
+
+
+        $value ='';
+        $value .='<ul>';
+        foreach ($categories as $val) {
+            $checkd = in_array($val->getId(), $array)? 'checked':'';
+            $value .= '<li class="dd-item dd3-item" style="width: 25%; float: left" ><div class="dd4-content"><input type="checkbox" '.$checkd.' name="categories[]" value="'.$val->getId().'" >'.$val->getName(). '</div></li>';
+        }
+        $value .='</ul>';
+        return $value;
+
+    }
 }

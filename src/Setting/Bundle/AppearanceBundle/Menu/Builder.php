@@ -642,7 +642,7 @@ class Builder extends ContainerAware
                 $menu['Application Setting']['Inventory']->addChild('Vendor', array('route' => 'inventory_vendor'))->setAttribute('icon', 'icon-th-list');
                 $menu['Application Setting']['Inventory']->addChild('Brand', array('route' => 'itembrand'))->setAttribute('icon', 'icon-th-list');
                 //$menu['Application Setting']['Inventory Setting']->addChild('Color', array('route' => 'itemcolor'))->setAttribute('icon', 'icon-th-list');
-                //$menu['Application Setting']['Inventory Setting']->addChild('Size', array('route' => 'itemsize'))->setAttribute('icon', 'icon-th-list');
+                $menu['Application Setting']['Inventory']->addChild('Size Group', array('route' => 'itemsize_group'))->setAttribute('icon', 'icon-th-list');
                 //$menu['Application Setting']['Inventory Setting']->addChild('Ware House', array('route' => 'inventory_warehouse'))->setAttribute('icon', 'icon-th-list');
                 if ($inventory->getIsBranch() == 1) {
                     $menu['Application Setting']->addChild('Branches')->setAttribute('icon', 'icon-building')->setAttribute('dropdown', true);

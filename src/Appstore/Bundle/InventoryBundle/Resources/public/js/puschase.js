@@ -37,7 +37,19 @@ function InventoryPurchasePage(){
         e.preventDefault();
     });
 
-    $('#addPurchaseForm , #action-button').click(function(e) {
+    $('#addPurchaseForm').click(function(e) {
+
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $('#purchaseItemForm').submit()
+            }
+        });
+        e.preventDefault();
+    });
+
+    $(' #action-button').click(function(e) {
 
         $('#confirm-content').confirmModal({
             topOffset: 0,

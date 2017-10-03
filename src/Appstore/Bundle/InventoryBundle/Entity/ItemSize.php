@@ -33,6 +33,11 @@ class ItemSize
 
 
     /**
+     * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSizeGroup", mappedBy="sizes")
+     */
+    protected $sizeGroup;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Item", mappedBy="size")
      */
     protected $item;
@@ -299,6 +304,14 @@ class ItemSize
     public function getStockItems()
     {
         return $this->stockItems;
+    }
+
+    /**
+     * @return ItemSizeGroup
+     */
+    public function getSizeGroup()
+    {
+        return $this->sizeGroup;
     }
 }
 

@@ -2,6 +2,9 @@
 
 namespace Appstore\Bundle\InventoryBundle\Controller;
 
+use Appstore\Bundle\InventoryBundle\Entity\ItemSizeGroup;
+use Appstore\Bundle\InventoryBundle\Form\ItemSizeGroupingType;
+use Appstore\Bundle\InventoryBundle\Form\ItemSizeGroupType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -118,7 +121,7 @@ class ItemSizeController extends Controller
 
     /**
      * Displays a form to edit an existing ItemSize entity.
-     * @Secure(roles="ROLE_ADMIN_OPERATION_USER")
+     * @Secure(roles="ROLE_ADMIN")
      */
     public function editAction($id)
     {
@@ -231,5 +234,81 @@ class ItemSizeController extends Controller
             'id'=>$size,
             'text'=>$size
         ));
+    }
+
+    public function sizeGroupAction(){
+
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = new ItemSizeGroup();
+        $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $array = array();
+        $grouping =  $inventoryConfig->getSizeGroup();
+        if($grouping){
+            $groups = $grouping->getSizes();
+            foreach($groups as $row ){
+                $array[] = $row->getId();
+            }
+        }else{
+            $entity->setInventoryConfig($inventoryConfig);
+            $em->persist($entity);
+            $em->flush();
+        }
+
+        $sizes = $em->getRepository('InventoryBundle:ItemSize')->findBy(array('isValid'=>1),array('code'=>'asc'));
+        if($sizes)
+        $entities = $this->getDoctrine()->getRepository('InventoryBundle:ItemSize')->getGroupSizes($sizes,$array);
+        $form   = $this->createSizeGroupForm($entity);
+
+        return $this->render('InventoryBundle:ItemSize:group.html.twig', array(
+            'entities' => $entities,
+            'form'   => $form->createView(),
+        ));
+
+    }
+
+    private function createSizeGroupForm(ItemSizeGroup $entity)
+    {
+
+        $form = $this->createForm(new ItemSizeGroupType(), $entity, array(
+            'action' => $this->generateUrl('itemsize_group_create'),
+            'method' => 'POST',
+        ));
+        return $form;
+    }
+
+    public function sizeGroupCreateAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
+        if($globalOption){
+            $entity = $globalOption->getInventoryConfig()->getSizeGroup();
+        }else{
+            $entity = new ItemSizeGroup();
+        }
+
+        $data = $request->request->get('categories');
+        $array = array();
+        foreach($data as $row){
+            $array[] = $em->getRepository('InventoryBundle:ItemSize')->find($row);
+        }
+
+        $form = $this->createSizeGroupForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            $entity->setInventoryConfig($this->getUser()->getGlobalOption()->getInventoryConfig());
+            $entity->setSizes($array);
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been updated successfully"
+            );
+            return $this->redirect($this->generateUrl('itemsize_group'));
+        }
+
+
     }
 }

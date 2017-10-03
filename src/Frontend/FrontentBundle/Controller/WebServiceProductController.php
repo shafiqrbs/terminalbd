@@ -503,7 +503,7 @@ class WebServiceProductController extends Controller
         $salesPrice = $subitem->getDiscountPrice() == null ?  $subitem->getSalesPrice() : $subitem->getDiscountPrice();
 
         $masterItem = !empty($product->getMasterItem()) and $showMaster == 1 ? $product->getMasterItem()->getName() . '-' : '';
-            /* if (!empty($subitem) and $subitem->getQuantity() >= $quantity) {*/
+        if (!empty($subitem) and $subitem->getQuantity() >= $quantity) {
             $data = array(
                 'id' => $subitem->getId(),
                 'name' => $masterItem . ' ' . $product->getWebName(),
@@ -521,9 +521,9 @@ class WebServiceProductController extends Controller
             $totalItems = (string)$cart->total_items();
             $cartResult = $cartTotal.'('.$totalItems.')';
             $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems)));
-           /* }else{
-                $array =(json_encode(array('process'=>'invalid')));
-            }*/
+        }else{
+            $array =(json_encode(array('process'=>'invalid')));
+        }
         echo $array;
         exit;
 

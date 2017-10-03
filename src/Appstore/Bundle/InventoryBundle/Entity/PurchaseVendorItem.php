@@ -263,14 +263,29 @@ class PurchaseVendorItem
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="string", length=255 , nullable = true)
+     * @ORM\Column(name="gender", type="string", length=10 , nullable = true)
      */
     private $gender;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="source", type="string", length=255 , nullable = true)
+     * @ORM\Column(name="warningLabel", type="string", length=10 , nullable = true)
+     */
+    private $warningLabel;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="warningText", type="string", length=255 , nullable = true)
+     */
+    private $warningText;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="source", type="string", length=20 , nullable = true)
      */
     private $source;
 
@@ -1152,6 +1167,38 @@ class PurchaseVendorItem
     public function setStatus($status)
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWarningLabel()
+    {
+        return $this->warningLabel;
+    }
+
+    /**
+     * @param string $warningLabel
+     */
+    public function setWarningLabel($warningLabel)
+    {
+        $this->warningLabel = $warningLabel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWarningText()
+    {
+        return $this->warningText;
+    }
+
+    /**
+     * @param string $warningText
+     */
+    public function setWarningText($warningText)
+    {
+        $this->warningText = $warningText;
     }
 
 

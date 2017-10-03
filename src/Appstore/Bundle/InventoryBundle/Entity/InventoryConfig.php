@@ -81,6 +81,12 @@ class InventoryConfig
     protected $itemTypeGrouping;
 
 
+     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSizeGroup", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     */
+    protected $sizeGroup;
+
+
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\WareHouse", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
      */
@@ -1121,6 +1127,14 @@ class InventoryConfig
     public function setOnlineSalesPrinter($onlineSalesPrinter)
     {
         $this->onlineSalesPrinter = $onlineSalesPrinter;
+    }
+
+    /**
+     * @return ItemSizeGroup
+     */
+    public function getSizeGroup()
+    {
+        return $this->sizeGroup;
     }
 
 

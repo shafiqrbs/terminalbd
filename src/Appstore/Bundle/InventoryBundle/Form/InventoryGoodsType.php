@@ -108,6 +108,16 @@ class InventoryGoodsType extends AbstractType
                     return $qb;
                 },
             ))
+            ->add('warningText','text', array('attr'=>array('class'=>'m-wrap span12')))
+            ->add('warningLabel', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'span12'),
+                'empty_value' => '---Choose a warning label---',
+                'choices' => array(
+                    'Warranty' => 'Warranty',
+                    'Guarantee' => 'Guarantee',
+                ),
+            ))
             ->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
             ->add('file');
 

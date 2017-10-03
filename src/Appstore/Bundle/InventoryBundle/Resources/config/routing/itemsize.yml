@@ -40,3 +40,13 @@ itemsize_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:ItemSize:delete" }
     methods:  [POST, DELETE]
+
+itemsize_group:
+    path:     /size-group
+    defaults: { _controller: "InventoryBundle:ItemSize:sizeGroup" }
+
+
+itemsize_group_create:
+    path:     /size-group-create
+    defaults: { _controller: "InventoryBundle:ItemSize:sizeGroupCreate" }
+    methods:  POST

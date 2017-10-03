@@ -169,6 +169,7 @@ class PurchaseSimpleController extends Controller
             'action' => $this->generateUrl('inventory_purchasesimple_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
+                'id' => 'purchaseForm',
                 'class' => 'horizontal-form purchase',
                 'novalidate' => 'novalidate',
             )
@@ -191,7 +192,7 @@ class PurchaseSimpleController extends Controller
             'action' => $this->generateUrl('inventory_purchasesimple_create', array('purchase' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
-                'id' => 'purchaseForm',
+                'id' => 'purchaseItemForm',
                 'class' => 'horizontal-form purchase',
                 'novalidate' => 'novalidate',
             )

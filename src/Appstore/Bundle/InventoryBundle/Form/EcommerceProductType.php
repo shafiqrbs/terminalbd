@@ -40,7 +40,7 @@ class EcommerceProductType extends AbstractType
                 'required'    => true,
                 'empty_value' => '---Choose a master product---',
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Product',
-                'property' => 'name',
+                'property' => 'nameUnit',
                 'attr'=>array('class'=>'span12 '),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
@@ -63,7 +63,16 @@ class EcommerceProductType extends AbstractType
                         ->orderBy("p.name","ASC");
                 },
             ))
-
+            ->add('warningText','text', array('attr'=>array('class'=>'m-wrap span12')))
+            ->add('warningLabel', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'span12'),
+                'empty_value' => '---Choose a warning label---',
+                'choices' => array(
+                    'Warranty' => 'Warranty',
+                    'Guarantee' => 'Guarantee',
+                ),
+            ))
             ->add('size', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemSize',
@@ -102,7 +111,7 @@ class EcommerceProductType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add sales price'))
             )))
-            ->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
+            ->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>8)))
             ->add('tag', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',

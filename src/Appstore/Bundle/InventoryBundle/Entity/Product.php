@@ -506,6 +506,16 @@ class Product implements CodeAwareEntity
         return $this->stockItems;
     }
 
+    public function getNameUnit()
+    {
+        $unit='';
+        if($this->getProductUnit()){
+            $unit =' - '.$this->getProductUnit()->getName();
+        }
+        return $this->name.$unit;
+    }
+
+
 
 }
 

@@ -45,7 +45,6 @@
             <!-- BEGIN FORM-->
             {{ form_start(form) }}
             {{ form_row(form._token) }}
-
             <!--/row-->
             <div class="clearfix">&nbsp;</div>
             <div class="row-fluid">
@@ -54,13 +53,9 @@
                 </div>
             </div>
             <div class="clearfix">&nbsp;</div>
-            <div class="clearfix"></div>
-            <div class="clearfix">&nbsp;</div>
-
             <div class="form-actions portlet box grey">
                 <div class="pull-center">
                     <button type="submit" class="btn green"><i class="icon-ok"></i> Save</button>
-                    <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
                 </div>
             </div>
             {{ form_end(form) }}
@@ -81,7 +76,6 @@
     {{ parent() }}
 
     $('#productCategories').tree({
-
         onCheck: { node: 'expand' },
         onUncheck: { node: 'collapse' }
         }).on('change', 'input[type=checkbox]', function(){

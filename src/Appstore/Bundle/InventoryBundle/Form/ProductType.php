@@ -66,6 +66,7 @@ class ProductType extends AbstractType
                 'property' => 'nestedLabel',
                 'choices'=> $this->categoryChoiceList()
             ))
+            
             ->add('ageGroup', 'choice', array(
                 'required'    => false,
                 'multiple'    => true,

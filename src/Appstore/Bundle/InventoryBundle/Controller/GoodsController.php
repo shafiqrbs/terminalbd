@@ -174,7 +174,7 @@ class GoodsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $sizes = $em->getRepository('InventoryBundle:ItemSize')->getCategoryBaseSize($entity);
-        $colors = $em->getRepository('InventoryBundle:ItemColor')->findBy(array('inventoryConfig'=>$entity->getInventoryConfig(), 'status'=>1),array('name'=>'ASC'));
+        $colors = $em->getRepository('InventoryBundle:ItemColor')->findBy(array('status'=>1),array('name'=>'ASC'));
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PurchaseVendorItem entity.');

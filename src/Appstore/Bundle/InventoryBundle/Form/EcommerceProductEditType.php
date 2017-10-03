@@ -135,6 +135,17 @@ class EcommerceProductEditType extends AbstractType
                      return $qb;
                 },
             ))
+            ->add('warningText','text', array('attr'=>array('class'=>'m-wrap span12')))
+            ->add('warningLabel', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'span12'),
+                'empty_value' => '---Choose a warning label---',
+                'choices' => array(
+                    'Warranty' => 'Warranty',
+                    'Guarantee' => 'Guarantee',
+                ),
+            ))
+
             ->add('itemColors', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemColor',

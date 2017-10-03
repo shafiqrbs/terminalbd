@@ -64,6 +64,16 @@ class PurchaseVendorItemDetailsType extends AbstractType
 
                 },
             ))
+            ->add('warningText','text', array('attr'=>array('class'=>'m-wrap span12')))
+            ->add('warningLabel', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'span12'),
+                'empty_value' => '---Choose a warning label---',
+                'choices' => array(
+                    'Warranty' => 'Warranty',
+                    'Guarantee' => 'Guarantee',
+                ),
+            ))
             ->add('country', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\LocationBundle\Entity\Country',
