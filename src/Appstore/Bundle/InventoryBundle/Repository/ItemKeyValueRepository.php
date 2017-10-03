@@ -27,7 +27,7 @@ class ItemKeyValueRepository extends EntityRepository
                 if(!empty($metaId)){
                     $this->updateMetaAttribute($itemKeyValue,$data['metaKey'][$i],$data['metaValue'][$i]);
                 }else{
-                    if(isset($data['metaValue'][$i]) and !empty($data['metaValue'][$i]))
+                    if(isset($data['metaValue'][$i]))
                     {
                         $entity = new ItemKeyValue();
                         $entity->setMetaKey($data['metaKey'][$i]);
@@ -73,6 +73,24 @@ class ItemKeyValueRepository extends EntityRepository
             }
 
         }
+    }
+
+    public function setDivOrdering($data)
+    {
+        $i = 1;
+        $em = $this->_em;
+        $qb = $em->createQueryBuilder();
+        foreach ($data as $key => $value){
+            $qb->update('InventoryBundle:ItemKeyValue', 'mg')
+                ->set('mg.sorting', $i)
+                ->where('mg.id = :id')
+                ->setParameter('id', $key)
+                ->getQuery()
+                ->execute();
+            $i++;
+
+        }
+
     }
 
 }

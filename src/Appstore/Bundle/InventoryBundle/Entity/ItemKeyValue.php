@@ -44,6 +44,14 @@ class ItemKeyValue
     private $metaValue;
 
     /**
+     * @var Integer
+     *
+     * @ORM\Column(name="sorting", type="smallint", length=2)
+     */
+    private $sorting;
+
+
+    /**
      * Get id
      *
      * @return integer
@@ -99,6 +107,23 @@ class ItemKeyValue
     public function setMetaValue($metaValue)
     {
         $this->metaValue = $metaValue;
+    }
+
+   
+    /**
+     * @return int
+     */
+    public function getSorting()
+    {
+        return $this->sorting;
+    }
+
+    /**
+     * @param int $sorting
+     */
+    public function setSorting($sorting)
+    {
+        $this->sorting = $sorting;
     }
 
 

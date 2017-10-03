@@ -136,55 +136,45 @@
 
     {{ parent() }}
 
-    $(function() {
-        $('.sortable').sortable();
-        $('.handles').sortable({
-            handle: 'span'
-        });
-
+    $('.sortable').sortable({
+    handle: 'span'
     });
-    $( function() {
+    $( ".grid li" ).resizable({
 
-       $( ".grid li" ).resizable({
+        maxHeight: 750,
+        maxWidth: 920,
+        minHeight: 200,
+        minWidth: 250,
 
-            maxHeight: 750,
-            maxWidth: 920,
-            minHeight: 200,
-            minWidth: 250,
-
-            start : function(event,ui) {
-            startW = $(this).outerWidth();
-            startH = $(this).outerHeight();
+        start : function(event,ui) {
+        startW = $(this).outerWidth();
+        startH = $(this).outerHeight();
         },
 
         stop : function(event,ui) {
 
-            var parentwidth = $(".sortable").width(),
-            endW = Math.round(($(this).outerWidth() / parentwidth) * 100);
-            endH = $(this).outerHeight();
-            id = $(this).attr('data-id');
-            $.ajax({
-            url: '{{ path('appearancefeaturewidget_resizing') }}',
-            type: "POST",
-            data: { id : id,height:endH,width:endW },
-            }).done(function(data){
-            });
+        var parentwidth = $(".sortable").width(),
+        endW = Math.round(($(this).outerWidth() / parentwidth) * 100);
+        endH = $(this).outerHeight();
+        id = $(this).attr('data-id');
+        $.ajax({
+        url: '{{ path('appearancefeaturewidget_resizing') }}',
+        type: "POST",
+        data: { id : id,height:endH,width:endW },
+        }).done(function(data){
+        });
 
         }
     });
-    });
-
-    $('#serialize').click(function(){
+    $( "ol.sortable" ).on( "sortupdate", function( event, ui ) {
 
         var serialized = $(".sortable").sortable("serialize");
         $.ajax({
-            url: '{{ path('appearancefeaturewidget_sorted') }}',
-            type: "POST",
-            data: serialized
+        url: '{{ path('appearancefeaturewidget_sorted') }}',
+        type: "POST",
+        data: serialized
         }).done(function(data){
-            location.reload();
         });
 
     })
-
 {% endblock %}

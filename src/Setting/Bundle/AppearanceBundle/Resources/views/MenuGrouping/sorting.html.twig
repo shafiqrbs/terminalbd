@@ -63,11 +63,7 @@
 
                                 </div>
                                 <div class="form-actions portlet box grey">
-                                    <div class="pull-center">
-                                        <button type="submit" class="btn green" id="serialize"><i class="icon-ok"></i> Save</button>
-                                        <button type="submit" class="btn purple"><i class="icon-refresh"></i> Reset</button>
 
-                                    </div>
                                 </div>
                             </form>
                             <!-- END FORM-->
@@ -85,14 +81,14 @@
     {{ parent() }}
 
     NestSortable.init();
-    $('#serialize').click(function(){
+    $( "ol.sortable" ).on( "sortupdate", function( event, ui ) {
         serialized = $('ol.sortable').nestedSortable('serialize');
         $.ajax({
             url: '{{ path('menugrouping_sorted') }}',
             type: "POST",
             data: serialized
         }).done(function(data){
-            $('#sorting').submit();
+
         });
     })
 

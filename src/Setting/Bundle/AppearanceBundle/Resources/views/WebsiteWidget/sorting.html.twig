@@ -92,12 +92,8 @@
 
     {{ parent() }}
 
-    $(function() {
-        $('.sortable').sortable();
-        $('.handles').sortable({
-            handle: 'span'
-        });
-
+    $('.sortable').sortable({
+        handle: 'span'
     });
 
     $('#serialize').click(function(){

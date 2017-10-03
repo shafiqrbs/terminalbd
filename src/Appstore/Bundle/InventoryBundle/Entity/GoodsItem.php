@@ -5,6 +5,7 @@ namespace Appstore\Bundle\InventoryBundle\Entity;
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 
 /**
  * GoodsItem
@@ -43,6 +44,11 @@ class GoodsItem
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="goodsItem")
      */
     protected $colors;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="masterProducts" )
+     **/
+    private  $productUnit;
 
     /**
      * @var string
@@ -271,6 +277,22 @@ class GoodsItem
     public function setSalesQuantity($salesQuantity)
     {
         $this->salesQuantity = $salesQuantity;
+    }
+
+    /**
+     * @return ProductUnit
+     */
+    public function getProductUnit()
+    {
+        return $this->productUnit;
+    }
+
+    /**
+     * @param ProductUnit $productUnit
+     */
+    public function setProductUnit($productUnit)
+    {
+        $this->productUnit = $productUnit;
     }
 
 

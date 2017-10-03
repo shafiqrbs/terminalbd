@@ -75,6 +75,7 @@ class PurchaseVendorItem
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemKeyValue", mappedBy="purchaseVendorItem" , cascade={"remove"}  )
+     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private  $itemKeyValues;
 

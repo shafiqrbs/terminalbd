@@ -8,6 +8,7 @@ var InventoryItemListPage = function () {
         return true;
     }
 
+
     $(".select2Product").select2({
 
         placeholder: "Search product name",
@@ -275,9 +276,78 @@ var InventoryItemListPage = function () {
 }
 
 var InventoryItemEditPage = function (item) {
-    /**
-     * Created by rbs on 2/12/16.
-     */
+
+
+    $('#addSubProduct').click(function() {
+
+        var url = $(this).attr("data-url");
+        var size = $('#goods_item_size').val();
+        var unit = $('#goods_item_productUnit').val();
+        var colors = $('#goods_item_colors').val();
+        var salesPrice = $('#goods_item_purchasePrice').val();
+        var purchasePrice = $('#goods_item_salesPrice').val();
+        var quantity = $('#goods_item_quantity').val();
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data:'size='+size+"&colors="+colors+'&salesPrice='+salesPrice+'&purchasePrice='+purchasePrice+'&quantity='+quantity,
+                    success: function (response) {
+                        $('#loadSubItem').html(response);
+                        $('#goods_item_size, #goods_item_colors').find('option').prop("selected", false);
+                        $('#goods_item_purchasePrice,#goods_item_salesPrice,#goods_item_quantity').val('');
+                    }
+                })
+            }
+        });
+    });
+
+    $(document).on("click", ".removeAttr", function() {
+
+        var url = $(this).attr('data-url');
+        var id = $(this).attr('data-id');
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get(url, function( data ) {
+                    $('.removeAttr-'+id).hide();
+                });
+            }
+        });
+    });
+
+    $(document).on("click", ".removeProduct", function() {
+
+        var url = $(this).attr('data-url');
+        var id = $(this).attr('data-id');
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get(url, function( data ) {
+                    $('#removeProduct-'+id).hide();
+                });
+            }
+        });
+    });
+
+
+    $( "ol.singleSortable" ).on( "sortupdate", function( event, ui ) {
+
+        serialized = $('ol.singleSortable').nestedSortable('serialize');
+        $.ajax({
+            url: Routing.generate('inventory_goods_attribute_sorted', {id: item}),
+            type: "POST",
+            data: serialized
+        }).done(function(data){
+            
+        });
+    });
+    
     if (item > 0) {
 
         $("#pluploadUploader").pluploadQueue({

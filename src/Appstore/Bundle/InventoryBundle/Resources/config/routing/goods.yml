@@ -80,3 +80,10 @@ inventory_goods_subItem_delete:
 inventory_goods_itemkeyvalue_delete:
     path:     /{id}/item-key-value-delete
     defaults: { _controller: "InventoryBundle:Goods:keyValueDelete" }
+
+inventory_goods_attribute_sorted:
+    path:     /{id}/item-key-value-sorted
+    defaults: { _controller: "InventoryBundle:Goods:keyValueSorted" }
+    methods:  POST
+    options:
+           expose: true

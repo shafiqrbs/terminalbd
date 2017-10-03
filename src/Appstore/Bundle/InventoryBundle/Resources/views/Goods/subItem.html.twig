@@ -1,53 +1,16 @@
-{% if entity.goodsItems is not empty and entity.goodsItems is defined %}
-    {% for goodsItem in  entity.goodsItems %}
-        {% if goodsItem.masterItem != 1 %}
-            <div class="trash">
-                <div class="row-fluid  box blue">
-                    <div class="span10">
-                        <div class="row-fluid">
-                            <div class=" span4 ">
-                                <select class="span12" name="size">
-                                    <option value="">Select size/dimension/weight
-                                    </option>
-                                    {% for size in sizes %}
-                                        <option value="{{ size.id }}" {% if goodsItem.size is not empty and  goodsItem.size.id == size.id %} selected="selected" {% endif %}>{{ size.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="span2">
-                                    <select class="span12" multiple="multiple" name="color">
-                                        {% for color in colors %}
-                                            <option {% if goodsItem.colors.contains(color) %} selected {% endif %}   value="{{ color.id }}">{{ color.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                            </div>
-                           <div class="span2">
-                                <input type="number" id="" name="quantity"
-                                       class="m-wrap span12 tooltips" placeholder="quantity" value="{{ goodsItem.quantity }}"
-                                       data-original-title="Please add item quantity"
-                                       data-trigger="hover">
-                            </div>
-                            <div class="span2">
-                                <input type="number" id="" name="purchasePrice"
-                                       class="m-wrap span12 tooltips" placeholder="purchase" value="{{ goodsItem.purchasePrice }}"
-                                       data-original-title="Please add purchase price"
-                                       data-trigger="hover">
-                            </div>
-                            <div class="span2">
-                                <input type="number" id="" name="salesPrice"
-                                       class="m-wrap span12 tooltips" placeholder="sales" value="{{ goodsItem.salesPrice }}"
-                                       data-original-title="Please add sales price"
-                                       data-trigger="hover">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span2">
-                        <a href="javascript:" data-id="" data-url="" class="btn blue mini update"><i class="icon-save m-icon-white"></i></a>
-                        <a href="javascript:" data-id="{{ goodsItem.id }}" data-url="{{ path('inventory_goods_subItem_delete',{'id':goodsItem.id} ) }}" class="btn red mini  remove">
-                            <i class="icon-trash m-icon-white"></i></a>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-    {% endfor %}
-{% endif %}
+{% for subItem in entity.goodsItems  %}
+    <tr>
+        <td class="numeric" >{{ loop.index }}</td>
+        <td class="numeric" >{% if subItem.size is not empty %}{{ subItem.size.name }}{% endif %}</td>
+        <td class="numeric" >{% if subItem.productUnit is not empty %}{{ subItem.productUnit.name }}{% endif %}</td>
+        <td class="numeric" >{% if subItem.colors is not empty %}{% for color in subItem.colors %}{{ color.name }} {% if not loop.last %},{% endif %}{% endfor %}{% endif %}</td>
+        <td class="numeric" >{{ subItem.quantity }}</td>
+        <td class="numeric" >{{ subItem.purchasePrice|number_format() }}</td>
+        <td class="numeric" >{{ subItem.salesPrice|number_format() }}</td>
+        <td>
+            {% if  subItem.masterItem == 0 %}
+            <a class="btn red remove mini" data-url="{{ path('inventory_goods_subItem_delete',{'id':subItem.id}) }}"><i class="icon-trash"></i> Delete</a>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}

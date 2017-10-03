@@ -38,7 +38,7 @@ class FeatureWidgetController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption'=> $globalOption),array('sorting'=>'ASC'));
+        $entities = $em->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption'=> $globalOption,'widgetFor'=>'e-commerce'),array('sorting'=>'ASC'));
         return $this->render('SettingAppearanceBundle:FeatureWidget:sorting.html.twig', array(
             'entities' => $entities,
         ));

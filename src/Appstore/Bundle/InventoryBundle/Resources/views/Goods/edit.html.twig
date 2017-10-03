@@ -62,9 +62,9 @@
                         {{ form_start(form) }}
                         {{ form_row(form._token) }}
                         <div class="row-fluid">
-                            <div class="span4">
+                            <div class="span8">
                                 <div class="row-fluid">
-                                    <div class="span12">
+                                    <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="firstName">Master Product</label>
                                             <div class="controls">
@@ -73,34 +73,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName">Country</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.country) }}
-                                                {{ form_errors(form.country) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" for="firstName">Brand</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.brand) }}
-                                                {{ form_errors(form.brand) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="span4">
-                                <div class="row-fluid">
-                                    <div class="span12">
+                                    <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="name">Item name</label>
                                             <div class="controls">
@@ -114,6 +87,83 @@
                                     </div>
                                 </div>
                                 <div class="row-fluid">
+                                    <div class="span6">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Brand</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.brand) }}
+                                                {{ form_errors(form.brand) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span6">
+                                        <div class="control-group">
+                                            <label class="control-label" for="firstName">Country</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.country) }}
+                                                {{ form_errors(form.country) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Colors</label>
+                                            <div class="clearfix" style="height:5px"></div>
+                                            <div class="controls">
+                                                {{ form_widget(form.itemColors) }}
+                                                {{ form_errors(form.itemColors) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12 ">
+                                        <div class="control-group">
+                                            <label class="control-label" >Tags</label>
+                                            <div class="clearfix" style="height:5px"></div>
+                                            <div class="controls">
+                                                {{ form_widget(form.tag) }}
+                                                {{ form_errors(form.tag) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span4">
+                                        <div class="control-group">
+                                            <label class="control-label" >Warning Label</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.warningLabel) }}
+                                                {{ form_errors(form.warningLabel) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span8">
+                                        <div class="control-group">
+                                            <label class="control-label" >Warning Text</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.warningText) }}
+                                                {{ form_errors(form.warningText) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="control-group">
+                                            <label class="control-label" >Description</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.content) }}
+                                                {{ form_errors(form.content) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
                                             <label class="control-label" for="size">Size/Weight/Dimension</label>
@@ -124,6 +174,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
@@ -131,15 +182,13 @@
                                             <div class="controls">
                                                 <div class="input-icon left">
                                                     <i class="icon-font"></i>
-                                                    {{ form_widget(form.masterQuantity) }}
-                                                    {{ form_errors(form.masterQuantity) }}
+                                                    {{ form_widget(form.quantity) }}
+                                                    {{ form_errors(form.quantity) }}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="span4">
                                 <div class="row-fluid">
                                     <div class="span12">
                                         <div class="control-group">
@@ -182,51 +231,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <!--/span-->
-                        <div class="row-fluid">
-
-                            <div class="span8">
-
-                                    <div class="row-fluid">
-                                        <div class="span12 ">
-                                            <div class="control-group">
-                                                <label class="control-label" >Colors</label>
-                                                <div class="clearfix" style="height:5px"></div>
-                                                <div class="controls">
-                                                    {{ form_widget(form.itemColors) }}
-                                                    {{ form_errors(form.itemColors) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row-fluid">
-                                        <div class="span12 ">
-                                            <div class="control-group">
-                                                <label class="control-label" >Tags</label>
-                                                <div class="clearfix" style="height:5px"></div>
-                                                <div class="controls">
-                                                    {{ form_widget(form.tag) }}
-                                                    {{ form_errors(form.tag) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row-fluid">
-                                    <div class="span12">
-                                        <div class="control-group">
-                                            <label class="control-label" >Description</label>
-                                            <div class="controls">
-                                                {{ form_widget(form.content) }}
-                                                {{ form_errors(form.content) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span4">
                                 <div class="row-fluid">
                                     <div class="span12 ">
                                         <div class="control-group">
@@ -266,123 +270,93 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
+                        <!--/span-->
                         {% if entity.subProduct == 1 %}
                             <div class="form-actions portlet box blue">
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>Sub item</div>
-                                    <a href="javascript:" data-ref-id="1"
+                     {#               <a href="javascript:" data-ref-id="1"
                                        class="btn black pull-right mini addSubProduct"><i
-                                       class="icon-plus m-icon-white"></i>&nbsp;Add</a>
+                                       class="icon-plus m-icon-white"></i>&nbsp;Add</a>#}
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
                                 <div class="span12">
                                     {% if entity.source != 'inventory'  %}
-                                    <div class="clone-block trash" id="clone-sub-product">
-                                        <div class="row-fluid clone  box blue">
-                                            <div class="span10">
+                                            <div class="clone-block trash" id="clone-sub-product">
+                                                <div class="row-fluid clone  box blue">
+                                            <div class="span11">
                                                 <div class="row-fluid">
-                                                    <div class=" span4 ">
-                                                        <input type="hidden" id="" name="goodsItem[]" class="" value="">
-                                                        <select class="span12" id="subSize" name="subSize">
-                                                            <option value="">Select size/dimension/weight</option>
-                                                            {% for size in sizes %}
-                                                                <option value="{{ size.id }}">{{ size.name }}</option>
-                                                            {% endfor %}
-                                                        </select>
+                                                    <div class=" span2">
+                                                        {{ form_widget(goodsItemForm.size) }}
+                                                        {{ form_errors(goodsItemForm.size) }}
+                                                    </div>
+                                                     <div class=" span2">
+                                                        {{ form_widget(goodsItemForm.productUnit) }}
+                                                        {{ form_errors(goodsItemForm.productUnit) }}
                                                     </div>
                                                     <div class="span2">
-                                                            <select class="span12" multiple="multiple" id="subColor" name="subColor[]">
-                                                                {% for color in colors %}
-                                                                    <option value="{{ color.id }}">{{ color.name }}</option>
-                                                                {% endfor %}
-                                                            </select>
+                                                        {{ form_widget(goodsItemForm.colors) }}
+                                                        {{ form_errors(goodsItemForm.colors) }}
                                                     </div>
                                                     <div class="span2">
-                                                        <input type="number" id="subQuantity" name="subQuantity"
-                                                               class="m-wrap span12 tooltips" placeholder="quantity" value=""
-                                                               data-original-title="Please add item quantity"
-                                                               data-trigger="hover">
+                                                        {{ form_widget(goodsItemForm.quantity) }}
+                                                        {{ form_errors(goodsItemForm.quantity) }}
+
                                                     </div>
                                                     <div class="span2">
-                                                        <input type="number" id="subPurchasePrice" name="subPurchasePrice"
-                                                               class="m-wrap span12 tooltips" placeholder="purchase" value=""
-                                                               data-original-title="Please add purchase price"
-                                                               data-trigger="hover">
+                                                        {{ form_widget(goodsItemForm.purchasePrice) }}
+                                                        {{ form_errors(goodsItemForm.purchasePrice) }}
                                                     </div>
                                                     <div class="span2">
-                                                        <input type="number" id="subSalesPrice" name="subSalesPrice"
-                                                               class="m-wrap span12 tooltips" placeholder="sales" value=""
-                                                               data-original-title="Please add sales price"
-                                                               data-trigger="hover">
+                                                        {{ form_widget(goodsItemForm.salesPrice) }}
+                                                        {{ form_errors(goodsItemForm.salesPrice) }}
                                                     </div>
                                                </div>
                                             </div>
-                                            <div class="span2">
-                                                <a href="javascript:" data-id="" id="addSubProduct" data-url="{{ path('inventory_vendoritem_subproduct',{'id':entity.id} ) }}" class="btn blue mini"><i class="icon-save m-icon-white"></i>&nbsp;Save</a>
+                                            <div class="span1">
+                                                <a href="javascript:" data-id=""  id="addSubProduct" data-url="{{ path('inventory_vendoritem_subproduct',{'id':entity.id}) }}" class="btn blue mini"><i class="icon-save m-icon-white"></i>&nbsp;Save</a>
                                             </div>
                                         </div>
-                                    </div>
+                                            </div>
+                                          {% if entity.goodsItems is defined and  entity.goodsItems is not empty  %}
+                                                <table class="table table-bordered table-striped table-condensed flip-content ">
+                                                    <thead class="flip-content ">
+                                                    <tr class="head-green">
+                                                        <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
+                                                        <th class="numeric" >Size</th>
+                                                        <th class="numeric" >Unit</th>
+                                                        <th class="numeric" >Color</th>
+                                                        <th class="numeric" >Quantity</th>
+                                                        <th class="numeric" >Purchase price</th>
+                                                        <th class="numeric" >Sales price</th>
+                                                        <th class="numeric" >Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="loadSubItem">
+                                                    {% for subItem in entity.goodsItems  %}
+                                                        <tr id="removeProduct-{{ subItem.id }}">
+                                                            <td class="numeric" >{{ loop.index }}</td>
+                                                            <td class="numeric" >{% if subItem.size is not empty %}{{ subItem.size.name }}{% endif %}</td>
+                                                            <td class="numeric" >{% if subItem.productUnit is not empty %}{{ subItem.productUnit.name }}{% endif %}</td>
+                                                            <td class="numeric" >{% if subItem.colors is not empty %}{% for color in subItem.colors %}{{ color.name }} {% if not loop.last %},{% endif %}{% endfor %}{% endif %}</td>
+                                                            <td class="numeric" >{{ subItem.quantity }}</td>
+                                                            <td class="numeric" >{{ subItem.purchasePrice|number_format() }}</td>
+                                                            <td class="numeric" >{{ subItem.salesPrice|number_format() }}</td>
+                                                            <td>
+                                                                {% if  subItem.masterItem == 0 %}
+                                                                <a class="btn red removeProduct mini" data-url="{{ path('inventory_goods_subItem_delete',{'id':subItem.id}) }}"><i class="icon-trash"></i> Delete</a>
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                         {% endif %}
                                     {% endif %}
-                                    <div class="trash " id="subProductLoad">
-                                    {% if entity.goodsItems is not empty and entity.goodsItems is defined %}
-                                        {% for goodsItem in  entity.goodsItems %}
-                                            {% if goodsItem.masterItem != 1 %}
-                                                <div class="row-fluid  box blue">
-                                                    <div class="span10">
-                                                        <div class="row-fluid">
-                                                            <div class=" span4">
-                                                                <select class="span12" name="subSize{{ goodsItem.id }}" id="subSize{{ goodsItem.id }}" >
-                                                                    <option value="">Select size/dimension/weight
-                                                                    </option>
-                                                                    {% for size in sizes %}
-                                                                        <option value="{{ size.id }}" {% if goodsItem.size is not empty and  goodsItem.size.id == size.id %} selected="selected" {% endif %}>{{ size.name }}</option>
-                                                                    {% endfor %}
-                                                                </select>
-                                                            </div>
-
-                                                                <div class="span2">
-                                                                    <select class="span12" multiple="multiple" id="subColor{{ goodsItem.id }}" name="subColor{{ goodsItem.id }}">
-                                                                        {% for color in colors %}
-                                                                            <option {% if goodsItem.colors.contains(color) %} selected {% endif %}   value="{{ color.id }}">{{ color.name }}</option>
-                                                                        {% endfor %}
-                                                                    </select>
-                                                                </div>
-                                                                <div class="span2">
-                                                                <input type="number" id="subQuantity{{ goodsItem.id }}" name="subQuantity{{ goodsItem.id }}"
-                                                                       class="m-wrap span12 tooltips" placeholder="quantity" value="{{ goodsItem.quantity }}"
-                                                                       data-original-title="Please add item quantity"
-                                                                       data-trigger="hover">
-                                                            </div>
-                                                            <div class="span2">
-                                                                <input type="number" id="subPurchasePrice{{ goodsItem.id }}" name="subPurchasePrice{{ goodsItem.id }}"
-                                                                       class="m-wrap span12 tooltips" placeholder="purchase" value="{{ goodsItem.purchasePrice }}"
-                                                                       data-original-title="Please add purchase price"
-                                                                       data-trigger="hover">
-                                                            </div>
-                                                            <div class="span2">
-                                                                <input type="number" id="subSalesPrice{{ goodsItem.id }}" name="subSalesPrice{{ goodsItem.id }}"
-                                                                       class="m-wrap span12 tooltips" placeholder="sales" value="{{ goodsItem.salesPrice }}"
-                                                                       data-original-title="Please add sales price"
-                                                                       data-trigger="hover">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {% if entity.source != 'inventory'  %}
-                                                    <div class="span2">
-                                                        <a href="javascript:" data-id="{{ goodsItem.id }}" data-url="{{ path('inventory_goods_subItem_update',{'id':goodsItem.id} ) }}" class="btn blue mini updateSubProduct"><i class="icon-save m-icon-white"></i></a>
-                                                        <a href="javascript:" data-id="{{ goodsItem.id }}" data-url="{{ path('inventory_goods_subItem_delete',{'id':goodsItem.id} ) }}" class="btn red mini  remove"><i class="icon-trash m-icon-white"></i></a>
-                                                    </div>
-                                                    {% endif %}
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                    </div>
                                 </div>
                             </div>
                         {% endif %}
@@ -445,7 +419,7 @@
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i>Additional Field & Value</div>
-                                <a href="javascript:" class="btn green pull-right mini addmore"><i
+                                <a href="javascript:" class="btn yellow pull-right mini addmore"><i
                                             class="icon-plus"></i></a>
                             </div>
                         </div>
@@ -476,33 +450,45 @@
                             </div>
                         </div>
                         {% if  entity.itemKeyValues is defined and entity.itemKeyValues is not empty %}
-                            {% for meta in entity.itemKeyValues %}
-                                <div class="row-fluid trash" id="remove-{{ meta.id }}">
-                                    <div class="span3 ">
-                                        <div class="control-group">
-                                            <input type="hidden" name="metaId[]" value="{{ meta.id }}">
-                                            <input type="text" name="metaKey[]" class="m-wrap span12"
-                                                   placeholder="Label name" value="{{ meta.metaKey }}">
-                                        </div>
-                                    </div>
-                                    <div class="span8">
-                                        <div class="control-group">
-                                            <input type="text" name="metaValue[]" class="m-wrap span12"
-                                                   placeholder="Label value" value="{{ meta.metaValue }}">
-                                        </div>
-                                    </div>
-                                    <div class="span1">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <a href="javascript:" data-id="{{ meta.id }}"
-                                                   data-url="{{ path('inventory_goods_itemkeyvalue_delete',{'id':meta.id}) }}"
-                                                   class="btn red  remove mini"><i class="icon-trash"></i></a>
+                            <ol class="dd-list singleSortable ui-sortable">
+                                {% for meta in entity.itemKeyValues %}
+                                    <li style="display:list-item" class="dd-item dd3-item removeAttr-{{ meta.id }}" id="menuItem_{{ meta.id }}">
+                                        <div class="menuDiv">
+                                            <div>
+                                                <div data-id="{{ meta.id }}" class="itemTitle dd-handle dd3-handle"></div>
+                                                <div class="row-fluid trash" id="remove-{{ meta.id }}" style="margin-left: 30px!important">
+                                                    <div class="span3 ">
+                                                        <div class="control-group">
+                                                            <input type="hidden" name="metaId[]" value="{{ meta.id }}">
+                                                            <input type="text" name="metaKey[]" class="m-wrap span12"
+                                                                   placeholder="Label name" value="{{ meta.metaKey }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="span8">
+                                                        <div class="control-group">
+                                                            <input type="text" name="metaValue[]" class="m-wrap span12"
+                                                                   placeholder="Label value" value="{{ meta.metaValue }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="span1">
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                <a href="javascript:" data-id="{{ meta.id }}"
+                                                                   data-url="{{ path('inventory_goods_itemkeyvalue_delete',{'id':meta.id}) }}"
+                                                                   class="btn red  removeAttr mini"><i class="icon-trash"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
+                                    </li>
+                                {% endfor %}
+                            </ol>
                         {% endif %}
+
+
+
                         <div class="form-actions portlet box purple">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i>Item Gallery</div>
@@ -568,63 +554,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-
-    $(document).on("click", "#addSubProduct", function() {
-
-        var url = $(this).attr("data-url");
-        var size = $('#subSize').val();
-        var colors = $('#subColor').val();
-        var salesPrice = $('#subSalesPrice').val();
-        var purchasePrice = $('#subPurchasePrice').val();
-        var quantity = $('#subQuantity').val();
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data:'size='+size+"&colors="+colors+'&salesPrice='+salesPrice+'&purchasePrice='+purchasePrice+'&quantity='+quantity,
-            success: function (response) {
-                $('#subSize, #subColor').find('option').prop("selected", false);
-                $('#subSalesPrice,#subPurchasePrice,#subQuantity').val('');
-                $('#subProductLoad').html(response);
-                FormComponents.init();
-            }
-        })
-
-    });
-
-    $(document).on("click", ".updateSubProduct", function() {
-
-        var url = $(this).attr("data-url");
-        var subItem = $(this).attr("data-id");
-
-        var size = $('#subSize'+subItem).val();
-        var colors = $('#subColor'+subItem).val();
-        var salesPrice = $('#subSalesPrice'+subItem).val();
-        var purchasePrice = $('#subPurchasePrice'+subItem).val();
-        var quantity = $('#subQuantity'+subItem).val();
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data:'size='+size+"&colors="+colors+'&salesPrice='+salesPrice+'&purchasePrice='+purchasePrice+'&quantity='+quantity,
-            success: function (response) {
-            }
-        })
-
-    });
-
-
-    $(document).on("click", ".remove, .delete", function() {
-        var url = $(this).attr('data-url');
-        var id = $(this).attr('data-id');
-        $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-        $.get(url, function( data ) {
-        $('#remove-'+id).hide();
-        });
-        }
-        });
-    });
-
+    NestSortable.init();
+    $('body').addClass('page-sidebar-closed');
     InventoryItemEditPage({{ entity.id ? entity.id : 0 }});
 {% endblock %}

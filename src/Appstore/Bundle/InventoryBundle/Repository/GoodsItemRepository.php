@@ -80,10 +80,10 @@ class GoodsItemRepository extends EntityRepository
 
             $colors = isset($data['colors']) ? $data['colors'] :'';
             $sizeId = isset($data['size']) ? $data['size'] :'';
+            $unitId = isset($data['unit']) ? $data['unit'] :'';
             $quantity = isset($data['quantity']) ? $data['quantity'] :1;
             $purchasePrice = isset($data['purchasePrice']) ? $data['purchasePrice'] :1;
             $salesPrice = isset($data['salesPrice']) ? $data['salesPrice'] :1;
-
             if (isset($data['salesPrice']) and !empty($data['salesPrice']) ) {
 
                 //$updateSubProduct = array('size' => ,'colors'=> $colors , 'quantity' => $quantity,'purchasePrice' => $purchasePrice,'salesPrice' => $salesPrice);
@@ -94,13 +94,17 @@ class GoodsItemRepository extends EntityRepository
                 if(isset($colors) and !empty($colors)){
                     $colorIds = explode(',',$colors);
                     foreach ($colorIds as $color ){
-                        $colorObj[] = $this->_em->getRepository('InventoryBundle:ItemColor')->findOneBy(array('inventoryConfig' => $reEntity->getInventoryConfig(),'id'=> $color));
+                        $colorObj[] = $this->_em->getRepository('InventoryBundle:ItemColor')->find($color);
                     }
                     $goods->setColors($colorObj);
                 }
                 if(isset($sizeId) and !empty($sizeId)){
-                    $size = $this->_em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('inventoryConfig' => $reEntity->getInventoryConfig(),'id'=> $sizeId));
+                    $size = $this->_em->getRepository('InventoryBundle:ItemSize')->find($sizeId);
                     $goods->setSize($size);
+                }
+                if(isset($unitId) and !empty($unitId)){
+                    $unit = $this->_em->getRepository('SettingToolBundle:ProductUnit')->find($unitId);
+                    $goods->setProductUnit($unit);
                 }
                 $goods->setPurchaseVendorItem($reEntity);
                 $em->persist($goods);

@@ -144,7 +144,6 @@ class PurchaseVendorItemRepository extends EntityRepository
     private function getNextPrevious(PurchaseVendorItem $entity)
     {
 
-
         /**
          * @var PurchaseVendorItem $entity
          */
@@ -279,6 +278,21 @@ class PurchaseVendorItemRepository extends EntityRepository
 
     }
 
+    public function updateMasterProductQuantity(PurchaseVendorItem $entity)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.goodsItems','gi');
+        $qb->select('sum(gi.quantity) AS quantity');
+        $qb->where("e.id = :id");
+        $qb->setParameter('id', $entity->getId());
+        $sum = $qb->getQuery()->getSingleScalarResult();
+
+        $entity->setMasterQuantity($sum);
+        $this->_em->persist($entity);
+        $this->_em->flush($entity);
+
+    }
+
     public function findItemWithSearch($inventory,$data,$limit = 0)
     {
 
@@ -404,5 +418,7 @@ class PurchaseVendorItemRepository extends EntityRepository
         return $discountPrice;
 
     }
+
+
 
 }

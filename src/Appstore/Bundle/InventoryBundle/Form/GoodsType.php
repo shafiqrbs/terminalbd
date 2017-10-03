@@ -89,7 +89,7 @@ class GoodsType extends AbstractType
 
                 },
             ))
-            ->add('masterQuantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'quantity')))
+            ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'quantity')))
 
             ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'purchase price'),
                 'constraints' =>array(
