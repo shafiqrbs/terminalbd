@@ -33,6 +33,16 @@ class ProductUnit
     protected $masterProducts;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="productUnit")
+     */
+    protected $goodsItem;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="productUnit")
+     */
+    protected $purchaseVendorItem;
+
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="unit")
      */
     protected $stockItems;

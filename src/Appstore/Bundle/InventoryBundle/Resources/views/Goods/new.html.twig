@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="item-title">
-                    {{ entity.name }} Details
+                    Product Details
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -17,7 +17,7 @@
                         <a href="{{ path('inventory_goods') }}">Product</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#"> {{ entity.name }} Details</a></li>
+                    <li><a href="#"> Add new product details</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -153,12 +153,21 @@
                             </div>
                             <div class="span4">
                                 <div class="row-fluid">
-                                    <div class="span12">
+                                    <div class="span8">
                                         <div class="control-group">
                                             <label class="control-label" for="size">Size/Weight/Dimension</label>
                                             <div class="controls">
                                                 {{ form_widget(form.size) }}
                                                 {{ form_errors(form.size) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span4">
+                                        <div class="control-group">
+                                            <label class="control-label" for="productUnit">Unit</label>
+                                            <div class="controls">
+                                                {{ form_widget(form.productUnit) }}
+                                                {{ form_errors(form.productUnit) }}
                                             </div>
                                         </div>
                                     </div>
@@ -290,14 +299,8 @@
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
-{% block javascriptBlock %}
-    {{ parent() }}
-    {% javascripts
-    '@InventoryBundle/Resources/public/js/item.js' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock %}
 {% block documentready %}
     {{ parent() }}
+    $('body').addClass('page-sidebar-closed');
     InventoryItemEditPage({{ entity.id ? entity.id : 0 }});
 {% endblock %}

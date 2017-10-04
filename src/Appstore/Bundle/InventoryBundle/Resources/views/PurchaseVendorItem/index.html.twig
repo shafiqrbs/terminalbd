@@ -91,9 +91,7 @@
                                     <th class="numeric" >Reminig Qnt</th>
                                     <th class="numeric" >Purchase</th>
                                     <th class="numeric" >Sales</th>
-{#                                    <th class="numeric" >Web price</th>#}
                                     <th class="numeric" >Is web</th>
-                                    <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody id="purchaseentity" >
@@ -109,13 +107,7 @@
                                         <td class="numeric" >{{ entity.quantity }}</td>
                                         <td class="numeric" >{{ entity.stockReminigQnt }}</td>
                                         <td class="numeric" >{{ entity.purchasePrice }}</td>
-
                                         <td class="numeric" >{{ entity.salesPrice }}</td>
-{#
-                                        <td class="numeric" >
-                                            <a class="editable" href="#" data-name="WebPrice" data-type="text" data-url="{{ path('inventory_item_web_price') }}" data-pk="{{ entity.id }}" data-original-title="Enter web price">{{entity.webPrice}}</a>
-                                        </td>
-#}
                                         <td class="numeric" >
                                         {% if( entity.isWeb == 1) %}
                                                 <a href="{{ path('inventory_vendoritem_status', { 'id': entity.id}) }}" class="btn blue mini"><i class="icon-check"></i></a>
@@ -123,10 +115,7 @@
                                                 <a  href="{{ path('inventory_vendoritem_status', { 'id': entity.id}) }}" class="btn blue mini" ><i class="icon-check-empty"></i></a>
                                             {% endif %}
                                         </td>
-                                        <td class="numeric" >
-                                            <a href="{{ path('inventory_purchasevendoritem_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i>&nbsp;Edit</a>
-                                            <a href="{{ path('inventory_purchasevendoritem_show',{'id':entity.id}) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
-                                        </td>
+
                                     </tr>
 
                                     <tr id="show-{{ entity.id }}" class="showing-overview remove-vendor-item-{{ entity.id }}">

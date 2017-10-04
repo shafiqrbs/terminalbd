@@ -455,6 +455,9 @@ class GoodsController extends Controller
         $entity->setPromotion($copyEntity->getPromotion());
         $entity->setCountry($copyEntity->getCountry());
         $entity->setInventoryConfig($copyEntity->getInventoryConfig());
+        $entity->setProductUnit($copyEntity->getProductUnit());
+        $entity->setWarningLabel($copyEntity->getWarningLabel());
+        $entity->setWarningText($copyEntity->getWarningText());
         $entity->setIsWeb(true);
         $entity->setStatus(true);
         $entity->setSource('goods');

@@ -325,32 +325,41 @@
                             </div>
                         </div>
                         {% if  entity.itemKeyValues is defined and entity.itemKeyValues is not empty %}
-                            {% for meta in entity.itemKeyValues %}
-                                <div class="row-fluid trash" id="remove-{{ meta.id }}">
-                                    <div class="span3 ">
-                                        <div class="control-group">
-                                            <input type="hidden" name="metaId[]" value="{{ meta.id }}">
-                                            <input type="text" name="metaKey[]" class="m-wrap span12"
-                                                   placeholder="Label name" value="{{ meta.metaKey }}">
-                                        </div>
-                                    </div>
-                                    <div class="span8">
-                                        <div class="control-group">
-                                            <input type="text" name="metaValue[]" class="m-wrap span12"
-                                                   placeholder="Label value" value="{{ meta.metaValue }}">
-                                        </div>
-                                    </div>
-                                    <div class="span1">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <a href="javascript:" id="{{ meta.id }}"
-                                                   data-url="{{ path('inventory_goods_itemkeyvalue_delete',{'id':meta.id}) }}"
-                                                   class="btn red  remove mini"><i class="icon-trash"></i></a>
+                            <ol class="dd-list singleSortable ui-sortable">
+                                {% for meta in entity.itemKeyValues %}
+                                    <li style="display:list-item" class="dd-item dd3-item removeAttr-{{ meta.id }}" id="menuItem_{{ meta.id }}">
+                                        <div class="menuDiv">
+                                            <div>
+                                                <div data-id="{{ meta.id }}" class="itemTitle dd-handle dd3-handle"></div>
+                                                <div class="row-fluid trash" id="remove-{{ meta.id }}" style="margin-left: 30px!important">
+                                                    <div class="span3 ">
+                                                        <div class="control-group">
+                                                            <input type="hidden" name="metaId[]" value="{{ meta.id }}">
+                                                            <input type="text" name="metaKey[]" class="m-wrap span12"
+                                                                   placeholder="Label name" value="{{ meta.metaKey }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="span8">
+                                                        <div class="control-group">
+                                                            <input type="text" name="metaValue[]" class="m-wrap span12"
+                                                                   placeholder="Label value" value="{{ meta.metaValue }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="span1">
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                <a href="javascript:" data-id="{{ meta.id }}"
+                                                                   data-url="{{ path('inventory_goods_itemkeyvalue_delete',{'id':meta.id}) }}"
+                                                                   class="btn red  removeAttr mini"><i class="icon-trash"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
+                                    </li>
+                                {% endfor %}
+                            </ol>
                         {% endif %}
                         <div class="form-actions portlet box purple">
                             <div class="portlet-title">
@@ -417,48 +426,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-
-    $(document).on("click", "#addSubProduct", function() {
-
-        var url = $(this).attr("data-url");
-        var size = $('#subSize').val();
-        var colors = $('#subColor').val();
-        var salesPrice = $('#subSalesPrice').val();
-        var purchasePrice = $('#subPurchasePrice').val();
-        var quantity = $('#subQuantity').val();
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data:'size='+size+"&colors="+colors+'&salesPrice='+salesPrice+'&purchasePrice='+purchasePrice+'&quantity='+quantity,
-            success: function (response) {
-                $('#subSize, #subColor').find('option').prop("selected", false);
-                $('#subSalesPrice,#subPurchasePrice,#subQuantity').val('');
-                $('#subProductLoad').html(response);
-            }
-        })
-
-    });
-
-    $(document).on("click", ".updateSubProduct", function() {
-
-        var url = $(this).attr("data-url");
-        var subItem = $(this).attr("data-id");
-
-        var size = $('#subSize'+subItem).val();
-        var colors = $('#subColor'+subItem).val();
-        var salesPrice = $('#subSalesPrice'+subItem).val();
-        var purchasePrice = $('#subPurchasePrice'+subItem).val();
-        var quantity = $('#subQuantity'+subItem).val();
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data:'size='+size+"&colors="+colors+'&salesPrice='+salesPrice+'&purchasePrice='+purchasePrice+'&quantity='+quantity,
-            success: function (response) {
-            }
-        })
-
-    });
-
-
+    NestSortable.init();
+    $('body').addClass('page-sidebar-closed');
     InventoryItemEditPage({{ entity.id ? entity.id : 0 }});
 {% endblock %}

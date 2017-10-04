@@ -89,6 +89,18 @@ class EcommerceProductEditType extends AbstractType
 
                 },
             ))
+            ->add('productUnit', 'entity', array(
+                'required'    => true,
+                'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
+                'empty_value' => '-Choose a unit-',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12'),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('p')
+                        ->where("p.status = 1")
+                        ->orderBy("p.name","ASC");
+                },
+            ))
             ->add('quantity','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'quantity')))
 
             ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'purchase price'),

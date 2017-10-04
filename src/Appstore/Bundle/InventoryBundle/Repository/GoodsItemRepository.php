@@ -37,6 +37,9 @@ class GoodsItemRepository extends EntityRepository
             $goods->setColors($reEntity->getItemColors());
         }
         $goods->setPurchaseVendorItem($reEntity);
+        if(!empty($reEntity->getProductUnit())){
+            $goods->setProductUnit($reEntity->getProductUnit());
+        }
         $goods->setMasterItem(1);
         $em->persist($goods);
         $em->flush();
@@ -59,6 +62,9 @@ class GoodsItemRepository extends EntityRepository
             }
             if($reEntity->getItemColors()){
                 $goods->setColors($reEntity->getItemColors());
+            }
+            if(!empty($reEntity->getProductUnit())){
+                $goods->setProductUnit($reEntity->getProductUnit());
             }
             $goods->setPurchaseVendorItem($reEntity);
             $em->persist($goods);
@@ -176,7 +182,7 @@ class GoodsItemRepository extends EntityRepository
         $em = $this->_em;
         /** @var GoodsItem $item */
         foreach( $entity->getGoodsItems() as $item){
-            echo $discountPrice = $this->getCulculationDiscountPrice($item,$discount);
+            $discountPrice = $this->getCulculationDiscountPrice($item,$discount);
             $item->setDiscountPrice($discountPrice);
             $em->persist($item);
             $em->flush();

@@ -8,6 +8,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Product\Bundle\ProductBundle\Entity\Category;
+use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -118,6 +119,11 @@ class PurchaseVendorItem
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Promotion", inversedBy="purchaseVendorItems" )
      **/
     private  $promotion;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="purchaseVendorItem" )
+     **/
+    private  $productUnit;
 
     /**
      * @var string
@@ -1200,6 +1206,22 @@ class PurchaseVendorItem
     public function setWarningText($warningText)
     {
         $this->warningText = $warningText;
+    }
+
+    /**
+     * @return ProductUnit
+     */
+    public function getProductUnit()
+    {
+        return $this->productUnit;
+    }
+
+    /**
+     * @param mixed $productUnit
+     */
+    public function setProductUnit($productUnit)
+    {
+        $this->productUnit = $productUnit;
     }
 
 

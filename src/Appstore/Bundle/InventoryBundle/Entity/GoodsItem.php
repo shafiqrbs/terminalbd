@@ -46,7 +46,7 @@ class GoodsItem
     protected $colors;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="masterProducts" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="goodsItem" )
      **/
     private  $productUnit;
 

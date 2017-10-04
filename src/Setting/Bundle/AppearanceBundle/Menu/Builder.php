@@ -469,7 +469,10 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', 'icon-th-list');
 
         }
-
+        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
+            $menu['Inventory']->addChild('Purchase Item for Web', array('route' => 'inventory_purchasevendoritem'))
+                ->setAttribute('icon', 'icon-info-sign');
+        }
 
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_STOCK')) {
 
@@ -490,10 +493,6 @@ class Builder extends ContainerAware
                 ->setAttribute('icon', ' icon-trash');
         }
 
-        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
-            $menu['Inventory']['Manage Stock']->addChild('Vendor Item', array('route' => 'inventory_purchasevendoritem'))
-                ->setAttribute('icon', 'icon-info-sign');
-        }
 
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_BRANCH')) {
 
@@ -559,7 +558,6 @@ class Builder extends ContainerAware
             $menu['E-commerce']->addChild('Product', array('route' => ''))
                 ->setAttribute('icon', 'fa fa-bookmark')
                 ->setAttribute('dropdown', true);
-            $menu['E-commerce']['Product']->addChild('Add Product', array('route' => 'inventory_goods_new'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Product', array('route' => 'inventory_goods'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Promotion', array('route' => 'ecommerce_promotion'))->setAttribute('icon', 'icon-th-list');
             $menu['E-commerce']['Product']->addChild('Discount', array('route' => 'ecommerce_discount'))->setAttribute('icon', 'icon-th-list');

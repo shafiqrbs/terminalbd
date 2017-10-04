@@ -46,7 +46,7 @@ class ItemKeyValue
     /**
      * @var Integer
      *
-     * @ORM\Column(name="sorting", type="smallint", length=2)
+     * @ORM\Column(name="sorting", type="smallint", length=2, nullable = true)
      */
     private $sorting;
 
