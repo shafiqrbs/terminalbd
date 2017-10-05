@@ -2,6 +2,7 @@
 
 namespace Product\Bundle\ProductBundle\Controller;
 
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -82,9 +83,7 @@ class CategoryController extends Controller
     private function createCreateForm(Category $entity)
     {
 
-
         $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
-
         $form = $this->createForm(new CategoryType($em), $entity, array(
             'action' => $this->generateUrl('category_create', array('id' => $entity->getId())),
             'method' => 'POST',
@@ -124,12 +123,8 @@ class CategoryController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('ProductProductBundle:Category:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -148,12 +143,9 @@ class CategoryController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
         return $this->render('ProductProductBundle:Category:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -193,63 +185,49 @@ class CategoryController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
 
+            if( $entity->upload() and !empty($entity->getFile())){
+                $entity->removeUpload();
+            }
             $entity->upload();
             $em->flush();
             return $this->redirect($this->generateUrl('category_edit', array('id' => $id)));
         }
 
-        return $this->render('ProductProductBundle:Category:edit.html.twig', array(
+        return $this->render('ProductProductBundle:Category:new.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form'   => $editForm->createView(),
         ));
     }
     /**
      * Deletes a Category entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Category $entity)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Product entity.');
+        }
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('ProductProductBundle:Category')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Category entity.');
-            }
+        try {
 
             $em->remove($entity);
             $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
         }
-
         return $this->redirect($this->generateUrl('category'));
-    }
-
-    /**
-     * Creates a form to delete a Category entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('category_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-            ;
     }
 
     /**
@@ -282,4 +260,26 @@ class CategoryController extends Controller
         return $this->redirect($this->generateUrl('category_sorting'));
 
     }
+
+    /**
+     * Status a Page entity.
+     *
+     */
+    public function statusAction(Category $entity)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $status = $entity->getStatus();
+        if($status == 1){
+            $entity->setStatus(0);
+        } else{
+            $entity->setStatus(1);
+        }
+        $em->flush();
+        $this->get('session')->getFlashBag()->add(
+            'error',"Status has been changed successfully"
+        );
+        return $this->redirect($this->generateUrl('category'));
+    }
+
 }

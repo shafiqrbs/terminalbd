@@ -282,7 +282,7 @@
                                     <div class="row meta-caption"><div class="col-xs-12 col-md-12"><strong>Specification</strong></div></div>
                                         {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
                                             {% for attribute in product.itemMetaAttributes %}
-                                                <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ attribute.itemAttribute.name }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ attribute.value }}</div></div>
+                                                <div class="row meta-key-value"><div class="col-xs-3 col-md-3">{{ attribute.itemAttribute.name }}<span class="meta-key-clone">:</span></div><div class="col-xs-9 col-md-9 ">{{ attribute.value }}</div></div>
                                             {% endfor %}
                                         {% endif %}
                                         {% if  product.itemKeyValues is defined and product.itemKeyValues is not empty %}
@@ -292,7 +292,7 @@
                                                 {% elseif meta.metaKey is empty and meta.metaValue is not empty %}
                                                     <div class="row meta-value"><div class="col-xs-12 col-md-12">{{ meta.metaValue }}</div></div>
                                                 {% else %}
-                                                    <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ meta.metaKey }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ meta.metaValue  }}</div></div>
+                                                    <div class="row meta-key-value"><div class="col-xs-3 col-md-3">{{ meta.metaKey }}<span class="meta-key-clone">:</span></div><div class="col-xs-9 col-md-9 ">{{ meta.metaValue  }}</div></div>
                                                 {% endif %}
                                             {% endfor %}
                                         {% endif %}

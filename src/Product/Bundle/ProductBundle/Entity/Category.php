@@ -440,6 +440,13 @@ class Category
             : $this->getUploadDir().'/'.$this->imagePath;
     }
 
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
+    }
+
     protected function getUploadRootDir()
     {
         return __DIR__.'/../../../../../web/'.$this->getUploadDir();

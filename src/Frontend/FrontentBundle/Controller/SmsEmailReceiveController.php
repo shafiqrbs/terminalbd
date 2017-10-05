@@ -36,6 +36,25 @@ class SmsEmailReceiveController extends Controller
         return new Response($customer->getMobile());
     }
 
+    public function newsLetterReceiveAction(Request $request,$subdomain)
+    {
+        $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('status' => 1, 'subDomain' => $subdomain));
+        $data = $request->request->all();
+        if (isset($data['mobile'])){
+            $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['mobile']);
+            $data['mobile'] = $mobile;
+        }
+
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->insertContactCustomer($globalOption,$data);
+        if(!empty($globalOption->getEmail())) {
+
+            // $dispatcher = $this->container->get('event_dispatcher');
+            // $dispatcher->dispatch('setting_tool.post.email_receive', new ReceiveEmailEvent($globalOption , $customerInbox));
+
+        }
+        return new Response($customer['status']);
+    }
+
     public function emailReceiveAction(Request $request,$subdomain)
     {
 
@@ -50,8 +69,9 @@ class SmsEmailReceiveController extends Controller
         $customerInbox = $this->getDoctrine()->getRepository('DomainUserBundle:CustomerInbox')->sendCustomerMessage($customer,$data,'email');
 
         if(!empty($globalOption->getEmail())) {
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.email_receive', new ReceiveEmailEvent($globalOption , $customerInbox));
+
+           // $dispatcher = $this->container->get('event_dispatcher');
+           // $dispatcher->dispatch('setting_tool.post.email_receive', new ReceiveEmailEvent($globalOption , $customerInbox));
 
         }
         return new Response('success');

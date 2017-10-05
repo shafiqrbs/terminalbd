@@ -67,6 +67,7 @@ class EcommerceOrderSmsListener extends BaseSmsAwareListener
                     $status =  $this->gateway->send($customerMsg, $customerMobile);
                     $this->em->getRepository('SettingToolBundle:SmsSender')->insertEcommerceSenderSms($globalOption,$customerMobile,$customerMsg,'Order',$status);
                 }
+                
                 if(!empty($post->getGlobalOption()->getNotificationConfig()->getMobile())) {
                     $status = $this->gateway->send($administratorMsg, $administratorMobile);
                     $this->em->getRepository('SettingToolBundle:SmsSender')->insertAdminEcommerceSenderSms($globalOption,$administratorMobile,$customerMsg,'Order',$status);

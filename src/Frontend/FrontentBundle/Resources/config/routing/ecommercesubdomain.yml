@@ -15,6 +15,13 @@ webservice_email_receive:
     options:
             expose: true
 
+webservice_news_letter_receive:
+    path:     /receive/news-letter-sender
+    defaults: { _controller: FrontendBundle:SmsEmailReceive:newsLetterReceive}
+    methods:  POST
+    options:
+            expose: true
+
 webservice_captch:
     path:     /captcha/recheck
     defaults: { _controller: FrontendBundle:SmsEmailReceive:captcha}

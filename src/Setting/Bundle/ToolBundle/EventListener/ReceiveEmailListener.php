@@ -9,29 +9,30 @@
 namespace Setting\Bundle\ToolBundle\EventListener;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Setting\Bundle\ToolBundle\Event\ReceiveEmailEvent;
-use Setting\Bundle\ToolBundle\Event\SmsEmailEvent;
 use Setting\Bundle\ToolBundle\Service\EasyMailer;
 
 
 class ReceiveEmailListener extends BaseSmsAwareListener
 {
     /** @var EasyMailer */
+
     private $mailer;
 
-    public function setMailer(EasyMailer $mailer)
+    public function  __construct(EasyMailer $mailer)
     {
         $this->mailer = $mailer;
     }
 
-    private function receiveEmail(ReceiveEmailEvent $event)
+
+    public function receiveEmail(ReceiveEmailEvent $event)
     {
 
         /**
          * @var ReceiveEmailEvent $event
          */
 
-        $post = $event->getCustomerInbox();
-        $domain = $event->getGlobalOption();
+        $post       = $event->getCustomerInbox();
+        $domain     = $event->getGlobalOption();
 
         $to         = $domain->getEmail();
         $from       = $post->getCustomer()->getEmail();

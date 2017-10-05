@@ -22,6 +22,7 @@ class ReceiveSmsEvent extends Event
     protected $globalOption;
 
     /** @var  CustomerInbox */
+
     protected $customerInbox;
 
 

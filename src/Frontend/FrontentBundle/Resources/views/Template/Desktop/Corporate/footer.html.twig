@@ -10,16 +10,16 @@
             <div class="col-sm-8">
                 <h6 class="text-uppercase bottom-line">News Letter</h6>
                 <div class="social-tooltip">
-                    <form name="newsLetter" method="post" id="newsLetter" action="{{ path(globalOption.subDomain ~ '_webservice_email_receive') }}">
+                    <form name="newsLetter" method="post" id="newsLetter" action="{{ path(globalOption.subDomain ~ '_webservice_news_letter_receive') }}">
                         <div class="row">
                             <div class=" col-xs-6 col-md-6">
-                                <input class="form-control col-xs-12 col-md-12" type="text" name="name" id="name" data-toggle="tooltip" required="required" title="Enter your name" placeholder="Enter your name" aria-label="Text input with multiple buttons">
+                                <input class="form-control col-xs-12 col-md-12" type="text" name="mobile" id="mobile" data-toggle="tooltip" required="required" title="Enter your mobile no" placeholder="Enter your name" aria-label="Enter your mobile no">
                             </div>
                             <div class=" col-xs-6 col-md-6">
                                 <div class="input-group">
-                                    <input class="form-control" type="email" name="email" id="email" data-toggle="tooltip" required="required" title="Enter valid e-mail address" placeholder="Enter your e-mail" aria-label="Text input with multiple buttons">
+                                    <input class="form-control" type="email" name="email" id="email" data-toggle="tooltip" required="required" title="Enter valid e-mail address" placeholder="Enter your e-mail" aria-label="Enter valid e-mail address">
                                     <div class="input-group-btn"> <button type="button" class="btn btn-warning" aria-label="Help"><span data-toggle="tooltip" title="Are you interest new product & offer to send please your e-mail." class="glyphicon glyphicon-question-sign"></span></button>
-                                        <button type="button" class="btn btn-primary emailSender"><span class="glyphicon glyphicon-saved"></span></button>
+                                        <button type="submit" class="btn btn-primary emailSender"><span class="glyphicon glyphicon-saved"></span></button>
                                     </div>
                                 </div>
                             </div>

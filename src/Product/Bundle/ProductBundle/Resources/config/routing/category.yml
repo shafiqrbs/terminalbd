@@ -20,7 +20,7 @@ category_edit:
     defaults: { _controller: "ProductProductBundle:Category:edit" }
 
 category_status:
-    path:     /{id}/edit
+    path:     /{id}/status
     defaults: { _controller: "ProductProductBundle:Category:status" }
 
 category_sorting:
@@ -39,7 +39,6 @@ category_update:
 category_delete:
     path:     /{id}/delete
     defaults: { _controller: "ProductProductBundle:Category:delete" }
-    requirements: { _method: post|delete }
 
 category_feature:
    path:     /feature

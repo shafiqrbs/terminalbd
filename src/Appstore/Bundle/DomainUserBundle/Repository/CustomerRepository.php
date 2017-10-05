@@ -178,7 +178,7 @@ class CustomerRepository extends EntityRepository
         }
 
         if(!empty($entity)){
-            return $entity;
+            return $data = array('customer' => $entity, 'status'=>'invalid');
         }else {
             $entity = new Customer();
             if(isset($data['email']) && $data['email'] !=""){
@@ -192,6 +192,35 @@ class CustomerRepository extends EntityRepository
             }
             $entity->setGlobalOption($globalOption);
             $entity->setCustomerType('contact');
+            $em->persist($entity);
+            $em->flush();
+            return $data = array('customer' => $entity, 'status'=>'valid');
+        }
+
+    }
+
+    public function insertNewsLetterCustomer($globalOption,$data,$mobile='')
+    {
+        $em = $this->_em;
+        $entity  ='';
+
+        if(!empty($mobile)){
+            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption, 'mobile' => $mobile));
+        }elseif(isset($data['email']) && $data['email'] !=""){
+            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' =>$globalOption, 'email' => $data['email']));
+        }
+        if(!empty($entity)){
+            return $entity;
+        }else {
+            $entity = new Customer();
+            if(isset($data['email']) && $data['email'] !=""){
+                $entity->setEmail($data['email']);
+            }
+            if(!empty($mobile)) {
+                $entity->setMobile($mobile);
+            }
+            $entity->setGlobalOption($globalOption);
+            $entity->setCustomerType('news-letter');
             $em->persist($entity);
             $em->flush();
             return $entity;
