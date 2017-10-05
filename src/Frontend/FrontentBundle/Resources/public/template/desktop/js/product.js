@@ -162,8 +162,18 @@ $('.addCart').submit( function(e) {
         success: function(response){
             obj = JSON.parse(response);
             if(obj['process'] == 'invalid'){
+
                 alert('There is not enough product in stock at this moment');
+
             }else{
+
+                $('#product-confirm').notifyModal({
+                    duration : 3000,
+                    placement : 'center',
+                    overlay : true,
+                    type : 'notify',
+                    icon : false
+                });
                 $('.totalItem').html(obj['totalItem']);
                 $('.totalAmount').html(obj['cartTotal']);
                 $('.vsidebar .txt').html(obj['cartResult']);

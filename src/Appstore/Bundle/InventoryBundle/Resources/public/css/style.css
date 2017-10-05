@@ -112,10 +112,6 @@ input[class*="span"].m-wrap {
 }
 
 
-.select2-container .select2-choice {
-    height: 34px!important;
-}
-
 #message {
     line-height: 33px;
     text-align: right;

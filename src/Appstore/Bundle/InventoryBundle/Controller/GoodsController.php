@@ -72,7 +72,7 @@ class GoodsController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setInventoryConfig($inventory);
-            $entity->setQuantity($entity->getMasterQuantity());
+            $entity->setMasterQuantity($entity->getQuantity());
             $entity->setSource('goods');
             $entity->setSubProduct(true);
             $entity->setIsWeb(true);
@@ -439,7 +439,7 @@ class GoodsController extends Controller
         $entity->setMasterItem($copyEntity->getMasterItem());
         $entity->setName($copyEntity->getName());
         $entity->setWebName($copyEntity->getWebName());
-        $entity->setSubProduct(false);
+        $entity->setSubProduct(true);
         $entity->setQuantity($copyEntity->getQuantity());
         $entity->setMasterQuantity($copyEntity->getMasterQuantity());
         $entity->setPurchasePrice($copyEntity->getPurchasePrice());
@@ -466,7 +466,7 @@ class GoodsController extends Controller
      //   $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->insertCopyPurchaseItem($entity,$item);
         $this->getDoctrine()->getRepository('InventoryBundle:ItemMetaAttribute')->insertCopyProductAttribute($entity,$copyEntity);
         $this->getDoctrine()->getRepository('InventoryBundle:ItemKeyValue')->insertCopyItemKeyValue($entity,$copyEntity);
-        $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->initialInsertSubProduct($entity);
+        $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->insertCopySubProduct($entity,$copyEntity);
         return $this->redirect($this->generateUrl('inventory_goods_edit', array('id' => $entity->getId())));
 
 

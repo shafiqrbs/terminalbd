@@ -41,7 +41,7 @@ class EcommerceProductType extends AbstractType
                 'empty_value' => '---Choose a master product---',
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Product',
                 'property' => 'nameUnit',
-                'attr'=>array('class'=>'span12 '),
+                'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -81,8 +81,10 @@ class EcommerceProductType extends AbstractType
                 'attr'=>array('class'=>'span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
+                        ->join('p.sizeGroup','sg')
                         ->where("p.status = 1")
                         ->andWhere("p.isValid = 1")
+                        ->andWhere("sg.inventoryConfig=".$this->inventoryConfig->getId())
                         ->orderBy("p.name","ASC");
                 },
             ))

@@ -30,19 +30,53 @@ class GoodsItemRepository extends EntityRepository
         $goods->setSalesPrice($reEntity->getSalesPrice());
         $goods->setPurchasePrice($reEntity->getPurchasePrice());
         $goods->setQuantity($reEntity->getMasterQuantity());
+        $goods->setPurchaseVendorItem($reEntity);
         if($reEntity->getSize()){
             $goods->setSize($reEntity->getSize());
         }
         if($reEntity->getItemColors()){
             $goods->setColors($reEntity->getItemColors());
         }
-        $goods->setPurchaseVendorItem($reEntity);
         if(!empty($reEntity->getProductUnit())){
             $goods->setProductUnit($reEntity->getProductUnit());
         }
         $goods->setMasterItem(1);
         $em->persist($goods);
-        $em->flush();
+        $em->flush($goods);
+    }
+
+    public function insertCopySubProduct(PurchaseVendorItem $entity , PurchaseVendorItem $copyEntity)
+    {
+        $em = $this->_em;
+        $i=0;
+
+        if(!empty($copyEntity->getGoodsItems())){
+
+            /* @var GoodsItem $goodsItem */
+            foreach ($copyEntity->getGoodsItems() as $goodsItem) {
+
+
+                $goods = new GoodsItem();
+                $goods->setSalesPrice($goodsItem->getSalesPrice());
+                $goods->setPurchasePrice($goodsItem->getPurchasePrice());
+                $goods->setQuantity($goodsItem->getQuantity());
+                $goods->setPurchaseVendorItem($entity);
+                if($goodsItem->getSize()){
+                    $goods->setSize($goodsItem->getSize());
+                }
+                if($goodsItem->getColors()){
+                    $goods->setColors($goodsItem->getColors());
+                }
+                if(!empty($goodsItem->getProductUnit())){
+                    $goods->setProductUnit($goodsItem->getProductUnit());
+                }
+                $goods->setMasterItem($goodsItem->getMasterItem());
+                $em->persist($goods);
+                $em->flush($goods);
+
+            }
+
+        }
     }
 
 
@@ -84,12 +118,14 @@ class GoodsItemRepository extends EntityRepository
 
         if($reEntity->getSubProduct() == 1 and isset($data['salesPrice']) ) {
 
-            $colors = isset($data['colors']) ? $data['colors'] :'';
+            $colors = !empty($data['colors']) ? $data['colors'] :'';
             $sizeId = isset($data['size']) ? $data['size'] :'';
             $unitId = isset($data['unit']) ? $data['unit'] :'';
             $quantity = isset($data['quantity']) ? $data['quantity'] :1;
             $purchasePrice = isset($data['purchasePrice']) ? $data['purchasePrice'] :1;
             $salesPrice = isset($data['salesPrice']) ? $data['salesPrice'] :1;
+
+
             if (isset($data['salesPrice']) and !empty($data['salesPrice']) ) {
 
                 //$updateSubProduct = array('size' => ,'colors'=> $colors , 'quantity' => $quantity,'purchasePrice' => $purchasePrice,'salesPrice' => $salesPrice);
@@ -97,7 +133,7 @@ class GoodsItemRepository extends EntityRepository
                 $goods->setSalesPrice($salesPrice);
                 $goods->setPurchasePrice($purchasePrice);
                 $goods->setQuantity($quantity);
-                if(isset($colors) and !empty($colors)){
+                if($colors != 'null' and !empty($colors)){
                     $colorIds = explode(',',$colors);
                     foreach ($colorIds as $color ){
                         $colorObj[] = $this->_em->getRepository('InventoryBundle:ItemColor')->find($color);

@@ -1,5 +1,11 @@
 #products .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th{
 }
+
+.modal-lg{
+    width: 1024px;
+}
+
+
 .list-table{
     width: 100%;
 }
@@ -481,3 +487,39 @@ strike{
     width: 50px;
     opacity: 0;
 }
+
+.meta-caption{
+    background-color: #E5E7E7;
+    height: 35px;
+    line-height: 35px;
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 15px;
+}
+.meta-label{
+    background-color: #EEF0F0;
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    color: #000;
+    text-transform: capitalize!important;
+}
+.meta-value{
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+.meta-key-clone{
+    float: right;
+    font-weight: bold;
+}
+.meta-key-value{
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+.meta-key-value:nth-of-type(even){
+    background-color: #F6F7F7;
+}
+.meta-key-value:nth-of-type(odd){
+    background-color: #F9FAFA;
+}
+

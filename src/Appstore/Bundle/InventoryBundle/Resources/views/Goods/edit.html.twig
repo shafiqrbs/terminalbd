@@ -185,22 +185,7 @@
                                 </div>
 
                                 <div class="row-fluid">
-                                    <div class="span8">
-                                        <div class="control-group">
-                                            <label class="control-label" for="quantity">Quantity<span class="required">*</span></label>
-                                            <div class="controls">
-                                                <div class="input-icon left">
-                                                    <i class="icon-sort-by-order"></i>
-                                                    {{ form_widget(form.quantity) }}
-                                                    {{ form_errors(form.quantity) }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span8">
+                                    <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="purchasePrice">Purchase Price<span class="required">*</span></label>
                                             <div class="controls">
@@ -212,9 +197,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span8">
+                                    <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="overHeadCost">Overhead Cost</label>
                                             <div class="controls">
@@ -228,7 +211,7 @@
                                     </div>
                                 </div>
                                 <div class="row-fluid">
-                                    <div class="span8">
+                                    <div class="span6">
                                         <div class="control-group">
                                             <label class="control-label" for="salesPrice">Sales Price<span class="required">*</span></label>
                                             <div class="controls">
@@ -236,6 +219,18 @@
                                                     <i class="icon-money"></i>
                                                     {{ form_widget(form.salesPrice) }}
                                                     {{ form_errors(form.salesPrice) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span6">
+                                        <div class="control-group">
+                                            <label class="control-label" for="quantity">Quantity<span class="required">*</span></label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-sort-by-order"></i>
+                                                    {{ form_widget(form.quantity) }}
+                                                    {{ form_errors(form.quantity) }}
                                                 </div>
                                             </div>
                                         </div>
@@ -328,7 +323,7 @@
                                                </div>
                                             </div>
                                             <div class="span1">
-                                                <a href="javascript:" data-id=""  id="addSubProduct" data-url="{{ path('inventory_vendoritem_subproduct',{'id':entity.id}) }}" class="btn blue mini"><i class="icon-save m-icon-white"></i>&nbsp;Save</a>
+                                                <a href="javascript:" data-id=""  id="addSubProduct" data-url="{{ path('inventory_vendoritem_subproduct',{'id':entity.id}) }}" class="btn yellow">Save</a>
                                             </div>
                                         </div>
                                             </div>
@@ -429,8 +424,7 @@
                         <div class="form-actions portlet box blue">
                             <div class="portlet-title">
                                 <div class="caption"><i class="icon-reorder"></i>Additional Field & Value</div>
-                                <a href="javascript:" class="btn yellow pull-right mini addmore"><i
-                                            class="icon-plus"></i></a>
+                                <a href="javascript:" class="btn yellow pull-right addmore"><i class="icon-plus"></i> Add More</a>
                             </div>
                         </div>
                         <div class="clearfix">&nbsp;</div>

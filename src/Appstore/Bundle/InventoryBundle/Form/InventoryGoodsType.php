@@ -40,8 +40,8 @@ class InventoryGoodsType extends AbstractType
                 'required'    => true,
                 'empty_value' => '---Choose a master product---',
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Product',
-                'property' => 'name',
-                'attr'=>array('class'=>'span12 '),
+                'property' => 'nameUnit',
+                'attr'=>array('class'=>'span12 select2 '),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),

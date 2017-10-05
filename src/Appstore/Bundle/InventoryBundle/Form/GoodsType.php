@@ -40,7 +40,7 @@ class GoodsType extends AbstractType
                 'required'    => true,
                 'empty_value' => '---Choose a master product---',
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Product',
-                'property' => 'name',
+                'property' => 'nameUnit',
                 'attr'=>array('class'=>'span12 '),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
@@ -72,8 +72,10 @@ class GoodsType extends AbstractType
                 'attr'=>array('class'=>'span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
+                        ->join('p.sizeGroup','sg')
                         ->where("p.status = 1")
                         ->andWhere("p.isValid = 1")
+                        ->andWhere("sg.inventoryConfig=".$this->inventoryConfig->getId())
                         ->orderBy("p.name","ASC");
                 },
             ))

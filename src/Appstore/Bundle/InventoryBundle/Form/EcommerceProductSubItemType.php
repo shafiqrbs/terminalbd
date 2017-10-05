@@ -37,8 +37,8 @@ class EcommerceProductSubItemType extends AbstractType
         $builder
 
             ->add('quantity','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Add product quantity' ,'hover'=>'trigger',' data-original-title'=>'Add product quantity')))
-            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Add purchase name' ,'hover'=>'trigger',' data-original-title'=>'Add purchase price')))
-            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Web sales name','hover'=>'trigger',' data-original-title'=>'Add sales price')))
+            ->add('purchasePrice','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Add purchase price' ,'hover'=>'trigger',' data-original-title'=>'Add purchase price')))
+            ->add('salesPrice','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Add sales price','hover'=>'trigger',' data-original-title'=>'Add sales price')))
             ->add('size', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemSize',

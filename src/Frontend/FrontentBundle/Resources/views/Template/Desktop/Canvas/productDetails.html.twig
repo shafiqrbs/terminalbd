@@ -233,7 +233,7 @@
                                                         <span class="glyphicon glyphicon-minus"></span>
                                                     </button>
                                                 </span>
-                                                <input readonly="readonly" type="text" name="quantity" id="quantiy" class="form-control input-lg input-number" style="width:135px; text-align: center; font-weight: bold" value="1" min="1" max="{{ product.masterQuantity }}">
+                                                <input readonly="readonly" type="text" name="quantity" id="quantiy" class="form-control input-lg input-number" style="width:100%; text-align: center; font-weight: bold" value="1" min="1" max="{{ product.masterQuantity }}">
                                                 <span class="input-group-btn ">
                                                       <button type="button" class="btn btn-lg btn-success btn-number" data-type="plus" data-field="quantity">
                                                           <span class="glyphicon glyphicon-plus"></span>
@@ -269,30 +269,34 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bhoechie-tab">
                                 <!-- flight section -->
                                 <div class="bhoechie-tab-content active">
-                                    <h3>Product information</h3>
-                                    <hr/>
-                                    <p>
-                                    {% if product.content is not empty %}
-                                        {{ product.content|raw }}
-                                    {% elseif product.masterItem is not empty %}
-                                        {{ product.masterItem.content|raw }}
-                                    {% endif %}
-                                    </p>
-                                    <table class="list-table">
-                                        {% if product.itemMetaAttributes is not empty or product.itemKeyValues is not empty %}<tr><td colspan="2" ><h4>Specification</h4></td></tr>{% endif %}
-                                        {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
-                                            {%  for attribute in product.itemMetaAttributes %}
-                                                {% if attribute.value is not empty %}
-                                                    <tr><td>{{ attribute.itemAttribute.name }}</td><td class="left-text">&nbsp;:&nbsp;{{ attribute.value }}</td></tr>
-                                                {% endif %}
+                                    <div class="row meta-value">
+                                        <div class="col-xs-12 col-md-12">
+                                            {% if product.content is not empty %}
+                                                {{ product.content|raw }}
+                                            {% elseif product.masterItem is not empty %}
+                                                {{ product.masterItem.content|raw }}
+                                            {% endif  %}
+                                        </div>
+                                    </div>
+                                    {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty or  product.itemKeyValues is defined and product.itemKeyValues is not empty  %}
+                                    <div class="row meta-caption"><div class="col-xs-12 col-md-12"><strong>Specification</strong></div></div>
+                                    {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
+                                        {% if attribute.value is not empty %}
+                                            <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ attribute.itemAttribute.name }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ attribute.value }}</div></div>
                                             {% endfor %}
                                         {% endif %}
                                         {% if  product.itemKeyValues is defined and product.itemKeyValues is not empty %}
                                             {% for meta in product.itemKeyValues %}
-                                                <tr><td>{{ meta.metaKey }}</td><td class="left-text">&nbsp;:&nbsp;{{ meta.metaValue  }}</td></tr>
+                                                {% if meta.metaKey is not empty and meta.metaValue is empty %}
+                                                    <div class="row meta-label"><div class="col-xs-12 col-md-12">{{ meta.metaKey|capitalize }}</div></div>
+                                                {% elseif meta.metaKey is empty and meta.metaValue is not empty %}
+                                                    <div class="row meta-value"><div class="col-xs-12 col-md-12">{{ meta.metaValue }}</div></div>
+                                                {% else %}
+                                                    <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ meta.metaKey }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ meta.metaValue  }}</div></div>
+                                                {% endif %}
                                             {% endfor %}
                                         {% endif %}
-                                    </table>
+                                    {% endif %}
                                 </div>
                                 <!-- hotel search -->
                                 <div class="bhoechie-tab-content">

@@ -20,33 +20,33 @@ class ItemKeyValueRepository extends EntityRepository
         $em = $this->_em;
         $i=0;
 
-        if(isset($data['metaValue'])){
-            foreach ($data['metaValue'] as $value) {
+        if(isset($data['metaKey']) OR isset($data['metaValue']) ){
+            foreach ($data['metaKey'] as $value) {
                 $metaId = isset($data['metaId'][$i]) ? $data['metaId'][$i] : 0 ;
                 $itemKeyValue = $this->_em->getRepository('InventoryBundle:ItemKeyValue')->findOneBy(array('purchaseVendorItem'=>$reEntity,'id' => $metaId));
-                if(!empty($metaId)){
+                if(!empty($metaId) and !empty($itemKeyValue)){
                     $this->updateMetaAttribute($itemKeyValue,$data['metaKey'][$i],$data['metaValue'][$i]);
                 }else{
-                    if(isset($data['metaValue'][$i]))
+                    if(!empty($data['metaKey'][$i]) OR !empty($data['metaValue'][$i]))
                     {
                         $entity = new ItemKeyValue();
                         $entity->setMetaKey($data['metaKey'][$i]);
                         $entity->setMetaValue($data['metaValue'][$i]);
                         $entity->setPurchaseVendorItem($reEntity);
                         $em->persist($entity);
+                        $em->flush($entity);
                     }
 
                 }
-
                 $i++;
             }
-            $em->flush();
+
         }
 
 
     }
 
-    public function updateMetaAttribute(ItemKeyValue $itemKeyValue,$key,$value)
+    public function updateMetaAttribute(ItemKeyValue $itemKeyValue,$key,$value ='')
     {
             $em = $this->_em;
             $itemKeyValue->setMetaKey($key);
@@ -66,6 +66,7 @@ class ItemKeyValueRepository extends EntityRepository
                 $entity = new ItemKeyValue();
                 $entity->setMetaKey($attribute->getMetaKey());
                 $entity->setMetaValue($attribute->getMetaValue());
+                $entity->setSorting($attribute->getSorting());
                 $entity->setPurchaseVendorItem($purchaseVendorItem);
                 $em->persist($entity);
                 $em->flush($entity);
