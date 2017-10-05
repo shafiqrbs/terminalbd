@@ -280,9 +280,9 @@
                                     </div>
                                     {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty or  product.itemKeyValues is defined and product.itemKeyValues is not empty  %}
                                     <div class="row meta-caption"><div class="col-xs-12 col-md-12"><strong>Specification</strong></div></div>
-                                    {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
-                                        {% if attribute.value is not empty %}
-                                            <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ attribute.itemAttribute.name }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ attribute.value }}</div></div>
+                                        {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
+                                            {% for attribute in product.itemMetaAttributes %}
+                                                <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ attribute.itemAttribute.name }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ attribute.value }}</div></div>
                                             {% endfor %}
                                         {% endif %}
                                         {% if  product.itemKeyValues is defined and product.itemKeyValues is not empty %}
