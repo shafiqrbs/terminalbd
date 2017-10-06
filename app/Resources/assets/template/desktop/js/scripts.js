@@ -216,13 +216,24 @@ $(document).ready(function(){
                     data        : $('#newsLetter').serialize(),
                     success: function(response) {
                         $("form").trigger("reset");
-                        $('#email-confirm').notifyModal({
-                            duration : 3000,
-                            placement : 'center',
-                            overlay : true,
-                            type : 'notify',
-                            icon : false
-                        });
+                        if(response == 'valid'){
+                            $('#email-confirm').notifyModal({
+                                duration : 10000,
+                                placement : 'center',
+                                overlay : true,
+                                type : 'notify',
+                                icon : false
+                            });
+                        }else{
+                            $('#email-invalid').notifyModal({
+                                duration : 10000,
+                                placement : 'center',
+                                overlay : true,
+                                type : 'notify',
+                                icon : false
+                            });
+                        }
+
                     },
 
                 });

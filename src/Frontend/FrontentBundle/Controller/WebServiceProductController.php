@@ -530,6 +530,60 @@ class WebServiceProductController extends Controller
     }
 
 
+    public function productAddSingleCartAction(Request $request , $subdomain , PurchaseVendorItem $product)
+    {
+
+        $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
+
+        /* @var GoodsItem $subitem */
+
+        $subitem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=>$product,'masterItem' => 1));
+        $quantity = $subitem->getQuantity();
+
+        $color = $request->request->get('color');
+        $productImg = $request->request->get('productImg');
+
+        $color = !empty($color) ? $color : 0;
+        if ($color > 0) {
+            $colorName = $this->getDoctrine()->getRepository('InventoryBundle:ItemColor')->find($color)->getName();
+        } else {
+            $colorName = '';
+        }
+        /** @var GlobalOption $globalOption */
+
+        $showMaster = $globalOption->getEcommerceConfig()->getShowMasterName();
+        $salesPrice = $subitem->getDiscountPrice() == null ?  $subitem->getSalesPrice() : $subitem->getDiscountPrice();
+
+        $masterItem = !empty($product->getMasterItem()) and $showMaster == 1 ? $product->getMasterItem()->getName() . '-' : '';
+        if (!empty($subitem) and $subitem->getQuantity() >= $quantity) {
+            $data = array(
+                'id' => $subitem->getId(),
+                'name' => $masterItem . ' ' . $product->getWebName(),
+                'brand' => !empty($product->getBrand()) ? $product->getBrand()->getName() : '',
+                'category' => !empty($product->getMasterItem()->getCategory()) ? $product->getMasterItem()->getCategory()->getName() : '',
+                'size' => !empty($subitem->getSize()) ? $subitem->getSize()->getName() : 0,
+                'color' => $colorName,
+                'colorId' => $color,
+                'price' => $salesPrice,
+                'quantity' => $quantity,
+                'productImg' => $productImg
+            );
+            $cart->insert($data);
+            $cartTotal = (string)$cart->total();
+            $totalItems = (string)$cart->total_items();
+            $cartResult = $cartTotal.'('.$totalItems.')';
+            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems)));
+        }else{
+            $array =(json_encode(array('process'=>'invalid')));
+        }
+        echo $array;
+        exit;
+
+    }
+
+
     public function productCartDetailsAction(Request $request, $subdomain){
 
 

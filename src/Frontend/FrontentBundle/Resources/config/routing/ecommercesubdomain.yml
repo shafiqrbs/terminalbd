@@ -45,6 +45,11 @@ webservice_product_cart:
     options:
             expose: true
 
+webservice_product_single_cart:
+    path:     /single-cart/{product}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productAddSingleCart }
+
+
 webservice_product_cart_update:
     path:     /cart/product-update/{cartid}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productUpdateCart }

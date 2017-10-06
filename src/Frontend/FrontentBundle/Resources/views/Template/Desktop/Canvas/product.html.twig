@@ -90,7 +90,7 @@
                         <div  class="product-item col-xs-{{ globalOption.ecommerceConfig.perColumn }} col-lg-{{ globalOption.ecommerceConfig.perColumn }}">
                             <div class="product-canvas">
                                 <a data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  class="btn btn-info product-preview product-eye"><span class="glyphicon glyphicon-eye-open"></span></a>
-                                <a class="btn btn-warning product-buy" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                                <a class="btn btn-warning product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="glyphicon glyphicon-shopping-cart"></span></a>
                                 <a class="img-card" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
                                     <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
                                 </a>
@@ -160,6 +160,11 @@
     <div class="clearfix"></div>
     <!-- Modal -->
 </section>
+ <style>
+     .shopping-cart{
+         width: 110px!important;
+     }
+ </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -183,4 +188,36 @@
 {% block documentready %}
     {{ parent() }}
     sliderPageOwl(4);
+    $(document).on( "click", ".product-buy", function(e){
+
+    var url = $(this).attr("data-url");
+    var dataId = $(this).attr("data-id");
+
+    $('#confirm-content').confirmModal({
+    topOffset: 0,
+    top: '25%',
+    onOkBut: function(event, el) {
+    $('.loader-curtain').addClass('is-active').fadeIn(3000);
+    $.get(url).done(function(response) {
+    obj = JSON.parse(response);
+    $('#buy-'+dataId).addClass('shopping-cart').attr("disabled", true).html('<i class="fa fa-shopping-cart"></i> 1 in Basket');
+    $('.totalItem').html(obj['totalItem']);
+    $('.totalAmount').html(obj['cartTotal']);
+    $('.dropdown-cart').html(obj['salesItem']);
+    $('.vsidebar .txt').html(obj['cartResult']);
+    $('.loader-curtain').fadeOut(3000);
+    }).always(function() {
+        $('#product-confirm').notifyModal({
+        duration : 10000,
+        placement : 'center',
+        overlay : true,
+        type : 'notify',
+        icon : false
+        });
+    });
+    }
+    });
+    });
+
+
 {% endblock %}

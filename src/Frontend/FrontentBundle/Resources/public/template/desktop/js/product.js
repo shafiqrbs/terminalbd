@@ -162,18 +162,8 @@ $('.addCart').submit( function(e) {
         success: function(response){
             obj = JSON.parse(response);
             if(obj['process'] == 'invalid'){
-
                 alert('There is not enough product in stock at this moment');
-
             }else{
-
-                $('#product-confirm').notifyModal({
-                    duration : 3000,
-                    placement : 'center',
-                    overlay : true,
-                    type : 'notify',
-                    icon : false
-                });
                 $('.totalItem').html(obj['totalItem']);
                 $('.totalAmount').html(obj['cartTotal']);
                 $('.vsidebar .txt').html(obj['cartResult']);
@@ -200,11 +190,17 @@ $(document).on( "click", ".cartSubmit", function(e){
 
     var url = $('.cartSubmit').attr("data-url");
     var data = $('.addCart').serialize();
+    var qnt = $('#quantity').val();
     $.ajax({
         url:url ,
         type: 'POST',
         data:data,
+        beforeSend: function () {
+            $('.loader-double').fadeIn(5000).addClass('is-active');
+            $('.cartSubmit').attr("disabled", true).html('<i class="fa fa-shopping-cart"></i> '+qnt+' in Basket');
+        },
         success: function(response){
+            $('.loader-double').fadeOut(5000).removeClass('is-active');
             obj = JSON.parse(response);
             $('.totalItem').html(obj['totalItem']);
             $('.totalAmount').html(obj['cartTotal']);
@@ -216,6 +212,9 @@ $(document).on( "click", ".cartSubmit", function(e){
     e.preventDefault();
 
 });
+
+
+
 
 $(document).on( "click", ".hunger-remove-cart", function(e){
     var url = $(this).attr("data-url");
@@ -235,6 +234,7 @@ $(document).on( "click", ".hunger-remove-cart", function(e){
     });
     e.preventDefault();
 });
+
 
 
 $('.remove-cart').click( function(e) {
@@ -257,7 +257,11 @@ $('.product-preview').click(function () {
     $.ajax({
         url: url,
         type: 'GET',
+        beforeSend: function () {
+            $('.loader-curtain').addClass('is-active').fadeIn(3000);
+        },
         success: function (response) {
+            $('.loader-curtain').fadeOut(2000).removeClass('is-active');
             $('.product-modal-content').html(response);
             $('#product-modal').modal('toggle');
         }

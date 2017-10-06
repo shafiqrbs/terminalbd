@@ -132,6 +132,7 @@ class PurchaseVendorItem
      */
     private $name;
 
+
     /**
      * @var string
      *

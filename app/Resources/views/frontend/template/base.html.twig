@@ -103,7 +103,9 @@
         <div class="product-modal-content modal-content"></div>
     </div>
 </div>
-<div id="email-confirm" style="display:none">Thank you for your interest in {{ globalOption.domain }}. Your email has been sent successfully to our customer service department.</div>
+<div id="email-confirm" style="display:none; text-align: left!important;">Thank you for your interest in {{ globalOption.domain }}. Your email has been sent successfully to our customer service department.</div>
+<div id="email-invalid" style="display:none; text-align: left!important;">Dear Customer, All ready your email/mobile has been send. Thank you for your interest in {{ globalOption.domain }}.</div>
+<div id="product-confirm" style="display:none; text-align: left!important;">Thank you for your interest in {{ globalOption.domain }}. Your order has been sent successfully to our customer service department.</div>
 {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
 {% if globalOption.templateCustomize.showSidebar == 1 %}
     <div class="side-toolbar" style=""></div>
