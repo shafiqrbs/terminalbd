@@ -160,11 +160,7 @@
     <div class="clearfix"></div>
     <!-- Modal -->
 </section>
- <style>
-     .shopping-cart{
-         width: 110px!important;
-     }
- </style>
+
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -197,15 +193,15 @@
     topOffset: 0,
     top: '25%',
     onOkBut: function(event, el) {
-    $('.loader-curtain').addClass('is-active').fadeIn(3000);
+    $('.loader-curtain').fadeIn(5000).addClass('is-active');
     $.get(url).done(function(response) {
     obj = JSON.parse(response);
-    $('#buy-'+dataId).addClass('shopping-cart').attr("disabled", true).html('<i class="fa fa-shopping-cart"></i> 1 in Basket');
+    $('#buy-'+dataId).addClass('shopping-cart').html('<i class="fa fa-shopping-cart"></i> 1 in Basket');
     $('.totalItem').html(obj['totalItem']);
     $('.totalAmount').html(obj['cartTotal']);
     $('.dropdown-cart').html(obj['salesItem']);
     $('.vsidebar .txt').html(obj['cartResult']);
-    $('.loader-curtain').fadeOut(3000);
+    $('.loader-curtain').fadeOut(1000);
     }).always(function() {
         $('#product-confirm').notifyModal({
         duration : 10000,

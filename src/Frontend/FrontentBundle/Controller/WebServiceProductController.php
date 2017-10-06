@@ -428,10 +428,11 @@ class WebServiceProductController extends Controller
 
     public function productSubProductAction($subdomain ,PurchaseVendorItem $product)
     {
-        $subItem = $_REQUEST['subItem'];
+        $subId = $_REQUEST['subItem'];
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=>$product,'id'=>$subItem));
+        /* @var GoodsItem $subItem */
+        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=> $product,'id'=> $subId));
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
@@ -443,13 +444,16 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
-            return $this->render('FrontendBundle:'.$theme.':subProduct.html.twig',
+            $html =  $this->renderView('FrontendBundle:'.$theme.':subProduct.html.twig',
                 array(
                     'globalOption'    => $globalOption,
                     'product'    => $product,
                     'subItem'    => $subItem
                 )
             );
+
+            echo $array = (json_encode(array('subItem' => $html ,'subItemQuantity' => $subItem->getQuantity())));
+            exit;
         }
     }
 

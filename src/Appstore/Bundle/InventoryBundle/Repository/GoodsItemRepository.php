@@ -93,6 +93,8 @@ class GoodsItemRepository extends EntityRepository
             $goods->setQuantity($reEntity->getQuantity());
             if($reEntity->getSize()){
                 $goods->setSize($reEntity->getSize());
+            }elseif(empty($reEntity->getSize()) and !empty($goods->getSize())){
+                $goods->setSize(null);
             }
             if($reEntity->getItemColors()){
                 $goods->setColors($reEntity->getItemColors());
