@@ -54,7 +54,7 @@ class PurchaseVendorItem
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\GoodsItem", mappedBy="purchaseVendorItem" , cascade={"remove"} )
-     * @ORM\OrderBy({"id" = "DESC"})
+     * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $goodsItems;
 
@@ -97,6 +97,7 @@ class PurchaseVendorItem
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemColor", inversedBy="purchaseVendorItems" )
+     * @ORM\OrderBy({"id" = "ASC"})
      **/
     private  $itemColors;
 

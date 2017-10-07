@@ -36,3 +36,22 @@
         </div>
     </div>
 </div>
+<div class="input-group col-xs-12 col-md-12">
+    <span class="input-group-btn">
+        <button type="button" class="btn btn-lg btn-danger btn-number" data-type="minus" data-field="quantity">
+            <span class="glyphicon glyphicon-minus"></span>
+        </button>
+    </span>
+    <input readonly="readonly" type="text" name="quantity" id="quantity" class="form-control input-lg input-number" style="width:100%; text-align: center; font-weight: bold" value="1" min="1" max="{{ product.masterQuantity }}">
+    <span class="input-group-btn ">
+          <button type="button" class="btn btn-lg btn-success btn-number" data-type="plus" data-field="quantity">
+              <span class="glyphicon glyphicon-plus"></span>
+          </button>
+        {% if  globalOption.ecommerceConfig.cart == 1 %}
+            <input type="hidden" name="productImg"  value="{% if product.webPath is not empty %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
+            <button type="submit" id="productBuy" class="btn btn-lg btn-info" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart',{'product' : product.id,'subitem' : subItem.id }) }}">
+                <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to Buy
+            </button>
+        {% endif %}
+    </span>
+</div>

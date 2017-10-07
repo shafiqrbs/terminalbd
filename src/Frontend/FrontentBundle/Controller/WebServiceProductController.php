@@ -457,6 +457,42 @@ class WebServiceProductController extends Controller
         }
     }
 
+    public function inlineSubProductAction($subdomain ,PurchaseVendorItem $product)
+    {
+
+        $subId = $_REQUEST['subItem'];
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        /* @var GoodsItem $subItem */
+        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=> $product,'id'=> $subId));
+        if(!empty($globalOption)){
+
+            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            /* Device Detection code desktop or mobile */
+
+            $detect = new MobileDetect();
+            if($detect->isMobile() || $detect->isTablet() ) {
+                $theme = 'Template/Mobile/'.$themeName;
+            }else{
+                $theme = 'Template/Desktop/'.$themeName;
+            }
+            $html =  $this->renderView('FrontendBundle:'.$theme.':inlineSubProduct.html.twig',
+                array(
+                    'globalOption'    => $globalOption,
+                    'product'    => $product,
+                    'subItem'    => $subItem
+                )
+            );
+            if($subItem->getDiscountPrice()){
+                $price = '<strike>'.$subItem->getSalesPrice().'</strike> <strong>'.$subItem->getDiscountPrice().'</strong>';
+            }else{
+                $price = '<strong>'.$subItem->getSalesPrice().'</strong>';
+            }
+            echo $array = (json_encode(array('subItem' => $html ,'salesPrice' => $price )));
+            exit;
+        }
+    }
+
     public function productSubProductCartAction($subdomain ,PurchaseVendorItem $product)
     {
         $subItem = $_REQUEST['subItem'];
@@ -505,8 +541,10 @@ class WebServiceProductController extends Controller
 
         $showMaster = $globalOption->getEcommerceConfig()->getShowMasterName();
         $salesPrice = $subitem->getDiscountPrice() == null ?  $subitem->getSalesPrice() : $subitem->getDiscountPrice();
+        $masterItem = (!empty($product->getMasterItem()) and $showMaster == 1) ? $product->getMasterItem()->getName() . ' ' : '';
+        $sizeUnit = !empty($subitem->getProductUnit()) ? $subitem->getProductUnit()->getName() : '';
+        $productUnit = (!empty($product->getMasterItem()) and !empty($product->getMasterItem()->getProductUnit())) ? $product->getMasterItem()->getProductUnit()->getName() : '';
 
-        $masterItem = !empty($product->getMasterItem()) and $showMaster == 1 ? $product->getMasterItem()->getName() . '-' : '';
         if (!empty($subitem) and $subitem->getQuantity() >= $quantity) {
             $data = array(
                 'id' => $subitem->getId(),
@@ -514,12 +552,15 @@ class WebServiceProductController extends Controller
                 'brand' => !empty($product->getBrand()) ? $product->getBrand()->getName() : '',
                 'category' => !empty($product->getMasterItem()->getCategory()) ? $product->getMasterItem()->getCategory()->getName() : '',
                 'size' => !empty($subitem->getSize()) ? $subitem->getSize()->getName() : 0,
+                'sizeUnit' => $sizeUnit,
+                'productUnit' => $productUnit,
                 'color' => $colorName,
                 'colorId' => $color,
                 'price' => $salesPrice,
                 'quantity' => $quantity,
                 'productImg' => $productImg
             );
+
             $cart->insert($data);
             $cartTotal = (string)$cart->total();
             $totalItems = (string)$cart->total_items();

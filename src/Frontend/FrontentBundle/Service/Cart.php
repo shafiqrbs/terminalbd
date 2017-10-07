@@ -95,6 +95,7 @@ class Cart {
             if(!isset($item['id'], $item['name'], $item['price'],$item['size'], $item['quantity'])){
                 return FALSE;
             }else{
+
                 /*
                  * Insert Item
                  */
@@ -153,7 +154,7 @@ class Cart {
                     $item['price'] = (float) $item['price'];
                 }
                 // product id & name shouldn't be changed
-                foreach(array_diff($keys, array('id', 'name')) as $key){
+                foreach(array_diff($keys, array('id','name')) as $key){
                     $this->cart_contents[$item['rowid']][$key] = $item[$key];
                 }
                 // save cart data

@@ -131,7 +131,7 @@
                         <div class="input-group-btn"> <button type="button" class="btn btn-primary">{% if product.masterItem is not empty and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}  {% endif %}</button> </div> </div>
                 </div>
             </div>
-            {% if subItem.colors is not empty and subItem.colors is defined %}
+            {% if globalOption.ecommerceConfig.isColor == 1 and subItem.colors is not empty and subItem.colors is defined %}
                 <div class="col-xs-3 col-md-3 pull-right">
                     <div class="form-group">
                         <div class="input-group input-group-sm">
@@ -145,7 +145,7 @@
                     </div>
                 </div>
             {% endif %}
-            {% if  product.goodsItems is defined %}
+            {% if  globalOption.ecommerceConfig.isSize == 1 and product.goodsItems is defined %}
                 <div class="col-xs-3 col-md-3 pull-right" >
                     <div class="form-group">
                         <div class="input-group input-group-sm">

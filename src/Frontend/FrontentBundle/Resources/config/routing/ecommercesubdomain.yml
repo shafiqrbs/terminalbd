@@ -77,6 +77,10 @@ webservice_product_sub_item_cart:
     path:     /sub-item/{product}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productSubProductCart }
 
+webservice_product_inline_item_load:
+    path:     /inline-product-load/{product}
+    defaults: { _controller: FrontendBundle:WebServiceProduct:inlineSubProduct }
+
 webservice_module_page:
     path:     /{module}/{slug}
     defaults: { _controller: FrontendBundle:WebServiceModule:modulePage }

@@ -87,21 +87,66 @@
 
                 <div class="row row-flex">
                     {% for product in products %}
-                        <div  class="product-item col-xs-{{ globalOption.ecommerceConfig.perColumn }} col-lg-{{ globalOption.ecommerceConfig.perColumn }}">
-                            <div class="product-canvas">
-                                <a data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  class="btn btn-info product-preview product-eye"><span class="glyphicon glyphicon-eye-open"></span></a>
-                                <a class="btn btn-warning product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="glyphicon glyphicon-shopping-cart"></span></a>
-                                <a class="img-card" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
-                                    <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
-                                </a>
-                                <div class="card-content" data-match-height="item-product">
-                                    <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a>
+
+                            <div  class="product-item col-xs-{{ globalOption.ecommerceConfig.perColumn }} col-lg-{{ globalOption.ecommerceConfig.perColumn }}">
+                                <form id="add_buy_cart-{{ product.id }}" class="addCart">
+                                <div class="product-canvas">
+                                    <a data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  class="btn btn-info product-preview product-eye"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                    <a class="btn btn-warning product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                                    <a class="img-card" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
+                                        <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
+                                    </a>
+                                    <div data-match-height="item-product" id="inlineLoading-{{ product.id }}">
+                                        <div class="card-content">
+                                            <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a>
+                                        </div>
+                                        <div class="row ">
+                                            {% if globalOption.ecommerceConfig.isSize == 1 and product.size is not empty and product.goodsItems|length == 1  %}
+                                                <div class="{% if product.itemColors is empty or  product.itemColors|length > 1  %} col-xs-12 col-lg-12 {% else %} col-xs-6 col-lg-6 {% endif %} text-center product-attr">
+                                                   {{ product.size.name }}{% if product.productUnit is not empty %} - {{ product.productUnit.name }}{% endif %}
+                                                    <input type="hidden" name="size" id="size" value="{{ product.size.id }}">
+                                                </div>
+                                            {% endif %}
+                                            {% if globalOption.ecommerceConfig.isColor == 1 and product.itemColors is not empty and  product.itemColors|length == 1 %}
+                                                <div class="{% if product.size is empty or product.goodsItems|length > 1 %} col-xs-12 col-lg-12 {% else %} col-xs-6 col-lg-6 {% endif %} text-center product-attr">
+                                                    {% for color in  product.itemColors %}
+                                                        {{ color.name }}
+                                                        <input type="hidden" name="color" id="color" value="{{ color.id }}">
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        {% if globalOption.ecommerceConfig.isSize == 1 and product.goodsItems is not empty  and product.goodsItems|length > 1  %}
+                                            <div class="row">
+                                                <div class="col-xs-12 col-lg-12 ">
+                                                    <select class="col-xs-12 col-lg-12 item-select inlineSizeChange size-{{ product.id }}"  data-id="{{ product.id }}" data-url="{{ path(globalOption.subDomain~'_webservice_product_inline_item_load', {'product' : product.id }) }}" name="size" id="size" >
+                                                        {% for goodsItem in  product.goodsItems  %}
+                                                            <option  value="{{ goodsItem.id }}" >{% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% else %} Default {% endif %}{% if goodsItem.productUnit is not empty %} - {{ goodsItem.productUnit.name }}{% endif %} {{ globalOption.ecommerceConfig.currency }} {% if goodsItem.discountPrice is empty %}{{ goodsItem.salesPrice|number_format }} {% else %}{{ goodsItem.discountPrice|number_format }}{% endif %}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {% if globalOption.ecommerceConfig.isColor == 1 and product.itemColors is not empty and product.itemColors is defined and product.itemColors|length > 1 %}
+                                    <div class="row">
+                                        <div class="col-xs-12 col-lg-12">
+                                            <select class="item-select col-xs-12 col-lg-12" name="color" id="color" >
+                                                {% for color in  product.itemColors %}
+                                                    <option value="{{ color.id }}" >{{ color.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    </div>
+                                    <div class="card-read-more text-center" >
+                                        <strong class="currency" >{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<span id="currency-{{ product.id }}">{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}</span>
+                                    </div>
+
                                 </div>
-                                <div class="card-read-more text-center">
-                                    <strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}
-                                </div>
+                                </form>
                             </div>
-                        </div>
+
                     {% endfor %}
                 </div>
                 <div class="clearfix"></div>
@@ -114,6 +159,7 @@
             <div class="clearfix"></div>
         </div>
     </section>
+
     <div class="clearfix"></div>
     <section>
         <div class="container " >
@@ -160,7 +206,186 @@
     <div class="clearfix"></div>
     <!-- Modal -->
 </section>
+<style>
+    /*==============================  Product Canvas==============================*/
 
+    .item-select{
+
+        height: 30px;
+        padding: 3px 10px;
+        font-size: 12px;
+        line-height: 1.5;
+        border: 1px solid #F6F7F7;
+        margin-bottom: 1px;
+        border-right: none;
+        border-left: none;
+        background-color: #F9FAFA;
+    }
+    .product-attr{
+        color: red;
+        font-size: 13px;
+        line-height: 30px;
+        height: 30px;
+    }
+
+    .size-loading{
+        background-image: url("{{ asset('/assets/img/ajax-loader.gif') }}");
+        background-repeat: no-repeat;
+        background-position: center center;
+        height: 100%;
+        width: 100%;
+
+    }
+
+    .product-canvas {
+        display: block;
+        line-height: 1.42857143;
+        background-color: #fff;
+        transition: box-shadow .25s;
+        position: relative;
+        border: 1px solid #dddddd;
+        margin-bottom: 30px;
+
+    }
+    .product-canvas:hover {
+        border: 1px solid #F88216;
+    }
+    .product-canvas:hover .product-buy {
+        right: 3px;
+        opacity: 1;
+        z-index: 99;
+    }
+    .product-canvas:hover .product-eye {
+        left: 3px;
+        opacity: 1;
+        z-index: 99;
+    }
+    .product-canvas .img-card-large {
+        width: 100%;
+        height:573px;
+        display:block;
+        overflow: hidden;
+        padding: 5px;
+    }
+    .product-canvas .img-card-large img{
+        width: 100%;
+        height: 573px;
+        object-fit:cover;
+        transition: all .25s ease;
+    }
+
+    .product-canvas .img-card-cat {
+        width: 100%;
+        height:573px;
+        display:block;
+        overflow: hidden;
+        padding: 10px;
+    }
+    .product-canvas .img-card-cat img{
+        width: 100%;
+        height: 573px;
+        object-fit:cover;
+        transition: all .25s ease;
+    }
+
+    .product-canvas .img-card {
+        width: 100%;
+        height:250px;
+        display:block;
+        overflow: hidden;
+        padding: 5px;
+    }
+    .product-canvas .img-card img{
+        width: 100%;
+        height: 250px;
+        object-fit:cover;
+        transition: all .25s ease;
+    }
+
+    .product-canvas .card-content {
+        padding:15px;
+        text-align:left;
+    }
+    .product-canvas .card-title {
+        margin-top:0;
+        font-weight: 700;
+        font-size: 1.65em;
+    }
+    .product-canvas .card-title a {
+        color: #000;
+        text-decoration: none !important;
+    }
+    .product-canvas .card-read-more {
+        border-top: 1px solid #D4D4D4;
+        padding: 10px;
+    }
+    .product-canvas .card-read-more a {
+        text-decoration: none !important;
+        font-size: 13px;
+    }
+
+    .product-canvas .product-eye {
+        position: absolute;
+        bottom: 3px;
+        left: -50px;
+        cursor: pointer;
+        -webkit-transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
+        transition: 0.5s ease-in-out;
+        width: 50px;
+        opacity: 0;
+    }
+
+    .product-canvas .product-buy {
+        position: absolute;
+        bottom: 3px;
+        right: -50px;
+        cursor: pointer;
+        -webkit-transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
+        transition: 0.5s ease-in-out;
+        width: 50px;
+        opacity: 0;
+    }
+
+    .meta-caption{
+        background-color: #E5E7E7;
+        height: 35px;
+        line-height: 35px;
+        font-size: 16px;
+        color: #000;
+        margin-bottom: 15px;
+    }
+    .meta-label{
+        background-color: #EEF0F0;
+        height: 30px;
+        line-height: 30px;
+        font-size: 16px;
+        color: #000;
+        text-transform: capitalize!important;
+    }
+    .meta-value{
+        padding-bottom: 5px;
+        padding-top: 5px;
+    }
+    .meta-key-clone{
+        float: right;
+        font-weight: bold;
+    }
+    .meta-key-value{
+        padding-bottom: 5px;
+        padding-top: 5px;
+    }
+    .meta-key-value:nth-of-type(even){
+        background-color: #F6F7F7;
+    }
+    .meta-key-value:nth-of-type(odd){
+        background-color: #F9FAFA;
+    }
+
+</style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -184,36 +409,4 @@
 {% block documentready %}
     {{ parent() }}
     sliderPageOwl(4);
-    $(document).on( "click", ".product-buy", function(e){
-
-    var url = $(this).attr("data-url");
-    var dataId = $(this).attr("data-id");
-
-    $('#confirm-content').confirmModal({
-    topOffset: 0,
-    top: '25%',
-    onOkBut: function(event, el) {
-    $('.loader-curtain').fadeIn(5000).addClass('is-active');
-    $.get(url).done(function(response) {
-    obj = JSON.parse(response);
-    $('#buy-'+dataId).addClass('shopping-cart').html('<i class="fa fa-shopping-cart"></i> 1 in Basket');
-    $('.totalItem').html(obj['totalItem']);
-    $('.totalAmount').html(obj['cartTotal']);
-    $('.dropdown-cart').html(obj['salesItem']);
-    $('.vsidebar .txt').html(obj['cartResult']);
-    $('.loader-curtain').fadeOut(1000);
-    }).always(function() {
-        $('#product-confirm').notifyModal({
-        duration : 10000,
-        placement : 'center',
-        overlay : true,
-        type : 'notify',
-        icon : false
-        });
-    });
-    }
-    });
-    });
-
-
 {% endblock %}

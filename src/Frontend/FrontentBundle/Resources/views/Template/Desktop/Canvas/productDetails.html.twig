@@ -191,7 +191,7 @@
                                         <form class="addCart">
                                             <div class="row" id="subItem-info">
                                                 <div class="col-xs-4 col-md-4">
-                                                    {% if product.size is defined  %}
+                                                    {% if globalOption.ecommerceConfig.isSize == 1 and product.goodsItems is defined  %}
                                                         <div class="form-group">
                                                             <div class="input-group input-group-sm">
                                                                 <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-list-alt"></span></span>
@@ -205,7 +205,7 @@
                                                     {% endif %}
                                                 </div>
                                                 <div class="col-xs-4 col-md-4">
-                                                    {% if globalOption.inventoryConfig.isColor == 1 and subItem.colors is not empty and subItem.colors is defined %}
+                                                    {% if globalOption.ecommerceConfig.isColor == 1 and subItem.colors is not empty and subItem.colors is defined %}
                                                         <div class="form-group">
                                                             <div class="input-group input-group-sm">
                                                                 <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-text-background"></span></span>
@@ -255,24 +255,7 @@
 
                         </div>
                     </div>
-                    <style>
-                        .cart-small-loading{
 
-                            background-image: url("{{ asset('/assets/img/ajax-loading.gif') }}");
-                            background-repeat: no-repeat;
-                            background-size: 100%;
-
-                        }
-                        .size-loading{
-                            background-image: url("{{ asset('/assets/img/ajax-loader.gif') }}");
-                            background-repeat: no-repeat;
-                            background-position: center center;
-                            height: 100%;
-                            width: 100%;
-
-                        }
-
-                    </style>
                     <div class="row-fluid">
                         <div class="col-xs-12 col-md-12 bhoechie-tab-container">
                             <div class="list-group list-group-horizontal bhoechie-tab-menu">
@@ -402,6 +385,24 @@
         {% endif %}
         <div class="clearfix"></div>
 </section>
+    <style>
+        .cart-small-loading{
+
+            background-image: url("{{ asset('/assets/img/ajax-loading.gif') }}");
+            background-repeat: no-repeat;
+            background-size: 100%;
+
+        }
+        .size-loading{
+            background-image: url("{{ asset('/assets/img/ajax-loader.gif') }}");
+            background-repeat: no-repeat;
+            background-position: center center;
+            height: 100%;
+            width: 100%;
+
+        }
+
+    </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
@@ -446,7 +447,7 @@
         },
         success: function(response) {
             obj = JSON.parse(response);
-            $('#subItem-info').html(obj['subItem']);
+            $('.addCart').html(obj['subItem']);
             var Qnt = obj['subItemQuantity'];
             $("input[name='quantity']").prop('max',Qnt);
 
