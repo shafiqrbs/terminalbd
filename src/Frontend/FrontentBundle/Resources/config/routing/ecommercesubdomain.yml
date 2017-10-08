@@ -48,7 +48,9 @@ webservice_product_cart:
 webservice_product_single_cart:
     path:     /single-cart/{product}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productAddSingleCart }
-
+    methods:  GET
+    options:
+            expose: true
 
 webservice_product_cart_update:
     path:     /cart/product-update/{cartid}

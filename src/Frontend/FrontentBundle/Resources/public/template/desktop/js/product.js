@@ -196,8 +196,6 @@ $(document).on( "click", ".cartSubmit", function(e){
 });
 
 
-
-
 $(document).on( "click", ".hunger-remove-cart", function(e){
     var url = $(this).attr("data-url");
     var id = $(this).attr("id");
@@ -313,19 +311,22 @@ $(document).on( "click", ".btn-number-cart", function(e){
     }
 });
 
-$(document).on( "click", ".product-buy", function(e){
 
-    var url = $(this).attr("data-url");
-    var dataId = $(this).attr("data-id");
+$(document).on( "click", "#productBuy", function(e){
+
+
+    var url = $('#productBuy').attr("data-url");
+    var data = $('.addCart').serialize();
+    var qnt = $('#quantity').val();
 
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
             $('.loader-curtain').fadeIn(5000).addClass('is-active');
-            $.get(url).done(function(response) {
+            $.post(url,data).done(function(response) {
                 obj = JSON.parse(response);
-                $('#buy-'+dataId).addClass('shopping-cart').html('<i class="fa fa-shopping-cart"></i> 1 in Basket');
+                $('#productBuy').addClass('shopping-cart').attr("disabled", true).html('<i class="fa fa-shopping-cart"></i> '+qnt+' in Basket');
                 $('.totalItem').html(obj['totalItem']);
                 $('.totalAmount').html(obj['cartTotal']);
                 $('.dropdown-cart').html(obj['salesItem']);
@@ -343,6 +344,41 @@ $(document).on( "click", ".product-buy", function(e){
         }
     });
 });
+
+$(document).on( "click", ".product-buy", function(e){
+
+    var url = $(this).attr("data-url");
+    var dataId = $(this).attr("data-id");
+    var size = $('#size-'+dataId).val() != '' || $('#size-'+dataId).val() != 'undefined'  ? $('#size-'+dataId).val() : '';
+    var color = $('#color-'+dataId).val() != 'undefined' ? $('#color-'+dataId).val() : '';
+    var productImg = $('#productImg-'+dataId).val() != '' ? $('#productImg-'+dataId).val() : '';
+    alert(color);
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $('.loader-curtain').fadeIn(5000).addClass('is-active');
+            $.get(url,{ size:size, color: color,productImg:productImg } ).done(function(response) {
+                obj = JSON.parse(response);
+                $('#buy-'+dataId).addClass('shopping-cart').attr("disabled", true).html('<i class="fa fa-shopping-cart"></i> 1 in Basket');
+                $('.totalItem').html(obj['totalItem']);
+                $('.totalAmount').html(obj['cartTotal']);
+                $('.dropdown-cart').html(obj['salesItem']);
+                $('.vsidebar .txt').html(obj['cartResult']);
+                $('.loader-curtain').fadeOut(1000);
+            }).always(function() {
+                $('#product-confirm').notifyModal({
+                    duration : 10000,
+                    placement : 'center',
+                    overlay : true,
+                    type : 'notify',
+                    icon : false
+                });
+            });
+        }
+    });
+});
+
 
 $(document).on( "change", ".inlineSizeChange", function( e ) {
 

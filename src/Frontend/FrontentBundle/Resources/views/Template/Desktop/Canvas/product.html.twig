@@ -98,20 +98,18 @@
                                     </a>
                                     <div data-match-height="item-product" id="inlineLoading-{{ product.id }}">
                                         <div class="card-content">
-                                            <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a>
+                                            <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}</a>
                                         </div>
                                         <div class="row ">
                                             {% if globalOption.ecommerceConfig.isSize == 1 and product.size is not empty and product.goodsItems|length == 1  %}
                                                 <div class="{% if product.itemColors is empty or  product.itemColors|length > 1  %} col-xs-12 col-lg-12 {% else %} col-xs-6 col-lg-6 {% endif %} text-center product-attr">
                                                    {{ product.size.name }}{% if product.productUnit is not empty %} - {{ product.productUnit.name }}{% endif %}
-                                                    <input type="hidden" name="size" id="size" value="{{ product.size.id }}">
                                                 </div>
                                             {% endif %}
                                             {% if globalOption.ecommerceConfig.isColor == 1 and product.itemColors is not empty and  product.itemColors|length == 1 %}
                                                 <div class="{% if product.size is empty or product.goodsItems|length > 1 %} col-xs-12 col-lg-12 {% else %} col-xs-6 col-lg-6 {% endif %} text-center product-attr">
                                                     {% for color in  product.itemColors %}
                                                         {{ color.name }}
-                                                        <input type="hidden" name="color" id="color" value="{{ color.id }}">
                                                     {% endfor %}
                                                 </div>
                                             {% endif %}
@@ -119,7 +117,7 @@
                                         {% if globalOption.ecommerceConfig.isSize == 1 and product.goodsItems is not empty  and product.goodsItems|length > 1  %}
                                             <div class="row">
                                                 <div class="col-xs-12 col-lg-12 ">
-                                                    <select class="col-xs-12 col-lg-12 item-select inlineSizeChange size-{{ product.id }}"  data-id="{{ product.id }}" data-url="{{ path(globalOption.subDomain~'_webservice_product_inline_item_load', {'product' : product.id }) }}" name="size" id="size" >
+                                                    <select class="col-xs-12 col-lg-12 item-select inlineSizeChange size-{{ product.id }}"  data-id="{{ product.id }}" data-url="{{ path(globalOption.subDomain~'_webservice_product_inline_item_load', {'product' : product.id }) }}" name="size" id="size-{{ product.id }}" >
                                                         {% for goodsItem in  product.goodsItems  %}
                                                             <option  value="{{ goodsItem.id }}" >{% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% else %} Default {% endif %}{% if goodsItem.productUnit is not empty %} - {{ goodsItem.productUnit.name }}{% endif %} {{ globalOption.ecommerceConfig.currency }} {% if goodsItem.discountPrice is empty %}{{ goodsItem.salesPrice|number_format }} {% else %}{{ goodsItem.discountPrice|number_format }}{% endif %}</option>
                                                         {% endfor %}
@@ -130,7 +128,7 @@
                                         {% if globalOption.ecommerceConfig.isColor == 1 and product.itemColors is not empty and product.itemColors is defined and product.itemColors|length > 1 %}
                                     <div class="row">
                                         <div class="col-xs-12 col-lg-12">
-                                            <select class="item-select col-xs-12 col-lg-12" name="color" id="color" >
+                                            <select class="item-select col-xs-12 col-lg-12" name="color" id="color-{{ product.id }}" >
                                                 {% for color in  product.itemColors %}
                                                     <option value="{{ color.id }}" >{{ color.name }}</option>
                                                 {% endfor %}
@@ -144,6 +142,7 @@
                                     </div>
 
                                 </div>
+                                    <input type="hidden" name="productImg-{{ product.id }}" id="productImg-{{ product.id }}" value="{% if product.webPath is not empty  %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
                                 </form>
                             </div>
 

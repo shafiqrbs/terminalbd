@@ -457,38 +457,6 @@
 
     });
 
-    $(document).on( "click", "#productBuy", function(e){
-
-
-        var url = $('#productBuy').attr("data-url");
-        var data = $('.addCart').serialize();
-        var qnt = $('#quantity').val();
-
-        $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-        $('.loader-curtain').fadeIn(5000).addClass('is-active');
-        $.post(url,data).done(function(response) {
-        obj = JSON.parse(response);
-        $('#productBuy').addClass('shopping-cart').html('<i class="fa fa-shopping-cart"></i> '+qnt+' in Basket');
-        $('.totalItem').html(obj['totalItem']);
-        $('.totalAmount').html(obj['cartTotal']);
-        $('.dropdown-cart').html(obj['salesItem']);
-        $('.vsidebar .txt').html(obj['cartResult']);
-        $('.loader-curtain').fadeOut(1000);
-        }).always(function() {
-        $('#product-confirm').notifyModal({
-        duration : 10000,
-        placement : 'center',
-        overlay : true,
-        type : 'notify',
-        icon : false
-        });
-        });
-        }
-        });
-    });
 
 
 

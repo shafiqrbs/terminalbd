@@ -67,7 +67,7 @@
                                                   <button type="button" class="btn btn-success btn-number-cart" data-type="plus" data-field="quantity" data-id="{{ product.rowid }}"  data-url="/cart/product-update/{{ product.rowid }}" data-text="{{ product.id }}" data-title="{{ product.price }}">
                                                       <span class="glyphicon glyphicon-plus"></span>
                                                   </button>
-                                                {% if product.productUnit is not empty %}
+                                                {% if product.productUnit is defined and product.productUnit is not empty %}
                                                 <button type="button" class="btn btn-warning" >{{ product.productUnit }}</button>
                                                 {% endif %}
                                             </span>

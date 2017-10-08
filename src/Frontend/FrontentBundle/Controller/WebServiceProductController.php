@@ -582,20 +582,26 @@ class WebServiceProductController extends Controller
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
 
+        $data = $_REQUEST;
+        $color = isset($data['color']) ? $data['color'] :'';
+        $size =  isset($data['size']) ? $data['size'] :'';
+        $productImg = isset($data['productImg']) ? $data['productImg'] :'';
+
         /* @var GoodsItem $subitem */
 
-        $subitem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=>$product,'masterItem' => 1));
-        $quantity = $subitem->getQuantity();
-
-        $color = $request->request->get('color');
-        $productImg = $request->request->get('productImg');
-
+        if(empty($size)){
+            $subitem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=>$product,'masterItem' => 1));
+        }else{
+            $subitem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=>$product,'id' => $size));
+        }
+        $quantity = 1;
         $color = !empty($color) ? $color : 0;
         if ($color > 0) {
             $colorName = $this->getDoctrine()->getRepository('InventoryBundle:ItemColor')->find($color)->getName();
         } else {
             $colorName = '';
         }
+
         /** @var GlobalOption $globalOption */
 
         $showMaster = $globalOption->getEcommerceConfig()->getShowMasterName();
