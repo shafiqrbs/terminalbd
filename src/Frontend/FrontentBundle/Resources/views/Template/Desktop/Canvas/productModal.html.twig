@@ -167,7 +167,7 @@
                 <button type="button" class="btn btn-info cartSubmit" data-style="zoom-in" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart',{'product' : product.id,'subitem' : subItem.id }) }}">Add To Buy</button>
                 <input type="hidden" name="productImg" value="{% if product.webPath is not empty  %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
             {% endif %}
-            <button class="btn btn-danger"  data-dismiss="modal" >Close</button>
+            <button class="btn btn-danger"  data-dismiss="modal" >x</button>
             <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" class="btn btn-success">More</a>
         </div>
      </div>
