@@ -4,6 +4,7 @@ use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
+use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\ItemSize;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
@@ -528,6 +529,82 @@ class GoodsItemRepository extends EntityRepository
                 }
             }
         }
+    }
+
+    public function findGroupBrands(InventoryConfig $config , $array = array())
+    {
+
+
+        $brands = is_array($array['brand']) ? $array['brand'] :'';
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:PurchaseVendorItem','e');
+        $qb->join('e.brand','brand');
+        $qb->select('brand.id as id');
+        $qb->addSelect('brand.name as name');
+        $qb->where('e.inventoryConfig='.$config->getId());
+        $qb->groupBy('brand.id');
+        $qb->orderBy('brand.name', 'ASC');
+        $res = $qb->getQuery()->getArrayResult();
+
+        $value ='';
+        $value .='<ul class="ul-check-list-brand">';
+        foreach ($res as $key => $val) {
+            $checkd = in_array($val['id'], $brands)? 'checked':'';
+            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="brand[]" value="'.$val['id'].'" ><span class="label" >'.$val['name']. '</span></li>';
+        }
+        $value .='</ul>';
+        return $value;
+
+    }
+
+    public function findGroupColors(InventoryConfig $config , $array = array())
+    {
+
+        $colors = is_array($array['color']) ? $array['color'] :'';
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.purchaseVendorItem','purchasevendoritem');
+        $qb->join('e.colors','colors');
+        $qb->select('colors.id as id');
+        $qb->addSelect('colors.name as name');
+        $qb->where('purchasevendoritem.inventoryConfig='.$config->getId());
+        $qb->groupBy('colors.id');
+        $qb->orderBy('colors.name', 'ASC');
+        $res = $qb->getQuery()->getArrayResult();
+
+        $value ='';
+        $value .='<ul class="ul-check-list">';
+        foreach ($res as $key => $val) {
+            $checkd = in_array($val['id'], $colors ) ? 'checked':'';
+            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="color[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
+        }
+        $value .='</ul>';
+        return $value;
+    }
+
+    public function findGroupSizes(InventoryConfig $config , $array = array())
+    {
+        $sizes = is_array($array['size']) ? $array['size'] :'';
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.purchaseVendorItem','purchasevendoritem');
+        $qb->join('e.size','size');
+        $qb->select('size.id as id');
+        $qb->addSelect('size.name as name');
+        $qb->where('purchasevendoritem.inventoryConfig='.$config->getId());
+        $qb->groupBy('size.id');
+        $qb->orderBy('size.name', 'ASC');
+        $res = $qb->getQuery()->getArrayResult();
+
+        $value ='';
+        $value .='<ul class="ul-check-list">';
+        foreach ($res as $key => $val) {
+            $checkd = in_array($val['id'], $sizes )? 'checked':'';
+            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="size[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
+        }
+        $value .='</ul>';
+        return $value;
     }
 
 

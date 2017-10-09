@@ -86,6 +86,67 @@ class PurchaseVendorItemRepository extends EntityRepository
 
     }
 
+    public function filterFrontendProductWithSearch($inventory, $data , $limit = 0)
+    {
+        if (!empty($data['sortBy'])) {
+
+            $sortBy = explode('=?=', $data['sortBy']);
+            $sort = $sortBy[0];
+            $order = $sortBy[1];
+        }
+
+        $qb = $this->createQueryBuilder('product');
+        $qb->leftJoin("product.masterItem",'masterItem');
+        $qb->leftJoin('product.goodsItems','goodsitems');
+        $qb->where("product.isWeb = 1");
+        $qb->andWhere("product.status = 1");
+        $qb->andWhere("product.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+
+        if (!empty($data['brand'])) {
+            $qb->andWhere("product.brand IN(:brand)");
+            $qb->setParameter('brand',$data['brand']);
+        }
+
+        if (!empty($data['size'])) {
+            $qb->andWhere("goodsitems.size IN(:size)");
+            $qb->setParameter('size',$data['size']);
+        }
+
+        if (!empty($data['color'])) {
+            $qb->leftJoin('goodsitems.colors','colors');
+            $qb->andWhere("colors.id IN(:color)");
+            $qb->setParameter('color',$data['color']);
+        }
+
+        if (!empty($data['promotion'])) {
+            $qb->andWhere("product.promotion IN(:promotion)");
+            $qb->setParameter('promotion',$data['promotion']);
+        }
+
+        if (!empty($data['tag'])) {
+            $qb->andWhere("product.tag IN(:tag)");
+            $qb->setParameter('tag',$data['tag']);
+        }
+
+        if (!empty($data['discount'])) {
+            $qb->andWhere("product.discount IN(:discount)");
+            $qb->setParameter('discount',$data['discount']);
+        }
+
+        if (empty($data['sortBy'])){
+            $qb->orderBy('product.updated', 'DESC');
+        }else{
+            $qb->orderBy($sort ,$order);
+        }
+        if($limit > 0 ) {
+            $qb->setMaxResults($limit);
+        }
+        $res = $qb->getQuery();
+        return  $res;
+
+    }
+
     public function insertCopyPurchaseItem(PurchaseVendorItem $entity, PurchaseVendorItem $copyEntity)
     {
         $em = $this->_em;

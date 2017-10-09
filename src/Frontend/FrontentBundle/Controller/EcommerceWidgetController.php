@@ -3,6 +3,7 @@
 namespace Frontend\FrontentBundle\Controller;
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
+use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Appstore\Bundle\InventoryBundle\Entity\ItemBrand;
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\CustomerRegisterType;
@@ -49,6 +50,7 @@ class EcommerceWidgetController extends Controller
         $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $globalOption->getInventoryConfig()));
         $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
         $detect = new MobileDetect();
+        $brandTree = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=> $globalOption->getInventoryConfig(),'status' => 1));
         if( $detect->isMobile() ||  $detect->isTablet() ) {
             $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTreeForMobile($cats,$category);
             $theme = 'Template/Mobile/'.$themeName;
@@ -59,6 +61,7 @@ class EcommerceWidgetController extends Controller
         return $this->render('@Frontend/'.$theme.'/header.html.twig', array(
             'globalOption'          => $globalOption,
             'categoryTree'          => $categoryTree,
+            'brandTree'             => $brandTree,
             'menu'                  => $menu,
             'cart'                  => $cart,
             'searchForm'            => $data
@@ -117,6 +120,45 @@ class EcommerceWidgetController extends Controller
         ));
     }
 
+    public function sidebarProductFilterAction(GlobalOption $globalOption , $searchForm )
+    {
+
+
+        
+        if(!empty($globalOption)) {
+
+            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+
+            /* @var InventoryConfig $inventory */
+            $inventory = $globalOption->getInventoryConfig();
+
+            /* Device Detection code desktop or mobile */
+
+            $detect = new MobileDetect();
+            if ($detect->isMobile() || $detect->isTablet()) {
+                $theme = 'Template/Mobile/' . $themeName;
+            } else {
+                $theme = 'Template/Desktop/' . $themeName;
+            }
+            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $inventory));
+            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
+            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
+            $brandTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupBrands($inventory, $searchForm);
+            $colorTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupColors($inventory, $searchForm);
+            $sizeTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupSizes($inventory, $searchForm);
+        }
+
+        return $this->render('@Frontend/'.$theme.'/productFilter.html.twig', array(
+                'globalOption'              => $globalOption,
+                'categorySidebar'           => $categorySidebar,
+                'brandTree'                 => $brandTree,
+                'colorTree'                 => $colorTree,
+                'sizeTree'                  => $sizeTree,
+
+            )
+        );
+
+    }
 
     public function aboutusAction(GlobalOption $globalOption,$wordlimit)
     {

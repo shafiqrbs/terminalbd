@@ -57,14 +57,22 @@ class ItemSizeRepository extends EntityRepository
 
     }
 
-    public function getGroupSizes($categories,$array = array() ){
+    public function getGroupSizes($inventoryConfig, $array = array() ){
 
+        $query = $this->createQueryBuilder('e');
+        $query->join('e.sizeGroup','sizegroup');
+        $query->select('e.id as id');
+        $query->addSelect('e.name as name');
+        $query->where('e.status=1');
+        $query->andWhere('sizegroup.inventoryConfig='.$inventoryConfig->getId());
+        $query->orderBy('e.name', 'ASC');
+        $sizes = $query->getQuery()->getResult();
 
         $value ='';
-        $value .='<ul>';
-        foreach ($categories as $val) {
-            $checkd = in_array($val->getId(), $array)? 'checked':'';
-            $value .= '<li class="dd-item dd3-item" style="width: 25%; float: left" ><div class="dd4-content"><input type="checkbox" '.$checkd.' name="categories[]" value="'.$val->getId().'" >'.$val->getName(). '</div></li>';
+        $value .='<ul class="ul-check-list">';
+        foreach ($sizes as $val) {
+            $checkd = in_array($val['id'], $array)? 'checked':'';
+            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="brand[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
         }
         $value .='</ul>';
         return $value;

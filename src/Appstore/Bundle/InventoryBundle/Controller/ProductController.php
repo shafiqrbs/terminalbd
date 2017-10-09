@@ -46,6 +46,7 @@ class ProductController extends Controller
             'entities' => $pagination,
         ));
     }
+
     /**
      * Creates a new Product entity.
      *
@@ -73,6 +74,31 @@ class ProductController extends Controller
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
+    }
+
+    /**
+     * Creates a new Product entity.
+     *
+     */
+    public function createMasterProductAction(Request $request)
+    {
+        $entity = new Product();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+            $entity->setInventoryConfig($inventory);
+            $entity->setStatus(true);
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been added successfully"
+            );
+        }
+        exit;
+
     }
 
     /**

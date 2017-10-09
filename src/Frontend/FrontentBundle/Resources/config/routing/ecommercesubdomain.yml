@@ -123,6 +123,10 @@ webservice_product:
     path:     /product
     defaults: { _controller: FrontendBundle:WebServiceProduct:product }
 
+webservice_product_filter:
+    path:     /product-filter
+    defaults: { _controller: FrontendBundle:WebServiceProduct:productFilter }
+
 webservice_customer_register:
     path:     /register
     defaults: { _controller: FrontendBundle:WebServiceCustomer:register }

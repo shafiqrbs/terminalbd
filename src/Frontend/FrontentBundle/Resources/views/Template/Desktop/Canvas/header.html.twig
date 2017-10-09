@@ -60,10 +60,18 @@
                                         <div class='input-group-field'>
                                             {{ categoryTree|raw }}
                                         </div>
-                                        <input type='text' class='form-control serarch-keyword' style="width: 300px" name="product" id="product" value="{% if searchForm.product is defined %}{{ searchForm.product }}{% endif %}"  placeholder="Find Your Favorite Products"/>
+                                        <div class='input-group-field'>
+                                           <select class=" col-md-12 col-lg-12 search-select search-field form-control" name="brand" id="brand">
+                                               <option value="">--- Filter Brand ---</option>
+                                               {% for brand in brandTree %}
+                                                <option {% if searchForm.product is defined and searchForm.product == brand.id %} selected="selected" {% endif %} value="{{ brand.id }}">{{ brand.name }}</option>
+                                               {% endfor %}
+                                           </select>
+                                        </div>
+                                        <input type='text' class='form-control serarch-keyword search-field'  name="product" id="product" value="{% if searchForm.product is defined %}{{ searchForm.product }}{% endif %}"  placeholder="Find Your Favorite Products"/>
                                         <span class="input-group-btn">
-                                                <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                                            </span>
+                                           <button class="btn btn-group btn-group-search search-box-bg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                                        </span>
                                     </div>
                                 </form>
                             </div>
@@ -88,9 +96,7 @@
         </div>
     </section>
     <section id="menu-bar" class="sticky">
-        <div class="container">
-            {{ include('FrontendBundle:Template/Desktop/Menu:menu.html.twig')}}
-        </div>
+        <div class="container">{{ include('FrontendBundle:Template/Desktop/Menu:menu.html.twig')}}</div>
     </section>
     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header-bottom')  %}
         {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'header-bottom'}) %}
@@ -98,11 +104,27 @@
     {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header-bottom')  %}
         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'header-bottom'}) %}
     {% endif %}
-
 </nav>
-
 <!-- BEGIN NAVIGATION -->
 
 <!-- END NAVIGATION -->
 
+<style>
 
+    .input-group-field {
+        border-radius: 0!important;
+    }
+    .search-field{
+        font-size: 13px;
+    }
+    .search-select {
+        height: 34px;
+        padding: 3px 10px;
+        line-height: 1.5;
+        border: none;
+        background-color: #F9FAFA;
+        border-radius:0!important;
+        border-right:1px solid #d0dde4!important;
+    }
+
+</style>

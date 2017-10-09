@@ -93,6 +93,7 @@
                                 <div class="product-canvas">
                                     <a data-url="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'item':product.id }) }}" href="javascript:"  class="btn btn-info product-preview product-eye"><span class="glyphicon glyphicon-eye-open"></span></a>
                                     <a class="btn btn-warning product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="glyphicon glyphicon-shopping-cart"></span></a>
+                                    {% if product.discount is not empty  %}<a class="btn btn-danger product-discount btn-sm"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}
                                     <a class="img-card" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
                                         <img src="{{ image(product.webPath).resize(500,500, 'white') }}"/>
                                     </a>
@@ -138,7 +139,7 @@
                                     {% endif %}
                                     </div>
                                     <div class="card-read-more text-center" >
-                                        <strong class="currency" >{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<span id="currency-{{ product.id }}">{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}</span>
+                                        <strong class="currency" >{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<span id="currency-{{ product.id }}">{% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %}</span>
                                     </div>
 
                                 </div>
@@ -162,13 +163,6 @@
     <div class="clearfix"></div>
     <section>
         <div class="container " >
-            {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
-                <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
-                <div class="row div-vertical-center">
-                    <button  class="btn btn-info ladda-button" id="filter" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
-                </div>
-            </div>
-            {% endif %}
             <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %}col-md-12 {% endif %}" data-match-height="body-footer"  >
                 <div class="row paginate-footer" >
                     {% if app.request.get('page') is not empty %}
@@ -184,13 +178,6 @@
                     </div>
                 </div>
             </div>
-            {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
-                <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
-                    <div class="row div-vertical-center">
-                        <button  class="btn btn-info" id="filter" data-style="zoom-in"><span class="glyphicon glyphicon-filter"></span> FILTER</button>
-                    </div>
-                </div>
-            {% endif %}
         </div>
     </section>
     <div class="clearfix"></div>
@@ -227,6 +214,8 @@
         height: 30px;
     }
 
+
+
     .size-loading{
         background-image: url("{{ asset('/assets/img/ajax-loader.gif') }}");
         background-repeat: no-repeat;
@@ -250,12 +239,12 @@
         border: 1px solid #F88216;
     }
     .product-canvas:hover .product-buy {
-        right: 3px;
+        right: 5px;
         opacity: 1;
         z-index: 99;
     }
     .product-canvas:hover .product-eye {
-        left: 3px;
+        left: 5px;
         opacity: 1;
         z-index: 99;
     }
@@ -347,6 +336,23 @@
         transition: 0.5s ease-in-out;
         width: 50px;
         opacity: 0;
+    }
+
+    .product-canvas .product-discount {
+        position: absolute;
+        top: 5px;
+        right:5px;
+        cursor: pointer;
+        -webkit-transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
+        transition: 0.5s ease-in-out;
+        width: 70px;
+    }
+
+    .product-canvas .list-price{
+        color: #F88216;
+        font-weight:bold;
     }
 
     .meta-caption{

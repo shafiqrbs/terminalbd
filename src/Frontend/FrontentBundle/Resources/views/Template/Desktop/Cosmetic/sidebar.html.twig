@@ -5,60 +5,48 @@
         </section>
     {% endif %}
     <div class="clearfix"></div>
-    <form id="productFilter" method="get" >
-        <div class="panel panel-default panel-filter">
-            {% if globalOption.ecommerceConfig.sidebarBrand == 1 %}
-                <div class="panel-heading">
-                    <h5 class="panel-title">ALL BRAND (1 To {{ brands|length }})</h5>
-                </div>
-                <div class="panel-body scrollbar">
-                    <div class="rectangle-list">
-                        <ol>
-                            {% for brand in brands %}
-                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product_brand',{'subdomain': globalOption.subDomain,'id':brand.id }) }}">{{ brand.name }}</a></li>
-                            {% endfor %}
-                        </ol>
-                    </div>
-
-                </div>
-            {% endif %}
-            {% if globalOption.ecommerceConfig.sidebarPrice == 1 %}
-                <div class="panel-heading">
-                    <h3 class="panel-title">PRICE RANGE</h3>
-                </div>
-                <div class="panel-body">
-                    <input id="price-range" name="price-range" type="text" class="span12" value="" data-slider-min="1" data-slider-max="1000000" data-slider-step="5" data-slider-value="[100,1000000]"/>
-                </div>
-            {% endif %}
-            {% if globalOption.ecommerceConfig.sidebarCategory == 1 %}
-                <div class="panel-heading">
-                    <h3 class="panel-title">ALL CATEGORY</h3>
-                </div>
-                <div class="panel-body scrollbar">
-                    <div class="treeview">
-                        {{ categorySidebar|raw }}
-                    </div>
-                </div>
-            {% endif %}
-            {% if globalOption.ecommerceConfig.sidebarSize == 1 %}
-                <div class="panel-heading">
-                    <h3 class="panel-title">SIZE/WEIGHT/DIMENSION</h3>
-                </div>
-                <div class="panel-body">Product Size</div>
-            {% endif %}
-            {% if globalOption.ecommerceConfig.sidebarColor == 1 %}
-                <div class="panel-heading">
-                    <h3 class="panel-title">COLOR</h3>
-                </div>
-                <div class="panel-body">Color</div>
-            {% endif %}
-            <div class="clearfix"></div>
-            {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-                <section class="feature-widget-body-bottom" >
-                    {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'menu' : menu.id,'position':'sidebar-bottom'}) %}
-                </section>
-            {% endif %}
-            <div class="clearfix"></div>
-        </div>
-    </form>
+    {% render controller("FrontendBundle:EcommerceWidget:sidebarProductFilter",{'globalOption':globalOption.id,'searchForm':searchForm}) %}
+    <div class="clearfix"></div>
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+        <section class="feature-widget-body-bottom" >
+            {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id,'menu':menu.id,'position':'sidebar-bottom'}) %}
+        </section>
+    {% endif %}
 </div>
+<style>
+    .ul-check-list-brand , .ul-check-list{
+       list-style: none;
+        padding-left:15px;
+        margin-left:0;
+    }
+    .ul-check-list-brand li{
+       list-style: none;
+        float: left;
+        width: 100%;
+        height: 30px;
+
+    }
+    .ul-check-list li{
+       list-style: none;
+        float: left;
+        width: 50%;
+        height: 30px;
+
+    }
+    .ul-check-list-brand .checkbox , .ul-check-list .checkbox{
+        height: 20px;
+        float: left;
+
+    }
+    .ul-check-list-brand .label , .ul-check-list .label{
+      display: block;
+      font-size: 90%;
+      color: #000000;
+      float: left;
+      line-height: 22px;
+      font-weight:normal;
+    }
+
+
+
+</style>

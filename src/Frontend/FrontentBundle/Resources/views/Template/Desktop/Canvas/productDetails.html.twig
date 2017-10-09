@@ -8,7 +8,7 @@
                 <ul class="breadcrumb">
                     <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
                     <li class=""><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subdomain}) }}">Product</a></li>
-                    <li class="active"><a href="javascript:void(0);">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></li>
+                    <li class="active"><a href="javascript:void(0);">{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}</a></li>
                 </ul>
             </div>
         </section>
@@ -39,7 +39,7 @@
                     <div class="row paginate">
                         <div class="col-md-8">
                             <div class="btn-group pull-left">
-                                <div class="product-title"><span class="glyphicon glyphicon-list"></span>&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</div>
+                                <div class="product-title"><span class="btn btn-info"><span class="glyphicon glyphicon-shopping-cart"></span></span> {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}</div>
                             </div>
                         </div>
                         <div class="col-md-4">

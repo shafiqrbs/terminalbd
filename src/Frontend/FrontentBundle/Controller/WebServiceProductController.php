@@ -73,22 +73,55 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
-
-
-            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
-            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
-            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
-            $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
-
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
 
                     'globalOption'      => $globalOption,
                     'cart'              => $cart,
-                    'categorySidebar'   => $categorySidebar,
-                    'brands'            => $brands,
                     'products'          => $pagination,
                     'menu'              => $menu,
+                    'pageName'          => 'Product',
+                    'searchForm'            => $data,
+                )
+            );
+        }
+    }
+
+    public function productFilterAction(Request $request , $subdomain)
+    {
+
+        $cart = new Cart($request->getSession());
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+
+        if(!empty($globalOption)){
+
+            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'product'));
+
+            $data = $_REQUEST;
+            $ecommerce = $globalOption->getEcommerceConfig();
+            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
+            $inventory = $globalOption->getInventoryConfig();
+            $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->filterFrontendProductWithSearch($inventory,$data);
+            $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
+
+            /* Device Detection code desktop or mobile */
+
+            $detect = new MobileDetect();
+            if( $detect->isMobile() || $detect->isTablet() ) {
+                $theme = 'Template/Mobile/'.$themeName;
+            }else{
+                $theme = 'Template/Desktop/'.$themeName;
+            }
+            return $this->render('FrontendBundle:'.$theme.':product.html.twig',
+                array(
+
+                    'globalOption'      => $globalOption,
+                    'cart'              => $cart,
+                    'products'          => $pagination,
+                    'menu'              => $menu,
+                    'searchForm'        => $data,
                     'pageName'          => 'Product',
                 )
             );
@@ -125,18 +158,10 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
-
-            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
-            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
-            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
-            $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
-
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
                     'globalOption'  => $globalOption,
                     'cart'              => $cart,
-                    'categorySidebar'  => $categorySidebar,
-                    'brands'        => $brands,
                     'products'      => $pagination,
                     'menu'          => $menu,
                     'pageName'      => 'Brand',
@@ -177,17 +202,10 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
-            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
-            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
-            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
-            $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
-
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
                     'globalOption'          => $globalOption,
                     'cart'              => $cart,
-                    'categorySidebar'       => $categorySidebar,
-                    'brands'                => $brands,
                     'products'              => $pagination,
                     'menu'                  => $menu,
                     'pageName'              => 'Product',
@@ -224,16 +242,11 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
-            $category = isset($data['category']) ? $data['category'] :0;
-            $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($category);
-            $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
 
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
 
                     'globalOption'  => $globalOption,
-                    'categoryTree'  => $categoryTree,
-                    'brands'  => $brands,
                     'menu'  => $menu,
                     'products'    => $pagination,
                 )
@@ -268,16 +281,10 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
-            $category = isset($data['category']) ? $data['category'] :0;
-            $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($category);
-            $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
-
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
 
                     'globalOption'  => $globalOption,
-                    'categoryTree'  => $categoryTree,
-                    'brands'  => $brands,
                     'menu'  => $menu,
                     'products'    => $pagination,
                 )
@@ -484,9 +491,9 @@ class WebServiceProductController extends Controller
                 )
             );
             if($subItem->getDiscountPrice()){
-                $price = '<strike>'.$subItem->getSalesPrice().'</strike> <strong>'.$subItem->getDiscountPrice().'</strong>';
+                $price = '<strike>'.$subItem->getSalesPrice().'</strike> <strong class="list-price" >'.$subItem->getDiscountPrice().'</strong>';
             }else{
-                $price = '<strong>'.$subItem->getSalesPrice().'</strong>';
+                $price = '<strong class="list-price">'.$subItem->getSalesPrice().'</strong>';
             }
             echo $array = (json_encode(array('subItem' => $html ,'salesPrice' => $price )));
             exit;

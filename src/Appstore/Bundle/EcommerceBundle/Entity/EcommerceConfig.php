@@ -139,6 +139,27 @@ class EcommerceConfig
     /**
      * @var boolean
      *
+     * @ORM\Column(name="sidebarDiscount", type="boolean")
+     */
+    private $sidebarDiscount = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sidebarPromotion", type="boolean")
+     */
+    private $sidebarPromotion = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sidebarTag", type="boolean")
+     */
+    private $sidebarTag = false;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="sidebarCategory", type="boolean")
      */
     private $sidebarCategory = false;
@@ -884,6 +905,54 @@ class EcommerceConfig
     public function setPrintBy($printBy)
     {
         $this->printBy = $printBy;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getSidebarDiscount()
+    {
+        return $this->sidebarDiscount;
+    }
+
+    /**
+     * @param boolean $sidebarDiscount
+     */
+    public function setSidebarDiscount($sidebarDiscount)
+    {
+        $this->sidebarDiscount = $sidebarDiscount;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getSidebarPromotion()
+    {
+        return $this->sidebarPromotion;
+    }
+
+    /**
+     * @param boolean $sidebarPromotion
+     */
+    public function setSidebarPromotion($sidebarPromotion)
+    {
+        $this->sidebarPromotion = $sidebarPromotion;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getSidebarTag()
+    {
+        return $this->sidebarTag;
+    }
+
+    /**
+     * @param boolean $sidebarTag
+     */
+    public function setSidebarTag($sidebarTag)
+    {
+        $this->sidebarTag = $sidebarTag;
     }
 
 }

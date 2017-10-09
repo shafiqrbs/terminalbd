@@ -40,6 +40,9 @@ class EcommerceProductType extends AbstractType
                 'required'    => true,
                 'empty_value' => '---Choose a master product---',
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Product',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please select master item'))
+                ),
                 'property' => 'nameUnit',
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){

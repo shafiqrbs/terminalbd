@@ -16,6 +16,12 @@ inventory_product_create:
     defaults: { _controller: "InventoryBundle:Product:create" }
     methods:  POST
 
+inventory_product_masteritem_create:
+    path:     /master-product-create
+    defaults: { _controller: "InventoryBundle:Product:createMasterProduct" }
+    options:
+           expose: true
+
 inventory_product_edit:
     path:     /{id}/edit
     defaults: { _controller: "InventoryBundle:Product:edit" }

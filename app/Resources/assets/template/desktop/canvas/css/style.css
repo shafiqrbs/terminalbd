@@ -934,9 +934,7 @@ div.treeview, .treeview ul {
     border-left-color: #F88216;
     color: #ffffff;
 }
-.slider.slider-horizontal{
-    width: 230px !important;
-}
+
 .slider-handle{
     background-color: #F88216 !important;
     background-image: -o-linear-gradient(top, #F88216 0%, #F88216 100%) !important;

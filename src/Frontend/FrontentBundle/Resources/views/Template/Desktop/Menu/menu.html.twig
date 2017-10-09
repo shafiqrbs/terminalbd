@@ -83,10 +83,14 @@
                             {% elseif (menu.features is not empty and  menu.brands is empty)  or (menu.promotions is not empty and  menu.brands is empty ) or (menu.discounts is not empty and  menu.brands is empty ) or (menu.tags is not  empty and  menu.brands is empty )  %}
                                 {% set column   = "col-sm-4" %}
                                 {% set class    = "col-sm-9" %}
+                            {% elseif (menu.features is empty and  menu.brands is not empty)  or (menu.promotions is empty and  menu.brands is not empty ) or (menu.discounts is empty and  menu.brands is not empty ) or (menu.tags is empty and  menu.brands is not empty )  %}
+                                {% set column   = "col-sm-4" %}
+                                {% set class    = "col-sm-9" %}
                             {% elseif (menu.features is not empty  and  menu.brands is not empty ) or (menu.promotions is not empty  and  menu.brands is not empty ) or (menu.discounts is not empty  and  menu.brands is not empty ) or ( menu.tags is not empty  and  menu.brands is not empty) %}
                                 {% set column   = "col-sm-6" %}
                                 {% set class    = "col-sm-6" %}
                             {% else %}
+                                {% set column   = "col-sm-6" %}
                                 {% set class    = "col-sm-6" %}
                             {% endif %}
                             <li class="{{ class }}" data-match-height="menu-content" style="border-right:1px solid #d6d9dd">

@@ -401,8 +401,6 @@
                                     </div>#}
                                 </div>
                                 <div class="span4">
-
-
                                     <div class="row-fluid bankHide">
                                         <div class="span12">
                                             <div class="control-group ">
@@ -425,18 +423,7 @@
                                     </div>
                                 </div>
                             </div>
-
-
-                            <!--/span-->
-                            <div class="row-fluid">
-                                <div class="span12">
-
-                                </div>
-                            </div>
-                            <!--/span-->
-
                             <div class="form-actions portlet box grey">
-                                <div class="span8" id="message"></div>
                                 <div class="pull-right">
                                     <button type="button" class="btn green" id="action-button"><i class="icon-ok"></i> Save</button>
                                 </div>
@@ -452,9 +439,11 @@
         </div>
     </div>
     <style>
+
         .ui-menu-item{
             border-bottom:1px solid #000000;
         }
+
         .ui-menu-item a{
             text-decoration: none;
             background: #d0dde4;
@@ -463,11 +452,13 @@
             border: none!important;
             border-bottom:1px solid #000000;
         }
+
         .ui-menu-item a:hover{
             background-color: #d2d2d2;
             height: 30px !important;
             line-height: 30px !important;
         }
+
         #inventoryItem{
             display: none;
         }
@@ -491,4 +482,4 @@
     $('body').addClass('page-sidebar-closed');
     InventoryPurchasePage();
     ApproveProcess();
-{% endblock %}
+    {% endblock %}

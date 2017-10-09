@@ -349,10 +349,10 @@ $(document).on( "click", ".product-buy", function(e){
 
     var url = $(this).attr("data-url");
     var dataId = $(this).attr("data-id");
-    var size = $('#size-'+dataId).val() != '' || $('#size-'+dataId).val() != 'undefined'  ? $('#size-'+dataId).val() : '';
-    var color = $('#color-'+dataId).val() != 'undefined' ? $('#color-'+dataId).val() : '';
+    var size = $('#size-'+dataId).val() != '' ? $('#size-'+dataId).val() : '';
+    var color = $('#color-'+dataId).val() != '' ? $('#color-'+dataId).val() : '';
     var productImg = $('#productImg-'+dataId).val() != '' ? $('#productImg-'+dataId).val() : '';
-    alert(color);
+
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',

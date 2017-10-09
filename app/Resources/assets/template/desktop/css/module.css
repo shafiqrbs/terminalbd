@@ -1612,7 +1612,15 @@ a:hover , a:visited, a:focus{
     font-size: .8em;
 }
 
-
+.slider.slider-horizontal{
+    width: 255px !important;
+}
+.slider-handle{
+    background-color: #F88216 !important;
+    background-image: -o-linear-gradient(top, #F88216 0%, #F88216 100%) !important;
+    background-image: -webkit-linear-gradient(top, #F88216 0%, #F88216 100%);
+    background-image: linear-gradient(to bottom, #F88216 100%, #F88216 100%);
+}
 
 .box .info-links{
     padding: 0;

@@ -5,11 +5,13 @@ namespace Appstore\Bundle\InventoryBundle\Controller;
 use Appstore\Bundle\InventoryBundle\Entity\GoodsItem;
 use Appstore\Bundle\InventoryBundle\Entity\ItemGallery;
 use Appstore\Bundle\InventoryBundle\Entity\ItemKeyValue;
+use Appstore\Bundle\InventoryBundle\Entity\Product;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Form\EcommerceProductEditType;
 use Appstore\Bundle\InventoryBundle\Form\EcommerceProductSubItemType;
 use Appstore\Bundle\InventoryBundle\Form\EcommerceProductType;
 use Appstore\Bundle\InventoryBundle\Form\InventoryGoodsType;
+use Appstore\Bundle\InventoryBundle\Form\MasterProductType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,10 +88,13 @@ class GoodsController extends Controller
             return $this->redirect($this->generateUrl('inventory_goods_edit',array('id'=>$entity->getId())));
         }
         $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
+        $master = new Product();
+        $masterForm   = $this->inventoryMasterProductForm($master);
         return $this->render('InventoryBundle:Goods:new.html.twig', array(
             'entity' => $entity,
             'ecommerceConfig' => $ecommerceConfig,
             'form'   => $form->createView(),
+            'masterForm'   => $masterForm->createView(),
         ));
     }
 
@@ -133,6 +138,30 @@ class GoodsController extends Controller
     }
 
     /**
+     * Creates a form to edit a PurchaseVendorItem entity.
+     *
+     * @param PurchaseVendorItem $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function inventoryMasterProductForm(Product $entity)
+    {
+        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
+        $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
+        $form = $this->createForm(new MasterProductType($em,$inventory), $entity, array(
+            'action' => $this->generateUrl('inventory_product_masteritem_create', array('id' => $entity->getId())),
+            'method' => 'POST',
+            'attr' => array(
+                'id' => 'masterProduct',
+                'class' => 'action',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+
+    /**
      * Displays a form to create a new PurchaseVendorItem entity.
      * @Secure(roles = "ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN")
      */
@@ -140,11 +169,14 @@ class GoodsController extends Controller
     {
         $entity = new PurchaseVendorItem();
         $form   = $this->createCreateForm($entity);
+        $master = new Product();
+        $masterForm   = $this->inventoryMasterProductForm($master);
         $inventoryConfig = $this->getUser()->getGlobalOption()->getInventoryConfig();
         return $this->render('InventoryBundle:Goods:new.html.twig', array(
             'entity' => $entity,
             'inventoryConfig' => $inventoryConfig,
             'form'   => $form->createView(),
+            'masterForm'   => $masterForm->createView(),
         ));
     }
 
