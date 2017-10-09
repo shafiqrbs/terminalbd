@@ -535,7 +535,7 @@ class GoodsItemRepository extends EntityRepository
     {
 
 
-        $brands = is_array($array['brand']) ? $array['brand'] :'';
+        $brands = $array; // is_array($array['brand']) ? $array['brand'] :'';
 
         $qb = $this->_em->createQueryBuilder();
         $qb->from('InventoryBundle:PurchaseVendorItem','e');
@@ -561,8 +561,8 @@ class GoodsItemRepository extends EntityRepository
     public function findGroupColors(InventoryConfig $config , $array = array())
     {
 
-        $colors = is_array($array['color']) ? $array['color'] :'';
-
+       // $colors = is_array($array['color']) ? $array['color'] :'';
+        $colors = $array;
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.purchaseVendorItem','purchasevendoritem');
         $qb->join('e.colors','colors');
@@ -576,7 +576,7 @@ class GoodsItemRepository extends EntityRepository
         $value ='';
         $value .='<ul class="ul-check-list">';
         foreach ($res as $key => $val) {
-            $checkd = in_array($val['id'], $colors ) ? 'checked':'';
+            echo $checkd = in_array($val['id'], $colors ) ? 'checked':'';
             $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="color[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
         }
         $value .='</ul>';
@@ -585,8 +585,8 @@ class GoodsItemRepository extends EntityRepository
 
     public function findGroupSizes(InventoryConfig $config , $array = array())
     {
-        $sizes = is_array($array['size']) ? $array['size'] :'';
-
+       // $sizes = is_array($array['size']) ? $array['size'] :'';
+        $sizes = $array;
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.purchaseVendorItem','purchasevendoritem');
         $qb->join('e.size','size');

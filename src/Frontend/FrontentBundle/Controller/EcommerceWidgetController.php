@@ -120,10 +120,8 @@ class EcommerceWidgetController extends Controller
         ));
     }
 
-    public function sidebarProductFilterAction(GlobalOption $globalOption , $searchForm )
+    public function sidebarProductFilterAction(GlobalOption $globalOption , $searchForm = array() )
     {
-
-
         
         if(!empty($globalOption)) {
 
