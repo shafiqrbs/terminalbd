@@ -89,7 +89,7 @@ $('.discountProductLeft .img-card-large img').css({
 
 
 $(document).on( "click", "#filter", function(e){
-    alert('Submit');
+
     $('#productFilter').submit();
 
 });
@@ -172,7 +172,7 @@ $(document).on( "click", ".cartSubmit", function(e){
     var url = $('.cartSubmit').attr("data-url");
     var data = $('.addCart').serialize();
     var qnt = $('#quantity').val();
-    alert(qnt);
+
     $.ajax({
         url:url ,
         type: 'POST',
