@@ -138,13 +138,14 @@ class OrderRepository extends EntityRepository
             $goodsItem = $em->getRepository('InventoryBundle:GoodsItem')->find($row['id']);
             if(!empty($goodsItem)) {
 
+                $salesPrice = empty($goodsItem->getDiscountPrice()) ? $goodsItem->getSalesPrice() : $goodsItem->getDiscountPrice();
                 $orderItem = new OrderItem();
                 $orderItem->setOrder($order);
                 $orderItem->setPurchaseVendorItem($goodsItem->getPurchaseVendorItem());
                 $orderItem->setGoodsItem($goodsItem);
-                $orderItem->setPrice($goodsItem->getSalesPrice());
+                $orderItem->setPrice($salesPrice);
                 $orderItem->setQuantity($row['quantity']);
-                $orderItem->setSubTotal($row['quantity'] * $goodsItem->getSalesPrice());
+                $orderItem->setSubTotal($row['quantity'] * $salesPrice);
                 if (!empty($row['colorId'])){
                 $orderItem->setColor($em->getRepository('InventoryBundle:ItemColor')->find($row['colorId']));
                 }
