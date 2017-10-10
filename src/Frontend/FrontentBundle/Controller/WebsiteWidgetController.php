@@ -28,11 +28,14 @@ class WebsiteWidgetController extends Controller
     {
 
         $widgets                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'widgetFor'=>'website','menu' => $menu ,'position' => $position ),array('sorting'=>'ASC'));
+
         /* Device Detection code desktop or mobile */
+
         return $this->render('@Frontend/Template/Desktop/WebsiteWidget/widget.html.twig', array(
             'widgets'                  => $widgets,
             'globalOption'            => $globalOption,
         ));
+
     }
 
 

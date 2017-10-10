@@ -89,23 +89,27 @@
                     </div>
                 </div>
                 {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty or  product.itemKeyValues is defined and product.itemKeyValues is not empty  %}
-                    <div class="row meta-caption"><div class="col-xs-12 col-md-12"><strong>Specification</strong></div></div>
-                    {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
-                        {% for attribute in  product.itemMetaAttributes %}
-                            <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ attribute.itemAttribute.name }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ attribute.value }}</div></div>
-                        {% endfor %}
-                    {% endif %}
-                    {% if  product.itemKeyValues is defined and product.itemKeyValues is not empty %}
-                        {% for meta in product.itemKeyValues %}
-                            {% if meta.metaKey is not empty and meta.metaValue is empty %}
-                                <div class="row meta-label"><div class="col-xs-12 col-md-12">{{ meta.metaKey|capitalize }}</div></div>
-                            {% elseif meta.metaKey is empty and meta.metaValue is not empty %}
-                             <div class="row meta-value"><div class="col-xs-12 col-md-12">{{ meta.metaValue }}</div></div>
-                            {% else %}
-                                <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ meta.metaKey }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ meta.metaValue  }}</div></div>
+                    <div class="row meta-caption"><div class="col-xs-11 col-md-11"><strong>Specification</strong></div><div class="col-xs-1 col-md-1 text-right btn btn-success" id="spec"><strong><span class="glyphicon glyphicon-chevron-down"></span></strong></div></div>
+                    <div class="row" id="showSpec">
+                        <div class="col-xs-12 col-md-12 scrollbar">
+                            {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
+                                {% for attribute in  product.itemMetaAttributes %}
+                                    <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ attribute.itemAttribute.name }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ attribute.value }}</div></div>
+                                {% endfor %}
                             {% endif %}
-                        {% endfor %}
-                    {% endif %}
+                            {% if  product.itemKeyValues is defined and product.itemKeyValues is not empty %}
+                                {% for meta in product.itemKeyValues %}
+                                    {% if meta.metaKey is not empty and meta.metaValue is empty %}
+                                        <div class="row meta-label"><div class="col-xs-12 col-md-12">{{ meta.metaKey|capitalize }}</div></div>
+                                    {% elseif meta.metaKey is empty and meta.metaValue is not empty %}
+                                        <div class="row meta-value"><div class="col-xs-12 col-md-12">{{ meta.metaValue }}</div></div>
+                                    {% else %}
+                                        <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ meta.metaKey }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ meta.metaValue  }}</div></div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
                 {% endif %}
         </div>
     </div>

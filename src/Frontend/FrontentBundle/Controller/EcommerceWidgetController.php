@@ -120,9 +120,47 @@ class EcommerceWidgetController extends Controller
         ));
     }
 
-    public function sidebarProductFilterAction(GlobalOption $globalOption , $searchForm = array() )
+    public function sidebarTemplateProductFilterAction(GlobalOption $globalOption , $searchForm = array() )
     {
         
+        if(!empty($globalOption)) {
+
+            $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
+
+            /* @var InventoryConfig $inventory */
+            $inventory = $globalOption->getInventoryConfig();
+
+            /* Device Detection code desktop or mobile */
+
+            $detect = new MobileDetect();
+            if ($detect->isMobile() || $detect->isTablet()) {
+                $theme = 'Template/Mobile/' . $themeName.'/EcommerceWidget/';
+            } else {
+                $theme = 'Template/Desktop/' . $themeName.'/EcommerceWidget/';
+            }
+            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $inventory));
+            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
+            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
+            $brandTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupBrands($inventory, $searchForm);
+            $colorTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupColors($inventory, $searchForm);
+            $sizeTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupSizes($inventory, $searchForm);
+        }
+
+        return $this->render('@Frontend/'.$theme.'/productFilter.html.twig', array(
+                'globalOption'              => $globalOption,
+                'categorySidebar'           => $categorySidebar,
+                'brandTree'                 => $brandTree,
+                'colorTree'                 => $colorTree,
+                'sizeTree'                  => $sizeTree,
+
+            )
+        );
+
+    }
+
+    public function sidebarProductFilterAction(GlobalOption $globalOption , $searchForm = array() )
+    {
+
         if(!empty($globalOption)) {
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();

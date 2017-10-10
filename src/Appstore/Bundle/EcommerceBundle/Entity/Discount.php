@@ -365,6 +365,17 @@ class Discount
         $this->discountAmount = $discountAmount;
     }
 
+    /**
+     * @return string
+     */
+    public function getNameDetails()
+    {
+        $type = $this->getType() == 'percentage' ? '%':'';
+        return $this->getName().'('.$this->getDiscountAmount().')'.$type;
+    }
+
+
+
 
 }
 

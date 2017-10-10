@@ -57,6 +57,13 @@ inventory_goods_inline_update:
     options:
             expose: true
 
+inventory_goods_inline_subitem_update:
+    path:     /inline-goods-subitem-update
+    defaults: { _controller: "InventoryBundle:Goods:inlineSubItemUpdate" }
+    methods:  POST
+    options:
+            expose: true
+
 inventory_vendoritem_subproduct:
     path:     /{id}/sub-product
     defaults: { _controller: "InventoryBundle:Goods:addSubProduct" }

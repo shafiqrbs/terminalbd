@@ -107,11 +107,7 @@ class GoodsItemRepository extends EntityRepository
             $em->persist($goods);
             $em->flush();
         }
-
-
     }
-
-
 
      public function insertSubProduct(PurchaseVendorItem $reEntity,$data)
     {

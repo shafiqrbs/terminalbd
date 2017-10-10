@@ -574,6 +574,23 @@ class GoodsController extends Controller
 
     }
 
+    public function inlineSubItemUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('InventoryBundle:GoodsItem')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
+        }
+        $setName = 'set'.$data['name'];
+        $setValue = $data['value'];
+        $entity->$setName($setValue);
+        $em->persist($entity);
+        $em->flush($entity);
+        exit;
+
+    }
+
     public function keyValueSortedAction(Request $request)
     {
         $data = $request ->request->get('menuItem');

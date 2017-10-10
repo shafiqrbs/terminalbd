@@ -80,14 +80,13 @@
         <div class="container ">
             {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
                 <div class="col-md-3" data-match-height="body-content" >
-                    {{ include('@Frontend/Template/Desktop/Cosmetic/sidebar.html.twig')}}
+                    {{ include('@Frontend/Template/Desktop/Canvas/sidebar.html.twig')}}
                 </div>
             {% endif %}
             <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="body-content" style="margin-top: 30px"  >
 
                 <div class="row row-flex">
                     {% for product in products %}
-
                             <div  class="product-item col-xs-{{ globalOption.ecommerceConfig.perColumn }} col-lg-{{ globalOption.ecommerceConfig.perColumn }}">
                                 <form id="add_buy_cart-{{ product.id }}" class="addCart">
                                 <div class="product-canvas">
@@ -153,7 +152,7 @@
             </div>
             {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
                 <div class="col-md-3" data-match-height="body-content" >
-                    {{ include('@Frontend/Template/Desktop/Cosmetic/sidebar.html.twig')}}
+                    {{ include('@Frontend/Template/Desktop/Canvas/sidebar.html.twig')}}
                 </div>
             {% endif %}
             <div class="clearfix"></div>
@@ -214,9 +213,7 @@
         height: 30px;
     }
 
-
-
-    .size-loading{
+   .size-loading{
         background-image: url("{{ asset('/assets/img/ajax-loader.gif') }}");
         background-repeat: no-repeat;
         background-position: center center;
@@ -388,6 +385,9 @@
     }
     .meta-key-value:nth-of-type(odd){
         background-color: #F9FAFA;
+    }
+    #showSpec{
+        display: none;
     }
 
 </style>

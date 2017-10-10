@@ -158,6 +158,7 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
+
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
                     'globalOption'  => $globalOption,
@@ -166,7 +167,7 @@ class WebServiceProductController extends Controller
                     'menu'          => $menu,
                     'pageName'      => 'Brand',
                     'titleName'      => 'Brand: '.$brand->getName(),
-                    'data' => $data,
+                    'searchForm'        => $data,
                 )
             );
         }
@@ -202,14 +203,16 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
+
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
                     'globalOption'          => $globalOption,
-                    'cart'              => $cart,
+                    'cart'                  => $cart,
                     'products'              => $pagination,
                     'menu'                  => $menu,
                     'pageName'              => 'Product',
                     'data'                  => $data['limit']= 20,
+                    'searchForm'            => $data,
                     'titleName'             => 'Category: '.$category->getName(),
                 )
             );
@@ -248,6 +251,7 @@ class WebServiceProductController extends Controller
 
                     'globalOption'  => $globalOption,
                     'menu'  => $menu,
+                    'searchForm'        => $data,
                     'products'    => $pagination,
                 )
             );
@@ -286,6 +290,7 @@ class WebServiceProductController extends Controller
 
                     'globalOption'  => $globalOption,
                     'menu'  => $menu,
+                    'searchForm'        => $data,
                     'products'    => $pagination,
                 )
             );
@@ -330,6 +335,7 @@ class WebServiceProductController extends Controller
                     'categoryTree'  => $categoryTree,
                     'brands'  => $brands,
                     'menu'  => $menu,
+                    'searchForm'        => $data,
                     'products'    => $pagination,
                 )
             );
@@ -392,7 +398,8 @@ class WebServiceProductController extends Controller
                     'subItem'           => $subItem,
                     'next'              => $next,
                     'previous'          => $previous,
-                    'menu'          => $menu,
+                    'menu'              => $menu,
+                    'searchForm'        => $_REQUEST,
                     'pageName'          => 'ProductDetails',
                 )
             );
@@ -651,6 +658,7 @@ class WebServiceProductController extends Controller
         return $this->render('FrontendBundle:Template/Desktop/EcommerceWidget:ajaxCart.html.twig',
             array(
                 'cart' => $cart,
+                'searchForm'        => $_REQUEST,
                 'globalOption' => $globalOption
             )
         );

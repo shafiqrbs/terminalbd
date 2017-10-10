@@ -39,7 +39,7 @@
                     <div class="row paginate">
                         <div class="col-md-8">
                             <div class="btn-group pull-left">
-                                <div class="product-title"><span class="btn btn-info"><span class="glyphicon glyphicon-shopping-cart"></span></span> {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}</div>
+                                <div class="product-title"><span class="glyphicon glyphicon-shopping-cart"></span>{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}</div>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -89,7 +89,7 @@
             <div class="container bodyColor">
                 {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
                     <div class="col-md-3" data-match-height="body-content" >
-                        {{ include('@Frontend/Template/Desktop/Cosmetic/sidebar.html.twig')}}
+                        {{ include('@Frontend/Template/Desktop/Canvas/sidebar.html.twig')}}
                     </div>
                 {% endif %}
                 <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="" {% if globalOption.ecommerceConfig.showSidebar == 1 %} style="width: 73%; margin-left: 2%" {% endif %}  >
@@ -344,32 +344,7 @@
                 </div>
                 {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
                     <div class="col-md-3" data-match-height="body-content" >
-                        {{ include('@Frontend/Template/Desktop/Cosmetic/sidebar.html.twig')}}
-                    </div>
-                {% endif %}
-            </div>
-        </section>
-        <section>
-            <div class="container bodyColor" >
-                {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'left' %}
-                    <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
-                    <div class="row div-vertical-center">
-                    <button  class="btn btn-info ladda-button" id="filter" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
-                    </div>
-                </div>
-                {% endif %}
-                <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %} col-md-12 {% endif %}" data-match-height="body-footer"  >
-                    <div class="row paginate-footer" >
-                        <div class="row-fluid">
-
-                        </div>
-                    </div>
-                </div>
-                {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.templateCustomize.sidebarPosition == 'right' %}
-                    <div class="col-md-3 sidebar-footer" data-match-height="body-footer" >
-                        <div class="row div-vertical-center">
-                            <button  class="btn btn-info ladda-button" id="filter" data-style="zoom-in"><span class="ladda-label">REFINE FILTER</span><span class="ladda-spinner"></span></button>
-                        </div>
+                        {{ include('@Frontend/Template/Desktop/Canvas/sidebar.html.twig')}}
                     </div>
                 {% endif %}
             </div>
@@ -386,20 +361,12 @@
         <div class="clearfix"></div>
 </section>
     <style>
-        .cart-small-loading{
-
-            background-image: url("{{ asset('/assets/img/ajax-loading.gif') }}");
-            background-repeat: no-repeat;
-            background-size: 100%;
-
-        }
         .size-loading{
             background-image: url("{{ asset('/assets/img/ajax-loader.gif') }}");
             background-repeat: no-repeat;
             background-position: center center;
             height: 100%;
             width: 100%;
-
         }
 
     </style>

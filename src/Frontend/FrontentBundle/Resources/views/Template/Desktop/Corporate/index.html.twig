@@ -1,11 +1,5 @@
 {% extends ':frontend/template:base.html.twig' %}
 {% block body %}
-    <div class="clearfix"></div>
-    <section>
-        {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
-            {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header-bottom'}) %}
-        {% endif %}
-    </section>
     <section>
         <div class="container">
             <div class="row">

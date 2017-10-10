@@ -40,6 +40,9 @@ class EcommerceProductEditType extends AbstractType
                 'required'    => true,
                 'empty_value' => '---Choose a master product---',
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\Product',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please select master item'))
+                ),
                 'property' => 'nameUnit',
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
@@ -55,7 +58,7 @@ class EcommerceProductEditType extends AbstractType
                 'class' => 'Appstore\Bundle\InventoryBundle\Entity\ItemBrand',
                 'property' => 'name',
                 'empty_value' => '-Choose a brand-',
-                'attr'=>array('class'=>'span12'),
+                'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->where("p.status = 1")
@@ -84,7 +87,7 @@ class EcommerceProductEditType extends AbstractType
                 'class' => 'Setting\Bundle\LocationBundle\Entity\Country',
                 'empty_value' => '---Choose a country ---',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 '),
+                'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('p')
                         ->orderBy("p.name","ASC");
@@ -117,7 +120,10 @@ class EcommerceProductEditType extends AbstractType
                     new NotBlank(array('message'=>'Please add sales price'))
             )))
             ->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
-            ->add('file')
+            ->add('file','file', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'sales price'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please product feature image'))
+            )))
             ->add('tag', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
@@ -145,6 +151,19 @@ class EcommerceProductEditType extends AbstractType
                      $qb->where("p.status = 1");
                      $qb->andWhere($qb->expr()->like('p.type', ':type'));
                      $qb->setParameter('type','%Promotion%');
+                     $qb->orderBy("p.name","ASC");
+                     return $qb;
+                },
+            ))
+            ->add('discount', 'entity', array(
+                'required'    => true,
+                'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Discount',
+                'empty_value' => '-Choose a Discount-',
+                'property' => 'nameDetails',
+                'attr'=>array('class'=>'span12 select2'),
+                'query_builder' => function(EntityRepository $er){
+                     $qb = $er->createQueryBuilder('p');
+                     $qb->where("p.status = 1");
                      $qb->orderBy("p.name","ASC");
                      return $qb;
                 },

@@ -70,7 +70,7 @@
                                         <td class="numeric" >{{ entity.updated|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.menu.menu }}</td>
                                         <td class="numeric" >{{ entity.position }}</td>
-                                        <td class="numeric" >{{ entity.module.name }}</td>
+                                        <td class="numeric" >{% if  entity.module is not empty %}{{ entity.module.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.jsFeature is not empty %}{{ entity.jsFeature.name }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
