@@ -89,19 +89,25 @@ function InventoryPurchasePage(){
         });
     });
 
-    $('#purchase').on("click", ".delete", function() {
+    $(document).on("click", ".delete , .remove", function() {
 
         var url = $(this).attr("rel");
         var id = $(this).attr("id");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                if ('success' == response) {
-                    $('#remove-' + id).hide();
-                }
-            },
-        })
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (response) {
+                        if ('success' == response) {
+                            $('#remove-' + id).hide();
+                        }
+                    },
+                })
+            }
+        });
     });
 
     $(document).on("click", ".vendorItemDelete", function() {
