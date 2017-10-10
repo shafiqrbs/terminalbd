@@ -184,7 +184,17 @@ function ApproveProcess(){
             onOkBut: function(event, el) {
                 $.post( url,{amount:amount,'accountMobileBank':accountMobileBank,'mobileAccount':mobileAccount,'transaction':transaction})
                     .done(function(data){
-                         location.reload();
+                        $('#payment-confirm').notifyModal({
+                            duration : 4000,
+                            placement : 'center',
+                            overlay : true,
+                            type : 'notify',
+                            icon : false
+                        });
+                        setTimeout(function(){
+                            location.reload();
+                        }, 5000);
+
                 });
             }
         });

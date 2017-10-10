@@ -4,6 +4,7 @@ namespace Appstore\Bundle\EcommerceBundle\Controller;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\EcommerceBundle\Form\DiscountType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -92,22 +93,18 @@ class DiscountController extends Controller
      * Displays a form to edit an existing PreOrder entity.
      *
      */
-    public function editAction(Discount $entity)
+    public function editAction(Request $request , Discount $entity)
     {
+
+        $data = $request->request->all();
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find PreOrder entity.');
+            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
         }
+        $entity->setName($data['value']);
+        $em->flush();
+        exit;
 
-        $editForm = $this->createEditForm($entity);
-        $ecommerceConfig = $this->getUser()->getGlobalOption()->getEcommerceConfig();
-        $entities = $em->getRepository('EcommerceBundle:Discount')->findBy(array('ecommerceConfig'=>$ecommerceConfig),array('name'=>'asc'));
-
-        return $this->render('EcommerceBundle:Discount:index.html.twig', array(
-            'entities' => $entities,
-            'entity' => $entity,
-            'form' => $editForm->createView(),
-        ));
     }
 
     /**
@@ -176,14 +173,28 @@ class DiscountController extends Controller
      */
     public function deleteAction( Discount $entity)
     {
+
+
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Discount entity.');
+            throw $this->createNotFoundException('Unable to find Product entity.');
         }
-        $entity->removeUpload();
-        $em->remove($entity);
-        $em->flush();
+
+        try {
+            $entity->removeUpload();
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }
         return $this->redirect($this->generateUrl('ecommerce_discount'));
+
     }
 
     public function statusAction(Discount $entity)

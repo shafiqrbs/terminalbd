@@ -4,6 +4,7 @@ namespace Appstore\Bundle\EcommerceBundle\Controller;
 
 use Appstore\Bundle\EcommerceBundle\Entity\Promotion;
 use Appstore\Bundle\EcommerceBundle\Form\PromotionType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -176,13 +177,23 @@ class PromotionController extends Controller
      */
     public function deleteAction( Promotion $entity)
     {
+
         $em = $this->getDoctrine()->getManager();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Promotion entity.');
+        try {
+            $entity->removeUpload();
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
         }
-        $em->remove($entity);
-        $em->flush();
         return $this->redirect($this->generateUrl('ecommerce_promotion'));
+
     }
 
     public function statusAction(Promotion $entity)

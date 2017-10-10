@@ -15,20 +15,6 @@ use Appstore\Bundle\EcommerceBundle\Form\EcommerceConfigType;
 class EcommerceConfigController extends Controller
 {
 
-    /**
-     * Lists all EcommerceConfig entities.
-     *
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('EcommerceBundle:EcommerceConfig')->findAll();
-
-        return $this->render('EcommerceBundle:EcommerceConfig:index.html.twig', array(
-            'entities' => $entities,
-        ));
-    }
 
 
     /**
@@ -50,34 +36,7 @@ class EcommerceConfigController extends Controller
         ));
         return $form;
     }
-    /**
-     * Edits an existing EcommerceConfig entity.
-     *
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('EcommerceBundle:EcommerceConfig')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find EcommerceConfig entity.');
-        }
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isValid()) {
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('ecommerce_config_modify'));
-        }
-
-        return $this->render('EcommerceBundle:EcommerceConfig:edit.html.twig', array(
-            'entity'      => $entity,
-            'form'   => $editForm->createView(),
-
-        ));
-    }
     /**
      * Displays a form to edit an existing EcommerceConfig entity.
      *
