@@ -162,7 +162,7 @@
     <div class="clearfix"></div>
     <section>
         <div class="container " >
-            <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %}col-md-12 {% endif %}" data-match-height="body-footer"  >
+            <div class="col-md-12">
                 <div class="row paginate-footer" >
                     {% if app.request.get('page') is not empty %}
                     {% set page = app.request.get('page') %}
