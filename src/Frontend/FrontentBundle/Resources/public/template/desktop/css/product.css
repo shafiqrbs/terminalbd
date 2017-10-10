@@ -379,6 +379,36 @@ strike{
 
 /*==============================  Product Canvas==============================*/
 
+/*==============================  Product Canvas==============================*/
+
+.item-select{
+
+    height: 30px;
+    padding: 3px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border: 1px solid #F6F7F7;
+    margin-bottom: 1px;
+    border-right: none;
+    border-left: none;
+    background-color: #F9FAFA;
+}
+.product-attr{
+    color: red;
+    font-size: 13px;
+    line-height: 30px;
+    height: 30px;
+}
+
+.size-loading{
+    background-image: url("{{ asset('/assets/img/ajax-loader.gif') }}");
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100%;
+    width: 100%;
+
+}
+
 .product-canvas {
     display: block;
     line-height: 1.42857143;
@@ -393,12 +423,12 @@ strike{
     border: 1px solid #F88216;
 }
 .product-canvas:hover .product-buy {
-    right: 3px;
+    right: 5px;
     opacity: 1;
     z-index: 99;
 }
 .product-canvas:hover .product-eye {
-    left: 3px;
+    left: 5px;
     opacity: 1;
     z-index: 99;
 }
@@ -492,6 +522,23 @@ strike{
     opacity: 0;
 }
 
+.product-canvas .product-discount {
+    position: absolute;
+    top: 5px;
+    right:5px;
+    cursor: pointer;
+    -webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
+    width: 70px;
+}
+
+.product-canvas .list-price{
+    color: #F88216;
+    font-weight:bold;
+}
+
 .meta-caption{
     background-color: #E5E7E7;
     height: 35px;
@@ -525,6 +572,9 @@ strike{
 }
 .meta-key-value:nth-of-type(odd){
     background-color: #F9FAFA;
+}
+#showSpec{
+    display: none;
 }
 
 .ul-check-list-brand , .ul-check-list{

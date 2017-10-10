@@ -347,11 +347,12 @@ $(document).on( "click", "#productBuy", function(e){
 
 $(document).on( "click", ".product-buy", function(e){
 
+    var cartForm = $(this).closest("form");
     var url = $(this).attr("data-url");
     var dataId = $(this).attr("data-id");
-    var size = $('#size-'+dataId).val() != '' ? $('#size-'+dataId).val() : '';
-    var color = $('#color-'+dataId).val() != '' ? $('#color-'+dataId).val() : '';
-    var productImg = $('#productImg-'+dataId).val() != '' ? $('#productImg-'+dataId).val() : '';
+    var size = $('#size-'+dataId , cartForm).val() != '' ? $('#size-'+dataId).val() : '';
+    var color = $('#color-'+dataId, cartForm).val() != '' ? $('#color-'+dataId).val() : '';
+    var productImg = $('#productImg-'+dataId, cartForm).val() != '' ? $('#productImg-'+dataId).val() : '';
 
     $('#confirm-content').confirmModal({
         topOffset: 0,
@@ -393,11 +394,8 @@ $(document).on( "change", ".inlineSizeChange", function( e ) {
 });
 
 $(document).on( "click", "#spec", function(e){
-    $("#showSpec").slideToggle(100);
-}).toggle( function() {
-    $('#spec').html('<strong><span class="glyphicon glyphicon-chevron-down"></span></strong>');
-}, function() {
-    $('#spec').html('<strong><span class="glyphicon glyphicon-chevron-up"></span></strong>');
+    $('#showSpec').slideToggle('2000');
+    $("span", this).toggleClass("glyphicon-chevron-down glyphicon-chevron-up");
 });
 
 

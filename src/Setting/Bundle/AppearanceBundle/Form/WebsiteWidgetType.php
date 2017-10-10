@@ -47,9 +47,6 @@ class WebsiteWidgetType extends AbstractType
             ->add('position', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12 select2 '),
                 'empty_value' => '---Select Position---',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Select feature position'))
-                ),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
