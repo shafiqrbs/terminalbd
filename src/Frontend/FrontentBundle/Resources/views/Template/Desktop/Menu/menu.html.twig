@@ -11,7 +11,7 @@
                     <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown">{{ menu.name }}<span class="caret"></span></a>
                     <ul class="dropdown-menu {% if menu.singleMenu != 1 %} mega-dropdown-menu {% else %} single-dropdown-menu {% endif %} ">
                         {% if menu.features is not empty or menu.promotions is not empty or menu.discounts is not empty or menu.tags is not empty %}
-                            <li class="col-sm-3" data-match-height="menu-content" style="background-color: #f9f9f9; border-right:1px solid #d6d9dd">
+                            <li  {% if menu.singleMenu != 1 %} class="col-sm-3" data-match-height="menu-content" style="background-color: #f9f9f9; border-right:1px solid #d6d9dd" {% endif %} >
                                 {% if menu.features is not empty %}
                                     <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                                         <!-- Wrapper for slides -->
@@ -93,12 +93,12 @@
                                 {% set column   = "col-sm-6" %}
                                 {% set class    = "col-sm-6" %}
                             {% endif %}
-                            <li class="{{ class }}" data-match-height="menu-content" style="border-right:1px solid #d6d9dd">
+                            <li {% if menu.singleMenu != 1 %}  class="{{ class }}" data-match-height="menu-content" style="border-right:1px solid #d6d9dd" {% endif %}>
                                 {% render controller("FrontendBundle:EcommerceWidget:returnMegaCategoryMenu",{globalOption:globalOption, categories: menu.categories,column:column}) %}
                             </li>
                         {% endif %}
                         {% if menu.brands is not empty %}
-                            <li data-match-height="menu-content" class="{% if (menu.features is empty or menu.promotions is empty or menu.discounts is empty or menu.tags is  empty ) and  menu.categories is empty %} col-sm-12 {% elseif menu.categories is empty %} col-sm-9 {% else %} col-sm-3 {% endif %}">
+                            <li {% if menu.singleMenu != 1 %}  data-match-height="menu-content" class="{% if (menu.features is empty or menu.promotions is empty or menu.discounts is empty or menu.tags is  empty ) and  menu.categories is empty %} col-sm-12 {% elseif menu.categories is empty %} col-sm-9 {% else %} col-sm-3 {% endif %}"  {% endif %} >
                                 <ul class="col-sm-12">
                                     <li class="dropdown-header">Brand's</li>
                                     {% for brand in menu.brands %}
@@ -108,7 +108,7 @@
                             </li>
                         {% endif %}
                         {% if menu.childMenus is not empty %}
-                            <li data-match-height="menu-content" class="{% if (menu.features is empty or menu.promotions is empty or menu.discounts is empty or menu.tags is  empty ) and  menu.categories is empty %} col-sm-12 {% elseif menu.categories is empty %} col-sm-9 {% else %} col-sm-3 {% endif %}">
+                            <li {% if menu.singleMenu != 1 %}  data-match-height="menu-content" class="{% if (menu.features is empty or menu.promotions is empty or menu.discounts is empty or menu.tags is  empty ) and  menu.categories is empty %} col-sm-12 {% elseif menu.categories is empty %} col-sm-9 {% else %} col-sm-3 {% endif %}"  {% endif %} >
                                 <ul class="col-sm-12">
                                     <li class="dropdown-header">Page's</li>
                                     {% if menu.childMenus is not empty %}
