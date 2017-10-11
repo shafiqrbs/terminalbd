@@ -1206,8 +1206,8 @@ class Builder extends ContainerAware
             ->setAttribute('dropdown', true);
         $menu['Application Setting']->addChild('Account Head', array('route' => 'accounthead'))->setAttribute('icon', 'icon-th-list');
         $menu['Application Setting']->addChild('Transaction Method', array('route' => 'transactionmethod_new'))->setAttribute('icon', 'icon-th-list');
-        $menu['Application Setting']->addChild('Color', array('route' => 'itemcolor'))->setAttribute('icon', 'icon-th-list');
-        $menu['Application Setting']->addChild('Size', array('route' => 'itemsize'))->setAttribute('icon', 'icon-th-list');
+        $menu['Application Setting']->addChild('Color', array('route' => 'color'))->setAttribute('icon', 'icon-th-list');
+        $menu['Application Setting']->addChild('Size', array('route' => 'size'))->setAttribute('icon', 'icon-th-list');
 
         return $menu;
 

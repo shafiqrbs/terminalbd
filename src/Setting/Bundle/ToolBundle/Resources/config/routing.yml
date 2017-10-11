@@ -10,6 +10,14 @@ setting_tool_sidebar:
     resource: "@SettingToolBundle/Resources/config/routing/sidebar.yml"
     prefix:   /domain/sidebar
 
+setting_tool_color:
+    resource: "@SettingToolBundle/Resources/config/routing/color.yml"
+    prefix:   /admin/color
+
+setting_tool_size:
+    resource: "@SettingToolBundle/Resources/config/routing/size.yml"
+    prefix:   /admin/size
+
 setting_tool_invoicesmsemail:
     resource: "@SettingToolBundle/Resources/config/routing/invoicesmsemail.yml"
     prefix:   /domain/invoice-sms-email
