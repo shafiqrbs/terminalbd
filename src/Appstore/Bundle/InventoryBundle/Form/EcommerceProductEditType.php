@@ -120,10 +120,11 @@ class EcommerceProductEditType extends AbstractType
                     new NotBlank(array('message'=>'Please add sales price'))
             )))
             ->add('content','textarea', array('attr'=>array('class'=>'no-resize span12','rows'=>5)))
-            ->add('file','file', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'sales price'),
+            ->add('file')
+            /*->add('file','file', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'sales price'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please product feature image'))
-            )))
+            )))*/
             ->add('tag', 'entity', array(
                 'required'    => true,
                 'class' => 'Appstore\Bundle\EcommerceBundle\Entity\Promotion',
