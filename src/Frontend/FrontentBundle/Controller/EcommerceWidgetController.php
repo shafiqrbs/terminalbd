@@ -143,6 +143,8 @@ class EcommerceWidgetController extends Controller
             $colorTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupColors($inventory, $searchForm);
             $sizeTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupSizes($inventory, $searchForm);
             $discountTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupDiscount($inventory, $searchForm);
+            $promotionTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupDiscount($inventory, $searchForm);
+            $tagTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupDiscount($inventory, $searchForm);
         }
 
         return $this->render('@Frontend/'.$theme.'/productFilter.html.twig', array(
@@ -152,6 +154,8 @@ class EcommerceWidgetController extends Controller
                 'colorTree'                 => $colorTree,
                 'sizeTree'                  => $sizeTree,
                 'discountTree'              => $discountTree,
+                'promotionTree'              => $promotionTree,
+                'tagTree'              => $tagTree,
 
             )
         );

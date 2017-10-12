@@ -603,6 +603,16 @@ class GoodsItemRepository extends EntityRepository
         return $value;
     }
 
+    public function findGroupDiscount()
+    {
+        return false;
+    }
+
+    public function findPromotionTree()
+    {
+        return false;
+    }
+
 
 
 
