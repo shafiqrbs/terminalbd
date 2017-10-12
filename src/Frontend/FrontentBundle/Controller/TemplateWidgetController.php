@@ -32,6 +32,7 @@ class TemplateWidgetController extends Controller
             'menuTree'           => $menuTree,
         ));
     }
+    
 
     public function headerAction(GlobalOption $globalOption, Menu $menu ,Request $request)
     {

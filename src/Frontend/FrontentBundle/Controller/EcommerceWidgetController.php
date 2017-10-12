@@ -26,16 +26,14 @@ use Syndicate\Bundle\ComponentBundle\Entity\Vendor;
 class EcommerceWidgetController extends Controller
 {
 
-/*
+
     public function mobileMenuAction(GlobalOption $globalOption)
     {
-        $menus = $this->getDoctrine()->getRepository('SettingAppearanceBundle:MenuGrouping')->findBy(array('globalOption'=> $globalOption,'parent'=>NULL,'menuGroup'=> 1),array('sorting'=>'asc'));
-        $menuTree = $this->get('setting.menuTreeSettingRepo')->getMenuTree($menus,$globalOption->getSubDomain());
         return $this->render('@Frontend/Template/Mobile/menu.html.twig', array(
-            'menuTree'           => $menuTree,
+            'globalOption'          => $globalOption,
         ));
     }
-*/
+
 
     public function headerAction(Request $request , GlobalOption $globalOption , Menu $menu )
     {

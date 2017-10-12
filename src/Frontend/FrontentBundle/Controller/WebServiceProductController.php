@@ -199,7 +199,7 @@ class WebServiceProductController extends Controller
 
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
-                $theme = 'Template/Mobile/Default';
+                $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
@@ -241,7 +241,7 @@ class WebServiceProductController extends Controller
 
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
-                $theme = 'Template/Mobile/Default';
+                $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
@@ -281,7 +281,7 @@ class WebServiceProductController extends Controller
 
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
-                $theme = 'Template/Mobile/Default';
+                $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
@@ -320,7 +320,7 @@ class WebServiceProductController extends Controller
 
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
-                $theme = 'Template/Mobile/Default';
+                $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }

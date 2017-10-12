@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+
+<head>
+    <meta charset="utf-8"/>
+    <title>{{ globalOption.name }}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="{{ globalOption.domain }}" name="description"/>
+    <meta content="{{ globalOption.domain }}" name="author"/>
+    <meta name="MobileOptimized" content="320">
+    <meta property="og:site_name" content="{{ globalOption.name }}">
+    <meta property="og:title" content="{{ globalOption.name }}">
+    <meta property="og:description" content="{{ globalOption.domain }}">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}"><!-- link to image for socio -->
+    <meta property="og:url" content="{{ globalOption.domain }}">
+    {% if globalOption.templateCustomize.favicon is not empty %}
+        <link  rel="shortcut icon" href="/uploads/domain/{{ globalOption.id }}/customizeTemplate/{{ globalOption.templateCustomize.favicon }}">
+    {% endif %}
+    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDmior4xLqsriysUeQhtdSawc8yjDyaWaw"></script>
+    <script type="application/x-javascript"> addEventListener("load", function() {setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    {% stylesheets filter='cssrewrite'
+    'assets/template/mobile/css/bootstrap.min.css'
+    'assets/template/mobile/css/font-awesome.min.css'
+    'assets/template/mobile/css/jquery.mmenu.all.css'
+    'assets/template/plugin/wow/css/animate.css'
+    'assets/template/plugin/owl.carousel/owl.carousel.min.css'
+    'assets/template/plugin/owl.carousel/owl.theme.min.css'
+    'assets/template/plugin/owl.carousel/owl.transitions.css'
+    'assets/template/plugin/textillate/assets/animate.css'
+    'assets/template/desktop/css/module.css'
+    'assets/template/mobile/css/style.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+    <!-- web-fonts -->
+    <link href='//fonts.googleapis.com/css?family=Abril+Fatface' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+    <!-- //web-fonts -->
+    {{ include('frontend/template/mobile/templateCustomize.html.twig')}}
+</head>
+<body >
+{% block cssBlock %}{% endblock %}
+<div class="body-back siteBgColor">
+    <div class="masthead pdng-stn1">
+        <div class="phone-box wrap push" id="home">
+            <div class="menu-notify sticky">
+                <div class="bar-left">
+                    <a href="#mm-menu" class="main-menu"><i class="fa fa-navicon"></i></a>
+                </div>
+                <div class="bar-mid">
+                    <h5 class="pro-link"><a class="site-name" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{{ globalOption.name }}</a></h5>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <!-- banner -->
+            {% block body %}{% endblock %}
+            <!--/footer-->
+            {% if globalOption.templateCustomize.topBar is not empty %}
+            <div id="side-bar-panel" class="left-shadow-overlay" >
+                <div class="handle">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </div>
+                <div class="menu-notify box-link">
+                    <div class="text-left">{{ app.user }}</div>
+                    <ul class="social-links">
+                        <li><a href="javascript:" class="register-btn"><i class="fa fa-sign-in"></i></a></li>
+                        <li><a href="javascript:" class="login-preview"><i class="fa fa-lock"></i></a></li>
+                        <li><a href="javascript:" class="cart-preview"><i class="fa fa-shopping-cart"></i></a></li>
+                    </ul>
+                </div>
+                <div id="cart-details">
+                    <div class="item-list" style="background: #222">
+                        {% if  cart is defined and cart.contents is not empty %}
+                            <ul class="cart-list">
+                                {% for item in cart.contents %}
+                                    <li id="item-remove-{{ item.rowid }}">
+                                        <div class="item">
+                                            <div class="col-md-12 cart-product-title">{{ item.name }}</div>
+                                            <div class="col-md-6">
+                                                {% if item.productImg is not empty %}
+                                                    <img src="{{ item.productImg }}" height="100" width="160" alt=""/>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ item.price }}</span>
+                                                    <input type="text" class="form-control" width="80" id="{{ item.rowid }}" value="{{ item.quantity }}">
+                                                </div><!-- /input-group -->
+                                                <div class="btn-group text-right col-md-12" role="group" >
+                                                    <button id="{{ item.rowid }}"  data-url="{{ path('webservice_product_cart_remove',{'cartid':item.rowid}) }}"
+                                                            class="btn  btn-danger pull-right hunger-remove-cart" data-id="{{ item.price }}" data-value="{{ item.quantity }}" ><span class="glyphicon glyphicon-trash"></span>
+                                                    </button>
+                                                    <button id="{{ item.rowid }}"  data-url="{{ path('webservice_product_cart_update',{'cartid':item.rowid}) }}"
+                                                            class="btn btn-success pull-right hunger-update-cart"><span class="glyphicon glyphicon-pencil"></span>
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                   </li>
+                                {% endfor %}
+                            </ul>
+                            <div class="text-center col-md-12"><a class="btn btn-warning " href="javascript:">Grand Total<b class="totalAmount">{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cart.total }}</b></a><a class="btn btn-info" href="{{ path('webservice_product_cart_details') }}">View Cart</a></div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div id="login-signip">
+                    {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
+                </div>
+            </div>
+            {% endif %}
+            <div class="w3agile">
+                {{ include('@Frontend/Template/Mobile/Widget/smsEmail.html.twig')}}
+                <div class="footer-bg" id="mobile-footer">
+                    <ul class="footer-icon">
+
+                        <li>
+                            <a href="callto://088{{ globalOption.mobile }}" class="hvr-radial-out" data-title="Phone">
+                                <i area-hidden=true class="fa fa-phone"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#sms-modal" class="hvr-radial-out sign-in popup-top-anim" data-title="">
+                                <i class="fa fa-comment"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:" class="scrollToTop" data-title="Top up">
+                                <i class="fa fa-hand-o-up"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#email-modal" class="hvr-radial-out sign-in popup-top-anim">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="last hvr-radial-out"
+                               href="{{ path(globalOption.subDomain ~ '_webservice_contact') }}" data-title="">
+                                <i class="fa fa-map-marker"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--/footer-->
+        </div>
+    </div>
+</div>
+{% render controller("FrontendBundle:EcommerceWidget:mobileMenu",{'globalOption': globalOption.id}) %}
+{% javascripts
+'assets/template/mobile/js/jquery-2.1.4.min.js'
+'assets/template/mobile/js/bootstrap.min.js'
+'assets/template/plugin/jquery-inputmask/jquery.inputmask.bundle.min.js'
+'assets/template/plugin/numeric/jquery.numeric.js'
+'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
+'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
+'assets/template/mobile/js/bigSlide.js'
+'assets/template/mobile/js/jquery.magnific-popup.js'
+'assets/template/mobile/js/modernizr.custom.js'
+'assets/template/mobile/js/jquery.mmenu.min.all.js'
+'assets/template/mobile/js/jquery.nicescroll.min.js'
+'assets/template/mobile/js/jquery.slidereveal.min.js'
+'assets/template/plugin/owl.carousel/owl.carousel.min.js'
+'assets/template/plugin/matchHeight/height-match.js'
+'assets/template/plugin/wow/js/wow.min.js'
+'assets/template/plugin/textillate/assets/jquery.fittext.js'
+'assets/template/plugin/textillate/assets/jquery.lettering.js'
+'assets/template/desktop/js/jquery.scrollbar.min.js'
+'assets/template/mobile/js/scripts.js'
+%}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+<script>  subdomain = "{{ globalOption.subDomain }}"; </script>
+{% block javascriptBlock %}{% endblock %}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        {% block documentready %}{% endblock %}
+    });
+    var images = ['image-1.jpg', 'image-2.jpg', 'image-3.jpg', 'image-4.jpg','image-5.jpg', 'image-6.jpg', 'image-7.jpg', 'image-8.jpg', 'image-9.jpg', 'image-10.jpg'];
+    document.getElementsByClassName('header-grid')[0].style.backgroundImage = 'url(/assets/template/mobile/images/' + images[Math.round(Math.random() * images.length)] + ')';
+</script>
+
+<style>
+
+    .menu-notify{
+        opacity: 0.8;
+    }
+    .fixed {
+        position: fixed;
+        width: 100%;
+        background: #222;
+        text-align: left;
+        z-index:9;
+        top:0!important;
+        opacity: 1!important;
+    }
+
+    html.mm-opened.mm-opening .mm-page, html.mm-opened.mm-opening #mm-blocker, html.mm-opened.mm-opening .mm-fixed-top, html.mm-opened.mm-opening .mm-fixed-bottom{
+        left: 70%;
+    }
+    .mm-menu{
+        width:70%;
+    }
+
+    .modal-body {
+        padding:0 !important;
+    }
+    .panel-body{
+        padding:0 !important;
+    }
+
+    .box-link{
+        height: 45px;
+    }
+    .social-links {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        padding-right: 5px;
+        position: absolute;
+        right: 0;
+        top: 8px;
+    }
+    .social-links li {
+        display: inline-block;
+        margin-left: 5px;
+    }
+    .social-links li a {
+        display: block;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        border-radius: 50%;
+        font-size: 17px;
+        color: #f9eee8;
+        border: 1px solid #f9eee8;
+        transition: all 0.5s ease 0s;
+        text-align: center;
+    }
+
+    .help-block{
+        margin-top: 0;
+    }
+    #cat-search{
+        margin-bottom:15px;
+        clear: both;
+    }
+    .mm-list.mm-panel{
+        padding-top:5px !important;
+    }
+
+    .mm-list a.mm-subclose:before {
+        border-right: none;
+        border-bottom: none;
+        margin-bottom: -13px;
+        left: 22px;
+    }
+
+    ul.cart-list{
+        list-style: none;
+        padding-top: 15px;
+    }
+    ul.cart-list li{
+        list-style: none;
+        margin-left: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #FFFFff;
+        margin-bottom: 15px;
+        display:inline-block;
+    }
+    .cart-product-title{
+        font-size: 15px;
+        padding-bottom: 15px;
+    }
+
+    #side-bar-panel{
+           position: fixed;
+           width: 100%!important;
+           transition: all 300ms ease;
+           height: 100%;
+           top: 0px;
+           right: 0px;
+    }
+
+    #side-bar-panel{
+        background-color: #BDBDBD;
+        color: #fff;
+        z-index: 1002;
+    }
+    .left-shadow-overlay{
+        box-shadow: 10px 0 15px 10px #585858;
+    }
+
+    #side-bar-panel .handle{
+        background-color: #2E2E2E;
+        left: -40px;
+        padding: 10px;
+        position: absolute;
+        top: 3px;
+        cursor: pointer;
+        width: 40px!important;
+        -moz-transition: 200ms ease all;
+        -webkit-transition: 200ms ease all;
+        -o-transition: 200ms ease all;
+        transition: 200ms ease all;
+    }
+
+    #side-bar-panel .handle-right{
+        left: 1px!important;
+        z-index: 99;
+    }
+
+    .carousel-main-control.carousel-left {
+        left: 6% !important;
+        text-decoration: none!important;
+    }
+
+    .carousel-main-control.carousel-right {
+        right: 6% !important;
+        text-decoration: none!important;
+    }
+    .carousel-inner{
+        height: 320px;
+        position: relative;
+    }
+    .carousel-cover{
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        position: fixed;
+        min-height: 100%;
+        height: 100%;
+        width: 100%;
+    }
+    .carousel-caption a{
+        font-weight: bold;
+    }
+
+    .header-grid {
+        background-position: center center;
+        background-size: cover;
+        height: 280px!important;
+        position: relative;
+    }
+
+    #mobile-logo{
+        left: 50%;
+        position: absolute;
+        z-index: 3;
+        -webkit-transform: translateX(-50%);
+        transform: translateX(-50%);
+        top:20%;
+    }
+    .feature-box{
+        padding: 5px !important;
+        position: relative;
+    }
+    .client-sidebar{
+        margin-bottom: 10px;
+    }
+    .client-sidebar .thumbnail{
+        margin-bottom: 0!important;
+    }
+    .clearfixTopMargin{
+        margin-top: 30px;
+        clear: both;
+        display: block;
+    }
+    #catlist dl{
+        padding-left: 0!important;
+    }
+    .panel-default>.panel-heading+.panel-collapse>.panel-body{
+        padding:15px !important;
+        text-align: justify;
+    }
+
+</style>
+</body>
+</html>
