@@ -16,7 +16,7 @@
                 </a>
             </div>
             <div class="col-xs-12 col-md-12">
-                <div class="module-title">
+                <div class="text-left">
                     <i class="fa fa-dribbble"></i>&nbsp;{% if product.brand is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subDomain,'brand':product.brand.id }) }}">{{ product.brand.name }}</a>{% endif %}&nbsp;&nbsp;&nbsp;
                     <i class="fa fa-tag"></i>&nbsp;{% if product.masterItem.category is defined and product.masterItem.category is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subDomain,'category':product.masterItem.category.id }) }}">{{ product.masterItem.category.name }}</a>{% endif %}
                     {% if product.itemGalleries is defined and product.itemGalleries is not empty %} <i class="fa fa-file-image-o"></i>&nbsp;<a href="{{ image(product.webPath()).resize() }}">Preview</a> {% endif %}
@@ -43,28 +43,14 @@
                                 {% if product.ageGroup is not empty %}<tr><td>Age Group</td><td class="left">{{ product.ageGroup }}</td></tr>{% endif %}
                                 {% if product.brand is not empty %}<tr><td>Brand</td><td class="left">{{ product.brand.name }}</td></tr>{% endif %}
                                 {% if product.country is not empty %}<tr><td>Made in</td><td class="left">{{ product.country.name }}</td></tr>{% endif %}
-                                <tr><td class="left" colspan="2"><strong>Attributes</strong></td></tr>
-                                {%  for attribute in product.itemMetaAttributes %}
-                                    {% if  attribute.value %}
-                                        <tr><td>{{ attribute.itemAttribute.name }}</td><td class="left">
-                                                {% if attribute.itemAttribute.dropDown == 1 %}
-                                                    {% set vals = attribute.value |split('|') %}
-                                                    <select name="metaValue[]">
-                                                        {% for val in vals %}
-                                                            <option value="val">{{ val }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                    <input type="hidden" name="metaKey[]" value="{{ attribute.itemAttribute.id }}" >
-                                                {% else %}
-                                                    {{ attribute.value }}
-                                                {% endif %}
-
-                                            </td>
-                                        </tr>
-                                    {% endif %}
-                                {% endfor %}
                                 <tr><td colspan="2" valign="top">Description</td></tr>
-                                <tr><td colspan="2" class="left">{{ product.content|raw }}</td></tr>
+                                <tr><td colspan="2" class="left text-justify">
+                                        {% if product.content is not empty %}
+                                            {{ product.content|raw }}
+                                        {% elseif product.masterItem is not empty %}
+                                            {{ product.masterItem.content|raw }}
+                                        {% endif  %}
+                                    </td></tr>
                             </table>
                             <div class="left" style="width: 100%">
                                 <form class="addCart" style="margin-top: 30px">
@@ -131,16 +117,7 @@
             </div>
             </div>
             <div class="col-xs-12 col-md-12">
-                <div class="row meta-value">
-                    <div class="col-xs-12 col-md-12 text-justify">
-                        {% if product.content is not empty %}
-                            {{ product.content|raw }}
-                        {% elseif product.masterItem is not empty %}
-                            {{ product.masterItem.content|raw }}
-                        {% endif  %}
-                    </div>
-                </div>
-                {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty or  product.itemKeyValues is defined and product.itemKeyValues is not empty  %}
+                  {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty or  product.itemKeyValues is defined and product.itemKeyValues is not empty  %}
                     <div class="row meta-caption"><div class="col-xs-12 col-md-12"><strong>Specification</strong></div></div>
                     {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
                         {% for attribute in product.itemMetaAttributes %}

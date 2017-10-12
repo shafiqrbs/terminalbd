@@ -411,6 +411,23 @@ class EcommerceWidgetController extends Controller
         ));
     }
 
+     /* =================================================Template Base Widget===================*/
+
+    public function featureTemplateMobileWidgetAction(GlobalOption $globalOption , $menu ='', $position ='' )
+    {
+
+        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
+        $siteEntity = $globalOption->getSiteSetting();
+        $themeName = $siteEntity->getTheme()->getFolderName();
+        /* Device Detection code desktop or mobile */
+
+        $theme = '';
+        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/FeatureWidget.html.twig', array(
+            'features'                  => $features,
+            'globalOption'              => $globalOption,
+        ));
+    }
+
     public function categoryTemplateWidgetAction(GlobalOption $globalOption , FeatureWidget $widget, Category $category)
     {
 

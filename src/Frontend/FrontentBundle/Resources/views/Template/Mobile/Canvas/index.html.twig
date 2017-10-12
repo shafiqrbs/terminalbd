@@ -3,30 +3,13 @@
     <!--/welcome-->
     <div class="welcome">
         {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-            <section class="feature-widget-body-top">
-                {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id, 'pageName':'Home','position':'body-top'}) %}
+            <section>
+                {% render controller("FrontendBundle:WebsiteWidget:featureMobileWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'mobile'}) %}
             </section>
         {% endif %}
-        <section style="background-color: rgb(22, 22, 22); margin-bottom: 15px; margin-top: 15px; padding-bottom: 15px">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-10 col-md-offset-1" style="margin-top: 10px" >
-                        <div  style="padding: 10px;border: 1px solid #000;color: #fff;font-size:14px; text-align:center">
-                            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> PLACE YOUR ORDER NOW - RECEIVE YOUR ITEMS WITHIN 72 HOURS
-                        </div>
-                        <div class="text-center">
-                            <a style="margin-top:7px;
-border: 3px solid #fff;
-border-radius: 15px;
-background: #000;" class="btn" href="{{ path(globalOption.subDomain ~ '_webservice_product') }}">SHOP NOW</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
         <style>
             .carousel-control     		 { width:  4%; }
-            .carousel-control.left,.carousel-control.right {margin-left:15px;background-image:none;}
+            .carousel-control.left , .carousel-control.right {margin-left:15px;background-image:none;}
             /*@media (max-width: 767px) {
                 .carousel-inner .active.left { left: -50%; }
                 .carousel-inner .next        { left:  50%; }
@@ -85,11 +68,7 @@ background: #000;" class="btn" href="{{ path(globalOption.subDomain ~ '_webservi
 
 
         </style>
-        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-            <section class="feature-widget-body-bottom"  >
-                {% render controller("FrontendBundle:EcommerceWidget:featureWidget",{'globalOption':globalOption.id, 'pageName':'Home','position':'footer'}) %}
-            </section>
-        {% endif %}
+
         <div class="b-bottom">
 
             <div class="col-md-12">
