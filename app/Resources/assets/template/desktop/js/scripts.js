@@ -132,7 +132,12 @@ $(document).ready(function(){
             $('#forgetModal').modal('toggle');
         });
 
-        $(".carousel").carousel({
+        $("#mega-menu-carousel").carousel({
+            interval: 10000,
+            wrap:true
+        });
+
+         $(".carousel").carousel({
             interval: 10000,
             wrap:true
         });

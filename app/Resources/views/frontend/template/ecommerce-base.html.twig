@@ -37,6 +37,7 @@
 
     'assets/template/desktop/css/bootstrap.min.css'
     'assets/template/desktop/font-awesome/css/font-awesome.min.css'
+    'assets/template/mobile/css/jquery.mmenu.all.css'
     'assets/template/plugin/owl.carousel/owl.carousel.min.css'
     'assets/template/plugin/owl.carousel/owl.theme.min.css'
     'assets/template/plugin/owl.carousel/owl.transitions.css'
@@ -112,6 +113,7 @@
 {% if globalOption.templateCustomize.showSidebar == 1 %}
     <div class="side-toolbar" style=""></div>
 {% endif %}
+
 <!-- jQuery -->
 <!--Jquery Smooth Scrolling-->
 {% javascripts
@@ -122,6 +124,7 @@
 'assets/template/plugin/numeric/jquery.numeric.js'
 'assets/template/plugin/validation/jquery.validate-1.14.0.min.js'
 'assets/template/plugin/validation/jquery-validate.bootstrap-tooltip.min.js'
+'assets/template/mobile/js/jquery.mmenu.min.all.js'
 'assets/template/plugin/owl.carousel/owl.carousel.min.js'
 'assets/template/plugin/select2/select2.js'
 'assets/template/plugin/wow/js/wow.min.js'
@@ -143,7 +146,7 @@
 {% block javascriptBlock %}{% endblock %}
 <script>
     $(document).ready(function(){
-
+        $("#mm-menu").mmenu();
         {% if globalOption.templateCustomize.sidebarTooltip == 1 %}
 
             $('.side-toolbar').vSidebar({
@@ -173,6 +176,12 @@
 </script>#}
 <!--End of Tawk.to Script-->
 <style>
+    #mm-menu{
+     width:320px;
+    }
+    .mm-menu.mm-current{
+        z-index: 999;
+    }
     .input-group-btn a{
      color:#ffffff!important;
     }
