@@ -257,7 +257,7 @@ class ItemSizeController extends Controller
 
         $sizes = $em->getRepository('InventoryBundle:ItemSize')->findBy(array('isValid'=>1),array('code'=>'asc'));
         if($sizes)
-        $entities = $this->getDoctrine()->getRepository('InventoryBundle:ItemSize')->getInventoryGroupSizes($sizes,$array);
+        $entities = $this->getDoctrine()->getRepository('InventoryBundle:ItemSize')->getGroupSizes($sizes,$array);
         $form   = $this->createSizeGroupForm($entity);
 
         return $this->render('InventoryBundle:ItemSize:group.html.twig', array(

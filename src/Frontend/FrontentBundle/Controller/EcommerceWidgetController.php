@@ -132,9 +132,9 @@ class EcommerceWidgetController extends Controller
 
             $detect = new MobileDetect();
             if ($detect->isMobile() || $detect->isTablet()) {
-                $theme = 'Template/Mobile/' . $themeName.'/EcommerceWidget/';
+                $theme = 'Template/Mobile/' . $themeName.'/EcommerceWidget';
             } else {
-                $theme = 'Template/Desktop/' . $themeName.'/EcommerceWidget/';
+                $theme = 'Template/Desktop/' . $themeName.'/EcommerceWidget';
             }
             $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $inventory));
             $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
@@ -142,6 +142,7 @@ class EcommerceWidgetController extends Controller
             $brandTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupBrands($inventory, $searchForm);
             $colorTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupColors($inventory, $searchForm);
             $sizeTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupSizes($inventory, $searchForm);
+            $discountTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupDiscount($inventory, $searchForm);
         }
 
         return $this->render('@Frontend/'.$theme.'/productFilter.html.twig', array(
@@ -150,6 +151,7 @@ class EcommerceWidgetController extends Controller
                 'brandTree'                 => $brandTree,
                 'colorTree'                 => $colorTree,
                 'sizeTree'                  => $sizeTree,
+                'discountTree'              => $discountTree,
 
             )
         );
