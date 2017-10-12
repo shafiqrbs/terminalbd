@@ -29,15 +29,6 @@
                         </div>
                     {% endif %}
                 </div>
-                {#<div class="product-single-meta" style="margin-top:20px; margin-bottom: 20px">
-                    <div class="p-single-meta-likes">
-                        <iframe src="https://www.facebook.com/plugins/share_button.php?href=http://www.tlsbd.org&layout=button_count&size=small&mobile_iframe=true&appId=369724209850316&width=88&height=20" width="88" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-                    </div>
-                    <div class="p-single-meta-share">
-                        <iframe src="https://www.facebook.com/plugins/like.php?href=http://www.tlsbd.org&width=150&layout=standard&action=like&size=small&show_faces=false&share=false&height=20&appId=369724209850316" width="150" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-                    </div>
-                </div>
-                #}
                 <div class="product">
                     <div class="product-details" style="border-top: none; padding: 0">
                             <table>
@@ -72,27 +63,50 @@
                                         </tr>
                                     {% endif %}
                                 {% endfor %}
-                                <tr><td valign="top">Description</td><td class="left">{{ product.content|raw }}</td></tr>
+                                <tr><td colspan="2" valign="top">Description</td></tr>
+                                <tr><td colspan="2" class="left">{{ product.content|raw }}</td></tr>
                             </table>
-                            {#<div class="left" style="width: 100%">
-                                <input  type="number" value="1" id="numberBox"  min="1" max="{{ product.purchaseStockItem  }}" class="numeric" maxlength="{{ product.purchaseStockItem  }}">
-                                <select class="dropdown" id="color" name="color">
-                                    <option value="">---Color/Shade---</option>
-                                    {% for color in product.colors  %}
-                                    <option value="{{ color }}">{{ color }}</option>
-                                    {% endfor %}
-                                </select>
-                                <select class="dropdown" id="size" name="size">
-                                    <option value="">---Size/Weight/Dimension---</option>
-                                    {% for size in product.sizes  %}
-                                        <option value="{{ size }}">{{ size }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>#}
-                            {#     <div class="center" style="width:100%; text-align: center"><a href="javascript:" id="cart" data-content="" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart',{'subdomain':globalOption.subDomain,'cart':'cart','item':product.id}) }}" class="o-buttons green"><i class="fa fa-cart-plus"></i>&nbsp;Add to cart</a><a href="{{ path(globalOption.subDomain ~ '_webservice_product_wishlist',{'subdomain':globalOption.subDomain,'wishlist':'wishlist','item':product.id}) }}" class="o-buttons firoza wishlist">Wish list</a></div>
-                            #}
-                          <form class="addCart" style="margin-top: 30px">
-                            <div class="input-group">
+                            <div class="left" style="width: 100%">
+                                <form class="addCart" style="margin-top: 30px">
+                                             <div class="row" id="subItem-info">
+                                                 <div class="col-xs-4 col-md-4">
+                                                     {% if globalOption.ecommerceConfig.isSize == 1 and product.goodsItems is defined  %}
+                                                         <div class="form-group">
+                                                             <div class="input-group input-group-sm">
+                                                                 <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-list-alt"></span></span>
+                                                                 <select class="form-control changeSize" data-url="{{ path(globalOption.subDomain~'_webservice_product_sub_item', {'product' : product.id }) }}" name="size" id="size" >
+                                                                     {% for goodsItem in  product.goodsItems  %}
+                                                                         <option {% if subItem.id == goodsItem.id %} selected="selected" {% endif %} value="{{ goodsItem.id }}" > {% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% else %}-Default-{% endif %}{% if goodsItem.productUnit is not empty %} - {{ goodsItem.productUnit.name }}{% endif %}</option>
+                                                                     {% endfor %}
+                                                                 </select>
+                                                             </div>
+                                                         </div>
+                                                     {% endif %}
+                                                 </div>
+                                                 <div class="col-xs-4 col-md-4">
+                                                     {% if globalOption.ecommerceConfig.isColor == 1 and subItem.colors is not empty and subItem.colors is defined %}
+                                                         <div class="form-group">
+                                                             <div class="input-group input-group-sm">
+                                                                 <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-text-background"></span></span>
+                                                                 <select class="form-control" name="color" >
+                                                                     {% for color in  subItem.colors %}
+                                                                         <option value="{{ color.id }}" >{{ color.name }}</option>
+                                                                     {% endfor %}
+                                                                 </select>
+                                                             </div>
+                                                         </div>
+                                                     {% endif %}
+                                                 </div>
+                                                 <div class="col-xs-4 col-md-4 pull-right">
+                                                     <div class="form-group">
+                                                         <div class="input-group input-group-sm">
+                                                             <span class="input-group-addon" id="sizing-addon3">{{ globalOption.ecommerceConfig.currency }}</span>
+                                                             <input class="form-control" name="" id="" disabled="disabled" value="{% if subItem.discountPrice is empty %}{{ subItem.salesPrice|number_format }} {% else %}{{ subItem.discountPrice|number_format }}{% endif %}" aria-label="Text input">
+                                                         </div>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                        <div class="input-group">
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-lg btn-danger btn-number" data-type="minus" data-field="quantity">
                                                 <span class="glyphicon glyphicon-minus"></span>
@@ -105,15 +119,46 @@
                                               </button>
                                         {% if  globalOption.ecommerceConfig.cart == 1 %}
                                             <input type="hidden" name="productImg"  value="/{% if product.webPath is not empty %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
-                                            <button type="submit" class="btn btn-lg btn-info cartSubmit" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : subitem.id }) }}">
+                                            <button type="submit" class="btn btn-lg btn-info cartSubmit" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : subItem.id }) }}">
                                             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to cart</button>
                                         {% endif %}
 
-                                </span>
+                                        </span>
+                                        </div>
+                                    </form>
                             </div>
-                        </form>
+                </div>
+            </div>
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <div class="row meta-value">
+                    <div class="col-xs-12 col-md-12 text-justify">
+                        {% if product.content is not empty %}
+                            {{ product.content|raw }}
+                        {% elseif product.masterItem is not empty %}
+                            {{ product.masterItem.content|raw }}
+                        {% endif  %}
                     </div>
                 </div>
+                {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty or  product.itemKeyValues is defined and product.itemKeyValues is not empty  %}
+                    <div class="row meta-caption"><div class="col-xs-12 col-md-12"><strong>Specification</strong></div></div>
+                    {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
+                        {% for attribute in product.itemMetaAttributes %}
+                            <div class="row meta-key-value"><div class="col-xs-3 col-md-3">{{ attribute.itemAttribute.name }}<span class="meta-key-clone">:</span></div><div class="col-xs-9 col-md-9 ">{{ attribute.value }}</div></div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if  product.itemKeyValues is defined and product.itemKeyValues is not empty %}
+                        {% for meta in product.itemKeyValues %}
+                            {% if meta.metaKey is not empty and meta.metaValue is empty %}
+                                <div class="row meta-label"><div class="col-xs-12 col-md-12">{{ meta.metaKey|capitalize }}</div></div>
+                            {% elseif meta.metaKey is empty and meta.metaValue is not empty %}
+                                <div class="row meta-value"><div class="col-xs-12 col-md-12">{{ meta.metaValue }}</div></div>
+                            {% else %}
+                                <div class="row meta-key-value"><div class="col-xs-3 col-md-3">{{ meta.metaKey }}<span class="meta-key-clone">:</span></div><div class="col-xs-9 col-md-9 ">{{ meta.metaValue  }}</div></div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
             </div>
         </article>
         <div class="clearfix"></div>
