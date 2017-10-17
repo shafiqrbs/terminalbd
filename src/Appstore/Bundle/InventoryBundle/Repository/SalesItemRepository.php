@@ -1,7 +1,9 @@
 <?php
 
 namespace Appstore\Bundle\InventoryBundle\Repository;
+use Appstore\Bundle\InventoryBundle\Entity\Item;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
+use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -90,6 +92,30 @@ class SalesItemRepository extends EntityRepository
         return $data;
     }
 
+    public function ongoingSalesManuelQuantity($inventory , $data = array())
+    {
+
+        $qb = $this->createQueryBuilder('salesItem');
+        $qb->join('salesItem.sales','sales');
+        $qb->join('salesItem.item','item');
+        $qb->select('SUM(salesItem.quantity) as ongoingQuantity ');
+        $qb->addSelect('item.id as id ');
+        $qb->where("sales.inventoryConfig = :inventory");
+        $qb->setParameter('inventory', $inventory);
+        $qb->andWhere('sales.process IN(:process)');
+        $qb->setParameter('process',array_values(array('In-progress','Courier')));
+        if(!empty($data)){
+        $qb->andWhere($qb->expr()->in("salesItem.item", $data ));
+        }
+        $qb->groupBy('item.id');
+        $result =  $qb->getQuery()->getArrayResult();
+        $data = array();
+        foreach($result as $row) {
+            $data[$row['id']] = $row['ongoingQuantity'];
+        }
+        return $data;
+    }
+
 
 
     public function checkSalesQuantity(PurchaseItem $purchaseItem)
@@ -111,27 +137,47 @@ class SalesItemRepository extends EntityRepository
 
     }
 
-    public function insertSalesManualItems($sales,$data)
+    public function checkSalesItemQuantity(Item  $item)
+    {
+
+        $qb = $this->createQueryBuilder('salesItem');
+        $qb->join('salesItem.sales','sales');
+        $qb->addSelect('SUM(salesItem.quantity) as quantity ');
+        $qb->where("salesItem.item = :item");
+        $qb->setParameter('item', $item->getId());
+        $qb->andWhere('sales.process IN(:process)');
+        $qb->setParameter('process',array_values(array('In-progress','Courier')));
+        $quantity =  $qb->getQuery()->getOneOrNullResult();
+        if(!empty($quantity['quantity'])){
+            return $quantity['quantity'];
+        }else{
+            return 0;
+        }
+
+    }
+
+    public function insertSalesManualItems(Sales $sales,Item $item,$data)
     {
         $em = $this->_em;
-        $i = 0;
-        var_dump($data);
-        foreach ($data['item'] as $row){
+        $existEntity = $this->findOneBy(array('sales'=> $sales,'item'=> $item));
 
-            $purchaseItem = $em->getRepository('InventoryBundle:PurchaseItem')->find($row);
+        if(!empty($existEntity)){
+            $existEntity->setQuantity($data['quantity']);
+            $existEntity->setSubTotal($data['salesPrice'] * $data['quantity']);
+            $em->persist($existEntity);
+
+        }else{
 
             $entity = new SalesItem();
             $entity->setSales($sales);
-            $entity->setPurchaseItem($purchaseItem);
-            $entity->setItem($purchaseItem->getItem());
-            $entity->setPurchasePrice($purchaseItem->getPurchasePrice());
-            $entity->setEstimatePrice($purchaseItem->getSalesPrice());
-            $entity->setSalesPrice($data['salesPrice'][$i]);
-            $entity->setQuantity($data['quantity'][$i]);
-            $entity->setSubTotal($data['salesPrice'][$i] * $data['quantity'][$i]);
+            $entity->setItem($item);
+            $entity->setSalesPrice($data['salesPrice']);
+            $entity->setEstimatePrice($item->getSalesPrice());
+            $entity->setQuantity($data['quantity']);
+            $entity->setPurchasePrice(100);
+            $entity->setCustomPrice($data['salesPrice']);
+            $entity->setSubTotal($data['salesPrice'] * $data['quantity']);
             $em->persist($entity);
-
-            $i++;
         }
         $em->flush();
     }
@@ -355,4 +401,5 @@ class SalesItemRepository extends EntityRepository
         $result = $qb->getQuery()->getOneOrNullResult();
         return $data = $result['salesVat'] ;
     }
+
 }

@@ -332,7 +332,7 @@
                             </div>
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
-                                <div class="span4">
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label " for="vatPercentage">Printer &nbsp;</label>
                                         <div class="control">
@@ -341,7 +341,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span4">
+                                <div class="span3">
                                     <div class="control-group">
                                         <label class="control-label " for="vatPercentage">Online Sales Printer &nbsp;</label>
                                         <div class="control">
@@ -350,7 +350,25 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span4">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Print Sales User Mobile</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.invoicePrintUserMobile) }}
+                                            {{ form_errors(form.invoicePrintUserMobile) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Print Logo</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.invoicePrintLogo) }}
+                                            {{ form_errors(form.invoicePrintLogo) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Print Footer Text</label>
                                         <div class="controls">

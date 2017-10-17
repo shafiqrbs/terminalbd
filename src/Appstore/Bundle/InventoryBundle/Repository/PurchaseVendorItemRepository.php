@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\InventoryBundle\Repository;
 use Appstore\Bundle\EcommerceBundle\Entity\Discount;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
+use Appstore\Bundle\InventoryBundle\Entity\PurchaseItem;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem;
 use Doctrine\ORM\EntityRepository;
 
@@ -134,6 +135,16 @@ class PurchaseVendorItemRepository extends EntityRepository
             $qb->setParameter('discount',$data['discount']);
         }
 
+        if (!empty($data['priceStart'])) {
+            $qb->andWhere(' product.salesPrice >= :priceStart');
+            $qb->setParameter('priceStart',$data['priceStart']);
+        }
+
+        if (!empty($data['priceEnd'])) {
+            $qb->andWhere(' product.salesPrice <= :priceEnd');
+            $qb->setParameter('priceEnd',$data['priceEnd']);
+        }
+        
         if (empty($data['sortBy'])){
             $qb->orderBy('product.updated', 'DESC');
         }else{
@@ -324,6 +335,63 @@ class PurchaseVendorItemRepository extends EntityRepository
 
     }
 
+    public function purchaseSimpleVendorItemUpdate(Purchase $purchase, PurchaseItem $purchaseItem){
+
+        $masterItem = $purchaseItem->getItem()->getMasterItem();
+        $qb = $this->createQueryBuilder('e');
+        $qb->where("e.purchase = :purchase");
+        $qb->setParameter('purchase', $purchase);
+        $qb->andWhere("e.masterItem = :masterItem");
+        $qb->setParameter('masterItem', $masterItem);
+        $purchaseVendorItem = $qb->getQuery()->getSingleResult();
+
+        /* @var PurchaseVendorItem $purchaseVendorItem */
+
+        if(empty($purchaseVendorItem)){
+
+            $purchaseVendorItem = new  PurchaseVendorItem();
+            $purchaseVendorItem->setInventoryConfig($purchase->getInventoryConfig());
+            $purchaseVendorItem->setPurchase($purchase);
+            $purchaseVendorItem->setName($masterItem->getName());
+            $purchaseVendorItem->setWebName($masterItem->getName());
+            $purchaseVendorItem->setPurchasePrice($purchaseItem->getPurchasePrice());
+            $purchaseVendorItem->setSalesPrice($purchaseItem->getPurchasePrice());
+            $purchaseVendorItem->setWebPrice($purchaseItem->getPurchasePrice());
+            $purchaseVendorItem->setQuantity($purchaseItem->getQuantity());
+            $purchaseVendorItem->setMasterQuantity($purchaseItem->getQuantity());
+            $this->_em->persist($purchaseVendorItem);
+
+        }else{
+
+            $result = $this->avgPurchasePriceQuantity($purchase , $purchaseItem);
+            if(!empty($result)){
+                $purchaseVendorItem->setPurchasePrice($result['purchasePrice']);
+                $purchaseVendorItem->setSalesPrice($result['salesPrice']);
+                $purchaseVendorItem->setWebPrice($result['salesPrice']);
+                $purchaseVendorItem->setQuantity($result['quantity']);
+                $purchaseVendorItem->setMasterQuantity($result['quantity']);
+            }
+        }
+        $this->_em->flush($purchaseVendorItem);
+
+    }
+
+    public function avgPurchasePriceQuantity(Purchase $purchase , PurchaseItem $purchaseItem ){
+
+        $masterItem = $purchaseItem->getItem()->getMasterItem();
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('InventoryBundle:PurchaseItem','e');
+        $qb->select('sum(pi.quantity) AS quantity , sum(pi.purchasePrice) AS purchasePrice, sum(pi.salesPrice) AS salesPrice');
+        $qb->where("e.purchase = :purchase");
+        $qb->setParameter('purchase', $purchase);
+        $qb->andWhere("e.masterItem = :masterItem");
+        $qb->setParameter('masterItem', $masterItem);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        return $result;
+
+    }
+
+
     public function findGoodsWithSearch($inventory,$data,$limit = 0)
     {
 
@@ -338,6 +406,7 @@ class PurchaseVendorItemRepository extends EntityRepository
         return  $result;
 
     }
+
 
     public function updateMasterProductQuantity(PurchaseVendorItem $entity)
     {

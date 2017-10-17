@@ -144,6 +144,9 @@
     .disabled{
         opacity: 0.5;
     }
+    ul.page-sidebar-menu > li.current_ancestor > ul.menu_level_1{
+        dispaly:none!important
+    }
 </style>
 {% endblock %}
 {% block javascriptBlock %}
@@ -157,7 +160,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-
+    $('body').addClass('page-sidebar-closed');
     var itemArr = $.cookie('items') ? $.cookie('items').split(',') : [];
 
     $('body').on('change', 'input.item', function(el) {

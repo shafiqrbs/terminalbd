@@ -92,6 +92,22 @@ class SalesGeneralType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
+            ->add('process', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'span8 m-wrap'),
+                'empty_value' => '---Choose current process---',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Select current process'))
+                ),
+                'choices' => array(
+                    'Created' => 'Created',
+                    'In-progress' => 'In-progress',
+                    'Courier' => 'Courier/Delivered',
+                    'Cancel' => 'Cancel',
+                    'Returned' => 'Returned',
+                    'Done' => 'Done',
+                ),
+            ))
 
             ->add('accountMobileBank', 'entity', array(
                 'required'    => false,

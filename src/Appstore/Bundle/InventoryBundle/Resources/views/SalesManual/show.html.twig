@@ -43,7 +43,7 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('inventory_salesmanual_add') }}"><i class="icon-plus-sign"></i>&nbsp;Add Sales</a></li>
+                                    <li><a href="{{ path('inventory_salesmanual_new') }}"><i class="icon-plus-sign"></i>&nbsp;Add Sales</a></li>
                                     <li><a href="{{ path('inventory_salesmanual') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
 
                                 </ul>
@@ -102,10 +102,9 @@
                                         <tr class="head-green">
                                             <td>&nbsp;&nbsp;<i class="icon-reorder"></i></td>
                                             <th class="numeric" >Item</th>
-                                            <th class="numeric" >Barcode</th>
-                                            <th class="numeric" >Qnt</th>
                                             <th class="numeric" >Estimate price</th>
                                             <th class="numeric" >Sales price</th>
+                                            <th class="numeric" >Qnt</th>
                                             <th class="numeric" >Sub-total</th>
                                         </tr>
                                         </thead>
@@ -114,12 +113,10 @@
                                             <tr>
                                                 <td class="numeric" >{{ loop.index }}</td>
                                                 <td class="numeric" >{{ salesItem.item.name }}/{{ salesItem.item.sku }}</td>
-                                                <td class="numeric" >{{ salesItem.purchaseItem.barcode }}</td>
-                                                <td class="numeric" >{{ salesItem.quantity }}</td>
                                                 <td class="numeric" >{{ salesItem.estimatePrice|number_format() }}</td>
                                                 <td class="numeric" >{{ salesItem.salesPrice|number_format() }}</td>
-                                                <td class="numeric" >{{ salesItem.subTotal|number_format() }}</td>
-
+                                                <td class="numeric" >{{ salesItem.quantity }}</td>
+                                                <td class="numeric" >={{ salesItem.subTotal|number_format() }}</td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>

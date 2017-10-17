@@ -181,7 +181,7 @@ class DomainController extends Controller
             $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
         }
         if($option->getInventoryConfig()) {
-            $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option);
+           $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option);
         }
         if($option->getHospitalConfig()) {
             $this->getDoctrine()->getRepository('HospitalBundle:HospitalConfig')->hospitalReset($option);

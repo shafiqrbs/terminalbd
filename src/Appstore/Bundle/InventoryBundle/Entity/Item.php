@@ -264,6 +264,15 @@ class Item
     /**
      * @var float
      *
+     * @ORM\Column(name="salesPrice", type="float", nullable=true)
+     */
+    private $salesPrice;
+
+
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="purchaseAvgPrice", type="float", nullable=true)
      */
     private $purchaseAvgPrice;
@@ -977,6 +986,28 @@ class Item
     public function getDeliveryItems()
     {
         return $this->deliveryItems;
+    }
+
+    public function getRemainingQuantity()
+    {
+        $remaingQnt = ($this->getPurchaseQuantity() + $this->getSalesQuantityReturn() + $this->getOnlineOrderQuantityReturn()) - ($this->getPurchaseQuantityReturn() + $this->getSalesQuantity() + $this->getDamageQuantity() + $this->getOnlineOrderQuantity());
+        return $remaingQnt;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSalesPrice()
+    {
+        return $this->salesPrice;
+    }
+
+    /**
+     * @param float $salesPrice
+     */
+    public function setSalesPrice($salesPrice)
+    {
+        $this->salesPrice = $salesPrice;
     }
 
 

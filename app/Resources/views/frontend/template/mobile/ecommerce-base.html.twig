@@ -71,14 +71,15 @@
                 <div class="menu-notify box-link">
                     <div class="text-left">{{ app.user }}</div>
                     <ul class="social-links">
-                        <li><a href="javascript:" class="register-btn"><i class="fa fa-sign-in"></i></a></li>
+                        <li><a href="javascript:" class="register-btn"><i class="fa fa-user"></i></a></li>
                         <li><a href="javascript:" class="login-preview"><i class="fa fa-lock"></i></a></li>
                         <li><a href="javascript:" class="cart-preview"><i class="fa fa-shopping-cart"></i></a></li>
                     </ul>
                 </div>
                 <div id="cart-details">
                     <div class="item-list" style="background: #222">
-                        {% if  cart is defined and cart.contents is not empty %}
+                        {% render controller("FrontendBundle:EcommerceWidget:sidebarTemplateProductFilter",{'globalOption':globalOption.id,'searchForm':searchForm}) %}
+                        {#{% if  cart is defined and cart.contents is not empty %}
                             <ul class="cart-list">
                                 {% for item in cart.contents %}
                                     <li id="item-remove-{{ item.rowid }}">
@@ -109,7 +110,7 @@
                                 {% endfor %}
                             </ul>
                             <div class="text-center col-md-12"><a class="btn btn-warning " href="javascript:">Grand Total<b class="totalAmount">{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cart.total }}</b></a><a class="btn btn-info" href="{{ path('webservice_product_cart_details') }}">View Cart</a></div>
-                        {% endif %}
+                        {% endif %}#}
                     </div>
                 </div>
                 <div id="login-signip">
@@ -171,6 +172,7 @@
 'assets/template/mobile/js/jquery.slidereveal.min.js'
 'assets/template/plugin/owl.carousel/owl.carousel.min.js'
 'assets/template/plugin/matchHeight/height-match.js'
+'assets/template/plugin/treeview/treeview.js'
 'assets/template/plugin/wow/js/wow.min.js'
 'assets/template/plugin/textillate/assets/jquery.fittext.js'
 'assets/template/plugin/textillate/assets/jquery.lettering.js'
@@ -182,12 +184,9 @@
 <script>  subdomain = "{{ globalOption.subDomain }}"; </script>
 {% block javascriptBlock %}{% endblock %}
 <script type="text/javascript">
-
     $(document).ready(function () {
         {% block documentready %}{% endblock %}
     });
-    var images = ['image-1.jpg', 'image-2.jpg', 'image-3.jpg', 'image-4.jpg','image-5.jpg', 'image-6.jpg', 'image-7.jpg', 'image-8.jpg', 'image-9.jpg', 'image-10.jpg'];
-    document.getElementsByClassName('header-grid')[0].style.backgroundImage = 'url(/assets/template/mobile/images/' + images[Math.round(Math.random() * images.length)] + ')';
 </script>
 
 <style>

@@ -1,8 +1,6 @@
 <style>
 
     /* Customize Template for Customer demand*/
-
-
     .site-name{
         {% if globalOption.templateCustomize.siteNameColor %}
             color: {{ globalOption.templateCustomize.siteNameColor }}!important;
@@ -37,7 +35,7 @@
 
 
     {% if globalOption.templateCustomize.webPath('mobileCarouselHeight') %}
-    .carousel-inner{
+    .carousel-inner-feature{
         height: {{ globalOption.templateCustomize.mobileCarouselHeight }}!important;
     }
     {% endif %}

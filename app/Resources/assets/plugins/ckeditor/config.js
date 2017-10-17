@@ -25,6 +25,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'about' }
 	];
 	config.extraPlugins = 'justify';
+	config.allowedContent = true;
 
 	// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.

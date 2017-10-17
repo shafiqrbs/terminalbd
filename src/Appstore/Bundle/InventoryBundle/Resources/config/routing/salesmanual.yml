@@ -10,13 +10,12 @@ inventory_salesmanual_show:
     path:     /{id}/show
     defaults: { _controller: "InventoryBundle:SalesManual:show" }
 
-inventory_salesmanual_add:
-    path:     /add-item
-    defaults: { _controller: "InventoryBundle:SalesManual:addItem" }
 
-inventory_salesmanual_busket:
-    path:     /item-busket
-    defaults: { _controller: "InventoryBundle:SalesManual:addBusket" }
+inventory_salesmanual_insert_item:
+    path:    /{sales}/insert-sales-item
+    defaults: { _controller: "InventoryBundle:SalesManual:insertManualSalesItem" }
+    methods:  [POST]
+
 
 inventory_salesmanual_new:
     path:     /new
@@ -30,7 +29,7 @@ inventory_salesmanual_item_search:
             expose: true
 
 inventory_salesmanual_edit:
-    path:     /{code}/pos
+    path:     /{code}/manual-sales
     defaults: { _controller: "InventoryBundle:SalesManual:edit" }
 
 inventory_salesmanual_update:
@@ -45,3 +44,10 @@ inventory_salesmanual_print_invoice:
 inventory_salesmanual_empty_delete:
     path:     /delete/empty-manual-invoice
     defaults: { _controller: "InventoryBundle:SalesManual:deleteEmptyInvoice" }
+
+inventory_salesmanual_item_inline_update:
+    path:     /{salesItem}/manual-sales-item-update
+    defaults: { _controller: "InventoryBundle:SalesManual:salesItemUpdate" }
+    options:
+           expose: true
+

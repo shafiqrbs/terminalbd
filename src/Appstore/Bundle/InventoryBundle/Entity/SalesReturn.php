@@ -60,7 +60,7 @@ class SalesReturn implements CodeAwareEntity
     private  $salesAdjustmentInvoice;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn", mappedBy="salesReturn" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSalesReturn", mappedBy="salesReturn", cascade={"remove"} )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $accountSalesReturn;

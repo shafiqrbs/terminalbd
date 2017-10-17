@@ -125,6 +125,14 @@ class PurchaseType extends AbstractType
                     'In House' => 'In House'
                 ),
             ))
+            ->add('process', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'span12'),
+                'choices' => array(
+                    'created' => 'Created',
+                    'complete' => 'Complete',
+                ),
+            ))
             ->add('asInvestment')
 
             /*->add('advanceAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))

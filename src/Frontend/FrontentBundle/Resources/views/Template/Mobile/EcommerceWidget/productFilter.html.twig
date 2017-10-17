@@ -1,0 +1,114 @@
+<form id="productFilter" method="get" action="{{ path(globalOption.subDomain ~ '_webservice_product_filter') }}" >
+    <div class="col-lg-12">
+        <div class="input-group input-group-lg" style="margin-top:15px; margin-bottom:15px">
+            <input type='text' class='form-control span12' name="product" id="product" value="{% if searchForm.product is defined %}{{ searchForm.product }}{% endif %}"  placeholder="Search for items"/>
+            <span class="input-group-btn"><button class="btn btn-success" type="button"><i class="fa fa-search" aria-hidden="true"></i></button></span>
+        </div><!-- /input-group -->
+    </div><!-- /.col-lg-6 -->
+    <div class="clearfix"></div>
+    <div class="panel panel-default panel-filter">
+        {% if globalOption.ecommerceConfig.sidebarCategory == 1 %}
+            <div class="panel-heading text-right">
+                <h3 class="panel-title"><span class="text-right btn btn-success selector" data-id="category" ><strong><i class="fa fa-list" aria-hidden="true"></i></strong> ALL CATEGORY <span class="glyphicon glyphicon-chevron-down"></span></span></h3>
+            </div>
+            <div class="panel-body scrollbar panel-hide" id="category" >
+                <div class="treeview">
+                    {{ categorySidebar|raw }}
+                </div>
+            </div>
+        {% endif %}
+        {% if globalOption.ecommerceConfig.sidebarBrand == 1 %}
+            <div class="panel-heading text-right">
+                <h3 class="panel-title"><span class="text-right btn btn-success selector" data-id="brand"><strong><i class="fa fa-list" aria-hidden="true"></i></strong> BRANDS <span class="glyphicon glyphicon-chevron-down"></span></span> </h3>
+            </div>
+            <div class="panel-body scrollbar panel-hide" id="brand">
+                <div class="row">
+                    {{ brandTree|raw }}
+                </div>
+            </div>
+        {% endif %}
+        {% if globalOption.ecommerceConfig.sidebarPrice == 1 %}
+            <div class="panel-heading text-right">
+                <h3 class="panel-title"><span class="text-right btn btn-info"><strong><i class="fa fa-money" aria-hidden="true"></i></strong> PRICE RANGE</span> </h3>
+            </div>
+            <div class="panel-body" style="height: 45px; margin-top: 15px">
+                <div class="col-md-5"><input id="priceStart" name="priceStart" type="text" class="col-md-12 form-control" value="{{ searchForm['priceStart'] is defined ? searchForm['priceStart'] :'' }}" /></div>
+                <div class="col-md-2 text-center" style="line-height:25px; font-weight: bold; color:#222">To</div>
+                <div class="col-md-5"><input id="priceEnd" name="priceEnd" type="text" class="col-md-12 form-control" value="{{ searchForm['priceEnd'] is defined ? searchForm['priceEnd'] :'' }}" /></div>
+            </div>
+        {% endif %}
+
+        {% if globalOption.ecommerceConfig.sidebarSize == 1 %}
+            <div class="panel-heading text-right">
+                <h3 class="panel-title"><span class="text-right btn btn-info selector" data-id="size"><strong><i class="fa fa-th-large" aria-hidden="true"></i></strong> SIZE/WEIGHT/DIMENSION <span class="glyphicon glyphicon-chevron-down"></span></span> </h3>
+            </div>
+            <div class="panel-body panel-hide" id="size">
+                <div class="row">
+                    {{ sizeTree|raw }}
+                </div>
+            </div>
+        {% endif %}
+        {% if globalOption.ecommerceConfig.sidebarColor == 1 %}
+            <div class="panel-heading text-right">
+                <h3 class="panel-title"><span class="text-right btn btn-info selector" data-id="color"><strong><i class="fa fa-camera-retro" aria-hidden="true"></i></strong> COLORS <span class="glyphicon glyphicon-chevron-down"></span></span> </h3>
+            </div>
+            <div class="panel-body panel-hide" id="color">
+                <div class="row">
+                    {{ colorTree|raw }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="clearfix"></div>
+        {% if globalOption.ecommerceConfig.sidebarDiscount == 1 %}
+            <div class="panel-heading text-right">
+                <h3 class="panel-title"><span class="text-right btn btn-danger selector" data-id="discount"><strong><i class="fa fa-money" aria-hidden="true"></i></strong> DISCOUNT OFFER <span class="glyphicon glyphicon-chevron-down"></span></span> </h3>
+            </div>
+            <div class="panel-body panel-hide" id="discount">
+                <div class="row">
+                    {{ discountTree|raw }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="clearfix"></div>
+        {% if globalOption.ecommerceConfig.sidebarPromotion == 1 %}
+            <div class="panel-heading text-right">
+                <h3 class="panel-title"><span class="text-right btn btn-warning selector" data-id="promotion"><strong><i class="fa fa-gift" aria-hidden="true"></i></strong> PROMOTIONS <span class="glyphicon glyphicon-chevron-down"></span></span> </h3>
+            </div>
+            <div class="panel-body panel-hide" id="promotion" >
+                <div class="row">
+                    {{ promotionTree|raw }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="clearfix"></div>
+        {% if globalOption.ecommerceConfig.sidebarTag == 1 %}
+            <div class="panel-heading text-right">
+                <h3 class="panel-title"><span class="text-right btn btn-warning selector" data-id="tag"><strong><span class="glyphicon glyphicon-tags"></span></strong> POPULAR TAGS <span class="glyphicon glyphicon-chevron-down"></span></span> </h3>
+            </div>
+            <div class="panel-body panel-hide" id="tag">
+                <div class="row">
+                   {{  tagTree|raw }}
+                </div>
+            </div>
+        {% endif %}
+        <div class="clearfix"></div>
+        <div class="panel-heading">
+            <div class="sidebar-footer col-md-12" >
+                <button type="submit"  class="btn btn-success col-md-12" id="filter"><span class="glyphicon glyphicon-filter"></span> FILTER</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    <div class="clearfix"></div>
+</div>
+</form>
+<style>
+    #priceStart , #priceEnd{
+        height:30px!important;
+        border-radius:0;
+        border: 1px solid #d2d2d2;
+
+    }
+    .panel-hide{
+        display: none;
+    }
+</style>

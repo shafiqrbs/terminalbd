@@ -138,9 +138,24 @@ class FeatureWidget
     private $categoryLimit;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="featureCategoryLimit", type="smallint",length=2 ,nullable=true)
+     */
+    private $featureCategoryLimit;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="promotionShow", type="string",length=50 ,nullable=true)
+     * @ORM\Column(name="featureCategoryShow", type="string",length=20 ,nullable=true)
+     */
+    private $featureCategoryShow;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="promotionShow", type="string",length=20 ,nullable=true)
      */
     private $promotionShow;
 
@@ -194,6 +209,19 @@ class FeatureWidget
      */
     private $brandLimit;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="featureBrandLimit", type="smallint",length=2 ,nullable=true)
+     */
+    private $featureBrandLimit;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="featureBrandShow", type="string",length=20 ,nullable=true)
+     */
+    private $featureBrandShow;
 
 
     /**
@@ -979,5 +1007,69 @@ class FeatureWidget
     public function setBrandLimit($brandLimit)
     {
         $this->brandLimit = $brandLimit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFeatureBrandShow()
+    {
+        return $this->featureBrandShow;
+    }
+
+    /**
+     * @param string $featureBrandShow
+     */
+    public function setFeatureBrandShow($featureBrandShow)
+    {
+        $this->featureBrandShow = $featureBrandShow;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFeatureBrandLimit()
+    {
+        return $this->featureBrandLimit;
+    }
+
+    /**
+     * @param int $featureBrandLimit
+     */
+    public function setFeatureBrandLimit($featureBrandLimit)
+    {
+        $this->featureBrandLimit = $featureBrandLimit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFeatureCategoryShow()
+    {
+        return $this->featureCategoryShow;
+    }
+
+    /**
+     * @param string $featureCategoryShow
+     */
+    public function setFeatureCategoryShow($featureCategoryShow)
+    {
+        $this->featureCategoryShow = $featureCategoryShow;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFeatureCategoryLimit()
+    {
+        return $this->featureCategoryLimit;
+    }
+
+    /**
+     * @param int $featureCategoryLimit
+     */
+    public function setFeatureCategoryLimit($featureCategoryLimit)
+    {
+        $this->featureCategoryLimit = $featureCategoryLimit;
     }
 }

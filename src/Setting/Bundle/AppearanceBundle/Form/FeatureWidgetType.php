@@ -179,7 +179,31 @@ class FeatureWidgetType extends AbstractType
                     '16'                => '16',
                 ),
             ))
+            ->add('featureCategoryLimit', 'choice', array(
+                'attr'=>array('class'=>'span12  m-wrap'),
+                'empty_value' => '--- Limit ---',
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    '6'                 => '6',
+                    '8'                 => '8',
+                    '12'                => '12',
+                    '16'                => '16',
+                ),
+            ))
             ->add('brandLimit', 'choice', array(
+                'attr'=>array('class'=>'span12  m-wrap'),
+                'empty_value' => '--- Limit ---',
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    '6'                 => '6',
+                    '8'                 => '8',
+                    '12'                => '12',
+                    '16'                => '16',
+                ),
+            ))
+            ->add('featureBrandLimit', 'choice', array(
                 'attr'=>array('class'=>'span12  m-wrap'),
                 'empty_value' => '--- Limit ---',
                 'expanded'      =>false,
@@ -240,6 +264,18 @@ class FeatureWidgetType extends AbstractType
                 ),
             ))
 
+            ->add('featureCategoryShow', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'slider2'              => 'Slider Two Column',
+                    'slider3'              => 'Slider Three Column',
+                    'grid1'                => 'Grid One Column',
+                    'grid2'                => 'Grid Two Column',
+                ),
+            ))
+
             ->add('brandShow', 'choice', array(
                 'attr'=>array('class'=>'m-wrap span12'),
                 'expanded'      =>false,
@@ -248,6 +284,19 @@ class FeatureWidgetType extends AbstractType
                     'slider'              => 'Product slider',
                     'imageProduct'        => 'Brand image with product',
                     'grid'                => 'Product grid',
+                ),
+            ))
+
+            ->add('featureBrandShow', 'choice', array(
+                'attr'=>array('class'=>'m-wrap span12'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'slider2'              => 'Slider Two Column',
+                    'slider3'              => 'Slider Three Column',
+                    'slider4'              => 'Slider Four Column',
+                    'grid1'                => 'Grid One Column',
+                    'grid2'                => 'Grid Two Column',
                 ),
             ))
 

@@ -62,12 +62,14 @@
                                 <div class="span4">
                                     <h4>Vendor:</h4>
                                     <ul class="unstyled">
-                                        <li>{{ entity.vendor.companyName }}</li>
-                                        <li>{{ entity.vendor.name }}</li>
-                                        <li>{{ entity.vendor.mobile }}</li>
-                                        <li>{{ entity.vendor.address }}</li>
-                                        {% if entity.vendor.country %}
-                                            <li>{{ entity.vendor.country.name }}</li>
+                                        {% if  entity.vendor is not empty %}
+                                            <li>{{ entity.vendor.companyName }}</li>
+                                            <li>{{ entity.vendor.name }}</li>
+                                            <li>{{ entity.vendor.mobile }}</li>
+                                            <li>{{ entity.vendor.address }}</li>
+                                            {% if entity.vendor.country %}
+                                                <li>{{ entity.vendor.country.name }}</li>
+                                            {% endif %}
                                         {% endif %}
 
                                     </ul>

@@ -440,17 +440,6 @@ $("div.list-group > a").click(function(e) {
     $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
 });
 
-$('#spec').click(function(){
-    alert('Okay');
-    $("#showSpec").slideToggle(100);
-}).toggle( function() {
-    $(this).html('<strong><span class="glyphicon glyphicon-chevron-down"></span></strong>');
-}, function() {
-    $(this).html('<strong><span class="glyphicon glyphicon-chevron-up"></span></strong>');
-});
-
-
-
 
 /*
 

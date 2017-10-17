@@ -128,7 +128,7 @@ class ItemRepository extends EntityRepository
             $qb->setParameter('itemColor', $itemColor);
         }
         if($inventory->getIsVendor() == 1) {
-            $vendor = $this->_em->getRepository('InventoryBundle:Vendor')->findOneBy(array('inventoryConfig'=> $inventory,'name'=> $vendor ));
+            $vendor = $this->_em->getRepository('InventoryBundle:Vendor')->findOneBy(array('inventoryConfig'=> $inventory,'companyName'=> $vendor ));
             $qb->andWhere('item.vendor = :vendor');
             $qb->setParameter('vendor', $vendor);
         }

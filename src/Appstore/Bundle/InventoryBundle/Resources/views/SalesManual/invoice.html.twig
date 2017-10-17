@@ -4,14 +4,20 @@
         <tr>
             <td>
                 <div class="span4  pull-left invoice-logo-space">
+                    {% if entity.inventoryConfig.invoicePrintLogo == 1 %}
                     {% if entity.inventoryConfig.globalOption.templateCustomize.webPath('logo') is not empty %}   <img style="max-width: 180px; max-height: 60px" src="/{{ entity.inventoryConfig.globalOption.templateCustomize.webPath('logo') }}">{% endif %}
+                    {% endif %}
                 </div>
             </td>
             <td class="pull-right">
                 <div class="span4">
                     <ul class="unstyled">
                         <li><strong>{{ entity.inventoryConfig.globalOption.name }}</strong></li>
+                        {% if entity.inventoryConfig.invoicePrintUserMobile == 1 and entity.salesBy.profile.mobile is not empty %}
+                        <li><i class="icon-phone"></i>&nbsp;{{ entity.salesBy.profile.mobile }}</li>
+                        {% else %}
                         <li><i class="icon-phone"></i>&nbsp;{{ entity.inventoryConfig.globalOption.mobile }}</li>
+                        {% endif %}
                         {% if  entity.inventoryConfig.globalOption.email is not empty %}<li><i class="icon-envelope"></i>&nbsp;{{ entity.inventoryConfig.globalOption.email }}</li>{% endif %}
                         {% if  entity.inventoryConfig.globalOption.contactPage.address1 %}<li><i class="icon-home"></i>&nbsp;{{ entity.inventoryConfig.globalOption.contactPage.address1 }}</li>{% endif %}
                         {% if entity.inventoryConfig.globalOption.domain is not empty %}<li><i class="icon-link"></i>&nbsp;www.{{ entity.inventoryConfig.globalOption.domain }}</li>{% endif %}
@@ -82,7 +88,9 @@
             <tr><td colspan="5"><strong class="pull-right" >Paid Amount</strong></td><td><strong>{{ entity.payment|number_format() }}</strong></td></tr>
             {% if entity.due %}<tr><td colspan="5"><strong class="pull-right" >Due Amount</strong></td><td><strong>{{ entity.due|number_format() }}</strong></td></tr>{% endif %}
             <tr><td colspan="6" style="text-align:right"><strong>In word TK.</strong>({{ entity.paymentInWord|raw }} Taka only).</td></tr>
-            <tr><td colspan="6" style="text-align:center">Powered By: Umar Biz Communication, www.umarlimited.com</td></tr>
+            {% if entity.inventoryConfig.invoicePrintLogo == 1 %}
+            <tr><td colspan="6" style="text-align:center">Powered By: {{ portal_power }}</td></tr>
+            {% endif %}
             </tfoot>
         </table>
     {% endif %}

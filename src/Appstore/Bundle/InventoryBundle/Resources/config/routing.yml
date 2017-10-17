@@ -150,6 +150,10 @@ inventory_item:
     resource: "@InventoryBundle/Resources/config/routing/item.yml"
     prefix:   /inventory/item
 
+inventory_simple_item:
+    resource: "@InventoryBundle/Resources/config/routing/inventoy_simple_item.yml"
+    prefix:   /inventory/simple-stock
+
 inventory_barcode:
     resource: "@InventoryBundle/Resources/config/routing/barcode.yml"
     prefix:   /inventory/barcode

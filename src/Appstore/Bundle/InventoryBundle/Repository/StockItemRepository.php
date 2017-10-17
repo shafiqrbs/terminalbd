@@ -717,7 +717,7 @@ class StockItemRepository extends EntityRepository
 
     }
 
-    public function insertSalesStockItem($sales){
+    public function insertSalesStockItem(Sales $sales){
 
         $em = $this->_em;
         foreach ($sales->getSalesItems() as $row ){
@@ -760,6 +760,54 @@ class StockItemRepository extends EntityRepository
             if(!empty($purchaseItem->getItem()->getColor())){
                 $entity->setColor($purchaseItem->getItem()->getColor());
                 $entity->setColorName($purchaseItem->getItem()->getColor()->getName());
+            }
+
+            $entity->setProcess('sales');
+            $em->persist($entity);
+        }
+
+        $em->flush();
+
+    }
+
+    public function insertSalesManualStockItem(Sales $sales){
+
+        $em = $this->_em;
+
+        /* @var SalesItem $row */
+
+        foreach ($sales->getSalesItems() as $row ){
+
+            $entity = new StockItem();
+            $entity->setInventoryConfig($sales->getInventoryConfig());
+            $entity->setSalesItem($row);
+            $entity->setPurchaseItem($row->getPurchaseItem());
+            $entity->setItem($row->getItem());
+            $quantity = '-'.$row->getQuantity();
+            $entity->setQuantity($quantity);
+            $entity->setCreatedBy($sales->getCreatedBy());
+
+            $entity->setProduct($row->getItem()->getMasterItem());
+            $entity->setProductName($row->getItem()->getMasterItem()->getName());
+            if(!empty($row->getItem()->getMasterItem()->getCategory())){
+                $entity->setCategory($row->getItem()->getMasterItem()->getCategory());
+                $entity->setCategoryName($row->getItem()->getMasterItem()->getCategory()->getName());
+            }
+
+            if(!empty($row->getItem()->getMasterItem()->getProductUnit())) {
+                $entity->setUnit($row->getItem()->getMasterItem()->getProductUnit());
+                $entity->setUnitName($row->getItem()->getMasterItem()->getProductUnit()->getName());
+            }
+
+
+            if(!empty($row->getItem()->getSize())){
+                $entity->setSize($row->getItem()->getSize());
+                $entity->setSizeName($row->getItem()->getSize()->getName());
+            }
+
+            if(!empty($row->getItem()->getColor())){
+                $entity->setColor($row->getItem()->getColor());
+                $entity->setColorName($row->getItem()->getColor()->getName());
             }
 
             $entity->setProcess('sales');

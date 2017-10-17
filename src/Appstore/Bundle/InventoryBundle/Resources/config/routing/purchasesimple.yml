@@ -10,40 +10,20 @@ inventory_purchasesimple_new:
     path:     /new
     defaults: { _controller: "InventoryBundle:PurchaseSimple:new" }
 
-inventory_purchasesimple_create:
-    path:     /{purchase}/create
-    defaults: { _controller: "InventoryBundle:PurchaseSimple:createPurchaseItem" }
-    methods:  POST
-
-inventory_purchasesimple_check_item_quantity:
-    path:     /check-item-quantity
-    defaults: { _controller: "InventoryBundle:PurchaseSimple:checkItemQuantity" }
-    methods:  POST
-
 inventory_purchasesimple_edit:
     path:     /{id}/edit
     defaults: { _controller: "InventoryBundle:PurchaseSimple:edit" }
+
 
 inventory_purchasesimple_update:
     path:     /{id}/update
     defaults: { _controller: "InventoryBundle:PurchaseSimple:update" }
     methods:  [POST, PUT]
 
-inventory_purchasesimple_status:
-    path:     /{id}/status
-    defaults: { _controller: "InventoryBundle:PurchaseSimple:edit" }
-
-inventory_grn_search:
-    path:     /inventory_purchasesimple-auto-search
-    defaults: { _controller: "InventoryBundle:PurchaseSimple:autoSearch" }
-    options:
-           expose: true
-
-inventory_grn_name:
-    path:     /{grn}/inventory_purchasesimple-search-name
-    defaults: { _controller: "InventoryBundle:PurchaseSimple:searchName" }
-    options:
-           expose: true
+inventory_purchasesimple_create:
+    path:     /{purchase}/create
+    defaults: { _controller: "InventoryBundle:PurchaseSimple:createPurchaseItem" }
+    methods:  POST
 
 inventory_purchasesimple_approve:
     path:     /{id}/approve
@@ -56,11 +36,6 @@ inventory_purchasesimple_delete:
 approved_inventory_purchasesimple_deleted:
     path:     /{id}/approved-inventory_purchasesimple-deleted
     defaults: { _controller: "InventoryBundle:PurchaseSimple:approvedPurchaseDeleted" }
-
-
-inventory_purchasesimple_item_delete:
-    path:     /{purchase}/{id}/inventory_purchasesimple-item-delete
-    defaults: { _controller: "InventoryBundle:PurchaseSimple:deleteItem" }
 
 inventory_purchasesimple_edit_approve:
     path:     /{id}/edit-approve
@@ -77,3 +52,20 @@ inventory_purchasesimple_create_stock_item:
     defaults: { _controller: "InventoryBundle:PurchaseSimple:createStockItem" }
     methods:  [POST, PUT]
 
+
+inventory_purchasesimple_item_delete:
+    path:     /{purchase}/{id}/purchase-simple-item-delete
+    defaults: { _controller: "InventoryBundle:PurchaseSimple:purchaseItemDelete" }
+
+
+inventory_grn_search:
+    path:     /inventory_purchasesimple-auto-search
+    defaults: { _controller: "InventoryBundle:PurchaseSimple:autoSearch" }
+    options:
+           expose: true
+
+inventory_grn_name:
+    path:     /{grn}/inventory_purchasesimple-search-name
+    defaults: { _controller: "InventoryBundle:PurchaseSimple:searchName" }
+    options:
+           expose: true

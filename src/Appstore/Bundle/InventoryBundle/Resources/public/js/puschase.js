@@ -17,26 +17,7 @@ function InventoryPurchasePage(){
         }
     });
 
-    $('#addStockItem').click(function(e) {
-
-        var url =  $('#inventoryItem').attr("action");
-        $('#confirm-content').confirmModal({
-            topOffset: 0,
-            top: '25%',
-            onOkBut: function(event, el) {
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data : $('#inventoryItem').serialize(),
-                    success: function (response) {
-                        location.reload();
-                    },
-                });
-            }
-        });
-        e.preventDefault();
-    });
-
+   
     $('#addMasterItem').click(function(e) {
 
         var url =  $('#masterProduct').attr("action");
@@ -89,27 +70,7 @@ function InventoryPurchasePage(){
         });
     });
 
-    $(document).on("click", ".delete , .remove", function() {
-
-        var url = $(this).attr("rel");
-        var id = $(this).attr("id");
-        $('#confirm-content').confirmModal({
-            topOffset: 0,
-            top: '25%',
-            onOkBut: function(event, el) {
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function (response) {
-                        if ('success' == response) {
-                            $('#remove-' + id).hide();
-                        }
-                    },
-                })
-            }
-        });
-    });
-
+   
     $(document).on("click", ".vendorItemDelete", function() {
 
         var url = $(this).attr("rel");
@@ -125,6 +86,32 @@ function InventoryPurchasePage(){
         })
     });
 
+    $('#addStockItem').click(function(e) {
+
+        var url =  $('#inventoryItem').attr("action");
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data : $('#inventoryItem').serialize(),
+                    success: function (response) {
+                        obj = JSON.parse(response);
+                        if(obj['status'] == 'valid'){
+                            location.reload();
+                        }else{
+                            alert(obj['message']);
+                        }
+                    },
+                });
+            }
+        });
+        e.preventDefault();
+    });
+
+
     $(document).on("click", ".purchaseItemDelete", function() {
 
         var url = $(this).attr("rel");
@@ -135,6 +122,7 @@ function InventoryPurchasePage(){
             success: function (response) {
                 if ('success' == response) {
                    location.reload();
+
                 }
             },
         })

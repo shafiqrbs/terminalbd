@@ -269,11 +269,9 @@ class PurchaseItemRepository extends EntityRepository
         $qb->setParameter('barcode', $barcode);
         $qb->andWhere("p.inventoryConfig = :inventory");
         $qb->setParameter('inventory', $inventory->getId());
-        $qb->orderBy('item.name','ASC');
         return $qb->getQuery()->getSingleResult();
 
     }
-
 
     public function searchAutoComplete($item, InventoryConfig $inventory)
     {
@@ -308,7 +306,6 @@ class PurchaseItemRepository extends EntityRepository
         $qb->setParameter('id', $purchase->getId());
         $qb->groupBy('item.masterItem');
         $data = $qb->getQuery()->getArrayResult();
-
         foreach ($data as $row){
 
            $purchaseVendorItem = $this->_em->getRepository('InventoryBundle:PurchaseVendorItem')->findOneBy(array('purchase' => $purchase ,'masterItem' => $row['productId']));
@@ -323,6 +320,7 @@ class PurchaseItemRepository extends EntityRepository
            $entity->setName($row['productName']);
            $entity->setPurchasePrice($row['purchase']);
            $entity->setSalesPrice($row['sales']);
+           $entity->setWebPrice($row['sales']);
            $entity->setQuantity($row['quantity']);
            $entity->setMasterQuantity($row['quantity']);
            $this->_em->persist($entity);

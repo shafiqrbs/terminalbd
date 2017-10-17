@@ -73,6 +73,7 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
+            $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
 
@@ -81,7 +82,7 @@ class WebServiceProductController extends Controller
                     'products'          => $pagination,
                     'menu'              => $menu,
                     'pageName'          => 'Product',
-                    'searchForm'            => $data,
+                    'searchForm'            => $searchForm,
                 )
             );
         }
@@ -114,6 +115,7 @@ class WebServiceProductController extends Controller
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
+            $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
 
@@ -121,7 +123,7 @@ class WebServiceProductController extends Controller
                     'cart'              => $cart,
                     'products'          => $pagination,
                     'menu'              => $menu,
-                    'searchForm'        => $data,
+                    'searchForm'        => $searchForm,
                     'pageName'          => 'Product',
                 )
             );
@@ -326,16 +328,14 @@ class WebServiceProductController extends Controller
             }
             $category = isset($data['category']) ? $data['category'] :0;
             $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTree($category);
-            $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
-
+            $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
 
                     'globalOption'  => $globalOption,
                     'categoryTree'  => $categoryTree,
-                    'brands'  => $brands,
                     'menu'  => $menu,
-                    'searchForm'        => $data,
+                    'searchForm'        => $searchForm,
                     'products'    => $pagination,
                 )
             );
@@ -368,10 +368,6 @@ class WebServiceProductController extends Controller
                 $products = $this->paginate($entities, $limit = 12 , $globalOption->getTemplateCustomize()->getPagination());
             }
 
-            $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig'=>$globalOption->getInventoryConfig()));
-            $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
-            $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
-            $brands = $this->getDoctrine()->getRepository('InventoryBundle:ItemBrand')->findBy(array('inventoryConfig'=>$globalOption->getInventoryConfig(),'status'=>1),array('name'=>'ASC'));
 
             $next = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->frontendProductNext($entity);
             $previous = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->frontendProductPrev($entity);
@@ -385,21 +381,21 @@ class WebServiceProductController extends Controller
                 $theme = 'Template/Desktop/'.$themeName;
             }
 
+            $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
+
             return $this->render('FrontendBundle:'.$theme.':productDetails.html.twig',
 
                 array(
 
                     'globalOption'      => $globalOption,
                     'cart'              => $cart,
-                    'categorySidebar'   => $categorySidebar,
-                    'brands'            => $brands,
                     'product'           => $entity,
                     'products'          => $products,
                     'subItem'           => $subItem,
                     'next'              => $next,
                     'previous'          => $previous,
                     'menu'              => $menu,
-                    'searchForm'        => $_REQUEST,
+                    'searchForm'        => $searchForm,
                     'pageName'          => 'ProductDetails',
                 )
             );

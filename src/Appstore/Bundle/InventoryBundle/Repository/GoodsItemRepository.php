@@ -530,8 +530,7 @@ class GoodsItemRepository extends EntityRepository
     public function findGroupBrands(InventoryConfig $config , $array = array())
     {
 
-
-        $brands = $array; // is_array($array['brand']) ? $array['brand'] :'';
+        $brands =  isset($array['brand']) ? $array['brand'] : array();
 
         $qb = $this->_em->createQueryBuilder();
         $qb->from('InventoryBundle:PurchaseVendorItem','e');
@@ -546,7 +545,7 @@ class GoodsItemRepository extends EntityRepository
         $value ='';
         $value .='<ul class="ul-check-list-brand">';
         foreach ($res as $key => $val) {
-            $checkd = in_array($val['id'], $brands)? 'checked':'';
+            $checkd = in_array($val['id'], $brands) ? 'checked':'';
             $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="brand[]" value="'.$val['id'].'" ><span class="label" >'.$val['name']. '</span></li>';
         }
         $value .='</ul>';
@@ -557,8 +556,8 @@ class GoodsItemRepository extends EntityRepository
     public function findGroupColors(InventoryConfig $config , $array = array())
     {
 
-       // $colors = is_array($array['color']) ? $array['color'] :'';
-        $colors = $array;
+        $colors = isset($array['color']) ? $array['color'] :$array;
+
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.purchaseVendorItem','purchasevendoritem');
         $qb->join('e.colors','colors');
@@ -572,7 +571,7 @@ class GoodsItemRepository extends EntityRepository
         $value ='';
         $value .='<ul class="ul-check-list">';
         foreach ($res as $key => $val) {
-            echo $checkd = in_array($val['id'], $colors ) ? 'checked':'';
+            $checkd = in_array($val['id'], $colors ) ? 'checked':'';
             $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="color[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
         }
         $value .='</ul>';
@@ -581,8 +580,7 @@ class GoodsItemRepository extends EntityRepository
 
     public function findGroupSizes(InventoryConfig $config , $array = array())
     {
-       // $sizes = is_array($array['size']) ? $array['size'] :'';
-        $sizes = $array;
+        $sizes = isset($array['size'])  ? $array['size'] :$array;
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.purchaseVendorItem','purchasevendoritem');
         $qb->join('e.size','size');
@@ -595,22 +593,82 @@ class GoodsItemRepository extends EntityRepository
 
         $value ='';
         $value .='<ul class="ul-check-list">';
+            foreach ($res as $key => $val) {
+                $checkd = in_array($val['id'], $sizes )? 'checked':'';
+                $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="size[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
+            }
+        $value .='</ul>';
+        return $value;
+    }
+
+    public function findGroupDiscount($config,  $array = array())
+    {
+        $discounts = isset($array['discount']) ? $array['discount'] :array();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.purchaseVendorItem','purchasevendoritem');
+        $qb->join('purchasevendoritem.discount','discount');
+        $qb->select('discount.id as id');
+        $qb->addSelect('discount.name as name');
+        $qb->where('purchasevendoritem.inventoryConfig='.$config->getId());
+        $qb->groupBy('discount.id');
+        $qb->orderBy('discount.name', 'ASC');
+        $res = $qb->getQuery()->getArrayResult();
+
+        $value ='';
+        $value .='<ul class="ul-check-list">';
         foreach ($res as $key => $val) {
-            $checkd = in_array($val['id'], $sizes )? 'checked':'';
-            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="size[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
+            $checkd = in_array($val['id'], $discounts )? 'checked':'';
+            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="discount[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
+        }
+        $value .='</ul>';
+        return $value;
+
+    }
+
+    public function findPromotionTree($config , $array = array())
+    {
+        $promotions = isset($array['promotion']) ? $array['promotion'] : array();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.purchaseVendorItem','purchasevendoritem');
+        $qb->join('purchasevendoritem.promotion','promotion');
+        $qb->select('promotion.id as id');
+        $qb->addSelect('promotion.name as name');
+        $qb->where('purchasevendoritem.inventoryConfig='.$config->getId());
+        $qb->groupBy('promotion.id');
+        $qb->orderBy('promotion.name', 'ASC');
+        $res = $qb->getQuery()->getArrayResult();
+
+        $value ='';
+        $value .='<ul class="ul-check-list">';
+        foreach ($res as $key => $val) {
+            $checkd = in_array($val['id'], $promotions )? 'checked':'';
+            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="promotion[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
         }
         $value .='</ul>';
         return $value;
     }
 
-    public function findGroupDiscount()
+    public function findTagTree($config , $array = array())
     {
-        return false;
-    }
+        $tags = isset($array['tag']) ? $array['tag'] : array();
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.purchaseVendorItem','purchasevendoritem');
+        $qb->join('purchasevendoritem.itemTags','tag');
+        $qb->select('tag.id as id');
+        $qb->addSelect('tag.name as name');
+        $qb->where('purchasevendoritem.inventoryConfig='.$config->getId());
+        $qb->groupBy('tag.id');
+        $qb->orderBy('tag.name', 'ASC');
+        $res = $qb->getQuery()->getArrayResult();
 
-    public function findPromotionTree()
-    {
-        return false;
+        $value ='';
+        $value .='<ul class="ul-check-list">';
+        foreach ($res as $key => $val) {
+            $checkd = in_array($val['id'], $tags )? 'checked':'';
+            $value .= '<li><input type="checkbox" class="checkbox" '.$checkd.' name="tag[]" value="'.$val['id'].'" ><span class="label">'.$val['name']. '</span></li>';
+        }
+        $value .='</ul>';
+        return $value;
     }
 
 

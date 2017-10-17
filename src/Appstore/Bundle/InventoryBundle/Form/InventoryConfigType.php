@@ -76,6 +76,8 @@ class InventoryConfigType extends AbstractType
             ->add('barcodePrint')
             ->add('barcodeSize')
             ->add('isPrintFooter')
+            ->add('invoicePrintUserMobile')
+            ->add('invoicePrintLogo')
             ->add('barcodeBrandVendor',
                 'choice', array(
                     'attr'=>array('class'=>'m-wrap span12'),

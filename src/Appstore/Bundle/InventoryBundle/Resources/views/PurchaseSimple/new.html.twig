@@ -84,7 +84,7 @@
                                         <div class="control-group">
                                             <label class="control-label" for="firstName">Size/Dimension/Weight<span class="required">*</span></label>
                                             <div class="controls">
-                                                <input type="text" id="size" name="size"  class="span12 m-wrap select2Size" value=""  autocomplete="off" placeholder="Color name">
+                                                <input type="text" id="size" name="size"  class="span12 m-wrap select2Size" value=""  autocomplete="off" placeholder="Size name">
                                             </div>
                                         </div>
                                     </div>
@@ -94,7 +94,7 @@
                                         <div class="control-group">
                                             <label class="control-label" for="firstName">Vendor<span class="required">*</span></label>
                                             <div class="controls">
-                                                <input type="text" id="vendor" name="vendor"  class="span12 m-wrap select2Vendor" value=""  autocomplete="off" placeholder="Color name">
+                                                <input type="text" id="vendor" name="vendor"  class="span12 m-wrap select2Vendor" value=""  autocomplete="off" placeholder="Vendor name">
                                             </div>
                                         </div>
                                     </div>
@@ -104,7 +104,7 @@
                                         <div class="control-group">
                                             <label class="control-label" for="firstName">Brand<span class="required">*</span></label>
                                             <div class="controls">
-                                                <input type="text" id="brand" name="brand"  class="span12 m-wrap select2Brand" value=""  autocomplete="off" placeholder="Color name">
+                                                <input type="text" id="brand" name="brand"  class="span12 m-wrap select2Brand" value=""  autocomplete="off" placeholder="Brand name">
                                             </div>
                                         </div>
                                     </div>
@@ -127,8 +127,8 @@
                                 <div class="control-group">
                                     <label class="control-label" for="name">Inventory Item <span class="required">*</span></label>
                                     <div class="controls">
-                                        {{ form_widget(purchaseItemForm.name) }}
-                                        {{ form_errors(purchaseItemForm.name) }}
+                                        {{ form_widget(purchaseItemForm.item) }}
+                                        {{ form_errors(purchaseItemForm.item) }}
                                     </div>
                                 </div>
 
@@ -423,6 +423,19 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row-fluid">
+                                <div class="span8">
+                                </div>
+                                <div class="span4">
+                                    <div class="control-group">
+                                        <label class="control-label" for="transactionMethod">Process</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.process) }}
+                                            {{ form_errors(form.process) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">
                                     <button type="button" class="btn green" id="action-button"><i class="icon-ok"></i> Save</button>
@@ -480,6 +493,9 @@
         dateFormat: "dd-mm-yy"
     });
     $('body').addClass('page-sidebar-closed');
+
     InventoryPurchasePage();
     ApproveProcess();
+
+
     {% endblock %}

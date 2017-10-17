@@ -17,12 +17,12 @@
                                                         <div class="client-logo">
                                                             <div class="tm-mask">
                                                                 <div class="tm-mask-content">
-                                                                    <h3><a href="{{ path('ecommercesubdomain',{'subdomain':entity.subDomain}) }}">{{ entity.name }}</a></h3>
+                                                                    <h3><a href="{% if entity.domain is not empty %}http://www.{{ entity.domain }}{% else %}javascript:{% endif %}">{{ entity.name }}</a></h3>
                                                                     <span class="line"></span>
                                                                     <div class="incategory">
                                                                         <a href="{{ path('bindu_build_syndicate',{'syndicate':entity.syndicate.slug }) }}">{{ entity.syndicate.name }}</a>
                                                                     </div>
-                                                                    <a class="tm-btn" href="{{ path('ecommercesubdomain',{'subdomain':entity.subDomain}) }}" >Visit Website</a>
+                                                                    <a class="tm-btn" href="{% if entity.domain is not empty %}http://www.{{ entity.domain }}{% else %}javascript:{% endif %}" >Visit Website</a>
                                                                 </div>
                                                             </div>
                                                             {% if(entity.templateCustomize.webPath('logo') is defined and entity.templateCustomize.webPath('logo') is not empty) %}
@@ -32,7 +32,7 @@
                                                         <div class="org-title" ><strong>{{ entity.name }}</strong></div>
                                                         <ul class="social-networks">
                                                             <li>
-                                                                <a target="_blank" href="{% if entity.domain is not empty %}http://www.{{ entity.domain }}{% else %}{{ path('ecommercesubdomain',{'subdomain':entity.subDomain}) }}{% endif %}" data-title="{% if entity.domain is not empty %}http://www.{{ entity.domain }}{% endif %}" >
+                                                                <a target="_blank" href="{% if entity.domain is not empty %}http://www.{{ entity.domain }}{% else %}javascript:{% endif %}" data-title="{% if entity.domain is not empty %}http://www.{{ entity.domain }}{% endif %}" >
                                                                     <i class="fa fa-home"></i>
                                                                 </a>
                                                             </li>
@@ -52,7 +52,7 @@
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <a class="last" href="{{ path('webservice_contact',{'subdomain':entity.subDomain}) }}" data-title="{% if  entity.location is defined and entity.location is not null  %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}">
+                                                                <a class="last" href="{{ path(entity.subDomain~'_webservice_contact') }}" data-title="{% if  entity.location is defined and entity.location is not null  %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}">
                                                                     <i class="fa fa-map-pin"></i>
                                                                 </a>
                                                             </li>

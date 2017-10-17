@@ -279,14 +279,14 @@ class CustomerController extends Controller
 
     public function searchAutoCompleteNameAction()
     {
-        $q = $_REQUEST['term'];
+        $q = $_REQUEST['q'];
         $option = $this->getUser()->getGlobalOption();
         $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteName($option,$q);
         $items = array();
         foreach ($entities as $entity):
             $items[]=array('id' => $entity['id'],'value' => $entity['id']);
         endforeach;
-        return new JsonResponse($items);
+        return new JsonResponse($entities);
 
     }
 

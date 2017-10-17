@@ -40,6 +40,7 @@ class WebServiceController extends Controller
                     'pageName'    => 'Home',
                     'menu'    => $menu,
                     'cart'    => $cart,
+                    'searchForm'    => array(),
                 )
             );
 

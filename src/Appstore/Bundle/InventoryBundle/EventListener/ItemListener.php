@@ -118,9 +118,11 @@ class ItemListener
         $vendorName ='';
 
         if(!empty($entity->getInventoryConfig()->getIsVendor()) and $entity->getInventoryConfig()->getIsVendor() == 1 ){
+
             $vendor             = '-V'.$entity->getVendor()->getSTRPadCode();
             $vendorSlug         =  $entity->getVendor()->getSlug();
             $vendorName         = '-'.$entity->getVendor()->getVendorCode();
+
         }elseif(!empty($entity->getVendor())){
             $vendorSlug           = $entity->getVendor()->getSlug();
         }else{

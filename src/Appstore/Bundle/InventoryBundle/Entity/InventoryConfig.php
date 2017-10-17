@@ -226,6 +226,21 @@ class InventoryConfig
      */
     private $barcodePrint = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="invoicePrintUserMobile", type="boolean",  nullable=true)
+     */
+    private $invoicePrintUserMobile = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="invoicePrintLogo", type="boolean",  nullable=true)
+     */
+    private $invoicePrintLogo = true;
+
+
 
     /**
      * @var boolean
@@ -1135,6 +1150,38 @@ class InventoryConfig
     public function getSizeGroup()
     {
         return $this->sizeGroup;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getInvoicePrintUserMobile()
+    {
+        return $this->invoicePrintUserMobile;
+    }
+
+    /**
+     * @param boolean $invoicePrintUserMobile
+     */
+    public function setInvoicePrintUserMobile($invoicePrintUserMobile)
+    {
+        $this->invoicePrintUserMobile = $invoicePrintUserMobile;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getInvoicePrintLogo()
+    {
+        return $this->invoicePrintLogo;
+    }
+
+    /**
+     * @param boolean $invoicePrintLogo
+     */
+    public function setInvoicePrintLogo($invoicePrintLogo)
+    {
+        $this->invoicePrintLogo = $invoicePrintLogo;
     }
 
 

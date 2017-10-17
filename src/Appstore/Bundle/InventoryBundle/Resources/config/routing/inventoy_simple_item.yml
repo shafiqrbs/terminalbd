@@ -1,87 +1,87 @@
-item:
+inventory_simple_stock_simple_stock:
     path:     /
     defaults: { _controller: "InventoryBundle:Item:index" }
 
-inventory_item:
+inventory_simple_stock_inventory_simple_stock:
     path:     /
     defaults: { _controller: "InventoryBundle:Item:index" }
 
-item_show:
+inventory_simple_stock_show:
     path:     /{id}/show
     defaults: { _controller: "InventoryBundle:Item:show" }
 
-item_new:
+inventory_simple_stock_new:
     path:     /new
     defaults: { _controller: "InventoryBundle:Item:new" }
 
-item_create:
+inventory_simple_stock_create:
     path:     /create
     defaults: { _controller: "InventoryBundle:Item:create" }
     methods:  POST
 
-item_edit:
+inventory_simple_stock_edit:
     path:     /{id}/edit
     defaults: { _controller: "InventoryBundle:Item:edit" }
 
 
-item_edit_web:
+inventory_simple_stock_edit_web:
     path:     /{id}/edit-web
     defaults: { _controller: "InventoryBundle:Item:editWeb" }
 
-item_web_status:
-    path:     /{id}/item-web-status
+inventory_simple_stock_web_status:
+    path:     /{id}/inventory_simple_stock-web-status
     defaults: { _controller: "InventoryBundle:Item:webStatus" }
 
-inventory_item_web_price:
+inventory_simple_stock_inventory_simple_stock_web_price:
     path:     /update-web-price
     defaults: { _controller: "InventoryBundle:Item:updateWebPrice" }
     methods:  POST
     options:
             expose: true
 
-item_gallery:
-    path:     /{item}/upload
+inventory_simple_stock_gallery:
+    path:     /{inventory_simple_stock}/upload
     defaults: { _controller: "InventoryBundle:Item:uploadItemImage" }
     options:
            expose: true
 
-item_status:
+inventory_simple_stock_status:
     path:     /{id}/status
     defaults: { _controller: "InventoryBundle:Item:status" }
 
-item_update:
+inventory_simple_stock_update:
     path:     /{id}/update
     defaults: { _controller: "InventoryBundle:Item:update" }
     methods:  [POST, PUT]
 
-item_web_update:
+inventory_simple_stock_web_update:
     path:     /{id}/web-update
     defaults: { _controller: "InventoryBundle:Item:updateWeb" }
     methods:  [POST, PUT]
 
-item_delete:
+inventory_simple_stock_delete:
     path:     /{id}/delete
     defaults: { _controller: "InventoryBundle:Item:delete" }
 
-item_search:
+inventory_simple_stock_search:
     path:     /search
     defaults: { _controller: "InventoryBundle:Item:autoSearch" }
     options:
            expose: true
 
-item_search_all:
+inventory_simple_stock_search_all:
     path:     /all-search
     defaults: { _controller: "InventoryBundle:Item:autoSearchItemAll" }
     options:
            expose: true
 
-inventory_item_inline_update:
-    path:     /{vendor}/vendor-item
+inventory_simple_stock_inventory_simple_stock_inline_update:
+    path:     /{vendor}/vendor-inventory_simple_stock
     defaults: { _controller: "InventoryBundle:Item:vendorItem" }
     options:
            expose: true
 
-item_price:
+inventory_simple_stock_price:
     path:      /price
     defaults: { _controller: "InventoryBundle:Item:price" }
     methods:  [POST]

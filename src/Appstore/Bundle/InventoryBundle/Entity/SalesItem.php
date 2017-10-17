@@ -69,14 +69,14 @@ class SalesItem
     /**
      * @var float
      *
-     * @ORM\Column(name="purchasePrice", type="float")
+     * @ORM\Column(name="purchasePrice", type="float", nullable=true)
      */
     private $purchasePrice;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="estimatePrice", type="decimal")
+     * @ORM\Column(name="estimatePrice", type="decimal", nullable=true)
      */
     private $estimatePrice;
 

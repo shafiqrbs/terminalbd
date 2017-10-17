@@ -120,22 +120,25 @@ class EcommerceWidgetController extends Controller
 
     public function sidebarTemplateProductFilterAction(GlobalOption $globalOption , $searchForm = array() )
     {
-        
         if(!empty($globalOption)) {
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
 
             /* @var InventoryConfig $inventory */
+
             $inventory = $globalOption->getInventoryConfig();
 
             /* Device Detection code desktop or mobile */
 
             $detect = new MobileDetect();
+
             if ($detect->isMobile() || $detect->isTablet()) {
-                $theme = 'Template/Mobile/' . $themeName.'/EcommerceWidget';
+                $theme = 'Template/Mobile/EcommerceWidget';
             } else {
-                $theme = 'Template/Desktop/' . $themeName.'/EcommerceWidget';
+               // $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
+                $theme = 'Template/Mobile/EcommerceWidget';
             }
+
             $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $inventory));
             $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
             $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
@@ -154,8 +157,9 @@ class EcommerceWidgetController extends Controller
                 'colorTree'                 => $colorTree,
                 'sizeTree'                  => $sizeTree,
                 'discountTree'              => $discountTree,
-                'promotionTree'              => $promotionTree,
-                'tagTree'              => $tagTree,
+                'promotionTree'             => $promotionTree,
+                'tagTree'                   => $tagTree,
+                'searchForm'                => $searchForm,
 
             )
         );
@@ -423,14 +427,66 @@ class EcommerceWidgetController extends Controller
     {
 
         $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'menu' => $menu  ,'position' => $position ), array('sorting'=>'ASC'));
-        $siteEntity = $globalOption->getSiteSetting();
-        $themeName = $siteEntity->getTheme()->getFolderName();
-        /* Device Detection code desktop or mobile */
-
-        $theme = '';
-        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/FeatureWidget.html.twig', array(
+        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/widget.html.twig', array(
             'features'                  => $features,
             'globalOption'              => $globalOption,
+        ));
+    }
+
+    public function ecommerceMobileWidgetAction(GlobalOption $globalOption , Menu $menu , $position ='' )
+    {
+
+        $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'widgetFor'=>'e-commerce','menu' => $menu,'position' => $position ),array('sorting'=>'ASC'));
+
+        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/widget.html.twig', array(
+            'features'                  => $features,
+            'globalOption'            => $globalOption,
+        ));
+    }
+
+    public function sliderMobileFeatureWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
+    {
+
+        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/feature.html.twig', array(
+            'widget'                => $widget,
+            'globalOption'          => $globalOption
+
+        ));
+    }
+
+    public function FeatureBrandWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
+    {
+
+        $limit = $widget->getModuleShowLimit() > 0 ? $widget->getFeatureBrandLimit():8;
+        $entities                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureBrand')->getSliderFeatureBrand($globalOption,$limit);
+        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/brandWidget.html.twig', array(
+            'entities'              => $entities,
+            'widget'                => $widget,
+            'globalOption'          => $globalOption
+        ));
+    }
+
+    public function FeatureCategoryWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
+    {
+
+        $limit = $widget->getModuleShowLimit() > 0 ? $widget->getFeatureBrandLimit():8;
+        $entities                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureBrand')->getSliderFeatureBrand($globalOption,$limit);
+        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/categoryWidget.html.twig', array(
+            'entities'              => $entities,
+            'widget'                => $widget,
+            'globalOption'          => $globalOption
+        ));
+    }
+
+    public function ecommerceMobileFeatureWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
+    {
+
+        $limit = $widget->getModuleShowLimit() > 0 ? $widget->getModuleShowLimit() : 10;
+        $entities                    = $this->getDoctrine()->getRepository('SettingContentBundle:Page')->findModuleContent($globalOption->getId(), $widget->getModule() ,$limit);
+        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/page.html.twig', array(
+            'entities'              => $entities,
+            'widget'                => $widget,
+            'globalOption'          => $globalOption
         ));
     }
 
@@ -447,7 +503,7 @@ class EcommerceWidgetController extends Controller
         /* Device Detection code desktop or mobile */
         $detect = new MobileDetect();
         if( $detect->isMobile() ||  $detect->isTablet() ) {
-            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/CategoryWidget';
+            $theme = 'Template/Mobile/'.$themeName.'/EcommerceWidget/categoryProductWidget';
         }else{
             $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget/CategoryWidget';
         }

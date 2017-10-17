@@ -26,7 +26,11 @@
                 <h3 class="panel-title">PRICE RANGE</h3>
             </div>
             <div class="panel-body">
-                <input id="price-range" name="price-range" type="text" class="span12" value="" data-slider-min="1" data-slider-max="999999" data-slider-step="5" data-slider-value="[10,999999]"/>
+                <div class="row">
+                <div class="col-md-5"><input id="priceStart" name="priceStart" type="text" class="col-md-12 form-control" value="{{ searchForm['priceStart'] is defined ? searchForm['priceStart'] :'' }}" /></div>
+                <div class="col-md-2" style="line-height:25px; font-weight: bold">To</div>
+                <div class="col-md-5"><input id="priceEnd" name="priceEnd" type="text" class="col-md-12 form-control" value="{{ searchForm['priceEnd'] is defined ? searchForm['priceEnd'] :'' }}" /></div>
+                </div>
             </div>
         {% endif %}
 
@@ -79,7 +83,7 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                    tagTree|raw
+                   {{  tagTree|raw }}
                 </div>
             </div>
         {% endif %}
@@ -95,3 +99,10 @@
     <div class="clearfix"></div>
 </div>
 </form>
+<style>
+    #priceStart , #priceEnd{
+        height:25px!important;
+        border-radius:0;
+
+    }
+</style>

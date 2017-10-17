@@ -60,7 +60,6 @@ class AccountSalesReturn
     private  $branches;
 
 
-
     /**
      * @var string
      *
