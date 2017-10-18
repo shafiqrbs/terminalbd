@@ -120,6 +120,38 @@
                                             </tr>
                                         {% endfor %}
                                         </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td class="numeric" colspan="5" ><strong class="pull-right">Total BDT</strong></td>
+                                            <td class="numeric" >={{ entity.subTotal|number_format() }}</td>
+                                        </tr>
+                                        <tr>
+                                            {% if entity.vat %}
+                                            <td class="numeric" colspan="5" ><strong class="pull-right">Vat BDT</strong></td>
+                                            <td class="numeric" >={{ entity.vat|number_format() }}</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            {% if entity.discount %}
+                                            <td class="numeric" colspan="5" ><strong class="pull-right">Discount BDT</strong></td>
+                                            <td class="numeric" >={{ entity.discount|number_format() }}</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            <td class="numeric" colspan="5" ><strong class="pull-right">Grand Total BDT</strong></td>
+                                            <td class="numeric" >={{ entity.total|number_format() }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="numeric" colspan="5" ><strong class="pull-right">Payment BDT</strong></td>
+                                            <td class="numeric" >={{ entity.payment|number_format() }}</td>
+                                        </tr>
+                                        <tr>
+                                            {% if entity.due %}
+                                            <td class="numeric" colspan="5" ><strong class="pull-right">Payment BDT</strong></td>
+                                            <td class="numeric" >={{ entity.due|number_format() }}</td>
+                                            {% endif %}
+                                        </tr>
+                                        </tfoot>
                                     </table>
                                 {% endif %}
                             </div>

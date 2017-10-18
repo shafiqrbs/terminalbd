@@ -200,23 +200,12 @@ class SalesManualController extends Controller
         $checkQuantity = $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->checkSalesItemQuantity($item);
         $salesItemStock =  $checkQuantity + $quantity;
         if (!empty($item) && $remainingQuantity >= $salesItemStock) {
-
             $this->getDoctrine()->getRepository('InventoryBundle:SalesItem')->insertSalesManualItems($sales, $item ,$data);
-            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getManualSalesItems($sales);
-            $msg = '<div class="alert alert-success"><strong>Success!</strong> Product added successfully.</div>';
-
-        } else {
-
-            $sales = $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
-            $salesItems = $em->getRepository('InventoryBundle:SalesItem')->getManualSalesItems($sales);
-            $msg = '<div class="alert"><strong>Warning!</strong> There is no product in our inventory.</div>';
+            $this->getDoctrine()->getRepository('InventoryBundle:Sales')->updateSalesTotalPrice($sales);
+            $this->get('session')->getFlashBag()->add('success', 'Product added successfully.');
+        }else{
+            $this->get('session')->getFlashBag()->add('error', 'There is no product in our inventory');
         }
-
-        $salesTotal = $sales->getTotal() > 0 ? $sales->getTotal() : 0;
-        $salesSubTotal = $sales->getSubTotal() > 0 ? $sales->getSubTotal() : 0;
-        $vat = $sales->getVat() > 0 ? $sales->getVat() : 0;
-        return new Response(json_encode(array('salesSubTotal' => $salesSubTotal,'salesTotal' => $salesTotal, 'salesItem' => $salesItems,'salesVat' => $vat, 'msg' => $msg , 'success' => 'success')));
         exit;
     }
 
