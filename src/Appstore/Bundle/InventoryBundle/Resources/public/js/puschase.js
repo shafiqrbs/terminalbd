@@ -89,6 +89,40 @@ function InventoryPurchasePage(){
     $('#addStockItem').click(function(e) {
 
         var url =  $('#inventoryItem').attr("action");
+
+        var masterItem = $('#masterItem').val();
+        if( masterItem == "" ){
+            alert( "Please add  item name" );
+            $('#masterItem').focus();
+            return false;
+        }
+        var color = $('#color').val();
+        if( color == "" ){
+            alert( "Please add color name" );
+            $('#color').focus();
+            return false;
+        }
+        var size = $('#size').val();
+        if( size == "" ){
+            alert( "Please add size value" );
+            $('#size').focus();
+            return false;
+        }
+
+        var brand = $('#brand').val();
+        if( brand == "" ){
+            alert( "Please add brand name" );
+            $('#brand').focus();
+            return false;
+        }
+
+        var vendor = $('#vendor').val();
+        if( vendor == "" ){
+            alert( "Please add vendor name" );
+            $('#vendor').focus();
+            return false;
+        }
+
         $('#confirm-content').confirmModal({
             topOffset: 0,
             top: '25%',

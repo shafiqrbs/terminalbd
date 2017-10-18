@@ -113,26 +113,39 @@
 
                                     <thead class="flip-content ">
                                     <tr class="head-grey">
+                                        <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                         <th class="numeric" >Vendor item name</th>
                                         <th class="numeric" >Qnt</th>
                                         <th class="numeric" >Purchase price</th>
                                         <th class="numeric" >Sub total</th>
                                         <th class="numeric" >Sales price</th>
                                         <th class="numeric" >Sub total</th>
+                                        <th class="numeric" ></th>
                                     </tr>
                                     </thead>
                                     <tbody id="purchaseItem" >
                                     {% for vendorItem in entity.purchaseVendorItems %}
                                         <tr>
+                                            <td> {% if entity.purchaseItems is defined and  entity.purchaseItems is not empty  %}<span class="badge badge-warning toggle badge-custom" id="{{ vendorItem.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                             <td class="numeric" >{{ vendorItem.name }}</td>
                                             <td class="numeric" >{{ vendorItem.quantity }}</td>
                                             <td class="numeric" >{{ vendorItem.purchasePrice }}</td>
                                             <td class="numeric" >{{ (vendorItem.purchasePrice*vendorItem.quantity) }}</td>
                                             <td class="numeric" >{{ vendorItem.salesPrice }}</td>
                                             <td class="numeric" >{{ (vendorItem.salesPrice*vendorItem.quantity) }}</td>
+
+                                            <td class="numeric">
+                                                    <span class="pull-right">
+                                                    {% if entity.process != 'approved' %}
+                                                        <a title="Are you sure went to delete ?" id="{{ entity.id }}" href="javascript:" rel="{{ path('purchase_vendor_item_delete', { 'id': vendorItem.id }) }}" class="btn red mini vendorItemDelete" ><i class="icon-trash"></i></a>
+                                                    {% endif %}
+                                                    </span>
+                                            </td>
+
                                         </tr>
-                                        <tr>
-                                            <td colspan="6">
+
+                                        <tr id="show-{{ vendorItem.id }}" class="showing-overview">
+                                            <td colspan="8">
                                                 {% if vendorItem.purchaseItems is defined and  vendorItem.purchaseItems is not empty  %}
                                                     <table class="table table-bordered table-striped table-condensed flip-content ">
 
@@ -164,7 +177,7 @@
                                                                 <td class=" numeric" >
                                                                      <span class="pull-left">
                                                                     {% if entity.process != 'approved' %}
-                                                                        <a title="Are you sure went to delete ?" href="javascript:" data-url="{{ path('inventory_purchasesimple_item_delete',{'purchase':entity.id ,'id':purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini remove" ><i class="icon-trash"></i></a>
+                                                                        <a title="Are you sure went to delete ?" href="javascript:" rel="{{ path('inventory_purchaseitem_delete', { 'id': purchaseItem.id }) }}" id="{{  purchaseItem.id }}"  class="btn red mini purchaseItemDelete" ><i class="icon-trash"></i></a>
                                                                     {% endif %}
                                                                      </span>
                                                                 </td>

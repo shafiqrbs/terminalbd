@@ -179,9 +179,13 @@ class PurchaseSimpleController extends Controller
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
             $em->flush();
-            return $this->redirect($this->generateUrl('inventory_purchasesimple_edit', array('id' => $id)));
+            if($entity->getProcess() == 'approved' ){
+                $this->approveAction($entity);
+                return $this->redirect($this->generateUrl('inventory_purchasesimple_show', array('id' => $id)));
+            }else{
+                return $this->redirect($this->generateUrl('inventory_purchasesimple_edit', array('id' => $id)));
+            }
         }
-
         return $this->render('InventoryBundle:PurchaseSimple:new.html.twig', array(
             'entity'      => $entity,
             'purchaseItemForm'   => $purchaseItemForm->createView(),
