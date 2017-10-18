@@ -166,7 +166,7 @@ class Builder extends ContainerAware
             $option = $this->container->get('security.context')->getToken()->getUser()->getGlobalOption();
             $menu
                 ->addChild('Manage Content')
-                ->setAttribute('icon', 'fa fa-bookmark')
+                ->setAttribute('icon', 'fa fa-book')
                 ->setAttribute('dropdown', true);
 
             $menu['Manage Content']->addChild('Page', array('route' => 'page'));
@@ -187,7 +187,7 @@ class Builder extends ContainerAware
             }
             $menu
                 ->addChild('Media')
-                ->setAttribute('icon', 'fa fa-bookmark')
+                ->setAttribute('icon', 'fa fa-picture-o')
                 ->setAttribute('dropdown', true);
 
             $menu['Manage Content']->addChild('Contact', array('route' => 'contactpage_modify'));
@@ -200,7 +200,7 @@ class Builder extends ContainerAware
             $globalOption = $securityContext->getToken()->getUser()->getGlobalOption();
             $menu
                 ->addChild('Manage Appearance')
-                ->setAttribute('icon', 'fa fa-bookmark')
+                ->setAttribute('icon', 'fa fa-cog')
                 ->setAttribute('dropdown', true);
 
             $menu['Manage Appearance']->addChild('Customize Template', array('route' => 'templatecustomize_edit', 'routeParameters' => array('id' => $globalOption->getId())));
