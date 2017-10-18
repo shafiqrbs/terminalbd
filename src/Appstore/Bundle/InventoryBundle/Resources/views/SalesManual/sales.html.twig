@@ -344,7 +344,6 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    $('body').addClass('page-sidebar-closed');
     InventorySales({{ entity.id }});
     EditableInit();
     ApproveProcess();
