@@ -24,7 +24,7 @@
     <div class="clearfix"></div>
     <div class="" >
         <ul class="mbm_social" style="margin-top: 8px">
-            <li><a class="social-facebook" target="_blank" href="https://www.facebook.com/share.php?u={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}&picture={{ app.request.getSchemeAndHttpHost() }}/{{ page.webPath }}&title={{ page.name }}&description={{ page.content|truncate(250)|raw }}">
+            <li><a class="social-facebook" target="_blank" href="https://www.facebook.com/share.php?u={{ app.request.getSchemeAndHttpHost() }}/{{ page.slug }}&picture={{ app.request.getSchemeAndHttpHost() }}/{{ page.webPath }}&title={{ page.name }}&description={{ page.content|striptags|truncate(250)|raw }}">
                     <i class="fa fa-facebook"></i>
                     <div class="tooltip"><span>facebook</span></div>
                 </a>
