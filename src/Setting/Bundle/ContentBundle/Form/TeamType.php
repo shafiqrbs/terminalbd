@@ -33,12 +33,7 @@ class TeamType extends AbstractType
 
                 )
             ))
-            ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter designation title'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-
-                )
-            ))
+            ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter designation title')))
             ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Enter mobile no')))
             ->add('facebook','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter facebook ID')))
             ->add('twitter','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter twitter ID')))
