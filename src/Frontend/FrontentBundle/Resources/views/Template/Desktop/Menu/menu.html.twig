@@ -176,20 +176,24 @@
                         </li>
                     {% endif %}
                     {% if menu.discounts is not empty %}
-                        <li><a href="#">Discount Offer's</a></li>
-                        <ul>
-                            {% for discount in  menu.discounts %}
-                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'discount':discount.id}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
-                            {% endfor %}
-                        </ul>
+                        <li><a href="#">Discount Offer's</a>
+                            <ul>
+                                {% for discount in  menu.discounts %}
+                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'discount':discount.id}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+
                     {% endif %}
                     {% if menu.tags is not empty %}
-                        <li><a href="#">Popular Tag's</a></li>
-                        <ul>
-                            {% for tag in  menu.tags %}
-                                <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>
-                            {% endfor %}
-                        </ul>
+                        <li><a href="#">Popular Tag's</a>
+                            <ul>
+                                {% for tag in  menu.tags %}
+                                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+
                     {% endif %}
                     {% if menu.categories is not empty %}
                         <li>

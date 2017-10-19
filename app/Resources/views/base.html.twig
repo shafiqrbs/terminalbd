@@ -214,7 +214,6 @@
 'assets/scripts/ui-jqueryui.js'
 'assets/scripts/form-components.js'
 'assets/scripts/table-advanced.js'
-
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 <script type="text/javascript" src="{{ asset('assets/plugins/ckeditor/ckeditor.js') }}"></script>
@@ -224,30 +223,13 @@
 {% endblock %}
 {#'http://bp.yahooapis.com/2.4.21/browserplus-min.js'#}
 <script type="text/javascript">
-
-    var Gallery = function () {
-        return {
-            //main function to initiate the module
-            init: function () {
-                App.initFancybox();
-            }
-        };
-
-    }();
-
     jQuery(document).ready(function () {
 
 
         {% block documentready %}
             App.init();
             UIModals.init();
-            //FormValidation.init();
             FormComponents.init();
-            //Tasks.initDashboardWidget();
-            //Index.initPieCharts();
-            // UIJQueryUI.init();
-            //CloneDiv.init();
-            //FormFileUpload.init();
             TableAdvanced.init();
         $('.select2').select2();
         $('.selectbox').selectBox();

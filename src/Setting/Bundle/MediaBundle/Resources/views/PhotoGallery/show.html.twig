@@ -1,4 +1,3 @@
-
 {% extends '::base.html.twig' %}
 {% block body %}
     <div class="container-fluid">
@@ -81,8 +80,27 @@
  </style>
 {% endblock %}
 {% block documentready %}
-    App.init();
+    var Gallery = function () {
+        return {
+            //main function to initiate the module
+            init: function () {
+            App.initFancybox();
+            }
+        };
+    }();
     Gallery.init();
+    $(".fancybox-button").fancybox({
+        groupAttr: 'data-rel',
+        prevEffect: 'none',
+        nextEffect: 'none',
+        closeBtn: true,
+        helpers: {
+        title: {
+        type: 'inside'
+        }
+        }
+    });
+
     $(document).on("click", ".delete , .remove", function() {
 
         var url = $(this).attr('data-url');
