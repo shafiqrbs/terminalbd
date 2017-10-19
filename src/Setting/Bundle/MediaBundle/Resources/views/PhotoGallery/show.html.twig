@@ -60,7 +60,7 @@
                                         </div>
                                     </a>
                                     <div class="details">
-                                         <a href="#" class="icon"><i class="icon-remove"></i></a>
+                                         <a href="javascript:" data-url="{{ path('galleryimage_delete',{'id':entity.id}) }}"  class="icon remove"><i class="icon-remove"></i></a>
                                     </div>
                                     <div><input type="text" class="span12" value="http://www.{{ entity.photoGallery.globalOption.domain~'/'~entity.getWebPath(entity.photoGallery.globalOption.id,entity.photoGallery.id) }}"></div>
                                 </div>
@@ -83,5 +83,19 @@
 {% block documentready %}
     App.init();
     Gallery.init();
-    $('.fancybox-video').fancybox({type: 'iframe'});
+    $(document).on("click", ".delete , .remove", function() {
+
+        var url = $(this).attr('data-url');
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                location.reload();
+            });
+            }
+        });
+
+    });
+
 {% endblock %}

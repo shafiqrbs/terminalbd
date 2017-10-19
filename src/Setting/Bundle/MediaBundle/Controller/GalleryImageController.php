@@ -176,8 +176,20 @@ class GalleryImageController extends Controller
         );
         return $this->redirect($this->generateUrl('galleryimage_edit', array('id' => $id)));
 
+    }
 
+    public function deleteImageAction(GalleryImage $entity)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        if(!empty($entity)){
+            $entity->removeUpload($entity->getPhotoGallery()->getGlobalOption()->getId(),$entity->getPhotoGallery()->getId());
+            $em->remove($entity);
+            $em->flush();
+        }
+        exit;
 
     }
+
 
 }

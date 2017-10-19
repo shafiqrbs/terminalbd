@@ -2,10 +2,6 @@ galleryimage:
     path:     /
     defaults: { _controller: "SettingMediaBundle:GalleryImage:index" }
 
-galleryimage_show:
-    path:     /{id}/show
-    defaults: { _controller: "SettingMediaBundle:GalleryImage:show" }
-
 galleryimage_new:
     path:     /new
     defaults: { _controller: "SettingMediaBundle:GalleryImage:new" }
@@ -26,8 +22,8 @@ galleryimage_update:
 
 galleryimage_delete:
     path:     /{id}/delete
-    defaults: { _controller: "SettingMediaBundle:GalleryImage:delete" }
-    requirements: { _method: post|delete }
+    defaults: { _controller: "SettingMediaBundle:GalleryImage:deleteImage" }
+
 
 galleryimage_upload:
     path:     /{id}/upload
