@@ -18,6 +18,7 @@ use Product\Bundle\ProductBundle\Entity\Product;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Entity\SubscribeEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Syndicate\Bundle\ComponentBundle\Entity\Education;
@@ -26,6 +27,15 @@ use Syndicate\Bundle\ComponentBundle\Entity\Vendor;
 class EcommerceWidgetController extends Controller
 {
 
+
+    public function cookieBaseProductListAction(Request $request)
+    {
+        $btnActive = $_REQUEST['btnActive'];
+        $cookie = new Cookie('btnActiveList', $btnActive);
+        $response = new Response();
+        $value = $response->headers->setCookie($cookie);
+        $request->cookies->get($cookie['btnActiveList']['value']);
+    }
 
     public function mobileMenuAction(GlobalOption $globalOption)
     {

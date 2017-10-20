@@ -35,7 +35,7 @@
             {% endif %}
             <div class="{% if globalOption.templateCustomize.showSidebar == 1 %} col-md-9 {% else %}col-md-12 {% endif %}">
                 <div class="row paginate">
-                    <div class="col-md-6">
+                   <div class="col-md-6">
                         <div class="btn-group pull-left">
                             <div class="product-title"><span class="glyphicon glyphicon-list"></span>&nbsp;{% if titleName is defined and titleName is not empty %}{{ titleName }}{% else %}ALL PRODUCT{% endif %}</div>
                    </div>
@@ -46,7 +46,7 @@
                                 <label for="exampleInputName2">Sort By: </label>
                                 {% set sortBy = app.request.get('sortBy') %}
                                 <select name="sortBy" id="sortBy" class="input-selector" onchange='this.form.submit()'>
-                                    <option>-- Position --</option>
+                                    <option>-- Sorting by --</option>
                                     <option {% if sortBy == ''  %} selected="selected" {% endif %} value="" >Default</option>
                                     <option {% if sortBy == 'product.name=?=ASC'  %} selected="selected" {% endif %} value="product.name=?=ASC">Name (A - Z)</option>
                                     <option {% if sortBy == 'product.name=?=DESC'  %} selected="selected" {% endif %} value="product.name=?=DESC">Name (Z - A)</option>
@@ -126,16 +126,16 @@
                                             </div>
                                         {% endif %}
                                         {% if globalOption.ecommerceConfig.isColor == 1 and product.itemColors is not empty and product.itemColors is defined and product.itemColors|length > 1 %}
-                                    <div class="row">
-                                        <div class="col-xs-12 col-lg-12">
-                                            <select class="item-select col-xs-12 col-lg-12" name="color" id="color-{{ product.id }}" >
-                                                {% for color in  product.itemColors %}
-                                                    <option value="{{ color.id }}" >{{ color.name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    {% endif %}
+                                            <div class="row">
+                                                <div class="col-xs-12 col-lg-12">
+                                                    <select class="item-select col-xs-12 col-lg-12" name="color" id="color-{{ product.id }}" >
+                                                        {% for color in  product.itemColors %}
+                                                            <option value="{{ color.id }}" >{{ color.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <div class="card-read-more text-center" >
                                         <strong class="currency" >{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;<span id="currency-{{ product.id }}">{% if product.discount is not empty  %}<strike>{% endif %}<span {% if product.discount is empty  %} class="list-price" {% endif %} >{{ product.salesPrice|number_format() }}</span>{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong class="list-price">{{ product.discountPrice|number_format() }}</strong>{% endif %}</span>

@@ -33,7 +33,13 @@ class WebServiceProductController extends Controller
         );
         $detect = new MobileDetect();
         if( $detect->isMobile() || $detect->isTablet() ) {
-            $pagination->setTemplate('FrontendBundle:Template/Desktop/Pagination:nextPrev.html.twig');
+            if($template =='nextPrev'){
+                $pagination->setTemplate('FrontendBundle:Template/Mobile/Pagination:nextPrev.html.twig');
+            }elseif($template =='nextPrevDropDown') {
+                $pagination->setTemplate('FrontendBundle:Template/Mobile/Pagination:nextPrevDropDown.html.twig');
+            }else{
+                $pagination->setTemplate('FrontendBundle:Template/Mobile/Pagination:bootstrap.html.twig');
+            }
         }else{
             if($template =='nextPrev'){
                 $pagination->setTemplate('FrontendBundle:Template/Desktop/Pagination:nextPrev.html.twig');
@@ -60,7 +66,7 @@ class WebServiceProductController extends Controller
 
             $data = $_REQUEST;
             $ecommerce = $globalOption->getEcommerceConfig();
-            $limit = !empty($data['limit'])  ? $data['limit'] : $ecommerce->getPerPage();
+            $limit = !empty($data['limit'])  ? $data['limit'] : 2;
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
             $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());
@@ -83,6 +89,7 @@ class WebServiceProductController extends Controller
                     'menu'              => $menu,
                     'pageName'          => 'Product',
                     'searchForm'            => $searchForm,
+                    
                 )
             );
         }
@@ -770,8 +777,5 @@ class WebServiceProductController extends Controller
         $quantity = $request->request->get('quantity');
         $order = $em->getRepository('EcommerceBundle:Order')->insertOrder($globalOption);
        // $em->getRepository('EcommerceBundle:OrderItem')->insertOrderItem($order,$data);
-
-
-
     }
 }

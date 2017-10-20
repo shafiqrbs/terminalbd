@@ -1,67 +1,490 @@
 {% extends ':frontend/template/mobile:ecommerce-base.html.twig' %}
 {% block body %}
-    {#<div class="bannerPane bannerPane-business-locaton">
-        <div class="overlay"></div>
-        <div class="s-banner-content">
-            <div><img width="100" src="{{ image(globalOption.templateCustomize.webPath('logo')).resize() }}" /></div>
-           Product
-        </div>
-    </div>
-#}
-    <div id="content"  class="product" style="margin-bottom: 50px">
-        <div id="cat-search">
-        </div>
-        {% render controller("FrontendBundle:EcommerceWidget:header",{'globalOption':globalOption, 'pageName':'product'}) %}
-        <br/>
+    <div id="content"  class="product" style="margin-bottom: 50px; margin-top: 47px">
+        <div id="cat-search"></div>
         <div class="container" id="product-section">
                 <div class="row">
+                    <div class="input-group">
+                        <span class="input-group-btn"><button type="button" class="btn btn-danger"><span class="fa fa-sort-numeric-asc"></span></button></span>
+                        <input type="text" name="search" id="search" class="form-control input-number" value="" placeholder="Search for over 20,000 products">
+                        <span class="input-group-btn"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></button></span>
+                        <span class="input-group-btn"><button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-filter"></span></button></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="bs-callout bs-callout-info bs-callout-custom ">
+                        <h4 class="feature-title"><i class="fa fa-th-large"></i> {% if titleName is defined and titleName is not empty %}{{ titleName }}{% else %}All Products{% endif %}</h4>
+                        {% if app.request.cookies.has('productList') %}
+                            {% set cookieVal = app.request.cookies.get('productList') %}
+                        {% else %}
+                            {% set cookieVal = 'faThLarge' %}
+                        {% endif %}
+                        <div class="btn-group btn-group-sm pull-right" role="group" aria-label="Small button group">
+                            <button type="button" class="btn btn-default btn-cookie" id="faListAlt" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}"><i class="fa fa-list-alt"></i></button>
+                            <button type="button" class="btn btn-default btn-cookie" id="faThLarge" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}" ><i class="fa fa-th-large "></i></button>
+                            <button type="button" class="btn btn-default btn-cookie" id="faList" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cookie_base_list') }}" ><i class="fa fa-list"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     {% for product in products %}
-                        {% set paymentID = globalOption.id~'-ecommerce-product-'~product.id %}
-                        <div class="outer-div">
+                        {% if cookieVal == 'faThLarge' %}
+                        <div class="col-xs-6 col-md-6 col-sm-cus-6">
                             <div class="inner-div">
-                                <div id="" class="ic_container capslide_img_cont ">
-                                    <div class="col-xs-12 col-md-12">
-                                        <a href="javascript:" class="thumbnail">
-                                            <img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}"  alt=""/>
-                                        </a>
+                                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" class="thumbnail">
+                                    <img class="img-responsive" src="{% if product.webPath is not empty  %}{{ image(product.webPath).forceResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}"  alt=""/>
+                                </a>
+                                <div class="caption" >
+                                    <div class="row-fluid">
+                                        <div class="col-xs-8 col-md-8 text-left product-price"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong> {% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</div>
+                                        <div class=" col-xs-4 col-md-4 text-right"><a class="btn btn-sm btn-info product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="fa fa-shopping-basket"></span></a></div>
                                     </div>
-                                    <div class="overlay"></div>
-                                    <div class="ic_caption">
-                                        <p class="title"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{ 'host':'', 'item':product.slug }) }}"  >{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></p>
-                                        <div class="product-short-details">
-                                            <span>{{ globalOption.ecommerceConfig.currency }}&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</span>
-                                        </div>
-                                        <div class="media-body">
-                                            <ul class="list-inline list-unstyled">
-                                                <li><span><i class="fa fa-dribbble" aria-hidden="true"></i>&nbsp;{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></li>
-                                                <li>|</li>
-                                                <li><span><span class="badge"><span class="fos-comment-count" data-fos-comment-thread-id="{{ paymentID }}">#</span></span> comments</span></li>
-                                            </ul>
-                                        </div>
+                                    <div class="col-xs-12 col-md-12 product-attr" data-match-height="product-attr">
+                                        <span class="group inner brand text-left" >{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}{% endif %}&nbsp;</span>
+                                        <span class="group inner product-name text-left" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}</a> </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    {% endfor %}
+                        {% elseif cookieVal == 'faListAlt' %}
+                        <div class="col-xs-12 col-md-12 list-group-item">
+                            <div class="col-xs-4 col-md-4">
+                                <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}" style="margin-top: 20px">
+                                    <img class="img-responsive" src="{% if product.webPath is not empty  %}{{ image(product.webPath).forceResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}"  alt=""/>
+                                </a>
+                            </div>
+                            <div class="col-xs-8 col-md-8">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-12 list-group-product">
+                                        {% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}
+                                            <span class="group inner brand text-left" >{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}{% endif %}&nbsp;</span>
+                                        {% endif %}
+                                        <span class="group inner product-name text-left" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}</a> </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6 col-md-6 text-left product-price"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong> {% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</div>
+                                    <div class=" col-xs-6 col-md-6 text-right">
+                                        {% if product.discount is not empty  %}<a class="btn btn-danger product-discount btn-xs"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}
+                                        <button class="btn btn-sm btn-info" type="button"><i class="fa fa-shopping-basket" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% elseif cookieVal == 'faList' %}
+                        <div class="col-xs-12 col-md-12">
+                            <div class="inner-div">
+                                <a class="thumbnail" href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
+                                    <img class="img-responsive" src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(320,420) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}"  alt=""/>
+                                </a>
+                                <div class="caption row" data-match-height="item-promotion">
+                                    <div class="row-fluid">
+                                        <div class="col-xs-8 col-md-8 text-left product-price"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong> {% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</div>
+                                        <div class=" col-xs-4 col-md-4 text-right"><a class="btn btn-info btn-sm product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="fa fa-shopping-basket"></span></a></div>
+                                    </div>
+                                    <div class="col-xs-12 col-md-12 product-attr">
+                                        <span class="group inner brand text-left" >{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}{% endif %}&nbsp;</span>
+                                        <span class="group inner product-name text-left" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}</a> </span>
+                                    </div>
+
+                               </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                   {% endfor %}
                 </div>
-            </div><!-- end container -->
-        <br/>
-        <div class="mobile-pagination" style="background-color: #00A8FF">
-            {{ knp_pagination_render(products) }}
-        </div>
+            <div class="row">
+                <div class="bs-callout bs-callout-info bs-callout-custom ">
+                    <div class="row">
+                        {{ knp_pagination_render(products) }}
+                    </div>
+                </div>
+            </div>
+        </div><!-- end container -->
     </div>
-<style>
+    <style>
+        .list-group-item {
+            position: relative;
+            display: block;
+            padding: 0;
+            margin-bottom: 15px;
+            background-color: #fff;
+            height: auto;
+            border-radius: 0!important;
+            border: none !important;
+            border-top: 1px solid #ddd!important;
+            padding-top: 15px;
+        }
+        .list-group-item:last-child {
+            border-bottom: 1px solid #ddd!important;
+            padding-bottom:15px;
+            margin-bottom: 15px;
+        }
+
+        div.treeview, .treeview ul {
+            margin:0;
+            padding:0;
+            list-style:none;
+            color: #F88216;
+        }
+        .treeview ul {
+            margin-left:5px!important;
+            position:relative;
+            width: 250px;
+        }
+        .treeview ul ul {
+            margin-left:.5em
+        }
+        .treeview ul:before {
+            content:"";
+            display:block;
+            width:0;
+            position:absolute;
+            top:0;
+            left:0;
+            border-left:1px solid;
+            bottom:15px;
+        }
+        .treeview li {
+            margin:0;
+            padding:0 1em;
+            line-height:2em;
+            position:relative
+        }
+        .treeview ul li:before {
+            content:"";
+            display:block;
+            width:10px;
+            height:0;
+            border-top:1px solid;
+            margin-top:-1px;
+            position:absolute;
+            top:1em;
+            left:0
+        }
+        .tree-indicator {
+            margin-right:5px;
+            color: #F88216!important;
+            cursor:pointer;
+        }
+        .treeview li a {
+            text-decoration: none;
+            color:#222222;
+            cursor:pointer;
+        }
+        .treeview li a:hover{
+            color: #F88216!important;
+        }
+        .treeview li button, .treeview li button:active, .treeview li button:focus {
+            text-decoration: none;
+            color:inherit;
+            border:none;
+            background:transparent;
+            margin:0;
+            padding:0;
+            outline: 0;
+        }
+
+        .scrollbar
+        {
+            height: 300px;
+            overflow-y: scroll;
+            margin-bottom: 25px;
+            overflow-x: hidden;
+        }
+        .scrollbar::-webkit-scrollbar-track
+        {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            background-color: #F5F5F5;
+        }
+
+        .scrollbar::-webkit-scrollbar
+        {
+            width: 10px;
+            background-color: #F5F5F5;
+        }
+
+        .scrollbar::-webkit-scrollbar-thumb
+        {
+            background-color: #f48024;
+            border: 1px solid #C66812;
+        }
 
 
-</style>
+        .carousel-control     		 { width:  4%; }
+        .carousel-control.left , .carousel-control.right {margin-left:15px;background-image:none;}
+        .carousel-logo .carousel-inner .active.left { left: -25%; }
+        .carousel-logo .carousel-inner .next        { left:  25%; }
+        .carousel-logo .carousel-inner .prev    	 { left: -25%; }
+        .carousel-logo .carousel-control 			 { width:  4%; }
+        .carousel-logo .carousel-control.left,.carousel-logo .carousel-control.right {margin-left:15px;background-image:none;}
+
+        .carousel-inner .active.left { left: -33%; }
+        .carousel-inner .next        { left:  33%; }
+        .carousel-inner .prev        { left: -33%; }
+        .carousel-control.left,.carousel-control.right {background-image:none;}
+        .item:not(.prev) {visibility: visible;}
+        .item.right:not(.prev) {visibility: hidden;}
+        .rightest{ visibility: visible;}
+
+        .control-box {
+            text-align: right;
+            width: 100%;
+        }
+        .carousel-control{
+            background: #666;
+            border: 0;
+            border-radius: 0;
+            display: inline-block;
+            font-size: 34px;
+            font-weight: 200;
+            line-height: 18px;
+            opacity: 0.5;
+            padding: 4px 10px 0;
+            position: static;
+            height: 30px;
+            width: 15px;
+        }
+        .carousel-inner {
+            height: auto!important;
+            position: relative;
+        }
+
+        .col-lg-cus-1, .col-lg-cus-10, .col-lg-cus-11, .col-lg-cus-12, .col-lg-cus-2, .col-lg-cus-3, .col-lg-cus-4, .col-lg-cus-5, .col-lg-cus-6, .col-lg-cus-7, .col-lg-cus-8, .col-lg-cus-9, .col-md-cus-1, .col-md-cus-10, .col-md-cus-11, .col-md-cus-12, .col-md-cus-2, .col-md-cus-3, .col-md-cus-4, .col-md-cus-5, .col-md-cus-6, .col-md-cus-7, .col-md-cus-8, .col-md-cus-9,.col-sm-cus-1,
+        .col-sm-cus-10, .col-sm-cus-11, .col-sm-cus-12, .col-sm-cus-2, .col-sm-cus-3, .col-sm-cus-4, .col-sm-cus-5, .col-sm-cus-6, .col-sm-cus-7, .col-sm-cus-8, .col-sm-cus-9, .col-xs-cus-1, .col-xs-cus-10, .col-xs-cus-11, .col-xs-cus-12, .col-xs-cus-2, .col-xs-cus-3, .col-xs-cus-4, .col-xs-cus-5, .col-xs-cus-6, .col-xs-cus-7, .col-xs-cus-8, .col-xs-cus-9{
+            position: relative;
+            min-height: 1px;
+            padding-right: 7.5px;
+            padding-left: 7.5px;
+        }
+
+        .feature-grid .col-sm-12 .wrap-category , .feature-grid .col-sm-6 .wrap-category {
+            position:relative;
+            border: 1px solid #ddd;
+            margin-bottom:15px;
+        }
+        .wrap-category .img-responsive{
+            padding-left: 5px;
+        }
+        .feature-grid .col-sm-12 .wrap-category .cat-label {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            color:#615e58;
+            left: 50px;
+            border-left: 1px solid #ddd;
+            font-size:11px;
+            text-align:left;
+            display: block;
+            vertical-align:middle;
+            line-height:30px;
+            padding:5px;
+            font-weight:bold;
+        }
+        .feature-grid .col-sm-6 .wrap-category .cat-label {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            color:#615e58;
+            left: 50px;
+            border-left: 1px solid #ddd;
+            font-size:13px;
+            text-align:left;
+            display: block;
+            vertical-align:middle;
+            line-height:12px;
+            padding:5px;
+            font-weight:bold;
+        }
+
+        .bs-callout-custom {
+            padding: 5px;
+            height: 32px;
+        }
+        .feature-title {
+            text-align: left;
+            float: left;
+            line-height: 30px;
+            margin-bottom: 0!important;
+        }
+        .control-box{
+            text-align: right;
+            width: 100%;
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .control-box ul{
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .control-box li>a, .control-box li>span {
+            display: inline-block;
+            padding: 5px 14px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 1px;
+        }
+
+        .img-responsive-preview {
+
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%);
+            padding: 5px;
+            opacity: 0.8;
+            z-index: 9;
+            color: #ffffff;
+            background-color: #0b0e23;
+            float: left;
+            font-size:20px;
+        }
+
+        .img-responsive-preview-top-left {
+            top: 5%;
+            left: 23%;
+        }
+        .img-responsive-preview-top-center {
+            top: 5%;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .img-responsive-preview-top-right {
+            top: 20%;
+            left: 95%;
+            margin-right: -100%;
+            transform: translate(-100%, -100%);
+
+        }
+        .img-responsive-preview-bottom-left {
+            top: 95%;
+            left: 23%;
+        }
+        .img-responsive-preview-bottom-center {
+            top: 95%;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .img-responsive-preview-bottom-right {
+            top: 95%;
+            left: 95%;
+            margin-right: -100%;
+            transform: translate(-100%, -100%);
+
+        }
+
+        .product-preview {
+            margin-bottom:5px;
+        }
+
+        #product .thumbnail {
+            margin-bottom: 2px;
+            padding: 0;
+        }
+        .caption{
+            min-height: 80px;
+            background: #F9FAFA;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        .caption .product-attr {
+            background: #555555;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            color: #fff;
+        }
+
+        .brand {
+            display: inherit;
+            font-size: 12px;
+            color: #d6d6d6;
+            border-bottom: 1px solid #6f6f6f;
+            padding-bottom: 5px;
+        }
+
+        .product-name{
+            display: inherit;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+        .product-price{
+            color:red;
+            font-weight: bold;
+            padding-top: 5px;
+        }
+        .product-price strong{
+            color:red
+        }
+        .product-price strike{
+            color: #999;
+            font-size: 12px;
+            font-weight: normal;
+        }
+        .category-name{
+            font-size: 12px;
+            text-align: left;
+            display: inherit;
+        }
+        .bs-callout {
+            padding:0;
+            padding-left: 15px;
+            padding-right: 15px;
+            margin: 20px 0;
+            border: none!important;
+            border-radius:0;
+            text-align: center;
+            background-color: #F9FAFA;
+        }
+        .bs-callout-info .btn-group-sm .btn{
+            color:#464646 !important;
+        }
+        .bs-callout-info .btn-group-sm .btn.btn-active{
+            color: #fff!important;
+            background-color: #464646!important;
+        }
+
+        .inner-div .thumbnail{
+            margin-bottom: 0!important;
+            border: none!important;
+            padding:0!important;
+        }
+
+        .item-select{
+          padding: 0!important;
+          height: 35px;
+          border-right:1px solid #ccc;
+          padding: 0!important;
+          padding-left:10px!important;
+        }
+        .list-group-iem .list-group-product{
+            min-height: 75px;
+        }
+        .list-group-product{
+            min-height: 65px;
+        }
+
+        .list-group-item .brand{
+            display: inherit;
+            font-size: 12px;
+            color: #d6d6d6;
+            border-bottom:none!important;
+            padding-bottom: 0!important;
+        }
+
+    </style>
 {% endblock %}
-{% block cssBlock %}
-    {% stylesheets filter='cssrewrite'
-    '@FrontendBundle/Resources/public/template/mobile/css/product-cosmetic.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-{% endblock  %}
 {% block javascriptBlock %}
     {% javascripts
     '@FrontendBundle/Resources/public/template/mobile/js/common.js'
@@ -71,6 +494,14 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+    var itemArr = $.cookie('productList') ? $.cookie('productList'): 'faThLarge';
+    $("#"+itemArr).addClass('btn-active');
+    $('body').on('click', '.btn-cookie', function(el) {
+        var val = $(this).attr('id');
+        var url = $(this).attr('data-url');
+        $.cookie('productList', val, {path: '/'});
+        setTimeout(location.reload(), 1000);
+    });
 {% endblock %}
 
 

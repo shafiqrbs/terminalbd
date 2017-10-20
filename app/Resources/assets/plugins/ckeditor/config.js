@@ -37,5 +37,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 	config.extraPlugins = 'doksoft_backup,doksoft_stat,zoom,justify';
-;
+	config.contentsCss  = ['assets/template/desktop/css/module.css','ckcustom.css'];
+	config.contentsCss  = ['assets/template/desktop/css/bootstrap.min.css','bootstrap.css'];
+
 };

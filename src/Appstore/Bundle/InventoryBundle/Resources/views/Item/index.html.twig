@@ -159,7 +159,7 @@
                                                     <tbody>
                                                     {% for purchaseItem in entity.purchaseItems %}
                                                         <tr {% if purchaseItem.itemStock == 0    %} class="disabled" aria-disabled="true" {% endif %}>
-                                                            <td><input id="action-{{ entity.id }}" {% if purchaseItem.itemStock == 0  %} disabled="disabled" {% endif %} data-id="{{ entity.id }}" class="barcode"  data-url="{{ path('account_bank_approve',{'id':entity.id}) }}" type="checkbox" name="item[]" value="{{ purchaseItem.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="Barcode print"  >&nbsp;{{ purchaseItem.barcode }}</td>
+                                                            <td><input id="action-{{ entity.id }}" {% if purchaseItem.itemStock == 0  %} disabled="disabled" {% endif %} data-id="{{ entity.id }}" class="barcode"   type="checkbox" name="item[]" value="{{ purchaseItem.id }}" class="check tooltips barcode" data-trigger="hover" data-original-title="Barcode print"  >&nbsp;{{ purchaseItem.barcode }}</td>
                                                             <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.receiveDate|date('d-m-Y') }}{% endif %}</td>
                                                             <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.memo }}{% endif %}</td>
                                                             <td class="numeric" >{% if purchaseItem.purchase is not empty %}{{ purchaseItem.purchase.created|date('d-m-Y') }}{% endif %}</td>
