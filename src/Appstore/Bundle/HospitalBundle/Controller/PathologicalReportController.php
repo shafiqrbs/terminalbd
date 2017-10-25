@@ -7,7 +7,7 @@ use Appstore\Bundle\HospitalBundle\Entity\PathologicalReport;
 use Appstore\Bundle\HospitalBundle\Form\PathologicalReportType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Validator\Constraints\Null;
+
 
 /**
  * Pathology controller.
@@ -191,6 +191,6 @@ class PathologicalReportController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('hms_pathological_report',array('pathology'=>$pathology->getId())));
+        return $this->redirect($this->generateUrl('hms_pathological_report',array('pathology' => $pathology->getId())));
     }
 }

@@ -22,6 +22,11 @@ $(document).ready(function(){
             $(".scrollbar1").getNiceScroll().hide();
         }
 
+        $('.treeview').each(function () {
+            var tree = $(this);
+            tree.treeview();
+        });
+
         $("#mm-menu").mmenu();
 
         var stickyOffset = $('.sticky').offset().top;
@@ -81,12 +86,12 @@ $(document).ready(function(){
             trigger: $(".handle"),
             // autoEscape: false,
             shown: function (obj) {
-                obj.find(".handle").html('<span class="glyphicon glyphicon-chevron-right"></span>');
+                obj.find(".handle").html('<span class="fa fa-ellipsis-v"></span>');
                 obj.find(".handle").addClass('handle-right');
                 obj.addClass("left-shadow-overlay");
             },
             hidden: function (obj) {
-                obj.find(".handle").html('<span class="glyphicon glyphicon-chevron-left"></span>');
+                obj.find(".handle").html('<span class="fa fa-ellipsis-v"></span>');
                 obj.find(".handle").removeClass('handle-right');
                 obj.removeClass("left-shadow-overlay");
 

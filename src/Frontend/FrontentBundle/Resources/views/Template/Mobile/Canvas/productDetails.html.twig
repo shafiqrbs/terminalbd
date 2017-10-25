@@ -3,96 +3,169 @@
     <div id="cat-search">
         {% render controller("FrontendBundle:EcommerceWidget:header",{'globalOption':globalOption, 'pageName':'product'}) %}
     </div>
-    <br/>
-
-    <div id="content" class="content-margin">
-        <article>
-            <div class="col-xs-12 col-md-12 text-center" style="padding-bottom: 20px">
-                <h3>{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</h3>
+    <div id="content" class="container content-margin">
+        <div class="row">
+            <div class="input-group">
+                <span class="input-group-btn"><button type="button" class="btn btn-danger"><span class="fa fa-sort-numeric-asc"></span></button></span>
+                <input type="text" name="search" id="search" class="form-control input-number" value="" placeholder="Search for over 20,000 products">
+                <span class="input-group-btn"><button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></button></span>
+                <span class="input-group-btn"><button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-filter"></span></button></span>
             </div>
-            <div class="col-xs-12 col-md-12">
-                <a href="#" class="thumbnail">
-                    <img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}"  alt=""/>
-                </a>
+        </div>
+        <div class="row">
+            <div class="col-xs-8 col-md-8 text-left" >
+                <h4>{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}</h4>
             </div>
-            <div class="col-xs-12 col-md-12">
-                <div class="text-left">
-                    <i class="fa fa-dribbble"></i>&nbsp;{% if product.brand is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subDomain,'brand':product.brand.id }) }}">{{ product.brand.name }}</a>{% endif %}&nbsp;&nbsp;&nbsp;
-                    <i class="fa fa-tag"></i>&nbsp;{% if product.masterItem.category is defined and product.masterItem.category is not empty %}<a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subDomain,'category':product.masterItem.category.id }) }}">{{ product.masterItem.category.name }}</a>{% endif %}
-                    {% if product.itemGalleries is defined and product.itemGalleries is not empty %} <i class="fa fa-file-image-o"></i>&nbsp;<a href="{{ image(product.webPath()).resize() }}">Preview</a> {% endif %}
-                    {% if product.itemGalleries is defined and product.itemGalleries is not empty %}
-                        <div id="Gallery">
-                            <i class="fa fa-file-image-o"></i>&nbsp;<a href="{{ image(product.webPath()).resize() }}">Preview</a>
-                            {% for photo in product.itemGalleries %}
-                                <a href="/{{ photo.getWebPath(product.purchase.inventoryConfig.globalOption.id,product.id) }}" rel="external"></a>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+            <div class="col-xs-4 col-md-4 text-right">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        {% if previous is not empty %}
+                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':previous.slug }) }}" class="btn btn-sm btn-info" style="margin-right: 2px"><span class="glyphicon glyphicon-chevron-left"></span></a>
+                        {% endif %}
+                        {% if next is not empty %}
+                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':next.slug }) }}" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                        {% endif %}
+                    </span>
                 </div>
-                <div class="product">
-                    <div class="product-details" style="border-top: none; padding: 0">
-                            <table>
-                                {% set quantity = 1 %}
-                                <tr><td colspan="2"><strong>Product Details</strong></td></tr>
-                                <tr><td>Price</td><td class="left">BDT <strong>{{ product.webPrice|format }}</strong></td></tr>
-                                {% if product.sku   %}
-                                    <tr><td><strong>SKU</strong></td><td class="left-text"><strong>{{ product.sku  }}</strong></td></tr>
-                                {% endif %}
-                                <tr><td>Stock in</td><td class="left"><strong>{{ product.purchaseStockItem  }}</strong></td></tr>
-                                {% if product.gender is not empty %}<tr><td>Gender</td><td class="left">{{ product.gender }}</td></tr>{% endif %}
-                                {% if product.ageGroup is not empty %}<tr><td>Age Group</td><td class="left">{{ product.ageGroup }}</td></tr>{% endif %}
-                                {% if product.brand is not empty %}<tr><td>Brand</td><td class="left">{{ product.brand.name }}</td></tr>{% endif %}
-                                {% if product.country is not empty %}<tr><td>Made in</td><td class="left">{{ product.country.name }}</td></tr>{% endif %}
-                                <tr><td colspan="2" valign="top">Description</td></tr>
-                                <tr><td colspan="2" class="left text-justify">
-                                        {% if product.content is not empty %}
-                                            {{ product.content|raw }}
-                                        {% elseif product.masterItem is not empty %}
-                                            {{ product.masterItem.content|raw }}
-                                        {% endif  %}
-                                    </td></tr>
-                            </table>
-                            <div class="left" style="width: 100%">
-                                <form class="addCart" style="margin-top: 30px">
-                                             <div class="row" id="subItem-info">
-                                                 <div class="col-xs-4 col-md-4">
-                                                     {% if globalOption.ecommerceConfig.isSize == 1 and product.goodsItems is defined  %}
-                                                         <div class="form-group">
-                                                             <div class="input-group input-group-sm">
-                                                                 <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-list-alt"></span></span>
-                                                                 <select class="form-control changeSize" data-url="{{ path(globalOption.subDomain~'_webservice_product_sub_item', {'product' : product.id }) }}" name="size" id="size" >
-                                                                     {% for goodsItem in  product.goodsItems  %}
-                                                                         <option {% if subItem.id == goodsItem.id %} selected="selected" {% endif %} value="{{ goodsItem.id }}" > {% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% else %}-Default-{% endif %}{% if goodsItem.productUnit is not empty %} - {{ goodsItem.productUnit.name }}{% endif %}</option>
-                                                                     {% endfor %}
-                                                                 </select>
-                                                             </div>
-                                                         </div>
-                                                     {% endif %}
-                                                 </div>
-                                                 <div class="col-xs-4 col-md-4">
-                                                     {% if globalOption.ecommerceConfig.isColor == 1 and subItem.colors is not empty and subItem.colors is defined %}
-                                                         <div class="form-group">
-                                                             <div class="input-group input-group-sm">
-                                                                 <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-text-background"></span></span>
-                                                                 <select class="form-control" name="color" >
-                                                                     {% for color in  subItem.colors %}
-                                                                         <option value="{{ color.id }}" >{{ color.name }}</option>
-                                                                     {% endfor %}
-                                                                 </select>
-                                                             </div>
-                                                         </div>
-                                                     {% endif %}
-                                                 </div>
-                                                 <div class="col-xs-4 col-md-4 pull-right">
-                                                     <div class="form-group">
-                                                         <div class="input-group input-group-sm">
-                                                             <span class="input-group-addon" id="sizing-addon3">{{ globalOption.ecommerceConfig.currency }}</span>
-                                                             <input class="form-control" name="" id="" disabled="disabled" value="{% if subItem.discountPrice is empty %}{{ subItem.salesPrice|number_format }} {% else %}{{ subItem.discountPrice|number_format }}{% endif %}" aria-label="Text input">
-                                                         </div>
-                                                     </div>
-                                                 </div>
-                                             </div>
-                                        <div class="input-group">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div id='carousel-custom' class='carousel slide' data-ride='carousel'>
+                    <div class='carousel-outer'>
+                        <!-- me art lab slider -->
+                        <div class='carousel-inner'>
+                            <div data-match-height="image-carousel" class='item active'>
+                                <img  id="zoom" src="{% if product.webPath is not empty  %}{{ image(product.webPath).resize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).resize() }}{% endif %}"  data-zoom-image="{% if product.webPath is not empty  %}{{ image(product.webPath).resize() }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).resize() }}{% endif %}"/>
+                            </div>
+                            {% if(product.itemGalleries) %}
+                                {% for photo in product.itemGalleries|slice(0,5) %}
+                                    <div data-match-height="image-carousel" class='item'>
+                                        <img class="img-responsive" src='{{ image(photo.getAbsolutePath(product.inventoryConfig.globalOption.id,product.id)).resize(400,400) }}' alt=''  data-zoom-image="{{ image(photo.getAbsolutePath(product.inventoryConfig.globalOption.id,product.id)).resize() }}"/>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <!-- sag sol -->
+                        <a class='left custom-carousel-control' href='#carousel-custom' data-slide='prev'>
+                            <span class='glyphicon glyphicon-chevron-left'></span>
+                        </a>
+                        <a class='right custom-carousel-control' href='#carousel-custom' data-slide='next'>
+                            <span class='glyphicon glyphicon-chevron-right'></span>
+                        </a>
+                    </div>
+
+                    <!-- thumb -->
+                    {#<ol class='carousel-indicators mCustomScrollbar meartlab'>
+                        <li data-target='#carousel-custom' data-slide-to='0' class='active'><img src='{% if product.webPath is not empty  %}{{ image(product.webPath).resize() }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).resize() }}{% endif %}' alt='' /></li>
+                        {% if(product.itemGalleries) %}
+                            {% for photo in product.itemGalleries|slice(0,5) %}
+                                <li data-target='#carousel-custom' data-slide-to='{{ loop.index }}' class=''><img src='{{ image(photo.getAbsolutePath(product.inventoryConfig.globalOption.id,product.id)).resize(70,70) }}' alt='' /></li>
+                            {% endfor %}
+                        {% endif %}
+                    </ol>#}
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <div>
+                    <div class="row meta-caption">
+                        <div class="col-xs-4 col-md-4"><strong>PRICE</strong></div>
+                        <div class="col-xs-5 col-md-5"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}</div>
+                        <div class="col-xs-3 col-md-3 text-right"> {% if product.discount is not empty  %}<a class="btn btn-danger product-discount btn-xs"  href="javascript:"><span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}</a>{% endif %}</div>
+                    </div>
+                    <div class="row meta-key-value"><div class="col-xs-4 col-md-4">Stock in<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 "><strong>{{ product.masterQuantity  }}</strong>&nbsp;{% if product.masterItem is not empty and product.masterItem.productUnit is not empty %}{{ product.masterItem.productUnit.name }}{% endif %}</div></div>
+                    <div class="row meta-key-value"><div class="col-xs-4 col-md-4">SKU<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 "><strong>{{ product.sku  }}</strong></div></div>
+                    {% if product.gender is not empty %}
+                        <div class="row meta-key-value"><div class="col-xs-4 col-md-4">Gender<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ product.gender }}</div></div>
+                    {% endif %}
+                    {% if product.ageGroup is not empty %}
+                        <div class="row meta-key-value"><div class="col-xs-4 col-md-4">Age Group<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ product.ageGroup }}</div></div>
+                    {% endif %}
+                    {% if product.masterItem.category is defined and product.masterItem.category is not empty %}
+                        <div class="row meta-key-value"><div class="col-xs-4 col-md-4">Category<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ product.masterItem.category.name }}</div></div>
+                    {% endif %}
+                    {% if product.brand is not empty %}
+                        <div class="row meta-key-value"><div class="col-xs-4 col-md-4">Brand<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ product.brand.name }}</div></div>
+                    {% endif %}
+                    {% if product.country is not empty %}
+                        <div class="row meta-key-value"><div class="col-xs-4 col-md-4">Country<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ product.country.name }}</div></div>
+                    {% endif %}
+                    <div class="row meta-value">
+                        <div class="col-xs-12 col-md-12 text-justify">
+                            {% if product.content is not empty %}
+                                {{ product.content|raw }}
+                            {% elseif product.masterItem is not empty %}
+                                {{ product.masterItem.content|raw }}
+                            {% endif  %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <ul class="mbm_social">
+                                <li><a class="social-facebook" target="_blank" href="//www.facebook.com/sharer.php?u={{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
+                                        <i class="fa fa-facebook"></i>
+                                        <div class="tooltip"><span>facebook</span></div>
+                                    </a>
+                                </li>
+                                <li><a class="social-google-plus" target="_blank" href="//plus.google.com/share?url={{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
+                                        <i class="fa fa-google-plus"></i>
+                                        <div class="tooltip"><span>Google</span></div>
+                                    </a>
+                                </li>
+                                <li><a class="social-twitter" target="_blank" href="//twitter.com/share?url={{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
+                                        <i class="fa fa-twitter"></i>
+                                        <div class="tooltip"><span>Twitter</span></div>
+                                    </a>
+                                </li>
+                                <li><a class="social-instagram" target="_blank" href="//instagram.com/share?url={{ path(globalOption.subDomain ~ '_webservice_product_details',{'item':product.slug }) }}">
+                                        <i class="fa  fa-instagram"></i>
+                                        <div class="tooltip"><span>Instagram</span></div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <form class="addCart" style="margin-top: 30px">
+                    <div class="row" id="subItem-info">
+                        <div class="col-xs-4 col-md-4">
+                            {% if globalOption.ecommerceConfig.isSize == 1 and product.goodsItems is defined  %}
+                                <div class="form-group">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-list-alt"></span></span>
+                                        <select class="form-control changeSize" data-url="{{ path(globalOption.subDomain~'_webservice_product_sub_item', {'product' : product.id }) }}" name="size" id="size" >
+                                            {% for goodsItem in  product.goodsItems  %}
+                                                <option {% if subItem.id == goodsItem.id %} selected="selected" {% endif %} value="{{ goodsItem.id }}" > {% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% else %}-Default-{% endif %}{% if goodsItem.productUnit is not empty %} - {{ goodsItem.productUnit.name }}{% endif %}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                            {% if globalOption.ecommerceConfig.isColor == 1 and subItem.colors is not empty and subItem.colors is defined %}
+                                <div class="form-group">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-text-background"></span></span>
+                                        <select class="form-control" name="color" >
+                                            {% for color in  subItem.colors %}
+                                                <option value="{{ color.id }}" >{{ color.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-xs-4 col-md-4 pull-right">
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon" id="sizing-addon3">{{ globalOption.ecommerceConfig.currency }}</span>
+                                    <input class="form-control" name="" id="" disabled="disabled" value="{% if subItem.discountPrice is empty %}{{ subItem.salesPrice|number_format }} {% else %}{{ subItem.discountPrice|number_format }}{% endif %}" aria-label="Text input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group">
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-lg btn-danger btn-number" data-type="minus" data-field="quantity">
                                                 <span class="glyphicon glyphicon-minus"></span>
@@ -103,88 +176,145 @@
                                               <button type="button" class="btn btn-lg btn-success btn-number" data-type="plus" data-field="quantity">
                                                   <span class="glyphicon glyphicon-plus"></span>
                                               </button>
-                                        {% if  globalOption.ecommerceConfig.cart == 1 %}
-                                            <input type="hidden" name="productImg"  value="/{% if product.webPath is not empty %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
-                                            <button type="submit" class="btn btn-lg btn-info cartSubmit" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : subItem.id }) }}">
-                                            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>&nbsp;Add to cart</button>
-                                        {% endif %}
-
+                                            {% if  globalOption.ecommerceConfig.cart == 1 %}
+                                                <input type="hidden" name="productImg"  value="/{% if product.webPath is not empty %}{{ product.webPath }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ product.masterItem.webPath }}{% endif %}">
+                                                <button type="submit" class="btn btn-lg btn-info cartSubmit" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_cart', {'subdomain':globalOption.subDomain, 'product' : product.id,'subitem' : subItem.id }) }}">
+                                            <span class="glyphicon glyphicon-shopping-bag" aria-hidden="true"></span>&nbsp;Add to Bag</button>
+                                            {% endif %}
                                         </span>
-                                        </div>
-                                    </form>
-                            </div>
-                </div>
-            </div>
+                    </div>
+                </form>
             </div>
             <div class="col-xs-12 col-md-12">
-                  {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty or  product.itemKeyValues is defined and product.itemKeyValues is not empty  %}
-                    <div class="row meta-caption"><div class="col-xs-12 col-md-12"><strong>Specification</strong></div></div>
-                    {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
-                        {% for attribute in product.itemMetaAttributes %}
-                            <div class="row meta-key-value"><div class="col-xs-3 col-md-3">{{ attribute.itemAttribute.name }}<span class="meta-key-clone">:</span></div><div class="col-xs-9 col-md-9 ">{{ attribute.value }}</div></div>
-                        {% endfor %}
-                    {% endif %}
-                    {% if  product.itemKeyValues is defined and product.itemKeyValues is not empty %}
-                        {% for meta in product.itemKeyValues %}
-                            {% if meta.metaKey is not empty and meta.metaValue is empty %}
-                                <div class="row meta-label"><div class="col-xs-12 col-md-12">{{ meta.metaKey|capitalize }}</div></div>
-                            {% elseif meta.metaKey is empty and meta.metaValue is not empty %}
-                                <div class="row meta-value"><div class="col-xs-12 col-md-12">{{ meta.metaValue }}</div></div>
-                            {% else %}
-                                <div class="row meta-key-value"><div class="col-xs-3 col-md-3">{{ meta.metaKey }}<span class="meta-key-clone">:</span></div><div class="col-xs-9 col-md-9 ">{{ meta.metaValue  }}</div></div>
+
+                {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty or  product.itemKeyValues is defined and product.itemKeyValues is not empty  %}
+                    <div class="row meta-caption"><div class="col-xs-10 col-md-10"><strong>Specification</strong></div><div class="col-xs-2 col-md-2 btn btn-success" id="spec"><strong><span class="glyphicon glyphicon-chevron-down"></span></strong></div></div>
+                    <div class="row" id="showSpec">
+                        <div class="col-xs-12 col-md-12 scrollbar">
+                            {% if  product.itemMetaAttributes is defined and  product.itemMetaAttributes is not empty %}
+                                {% for attribute in  product.itemMetaAttributes %}
+                                    <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ attribute.itemAttribute.name }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ attribute.value }}</div></div>
+                                {% endfor %}
                             {% endif %}
-                        {% endfor %}
-                    {% endif %}
+                            {% if  product.itemKeyValues is defined and product.itemKeyValues is not empty %}
+                                {% for meta in product.itemKeyValues %}
+                                    {% if meta.metaKey is not empty and meta.metaValue is empty %}
+                                        <div class="row meta-label"><div class="col-xs-12 col-md-12">{{ meta.metaKey|capitalize }}</div></div>
+                                    {% elseif meta.metaKey is empty and meta.metaValue is not empty %}
+                                        <div class="row meta-value"><div class="col-xs-12 col-md-12">{{ meta.metaValue }}</div></div>
+                                    {% else %}
+                                        <div class="row meta-key-value"><div class="col-xs-4 col-md-4">{{ meta.metaKey }}<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{{ meta.metaValue  }}</div></div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
                 {% endif %}
             </div>
-        </article>
+        </div>
         <div class="clearfix"></div>
         {% if(products) %}
             {% if product.masterItem is not empty and product.masterItem.category is not empty and product.masterItem.category is defined %}
-                <br>
                 <div class="clear"></div>
-                <div class="col-md-12" >
-                    <div class="bs-callout bs-callout-info">
-                        <h4 class="title"><i class="fa fa-tag"></i>&nbsp;{{ product.masterItem.category.name }}</h4>
+                <div class="row">
+                    <div class="bs-callout bs-callout-info bs-callout-custom">
+                        <h4 class="feature-title"><i class="fa fa-tag"></i> {{ product.masterItem.category.name }}</h4>
                     </div>
                 </div>
-                <div id="product" class="">
-                    {% for product in products  %}
-                        {% set paymentID = globalOption.id~'-ecommerce-product-'~product.id %}
-                        <div class="outer-div">
-                            <div class="inner-div">
-                                <div id="" class="ic_container capslide_img_cont ">
-                                    <div class="col-xs-12 col-md-12">
-                                        <a href="#" class="thumbnail">
-                                            <img src="{% if product.webPath is not empty  %}{{ image(product.webPath).scaleResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}"  alt=""/>
-                                        </a>
-                                    </div>
-                                    <div class="ic_caption">
-                                        <p class="title"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_details',{'subdomain': globalOption.subDomain,'item':product.slug }) }}"  >{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></p>
-                                        <div class="product-short-details">
-                                            <span>{{ globalOption.ecommerceConfig.currency }}&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</span>
+                <div id="row" class="">
+                    <div id="promotion-slider" class="twoColumnCarousel">
+                        <div class="carousel slide row" data-ride="carousel" data-type="multi" data-interval="3000" id="TwoColumnCarousel">
+                            <div class="carousel-inner">
+                                {% for product in products  %}
+                                    <div class="product-item  {% if loop.index-1 == 0 %} active {% endif %}">
+                                        <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 fadeInDown animated" data-wow-delay="0.1s" >
+                                            <div class="thumbnail" >
+                                                <div class="product-preview group list-group-image" >
+                                                    <img class="img-responsive" src="{% if product.webPath is not empty  %}{{ image(product.webPath).forceResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="">
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-8 col-md-8 text-left product-price"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong> {% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</div>
+                                                    <div class=" col-xs-4 col-md-4 text-right"><a class="btn btn-sm btn-info product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="fa fa-shopping-basket"></span></a></div>
+                                                </div>
+                                                <div class="caption" data-match-height="item-caption">
+                                                    <div class="row-fluid">
+                                                        {% if globalOption.ecommerceConfig.showBrand == 1 %}
+                                                            <span class="group inner brand text-left" >{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}{% endif %}</span>
+                                                        {% endif %}
+                                                        <span class="group inner product-name text-left" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}">{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}</a> </span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="media-body">
-                                            <ul class="list-inline list-unstyled">
-                                                <li><span><i class="fa fa-dribbble" aria-hidden="true"></i>&nbsp;{% if product.brand is not empty %}{{ product.brand.name }}{% endif %}</span></li>
-                                                <li>|</li>
-                                                <li><span><span class="badge"><span class="fos-comment-count" data-fos-comment-thread-id="{{ paymentID }}">#</span></span> comments</span></li>
-                                            </ul>
+                                    </div>
+                                    <div class="product-item  {% if loop.index-1 == 0 %} active {% endif %}">
+                                        <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 fadeInDown animated" data-wow-delay="0.1s" >
+                                            <div class="thumbnail" >
+                                                <div class="product-preview group list-group-image" >
+                                                    <img class="img-responsive" src="{% if product.webPath is not empty  %}{{ image(product.webPath).forceResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="">
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-8 col-md-8 text-left product-price"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong> {% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</div>
+                                                    <div class=" col-xs-4 col-md-4 text-right"><a class="btn btn-sm btn-info product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="fa fa-shopping-basket"></span></a></div>
+                                                </div>
+                                                <div class="caption" data-match-height="item-caption">
+                                                    <div class="row-fluid">
+                                                        {% if globalOption.ecommerceConfig.showBrand == 1 %}
+                                                            <span class="group inner brand text-left" >{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}{% endif %}</span>
+                                                        {% endif %}
+                                                        <span class="group inner product-name text-left" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}">{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}</a> </span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="product-item  {% if loop.index-1 == 0 %} active {% endif %}">
+                                        <div class="col-lg-6 col-xs-6 col-md-6 col-sm-6 col-sm-cus-6 fadeInDown animated" data-wow-delay="0.1s" >
+                                            <div class="thumbnail" >
+                                                <div class="product-preview group list-group-image" >
+                                                    <img class="img-responsive" src="{% if product.webPath is not empty  %}{{ image(product.webPath).forceResize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).scaleResize(400,400) }}{% endif %}" alt="">
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-8 col-md-8 text-left product-price"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong> {% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}</div>
+                                                    <div class=" col-xs-4 col-md-4 text-right"><a class="btn btn-sm btn-info product-buy" id="buy-{{ product.id }}" data-id="{{ product.id }}" href="javascript:" data-url="{{ path(globalOption.subDomain ~ '_webservice_product_single_cart',{'product':product.id }) }}"><span class="fa fa-shopping-basket"></span></a></div>
+                                                </div>
+                                                <div class="caption" data-match-height="item-caption">
+                                                    <div class="row-fluid">
+                                                        {% if globalOption.ecommerceConfig.showBrand == 1 %}
+                                                            <span class="group inner brand text-left" >{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}{% endif %}</span>
+                                                        {% endif %}
+                                                        <span class="group inner product-name text-left" ><a href="{{ path(globalOption.subDomain ~ '_webservice_product_modal',{'subdomain': globalOption.subDomain,'item':product.id }) }}">{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}</a> </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
-                    {% endfor %}
+                    </div>
                 </div>
             {% endif %}
         {% endif %}
-
     </div>
+
+    <style>
+        .carousel-outer .custom-carousel-control{
+            position: absolute;
+            top: 48%;
+            font-size: 35px;
+        }
+        .carousel-outer .right.custom-carousel-control{
+            right: 0;
+        }
+
+
+
+    </style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@FrontendBundle/Resources/public/template/mobile/css/product-cosmetic.css'
+    '@FrontendBundle/Resources/public/template/mobile/css/product-canvas.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -199,6 +329,84 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
+
+    $(document).on( "click", ".selector", function(e){
+        var show = $(this).attr('data-id');
+        $('#'+show).slideToggle();
+        $("span", this).toggleClass("glyphicon-chevron-down glyphicon-chevron-up");
+    });
+
+    $('body').on( "click", "#spec", function(e){
+        $('#showSpec').slideToggle('2000');
+        $("span", this).toggleClass("glyphicon-chevron-down glyphicon-chevron-up");
+    });
+
+    $('#OneColumnCarousel').carousel({
+    interval: 40000
+    });
+
+    $('#TwoColumnCarousel').carousel({
+    interval: 500000000
+    });
+
+    $('.twoColumnCarousel .item').each(function(){
+    var next = $(this).next();
+    if (!next.length) {
+    next = $(this).siblings(':first');
+    }
+    next.children(':first-child').clone().appendTo($(this));
+    if (next.length > 0) {
+    next.addClass('rightest');
+    }
+    else {
+    $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+    }
+    });
+
+    $('#ThreeColumnCarousel').carousel({
+    interval: 60000
+    });
+
+    $('.threeColumnCarousel .item').each(function(){
+    var next = $(this).next();
+    if (!next.length) {
+    next = $(this).siblings(':first');
+    }
+    next.children(':first-child').clone().appendTo($(this));
+
+    if (next.next().length > 0) {
+
+    next.next().children(':first-child').clone().appendTo($(this)).addClass('rightest');
+
+    }else {
+
+    $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+
+    }
+    });
+
+    $('#FourColumnCarousel').carousel({
+    interval: 80000
+    });
+
+    $('.fourColumnCarousel .item').each(function(){
+    var next = $(this).next();
+    if (!next.length) {
+    next = $(this).siblings(':first');
+    }
+    next.children(':first-child').clone().appendTo($(this));
+    if (next.next().length > 0) {
+    next.next().children(':first-child').clone().appendTo($(this));
+    if (next.next().length > 0) {
+    next.next().children(':first-child').clone().appendTo($(this)).addClass('rightest');
+    }
+    }else {
+
+    $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+
+    }
+    });
+
 {% endblock %}
 
 

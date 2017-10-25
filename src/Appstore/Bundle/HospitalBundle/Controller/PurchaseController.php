@@ -11,13 +11,25 @@ use Appstore\Bundle\HospitalBundle\Form\VendorType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Constraints\Null;
+
 /**
  * Vendor controller.
  *
  */
 class PurchaseController extends Controller
 {
+
+    public function paginate($entities)
+    {
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        return $pagination;
+    }
+
 
     /**
      * Lists all Vendor entities.
@@ -28,9 +40,11 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsVendor')->findBy(array('hospitalConfig' => $hospital),array('companyName'=>'ASC'));
-        return $this->render('HospitalBundle:Vendor:index.html.twig', array(
-            'entities' => $entities,
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsPurchase')->findBy(array('hospitalConfig' => $hospital),array('created'=>'DESC'));
+        $pagination = $this->paginate($entities);
+
+        return $this->render('HospitalBundle:Purchase:index.html.twig', array(
+            'entities' => $pagination,
         ));
     }
     /**

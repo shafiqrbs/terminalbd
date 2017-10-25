@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Setting\Bundle\MediaBundle\Entity\GalleryImage;
 use Setting\Bundle\MediaBundle\Form\GalleryImageType;
-use Symfony\Component\Validator\Constraints\Null;
+
 
 /**
  * GalleryImage controller.

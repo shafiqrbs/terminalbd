@@ -3,7 +3,7 @@
 namespace Setting\Bundle\MediaBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Validator\Constraints\Null;
+
 
 /**
  * GalleryImageRepository

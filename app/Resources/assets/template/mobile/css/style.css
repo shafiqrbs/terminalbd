@@ -194,7 +194,7 @@ position:relative;
 }
 .bar-mid {
     float: left;
-    width: 70%;
+    width: 65%;
     text-align: center;
 }
 .bar-left {
@@ -217,8 +217,9 @@ h5.pro-link a:hover{
 }
 .bar-right {
     float: right;
-    width: 33.3333%;
-    text-align: center;
+    width: 17%;
+    text-align: left;
+    margin-top: -2px;
 }
 .bar-right i{
     font-size: 20px;

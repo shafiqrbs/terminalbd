@@ -12,7 +12,7 @@ use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesItem;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Validator\Constraints\Null;
+
 
 /**
  * GoodsItemRepository

@@ -1,6 +1,6 @@
 <div id="cart-item-list">
     {% if  cart.contents is not empty %}
-    <div class="top">Recent Buy Item's</div>
+        <div class="top">Recent Buy Item's</div>
         <div id="cart-item-list-box" class="scrollbar">
             {% for product in cart.contents %}
                 <dl class="entity-list" id="item-remove-{{ product.rowid }}">
@@ -20,107 +20,19 @@
                 </dl>
             {% endfor %}
         </div>
-    <div class="bottom">
-        <span class="dd-span pull-left">SubTotal:</span>
-        <span class="dd-span pull-right"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;<span class="totalAmount">{{ cart.total }}</span></strong></span>
-    </div>
-    <div class="bottom">
-        <span class="dd-span pull-left"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" class="btn btn-success"><span class="glyphicon glyphicon-shopping-cart"></span> View Buy</a></span>
-        <span class="dd-span pull-right">
-            {% if app.user %}
-                <a href="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" type="button" class="btn btn-success">Checkout <span class="glyphicon glyphicon-play"></span></a>
-            {% endif %}
-        </span>
-    </div>
+        <div class="bottom">
+            <span class="dd-span pull-left">SubTotal:</span>
+            <span class="dd-span pull-right"><strong>{{ globalOption.ecommerceConfig.currency }}&nbsp;<span class="totalAmount">{{ cart.total }}</span></strong></span>
+        </div>
+        <div class="bottom">
+            <span class="dd-span pull-left"><a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" class="btn btn-success"><span class="glyphicon glyphicon-shopping-cart"></span> View Buy</a></span>
+            <span class="dd-span pull-right">
+                {% if app.user %}
+                    <a href="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" type="button" class="btn btn-success">Checkout <span class="glyphicon glyphicon-play"></span></a>
+                {% endif %}
+            </span>
+        </div>
     {% else %}
     <p>You have no products in your shopping Bag.</p>
     {% endif %}
 </div>
-
-<style>
-    .popModal .close {
-        right: 15px!important;
-    }
-
-    #cart-item-list {
-        border:1px solid  #f5f5f5;
-        margin: 10px auto;
-        width: 350px;
-    }
-
-    #cart-item-list #cart-item-list-box{
-        overflow-y:auto;
-    }
-
-    #cart-item-list dl {
-        border-bottom: 1px solid #f5f5f5;
-        margin: 0 auto;
-        overflow: hidden;
-        padding: 10px;
-    }
-    #cart-item-list dt{
-        font-weight: normal;
-    }
-    #cart-item-list dt img {
-        border: 1px solid #fafafa;
-        float: left;
-        margin: 0 15px 0 0;
-    }
-    #cart-item-list dd {
-        margin-top: 10px;
-        overflow: auto;
-    }
-
-    #cart-item-list .bottom {
-        background-color: #f5f5f5;
-        color: #000;
-        height: 40px;
-        line-height: 40px;
-        margin-top: 10px;
-        overflow: auto;
-        text-align: center;
-    }
-
-    #cart-item-list .top {
-        background-color: #f5f5f5;
-        height: 40px;
-        line-height: 40px;
-        overflow: auto;
-        padding-left: 11px;
-        text-align: left;
-    }
-
-    #cart-item-list .dd-span{
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-    #cart-item-list .dd-span-name{
-        display: inline-block;
-        width: 70%;
-        text-align: left;
-        height: 43px;
-        overflow: hidden;
-    }
-    #cart-item-list .dd-span-action{
-        display: inline-block;
-        width: 13%;
-        text-align: left;
-    }
-    #cart-item-list .dd-span-price{
-        display: inline-block;
-        width: 85%;
-        text-align: right;
-    }
-
-    #cart-item-list  p{
-        padding-top: 5px;
-        text-align: center;
-        color: red;
-
-    }
-
-    .popModal{
-        max-width: 400px!important;
-    }
-
-</style>

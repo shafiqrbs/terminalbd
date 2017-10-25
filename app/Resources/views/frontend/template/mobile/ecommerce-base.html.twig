@@ -36,6 +36,8 @@
     'assets/template/plugin/owl.carousel/owl.theme.min.css'
     'assets/template/plugin/owl.carousel/owl.transitions.css'
     'assets/template/plugin/textillate/assets/animate.css'
+    'assets/plugins/pop-modal/popModal.min.css'
+    'assets/template/desktop/css/css-loader.css'
     'assets/template/desktop/css/module.css'
     'assets/template/mobile/css/style.css'
     %}
@@ -59,6 +61,9 @@
                 <div class="bar-mid">
                     <h5 class="pro-link"><a class="site-name" href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}">{{ globalOption.name }}</a></h5>
                 </div>
+                <div class="bar-right">
+                    <a href="javascript:" class="cart totalItem" id="cartItem"><i class="fa fa-shopping-bag"></i></a>
+                </div>
                 <div class="clearfix"></div>
             </div>
             <!-- banner -->
@@ -66,8 +71,8 @@
             <!--/footer-->
             {% if globalOption.templateCustomize.topBar is not empty %}
             <div id="side-bar-panel" class="left-shadow-overlay" >
-                <div class="handle">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
+                <div class="handle btn btn-default">
+                    <span class="fa fa-ellipsis-v" aria-hidden="true"></span>
                 </div>
                 <div class="menu-notify box-link">
                     <div class="text-left">{{ app.user }}</div>
@@ -76,43 +81,6 @@
                         <li><a href="javascript:" class="login-preview"><i class="fa fa-lock"></i></a></li>
                         <li><a href="javascript:" class="cart-preview"><i class="fa fa-shopping-cart"></i></a></li>
                     </ul>
-                </div>
-                <div id="cart-details">
-                    <div class="item-list" style="background: #222">
-                        {% render controller("FrontendBundle:EcommerceWidget:sidebarTemplateProductFilter",{'globalOption':globalOption.id,'searchForm':searchForm}) %}
-                        {#{% if  cart is defined and cart.contents is not empty %}
-                            <ul class="cart-list">
-                                {% for item in cart.contents %}
-                                    <li id="item-remove-{{ item.rowid }}">
-                                        <div class="item">
-                                            <div class="col-md-12 cart-product-title">{{ item.name }}</div>
-                                            <div class="col-md-6">
-                                                {% if item.productImg is not empty %}
-                                                    <img src="{{ item.productImg }}" height="100" width="160" alt=""/>
-                                                {% endif %}
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ item.price }}</span>
-                                                    <input type="text" class="form-control" width="80" id="{{ item.rowid }}" value="{{ item.quantity }}">
-                                                </div><!-- /input-group -->
-                                                <div class="btn-group text-right col-md-12" role="group" >
-                                                    <button id="{{ item.rowid }}"  data-url="{{ path('webservice_product_cart_remove',{'cartid':item.rowid}) }}"
-                                                            class="btn  btn-danger pull-right hunger-remove-cart" data-id="{{ item.price }}" data-value="{{ item.quantity }}" ><span class="glyphicon glyphicon-trash"></span>
-                                                    </button>
-                                                    <button id="{{ item.rowid }}"  data-url="{{ path('webservice_product_cart_update',{'cartid':item.rowid}) }}"
-                                                            class="btn btn-success pull-right hunger-update-cart"><span class="glyphicon glyphicon-pencil"></span>
-                                                    </button>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                   </li>
-                                {% endfor %}
-                            </ul>
-                            <div class="text-center col-md-12"><a class="btn btn-warning " href="javascript:">Grand Total<b class="totalAmount">{{ globalOption.ecommerceConfig.currency }}&nbsp;{{ cart.total }}</b></a><a class="btn btn-info" href="{{ path('webservice_product_cart_details') }}">View Cart</a></div>
-                        {% endif %}#}
-                    </div>
                 </div>
                 <div id="login-signip">
                     {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
@@ -174,10 +142,11 @@
 'assets/template/mobile/js/jquery.slidereveal.min.js'
 'assets/template/plugin/owl.carousel/owl.carousel.min.js'
 'assets/template/plugin/matchHeight/height-match.js'
-'assets/template/plugin/treeview/treeview.js'
 'assets/template/plugin/wow/js/wow.min.js'
+'assets/template/plugin/treeview/treeview.js'
 'assets/template/plugin/textillate/assets/jquery.fittext.js'
 'assets/template/plugin/textillate/assets/jquery.lettering.js'
+'assets/plugins/pop-modal/popModal.js'
 'assets/template/desktop/js/jquery.scrollbar.min.js'
 'assets/template/mobile/js/scripts.js'
 %}
@@ -303,22 +272,30 @@
     }
 
     #side-bar-panel .handle{
-        background-color: #2E2E2E;
+        background-color:transparent !important;
         left: -40px;
         padding: 10px;
         position: absolute;
-        top: 3px;
+        top: 0;
         cursor: pointer;
         width: 40px!important;
         -moz-transition: 200ms ease all;
         -webkit-transition: 200ms ease all;
         -o-transition: 200ms ease all;
         transition: 200ms ease all;
+        font-size: 21px;
+        padding-top: 5px;
+        padding-left: 15px;
+        border:none;
     }
 
     #side-bar-panel .handle-right{
         left: 1px!important;
         z-index: 99;
+    }
+
+    #side-bar-panel .handle:hover{
+        background: transparent!important;
     }
 
     .carousel-main-control.carousel-left {

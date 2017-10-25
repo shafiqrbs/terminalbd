@@ -77,7 +77,7 @@ class WebServiceProductController extends Controller
             if( $detect->isMobile() || $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
-                $theme = 'Template/Desktop/'.$themeName;
+                $theme = 'Template/Mobile/'.$themeName;
             }
             $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
@@ -425,6 +425,8 @@ class WebServiceProductController extends Controller
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
             /* Device Detection code desktop or mobile */
+            $next = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->frontendProductNext($item);
+            $previous = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->frontendProductPrev($item);
 
             $detect = new MobileDetect();
             if($detect->isMobile() || $detect->isTablet() ) {
@@ -436,6 +438,8 @@ class WebServiceProductController extends Controller
                 array(
                     'globalOption'      => $globalOption,
                     'product'           => $item,
+                    'next'              => $next,
+                    'previous'          => $previous,
                     'subItem'           => $subItem
                 )
             );

@@ -78,8 +78,7 @@
                             <div class="col-md-3 col-lg-3">
                                 <div class="input-group text-right" style="margin-top: 2px" >
                                     <div class="input-group-btn">
-                                        <a href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}" data-toggle="tooltip" title="View Shopping Bag Details"  class="btn btn-group btn-success"><span  class="glyphicon glyphicon-shopping-cart"></span></a>
-                                        <a  href="javascript:" data-toggle="tooltip" title="View Shopping Items"  id="cartItem"  class="btn btn-warning"> <span class="label label-warning badge totalItem "  >{{ cart.total_items }}</span></a>
+                                        <a  href="javascript:" data-toggle="tooltip" title="View Shopping Items"  id="cartItem"  class="btn btn-warning"> <span class="label label-warning badge totalItem"  ><span  class="fa fa-shopping-bag"></span> {{ cart.total_items }}</span></a>
                                         {% if app.user %}
                                             <a href="/logout" type="button" data-toggle="tooltip" title="System Logout" class="btn btn-group btn-danger" ><span class="glyphicon glyphicon-lock"></span></a>
                                             <a href="{{ path('domain_customer_homepage',{'shop':globalOption.slug}) }}" data-toggle="tooltip" title="Go To Your Order Panel" type="button" class="btn btn-group btn-primary" ><span class="glyphicon glyphicon-user"></span></a>

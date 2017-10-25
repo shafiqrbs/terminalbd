@@ -1,24 +1,6 @@
 {# default Sliding pagination control implementation #}
 <form style="float: left" id="page-form"  name="page-form" method="get" action="">
-    <div class="col-xs-6 col-md-6 col-md-cus-6">
-        <div class="input-group">
-            <span class="input-group-btn">
-            <button class="btn btn-info btn-sm page-button"><span class="fa fa-sort-numeric-asc"></span></button>
-            </span>
-            {% set sortBy = app.request.get('sortBy') %}
-            <select name="sortBy" id="sortBy" class="input-selector item-select" onchange='this.form.submit()'>
-                <option {% if sortBy == ''  %} selected="selected" {% endif %} value="" >-- Sorting by --</option>
-                <option {% if sortBy == 'product.name=?=ASC'  %} selected="selected" {% endif %} value="product.name=?=ASC">Name (A - Z)</option>
-                <option {% if sortBy == 'product.name=?=DESC'  %} selected="selected" {% endif %} value="product.name=?=DESC">Name (Z - A)</option>
-                <option {% if sortBy == 'brand.name=?=ASC'  %} selected="selected" {% endif %} value="brand.name=?=ASC">Brand (A - Z)</option>
-                <option {% if sortBy == 'brand.name=?=DESC'  %} selected="selected" {% endif %} value="brand.name=?=DESC">Brand (Z - A)</option>
-                <option {% if sortBy == 'product.salesPrice=?=ASC'  %} selected="selected" {% endif %} value="product.salesPrice=?=ASC">Price (Low &gt; High)</option>
-                <option {% if sortBy == 'product.salesPrice=?=DESC'  %} selected="selected" {% endif %} value="product.salesPrice=?=DESC">Price (High &gt; Low)</option>
-            </select>
-        </div>
-    </div>
-    <div class="col-xs-6 col-md-6 col-md-cus-6">
-        <div class="input-group">
+    <div class="input-group">
             <span class="input-group-btn">
                  {% if previous is defined %}
                      <a style="float: left" class="btn btn-info btn-sm page-button" href="{{ path(route, query|merge({(pageParameterName): previous})) }}"><span class="glyphicon glyphicon glyphicon-chevron-left"></span></a>
@@ -26,20 +8,19 @@
                      <a style="float: left" class="btn btn-info btn-sm page-button" disabled href="javascript:"><span class="glyphicon glyphicon glyphicon-chevron-left"></span></a>
                  {% endif %}
             </span>
-            {% if pageCount > 1 %}
-                {% set page = app.request.get('page') %}
-                <select id="page" name="page" class="page-selector item-select"  onchange='this.form.submit()'>
-                    <option value="">-- Select Page --</option>
-                    {% for i in 1..pageCount %}
-                        <option {% if page == i  %} selected="selected" {% endif %} value="{{ i }}">Page no. {{ i }}</option>
-                    {% endfor %}
-                </select>
+        {% if pageCount > 1 %}
+            {% set page = app.request.get('page') %}
+            <select id="page" name="page" class="page-selector item-select"  onchange='this.form.submit()'>
+                <option value="">-- Select Page --</option>
+                {% for i in 1..pageCount %}
+                    <option {% if page == i  %} selected="selected" {% endif %} value="{{ i }}">Page no. {{ i }}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
+        <span class="input-group-btn">
+            {% if next is defined %}
+                <a class="btn btn-info btn-sm page-button" href="{{ path(route, query|merge({(pageParameterName): next})) }}"><span class="glyphicon glyphicon glyphicon-chevron-right"></span></a>
             {% endif %}
-            <span class="input-group-btn">
-                    {% if next is defined %}
-                        <a class="btn btn-info btn-sm page-button" href="{{ path(route, query|merge({(pageParameterName): next})) }}"><span class="glyphicon glyphicon glyphicon-chevron-right"></span></a>
-                    {% endif %}
-                </span>
-        </div>
+        </span>
     </div>
 </form>

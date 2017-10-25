@@ -44,14 +44,6 @@
         </div>
     </section>
     <div class="clearfix"></div>
-    <section>
-        <div class="container">
-            {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
-                {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'footer-top'}) %}
-            {% endif %}
-            <div class="clearfix"><br></div>
-        </div>
-    </section>
     <script>
         {% if globalOption.templateCustomize.showSidebar == 1 and menu.featureWidgetExist == 'true' %}
             columnItem = 3;

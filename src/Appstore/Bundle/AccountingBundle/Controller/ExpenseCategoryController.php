@@ -6,7 +6,6 @@ use Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory;
 use Appstore\Bundle\AccountingBundle\Form\ExpenseCategoryType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Validator\Constraints\Null;
 
 /**
  * ExpenseCategory controller.

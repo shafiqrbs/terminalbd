@@ -8,7 +8,7 @@ use Appstore\Bundle\HospitalBundle\Form\ParticularType;
 use Appstore\Bundle\HospitalBundle\Form\PathologyType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Validator\Constraints\Null;
+
 
 /**
  * DoctorController controller.

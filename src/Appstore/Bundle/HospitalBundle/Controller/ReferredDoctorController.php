@@ -10,7 +10,7 @@ use Appstore\Bundle\HospitalBundle\Form\PathologyType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Validator\Constraints\Null;
+
 
 /**
  * ReferredDoctorController controller.

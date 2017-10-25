@@ -144,15 +144,15 @@ class CategoryRepository extends MaterializedPathRepository
         return $tree;
     }
 
-    public function  getReturnCategoryTreeForMobile($category,$selected='')
+    public function  getReturnCategoryTreeForMobile($category,$array = array())
     {
+        $selected =  isset($array['category']) ? $array['category'] : '';
         $categoryTree = $this->printTree($category);
-
         $tree='';
-        $tree .= "<select name='category' id='category' style='width: 185px !important;' class='select2'>";
+        $tree .= "<select name='category' id='category' class='input-selector item-select col-xs-12 col-md-12'>";
         $tree .= "<option value=''>Filter by Category</option>";
         foreach($categoryTree as $row) {
-            $selected = ($selected == $row['id'])? 'selected="selected"':'';
+            $selected = ($selected === $row['id'])? 'selected':'';
             $tree .= "<option ".$selected." value=".$row["id"].">".$row["name"]."</option>";
         }
         $tree .= "</select>";
@@ -176,21 +176,22 @@ class CategoryRepository extends MaterializedPathRepository
 
     }
 
-    public function productCategorySidebar($category){
+    public function productCategorySidebar($category, $array = array()){
 
-
+       $categories =  isset($array['categories']) ? $array['categories'] : array();
        if(empty($category) || count($category) == 0){
            return '';
        }
        $result = "<ul>";
-        foreach ($category as $row)
-        {
+       foreach ($category as $row)
+       {
+            $checked = in_array($row->getId() , $categories) ? 'checked':'';
             if (!empty($row->getChildren())) {
-                $result.= '<li><a href="/product/category/'.$row->getId().'">'.$row->getName() .'</a>';
+                $result.= '<li><input type="checkbox" class="" '.$checked.'  id="categories" name="categories[]" value="'.$row->getId().'"><a href="/product/category/'.$row->getId().'">'.$row->getName() .'</a>';
                 $result.= $this->productCategorySidebar($row->getChildren());
                 $result.= "</li>";
             }else {
-                $result .= '<li><a href="/product/category/'.$row->getId().'">' . $row->getName() .'</a></li>';
+                $result .= '<li><input type="checkbox" class="" '.$checked.' id="category" name="category[]" value="'.$row->getId().'"><input type="checkbox"><a href="/product/category/'.$row->getId().'">' . $row->getName() .'</a></li>';
             }
         }
 
@@ -210,7 +211,7 @@ class CategoryRepository extends MaterializedPathRepository
         foreach ($data  as $row ){
 
              if(in_array($row->getId(), $array)){
-                 $selected = ($slected == $row->getId() )? 'selected="selected"':'';
+                 $selected = ($slected === $row->getId() )? 'selected="selected"':'';
                  $tree .= '<option  value='.$row->getId().' '.$selected.' >'.$row->getName() . '</option>';
              }
         }

@@ -9,7 +9,7 @@ use Appstore\Bundle\HospitalBundle\Form\ParticularType;
 use Appstore\Bundle\HospitalBundle\Form\PathologyType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Validator\Constraints\Null;
+
 
 /**
  * SurgeryController controller.
@@ -192,7 +192,7 @@ class SurgeryController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('hms_referreddoctor'));
+            return $this->redirect($this->generateUrl('hms_surgery'));
         }
 
         return $this->render('HospitalBundle:Surgery:new.html.twig', array(
@@ -212,7 +212,7 @@ class SurgeryController extends Controller
         }
         $em->remove($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('hms_referreddoctor'));
+        return $this->redirect($this->generateUrl('hms_surgery'));
     }
 
    
@@ -238,6 +238,6 @@ class SurgeryController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('hms_referreddoctor'));
+        return $this->redirect($this->generateUrl('hms_surgery'));
     }
 }

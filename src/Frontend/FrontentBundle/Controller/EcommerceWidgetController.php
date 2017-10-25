@@ -152,6 +152,7 @@ class EcommerceWidgetController extends Controller
             $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $inventory));
             $cats = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getParentId($inventoryCat);
             $categorySidebar = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->productCategorySidebar($cats);
+            $categoryTree = $this->getDoctrine()->getRepository('ProductProductBundle:Category')->getReturnCategoryTreeForMobile($cats,$searchForm);
             $brandTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupBrands($inventory, $searchForm);
             $colorTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupColors($inventory, $searchForm);
             $sizeTree = $this->getDoctrine()->getRepository('InventoryBundle:GoodsItem')->findGroupSizes($inventory, $searchForm);
@@ -163,6 +164,7 @@ class EcommerceWidgetController extends Controller
         return $this->render('@Frontend/'.$theme.'/productFilter.html.twig', array(
                 'globalOption'              => $globalOption,
                 'categorySidebar'           => $categorySidebar,
+                'categoryTree'              => $categoryTree,
                 'brandTree'                 => $brandTree,
                 'colorTree'                 => $colorTree,
                 'sizeTree'                  => $sizeTree,

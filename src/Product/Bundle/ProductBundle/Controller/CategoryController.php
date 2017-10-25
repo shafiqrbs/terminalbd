@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Product\Bundle\ProductBundle\Entity\Category;
 use Product\Bundle\ProductBundle\Form\CategoryType;
-use Symfony\Component\Validator\Constraints\Null;
+
 
 /**
  * Category controller.

@@ -164,7 +164,6 @@ $('#cartItem').click(function(){
             });
         }
     });
-
 });
 
 $(document).on( "click", ".cartSubmit", function(e){

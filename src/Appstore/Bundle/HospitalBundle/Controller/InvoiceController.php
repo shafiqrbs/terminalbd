@@ -243,7 +243,7 @@ class InvoiceController extends Controller
         $editForm->handleRequest($request);
         $referredId = $request->request->get('referredId');
         $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
-        if ($editForm->isValid()) {
+        if($editForm->isValid()) {
 
             if (!empty($data['customer']['name'])) {
 
@@ -258,9 +258,12 @@ class InvoiceController extends Controller
                 $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['referredDoctor']['mobile']);
                 $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findHmsExistingCustomer($entity->getHospitalConfig() , $mobile,$data);
                 $entity->setReferredDoctor($referred);
+
             }else{
+
                 $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $entity->getHospitalConfig() , 'service' => 6, 'id' => $referredId ));
                 $entity->setReferredDoctor($referred);
+
             }
             
             $entity->setProcess('In-progress');
@@ -277,9 +280,11 @@ class InvoiceController extends Controller
             }
 
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.hms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
             }
+
             return $this->redirect($this->generateUrl('hms_invoice_show', array('id' => $entity->getId())));
         }
 
@@ -291,6 +296,7 @@ class InvoiceController extends Controller
             'referredDoctors' => $referredDoctors,
             'form' => $editForm->createView(),
         ));
+
     }
 
     public function searchAction(Request $request)
