@@ -195,7 +195,7 @@ class CabinController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('hms_referreddoctor'));
+            return $this->redirect($this->generateUrl('hms_cabin'));
         }
 
         return $this->render('HospitalBundle:Cabin:new.html.twig', array(
