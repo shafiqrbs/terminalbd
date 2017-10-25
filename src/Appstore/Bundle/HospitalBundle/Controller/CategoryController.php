@@ -4,6 +4,7 @@ namespace Appstore\Bundle\HospitalBundle\Controller;
 
 use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
 use Appstore\Bundle\HospitalBundle\Form\CategoryType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -204,13 +205,27 @@ class CategoryController extends Controller
     public function deleteAction(HmsCategory $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Category entity.');
+        try {
+
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice', 'Please contact system administrator further notification.'
+            );
         }
-        $em->remove($entity);
-        $em->flush();
         return $this->redirect($this->generateUrl('hms_category'));
     }
+
+
 
     /**
      * Lists all Category entities.

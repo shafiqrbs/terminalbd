@@ -4,6 +4,8 @@ namespace Appstore\Bundle\AccountingBundle\Controller;
 
 use Appstore\Bundle\AccountingBundle\Entity\ExpenseCategory;
 use Appstore\Bundle\AccountingBundle\Form\ExpenseCategoryType;
+use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -212,23 +214,26 @@ class ExpenseCategoryController extends Controller
      * Deletes a ExpenseCategory entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(HmsCategory $entity)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('AccountingBundle:ExpenseCategory')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find ExpenseCategory entity.');
-            }
+        $em = $this->getDoctrine()->getManager();
+        try {
 
             $em->remove($entity);
             $em->flush();
-        }
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
 
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice', 'Please contact system administrator further notification.'
+            );
+        }
         return $this->redirect($this->generateUrl('expensecategory'));
     }
 
