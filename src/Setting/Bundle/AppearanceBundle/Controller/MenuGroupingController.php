@@ -3,7 +3,7 @@
 namespace Setting\Bundle\AppearanceBundle\Controller;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\Tests\Common\Annotations\Null;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Setting\Bundle\AppearanceBundle\Entity\MenuGrouping;
