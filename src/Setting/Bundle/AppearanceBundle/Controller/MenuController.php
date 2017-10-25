@@ -74,7 +74,7 @@ class MenuController extends Controller
      */
     private function createEditForm($id)
     {
-        $form = $this->createForm(new MenuType(), Null, array(
+        $form = $this->createForm(new MenuType(), null, array(
             'action' => $this->generateUrl('menu_update', array('id' => $id)),
             'method' => 'PUT',
             'attr' => array(

@@ -127,17 +127,17 @@ class ProductRepository extends EntityRepository
         foreach ($data['productId'] as $key ){
 
 
-            $name           = ($data['name'][$i]) ? $data['name'][$i] : Null ;
-            $vendorPrice    = ($data['vendorPrice'][$i]) ? $data['vendorPrice'][$i] : Null ;
-            $price          = ($data['price'][$i]) ? $data['price'][$i] : Null ;
-            $salesPrice     = ($data['salesPrice'][$i]) ? $data['salesPrice'][$i] : Null ;
-            $quantity       = ($data['quantity'][$i]) ? $data['quantity'][$i] : Null ;
-            $content        = ($data['content'][$i]) ? $data['content'][$i] : Null ;
-            $shipping       = ($data['shipping'][$i]) ? $data['shipping'][$i] : Null ;
-            $madeIn         = ($data['madeIn'][$i]) ? $data['madeIn'][$i] : Null ;
-            $category       = ($data['category'][$i]) ? $data['category'][$i] : Null ;
-            $availability       = ($data['availability'][$i]) ? $data['availability'][$i] : Null ;
-            $unit       = ($data['unit'][$i]) ? $data['unit'][$i] : Null ;
+            $name           = ($data['name'][$i]) ? $data['name'][$i] : null ;
+            $vendorPrice    = ($data['vendorPrice'][$i]) ? $data['vendorPrice'][$i] : null ;
+            $price          = ($data['price'][$i]) ? $data['price'][$i] : null ;
+            $salesPrice     = ($data['salesPrice'][$i]) ? $data['salesPrice'][$i] : null ;
+            $quantity       = ($data['quantity'][$i]) ? $data['quantity'][$i] : null ;
+            $content        = ($data['content'][$i]) ? $data['content'][$i] : null ;
+            $shipping       = ($data['shipping'][$i]) ? $data['shipping'][$i] : null ;
+            $madeIn         = ($data['madeIn'][$i]) ? $data['madeIn'][$i] : null ;
+            $category       = ($data['category'][$i]) ? $data['category'][$i] : null ;
+            $availability       = ($data['availability'][$i]) ? $data['availability'][$i] : null ;
+            $unit       = ($data['unit'][$i]) ? $data['unit'][$i] : null ;
 
 
             $entity = $em->getRepository('ProductProductBundle:Product')->findOneBy(array('id'=>$key));

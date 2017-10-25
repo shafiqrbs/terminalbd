@@ -55,8 +55,8 @@ class GalleryImageRepository extends EntityRepository
 
         foreach ($data['imageId'] as $key ){
 
-            $caption = ($data['caption'][$i]) ? $data['caption'][$i] : Null ;
-            $description = ($data['description'][$i]) ? $data['description'][$i] : Null ;
+            $caption = ($data['caption'][$i]) ? $data['caption'][$i] : null ;
+            $description = ($data['description'][$i]) ? $data['description'][$i] : null ;
             $status = isset($data['status'][$i]) ? $data['status'][$i] : 0 ;
             $sorting = ($data['sorting'][$i]) ? $data['sorting'][$i] : 0 ;
 

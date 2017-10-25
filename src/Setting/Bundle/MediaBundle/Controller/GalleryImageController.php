@@ -150,7 +150,7 @@ class GalleryImageController extends Controller
      */
     private function createEditForm($id)
     {
-        $form = $this->createForm(new GalleryImageType(), Null, array(
+        $form = $this->createForm(new GalleryImageType(), null, array(
             'action' => $this->generateUrl('galleryimage_update', array('id' => $id)),
             'method' => 'POST',
             'attr' => array(
