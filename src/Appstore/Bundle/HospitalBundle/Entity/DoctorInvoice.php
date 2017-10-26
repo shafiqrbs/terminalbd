@@ -112,9 +112,9 @@ class DoctorInvoice
     /**
      * @var string
      *
-     * @ORM\Column(name="invoice", type="string", length=50, nullable=true)
+     * @ORM\Column(name="hmsDoctorInvoice", type="string", length=50, nullable=true)
      */
-    private $invoice;
+    private $hmsDoctorInvoice;
 
     /**
      * @var integer
@@ -505,6 +505,22 @@ class DoctorInvoice
     public function setHmsInvoice($hmsInvoice)
     {
         $this->hmsInvoice = $hmsInvoice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHmsDoctorInvoice()
+    {
+        return $this->hmsDoctorInvoice;
+    }
+
+    /**
+     * @param string $hmsDoctorInvoice
+     */
+    public function setHmsDoctorInvoice($hmsDoctorInvoice)
+    {
+        $this->hmsDoctorInvoice = $hmsDoctorInvoice;
     }
 
 }

@@ -148,7 +148,7 @@ class SyndicateRepository extends MaterializedPathRepository{
         foreach ($Syndicates as $Syndicate) {
             switch($Syndicate->getLevel()) {
                 case 2:
-                    $grouped[$Syndicates[$Syndicate->getParentIdByLevel()]->getName()]["" + $Syndicate->getId()] = $Syndicate;
+                    $grouped[$Syndicates[$Syndicate->getParentIdByLevel()]->getName()]["" . $Syndicate->getId()] = $Syndicate;
             }
         }
 

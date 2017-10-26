@@ -22,7 +22,7 @@ class DoctorInvoiceListener
             $datetime = new \DateTime("now");
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);
-            $entity->setInvoice(sprintf("%s%s", $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
+            $entity->setHmsDoctorInvoice(sprintf("%s%s", $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
 
         }
     }

@@ -11,6 +11,25 @@ var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
 // Setter
 $( ".date-picker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
 
+$(".receivePayment").click(function(){
+    $("#showPayment").slideToggle(1000);
+});
+
+$(document).on("click", ".addPay", function() {
+
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                location.reload();
+            });
+        }
+    });
+});
+
+
 $( "#name" ).autocomplete({
 
     source: function( request, response ) {

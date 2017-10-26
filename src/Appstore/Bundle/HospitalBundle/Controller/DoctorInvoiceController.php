@@ -177,7 +177,6 @@ class DoctorInvoiceController extends Controller
         if (!empty($entity) and $totalInvoiceAmount == $entity->getCommission() and $entity->getCommissionApproved() == false ) {
             $em = $this->getDoctrine()->getManager();
             $entity->setCommissionApproved(true);
-            $entity->setApprovedBy($this->getUser());
             $em->flush();
             return $this->redirect($this->generateUrl('hms_doctor_invoice'));
         } else {
