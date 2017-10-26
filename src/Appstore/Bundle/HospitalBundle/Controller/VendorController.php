@@ -170,9 +170,6 @@ class VendorController extends Controller
 
         if ($editForm->isValid()) {
             $em->flush();
-            $user = $this->get('security.context')->getToken()->getUser();
-            $inventoryConfig = $user->getGlobalOption()->getInventoryConfig();
-            $entity->setInventoryConfig($inventoryConfig);
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been changed successfully"
             );

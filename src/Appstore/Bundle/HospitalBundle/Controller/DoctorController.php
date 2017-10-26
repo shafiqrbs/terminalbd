@@ -6,6 +6,7 @@ use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Form\DoctorType;
 use Appstore\Bundle\HospitalBundle\Form\ParticularType;
 use Appstore\Bundle\HospitalBundle\Form\PathologyType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -214,11 +215,23 @@ class DoctorController extends Controller
     public function deleteAction(Particular $entity)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Particular entity.');
+        try {
+
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice', 'Please contact system administrator further notification.'
+            );
         }
-        $em->remove($entity);
-        $em->flush();
         return $this->redirect($this->generateUrl('hms_doctor'));
     }
 

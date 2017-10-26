@@ -196,6 +196,20 @@ $(document).on("click", ".removeDiscount", function() {
     })
 });
 
+$(document).on("click", ".remove", function() {
+
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                location.reload();
+            });
+        }
+    });
+});
+
 $(document).on("click", ".delete", function() {
 
     var id = $(this).attr("data-id");
