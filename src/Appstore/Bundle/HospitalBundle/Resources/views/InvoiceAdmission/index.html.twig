@@ -169,16 +169,25 @@
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
-                                            {% set processArr = {'In-progress': 'In-progress' ,'Created':'Created','Revised':'Revised'} %}
-                                            {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due'} %}
-                                            {% if entity.process in  processArr|keys and entity.paymentStatus == 'Pending' or entity.process =='Created' and entity.paymentStatus == 'Due' %}
-                                                <li><a href="{{ path('hms_invoice_admission_edit', { 'id': entity.id }) }}" class="btn green  " ><i class="icon-pencil"></i> Edit & Update</a></li>
-                                                <li><a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('hms_invoice_admission_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red  remove tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a></li>
-                                            {% elseif entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
-                                                <li><a href="{{ path('hms_invoice_admission_show', { 'id': entity.id }) }}" class="btn purple"><i class="icon-eye-open"></i> View</a></li>
-                                                <li><a  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a></li>
-                                                <li><a  href="{{ path('hms_invoice_admission_confirm',{'id':entity.id}) }}"  class="btn yellow" ><i class=" icon-truck"></i> Delivery</a></li>
-                                            {% endif %}
+                                            <div class="btn-group">
+                                                <a class="btn blue mini" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                                    Action
+                                                    <i class="icon-tasks"></i>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right action">
+                                                    {% set processArr = {'In-progress': 'In-progress' ,'Created':'Created','Revised':'Revised'} %}
+                                                    {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due'} %}
+                                                    {% if entity.process in  processArr|keys and entity.paymentStatus == 'Pending' or entity.process =='Created' and entity.paymentStatus == 'Due' %}
+                                                        <li><a href="{{ path('hms_invoice_admission_edit', { 'id': entity.id }) }}" class="btn green  " ><i class="icon-pencil"></i> Edit & Update</a></li>
+                                                        <li><a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('hms_invoice_admission_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red  remove tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a></li>
+                                                    {% elseif entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
+                                                        <li><a href="{{ path('hms_invoice_admission_show', { 'id': entity.id }) }}" class="btn purple"><i class="icon-eye-open"></i> View</a></li>
+                                                        <li><a  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a></li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+
+
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -206,6 +215,7 @@
     {{ parent() }}
     {% javascripts
     '@HospitalBundle/Resources/public/js/invoice.js'
+    '@HospitalBundle/Resources/public/js/editable.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
