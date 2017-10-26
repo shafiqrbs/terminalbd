@@ -243,7 +243,9 @@ class InvoiceController extends Controller
         $editForm->handleRequest($request);
         $referredId = $request->request->get('referredId');
         $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
-        if($editForm->isValid()) {
+
+
+        if($editForm->isValid() and !empty($entity->getInvoiceParticulars())) {
 
             if (!empty($data['customer']['name'])) {
 
@@ -265,7 +267,11 @@ class InvoiceController extends Controller
                 $entity->setReferredDoctor($referred);
 
             }
-            
+            $deliveryDateTime = $request->request->get('deliveryDateTime');
+            $datetime = (new \DateTime("now"))->format('d-m-Y h:i A');
+            $datetime = empty($deliveryDateTime) ? $datetime : $deliveryDateTime ;
+
+            $entity->setDeliveryDateTime($datetime);
             $entity->setProcess('In-progress');
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
@@ -289,10 +295,10 @@ class InvoiceController extends Controller
         }
 
         $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=> 6),array('name'=>'ASC'));
-        $particulars = $em->getRepository('HospitalBundle:Particular')->getServiceWithParticular($entity->getHospitalConfig());
+        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($entity->getHospitalConfig());
         return $this->render('HospitalBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
-            'particulars' => $particulars,
+            'partcularService' => $services,
             'referredDoctors' => $referredDoctors,
             'form' => $editForm->createView(),
         ));
@@ -438,6 +444,7 @@ class InvoiceController extends Controller
         $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsSalesTransactionReverse($entity);
         $em = $this->getDoctrine()->getManager();
         $entity->setRevised(true);
+        $entity->setProcess('Revised');
         $em->flush();
         $template = $this->get('twig')->render('HospitalBundle:Invoice:reverse.html.twig',array(
             'entity' => $entity,
@@ -504,7 +511,6 @@ class InvoiceController extends Controller
 
         $barcode = $this->getBarcode($entity->getInvoice());
         $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
-
         return $this->render('HospitalBundle:Invoice:'.$entity->getPrintFor().'.html.twig', array(
             'entity'      => $entity,
             'barcode'     => $barcode,

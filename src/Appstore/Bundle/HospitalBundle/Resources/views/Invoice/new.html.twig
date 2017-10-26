@@ -287,7 +287,7 @@
                                 <div class="span2"><input type="text" class="m-wrap span12" id="price" name="price" value="" maxlength="8"></div>
                                 <div class="span1">
                                     <input type="hidden" id="particularId" name="particularId" value="">
-                                    <button type="button" class="btn blue" disabled="disabled" id="addParticular" data-url="{{ path('hms_invoice_particular_add',{'invoice':entity.id}) }}" >Add</button>
+                                    <button type="button" class="btn blue confirm" disabled="disabled" id="addParticular" data-url="{{ path('hms_invoice_particular_add',{'invoice':entity.id}) }}" >Add</button>
                                 </div>
                             </div>
                         </div>
@@ -410,22 +410,6 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
-
-                                <div class="input-prepend span12">
-                                    <span class="add-on" onclick="javascript:NewCssCal('appstore_bundle_hospitalbundle_invoice_deliveryDateTime','ddMMyyyy','arrow',true,'12','','future')"><i class="icon-calendar"></i></span>
-                                    {{ form_widget(form.deliveryDateTime) }}
-                                </div>
-                                <div class="controls">
-                                    {{ form_errors(form.deliveryDateTime) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="clearfix"></div>
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <div class="control-group">
                                 <div class="controls">
                                     {{ form_widget(form.transactionMethod) }}
                                     {{ form_errors(form.transactionMethod) }}
@@ -516,8 +500,19 @@
                         </div>
                         <!--/span-->
                     </div>
-
                     <div class="clearfix"></div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="control-group">
+                                <div class="input-prepend">
+                                    <button class="btn blue" type="button" onclick="javascript:NewCssCal('deliveryDateTime','ddMMyyyy','arrow',true,'12','','future')"><i class="icon-calendar"></i></button>
+                                    <input type="text"  onclick="javascript:NewCssCal('deliveryDateTime','ddMMyyyy','arrow',true,'12','','future')" id="deliveryDateTime" name="deliveryDateTime" required="required" class="m-wrap span12 tooltips input2" data-trigger="hover" placeholder="Report delivery date" data-original-title="Report delivery date" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
                 </div>
             </div>
 
@@ -531,7 +526,7 @@
                     <input type="hidden" name="netTotal" class="" id="netTotal" value="{{ entity.total }}">
                     <input type="hidden" name="due" class="" id="due" value="{{ entity.due }}">
 
-                    <button type="submit" class="btn blue span11" id="receiveBtn"><i class="icon-ok"></i> Received with Print</button>
+                    <button type="button" class="btn blue span11" id="receiveBtn"><i class="icon-save"></i> Received with Print</button>
                 </div>
             </div>
             {{ form_end(form) }}
@@ -566,7 +561,6 @@
     {{ parent() }}
     EditableInit();
 
-    $('body').addClass('page-sidebar-closed');
     $("input:text:visible:first").focus();
     $('input[name=particular]').focus();
 
@@ -582,8 +576,6 @@
         $('.input2').eq(index).focus();
         }
     });
-
-
     $( ".payment" ).val('');
     $( ".discount" ).val('');
     $( ".payment" ).attr( "placeholder", "{{ entity.payment }}" );

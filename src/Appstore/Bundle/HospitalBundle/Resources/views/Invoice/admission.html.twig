@@ -1,28 +1,28 @@
 {% extends '::print.html.twig' %}
 {% block body %}
     {%  if entity.hospitalConfig.isPrintHeader == 1 %}
-        <table class="table">
-            <tr>
-                <td>
-                    <div class="span4  pull-left invoice-logo-space">
-                        {%  if entity.hospitalConfig.invoicePrintLogo == 1 %}
-                            {% if entity.hospitalConfig.globalOption.templateCustomize.webPath('logo') is not empty %}   <img style="max-width: 180px; max-height: 60px" src="/{{ entity.hospitalConfig.globalOption.templateCustomize.webPath('logo') }}">{% endif %}
-                        {%  endif %}
-                    </div>
-                </td>
-                <td class="pull-right">
-                    <div class="span4">
-                        <ul class="unstyled">
-                            <li><strong>{{ entity.hospitalConfig.globalOption.name }}</strong></li>
-                            <li><i class="icon-phone"></i>&nbsp;{{ entity.hospitalConfig.globalOption.mobile }}</li>
-                            {% if  entity.hospitalConfig.globalOption.email is not empty %}<li><i class="icon-envelope"></i>&nbsp;{{ entity.hospitalConfig.globalOption.email }}</li>{% endif %}
-                            {% if  entity.hospitalConfig.globalOption.contactPage.address1 %}<li><i class="icon-home"></i>&nbsp;{{ entity.hospitalConfig.globalOption.contactPage.address1 }}</li>{% endif %}
-                            {% if entity.hospitalConfig.globalOption.domain is not empty %}<li><i class="icon-link"></i>&nbsp;www.{{ entity.hospitalConfig.globalOption.domain }}</li>{% endif %}
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-        </table>
+    <table class="table">
+        <tr>
+            <td>
+                <div class="span4  pull-left invoice-logo-space">
+                    {%  if entity.hospitalConfig.invoicePrintLogo == 1 %}
+                    {% if entity.hospitalConfig.globalOption.templateCustomize.webPath('logo') is not empty %}   <img style="max-width: 180px; max-height: 60px" src="/{{ entity.hospitalConfig.globalOption.templateCustomize.webPath('logo') }}">{% endif %}
+                    {%  endif %}
+                </div>
+            </td>
+            <td class="pull-right">
+                <div class="span4">
+                    <ul class="unstyled">
+                        <li><strong>{{ entity.hospitalConfig.globalOption.name }}</strong></li>
+                        <li><i class="icon-phone"></i>&nbsp;{{ entity.hospitalConfig.globalOption.mobile }}</li>
+                        {% if  entity.hospitalConfig.globalOption.email is not empty %}<li><i class="icon-envelope"></i>&nbsp;{{ entity.hospitalConfig.globalOption.email }}</li>{% endif %}
+                        {% if  entity.hospitalConfig.globalOption.contactPage.address1 %}<li><i class="icon-home"></i>&nbsp;{{ entity.hospitalConfig.globalOption.contactPage.address1 }}</li>{% endif %}
+                        {% if entity.hospitalConfig.globalOption.domain is not empty %}<li><i class="icon-link"></i>&nbsp;www.{{ entity.hospitalConfig.globalOption.domain }}</li>{% endif %}
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </table>
     {% endif %}
     <table class="table table-border" >
         <tr class="print-header">

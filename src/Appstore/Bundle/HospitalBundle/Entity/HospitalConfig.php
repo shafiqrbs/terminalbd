@@ -167,13 +167,6 @@ class HospitalConfig
 
 
     /**
-     * @var smallint
-     *
-     * @ORM\Column(name="barcodeBrandVendor", type="smallint",  nullable=true)
-     */
-    private $barcodeBrandVendor;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="barcodeText", type="string", length=255,nullable = true)
@@ -242,6 +235,13 @@ class HospitalConfig
      * @ORM\Column(name="barcodeScale", type="smallint", nullable = true)
      */
     private $barcodeScale = 1;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="invoicePrintLogo", type="boolean",  nullable=true)
+     */
+    private $invoicePrintLogo = true;
 
 
     /**
@@ -724,6 +724,22 @@ class HospitalConfig
     public function getHmsReverses()
     {
         return $this->hmsReverses;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isInvoicePrintLogo()
+    {
+        return $this->invoicePrintLogo;
+    }
+
+    /**
+     * @param boolean $invoicePrintLogo
+     */
+    public function setInvoicePrintLogo($invoicePrintLogo)
+    {
+        $this->invoicePrintLogo = $invoicePrintLogo;
     }
 
 

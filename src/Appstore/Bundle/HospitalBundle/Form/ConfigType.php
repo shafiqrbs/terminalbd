@@ -25,6 +25,8 @@ class ConfigType extends AbstractType
             ->add('vatPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span10')))
             ->add('vatEnable')
             ->add('isBranch')
+            ->add('invoicePrintLogo')
+            ->add('isPrintHeader')
             ->add('isPrintFooter')
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))

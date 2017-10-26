@@ -242,6 +242,24 @@ $(document).on('click', '#addPayment', function() {
     })
 });
 
+$(document).on("click", "#receiveBtn", function() {
+
+    var deliveryDateTime = $('#deliveryDateTime').val();
+    if(deliveryDateTime ==''){
+        alert('Please add delivery date time');
+        $('#deliveryDateTime').click();
+        return false;
+    }
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+          $('#posForm').submit();
+        }
+    });
+});
+
+
 $(document).on('change', '#appstore_bundle_hospitalbundle_invoice_payment', function() {
 
     var payment  = parseInt($('#appstore_bundle_hospitalbundle_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );

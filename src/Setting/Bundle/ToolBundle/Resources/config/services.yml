@@ -32,12 +32,6 @@ services:
         - { name: kernel.event_listener, event: setting_tool.post.email_message, method: sendSms }
 
 
-  setting_tool.listener.sms.receive:
-      class: Setting\Bundle\ToolBundle\EventListener\ReceiveSmsListener
-      arguments: [@setting_tool.sms_gateWay]
-      tags:
-        - { name: kernel.event_listener, event: setting_tool.post.sms_receive, method: receiveSms }
-
   setting_tool.listener.email.receive:
       class: Setting\Bundle\ToolBundle\EventListener\ReceiveEmailListener
       arguments: [@setting_tool.easy_email]
@@ -85,8 +79,6 @@ services:
   setting_tool.listener.domain_notification:
       class: Setting\Bundle\ToolBundle\EventListener\DomainNotificationListener
       arguments: [@setting_tool.sms_gateWay]
-      calls:
-        - [setMailer, [@setting_tool.easy_email]]
       tags:
         - { name: kernel.event_listener, event: setting_tool.post.domain_notification, method: domainNotify }
 

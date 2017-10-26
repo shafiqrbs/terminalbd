@@ -33,14 +33,14 @@ class CustomerForHospitalType extends AbstractType
                     new NotBlank(array('message'=>'Enter patient name')),
                 )
             ))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile inputs','autocomplete'=>'off','placeholder'=>'Enter patient mobile no'),
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile inputs','autocomplete'=>'off','placeholder'=>'Enter mobile no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter patient mobile no')),
                 )
             ))
-            ->add('age','number', array('attr'=>array('class'=>'m-wrap span12 numeric inputs','placeholder'=>'Enter patient age'),
+            ->add('age','number', array('attr'=>array('class'=>'m-wrap span12 numeric inputs','placeholder'=>'Enter age'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter patient age')),
+                    new NotBlank(array('message'=>'Patient age')),
             )))
 
             ->add('ageType', 'choice', array(
