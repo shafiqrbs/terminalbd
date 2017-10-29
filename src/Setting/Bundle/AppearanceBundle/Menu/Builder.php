@@ -724,43 +724,43 @@ class Builder extends ContainerAware
         $user = $securityContext->getToken()->getUser();
         $menu
             ->addChild('Hospital & Diagnostic')
-            ->setAttribute('icon', 'icon icon-medkit')
+            ->setAttribute('icon', 'fa fa-hospital-o')
             ->setAttribute('dropdown', true);
 
         $menu['Hospital & Diagnostic']->addChild('Manage Invoice')
-            ->setAttribute('icon', 'icon icon-reorder')
+            ->setAttribute('icon', 'icon icon-medkit')
             ->setAttribute('dropdown', true);
         $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Pathological', array('route' => 'hms_invoice'))
-            ->setAttribute('icon', 'fa fa-files-o');
+            ->setAttribute('icon', 'fa fa-hospital-o');
         $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'))
-            ->setAttribute('icon', 'fa fa-files-o');
-        $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Doctor Invoice', array('route' => 'hms_doctor_invoice'))
-            ->setAttribute('icon', 'fa fa-files-o');
+            ->setAttribute('icon', 'fa fa-ambulance');
+        $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission Invoice', array('route' => 'hms_doctor_commission_invoice'))
+            ->setAttribute('icon', 'fa fa-user-md');
         $menu['Hospital & Diagnostic']->addChild('Pathological Report')
-            ->setAttribute('icon', 'icon icon-reorder')
+            ->setAttribute('icon', 'fa fa-stethoscope')
             ->setAttribute('dropdown', true);
         $menu['Hospital & Diagnostic']['Pathological Report']->addChild('Collection & Process', array('route' => 'hms_invoice_particular'))
-            ->setAttribute('icon', 'icon-plus');
-        $menu['Hospital & Diagnostic']->addChild('Manage System')
-            ->setAttribute('icon', 'icon icon-cogs')
+            ->setAttribute('icon', 'fa fa-stethoscope');
+        $menu['Hospital & Diagnostic']->addChild('Master Data')
+            ->setAttribute('icon', 'icon icon-cog')
             ->setAttribute('dropdown', true);
-        $menu['Hospital & Diagnostic']['Manage System']->addChild('Purchase', array('route' => 'hms_purchase'))
+        $menu['Hospital & Diagnostic']['Master Data']->addChild('Purchase', array('route' => 'hms_purchase'))
             ->setAttribute('icon', 'icon-th-list');
-        $menu['Hospital & Diagnostic']['Manage System']->addChild('Pathological Test', array('route' => 'hms_pathology'))
+        $menu['Hospital & Diagnostic']['Master Data']->addChild('Pathological Test', array('route' => 'hms_pathology'))
             ->setAttribute('icon', 'icon-th-list');
-        $menu['Hospital & Diagnostic']['Manage System']->addChild('Doctor', array('route' => 'hms_doctor'))
+        $menu['Hospital & Diagnostic']['Master Data']->addChild('Doctor', array('route' => 'hms_doctor'))
             ->setAttribute('icon', 'icon-th-list');
-        $menu['Hospital & Diagnostic']['Manage System']->addChild('Referred Doctor', array('route' => 'hms_referreddoctor'))
+        $menu['Hospital & Diagnostic']['Master Data']->addChild('Referred Doctor', array('route' => 'hms_referreddoctor'))
             ->setAttribute('icon', 'icon-th-list');
-        $menu['Hospital & Diagnostic']['Manage System']->addChild('Cabin/Ward', array('route' => 'hms_cabin'))
+        $menu['Hospital & Diagnostic']['Master Data']->addChild('Cabin/Ward', array('route' => 'hms_cabin'))
             ->setAttribute('icon', 'icon-th-list');
-        $menu['Hospital & Diagnostic']['Manage System']->addChild('Medicine', array('route' => 'hms_medicine'))
+        $menu['Hospital & Diagnostic']['Master Data']->addChild('Medicine', array('route' => 'hms_medicine'))
             ->setAttribute('icon', 'icon-th-list');
-        $menu['Hospital & Diagnostic']['Manage System']->addChild('Surgery', array('route' => 'hms_surgery'))
+        $menu['Hospital & Diagnostic']['Master Data']->addChild('Surgery', array('route' => 'hms_surgery'))
             ->setAttribute('icon', 'icon-th-list');
-        $menu['Hospital & Diagnostic']['Manage System']->addChild('Category', array('route' => 'hms_category'))->setAttribute('icon', 'icon-tag');
-        $menu['Hospital & Diagnostic']['Manage System']->addChild('Vendor', array('route' => 'hms_vendor'))->setAttribute('icon', 'icon-tag');
-        $menu['Hospital & Diagnostic']->addChild('Configuration', array('route' => 'hms_config_manage'))
+        $menu['Hospital & Diagnostic']['Master Data']->addChild('Category', array('route' => 'hms_category'))->setAttribute('icon', 'icon-tag');
+        $menu['Hospital & Diagnostic']['Master Data']->addChild('Vendor', array('route' => 'hms_vendor'))->setAttribute('icon', 'icon-tag');
+        $menu['Hospital & Diagnostic']['Master Data']->addChild('Configuration', array('route' => 'hms_config_manage'))
             ->setAttribute('icon', 'icon-cog');
 
         return $menu;

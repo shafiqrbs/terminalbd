@@ -109,8 +109,8 @@
                                                         <a class="btn mini blue confirm"  data-url="{{ path('hms_invoice_particular_collection_confirm',{'id':item.id}) }}" href="javascript:"><i class="icon-ok"></i>&nbsp;Confirm</a>
                                                         <a class="btn mini green"  href="{{ path('hms_invoice_particular_collection_barcode',{'id':item.id}) }}" ><i class="icon-barcode"></i> Tag Print</a>
                                                     {% elseif item.particular.service.id == 1 and item.process == 'Collected' %}
-                                                        <a class="btn mini green " href="{{ path('hms_invoice_particular_preparation', {'id': item.id}) }}"><i class="icon-retweet"></i>&nbsp;Preparation</a>
-                                                        <a target="_blank" class="btn mini purple"  href="{{ path('hms_invoice_particular_collection_barcode',{'id':item.id}) }}" ><i class="icon-barcode"></i> Tag Print</a>
+                                                        <a class="btn mini purple " href="{{ path('hms_invoice_particular_preparation', {'id': item.id}) }}"><i class="icon-retweet"></i>&nbsp;Preparation</a>
+                                                        <a target="_blank" class="btn mini green"  href="{{ path('hms_invoice_particular_collection_barcode',{'id':item.id}) }}" ><i class="icon-barcode"></i> Tag Print</a>
                                                     {% elseif item.particular.service.id == 1 %}
                                                         <a target="_blank" class="btn mini blue"  href="{{ path('hms_invoice_particular_report_print',{'id':item.id}) }}" ><i class="icon-print"></i> Report Print</a>
                                                     {% endif %}

@@ -125,7 +125,7 @@ class ExpenditureRepository extends EntityRepository
         $entity->setTransactionMethod($doctorInvoice->getTransactionMethod());
         $entity->setAccountMobileBank($doctorInvoice->getAccountMobileBank());
         $entity->setAccountBank($doctorInvoice->getAccountBank());
-        $entity->setRemark('From Doctor Commission. Invoice No.-'.$doctorInvoice->getInvoice());
+        $entity->setRemark('From Doctor Commission. Invoice No.-'.$doctorInvoice->getHmsDoctorInvoice());
         $entity->setProcess('approved');
         $em->persist($entity);
         $em->flush();

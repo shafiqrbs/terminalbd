@@ -35,7 +35,7 @@
                     <li>Patient Name : <strong>{{ entity.hmsInvoice.customer.name }}</strong></li>
                     <li>Investigation : {{ entity.particular.name }}</li>
                     <li>Sepcimen/Sample : {{ entity.particular.sepcimen }}</li>
-                    <li>Ref. By : <strong>{{ entity.hmsInvoice.referredDoctor.name }}</strong></li>
+                    <li>Ref. By : {% if entity.hmsInvoice.referredDoctor is not empty %}<strong>{{ entity.hmsInvoice.referredDoctor.name }}</strong>{% endif %}</li>
                 </ul>
             </td>
 
@@ -73,13 +73,28 @@
             </thead>
             <tbody>
             {% for item in entity.particular.pathologicalReports %}
-                <tr>
-                    <td  class="numeric">{{ item.name }}</td>
-                    <td class="numeric text-right">{% if item.children is empty %}{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }}{% endif %}{% endif %}</td>
-                    <td class="numeric">{{ item.unit }}</td>
-                    <td class="numeric">{{ item.referenceValue }}</td>
-                </tr>
+                {% if item.children is not empty %}
+                    <tr id="remove-{{ item.id }}">
+                        <td  class="numeric" colspan="5"><strong>{{ item.name }}</strong></td>
+                    </tr>
+                    {% for child in item.children %}
+                        <tr>
+                            <td  class="numeric">{{ child.name }}</td>
+                            <td class="">{% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %}</td>
+                            <td class="numeric">{{ child.unit }}</td>
+                            <td class="numeric">{{ child.referenceValue }}</td>
+                        </tr>
+                    {% endfor %}
+                {% elseif item.parent is empty %}
+                    <tr id="remove-{{ item.id }}">
+                        <td  class="numeric">{{ item.name }}</td>
+                        <td class="">{% if item.children is empty %}{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }}{% endif %}{% endif %}</td>
+                        <td class="numeric">{{ item.unit }}</td>
+                        <td class="numeric">{{ item.referenceValue }}</td>
+                    </tr>
+                {% endif %}
             {% endfor %}
+
             </tbody>
             <tfoot>
             {% for meta in entity.invoicePathologicalReports %}

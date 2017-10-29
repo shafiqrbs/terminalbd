@@ -156,7 +156,7 @@ $('.addCart').submit( function(e) {
 });
 
 
-$('#cartItem').click(function(){
+$('#cartItem').mouseover(function(){
     $('#cartItem').popModal({
         html : function(callback) {
             $.ajax({url:'/cart/product-details'}).done(function(content){
@@ -263,14 +263,14 @@ $(document).on( "click", ".btn-number-cart", function(e){
 
     e.preventDefault();
 
-    url = $(this).attr('data-url');
-    productId = $(this).attr('data-text');
-    price = $(this).attr('data-title');
-    fieldId = $(this).attr('data-id');
-    fieldName = $(this).attr('data-field');
-    type      = $(this).attr('data-type');
-    var input = $('#quantity-'+$(this).attr('data-id'));
-    var currentVal = parseInt(input.val());
+    var url         = $(this).attr('data-url');
+    var productId   = $(this).attr('data-text');
+    var price       = $(this).attr('data-title');
+    var fieldId     = $(this).attr('data-id');
+    var fieldName   = $(this).attr('data-field');
+    var type        = $(this).attr('data-type');
+    var input       = $('#quantity-'+ $(this).attr('data-id'));
+    var currentVal  = parseInt(input.val());
     if (!isNaN(currentVal)) {
         if(type == 'minus') {
             if(currentVal > input.attr('min')) {
@@ -278,11 +278,19 @@ $(document).on( "click", ".btn-number-cart", function(e){
                 input.val(existVal).change();
                 $.get( url,{ quantity:existVal,'productId':productId,'price':price})
                     .done(function( data ) {
-                        location.reload();
+                        obj = JSON.parse(data);
+                        var subTotal = (existVal * parseInt(price));
+                        $('#btn-total-'+fieldId).html(subTotal);
+                        $('#cart-item-list-box').html(obj['cartItem']);
+                        $('.totalItem').html(obj['totalItem']);
+                        $('.totalAmount').html(obj['cartTotal']);
+                        $('.vsidebar .txt').html(obj['cartResult']);
                     });
             }
             if(parseInt(input.val()) == input.attr('min')) {
-                $(this).attr('disabled', true);
+                $('#'+input).attr('disabled', true);
+            }else {
+                $('#'+input).attr('disabled', false);
             }
 
         } else if(type == 'plus') {
@@ -292,8 +300,14 @@ $(document).on( "click", ".btn-number-cart", function(e){
                 input.val(existVal).change();
                 $.get( url,{ quantity:existVal,'productId':productId,'price':price})
                     .done(function(data){
-                        if(data == 'success'){
-                            location.reload();
+                        obj = JSON.parse(data);
+                        if(obj['process'] == 'success'){
+                            var subTotal = (existVal * parseInt(price));
+                            $('#btn-total-'+fieldId).html(subTotal);
+                            $('#cart-item-list-box').html(obj['cartItem']);
+                            $('.totalItem').html(obj['totalItem']);
+                            $('.totalAmount').html(obj['cartTotal']);
+                            $('.vsidebar .txt').html(obj['cartResult']);
                         }else{
                             input.val(existVal-1).change();
                             alert('There is not enough product in stock at this moment')
@@ -301,7 +315,9 @@ $(document).on( "click", ".btn-number-cart", function(e){
                     });
             }
             if(parseInt(input.val()) == input.attr('max')) {
-                $(this).attr('disabled', true);
+                $('#'+input).attr('disabled', true);
+            }else {
+                $('#'+input).attr('disabled', false);
             }
 
         }

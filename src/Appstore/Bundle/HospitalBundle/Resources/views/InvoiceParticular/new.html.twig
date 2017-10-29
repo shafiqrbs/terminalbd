@@ -103,9 +103,7 @@
                 <table class="table table-bordered table-striped table-condensed flip-content ">
                     <thead class="flip-content ">
                     <tr class="head-green">
-                        <th class="numeric">Si/No</th>
                         <th class="numeric">Name</th>
-                        <th class="numeric">Parent</th>
                         <th class="numeric">Result</th>
                         <th class="numeric">Unit</th>
                         <th class="numeric">Reference</th>
@@ -113,15 +111,29 @@
                     </thead>
                     <tbody>
                     {% for item in entity.particular.pathologicalReports %}
+
+                        {% if item.children is not empty %}
                         <tr id="remove-{{ item.id }}">
-                            <td  class="numeric">{{ loop.index }}</td>
-                            <td  class="numeric">{{ item.name }}</td>
-                            <td  class="numeric">{% if item.parent is not empty %}{{ item.parent.name }}{% endif %}</td>
-                            <td class="">{% if item.children is empty %}<input type="text" name="result" class="m-wrap span12" value="{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }}{% endif %}" >{% endif %}</td>
-                            <td class="numeric">{{ item.unit }}</td>
-                            <td class="numeric">{{ item.referenceValue }}</td>
-                            <input type="hidden" name="pathologicalReportId[]" value="{{ item.id }}" >
+                            <td  class="numeric" colspan="5"><strong>{{ item.name }}</strong></td>
                         </tr>
+                        {% for child in item.children %}
+                            <tr id="remove-{{ item.id }}">
+                                <td  class="numeric">{{ child.name }}</td>
+                                <td class=""><input type="text" name="result[]" class="m-wrap span12" value="{% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %}" ></td>
+                                <td class="numeric">{{ child.unit }}</td>
+                                <td class="numeric">{{ child.referenceValue }}</td>
+                                <input type="hidden" name="pathologicalReportId[]" value="{{ child.id }}" >
+                            </tr>
+                        {% endfor %}
+                        {% elseif item.parent is empty %}
+                            <tr id="remove-{{ item.id }}">
+                                <td  class="numeric">{{ item.name }}</td>
+                                <td class="">{% if item.children is empty %}<input type="text" name="result[]" class="m-wrap span12" value="{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }}{% endif %}" >{% endif %}</td>
+                                <td class="numeric">{{ item.unit }}</td>
+                                <td class="numeric">{{ item.referenceValue }}</td>
+                                <input type="hidden" name="pathologicalReportId[]" value="{{ item.id }}" >
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>
@@ -218,7 +230,7 @@
                 <div class="pull-right">
                     <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
                     {% if entity.process == "Done" %}
-                    <a href="{{ path('hms_invoice_particular_report', {'id': entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a>
+                    <a href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a>
                     {% endif %}
                 </div>
             </div>

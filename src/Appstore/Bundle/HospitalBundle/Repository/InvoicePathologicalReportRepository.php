@@ -51,25 +51,27 @@ class InvoicePathologicalReportRepository extends EntityRepository
     public function insertPathologicalReportValue($invoiceParticular , $data)
     {
         $em = $this->_em;
+
         if ($data and isset($data['pathologicalReportId']) and !empty($data['pathologicalReportId'])) {
 
             $i = 0;
-            foreach ($data['pathologicalReportId'] as $row):
-
-                $entity = $em->getRepository('HospitalBundle:InvoicePathologicalReport')->findOneBy(array('invoiceParticular' => $invoiceParticular->getId(),'pathologicalReport' => $data['pathologicalReportId']));
+            foreach ($data['pathologicalReportId'] as $key => $row):
+                $pathologicalReportId = $data['pathologicalReportId'][$key];
+                $entity = $em->getRepository('HospitalBundle:InvoicePathologicalReport')->findOneBy(array('invoiceParticular' => $invoiceParticular ,'pathologicalReport' => $pathologicalReportId ));
                 if(empty($entity)){
-                    $pathologicalReport = $em->getRepository('HospitalBundle:PathologicalReport')->find($invoiceParticular);
+                    $pathologicalReport = $em->getRepository('HospitalBundle:PathologicalReport')->find($pathologicalReportId);
                     $entity = new InvoicePathologicalReport();
                     $entity->setPathologicalReport($pathologicalReport);
                 }
                 $entity->setInvoiceParticular($invoiceParticular);
-                $entity->setResult($data['result']);
+                $entity->setResult($data['result'][$key]);
                 $em->persist($entity);
+                $em->flush($entity);
 
             endforeach;
-            $em->flush();
 
         }
+
     }
 
 }

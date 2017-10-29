@@ -160,7 +160,6 @@ $('.addCart').submit( function(e) {
         processData: false,
         contentType: false,
         success: function(response){
-
             obj = JSON.parse(response);
             $('.totalItem').html(obj['totalItem']);
             $('.totalAmount').html(obj['cartTotal']);

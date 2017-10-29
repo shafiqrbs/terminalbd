@@ -196,8 +196,9 @@ $(document).on("click", ".removeDiscount", function() {
     })
 });
 
-$(document).on("click", ".remove", function() {
+$(document).on("click", ".delete", function() {
 
+    var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
     $('#confirm-content').confirmModal({
         topOffset: 0,

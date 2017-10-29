@@ -81,6 +81,7 @@
         </div>
     </section>
 </nav>
+<div class="clearfix"></div>
 {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.featureWidgetPositionExist('header-bottom') %}
     <section class="feature-widget-header-top" >
         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header-bottom'}) %}

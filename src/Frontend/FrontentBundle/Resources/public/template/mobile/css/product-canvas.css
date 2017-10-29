@@ -127,6 +127,14 @@ div.treeview, .treeview ul {
     height: auto!important;
     position: relative;
 }
+.carousel-outer .custom-carousel-control{
+    position: absolute;
+    top: 48%;
+    font-size: 35px;
+}
+.carousel-outer .right.custom-carousel-control{
+    right: 0;
+}
 
 .col-lg-cus-1, .col-lg-cus-10, .col-lg-cus-11, .col-lg-cus-12, .col-lg-cus-2, .col-lg-cus-3, .col-lg-cus-4, .col-lg-cus-5, .col-lg-cus-6, .col-lg-cus-7, .col-lg-cus-8, .col-lg-cus-9, .col-md-cus-1, .col-md-cus-10, .col-md-cus-11, .col-md-cus-12, .col-md-cus-2, .col-md-cus-3, .col-md-cus-4, .col-md-cus-5, .col-md-cus-6, .col-md-cus-7, .col-md-cus-8, .col-md-cus-9,.col-sm-cus-1,
 .col-sm-cus-10, .col-sm-cus-11, .col-sm-cus-12, .col-sm-cus-2, .col-sm-cus-3, .col-sm-cus-4, .col-sm-cus-5, .col-sm-cus-6, .col-sm-cus-7, .col-sm-cus-8, .col-sm-cus-9, .col-xs-cus-1, .col-xs-cus-10, .col-xs-cus-11, .col-xs-cus-12, .col-xs-cus-2, .col-xs-cus-3, .col-xs-cus-4, .col-xs-cus-5, .col-xs-cus-6, .col-xs-cus-7, .col-xs-cus-8, .col-xs-cus-9{
@@ -608,9 +616,6 @@ div.treeview, .treeview ul {
     font-weight:normal;
 }
 
-
-
-
 .outer-div
 {
     padding:0;
@@ -643,4 +648,116 @@ div.treeview, .treeview ul {
     font-size: 20px;
     margin-bottom: 10px!important;
     border-bottom: 1px solid  #f3f3f3;
+}
+
+.dialogModal .dialogModal_content {
+    padding: 15px;
+    line-height: 20px;
+    min-height: 200px;
+}
+
+#cart-item-list {
+    border: 1px solid #f5f5f5;
+    margin: 10px auto;
+}
+
+#cart-item-list #cart-item-list-box {
+    overflow-y: auto;
+}
+
+#cart-item-list dl {
+    border-bottom: 1px solid #f5f5f5;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 10px;
+}
+
+#cart-item-list dt {
+    font-weight: normal;
+}
+
+#cart-item-list dt img {
+    border: 1px solid #fafafa;
+    float: left;
+    margin: 0 15px 0 0;
+}
+
+#cart-item-list dd {
+    margin-top: 10px;
+    overflow: auto;
+}
+
+#cart-item-list .bottom {
+    background-color: #f5f5f5;
+    color: #000;
+    height: 40px;
+    line-height: 40px;
+    margin-top: 10px;
+    overflow: auto;
+    text-align: center;
+}
+
+#cart-item-list .top {
+    background-color: #f5f5f5;
+    height: 40px;
+    line-height: 40px;
+    overflow: auto;
+    padding-left: 11px;
+    text-align: left;
+}
+
+#cart-item-list .dd-span {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#cart-item-list .dd-span-name {
+    display: inline-block;
+    width: 70%;
+    text-align: left;
+    height: 43px;
+    overflow: hidden;
+}
+
+#cart-item-list .dd-span-action {
+    display: inline-block;
+    width: 13%;
+    text-align: left;
+}
+
+#cart-item-list .dd-span-price {
+    display: inline-block;
+    width: 85%;
+    text-align: right;
+}
+
+#cart-item-list p {
+    padding-top: 5px;
+    text-align: center;
+    color: red;
+    font-size: 12px;
+}
+
+.dialogModal .dialogModal_footer {
+    background: #fff;
+    padding: 25px 0;
+    border-top: 1px solid #ddd;
+    text-align: right;
+    border-radius: 0;
+}
+
+.popModal {
+    max-width: 370px !important;
+    left: 18px !important;
+    top: 46px;
+}
+
+.popModal:after, .popModal:before {
+    border: 0 !important;
+}
+
+.input-number, .btn-number-cart {
+    height: 30px;
+    font-weight: bold;
+    text-align: center;
 }

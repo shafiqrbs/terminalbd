@@ -76,8 +76,11 @@ webservice_product_wishlist:
     defaults: { _controller: FrontendBundle:WebServiceProduct:productAddWishList }
 
 webservice_product_sub_item:
-    path:     /sub-item/{product}
+    path:     /modal-sub-item
     defaults: { _controller: FrontendBundle:WebServiceProduct:productSubProduct }
+    methods:  GET
+    options:
+           expose: true
 
 webservice_product_sub_item_cart:
     path:     /sub-item/{product}

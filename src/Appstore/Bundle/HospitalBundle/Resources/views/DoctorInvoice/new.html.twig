@@ -15,7 +15,7 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('hms_doctor_invoice') }}">Doctor Commission</a>
+                    <a href="{{ path('hms_doctor_commission_invoice') }}">Doctor Commission</a>
                     <span class="icon-angle-right"></span>
                 </li>
                 <li><a href="#">Manage Doctor Commission</a></li>
@@ -41,7 +41,8 @@
                         <i class="icon-tasks"></i>
                     </a>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
+                        <li><a href="{{ path('hms_doctor_commission_invoice') }}"><i class="icon-th-list"></i>&nbsp;Commission Invoice</a></li>
+                        <li><a href="{{ path('hms_doctor_invoice') }}"><i class="icon-th-list"></i>&nbsp;Payment List</a></li>
                     </ul>
                 </div>
             </div>
@@ -206,7 +207,7 @@
             <div class="clearfix">&nbsp;</div>
             <div class="form-actions portlet box blue">
                 <div class="pull-left span4">
-                    <a class="btn black span12 pull-left" style="text-align: left" ><i class="icon-plus"></i>&nbsp;Add Doctor/Referrred/Agent Payment</a>
+                    <a class="btn blue span12 pull-left" ><i class="icon-plus"></i>&nbsp;Add Doctor/Referrred/Agent Payment</a>
                 </div>
                 <div class="pull-left span5 msg-hidden" style="display: none">
                     <a class="btn yellow span12 pull-left" ><span id="msg"></span></a>
@@ -389,9 +390,9 @@
                     <input type="hidden" name="netTotal" class="" id="netTotal" value="{{ invoice.total }}">
                     <input type="hidden" name="due" class="" id="due" value="{{ invoice.due }}">
                     {% if totalPayment == invoice.commission and invoice.commission > 0  %}
-                    <a href="{{ path('hms_doctor_invoice_confirm',{'id':invoice.id}) }}"  class="btn green " id="receiveBtn"><i class="icon-ok"></i> Approve</a>
+                    <a href="{{ path('hms_doctor_invoice_confirm',{'id':invoice.id}) }}"  class="btn red receiveBtn" ><i class="icon-ok"></i> Close Invoice</a>
                     {% endif %}
-                    <button type="submit" class="btn blue " id="receiveBtn"><i class="icon-save"></i> Create</button>
+                    <button type="button" class="btn blue receiveBtn" id=""><i class="icon-save"></i> Payment</button>
                 </div>
             </div>
             {{ form_end(form) }}

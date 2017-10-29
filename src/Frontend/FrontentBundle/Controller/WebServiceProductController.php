@@ -77,7 +77,7 @@ class WebServiceProductController extends Controller
             if( $detect->isMobile() || $detect->isTablet() ) {
                 $theme = 'Template/Mobile/'.$themeName;
             }else{
-                $theme = 'Template/Mobile/'.$themeName;
+                $theme = 'Template/Desktop/'.$themeName;
             }
             $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
@@ -447,17 +447,19 @@ class WebServiceProductController extends Controller
 
     }
 
-    public function productSubProductAction($subdomain ,PurchaseVendorItem $product)
+    public function productSubProductAction($subdomain)
     {
         $subId = $_REQUEST['subItem'];
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=> $subdomain));
         /* @var GoodsItem $subItem */
-        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=> $product,'id'=> $subId));
+        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->find($subId);
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
             /* Device Detection code desktop or mobile */
+            $next = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->frontendProductNext($subItem->getPurchaseVendorItem());
+            $previous = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->frontendProductPrev($subItem->getPurchaseVendorItem());
 
             $detect = new MobileDetect();
             if($detect->isMobile() || $detect->isTablet() ) {
@@ -467,9 +469,11 @@ class WebServiceProductController extends Controller
             }
             $html =  $this->renderView('FrontendBundle:'.$theme.':subProduct.html.twig',
                 array(
-                    'globalOption'    => $globalOption,
-                    'product'    => $product,
-                    'subItem'    => $subItem
+                    'globalOption'      => $globalOption,
+                    'product'           => $subItem->getPurchaseVendorItem(),
+                    'next'              => $next,
+                    'previous'          => $previous,
+                    'subItem'           => $subItem
                 )
             );
 
@@ -579,6 +583,7 @@ class WebServiceProductController extends Controller
                 'colorId' => $color,
                 'price' => $salesPrice,
                 'quantity' => $quantity,
+                'maxQuantity' => $subitem->getQuantity(),
                 'productImg' => $productImg
             );
 
@@ -624,11 +629,12 @@ class WebServiceProductController extends Controller
         }
 
         /** @var GlobalOption $globalOption */
-
         $showMaster = $globalOption->getEcommerceConfig()->getShowMasterName();
         $salesPrice = $subitem->getDiscountPrice() == null ?  $subitem->getSalesPrice() : $subitem->getDiscountPrice();
+        $masterItem = (!empty($product->getMasterItem()) and $showMaster == 1) ? $product->getMasterItem()->getName() . ' ' : '';
+        $sizeUnit = !empty($subitem->getProductUnit()) ? $subitem->getProductUnit()->getName() : '';
+        $productUnit = (!empty($product->getMasterItem()) and !empty($product->getMasterItem()->getProductUnit())) ? $product->getMasterItem()->getProductUnit()->getName() : '';
 
-        $masterItem = !empty($product->getMasterItem()) and $showMaster == 1 ? $product->getMasterItem()->getName() . '-' : '';
         if (!empty($subitem) and $subitem->getQuantity() >= $quantity) {
             $data = array(
                 'id' => $subitem->getId(),
@@ -636,10 +642,13 @@ class WebServiceProductController extends Controller
                 'brand' => !empty($product->getBrand()) ? $product->getBrand()->getName() : '',
                 'category' => !empty($product->getMasterItem()->getCategory()) ? $product->getMasterItem()->getCategory()->getName() : '',
                 'size' => !empty($subitem->getSize()) ? $subitem->getSize()->getName() : 0,
+                'sizeUnit' => $sizeUnit,
+                'productUnit' => $productUnit,
                 'color' => $colorName,
                 'colorId' => $color,
                 'price' => $salesPrice,
                 'quantity' => $quantity,
+                'maxQuantity' => $subitem->getQuantity(),
                 'productImg' => $productImg
             );
             $cart->insert($data);
@@ -662,7 +671,16 @@ class WebServiceProductController extends Controller
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
-        return $this->render('FrontendBundle:Template/Desktop/EcommerceWidget:ajaxCart.html.twig',
+
+        /* Device Detection code desktop or mobile */
+
+        $detect = new MobileDetect();
+        if($detect->isMobile() && $detect->isTablet() ) {
+            $theme = 'Template/Mobile';
+        }else{
+            $theme = 'Template/Mobile';
+        }
+        return $this->render('FrontendBundle:'.$theme.'/EcommerceWidget:ajaxCart.html.twig',
             array(
                 'cart' => $cart,
                 'searchForm'        => $_REQUEST,
@@ -687,13 +705,16 @@ class WebServiceProductController extends Controller
                 'quantity' => $quantity,
             );
             $cart->update($data);
-            return new Response('success');
+            $cartTotal = (string)$cart->total();
+            $totalItems = (string)$cart->total_items();
+            $cartResult = $cartTotal.'('.$totalItems.')';
+            $array =(json_encode(array('process'=>'success','cartResult' => $cartResult,'cartTotal' => $cartTotal,'totalItem' => $totalItems)));
+
         }else{
-            return new Response('invalid');
+            $array =(json_encode(array('process'=>'invalid')));
         }
+        echo $array;
         exit;
-
-
     }
 
     public function getCartItem(GlobalOption $globalOption , Cart $cart){

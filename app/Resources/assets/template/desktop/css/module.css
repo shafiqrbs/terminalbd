@@ -17,6 +17,19 @@ a:hover , a:visited, a:focus{
     color: #FBFBFB !important;
 }
 
+.margin-bottom{
+    margin-bottom: 15px;
+}
+.margin-top{
+    margin-top: 15px;
+}
+.padding-bottom{
+    margin-bottom: 15px;
+}
+.padding-top{
+    margin-top: 15px;
+}
+
 .gmap{
     height: 690px!important;
 }
@@ -1684,6 +1697,7 @@ a:hover , a:visited, a:focus{
     border-color: rgb(40, 94, 142);
     color: rgb(255, 255, 255);
 }
+/*
 .form-control:focus
 {
     background-color: rgb(50, 118, 177);
@@ -1691,6 +1705,7 @@ a:hover , a:visited, a:focus{
     color: rgb(255, 255, 255);
 }
 .form-signup input[type="text"],.form-signup input[type="password"] { border: 1px solid rgb(50, 118, 177); }
+*/
 .form-group ul li , .checkbox ul li{
     color:#a94442;
 }

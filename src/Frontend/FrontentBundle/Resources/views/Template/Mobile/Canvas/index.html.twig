@@ -18,79 +18,13 @@
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
-
+{% block javascriptBlock %}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/mobile/js/common.js'
+    '@FrontendBundle/Resources/public/template/mobile/js/product.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
 {% block documentready %}
     {{ parent() }}
-    $(document).on( "click", ".selector", function(e){
-        var show = $(this).attr('data-id');
-        $('#'+show).slideToggle();
-        $("span", this).toggleClass("glyphicon-chevron-down glyphicon-chevron-up");
-    });
-
-    $('#OneColumnCarousel').carousel({
-        interval: 40000
-    });
-
-    $('#TwoColumnCarousel').carousel({
-        interval: 500000000
-    });
-
-    $('.twoColumnCarousel .item').each(function(){
-        var next = $(this).next();
-        if (!next.length) {
-        next = $(this).siblings(':first');
-        }
-        next.children(':first-child').clone().appendTo($(this));
-        if (next.length > 0) {
-        next.addClass('rightest');
-        }
-        else {
-        $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
-        }
-    });
-
-    $('#ThreeColumnCarousel').carousel({
-        interval: 60000
-    });
-
-    $('.threeColumnCarousel .item').each(function(){
-        var next = $(this).next();
-        if (!next.length) {
-        next = $(this).siblings(':first');
-        }
-        next.children(':first-child').clone().appendTo($(this));
-
-        if (next.next().length > 0) {
-
-        next.next().children(':first-child').clone().appendTo($(this)).addClass('rightest');
-
-        }else {
-
-        $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
-
-        }
-    });
-
-    $('#FourColumnCarousel').carousel({
-        interval: 80000
-    });
-
-    $('.fourColumnCarousel .item').each(function(){
-        var next = $(this).next();
-        if (!next.length) {
-        next = $(this).siblings(':first');
-        }
-        next.children(':first-child').clone().appendTo($(this));
-        if (next.next().length > 0) {
-            next.next().children(':first-child').clone().appendTo($(this));
-            if (next.next().length > 0) {
-              next.next().children(':first-child').clone().appendTo($(this)).addClass('rightest');
-            }
-        }else {
-
-        $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
-
-        }
-    });
-
 {% endblock %}

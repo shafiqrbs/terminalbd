@@ -1,16 +1,45 @@
 <form class="bs-example" action="{{ path(globalOption.subDomain ~ '_webservice_product_filter') }}"  method="get" data-example-id="input-group-segmented-buttons">
-<div class="row">
+<div class="row  margin-bottom">
     <div class="input-group col-xs-12 col-md-12">{{ categoryTree|raw }}</div>
     <div class="input-group">
         <span class="input-group-btn"><button type="button" class="btn btn-info btn-sorted"><span class="fa fa-sort-numeric-asc"></span></button></span>
-        <input type="text" name="search" id="search" class="form-control input-number" value="{{ searchForm['search'] is defined ? searchForm['search'] :'' }}" placeholder="Search for over 20,000 products">
+        <input type="text" name="search" id="search" class="form-control" value="{{ searchForm['search'] is defined ? searchForm['search'] :'' }}" placeholder="Search for over 20,000 products">
         <span class="input-group-btn"><button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></button></span>
         <span class="input-group-btn"><button type="button" class="btn btn-warning" id="filter"><span class="fa fa-filter"></span></button></span>
     </div>
 </div>
+<div class="row margin-bottom" id="showFilter" style="display:none;">
+
+        {% set sortBy = app.request.get('sortBy') %}
+        <select name="sortBy" id="sortBy" class="input-selector item-select col-xs-12 col-md-12"
+                onchange='this.form.submit()'>
+            <option {% if sortBy == '' %} selected="selected" {% endif %} value="">-- Sorting by
+                --
+            </option>
+            <option {% if sortBy == 'product.name=?=ASC' %} selected="selected" {% endif %}
+                    value="product.name=?=ASC">Name (A - Z)
+            </option>
+            <option {% if sortBy == 'product.name=?=DESC' %} selected="selected" {% endif %}
+                    value="product.name=?=DESC">Name (Z - A)
+            </option>
+            <option {% if sortBy == 'brand.name=?=ASC' %} selected="selected" {% endif %}
+                    value="brand.name=?=ASC">Brand (A - Z)
+            </option>
+            <option {% if sortBy == 'brand.name=?=DESC' %} selected="selected" {% endif %}
+                    value="brand.name=?=DESC">Brand (Z - A)
+            </option>
+            <option {% if sortBy == 'product.salesPrice=?=ASC' %} selected="selected" {% endif %}
+                    value="product.salesPrice=?=ASC">Price (Low &gt; High)
+            </option>
+            <option {% if sortBy == 'product.salesPrice=?=DESC' %} selected="selected" {% endif %}
+                    value="product.salesPrice=?=DESC">Price (High &gt; Low)
+            </option>
+        </select>
+</div>
 </form>
+
 <form id="productFilter" method="get" action="{{ path(globalOption.subDomain ~ '_webservice_product_filter') }}" >
-<div class="panel-group row" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 1px;">
+<div class=" panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-top: 1px;">
         {% if globalOption.ecommerceConfig.sidebarPrice == 1 %}
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingOne">
@@ -22,12 +51,10 @@
                 </div>
                 <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                     <div class="panel-body">
-                        <div class="row col-xs-12 col-md-12"><input type="text" name="search" id="search" class="form-control input-number" value="{{ searchForm['search'] is defined ? searchForm['search'] :'' }}" placeholder="Search for over 20,000 products"></div>
-                        <br/>
                         <div class="row">
-                            <div class="col-xs-4 col-md-4"><input id="priceStart" name="priceStart" type="text" class="col-md-12 form-control" value="{{ searchForm['priceStart'] is defined ? searchForm['priceStart'] :'' }}" /></div>
+                            <div class="col-xs-4 col-md-4"><input id="priceStart" name="priceStart" type="text" class="col-md-12 form-control" value="{{ searchForm['priceStart'] is defined ? searchForm['priceStart'] :'' }}" placeholder="Min price" /></div>
                             <div class="col-xs-2 col-md-2 text-center" style="line-height:30px; font-weight: bold; color:#222">To</div>
-                            <div class="col-xs-5 col-md-5"><input id="priceEnd" name="priceEnd" type="text" class="col-md-12 form-control" value="{{ searchForm['priceEnd'] is defined ? searchForm['priceEnd'] :'' }}" /></div>
+                            <div class="col-xs-5 col-md-5"><input id="priceEnd" name="priceEnd" type="text" class="col-md-12 form-control" value="{{ searchForm['priceEnd'] is defined ? searchForm['priceEnd'] :'' }}" placeholder="Max price" /></div>
                         </div>
                     </div>
                 </div>

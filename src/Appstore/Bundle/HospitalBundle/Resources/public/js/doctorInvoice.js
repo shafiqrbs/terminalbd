@@ -29,6 +29,33 @@ $(document).on("click", ".addPay", function() {
     });
 });
 
+$(document).on("click", ".receiveBtn", function() {
+
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $('form').submit();
+        }
+    });
+});
+
+$(document).on('click', '.delete', function() {
+
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                location.reload();
+            });
+        }
+    });
+
+});
+
+
 
 $( "#name" ).autocomplete({
 
@@ -84,30 +111,4 @@ $(document).on('change', '.transactionMethod', function() {
 
 });
 
-$(document).on('click', '.addPay', function() {
-
-    var url = $(this).attr('data-url');
-    $('.btn').removeClass('addPay');
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            location.reload();
-        }
-    })
-});
-
-$(document).on('click', '.delete', function() {
-
-    var url = $(this).attr("data-url");
-    var id = $(this).attr("id");
-    $('#remove-'+id).hide();
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            location.reload();
-        }
-    })
-});
 
