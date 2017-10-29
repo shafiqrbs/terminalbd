@@ -1,6 +1,6 @@
 <nav class="navbar navbar-inverse ">
-    {% if globalOption.templateCustomize.topBar is not empty %}
     <section id="top-bar" class=" header-position">
+        {% if globalOption.templateCustomize.topBar is not empty %}
         <div class="container" >
             <div class="row">
                 <div class="col-md-6 text-left">
@@ -39,8 +39,9 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </section>
-    {% endif %}
+
     {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header-top') %}
         <section class="feature-widget-header-top" >
             {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header-top'}) %}
@@ -80,6 +81,7 @@
 
         </div>
     </section>
+    <div class="clearfix"></div>
 </nav>
 <div class="clearfix"></div>
 {% if menu.featureWidgets is defined and menu.featureWidgets is not empty and menu.featureWidgetPositionExist('header-bottom') %}
