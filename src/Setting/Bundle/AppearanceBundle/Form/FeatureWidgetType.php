@@ -55,8 +55,7 @@ class FeatureWidgetType extends AbstractType
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
-                    'header-top'                => 'Header Top',
-                    'header-bottom'             => 'Header Bottom',
+                    'header'                    => 'Header',
                     'body-top'                  => 'Body Top',
                     'body-bottom'               => 'Body Bottom',
                     'footer'                    => 'Footer',

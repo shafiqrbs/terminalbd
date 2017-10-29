@@ -36,12 +36,6 @@
             </div>
         </div>
     </section>
-    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header-top')  %}
-        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'header-top'}) %}
-    {% endif %}
-    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header-top')  %}
-        {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'header-top'}) %}
-    {% endif %}
     <section id="header">
         <div class="container">
             <div class="navbar-header">
@@ -94,14 +88,16 @@
             </div>
         </div>
     </section>
+    <div class="clearfix"></div>
     <section id="menu-bar" class="sticky">
         <div class="container">{{ include('FrontendBundle:Template/Desktop/Menu:menu.html.twig')}}</div>
     </section>
-    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header-bottom')  %}
-        {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'header-bottom'}) %}
+    <div class="clearfix"></div>
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header')  %}
+        {% render controller("FrontendBundle:EcommerceWidget:featureTemplateWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'header'}) %}
     {% endif %}
-    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header-bottom')  %}
-        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'header-bottom'}) %}
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty and menu.getFeatureWidgetPositionExist('header')  %}
+        {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'header'}) %}
     {% endif %}
 </nav>
 <!-- BEGIN NAVIGATION -->
