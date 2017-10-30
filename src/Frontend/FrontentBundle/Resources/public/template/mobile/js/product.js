@@ -101,7 +101,7 @@ $('body').on('change', '#subItem', function(e) {
     });
 });
 
-$('body').on('click', '.product-preview', function(e) {
+$('body').on('click', '.productView', function(e) {
 
     var url = $(this).attr('data-url');
     var dataTitle = $(this).attr('data-title');

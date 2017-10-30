@@ -6,8 +6,7 @@
             <div class="row" id="showCartItem"></div>
             <div class="row">
                 <div class="bs-callout bs-callout-info bs-callout-custom ">
-                    <h4 class="feature-title"><i
-                                class="fa fa-th-large"></i> {% if titleName is defined and titleName is not empty %}{{ titleName }}{% else %}All Products{% endif %}
+                    <h4 class="feature-title"><i class="fa fa-th-large"></i> {% if titleName is defined and titleName is not empty %}{{ titleName }}{% else %}All Products{% endif %}
                     </h4>
                     {% if app.request.cookies.has('productList') %}
                         {% set cookieVal = app.request.cookies.get('productList') %}
@@ -44,7 +43,7 @@
                                                 class="currency">{{ globalOption.ecommerceConfig.currency }}</strong> {% if product.discount is not empty %}
                                         <strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty %}</strike>{% endif %}{% if product.discount is not empty %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}
                                     </div>
-                                    <div class=" col-xs-4 col-md-4 text-right"><a class="btn btn-info btn-sm product-preview"
+                                    <div class=" col-xs-4 col-md-4 text-right"><a class="btn btn-info btn-sm productView"
                                                                                   data-title="{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}"
                                                                                   data-dialogmodal-bind=".dialog_content" data-topoffset="0" data-top="10%"
                                                                                   data-type="modal" href="javascript:" id="buy-{{ product.id }}"
@@ -97,7 +96,7 @@
                                                 class="btn btn-danger product-discount btn-xs" href="javascript:"><span
                                                 class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}
                                             </a>{% endif %}
-                                        <a class="btn btn-info btn-sm product-preview"
+                                        <a class="btn btn-info btn-sm productView"
                                            data-title="{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}"
                                            data-dialogmodal-bind=".dialog_content" data-topoffset="0" data-top="10%"
                                            data-type="modal" href="javascript:" id="buy-{{ product.id }}"
@@ -128,7 +127,7 @@
                                                     class="btn btn-danger product-discount btn-xs" href="javascript:">
                                                 <span class="glyphicon glyphicon-tag"></span> {{ product.discount.discountAmount }}{% if product.discount.type !='flat' %}%{% endif %}
                                                 </a>{% endif %}
-                                            <a class="btn btn-info btn-sm product-preview"
+                                            <a class="btn btn-info btn-sm productView"
                                                data-title="{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}"
                                                data-dialogmodal-bind=".dialog_content" data-topoffset="0" data-top="10%"
                                                data-type="modal" href="javascript:" id="buy-{{ product.id }}"

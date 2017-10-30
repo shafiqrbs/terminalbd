@@ -9,7 +9,7 @@
                         {% endfor %}
                     {% endif %}
                     {% if menu.features is not empty %}
-                        <li><a href="#">Feature's</a>
+                        <li><a href="javascript:">Feature's</a>
                             <ul>
                                 {% for feature in  menu.features %}
                                     {% if feature.targetTo == 'Category' and feature.category is not empty %}
@@ -33,7 +33,7 @@
                         </li>
                     {% endif %}
                     {% if menu.promotions is not empty %}
-                        <li><a href="#">Promotion's</a>
+                        <li><a href="javascript:">Promotion's</a>
                             <ul>
                                 {% for promotion in  menu.promotions %}
                                     <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'promotion':promotion.id}) }}">{{ promotion.name }}</a></li>
@@ -42,7 +42,7 @@
                         </li>
                     {% endif %}
                     {% if menu.discounts is not empty %}
-                        <li><a href="#">Discount Offer's</a>
+                        <li><a href="javascript:">Discount Offer's</a>
                             <ul>
                                 {% for discount in  menu.discounts %}
                                     <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'discount':discount.id}) }}">{{ discount.name }}&nbsp;{{ discount.type|capitalize }}</a></li>
@@ -52,7 +52,7 @@
 
                     {% endif %}
                     {% if menu.tags is not empty %}
-                        <li><a href="#">Popular Tag's</a>
+                        <li><a href="javascript:">Popular Tag's</a>
                             <ul>
                                 {% for tag in  menu.tags %}
                                     <li><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'tag':tag.id}) }}">{{ tag.name }}</a></li>

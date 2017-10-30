@@ -88,7 +88,7 @@ class WebServiceProductController extends Controller
                     'products'          => $pagination,
                     'menu'              => $menu,
                     'pageName'          => 'Product',
-                    'searchForm'            => $searchForm,
+                    'searchForm'        => $searchForm,
                     
                 )
             );
@@ -137,17 +137,17 @@ class WebServiceProductController extends Controller
         }
     }
 
-    public function brandAction(Request $request , $subdomain,ItemBrand $brand)
+    public function brandAction(Request $request , $subdomain, ItemBrand $brand)
     {
 
         $cart = new Cart($request->getSession());
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
+        $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain' => $subdomain));
 
         if(!empty($globalOption)){
 
             $themeName = $globalOption->getSiteSetting()->getTheme()->getFolderName();
-            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => 'brand'));
+            $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => 'brand'));
 
             $data = $_REQUEST;
             if(empty($data)){
@@ -163,26 +163,27 @@ class WebServiceProductController extends Controller
 
             $detect = new MobileDetect();
             if( $detect->isMobile() || $detect->isTablet() ) {
-                $theme = 'Template/Mobile/Default';
+                $theme = 'Template/Mobile/'.$themeName;
             }else{
                 $theme = 'Template/Desktop/'.$themeName;
             }
+            $searchForm = !empty($_REQUEST) ? $_REQUEST :array();
 
             return $this->render('FrontendBundle:'.$theme.':product.html.twig',
                 array(
-                    'globalOption'  => $globalOption,
+                    'titleName'         => 'Brand: '.$brand->getName(),
+                    'globalOption'      => $globalOption,
                     'cart'              => $cart,
-                    'products'      => $pagination,
-                    'menu'          => $menu,
-                    'pageName'      => 'Brand',
-                    'titleName'      => 'Brand: '.$brand->getName(),
-                    'searchForm'        => $data,
+                    'products'          => $pagination,
+                    'menu'              => $menu,
+                    'pageName'          => 'Product',
+                    'searchForm'        => $searchForm,
                 )
             );
         }
     }
 
-    public function categoryAction(Request $request , $subdomain,Category $category)
+    public function categoryAction(Request $request , $subdomain, Category $category)
     {
 
         $cart = new Cart($request->getSession());

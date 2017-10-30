@@ -231,7 +231,7 @@
                                                                     class="currency">{{ globalOption.ecommerceConfig.currency }}</strong> {% if product.discount is not empty %}
                                                             <strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty %}</strike>{% endif %}{% if product.discount is not empty %}&nbsp;{{ product.discountPrice|number_format() }}{% endif %}
                                                         </div>
-                                                        <div class=" col-xs-4 col-md-4 text-right"><a class="btn btn-info btn-sm product-preview"
+                                                        <div class=" col-xs-4 col-md-4 text-right"><a class="btn btn-info btn-sm productView"
                                                                                                       data-title="{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}"
                                                                                                       data-dialogmodal-bind=".dialog_content" data-topoffset="0" data-top="10%"
                                                                                                       data-type="modal" href="javascript:" id="buy-{{ product.id }}"
