@@ -7,8 +7,7 @@
         <span class="input-group-btn"><button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-search"></span></button></span>
         <span class="input-group-btn"><button type="button" class="btn btn-warning" id="filter"><span class="fa fa-filter"></span></button></span>
     </div>
-</div>
-<div class="row margin-bottom" id="showFilter" style="display:none;">
+    <div id="showFilter" style="display:none;">
 
         {% set sortBy = app.request.get('sortBy') %}
         <select name="sortBy" id="sortBy" class="input-selector item-select col-xs-12 col-md-12"
@@ -35,7 +34,9 @@
                     value="product.salesPrice=?=DESC">Price (High &gt; Low)
             </option>
         </select>
+    </div>
 </div>
+
 </form>
 
 <form id="productFilter" method="get" action="{{ path(globalOption.subDomain ~ '_webservice_product_filter') }}" >

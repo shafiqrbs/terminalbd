@@ -12,6 +12,7 @@
 namespace Core\UserBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -22,6 +23,17 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 class ProfileType extends AbstractType
 {
+
+
+    /** @var  LocationRepository */
+    private $location;
+
+
+    function __construct( LocationRepository $location)
+    {
+        $this->location = $location;
+    }
+
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -39,22 +51,16 @@ class ProfileType extends AbstractType
                        ))
                )
                ->add('location', 'entity', array(
+                   'required'    => false,
+                   'empty_value' => '---Select Location---',
+                   'attr'=>array('class'=>'select2 span12 input-selector item-select'),
+                   'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
                    'constraints' =>array(
-                       new NotBlank(array('message'=>'Enter your location name required'))
+                       new NotBlank(array('message'=>'Select user location'))
                    ),
-                   'placeholder' => 'Choose your location',
-                   'required'      => true,
-                   'multiple'      =>false,
-                   'expanded'      =>false,
-                   'class'         => 'SettingLocationBundle:Location',
-                   'property'      => 'name',
-                   'attr'          =>array('class'=>'col-xs-12 form-control o-margin-padding required'),
-                   'query_builder' => function(EntityRepository $er){
-                       return $er->createQueryBuilder('d')
-                           ->where("d.parent = 8")
-                           ->andWhere("d.level = 3")
-                           ->orderBy('d.name','ASC');
-                   }
+                   'choices'=> $this->LocationChoiceList(),
+                   'choices_as_values' => true,
+                   'choice_label' => 'nestedLabel',
                ))
                 ->add('address','text', array('required' => false,'attr'=>array('class'=>'m-wrap span12 form-control','placeholder'=>'Enter your full address'),
                 'constraints' =>array(
@@ -81,5 +87,10 @@ class ProfileType extends AbstractType
     public function getName()
     {
         return 'manage_profile';
+    }
+    protected function LocationChoiceList()
+    {
+        return $syndicateTree = $this->location->getLocationOptionGroup();
+
     }
 }

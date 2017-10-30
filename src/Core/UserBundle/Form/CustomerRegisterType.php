@@ -5,6 +5,7 @@ namespace Core\UserBundle\Form;
 
 use Core\UserBundle\Form\Type\ProfileType;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -16,6 +17,15 @@ class CustomerRegisterType extends AbstractType
 {
 
 
+    /** @var  LocationRepository */
+    private $location;
+
+
+    function __construct( LocationRepository $location)
+    {
+        $this->location = $location;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -23,7 +33,7 @@ class CustomerRegisterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
             $builder->add('email','text', array('attr'=>array('class'=>'span12 form-control','placeholder'=>'Enter your secured email address')));
-            $builder->add('profile', new ProfileType());
+            $builder->add('profile', new ProfileType($this->location));
            /* ->add('enabled');*/
     }
 

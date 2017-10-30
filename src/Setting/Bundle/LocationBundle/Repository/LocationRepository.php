@@ -122,7 +122,7 @@ class LocationRepository extends MaterializedPathRepository{
     public function getLocationOptionGroup()
     {
         $results = $this->createQueryBuilder('node')
-            ->orderBy('node.level, node.name', 'ASC')
+            ->orderBy('node.parent', 'ASC')
             ->where('node.level < 4')
             ->getQuery()
             ->getResult();

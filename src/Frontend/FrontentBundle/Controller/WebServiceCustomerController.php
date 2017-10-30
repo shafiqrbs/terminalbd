@@ -54,7 +54,8 @@ class WebServiceCustomerController extends Controller
 
     private function createCreateForm($subdomain,User $entity)
     {
-        $form = $this->createForm(new CustomerRegisterType(), $entity, array(
+        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
+        $form = $this->createForm(new CustomerRegisterType($location), $entity, array(
             'action' => $this->generateUrl($subdomain.'_webservice_customer_create'),
             'method' => 'POST',
             'attr' => array(

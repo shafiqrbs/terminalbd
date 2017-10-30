@@ -124,7 +124,6 @@ div.treeview, .treeview ul {
     width: 15px;
 }
 .carousel-inner {
-    height: auto!important;
     position: relative;
 }
 .carousel-outer .custom-carousel-control{
@@ -394,17 +393,10 @@ div.treeview, .treeview ul {
 }
 
 .item-select{
-
-    height: 30px;
     font-size: 12px !important;
     line-height: 1.5;
-    border: 1px solid #F6F7F7;
-    margin-bottom: 1px;
-    border-right: none;
-    border-left: none;
     background-color: #F9FAFA;
     padding: 0!important;
-    border-right:1px solid #ccc;
     padding-left:10px!important;
 }
 
