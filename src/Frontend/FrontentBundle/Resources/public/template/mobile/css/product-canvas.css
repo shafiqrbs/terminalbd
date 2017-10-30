@@ -279,6 +279,7 @@ div.treeview, .treeview ul {
     border-top: 1px solid #ddd!important;
     padding-top: 15px;
 }
+
 .list-group-item:last-child {
     border-bottom: 1px solid #ddd!important;
     padding-bottom:15px;
@@ -311,7 +312,6 @@ div.treeview, .treeview ul {
 .brand {
     display: inherit;
     font-size: 12px;
-    color: #d6d6d6;
     border-bottom: 1px solid #6f6f6f;
     padding-bottom: 5px;
 }
@@ -325,6 +325,8 @@ div.treeview, .treeview ul {
     color:red;
     font-weight: bold;
     padding-top: 5px;
+    font-size: 13px;
+    padding-left: 0!important;
 }
 .product-price strong{
     color:red
@@ -334,6 +336,24 @@ div.treeview, .treeview ul {
     font-size: 12px;
     font-weight: normal;
 }
+
+.product-price-lg strong{
+    color:red
+}
+.product-price-lg strike{
+    color: #999;
+    font-weight: normal;
+}
+
+
+
+.product-discount{
+    position: absolute;
+    top: 8px;
+    right: 0;
+    opacity: 0.8;
+}
+
 .category-name{
     font-size: 12px;
     text-align: left;
@@ -355,6 +375,16 @@ div.treeview, .treeview ul {
 .bs-callout-info .btn-group-sm .btn.btn-active{
     color: #fff!important;
     background-color: #464646!important;
+}
+.product-item{
+    position: relative;
+}
+
+.product-item .product-discount{
+    right:8px
+}
+.product-item .productView{
+    margin-left:-2px;
 }
 
 .product-item .thumbnail {
@@ -387,7 +417,6 @@ div.treeview, .treeview ul {
 .list-group-item .brand{
     display: inherit;
     font-size: 12px;
-    color: #d6d6d6;
     border-bottom:none!important;
     padding-bottom: 0!important;
 }

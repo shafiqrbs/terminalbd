@@ -81,7 +81,7 @@ $("#"+itemArr).addClass('btn-active');
 $('body').on('click', '.product-next-prev', function(e) {
     var url = $(this).attr('data-url');
     var dataTitle = $(this).attr('data-title');
-    $('.dialogModal_header').html(dataTitle);
+    $('.dialogModal_header span').html(dataTitle);
     $.ajax({url:url}).done(function(content){
         $('.dialogModal_content').html(content);
     });
@@ -106,7 +106,6 @@ $('body').on('click', '.productView', function(e) {
     var url = $(this).attr('data-url');
     var dataTitle = $(this).attr('data-title');
     $('.dialogModal_header').html(dataTitle);
-    $('.dialogModal_content').addClass('is-active').fadeIn(5000);
     $('.dialog_content').dialogModal({
         topOffset: 0,
         top: 0,

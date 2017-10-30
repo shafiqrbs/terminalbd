@@ -16,18 +16,20 @@
                     {% endif %}
                 </div>
                 <!-- sag sol -->
+                {% if(product.itemGalleries) %}
                 <a class='left custom-carousel-control' href='#carousel-custom-{{ product.id }}' data-slide='prev'>
                     <span class='glyphicon glyphicon-chevron-left'></span>
                 </a>
                 <a class='right custom-carousel-control' href='#carousel-custom-{{ product.id }}' data-slide='next'>
                     <span class='glyphicon glyphicon-chevron-right'></span>
                 </a>
+                {% endif %}
             </div>
         </div>
         <div class="col-xs-12 col-md-12" >
                 <div class="row meta-caption">
                     <div class="col-xs-4 col-md-4"><strong>PRICE</strong></div>
-                    <div class="col-xs-8 col-md-8"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}</div>
+                    <div class="col-xs-8 col-md-8 product-price-lg"><strong class="currency">{{ globalOption.ecommerceConfig.currency }}</strong>&nbsp;{% if product.discount is not empty  %}<strike>{% endif %}{{ product.salesPrice|number_format() }}{% if product.discount is not empty  %}</strike>{% endif %}{% if product.discount is not empty  %} <strong>{{ product.discountPrice|number_format() }}</strong>{% endif %}</div>
                 </div>
                 <div class="row meta-key-value"><div class="col-xs-12 col-md-12 "><strong>{% if product.brand is not empty and  globalOption.ecommerceConfig.showBrand == 1 %}{{ product.brand.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}&nbsp;{% if product.masterItem is not empty and  globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}{% endif %}</strong></div></div>
                 <div class="row meta-key-value"><div class="col-xs-4 col-md-4">Stock in<span class="meta-key-clone">:</span></div><div class="col-xs-8 col-md-8 ">{% if product.masterQuantity is not empty %}<strong>Available</strong>{% else %}Out of stock{% endif %}</div></div>
@@ -109,6 +111,7 @@
         </div>
     </div>
 </div>
+<div class="loader loader-double" ></div>
 <div class="dialogModal_footer">
     <form class="addCart" id="sizeLoad">
        <div class="row">
