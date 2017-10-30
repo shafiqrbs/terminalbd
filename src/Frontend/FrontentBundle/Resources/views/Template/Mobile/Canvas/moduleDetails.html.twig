@@ -1,32 +1,37 @@
 {% extends ':frontend/template/mobile:ecommerce-base.html.twig' %}
 {% block body %}
-
-        {% if ( moduleName == 'News') %}
+    {% if ( menu.module.slug == 'news') %}
         {{ include('@Frontend/Template/Mobile/ModuleDetails/news.html.twig')}}
-        {% elseif( moduleName == 'Blog' ) %}
-            {{ include('@Frontend/Template/Mobile/ModuleDetails/blog.html.twig')}}
-        {% elseif( moduleName == 'Testimonial' ) %}
-            {{ include('@Frontend/Template/Mobile/ModuleDetails/testimonial.html.twig')}}
-        {% elseif( moduleName == 'Timeline' ) %}
-            {{ include('@Frontend/Template/Mobile/ModuleDetails/timeline.html.twig')}}
-        {% elseif( moduleName == 'Branch' ) %}
-            {{ include('@Frontend/Template/Mobile/ModuleDetails/branch.html.twig')}}
-        {% elseif( moduleName == 'Event' ) %}
-            {{ include('@Frontend/Template/Mobile/ModuleDetails/event.html.twig')}}
-        {% elseif( moduleName == 'ClassRoutine' ) %}
-            {{ include('@Frontend/Template/Mobile/ModuleDetails/blackout.html.twig')}}
-        {% elseif( moduleName == 'Blackout' ) %}
-            {{ include('@Frontend/Template/Mobile/ModuleDetails/blackout.html.twig')}}
-        {% elseif( moduleName == 'NoticeBoard' ) %}
-            {{ include('@Frontend/Template/Mobile/ModuleDetails/noticeboard.html.twig')}}
-        {% elseif( moduleName == 'Admission' ) %}
-            {{ include('@Frontend/Template/Mobile/ModuleDetails/admission.html.twig')}}
-        {% elseif( moduleName == 'Syndicate' ) %}
-            {{ include('@Frontend/Template/Mobile/ModuleDetails/syndicate.html.twig')}}
-        {% else %}
-            {{ include('@Frontend/Template/Mobile/Module/default.html.twig')}}
-        {% endif %}
+    {% elseif( menu.module.slug == 'blog') %}
+        {{ include('@Frontend/Template/Mobile/ModuleDetails/blog.html.twig')}}
+    {% elseif( menu.module.slug == 'event') %}
+        {{ include('@Frontend/Template/Mobile/ModuleDetails/event.html.twig')}}
+    {% elseif( menu.module.slug == 'noticeboard' ) %}
+        {{ include('@Frontend/Template/Mobile/ModuleDetails/noticeboard.html.twig')}}
+    {% elseif( menu.module.slug == 'service' ) %}
+        {{ include('@Frontend/Template/Mobile/ModuleDetails/service.html.twig')}}
+    {% elseif( menu.module.slug == 'team' ) %}
+        {{ include('@Frontend/Template/Mobile/ModuleDetails/team.html.twig')}}
+    {% elseif( menu.module.slug == 'syndicate' ) %}
+        {{ include('@Frontend/Template/Mobile/ModuleDetails/syndicate.html.twig')}}
+    {% else %}
+        {{ include('@Frontend/Template/Mobile/Module/default.html.twig')}}
+    {% endif %}
+    {% if menu.featureWidgets is defined and menu.featureWidgets is not empty %}
+        {% render controller("FrontendBundle:WebsiteWidget:featureMobileWidget",{'globalOption':globalOption.id, 'menu': menu.id,'position':'mobile'}) %}
+    {% endif %}
+    <!--//welcome-->
 {% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@FrontendBundle/Resources/public/template/mobile/js/common.js'
+    '@FrontendBundle/Resources/public/template/mobile/js/page.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 
 
 

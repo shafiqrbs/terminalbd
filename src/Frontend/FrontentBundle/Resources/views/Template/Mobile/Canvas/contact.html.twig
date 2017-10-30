@@ -1,6 +1,6 @@
 {% extends ':frontend/template/mobile:ecommerce-base.html.twig' %}
 {% block body %}
-    <section class="">
+    <section class="container-section">
         {% if globalOption.contactPage.latitude is not empty and globalOption.contactPage.longitude is not empty %}
             <div id="gmap_canvas" class="gmap">
                 <div class="Lat">{{ globalOption.contactPage.latitude }}</div>
