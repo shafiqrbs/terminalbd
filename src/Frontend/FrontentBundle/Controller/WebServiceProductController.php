@@ -66,7 +66,7 @@ class WebServiceProductController extends Controller
 
             $data = $_REQUEST;
             $ecommerce = $globalOption->getEcommerceConfig();
-            $limit = !empty($data['limit'])  ? $data['limit'] : 2;
+            $limit = !empty($data['limit'])  ? $data['limit'] : 20;
             $inventory = $globalOption->getInventoryConfig();
             $entities = $this->getDoctrine()->getRepository('InventoryBundle:PurchaseVendorItem')->findFrontendProductWithSearch($inventory,$data);
             $pagination = $this->paginate($entities, $limit,$globalOption->getTemplateCustomize()->getPagination());

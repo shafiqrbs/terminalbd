@@ -75,12 +75,15 @@
                     <span class="fa fa-ellipsis-v" aria-hidden="true"></span>
                 </div>
                 <div class="menu-notify box-link">
-                    <div class="text-left">{{ app.user }}</div>
                     <ul class="social-links">
-                        <li><a href="javascript:" class="register-btn"><i class="fa fa-user"></i></a></li>
-                        <li><a href="javascript:" class="login-preview"><i class="fa fa-lock"></i></a></li>
-                        <li><a href="javascript:" class="cart-preview"><i class="fa fa-shopping-cart"></i></a></li>
+                        <li><button type="button" class="btn btn-sm btn-success register-btn"> Sign Up <span class="glyphicon glyphicon-user"></span></button></li>
+                        {% if app.user is not empty   %}
+                        <li><button onclick="window.location.href='/logout'" class="btn btn-sm btn-danger"> {{ app.user }} <span class="fa fa-sign-in"></span></button></li>
+                        {% else %}
+                        <li><button type="button" class="btn btn-sm btn-warning login-preview"> Login <span class="glyphicon glyphicon-lock"></span></button></li>
+                        {% endif %}
                     </ul>
+
                 </div>
                 <div id="login-signip">
                     {% render controller("FrontendBundle:TemplateWidget:modalLogin",{'globalOption':globalOption.id}) %}
@@ -161,7 +164,44 @@
 <script type="text/javascript">
     $(document).ready(function () {
         {% block documentready %}{% endblock %}
+        window.showPrompt = function() {
+            do {
+                var mobile = prompt("Please enter your mobile no");
+            }
+            while(mobile.length == 11);
+            var url = '/reset-customer-password';
+            $.get(url,{'mobile':mobile},function(data) {
+                alert(data);
+            });
+        }
+
+        var theButton = document.getElementById("prompt");
+
+        theButton.onclick = function () {
+            var thePrompt = window.open("", "", "widht=500");
+            var theHTML = "";
+
+            theHTML += "<p>The server http://localhost:8888 requires a username and password. The server says: These are restricted files, please authenticate yourself.</p>";
+            theHTML += "<br/>";
+            theHTML += "Username: <input type='text' id='theUser' placeholder='Enter Username...'/>";
+            theHTML += "<br />";
+            theHTML += "Password: <input type='text' id='thePass' placeholder='Enter Password...'/>";
+            theHTML += "<br />";
+            theHTML += "<input type='button' value='OK' id='authOK'/>";
+            thePrompt.document.body.innerHTML = theHTML;
+
+            var theUser = thePrompt.document.getElementById("theUser").value;
+            var thePass = thePrompt.document.getElementById("thePass").value;
+            thePrompt.document.getElementById("authOK").onclick = function () {
+                doAuthentication(theUser, thePass);
+            }
+        }
+
+        function doAuthentication(user, pass) {
+            //do authentication
+        }
     });
+
 </script>
 
 <style>

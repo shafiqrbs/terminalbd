@@ -258,6 +258,27 @@ class WebServiceCustomerController extends Controller
         );
     }
 
+    public function customerForgetPasswordAction()
+    {
+
+        $mobile =  $_REQUEST['mobile'];
+        $user = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('username' => $mobile));
+        if($user){
+            $a = mt_rand(1000,9999);
+            $user->setPlainPassword($a);
+            $this->get('fos_user.user_manager')->updateUser($user);
+            $this->get('session')->getFlashBag()->add(
+                'success',"Password reset successfully"
+            );
+            $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,'123456'));
+            echo 'Your reset password is '.$a;
+        }else{
+            echo 'This mobile '.$mobile.' is not correct,Please try another mobile no.';
+        }
+        exit;
+    }
+
 
 
 }

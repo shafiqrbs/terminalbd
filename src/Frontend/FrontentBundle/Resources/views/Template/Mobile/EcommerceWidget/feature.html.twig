@@ -1,13 +1,3 @@
-{% if widget.jsFeature is empty %}
-<div class="details-grid">
-    <div class="details-shade">
-        <div class="details-right">
-            {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
-            <h3>Welcome</h3>
-        </div>
-    </div>
-</div>
-{% endif %}
 {% if widget.jsFeature is not empty and widget.jsFeature.slug == 'slider' %}
     <div id="main-carousel"  class="carousel slide carousel-fade" data-ride="carousel" data-match-height="slider-height">
         <!-- Indicators -->

@@ -1,15 +1,17 @@
 {% extends ':frontend/template/mobile:ecommerce-base.html.twig' %}
 {% block body %}
-    <!--/welcome-->
-    <div class="welcome">
-        {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
-            <section>
-                {% render controller("FrontendBundle:EcommerceWidget:ecommerceMobileWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'mobile'}) %}
-            </section>
-        {% endif %}
-        <div class="clearfix"></div>
+<div class="product-container">
+    <div class="container" id="product-section">
+        {% render controller("FrontendBundle:EcommerceWidget:sidebarTemplateProductFilter",{'globalOption':globalOption.id,'searchForm':searchForm}) %}
+        <div class="row" id="showCartItem"></div>
     </div>
-    <!--//welcome-->
+    <div class="clearfix"></div>
+    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
+        <section>
+            {% render controller("FrontendBundle:EcommerceWidget:featureTemplateMobileWidget",{'globalOption':globalOption.id,'menu': menu.id,'position':'mobile'}) %}
+        </section>
+    {% endif %}
+ </div>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

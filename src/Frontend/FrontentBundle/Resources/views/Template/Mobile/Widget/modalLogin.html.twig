@@ -1,4 +1,4 @@
-<div id="loginModal" class="modal-content  col-xs-12 col-md-12" style="background: #222; display: none">
+<div id="loginModal" class="modal-content  col-xs-12 col-md-12" style="background: #222;">
     <form class="register" id="commentform" action="{{ path("fos_user_security_check") }}" method="post" novalidate="novalidate">
         <div class="modal-header">
             <h4 class="modal-title">LOGIN</h4>
@@ -34,7 +34,7 @@
             <div class="" style="text-align: left">
                 <div class="forget-password">
                     <h4>Forgot your password ?</h4>
-                    <span>no worries, click <a href="javascript:" id="forget-password">here</a>to reset your password.</span>
+                    <span>No worries, click <a href="javascript:" onclick="showPrompt();" id="forget-password" data-url="{{ path(globalOption.subDomain ~ '_webservice_reset_password') }}"> here </a>to reset your password.</span>
                 </div>
             </div>
         </div>

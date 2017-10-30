@@ -449,8 +449,7 @@ class EcommerceWidgetController extends Controller
     {
 
         $features                    = $this->getDoctrine()->getRepository('SettingAppearanceBundle:FeatureWidget')->findBy(array('globalOption' => $globalOption, 'widgetFor'=>'e-commerce','menu' => $menu,'position' => $position ),array('sorting'=>'ASC'));
-
-        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/widget.html.twig', array(
+        return $this->render('@Frontend/Template/Mobile/EcommerceWidget/feature.html.twig', array(
             'features'                  => $features,
             'globalOption'            => $globalOption,
         ));
@@ -458,7 +457,6 @@ class EcommerceWidgetController extends Controller
 
     public function sliderMobileFeatureWidgetAction(GlobalOption $globalOption , FeatureWidget $widget)
     {
-
         return $this->render('@Frontend/Template/Mobile/EcommerceWidget/feature.html.twig', array(
             'widget'                => $widget,
             'globalOption'          => $globalOption

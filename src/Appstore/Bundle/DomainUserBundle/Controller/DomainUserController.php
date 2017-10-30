@@ -314,8 +314,8 @@ class DomainUserController extends Controller
         $dispatcher = $this->container->get('event_dispatcher');
         $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,'123456'));
         return $this->redirect($this->generateUrl('domain_edit', array('id' => $user->getId())));
-
-
     }
+
+  
 
 }

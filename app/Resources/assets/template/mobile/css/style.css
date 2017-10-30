@@ -92,6 +92,12 @@ h1,h2,h3,h4,h5,h6{
     top: 64px;
     overflow: hidden;
 }
+
+.product-container{
+    margin-top: 47px;
+    margin-bottom:50px
+}
+
 .frame-border{
     width: 350px;
     height: 630px;

@@ -82,6 +82,13 @@ webservice_product_sub_item:
     options:
            expose: true
 
+webservice_reset_password:
+    path:     /reset-customer-password
+    defaults: { _controller: FrontendBundle:WebServiceCustomer:customerForgetPassword}
+    methods:  GET
+    options:
+           expose: true
+
 webservice_product_sub_item_cart:
     path:     /sub-item/{product}
     defaults: { _controller: FrontendBundle:WebServiceProduct:productSubProductCart }
