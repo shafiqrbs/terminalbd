@@ -226,7 +226,7 @@ $(document).on( "click", ".cartSubmit", function(e){
         data:data,
         beforeSend: function () {
             $('.loader-double').fadeIn(5000).addClass('is-active');
-            $('.cartSubmit').attr("disabled", true).html('<i class="fa fa-shopping-cart"></i> '+qnt+' in Basket');
+            $('.cartSubmit').html('<i class="fa fa-shopping-cart"></i> '+qnt+' in Basket');
         },
         success: function(response){
             $('.loader-double').fadeOut(5000).removeClass('is-active');
@@ -343,7 +343,7 @@ $(document).on( "click", "#productBuy", function(e){
             $('.loader-curtain').fadeIn(5000).addClass('is-active');
             $.post(url,data).done(function(response) {
                 obj = JSON.parse(response);
-                $('#productBuy').addClass('shopping-cart').attr("disabled", true).html('<i class="fa fa-shopping-cart"></i> '+qnt+' in Basket');
+                $('#productBuy').addClass('shopping-cart').html('<i class="fa fa-shopping-cart"></i> '+qnt+' in Basket');
                 $('.totalItem').html(obj['totalItem']);
                 $('.totalAmount').html(obj['cartTotal']);
                 $('.dropdown-cart').html(obj['salesItem']);
@@ -378,7 +378,7 @@ $(document).on( "click", ".product-buy", function(e){
             $('.loader-curtain').fadeIn(5000).addClass('is-active');
             $.get(url,{ size:size, color: color,productImg:productImg } ).done(function(response) {
                 obj = JSON.parse(response);
-                $('#buy-'+dataId).addClass('shopping-cart').attr("disabled", true).html('<i class="fa fa-shopping-cart"></i> 1 in Basket');
+                $('#buy-'+dataId).addClass('shopping-cart').html('<i class="fa fa-shopping-cart"></i> 1 in Basket');
                 $('.totalItem').html(obj['totalItem']);
                 $('.totalAmount').html(obj['cartTotal']);
                 $('.dropdown-cart').html(obj['salesItem']);
@@ -470,16 +470,6 @@ $(document).on( "change", ".btn-number", function(e){
     }
 
 
-});
-
-
-$("div.list-group > a").click(function(e) {
-    e.preventDefault();
-    $(this).siblings('a.active').removeClass("active");
-    $(this).addClass("active");
-    var index = $(this).index();
-    $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
-    $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
 });
 
 

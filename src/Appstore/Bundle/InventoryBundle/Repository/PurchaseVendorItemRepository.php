@@ -225,6 +225,7 @@ class PurchaseVendorItemRepository extends EntityRepository
         $db->from('InventoryBundle:PurchaseVendorItem','e');
         $db->where($db->expr()->andX(
             $db->expr()->eq('e.isWeb',1),
+            $db->expr()->eq('e.status',1),
             $db->expr()->eq('e.inventoryConfig',$entity->getInventoryConfig()->getId())
         ));
         $db->setMaxResults(1);

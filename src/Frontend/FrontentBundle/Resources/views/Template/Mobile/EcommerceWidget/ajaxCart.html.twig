@@ -34,7 +34,7 @@
                                                     <span class="glyphicon glyphicon-minus"></span>
                                            </button>
                                         </span>
-                            <input type="text" name="quantity" id="quantity-{{ product.rowid }}"
+                            <input type="text" readonly="readonly" name="quantity" id="quantity-{{ product.rowid }}"
                                    class="form-control btn-number-cart" value="{{ product.quantity }}"
                                    min="1" max="{{ product.maxQuantity }}">
 

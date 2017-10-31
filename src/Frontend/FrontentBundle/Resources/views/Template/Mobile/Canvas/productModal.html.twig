@@ -7,7 +7,7 @@
                     <div data-match-height="image-carousel" class='item active'>
                         <img  id="zoom" src="{% if product.webPath is not empty  %}{{ image(product.webPath).resize(400,400) }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).resize() }}{% endif %}"  data-zoom-image="{% if product.webPath is not empty  %}{{ image(product.webPath).resize() }}{% elseif product.masterItem.webPath is defined and product.masterItem.webPath is not empty %}{{ image(product.masterItem.webPath).resize() }}{% endif %}"/>
                     </div>
-                    {% if(product.itemGalleries) %}
+                    {% if product.itemGalleries is not empty %}
                         {% for photo in product.itemGalleries|slice(0,5) %}
                             <div data-match-height="image-carousel" class='item'>
                                 <img class="img-responsive" src='{{ image(photo.getAbsolutePath(product.inventoryConfig.globalOption.id,product.id)).resize(400,400) }}' alt=''  data-zoom-image="{{ image(photo.getAbsolutePath(product.inventoryConfig.globalOption.id,product.id)).resize() }}"/>
@@ -16,7 +16,7 @@
                     {% endif %}
                 </div>
                 <!-- sag sol -->
-                {% if(product.itemGalleries) %}
+                {% if product.itemGalleries is not empty %}
                 <a class='left custom-carousel-control' href='#carousel-custom-{{ product.id }}' data-slide='prev'>
                     <span class='glyphicon glyphicon-chevron-left'></span>
                 </a>
@@ -117,25 +117,43 @@
         <div class="row">
             {% if  globalOption.ecommerceConfig.isSize == 1 and product.goodsItems is defined %}
                 <div class="col-xs-8 col-md-8" >
-                    <div class="form-group">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-list-alt"></span></span>
-                            <select class="input-selector item-select"  name="subItem" id="subItem" >
-                                {% for goodsItem in  product.goodsItems  %}
-                                    <option {% if subItem.id == goodsItem.id %} selected="selected" {% endif %} value="{{ goodsItem.id }}" > {% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% else %} Default {% endif %}{% if goodsItem.productUnit is not empty %} - {{ goodsItem.productUnit.name }}{% endif %}</option>
-                                {% endfor %}
-                            </select>
+                    {% if product.goodsItems is not empty and product.goodsItems|length > 1 %}
+                        <div class="form-group">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-list-alt"></span></span>
+                                <select class="input-selector item-select"  name="subItem" id="subItem" >
+                                    {% for goodsItem in  product.goodsItems  %}
+                                        <option {% if subItem.id == goodsItem.id %} selected="selected" {% endif %} value="{{ goodsItem.id }}" > {% if goodsItem.size is not empty %}{{ goodsItem.size.name }}{% else %} Default {% endif %}{% if goodsItem.productUnit is not empty %} - {{ goodsItem.productUnit.name }}{% endif %}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                    {% elseif  product.goodsItems is not empty and subItem.size is not empty and subItem.size.name != 'Default' %}
+                            <div class="form-group">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon" id="sizing-addon3"><span class="glyphicon glyphicon-list-alt"></span></span>
+                                    <span class="product-size-color">{{ product.size.name }} {% if product.productUnit is not empty %} - {{ product.productUnit.name }}{% endif %}</span>
+                                </div>
+                            </div>
+                    {% endif %}
                 </div>
             {% endif %}
             {% if globalOption.ecommerceConfig.isColor == 1 and subItem.colors is not empty and subItem.colors is defined %}
                 <div class="col-xs-4 col-md-4 col-sm-cus-4">
-                    <select class="input-selector item-select" name="color" id="color" >
+                    {% if subItem.colors is not empty and subItem.colors|length > 1 %}
+                        <select class="input-selector item-select" name="color" id="color" >
+                            {% for color in  subItem.colors %}
+                                <option  value="{{ color.id }}" >{{ color.name }}</option>
+                            {% endfor %}
+                        </select>
+                    {% elseif subItem.colors is not empty %}
                         {% for color in  subItem.colors %}
-                            <option  value="{{ color.id }}" >{{ color.name }}</option>
+                            {% if color.name != 'Default' %}
+                                <span class="product-size-color">{{ color.name }}</span>
+                            {% endif %}
                         {% endfor %}
-                    </select>
+                    {% endif %}
+
                 </div>
             {% endif %}
 
@@ -146,7 +164,7 @@
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-sm btn-danger btn-number" data-type="minus" data-field="quantity"><span class="glyphicon glyphicon-minus"></span></button>
                                 </span>
-                    <input type="text" name="quantity" id="quantity" class="form-control input-number"  value="1" min="1" max="{{ subItem.quantity }}">
+                    <input type="text" readonly="readonly" name="quantity" id="quantity" class="form-control input-number"  value="1" min="1" max="{{ subItem.quantity }}">
                                 <span class="input-group-btn">
                                       <button type="button" class="btn btn-sm btn-success btn-number" data-type="plus" data-field="quantity"><span class="glyphicon glyphicon-plus"></span></button>
                                 </span>

@@ -420,7 +420,7 @@ class WebServiceProductController extends Controller
         $subItem ='';
         }else{
         $subItem = isset($_REQUEST['subItem']) ? $_REQUEST['subItem'] : $masterItem->getId() ;
-        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem'=>$item,'id'=>$subItem));
+        $subItem = $em->getRepository('InventoryBundle:GoodsItem')->findOneBy(array('purchaseVendorItem' => $item,'id' => $subItem));
         }
         if(!empty($globalOption)){
 

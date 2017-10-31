@@ -103,7 +103,9 @@
                                         <div class="row ">
                                             {% if globalOption.ecommerceConfig.isSize == 1 and product.size is not empty and product.goodsItems|length == 1  %}
                                                 <div class="{% if product.itemColors is empty or  product.itemColors|length > 1  %} col-xs-12 col-lg-12 {% else %} col-xs-6 col-lg-6 {% endif %} text-center product-attr">
-                                                   {{ product.size.name }}{% if product.productUnit is not empty %} - {{ product.productUnit.name }}{% endif %}
+                                                   {% if product.size.name != 'Default' %}
+                                                    {{ product.size.name }}{% if product.productUnit is not empty %} - {{ product.productUnit.name }}{% endif %}
+                                                   {% endif %}
                                                 </div>
                                             {% endif %}
                                             {% if globalOption.ecommerceConfig.isColor == 1 and product.itemColors is not empty and  product.itemColors|length == 1 %}
