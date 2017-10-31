@@ -145,8 +145,7 @@ class EcommerceWidgetController extends Controller
             if ($detect->isMobile() || $detect->isTablet()) {
                 $theme = 'Template/Mobile/EcommerceWidget';
             } else {
-               // $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
-                $theme = 'Template/Mobile/EcommerceWidget';
+                $theme = 'Template/Desktop/'.$themeName.'/EcommerceWidget';
             }
 
             $inventoryCat = $this->getDoctrine()->getRepository('InventoryBundle:ItemTypeGrouping')->findOneBy(array('inventoryConfig' => $inventory));

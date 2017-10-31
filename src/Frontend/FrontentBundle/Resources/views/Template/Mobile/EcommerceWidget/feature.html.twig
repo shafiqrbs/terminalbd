@@ -2,7 +2,7 @@
     <div id="main-carousel"  class="carousel slide carousel-fade" data-ride="carousel" data-match-height="slider-height">
         <!-- Indicators -->
         <!-- Wrapper for slides -->
-        <div class="carousel-inner" >
+        <div class="carousel-inner" style="height: 320px!important;" >
             <a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}" id="mobile-logo">
                 {% if globalOption.templateCustomize.webPath('logo') is not empty %} <img src="{{ image(globalOption.templateCustomize.webPath('logo')).resize(120) }}" alt=" ">{% endif %}
             </a>

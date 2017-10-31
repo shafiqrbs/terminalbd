@@ -142,6 +142,9 @@ $('body').on( "click", "#filter", function(e){
 $('body').on( "click", ".showCartItem", function(e){
     $.ajax({url:'/cart/product-details'}).done(function(content){
         $("#showCartItem").html(content).slideDown("slow");
+        $('html, body').animate({
+            'scrollTop' : $("#showCartItem").position().top
+        }, 1000).scrollIntoView(true);
     });
 });
 $('body').on( "click", ".hideCartItem", function(e){

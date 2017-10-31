@@ -125,6 +125,7 @@ div.treeview, .treeview ul {
 }
 .carousel-inner {
     position: relative;
+    height: auto!important;
 }
 .carousel-outer .custom-carousel-control{
     position: absolute;
@@ -344,8 +345,6 @@ div.treeview, .treeview ul {
     color: #999;
     font-weight: normal;
 }
-
-
 
 .product-discount{
     position: absolute;
