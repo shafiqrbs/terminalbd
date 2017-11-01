@@ -45,7 +45,7 @@ var InventorySales = function(sales) {
         $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
     });
 
-    $('body').addClass('page-sidebar-closed');
+
     $( "#searchToggole" ).click(function() {
         $( "#search-product" ).slideToggle( "slow" );
     });

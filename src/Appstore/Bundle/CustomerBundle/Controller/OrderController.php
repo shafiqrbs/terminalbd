@@ -56,7 +56,7 @@ class OrderController extends Controller
      */
     public function cartToOrderAction($shop , Request $request)
     {
-        $couponCode = $_REQUEST['couponCode'];
+        $couponCode = isset($_REQUEST['couponCode']) and $_REQUEST['couponCode'] !='' ? $_REQUEST['couponCode']:'';
         $em = $this->getDoctrine()->getManager();
         $cart = new Cart($request->getSession());
         $user = $this->getUser();

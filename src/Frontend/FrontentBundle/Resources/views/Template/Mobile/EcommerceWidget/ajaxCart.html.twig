@@ -78,9 +78,8 @@
                                     &nbsp;<span class="totalAmount">{{ cart.total }}</span></strong></span>
         </div>
         <div class="bottom">
-                            <span class="dd-span pull-left"><a
-                                        href="{{ path(globalOption.subDomain ~ '_webservice_product_cart_details') }}"
-                                        class="btn btn-success"><span class="glyphicon glyphicon-shopping-cart"></span> View Buy</a></span>
+                        <span class="dd-span pull-right"><a  href="javascript:"
+                                        class="btn btn-success handle login-preview"><span class="glyphicon glyphicon-shopping-cart"></span> Login & Take Order</a></span>
                         <span class="dd-span pull-right">
                         {% if app.user %}
                             <a href="{{ path('order_checkout',{'shop':globalOption.uniqueCode}) }}" type="button"

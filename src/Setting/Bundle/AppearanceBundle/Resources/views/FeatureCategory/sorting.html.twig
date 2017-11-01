@@ -73,7 +73,7 @@
 {% block documentready %}
 
     {{ parent() }}
-    $('body').addClass('page-sidebar-closed');
+
     NestSortable.init();
 
     $('#serialize').click(function(){

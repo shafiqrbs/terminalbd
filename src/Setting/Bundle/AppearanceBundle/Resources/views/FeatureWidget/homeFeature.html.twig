@@ -139,7 +139,7 @@
 {% block documentready %}
 
     {{ parent() }}
-    $('body').addClass('page-sidebar-closed');
+
     $(function() {
         $('.sortable').sortable();
         $('.handles').sortable({

@@ -336,11 +336,12 @@ div.treeview, .treeview ul {
 .product-size-color{
     line-height: 34px;
     font-weight: bold;
-    padding-left: 10px;
+    padding-left: 15px;
     border: 1px solid #ddd;
     height: 34px;
     display: inline-block;
     width: 100%;
+    text-align: left;
 }
 
 .product-price strike{

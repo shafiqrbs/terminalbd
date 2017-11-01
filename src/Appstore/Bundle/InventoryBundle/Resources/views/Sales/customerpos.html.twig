@@ -489,7 +489,7 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    $('body').addClass('page-sidebar-closed');
+
     $( "#search-product" ).show();
     $( "#searchToggole" ).click(function() {
         $( "#search-product" ).slideToggle( "slow" );

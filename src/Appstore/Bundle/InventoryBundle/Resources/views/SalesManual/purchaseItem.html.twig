@@ -160,7 +160,7 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    $('body').addClass('page-sidebar-closed');
+
     var itemArr = $.cookie('items') ? $.cookie('items').split(',') : [];
 
     $('body').on('change', 'input.item', function(el) {

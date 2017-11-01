@@ -580,6 +580,6 @@
     {{ parent() }}
     EditableInit();
     NestSortable.init();
-    $('body').addClass('page-sidebar-closed');
+
     InventoryItemEditPage({{ entity.id ? entity.id : 0 }});
 {% endblock %}
