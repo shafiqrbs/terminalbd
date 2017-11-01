@@ -6,4 +6,3 @@ imports:
     - { resource: bundles/knp_menu.yml }
     - { resource: bundles/doctrine.yml }
     - { resource: bundles/stof_doctrine.yml }
-    - { resource: bundles/sylius.yml }

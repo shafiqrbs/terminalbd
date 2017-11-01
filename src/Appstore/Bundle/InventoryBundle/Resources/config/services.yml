@@ -3,11 +3,6 @@ services:
 #        class: Appstore\Bundle\InventoryBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
 
-    app.datatable.stockitem:
-        class: Appstore\Bundle\InventoryBundle\Datatables\StockItemDatatable
-        tags:
-            - { name: sg.datatable.view }
-
     appstore.sales.event.listener:
         class: Appstore\Bundle\InventoryBundle\EventListener\SalesListener
         tags:

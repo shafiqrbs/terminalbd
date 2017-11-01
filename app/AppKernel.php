@@ -15,11 +15,6 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Divi\AjaxLoginBundle\DiviAjaxLoginBundle(),
-            new Sylius\Bundle\ResourceBundle\SyliusResourceBundle(),
-            new Sylius\Bundle\TranslationBundle\SyliusTranslationBundle(),
-            new Sylius\Bundle\MoneyBundle\SyliusMoneyBundle(),
-            new Sylius\Bundle\OrderBundle\SyliusOrderBundle(),
-            new Sylius\Bundle\CartBundle\SyliusCartBundle(),
 
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
@@ -37,7 +32,6 @@ class AppKernel extends Kernel
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
 
             new Core\UserBundle\UserBundle(),
-            new Slik\DompdfBundle\SlikDompdfBundle(),
             new Setting\Bundle\LocationBundle\SettingLocationBundle(),
             new Setting\Bundle\MediaBundle\SettingMediaBundle(),
             new Setting\Bundle\AppearanceBundle\SettingAppearanceBundle(),
@@ -54,8 +48,6 @@ class AppKernel extends Kernel
             new Setting\Bundle\AdvertismentBundle\SettingAdvertismentBundle(),
             new EightPoints\Bundle\GuzzleBundle\GuzzleBundle(),
             new Bindu\BinduBundle\BinduBundle(),
-            new Sg\DatatablesBundle\SgDatatablesBundle(),
-            new Hackzilla\BarcodeBundle\HackzillaBarcodeBundle(),
             new Appstore\Bundle\EcommerceBundle\EcommerceBundle(),
             new Appstore\Bundle\InventoryBundle\InventoryBundle(),
             new Appstore\Bundle\BillingBundle\AppstoreBillingBundle(),

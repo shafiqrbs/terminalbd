@@ -124,7 +124,7 @@ class Sales
 
 
         /**
-         * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\paymentCard", inversedBy="sales" )
+         * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PaymentCard", inversedBy="sales" )
          **/
         private  $paymentCard;
 

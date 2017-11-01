@@ -3,7 +3,6 @@
 namespace Appstore\Bundle\InventoryBundle\Entity;
 
 use Appstore\Bundle\EcommerceBundle\Entity\OrderItem;
-use Appstore\Bundle\EcommerceBundle\Entity\OrderReturnItem;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -47,10 +46,6 @@ class StockItem
      */
     protected $orderItem;
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderReturnItem", inversedBy="stockItems")
-     */
-    protected $orderReturnItem;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseReturnItem", inversedBy="stockItems")
@@ -505,22 +500,6 @@ class StockItem
     public function setOrderItem($orderItem)
     {
         $this->orderItem = $orderItem;
-    }
-
-    /**
-     * @return OrderReturnItem
-     */
-    public function getOrderReturnItem()
-    {
-        return $this->orderReturnItem;
-    }
-
-    /**
-     * @param OrderReturnItem $orderReturnItem
-     */
-    public function setOrderReturnItem($orderReturnItem)
-    {
-        $this->orderReturnItem = $orderReturnItem;
     }
 
     /**

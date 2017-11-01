@@ -69,7 +69,7 @@ class Order
     private  $accountOnlineOrder;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Coupon", inversedBy="order" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\Coupon", inversedBy="orders" )
      **/
     private  $coupon;
 
