@@ -43,8 +43,7 @@
         "hackzilla/barcode-bundle": "~2.0",
         "codeitnowin/barcode": "^1.0",
         "mike42/escpos-php": "dev-master",
-        "divi/ajax-login-bundle": "dev-master",
-        "moltin/cart": "dev-master"
+        "divi/ajax-login-bundle": "dev-master"
 
     },
     "scripts": {
@@ -72,9 +71,6 @@
         "symfony-web-dir": "web",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
-        },
-        "branch-alias": {
-            "dev-master": "2.4-dev"
         }
     }
 }
