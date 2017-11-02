@@ -4,6 +4,7 @@
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
+        "files": ["src/Symfony/Component/Validator/Constraints/File.php"],
         "psr-0": {
             "": "src/"
         }

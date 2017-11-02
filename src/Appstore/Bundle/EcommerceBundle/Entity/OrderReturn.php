@@ -43,13 +43,6 @@ class OrderReturn
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\OrderReturnItem", mappedBy="orderReturn"  , cascade={"persist", "remove"} )
-     **/
-    private  $returnItems;
-
-
-
-    /**
      * @var string
      *
      * @ORM\Column(name="invoice", type="string", length=255 , nullable = true)
