@@ -1,7 +1,8 @@
 <?php
 
 namespace Setting\Bundle\ToolBundle\Repository;
-use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityRepository;
+
 
 /**
  * ThemeRepository

@@ -17,13 +17,31 @@ class InvoiceTransactionRepository extends EntityRepository
 {
     public function insertTransaction(Invoice $invoice, $data)
     {
-        if ($data['payment'] > 0 || $data['discount'] > 0) {
 
+        if ($data['discount'] > 0) {
+
+            $process = $data['process'];
+            $entity = New InvoiceTransaction();
+            $existDiscount = $this->_em->getRepository('HospitalBundle:InvoiceTransaction')->findOneBy(array('process'=> $process));
+            if($existDiscount){
+                $entity = $existDiscount;
+            }
+            $entity->setHmsInvoice($invoice);
+            $entity->setProcess($process);
+            $entity->setDiscount($data['discount']);
+            $this->_em->persist($entity);
+            $this->_em->flush($entity);
+
+        }
+
+        if($data['payment'] > 0){
+
+            $process = $data['process'];
             $entity = New InvoiceTransaction();
             $entity->setHmsInvoice($invoice);
+            $entity->setProcess($process);
             $entity->setPayment($data['payment']);
             $entity->setTransactionMethod($invoice->getTransactionMethod());
-            $entity->setDiscount($data['discount']);
             $entity->setAccountBank($invoice->getAccountBank());
             $entity->setPaymentCard($invoice->getPaymentCard());
             $entity->setCardNo($invoice->getCardNo());
@@ -38,11 +56,10 @@ class InvoiceTransactionRepository extends EntityRepository
             }
             $this->_em->persist($entity);
             $this->_em->flush($entity);
-        }
-        if ($data['payment'] > 0) {
             $accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountInvoice($entity);
             $this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountInvoice);
         }
+
     }
 
     public function hmsSalesTransactionReverse(Invoice $entity)
@@ -116,10 +133,14 @@ class InvoiceTransactionRepository extends EntityRepository
         foreach ($entities as $transaction) {
 
             $date = $transaction->getUpdated()->format('d-m-Y');
+            $transactionMethod ='';
+            if(!empty($transaction->getTransactionMethod())){
+                $transactionMethod = $transaction->getTransactionMethod()->getName();
+            }
             $data .= '<tr>';
             $data .= '<td class="numeric" >' . $i . '</td>';
             $data .= '<td class="numeric" >' . $date . '</td>';
-            $data .= '<td class="numeric" >' . $transaction->getTransactionMethod()->getName() . '</td>';
+            $data .= '<td class="numeric" >' . $transactionMethod. '</td>';
             $data .= '<td class="numeric" >' . $transaction->getDiscount() . '</td>';
             $data .= '<td class="numeric" >' . $transaction->getVat() . '</td>';
             $data .= '<td class="numeric" >' . $transaction->getPayment() . '</td>';

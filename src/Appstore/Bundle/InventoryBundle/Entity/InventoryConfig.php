@@ -354,7 +354,7 @@ class InventoryConfig
      *
      * @ORM\Column(name="barcodeBrandVendor", type="smallint",  nullable=true)
      */
-    private $barcodeBrandVendor;
+    private $barcodeBrandVendor = 0;
 
     /**
      * @var string

@@ -2,7 +2,7 @@
 
 namespace Setting\Bundle\ToolBundle\Form;
 
-use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;

@@ -15,10 +15,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('hms_invoice') }}">Invoice</a>
+                        <a href="{{ path('hms_invoice_particular') }}">Collection & Report</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Patient</a></li>
+                    <li><a href="#">Manage Collection & Report</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>c
                         {{ "now"|date("d-F-Y") }}
@@ -34,7 +34,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Invoice Details</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Report</div>
 
                         <div class="actions">
                             <div class="btn-group">
@@ -43,9 +43,7 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('hms_invoice_new') }}"><i class="icon-plus-sign"></i>&nbsp;Add Invoice</a></li>
-                                    <li><a href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-
+                                    <li><a href="{{ path('hms_invoice_particular') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
                         </div>

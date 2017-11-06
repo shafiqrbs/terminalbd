@@ -120,6 +120,7 @@ class CategoryRepository extends MaterializedPathRepository
     public function printTree( $category , $spacing = '--', $user_tree_array = '' ) {
 
         $em = $this->_em;
+        $user_tree_array = array();
         foreach ($category as $row )
         {
             $user_tree_array[] = array("id" => $row->getId(), "name" => $spacing . $row->getName());

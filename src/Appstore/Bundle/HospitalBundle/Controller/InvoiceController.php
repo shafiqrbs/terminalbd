@@ -202,11 +202,8 @@ class InvoiceController extends Controller
         $entity = $em->getRepository('HospitalBundle:Invoice')->find($invoice);
         $total = ($entity->getSubTotal() - $discount);
         if($total > $discount && $discount > 0 ){
-            $em->persist($entity);
-            $em->flush();
-
             $discount = $request->request->get('discount');
-            $transactionData = array('payment' => 0, 'discount' => $discount);
+            $transactionData = array('process'=> $entity->getProcess(),'payment' => 0, 'discount' => $discount);
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity, $transactionData);
             $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
         }
@@ -407,7 +404,7 @@ class InvoiceController extends Controller
             $entity->setProcess($process);
             $em->flush();
             if($payment > 0 || $discount > 0) {
-                $transactionData = array('payment' => $payment, 'discount' => $discount);
+                $transactionData = array('process'=> $entity->getProcess(),'payment' => $payment, 'discount' => $discount);
                 $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity,$transactionData);
                 $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
             }

@@ -3,6 +3,8 @@
 namespace Core\UserBundle\Controller;
 
 use Doctrine\Common\Util\Debug;
+use Setting\Bundle\ToolBundle\Entity\AppModule;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -103,12 +105,21 @@ class DefaultController extends Controller
     public function domainAction()
     {
 
-        $user = $this->getUser();
-        $em = $this->get('doctrine.orm.entity_manager');
-        $todaySalesOverview = $em->getRepository('InventoryBundle:Sales')->todaySalesOverview($this->getUser());
+        /* @var GlobalOption $globalOption */
+        $globalOption = $this->getUser()->getGlobalOption();
+        $modules = $globalOption->getSiteSetting()->getAppModules();
+        $apps = array();
+        if (!empty($globalOption ->getSiteSetting()) and !empty($modules)) {
+            /* @var AppModule $mod */
+            foreach ($modules as $mod) {
+                if (!empty($mod->getModuleClass())) {
+                    $apps[] = $mod->getSlug();
+                }
+            }
+        }
         return $this->render('UserBundle:Default:domain.html.twig', array(
-            'user' => $user,
-            'todaySalesOverview' => $todaySalesOverview
+            'globalOption' => $globalOption,
+             'apps' => $apps
         ));
     }
 
@@ -140,7 +151,7 @@ class DefaultController extends Controller
 
     public function vendorAction()
     {
-        exit;
+
         $user = $this->getUser();
         $em = $this->get('doctrine.orm.entity_manager');
         return $this->render('UserBundle:Default:domain.html.twig', array(

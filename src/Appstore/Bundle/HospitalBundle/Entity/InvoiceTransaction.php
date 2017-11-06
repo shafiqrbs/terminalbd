@@ -94,15 +94,12 @@ class InvoiceTransaction
      */
     private $transactionId;
 
-
-
     /**
      * @var string
      *
      * @ORM\Column(name="discount", type="decimal", nullable=true)
      */
-    private $discount;
-
+    private $discount = 0;
 
     /**
      * @var string
@@ -119,6 +116,12 @@ class InvoiceTransaction
      */
     private $vat;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="process", type="string", length=50, nullable=true)
+     */
+    private $process ='Created';
 
     /**
      * @var string
@@ -425,6 +428,22 @@ class InvoiceTransaction
     public function setHmsInvoice($hmsInvoice)
     {
         $this->hmsInvoice = $hmsInvoice;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProcess()
+    {
+        return $this->process;
+    }
+
+    /**
+     * @param string $process
+     */
+    public function setProcess($process)
+    {
+        $this->process = $process;
     }
 
 

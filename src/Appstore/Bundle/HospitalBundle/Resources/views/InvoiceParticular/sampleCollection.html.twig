@@ -15,10 +15,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('hms_invoice') }}">Invoice</a>
+                        <a href="{{ path('hms_invoice_particular') }}">Collection & Report</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Patient</a></li>
+                    <li><a href="#">Manage Collection</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>c
                         {{ "now"|date("d-F-Y") }}
@@ -43,9 +43,7 @@
                                     <i class="icon-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('hms_invoice_new') }}"><i class="icon-plus-sign"></i>&nbsp;Add Invoice</a></li>
-                                    <li><a href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-
+                                    <li><a href="{{ path('hms_invoice_particular') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -109,10 +107,11 @@
                                                 <td class="numeric">
                                                     {% if item.particular.service.id == 1 and item.sampleCollectedBy is empty %}
                                                         <a class="btn mini blue confirm"  data-url="{{ path('hms_invoice_particular_collection_confirm',{'id':item.id}) }}" href="javascript:"><i class="icon-ok"></i>&nbsp;Confirm</a>
-                                                        <a target="_blank" class="btn mini purple"  href="{{ path('hms_invoice_particular_collection_barcode',{'id':item.id}) }}" ><i class="icon-barcode"></i> Tag Print</a>
                                                     {% elseif item.particular.service.id == 1 and item.process == 'Collected' %}
                                                         {{ item.collectionDate|date('d-m-Y h:i:s A') }}
+                                                        <a class="btn mini purple " href="{{ path('hms_invoice_particular_preparation', {'id': item.id}) }}"><i class="icon-retweet"></i>&nbsp;Preparation</a>
                                                     {% endif %}
+                                                    <a target="_blank" class="btn mini green"  href="{{ path('hms_invoice_particular_collection_barcode',{'id':item.id}) }}" ><i class="icon-barcode"></i> Tag Print</a>
                                                 </td>
                                             </tr>
                                             {% if item.particular.service.id == 1 %}

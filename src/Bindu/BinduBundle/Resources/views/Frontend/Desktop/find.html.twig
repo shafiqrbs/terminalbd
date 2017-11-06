@@ -52,7 +52,7 @@
                                                                 </a>
                                                             </li>
                                                             <li>
-                                                                <a class="last" href="{{ path(entity.subDomain~'_webservice_contact') }}" data-title="{% if  entity.location is defined and entity.location is not null  %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}">
+                                                                <a class="last" href="{{ path(entity.subDomain ~ '_webservice_contact',{'domain_name':entity.domain}) }}" data-title="{% if  entity.location is defined and entity.location is not null  %}{{ entity.location.name }},{{ entity.location.parent.name }}{% endif %}">
                                                                     <i class="fa fa-map-pin"></i>
                                                                 </a>
                                                             </li>

@@ -1,5 +1,8 @@
 {% extends '::print.html.twig' %}
 {% block body %}
+    <script>
+        window.print();
+    </script>
     <table class="table">
         <tr>
             <td>
@@ -123,6 +126,7 @@
                   </ul>
             </td>
             <td class="right span4">
+                {% if entity.assignDoctor is not empty %}
                 <ul class="unstyled">
                     <li><strong>{{ entity.assignDoctor.name }}{{ entity.assignDoctor.id }}</strong></li>
                     <li>{{ entity.assignDoctor.educationalDegree|raw }}</li>
@@ -131,6 +135,7 @@
                     <li>{{ entity.assignDoctor.designation }}</li>
                     <li>{{ entity.assignDoctor.currentJob }}</li>
                 </ul>
+                {% endif %}
             </td>
         </tr>
     </table>

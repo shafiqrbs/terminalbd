@@ -39,11 +39,11 @@ class StockItemRepository extends EntityRepository
             $brand = isset($data['brand'])? $data['brand'] :'';
 
             if (!empty($data['startDate']) ) {
-                $qb->andWhere("pi.created >= :startDate");
+                $qb->andWhere("p.created >= :startDate");
                 $qb->setParameter('startDate', $startDate.' 00:00:00');
             }
             if (!empty($data['endDate'])) {
-                $qb->andWhere("pi.created <= :endDate");
+                $qb->andWhere("p.created <= :endDate");
                 $qb->setParameter('endDate', $endDate.' 23:59:59');
             }
 

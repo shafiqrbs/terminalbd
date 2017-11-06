@@ -82,7 +82,7 @@ class InventoryConfigType extends AbstractType
                 'choice', array(
                     'attr'=>array('class'=>'m-wrap span12'),
                     'choices' => array(
-                        '' => '--Select one--',
+                        '0' => '--Select one--',
                         '1' => 'Brand',
                         '2' => 'Vendor',
                     ),

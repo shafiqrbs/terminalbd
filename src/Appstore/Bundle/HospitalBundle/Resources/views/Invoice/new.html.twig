@@ -251,7 +251,7 @@
                             <tr>
                                 <td  class="numeric">{{ loop.index }}</td>
                                 <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
-                                <td class="numeric">{{ transaction.transactionMethod.name }}</td>
+                                <td class="numeric">{% if transaction.transactionMethod is not empty %}{{ transaction.transactionMethod.name }}{% endif %}</td>
                                 <td class="numeric">{{ transaction.discount }}</td>
                                 <td class="numeric">{{ transaction.vat }}</td>
                                 <td class="numeric">{{ transaction.payment }}</td>
@@ -278,8 +278,8 @@
                         <div class="span12">
                             <div class="row-fluid particular-info" >
                                 <div class="span7">
-                                    <select id="particular" name="particular" class="span12">
-                                        <option value="">Test Name ,Medicine Accessories, Surgery,Cabin </option>
+                                    <select id="particular" name="particular" class="span12 select2">
+                                        <option value="">Test Name ,Medicine Accessories, Surgery,Cabin etc. </option>
                                         {{ partcularService|raw }}
                                      </select>
                                 </div>
@@ -287,7 +287,7 @@
                                 <div class="span2"><input type="text" class="m-wrap span12" id="price" name="price" value="" maxlength="8"></div>
                                 <div class="span1">
                                     <input type="hidden" id="particularId" name="particularId" value="">
-                                    <button type="button" class="btn blue confirm" disabled="disabled" id="addParticular" data-url="{{ path('hms_invoice_particular_add',{'invoice':entity.id}) }}" >Add</button>
+                                    <button type="button" class="btn blue" disabled="disabled" id="addParticular" data-url="{{ path('hms_invoice_particular_add',{'invoice':entity.id}) }}" >Add</button>
                                 </div>
                             </div>
                         </div>
@@ -577,7 +577,5 @@
         }
     });
     $( ".payment" ).val('');
-    $( ".discount" ).val('');
     $( ".payment" ).attr( "placeholder", "{{ entity.payment }}" );
-    $( ".discount" ).attr( "placeholder", "{{ entity.discount }}" );
 {% endblock %}
