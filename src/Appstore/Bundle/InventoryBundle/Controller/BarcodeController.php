@@ -71,12 +71,13 @@ class BarcodeController extends Controller
         }
 
         if (!empty($barcoder->getItem()->getVendor()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeBrandVendor() == 2 ){
-            $vendorBrand = $barcoder->getItem()->getVendor()->getVendorCode();
+            $vendorBrand = $barcoder->getPurchase()->getVendor()->getVendorCode();
         }elseif(!empty($barcoder->getItem()->getBrand()) and $barcoder->getItem()->getInventoryConfig()->getBarcodeBrandVendor() == 1){
             $vendorBrand = $barcoder->getItem()->getBrand()->getBrandCode();
         }else{
             $vendorBrand = '';
         }
+
         $barcodeWidth = $barcoder->getItem()->getInventoryConfig()->getBarcodeWidth().'px';
         $barcodeHeight = $barcoder->getItem()->getInventoryConfig()->getBarcodeHeight().'px';
         $barcodeMargin = $barcoder->getItem()->getInventoryConfig()->getBarcodeMargin();
