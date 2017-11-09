@@ -64,8 +64,11 @@ class TransactionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('e');
         $qb->select('sum(e.debit) as debit , sum(e.credit) as credit');
         $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption',67);
-
+        $qb->setParameter('globalOption',$globalOption);
+        if(!empty($accountHead)){
+            $qb->andWhere("e.accountHead = :head");
+            $qb->setParameter('head',$accountHead);
+        }
         $result = $qb->getQuery();
         $res = $result->getOneOrNullResult();
         return $res;

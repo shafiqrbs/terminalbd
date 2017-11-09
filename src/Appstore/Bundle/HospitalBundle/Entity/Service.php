@@ -47,6 +47,21 @@ class Service
      **/
     private $hmsInvoices;
 
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="sorting", type="smallint",  length=2, nullable=true)
+     */
+    private $sorting = 0;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="hasQuantity", type="boolean" )
+     */
+    private $hasQuantity = false;
+
     /**
      * @var boolean
      *
@@ -127,6 +142,38 @@ class Service
     public function getHmsInvoices()
     {
         return $this->hmsInvoices;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSorting()
+    {
+        return $this->sorting;
+    }
+
+    /**
+     * @param int $sorting
+     */
+    public function setSorting($sorting)
+    {
+        $this->sorting = $sorting;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHasQuantity()
+    {
+        return $this->hasQuantity;
+    }
+
+    /**
+     * @param bool $hasQuantity
+     */
+    public function setHasQuantity($hasQuantity)
+    {
+        $this->hasQuantity = $hasQuantity;
     }
 
 

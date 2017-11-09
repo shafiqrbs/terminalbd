@@ -10,14 +10,11 @@ use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
-use Mike42\Escpos\Printer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Hackzilla\BarcodeBundle\Utility\Barcode;
+
 /**
  * Invoice controller.
  *
@@ -69,7 +66,15 @@ class InvoiceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new Invoice();
-        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $option = $this->getUser()->getGlobalOption();
+        $patient = isset($_REQUEST['patient']) ? $_REQUEST['patient']:'';
+        if(!empty($patient)){
+            $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option,'id' => $patient));
+            $entity->setCustomer($customer);
+            $entity->setMobile($customer->getMobile());
+
+        }
+        $hospital = $option->getHospitalConfig();
         $entity->setHospitalConfig($hospital);
         $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
         $entity->setService($service);
@@ -104,7 +109,6 @@ class InvoiceController extends Controller
         if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created" and $entity->getRevised() != 1) {
             return $this->redirect($this->generateUrl('hms_invoice_show', array('id' => $entity->getId())));
         }
-      //  $services           = $em->getRepository('HospitalBundle:Service')->findBy(array('hospitalConfig' => $hospital,'status' => 1));
         $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital);
         $referredDoctors    = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
         return $this->render('HospitalBundle:Invoice:new.html.twig', array(
@@ -277,7 +281,7 @@ class InvoiceController extends Controller
             $payment = $data['payment'];
             if($payment > 0) {
 
-                $transactionData = array('payment' => $payment, 'discount' => 0);
+                $transactionData = array('process' => $entity->getProcess(),'payment' => $payment, 'discount' => 0);
                 $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity, $transactionData);
                 $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
             }
@@ -508,8 +512,31 @@ class InvoiceController extends Controller
 
         $barcode = $this->getBarcode($entity->getInvoice());
         $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+
+        $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
+
+        foreach ($entity->getInvoiceParticulars() as $item) {
+            /** @var InvoiceParticular $item */
+            $serviceName = $item->getParticular()->getService()->getName();
+            $hasQuantity = $item->getParticular()->getService()->getHasQuantity();
+
+            if(!isset($invoiceDetails[$serviceName])) {
+                $invoiceDetails[$serviceName]['items'] = [];
+                $invoiceDetails[$serviceName]['total'] = 0;
+                $invoiceDetails[$serviceName]['hasQuantity'] = ( $hasQuantity == 1);
+            }
+
+            $invoiceDetails[$serviceName]['items'][] = $item;
+            $invoiceDetails[$serviceName]['total'] += $item->getSubTotal();
+        }
+
+        if(count($invoiceDetails['Pathology']['items']) == 0) {
+            unset($invoiceDetails['Pathology']);
+        }
+
         return $this->render('HospitalBundle:Invoice:'.$entity->getPrintFor().'.html.twig', array(
             'entity'      => $entity,
+            'invoiceDetails'      => $invoiceDetails,
             'barcode'     => $barcode,
             'inWords'     => $inWords,
         ));

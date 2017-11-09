@@ -19,8 +19,7 @@
                     </li>
                     <li><a href="#">View Lists</a></li>
                     <li class="pull-right btn blue disabled mini">
-                        <i class="fa fa-calendar"></i>
-                        {{ "now"|date("d-F-Y") }}
+                        <i class="fa fa-calendar"></i> {{ "now"|date("d-F-Y") }}
                     </li>
                 </ul>
             </div>
@@ -59,7 +58,7 @@
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-user"></i>
-                                                <input class="m-wrap span12 search-input" name="name" id="name" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.name is defined %}{{ searchForm.name }}{% else %}Patient name{% endif %}">
+                                                <input class="m-wrap span12 search-input" name="name" id="name" value="{% if searchForm.name is defined %}{{ searchForm.name }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.name is defined %}{{ searchForm.name }}{% else %}Patient ID{% endif %}">
                                             </div>
                                         </div>
                                         <div class="span3">
@@ -180,10 +179,10 @@
                                                     <li><a href="{{ path('hms_invoice_edit', { 'id': entity.id }) }}" class="btn green  " ><i class="icon-pencil"></i> Edit & Update</a></li>
                                                     <li><a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red  remove tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a></li>
                                                     {% elseif entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
-                                                    <li><a href="{{ path('hms_invoice_show', { 'id': entity.id }) }}" class="btn purple"><i class="icon-eye-open"></i> View</a></li>
                                                     <li><a  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a></li>
                                                     <li><a  href="{{ path('hms_invoice_confirm',{'id':entity.id}) }}"  class="btn yellow" ><i class=" icon-truck"></i> Delivery</a></li>
                                                     {% endif %}
+                                                    <li><a href="{{ path('hms_invoice_show', { 'id': entity.id }) }}" class="btn purple"><i class="icon-eye-open"></i> View</a></li>
                                                 </ul>
                                             </div>
                                         </td>

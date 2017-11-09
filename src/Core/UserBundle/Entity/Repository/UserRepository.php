@@ -149,6 +149,22 @@ class UserRepository extends EntityRepository
                 'ROLE_DOMAIN_ECOMMERCE_SETTING'             => 'E-commerce Setting',
             );
         }
+
+
+        $hms = array('hms');
+        $result = array_intersect($arrSlugs, $hms);
+        if (!empty($result)) {
+
+            $array['HMS'] = array(
+                'ROLE_HOSPITAL'                              => 'Hms',
+                'ROLE_DOMAIN_HOSPITAL_MANAGER'               => 'Hms Manager',
+                'ROLE_DOMAIN_HOSPITAL_OPERATOR'              => 'Hms Operator',
+                'ROLE_DOMAIN_HOSPITAL_DOCTOR'                => 'Hms Doctor',
+                'ROLE_DOMAIN_HOSPITAL_ADMIN'                 => 'Hms Admin',
+                'ROLE_DOMAIN_HOSPITAL_CONFIG'                => 'Hms Config',
+            );
+        }
+
         return $array;
     }
 

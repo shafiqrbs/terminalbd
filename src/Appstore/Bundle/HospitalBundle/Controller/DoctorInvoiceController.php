@@ -53,15 +53,12 @@ class DoctorInvoiceController extends Controller
         $overview = $em->getRepository('HospitalBundle:DoctorInvoice')->findWithOverview($user,$data);
         $invoiceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithOverview($user,$data);
 
-        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
-        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
-
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5,6));
         return $this->render('HospitalBundle:DoctorInvoice:index.html.twig', array(
             'entities' => $pagination,
             'invoiceOverview' => $invoiceOverview,
             'overview' => $overview,
             'assignDoctors' => $assignDoctors,
-            'referredDoctors' => $referredDoctors,
             'searchForm' => $data,
         ));
     }

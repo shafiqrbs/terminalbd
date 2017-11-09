@@ -55,11 +55,11 @@
                             <div class="row-fluid">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="row-fluid">
-                                                <div class="span3">
+                                                <div class="span4">
                                                     <select name="assignDoctor" id="assignDoctor" class="m-wrap span12">
-                                                        <option value="" >--Assign Doctor--</option>
+                                                        <option value="" >--Doctor/Patient Referred--</option>
                                                         {% for assign in assignDoctors %}
-                                                            <option {% if searchForm.assignDoctor is defined and searchForm.assignDoctor == assign.id %} selected="selected" {% endif %} value="{{ assign.id }}" >{{ assign.name }}</option>
+                                                            <option {% if searchForm.assignDoctor is defined and searchForm.assignDoctor == assign.id %} selected="selected" {% endif %} value="{{ assign.id }}" >{{ assign.particularCode }}-{{ assign.name }}({{ assign.mobile }})/{{ assign.serviceName }}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
@@ -86,7 +86,7 @@
                                                         {% endfor %}
                                                     </select>
                                                 </div>
-                                                <div class="span3">
+                                                <div class="span2">
                                                     <div class="controls">
                                                         <div class="input-append span11">
                                                             <input type="text" id="hmsInvoice" name="hmsInvoice"  class="m-wrap span10 search-input  " value="{% if searchForm.hmsInvoice is defined %}{{ searchForm.hmsInvoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.hmsInvoice is defined %}{{ searchForm.hmsInvoice }}{% else %}Patient invoice no{% endif %} ">
@@ -105,8 +105,6 @@
                                             <th class="numeric" ><strong>{{ overview.commission|number_format }}</strong></th>
                                             <th class="numeric" ><strong>Paid Tk.</strong></th>
                                             <th class="numeric" ><strong>{{ overview.payment|number_format }}</strong></th>
-                                            <th class="numeric" ><strong>Due Tk.</strong></th>
-                                            <th class="numeric" ><strong>{{ overview.due|number_format }}</strong></th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -118,10 +116,11 @@
                                     <th class="numeric">&nbsp;&nbsp;<i class="icon-list"></i></th>
                                     <th class="numeric">Created</th>
                                     <th class="numeric">Doctor/Referred</th>
-                                    <th class="numeric">Mobile</th>
                                     <th class="numeric">Payment For</th>
                                     <th class="numeric">Payment Method</th>
                                     <th class="numeric">Created By</th>
+                                    <th class="numeric">Invoice</th>
+                                    <th class="numeric">Invoice Amount</th>
                                     <th class="numeric">Amount</th>
                                     <th class="numeric">Paid</th>
                                 </tr>
@@ -131,11 +130,12 @@
                                     <tr>
                                         <td  class="numeric">{{ loop.index }}</td>
                                         <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
-                                        <td class="numeric">{{ transaction.assignDoctor.name }}</td>
-                                        <td class="numeric">{{ transaction.assignDoctor.mobile }}</td>
+                                        <td class="numeric">{{ transaction.assignDoctor.particularCode }}-{{ transaction.assignDoctor.name }}</td>
                                         <td class="numeric">{{ transaction.hmsCommission.name }}</td>
                                         <td class="numeric">{{ transaction.transactionMethod.name }}</td>
                                         <td class="numeric">{{ transaction.createdBy }}</td>
+                                        <td class="numeric">{{ transaction.hmsInvoice.invoice }}</td>
+                                        <td class="numeric">{{ transaction.hmsInvoice.total }}</td>
                                         <td class="numeric">{{ transaction.payment }}</td>
                                         <td class="numeric">
                                             {% if transaction.process != 'Paid' %}

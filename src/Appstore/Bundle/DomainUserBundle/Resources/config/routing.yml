@@ -3,6 +3,10 @@ inventory_customer:
     resource: "@DomainUserBundle/Resources/config/routing/customerInventory.yml"
     prefix:   /inventory/customer
 
+hms_customer:
+    resource: "@DomainUserBundle/Resources/config/routing/hms_customer.yml"
+    prefix:   /hms/patient
+
 domain_notification:
     resource: "@DomainUserBundle/Resources/config/routing/notificationconfig.yml"
     prefix:   /domain/notification

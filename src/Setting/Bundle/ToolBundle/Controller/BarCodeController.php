@@ -11,7 +11,7 @@ namespace Setting\Bundle\ToolBundle\Controller;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Hackzilla\BarcodeBundle\Utility\Barcode;
+
 
 
 /**

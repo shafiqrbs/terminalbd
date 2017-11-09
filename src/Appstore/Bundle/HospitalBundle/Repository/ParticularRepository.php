@@ -48,7 +48,9 @@ class ParticularRepository extends EntityRepository
             ->leftJoin('e.service','s')
             ->select('e.id')
             ->addSelect('e.name')
+            ->addSelect('e.name')
             ->addSelect('e.particularCode')
+            ->addSelect('e.mobile')
             ->addSelect('e.price')
             ->addSelect('e.minimumPrice')
             ->addSelect('e.quantity')
@@ -74,9 +76,9 @@ class ParticularRepository extends EntityRepository
                 if ($service != '') {
                     $data .= '</optgroup>';
                 }
-                $data .= '<optgroup label="'.$particular['serviceCode'].'-'.ucfirst($particular['serviceName']).' Backgrounds">';
+                $data .= '<optgroup label="'.$particular['serviceCode'].'-'.ucfirst($particular['serviceName']).'">';
             }
-            $data .= '<option value="/hms/invoice/'.$particular['id'].'/particular-search">'.$particular['particularCode'] .' - '.htmlspecialchars($particular['name']).'</option>';
+            $data .= '<option value="/hms/invoice/'.$particular['id'].'/particular-search">'.$particular['particularCode'] .' - '.htmlspecialchars(ucfirst($particular['name'])).'</option>';
             $service = $particular['serviceName'];
         }
         if ($service != '') {

@@ -60,9 +60,9 @@
                                 <div class="span3">
                                     <h4>About:</h4>
                                     <ul class="unstyled">
+                                        {% if entity.customer is not empty %}<li><strong>Patient ID #:</strong>&nbsp;{{ entity.customer.customerId }}</li>{% endif %}
                                         {% if entity.customer is not empty %}<li><strong>Patient #:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
                                         {% if entity.customer is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
-                                        {% if entity.customer is not empty and entity.customer.location is not empty   %}<li><strong>Location #:</strong>&nbsp;{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
                                         <li><strong>Created:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
                                     </ul>
                                 </div>
@@ -115,6 +115,7 @@
                                             <th class="span2">Service</th>
                                             <th class="span1">Qnt</th>
                                             <th class="span1">Amount</th>
+                                            <th class="span1">Report</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -127,6 +128,11 @@
                                                 <td class="span2">{{ item.particular.service.name }}</td>
                                                 <td class="span1">{{ item.quantity }}</td>
                                                 <td class="span1">{{ item.subTotal|number_format }}</td>
+                                                <td>
+                                                {% if item.particular.service.id == 1 and item.process =='Done'%}
+                                                    <a target="_blank" href="{{ path('hms_invoice_particular_report_print', {'id': item.id}) }}"  class="btn blue mini"><i class="icon-print"></i> Report</a>
+                                                {% endif %}
+                                                </td>
                                             </tr>
                                             {% if item.particular.service.id == 1 %}
                                                 <tr id="show-{{ item.id }}" class="showing-overview">
@@ -204,7 +210,7 @@
                                             <tr>
                                                 <td  class="numeric">{{ loop.index }}</td>
                                                 <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
-                                                <td class="numeric">{{ transaction.transactionMethod.name }}</td>
+                                                <td class="numeric">{% if transaction.transactionMethod is not empty %}{{ transaction.transactionMethod.name }}{% endif %}</td>
                                                 <td class="numeric">{{ transaction.discount }}</td>
                                                 <td class="numeric">{{ transaction.vat }}</td>
                                                 <td class="numeric">{{ transaction.payment }}</td>

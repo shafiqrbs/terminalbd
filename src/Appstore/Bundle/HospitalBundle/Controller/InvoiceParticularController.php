@@ -40,7 +40,9 @@ class InvoiceParticularController extends Controller
 
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
-        $data = array('process'=>'In-progress');
+        if(empty($data)){
+            $data = array('process'=>'In-progress');
+        }
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'pathology' , $data);
         $pagination = $this->paginate($entities);
         $overview = $em->getRepository('HospitalBundle:DoctorInvoice')->findWithOverview($user,$data);

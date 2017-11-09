@@ -38,8 +38,9 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
         }
         if (!empty($customerName)) {
+
             $qb->join('e.customer','c');
-            $qb->andWhere($qb->expr()->like("c.name", "'%$customerName%'"  ));
+            $qb->andWhere($qb->expr()->like("c.customerId", "'%$customerName%'"  ));
         }
         if (!empty($customerMobile)) {
             $qb->join('e.customer','m');
@@ -225,6 +226,18 @@ class InvoiceRepository extends EntityRepository
     {
         $vat = ( ($totalAmount * (int)$sales->getHospitalConfig()->getVatPercentage())/100 );
         return round($vat);
+    }
+
+    public function getInvoiceDetails(Invoice $invoice){
+
+        $em = $this->_em;
+        $qb = $em->createQueryBuilder();
+        $qb->from('HospitalBundle:InvoiceParticular','ip');
+        $qb->innerJoin('ip.particular','particular');
+        $qb->where('si.hmsInvoice = :invoice');
+        $qb->setParameter('invoice', $invoice ->getId());
+        $qb->groupBy('particular.service');
+
     }
 
 

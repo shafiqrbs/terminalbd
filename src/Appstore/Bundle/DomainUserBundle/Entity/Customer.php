@@ -226,7 +226,7 @@ class Customer
     /**
      * @var string
      *
-     * @ORM\Column(name="ageType", type="string", length=10, nullable = true)
+     * @ORM\Column(name="ageType", type="string", length=20, nullable = true)
      */
     private $ageType;
 

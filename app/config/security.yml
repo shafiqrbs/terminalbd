@@ -14,7 +14,8 @@ security:
         ROLE_DOMAIN_USER:                               [ROLE_USER]
         ROLE_DOMAIN_USER:                               [ROLE_DOAMIN]
         ROLE_WEBSITE:                                   [ROLE_WEBSITE]
-        ROLE_APPEARANCE:                                   [ROLE_APPEARANCE]
+        ROLE_APPEARANCE:                                [ROLE_APPEARANCE]
+        ROLE_HMS:                                       [ROLE_HMS]
 
         # THIS IS PART OF WEBSITE MANAGE
 
@@ -83,6 +84,13 @@ security:
         ROLE_DOMAIN_ECOMMERCE_CONFIG:                   [ROLE_DOMAIN_ECOMMERCE_CONFIG,ROLE_APPEARANCE]
         ROLE_DOMAIN_ECOMMERCE:                          [ROLE_ECOMMERCE,ROLE_DOMAIN_ECOMMERCE_PRODUCT,ROLE_DOMAIN_ECOMMERCE_ORDER,ROLE_DOMAIN_ECOMMERCE_CONFIG]
 
+        # THIS IS ECOMMERCE PART
+
+        ROLE_HMS:                                       [ROLE_HMS]
+        ROLE_DOMAIN_HMS_CONFIG:                         [ROLE_DOMAIN_HMS_CONFIG,ROLE_HMS]
+        ROLE_DOMAIN_HMS_MANAGER:                        [ROLE_DOMAIN_HMS_MANAGER]
+        ROLE_DOMAIN_HMS_ADMIN:                          [ROLE_DOMAIN_HMS_ADMIN,ROLE_DOMAIN_HMS_MANAGER]
+
 
 
         ROLE_FOOD:                                      [ROLE_FOOD]
@@ -99,8 +107,10 @@ security:
 
 
         ROLE_HOSPITAL:                                  [ROLE_HOSPITAL]
-        ROLE_DOMAIN_HOSPITAL:                           [ROLE_HOSPITAL,ROLE_DOMAIN_HOSPITAL]
-        ROLE_DOMAIN_HOSPITAL_MANAGER:                   [ROLE_DOMAIN_SERVICE,ROLE_DOMAIN_HOSPITAL_MANAGER]
+        ROLE_DOMAIN_HOSPITAL_OPERATOR:                  [ROLE_HOSPITAL,ROLE_DOMAIN_HOSPITAL_OPERATOR]
+        ROLE_DOMAIN_HOSPITAL_DOCTOR:                    [ROLE_HOSPITAL,ROLE_DOMAIN_HOSPITAL_DOCTOR]
+        ROLE_DOMAIN_HOSPITAL_MANAGER:                   [ROLE_HOSPITAL,ROLE_DOMAIN_HOSPITAL_DOCTOR,ROLE_DOMAIN_HOSPITAL_OPERATOR]
+        ROLE_DOMAIN_HOSPITAL_ADMIN:                     [ROLE_DOMAIN_HOSPITAL_MANAGER,ROLE_DOMAIN_HOSPITAL_ADMIN]
 
 
         ROLE_DOMAIN_PURCHASE:                           [ROLE_DOMAIN_PURCHASE]

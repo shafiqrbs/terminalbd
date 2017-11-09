@@ -80,19 +80,11 @@
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="row-fluid">
-                                        <div class="span3">
-                                            <select name="doctor" id="doctor" class="m-wrap span12">
-                                                <option value="" >--Assign Doctor--</option>
-                                                {% for doctor in assignDoctors %}
-                                                    <option {% if searchForm.doctor is defined and searchForm.doctor == doctor.id %} selected="selected" {% endif %} value="{{ doctor.id }}" >{{ doctor.name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                        <div class="span3">
-                                            <select name="referred" id="referred" class="m-wrap span12">
-                                                <option value="" >--Patient Referred--</option>
-                                                {% for referred in referredDoctors %}
-                                                    <option {% if searchForm.referred is defined and searchForm.referred == referred.id %} selected="selected" {% endif %} value="{{ referred.id }}" >{{ referred.name }}</option>
+                                        <div class="span6">
+                                            <select name="assignDoctor" id="assignDoctor" class="m-wrap span12">
+                                                <option value="" >--Doctor/Patient Referred--</option>
+                                                {% for assign in assignDoctors %}
+                                                    <option {% if searchForm.assignDoctor is defined and searchForm.assignDoctor == assign.id %} selected="selected" {% endif %} value="{{ assign.id }}" >{{ assign.particularCode }}-{{ assign.name }}({{ assign.mobile }})/{{ assign.serviceName }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>

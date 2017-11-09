@@ -174,6 +174,20 @@ class HospitalConfig
     private $barcodeText;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="invoicePrefix", type="string", length=10,nullable = true)
+     */
+    private $invoicePrefix;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="customerPrefix", type="string", length=10,nullable = true)
+     */
+    private $customerPrefix;
+
+    /**
      * @var smallint
      *
      * @ORM\Column(name="barcodeWidth", type="smallint", nullable = true)
@@ -242,6 +256,13 @@ class HospitalConfig
      * @ORM\Column(name="invoicePrintLogo", type="boolean",  nullable=true)
      */
     private $invoicePrintLogo = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="printInstruction", type="boolean",  nullable=true)
+     */
+    private $printInstruction = true;
 
 
     /**
@@ -740,6 +761,54 @@ class HospitalConfig
     public function setInvoicePrintLogo($invoicePrintLogo)
     {
         $this->invoicePrintLogo = $invoicePrintLogo;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPrintInstruction()
+    {
+        return $this->printInstruction;
+    }
+
+    /**
+     * @param bool $printInstruction
+     */
+    public function setPrintInstruction($printInstruction)
+    {
+        $this->printInstruction = $printInstruction;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoicePrefix()
+    {
+        return $this->invoicePrefix;
+    }
+
+    /**
+     * @param string $invoicePrefix
+     */
+    public function setInvoicePrefix($invoicePrefix)
+    {
+        $this->invoicePrefix = $invoicePrefix;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerPrefix()
+    {
+        return $this->customerPrefix;
+    }
+
+    /**
+     * @param string $customerPrefix
+     */
+    public function setCustomerPrefix($customerPrefix)
+    {
+        $this->customerPrefix = $customerPrefix;
     }
 
 

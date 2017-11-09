@@ -39,13 +39,14 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('bindu_build'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') && $enable == 1 ) {
             return $this->redirect($this->generateUrl('inventoryconfig_dashboard'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_HOSPITAL') && $enable == 1 ) {
+            return $this->redirect($this->generateUrl('hospital_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_ACCOUNTING') && $enable == 1 ) {
             return $this->redirect($this->generateUrl('domain'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN_INVENTORY_SALES') && $enable == 1) {
 
             $inventory = $user->getGlobalOption()->getInventoryConfig();
             $deliveryProcess = $inventory->getDeliveryProcess();
-
             if (!empty($deliveryProcess)) {
 
                 if (in_array('Pos', $deliveryProcess)) {
@@ -125,7 +126,14 @@ class DefaultController extends Controller
 
     public function websiteAction()
     {
+        $user = $this->getUser();
+        return $this->render('UserBundle:Default:website.html.twig', array(
+            'user' => $user,
+        ));
+    }
 
+    public function hospitalAction()
+    {
         $user = $this->getUser();
         return $this->render('UserBundle:Default:website.html.twig', array(
             'user' => $user,
