@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\ToolBundle\Form\InitialOptionType;
+use Setting\Bundle\ToolBundle\Repository\DesignationRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -23,11 +24,15 @@ class DomainProfileType extends AbstractType
     /** @var  LocationRepository */
     private $location;
 
+    /** @var  DesignationRepository */
+    private $designation;
 
-    function __construct(GlobalOption $globalOption, LocationRepository $location)
+
+    function __construct(GlobalOption $globalOption, LocationRepository $location, DesignationRepository $designation)
     {
         $this->globalOption = $globalOption;
         $this->location = $location;
+        $this->designation = $designation;
     }
 
 
@@ -80,6 +85,7 @@ class DomainProfileType extends AbstractType
                         ->orderBy("e.name", "ASC");
                 },
             ))
+
             ->add('nid','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter national id card no')))
             ->add('branches', 'entity', array(
                 'required'    => true,
@@ -121,6 +127,12 @@ class DomainProfileType extends AbstractType
     }
 
     protected function LocationChoiceList()
+    {
+        return $syndicateTree = $this->location->getLocationOptionGroup();
+
+    }
+
+    protected function DesignationChoiceList()
     {
         return $syndicateTree = $this->location->getLocationOptionGroup();
 

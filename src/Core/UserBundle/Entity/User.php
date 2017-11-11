@@ -560,9 +560,8 @@ class User extends BaseUser
      */
     protected $hmsInvoiceParticularCollected;
 
-
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="assignDoctor" , cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="assignDoctor" , cascade={"persist", "remove"})
      */
     protected $particularDoctor;
 

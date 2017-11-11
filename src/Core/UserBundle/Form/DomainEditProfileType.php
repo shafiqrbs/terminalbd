@@ -2,11 +2,14 @@
 
 namespace Core\UserBundle\Form;
 
+use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\Type\ProfileType;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Form\DesignationType;
 use Setting\Bundle\ToolBundle\Form\InitialOptionType;
+use Setting\Bundle\ToolBundle\Repository\DesignationRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -24,11 +27,14 @@ class DomainEditProfileType extends AbstractType
     /** @var  LocationRepository */
     private $location;
 
+    /** @var  DesignationRepository */
+    private $designation;
 
-    function __construct(GlobalOption $globalOption, LocationRepository $location)
+    function __construct(GlobalOption $globalOption, LocationRepository $location , DesignationRepository $designation)
     {
         $this->globalOption = $globalOption;
         $this->location = $location;
+        $this->designation = $designation;
     }
 
 
@@ -53,18 +59,17 @@ class DomainEditProfileType extends AbstractType
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter address')))
             ->add('permanentAddress','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter permanent address')))
             ->add('designation', 'entity', array(
-                'required'    => true,
+                'required'    => false,
+                'empty_value' => '--- Select Designation ---',
+                'attr'=>array('class'=>'select2 span12'),
                 'class' => 'Setting\Bundle\ToolBundle\Entity\Designation',
-                'empty_value' => '---Choose a designation---',
-                'property' => 'name',
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Select user designation'))
                 ),
-                'attr'=>array('class'=>'span12 select2'),
+                'property' => 'name',
                 'query_builder' => function(EntityRepository $er){
-                    return $er->createQueryBuilder('e')
-                        ->where("e.status =1")
-                        ->orderBy("e.name", "ASC");
+                    return $er->createQueryBuilder('b')
+                        ->orderBy("b.name", "ASC");
                 },
             ))
 
@@ -123,6 +128,12 @@ class DomainEditProfileType extends AbstractType
     protected function LocationChoiceList()
     {
         return $syndicateTree = $this->location->getLocationOptionGroup();
+
+    }
+
+    protected function DesignationChoiceList()
+    {
+        return $syndicateTree = $this->designation->getDesignationOptionGroup();
 
     }
 }

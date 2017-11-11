@@ -95,7 +95,7 @@ class Particular
     private  $assignOperator;
 
      /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularDoctor" )
+     * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularDoctor" )
      **/
     private  $assignDoctor;
 

@@ -66,13 +66,16 @@
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <div class="span3">
+                                    <div class="span2">
                                         <input type="text" id="accountRefNo" name="accountRefNo"  class="m-wrap  span12 search-input  " value="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.accountRefNo is defined %}{{ searchForm.accountRefNo }}{% else %}Enter Ref No{% endif %} ">
                                     </div>
-                                    <div class="span3">
+                                    <div class="span2">
+                                        <input type="text" id="startDate" name="startDate"  class="m-wrap  span12 date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                    </div>
+                                    <div class="span2">
                                         <div class="controls">
-                                            <div class="input-append span11">
-                                                <input type="text" id="tillDate" name="tillDate"  class="span11 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.tillDate }}{% else %}{{ "now"|date("m/d/Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.tillDate is defined %}{{ searchForm.tillDate }}{% else %}Till date{% endif %}  ">
+                                            <div class="input-append span10">
+                                                <input type="text" id="endDate" name="endDate"  class="span11 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
                                                 <div class="btn-group">
                                                     <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
@@ -85,16 +88,19 @@
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content">
                                 <tr class="head-red">
-                                    <th class="" >Debit</th>
-                                    <th class="" >Credit</th>
-                                    <th class="" >Balance</th>
+                                    <th class="" ><strong>Opening Balance</strong></th>
+                                    <th class="" ><strong>Receive</strong></th>
+                                    <th class="" ><strong>Payment</strong></th>
+                                    <th class="" ><strong>Balance</strong></th>
                                 </tr>
                                 </thead>
                                 <tbody>
+
                                 <tr>
+                                    <td class="numeric" ><strong>{{ overview.openingBalance|number_format }}</strong></td>
                                     <td class="numeric" ><strong>{{ overview.debit|number_format }}</strong></td>
                                     <td class="numeric" ><strong>{{ overview.credit|number_format }}</strong></td>
-                                    <td class="numeric" ><strong>{{  (overview.debit - overview.credit)|number_format }}</strong></td>
+                                    <td class="numeric" ><strong>{{ (overview.openingBalance + overview.debit - overview.credit)|number_format }}</strong></td>
                                 </tr>
 
                                 </tbody>
@@ -111,8 +117,8 @@
                                     <th class="numeric" >Account Head</th>
                                     <th class="numeric" >Process</th>
                                     <th class="numeric" >Ref no.</th>
-                                    <th class="numeric" >Debit</th>
-                                    <th class="numeric" >Credit</th>
+                                    <th class="numeric" >Receive</th>
+                                    <th class="numeric" >Payment</th>
                                 </tr>
                                 </thead>
                                 <tbody>

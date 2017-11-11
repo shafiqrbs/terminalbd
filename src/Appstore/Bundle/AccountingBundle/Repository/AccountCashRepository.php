@@ -155,7 +155,8 @@ class AccountCashRepository extends EntityRepository
         $qb->setParameter('transactionMethod',array_values($transactionMethods));
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getOneOrNullResult();
-        $data =  array('debit'=> $result['debit'],'credit'=> $result['credit']);
+        $openingBalance = $this->openingBalance($user,$transactionMethods,$data);
+        $data =  array('openingBalance'=> $openingBalance , 'debit'=> $result['debit'],'credit'=> $result['credit']);
         return $data;
 
     }
@@ -167,46 +168,81 @@ class AccountCashRepository extends EntityRepository
 
     protected function handleSearchBetween($qb,$data)
     {
-        if(!empty($data))
-        {
-            $accountRefNo = isset($data['accountRefNo'])  ? $data['accountRefNo'] : '';
-            $tillDate = isset($data['tillDate'])  ? $data['tillDate'] : '';
-            $process =    isset($data['processHead'])? $data['processHead'] :'';
-            $accountBank =    isset($data['accountBank'])? $data['accountBank'] :'';
-            $accountMobileBank =    isset($data['accountMobileBank'])? $data['accountMobileBank'] :'';
+        $accountRefNo = isset($data['accountRefNo'])  ? $data['accountRefNo'] : '';
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate = isset($data['endDate'])  ? $data['endDate'] : '';
+        $process =    isset($data['processHead'])? $data['processHead'] :'';
+        $accountBank =    isset($data['accountBank'])? $data['accountBank'] :'';
+        $accountMobileBank =    isset($data['accountMobileBank'])? $data['accountMobileBank'] :'';
 
-            if (!empty($process)) {
-                $qb->andWhere("e.processHead = :process");
-                $qb->setParameter('process', $process);
-            }
-            if (!empty($accountRefNo)) {
+        if (!empty($process)) {
+            $qb->andWhere("e.processHead = :process");
+            $qb->setParameter('process', $process);
+        }
+        if (!empty($accountRefNo)) {
 
-                $qb->andWhere("e.accountRefNo = :accountRefNo");
-                $qb->setParameter('accountRefNo', $accountRefNo);
-            }
-
-            if (!empty($tillDate) ) {
-
-                $compareTo = new \DateTime($data['tillDate']);
-                $tillDate =  $compareTo->format('Y-m-d 23:59:59');
-                $qb->andWhere("e.updated >= :updated");
-                $qb->setParameter('updated', $tillDate);
-            }
-
-            if (!empty($accountBank)) {
-
-                $qb->andWhere("e.accountBank = :accountBank");
-                $qb->setParameter('accountBank', $accountBank);
-            }
-
-            if (!empty($accountMobileBank)) {
-
-                $qb->andWhere("e.accountMobileBank = :accountMobileBank");
-                $qb->setParameter('accountMobileBank', $accountMobileBank);
-            }
-
+            $qb->andWhere("e.accountRefNo = :accountRefNo");
+            $qb->setParameter('accountRefNo', $accountRefNo);
         }
 
+        $compareStart = new \DateTime();
+        if (!empty($startDate) ) {
+        $compareStart = new \DateTime($startDate);
+        }
+        $start =  $compareStart->format('Y-m-d 00:00:01');
+        $qb->andWhere("e.updated > :start");
+        $qb->setParameter('start', $start);
+
+        $compareEnd = new \DateTime();
+        if (!empty($endDate) ) {
+        $compareEnd = new \DateTime($endDate);
+        }
+        $end =  $compareEnd->format('Y-m-d 23:59:59');
+        $qb->andWhere("e.updated < :end");
+        $qb->setParameter('end', $end);
+
+        if (!empty($accountBank)) {
+
+            $qb->andWhere("e.accountBank = :accountBank");
+            $qb->setParameter('accountBank', $accountBank);
+        }
+
+        if (!empty($accountMobileBank)) {
+
+            $qb->andWhere("e.accountMobileBank = :accountMobileBank");
+            $qb->setParameter('accountMobileBank', $accountMobileBank);
+        }
+
+    }
+
+    public function openingBalance(User $user,$transactionMethods,$data){
+
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+        if(isset($data['startDate'])){
+            $date = new \DateTime($data['startDate']);
+        }else{
+            $date = new \DateTime();
+        }
+        $date->add(\DateInterval::createFromDateString('yesterday'));
+        $tillDate = $date->format('Y-m-d 23:59:59');
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.transactionMethod','t');
+        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        if (!empty($branch)){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $qb->andWhere("t.id IN(:transactionMethod)");
+        $qb->setParameter('transactionMethod',array_values($transactionMethods));
+        $qb->andWhere("e.updated <= :updated");
+        $qb->setParameter('updated', $tillDate);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $openingBalance = ( $result['debit'] - $result['credit']);
+        return $openingBalance;
     }
 
     public function lastInsertCash($entity,$processHead)

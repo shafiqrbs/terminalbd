@@ -159,6 +159,7 @@ class UserRepository extends EntityRepository
                 'ROLE_HOSPITAL'                              => 'Hms',
                 'ROLE_DOMAIN_HOSPITAL_MANAGER'               => 'Hms Manager',
                 'ROLE_DOMAIN_HOSPITAL_OPERATOR'              => 'Hms Operator',
+                'ROLE_DOMAIN_HOSPITAL_LAB'                   => 'Hms Lab Operator',
                 'ROLE_DOMAIN_HOSPITAL_DOCTOR'                => 'Hms Doctor',
                 'ROLE_DOMAIN_HOSPITAL_ADMIN'                 => 'Hms Admin',
                 'ROLE_DOMAIN_HOSPITAL_CONFIG'                => 'Hms Config',

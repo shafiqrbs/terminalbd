@@ -3,7 +3,11 @@
 namespace Core\UserBundle\Form;
 
 
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\LocationBundle\Repository\LocationRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Repository\DesignationRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -14,6 +18,26 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class DomainSignType extends AbstractType
 {
 
+    /** @var  User */
+    private $user;
+
+    /** @var  GlobalOption */
+    private $globalOption;
+
+    /** @var  LocationRepository */
+    private $location;
+
+    /** @var  DesignationRepository */
+    private $designation;
+
+
+    function __construct(User $user , GlobalOption $globalOption, LocationRepository $location, DesignationRepository $designation)
+    {
+        $this->user = $user;
+        $this->globalOption = $globalOption;
+        $this->location = $location;
+        $this->designation = $designation;
+    }
 
     /**
      * @param FormBuilderInterface $builder
@@ -54,7 +78,7 @@ class DomainSignType extends AbstractType
                         new Length(array('max'=>200))
                     ))
             );
-            $builder->add('profile', new DomainProfileType());
+            $builder->add('profile', new DomainProfileType($this->globalOption , $this->location , $this->designation));
 
     }
 

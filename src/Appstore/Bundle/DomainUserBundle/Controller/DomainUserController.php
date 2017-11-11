@@ -2,10 +2,12 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Controller;
 use Core\UserBundle\Form\DomainEditProfileType;
+use Core\UserBundle\Form\DomainEditUserType;
 use FOS\UserBundle\Model\UserManager;
 use Core\UserBundle\Entity\User;
 use Core\UserBundle\Form\DomainEditSignType;
 use Core\UserBundle\Form\DomainSignType;
+use Setting\Bundle\ToolBundle\Entity\Designation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -78,7 +80,8 @@ class DomainUserController extends Controller
         $user = $this->getDoctrine()->getRepository('UserBundle:User');
         $globalOption = $this->getUser()->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new DomainSignType($user,$globalOption,$location), $entity, array(
+        $designation = $this->getDoctrine()->getRepository('SettingToolBundle:Designation');
+        $form = $this->createForm(new DomainSignType($user,$globalOption,$location,$designation), $entity, array(
             'action' => $this->generateUrl('domain_create'),
             'method' => 'POST',
             'attr' => array(
@@ -86,7 +89,6 @@ class DomainUserController extends Controller
                 'novalidate' => 'novalidate',
             )
         ));
-
         return $form;
     }
 
@@ -151,10 +153,12 @@ class DomainUserController extends Controller
      */
     private function createEditForm(User $entity)
     {
+
         $user = $this->getDoctrine()->getRepository('UserBundle:User');
         $globalOption = $this->getUser()->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new \Core\UserBundle\Form\DomainEditUserType($user, $globalOption,$location), $entity, array(
+        $designation = $this->getDoctrine()->getRepository('SettingToolBundle:Designation');
+        $form = $this->createForm(new DomainEditUserType($user,$globalOption,$location,$designation), $entity, array(
             'action' => $this->generateUrl('domain_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -223,7 +227,8 @@ class DomainUserController extends Controller
 
         $globalOption = $this->getUser()->getGlobalOption();
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new DomainEditSignType($globalOption,$location), $entity, array(
+        $designation = $this->getDoctrine()->getRepository('SettingToolBundle:Designation');
+        $form = $this->createForm(new DomainEditSignType($globalOption,$location,$designation), $entity, array(
             'action' => $this->generateUrl('domain_update_profile'),
             'method' => 'PUT',
             'attr' => array(

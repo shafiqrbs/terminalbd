@@ -7,6 +7,7 @@ use Core\UserBundle\Entity\Repository\UserRepository;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\LocationBundle\Repository\LocationRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Repository\DesignationRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -23,15 +24,19 @@ class DomainEditUserType extends AbstractType
     /** @var  LocationRepository */
     private $location;
 
+    /** @var  DesignationRepository */
+    private $designation;
+
     /** @var  UserRepository */
     private $user;
 
 
-    function __construct(UserRepository $user , GlobalOption $globalOption, LocationRepository $location)
+    function __construct(UserRepository $user , GlobalOption $globalOption, LocationRepository $location, DesignationRepository $designation)
     {
         $this->user = $user;
         $this->globalOption = $globalOption;
         $this->location = $location;
+        $this->designation = $designation;
     }
 
     /**
@@ -57,11 +62,8 @@ class DomainEditUserType extends AbstractType
                     'empty_data'  => null,
                     'choices'   => $this->getAccessRoleGroup())
             )
-
-
-
             ->add('enabled');
-            $builder->add('profile', new DomainUserProfileType($this->globalOption,$this->location));
+            $builder->add('profile', new DomainUserProfileType($this->globalOption, $this->location, $this->designation));
 
     }
 

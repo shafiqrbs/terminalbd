@@ -69,6 +69,7 @@ class DoctorType extends AbstractType
                 'empty_value' => '---Select doctor---',
                 'class' => 'Core\UserBundle\Entity\User',
                 'property' => 'userFullName',
+                'error_bubbling' => true,
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
@@ -102,7 +103,7 @@ class DoctorType extends AbstractType
 
             ->add('category', 'entity', array(
                 'required'    => true,
-                'empty_value' => '---Select pathology---',
+                'empty_value' => '---Select category---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please select required'))
@@ -132,9 +133,12 @@ class DoctorType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular'
+            'data_class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
+            'cascade_validation' => true,
+            'error_bubbling'     => false,
         ));
     }
+
 
     /**
      * @return string

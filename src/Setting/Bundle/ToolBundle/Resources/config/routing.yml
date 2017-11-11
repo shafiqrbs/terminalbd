@@ -10,6 +10,10 @@ setting_tool_sidebar:
     resource: "@SettingToolBundle/Resources/config/routing/sidebar.yml"
     prefix:   /domain/sidebar
 
+setting_tool_designation:
+    resource: "@SettingToolBundle/Resources/config/routing/designation.yml"
+    prefix:   /admin/designation
+
 setting_tool_color:
     resource: "@SettingToolBundle/Resources/config/routing/color.yml"
     prefix:   /admin/color
