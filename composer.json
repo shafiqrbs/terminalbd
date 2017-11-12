@@ -4,7 +4,10 @@
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
-        "files": ["src/Symfony/Component/Validator/Constraints/File.php","src/Symfony/Component/Yaml/Inline.php"],
+        "classmap": [
+            "app/AppKernel.php",
+            "app/AppCache.php"
+        ],
         "psr-0": {
             "": "src/"
         }
@@ -16,9 +19,9 @@
         "doctrine/doctrine-bundle": "~1.2",
         "twig/extensions": "~1.0",
         "symfony/assetic-bundle": "~2.3",
-        "symfony/swiftmailer-bundle": "2.3.*@dev",
+        "symfony/swiftmailer-bundle": "^2.6",
         "symfony/monolog-bundle": "~2.4",
-        "sensio/distribution-bundle": "~2.3",
+        "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "~3.0",
         "sensio/generator-bundle": "~2.3",
         "incenteev/composer-parameter-handler": "~2.0",
@@ -26,36 +29,37 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "friendsofsymfony/jsrouting-bundle": "@stable",
         "friendsofsymfony/rest-bundle": "@stable",
-        "jms/security-extra-bundle": "dev-master",
-        "gregwar/image-bundle": "dev-master",
+        "jms/security-extra-bundle": "^1.6",
+        "gregwar/image-bundle": "^2.1",
         "knplabs/knp-menu-bundle": "~2",
         "knplabs/knp-time-bundle": "1.*",
-        "stof/doctrine-extensions-bundle": "~1.1@dev",
-        "knplabs/knp-snappy": "*",
+        "stof/doctrine-extensions-bundle": "^1.1",
+        "knplabs/knp-snappy": "^1.0",
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "h4cc/wkhtmltoimage-amd64": "0.12.x",
         "liuggio/excelbundle":"^2.0",
-        "eightpoints/guzzle-bundle": "dev-master",
+        "eightpoints/guzzle-bundle": "4.5.*",
         "friendsofsymfony/comment-bundle": "^2.0",
         "codeitnowin/barcode": "^1.0",
-        "mike42/escpos-php": "dev-master",
+        "mike42/escpos-php": "1.5.*",
         "divi/ajax-login-bundle": "dev-master",
-        "xiidea/ez-maintenance": "^1.0"
+        "xiidea/ez-maintenance": "^1.0",
+        "symfony/yaml": "^2.8",
+        "symfony/validator": "^2.8"
     },
     "scripts": {
-        "post-install-cmd": [
+        "symfony-scripts": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
         ],
+        "post-install-cmd": [
+            "@symfony-scripts"
+        ],
         "post-update-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+            "@symfony-scripts"
         ]
     },
     "minimum-stability":"dev",
