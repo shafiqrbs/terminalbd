@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1a6e09a24ec7726509c80ec8e55400dc",
+    "content-hash": "14daee06cee58e43159554984cd146a3",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -4637,6 +4637,54 @@
                 "negotiation"
             ],
             "time": "2015-10-01T07:42:40+00:00"
+        },
+        {
+            "name": "xiidea/ez-maintenance",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xiidea/ez-maintenance.git",
+                "reference": "90024a1e2830ad88a3ccff7e00ec2ac7df2388c3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xiidea/ez-maintenance/zipball/90024a1e2830ad88a3ccff7e00ec2ac7df2388c3",
+                "reference": "90024a1e2830ad88a3ccff7e00ec2ac7df2388c3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "EzMaintenance\\": "EzMaintenance/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roni Saha",
+                    "email": "roni.cse@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A handy library to handle site maintenance situation",
+            "homepage": "http://xiidea.github.io/ez-maintenance/",
+            "keywords": [
+                "Service Unavailable",
+                "Under Maintenance",
+                "easy"
+            ],
+            "time": "2015-03-24T05:19:52+00:00"
         }
     ],
     "packages-dev": [],
@@ -4654,7 +4702,7 @@
         "mike42/escpos-php": 20,
         "divi/ajax-login-bundle": 20
     },
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.3"
