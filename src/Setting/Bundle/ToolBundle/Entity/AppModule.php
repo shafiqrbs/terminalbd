@@ -55,14 +55,6 @@ class AppModule
     private $moduleClass;
 
     /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created", type="datetime")
-     */
-    private $created;
-
-
-    /**
      * @Gedmo\Slug(fields={"name"})
      * @ORM\Column(length=255, unique=true)
      */
