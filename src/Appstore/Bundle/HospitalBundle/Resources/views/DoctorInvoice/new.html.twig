@@ -102,61 +102,67 @@
             <div class="clearfix">&nbsp;</div>
             <div class="row-fluid" >
                 <div class="span12" id="particular-table">
+                {% if invoice.invoiceParticulars is defined and  invoice.invoiceParticulars is not empty  %}
                     <table class="table table-bordered table-striped table-condensed table-fixed">
-                        <thead>
-                        <tr>
-                            <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
-                            <th class="span1">Code</th>
-                            <th class="span4">Particular</th>
-                            <th class="span2">Service</th>
+                        <thead class="flip-content ">
+                        <tr class="head-black">
+                            <th class="span9" colspan="2">Investigation</th>
                             <th class="span1">Qnt</th>
-                            <th class="span1">Amount</th>
+                            <th class="span2">Amount</th>
                         </tr>
                         </thead>
-                        <tbody id="invoiceParticulars">
-                        {% for item in invoice.invoiceParticulars %}
-                        <tr id="remove-{{ item.id }}">
-                             <td  class="span1">{{ loop.index }}</td>
-                            <td  class="span1">{{ item.particular.particularCode }}</td>
-                            <td class="span4">{{ item.particular.name }}</td>
-                            <td class="span2">{{ item.particular.service.name }}</td>
-                            <td class="span1">{{ item.quantity }}</td>
-                            <td class="span1">{{ item.subTotal|number_format }}</td>
-                        </tr>
+                        <tbody>
+
+                        {% for key, serviceDetails in invoiceDetails %}
+                            {% if key != 'Pathology' %}
+                                <tr><td colspan="4" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
+                            {% endif %}
+                            {% set colSpan = serviceDetails.hasQuantity? 2 : 3 %}
+                            {% for item in serviceDetails.items %}
+                                <tr>
+                                    <td class="span9" colspan="{{ colSpan }}">{{ item.particular.particularCode }} - {{ item.particular.name }}</td>
+                                    {% if serviceDetails.hasQuantity %}
+                                        <td class="span1">{{ item.quantity }}</td>
+                                    {% endif %}
+                                    <td class="span1" style="text-align: right!important;">{{ item.subTotal|number_format }}</td>
+                                </tr>
+                            {% endfor %}
+                            <tr><td colspan="3" class="span11"><strong class="pull-right">Sub-Total</strong></td><td class="span1" style="text-align: right!important;">{{ serviceDetails.total|number_format }}</td></tr>
                         {% endfor %}
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="6" class="span12" style="border: 1px double #000"></td>
+                            <td colspan="4" class="span12" style="border: 1px double #000"></td>
                         </tr>
                         <tr>
-                            <td colspan="5" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+                            <td colspan="3" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
                             <td class="span1"><strong class="subTotal">{{ invoice.subTotal|number_format }}</strong></td>
                         </tr>
                         <tr>
-                            <td colspan="5" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
+                            <td colspan="3" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
                             <td class="span1"><strong class="vat">{{ invoice.vat|number_format }}</strong></td>
                         </tr>
                         <tr>
-                            <td colspan="5" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                            <td colspan="3" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                             <td class="span1"><strong class="discountAmount">{{ invoice.discount|number_format }}</strong></td>
                         </tr>
                         <tr>
-                            <td colspan="5" class="span9"><span class="pull-right"><strong>Grand Total TK.</strong> =</span></td>
+                            <td colspan="3" class="span9"><span class="pull-right"><strong>Grand Total TK.</strong> =</span></td>
                             <td class="span1"><strong class="paymentAmount">{{ invoice.total|number_format }}</strong></td>
                         </tr>
-                         <tr>
-                            <td colspan="5" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
+                        <tr>
+                            <td colspan="3" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
                             <td class="span1"><strong class="paymentAmount">{{ invoice.payment|number_format }}</strong></td>
                         </tr>
                         <tr>
-                            <td colspan="5" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
+                            <td colspan="3" class="span9"><span class="pull-right"><strong>Due TK.</strong> =</span></td>
                             <td class="span1"><strong class="paymentAmount">{{ invoice.due|number_format }}</strong></td>
                         </tr>
                         </tfoot>
                     </table>
-                    <div class="clearfix">&nbsp;</div>
+                {% endif %}
                 </div>
+
             </div>
             <div class="clearfix">&nbsp;</div>
             <div class="form-actions portlet box purple">

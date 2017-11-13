@@ -96,7 +96,9 @@
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Category</th>
                                     <th class="numeric" >Department</th>
+                                    <th class="numeric" >Over Head</th>
                                     <th class="numeric" >Price</th>
+                                    <th class="numeric" >Min Price</th>
                                     <th class="numeric" >Action</th>
 
                                 </tr>
@@ -109,7 +111,9 @@
                                         <td class="numeric" ><a href="{{ path('hms_pathology_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric">{% if entity.category is not empty %}{{ entity.category.name|default('---') }}{% endif %}</td>
                                         <td class="numeric">{% if entity.department is not empty %}{{ entity.department.name|default('---') }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.overHeadCost|number_format }}</td>
                                         <td class="numeric" >{{ entity.price|number_format }}</td>
+                                        <td class="numeric" >{{ entity.minimumPrice|number_format }}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
                                                 <a class="btn mini blue btn-action" href="{{ path('hms_pathology_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>

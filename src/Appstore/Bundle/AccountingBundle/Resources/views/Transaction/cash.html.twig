@@ -83,7 +83,7 @@
                                     <th class="" ><strong>Opening Balance</strong></th>
                                     <th class="" ><strong>Receive</strong></th>
                                     <th class="" ><strong>Payment</strong></th>
-                                    <th class="" ><strong>Balance</strong></th>
+                                    <th class="" ><strong>Closing Balance</strong></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -151,7 +151,6 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@AccountingBundle/Resources/public/js/editable.js'
     '@AccountingBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -159,7 +158,6 @@
 {% endblock %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
     AccountingApproveProcess();
 {% endblock %}
 

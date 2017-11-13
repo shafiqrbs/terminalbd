@@ -173,6 +173,13 @@ class Particular
     /**
      * @var string
      *
+     * @ORM\Column(name="overHeadCost", type="decimal", nullable=true)
+     */
+    private $overHeadCost;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="price", type="decimal", nullable=true)
      */
     private $price;
@@ -836,7 +843,6 @@ class Particular
 
     protected function getUploadDir()
     {
-        //return 'uploads/files/inventory/purchase/'.$this->getPurchasePrice().'item/';
         return 'uploads/domain/'.$this->getHospitalConfig()->getGlobalOption()->getId().'/hms/';
     }
 
@@ -1015,6 +1021,22 @@ class Particular
     public function setDesignation($designation)
     {
         $this->designation = $designation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOverHeadCost()
+    {
+        return $this->overHeadCost;
+    }
+
+    /**
+     * @param string $overHeadCost
+     */
+    public function setOverHeadCost($overHeadCost)
+    {
+        $this->overHeadCost = $overHeadCost;
     }
 
 

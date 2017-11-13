@@ -121,7 +121,7 @@ class ExpenditureRepository extends EntityRepository
         $entity->setAmount($doctorInvoice->getPayment());
         $entity->setCreatedBy($doctorInvoice->getCreatedBy());
         $entity->setApprovedBy($doctorInvoice->getApprovedBy());
-        $entity->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(50));
+        $entity->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(52));
         $entity->setTransactionMethod($doctorInvoice->getTransactionMethod());
         $entity->setAccountMobileBank($doctorInvoice->getAccountMobileBank());
         $entity->setAccountBank($doctorInvoice->getAccountBank());

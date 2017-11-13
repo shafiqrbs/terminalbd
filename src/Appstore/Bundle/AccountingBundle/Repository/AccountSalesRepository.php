@@ -229,7 +229,7 @@ class AccountSalesRepository extends EntityRepository
 
         $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
         $revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
-        $salesVat = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
+        $salesVat = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionVat($globalOption, $accountHeads = array(20), $data);
         $data =  array('salesAmount' => $salesAmount ,'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesVat);
         return $data;
 

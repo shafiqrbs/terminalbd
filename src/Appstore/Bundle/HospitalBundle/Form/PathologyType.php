@@ -52,12 +52,17 @@ class PathologyType extends AbstractType
             ->add('instruction','textarea', array('attr'=>array('class'=>'m-wrap span12','rows'=>'3','placeholder'=>'Enter test related any instruction for patient')))
             ->add('minimumPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter minimum price')))
             ->add('commission','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter commission')))
+            ->add('overHeadCost','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter over head cost'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required')),
+                )
+            ))
             ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter price'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-       
+
             ->add('assignOperator', 'entity', array(
                 'required'    => false,
                 'class' => 'Core\UserBundle\Entity\User',

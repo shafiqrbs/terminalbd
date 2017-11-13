@@ -273,7 +273,7 @@ class Builder extends ContainerAware
                 $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'report_income'))->setAttribute('icon', 'icon-th-list');
                 /* $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');*/
             }
-            $accounting = array('hospital');
+            $accounting = array('hms');
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {
                 $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'report_income_hospital'))->setAttribute('icon', 'icon-th-list');
@@ -327,12 +327,11 @@ class Builder extends ContainerAware
             $menu['Accounting']->addChild('Online Order Return', array('route' => 'account_onlineorder'));
         }
 
-        $accounting = array('hospital');
-        $result = array_intersect($arrSlugs, $accounting);
+        $hospital = array('hms');
+        $result = array_intersect($arrSlugs, $hospital);
         if (!empty($result)) {
             $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_hospital'))->setAttribute('icon', 'icon-th-list');
         }
-
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
 
             $menu['Accounting']->addChild('Journal', array('route' => 'account_journal'))->setAttribute('icon', 'icon-retweet');

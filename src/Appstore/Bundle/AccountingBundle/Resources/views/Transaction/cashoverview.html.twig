@@ -35,14 +35,32 @@
 
                     <div class="portlet-body">
                         <div class="portlet-body">
+                            <form class="search-form" action="" method="get" name="itemSearch">
+                                <div class="row-fluid">
+                                    <div class="span6"></div>
+                                    <div class="span3">
+                                        <input type="text" id="startDate" name="startDate"  class="m-wrap  span12 date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                    </div>
+                                    <div class="span3">
+                                        <div class="controls">
+                                            <div class="input-append span11">
+                                                <input type="text" id="endDate" name="endDate"  class="span11 m-wrap date-picker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                                <div class="btn-group">
+                                                    <button class="btn blue" type="submit"><i class="icon-search"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                             {% include('flash-message.html.twig') %}
 
                             <table class="table table-bordered table-striped table-condensed flip-content ">
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
-                                    <th class="numeric">Transaction</th>
-                                    <th class="numeric" >Debit</th>
-                                    <th class="numeric" >Credit</th>
+                                    <th class="numeric">Cash Account</th>
+                                    <th class="numeric" >Receive</th>
+                                    <th class="numeric" >Payment</th>
                                     <th class="numeric" >Balance</th>
                                 </tr>
                                 </thead>
@@ -67,8 +85,8 @@
                                 <thead class="flip-content ">
                                 <tr class="head-green">
                                     <th class="numeric">Bank Account</th>
-                                    <th class="numeric" >Debit</th>
-                                    <th class="numeric" >Credit</th>
+                                    <th class="numeric" >Receive</th>
+                                    <th class="numeric" >Payment</th>
                                     <th class="numeric" >Balance</th>
                                 </tr>
                                 </thead>
@@ -93,8 +111,8 @@
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
                                     <th>Mobile Account</th>
-                                    <th class="" >Debit</th>
-                                    <th class="" >Credit</th>
+                                    <th class="" >Receive</th>
+                                    <th class="" >Payment</th>
                                     <th class="" >Balance</th>
                                 </tr>
                                 </thead>
@@ -119,8 +137,8 @@
                                 <thead class="flip-content ">
                                 <tr class="head-yellow">
                                     <th>Account Head</th>
-                                    <th class="numeric"  >Debit</th>
-                                    <th class="numeric"  >Credit</th>
+                                    <th class="numeric"  >Receive</th>
+                                    <th class="numeric"  >Payment</th>
                                     <th class="numeric"  >Balance</th>
                                 </tr>
                                 </thead>
@@ -156,6 +174,19 @@
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock  %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@AccountingBundle/Resources/public/js/approveProcess.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+{% block documentready %}
+    {{ parent() }}
+    AccountingApproveProcess();
+{% endblock %}
+
 
 
 

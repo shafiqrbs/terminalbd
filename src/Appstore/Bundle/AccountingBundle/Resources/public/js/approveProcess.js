@@ -201,7 +201,7 @@ function AccountingApproveProcess(){
             });
         },
         allowClear: true,
-        minimumInputLength: 1
+        minimumInputLength: 3
     });
 
     $(".select2Invoice").select2({

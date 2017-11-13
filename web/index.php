@@ -7,6 +7,7 @@ $loader = require __DIR__.'/../app/autoload.php';
 EzMaintenance\Worker::watch('file', array(
     'path' => 'maintenance.enable',
     'template' => 'game',
+   /* 'template' => 'under_construction.php',*/
     'msg' => 'Site is currently undergoing maintenance!'
 ));
 

@@ -12,9 +12,6 @@ echo "Removing old cache if any"
 rm -rf app/cache/*
 rm -rf app/logs/*
 
-echo "Generating bootstrap cache"
-php vendor/sensio/distribution-bundle/Sensio/Bundle/DistributionBundle/Resources/bin/build_bootstrap.php
-
 echo "(Re)Creating assets symlink"
 rm web/assets
 ln -s ../app/Resources/assets/ web/assets

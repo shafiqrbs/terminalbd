@@ -92,10 +92,33 @@ class DoctorInvoiceController extends Controller
     public function newAction(Invoice $invoice)
     {
         $em = $this->getDoctrine()->getManager();
+
+        $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
+
+        foreach ($invoice->getInvoiceParticulars() as $item) {
+            /** @var InvoiceParticular $item */
+            $serviceName = $item->getParticular()->getService()->getName();
+            $hasQuantity = $item->getParticular()->getService()->getHasQuantity();
+
+            if(!isset($invoiceDetails[$serviceName])) {
+                $invoiceDetails[$serviceName]['items'] = [];
+                $invoiceDetails[$serviceName]['total'] = 0;
+                $invoiceDetails[$serviceName]['hasQuantity'] = ( $hasQuantity == 1);
+            }
+
+            $invoiceDetails[$serviceName]['items'][] = $item;
+            $invoiceDetails[$serviceName]['total'] += $item->getSubTotal();
+        }
+
+        if(count($invoiceDetails['Pathology']['items']) == 0) {
+            unset($invoiceDetails['Pathology']);
+        }
+
         $entity = new DoctorInvoice();
         $form = $this->createCreateForm($entity,$invoice);
         return $this->render('HospitalBundle:DoctorInvoice:new.html.twig', array(
             'entity' => $entity,
+            'invoiceDetails'      => $invoiceDetails,
             'invoice' => $invoice,
             'form'   => $form->createView(),
         ));
