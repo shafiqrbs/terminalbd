@@ -34,6 +34,9 @@ class InvoiceParticularRepository extends EntityRepository
         $entity->setHmsInvoice($invoice);
         $entity->setParticular($particular);
         $entity->setEstimatePrice($particular->getPrice());
+        if($particular->getCommission()){
+            $entity->setCommission($particular->getCommission() * $data['quantity']);
+        }
         $em->persist($entity);
         $em->flush();
 

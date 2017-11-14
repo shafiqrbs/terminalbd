@@ -76,6 +76,14 @@ class InvoiceParticular
 
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="commission", type="float")
+     */
+    private $commission;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="estimatePrice", type="decimal")
@@ -408,6 +416,22 @@ class InvoiceParticular
     public function setCollectionDate($collectionDate)
     {
         $this->collectionDate = $collectionDate;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCommission()
+    {
+        return $this->commission;
+    }
+
+    /**
+     * @param float $commission
+     */
+    public function setCommission($commission)
+    {
+        $this->commission = $commission;
     }
 
 

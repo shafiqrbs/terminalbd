@@ -769,6 +769,7 @@ class Builder extends ContainerAware
             $menu['Hospital & Diagnostic']['Master Data']->addChild('Surgery', array('route' => 'hms_surgery'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Hospital & Diagnostic']['Master Data']->addChild('Category', array('route' => 'hms_category'))->setAttribute('icon', 'icon-tag');
+            $menu['Hospital & Diagnostic']['Master Data']->addChild('Commission', array('route' => 'hms_commission'))->setAttribute('icon', 'icon-tag');
             $menu['Hospital & Diagnostic']['Master Data']->addChild('Purchase', array('route' => 'hms_purchase'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Hospital & Diagnostic']['Master Data']->addChild('Vendor', array('route' => 'hms_vendor'))->setAttribute('icon', 'icon-tag');

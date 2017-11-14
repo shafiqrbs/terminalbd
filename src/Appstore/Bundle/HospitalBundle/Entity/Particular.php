@@ -53,7 +53,7 @@ class Particular
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", mappedBy="particular")
-     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $pathologicalReports;
 
@@ -290,6 +290,14 @@ class Particular
      * @ORM\Column(name="mobile", type="string", length=15, nullable=true)
      */
     private $mobile;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="testDuration", type="boolean" )
+     */
+    private $testDuration = true;
+
 
     /**
      * @var boolean
@@ -1037,6 +1045,22 @@ class Particular
     public function setOverHeadCost($overHeadCost)
     {
         $this->overHeadCost = $overHeadCost;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getTestDuration()
+    {
+        return $this->testDuration;
+    }
+
+    /**
+     * @param bool $testDuration
+     */
+    public function setTestDuration($testDuration)
+    {
+        $this->testDuration = $testDuration;
     }
 
 

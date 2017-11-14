@@ -7,6 +7,7 @@ use Appstore\Bundle\HospitalBundle\Form\DoctorType;
 use Appstore\Bundle\HospitalBundle\Form\CabinType;
 use Appstore\Bundle\HospitalBundle\Form\ParticularType;
 use Appstore\Bundle\HospitalBundle\Form\PathologyType;
+use Appstore\Bundle\HospitalBundle\Form\SurgeryType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -89,7 +90,7 @@ class SurgeryController extends Controller
     {
 
         $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
-        $form = $this->createForm(new CabinType($em,$globalOption), $entity, array(
+        $form = $this->createForm(new SurgeryType($em,$globalOption), $entity, array(
             'action' => $this->generateUrl('hms_surgery_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -158,7 +159,7 @@ class SurgeryController extends Controller
     {
         $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
         $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new CabinType($em,$globalOption,$location), $entity, array(
+        $form = $this->createForm(new SurgeryType($em,$globalOption,$location), $entity, array(
             'action' => $this->generateUrl('hms_surgery_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(

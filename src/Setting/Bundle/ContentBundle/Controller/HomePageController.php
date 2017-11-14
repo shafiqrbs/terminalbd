@@ -26,12 +26,8 @@ class HomePageController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        return $this->redirect($this->generateUrl('landing_page'));
 
-        $entities = $em->getRepository('SettingContentBundle:HomePage')->findAll();
-
-        return $this->render('SettingContentBundle:HomePage:index.html.twig', array(
-            'entities' => $entities,
-        ));
     }
 
 

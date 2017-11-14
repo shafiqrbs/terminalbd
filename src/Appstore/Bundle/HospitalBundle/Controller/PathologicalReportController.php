@@ -24,15 +24,23 @@ class PathologicalReportController extends Controller
      */
     public function pathologicalReportAction(Particular $pathology)
     {
-        $em = $this->getDoctrine()->getManager();
-        $entity = New PathologicalReport();
-        $form = $this->createCreateForm($entity,$pathology);
+        $hmsc = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        if($hmsc->getId() == $pathology->getHospitalConfig()->getId()){
+            $em = $this->getDoctrine()->getManager();
+            $entity = New PathologicalReport();
+            $form = $this->createCreateForm($entity,$pathology);
+            $reportFormats = $this->getDoctrine()->getRepository('HospitalBundle:PathologicalReport')->findBy(array('particular' => $pathology),array('sorting'=>'asc','parent'=>'asc'));
+            return $this->render('HospitalBundle:Pathology:pathologicalReport.html.twig', array(
+                'entity'        => $entity,
+                'pathology'     => $pathology,
+                'reportFormats'     => $reportFormats,
+                'form'          => $form->createView(),
+            ));
+        }else{
+            throw $this->createNotFoundException('Unable to find wrong access.');
+        }
 
-        return $this->render('HospitalBundle:Pathology:pathologicalReport.html.twig', array(
-            'entity'        => $entity,
-            'pathology'     => $pathology,
-            'form'          => $form->createView(),
-        ));
+
     }
 
     /**
@@ -192,5 +200,12 @@ class PathologicalReportController extends Controller
             'success',"Status has been changed successfully"
         );
         return $this->redirect($this->generateUrl('hms_pathological_report',array('pathology' => $pathology->getId())));
+    }
+
+    public function sortingAction(Request $request,Particular $pathology)
+    {
+        $data = $request ->request->get('item');
+        $this->getDoctrine()->getRepository('HospitalBundle:PathologicalReport')->updateSorting($data);
+        exit;
     }
 }

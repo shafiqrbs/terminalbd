@@ -23,3 +23,10 @@ hms_pathological_report_delete:
 hms_pathological_report_status:
     path:      /{pathology}/{id}/status
     defaults: { _controller: "HospitalBundle:PathologicalReport:status" }
+
+hms_pathological_report_list_sorted:
+    path:      /sorted/{pathology}
+    defaults: { _controller: "HospitalBundle:PathologicalReport:sorting" }
+    methods:  POST
+
+

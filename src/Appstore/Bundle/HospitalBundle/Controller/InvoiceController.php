@@ -72,7 +72,6 @@ class InvoiceController extends Controller
             $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option,'id' => $patient));
             $entity->setCustomer($customer);
             $entity->setMobile($customer->getMobile());
-
         }
         $hospital = $option->getHospitalConfig();
         $entity->setHospitalConfig($hospital);

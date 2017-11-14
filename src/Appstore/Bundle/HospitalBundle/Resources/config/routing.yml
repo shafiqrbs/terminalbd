@@ -2,6 +2,10 @@ hospital_purchase:
     resource: "@HospitalBundle/Resources/config/routing/purchase.yml"
     prefix:   /purchase
 
+hospital_commission:
+    resource: "@HospitalBundle/Resources/config/routing/commission.yml"
+    prefix:   /commission
+
 hospital_vendor:
     resource: "@HospitalBundle/Resources/config/routing/vendor.yml"
     prefix:   /vendor

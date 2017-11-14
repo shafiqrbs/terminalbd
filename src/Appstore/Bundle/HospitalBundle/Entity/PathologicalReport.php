@@ -30,11 +30,9 @@ class PathologicalReport
 
     /**
      * @ORM\OneToMany(targetEntity="PathologicalReport" , mappedBy="parent")
-     * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $children;
-
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="pathologicalReport" , cascade={"persist", "remove"})
@@ -54,7 +52,7 @@ class PathologicalReport
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=50, nullable=true)
+     * @ORM\Column(name="name", type="string", length=200, nullable=true)
      */
     private $name;
 
@@ -66,12 +64,18 @@ class PathologicalReport
     private $code;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="sorting", type="smallint", length=2, nullable=true)
+     */
+    private $sorting;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="referenceValue", type="text", nullable=true)
      */
     private $referenceValue;
-
 
     /**
      * @var string
@@ -80,14 +84,13 @@ class PathologicalReport
      */
     private $unit;
 
-
-
     /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean" )
      */
     private $status= true;
+
 
     /**
      * Get id
@@ -244,6 +247,22 @@ class PathologicalReport
     public function getInvoicePathologicalReports()
     {
         return $this->invoicePathologicalReports;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSorting()
+    {
+        return $this->sorting;
+    }
+
+    /**
+     * @param int $sorting
+     */
+    public function setSorting($sorting)
+    {
+        $this->sorting = $sorting;
     }
 
 

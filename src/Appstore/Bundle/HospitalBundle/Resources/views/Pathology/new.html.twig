@@ -98,12 +98,26 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="control-group">
-                                <label class="control-label" for="name">Sepcimen(Sample Collection)<span class="required">*</span></label>
+                                <label class="control-label" for="name">Sepcimen(Sample Collection)</label>
                                 <div class="controls">
                                     <div class="input-icon left">
                                         <i class="icon-font"></i>
                                         {{ form_widget(form.sepcimen) }}
                                         {{ form_errors(form.sepcimen) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="control-group">
+                                <label class="control-label" for="name">Test Duration</label>
+                                <div class="controls">
+                                    <div class="input-icon left">
+                                        <i class="icon-font"></i>
+                                        {{ form_widget(form.testDuration) }}
+                                        {{ form_errors(form.testDuration) }}
                                     </div>
                                 </div>
                             </div>

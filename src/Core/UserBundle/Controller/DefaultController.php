@@ -126,18 +126,44 @@ class DefaultController extends Controller
 
     public function websiteAction()
     {
-        $user = $this->getUser();
-        return $this->render('UserBundle:Default:website.html.twig', array(
-            'user' => $user,
+        /* @var GlobalOption $globalOption */
+        $globalOption = $this->getUser()->getGlobalOption();
+        $modules = $globalOption->getSiteSetting()->getAppModules();
+        $apps = array();
+        if (!empty($globalOption ->getSiteSetting()) and !empty($modules)) {
+            /* @var AppModule $mod */
+            foreach ($modules as $mod) {
+                if (!empty($mod->getModuleClass())) {
+                    $apps[] = $mod->getSlug();
+                }
+            }
+        }
+        return $this->render('UserBundle:Default:domain.html.twig', array(
+            'globalOption' => $globalOption,
+            'apps' => $apps
         ));
+
     }
 
     public function hospitalAction()
     {
-        $user = $this->getUser();
-        return $this->render('UserBundle:Default:website.html.twig', array(
-            'user' => $user,
+        /* @var GlobalOption $globalOption */
+        $globalOption = $this->getUser()->getGlobalOption();
+        $modules = $globalOption->getSiteSetting()->getAppModules();
+        $apps = array();
+        if (!empty($globalOption ->getSiteSetting()) and !empty($modules)) {
+            /* @var AppModule $mod */
+            foreach ($modules as $mod) {
+                if (!empty($mod->getModuleClass())) {
+                    $apps[] = $mod->getSlug();
+                }
+            }
+        }
+        return $this->render('UserBundle:Default:domain.html.twig', array(
+            'globalOption' => $globalOption,
+            'apps' => $apps
         ));
+
     }
 
 

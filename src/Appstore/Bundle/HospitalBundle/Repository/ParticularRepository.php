@@ -76,9 +76,13 @@ class ParticularRepository extends EntityRepository
                 if ($service != '') {
                     $data .= '</optgroup>';
                 }
-                $data .= '<optgroup label="'.$particular['serviceCode'].'-'.ucfirst($particular['serviceName']).'">';
+                $data .= '<optgroup label="' . $particular['serviceCode'] . '-' . ucfirst($particular['serviceName']) . '">';
             }
-            $data .= '<option value="/hms/invoice/'.$particular['id'].'/particular-search">'.$particular['particularCode'] .' - '.htmlspecialchars(ucfirst($particular['name'])).'</option>';
+            if ($particular['serviceCode'] != '04'){
+                $data .= '<option value="/hms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['price'] . ' to ' . $particular['minimumPrice'] . '</option>';
+            }else{
+                $data .= '<option value="/hms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['price'].'</option>';
+            }
             $service = $particular['serviceName'];
         }
         if ($service != '') {

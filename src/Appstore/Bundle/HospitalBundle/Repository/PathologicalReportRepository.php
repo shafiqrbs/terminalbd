@@ -12,4 +12,23 @@ use Doctrine\ORM\EntityRepository;
  */
 class PathologicalReportRepository extends EntityRepository
 {
+
+    public function updateSorting($data){
+
+        $i = 1;
+        $em = $this->_em;
+        $qb = $em->createQueryBuilder();
+
+        foreach ($data as $key => $value){
+
+            $qb->update('HospitalBundle:PathologicalReport', 'mg')
+                ->set('mg.sorting', $i)
+                ->where('mg.id = :id')
+                ->setParameter('id', $value)
+                ->getQuery()
+                ->execute();
+            $i++;
+
+        }
+    }
 }

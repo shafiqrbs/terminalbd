@@ -99,8 +99,8 @@
                                     <th class="numeric" >Over Head</th>
                                     <th class="numeric" >Price</th>
                                     <th class="numeric" >Min Price</th>
+                                    <th class="numeric" >Commission</th>
                                     <th class="numeric" >Action</th>
-
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -114,6 +114,7 @@
                                         <td class="numeric" >{{ entity.overHeadCost|number_format }}</td>
                                         <td class="numeric" >{{ entity.price|number_format }}</td>
                                         <td class="numeric" >{{ entity.minimumPrice|number_format }}</td>
+                                        <td class="numeric" >{{ entity.commission|number_format }}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
                                                 <a class="btn mini blue btn-action" href="{{ path('hms_pathology_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>

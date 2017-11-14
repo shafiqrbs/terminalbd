@@ -75,6 +75,8 @@
                                     <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Price</th>
+                                    <th class="numeric" >Min Price</th>
+                                    <th class="numeric" >Dr. Charge</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -85,6 +87,8 @@
                                         <td class="numeric" >{{ entity.particularCode }}</td>
                                         <td class="numeric" ><a href="{{ path('hms_surgery_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >{{ entity.price|number_format }}</td>
+                                        <td class="numeric" >{{ entity.minimumPrice|number_format }}</td>
+                                        <td class="numeric" >{{ entity.commission|number_format }}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
                                                 <a class="btn mini blue btn-action" href="{{ path('hms_surgery_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>

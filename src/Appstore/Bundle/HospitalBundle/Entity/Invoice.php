@@ -272,6 +272,12 @@ class Invoice
      */
     private $payment;
 
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="estimateCommission", type="float")
+     */
+    private $estimateCommission;
 
     /**
      * @var string
@@ -1198,6 +1204,22 @@ class Invoice
     public function setRevised($revised)
     {
         $this->revised = $revised;
+    }
+
+    /**
+     * @return float
+     */
+    public function getEstimateCommission()
+    {
+        return $this->estimateCommission;
+    }
+
+    /**
+     * @param float $estimateCommission
+     */
+    public function setEstimateCommission($estimateCommission)
+    {
+        $this->estimateCommission = $estimateCommission;
     }
 
 
