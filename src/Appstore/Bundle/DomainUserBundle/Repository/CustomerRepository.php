@@ -286,7 +286,7 @@ class CustomerRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('e');
 
-        $query->select('e.customerId as id');
+        $query->select('e.mobile as id');
         $query->addSelect('e.customerId as text');
         //$query->addSelect('CONCAT(e.customerId, " - ", e.name) AS text');
         $query->where($query->expr()->like("e.customerId", "'$q%'"  ));

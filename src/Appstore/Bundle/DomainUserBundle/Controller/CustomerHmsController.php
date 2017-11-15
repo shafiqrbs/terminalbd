@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\DomainUserBundle\Controller;
 
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForHospitalType;
+use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Form\InvoicePatientType;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
@@ -237,23 +238,26 @@ class CustomerHmsController extends Controller
     public function detailsAction(Request $request)
     {
         $mobile = $request->request->get('mobile');
+        $invoice = $request->request->get('invoice');
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=> $option,'mobile' => $mobile));
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
+            $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePatientInfo($invoice, $entity);
+            $data = array(
+                'customerId' => $entity->getCustomerId(),
+                'mobile' => $entity->getMobile(),
+                'name' => $entity->getName(),
+                'gender' => $entity->getGender(),
+                'age' => $entity->getAge(),
+                'ageType' => $entity->getAgeType(),
+                'location' => $entity->getLocation()->getId(),
+                'address' => $entity->getAddress()
+            );
+            return new Response(json_encode($data));
+        }else{
+            return false;
         }
-        $data = array(
-            'customerId'    => $entity->getCustomerId(),
-            'mobile'        => $entity->getMobile(),
-            'name'          => $entity->getName(),
-            'gender'        => $entity->getGender(),
-            'age'           => $entity->getAge(),
-            'ageType'       => $entity->getAgeType() ,
-            'location'      => $entity->getLocation()->getId(),
-            'address'       => $entity->getAddress()
-        );
-        return new Response(json_encode($data));
         exit;
     }
 

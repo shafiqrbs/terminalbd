@@ -220,17 +220,42 @@ $(".select2CustomerCode").select2({
 
 });
 
-$(document).on('change', '#appstore_bundle_hospitalbundle_invoice_customer_mobile', function() {
+$(document).on('change', '#appstore_bundle_hospitalbundle_invoice_customer_customerId', function() {
 
-    var mobile = $('#appstore_bundle_hospitalbundle_invoice_customer_mobile').val();
-    alert(mobile);
+    var mobile = $('#appstore_bundle_hospitalbundle_invoice_customer_customerId').val();
+    var invoice = $('#invoice').val();
     $.ajax({
         url: Routing.generate('hms_invoice_customer_details'),
         type: 'POST',
-        data:'mobile='+ mobile,
+        data:'mobile='+ mobile +'&invoice='+invoice,
         success: function(response) {
             obj = JSON.parse(response);
-            $('.select2CustomerId').val(obj['customerId']);
+            $('.select2CustomerId').select2('data', {id: obj['customerId'], a_key: obj['customerId']});
+            $('.select2mobile').val(obj['mobile']);
+            $('.patientNme').val(obj['name']);
+            $('.patientAge').val(obj['age']);
+            $('.address').val(obj['address']);
+            $('.location').val(obj['location']).find("option[value=" + obj['location'] +"]").attr('selected', true);
+            $('.gender').val(obj['gender']).find("option[value=" + obj['gender'] +"]").attr('selected', true);
+            $('.ageType').val(obj['ageType']).find("option[value=" + obj['ageType'] +"]").attr('selected', true);
+        },
+    })
+
+});
+
+
+
+$(document).on('change', '#appstore_bundle_hospitalbundle_invoice_customer_mobile', function() {
+
+    var mobile = $('#appstore_bundle_hospitalbundle_invoice_customer_mobile').val();
+    var invoice = $('#invoice').val();
+    $.ajax({
+        url: Routing.generate('hms_invoice_customer_details'),
+        type: 'POST',
+        data:'mobile='+ mobile +'&invoice='+invoice,
+        success: function(response) {
+            obj = JSON.parse(response);
+            $('.select2CustomerId').select2('data', {id: obj['customerId'], a_key: obj['customerId']});
             $('.select2mobile').val(obj['mobile']);
             $('.patientNme').val(obj['name']);
             $('.patientAge').val(obj['age']);

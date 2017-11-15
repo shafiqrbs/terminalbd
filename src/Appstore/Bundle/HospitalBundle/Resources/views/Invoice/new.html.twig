@@ -65,6 +65,7 @@
                                 <div class="controls">
                                     {{ form_widget(form.customer.customerId) }}
                                     {{ form_errors(form.customer.customerId) }}
+                                    <input type="hidden" id="invoice" name="invoice" value="{{ entity.id }}">
                                 </div>
                             </div>
                         </div>

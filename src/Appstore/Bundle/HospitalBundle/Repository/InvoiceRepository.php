@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
+use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -241,6 +242,16 @@ class InvoiceRepository extends EntityRepository
         $qb->where('si.hmsInvoice = :invoice');
         $qb->setParameter('invoice', $invoice ->getId());
         $qb->groupBy('particular.service');
+
+    }
+
+    public function updatePatientInfo(Invoice $invoice,Customer $patient)
+    {
+        $em = $this->_em;
+        $invoice->setCustomer($patient);
+        $invoice->setMobile($patient->getMobile());
+        $em->persist($invoice);
+        $em->flush($invoice);
 
     }
 

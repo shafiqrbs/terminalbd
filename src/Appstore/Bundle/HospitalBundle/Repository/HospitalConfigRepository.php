@@ -23,8 +23,11 @@ class HospitalConfigRepository extends EntityRepository
         $StockItem = $em->createQuery('DELETE HospitalBundle:Invoice e WHERE e.hospitalConfig = '.$config);
         $StockItem->execute();
 
-        $Damage = $em->createQuery('DELETE HospitalBundle:Particular e WHERE e.hospitalConfig = '.$config);
+        $Damage = $em->createQuery('DELETE HospitalBundle:DoctorInvoice e WHERE e.hospitalConfig = '.$config);
         $Damage->execute();
+
+        $reverse = $em->createQuery('DELETE HospitalBundle:HmsReverse e WHERE e.hospitalConfig = '.$config);
+        $reverse->execute();
 
         $Damage = $em->createQuery('DELETE HospitalBundle:PathologicalReport e WHERE e.hospitalConfig = '.$config);
         $Damage->execute();
