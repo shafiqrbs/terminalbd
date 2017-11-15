@@ -140,11 +140,13 @@ class InvoiceRepository extends EntityRepository
         $total = $em->createQueryBuilder()
             ->from('HospitalBundle:InvoiceParticular','si')
             ->select('sum(si.subTotal) as subTotal')
+            ->addSelect('sum(si.commission) as subCommission')
             ->where('si.hmsInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();
 
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
+        $subCommission = !empty($total['subCommission']) ? $total['subCommission'] :0;
         if($subTotal > 0){
 
             if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
@@ -156,11 +158,13 @@ class InvoiceRepository extends EntityRepository
             $invoice->setSubTotal($subTotal);
             $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
             $invoice->setNetTotal($invoice->getTotal());
+            $invoice->setEstimateCommission($subCommission);
             $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
 
         }else{
 
             $invoice->setSubTotal(0);
+            $invoice->setEstimateCommission(0);
             $invoice->setTotal(0);
             $invoice->setNetTotal(0);
             $invoice->setDue(0);

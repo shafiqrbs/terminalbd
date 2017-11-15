@@ -27,4 +27,7 @@ hms_customer_update:
 hms_customer_delete:
     path:     /{id}/delete
     defaults: { _controller: "DomainUserBundle:CustomerHms:delete" }
-    methods:  [POST, DELETE]
+
+hms_customer_details:
+    path:     /{mobile}/patient-details
+    defaults: { _controller: "DomainUserBundle:CustomerHms:details" }

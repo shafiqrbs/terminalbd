@@ -53,6 +53,18 @@ domain_customer_name:
     options:
            expose: true
 
+domain_customer_code_search:
+    path:     /customer-code-search
+    defaults: { _controller: "DomainUserBundle:Customer:autoCodeSearch" }
+    options:
+            expose: true
+
+domain_customer_code:
+    path:      /{customer}/customer-code
+    defaults: { _controller: "DomainUserBundle:Customer:searchCode" }
+    options:
+           expose: true
+
 domain_location_search:
     path:     /location-search
     defaults: { _controller: "DomainUserBundle:Customer:autoLocationSearch" }

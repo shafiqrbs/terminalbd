@@ -59,12 +59,21 @@
             <div class="row-fluid">
                 <div class="span12 patient-info">
                     <div class="row-fluid customer-add">
-                        <div class="span8">
+                        <div class="span4">
                             <div class="control-group">
-                                <label class="control-label red" for="firstName"><span>Patient Name</span><span class="required">*</span></label>
+                                <label class="control-label red" for="firstName"><span>Patient Code</span></label>
                                 <div class="controls">
-                                    {{ form_widget(form.customer.name) }}
-                                    {{ form_errors(form.customer.name) }}
+                                    {{ form_widget(form.customer.customerId) }}
+                                    {{ form_errors(form.customer.customerId) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span4">
+                            <div class="control-group">
+                                <label class="control-label red" for="firstName"><span>Mobile no</span><span class="required">*</span></label>
+                                <div class="controls">
+                                    {{ form_widget(form.customer.mobile) }}
+                                    {{ form_errors(form.customer.mobile) }}
                                 </div>
                             </div>
                         </div>
@@ -72,10 +81,10 @@
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Mobile no</span><span class="required">*</span></label>
+                                        <label class="control-label red" for="firstName"><span>Patient Name</span><span class="required">*</span></label>
                                         <div class="controls">
-                                            {{ form_widget(form.customer.mobile) }}
-                                            {{ form_errors(form.customer.mobile) }}
+                                            {{ form_widget(form.customer.name) }}
+                                            {{ form_errors(form.customer.name) }}
                                         </div>
                                     </div>
                                 </div>
@@ -552,6 +561,7 @@
     '@HospitalBundle/Resources/public/js/invoice.js'
     '@HospitalBundle/Resources/public/js/editable.js'
     '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
+    '@HospitalBundle/Resources/public/js/approveProcess.js'
 
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

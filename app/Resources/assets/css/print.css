@@ -138,11 +138,33 @@ table.table-no-border {
     display: inline-block;
 
 }
+.print-header .title-center{
+    padding-left: 10px;
+    line-height: 50px;
+    font-size: 18px;
+    clear: both;
+    display: inline-block;
+}
+
+.print-header .barcode-left{
+    float: left;
+    padding-left: 10px;
+    margin-top: 5px;
+}
+
+.print-header .barcode-right{
+    float: right;
+    padding-right: 10px;
+    margin-top: 5px;
+}
+
 .print-header .barcode{
     float: right;
     padding-right: 10px;
     margin-top: 5px;
 }
+
+
 .table td {
     padding:1px;
     line-height: 20px;

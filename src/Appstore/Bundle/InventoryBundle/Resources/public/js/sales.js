@@ -365,7 +365,6 @@ var InventorySales = function(sales) {
     $(".select2Item").select2({
 
         placeholder: "Search item, color, size & brand name",
-        allowClear: true,
         ajax: {
             url: Routing.generate('item_search'),
             dataType: 'json',

@@ -90,3 +90,10 @@ hms_invoice_status_select:
 hms_invoice_empty_delete:
     path:     /delete/empty-invoice
     defaults: { _controller: "HospitalBundle:Invoice:deleteEmptyInvoice" }
+
+hms_invoice_customer_details:
+    path:     /invoice-patient-details
+    defaults: { _controller: "DomainUserBundle:CustomerHms:details" }
+    methods:  POST
+    options:
+           expose: true

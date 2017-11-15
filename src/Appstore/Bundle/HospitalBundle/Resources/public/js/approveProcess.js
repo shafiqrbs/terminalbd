@@ -86,159 +86,6 @@ $(document).on("click", ".approvex", function() {
     })
 });
 
-$(".select2Item").select2({
-
-    placeholder: "Search item, color, size & brand name",
-    allowClear: true,
-    ajax: {
-        url: Routing.generate('item_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function(item){
-
-        //return item.name +' => '+ (item.remainingQuantity)
-        return item.name
-
-    }, // omitted for brevity, see the source of this page
-    formatSelection: function(item){return item.name + ' / ' + item.sku}, // omitted for brevity, see the source of this page
-    initSelection: function(element, callback) {
-        var id = $(element).val();
-    },
-    allowClear: true,
-    minimumInputLength:1
-});
-
-$(".branchSales2Item").select2({
-
-    placeholder: "Search item, color, size & brand name",
-    allowClear: true,
-    ajax: {
-        url: Routing.generate('item_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function(item){
-
-        //return item.name +' => '+ (item.remainingQuantity)
-        return item.name
-
-    }, // omitted for brevity, see the source of this page
-    formatSelection: function(item){return item.name + ' / ' + item.sku}, // omitted for brevity, see the source of this page
-    initSelection: function(element, callback) {
-        var id = $(element).val();
-    },
-    allowClear: true,
-    minimumInputLength:1
-});
-
-
-$("#barcodeNo").select2({
-
-    placeholder: "Enter specific barcode",
-    allowClear: true,
-    ajax: {
-
-        url: Routing.generate('inventory_purchaseitem_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function(item){ return item.text +'(' +item.item_name+')'}, // omitted for brevity, see the source of this page
-    formatSelection: function(item){return item.text +'(' +item.item_name+')' }, // omitted for brevity, see the source of this page
-    initSelection: function(element, callback) {
-        var id = $(element).val();
-    },
-    allowClear: true,
-    minimumInputLength:1
-});
-
-$(".select2Barcode").select2({
-
-    placeholder: "Enter specific barcode",
-    allowClear: true,
-    ajax: {
-
-        url: Routing.generate('inventory_purchaseitem_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function(item){ return item.text}, // omitted for brevity, see the source of this page
-    formatSelection: function(item){return item.text}, // omitted for brevity, see the source of this page
-    initSelection: function (element, callback) {
-        var id = $(element).val();
-        $.ajax(Routing.generate('inventory_barcode_name', { barcode : id}), {
-            dataType: "json"
-        }).done(function (data) {
-            return  callback(data);
-        });
-
-
-    },
-    allowClear: true,
-    minimumInputLength:1
-
-});
-
 
 $(".select2Grn").select2({
 
@@ -328,102 +175,19 @@ $(".select2Product").select2({
     minimumInputLength: 1
 });
 
-$(".select2Category").select2({
+$(".select2CustomerCode").select2({
 
-    placeholder: "Search by product category",
+    placeholder: "Search customer code",
     ajax: {
-        url: Routing.generate('inventory_category_search'),
+
+        url: Routing.generate('domain_customer_code_search'),
         dataType: 'json',
         delay: 250,
         data: function (params, page) {
             return {
                 q: params,
-                page_limit: 100
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function (item) {
-        return item.text
-    }, // omitted for brevity, see the source of this page
-    formatSelection: function (item) {
-        return item.text
-    }, // omitted for brevity, see the source of this page
-    initSelection: function (element, callback) {
+                page_limit: 100,
 
-        var id = $(element).val();
-        $.ajax(Routing.generate('inventory_category_name', { category : id}), {
-            dataType: "json"
-        }).done(function (data) {
-            return  callback(data);
-        });
-
-
-    },
-    allowClear: true,
-    minimumInputLength: 1
-});
-
-$(".select2Unit").select2({
-
-    placeholder: "Search product unit",
-    ajax: {
-        url: Routing.generate('inventory_unit_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function (item) { return item.text}, // omitted for brevity, see the source of this page
-    formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
-    initSelection: function (element, callback) {
-        var id = $(element).val();
-        $.ajax(Routing.generate('inventory_unit_name', { vendor : id}), {
-            dataType: "json"
-        }).done(function (data) {
-            return  callback(data);
-        });
-
-
-    },
-    allowClear: true,
-    minimumInputLength: 1
-
-});
-
-$(".select2Color").select2({
-
-    placeholder: "Search color name",
-    ajax: {
-
-        url: Routing.generate('inventory_itemcolor_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100
             };
         },
         results: function (data, page) {
@@ -444,59 +208,60 @@ $(".select2Color").select2({
     }, // omitted for brevity, see the source of this page
     initSelection: function (element, callback) {
         var id = $(element).val();
-        $.ajax(Routing.generate('inventory_itemcolor_name', { color : id}), {
-            dataType: "json"
-        }).done(function (data) {
-            return  callback(data);
-        });
-    },
-    allowClear: true,
-    minimumInputLength: 1
-});
-
-$(".select2Size").select2({
-
-    placeholder: "Search size name",
-    ajax: {
-
-        url: Routing.generate('inventory_itemsize_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function (item) {
-        return item.text
-    }, // omitted for brevity, see the source of this page
-    formatSelection: function (item) {
-        return item.text
-    }, // omitted for brevity, see the source of this page
-    initSelection: function (element, callback) {
-        var id = $(element).val();
-        $.ajax(Routing.generate('inventory_itemsize_name', { size : id}), {
+        $.ajax(Routing.generate('inventory_vendor_name', { vendor : id}), {
             dataType: "json"
         }).done(function (data) {
             return  callback(data);
         });
 
-
     },
     allowClear: true,
-    minimumInputLength: 1
+    minimumInputLength: 3
+
 });
+
+$(document).on('change', '#appstore_bundle_hospitalbundle_invoice_customer_mobile', function() {
+
+    var mobile = $('#appstore_bundle_hospitalbundle_invoice_customer_mobile').val();
+    alert(mobile);
+    $.ajax({
+        url: Routing.generate('hms_invoice_customer_details'),
+        type: 'POST',
+        data:'mobile='+ mobile,
+        success: function(response) {
+            obj = JSON.parse(response);
+            $('.select2CustomerId').val(obj['customerId']);
+            $('.select2mobile').val(obj['mobile']);
+            $('.patientNme').val(obj['name']);
+            $('.patientAge').val(obj['age']);
+            $('.address').val(obj['address']);
+            $('.location').val(obj['location']).find("option[value=" + obj['location'] +"]").attr('selected', true);
+            $('.gender').val(obj['gender']).find("option[value=" + obj['gender'] +"]").attr('selected', true);
+            $('.ageType').val(obj['ageType']).find("option[value=" + obj['ageType'] +"]").attr('selected', true);
+        },
+    })
+
+});
+
+
+$( ".select2mobile" ).autocomplete({
+
+    source: function( request, response ) {
+        $.ajax({
+            url: Routing.generate('domain_customer_auto_mobile_search'),
+            data: {
+                term: request.term
+            },
+            success: function( data ) {
+                response( data );
+            }
+        });
+    },
+    minLength: 3,
+    select: function( event, ui){}
+
+});
+
 
 $(".select2Vendor").select2({
 
@@ -538,49 +303,6 @@ $(".select2Vendor").select2({
 
 });
 
-$(".select2Brand").select2({
-
-    placeholder: "Search brand name",
-    ajax: {
-
-        url: Routing.generate('inventory_itembrand_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100,
-
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function (item) {
-        return item.text
-    }, // omitted for brevity, see the source of this page
-    formatSelection: function (item) {
-        return item.text
-    }, // omitted for brevity, see the source of this page
-    initSelection: function (element, callback) {
-        var id = $(element).val();
-        $.ajax(Routing.generate('inventory_itembrand_name', { brand : id}), {
-            dataType: "json"
-        }).done(function (data) {
-            return  callback(data);
-        });
-    },
-    allowClear: true,
-    minimumInputLength: 1
-
-});
 
 $(".select2User").select2({
 
@@ -705,63 +427,6 @@ $(".select2Location").select2({
     minimumInputLength: 1
 });
 
-$(".select2Item").select2({
-
-    placeholder: "Search item, color, size & brand name",
-    allowClear: true,
-    ajax: {
-        url: Routing.generate('item_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function(item){
-
-        return item.name +' => '+ (item.remainingQuantity)
-
-    }, // omitted for brevity, see the source of this page
-    formatSelection: function(item){return item.name + ' / ' + item.sku}, // omitted for brevity, see the source of this page
-    initSelection: function(element, callback) {
-        var id = $(element).val();
-    },
-    allowClear: true,
-    minimumInputLength:1
-});
-
-$(document).on('change', '#item', function() {
-
-    var item = $('#item').val();
-    if(item == ''){
-        $('#stockItemDetails').hide();
-        return false;
-    }
-    $.ajax({
-        url: Routing.generate('inventory_sales_item_purchase',{'customer':'customer'}),
-        type: 'POST',
-        data:'item='+ item,
-        success: function(response) {
-            $('#stockItemDetails').show();
-            $('#itemDetails').html(response);
-            $(".editable").editable();
-        },
-    })
-});
-
-
 $("#barcodeNo").select2({
 
     placeholder: "Enter specific barcode",
@@ -792,7 +457,6 @@ $("#barcodeNo").select2({
     initSelection: function(element, callback) {
         var id = $(element).val();
     },
-    allowClear: true,
     minimumInputLength:1
 });
 
@@ -826,7 +490,6 @@ $("#sku").select2({
     initSelection: function(element, callback) {
         var id = $(element).val();
     },
-    allowClear: true,
     minimumInputLength:1
 
 });

@@ -28,39 +28,40 @@ class CustomerForHospitalType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs','autocomplete'=>'off','placeholder'=>'Enter patient name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs patientNme','autocomplete'=>'off','placeholder'=>'Enter patient name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter patient name')),
                 )
             ))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile inputs','autocomplete'=>'off','placeholder'=>'Enter mobile no'),
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 select2mobile inputs','autocomplete'=>'off','placeholder'=>'Enter mobile no'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter patient mobile no')),
                 )
             ))
-            ->add('age','number', array('attr'=>array('class'=>'m-wrap span12 numeric inputs','placeholder'=>'Enter age'),
+            ->add('customerId','text', array('attr'=>array('class'=>'m-wrap span12 select2CustomerCode','autocomplete'=>'off','placeholder'=>'Enter customer code')))
+            ->add('age','number', array('attr'=>array('class'=>'m-wrap span12 numeric inputs patientAge','placeholder'=>'Enter age'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Patient age')),
             )))
 
             ->add('ageType', 'choice', array(
-                'attr'=>array('class'=>'span12 select-custom inputs'),
+                'attr'=>array('class'=>'span12 select-custom inputs ageType'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array('Years' => 'Years','Months' => 'Months','Day' => 'Day')
             ))
             ->add('gender', 'choice', array(
-                'attr'=>array('class'=>'span12 select-custom inputs'),
+                'attr'=>array('class'=>'span12 select-custom inputs gender'),
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array('Female' => 'Female','Male' => 'Male', 'Others' => 'Others'),
             ))
-            ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 resize inputs','rows'=> 3,'autocomplete'=>'off','placeholder'=>'Enter patient address')
+            ->add('address','textarea', array('attr'=>array('class'=>'m-wrap span12 resize inputs address','rows'=> 3,'autocomplete'=>'off','placeholder'=>'Enter patient address')
             ))
             ->add('location', 'entity', array(
                 'required'    => false,
                 'empty_value' => '---Select Location---',
-                'attr'=>array('class'=>'select2 span12'),
+                'attr'=>array('class'=>'select2 span12 location'),
                 'class' => 'Setting\Bundle\LocationBundle\Entity\Location',
                 'choices'=> $this->LocationChoiceList(),
                 'choices_as_values' => true,

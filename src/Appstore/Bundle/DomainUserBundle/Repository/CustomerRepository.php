@@ -98,9 +98,7 @@ class CustomerRepository extends EntityRepository
         $location = $data['customer']['location'];
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'name' => $name ,'mobile' => $mobile,'age' => $age,'gender' => $gender));
         if($entity){
-
             return $entity;
-
         }else{
 
             $entity = new Customer();
@@ -144,6 +142,7 @@ class CustomerRepository extends EntityRepository
             $mobile =    isset($data['mobile'])? $data['mobile'] :'';
             $customer =    isset($data['name'])? $data['name'] :'';
             $location =    isset($data['location'])? $data['location'] :'';
+            $customerId =    isset($data['customerId'])? $data['customerId'] :'';
 
             if (!empty($mobile)) {
                 $qb->andWhere("customer.mobile = :mobile");
@@ -158,6 +157,10 @@ class CustomerRepository extends EntityRepository
             if (!empty($customer)) {
                 $qb->andWhere("customer.name LIKE :name");
                 $qb->setParameter('name','%'. $customer.'%');
+            }
+            if (!empty($customerId)) {
+                $qb->andWhere("customer.customerId LIKE :customerId");
+                $qb->setParameter('customerId','%'. $customerId.'%');
             }
 
 
@@ -257,7 +260,6 @@ class CustomerRepository extends EntityRepository
         $query->where($query->expr()->like("e.mobile", "'$q%'"  ));
         $query->andWhere("e.globalOption = :globalOption");
         $query->setParameter('globalOption', $globalOption->getId());
-        $query->groupBy('e.mobile');
         $query->orderBy('e.name', 'ASC');
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
@@ -275,6 +277,22 @@ class CustomerRepository extends EntityRepository
         $query->setParameter('globalOption', $globalOption->getId());
         $query->groupBy('e.name');
         $query->orderBy('e.name', 'ASC');
+        $query->setMaxResults( '10' );
+        return $query->getQuery()->getResult();
+
+    }
+
+    public function searchAutoCompleteCode(GlobalOption $globalOption, $q)
+    {
+        $query = $this->createQueryBuilder('e');
+
+        $query->select('e.customerId as id');
+        $query->addSelect('e.customerId as text');
+        //$query->addSelect('CONCAT(e.customerId, " - ", e.name) AS text');
+        $query->where($query->expr()->like("e.customerId", "'$q%'"  ));
+        $query->andWhere("e.globalOption = :globalOption");
+        $query->setParameter('globalOption', $globalOption->getId());
+        $query->orderBy('e.customerId', 'ASC');
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
 

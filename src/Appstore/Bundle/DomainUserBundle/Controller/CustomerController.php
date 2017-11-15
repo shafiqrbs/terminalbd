@@ -251,7 +251,29 @@ class CustomerController extends Controller
         return new JsonResponse($item);
     }
 
+
+
     public function searchCustomerNameAction($customer)
+    {
+        return new JsonResponse(array(
+            'id'=> $customer,
+            'text' => $customer
+        ));
+    }
+
+    public function autoCodeSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $go = $this->getUser()->getGlobalOption();
+            $item = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteCode($go,$item);
+        }
+        return new JsonResponse($item);
+    }
+
+
+
+    public function searchCodeAction($customer)
     {
         return new JsonResponse(array(
             'id'=> $customer,
@@ -302,10 +324,5 @@ class CustomerController extends Controller
         return new JsonResponse($items);
 
     }
-
-
-
-
-
 
 }

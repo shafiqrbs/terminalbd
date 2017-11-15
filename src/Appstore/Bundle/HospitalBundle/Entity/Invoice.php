@@ -275,7 +275,7 @@ class Invoice
     /**
      * @var float
      *
-     * @ORM\Column(name="estimateCommission", type="float")
+     * @ORM\Column(name="estimateCommission", type="float" , nullable=true)
      */
     private $estimateCommission;
 

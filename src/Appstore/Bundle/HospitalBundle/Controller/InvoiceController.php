@@ -454,21 +454,6 @@ class InvoiceController extends Controller
 
     }
 
-
-    public function getBarcode($invoice)
-    {
-        $barcode = new BarcodeGenerator();
-        $barcode->setText($invoice);
-        $barcode->setType(BarcodeGenerator::Code39Extended);
-        $barcode->setScale(1);
-        $barcode->setThickness(25);
-        $barcode->setFontSize(8);
-        $code = $barcode->generate();
-        $data = '';
-        $data .= '<img src="data:image/png;base64,'.$code .'" />';
-        return $data;
-    }
-
     public function deleteEmptyInvoiceAction()
     {
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
@@ -505,11 +490,27 @@ class InvoiceController extends Controller
 
     }
 
+    public function getBarcode($value)
+    {
+        $barcode = new BarcodeGenerator();
+        $barcode->setText($value);
+        $barcode->setType(BarcodeGenerator::Code39Extended);
+        $barcode->setScale(1);
+        $barcode->setThickness(25);
+        $barcode->setFontSize(8);
+        $code = $barcode->generate();
+        $data = '';
+        $data .= '<img src="data:image/png;base64,'.$code .'" />';
+        return $data;
+    }
+
+
 
     public function invoicePrintAction(Invoice $entity)
     {
 
         $barcode = $this->getBarcode($entity->getInvoice());
+        $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
         $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
 
         $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
@@ -536,7 +537,8 @@ class InvoiceController extends Controller
         return $this->render('HospitalBundle:Invoice:'.$entity->getPrintFor().'.html.twig', array(
             'entity'      => $entity,
             'invoiceDetails'      => $invoiceDetails,
-            'barcode'     => $barcode,
+            'invoiceBarcode'     => $barcode,
+            'patientBarcode'     => $patientId,
             'inWords'     => $inWords,
         ));
     }

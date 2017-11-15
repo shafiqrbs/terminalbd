@@ -106,8 +106,9 @@
                     <table class="table table-bordered table-striped table-condensed table-fixed">
                         <thead class="flip-content ">
                         <tr class="head-black">
-                            <th class="span9" colspan="2">Investigation</th>
+                            <th class="span8">Investigation</th>
                             <th class="span1">Qnt</th>
+                            <th class="span1">Commission</th>
                             <th class="span2">Amount</th>
                         </tr>
                         </thead>
@@ -115,19 +116,20 @@
 
                         {% for key, serviceDetails in invoiceDetails %}
                             {% if key != 'Pathology' %}
-                                <tr><td colspan="4" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
+                                <tr><td colspan="3" class="span9 service-group"><strong>{{ key }}</strong></td></tr>
                             {% endif %}
-                            {% set colSpan = serviceDetails.hasQuantity? 2 : 3 %}
+                            {% set colSpan = serviceDetails.hasQuantity? 1 : 2 %}
                             {% for item in serviceDetails.items %}
                                 <tr>
-                                    <td class="span9" colspan="{{ colSpan }}">{{ item.particular.particularCode }} - {{ item.particular.name }}</td>
+                                    <td class="span8" colspan="{{ colSpan }}">{{ item.particular.particularCode }} - {{ item.particular.name }}</td>
+                                    <td class="span1">{{ item.commission|number_format }}</td>
                                     {% if serviceDetails.hasQuantity %}
                                         <td class="span1">{{ item.quantity }}</td>
                                     {% endif %}
-                                    <td class="span1" style="text-align: right!important;">{{ item.subTotal|number_format }}</td>
+                                    <td class="span1">{{ item.subTotal|number_format }}</td>
                                 </tr>
                             {% endfor %}
-                            <tr><td colspan="3" class="span11"><strong class="pull-right">Sub-Total</strong></td><td class="span1" style="text-align: right!important;">{{ serviceDetails.total|number_format }}</td></tr>
+                            <tr><td colspan="3" class="span11"><strong class="pull-right">Sub-Total</strong></td><td class="span1"><strong>{{ serviceDetails.total|number_format }}</strong></td></tr>
                         {% endfor %}
                         </tbody>
                         <tfoot>
@@ -166,7 +168,8 @@
             </div>
             <div class="clearfix">&nbsp;</div>
             <div class="form-actions portlet box purple">
-                <div class="pull-right span12">
+                <div class="pull-left span6"><span class="btn" style="margin-top:1px; font-weight:bold">Invoice Commission: BDT. {{ invoice.estimateCommission|number_format }}</span></div>
+                <div class="pull-right span6">
                     <span id="show" data-trigger="hover" data-original-title="All payment history" class=" btn purple receivePayment tooltips pull-right"><i class="icon-money"></i>&nbsp;Payment History</span>
                 </div>
             </div>

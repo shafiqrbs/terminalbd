@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Customer controller.
@@ -33,7 +34,7 @@ class CustomerHmsController extends Controller
 
 
     /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES,ROLE_DOMAIN_CUSTOMER")
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_OPERATOR")
      */
 
     public function indexAction()
@@ -107,9 +108,9 @@ class CustomerHmsController extends Controller
     }
 
     /**
-     * Displays a form to create a new Customer entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_OPERATOR")
      */
+
     public function newAction()
     {
         $entity = new Customer();
@@ -140,9 +141,9 @@ class CustomerHmsController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Customer entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_OPERATOR")
      */
+
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -213,11 +214,12 @@ class CustomerHmsController extends Controller
             'form'   => $editForm->createView(),
         ));
     }
+
     /**
-     * Deletes a Customer entity.
-     *
+     * @Secure(roles="ROLE_DOMAIN_HOSPITAL_OPERATOR")
      */
-    public function deleteAction(Request $request, $id)
+
+    public function deleteAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
@@ -230,6 +232,29 @@ class CustomerHmsController extends Controller
         $em->flush();
 
         return $this->redirect($this->generateUrl('customer'));
+    }
+
+    public function detailsAction(Request $request)
+    {
+        $mobile = $request->request->get('mobile');
+        $em = $this->getDoctrine()->getManager();
+        $option = $this->getUser()->getGlobalOption();
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=> $option,'mobile' => $mobile));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Customer entity.');
+        }
+        $data = array(
+            'customerId'    => $entity->getCustomerId(),
+            'mobile'        => $entity->getMobile(),
+            'name'          => $entity->getName(),
+            'gender'        => $entity->getGender(),
+            'age'           => $entity->getAge(),
+            'ageType'       => $entity->getAgeType() ,
+            'location'      => $entity->getLocation()->getId(),
+            'address'       => $entity->getAddress()
+        );
+        return new Response(json_encode($data));
+        exit;
     }
 
 }

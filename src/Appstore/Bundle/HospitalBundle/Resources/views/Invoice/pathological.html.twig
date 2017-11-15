@@ -28,8 +28,9 @@
         <table class="table table-border" >
             <tr class="print-header">
                 <th colspan="2">
-                    <strong class="title">Invoice</strong>
-                    <span class="barcode" style="margin-top: 8px">{{ barcode|raw }}</span>
+                    <span class="barcode-left">{{ patientBarcode|raw }}</span>
+                    <span class="title-center text-center">Patient Invoice</span>
+                    <span class="barcode-right">{{ invoiceBarcode|raw }}</span>
                 </th>
             </tr>
             <tr>

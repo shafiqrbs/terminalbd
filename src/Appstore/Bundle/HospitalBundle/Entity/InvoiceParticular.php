@@ -66,7 +66,6 @@ class InvoiceParticular
      */
     private $quantity = 1;
 
-
     /**
      * @var float
      *
@@ -74,19 +73,17 @@ class InvoiceParticular
      */
     private $salesPrice;
 
-
     /**
      * @var float
      *
-     * @ORM\Column(name="commission", type="float")
+     * @ORM\Column(name="commission", type="float", nullable=true)
      */
     private $commission;
-
 
     /**
      * @var string
      *
-     * @ORM\Column(name="estimatePrice", type="decimal")
+     * @ORM\Column(name="estimatePrice", type="decimal", nullable=true)
      */
     private $estimatePrice;
 
