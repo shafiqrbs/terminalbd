@@ -263,12 +263,23 @@ class CustomerController extends Controller
 
     public function autoCodeSearchAction(Request $request)
     {
-        $item = $_REQUEST['q'];
+
+        /* $item = $_REQUEST['q'];
         if ($item) {
             $go = $this->getUser()->getGlobalOption();
             $item = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteCode($go,$item);
         }
-        return new JsonResponse($item);
+        return new JsonResponse($item);*/
+
+        $q = $_REQUEST['term'];
+        $option = $this->getUser()->getGlobalOption();
+        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteCode($option,$q);
+        $items = array();
+        foreach ($entities as $entity):
+            $items[]=array('id' => $entity['customer'],'value' => $entity['text']);
+        endforeach;
+        return new JsonResponse($items);
+
     }
 
 
@@ -289,6 +300,9 @@ class CustomerController extends Controller
             $item = $this->getDoctrine()->getRepository('SettingLocationBundle:Location')->searchAutoComplete($item);
         }
         return new JsonResponse($item);
+
+
+
     }
 
     public function searchLocationNameAction($location)
@@ -319,7 +333,7 @@ class CustomerController extends Controller
         $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoComplete($option,$q);
         $items = array();
         foreach ($entities as $entity):
-            $items[]=array('id' => $entity['id'],'value' => $entity['id']);
+            $items[]=array('id' => $entity['customer'],'value' => $entity['id']);
         endforeach;
         return new JsonResponse($items);
 

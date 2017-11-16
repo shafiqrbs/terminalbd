@@ -236,11 +236,11 @@ class CustomerHmsController extends Controller
 
     public function detailsAction(Request $request)
     {
-        $mobile = $request->request->get('mobile');
+        $customer = $request->request->get('customer');
         $invoice = $request->request->get('invoice');
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
-        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=> $option,'mobile' => $mobile));
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=> $option,'id' => $customer));
         if (!empty($entity)) {
             $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePatientInfo($invoice, $entity);
             $data = array(

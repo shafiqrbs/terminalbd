@@ -256,6 +256,7 @@ class CustomerRepository extends EntityRepository
         $query = $this->createQueryBuilder('e');
 
         $query->select('e.mobile as id');
+        $query->addSelect('e.id as customer');
         $query->addSelect('e.mobile as text');
         $query->where($query->expr()->like("e.mobile", "'$q%'"  ));
         $query->andWhere("e.globalOption = :globalOption");
@@ -271,6 +272,7 @@ class CustomerRepository extends EntityRepository
         $query = $this->createQueryBuilder('e');
 
         $query->select('e.name as id');
+        $query->addSelect('e.id as customer');
         $query->addSelect('e.name as text');
         $query->where($query->expr()->like("e.name", "'$q%'"  ));
         $query->andWhere("e.globalOption = :globalOption");
@@ -287,6 +289,7 @@ class CustomerRepository extends EntityRepository
         $query = $this->createQueryBuilder('e');
 
         $query->select('e.mobile as id');
+        $query->addSelect('e.id as customer');
         $query->addSelect('e.customerId as text');
         //$query->addSelect('CONCAT(e.customerId, " - ", e.name) AS text');
         $query->where($query->expr()->like("e.customerId", "'$q%'"  ));

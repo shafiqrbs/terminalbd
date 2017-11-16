@@ -174,104 +174,48 @@ $(".select2Product").select2({
     minimumInputLength: 1
 });
 
-$(".select2CustomerCode").select2({
 
-    placeholder: "Search customer code",
-    ajax: {
+$(".select2CustomerCode" ).autocomplete({
 
-        url: Routing.generate('domain_customer_code_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100,
-
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function (item) {
-        return item.text
-    }, // omitted for brevity, see the source of this page
-    formatSelection: function (item) {
-        return item.text
-    }, // omitted for brevity, see the source of this page
-    initSelection: function (element, callback) {
-        var id = $(element).val();
-        $.ajax(Routing.generate('inventory_vendor_name', { vendor : id}), {
-            dataType: "json"
-        }).done(function (data) {
-            return  callback(data);
-        });
-
-    },
-    allowClear: true,
-    minimumInputLength: 3
-
-});
-
-$(document).on('change', '#appstore_bundle_hospitalbundle_invoice_customer_customerId', function() {
-
-    var mobile = $('#appstore_bundle_hospitalbundle_invoice_customer_customerId').val();
-    var invoice = $('#invoice').val();
-    $.ajax({
-        url: Routing.generate('hms_invoice_customer_details'),
-        type: 'POST',
-        data:'mobile='+ mobile +'&invoice='+invoice,
-        success: function(response) {
-            obj = JSON.parse(response);
-            if(obj['status'] == 'valid'){
-                $('.select2CustomerId').select2('data', {id: obj['customerId'], a_key: obj['customerId']});
-                $('.select2mobile').val(obj['mobile']);
-                $('.patientNme').val(obj['name']);
-                $('.patientAge').val(obj['age']);
-                $('.address').val(obj['address']);
-                $('.location').val(obj['location']).find("option[value=" + obj['location'] +"]").attr('selected', true);
-                $('.gender').val(obj['gender']).find("option[value=" + obj['gender'] +"]").attr('selected', true);
-                $('.ageType').val(obj['ageType']).find("option[value=" + obj['ageType'] +"]").attr('selected', true);
-
-            }else{
-                alert("Exit patient information does not exist");
+    source: function( request, response ) {
+        $.ajax({
+            url: Routing.generate('domain_customer_code_search'),
+            data: {
+                term: request.term
+            },
+            success: function( data ) {
+                response( data );
             }
-        },
-    })
+        });
+    },
+    minLength: 8,
+    select: function( event, ui){
+        var customerId = ui.item.id;
+        var invoice = $('#invoice').val();
+        $.ajax({
+            url: Routing.generate('hms_invoice_customer_details'),
+            type: 'POST',
+            data:'customer='+customerId +'&invoice='+invoice,
+            success: function(response) {
+                obj = JSON.parse(response);
+                if(obj['status'] == 'valid'){
+                    $('.select2CustomerId').val(obj['customerId']);
+                    $('.select2mobile').val(obj['mobile']);
+                    $('.patientNme').val(obj['name']);
+                    $('.patientAge').val(obj['age']);
+                    $('.address').val(obj['address']);
+                    $('.location').val(obj['location']).find("option[value=" + obj['location'] +"]").attr('selected', true);
+                    $('.gender').val(obj['gender']).find("option[value=" + obj['gender'] +"]").attr('selected', true);
+                    $('.ageType').val(obj['ageType']).find("option[value=" + obj['ageType'] +"]").attr('selected', true);
+
+                }else{
+                    alert("Exit patient information does not exist");
+                }
+            },
+        })
+    }
 
 });
-
-
-
-$(document).on('change', '#appstore_bundle_hospitalbundle_invoice_customer_mobile', function() {
-
-    var mobile = $('#appstore_bundle_hospitalbundle_invoice_customer_mobile').val();
-    var invoice = $('#invoice').val();
-    $.ajax({
-        url: Routing.generate('hms_invoice_customer_details'),
-        type: 'POST',
-        data:'mobile='+ mobile +'&invoice='+invoice,
-        success: function(response) {
-            obj = JSON.parse(response);
-            $('.select2CustomerId').select2('data', {id: obj['customerId'], a_key: obj['customerId']});
-            $('.select2mobile').val(obj['mobile']);
-            $('.patientNme').val(obj['name']);
-            $('.patientAge').val(obj['age']);
-            $('.address').val(obj['address']);
-            $('.location').val(obj['location']).find("option[value=" + obj['location'] +"]").attr('selected', true);
-            $('.gender').val(obj['gender']).find("option[value=" + obj['gender'] +"]").attr('selected', true);
-            $('.ageType').val(obj['ageType']).find("option[value=" + obj['ageType'] +"]").attr('selected', true);
-        },
-    })
-
-});
-
 
 $( ".select2mobile" ).autocomplete({
 
@@ -286,8 +230,32 @@ $( ".select2mobile" ).autocomplete({
             }
         });
     },
-    minLength: 3,
-    select: function( event, ui){}
+    minLength: 11,
+    select: function( event, ui){
+        var customerId = ui.item.id;
+        var invoice = $('#invoice').val();
+        $.ajax({
+            url: Routing.generate('hms_invoice_customer_details'),
+            type: 'POST',
+            data:'customer='+customerId+'&invoice='+invoice,
+            success: function(response) {
+                obj = JSON.parse(response);
+                if(obj['status'] == 'valid'){
+                    $('.select2CustomerId').val(obj['customerId']);
+                    $('.select2mobile').val(obj['mobile']);
+                    $('.patientNme').val(obj['name']);
+                    $('.patientAge').val(obj['age']);
+                    $('.address').val(obj['address']);
+                    $('.location').val(obj['location']).find("option[value=" + obj['location'] +"]").attr('selected', true);
+                    $('.gender').val(obj['gender']).find("option[value=" + obj['gender'] +"]").attr('selected', true);
+                    $('.ageType').val(obj['ageType']).find("option[value=" + obj['ageType'] +"]").attr('selected', true);
+
+                }else{
+                    alert("Exit patient information does not exist");
+                }
+            },
+        })
+    }
 
 });
 

@@ -20,23 +20,20 @@ class HospitalConfigRepository extends EntityRepository
         $em = $this->_em;
         $config = $option->getHospitalConfig()->getId();
 
-        $StockItem = $em->createQuery('DELETE HospitalBundle:Invoice e WHERE e.hospitalConfig = '.$config);
-        $StockItem->execute();
+        $Invoice = $em->createQuery('DELETE HospitalBundle:Invoice e WHERE e.hospitalConfig = '.$config);
+        $Invoice->execute();
 
-        $Damage = $em->createQuery('DELETE HospitalBundle:DoctorInvoice e WHERE e.hospitalConfig = '.$config);
-        $Damage->execute();
+        $DoctorInvoice = $em->createQuery('DELETE HospitalBundle:DoctorInvoice e WHERE e.hospitalConfig = '.$config);
+        $DoctorInvoice->execute();
 
         $reverse = $em->createQuery('DELETE HospitalBundle:HmsReverse e WHERE e.hospitalConfig = '.$config);
         $reverse->execute();
 
-        $Damage = $em->createQuery('DELETE HospitalBundle:PathologicalReport e WHERE e.hospitalConfig = '.$config);
-        $Damage->execute();
+        $PathologicalReport = $em->createQuery('DELETE HospitalBundle:PathologicalReport e WHERE e.hospitalConfig = '.$config);
+        $PathologicalReport->execute();
 
         $HmsPurchase = $em->createQuery('DELETE HospitalBundle:HmsPurchase e WHERE e.hospitalConfig = '.$config);
         $HmsPurchase->execute();
-
-        $HmsVendor = $em->createQuery('DELETE HospitalBundle:HmsVendor e WHERE e.hospitalConfig = '.$config);
-        $HmsVendor->execute();
 
         $Particular = $em->createQuery('DELETE HospitalBundle:Particular e WHERE e.hospitalConfig = '.$config);
         $Particular->execute();
