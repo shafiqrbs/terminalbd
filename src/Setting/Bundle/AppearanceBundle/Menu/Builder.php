@@ -61,17 +61,24 @@ class Builder extends ContainerAware
                 }
             }
 
-            $result = array_intersect($menuName, array('Accounting'));
-            if (!empty($result)) {
-                if ($securityContext->isGranted('ROLE_ACCOUNTING')){
-                    $menu = $this->AccountingMenu($menu);
-                }
-            }
-
             $result = array_intersect($menuName, array('Inventory'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_INVENTORY')){
                     $menu = $this->InventoryMenu($menu);
+                }
+            }
+
+            $result = array_intersect($menuName, array('Hospital'));
+            if (!empty($result)) {
+                if ($securityContext->isGranted('ROLE_HOSPITAL')){
+                    $menu = $this->HospitalSalesMenu($menu);
+                }
+            }
+
+            $result = array_intersect($menuName, array('Accounting'));
+            if (!empty($result)) {
+                if ($securityContext->isGranted('ROLE_ACCOUNTING')){
+                    $menu = $this->AccountingMenu($menu);
                 }
             }
 
@@ -93,13 +100,6 @@ class Builder extends ContainerAware
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_WEBSITE')){
                     $menu = $this->WebsiteMenu($menu,$menuName);
-                }
-            }
-
-            $result = array_intersect($menuName, array('Hospital'));
-            if (!empty($result)) {
-                if ($securityContext->isGranted('ROLE_HOSPITAL')){
-                    $menu = $this->HospitalSalesMenu($menu);
                 }
             }
 
