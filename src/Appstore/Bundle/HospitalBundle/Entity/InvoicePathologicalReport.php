@@ -26,11 +26,13 @@ class InvoicePathologicalReport
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", inversedBy="invoicePathologicalReports")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $invoiceParticular;
 
      /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", inversedBy="invoicePathologicalReports")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $pathologicalReport;
 

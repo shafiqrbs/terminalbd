@@ -26,6 +26,7 @@ class InvoiceParticular
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="invoiceParticulars")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $hmsInvoice;
 
@@ -40,7 +41,7 @@ class InvoiceParticular
     private $assignDoctor;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoicePathologicalReport", mappedBy="invoiceParticular")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoicePathologicalReport", mappedBy="invoiceParticular" , cascade={"remove"})
      **/
     private $invoicePathologicalReports;
 

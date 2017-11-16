@@ -35,12 +35,14 @@ class PathologicalReport
     private $children;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="pathologicalReport" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="pathologicalReport")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $hospitalConfig;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="pathologicalReports")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $particular;
 

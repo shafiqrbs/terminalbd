@@ -32,10 +32,10 @@ class InvoiceTransaction
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="invoiceTransactions" , cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="invoiceTransactions")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $hmsInvoice;
-
 
     /**
      * @Gedmo\Blameable(on="create")
