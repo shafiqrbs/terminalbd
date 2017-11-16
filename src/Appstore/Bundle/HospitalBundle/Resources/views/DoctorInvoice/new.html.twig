@@ -122,14 +122,14 @@
                             {% for item in serviceDetails.items %}
                                 <tr>
                                     <td class="span8" colspan="{{ colSpan }}">{{ item.particular.particularCode }} - {{ item.particular.name }}</td>
-                                    <td class="span1">{{ item.commission|number_format }}</td>
                                     {% if serviceDetails.hasQuantity %}
                                         <td class="span1">{{ item.quantity }}</td>
                                     {% endif %}
+                                    <td class="span1">{{ item.commission|number_format }}</td>
                                     <td class="span1">{{ item.subTotal|number_format }}</td>
                                 </tr>
                             {% endfor %}
-                            <tr><td colspan="3" class="span11"><strong class="pull-right">Sub-Total</strong></td><td class="span1"><strong>{{ serviceDetails.total|number_format }}</strong></td></tr>
+                            <tr><td colspan="3" class="span11"><strong class="pull-right">Sub-Total</strong></td><td class="span1"><strong>{{ serviceDetails.total|number_format }} </strong></td></tr>
                         {% endfor %}
                         </tbody>
                         <tfoot>

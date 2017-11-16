@@ -2,7 +2,6 @@
  * Created by rbs on 5/1/17.
  */
 $(document).on("click", ".approve", function() {
-    alert('approve');
     $(this).removeClass('approve');
     var url = $(this).attr("data-url");
     $.ajax({
@@ -53,7 +52,6 @@ $(document).on('click', '#addParticular', function() {
     var quantity = $('#quantity').val();
     var price = $('#price').val();
     var url = $('#addParticular').attr('data-url');
-    alert(particularId);
     if(particularId == ''){
         $('#msg').html('Please select medicine or accessories name');
         return false;

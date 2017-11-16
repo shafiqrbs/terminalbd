@@ -15,7 +15,7 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('hms_purchase') }}">Medicine & Accessories</a>
+                    <a href="{{ path('hms_purchase') }}">Accessories</a>
                     <span class="icon-angle-right"></span>
                 </li>
                 <li><a href="#">Manage Purchase</a></li>
@@ -33,7 +33,7 @@
 
     <div class="portlet box green tabbable">
         <div class="portlet-title">
-            <div class="caption"><i class="icon-reorder"></i>Medicine & Accessories Information</div>
+            <div class="caption"><i class="icon-reorder"></i>Accessories Information</div>
             <div class="actions">
                 <div class="btn-group">
                     <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -128,7 +128,7 @@
                             <div class="row-fluid particular-info" >
                                 <div class="span7">
                                     <select id="particular" name="particular" class="span12 ">
-                                        <option value="">--- Select medicine & accessories name ---</option>
+                                        <option value="">--- Select accessories name ---</option>
                                        {% for particular in particulars %}
                                            <option value="{{ path('hms_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} </option>
                                        {% endfor %}
@@ -302,6 +302,5 @@
 {% block documentready %}
     {{ parent() }}
     EditableInit();
-
     $('input[name=particular]').focus();
 {% endblock %}
