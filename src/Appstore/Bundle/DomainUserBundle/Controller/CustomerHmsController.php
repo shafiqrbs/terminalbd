@@ -231,7 +231,6 @@ class CustomerHmsController extends Controller
 
         $em->remove($entity);
         $em->flush();
-
         return $this->redirect($this->generateUrl('customer'));
     }
 
@@ -242,9 +241,10 @@ class CustomerHmsController extends Controller
         $em = $this->getDoctrine()->getManager();
         $option = $this->getUser()->getGlobalOption();
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=> $option,'mobile' => $mobile));
-        if (!$entity) {
+        if (!empty($entity)) {
             $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePatientInfo($invoice, $entity);
             $data = array(
+                'status' => 'valid',
                 'customerId' => $entity->getCustomerId(),
                 'mobile' => $entity->getMobile(),
                 'name' => $entity->getName(),
@@ -256,7 +256,7 @@ class CustomerHmsController extends Controller
             );
             return new Response(json_encode($data));
         }else{
-            return false;
+            return new Response(json_encode(array('status' => 'invalid')));
         }
         exit;
     }

@@ -30,7 +30,6 @@ $(document).on("click", ".confirm", function() {
 
 
 $(document).on("click", ".delete", function() {
-
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
     $('#action-'+id).hide();
@@ -41,7 +40,7 @@ $(document).on("click", ".delete", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                location.reload();
+              /*  location.reload();*/
             });
         }
     });
@@ -230,14 +229,19 @@ $(document).on('change', '#appstore_bundle_hospitalbundle_invoice_customer_custo
         data:'mobile='+ mobile +'&invoice='+invoice,
         success: function(response) {
             obj = JSON.parse(response);
-            $('.select2CustomerId').select2('data', {id: obj['customerId'], a_key: obj['customerId']});
-            $('.select2mobile').val(obj['mobile']);
-            $('.patientNme').val(obj['name']);
-            $('.patientAge').val(obj['age']);
-            $('.address').val(obj['address']);
-            $('.location').val(obj['location']).find("option[value=" + obj['location'] +"]").attr('selected', true);
-            $('.gender').val(obj['gender']).find("option[value=" + obj['gender'] +"]").attr('selected', true);
-            $('.ageType').val(obj['ageType']).find("option[value=" + obj['ageType'] +"]").attr('selected', true);
+            if(obj['status'] == 'valid'){
+                $('.select2CustomerId').select2('data', {id: obj['customerId'], a_key: obj['customerId']});
+                $('.select2mobile').val(obj['mobile']);
+                $('.patientNme').val(obj['name']);
+                $('.patientAge').val(obj['age']);
+                $('.address').val(obj['address']);
+                $('.location').val(obj['location']).find("option[value=" + obj['location'] +"]").attr('selected', true);
+                $('.gender').val(obj['gender']).find("option[value=" + obj['gender'] +"]").attr('selected', true);
+                $('.ageType').val(obj['ageType']).find("option[value=" + obj['ageType'] +"]").attr('selected', true);
+
+            }else{
+                alert("Exit patient information does not exist");
+            }
         },
     })
 

@@ -67,6 +67,21 @@ class InvoiceParticular
     private $quantity = 1;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="code", type="integer",  nullable=true)
+     */
+    private $code;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reportCode", type="string",  nullable=true)
+     */
+    private $reportCode;
+
+
+    /**
      * @var float
      *
      * @ORM\Column(name="salesPrice", type="float")
@@ -429,6 +444,38 @@ class InvoiceParticular
     public function setCommission($commission)
     {
         $this->commission = $commission;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param int $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReportCode()
+    {
+        return $this->reportCode;
+    }
+
+    /**
+     * @param string $reportCode
+     */
+    public function setReportCode($reportCode)
+    {
+        $this->reportCode = $reportCode;
     }
 
 

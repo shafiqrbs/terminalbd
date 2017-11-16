@@ -245,9 +245,10 @@ class InvoiceRepository extends EntityRepository
 
     }
 
-    public function updatePatientInfo(Invoice $invoice,Customer $patient)
+    public function updatePatientInfo($invoice,Customer $patient)
     {
         $em = $this->_em;
+        $invoice = $this->_em->getRepository('HospitalBundle:Invoice')->find($invoice);
         $invoice->setCustomer($patient);
         $invoice->setMobile($patient->getMobile());
         $em->persist($invoice);
