@@ -78,9 +78,6 @@ class PathologyType extends AbstractType
                 'empty_value' => '---Select department---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
                 'property' => 'nestedLabel',
                 'choices'=> $this->DepartmentChoiceList()
             ))
@@ -89,9 +86,6 @@ class PathologyType extends AbstractType
                 'required'    => true,
                 'empty_value' => '---Select pathology---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
                 'choices'=> $this->PathologyChoiceList()

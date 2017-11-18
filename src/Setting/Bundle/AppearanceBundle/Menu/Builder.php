@@ -864,6 +864,7 @@ class Builder extends ContainerAware
 
     }
 
+
     public function PayrollMenu($menu)
     {
         $securityContext = $this->container->get('security.context');
@@ -871,10 +872,17 @@ class Builder extends ContainerAware
             ->addChild('HR & Payroll')
             ->setAttribute('icon', 'fa fa-group')
             ->setAttribute('dropdown', true);
-        if ($securityContext->isGranted('ROLE_HR_USER')) {
+        if ($securityContext->isGranted('ROLE_HR_EMPLOYEE')) {
 
             $menu['HR & Payroll']->addChild('Human Resource')->setAttribute('icon', 'icon-group')->setAttribute('dropdown', true);
             $menu['HR & Payroll']['Human Resource']->addChild('Employee', array('route' => 'domain_user'))->setAttribute('icon', 'icon-user');
+        }
+        if ($securityContext->isGranted('ROLE_HR_ATTENDANCE')) {
+            $menu['HR & Payroll']->addChild('Attendance')->setAttribute('icon', 'icon-group')->setAttribute('dropdown', true);
+            $menu['HR & Payroll']['Attendance']->addChild('Attendance', array('route' => 'domain_hr_attendance'))->setAttribute('icon', 'icon-user');
+            $menu['HR & Payroll']['Attendance']->addChild('Leave', array('route' => 'domain_hr_leave'))->setAttribute('icon', 'icon-user');
+            $menu['HR & Payroll']['Attendance']->addChild('Calendar Blackout', array('route' => 'domain_hr_blackout'))->setAttribute('icon', 'icon-user');
+            $menu['HR & Payroll']['Attendance']->addChild('Report', array('route' => 'domain_hr_report'))->setAttribute('icon', 'icon-user');
         }
         if ($securityContext->isGranted('ROLE_PAYROLL_SALARY')) {
 
@@ -883,6 +891,9 @@ class Builder extends ContainerAware
             $menu['HR & Payroll']['Payroll']->addChild('Payment Salary', array('route' => 'account_paymentsalary_employee'))->setAttribute('icon', 'icon-th-list');
             $menu['HR & Payroll']['Payroll']->addChild('Salary Invoice', array('route' => 'account_salarysetting'))->setAttribute('icon', 'icon-th-list');
         }
+
+
+
         if ($securityContext->isGranted('ROLE_ADMIN')) {
 
             $menu['HR & Payroll']->addChild('Manage Agent')->setAttribute('icon', 'icon-group')->setAttribute('dropdown', true);

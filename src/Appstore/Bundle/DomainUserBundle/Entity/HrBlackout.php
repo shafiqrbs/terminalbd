@@ -1,16 +1,17 @@
 <?php
 
-namespace Setting\Bundle\ContentBundle\Entity;
+namespace Appstore\Bundle\DomainUserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
- * Blackout
+ * HrBlackout
  *
- * @ORM\Table()
- * @ORM\Entity(repositoryClass="Setting\Bundle\ContentBundle\Repository\BlackoutRepository")
+ * @ORM\Table(name="hr_blackout")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\DomainUserBundle\Repository\HrBlackoutRepository")
  */
-class Blackout
+class HrBlackout
 {
     /**
      * @var integer
@@ -22,12 +23,6 @@ class Blackout
     private $id;
 
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255)
-     */
-    private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="blackout")
@@ -36,16 +31,16 @@ class Blackout
     protected $globalOption;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="blackoutDate", type="text")
+     * @ORM\Column(name="blackoutDate", type="array" , nullable=true)
      */
     private $blackoutDate;
 
     /**
      * @var text
      *
-     * @ORM\Column(name="content", type="text")
+     * @ORM\Column(name="content", type="text", nullable=true)
      */
     private $content;
 
@@ -57,19 +52,11 @@ class Blackout
     private $status = true;
 
 
-    public function __construct() {
-
-        if(!$this->getId()){
-            $this->setStatus(true);
-        }
-
-    }
-
 
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -85,14 +72,13 @@ class Blackout
     public function setBlackoutDate($blackoutDate)
     {
         $this->blackoutDate = $blackoutDate;
-
         return $this;
     }
 
     /**
      * Get blackoutDate
      *
-     * @return string
+     * @return string 
      */
     public function getBlackoutDate()
     {
@@ -109,9 +95,8 @@ class Blackout
         return explode(',' , $this->blackoutDate);
     }
 
-
     /**
-     * @return \Setting\Bundle\ContentBundle\Entity\text
+     * @return text
      */
     public function getContent()
     {
@@ -119,28 +104,13 @@ class Blackout
     }
 
     /**
-     * @param \Setting\Bundle\ContentBundle\Entity\text $content
+     * @param  $content
      */
     public function setContent($content)
     {
         $this->content = $content;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
 
     /**
      * @return boolean
@@ -159,7 +129,7 @@ class Blackout
     }
 
     /**
-     * @return mixed
+     * @return GlobalOption
      */
     public function getGlobalOption()
     {
@@ -167,7 +137,7 @@ class Blackout
     }
 
     /**
-     * @param mixed $globalOption
+     * @param GlobalOption $globalOption
      */
     public function setGlobalOption($globalOption)
     {

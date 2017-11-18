@@ -38,3 +38,19 @@ domain_agent_user:
 domain_agent_payment:
     resource: "@DomainUserBundle/Resources/config/routing/agentpayment.yml"
     prefix:   /hr/agent-payment
+
+domain_user_attendance:
+    resource: "@DomainUserBundle/Resources/config/routing/hrattendance.yml"
+    prefix:   /hr/attendance
+
+domain_user_leave:
+    resource: "@DomainUserBundle/Resources/config/routing/hrleave.yml"
+    prefix:   /hr/leave
+
+domain_calendar_blackout:
+    resource: "@DomainUserBundle/Resources/config/routing/hrblackout.yml"
+    prefix:   /hr/calendar-blackout
+
+domain_user_report:
+    resource: "@DomainUserBundle/Resources/config/routing/hrreport.yml"
+    prefix:   /hr/report

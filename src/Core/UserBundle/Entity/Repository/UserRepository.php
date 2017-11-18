@@ -130,6 +130,8 @@ class UserRepository extends EntityRepository
 
             $array['HR & Payroll'] = array(
                 'ROLE_HR'                                   => 'Human Resource',
+                'ROLE_HR_EMPLOYEE'                          => 'HR Employee',
+                'ROLE_HR_ATTENDANCE'                        => 'HR Attendance',
                 'ROLE_HR_BRANCH'                            => 'Branch',
                 'ROLE_PAYROLL'                              => 'Payroll',
                 'ROLE_PAYROLL_SALARY'                       => 'Payroll Salary',

@@ -125,12 +125,28 @@ class HospitalConfig
      */
     private $printTopMargin = 0;
 
+
     /**
      * @var smallint
      *
      * @ORM\Column(name="printMarginBottom", type="smallint",  nullable=true)
      */
     private $printMarginBottom = 0;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="printMarginReportTop", type="smallint",  nullable=true)
+     */
+    private $printMarginReportTop = 0;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="printMarginReportBottom", type="smallint",  nullable=true)
+     */
+    private $printMarginReportBottom = 0;
+
 
 
     /**
@@ -809,6 +825,38 @@ class HospitalConfig
     public function setCustomerPrefix($customerPrefix)
     {
         $this->customerPrefix = $customerPrefix;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getPrintMarginReportTop()
+    {
+        return $this->printMarginReportTop;
+    }
+
+    /**
+     * @param smallint $printMarginReportTop
+     */
+    public function setPrintMarginReportTop($printMarginReportTop)
+    {
+        $this->printMarginReportTop = $printMarginReportTop;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getPrintMarginReportBottom()
+    {
+        return $this->printMarginReportBottom;
+    }
+
+    /**
+     * @param smallint $printMarginReportBottom
+     */
+    public function setPrintMarginReportBottom($printMarginReportBottom)
+    {
+        $this->printMarginReportBottom = $printMarginReportBottom;
     }
 
 
