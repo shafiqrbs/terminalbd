@@ -33,7 +33,13 @@ class CustomerForHospitalAdmissionType extends AbstractType
                     new NotBlank(array('message'=>'Enter patient name')),
                 )
             ))
-             ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter father name'),
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 select2mobile inputs','autocomplete'=>'off','placeholder'=>'Enter mobile no'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Enter patient mobile no')),
+                )
+            ))
+            ->add('customerId','text', array('attr'=>array('class'=>'m-wrap span12 select2CustomerCode','autocomplete'=>'off','placeholder'=>'Enter customer code')))
+            ->add('fatherName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter father name'),
 
             ))
             ->add('motherName','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter mother name'),
@@ -47,11 +53,6 @@ class CustomerForHospitalAdmissionType extends AbstractType
             ))
             ->add('nationality','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter nationality'),
 
-            ))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','autocomplete'=>'off','placeholder'=>'Enter patient mobile no'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Enter patient mobile no')),
-                )
             ))
             ->add('age','number', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Enter patient age'),
                 'constraints' =>array(

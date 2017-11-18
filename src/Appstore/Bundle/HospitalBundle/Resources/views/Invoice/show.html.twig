@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Patient Pathological Invoice No # {{ entity.invoice }}
+                    Patient Diagnostic Invoice No # {{ entity.invoice }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +15,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('hms_invoice') }}">Invoice</a>
+                        <a href="{{ path('hms_invoice') }}">Diagnostic Invoice</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Patient</a></li>
+                    <li><a href="#">Manage Diagnostic Invoice</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>c
                         {{ "now"|date("d-F-Y") }}

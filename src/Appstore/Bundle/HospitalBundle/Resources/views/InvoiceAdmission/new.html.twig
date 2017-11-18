@@ -68,10 +68,11 @@
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Patient Name</span><span class="required">*</span></label>
+                                        <label class="control-label red" for="firstName"><span>Patient Code</span></label>
                                         <div class="controls">
-                                            {{ form_widget(form.customer.name) }}
-                                            {{ form_errors(form.customer.name) }}
+                                            {{ form_widget(form.customer.customerId) }}
+                                            {{ form_errors(form.customer.customerId) }}
+                                            <input type="hidden" id="invoice" name="invoice" value="{{ entity.id }}">
                                         </div>
                                     </div>
                                 </div>
@@ -83,6 +84,17 @@
                                         <div class="controls">
                                             {{ form_widget(form.customer.mobile) }}
                                             {{ form_errors(form.customer.mobile) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="control-group">
+                                        <label class="control-label red" for="firstName"><span>Patient Name</span><span class="required">*</span></label>
+                                        <div class="controls">
+                                            {{ form_widget(form.customer.name) }}
+                                            {{ form_errors(form.customer.name) }}
                                         </div>
                                     </div>
                                 </div>

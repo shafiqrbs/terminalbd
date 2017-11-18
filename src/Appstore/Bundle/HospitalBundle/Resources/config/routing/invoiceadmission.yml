@@ -18,23 +18,15 @@ hms_invoice_admission_particular_search:
     path:     /{id}/particular-search
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:particularSearch" }
 
-hms_invoice_admission_approved:
-    path:     /{id}/invoice-approved
-    defaults: { _controller: "HospitalBundle:InvoiceAdmission:approve" }
-    methods:  POST
-    options:
-            expose: true
-
 hms_invoice_admission_update:
     path:     /{id}/update
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:update" }
     methods:  [POST, PUT]
 
-hms_invoice_admission_delete:
-    path:     /{id}/delete
-    defaults: { _controller: "HospitalBundle:InvoiceAdmission:delete" }
-
 hms_invoice_admission_print_invoice:
     path:     /{id}/print
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:invoicePrint" }
 
+hms_invoice_admission_empty_delete:
+    path:     /delete/empty-invoice
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:deleteEmptyInvoice" }

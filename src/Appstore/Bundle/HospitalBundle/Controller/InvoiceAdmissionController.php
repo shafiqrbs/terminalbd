@@ -156,6 +156,9 @@ class InvoiceAdmissionController extends Controller
     public function invoiceDiscountUpdateAction(Request $request)
     {
     }
+    public function deleteAction(Request $request)
+    {
+    }
 
     public function updateAction(Request $request, Invoice $entity)
     {
@@ -245,63 +248,6 @@ class InvoiceAdmissionController extends Controller
     }
 
 
-
-
-
-    public function approveAction(Request $request , Invoice $entity)
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $payment = $request->request->get('payment');
-        $discount = $request->request->get('discount');
-        $process = $request->request->get('process');
-
-
-        if (!empty($entity)) {
-            $em = $this->getDoctrine()->getManager();
-            if($payment){
-
-                $entity->setDiscount($entity->getDiscount() + $discount);
-                $entity->setTotal($entity->getTotal() - $entity->getDiscount());
-                $entity->setPayment($entity->getPayment() + $payment);
-                $entity->setDue($entity->getTotal() - $entity->getPayment());
-                if($entity->getPayment() >= $entity->getTotal()) {
-                    $entity->setPaymentStatus('Paid');
-                }
-            }
-            $entity->setProcess($process);
-            $entity->setApprovedBy($this->getUser());
-            $em->flush();
-            return new Response('success');
-        } else {
-            return new Response('failed');
-        }
-        exit;
-    }
-
-
-    /**
-     * @Secure(roles="ROLE_DOMAIN_INVENTORY_SALES")
-     */
-
-    public function deleteAction(Invoice $sales)
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        if (!$sales) {
-            throw $this->createNotFoundException('Unable to find Invoice entity.');
-        }
-        if (!empty($sales->getInvoiceImport())) {
-            $salesImport = $sales->getInvoiceImport();
-            $em->remove($salesImport);
-        }
-        $em->remove($sales);
-        $em->flush();
-        return new Response(json_encode(array('success' => 'success')));
-        exit;
-    }
-
-
     public function getBarcode($invoice)
     {
         $barcode = new BarcodeGenerator();
@@ -319,7 +265,7 @@ class InvoiceAdmissionController extends Controller
     public function deleteEmptyInvoiceAction()
     {
         $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findBy(array('inventoryConfig' => $inventory, 'paymentStatus' => 'Pending'));
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findBy(array('inventoryConfig' => $inventory, 'process' => 'Created','invoiceMode'=>'admission'));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity) {
             $em->remove($entity);
@@ -328,81 +274,18 @@ class InvoiceAdmissionController extends Controller
         return $this->redirect($this->generateUrl('hms_invoice_admission'));
     }
 
-    public function salesInlineUpdateAction(Request $request)
-    {
-        $data = $request->request->all();
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('HospitalBundle:Invoice')->find($data['pk']);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find PurchaseItem entity.');
-        }
-        $entity->setCourierInvoice($data['value']);
-        $em->flush();
-        exit;
-
-    }
-
-
-
-    public function approvedOrder(Invoice $entity)
-    {
-        if (!empty($entity)) {
-
-            $em = $this->getDoctrine()->getManager();
-
-            $entity->setPaymentStatus('Paid');
-            $entity->setProcess('Paid');
-            $entity->setPayment($entity->getTotal());
-            $entity->setDue(0);
-            $entity->setApprovedBy($this->getUser());
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-            $entity->setPaymentInWord($amountInWords);
-            $em->flush();
-            $em->getRepository('HospitalBundle:Item')->getItemInvoiceUpdate($entity);
-            $em->getRepository('HospitalBundle:StockItem')->insertInvoiceStockItem($entity);
-            $em->getRepository('HospitalBundle:GoodsItem')->updateEcommerceItem($entity);
-            $accountInvoice = $em->getRepository('AccountingBundle:AccountInvoice')->insertAccountInvoice($entity);
-            $em->getRepository('AccountingBundle:Transaction')->salesTransaction($entity, $accountInvoice);
-            return new Response('success');
-        } else {
-            return new Response('failed');
-        }
-        exit;
-    }
-
-    public function returnCancelOrder(Invoice $entity)
-    {
-        if (!empty($entity)) {
-            $em = $this->getDoctrine()->getManager();
-            $entity->setPaymentStatus('Cancel');
-            $entity->setApprovedBy($this->getUser());
-            $em->flush();
-            return new Response('success');
-        } else {
-            return new Response('failed');
-        }
-        exit;
-    }
-
-    public function salesSelectAction()
-    {
-        $items  = array();
-        $items[]= array('value' => 'Paid','text'=>'Paid');
-        $items[]= array('value' => 'In-progress','text'=>'In-progress');
-        $items[]= array('value' => 'Courier','text'=>'Courier');
-        $items[]= array('value' => 'Returned','text'=>'Returned');
-        return new JsonResponse($items);
-    }
 
     public function invoicePrintAction(Invoice $entity)
     {
 
         $barcode = $this->getBarcode($entity->getInvoice());
+        $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
         $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
 
         return $this->render('HospitalBundle:InvoiceAdmission:'.$entity->getPrintFor().'.html.twig', array(
             'entity'      => $entity,
             'barcode'     => $barcode,
+            'patientBarcode'     => $patientId,
             'inWords'     => $inWords,
         ));
     }
