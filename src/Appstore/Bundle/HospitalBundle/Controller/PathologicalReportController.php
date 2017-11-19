@@ -5,6 +5,7 @@ namespace Appstore\Bundle\HospitalBundle\Controller;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Appstore\Bundle\HospitalBundle\Entity\PathologicalReport;
 use Appstore\Bundle\HospitalBundle\Form\PathologicalReportType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -171,8 +172,23 @@ class PathologicalReportController extends Controller
         if (!$pathologicalReport) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-        $em->remove($pathologicalReport);
-        $em->flush();
+        try {
+
+            $em->remove($pathologicalReport);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice', 'Please contact system administrator further notification.'
+            );
+        }
         return $this->redirect($this->generateUrl('hms_pathological_report',array('pathology'=>$pathology->getId())));
     }
 

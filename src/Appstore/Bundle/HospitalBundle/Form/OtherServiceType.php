@@ -12,23 +12,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class CabinType extends AbstractType
+class OtherServiceType extends AbstractType
 {
-
-
-    /** @var  HmsCategoryRepository */
-    private $emCategory;
-
-    /** @var  GlobalOption */
-    private $globalOption;
-
-
-    function __construct(HmsCategoryRepository $emCategory , GlobalOption $globalOption)
-    {
-        $this->emCategory = $emCategory;
-        $this->globalOption = $globalOption;
-    }
-
 
     /**
      * @param FormBuilderInterface $builder
@@ -38,19 +23,18 @@ class CabinType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter cabin/ward/room name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter service name'),
                     'constraints' =>array(
-                        new NotBlank(array('message'=>'Please enter cabin/ward/room name'))
+                        new NotBlank(array('message'=>'Please enter service name'))
                     ))
             )
-            ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
             ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter content')))
-            ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter price'),
+            ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room rent'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-
+            ->add('minimumPrice','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter minimum Price')))
 
         ;
     }
@@ -73,21 +57,5 @@ class CabinType extends AbstractType
         return 'appstore_bundle_hospitalbundle_particular';
     }
 
-    /**
-     * @return mixed
-     */
-    protected function PathologyChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 2 /** Pathology */ );
-
-    }
-    /**
-     * @return mixed
-     */
-    protected function DepartmentChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 7 /** Department */);
-
-    }
 
 }

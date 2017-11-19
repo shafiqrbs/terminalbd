@@ -106,11 +106,11 @@ class InvoiceAdmissionController extends Controller
         if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created") {
             return $this->redirect($this->generateUrl('hms_invoice_admission_show', array('id' => $entity->getId())));
         }
-        $particulars = $em->getRepository('HospitalBundle:Particular')->getServiceWithParticular($hospital);
+        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital);
         $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
         return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(
             'entity' => $entity,
-            'particulars' => $particulars,
+            'particularService' => $services,
             'referredDoctors' => $referredDoctors,
             'form' => $editForm->createView(),
         ));

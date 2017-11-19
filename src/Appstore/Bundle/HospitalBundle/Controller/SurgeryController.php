@@ -38,13 +38,17 @@ class SurgeryController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $entity = new Particular();
         $data = $_REQUEST;
+        $globalOption = $this->getUser()->getGlobalOption();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Particular')->findWithSearch($config , $service = 3, $data);
         $pagination = $this->paginate($entities);
+        $form = $this->createCreateForm($entity,$globalOption);
         return $this->render('HospitalBundle:Surgery:index.html.twig', array(
             'entities' => $pagination,
-            'searchForm' => $data,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         ));
 
     }
@@ -70,10 +74,10 @@ class SurgeryController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('hms_surgery_new', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('hms_surgery'));
         }
 
-        return $this->render('HospitalBundle:Surgery:new.html.twig', array(
+        return $this->render('HospitalBundle:Surgery:index.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -102,31 +106,6 @@ class SurgeryController extends Controller
     }
 
     /**
-     * Displays a form to create a new Particular entity.
-     *
-     */
-    public function newAction()
-    {
-        $entity = new Particular();
-        $globalOption = $this->getUser()->getGlobalOption();
-        $form   = $this->createCreateForm($entity,$globalOption);
-
-        return $this->render('HospitalBundle:Surgery:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
-    }
-
-    /**
-     * Finds and displays a Particular entity.
-     *
-     */
-    public function showAction($id)
-    {
-
-    }
-
-    /**
      * Displays a form to edit an existing Particular entity.
      *
      */
@@ -142,7 +121,7 @@ class SurgeryController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $editForm = $this->createEditForm($entity,$globalOption);
 
-        return $this->render('HospitalBundle:Surgery:new.html.twig', array(
+        return $this->render('HospitalBundle:Surgery:index.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -196,7 +175,7 @@ class SurgeryController extends Controller
             return $this->redirect($this->generateUrl('hms_surgery'));
         }
 
-        return $this->render('HospitalBundle:Surgery:new.html.twig', array(
+        return $this->render('HospitalBundle:Surgery:index.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));

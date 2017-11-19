@@ -112,7 +112,7 @@ class InvoiceController extends Controller
         $referredDoctors    = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
         return $this->render('HospitalBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
-            'partcularService' => $services,
+            'particularService' => $services,
             'referredDoctors' => $referredDoctors,
             'form' => $editForm->createView(),
         ));

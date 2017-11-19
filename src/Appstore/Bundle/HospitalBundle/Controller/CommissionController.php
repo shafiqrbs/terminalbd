@@ -5,6 +5,7 @@ namespace Appstore\Bundle\HospitalBundle\Controller;
 use Appstore\Bundle\HospitalBundle\Entity\HmsCommission;
 use Appstore\Bundle\HospitalBundle\Form\CommissionType;
 use Appstore\Bundle\HospitalBundle\Form\VendorType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -166,9 +167,23 @@ class CommissionController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
-        $em->remove($entity);
-        $em->flush();
+        try {
 
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice', 'Please contact system administrator further notification.'
+            );
+        }
         return $this->redirect($this->generateUrl('hms_commission'));
     }
 

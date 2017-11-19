@@ -3,9 +3,10 @@
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
-use Appstore\Bundle\HospitalBundle\Entity\PathologicalReport;
+use Appstore\Bundle\HospitalBundle\Form\DoctorType;
+use Appstore\Bundle\HospitalBundle\Form\CabinType;
+use Appstore\Bundle\HospitalBundle\Form\OtherServiceType;
 use Appstore\Bundle\HospitalBundle\Form\ParticularType;
-use Appstore\Bundle\HospitalBundle\Form\PathologicalReportType;
 use Appstore\Bundle\HospitalBundle\Form\PathologyType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,10 +14,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 
 /**
- * Pathology controller.
+ * CabinController controller.
  *
  */
-class PathologyController extends Controller
+class OtherServiceController extends Controller
 {
 
     public function paginate($entities)
@@ -38,17 +39,16 @@ class PathologyController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $entity = new Particular();
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $em->getRepository('HospitalBundle:Particular')->findWithSearch($config , $service = 1, $data);
+        $entities = $em->getRepository('HospitalBundle:Particular')->findWithSearch($config , $service = 7, $data);
         $pagination = $this->paginate($entities);
-        $categories = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->findBy(array('parent'=>2),array('name' =>'asc' ));
-        $departments = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->findBy(array('parent'=>7),array('name' =>'asc' ));
-        return $this->render('HospitalBundle:Pathology:index.html.twig', array(
+        $editForm = $this->createCreateForm($entity);
+        return $this->render('HospitalBundle:OtherService:index.html.twig', array(
             'entities' => $pagination,
-            'categories' => $categories,
-            'departments' => $departments,
             'searchForm' => $data,
+            'form'   => $editForm->createView(),
         ));
 
     }
@@ -61,23 +61,23 @@ class PathologyController extends Controller
     {
         $entity = new Particular();
         $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createCreateForm($entity,$globalOption);
+        $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setHospitalConfig($globalOption -> getHospitalConfig());
-            $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(1);
+            $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(7);
             $entity->setService($service);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('hms_pathology_new', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('hms_other_service'));
         }
 
-        return $this->render('HospitalBundle:Pathology:new.html.twig', array(
+        return $this->render('HospitalBundle:OtherService:index.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -90,12 +90,10 @@ class PathologyController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Particular $entity, $globalOption)
+    private function createCreateForm(Particular $entity)
     {
-
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
-        $form = $this->createForm(new PathologyType($em,$globalOption), $entity, array(
-            'action' => $this->generateUrl('hms_pathology_create', array('id' => $entity->getId())),
+        $form = $this->createForm(new OtherServiceType(), $entity, array(
+            'action' => $this->generateUrl('hms_other_service_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -105,30 +103,7 @@ class PathologyController extends Controller
         return $form;
     }
 
-    /**
-     * Displays a form to create a new Particular entity.
-     *
-     */
-    public function newAction()
-    {
-        $entity = new Particular();
-        $globalOption = $this->getUser()->getGlobalOption();
-        $form   = $this->createCreateForm($entity,$globalOption);
 
-        return $this->render('HospitalBundle:Pathology:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
-    }
-
-    /**
-     * Finds and displays a Particular entity.
-     *
-     */
-    public function showAction($id)
-    {
-
-    }
 
     /**
      * Displays a form to edit an existing Particular entity.
@@ -143,15 +118,13 @@ class PathologyController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-        $globalOption = $this->getUser()->getGlobalOption();
-        $editForm = $this->createEditForm($entity,$globalOption);
+        $editForm = $this->createEditForm($entity);
 
-        return $this->render('HospitalBundle:Pathology:new.html.twig', array(
+        return $this->render('HospitalBundle:OtherService:index.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
     }
-
 
     /**
      * Creates a form to edit a Particular entity.
@@ -160,22 +133,19 @@ class PathologyController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Particular $entity,$globalOption)
+    private function createEditForm(Particular $entity)
     {
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
-        $form = $this->createForm(new PathologyType($em,$globalOption), $entity, array(
-            'action' => $this->generateUrl('hms_pathology_update', array('id' => $entity->getId())),
+
+        $form = $this->createForm(new OtherServiceType(), $entity, array(
+            'action' => $this->generateUrl('hms_other_service_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
                 'novalidate' => 'novalidate',
             )
         ));
-
-
         return $form;
     }
-
     /**
      * Edits an existing Particular entity.
      *
@@ -200,10 +170,10 @@ class PathologyController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('hms_pathology'));
+            return $this->redirect($this->generateUrl('hms_other_service'));
         }
 
-        return $this->render('HospitalBundle:Pathology:new.html.twig', array(
+        return $this->render('HospitalBundle:OtherService:index.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -212,11 +182,9 @@ class PathologyController extends Controller
      * Deletes a Particular entity.
      *
      */
-    public function deleteAction($id)
+    public function deleteAction(Particular $entity)
     {
-
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
@@ -237,7 +205,7 @@ class PathologyController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-        return $this->redirect($this->generateUrl('hms_pathology'));
+        return $this->redirect($this->generateUrl('hms_other_service'));
     }
 
    
@@ -263,6 +231,6 @@ class PathologyController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('hms_pathology'));
+        return $this->redirect($this->generateUrl('hms_other_service'));
     }
 }

@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Manage Bed/Cabin
+                   Manage Other Services
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,11 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li>
-                        <a href="{{ path('hms_cabin') }}">Bed/Cabin</a>
-                        <span class="icon-angle-right"></span>
-                    </li>
-                    <li><a href="#">View Lists</a></li>
+                     <li><a href="#">Other Services</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -31,13 +27,11 @@
             <div class="span12">
 
                 <div class="portlet box green tabbable">
-
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Bed/Cabin</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Other Services</div>
                     </div>
-
-                    <div class="portlet-body">
-                        <div class="portlet-body form">
+                    <div class="portlet-body form">
+                        <div class="portlet-body ">
                             {% include('flash-message.html.twig')  %}
                             <!-- BEGIN FORM-->
                             {{ form_start(form) }}
@@ -46,7 +40,7 @@
                                 <!--/span-->
                                 <div class="span6">
                                     <div class="control-group">
-                                        <label class="control-label" for="name">Bed/Cabin/Ward <span class="required">*</span></label>
+                                        <label class="control-label" for="name">Service name<span class="required">*</span></label>
                                         <div class="controls">
                                             {{ form_widget(form.name) }}
                                             {{ form_errors(form.name) }}
@@ -54,23 +48,32 @@
                                     </div>
                                 </div>
                                 <div class="span3">
-                                    <div class="control-group">
-                                        <label class="control-label" for="price">Per Day Price<span class="required">*</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.price) }}
-                                            {{ form_errors(form.price) }}
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="price">Price<span class="required">*</span></label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.price) }}
+                                                    {{ form_errors(form.price) }}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="span3">
-                                    <div class="control-group">
-                                        <label class="control-label" for="room">Room no</label>
-                                        <div class="controls">
-                                            {{ form_widget(form.room) }}
-                                            {{ form_errors(form.room) }}
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="price">Minimum price</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.minimumPrice) }}
+                                                    {{ form_errors(form.minimumPrice) }}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                             <div class="row-fluid">
                                 <!--/span-->
@@ -83,6 +86,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
 
                             <div class="form-actions portlet box grey">
@@ -94,8 +98,8 @@
                             <!-- END FORM-->
                         </div>
                         <div class="clearfix"><br/></div>
-
                         <div class="portlet-body flip-scroll">
+
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
@@ -103,26 +107,25 @@
                                     <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
                                     <th class="numeric" >Price</th>
-                                    <th class="numeric" >Room no</th>
+                                    <th class="numeric" >Minimum Price</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 {% for entity in entities %}
                                     <tr>
                                         <td class="numeric" >{{ entity.particularCode }}</td>
                                         <td class="numeric" ><a href="{{ path('hms_cabin_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >{{ entity.price|number_format }}</td>
-                                        <td class="numeric" >{{ entity.room }}</td>
+                                        <td class="numeric" >{{ entity.minimumPrice|number_format }}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
-                                                <a class="btn mini blue btn-action" href="{{ path('hms_cabin_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
+                                                <a class="btn mini blue btn-action" href="{{ path('hms_other_service_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
                                             {% else %}
-                                                <a class="btn mini red btn-action" href="{{ path('hms_cabin_status', { 'id': entity.id}) }}">x</a>
+                                                <a class="btn mini red btn-action" href="{{ path('hms_other_service_status', { 'id': entity.id}) }}">x</a>
                                             {% endif %}
-                                            <a href="{{ path('hms_cabin_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                            <a title="Are you sure went to delete ?" href="{{ path('hms_cabin_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                            <a href="{{ path('hms_other_service_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+                                            <a title="Are you sure went to delete ?" href="{{ path('hms_other_service_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

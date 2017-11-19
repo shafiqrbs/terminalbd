@@ -309,15 +309,15 @@ class DomainUserController extends Controller
 
     public function forgetPasswordAction(User $user)
     {
-
-        $user->setPlainPassword(123456);
+        $password = '*4848#';
+        $user->setPlainPassword($password);
         $this->get('fos_user.user_manager')->updateUser($user);
         $this->get('session')->getFlashBag()->add(
             'success',"Password reset successfully"
         );
 
         $dispatcher = $this->container->get('event_dispatcher');
-        $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,'123456'));
+        $dispatcher->dispatch('setting_tool.post.change_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeSmsEvent($user,$password));
         return $this->redirect($this->generateUrl('domain_edit', array('id' => $user->getId())));
     }
 

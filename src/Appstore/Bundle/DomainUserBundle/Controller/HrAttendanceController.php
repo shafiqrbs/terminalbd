@@ -40,9 +40,16 @@ class HrAttendanceController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $entities = $em->getRepository('DomainUserBundle:HrAttendance')->findBy(array('globalOption'=> $globalOption));
         $pagination = $this->paginate($entities);
+        $calendarBlackout = $em->getRepository('DomainUserBundle:HrBlackout')->findOneBy(array('globalOption' => $globalOption));
+        $blackOutDate =  $calendarBlackout ->getBlackOutDate();
+        if($blackOutDate){
+            $blackoutdate = (array_map('trim',array_filter(explode(',',$blackOutDate))));
+        }
         return $this->render('DomainUserBundle:HrAttendance:index.html.twig', array(
-            'entities' => $pagination,
-            'searchForm' => $data,
+        'entities' => $pagination,
+        'globalOption' => $globalOption,
+        'blackoutdate' => $blackoutdate,
+        'searchForm' => $data,
         ));
     }
     /**

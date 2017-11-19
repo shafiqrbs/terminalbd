@@ -4,6 +4,8 @@ namespace Appstore\Bundle\HospitalBundle\Controller;
 
 use Appstore\Bundle\HospitalBundle\Entity\HmsVendor;
 use Appstore\Bundle\HospitalBundle\Form\VendorType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -21,11 +23,14 @@ class VendorController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
+        $entity = new HmsVendor();
+        $form = $this->createCreateForm($entity);
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsVendor')->findBy(array('hospitalConfig' => $hospital),array('companyName'=>'ASC'));
         return $this->render('HospitalBundle:Vendor:index.html.twig', array(
             'entities' => $entities,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         ));
     }
     /**
@@ -50,7 +55,7 @@ class VendorController extends Controller
             return $this->redirect($this->generateUrl('hms_vendor', array('id' => $entity->getId())));
         }
 
-        return $this->render('HospitalBundle:Vendor:new.html.twig', array(
+        return $this->render('HospitalBundle:Vendor:index.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -77,39 +82,6 @@ class VendorController extends Controller
     }
 
     /**
-     * Displays a form to create a new Vendor entity.
-     *
-     */
-    public function newAction()
-    {
-        $entity = new HmsVendor();
-        $form   = $this->createCreateForm($entity);
-        return $this->render('HospitalBundle:Vendor:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView()
-        ));
-    }
-
-    /**
-     * Finds and displays a Vendor entity.
-     *
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('HospitalBundle:Vendor')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Vendor entity.');
-        }
-
-        return $this->render('HospitalBundle:Vendor:show.html.twig', array(
-            'entity'      => $entity,
-        ));
-    }
-
-    /**
      * Displays a form to edit an existing Vendor entity.
      *
      */
@@ -126,7 +98,7 @@ class VendorController extends Controller
         $editForm = $this->createEditForm($entity);
 
 
-        return $this->render('HospitalBundle:Vendor:new.html.twig', array(
+        return $this->render('HospitalBundle:Vendor:index.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -176,7 +148,7 @@ class VendorController extends Controller
             return $this->redirect($this->generateUrl('hms_vendor_edit', array('id' => $id)));
         }
 
-        return $this->render('HospitalBundle:Vendor:new.html.twig', array(
+        return $this->render('HospitalBundle:Vendor:index.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -194,8 +166,23 @@ class VendorController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
-        $em->remove($entity);
-        $em->flush();
+        try {
+
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice', 'Please contact system administrator further notification.'
+            );
+        }
 
         return $this->redirect($this->generateUrl('hms_vendor'));
     }
@@ -228,22 +215,5 @@ class VendorController extends Controller
         return $this->redirect($this->generateUrl('hms_vendor'));
     }
 
-    public function autoSearchAction(Request $request)
-    {
-        $item = $_REQUEST['q'];
-        if ($item) {
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $item = $this->getDoctrine()->getRepository('HospitalBundle:HmsVendor')->searchAutoComplete($item,$inventory);
-        }
-        return new JsonResponse($item);
-    }
-
-    public function searchVendorNameAction($vendor)
-    {
-        return new JsonResponse(array(
-            'id'=>$vendor,
-            'text'=>$vendor
-        ));
-    }
 
 }

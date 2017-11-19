@@ -7,6 +7,7 @@ use Appstore\Bundle\HospitalBundle\Form\DoctorType;
 use Appstore\Bundle\HospitalBundle\Form\CabinType;
 use Appstore\Bundle\HospitalBundle\Form\ParticularType;
 use Appstore\Bundle\HospitalBundle\Form\PathologyType;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -37,17 +38,17 @@ class CabinController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $entity = new Particular();
         $data = $_REQUEST;
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Particular')->findWithSearch($config , $service = 2, $data);
         $pagination = $this->paginate($entities);
-        $categories = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->findBy(array('parent'=>2),array('name' =>'asc' ));
-        $departments = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory')->findBy(array('parent'=>7),array('name' =>'asc' ));
+        $globalOption = $this->getUser()->getGlobalOption();
+        $form = $this->createCreateForm($entity,$globalOption);
         return $this->render('HospitalBundle:Cabin:index.html.twig', array(
             'entities' => $pagination,
-            'categories' => $categories,
-            'departments' => $departments,
-            'searchForm' => $data,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         ));
 
     }
@@ -73,10 +74,10 @@ class CabinController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('hms_cabin_new', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('hms_cabin', array('id' => $entity->getId())));
         }
 
-        return $this->render('HospitalBundle:Cabin:new.html.twig', array(
+        return $this->render('HospitalBundle:Cabin:index.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -104,30 +105,6 @@ class CabinController extends Controller
         return $form;
     }
 
-    /**
-     * Displays a form to create a new Particular entity.
-     *
-     */
-    public function newAction()
-    {
-        $entity = new Particular();
-        $globalOption = $this->getUser()->getGlobalOption();
-        $form   = $this->createCreateForm($entity,$globalOption);
-
-        return $this->render('HospitalBundle:Cabin:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
-    }
-
-    /**
-     * Finds and displays a Particular entity.
-     *
-     */
-    public function showAction($id)
-    {
-
-    }
 
     /**
      * Displays a form to edit an existing Particular entity.
@@ -145,7 +122,7 @@ class CabinController extends Controller
         $globalOption = $this->getUser()->getGlobalOption();
         $editForm = $this->createEditForm($entity,$globalOption);
 
-        return $this->render('HospitalBundle:Cabin:new.html.twig', array(
+        return $this->render('HospitalBundle:Cabin:index.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -198,7 +175,7 @@ class CabinController extends Controller
             return $this->redirect($this->generateUrl('hms_cabin'));
         }
 
-        return $this->render('HospitalBundle:Cabin:new.html.twig', array(
+        return $this->render('HospitalBundle:Cabin:index.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -213,8 +190,23 @@ class CabinController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-        $em->remove($entity);
-        $em->flush();
+        try {
+
+            $em->remove($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'error',"Data has been deleted successfully"
+            );
+
+        } catch (ForeignKeyConstraintViolationException $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice',"Data has been relation another Table"
+            );
+        }catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add(
+                'notice', 'Please contact system administrator further notification.'
+            );
+        }
         return $this->redirect($this->generateUrl('hms_cabin'));
     }
 

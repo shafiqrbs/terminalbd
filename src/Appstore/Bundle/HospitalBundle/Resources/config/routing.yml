@@ -52,7 +52,11 @@ hospital_surgery:
 
 hospital_medicine:
     resource: "@HospitalBundle/Resources/config/routing/medicine.yml"
-    prefix:   /medicine
+    prefix:   /accessories
+
+hospital_other_service:
+    resource: "@HospitalBundle/Resources/config/routing/otherservice.yml"
+    prefix:   /other-service
 
 hospital_referred_doctor:
     resource: "@HospitalBundle/Resources/config/routing/referreddoctor.yml"

@@ -2,14 +2,6 @@ hms_cabin:
     path:     /
     defaults: { _controller: "HospitalBundle:Cabin:index" }
 
-hms_cabin_show:
-    path:     /{id}/show
-    defaults: { _controller: "HospitalBundle:Cabin:show" }
-
-hms_cabin_new:
-    path:     /new
-    defaults: { _controller: "HospitalBundle:Cabin:new" }
-
 hms_cabin_create:
     path:     /create
     defaults: { _controller: "HospitalBundle:Cabin:create" }

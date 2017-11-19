@@ -20,8 +20,8 @@ class VendorType extends AbstractType
         $builder
 
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter vendor name')))
-            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter vendor mobile no')))
-            ->add('companyName','text', array('attr'=>array('class'=>'m-wrap span9','placeholder'=>'Enter company name'),
+            ->add('mobile','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter mobile no')))
+            ->add('companyName','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter company name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')))
             ))
@@ -38,8 +38,7 @@ class VendorType extends AbstractType
                     return $er->createQueryBuilder('m')
                         ->orderBy('m.name','ASC');
                 },
-            ))
-            ->add('status');
+            ));
     }
     
     /**
