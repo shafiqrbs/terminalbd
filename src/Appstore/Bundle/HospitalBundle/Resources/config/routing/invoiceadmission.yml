@@ -27,6 +27,10 @@ hms_invoice_admission_print_invoice:
     path:     /{id}/print
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:invoicePrint" }
 
+hms_invoice_admission_delete:
+    path:     /delete/admission-invoice
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:delete" }
+
 hms_invoice_admission_empty_delete:
     path:     /delete/empty-invoice
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:deleteEmptyInvoice" }

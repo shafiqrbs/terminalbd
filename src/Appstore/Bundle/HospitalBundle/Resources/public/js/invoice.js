@@ -82,8 +82,14 @@ $(document).on('change', '.transactionMethod', function() {
 
 });
 
-$(".receivePayment").click(function(){
+$(document).on( "click", ".patientShow", function(e){
+    $('#updatePatient').slideToggle(2000);
+    $("span", this).toggleClass("fa-minus fa-plus");
+});
+
+$(document).on( "click", ".receivePayment", function(e){
     $("#showPayment").slideToggle(1000);
+    $("span", this).toggleClass("fa-minus fa-money");
 });
 
 $(document).on('change', '#particular', function() {

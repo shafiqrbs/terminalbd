@@ -340,6 +340,12 @@ class Invoice
 
     /**
      * @var \DateTime
+     * @ORM\Column(name="releaseDate", type="datetime")
+     */
+    private $releaseDate;
+
+    /**
+     * @var \DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated", type="datetime")
      */
@@ -1220,6 +1226,22 @@ class Invoice
     public function setEstimateCommission($estimateCommission)
     {
         $this->estimateCommission = $estimateCommission;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getReleaseDate()
+    {
+        return $this->releaseDate;
+    }
+
+    /**
+     * @param \DateTime $releaseDate
+     */
+    public function setReleaseDate($releaseDate)
+    {
+        $this->releaseDate = $releaseDate;
     }
 
 

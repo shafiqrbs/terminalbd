@@ -37,16 +37,14 @@ class SurgeryController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+
         $entity = new Particular();
-        $data = $_REQUEST;
-        $globalOption = $this->getUser()->getGlobalOption();
+        $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $em->getRepository('HospitalBundle:Particular')->findWithSearch($config , $service = 3, $data);
-        $pagination = $this->paginate($entities);
-        $form = $this->createCreateForm($entity,$globalOption);
+        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 3),array('name'=>'ASC'));
+        $form = $this->createCreateForm($entity);
         return $this->render('HospitalBundle:Surgery:index.html.twig', array(
-            'entities' => $pagination,
+            'pagination' => $pagination,
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -60,13 +58,15 @@ class SurgeryController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Particular();
-        $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createCreateForm($entity,$globalOption);
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 3),array('name'=>'ASC'));
+        $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setHospitalConfig($globalOption -> getHospitalConfig());
+            $entity->setHospitalConfig($config);
             $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(3);
             $entity->setService($service);
             $em->persist($entity);
@@ -79,6 +79,7 @@ class SurgeryController extends Controller
 
         return $this->render('HospitalBundle:Surgery:index.html.twig', array(
             'entity' => $entity,
+            'pagination' => $pagination,
             'form'   => $form->createView(),
         ));
     }
@@ -90,11 +91,10 @@ class SurgeryController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Particular $entity, $globalOption)
+    private function createCreateForm(Particular $entity)
     {
 
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
-        $form = $this->createForm(new SurgeryType($em,$globalOption), $entity, array(
+        $form = $this->createForm(new SurgeryType(), $entity, array(
             'action' => $this->generateUrl('hms_surgery_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -112,17 +112,18 @@ class SurgeryController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 3),array('name'=>'ASC'));
         $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-        $globalOption = $this->getUser()->getGlobalOption();
-        $editForm = $this->createEditForm($entity,$globalOption);
+        $editForm = $this->createEditForm($entity);
 
         return $this->render('HospitalBundle:Surgery:index.html.twig', array(
             'entity'      => $entity,
+            'pagination'      => $pagination,
             'form'   => $editForm->createView(),
         ));
     }
@@ -134,11 +135,10 @@ class SurgeryController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Particular $entity,$globalOption)
+    private function createEditForm(Particular $entity)
     {
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
-        $location = $this->getDoctrine()->getRepository('SettingLocationBundle:Location');
-        $form = $this->createForm(new SurgeryType($em,$globalOption,$location), $entity, array(
+
+        $form = $this->createForm(new SurgeryType(), $entity, array(
             'action' => $this->generateUrl('hms_surgery_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -155,15 +155,14 @@ class SurgeryController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=>4),array('name'=>'ASC'));
         $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-
-        $globalOption = $this->getUser()->getGlobalOption();
-        $editForm = $this->createEditForm($entity,$globalOption);
+        $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -176,6 +175,7 @@ class SurgeryController extends Controller
         }
 
         return $this->render('HospitalBundle:Surgery:index.html.twig', array(
+            'pagination'      => $pagination,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));

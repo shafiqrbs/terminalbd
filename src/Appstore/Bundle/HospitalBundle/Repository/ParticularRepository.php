@@ -64,10 +64,10 @@ class ParticularRepository extends EntityRepository
         return  $qb;
     }
 
-    public function getServices($hospital){
+    public function getServices($hospital,$services){
 
 
-        $particulars = $this->getServiceWithParticular($hospital);
+        $particulars = $this->getServiceWithParticular($hospital,$services);
 
         $data = '';
         $service = '';
@@ -93,7 +93,7 @@ class ParticularRepository extends EntityRepository
     }
 
 
-    public function getServiceWithParticular($hospital){
+    public function getServiceWithParticular($hospital,$services){
 
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')
@@ -107,7 +107,7 @@ class ParticularRepository extends EntityRepository
             ->addSelect('s.code as serviceCode')
             ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
             ->andWhere('s.id IN(:service)')
-            ->setParameter('service',array_values(array(1,2,3,4)))
+            ->setParameter('service',array_values($services))
             ->orderBy('e.service','ASC')
             ->getQuery()->getArrayResult();
             return  $qb;

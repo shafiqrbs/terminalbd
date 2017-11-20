@@ -175,7 +175,7 @@ class InvoiceAdmissionType extends AbstractType
             ->add('assignDoctor', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
-                'property' => 'referred',
+                'property' => 'doctor',
                 'attr'=>array('class'=>'span12 select2'),
                 'empty_value' => '--- Choose assign doctor ---',
                 'query_builder' => function(EntityRepository $er){

@@ -22,7 +22,6 @@ class CommissionController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
 
         $entity = new HmsCommission();
         $form   = $this->createCreateForm($entity);
@@ -41,6 +40,9 @@ class CommissionController extends Controller
     public function createAction(Request $request)
     {
         $entity = new HmsCommission();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsCommission')->findBy(array('hospitalConfig' => $hospital),array('name'=>'ASC'));
+
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -57,6 +59,7 @@ class CommissionController extends Controller
         }
 
         return $this->render('HospitalBundle:Commission:index.html.twig', array(
+            'entities' => $entities,
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -89,6 +92,8 @@ class CommissionController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsCommission')->findBy(array('hospitalConfig' => $hospital),array('name'=>'ASC'));
 
         $entity = $em->getRepository('HospitalBundle:HmsCommission')->find($id);
 
@@ -100,6 +105,7 @@ class CommissionController extends Controller
 
 
         return $this->render('HospitalBundle:Commission:index.html.twig', array(
+            'entities'      => $entities,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -131,6 +137,8 @@ class CommissionController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsCommission')->findBy(array('hospitalConfig' => $hospital),array('name'=>'ASC'));
 
         $entity = $em->getRepository('HospitalBundle:HmsCommission')->find($id);
 
@@ -150,6 +158,7 @@ class CommissionController extends Controller
         }
 
         return $this->render('HospitalBundle:Commission:index.html.twig', array(
+            'entities'      => $entities,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));

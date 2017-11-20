@@ -106,7 +106,7 @@ class InvoiceAdmissionController extends Controller
         if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created") {
             return $this->redirect($this->generateUrl('hms_invoice_admission_show', array('id' => $entity->getId())));
         }
-        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital);
+        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,2,3,4,7));
         $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
         return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(
             'entity' => $entity,
@@ -133,7 +133,7 @@ class InvoiceAdmissionController extends Controller
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
-                'id' => 'posForm',
+                'id' => 'invoiceForm',
                 'novalidate' => 'novalidate',
             )
         ));
@@ -194,6 +194,7 @@ class InvoiceAdmissionController extends Controller
 
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setProcess('In-progress');
+            $entity->setPrintFor('admission');
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
 
@@ -210,8 +211,8 @@ class InvoiceAdmissionController extends Controller
             return $this->redirect($this->generateUrl('hms_invoice_admission_edit', array('id' => $entity->getId())));
         }
 
-        $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=>6),array('name'=>'ASC'));
-        $particulars = $em->getRepository('HospitalBundle:Particular')->getServiceWithParticular($entity->getHospitalConfig());
+        $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=> 6),array('name'=>'ASC'));
+        $particulars = $em->getRepository('HospitalBundle:Particular')->getServiceWithParticular($entity->getHospitalConfig(),array(1,2,3,4,7));
         return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(
             'entity' => $entity,
             'particulars' => $particulars,

@@ -19,17 +19,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class CabinController extends Controller
 {
 
-    public function paginate($entities)
-    {
-        $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $entities,
-            $this->get('request')->query->get('page', 1)/*page number*/,
-            50  /*limit per page*/
-        );
-        return $pagination;
-    }
-
 
     /**
      * Lists all Particular entities.
@@ -37,16 +26,14 @@ class CabinController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+
         $entity = new Particular();
-        $data = $_REQUEST;
+        $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $em->getRepository('HospitalBundle:Particular')->findWithSearch($config , $service = 2, $data);
-        $pagination = $this->paginate($entities);
-        $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createCreateForm($entity,$globalOption);
+        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 2),array('name'=>'ASC'));
+        $form = $this->createCreateForm($entity);
         return $this->render('HospitalBundle:Cabin:index.html.twig', array(
-            'entities' => $pagination,
+            'pagination' => $pagination,
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -60,13 +47,16 @@ class CabinController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Particular();
-        $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createCreateForm($entity,$globalOption);
+        $em = $this->getDoctrine()->getManager();
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=>4),array('name'=>'ASC'));
+
+        $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setHospitalConfig($globalOption -> getHospitalConfig());
+            $entity->setHospitalConfig($config);
             $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(2);
             $entity->setService($service);
             $em->persist($entity);
@@ -79,6 +69,7 @@ class CabinController extends Controller
 
         return $this->render('HospitalBundle:Cabin:index.html.twig', array(
             'entity' => $entity,
+            'pagination' => $pagination,
             'form'   => $form->createView(),
         ));
     }
@@ -90,11 +81,9 @@ class CabinController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Particular $entity, $globalOption)
+    private function createCreateForm(Particular $entity)
     {
-
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
-        $form = $this->createForm(new CabinType($em,$globalOption), $entity, array(
+        $form = $this->createForm(new CabinType(), $entity, array(
             'action' => $this->generateUrl('hms_cabin_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
@@ -113,17 +102,17 @@ class CabinController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 2),array('name'=>'ASC'));
         $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-        $globalOption = $this->getUser()->getGlobalOption();
-        $editForm = $this->createEditForm($entity,$globalOption);
-
+        $editForm = $this->createEditForm($entity);
         return $this->render('HospitalBundle:Cabin:index.html.twig', array(
             'entity'      => $entity,
+            'pagination'      => $pagination,
             'form'   => $editForm->createView(),
         ));
     }
@@ -135,10 +124,9 @@ class CabinController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Particular $entity,$globalOption)
+    private function createEditForm(Particular $entity)
     {
-        $em = $this->getDoctrine()->getRepository('HospitalBundle:HmsCategory');
-        $form = $this->createForm(new CabinType($em,$globalOption), $entity, array(
+        $form = $this->createForm(new CabinType(), $entity, array(
             'action' => $this->generateUrl('hms_cabin_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -155,20 +143,18 @@ class CabinController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 7),array('name'=>'ASC'));
         $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
-
-        $globalOption = $this->getUser()->getGlobalOption();
-        $editForm = $this->createEditForm($entity,$globalOption);
+        $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->flush();
-
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
@@ -177,6 +163,7 @@ class CabinController extends Controller
 
         return $this->render('HospitalBundle:Cabin:index.html.twig', array(
             'entity'      => $entity,
+            'pagination'      => $pagination,
             'form'   => $editForm->createView(),
         ));
     }

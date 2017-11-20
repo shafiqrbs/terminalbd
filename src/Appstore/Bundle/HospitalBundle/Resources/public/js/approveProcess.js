@@ -1,11 +1,15 @@
 $( ".date-picker" ).datepicker({
     dateFormat: "dd-mm-yy"
 });
-// Getter
-var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
 
-// Setter
-$( ".date-picker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
+$( ".dateCalendar" ).datepicker({
+    dateFormat: "dd-mm-yy",
+    changeMonth: true,
+    changeYear: true,
+    yearRange: "-100:+0",
+});
+
+
 
 $(document).on("click", ".editable-submit", function() {
     setTimeout(pageReload, 3000);
@@ -199,6 +203,7 @@ $(".select2CustomerCode" ).autocomplete({
             success: function(response) {
                 obj = JSON.parse(response);
                 if(obj['status'] == 'valid'){
+                    $('#patient').val(obj['patient']);
                     $('.select2CustomerId').val(obj['customerId']);
                     $('.select2mobile').val(obj['mobile']);
                     $('.patientNme').val(obj['name']);
@@ -241,6 +246,7 @@ $( ".select2mobile" ).autocomplete({
             success: function(response) {
                 obj = JSON.parse(response);
                 if(obj['status'] == 'valid'){
+                    $('#patient').val(obj['patient']);
                     $('.select2CustomerId').val(obj['customerId']);
                     $('.select2mobile').val(obj['mobile']);
                     $('.patientNme').val(obj['name']);

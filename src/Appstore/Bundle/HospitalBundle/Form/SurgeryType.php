@@ -15,21 +15,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class SurgeryType extends AbstractType
 {
 
-
-    /** @var  HmsCategoryRepository */
-    private $emCategory;
-
-    /** @var  GlobalOption */
-    private $globalOption;
-
-
-    function __construct(HmsCategoryRepository $emCategory , GlobalOption $globalOption)
-    {
-        $this->emCategory = $emCategory;
-        $this->globalOption = $globalOption;
-    }
-
-
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -75,21 +60,6 @@ class SurgeryType extends AbstractType
         return 'appstore_bundle_hospitalbundle_particular';
     }
 
-    /**
-     * @return mixed
-     */
-    protected function PathologyChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 2 /** Pathology */ );
 
-    }
-    /**
-     * @return mixed
-     */
-    protected function DepartmentChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 7 /** Department */);
-
-    }
 
 }

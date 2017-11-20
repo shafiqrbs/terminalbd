@@ -28,7 +28,7 @@ class CustomerForHospitalType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs patientNme','autocomplete'=>'off','placeholder'=>'Enter patient name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 inputs patientName','autocomplete'=>'off','placeholder'=>'Enter patient name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Enter patient name')),
                 )

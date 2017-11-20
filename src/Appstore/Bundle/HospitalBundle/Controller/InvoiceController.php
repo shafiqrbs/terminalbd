@@ -108,7 +108,7 @@ class InvoiceController extends Controller
         if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created" and $entity->getRevised() != 1) {
             return $this->redirect($this->generateUrl('hms_invoice_show', array('id' => $entity->getId())));
         }
-        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital);
+        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,4));
         $referredDoctors    = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
         return $this->render('HospitalBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
@@ -273,6 +273,7 @@ class InvoiceController extends Controller
 
             $entity->setDeliveryDateTime($datetime);
             $entity->setProcess('In-progress');
+            $entity->setPrintFor('pathological');
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
@@ -488,6 +489,15 @@ class InvoiceController extends Controller
         $em->flush();
         exit;
 
+    }
+
+    public function addPatientAction(Request $request,Invoice $invoice)
+    {
+        $data = $request->request->all();
+        $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->patientInsertUpdate($data,$invoice);
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->patientAdmissionUpdate($data,$invoice);
+        return new Response(json_encode(array('patient' => $customer->getId())));
+        exit;
     }
 
     public function getBarcode($value)

@@ -112,7 +112,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for entity in entities %}
+                                {% for entity in pagination %}
                                     <tr>
                                         <td class="numeric" >{{ entity.particularCode }}</td>
                                         <td class="numeric" ><a href="{{ path('hms_cabin_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
@@ -131,9 +131,6 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
-                            <div class="pagination" >
-                                {{ knp_pagination_render(entities) }}
-                            </div>
                         </div>
                     </div>
                 </div>

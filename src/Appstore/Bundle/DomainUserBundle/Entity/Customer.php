@@ -203,9 +203,9 @@ class Customer
     private $bloodGroup;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="dob", type="datetime", nullable =true)
+     * @ORM\Column(name="dob", type="string", nullable =true)
      */
     private $dob;
 
@@ -215,6 +215,36 @@ class Customer
      * @ORM\Column(name="ageGroup", type="string",length=10 , nullable = true)
      */
     private $ageGroup;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="maritalStatus", type="string",length=30 , nullable = true)
+     */
+    private $maritalStatus;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="alternativeContactPerson", type="string",length=200 , nullable = true)
+     */
+    private $alternativeContactPerson;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="alternativeContactMobile", type="string",length=50 , nullable = true)
+     */
+    private $alternativeContactMobile;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="alternativeRelation", type="string",length=100 , nullable = true)
+     */
+    private $alternativeRelation;
+
 
     /**
      * @var integer
@@ -391,29 +421,7 @@ class Customer
         return $this->bloodGroup;
     }
 
-    /**
-     * Set dob
-     *
-     * @param \DateTime $dob
-     *
-     * @return Customer
-     */
-    public function setDob($dob)
-    {
-        $this->dob = $dob;
 
-        return $this;
-    }
-
-    /**
-     * Get dob
-     *
-     * @return \DateTime
-     */
-    public function getDob()
-    {
-        return $this->dob;
-    }
 
     /**
      * @return GlobalOption
@@ -797,6 +805,86 @@ class Customer
     public function setNationality($nationality)
     {
         $this->nationality = $nationality;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlternativeContactPerson()
+    {
+        return $this->alternativeContactPerson;
+    }
+
+    /**
+     * @param string $alternativeContactPerson
+     */
+    public function setAlternativeContactPerson($alternativeContactPerson)
+    {
+        $this->alternativeContactPerson = $alternativeContactPerson;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlternativeContactMobile()
+    {
+        return $this->alternativeContactMobile;
+    }
+
+    /**
+     * @param string $alternativeContactMobile
+     */
+    public function setAlternativeContactMobile($alternativeContactMobile)
+    {
+        $this->alternativeContactMobile = $alternativeContactMobile;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMaritalStatus()
+    {
+        return $this->maritalStatus;
+    }
+
+    /**
+     * @param string $maritalStatus
+     */
+    public function setMaritalStatus($maritalStatus)
+    {
+        $this->maritalStatus = $maritalStatus;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlternativeRelation()
+    {
+        return $this->alternativeRelation;
+    }
+
+    /**
+     * @param string $alternativeRelation
+     */
+    public function setAlternativeRelation($alternativeRelation)
+    {
+        $this->alternativeRelation = $alternativeRelation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDob()
+    {
+        return $this->dob;
+    }
+
+    /**
+     * @param string $dob
+     */
+    public function setDob($dob)
+    {
+        $this->dob = $dob;
     }
 
 }

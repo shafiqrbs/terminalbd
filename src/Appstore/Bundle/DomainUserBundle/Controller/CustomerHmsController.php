@@ -245,6 +245,7 @@ class CustomerHmsController extends Controller
             $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePatientInfo($invoice, $entity);
             $data = array(
                 'status' => 'valid',
+                'patient' => $entity->getId(),
                 'customerId' => $entity->getCustomerId(),
                 'mobile' => $entity->getMobile(),
                 'name' => $entity->getName(),

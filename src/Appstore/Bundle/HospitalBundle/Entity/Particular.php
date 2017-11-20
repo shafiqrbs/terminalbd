@@ -94,7 +94,7 @@ class Particular
      **/
     private  $assignOperator;
 
-     /**
+    /**
      * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularDoctor" )
      **/
     private  $assignDoctor;
@@ -356,6 +356,10 @@ class Particular
     public function getReferred(){
 
         return $this->particularCode.' - '.$this->name .' ('. $this->mobile .')/'.$this->getService()->getName();
+    }
+
+    public function getDoctor(){
+        return $this->particularCode.' - '.$this->name;
     }
 
     /**

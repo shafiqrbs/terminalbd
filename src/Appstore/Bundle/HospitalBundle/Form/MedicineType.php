@@ -13,22 +13,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class MedicineType extends AbstractType
 {
-
-
-    /** @var  HmsCategoryRepository */
-    private $emCategory;
-
-    /** @var  GlobalOption */
-    private $globalOption;
-
-
-    function __construct(HmsCategoryRepository $emCategory , GlobalOption $globalOption)
-    {
-        $this->emCategory = $emCategory;
-        $this->globalOption = $globalOption;
-    }
-
-
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -47,15 +31,6 @@ class MedicineType extends AbstractType
                     new NotBlank(array('message'=>'Please input required')),
                 )
             ))
-            ->add('content','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter medicine details')))
-            ->add('department', 'entity', array(
-                'required'    => true,
-                'empty_value' => '---Select department---',
-                'attr'=>array('class'=>'m-wrap span12 select2'),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
-                'property' => 'nestedLabel',
-                'choices'=> $this->DepartmentChoiceList()
-            ))
             ->add('unit', 'entity', array(
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\ProductUnit',
@@ -71,14 +46,7 @@ class MedicineType extends AbstractType
                         ->orderBy("p.name","ASC");
                 },
             ))
-            ->add('category', 'entity', array(
-                'required'    => true,
-                'empty_value' => '---Select pathology---',
-                'attr'=>array('class'=>'m-wrap span12 select2'),
-                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
-                'property' => 'nestedLabel',
-                'choices'=> $this->PathologyChoiceList()
-            ))
+
         ;
     }
     
@@ -100,21 +68,5 @@ class MedicineType extends AbstractType
         return 'appstore_bundle_hospitalbundle_particular';
     }
 
-    /**
-     * @return mixed
-     */
-    protected function PathologyChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 2 /** Pathology */ );
-
-    }
-    /**
-     * @return mixed
-     */
-    protected function DepartmentChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 7 /** Department */);
-
-    }
 
 }

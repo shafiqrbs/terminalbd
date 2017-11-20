@@ -52,19 +52,6 @@ class InvoiceType extends AbstractType
             ))
             ->add('discount','text', array('attr'=>array('class'=>'tooltips discount input2','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
             ))
-            ->add('printFor', 'choice', array(
-                'attr'=>array('class'=>'span12 select-custom input2'),
-                'empty_value' => '--- Select Print For ---',
-                'expanded'      =>false,
-                'multiple'      =>false,
-                'choices' => array(
-                    'pathological' => 'Pathological',
-                    'admission' => 'Admission',
-                    'release' => 'Release',
-                    'surgery' => 'Surgery',
-                    'emergency' => 'Emergency'
-                ),
-            ))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('referredDoctor', 'entity', array(
                   'required'    => true,

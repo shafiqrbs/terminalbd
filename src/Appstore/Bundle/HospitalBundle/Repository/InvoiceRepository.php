@@ -256,5 +256,32 @@ class InvoiceRepository extends EntityRepository
 
     }
 
+    public function patientAdmissionUpdate($data,Invoice $entity)
+    {
+        $em = $this->_em;
+        $invoiceInfo = $data['appstore_bundle_hospitalbundle_invoice'];
+        if($invoiceInfo['cabin']){
+            $cabin = $em->getRepository('HospitalBundle:Particular')->find($invoiceInfo['cabin']);
+            $entity->setCabin($cabin);
+        }
+        if($invoiceInfo['assignDoctor']){
+            $assignDoctor = $em->getRepository('HospitalBundle:Particular')->find($invoiceInfo['assignDoctor']);
+            $entity->setAssignDoctor($assignDoctor);
+        }
+        if($invoiceInfo['department']){
+            $department = $em->getRepository('HospitalBundle:HmsCategory')->find($invoiceInfo['department']);
+            $entity->setDepartment($department);
+        }
+        if($invoiceInfo['cabinNo']){
+            $entity->setCabinNo($invoiceInfo['cabinNo']);
+        }
+        if($invoiceInfo['disease']){
+            $entity->setDisease($invoiceInfo['disease']);
+        }
+        $em->persist($entity);
+        $em->flush($entity);
+
+    }
+
 
 }

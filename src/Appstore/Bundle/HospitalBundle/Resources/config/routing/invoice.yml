@@ -97,3 +97,10 @@ hms_invoice_customer_details:
     methods:  POST
     options:
            expose: true
+
+hms_invoice_add_patient:
+    path:     /{id}/invoice-patient-add
+    defaults: { _controller: "HospitalBundle:Invoice:addPatient" }
+    methods:  [POST, PUT]
+    options:
+            expose: true

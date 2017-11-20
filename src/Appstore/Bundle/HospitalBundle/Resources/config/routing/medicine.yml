@@ -2,14 +2,6 @@ hms_medicine:
     path:     /
     defaults: { _controller: "HospitalBundle:Medicine:index" }
 
-hms_medicine_show:
-    path:     /{id}/show
-    defaults: { _controller: "HospitalBundle:Medicine:show" }
-
-hms_medicine_new:
-    path:     /new
-    defaults: { _controller: "HospitalBundle:Medicine:new" }
-
 hms_medicine_create:
     path:     /create
     defaults: { _controller: "HospitalBundle:Medicine:create" }

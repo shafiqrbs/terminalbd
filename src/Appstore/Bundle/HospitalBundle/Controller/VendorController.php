@@ -40,6 +40,8 @@ class VendorController extends Controller
     public function createAction(Request $request)
     {
         $entity = new HmsVendor();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsVendor')->findBy(array('hospitalConfig' => $hospital),array('companyName'=>'ASC'));
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -56,6 +58,7 @@ class VendorController extends Controller
         }
 
         return $this->render('HospitalBundle:Vendor:index.html.twig', array(
+            'entities' => $entities,
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -88,6 +91,8 @@ class VendorController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsVendor')->findBy(array('hospitalConfig' => $hospital),array('companyName'=>'ASC'));
 
         $entity = $em->getRepository('HospitalBundle:HmsVendor')->find($id);
 
@@ -99,6 +104,7 @@ class VendorController extends Controller
 
 
         return $this->render('HospitalBundle:Vendor:index.html.twig', array(
+            'entities'      => $entities,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -130,6 +136,8 @@ class VendorController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsVendor')->findBy(array('hospitalConfig' => $hospital),array('companyName'=>'ASC'));
 
         $entity = $em->getRepository('HospitalBundle:HmsVendor')->find($id);
 
@@ -149,6 +157,7 @@ class VendorController extends Controller
         }
 
         return $this->render('HospitalBundle:Vendor:index.html.twig', array(
+            'entities'      => $entities,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));

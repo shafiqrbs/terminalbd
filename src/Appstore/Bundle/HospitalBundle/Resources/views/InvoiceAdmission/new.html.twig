@@ -51,11 +51,90 @@
             </div>
         </div>
     <div class="portlet-body">
-        <div class="portlet-body form">
+        <div class="portlet-body">
+            <div class="row-fluid">
+
+                <div class="span3">
+                    <h4>About:</h4>
+                    <ul class="unstyled">
+                        {% if entity.customer is not empty %}<li><strong>Patient #:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
+                        {% if entity.customer is not empty %}<li><strong>Mobile #:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
+                        {% if entity.customer is not empty %}<li><strong>Address #:</strong>&nbsp;{{ entity.customer.address }}</li>{% endif %}
+                        {% if entity.customer is not empty and entity.customer.location is not empty   %}<li><strong>Location #:</strong>&nbsp;{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
+                        <li><strong>Guardian:</strong>&nbsp;{{ entity.customer.alternativeContactPerson }},{{ entity.customer.alternativeContactMobile }}</li>
+                        <li><strong>Patient Relation:</strong>&nbsp;{{ entity.customer.alternativeRelation }}</li>
+                    </ul>
+                </div>
+                <div class="span3 invoice-payment">
+                    <h4>Personal:</h4>
+                    <ul class="unstyled">
+                        {% if entity.customer is not empty %}<li><strong>Patient ID #:</strong>&nbsp;{{ entity.customer.customerId }}</li>{% endif %}
+                        <li><strong>Age:</strong>&nbsp;{{ entity.customer.age }} {{ entity.customer.ageType }}</li>
+                        <li><strong>Date of Birth:</strong>&nbsp;{{ entity.customer.dob }}</li>
+                        <li><strong>marital:</strong>&nbsp;{{ entity.customer.maritalStatus }}</li>
+                        <li><strong>Blood Group:</strong>&nbsp;{{ entity.customer.bloodGroup }}</li>
+                    </ul>
+                </div>
+
+                <div class="span3 invoice-payment">
+                    <h4>Admission:</h4>
+                    <ul class="unstyled">
+                        <li><strong>Admission Date:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
+                        <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y') }}{% endif %}</li>
+                        <li><strong>Cabin/Bed:</strong>&nbsp;{{ entity.payment|number_format() }}</li>
+                        <li><strong>Assign Doctor:</strong>&nbsp;{{ entity.assignDoctor.name }}</li>
+                        <li><strong>Department:</strong>&nbsp;{{ entity.department.name }}</li>
+                    </ul>
+                </div>
+
+                <div class="span3 invoice-payment">
+                    <h4>Payment Details:</h4>
+                    <ul class="unstyled">
+                        <li><strong>Total BDT:</strong>&nbsp;{{ entity.total|number_format() }}</li>
+                        <li><strong>Payment BDT:</strong>&nbsp;{{ entity.payment|number_format() }}</li>
+                        {% if entity.discount %}<li><strong>Discount BDT:</strong>&nbsp;{{ entity.discount|number_format() }}</li>{% endif %}
+                        {% if entity.due %}<li><strong>Due BDT:</strong>&nbsp;{{ entity.due|number_format() }}</li>{% endif %}
+                        <li><strong>Payment status</strong>&nbsp;{{  entity.paymentStatus|capitalize }}</li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <strong>Disease: </strong>{{ entity.disease }}
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="portlet-body form"  >
             {% include('flash-message.html.twig')  %}
             <!-- BEGIN FORM-->
             {{ form_start(form) }}
             {{ form_row(form._token) }}
+            <div class="form-actions portlet box blue">
+                <div class="portlet-title">
+                    <div class="caption"><i class="icon-user"></i>Patient Information</div>
+                    <div class="pull-right span2">
+                        <a class="btn black mini pull-right patientShow"><span class="fa fa-plus"></span>&nbsp;Show</a>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">&nbsp;</div>
+            <div id="updatePatient" {% if entity.customer is not empty %} style="display:none" {% else %} style="display:block" {% endif %}>
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="control-group">
+                        <div class="controls">
+                            <div class="input-icon left">
+                                <i class="icon-search"></i>
+                                {{ form_widget(form.customer.customerId) }}
+                                {{ form_errors(form.customer.customerId) }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
             <div class="row-fluid">
                 <div class="span12 patient-info">
                     <div class="row-fluid customer-add">
@@ -68,11 +147,10 @@
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Patient Code</span></label>
+                                        <label class="control-label red" for="firstName"><span>Patient Name</span><span class="required">*</span></label>
                                         <div class="controls">
-                                            {{ form_widget(form.customer.customerId) }}
-                                            {{ form_errors(form.customer.customerId) }}
-                                            <input type="hidden" id="invoice" name="invoice" value="{{ entity.id }}">
+                                            {{ form_widget(form.customer.name) }}
+                                            {{ form_errors(form.customer.name) }}
                                         </div>
                                     </div>
                                 </div>
@@ -91,10 +169,14 @@
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Patient Name</span><span class="required">*</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.customer.name) }}
-                                            {{ form_errors(form.customer.name) }}
+                                        <label class="control-label red" for="firstName"><span>Date of Birth & Marital Status</span></label>
+                                        <div class="controls span6">
+                                            {{ form_widget(form.customer.dob) }}
+                                            {{ form_errors(form.customer.dob) }}
+                                        </div>
+                                        <div class="controls span6">
+                                            {{ form_widget(form.customer.maritalStatus) }}
+                                            {{ form_errors(form.customer.maritalStatus) }}
                                         </div>
                                     </div>
                                 </div>
@@ -128,7 +210,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group">
@@ -143,7 +224,7 @@
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Father/Husband Name</span></label>
+                                        <label class="control-label red" for="firstName"><span>Father/Spouse Name</span></label>
                                         <div class="controls">
                                             {{ form_widget(form.customer.fatherName) }}
                                             {{ form_errors(form.customer.fatherName) }}
@@ -166,13 +247,14 @@
                         <div class="span4">
                             <div class="row-fluid">
                                 <div class="span12">
-                                   <h4>Address Information</h4>
+                                   <h4>Other Information</h4>
                                 </div>
                             </div>
+
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Nationality & Relegion</span></label>
+                                        <label class="control-label red" for="firstName"><span>Nationality & Religion</span></label>
                                         <div class="controls span6">
                                             {{ form_widget(form.customer.nationality) }}
                                         </div>
@@ -207,14 +289,37 @@
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Permanent Address</span></label>
+                                        <label class="control-label red" for="firstName"><span>Guardian Name<span class="required">*</span></span></label>
                                         <div class="controls">
-                                            {{ form_widget(form.customer.permanentAddress) }}
-                                            {{ form_errors(form.customer.permanentAddress) }}
+                                            {{ form_widget(form.customer.alternativeContactPerson) }}
+                                            {{ form_errors(form.customer.alternativeContactPerson) }}
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="control-group">
+                                        <label class="control-label red" for="firstName"><span>Relationship with the Patient<span class="required">*</span></span></label>
+                                        <div class="controls">
+                                            {{ form_widget(form.customer.alternativeRelation) }}
+                                            {{ form_errors(form.customer.alternativeRelation) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="control-group">
+                                        <label class="control-label red" for="firstName"><span>Guardian Mobile No<span class="required">*</span></span></label>
+                                        <div class="controls">
+                                            {{ form_widget(form.customer.alternativeContactMobile) }}
+                                            {{ form_errors(form.customer.alternativeContactMobile) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="span4">
                             <div class="row-fluid">
@@ -285,13 +390,19 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <br/>
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <button type="button" class="btn blue span12" data-url="{{ path('hms_invoice_add_patient',{'id':entity.id}) }}" id="addPatient"><i class="icon-save"></i> Save Patient Information</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                  </div>
-
+            </div>
             </div>
             <div class="clearfix">&nbsp;</div>
+            <div {% if entity.customer is empty %} style="display:none" {% endif %}>
             <div class="form-actions portlet box green">
                 <div class="portlet-title">
                     <div class="caption"><i class="icon-reorder"></i>Particulars & Payment Information</div>
@@ -685,11 +796,12 @@
 
                 </div>
                 <div class="pull-right span3">
+                    <input type="hidden" id="patient" name="patient" value="{% if entity.customer is not empty %}{{ entity.customer.id }}{% endif %}">
+                    <input type="hidden" id="invoice" name="invoice" value="{{ entity.id }}">
                     <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}">
                     <input type="hidden" name="netTotal" class="" id="netTotal" value="{{ entity.total }}">
                     <input type="hidden" name="due" class="" id="due" value="{{ entity.due }}">
-                    <button type="submit" class="btn blue" id="receiveBtn"><i class="icon-save"></i> Received</button>
-                    <div class="btn-group dropup">
+                    {#<div class="btn-group dropup">
                         <a class="btn purple" href="#" data-toggle="dropdown" data-hover="dropdown"  aria-haspopup="true" aria-expanded="false" data-close-others="true">
                             <i class="icon-print"></i>&nbsp;Print for&nbsp;<span class="caret"></span>
                         </a>
@@ -704,9 +816,13 @@
                             <li role="separator" class="divider"></li>
                             <li><a href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id ,'for':'emergency'}) }}"><i class="icon-print"></i>&nbsp;Emergency</a></li>
                         </ul>
-                    </div>
+                    </div>#}
+                    <a class="btn red" href="{{ path('hms_invoice_admission_delete',{'id':entity.id , 'for':'pathological'}) }}"><i class="fa fa-close"></i>&nbsp;Cancel</a>
+                    <button type="submit" class="btn blue" id="receiveBtn"><i class="icon-print"></i> Received with Print</button>
                 </div>
             </div>
+            </div>
+
             {{ form_end(form) }}
             <!-- END FORM-->
         </div>
@@ -727,6 +843,7 @@
     {{ parent() }}
     {% javascripts
     '@HospitalBundle/Resources/public/js/invoice.js'
+    '@HospitalBundle/Resources/public/js/approveProcess.js'
     '@HospitalBundle/Resources/public/js/editable.js'
     '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
 
@@ -737,6 +854,21 @@
 {% block documentready %}
     {{ parent() }}
     EditableInit();
+
+    $(document).on('click', '#addPatient', function(e) {
+
+        var url = $('#addPatient').attr('data-url');
+        e.preventDefault();
+        $.ajax({
+            type: 'post',
+            url: url,
+            data: $('#invoiceForm').serialize(),
+            success: function (response) {
+                obj = JSON.parse(response);
+                $('#patient').val(obj['patient']);
+            }
+        });
+    });
 
     $('input[name=particular]').focus();
     $( ".payment" ).val('');

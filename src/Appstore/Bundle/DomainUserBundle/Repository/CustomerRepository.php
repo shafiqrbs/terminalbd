@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
+use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -298,6 +299,89 @@ class CustomerRepository extends EntityRepository
         $query->orderBy('e.customerId', 'ASC');
         $query->setMaxResults( '10' );
         return $query->getQuery()->getResult();
+
+    }
+
+    public function patientInsertUpdate($data,Invoice $invoice)
+    {
+        $em = $this->_em;
+        $customer = $data['appstore_bundle_hospitalbundle_invoice']['customer'];
+        $patient = $data['patient'];
+        $option = $invoice->getHospitalConfig()->getGlobalOption();
+        if($patient){
+            $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption'=> $option ,'id' => $patient));
+        }else{
+            $location = $customer['location'];
+            $entity = new Customer();
+            if(!empty($location)){
+                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
+                $entity->setLocation($location);
+            }
+            if($customer['mobile']){
+                $entity->setMobile($customer['mobile']);
+            }
+            if($customer['name']){
+                $entity->setName($customer['name']);
+            }
+            if($customer['gender']){
+                $entity->setGender($customer['gender']);
+            }
+            if($customer['age']){
+                $entity->setAge($customer['age']);
+            }
+            if($customer['ageType']){
+                $entity->setAgeType($customer['ageType']);
+            }
+            if($customer['profession']){
+                $entity->setProfession($customer['profession']);
+            }
+            if($customer['fatherName']){
+                $entity->setFatherName($customer['fatherName']);
+            }
+            if($customer['motherName']){
+                $entity->setMotherName($customer['motherName']);
+            }
+            if($customer['nationality']){
+                $entity->setNationality($customer['nationality']);
+            }
+            if($customer['religion']){
+                $entity->setReligion($customer['religion']);
+            }
+            if($customer['address']){
+                $entity->setAddress($customer['address']);
+            }
+            if($customer['bloodGroup']){
+                $entity->setBloodGroup($customer['bloodGroup']);
+            }
+            if($customer['motherName']){
+                $entity->setMotherName($customer['motherName']);
+            }
+            if($customer['nationality']){
+                $entity->setNationality($customer['nationality']);
+            }
+            if($customer['maritalStatus']){
+                $entity->setMaritalStatus($customer['maritalStatus']);
+            }
+            if($customer['dob']){
+                $entity->setDob($customer['dob']);
+            }
+            if($customer['alternativeRelation']){
+                $entity->setAlternativeRelation($customer['alternativeRelation']);
+            }
+            if($customer['alternativeContactMobile']){
+                $entity->setAlternativeContactMobile($customer['alternativeContactMobile']);
+            }
+            if($customer['alternativeContactPerson']){
+                $entity->setAlternativeContactPerson($customer['alternativeContactPerson']);
+            }
+
+
+            $entity->setGlobalOption($option);
+            $em->persist($entity);
+            $em->flush($entity);
+        }
+        $em->getRepository('HospitalBundle:Invoice')->updatePatientInfo($invoice, $entity);
+        return $entity;
 
     }
 
