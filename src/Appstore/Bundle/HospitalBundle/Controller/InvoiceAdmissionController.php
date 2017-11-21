@@ -197,17 +197,20 @@ class InvoiceAdmissionController extends Controller
             $entity->setPrintFor('admission');
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
+             $payment = $data['payment'];
+             if($payment > 0) {
 
-            $payment = $data['payment'];
-            if($payment > 0 ) {
-                 $transactionData = array('payment' => $payment, 'discount' => 0 );
+                 $transactionData = array('process' => $entity->getProcess(),'payment' => $payment, 'discount' => 0);
                  $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity, $transactionData);
                  $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
-            }
-            if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
-               $dispatcher = $this->container->get('event_dispatcher');
-               $dispatcher->dispatch('setting_tool.post.hms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
-            }
+             }
+
+             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+
+                 $dispatcher = $this->container->get('event_dispatcher');
+                 $dispatcher->dispatch('setting_tool.post.hms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
+             }
+
             return $this->redirect($this->generateUrl('hms_invoice_admission_edit', array('id' => $entity->getId())));
         }
 
@@ -215,7 +218,7 @@ class InvoiceAdmissionController extends Controller
         $particulars = $em->getRepository('HospitalBundle:Particular')->getServiceWithParticular($entity->getHospitalConfig(),array(1,2,3,4,7));
         return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(
             'entity' => $entity,
-            'particulars' => $particulars,
+            'particularService' => $particulars,
             'referredDoctors' => $referredDoctors,
             'form' => $editForm->createView(),
         ));
@@ -283,12 +286,44 @@ class InvoiceAdmissionController extends Controller
         $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
         $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
 
-        return $this->render('HospitalBundle:InvoiceAdmission:'.$entity->getPrintFor().'.html.twig', array(
+        $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
+
+        foreach ($entity->getInvoiceParticulars() as $item) {
+
+            /** @var InvoiceParticular $item */
+            $serviceName = $item->getParticular()->getService()->getName();
+            $hasQuantity = $item->getParticular()->getService()->getHasQuantity();
+
+            if(!isset($invoiceDetails[$serviceName])) {
+                $invoiceDetails[$serviceName]['items'] = [];
+                $invoiceDetails[$serviceName]['total'] = 0;
+                $invoiceDetails[$serviceName]['hasQuantity'] = ( $hasQuantity == 1);
+            }
+
+            $invoiceDetails[$serviceName]['items'][] = $item;
+            $invoiceDetails[$serviceName]['total'] += $item->getSubTotal();
+        }
+
+        if(count($invoiceDetails['Pathology']['items']) == 0) {
+            unset($invoiceDetails['Pathology']);
+        }
+        return $this->render('HospitalBundle:Print:'.$entity->getPrintFor().'.html.twig', array(
             'entity'      => $entity,
-            'barcode'     => $barcode,
+            'invoiceDetails'      => $invoiceDetails,
+            'invoiceBarcode'     => $barcode,
             'patientBarcode'     => $patientId,
-            'inWords'     => $inWords,
+            'inWords'           => $inWords,
         ));
+    }
+
+    public function invoicePrintForAction(Request $request, Invoice $invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $print = $request->request->get('printFor');
+        $invoice->setPrintFor($print);
+        $em->persist($invoice);
+        $em->flush();
+        exit;
     }
 }
 

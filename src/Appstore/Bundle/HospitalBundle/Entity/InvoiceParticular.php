@@ -163,9 +163,6 @@ class InvoiceParticular
     {
         return $this->id;
     }
-
-
-
     /**
      * @return Particular
      */

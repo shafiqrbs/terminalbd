@@ -158,9 +158,10 @@
                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
                             <th class="span1">Si/No</th>
                             <th class="span1">Code</th>
-                            <th class="span4">Particular</th>
+                            <th class="span3">Particular</th>
                             <th class="span2">Service</th>
                             <th class="span1">Qnt</th>
+                            <th class="span2">Unit Price</th>
                             <th class="span1">Amount</th>
                             <th class="span1"><i class="icon-trash"></i></th>
                         </tr>
@@ -171,9 +172,10 @@
                             <td class="span1"><span class="badge badge-warning toggle badge-custom" id="{{ item.id  }}" ><span>[+]</span></span></td>
                             <td  class="span1">{{ loop.index }}</td>
                             <td  class="span1">{{ item.particular.particularCode }}</td>
-                            <td class="span4">{{ item.particular.name }}</td>
+                            <td class="span3">{{ item.particular.name }}</td>
                             <td class="span2">{{ item.particular.service.name }}</td>
-                            <td class="span1">{{ item.quantity }}</td>
+                            <td class="span1">{% if item.particular.service.hasQuantity == 1 %}{{ item.quantity }}{% endif %}</td>
+                            <td class="span2">{{ item.salesPrice }}</td>
                             <td class="span1">{{ item.subTotal|number_format }}</td>
                             <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_invoice_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
                         </tr>
@@ -193,27 +195,27 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="8" class="span12" style="border: 1px double #000"></td>
+                            <td colspan="9" class="span12" style="border: 1px double #000"></td>
                         </tr>
                         <tr>
-                            <td colspan="6" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
+                            <td colspan="7" class="span9"><span class="pull-right"><strong>Total Amount TK.</strong> =</span></td>
                             <td class="span2"><strong class="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         <tr>
-                            <td colspan="6" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
+                            <td colspan="7" class="span9"><span class="pull-right"><strong>Vat/Tax TK.</strong> =</span></td>
                             <td class="span2"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         <tr>
-                            <td colspan="6" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                            <td colspan="7" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                             <td class="span2"><strong class="discountAmount">{{ entity.discount|number_format }}</strong></td>
                             <td class="span1">
                                 <a href="javascript:" id=""  data-trigger="hover" data-original-title="Delete discount amount" data-url="{{ path('hms_invoice_discount_delete',{'id':entity.id}) }}" class=" btn red mini removeDiscount tooltips"><i class="icon-trash"></i></a>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
+                            <td colspan="7" class="span9"><span class="pull-right"><strong>Received TK.</strong> =</span></td>
                             <td class="span2"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
@@ -515,16 +517,22 @@
 
             <div class="clearfix">&nbsp;</div>
             <div class="form-actions portlet box grey">
-                <div class="pull-left span9">
-
-                </div>
+                <div class="pull-left span9"></div>
                 <div class="pull-right span3">
                     <input type="hidden" id="patient" name="patient" value="{% if entity.customer is not empty %}{{ entity.customer.id }}{% endif %}">
-                    <input type="hidden" id="invoice" name="invoice" value="{{ entity.id }}">
+                    <input type="hidden" id="invoice" name="invoice" data-action="{{ path('hms_invoice_print_for',{'id': entity.id}) }}" value="{{ entity.id }}">
                     <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}" >
                     <input type="hidden" name="netTotal" class="" id="netTotal" value="{{ entity.total }}">
                     <input type="hidden" name="due" class="" id="due" value="{{ entity.due }}">
-                    <button type="button" class="btn blue span11" id="receiveBtn"><i class="icon-save"></i> Received with Print</button>
+                    <div class="controls">
+                        <div class="input-append span7">
+                            {{ form_widget(form.printFor) }}
+                            {{ form_errors(form.printFor) }}
+                            <div class="btn-group">
+                                <button type="button" class="btn blue" id="receiveBtn"><i class="icon-save"></i> Received</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             {{ form_end(form) }}
@@ -559,6 +567,20 @@
 {% block documentready %}
     {{ parent() }}
     EditableInit();
+
+    $(document).on('change', '#appstore_bundle_hospitalbundle_invoice_printFor', function(e) {
+
+        var printFor = $(this).val();
+        var url = $('#invoice').attr('data-action');
+        e.preventDefault();
+        $.ajax({
+        type: 'post',
+        url: url,
+        data:'printFor='+printFor,
+        success: function (response) {}
+        });
+    });
+
 
     $("input:text:visible:first").focus();
     $('input[name=particular]').focus();

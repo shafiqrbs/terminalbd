@@ -347,7 +347,6 @@ class Builder extends ContainerAware
 
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
-        $userRoles = $user->getRoles();
         $inventory = $user->getGlobalOption()->getInventoryConfig();
         $menu
             ->addChild('Sales')
@@ -721,6 +720,7 @@ class Builder extends ContainerAware
 
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
+        $config = $user->getGlobalOption()->getHospitalConfig()->getInvoiceProcess();
         $menu
             ->addChild('Hospital & Diagnostic')
             ->setAttribute('icon', 'fa fa-hospital-o')
@@ -730,18 +730,26 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon icon-medkit')
             ->setAttribute('dropdown', true);
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_OPERATOR')) {
-            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Diagnostic', array('route' => 'hms_invoice'))
-                ->setAttribute('icon', 'fa fa-hospital-o');
+            if (!empty($config) and in_array('diagnostic', $config)) {
+                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Diagnostic', array('route' => 'hms_invoice'))
+                    ->setAttribute('icon', 'fa fa-hospital-o');
+            }
+            if (!empty($config) and in_array('admission', $config)) {
             $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'))
                 ->setAttribute('icon', 'fa fa-ambulance');
+            }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER')) {
-            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission Invoice', array('route' => 'hms_doctor_commission_invoice'))
-                ->setAttribute('icon', 'fa fa-user-md');
+            if (!empty($config) and in_array('doctor', $config)) {
+                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission Invoice', array('route' => 'hms_doctor_commission_invoice'))
+                    ->setAttribute('icon', 'fa fa-user-md');
+            }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_OPERATOR')) {
-            $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Patient', array('route' => 'hms_customer'))
-                ->setAttribute('icon', 'fa fa-user');
+            if (!empty($config)) {
+                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Patient', array('route' => 'hms_customer'))
+                    ->setAttribute('icon', 'fa fa-user');
+            }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_LAB') || $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_DOCTOR')) {
             $menu['Hospital & Diagnostic']->addChild('Patient Report')

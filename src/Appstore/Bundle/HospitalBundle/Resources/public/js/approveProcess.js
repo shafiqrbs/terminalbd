@@ -37,13 +37,13 @@ $(document).on("click", ".delete", function() {
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
     $('#action-'+id).hide();
-    $('#delete-'+id).hide();
-
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
+                $('#delete-'+id).hide();
+                $('#remove-'+id).hide();
               /*  location.reload();*/
             });
         }
@@ -56,9 +56,6 @@ $(document).on("click", ".approve", function() {
     $(this).removeClass('approve');
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
-    $('#action-'+id).hide();
-    $('#delete-'+id).hide();
-
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
@@ -68,25 +65,6 @@ $(document).on("click", ".approve", function() {
             });
         }
     });
-});
-
-$(document).on("click", ".approvex", function() {
-
-    $(this).removeClass('approve');
-    var id = $(this).attr("data-id");
-    var url = $(this).attr("data-url");
-    $('#action-'+id).hide();
-    $('#delete-'+id).hide();
-    $.ajax({
-        url: url,
-        type: 'GET',
-        beforeSend: function() {
-            $('.tabbable').show().addClass('ajax-loading').fadeIn(3000);
-        },
-        success: function (response) {
-            location.reload();
-        },
-    })
 });
 
 

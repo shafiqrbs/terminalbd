@@ -270,15 +270,12 @@ class InventoryConfig
      */
     private $printMarginBottom = 0;
 
-
     /**
      * @var boolean
      *
      * @ORM\Column(name="isPrintHeader", type="boolean",  nullable=true)
      */
     private $isPrintHeader = true;
-
-
 
     /**
      * @var boolean

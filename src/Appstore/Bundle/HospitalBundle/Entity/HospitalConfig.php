@@ -147,8 +147,6 @@ class HospitalConfig
      */
     private $printMarginReportBottom = 0;
 
-
-
     /**
      * @var boolean
      *
@@ -156,6 +154,12 @@ class HospitalConfig
      */
     private $isPrintHeader = true;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isInvoiceTitle", type="boolean",  nullable=true)
+     */
+    private $isInvoiceTitle = true;
 
 
     /**
@@ -195,6 +199,13 @@ class HospitalConfig
      * @ORM\Column(name="invoicePrefix", type="string", length=10,nullable = true)
      */
     private $invoicePrefix;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="invoiceProcess", type="array", nullable = true)
+     */
+    private $invoiceProcess;
 
     /**
      * @var string
@@ -858,6 +869,40 @@ class HospitalConfig
     {
         $this->printMarginReportBottom = $printMarginReportBottom;
     }
+
+    /**
+     * @return bool
+     */
+    public function getIsInvoiceTitle()
+    {
+        return $this->isInvoiceTitle;
+    }
+
+    /**
+     * @param bool $isInvoiceTitle
+     */
+    public function setIsInvoiceTitle($isInvoiceTitle)
+    {
+        $this->isInvoiceTitle = $isInvoiceTitle;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getInvoiceProcess()
+    {
+        return $this->invoiceProcess;
+    }
+
+    /**
+     * @param array $invoiceProcess
+     */
+    public function setInvoiceProcess($invoiceProcess)
+    {
+        $this->invoiceProcess = $invoiceProcess;
+    }
+
 
 
 }

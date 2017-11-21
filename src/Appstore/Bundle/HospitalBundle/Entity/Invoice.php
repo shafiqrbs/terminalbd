@@ -340,7 +340,7 @@ class Invoice
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="releaseDate", type="datetime")
+     * @ORM\Column(name="releaseDate", type="datetime", nullable=true)
      */
     private $releaseDate;
 
@@ -375,7 +375,7 @@ class Invoice
     /**
      * @var string
      *
-     * @ORM\Column(name="printFor", type="string",  length=50, nullable=true)
+     * @ORM\Column(name="printFor", type="string",  length=100, nullable=true)
      */
     private $printFor ='pathological';
 

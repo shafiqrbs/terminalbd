@@ -104,3 +104,4 @@ hms_invoice_add_patient:
     methods:  [POST, PUT]
     options:
             expose: true
+

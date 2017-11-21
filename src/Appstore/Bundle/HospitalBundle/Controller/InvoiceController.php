@@ -83,6 +83,7 @@ class InvoiceController extends Controller
         $entity->setTransactionMethod($transactionMethod);
         $entity->setPaymentStatus('Pending');
         $entity->setInvoiceMode('pathology');
+        $entity->setPrintFor('diagnostic');
         $entity->setCreatedBy($this->getUser());
         if(!empty($this->getUser()->getProfile()->getBranches())){
             $entity->setBranches($this->getUser()->getProfile()->getBranches());
@@ -108,7 +109,7 @@ class InvoiceController extends Controller
         if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created" and $entity->getRevised() != 1) {
             return $this->redirect($this->generateUrl('hms_invoice_show', array('id' => $entity->getId())));
         }
-        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,4));
+        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,4,7));
         $referredDoctors    = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
         return $this->render('HospitalBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
@@ -190,10 +191,6 @@ class InvoiceController extends Controller
         $result = $this->returnResultData($entity,$msg);
         return new Response(json_encode($result));
         exit;
-
-
-
-
     }
 
     public function invoiceDiscountUpdateAction(Request $request)
@@ -273,7 +270,6 @@ class InvoiceController extends Controller
 
             $entity->setDeliveryDateTime($datetime);
             $entity->setProcess('In-progress');
-            $entity->setPrintFor('pathological');
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
@@ -296,10 +292,10 @@ class InvoiceController extends Controller
         }
 
         $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=> 6),array('name'=>'ASC'));
-        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($entity->getHospitalConfig());
+        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($entity->getHospitalConfig(),array(1,6));
         return $this->render('HospitalBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
-            'partcularService' => $services,
+            'particularService' => $services,
             'referredDoctors' => $referredDoctors,
             'form' => $editForm->createView(),
         ));
@@ -543,13 +539,25 @@ class InvoiceController extends Controller
         if(count($invoiceDetails['Pathology']['items']) == 0) {
             unset($invoiceDetails['Pathology']);
         }
+        $lastTransaction = 0 ;
+        $inWordTransaction='';
+        if(!empty($entity->getInvoiceTransactions())){
+            $transaction = $entity->getInvoiceTransactions();
+            $lastTransaction = $transaction[0]->getPayment();
+            $inWordTransaction = $this->get('settong.toolManageRepo')->intToWords($lastTransaction);
 
-        return $this->render('HospitalBundle:Invoice:'.$entity->getPrintFor().'.html.twig', array(
-            'entity'      => $entity,
-            'invoiceDetails'      => $invoiceDetails,
-            'invoiceBarcode'     => $barcode,
-            'patientBarcode'     => $patientId,
-            'inWords'     => $inWords,
+        }
+
+
+
+        return $this->render('HospitalBundle:Print:'.$entity->getPrintFor().'.html.twig', array(
+            'entity'                => $entity,
+            'invoiceDetails'        => $invoiceDetails,
+            'invoiceBarcode'        => $barcode,
+            'patientBarcode'        => $patientId,
+            'inWords'               => $inWords,
+            'lastTransaction'       => $lastTransaction,
+            'inWordTransaction'     => $inWordTransaction,
         ));
     }
 }

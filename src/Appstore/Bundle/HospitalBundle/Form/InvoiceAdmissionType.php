@@ -50,9 +50,7 @@ class InvoiceAdmissionType extends AbstractType
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
-            ->add('deliveryDateTime','text', array('attr'=>array('class'=>'m-wrap span10 tooltips','data-trigger' => 'hover','placeholder'=>'Patient release date','data-original-title'=>'Patient release date','autocomplete'=>'off'),
-
-            ))
+            ->add('deliveryDateTime','text', array('attr'=>array('class'=>'m-wrap span10 tooltips','data-trigger' => 'hover','placeholder'=>'Patient release date','data-original-title'=>'Patient release date','autocomplete'=>'off')))
             ->add('payment','text', array('attr'=>array('class'=>'tooltips payment','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
             ))
             ->add('discount','text', array('attr'=>array('class'=>'tooltips discount','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
@@ -63,12 +61,13 @@ class InvoiceAdmissionType extends AbstractType
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
-                    'pathological' => 'Pathological',
                     'admission' => 'Admission',
-                    'release' => 'Release',
-                    'certificate' => 'Release Certificate',
-                    'surgery' => 'Surgery',
-                    'emergency' => 'Emergency'
+                    'payment' => 'Payment',
+                    'payments' => 'All Payment',
+                    'visit' => 'Visit',
+                    'release' => 'Release Certificate',
+                    'death' => 'Death Certificate',
+                    'done' => 'Done',
                 ),
             ))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
