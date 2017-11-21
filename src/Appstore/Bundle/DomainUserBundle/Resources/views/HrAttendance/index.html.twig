@@ -69,21 +69,16 @@
                                 <th class="numeric"><span class="pull-left">{{ user.profile.name }}</span></th>
                                 {% for i in 1..max %}
                                     {% set blackO = date(month~i)|date('m/d/Y') %}
-                                    {% if blackO  in  blackoutdate %}
-                                    <td class="numeric  red {% endif %}" >
-                                        <div class="row-fluid">
-                                            <span class="span6"><input type="checkbox" id="{{ i }}" value="1" ></span>
-                                            <span class="span6"><input type="checkbox" id="{{ i }}" value="2" ></span>
-                                        </div>
-                                    </td>
-                                    {% else %}
-                                        <td class="numeric  red {% endif %}" >
-                                            <div class="row-fluid">
-                                                <span class="span6"><input type="checkbox" id="{{ i }}" value="1" ></span>
-                                                <span class="span6"><input type="checkbox" id="{{ i }}" value="2" ></span>
-                                            </div>
-                                        </td>
-                                    {% endif %}
+                                        {% if blackO  in  blackoutdate %}
+                                            <td class="numeric  red" >&nbsp;</td>
+                                        {% else %}
+                                            <td class="numeric" >
+                                                <div class="row-fluid">
+                                                    <span class="span6"><input type="checkbox" id="{{ i }}" value="1" ></span>
+                                                    <span class="span6"><input type="checkbox" id="{{ i }}" value="2" ></span>
+                                                </div>
+                                            </td>
+                                        {% endif %}
                                 {% endfor %}
                             </tr>
                             {% endfor %}
@@ -104,7 +99,9 @@
     div.dataTables_wrapper {
         margin: 0 auto;
     }
-
+    .red{
+        background: red;
+    }
 
     table {
         border-collapse: separate;
