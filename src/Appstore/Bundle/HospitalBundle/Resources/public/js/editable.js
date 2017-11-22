@@ -64,5 +64,5 @@ $('.trash').on("click", ".remove", function() {
             }
         },
     })
-})
+});
 

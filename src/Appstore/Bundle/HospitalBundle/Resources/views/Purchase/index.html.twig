@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('hms_purchase') }}">Invoice</a>
+                        <a href="{{ path('hms_purchase') }}">Accessories</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -36,15 +36,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Manage Purchase Invoice</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('hms_purchase_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('hms_purchase') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
-                            </div>
+                                <a class="btn red" href="{{ path('hms_purchase_new') }}"><i class="icon-plus-sign"></i> Add Purchase</a>
+                             </div>
                         </div>
                     </div>
 
@@ -85,24 +78,28 @@
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >GRN</th>
                                     <th class="numeric" >Vendor Name</th>
-                                    <th class="numeric" >Amount</th>
+                                    <th class="numeric" >Total</th>
+                                    <th class="numeric" >Payment</th>
+                                    <th class="numeric" >Due</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 {% for entity in entities %}
-                                    <tr>
+                                    <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
-                                        <td class="numeric" >{{ entity.invoice }}</td>
+                                        <td class="numeric" >{{ entity.grn }}</td>
                                         <td class="numeric" >{% if entity.vendor is defined and entity.vendor is not empty %}{{ entity.vendor.name }}{% endif %}</td>
-                                        <td class="numeric" >{{ entity.payment }}</td>
+                                        <td class="numeric" >{{ entity.netTotal|number_format }}</td>
+                                        <td class="numeric" >{{ (entity.netTotal - entity.payment)|number_format }}</td>
+                                        <td class="numeric" >{{ entity.payment|number_format }}</td>
                                         <td class="numeric" >
-                                            {% if entity.process == 'Created' or entity.process == 'Pending' %}
+                                            {% if entity.process == 'created' or entity.process == 'pending' %}
                                             <a href="{{ path('hms_purchase_edit', { 'id': entity.id }) }}" class="btn yellow mini" ><i class="icon-pushpin"></i></a>
-                                            <a title="Are you sure went to delete ?" id="{{ entity.id }}" rel="{{ path('hms_purchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+                                            <a title="Are you sure went to delete ?" id="{{ entity.id }}" data-id="{{ entity.id }}" data-url="{{ path('hms_purchase_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                                             {% endif %}
-                                            <a href="{{ path('hms_purchase_show', { 'id': entity.id }) }}" class="btn blue mini" ><i class="icon-money"></i></a>
+                                            <a href="{{ path('hms_purchase_show', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-eye-open"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -122,7 +119,6 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/editable.js'
     '@HospitalBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

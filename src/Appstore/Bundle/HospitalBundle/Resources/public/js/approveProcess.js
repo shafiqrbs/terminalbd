@@ -36,7 +36,6 @@ $(document).on("click", ".confirm", function() {
 $(document).on("click", ".delete", function() {
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
-    $('#action-'+id).hide();
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',

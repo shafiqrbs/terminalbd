@@ -42,3 +42,7 @@ hms_invoice_print_for:
     methods:  [POST]
     options:
             expose: true
+
+hms_invoice_admission_confirm:
+    path:     /{id}/invoice-confirm
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:confirm" }

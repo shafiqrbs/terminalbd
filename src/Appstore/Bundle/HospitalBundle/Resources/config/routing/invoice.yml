@@ -65,7 +65,6 @@ hms_invoice_confirm:
     path:     /{id}/invoice-confirm
     defaults: { _controller: "HospitalBundle:Invoice:confirm" }
 
-
 hms_invoice_particular_delete:
     path:     /{invoice}/{id}/particular-delete
     defaults: { _controller: "HospitalBundle:Invoice:invoiceParticularDelete" }

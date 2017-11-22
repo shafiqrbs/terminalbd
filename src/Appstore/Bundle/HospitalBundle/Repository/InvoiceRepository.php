@@ -203,6 +203,9 @@ class InvoiceRepository extends EntityRepository
         }else{
             $invoice->setPaymentStatus('Due');
         }
+        if($invoice->getPrintFor() == "visit" and $invoice->getPaymentStatus() == "Paid") {
+            $invoice->setProcess('Done');
+        }
         $em->flush();
 
     }

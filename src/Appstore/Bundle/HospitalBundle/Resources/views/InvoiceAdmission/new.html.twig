@@ -36,17 +36,8 @@
             <div class="caption"><i class="icon-reorder"></i>Patient Admission Information</div>
             <div class="actions">
                 <div class="btn-group">
-                    <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                        <i class="icon-cogs"></i>&nbsp;Tools
-                        <i class="icon-tasks"></i>
-                    </a>
-                    <ul class="dropdown-menu pull-right">
-                        <li><a href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                        <li><a href="{{ path('hms_invoice_admission') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                        {% if(entity.id > 0 ) %}
-                        <li><a href="{{ path('hms_invoice_admission_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                        {% endif %}
-                    </ul>
+                    <a class="btn red" href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus-sign"></i> Add Invoice</a>
+                    <a class="btn" href="{{ path('hms_invoice_admission') }}"><i class="icon-th-list"></i> Admission</a>
                 </div>
             </div>
         </div>

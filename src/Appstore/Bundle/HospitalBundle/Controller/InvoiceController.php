@@ -216,18 +216,6 @@ class InvoiceController extends Controller
 
     }
 
-    public function discountDeleteAction(Invoice $entity)
-    {
-
-        $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->updateInvoiceTransactionDiscount($entity);
-        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
-
-        $msg = 'Discount deleted successfully';
-        $result = $this->returnResultData($entity,$msg);
-        return new Response(json_encode($result));
-        exit;
-    }
-
     public function updateAction(Request $request, Invoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -269,7 +257,6 @@ class InvoiceController extends Controller
             $datetime = empty($deliveryDateTime) ? $datetime : $deliveryDateTime ;
 
             $entity->setDeliveryDateTime($datetime);
-            $entity->setProcess('In-progress');
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
@@ -300,6 +287,18 @@ class InvoiceController extends Controller
             'form' => $editForm->createView(),
         ));
 
+    }
+
+    public function discountDeleteAction(Invoice $entity)
+    {
+
+        $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->updateInvoiceTransactionDiscount($entity);
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
+
+        $msg = 'Discount deleted successfully';
+        $result = $this->returnResultData($entity,$msg);
+        return new Response(json_encode($result));
+        exit;
     }
 
     public function searchAction(Request $request)
@@ -398,10 +397,12 @@ class InvoiceController extends Controller
         $payment = $request->request->get('payment');
         $discount = $request->request->get('discount');
         $process = $request->request->get('process');
+        $printFor = $request->request->get('printFor');
 
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess($process);
+            $entity->setPrintFor($printFor);
             $em->flush();
             if($payment > 0 || $discount > 0) {
                 $transactionData = array('process'=> $entity->getProcess(),'payment' => $payment, 'discount' => $discount);
@@ -547,8 +548,6 @@ class InvoiceController extends Controller
             $inWordTransaction = $this->get('settong.toolManageRepo')->intToWords($lastTransaction);
 
         }
-
-
 
         return $this->render('HospitalBundle:Print:'.$entity->getPrintFor().'.html.twig', array(
             'entity'                => $entity,

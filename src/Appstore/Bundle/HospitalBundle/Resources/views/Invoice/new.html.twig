@@ -6,7 +6,7 @@
     <div class="row-fluid">
         <div class="span12">
             <h3 class="category-title">
-                Patient Pathological Invoice no #  <strong>{{ entity.invoice }}</strong>
+                Patient Diagnostic Invoice no #  <strong>{{ entity.invoice }}</strong>
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -36,17 +36,8 @@
             <div class="caption"><i class="icon-reorder"></i>Patient Invoice Diagnostic Information</div>
             <div class="actions">
                 <div class="btn-group">
-                    <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                        <i class="icon-cogs"></i>&nbsp;Tools
-                        <i class="icon-tasks"></i>
-                    </a>
-                    <ul class="dropdown-menu pull-right">
-                        <li><a href="{{ path('hms_invoice_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                        <li><a href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                        {% if(entity.id > 0 ) %}
-                        <li><a href="{{ path('hms_invoice_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                        {% endif %}
-                    </ul>
+                    <a class="btn red" href="{{ path('hms_invoice_new') }}"><i class="icon-plus-sign"></i> Add Invoice</a>
+                    <a class="btn" href="{{ path('hms_invoice') }}"><i class="icon-trash"></i> Diagnostic</a>
                 </div>
             </div>
         </div>
@@ -505,7 +496,7 @@
                             <div class="control-group">
                                 <div class="input-prepend">
                                     <button class="btn blue" type="button" onclick="javascript:NewCssCal('deliveryDateTime','ddMMyyyy','arrow',true,'12','','future')"><i class="icon-calendar"></i></button>
-                                    <input type="text"  onclick="javascript:NewCssCal('deliveryDateTime','ddMMyyyy','arrow',true,'12','','future')" id="deliveryDateTime" name="deliveryDateTime" required="required" class="m-wrap span12 tooltips input2" data-trigger="hover" placeholder="Report delivery date" data-original-title="Report delivery date" autocomplete="off">
+                                    <input type="text"  onclick="javascript:NewCssCal('deliveryDateTime','ddMMyyyy','arrow',true,'12','','future')" id="deliveryDateTime" name="deliveryDateTime" required="required" class="m-wrap span12 tooltips input2" value="{{ entity.deliveryDateTime }}" data-trigger="hover" placeholder="Report delivery date" data-original-title="Report delivery date" autocomplete="off">
                                 </div>
                             </div>
                         </div>

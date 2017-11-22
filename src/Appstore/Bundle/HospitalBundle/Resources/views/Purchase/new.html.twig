@@ -36,17 +36,8 @@
             <div class="caption"><i class="icon-reorder"></i>Accessories Information</div>
             <div class="actions">
                 <div class="btn-group">
-                    <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                        <i class="icon-cogs"></i>&nbsp;Tools
-                        <i class="icon-tasks"></i>
-                    </a>
-                    <ul class="dropdown-menu pull-right">
-                        <li><a href="{{ path('hms_purchase_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                        <li><a href="{{ path('hms_purchase') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                        {% if(entity.id > 0 ) %}
-                        <li><a href="{{ path('hms_purchase_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                        {% endif %}
-                    </ul>
+                    <a class="btn red" href="{{ path('hms_purchase_new') }}"><i class="icon-plus-sign"></i> Add Purchase</a>
+                    <a class="btn" href="{{ path('hms_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
                 </div>
             </div>
         </div>
@@ -127,7 +118,7 @@
                         <div class="span12">
                             <div class="row-fluid particular-info" >
                                 <div class="span7">
-                                    <select id="particular" name="particular" class="span12 ">
+                                    <select id="particular" name="particular" class="span12 select2">
                                         <option value="">--- Select accessories name ---</option>
                                        {% for particular in particulars %}
                                            <option value="{{ path('hms_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} </option>
@@ -293,7 +284,7 @@
     {{ parent() }}
     {% javascripts
     '@HospitalBundle/Resources/public/js/purchase.js'
-    '@HospitalBundle/Resources/public/js/editable.js'
+    '@HospitalBundle/Resources/public/js/approveProcess.js'
     '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -301,6 +292,6 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-    EditableInit();
     $('input[name=particular]').focus();
 {% endblock %}
+

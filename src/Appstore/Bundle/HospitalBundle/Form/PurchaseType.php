@@ -34,7 +34,7 @@ class PurchaseType extends AbstractType
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsVendor',
                 'empty_value' => '---Choose a vendor ---',
                 'property' => 'companyName',
-                'attr'=>array('class'=>'span12 select2'),
+                'attr'=>array('class'=>'span12'),
                 'constraints' =>array( new NotBlank(array('message'=>'Please select your vendor name')) ),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('wt')
@@ -46,7 +46,7 @@ class PurchaseType extends AbstractType
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
-                'attr'=>array('class'=>'span12 select2 transactionMethod'),
+                'attr'=>array('class'=>'span12 transactionMethod'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 ),
@@ -87,18 +87,8 @@ class PurchaseType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please add  memo no'))
             )))
-            ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12 resize ','rows'=>3,'required' => true ,'label' => 'form.name','placeholder'=>'Enter remark'),
-
-            ))
-            ->add('receiveDate', 'date', array(
-                'widget' => 'single_text',
-                'placeholder' => array(
-                    'mm' => 'mm', 'dd' => 'dd','YY' => 'YY'
-                ),
-                'format' => 'dd-MM-yyyy',
-                'attr' => array('class'=>'m-wrap span12 datePicker'),
-                'view_timezone' => 'Asia/Dhaka'))
-
+            ->add('remark','textarea', array('attr'=>array('class'=>'m-wrap span12 resize ','rows'=>3,'required' => true ,'label' => 'form.name','placeholder'=>'Enter remark')))
+            ->add('receiveDate','text', array('attr'=>array('class'=>'m-wrap span12 dateCalendar','placeholder'=>'Enter receive date')))
             ->add('payment','text', array('attr'=>array('class'=>'numeric','placeholder'=>'Payment amount')
             ));
     }

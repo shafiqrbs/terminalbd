@@ -64,7 +64,6 @@ class InvoiceAdmissionType extends AbstractType
                     'admission' => 'Admission',
                     'payment' => 'Payment',
                     'payments' => 'All Payment',
-                    'visit' => 'Visit',
                     'release' => 'Release Certificate',
                     'death' => 'Death Certificate',
                     'done' => 'Done',
