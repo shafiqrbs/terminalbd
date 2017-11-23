@@ -84,7 +84,7 @@ $(document).on('change', '.transactionMethod', function() {
 
 $(document).on( "click", ".patientShow", function(e){
     $('#updatePatient').slideToggle(2000);
-    $("span", this).toggleClass("fa-minus fa-plus");
+    $("span", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");
 });
 
 $(document).on( "click", ".receivePayment", function(e){

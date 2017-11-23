@@ -112,6 +112,7 @@ class InvoiceAdmissionController extends Controller
             'entity' => $entity,
             'particularService' => $services,
             'referredDoctors' => $referredDoctors,
+            'admissionForm' => 'hide',
             'form' => $editForm->createView(),
         ));
     }
@@ -197,8 +198,8 @@ class InvoiceAdmissionController extends Controller
             $entity->setPrintFor('admission');
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
-             $payment = $data['payment'];
-             if($payment > 0) {
+            $payment = $data['payment'];
+              if($payment > 0) {
 
                  $transactionData = array('process' => $entity->getProcess(),'payment' => $payment, 'discount' => 0);
                  $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity, $transactionData);
@@ -215,11 +216,12 @@ class InvoiceAdmissionController extends Controller
         }
 
         $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=> 6),array('name'=>'ASC'));
-        $particulars = $em->getRepository('HospitalBundle:Particular')->getServiceWithParticular($entity->getHospitalConfig(),array(1,2,3,4,7));
+        $particulars = $em->getRepository('HospitalBundle:Particular')->getServices($entity->getHospitalConfig(),array(1,2,3,4,7));
         return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(
             'entity' => $entity,
             'particularService' => $particulars,
             'referredDoctors' => $referredDoctors,
+            'admissionForm' => 'show',
             'form' => $editForm->createView(),
         ));
     }

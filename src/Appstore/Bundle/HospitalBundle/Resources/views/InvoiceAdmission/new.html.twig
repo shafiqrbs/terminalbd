@@ -38,12 +38,13 @@
                 <div class="btn-group">
                     <a class="btn red" href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus-sign"></i> Add Invoice</a>
                     <a class="btn" href="{{ path('hms_invoice_admission') }}"><i class="icon-th-list"></i> Admission</a>
+                    <a class="btn black patientShow"><span class="fa fa-angle-double-up"></span>&nbsp;Show</a>
                 </div>
             </div>
         </div>
     <div class="portlet-body">
         <div class="portlet-body">
-            {% if entity.customer is not empty %}
+            {% if entity.customer is defined and entity.customer is not empty and entity.customer.id is not empty %}
             <div class="row-fluid">
                 <div class="span3">
                     <h4>About:</h4>
@@ -56,23 +57,23 @@
                         <li><strong>Patient Relation:</strong>&nbsp;{{ entity.customer.alternativeRelation }}</li>
                     </ul>
                 </div>
-                <div class="span3 invoice-payment">
+                <div class="span3">
                     <h4>Personal:</h4>
                     <ul class="unstyled">
                         {% if entity.customer is not empty %}<li><strong>Patient ID #:</strong>&nbsp;{{ entity.customer.customerId }}</li>{% endif %}
                         <li><strong>Age:</strong>&nbsp;{{ entity.customer.age }} {{ entity.customer.ageType }}</li>
                         <li><strong>Date of Birth:</strong>&nbsp;{{ entity.customer.dob }}</li>
-                        <li><strong>marital:</strong>&nbsp;{{ entity.customer.maritalStatus }}</li>
+                        <li><strong>Marital:</strong>&nbsp;{{ entity.customer.maritalStatus }}</li>
                         <li><strong>Blood Group:</strong>&nbsp;{{ entity.customer.bloodGroup }}</li>
                     </ul>
                 </div>
 
-                <div class="span3 invoice-payment">
+                <div class="span3">
                     <h4>Admission:</h4>
                     <ul class="unstyled">
                         <li><strong>Admission Date:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
                         <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y') }}{% endif %}</li>
-                        <li><strong>Cabin/Bed:</strong>&nbsp;{{ entity.payment|number_format() }}</li>
+                        <li><strong>Cabin/Bed:</strong> {% if entity.cabin is not empty %}{{ entity.cabin.name }}{% endif %}/{{ entity.cabinNo }}</li>
                         <li><strong>Assign Doctor:</strong>&nbsp;{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</li>
                         <li><strong>Department:</strong>&nbsp;{% if entity.department is not empty %}{{ entity.department.name }}{% endif %}</li>
                     </ul>
@@ -93,27 +94,22 @@
             <div class="row-fluid">
                 <div class="span12">
                     <strong>Disease: </strong>{{ entity.disease }}
+                    {% if entity.customer is defined and entity.customer.id is empty %}
+                        {{ entity.customer.id }}
+                    {% endif %}
                 </div>
             </div>
-            <hr/>
             {% endif %}
         </div>
+
 
         <div class="portlet-body form"  >
             {% include('flash-message.html.twig')  %}
             <!-- BEGIN FORM-->
             {{ form_start(form) }}
             {{ form_row(form._token) }}
-            <div class="form-actions portlet box blue">
-                <div class="portlet-title">
-                    <div class="caption"><i class="icon-user"></i>Patient Information</div>
-                    <div class="pull-right span2">
-                        <a class="btn black mini pull-right patientShow"><span class="fa fa-plus"></span>&nbsp;Show</a>
-                    </div>
-                </div>
-            </div>
             <div class="clearfix">&nbsp;</div>
-            <div id="updatePatient" {% if entity.customer is not empty %} style="display:none" {% else %} style="display:block" {% endif %}>
+            <div id="updatePatient" {% if entity.customer is defined and entity.customer is not empty and admissionForm !='show' %} style="display:none" {% else %} style="display:block" {% endif %}>
             <div class="row-fluid">
                 <div class="span12">
                     <div class="control-group">
@@ -386,7 +382,7 @@
                             <br/>
                             <div class="row-fluid">
                                 <div class="span12">
-                                    <button type="button" class="btn blue span12" data-url="{{ path('hms_invoice_add_patient',{'id':entity.id}) }}" id="addPatient"><i class="icon-save"></i> Save Patient Information</button>
+                                    <button type="submit" class="btn blue span12"><i class="icon-save"></i> Add Patient Information</button>
                                 </div>
                             </div>
                         </div>
@@ -541,7 +537,7 @@
                             <div class="row-fluid particular-info" >
                                 <div class="span7">
                                     <select id="particular" name="particular" class="span12 select2">
-                                        <option value="">Test Name ,Accessories, Surgery,Cabin etc. </option>
+                                        <option value="">Test Name, Accessories, Surgery, Cabin etc. </option>
                                         {{ particularService|raw }}
                                     </select>
                                 </div>
@@ -822,7 +818,6 @@
     '@HospitalBundle/Resources/public/js/approveProcess.js'
     '@HospitalBundle/Resources/public/js/editable.js'
     '@HospitalBundle/Resources/public/js/datetimepicker_css.js'
-
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -832,7 +827,6 @@
     EditableInit();
 
     $(document).on('click', '#addPatient', function(e) {
-
         var url = $('#addPatient').attr('data-url');
         e.preventDefault();
         $.ajax({
@@ -841,7 +835,7 @@
             data: $('#invoiceForm').serialize(),
             success: function (response) {
                 obj = JSON.parse(response);
-                $('#patient').val(obj['patient']);
+                location.reload();
             }
         });
     });
