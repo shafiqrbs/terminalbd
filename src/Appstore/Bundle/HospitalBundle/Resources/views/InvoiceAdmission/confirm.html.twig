@@ -160,9 +160,43 @@
                                 {% endif %}
                             </div>
                             <div class="clearfix">&nbsp;</div>
-                            <div class="form-actions portlet box purple">
-                                <div class="pull-left">
-                                    <a class="btn green span12 pull-left" style="text-align: left" ><i class="icon-money"></i>&nbsp;Payment Due</a>
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <table class="table table-bordered table-striped table-condensed table-fixed">
+                                        <thead>
+                                        <tr class="head-blue">
+                                            <th class="numeric">&nbsp;&nbsp;<i class="icon-list"></i></th>
+                                            <th class="numeric">Created</th>
+                                            <th class="numeric">Payment Method</th>
+                                            <th class="numeric">Discount</th>
+                                            <th class="numeric">Vat/Tax</th>
+                                            <th class="numeric">Amount</th>
+                                            <th class="numeric">Created By</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="invoiceTransaction">
+                                        {% for transaction in entity.invoiceTransactions %}
+                                            <tr>
+                                                <td  class="numeric">{{ loop.index }}</td>
+                                                <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
+                                                <td class="numeric">{{ transaction.transactionMethod.name }}</td>
+                                                <td class="numeric">{{ transaction.discount }}</td>
+                                                <td class="numeric">{{ transaction.vat }}</td>
+                                                <td class="numeric">{{ transaction.payment }}</td>
+                                                <td class="numeric">{{ transaction.createdBy }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td class="numeric" colspan="3"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                            <td class="numeric"><strong class="discountAmount">{{ entity.discount|number_format }}</strong></td>
+                                            <td class="numeric"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
+                                            <td class="numeric"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
+                                            <td class="numeric"></td>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>

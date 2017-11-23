@@ -94,9 +94,6 @@
             <div class="row-fluid">
                 <div class="span12">
                     <strong>Disease: </strong>{{ entity.disease }}
-                    {% if entity.customer is defined and entity.customer.id is empty %}
-                        {{ entity.customer.id }}
-                    {% endif %}
                 </div>
             </div>
             {% endif %}

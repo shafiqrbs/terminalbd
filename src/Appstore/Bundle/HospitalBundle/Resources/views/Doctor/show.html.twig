@@ -5,7 +5,7 @@
     <div class="row-fluid">
         <div class="span12">
             <h3 class="page-title">
-                View Lists
+                {{ entity.assignDoctor.userFullName }}
             </h3>
             <ul class="breadcrumb">
                 <li>
@@ -14,10 +14,10 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('blog') }}">Feature Category</a>
+                    <a href="{{ path('hms_doctor') }}">Doctor</a>
                     <span class="icon-angle-right"></span>
                 </li>
-                <li><a href="#">View Lists</a></li>
+                <li><a href="#">Doctor Information</a></li>
                 <li class="pull-right btn blue disabled mini">
                     <i class="fa fa-calendar"></i>
                     {{ "now"|date("d-F-Y") }}
@@ -30,52 +30,59 @@
     <div class="row-fluid">
         <div class="span12">
 
-            <div class="portlet box green tabbable">
+            <div class="portlet box green">
 
                 <div class="portlet-title">
-                    <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
-                </div>
-
-                <div class="portlet-body">
-
-                    <div class="tabbable portlet-tabs">
-                        <form method="post" name="featureCategory" id="featureCategory" action="{{ path('category_feature') }}" >
-                        <ul class="nav nav-tabs">
-                                <li class="active"><a  href="javascript:"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="portlet-body flip-scroll">
-                                    {% include('flash-message.html.twig')  %}
-                                    <div id="nestable_list_3" class="dd">
-                                        <ol class="dd-list singleSortable ui-sortable">
-                                            {% for entity in entities %}
-                                                <li style="display:list-item" class="dd-item dd3-item " id="menuItem_{{ entity.id }}">
-                                                    <div class="menuDiv">
-                                                            <span >
-                                                                <div data-id="{{ entity.id }}" class="itemTitle dd-handle dd3-handle"></div>
-                                                                <span class="dd3-content">{{ entity.name }} <div style="float: right; margin-top: -3px">
-                                                                        <span class="btn mini red-stripe btn-action">
-                                                                            <input type="checkbox" name="feature[]" {% if entity.feature == 1 %} checked="checked" {% endif %} value="{{ entity.id }}">
-                                                                            <input type="hidden" name="catId[]" value="{{ entity.id }}">
-                                                                        </span></div></span>
-                                                            </span>
-                                                    </div>
-                                                </li>
-                                            {% endfor %}
-                                        </ol>
-                                    </div>
-                                    <div class="form-actions portlet box grey">
-                                        <div class="pull-center">
-                                            <button class="btn green serialize" type="submit"><i class="icon-ok"></i> Update</button>
-                                            <button class="btn purple" type="submit"><i class="icon-refresh"></i> Reset</button>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </form>
+                    <div class="caption"><i class="icon-reorder"></i>Doctor: {{ entity.assignDoctor.userFullName }}</div>
+                    <div class="actions">
+                        <div class="btn-group">
+                            <a class="btn red" href="{{ path('hms_doctor_new') }}"><i class="icon-plus-sign"></i> Add Invoice</a>
+                            <a class="btn" href="{{ path('hms_doctor') }}"><i class="icon-th-list"></i> Doctor</a>
+                        </div>
                     </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <h4>About:</h4>
+                            <ul class="unstyled">
+                                <li><strong>Name:</strong>&nbsp;  {{ entity.assignDoctor.userFullName }}</li>
+                                <li><strong>Designation:</strong>&nbsp;  {% if entity.designation is not empty %}{{ entity.designation }}{% endif %}</li>
+                                <li><strong>Mobile:</strong>&nbsp;  {% if entity.mobile is not empty %}{{ entity.mobile }}{% endif %}</li>
+                                <li><strong>E-mail:</strong>&nbsp;  {% if entity.email is not empty %}{{ entity.email }}{% endif %}</li>
+                             </ul>
+                        </div>
+                        <div class="span4">
+                            <h4>Personal:</h4>
+                            <ul class="unstyled">
+                                <li><strong>Department:</strong>&nbsp;  {% if entity.department is not empty %}{{ entity.department.name }}{% endif %}</li>
+                                <li><strong>Category:</strong>&nbsp;  {% if entity.category is not empty %}{{ entity.category.name }}{% endif %}</li>
+                                <li><strong>Current Job:</strong>&nbsp;  {% if entity.currentJob is not empty %}{{ entity.currentJob }}{% endif %}</li>
+                            </ul>
+                        </div>
 
+                        <div class="span4">
+                            <h4>Official:</h4>
+                            <ul class="unstyled">
+                                <li><strong>Fee:</strong>&nbsp;  {{ entity.price }}</li>
+                                <li><strong>Commission:</strong>&nbsp;  {% if entity.commission is not empty %}{{ entity.commission }}{% endif %}</li>
+                                <li><strong>Room:</strong> {% if entity.room is not empty %}{{ entity.room }}{% endif %}</li>
+                                <li><strong>Assign Operator:</strong> {% if entity.assignOperator is not empty %}{{ entity.assignOperator.fullName }}{% endif %}}</li>
+                                <li><strong>Hour:</strong> {% if entity.startHour is not empty %}{{ entity.startHour }}{% endif %} To {% if entity.endHour is not empty %}{{ entity.endHour }}{% endif %}</li>
+                                <li><strong>Off Day:</strong>&nbsp;{% if entity.weeklyOffDay is not empty %}{% for off in  entity.weeklyOffDay %}{{ off }}{% endfor %}{% endif %}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <strong>Educational Degree: </strong>{{ entity.educationalDegree }}
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <strong>Specialist: </strong>{{ entity.specialist }}
+                        </div>
+                    </div>
                 </div>
 
             </div>

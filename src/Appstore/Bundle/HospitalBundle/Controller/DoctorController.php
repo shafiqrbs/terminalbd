@@ -128,7 +128,14 @@ class DoctorController extends Controller
      */
     public function showAction($id)
     {
-
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Particular entity.');
+        }
+        return $this->render('HospitalBundle:Doctor:show.html.twig', array(
+            'entity'      => $entity,
+        ));
     }
 
     /**
