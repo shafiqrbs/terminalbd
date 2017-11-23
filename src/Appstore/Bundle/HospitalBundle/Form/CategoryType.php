@@ -38,7 +38,6 @@ class CategoryType extends AbstractType
             ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter category name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
-
                 )
             ))
             ->add('parent', 'entity', array(
