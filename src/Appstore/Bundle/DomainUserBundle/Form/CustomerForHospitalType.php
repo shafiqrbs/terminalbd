@@ -38,7 +38,6 @@ class CustomerForHospitalType extends AbstractType
                     new NotBlank(array('message'=>'Enter patient mobile no')),
                 )
             ))
-            ->add('customerId','text', array('attr'=>array('class'=>'m-wrap span12 select2CustomerCode','autocomplete'=>'off','placeholder'=>'Enter customer code')))
             ->add('age','number', array('attr'=>array('class'=>'m-wrap span12 numeric inputs patientAge','placeholder'=>'Enter age'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Patient age')),

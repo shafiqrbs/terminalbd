@@ -50,23 +50,21 @@ class InvoiceAdmissionType extends AbstractType
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
-            ->add('deliveryDateTime','text', array('attr'=>array('class'=>'m-wrap span10 tooltips','data-trigger' => 'hover','placeholder'=>'Patient release date','data-original-title'=>'Patient release date','autocomplete'=>'off')))
+           /* ->add('deliveryDateTime','text', array('attr'=>array('class'=>'m-wrap span10 tooltips','data-trigger' => 'hover','placeholder'=>'Patient release date','data-original-title'=>'Patient release date','autocomplete'=>'off')))*/
             ->add('payment','text', array('attr'=>array('class'=>'tooltips payment','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
             ))
             ->add('discount','text', array('attr'=>array('class'=>'tooltips discount','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
             ))
             ->add('printFor', 'choice', array(
                 'attr'=>array('class'=>'span12 select-custom'),
-                'empty_value' => '--- Select Print For ---',
+                'empty_value' => '--- Select Patient Status ---',
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
                     'admission' => 'Admission',
-                    'payment' => 'Payment',
-                    'payments' => 'All Payment',
-                    'release' => 'Release Certificate',
-                    'death' => 'Death Certificate',
-                    'done' => 'Done',
+                    'admitted'  => 'Admitted',
+                    'release'   => 'Release Certificate',
+                    'death'     => 'Death Certificate',
                 ),
             ))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
@@ -154,18 +152,13 @@ class InvoiceAdmissionType extends AbstractType
                 }
             ))
             ->add('cabinNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add cabin/ward no','data-original-title'=>'Add cabin/ward no','autocomplete'=>'off'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add cabin/ward no required'))
-                ),
+
             ))
             ->add('department', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select department---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
                 'property' => 'nestedLabel',
                 'choices'=> $this->DepartmentChoiceList()
             ))

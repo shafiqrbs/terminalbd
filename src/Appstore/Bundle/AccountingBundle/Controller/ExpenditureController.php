@@ -38,19 +38,21 @@ class ExpenditureController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $user = $this->getUser();
-        $globalOption = $user->getGlobalOption();
+        $entity = new Expenditure();
+        $form = $this->createCreateForm($entity);
         $entities = $em->getRepository('AccountingBundle:Expenditure')->findWithSearch($user,$data);
         $pagination = $this->paginate($entities);
         $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->expenditureOverview($user,$data);
         //$flatExpenseCategoryTree = $this->getDoctrine()->getRepository('AccountingBundle:ExpenseCategory')->getCategoryOptions();
         $transactionMethods = $this->getDoctrine()->getRepository('SettingToolBundle:TransactionMethod')->findBy(array('status'=>1),array('name'=>'asc'));
-
         return $this->render('AccountingBundle:Expenditure:index.html.twig', array(
             'entities' => $pagination,
             'searchForm' => $data,
             'flatExpenseCategoryTree' => '',
             'transactionMethods' => $transactionMethods,
             'overview' => $overview,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         ));
     }
     /**

@@ -103,7 +103,7 @@ class InvoiceAdmissionController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created") {
+        if ($entity->getProcess() != "Admitted" and $entity->getProcess() != "Created") {
             return $this->redirect($this->generateUrl('hms_invoice_admission_show', array('id' => $entity->getId())));
         }
         $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,2,3,4,7));
@@ -141,26 +141,6 @@ class InvoiceAdmissionController extends Controller
         return $form;
     }
 
-    public function particularSearchAction(Particular $particular)
-    {
-        $quantity = $particular->getQuantity() > 0 ? $particular->getQuantity() :1;
-        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $quantity, 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
-    }
-
-    public function addParticularAction(Request $request, Invoice $invoice)
-    {
-    }
-
-    public function invoiceParticularDeleteAction(Invoice $invoice, InvoiceParticular $particular){
-    }
-
-    public function invoiceDiscountUpdateAction(Request $request)
-    {
-    }
-    public function deleteAction(Request $request)
-    {
-    }
-
     public function updateAction(Request $request, Invoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -194,7 +174,7 @@ class InvoiceAdmissionController extends Controller
             }
 
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-            $entity->setProcess('In-progress');
+            $entity->setProcess('Admitted');
             $entity->setPrintFor('admission');
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
@@ -226,6 +206,26 @@ class InvoiceAdmissionController extends Controller
         ));
     }
 
+    public function particularSearchAction(Particular $particular)
+    {
+        $quantity = $particular->getQuantity() > 0 ? $particular->getQuantity() :1;
+        return new Response(json_encode(array('particularId'=> $particular->getId() ,'price'=> $particular->getPrice() , 'quantity'=> $quantity, 'minimumPrice'=> $particular->getMinimumPrice(), 'instruction'=> $particular->getInstruction())));
+    }
+
+    public function addParticularAction(Request $request, Invoice $invoice)
+    {
+    }
+
+    public function invoiceParticularDeleteAction(Invoice $invoice, InvoiceParticular $particular){
+    }
+
+    public function invoiceDiscountUpdateAction(Request $request)
+    {
+    }
+    public function deleteAction(Request $request)
+    {
+    }
+
 
     public function showAction(Invoice $entity)
     {
@@ -250,6 +250,31 @@ class InvoiceAdmissionController extends Controller
         } else {
             return $this->redirect($this->generateUrl('hms_invoice_admission'));
         }
+    }
+
+    public function admittedAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        $hospital = $user->getGlobalOption()->getHospitalConfig();
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user,$mode ='admission', $data);
+        $pagination = $this->paginate($entities);
+        $overview = $em->getRepository('HospitalBundle:DoctorInvoice')->findWithOverview($user,$data);
+        $invoiceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithOverview($user,$data);
+
+        $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
+        $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
+
+        return $this->render('HospitalBundle:InvoiceAdmission:admitted.html.twig', array(
+            'entities' => $pagination,
+            'invoiceOverview' => $invoiceOverview,
+            'overview' => $overview,
+            'assignDoctors' => $assignDoctors,
+            'referredDoctors' => $referredDoctors,
+            'searchForm' => $data,
+        ));
 
     }
 

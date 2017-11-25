@@ -131,11 +131,8 @@ class SalarySettingController extends Controller
             throw $this->createNotFoundException('Unable to find SalarySetting entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('AccountingBundle:SalarySetting:show.html.twig', array(
+       return $this->render('AccountingBundle:SalarySetting:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -195,7 +192,6 @@ class SalarySettingController extends Controller
             throw $this->createNotFoundException('Unable to find SalarySetting entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
@@ -213,10 +209,9 @@ class SalarySettingController extends Controller
             return $this->redirect($this->generateUrl('account_salarysetting_edit', array('id' => $id)));
         }
 
-        return $this->render('AccountingBundle:SalarySetting:edit.html.twig', array(
+        return $this->render('AccountingBundle:SalarySetting:new.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form'   => $editForm->createView(),
         ));
     }
     /**
@@ -235,24 +230,6 @@ class SalarySettingController extends Controller
     }
 
     /**
-     * Creates a form to delete a SalarySetting entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('account_salarysetting_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
-    }
-
-
-    /**
      * Displays a form to edit an existing Expenditure entity.
      *
      */
@@ -264,7 +241,7 @@ class SalarySettingController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AccountPurchase entity.');
         }
-        $field ='set'.$data['data-name'];
+        $field ='set'.$data['name'];
         $entity->$field($data['value']);
         $em->flush();
         exit;

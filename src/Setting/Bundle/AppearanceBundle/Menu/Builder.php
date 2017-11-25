@@ -71,7 +71,7 @@ class Builder extends ContainerAware
             $result = array_intersect($menuName, array('Hospital'));
             if (!empty($result)) {
                 if ($securityContext->isGranted('ROLE_HOSPITAL')){
-                    $menu = $this->HospitalSalesMenu($menu);
+                    $menu = $this->HospitalMenu($menu);
                 }
             }
 
@@ -715,7 +715,7 @@ class Builder extends ContainerAware
 
     }
 
-    public function HospitalSalesMenu($menu)
+    public function HospitalMenu($menu)
     {
 
         $securityContext = $this->container->get('security.context');

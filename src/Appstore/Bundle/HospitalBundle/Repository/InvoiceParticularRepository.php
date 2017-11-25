@@ -2,6 +2,7 @@
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
 use Appstore\Bundle\HospitalBundle\Controller\InvoiceController;
+use Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Doctrine\ORM\EntityRepository;
@@ -41,15 +42,47 @@ class InvoiceParticularRepository extends EntityRepository
             $entity->setSalesPrice($data['price']);
             $entity->setSubTotal($data['price'] * $data['quantity']);
         }
+
         $entity->setHmsInvoice($invoice);
         $entity->setParticular($particular);
         $entity->setEstimatePrice($particular->getPrice());
         if($particular->getCommission()){
-            $entity->setCommission($particular->getCommission() * $data['quantity']);
+            $entity->setCommission($particular->getCommission() * $entity->getQuantity());
         }
         $em->persist($entity);
         $em->flush();
 
+    }
+
+    public function insertInvoiceParticularMasterUpdate(AdmissionPatientParticular $patientParticular)
+    {
+        $em = $this->_em;
+        $invoice = $patientParticular->getInvoiceTransaction()->getHmsInvoice();
+        $entity = $this->findOneBy(array('hmsInvoice' => $invoice,'particular' => $patientParticular->getParticular()));
+        /* @var $entity InvoiceParticular */
+        if(empty($entity)){
+
+            $entity = new InvoiceParticular();
+            $entity->setSubTotal($patientParticular->getSubTotal());
+            $entity->setQuantity($patientParticular->getQuantity());
+            $entity->setHmsInvoice($invoice);
+            $entity->setParticular($patientParticular->getParticular());
+            $entity->setSalesPrice($patientParticular->getSalesPrice());
+            $entity->setEstimatePrice($patientParticular->getParticular()->getPrice());
+            if($patientParticular->getParticular()->getCommission()){
+                $entity->setCommission($patientParticular->getParticular()->getCommission() * $entity->getQuantity());
+            }
+
+        }else{
+
+            $entity->setSubTotal( $entity->getSubTotal() + $patientParticular->getSubTotal());
+            $entity->setQuantity( $entity->getQuantity() + $patientParticular->getQuantity());
+            if($entity->getCommission()){
+                $entity->setCommission($entity->getCommission() * $entity->getQuantity());
+            }
+        }
+        $em->persist($entity);
+        $em->flush();
     }
 
     public function getSalesItems(Invoice $sales)

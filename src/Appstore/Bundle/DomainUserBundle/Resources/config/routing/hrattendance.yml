@@ -2,53 +2,21 @@ domain_hr_attendance:
     path:     /
     defaults: { _controller: "DomainUserBundle:HrAttendance:index" }
 
-agent_show:
-    path:     /{id}/show
-    defaults: { _controller: "DomainUserBundle:Agent:show" }
+domain_hr_attendance_show:
+    path:     /{month}/show
+    defaults: { _controller: "DomainUserBundle:HrAttendance:show" }
 
-agent_new:
-    path:     /new
-    defaults: { _controller: "DomainUserBundle:Agent:new" }
+domain_hr_attendance_month:
+    path:     /current-month
+    defaults: { _controller: "DomainUserBundle:HrAttendance:month" }
 
-agent_create:
-    path:     /create
-    defaults: { _controller: "DomainUserBundle:Agent:create" }
+domain_hr_attendance_add:
+    path:     /{user}/add
+    defaults: { _controller: "DomainUserBundle:HrAttendance:addAttendance" }
     methods:  POST
+    options:
+           expose: true
 
-agent_edit:
-    path:     /{id}/edit
-    defaults: { _controller: "DomainUserBundle:Agent:edit" }
-
-agent_update:
-    path:     /{id}/update
-    defaults: { _controller: "DomainUserBundle:Agent:update" }
-    methods:  [POST, PUT]
-
-agent_delete:
+domain_hr_attendance_delete:
     path:     /{id}/delete
-    defaults: { _controller: "DomainUserBundle:Agent:delete" }
-    methods:  [POST, DELETE]
-
-agent_search:
-    path:     /customer-search
-    defaults: { _controller: "DomainUserBundle:Agent:autoSearch" }
-    options:
-            expose: true
-
-agent_name:
-    path:      /{customer}/customer-name
-    defaults: { _controller: "DomainUserBundle:Agent:searchCustomerName" }
-    options:
-           expose: true
-
-domain_location_search:
-    path:     /location-search
-    defaults: { _controller: "DomainUserBundle:Agent:autoLocationSearch" }
-    options:
-            expose: true
-
-domain_location_name:
-    path:      /{location}/location-name
-    defaults: { _controller: "DomainUserBundle:Agent:searchLocationName" }
-    options:
-           expose: true
+    defaults: { _controller: "DomainUserBundle:HrAttendance:delete" }

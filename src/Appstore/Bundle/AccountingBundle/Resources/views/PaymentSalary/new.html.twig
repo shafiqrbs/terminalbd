@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+    {% extends '::base.html.twig' %}
 
 {% block body %}
     <div class="container-fluid">
@@ -37,18 +37,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Salary Payment Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('account_paymentsalary') }}"><i class="icon-th-list"></i>&nbsp;Payment Salary</a></li>
-                                    <li><a href="{{ path('account_paymentsalary_employee') }}"><i class="icon-th-list"></i>&nbsp;Salary Employee</a></li>
-                                    {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('account_salarysetting_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('account_salarysetting_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
-                                    {% endif %}
-                                </ul>
+                                <a class="btn red" href="{{ path('account_paymentsalary_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
                             </div>
                         </div>
 
@@ -62,7 +51,7 @@
                                     <h4>Employee info:</h4>
                                     <ul class="unstyled">
                                         <li>{{ user.profile.name }}</li>
-                                        <li>{{ user.profile.designation }}</li>
+                                        <li>{% if user.profile.designation is not empty %}{{ user.profile.designation.name }}{% endif %}</li>
                                         <li>{{ user.profile.mobile }}</li>
                                         <li>{{ user.profile.address }}</li>
 
@@ -255,7 +244,6 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@AccountingBundle/Resources/public/js/*'
     '@AccountingBundle/Resources/public/js/paymentsalary.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -264,6 +252,4 @@
 {% block documentready %}
     {{ parent() }}
     PaymentSalary();
-    CommonJs();
-
 {% endblock %}

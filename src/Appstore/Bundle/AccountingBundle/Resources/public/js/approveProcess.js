@@ -1,21 +1,21 @@
 function AccountingApproveProcess(){
 
+    $( ".date-picker" ).datepicker({
+        dateFormat: "dd-mm-yy",
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0"
+    });
 
-    $( ".date-picker" ).datepicker({dateFormat: "dd-mm-yy"});
-    // Getter
-    var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
-    // Setter
-    $( ".date-picker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
-
-
-    $( ".dateCalendar" ).datepicker({ dateFormat: "dd-mm-yy" });
-    // Getter
-    $( ".dateCalendar" ).datepicker( "option", "dateFormat" );
-    // Setter
-    $( ".dateCalendar" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
+    $( ".dateCalendar" ).datepicker({
+        dateFormat: "dd-mm-yy",
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0"
+    });
 
     $(document).on("click", ".editable-submit", function() {
-        setTimeout(pageReload, 3000);
+        setTimeout(pageReload, 1000);
     });
     function pageReload() {
         location.reload();
@@ -42,17 +42,19 @@ function AccountingApproveProcess(){
         $(this).removeClass('approve');
         var id = $(this).attr("data-id");
         var url = $(this).attr("data-url");
-        $('#delete-'+id).hide();
-        $('#action-'+id).hide();
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                location.reload();
-            },
-        })
+        $('#confirm-content').confirmModal({
+            topOffset: 0,
+            top: '25%',
+            onOkBut: function(event, el) {
+                $.get(url, function( data ) {
+                    location.reload();
+                });
+            }
+        });
 
     });
+
+
 
     $(".approvex").confirm({
 

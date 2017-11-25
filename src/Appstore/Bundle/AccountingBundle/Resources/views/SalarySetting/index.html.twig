@@ -37,14 +37,7 @@
                         <div class="spn5" id="message"></div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('account_salarysetting_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('account_salarysetting') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <a class="btn red" href="{{ path('account_salarysetting_new') }}"><i class="icon-plus-sign"></i> New Invoice</a>
                             </div>
                         </div>
                     </div>
@@ -52,31 +45,28 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
-                            <div class="portlet search-portlet box grey">
+                            <div class="">
                                 <form class="search-form" action="" method="get" name="itemSearch">
-                                    <div class="span11">
-                                        <input type="text" id="user" name="user"  class="span11 select2User" value="{% if searchForm.user is defined %}{{ searchForm.user }}{% endif %}"  autocomplete="off" placeholder="Select employee name">
-                                    </div>
-                                    <div class="1">
-                                        <div class="control-group">
+                                    <div class="row-fluid">
+                                       <div class="span6">&nbsp;</div>
+                                        <div class="span6">
                                             <div class="controls">
-                                                <div class="input-append">
+                                                <div class="input-append span11">
+                                                    <input type="text" id="user" name="user"  class="span11 select2User" value="{% if searchForm.user is defined %}{{ searchForm.user }}{% endif %}"  autocomplete="off" placeholder="Select employee name">
                                                     <div class="btn-group">
-                                                        <button class="btn" type="submit" >
-                                                            <i class="icon-search"></i>&nbsp;Go</button>
+                                                        <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </form>
-
                             </div>
 
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
-                                <tr class="head-grey">
+                                <tr class="head-blue">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Employee Name</th>
                                     <th class="numeric" >Invoice</th>

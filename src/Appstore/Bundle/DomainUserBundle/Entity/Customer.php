@@ -144,7 +144,7 @@ class Customer
      *
      * @ORM\Column(name="religion", type="string", length=100, nullable =true)
      */
-    private $religion;
+    private $religion ="Islam" ;
 
     /**
      * @var string
@@ -158,7 +158,7 @@ class Customer
      *
      * @ORM\Column(name="nationality", type="string", length=100, nullable =true)
      */
-    private $nationality;
+    private $nationality = 'Bangladeshi';
 
     /**
      * @var string

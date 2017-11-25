@@ -51,7 +51,7 @@ class InvoiceTransactionRepository extends EntityRepository
             $entity->setTransactionId($invoice->getTransactionId());
             $entity->setComment($invoice->getComment());
             if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
-                $vat = $this->getCulculationVat($invoice, $invoice->getPayment());
+                $vat = $this->getCulculationVat($invoice, $entity->getPayment());
                 $entity->setVat($vat);
             }
             $this->_em->persist($entity);
@@ -59,6 +59,20 @@ class InvoiceTransactionRepository extends EntityRepository
             $accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountInvoice($entity);
             $this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountInvoice);
         }
+
+    }
+
+    public function admissionInvoiceTransactionUpdate(InvoiceTransaction $entity )
+    {
+        $invoice = $entity->getHmsInvoice();
+        if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
+            $vat = $this->getCulculationVat($invoice, $entity->getPayment());
+            $entity->setVat($vat);
+        }
+        $this->_em->persist($entity);
+        $this->_em->flush($entity);
+        $accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountInvoice($entity);
+        $this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountInvoice);
 
     }
 
@@ -116,9 +130,9 @@ class InvoiceTransactionRepository extends EntityRepository
 
     }
 
-    public function getCulculationVat(Invoice $sales, $totalAmount)
+    public function getCulculationVat(Invoice $invoice, $totalAmount)
     {
-        $vat = (($totalAmount * (int)$sales->getHospitalConfig()->getVatPercentage()) / 100);
+        $vat = (($totalAmount * (int)$invoice->getHospitalConfig()->getVatPercentage()) / 100);
         return round($vat);
     }
 
@@ -149,5 +163,19 @@ class InvoiceTransactionRepository extends EntityRepository
             $i++;
         }
         return $data;
+    }
+
+    public function getLastCode(Invoice $invoice)
+    {
+        $qb = $this->_em->getRepository('HospitalBundle:InvoiceTransaction')->createQueryBuilder('s');
+        $qb
+            ->select('MAX(s.code)')
+            ->where('s.hmsInvoice = :invoice')
+            ->setParameter('invoice', $invoice->getId());
+            $lastCode = $qb->getQuery()->getSingleScalarResult();
+        if (empty($lastCode)) {
+            return 0;
+        }
+        return $lastCode;
     }
 }

@@ -61,6 +61,12 @@ class Invoice
      **/
     private  $invoiceParticulars;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular", mappedBy="hmsInvoice" , cascade={"remove"} )
+     * @ORM\OrderBy({"updated" = "DESC"})
+     **/
+    private  $admissionPatientParticulars;
+
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="hmsInvoices" )
@@ -1242,6 +1248,14 @@ class Invoice
     public function setReleaseDate($releaseDate)
     {
         $this->releaseDate = $releaseDate;
+    }
+
+    /**
+     * @return AdmissionPatientParticular
+     */
+    public function getAdmissionPatientParticulars()
+    {
+        return $this->admissionPatientParticulars;
     }
 
 

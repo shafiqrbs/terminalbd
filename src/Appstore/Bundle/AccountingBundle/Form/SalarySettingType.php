@@ -29,13 +29,12 @@ class SalarySettingType extends AbstractType
 
             ->add('basicAmount','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'add payment amount BDT'),
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please add payment amount BDT'))
+                    new NotBlank(array('message'=>'Add basic amount'))
                 )))
             ->add('bonusAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
             ->add('otherAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
             ->add('advanceAmount','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
             ->add('remark','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'')))
-            ->add('status')
             ->add('effectedMonth','date', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>''),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
@@ -50,7 +49,7 @@ class SalarySettingType extends AbstractType
                 'required'    => true,
                 'class' => 'Core\UserBundle\Entity\User',
                 'empty_value' => '---Choose a employee---',
-                'property' => 'username',
+                'property' => 'userFullName',
                 'attr'=>array('class'=>'span12 select2'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))

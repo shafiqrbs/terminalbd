@@ -11,6 +11,7 @@ var PaymentSalary = function() {
         if(id === ''){
             return false;
         }
+        alert(id);
         $.ajax({
             url: Routing.generate('account_salarysetting_salaryAmount'),
             type: 'POST',

@@ -38,6 +38,12 @@ class InvoiceTransaction
     private $hmsInvoice;
 
     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular", mappedBy="invoiceTransaction")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     **/
+    private $admissionPatientParticulars;
+
+    /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceCreatedBy" )
      **/
@@ -58,12 +64,10 @@ class InvoiceTransaction
      **/
     private  $accountBank;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="invoiceTransactions" )
      **/
     private  $accountMobileBank;
-
 
     /**
      * @var string
@@ -108,6 +112,12 @@ class InvoiceTransaction
      */
     private $payment;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total", type="decimal", nullable=true)
+     */
+    private $total;
 
     /**
      * @var string
@@ -129,6 +139,20 @@ class InvoiceTransaction
      * @ORM\Column(name="comment", type="text", nullable=true)
      */
     private $comment;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="code", type="integer",  nullable=true)
+     */
+     private $code;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="transactionCode", type="string", length= 5,  nullable=true)
+     */
+     private $transactionCode;
 
 
     /**
@@ -444,6 +468,62 @@ class InvoiceTransaction
     public function setProcess($process)
     {
         $this->process = $process;
+    }
+
+    /**
+     * @return AdmissionPatientParticular
+     */
+    public function getAdmissionPatientParticulars()
+    {
+        return $this->admissionPatientParticulars;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param int $code
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransactionCode()
+    {
+        return $this->transactionCode;
+    }
+
+    /**
+     * @param string $transactionCode
+     */
+    public function setTransactionCode($transactionCode)
+    {
+        $this->transactionCode = $transactionCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * @param string $total
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
     }
 
 

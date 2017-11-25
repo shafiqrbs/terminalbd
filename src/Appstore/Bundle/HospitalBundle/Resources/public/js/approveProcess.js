@@ -18,6 +18,17 @@ function pageReload() {
     location.reload();
 }
 
+$(document).on("click", ".invoiceConfirm", function() {
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $('#invoiveTransactionForm').submit();
+        }
+    });
+});
+
+
 $(document).on("click", ".confirm", function() {
     var url = $(this).attr('data-url');
     $('#confirm-content').confirmModal({
@@ -180,16 +191,7 @@ $(".select2CustomerCode" ).autocomplete({
             success: function(response) {
                 obj = JSON.parse(response);
                 if(obj['status'] == 'valid'){
-                    $('#patient').val(obj['patient']);
-                    $('.select2CustomerId').val(obj['customerId']);
-                    $('.select2mobile').val(obj['mobile']);
-                    $('.patientNme').val(obj['name']);
-                    $('.patientAge').val(obj['age']);
-                    $('.address').val(obj['address']);
-                    $('.location').val(obj['location']).find("option[value=" + obj['location'] +"]").attr('selected', true);
-                    $('.gender').val(obj['gender']).find("option[value=" + obj['gender'] +"]").attr('selected', true);
-                    $('.ageType').val(obj['ageType']).find("option[value=" + obj['ageType'] +"]").attr('selected', true);
-
+                    location.reload();
                 }else{
                     alert("Exit patient information does not exist");
                 }
@@ -223,16 +225,7 @@ $( ".select2mobile" ).autocomplete({
             success: function(response) {
                 obj = JSON.parse(response);
                 if(obj['status'] == 'valid'){
-                    $('#patient').val(obj['patient']);
-                    $('.select2CustomerId').val(obj['customerId']);
-                    $('.select2mobile').val(obj['mobile']);
-                    $('.patientNme').val(obj['name']);
-                    $('.patientAge').val(obj['age']);
-                    $('.address').val(obj['address']);
-                    $('.location').val(obj['location']).find("option[value=" + obj['location'] +"]").attr('selected', true);
-                    $('.gender').val(obj['gender']).find("option[value=" + obj['gender'] +"]").attr('selected', true);
-                    $('.ageType').val(obj['ageType']).find("option[value=" + obj['ageType'] +"]").attr('selected', true);
-
+                    location.reload();
                 }else{
                     alert("Exit patient information does not exist");
                 }

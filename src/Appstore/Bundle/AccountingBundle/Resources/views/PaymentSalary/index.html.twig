@@ -32,15 +32,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Account of payment salary</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('account_salarysetting_new') }}"><i class="icon-plus"></i>&nbsp;New Invoice</a></li>
-                                    <li><a href="{{ path('account_salarysetting') }}"><i class="icon-th-list"></i>&nbsp;Salary Invoice</a></li>
-                                    <li><a href="{{ path('account_paymentsalary_employee') }}"><i class="icon-th-list"></i>&nbsp;Employee salary</a></li>
-                                </ul>
+                                <a class="btn" href="{{ path('account_salarysetting') }}"><i class="icon-plus-sign"></i> New Invoice</a>
+                                <a class="blue btn" href="{{ path('account_paymentsalary_employee') }}"><i class="icon-plus-sign"></i> New Invoice</a>
                             </div>
                         </div>
                     </div>
@@ -48,7 +41,7 @@
                     <div class="portlet-body">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
-                            <div class="portlet search-portlet box grey">
+                            <div class="">
                                 <form class="search-form" action="" method="get" name="itemSearch">
                                     <div class="span2">
                                         <input type="text" id="startDate" name="startDate"  class="span12 search-input  date-picker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start receive date{% endif %} ">
@@ -64,23 +57,18 @@
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <div class="span3">
-                                        <input type="text" id="toUser" name="toUser"  class="span11 select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="select user">
-                                    </div>
-                                    <div class="1">
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <div class="input-append">
-                                                    <div class="btn-group">
-                                                        <button class="btn blue" type="submit" >
-                                                            <i class="icon-search"></i></button>
-                                                    </div>
+                                    <div class="span4">
+                                        <div class="controls">
+                                            <div class="input-append span11">
+                                                <input type="text" id="toUser" name="toUser"  class="span11 select2User" value="{% if searchForm.toUser is defined %}{{ searchForm.toUser }}{% endif %}"  autocomplete="off" placeholder="select user">
+                                                <div class="btn-group">
+                                                    <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </form>
 
+                                </form>
                             </div>
                             <table class="table table-bordered table-striped table-condensed flip-content ">
 
@@ -93,7 +81,7 @@
                                     <td class="numeric" ><strong>{{ overview.dueAmount|number_format }}</strong></td>
                                     <td class="numeric" ></td>
                                 </tr>
-                                <tr class="head-grey">
+                                <tr class="head-blue">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Employee Name</th>
                                     <th class="numeric" >Invoice</th>

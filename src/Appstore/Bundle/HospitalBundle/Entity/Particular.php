@@ -88,6 +88,12 @@ class Particular
      **/
     private  $invoiceParticular;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular", mappedBy="particular" )
+     * @ORM\OrderBy({"id" = "DESC"})
+     **/
+    private  $admissionPatientParticular;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularOperator" )
@@ -1065,6 +1071,14 @@ class Particular
     public function setTestDuration($testDuration)
     {
         $this->testDuration = $testDuration;
+    }
+
+    /**
+     * @return AdmissionPatientParticular
+     */
+    public function getAdmissionPatientParticular()
+    {
+        return $this->admissionPatientParticular;
     }
 
 

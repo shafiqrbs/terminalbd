@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 
-class InvoiceParticularType extends AbstractType
+class InvoiceTransactionType extends AbstractType
 {
 
     /** @var  HospitalConfig */

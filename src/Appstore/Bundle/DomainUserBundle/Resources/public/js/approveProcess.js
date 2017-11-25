@@ -1,122 +1,112 @@
-function AccountingApproveProcess(){
+
+$( ".date-picker" ).datepicker({
+    dateFormat: "dd-mm-yy"
+});
+
+$( ".dateCalendar" ).datepicker({
+    dateFormat: "dd-mm-yy",
+    changeMonth: true,
+    changeYear: true,
+    yearRange: "-100:+0",
+});
 
 
-    $( ".date-picker" ).datepicker({
-        dateFormat: "yy-mm-dd"
-    });
-    // Getter
-    var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
+var table = $('#attendance').DataTable( {
+    scrollY:        "auto",
+    scrollX:        true,
+    scrollCollapse: true,
+    paging:         false,
+    bInfo : false,
+    fixedColumns:   {
+        leftColumns: 1,
+        rightColumns: 1
+    }
+});
 
-    // Setter
-    $( ".date-picker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+$(document).on("click", ".attendance", function() {
 
-    $(document).on("click", ".delete", function() {
-
-        var id = $(this).attr("data-id");
-        var url = $(this).attr("data-url");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                if ('success' == response ) {
-                    $('#remove-' + id).remove();
-                }
-            },
-        })
-
-    })
-
-    $(document).on("click", ".approve", function() {
-
-        var id = $(this).attr("data-id");
-        var url = $(this).attr("data-url");
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                if ('success' == response ) {
-                    location.reload();
-                    //$('#action-' + id).append('<a title="Approve" href="javascript:" class="btn green mini" ><i class="icon-check"></i>&nbsp;Approved</a>');
-                    //$('.approved-' + id).remove();
-                }
-            },
-        })
-
-    })
-
-    $(".select2User").select2({
-
-        ajax: {
-
-            url: Routing.generate('domain_user_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        formatSelection: function (item) {
-            return item.text
-        }, // omitted for brevity, see the source of this page
-        initSelection: function (element, callback) {
-            var id = $(element).val();
-        },
-        allowClear: true,
-        minimumInputLength: 1
-    });
-
-    $(".select2Vendor").select2({
-
-        placeholder: "Search vendor name",
-        ajax: {
-            url: Routing.generate('inventory_vendor_search'),
-            dataType: 'json',
-            delay: 250,
-            data: function (params, page) {
-                return {
-                    q: params,
-                    page_limit: 100
-                };
-            },
-            results: function (data, page) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        escapeMarkup: function (m) {
-            return m;
-        },
-        formatResult: function (item) { return item.text}, // omitted for brevity, see the source of this page
-        formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
-        initSelection: function (element, callback) {
-            var id = $(element).val();
-            $.ajax(Routing.generate('inventory_vendor_name', { vendor : id}), {
-                dataType: "json"
-            }).done(function (data) {
-                return  callback(data);
+    var url = $(this).attr('data-url');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                location.reload();
             });
-        },
-        allowClear: true,
-        minimumInputLength: 1
-
+        }
     });
+});
 
-}
+$(".select2User").select2({
 
+    ajax: {
+
+        url: Routing.generate('domain_user_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var id = $(element).val();
+    },
+    allowClear: true,
+    minimumInputLength: 1
+});
+
+$(".select2Vendor").select2({
+
+    placeholder: "Search vendor name",
+    ajax: {
+        url: Routing.generate('inventory_vendor_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) { return item.text}, // omitted for brevity, see the source of this page
+    formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var id = $(element).val();
+        $.ajax(Routing.generate('inventory_vendor_name', { vendor : id}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 1
+
+});

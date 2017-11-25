@@ -2,12 +2,16 @@
 
 namespace Appstore\Bundle\DomainUserBundle\Controller;
 
+use Appstore\Bundle\DomainUserBundle\Entity\HrAttendance;
+use Appstore\Bundle\DomainUserBundle\Entity\HrAttendanceMonth;
+use Core\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * Customer controller.
@@ -23,7 +27,7 @@ class HrAttendanceController extends Controller
         $pagination = $paginator->paginate(
             $entities,
             $this->get('request')->query->get('page', 1)/*page number*/,
-            25  /*limit per page*/
+            50  /*limit per page*/
         );
         return $pagination;
     }
@@ -38,98 +42,56 @@ class HrAttendanceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('DomainUserBundle:HrAttendance')->findBy(array('globalOption'=> $globalOption));
+        $entities = $em->getRepository('DomainUserBundle:HrAttendance')->findByMonth($globalOption,$data);
         $pagination = $this->paginate($entities);
-        $calendarBlackout = $em->getRepository('DomainUserBundle:HrBlackout')->findOneBy(array('globalOption' => $globalOption));
-        $blackOutDate =  $calendarBlackout ->getBlackOutDate();
-        if($blackOutDate){
-            $blackoutdate = (array_map('trim',array_filter(explode(',',$blackOutDate))));
-        }
         return $this->render('DomainUserBundle:HrAttendance:index.html.twig', array(
-        'entities' => $pagination,
-        'globalOption' => $globalOption,
-        'blackoutdate' => $blackoutdate,
-        'searchForm' => $data,
-        ));
-    }
-    /**
-     * Creates a new Customer entity.
-     *
-     */
-    public function createAction(Request $request)
-    {
-        $entity = new Customer();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('customer_show', array('id' => $entity->getId())));
-        }
-
-        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
+            'entities' => $pagination,
+            'searchForm' => $data,
         ));
     }
 
-    /**
-     * Creates a form to create a Customer entity.
-     *
-     * @param Customer $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(Customer $entity)
-    {
-        $form = $this->createForm(new CustomerType(), $entity, array(
-            'action' => $this->generateUrl('customer_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
-    }
 
     /**
      * Displays a form to create a new Customer entity.
      *
      */
-    public function newAction()
+    public function monthAction()
     {
-        $entity = new Customer();
-        $form   = $this->createCreateForm($entity);
-
-        return $this->render('DomainUserBundle:Customer:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
+        $em = $this->getDoctrine()->getManager();
+        $globalOption = $this->getUser()->getGlobalOption();
+        $calendarBlackout = $em->getRepository('DomainUserBundle:HrBlackout')->findOneBy(array('globalOption' => $globalOption));
+        $blackOutDate =  $calendarBlackout ->getBlackOutDate();
+        if($blackOutDate){
+            $blackoutdate = (array_map('trim',array_filter(explode(',',$blackOutDate))));
+        }
+        return $this->render('DomainUserBundle:HrAttendance:attendance.html.twig', array(
+            'globalOption' => $globalOption,
+            'blackoutdate' => $blackoutdate,
         ));
+
     }
 
     /**
      * Finds and displays a Customer entity.
      *
      */
-    public function showAction($id)
+    public function showAction($month)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
+        $globalOption = $this->getUser()->getGlobalOption();
+        $calendarBlackout = $em->getRepository('DomainUserBundle:HrBlackout')->findOneBy(array('globalOption' => $globalOption));
+        $blackOutDate =  $calendarBlackout ->getBlackOutDate();
+        if($blackOutDate){
+            $blackoutdate = (array_map('trim',array_filter(explode(',',$blackOutDate))));
         }
+        $attendances = $this->getDoctrine()->getRepository('DomainUserBundle:HrAttendanceMonth')->findBy(array('globalOption' => $globalOption));
 
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('DomainUserBundle:Customer:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+        return $this->render('DomainUserBundle:HrAttendance:show.html.twig', array(
+            'globalOption' => $globalOption,
+            'blackoutdate' => $blackoutdate,
+            'attendances' => $attendances,
         ));
+
     }
 
     /**
@@ -156,76 +118,18 @@ class HrAttendanceController extends Controller
         ));
     }
 
-    /**
-     * Creates a form to edit a Customer entity.
-     *
-     * @param Customer $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createEditForm(Customer $entity)
-    {
-
-        $form = $this->createForm(new CustomerType(), $entity, array(
-            'action' => $this->generateUrl('customer_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
-        return $form;
-    }
-    /**
-     * Edits an existing Customer entity.
-     *
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Customer entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isValid()) {
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('customer_edit', array('id' => $id)));
-        }
-
-        return $this->render('DomainUserBundle:Customer:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-    /**
+     /**
      * Deletes a Customer entity.
      *
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(HrAttendanceMonth $entity)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('DomainUserBundle:Customer')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Customer entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Customer entity.');
         }
-
+        $em->remove($entity);
+        $em->flush();
         return $this->redirect($this->generateUrl('customer'));
     }
 
@@ -299,50 +203,15 @@ class HrAttendanceController extends Controller
     }
 
 
-    public function autoLocationSearchAction(Request $request)
+    public function addAttendance(User $user)
     {
-        $item = $_REQUEST['q'];
-        if ($item) {
-            $item = $this->getDoctrine()->getRepository('SettingLocationBundle:Location')->searchAutoComplete($item);
-        }
-        return new JsonResponse($item);
 
-
-
+        $datetime = new \DateTime("now");
+        $today  = $datetime->format('d');
+        $month  = $datetime->format('m');
+        $year   = $datetime->format('y');
+        $this->getDoctrine()->getRepository('DomainUserBundle:HrAttendanceMonth')->findOneBy(array('user' => $user));
     }
 
-    public function searchLocationNameAction($location)
-    {
-        return new JsonResponse(array(
-            'id'=> $location,
-            'text' => $location
-        ));
-    }
-
-    public function searchAutoCompleteNameAction()
-    {
-        $q = $_REQUEST['q'];
-        $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoCompleteName($option,$q);
-        $items = array();
-        foreach ($entities as $entity):
-            $items[]=array('id' => $entity['id'],'value' => $entity['id']);
-        endforeach;
-        return new JsonResponse($entities);
-
-    }
-
-    public function searchAutoCompleteMobileAction()
-    {
-        $q = $_REQUEST['term'];
-        $option = $this->getUser()->getGlobalOption();
-        $entities = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->searchAutoComplete($option,$q);
-        $items = array();
-        foreach ($entities as $entity):
-            $items[]=array('id' => $entity['customer'],'value' => $entity['id']);
-        endforeach;
-        return new JsonResponse($items);
-
-    }
 
 }

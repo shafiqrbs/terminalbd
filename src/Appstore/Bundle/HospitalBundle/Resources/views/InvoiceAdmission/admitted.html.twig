@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                   Manage Patient Admitted Patient
+                   Manage Patient Admission Invoice
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -25,9 +25,11 @@
         <!-- BEGIN PAGE CONTENT-->
         <div class="row-fluid">
             <div class="span12">
-                <div class="portlet box green">
+
+                <div class="portlet box green tabbable">
+
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Admitted Patient</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Admission Invoice</div>
                         <div class="actions">
                             <a class="btn red" href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus-sign"></i> New Admission</a>
                             <a class="btn yellow" href="{{ path('hms_invoice_admission_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
@@ -89,8 +91,8 @@
                                         <div class="span3">
                                             <select name="process" id="process" class="m-wrap span12">
                                                 <option value="" >--Process--</option>
-                                                <option value="Admitted" {% if searchForm.process is defined and searchForm.process == 'Admitted' %} selected="selected" {% endif %} >Admitted</option>
-                                                <option value="Release"  {% if searchForm.process is defined and searchForm.process == 'Release' %} selected="selected" {% endif %} >Release</option>
+                                                <option value="In-progress" {% if searchForm.process is defined and searchForm.process == 'In-progress' %} selected="selected" {% endif %} >In-progress</option>
+                                                <option value="Done"  {% if searchForm.process is defined and searchForm.process == 'Done' %} selected="selected" {% endif %} >Done</option>
                                                 <option value="Cancel"  {% if searchForm.process is defined and searchForm.process == 'Cancel' %} selected="selected" {% endif %} >Cancel</option>
                                             </select>
                                         </div>
@@ -161,22 +163,18 @@
                                         <td class="numeric" >
                                             <div class="btn-group">
                                                 <a class="btn blue mini" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                                    Action <i class="icon-tasks"></i>
+                                                    Action
+                                                    <i class="icon-tasks"></i>
                                                 </a>
                                                 <ul class="dropdown-menu pull-right action">
-                                                    {% set processArr = {'Admitted': 'Admitted' ,'Created':'Created','Revised':'Revised'} %}
+                                                    {% set processArr = {'In-progress': 'In-progress' ,'Created':'Created','Revised':'Revised'} %}
                                                     {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due'} %}
-                                                    {% if entity.process in  processArr and entity.paymentStatus == 'Pending' or entity.process =='Created' and entity.paymentStatus == 'Due' %}
-                                                        <li><a href="{{ path('hms_invoice_admission_edit', { 'id': entity.id }) }}" class="btn green  " ><i class="fa fa-user-md"></i> Patient Update</a></li>
+                                                    {% if entity.process in  processArr|keys and entity.paymentStatus == 'Pending' or entity.process =='Created' and entity.paymentStatus == 'Due' %}
+                                                        <li><a href="{{ path('hms_invoice_admission_edit', { 'id': entity.id }) }}" class="btn green  " ><i class="icon-pencil"></i> Edit & Update</a></li>
+                                                        <li><a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red  delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a></li>
                                                     {% elseif entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
                                                         <li><a  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a></li>
                                                         <li><a  href="{{ path('hms_invoice_admission_confirm',{'id':entity.id}) }}"  class="btn yellow" ><i class=" icon-truck"></i> Release</a></li>
-                                                    {% endif %}
-                                                    {% if entity.process == "Admitted" %}
-                                                    <li><a href="{{ path('hms_invoice_admission_confirm', { 'id': entity.id }) }}" class="btn green" ><i class="fa fa-money"></i> Manage Patient</a></li>
-                                                    {% endif %}
-                                                    {% if entity.paymentStatus == 'Pending' or entity.process =='Created' %}
-                                                    <li><a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red  delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a></li>
                                                     {% endif %}
                                                     <li><a href="{{ path('hms_invoice_admission_show', { 'id': entity.id }) }}" class="btn purple"><i class="icon-eye-open"></i> View</a></li>
                                                 </ul>

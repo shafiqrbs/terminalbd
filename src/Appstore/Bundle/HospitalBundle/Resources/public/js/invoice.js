@@ -1,15 +1,14 @@
-/**
- * Created by rbs on 5/1/17.
- */
-
 $( ".date-picker" ).datepicker({
     dateFormat: "dd-mm-yy"
 });
-// Getter
-var dateFormat = $( ".date-picker" ).datepicker( "option", "dateFormat" );
 
-// Setter
-$( ".date-picker" ).datepicker( "option", "dateFormat", "dd-mm-yy" );
+$( ".dateCalendar" ).datepicker({
+    dateFormat: "dd-mm-yy",
+    changeMonth: true,
+    changeYear: true,
+    yearRange: "-100:+0",
+});
+
 
 
 $( "#name" ).autocomplete({
@@ -214,7 +213,7 @@ $(document).on("click", ".removeDiscount", function() {
     })
 });
 
-$(document).on("click", ".delete", function() {
+$(document).on("click", ".particularDelete", function() {
 
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
@@ -223,7 +222,10 @@ $(document).on("click", ".delete", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                location.reload();
+                obj = JSON.parse(data);
+                $('.total').html(obj['total']);
+                $('.total'+id).html(obj['total']);
+                $('#remove-'+id).hide();
             });
         }
     });
@@ -233,13 +235,12 @@ $(document).on("click", ".delete", function() {
 
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
-    $('#remove-'+id).hide();
-
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
+                $('#remove-'+id).hide();
                 obj = JSON.parse(data);
                 $('.subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
@@ -277,12 +278,6 @@ $(document).on('click', '#addPayment', function() {
 
 $(document).on("click", "#receiveBtn", function() {
 
-    var deliveryDateTime = $('#deliveryDateTime').val();
-    if(deliveryDateTime ==''){
-        alert('Please add delivery date time');
-        $('#deliveryDateTime').click();
-        return false;
-    }
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',

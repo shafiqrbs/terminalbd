@@ -37,18 +37,8 @@
                         <div class="caption"><i class="icon-reorder"></i>Expenditure Payment Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('account_expenditure_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('account_expenditure') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                    {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('account_expenditure_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('account_expenditure_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
-                                    {% endif %}
-                                </ul>
+                                <a class="btn red" href="{{ path('account_expenditure_new') }}"><i class="icon-plus-sign"></i> New Expense</a>
+                                <a class="btn" href="{{ path('account_expenditure') }}"><i class="icon-th-list"></i>&nbsp;Lists</a>
                             </div>
                         </div>
 
@@ -61,7 +51,6 @@
                             <!-- BEGIN FORM-->
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
-
                             <div class="row-fluid">
                                 <div class="span4">
                                     <div class="row-fluid">
@@ -147,7 +136,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!--/span-->
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right">

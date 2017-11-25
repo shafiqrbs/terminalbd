@@ -43,6 +43,64 @@ hms_invoice_print_for:
     options:
             expose: true
 
+
+
+hms_invoice_admission_admitted:
+    path:     /admitted-patient
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:admitted" }
+
+
 hms_invoice_admission_confirm:
-    path:     /{id}/invoice-confirm
+    path:     /{id}/manage-admitted-patient
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:confirm" }
+
+hms_invoice_admission_daily_invoice:
+    path:     /{invoice}/manage-admitted-patient-invoice
+    defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:admittedInvoice" }
+
+hms_invoice_admission_daily_invoice_create:
+    path:     /{invoice}/{id}/manage-admitted-patient-invoice
+    defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:dailyAdmittedInvoice" }
+
+
+hms_invoice_admission_daily_invoice_add:
+    path:     /{id}/admitted-patient-particular-add
+    defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:addParticular" }
+    options:
+            expose: true
+
+hms_invoice_admission_daily_delete:
+    path:      /{id}/admitted-patient-daily-invoice-delete
+    defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:invoiceTransactionDelete" }
+    options:
+            expose: true
+
+hms_invoice_admission_daily_particular_delete:
+    path:      /{transaction}/{id}/admitted-patient-daily-invoice-particular-delete
+    defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:invoiceParticularDelete" }
+    options:
+            expose: true
+
+hms_invoice_admission_daily_invoice_transaction_submit:
+    path:     /{id}/admitted-patient-particular-submit
+    defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:submitTransaction" }
+    methods:  [POST]
+
+hms_invoice_admission_transaction_print_single:
+    path:     /{invoice}/{id}/admitted-patient-transaction-invoice-single-print
+    defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:singleTransactionInvoicePrint" }
+    options:
+            expose: true
+
+hms_invoice_admission_transaction_print:
+    path:      /{invoice}/admitted-patient-transaction-invoice-print
+    defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:transactionInvoicePrint" }
+    options:
+            expose: true
+
+
+hms_invoice_admission_particular_print:
+    path:      /{invoice}/admitted-patient-transaction-invoice-particular
+    defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:invoiceParticularPrint" }
+    options:
+            expose: true

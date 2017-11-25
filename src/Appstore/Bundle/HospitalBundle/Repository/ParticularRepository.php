@@ -1,10 +1,12 @@
 <?php
 
 namespace Appstore\Bundle\HospitalBundle\Repository;
+use Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchaseItem;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Doctrine\ORM\EntityRepository;
 
@@ -196,6 +198,27 @@ class ParticularRepository extends EntityRepository
         /** @var InvoiceParticular $item */
 
         foreach($invoice->getInvoiceParticulars() as $item ){
+
+            /** @var Particular  $particular */
+
+            $particular = $item->getParticular();
+            if( $particular->getService()->getId() == 4 ){
+
+                $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
+                $particular->setSalesQuantity($qnt);
+                $em->persist($particular);
+                $em->flush();
+            }
+        }
+    }
+
+    public function setAdmissionPatientUpdateQnt(InvoiceTransaction  $transaction){
+
+        $em = $this->_em;
+
+        /** @var InvoiceParticular $item */
+
+        foreach($transaction->getAdmissionPatientParticulars() as $item ){
 
             /** @var Particular  $particular */
 
