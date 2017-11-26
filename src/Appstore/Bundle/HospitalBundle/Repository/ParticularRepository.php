@@ -217,20 +217,23 @@ class ParticularRepository extends EntityRepository
         $em = $this->_em;
 
         /** @var InvoiceParticular $item */
+        if(!empty($transaction->getAdmissionPatientParticulars())){
 
-        foreach($transaction->getAdmissionPatientParticulars() as $item ){
+            foreach($transaction->getAdmissionPatientParticulars() as $item ){
 
-            /** @var Particular  $particular */
+                /** @var Particular  $particular */
 
-            $particular = $item->getParticular();
-            if( $particular->getService()->getId() == 4 ){
+                $particular = $item->getParticular();
+                if( $particular->getService()->getId() == 4 ){
 
-                $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
-                $particular->setSalesQuantity($qnt);
-                $em->persist($particular);
-                $em->flush();
+                    $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
+                    $particular->setSalesQuantity($qnt);
+                    $em->persist($particular);
+                    $em->flush();
+                }
             }
         }
+
     }
 
     public function groupServiceBy(){

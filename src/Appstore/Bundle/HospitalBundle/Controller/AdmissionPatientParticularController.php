@@ -74,9 +74,12 @@ class AdmissionPatientParticularController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital , 'invoice' => $invoice));
+        $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital,'invoice' => $invoice));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        if($transaction->getProcess() != 'Created' or $transaction->getProcess() != 'Pending'){
+            return $this->redirect($this->generateUrl('hms_invoice_admission_confirm', array('id' => $transaction->getHmsInvoice()->getId())));
         }
 
         $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,2,3,4,7));

@@ -54,6 +54,26 @@ class AdmissionPatientParticularRepository extends EntityRepository
 
     }
 
+    public function initialUpdateInvoiceParticulars(Invoice $entity,$transaction)
+    {
+        /* @var $particular InvoiceParticular */
+        $em = $this->_em;
+
+        foreach ($entity->getInvoiceParticulars() as $particular ){
+
+            $admission = New AdmissionPatientParticular();
+            $admission->setInvoiceTransaction($transaction);
+            $admission->setParticular($particular->getParticular());
+            $admission->setSalesPrice($particular->getSalesPrice());
+            $admission->setEstimatePrice($particular->getEstimatePrice());
+            $admission->setQuantity($particular->getQuantity());
+            $admission->setSubTotal($particular->getSubTotal());
+            $em->persist($admission);
+            $em->flush($admission);
+        }
+
+    }
+
     public function getSalesItems(InvoiceTransaction $sales)
     {
         $entities = $sales->getAdmissionPatientParticulars();

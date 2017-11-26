@@ -153,7 +153,7 @@ class InvoiceAdmissionController extends Controller
         $editForm->handleRequest($request);
         $referredId = $request->request->get('referredId');
         $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
-         if ($editForm->isValid()) {
+        if ($editForm->isValid()) {
 
             if (!empty($data['customer']['name'])) {
 
@@ -179,20 +179,24 @@ class InvoiceAdmissionController extends Controller
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
             $payment = $data['payment'];
-              if($payment > 0) {
+            $transaction = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->initialInsertInvoiceTransaction($entity);
+            $this->getDoctrine()->getRepository('HospitalBundle:AdmissionPatientParticular')->initialUpdateInvoiceParticulars($entity,$transaction);
+            $this->getDoctrine()->getRepository('HospitalBundle:Particular')->setAdmissionPatientUpdateQnt($transaction);
+
+            if($payment > 0) {
 
                  $transactionData = array('process' => $entity->getProcess(),'payment' => $payment, 'discount' => 0);
                  $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity, $transactionData);
                  $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
-             }
+            }
 
-             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
+            if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
 
                  $dispatcher = $this->container->get('event_dispatcher');
                  $dispatcher->dispatch('setting_tool.post.hms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
-             }
+            }
 
-            return $this->redirect($this->generateUrl('hms_invoice_admission_edit', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('hms_invoice_admission_confirm', array('id' => $entity->getId())));
         }
 
         $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=> 6),array('name'=>'ASC'));

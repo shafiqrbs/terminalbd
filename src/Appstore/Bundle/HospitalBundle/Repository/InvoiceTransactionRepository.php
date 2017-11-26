@@ -15,6 +15,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvoiceTransactionRepository extends EntityRepository
 {
+
+    public function initialInsertInvoiceTransaction(Invoice $invoice){
+
+        $entity = New InvoiceTransaction();
+        $entity->setHmsInvoice($invoice);
+        $entity->setTotal($invoice->getSubTotal());
+        $this->_em->persist($entity);
+        $this->_em->flush($entity);
+        return $entity;
+    }
+
     public function insertTransaction(Invoice $invoice, $data)
     {
 

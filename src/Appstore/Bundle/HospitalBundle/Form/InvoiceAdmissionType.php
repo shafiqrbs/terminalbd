@@ -152,8 +152,9 @@ class InvoiceAdmissionType extends AbstractType
                 }
             ))
             ->add('cabinNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add cabin/ward no','data-original-title'=>'Add cabin/ward no','autocomplete'=>'off'),
-
-            ))
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'add cabin/ward no'))
+                )))
             ->add('department', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select department---',

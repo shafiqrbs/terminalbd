@@ -29,13 +29,13 @@
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Manage Admitted Patient</div>
                         <div class="actions">
-                            <a class="btn red" href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus-sign"></i> New Admission</a>
-                            <a class="btn yellow" href="{{ path('hms_invoice_admission_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
+                            <div class="btn-group">
+                                <a class="btn yellow" href="{{ path('hms_invoice_admission_empty_delete') }}"><i class="icon-trash"></i> Empty Delete</a>
+                                <a class="btn red" href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus-sign"></i> New Admission</a>
+                            </div>
                         </div>
                     </div>
-
                     <div class="portlet-body">
-
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
                             <div class="row-fluid" >

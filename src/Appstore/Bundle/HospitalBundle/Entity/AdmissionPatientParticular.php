@@ -23,13 +23,6 @@ class AdmissionPatientParticular
      */
     private $id;
 
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="admissionPatientParticulars")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     **/
-    private $hmsInvoice;
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", inversedBy="admissionPatientParticular")
      **/
@@ -276,21 +269,6 @@ class AdmissionPatientParticular
         $this->process = $process;
     }
 
-    /**
-     * @return Invoice
-     */
-    public function getHmsInvoice()
-    {
-        return $this->hmsInvoice;
-    }
-
-    /**
-     * @param Invoice $hmsInvoice
-     */
-    public function setHmsInvoice($hmsInvoice)
-    {
-        $this->hmsInvoice = $hmsInvoice;
-    }
 
     /**
      * @return mixed
