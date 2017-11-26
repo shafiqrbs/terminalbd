@@ -16,6 +16,16 @@ class CabinType extends AbstractType
 {
 
 
+    /** @var  GlobalOption */
+    private $globalOption;
+
+
+    function __construct(GlobalOption $globalOption)
+    {
+        $this->globalOption     = $globalOption;
+    }
+
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -24,11 +34,23 @@ class CabinType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','autocomplete'=>'off','placeholder'=>'Enter cabin/ward/room name'),
-                    'constraints' =>array(
-                        new NotBlank(array('message'=>'Please enter cabin/ward/room name'))
-                    ))
-            )
+            ->add('serviceGroup', 'entity', array(
+                'required'    => false,
+                'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup',
+                'property' => 'name',
+                'attr'=>array('class'=>'span12'),
+                'empty_value' => '---Select cabin/ward ---',
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please select required'))
+                ),
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('b')
+                        ->where("b.status = 1")
+                        ->andWhere("b.service = 2")
+                        ->andWhere("b.hospitalConfig =".$this->globalOption->getHospitalConfig()->getId())
+                        ->orderBy("b.name", "ASC");
+                }
+            ))
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
             ->add('content','textarea', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter content')))
             ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter price'),

@@ -172,21 +172,22 @@ class InvoiceAdmissionController extends Controller
                 $referred = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->findOneBy(array('hospitalConfig' => $entity->getHospitalConfig() , 'service' => 6, 'id' => $referredId ));
                 $entity->setReferredDoctor($referred);
             }
-
-            $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
-            $entity->setProcess('Admitted');
-            $entity->setPrintFor('admission');
-            $entity->setPaymentInWord($amountInWords);
+            if($entity->getTotal() > 0 ) {
+                $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+                $entity->setProcess('Admitted');
+                $entity->setPrintFor('admission');
+                $entity->setPaymentInWord($amountInWords);
+            }
             $em->flush();
             $payment = $data['payment'];
-            $transaction = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->initialInsertInvoiceTransaction($entity);
-            $this->getDoctrine()->getRepository('HospitalBundle:AdmissionPatientParticular')->initialUpdateInvoiceParticulars($entity,$transaction);
-            $this->getDoctrine()->getRepository('HospitalBundle:Particular')->setAdmissionPatientUpdateQnt($transaction);
-
+            if($entity->getTotal() > 0 ){
+                $transaction = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->initialInsertInvoiceTransaction($entity);
+                $this->getDoctrine()->getRepository('HospitalBundle:AdmissionPatientParticular')->initialUpdateInvoiceParticulars($entity,$transaction);
+                $this->getDoctrine()->getRepository('HospitalBundle:Particular')->setAdmissionPatientUpdateQnt($transaction);
+            }
             if($payment > 0) {
-
                  $transactionData = array('process' => $entity->getProcess(),'payment' => $payment, 'discount' => 0);
-                 $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity, $transactionData);
+                 $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertAdmissionTransaction($transaction,$transactionData);
                  $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
             }
 
@@ -195,8 +196,10 @@ class InvoiceAdmissionController extends Controller
                  $dispatcher = $this->container->get('event_dispatcher');
                  $dispatcher->dispatch('setting_tool.post.hms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
             }
-
-            return $this->redirect($this->generateUrl('hms_invoice_admission_confirm', array('id' => $entity->getId())));
+            if(!empty($entity->getInvoiceParticulars()) and count($entity->getInvoiceParticulars()) > 0){
+                return $this->redirect($this->generateUrl('hms_invoice_admission_confirm', array('id' => $entity->getId())));
+            }
+            return $this->redirect($this->generateUrl('hms_invoice_admission_edit', array('id' => $entity->getId())));
         }
 
         $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=> 6),array('name'=>'ASC'));

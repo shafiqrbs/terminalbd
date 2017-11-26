@@ -78,7 +78,7 @@ class AdmissionPatientParticularController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        if($transaction->getProcess() != 'Created' or $transaction->getProcess() != 'Pending'){
+        if($transaction->getProcess() == 'In-progress'){
             return $this->redirect($this->generateUrl('hms_invoice_admission_confirm', array('id' => $transaction->getHmsInvoice()->getId())));
         }
 

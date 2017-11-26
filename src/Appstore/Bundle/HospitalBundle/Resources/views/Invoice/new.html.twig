@@ -54,8 +54,7 @@
                             <div class="control-group">
                                 <label class="control-label red" for="firstName"><span>Patient Code</span></label>
                                 <div class="controls">
-                                    {{ form_widget(form.customer.customerId) }}
-                                    {{ form_errors(form.customer.customerId) }}
+                                    <input class="m-wrap span12 select2CustomerCode" id="customerId" name="customerId" value="{% if entity.customer is not empty %}{{ entity.customer.customerId }}{% endif %}">
                                 </div>
                             </div>
                         </div>

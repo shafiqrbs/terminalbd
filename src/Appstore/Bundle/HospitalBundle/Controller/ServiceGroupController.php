@@ -2,11 +2,8 @@
 
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
-use Appstore\Bundle\HospitalBundle\Entity\Particular;
-use Appstore\Bundle\HospitalBundle\Form\DoctorType;
-use Appstore\Bundle\HospitalBundle\Form\CabinType;
-use Appstore\Bundle\HospitalBundle\Form\ParticularType;
-use Appstore\Bundle\HospitalBundle\Form\PathologyType;
+use Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup;
+use Appstore\Bundle\HospitalBundle\Form\ServiceGroupType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,23 +13,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  * CabinController controller.
  *
  */
-class CabinController extends Controller
+class ServiceGroupController extends Controller
 {
 
 
     /**
-     * Lists all Particular entities.
+     * Lists all HmsServiceGroup entities.
      *
      */
     public function indexAction()
     {
 
-        $entity = new Particular();
+        $entity = new HmsServiceGroup();
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 2),array('name'=>'ASC'));
+        $pagination = $em->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig' => $config),array('name'=>'ASC'));
         $form = $this->createCreateForm($entity);
-        return $this->render('HospitalBundle:Cabin:index.html.twig', array(
+        return $this->render('HospitalBundle:ServiceGroup:index.html.twig', array(
             'pagination' => $pagination,
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -41,35 +38,30 @@ class CabinController extends Controller
     }
 
     /**
-     * Creates a new Particular entity.
+     * Creates a new HmsServiceGroup entity.
      *
      */
     public function createAction(Request $request)
     {
-        $entity = new Particular();
+        $entity = new HmsServiceGroup();
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=>2),array('name'=>'ASC'));
-
+        $pagination = $em->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig' => $config,'service'=>4),array('name'=>'ASC'));
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setHospitalConfig($config);
-            $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(2);
-            $entity->setService($service);
-            $name = $entity->getServiceGroup()->getName().'-'.$entity->getRoom();
-            $entity->setName($name);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('hms_cabin', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('hms_service_group', array('id' => $entity->getId())));
         }
 
-        return $this->render('HospitalBundle:Cabin:index.html.twig', array(
+        return $this->render('HospitalBundle:ServiceGroup:index.html.twig', array(
             'entity' => $entity,
             'pagination' => $pagination,
             'form'   => $form->createView(),
@@ -77,17 +69,16 @@ class CabinController extends Controller
     }
 
     /**
-     * Creates a form to create a Particular entity.
+     * Creates a form to create a HmsServiceGroup entity.
      *
-     * @param Particular $entity The entity
+     * @param HmsServiceGroup $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Particular $entity)
+    private function createCreateForm(HmsServiceGroup $entity)
     {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new CabinType($globalOption), $entity, array(
-            'action' => $this->generateUrl('hms_cabin_create', array('id' => $entity->getId())),
+        $form = $this->createForm(new ServiceGroupType(), $entity, array(
+            'action' => $this->generateUrl('hms_service_group_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -99,21 +90,21 @@ class CabinController extends Controller
 
 
     /**
-     * Displays a form to edit an existing Particular entity.
+     * Displays a form to edit an existing HmsServiceGroup entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 2),array('name'=>'ASC'));
-        $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
+        $pagination = $em->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig' => $config),array('name'=>'ASC'));
+        $entity = $em->getRepository('HospitalBundle:HmsServiceGroup')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Particular entity.');
+            throw $this->createNotFoundException('Unable to find HmsServiceGroup entity.');
         }
         $editForm = $this->createEditForm($entity);
-        return $this->render('HospitalBundle:Cabin:index.html.twig', array(
+        return $this->render('HospitalBundle:ServiceGroup:index.html.twig', array(
             'entity'      => $entity,
             'pagination'      => $pagination,
             'form'   => $editForm->createView(),
@@ -121,17 +112,16 @@ class CabinController extends Controller
     }
 
     /**
-     * Creates a form to edit a Particular entity.
+     * Creates a form to edit a HmsServiceGroup entity.
      *
-     * @param Particular $entity The entity
+     * @param HmsServiceGroup $entity The entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createEditForm(Particular $entity)
+    private function createEditForm(HmsServiceGroup $entity)
     {
-        $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new CabinType($globalOption), $entity, array(
-            'action' => $this->generateUrl('hms_cabin_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new ServiceGroupType(), $entity, array(
+            'action' => $this->generateUrl('hms_service_group_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -141,47 +131,45 @@ class CabinController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Particular entity.
+     * Edits an existing HmsServiceGroup entity.
      *
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 2),array('name'=>'ASC'));
-        $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
+        $pagination = $em->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig' => $config),array('name'=>'ASC'));
+        $entity = $em->getRepository('HospitalBundle:HmsServiceGroup')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Particular entity.');
+            throw $this->createNotFoundException('Unable to find HmsServiceGroup entity.');
         }
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $name = $entity->getServiceGroup()->getName().'-'.$entity->getRoom();
-            $entity->setName($name);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('hms_cabin'));
+            return $this->redirect($this->generateUrl('hms_service_group'));
         }
 
-        return $this->render('HospitalBundle:Cabin:index.html.twig', array(
+        return $this->render('HospitalBundle:ServiceGroup:index.html.twig', array(
             'entity'      => $entity,
             'pagination'      => $pagination,
             'form'   => $editForm->createView(),
         ));
     }
     /**
-     * Deletes a Particular entity.
+     * Deletes a HmsServiceGroup entity.
      *
      */
-    public function deleteAction(Particular $entity)
+    public function deleteAction(HmsServiceGroup $entity)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Particular entity.');
+            throw $this->createNotFoundException('Unable to find HmsServiceGroup entity.');
         }
         try {
 
@@ -200,7 +188,7 @@ class CabinController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-        return $this->redirect($this->generateUrl('hms_cabin'));
+        return $this->redirect($this->generateUrl('hms_service_group'));
     }
 
    
@@ -208,7 +196,7 @@ class CabinController extends Controller
      * Status a Page entity.
      *
      */
-    public function statusAction(Particular $entity)
+    public function statusAction(HmsServiceGroup $entity)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -226,6 +214,6 @@ class CabinController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('hms_cabin'));
+        return $this->redirect($this->generateUrl('hms_service_group'));
     }
 }

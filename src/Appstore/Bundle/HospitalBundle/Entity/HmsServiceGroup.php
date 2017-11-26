@@ -8,10 +8,10 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 /**
  * Service
  *
- * @ORM\Table( name ="hms_service")
+ * @ORM\Table( name ="hms_service_group")
  * @ORM\Entity(repositoryClass="")
  */
-class Service
+class HmsServiceGroup
 {
     /**
      * @var integer
@@ -23,34 +23,26 @@ class Service
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="hmsServiceGroup")
+     **/
+    private $hospitalConfig;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=50, nullable=true)
      */
     private $name;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="code", type="string", length=10, nullable=true)
-     */
-    private $code;
-
+       /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="hmsServiceGroup")
+     **/
+    private $service;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="service")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Particular", mappedBy="hmsServiceGroup")
      **/
     private $particulars;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup", mappedBy="service")
-     **/
-    private $serviceGroups;
-
-     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="service")
-     **/
-    private $hmsInvoices;
 
 
     /**
@@ -59,13 +51,6 @@ class Service
      * @ORM\Column(name="sorting", type="smallint",  length=2, nullable=true)
      */
     private $sorting = 0;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="hasQuantity", type="boolean" )
-     */
-    private $hasQuantity = false;
 
     /**
      * @var boolean
@@ -102,30 +87,6 @@ class Service
     }
 
     /**
-     * @return mixed
-     */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param mixed $code
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-    }
-
-    /**
-     * @return Particular
-     */
-    public function getParticulars()
-    {
-        return $this->particulars;
-    }
-
-    /**
      * @return bool
      */
     public function getStatus()
@@ -141,13 +102,6 @@ class Service
         $this->status = $status;
     }
 
-    /**
-     * @return Invoice
-     */
-    public function getHmsInvoices()
-    {
-        return $this->hmsInvoices;
-    }
 
     /**
      * @return int
@@ -165,28 +119,45 @@ class Service
         $this->sorting = $sorting;
     }
 
+
     /**
-     * @return bool
+     * @return HospitalConfig
      */
-    public function getHasQuantity()
+    public function getHospitalConfig()
     {
-        return $this->hasQuantity;
+        return $this->hospitalConfig;
     }
 
     /**
-     * @param bool $hasQuantity
+     * @param HospitalConfig $hospitalConfig
      */
-    public function setHasQuantity($hasQuantity)
+    public function setHospitalConfig($hospitalConfig)
     {
-        $this->hasQuantity = $hasQuantity;
+        $this->hospitalConfig = $hospitalConfig;
+    }
+
+    /**
+     * @return Service
+     */
+    public function getService()
+    {
+        return $this->service;
+    }
+
+    /**
+     * @param Service $service
+     */
+    public function setService($service)
+    {
+        $this->service = $service;
     }
 
     /**
      * @return mixed
      */
-    public function getServiceGroups()
+    public function getParticulars()
     {
-        return $this->serviceGroups;
+        return $this->particulars;
     }
 
 

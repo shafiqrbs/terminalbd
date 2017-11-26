@@ -232,10 +232,11 @@
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td class="numeric" colspan="4"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                                            <td class="numeric" colspan="3"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                                             <td class="numeric"><strong class="discountAmount">{{ entity.discount|number_format }}</strong></td>
                                             <td class="numeric"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
                                             <td class="numeric"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
+                                            <td class="numeric"><strong class="">{{ entity.total|number_format }}</strong></td>
                                             <td class="numeric"></td>
                                             <td class="numeric"></td>
                                         </tr>
@@ -433,7 +434,7 @@
         $('#particular').prop('selectedIndex',0);
         $('#price').val('');
         $('#quantity').val('1');
-        $('#addPatientParticular').attr("disabled", true);
+        $('#addPatientParticular').attr("disabled", false);
         }
         })
         }

@@ -46,7 +46,7 @@ class AdmissionPatientParticularRepository extends EntityRepository
         $entity->setInvoiceTransaction($transaction);
         $entity->setParticular($particular);
         $entity->setEstimatePrice($particular->getPrice());
-        if($particular->getCommission()){
+        if(!empty($particular->getCommission())){
             $entity->setCommission($particular->getCommission() * $data['quantity']);
         }
         $em->persist($entity);

@@ -68,7 +68,11 @@ class InvoiceAdmissionType extends AbstractType
                 ),
             ))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
-            ->add('disease','textarea', array('attr'=>array('class'=>'m-wrap span12','rows' => 4,'placeholder'=>'Add disease','autocomplete'=>'off')))
+            ->add('disease','textarea', array('attr'=>array('class'=>'m-wrap span12','rows' => 4,'placeholder'=>'Add disease'),
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required')),
+                )
+            ))
             ->add('referredDoctor', 'entity', array(
                   'required'    => true,
                   'property' => 'referred',
@@ -151,10 +155,6 @@ class InvoiceAdmissionType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ))
-            ->add('cabinNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add cabin/ward no','data-original-title'=>'Add cabin/ward no','autocomplete'=>'off'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'add cabin/ward no'))
-                )))
             ->add('department', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select department---',

@@ -147,6 +147,8 @@ $(document).on('click', '#addParticular', function() {
                     $('#price').val('');
                     $('#quantity').val('1');
                     $('#addParticular').attr("disabled", true);
+                    $('#addPatientParticular').attr("disabled", true);
+
                 }
             })
         }
@@ -282,7 +284,7 @@ $(document).on("click", "#receiveBtn", function() {
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
-          $('#posForm').submit();
+          $('#invoiceForm').submit();
         }
     });
 });

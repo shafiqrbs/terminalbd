@@ -32,10 +32,15 @@ class HospitalConfig
      **/
     private $hmsInvoices;
 
-     /**
+    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCommission", mappedBy="hospitalConfig")
      **/
     private $hmsCommissions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup", mappedBy="hospitalConfig")
+     **/
+    private $hmsServiceGroup;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsReverse", mappedBy="hospitalConfig")
@@ -903,6 +908,21 @@ class HospitalConfig
         $this->invoiceProcess = $invoiceProcess;
     }
 
+    /**
+     * @return HmsServiceGroup
+     */
+    public function getHmsServiceGroup()
+    {
+        return $this->hmsServiceGroup;
+    }
+
+    /**
+     * @return HmsCommission
+     */
+    public function getHmsCommissions()
+    {
+        return $this->hmsCommissions;
+    }
 
 
 }

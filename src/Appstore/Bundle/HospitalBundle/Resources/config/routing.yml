@@ -46,6 +46,10 @@ hospital_cabin:
     resource: "@HospitalBundle/Resources/config/routing/cabin.yml"
     prefix:   /cabin-ward
 
+hospital_servicegroup:
+    resource: "@HospitalBundle/Resources/config/routing/servicegroup.yml"
+    prefix:   /service-group
+
 hospital_surgery:
     resource: "@HospitalBundle/Resources/config/routing/surgery.yml"
     prefix:   /surgery-operation

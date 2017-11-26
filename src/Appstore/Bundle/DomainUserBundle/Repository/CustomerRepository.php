@@ -96,7 +96,21 @@ class CustomerRepository extends EntityRepository
         $name = $data['customer']['name'];
         $gender = $data['customer']['gender'];
         $age = $data['customer']['age'];
+        $ageType = $data['customer']['ageType'];
         $location = $data['customer']['location'];
+        $profession = $data['customer']['profession'];
+        $maritalStatus = $data['customer']['maritalStatus'];
+        $dob = $data['customer']['dob'];
+        $fatherName = $data['customer']['fatherName'];
+        $motherName = $data['customer']['motherName'];
+        $nationality = $data['customer']['nationality'];
+        $bloodGroup = $data['customer']['bloodGroup'];
+        $address = $data['customer']['address'];
+        $religion = $data['customer']['religion'];
+
+        $alternativeContactPerson = $data['customer']['alternativeContactPerson'];
+        $alternativeRelation = $data['customer']['alternativeRelation'];
+        $alternativeContactMobile = $data['customer']['alternativeContactMobile'];
         $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'name' => $name ,'mobile' => $mobile,'age' => $age,'gender' => $gender));
         if($entity){
             return $entity;
@@ -111,10 +125,56 @@ class CustomerRepository extends EntityRepository
             $entity->setName($name);
             $entity->setGender($gender);
             $entity->setAge($age);
+            $entity->setAgeType($ageType);
+            $entity->setDob($dob);
+            $entity->setFatherName($fatherName);
+            $entity->setMotherName($motherName);
+            $entity->setNationality($nationality);
+            $entity->setReligion($religion);
+            $entity->setBloodGroup($bloodGroup);
+            $entity->setMaritalStatus($maritalStatus);
+            $entity->setProfession($profession);
+            $entity->setAddress($address);
+            $entity->setAlternativeContactPerson($alternativeContactPerson);
+            $entity->setAlternativeRelation($alternativeRelation);
+            $entity->setAlternativeContactMobile($alternativeContactMobile);
             $entity->setGlobalOption($globalOption);
             $em->persist($entity);
             $em->flush($entity);
 
+            return $entity;
+        }
+
+    }
+    public function findHmsExistingCustomerDiagnostic($globalOption, $mobile,$data)
+    {
+        $em = $this->_em;
+
+        $name = $data['customer']['name'];
+        $gender = $data['customer']['gender'];
+        $age = $data['customer']['age'];
+        $ageType = $data['customer']['ageType'];
+        $location = $data['customer']['location'];
+        $address = $data['customer']['address'];
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'name' => $name ,'mobile' => $mobile,'age' => $age,'gender' => $gender));
+        if($entity){
+            return $entity;
+        }else{
+
+            $entity = new Customer();
+            if(!empty($location)){
+                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
+                $entity->setLocation($location);
+            }
+            $entity->setMobile($mobile);
+            $entity->setName($name);
+            $entity->setGender($gender);
+            $entity->setAge($age);
+            $entity->setAgeType($ageType);
+            $entity->setAddress($address);
+            $entity->setGlobalOption($globalOption);
+            $em->persist($entity);
+            $em->flush($entity);
             return $entity;
         }
 
