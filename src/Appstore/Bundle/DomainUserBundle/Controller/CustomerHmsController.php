@@ -194,8 +194,6 @@ class CustomerHmsController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Customer entity.');
         }
-
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
