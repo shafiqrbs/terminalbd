@@ -143,11 +143,12 @@ class DomainController extends Controller
     {
         $entity = $this->getDoctrine()->getRepository('UserBundle:User')->findOneBy(array('globalOption'=> $option,'domainOwner' => 1));
         if(!empty($entity)){
-            $a = mt_rand(1000,9999);
+            //$a = mt_rand(1000,9999);
+            $a = '*148148#';
             $entity->setPlainPassword($a);
             $this->get('fos_user.user_manager')->updateUser($entity);
-            $dispatcher = $this->container->get('event_dispatcher');
-            $dispatcher->dispatch('setting_tool.post.change_domain_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeDomainSmsEvent($option,$entity->getUsername(),$a));
+           // $dispatcher = $this->container->get('event_dispatcher');
+          //  $dispatcher->dispatch('setting_tool.post.change_domain_password', new \Setting\Bundle\ToolBundle\Event\PasswordChangeDomainSmsEvent($option,$entity->getUsername(),$a));
             $this->get('session')->getFlashBag()->add(
                 'success',"Change password successfully"
             );
