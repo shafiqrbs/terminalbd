@@ -117,7 +117,7 @@ class InvoiceRepository extends EntityRepository
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $this->handleSearchBetween($qb,$data);
-        $qb->orderBy('e.updated','DESC');
+        $qb->orderBy('e.created','DESC');
         $qb->getQuery();
         return  $qb;
     }

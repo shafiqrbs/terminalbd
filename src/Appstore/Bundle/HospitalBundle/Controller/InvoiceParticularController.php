@@ -98,7 +98,7 @@ class InvoiceParticularController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity preparation.');
         }
-        $barcodePrint = $entity->getHmsInvoice()->getInvoice().'-'.$entity->getParticular()->getParticularCode();
+        $barcodePrint = $entity->getParticular()->getParticularCode().'-'.$entity->getReportCode();
         $barcodeReport = $this->getBarcode($barcodePrint);
         return $this->render('HospitalBundle:InvoiceParticular:sampleCollectionBarcode.html.twig', array(
             'entity' => $entity,
@@ -227,7 +227,7 @@ class InvoiceParticularController extends Controller
         /** @var InvoicePathologicalReport $row */
         $barcodePrint = $entity->getHmsInvoice()->getInvoice();
         $barcodeInvoice = $this->getBarcode($barcodePrint);
-        $barcodePrint = $entity->getHmsInvoice()->getInvoice().'-'.$entity->getParticular()->getParticularCode();
+        $barcodePrint = $entity->getParticular()->getParticularCode().'-'.$entity->getReportCode();
         $barcodeReport = $this->getBarcode($barcodePrint);
         
         if (!empty($entity->getInvoicePathologicalReports())){

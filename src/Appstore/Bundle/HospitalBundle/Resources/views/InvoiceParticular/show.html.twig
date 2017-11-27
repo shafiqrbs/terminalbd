@@ -87,7 +87,7 @@
                                             <th class="numeric">Code</th>
                                             <th class="numeric">Particular</th>
                                             <th class="numeric">Service</th>
-                                            <th class="numeric">Qnt</th>
+                                            <th class="numeric">Sepcimen</th>
                                             <th class="numeric">Report Progress</th>
                                             <th class="numeric">Action</th>
                                         </tr>
@@ -100,7 +100,7 @@
                                                 <td  class="numeric">{{ item.particular.particularCode }}</td>
                                                 <td class="numeric">{{ item.particular.name }}</td>
                                                 <td class="numeric">{{ item.particular.service.name }}</td>
-                                                <td class="numeric">{{ item.quantity }}</td>
+                                                <td class="numeric">{{ item.particular.sepcimen }}</td>
                                                 <th class="numeric">{% if item.particular.service.id == 1 %}<span class="tooltips" data-trigger ='hover' data-original-title='Collected by: {% if item.sampleCollectedBy is not empty %}{{ item.sampleCollectedBy }}{% endif %} , Prepared by: {% if item.particularPreparedBy is not empty %}{{ item.particularPreparedBy }}{% endif %}, Assign Doctor: {% if item.assignDoctor is not empty %}{{ item.assignDoctor.name }}{% endif %}'>{{ item.process }}</span>{% endif %}</th>
                                                 <td class="numeric">
                                                     {% if item.particular.service.id == 1 and item.sampleCollectedBy is empty %}

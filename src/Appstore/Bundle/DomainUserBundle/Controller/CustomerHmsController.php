@@ -252,7 +252,7 @@ class CustomerHmsController extends Controller
                 'gender' => $entity->getGender(),
                 'age' => $entity->getAge(),
                 'ageType' => $entity->getAgeType(),
-                'location' => $entity->getLocation()->getId(),
+                'location' => !empty($entity->getLocation())? $entity->getLocation()->getId():'',
                 'address' => $entity->getAddress()
             );
             return new Response(json_encode($data));

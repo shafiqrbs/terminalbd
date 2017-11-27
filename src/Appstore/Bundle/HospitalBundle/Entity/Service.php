@@ -32,6 +32,13 @@ class Service
     /**
      * @var string
      *
+     * @ORM\Column(name="slug", type="string", length=50, nullable=true)
+     */
+    private $slug;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="code", type="string", length=10, nullable=true)
      */
     private $code;
@@ -187,6 +194,22 @@ class Service
     public function getServiceGroups()
     {
         return $this->serviceGroups;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
     }
 
 

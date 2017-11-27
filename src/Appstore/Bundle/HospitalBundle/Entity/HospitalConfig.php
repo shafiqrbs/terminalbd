@@ -148,9 +148,9 @@ class HospitalConfig
     /**
      * @var smallint
      *
-     * @ORM\Column(name="printMarginReportBottom", type="smallint",  nullable=true)
+     * @ORM\Column(name="printMarginReportLeft", type="smallint",  nullable=true)
      */
-    private $printMarginReportBottom = 0;
+    private $printMarginReportLeft = 0;
 
     /**
      * @var boolean
@@ -260,6 +260,21 @@ class HospitalConfig
      * @ORM\Column(name="barcodeHeight", type="smallint", nullable = true)
      */
     private $barcodeHeight = 80;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="invoiceHeight", type="integer", nullable = true)
+     */
+    private $invoiceHeight = 0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="reportHeight", type="integer", nullable = true)
+     */
+    private $reportHeight = 0;
+
 
     /**
      * @var smallint
@@ -860,22 +875,6 @@ class HospitalConfig
     }
 
     /**
-     * @return smallint
-     */
-    public function getPrintMarginReportBottom()
-    {
-        return $this->printMarginReportBottom;
-    }
-
-    /**
-     * @param smallint $printMarginReportBottom
-     */
-    public function setPrintMarginReportBottom($printMarginReportBottom)
-    {
-        $this->printMarginReportBottom = $printMarginReportBottom;
-    }
-
-    /**
      * @return bool
      */
     public function getIsInvoiceTitle()
@@ -922,6 +921,54 @@ class HospitalConfig
     public function getHmsCommissions()
     {
         return $this->hmsCommissions;
+    }
+
+    /**
+     * @return int
+     */
+    public function getInvoiceHeight()
+    {
+        return $this->invoiceHeight;
+    }
+
+    /**
+     * @param int $invoiceHeight
+     */
+    public function setInvoiceHeight($invoiceHeight)
+    {
+        $this->invoiceHeight = $invoiceHeight;
+    }
+
+    /**
+     * @return int
+     */
+    public function getReportHeight()
+    {
+        return $this->reportHeight;
+    }
+
+    /**
+     * @param int $reportHeight
+     */
+    public function setReportHeight($reportHeight)
+    {
+        $this->reportHeight = $reportHeight;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getPrintMarginReportLeft()
+    {
+        return $this->printMarginReportLeft;
+    }
+
+    /**
+     * @param smallint $printMarginReportLeft
+     */
+    public function setPrintMarginReportLeft($printMarginReportLeft)
+    {
+        $this->printMarginReportLeft = $printMarginReportLeft;
     }
 
 

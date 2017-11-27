@@ -106,7 +106,7 @@ class InvoiceAdmissionController extends Controller
         if ($entity->getProcess() != "Admitted" and $entity->getProcess() != "Created") {
             return $this->redirect($this->generateUrl('hms_invoice_admission_show', array('id' => $entity->getId())));
         }
-        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,2,3,4,7));
+        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(2,3,4,7));
         $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
         return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(
             'entity' => $entity,
@@ -203,7 +203,7 @@ class InvoiceAdmissionController extends Controller
         }
 
         $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=> 6),array('name'=>'ASC'));
-        $particulars = $em->getRepository('HospitalBundle:Particular')->getServices($entity->getHospitalConfig(),array(1,2,3,4,7));
+        $particulars = $em->getRepository('HospitalBundle:Particular')->getServices($entity->getHospitalConfig(),array(2,3,4,7));
         return $this->render('HospitalBundle:InvoiceAdmission:new.html.twig', array(
             'entity' => $entity,
             'particularService' => $particulars,

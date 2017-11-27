@@ -23,7 +23,7 @@ class InvoiceParticularListener
             $datetime = new \DateTime("now");
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);
-            $entity->setReportCode(sprintf("%s%s", $datetime->format('dmy'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
+            $entity->setReportCode(sprintf("%s%s", $datetime->format('dmy'), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT)));
 
         }
     }

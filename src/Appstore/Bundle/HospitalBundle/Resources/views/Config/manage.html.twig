@@ -168,9 +168,22 @@
                                                 {{ form_widget(form.printInstruction) }} Print Instruction
                                             </div>
                                         </div>
-
                                     </div>
                                     <div class="span4">
+                                        <div class="row-fluid">
+                                            <div class="span12"><h4>Invoice Format</h4></div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                    <label class="control-label " for="vatPercentage">Invoice Height</label>
+                                                    <div class="control">
+                                                        {{ form_widget(form.invoiceHeight) }}
+                                                        {{ form_errors(form.invoiceHeight) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row-fluid">
                                             <div class="span6">
                                                 <div class="control-group">
@@ -182,8 +195,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="span4">
                                         <div class="row-fluid">
                                             <div class="span6">
                                                 <div class="control-group">
@@ -191,6 +202,45 @@
                                                     <div class="control">
                                                         {{ form_widget(form.printTopMargin) }}
                                                         {{ form_errors(form.printTopMargin) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span4">
+                                        <div class="row-fluid">
+                                            <div class="span12"><h4>Report Format</h4></div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span6">
+                                                <div class="control-group">
+                                                    <label class="control-label " for="reportHeight">Report Height</label>
+                                                    <div class="control">
+                                                        {{ form_widget(form.reportHeight) }}
+                                                        {{ form_errors(form.reportHeight) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label " for="vatPercentage">Margin Top</label>
+                                                    <div class="control">
+                                                        {{ form_widget(form.printMarginReportTop) }}
+                                                        {{ form_errors(form.printMarginReportTop) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <div class="control-group">
+                                                    <label class="control-label " for="vatPercentage">Margin Left</label>
+                                                    <div class="control">
+                                                        {{ form_widget(form.printMarginReportLeft) }}
+                                                        {{ form_errors(form.printMarginReportLeft) }}
                                                     </div>
                                                 </div>
                                             </div>

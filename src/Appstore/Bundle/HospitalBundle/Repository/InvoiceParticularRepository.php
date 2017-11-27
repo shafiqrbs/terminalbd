@@ -42,8 +42,15 @@ class InvoiceParticularRepository extends EntityRepository
             $entity->setSalesPrice($data['price']);
             $entity->setSubTotal($data['price'] * $data['quantity']);
         }
-
         $entity->setHmsInvoice($invoice);
+        if($particular->getService()->getCode() == '01'){
+            $datetime = new \DateTime("now");
+            $entity->setCode($invoice);
+            $lastCode = $this->getLastCode($invoice,$datetime);
+            $entity->setCode($lastCode+1);
+            $reportCode = sprintf("%s%s", $datetime->format('dmy'), str_pad($entity->getCode(),3, '0', STR_PAD_LEFT));
+            $entity->setReportCode($reportCode);
+        }
         $entity->setParticular($particular);
         $entity->setEstimatePrice($particular->getPrice());
         if($particular->getCommission()){
@@ -112,5 +119,31 @@ class InvoiceParticularRepository extends EntityRepository
     public function invoiceParticularLists($user){
 
 
+    }
+
+    public function getLastCode($entity,$datetime)
+    {
+
+        $today_startdatetime = $datetime->format('Y-m-d 00:00:00');
+        $today_enddatetime = $datetime->format('Y-m-d 23:59:59');
+
+
+        $qb = $this->createQueryBuilder('ip');
+        $qb
+            ->select('MAX(ip.code)')
+            ->join('ip.hmsInvoice','s')
+            ->where('s.hospitalConfig = :hospital')
+            ->andWhere('s.updated >= :today_startdatetime')
+            ->andWhere('s.updated <= :today_enddatetime')
+            ->setParameter('hospital', $entity->getHospitalConfig())
+            ->setParameter('today_startdatetime', $today_startdatetime)
+            ->setParameter('today_enddatetime', $today_enddatetime);
+        $lastCode = $qb->getQuery()->getSingleScalarResult();
+
+        if (empty($lastCode)) {
+            return 0;
+        }
+
+        return $lastCode;
     }
 }

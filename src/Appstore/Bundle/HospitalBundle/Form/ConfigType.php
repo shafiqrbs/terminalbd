@@ -45,8 +45,12 @@ class ConfigType extends AbstractType
             ->add('isPrintHeader')
             ->add('isPrintFooter')
             ->add('printInstruction')
+            ->add('invoiceHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
+            ->add('printMarginReportLeft','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
+            ->add('reportHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
+            ->add('printMarginReportTop','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
 
         ;
     }

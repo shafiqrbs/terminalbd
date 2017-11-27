@@ -279,7 +279,7 @@ class InvoiceController extends Controller
         }
 
         $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=> 6),array('name'=>'ASC'));
-        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($entity->getHospitalConfig(),array(1,6));
+        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($entity->getHospitalConfig(),array(1,4,7));
         return $this->render('HospitalBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
             'particularService' => $services,
@@ -518,8 +518,10 @@ class InvoiceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital , 'invoice' => $invoice));
 
+        if($entity->getHospitalConfig()->getId() != $hospital->getId()){
+            return $this->redirect($this->generateUrl('hms_invoice'));
+        }
         $barcode = $this->getBarcode($entity->getInvoice());
         $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
         $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
