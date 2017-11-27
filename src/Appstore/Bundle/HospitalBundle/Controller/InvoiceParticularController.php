@@ -35,14 +35,13 @@ class InvoiceParticularController extends Controller
     public function indexAction()
     {
 
+
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
 
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
-        if(empty($data)){
-            $data = array('process'=>'In-progress');
-        }
+        $data = array('process'=>'In-progress');
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'pathology' , $data);
         $pagination = $this->paginate($entities);
         $overview = $em->getRepository('HospitalBundle:DoctorInvoice')->findWithOverview($user,$data);

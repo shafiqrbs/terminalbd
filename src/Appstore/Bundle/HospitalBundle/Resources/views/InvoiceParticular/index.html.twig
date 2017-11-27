@@ -67,14 +67,14 @@
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-calendar"></i>
-                                                <input class="m-wrap span12 search-input date-picker" name="created" id="created" value="{% if searchForm.created is defined %}{{ searchForm.created }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.created is defined %}{{ searchForm.created }}{% else %}Created Date{% endif %}" >
+                                                <input class="m-wrap span12 search-input dateCalendar" name="created" id="created" value="{% if searchForm.created is defined %}{{ searchForm.created }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.created is defined %}{{ searchForm.created }}{% else %}Created Date{% endif %}" >
                                             </div>
                                         </div>
 
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-calendar"></i>
-                                                <input class="m-wrap span12 search-input date-picker" name="deliveryDate" id="deliveryDate" value="{% if searchForm.deliveryDate is defined %}{{ searchForm.deliveryDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.deliveryDate is defined %}{{ searchForm.deliveryDate }}{% else %}Delivery Date{% endif %}">
+                                                <input class="m-wrap span12 search-input dateCalendar" name="deliveryDate" id="deliveryDate" value="{% if searchForm.deliveryDate is defined %}{{ searchForm.deliveryDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.deliveryDate is defined %}{{ searchForm.deliveryDate }}{% else %}Delivery Date{% endif %}">
                                             </div>
                                         </div>
                                     </div>
@@ -88,20 +88,12 @@
                                                 {% endfor %}
                                             </select>
                                         </div>
-                                        <div class="span3">
+                                        <div class="span6">
                                             <select name="referred" id="referred" class="m-wrap span12">
                                                 <option value="" >--Patient Referred--</option>
                                                 {% for referred in referredDoctors %}
                                                     <option {% if searchForm.referred is defined and searchForm.referred == referred.id %} selected="selected" {% endif %} value="{{ referred.id }}" >{{ referred.name }}</option>
                                                 {% endfor %}
-                                            </select>
-                                        </div>
-                                        <div class="span3">
-                                            <select name="process" id="process" class="m-wrap span12">
-                                                <option value="" >--Process--</option>
-                                                <option value="In-progress" {% if searchForm.process is defined and searchForm.process == 'In-progress' %} selected="selected" {% endif %} >In-progress</option>
-                                                <option value="Done"  {% if searchForm.process is defined and searchForm.process == 'Done' %} selected="selected" {% endif %} >Done</option>
-                                                <option value="Cancel"  {% if searchForm.process is defined and searchForm.process == 'Cancel' %} selected="selected" {% endif %} >Cancel</option>
                                             </select>
                                         </div>
                                         <div class="span3">

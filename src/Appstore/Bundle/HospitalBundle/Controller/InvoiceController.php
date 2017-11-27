@@ -255,10 +255,14 @@ class InvoiceController extends Controller
             $deliveryDateTime = $request->request->get('deliveryDateTime');
             $datetime = (new \DateTime("now"))->format('d-m-Y h:i A');
             $datetime = empty($deliveryDateTime) ? $datetime : $deliveryDateTime ;
+            if($entity->getTotal() > 0){
+                $entity->setProcess('In-progress');
+            }
 
             $entity->setDeliveryDateTime($datetime);
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
+
             $em->flush();
 
             $payment = $data['payment'];
