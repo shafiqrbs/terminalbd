@@ -552,10 +552,13 @@ class InvoiceController extends Controller
         }
         $lastTransaction = 0 ;
         $inWordTransaction='';
-        if(!empty($entity->getInvoiceTransactions())){
+        if(!empty($entity->getInvoiceTransactions()) and count($entity->getInvoiceTransactions()) > 0){
             $transaction = $entity->getInvoiceTransactions();
-            $lastTransaction = $transaction[0]->getPayment();
-            $inWordTransaction = $this->get('settong.toolManageRepo')->intToWords($lastTransaction);
+            if(!empty($transaction[0]->getPayment())){
+                $lastTransaction = $transaction[0]->getPayment();
+                $inWordTransaction = $this->get('settong.toolManageRepo')->intToWords($lastTransaction);
+
+            }
 
         }
 

@@ -64,21 +64,11 @@
         </table>
         <script> window.print(); </script>
     </div>
-    <style>
-        .table thead tr th{
-            font-size:13px;
-        }
-        .service-group{
-            background-color: #ddddff!important;
-        }
-        table.table{
-            margin-bottom: 0!important;
-        }
-        .table td {
-            line-height: 15px;
-            padding-left: 8px;
-            padding-right: 8px;
-        }
-    </style>
 {% endblock %}
-
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@HospitalBundle/Resources/public/css/print.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}

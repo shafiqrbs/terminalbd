@@ -3,7 +3,9 @@
     <script>
         window.print();
     </script>
-    <table class="table" style="margin-top:{{  entity.hmsInvoice.hospitalConfig.printMarginReportTop }}px;margin-left:{{ entity.hmsInvoice.hospitalConfig.printMarginReportLeft }}px;">
+    <div style="margin-top:{{  entity.hmsInvoice.hospitalConfig.printMarginReportTop }}px;margin-left:{{ entity.hmsInvoice.hospitalConfig.printMarginReportLeft }}px;">
+    {%  if entity.hmsInvoice.hospitalConfig.isPrintHeader == 1 %}
+    <table class="table" >
     <tr>
             <td>
                 <div class="span4  pull-left invoice-logo-space">
@@ -21,8 +23,9 @@
                     </ul>
                 </div>
             </td>
-        </tr>
+    </tr>
     </table>
+    {% endif %}
     <table class="table table-border" >
         <tr class="print-header">
             <th colspan="2">
@@ -68,10 +71,10 @@
         <table class="table table-bordered table-striped">
             <thead class="flip-content ">
             <tr class="head-black">
-                <th class="numeric">Name</th>
-                <th class="numeric text-right">Result</th>
-                <th class="numeric">Unit</th>
-                <th class="numeric">Reference</th>
+                <th class="span3">Name</th>
+                <th class="text-right span1">Result</th>
+                <th class="span2">Unit</th>
+                <th class="span4">Reference</th>
             </tr>
             </thead>
             <tbody>
@@ -79,84 +82,67 @@
                 {% for item in entity.particular.pathologicalReports %}
                     {% if item.children is not empty %}
                         <tr id="remove-{{ item.id }}">
-                            <td  class="numeric" colspan="5"><strong>{{ item.name }}</strong></td>
+                            <td  class="span12" colspan="5"><strong>{{ item.name }}</strong></td>
                         </tr>
                         {% for child in item.children %}
                             <tr>
-                                <td  class="numeric">{{ child.name }}</td>
-                                <td class="">{% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %}</td>
-                                <td class="numeric">{{ child.unit }}</td>
-                                <td class="numeric">{{ child.referenceValue }}</td>
+                                <td  class="span3">{{ child.name }}</td>
+                                <td class="span1">{% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %}</td>
+                                <td class="span2">{{ child.unit }}</td>
+                                <td class="span4">{{ child.referenceValue }}</td>
                             </tr>
                         {% endfor %}
                     {% elseif item.parent is empty %}
                         <tr id="remove-{{ item.id }}">
-                            <td  class="numeric">{{ item.name }}</td>
-                            <td class="">{% if item.children is empty %}{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }}{% endif %}{% endif %}</td>
-                            <td class="numeric">{{ item.unit }}</td>
-                            <td class="numeric">{{ item.referenceValue }}</td>
+                            <td  class="span4">{{ item.name }}</td>
+                            <td class="span1">{% if item.children is empty %}{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }}{% endif %}{% endif %}</td>
+                            <td class="span2">{{ item.unit }}</td>
+                            <td class="span4">{{ item.referenceValue }}</td>
                         </tr>
                     {% endif %}
                 {% endfor %}
             {% endif %}
-
-            </tbody>
-            <tfoot>
             {% for meta in entity.invoicePathologicalReports %}
                 {% if meta.metaValue is not empty %}
                     <tr><td class="numeric">{{ meta.metaKey }}</td><td colspan="3">{{ meta.metaValue|raw }}</td></tr>
                 {% endif %}
             {% endfor %}
             <tr><td class="numeric">Comment</td><td colspan="3"> {{ entity.comment|raw }}</td></tr>
-            </tfoot>
-         </table>
+            </tbody>
+        </table>
     {% endif %}
-    <table class="table print-footer" style="position:fixed; bottom:30px;" >
-        <tr>
-            <td class="left span4">
-                <ul class="unstyled">
-                    <li>Prepared By</li>
-                    <li><strong>{{ entity.particularPreparedBy.profile.name }}</strong></li>
-                    <li>{% if entity.particularPreparedBy.profile.designation is not empty %}{{ entity.particularPreparedBy.profile.designation.name }}{% endif %}</li>
-                  </ul>
-            </td>
-            <td class="center span4">
-                <ul class="unstyled">
-                    <li>Printed By</li>
-                    <li><strong>{{ printUser.profile.name }}</strong></li>
-                    <li>{% if entity.particularPreparedBy.profile.designation is not empty %}{{ printUser.profile.designation.name }}{% endif %}</li>
-                  </ul>
-            </td>
-            <td class="right span4">
-                {% if entity.assignDoctor is not empty %}
-                <ul class="unstyled">
-                    <li><strong>{{ entity.assignDoctor.name }}{{ entity.assignDoctor.id }}</strong></li>
-                    <li>{{ entity.assignDoctor.educationalDegree|raw }}</li>
-                    <li>{{ entity.assignDoctor.specialist|raw }}</li>
-                    <li>{{ entity.assignDoctor.category.name }},{{ entity.assignDoctor.department.name }}</li>
-                    <li>{{ entity.assignDoctor.designation }}</li>
-                    <li>{{ entity.assignDoctor.currentJob }}</li>
-                </ul>
-                {% endif %}
-            </td>
-        </tr>
-    </table>
- <style>
-
-     table.table-border{
-         border: 1px solid #c0c5c9!important;
-     }
-     .print-header{
-         border: 1px solid #c0c5c9!important;
-     }
-     .head-black{
-         border: 1px solid #c0c5c9!important;
-     }
-     .table-bordered tr td{
-         border: 1px solid #c0c5c9!important;
-     }
- </style>
-{% endblock %}
+        <table class="table print-footer" style="margin-top:30px" >
+            <tr>
+                <td class="left span4">
+                    <ul class="unstyled">
+                        <li>Prepared By</li>
+                        <li><strong>{{ entity.particularPreparedBy.profile.name }}</strong></li>
+                        <li>{% if entity.particularPreparedBy.profile.designation is not empty %}{{ entity.particularPreparedBy.profile.designation.name }}{% endif %}</li>
+                    </ul>
+                </td>
+                <td class="center span4">
+                    <ul class="unstyled">
+                        <li>Printed By</li>
+                        <li><strong>{{ printUser.profile.name }}</strong></li>
+                        <li>{% if entity.particularPreparedBy.profile.designation is not empty %}{{ printUser.profile.designation.name }}{% endif %}</li>
+                    </ul>
+                </td>
+                <td class="span4">
+                    {% if entity.assignDoctor is not empty %}
+                        <ul class="unstyled">
+                            <li><strong>{{ entity.assignDoctor.name }}{{ entity.assignDoctor.id }}</strong></li>
+                            <li>{{ entity.assignDoctor.educationalDegree|raw }}</li>
+                            <li>{{ entity.assignDoctor.specialist|raw }}</li>
+                            <li>{{ entity.assignDoctor.category.name }},{{ entity.assignDoctor.department.name }}</li>
+                            <li>{{ entity.assignDoctor.designation }}</li>
+                            <li>{{ entity.assignDoctor.currentJob }}</li>
+                        </ul>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+ {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
     '@HospitalBundle/Resources/public/css/print.css'

@@ -140,13 +140,12 @@
             <tr><td colspan="3">&nbsp;</td></tr>
         </table>
     {% endif %}
-<style>
-    table.table{
-        margin-bottom: 0!important;
-    }
-    table.table-border{
-        border:1px solid #ddddff;
-    }
-</style>
     <script> window.print(); </script>
 {% endblock %}
+{% block cssBlock %}
+    {% stylesheets filter='cssrewrite'
+    '@HospitalBundle/Resources/public/css/print.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock  %}
