@@ -23,6 +23,7 @@ class InvoiceRepository extends EntityRepository
 
     protected function handleSearchBetween($qb,$data)
     {
+
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
         $commission = isset($data['commission'])? $data['commission'] :'';
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
@@ -39,7 +40,7 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
         }
         if (!empty($customerName)) {
-
+            exit;
             $qb->join('e.customer','c');
             $qb->andWhere($qb->expr()->like("c.customerId", "'%$customerName%'"  ));
         }
