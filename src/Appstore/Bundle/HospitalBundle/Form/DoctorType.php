@@ -69,7 +69,9 @@ class DoctorType extends AbstractType
                 'empty_value' => '---Select doctor---',
                 'class' => 'Core\UserBundle\Entity\User',
                 'property' => 'userFullName',
-                'error_bubbling' => true,
+                'constraints' =>array(
+                    new NotBlank(array('message'=>'Please input required')),
+                ),
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
