@@ -24,6 +24,7 @@ class InvoiceRepository extends EntityRepository
     protected function handleSearchBetween($qb,$data)
     {
 
+
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
         $commission = isset($data['commission'])? $data['commission'] :'';
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
@@ -40,10 +41,10 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
         }
         if (!empty($customerName)) {
-            exit;
             $qb->join('e.customer','c');
             $qb->andWhere($qb->expr()->like("c.customerId", "'%$customerName%'"  ));
         }
+
         if (!empty($customerMobile)) {
             $qb->join('e.customer','m');
             $qb->andWhere($qb->expr()->like("m.mobile", "'%$customerMobile%'"  ));
@@ -122,6 +123,22 @@ class InvoiceRepository extends EntityRepository
         $qb->getQuery();
         return  $qb;
     }
+
+    public function invoicePathologicalReportLists(User $user , $mode , $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
+        $this->handleSearchBetween($qb,$data);
+        $qb->andWhere("e.process IN (:processes)");
+        $qb->setParameter('processes', array('Done','Paid','In-progress','Diagnostic'));
+        $qb->orderBy('e.created','DESC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
 
     public function doctorInvoiceLists(User $user,$data)
     {

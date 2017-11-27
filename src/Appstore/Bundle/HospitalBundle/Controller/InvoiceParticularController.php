@@ -38,11 +38,9 @@ class InvoiceParticularController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
-        $data = array('process'=>'In-progress');
-        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'pathology' , $data);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoicePathologicalReportLists( $user , $mode = 'pathology' , $data);
         $pagination = $this->paginate($entities);
         $overview = $em->getRepository('HospitalBundle:DoctorInvoice')->findWithOverview($user,$data);
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
