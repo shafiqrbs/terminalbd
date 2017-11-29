@@ -28,11 +28,13 @@ class BinduController extends Controller
         }else{
             $theme = 'Frontend/Desktop';
         }
-        return $this->render('BinduBundle:'.$theme.':index.html.twig', array(
+        return $this->redirect($this->generateUrl('fos_user_security_login'));
+
+       /* return $this->render('BinduBundle:'.$theme.':index.html.twig', array(
             'entity' => $entity,
             'slides' => $slides,
             'form'   => $form->createView(),
-        ));
+        ));*/
 
     }
 

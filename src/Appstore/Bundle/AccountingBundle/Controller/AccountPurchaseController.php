@@ -51,10 +51,12 @@ class AccountPurchaseController extends Controller
             'searchForm' => $data,
         ));
     }
+
     /**
      * Lists all AccountPurchase entities.
      *
      */
+
     public function purchaseReturnAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -115,7 +117,7 @@ class AccountPurchaseController extends Controller
                 'novalidate' => 'novalidate',
             )
         ));
-      return $form;
+        return $form;
     }
 
     /**
@@ -129,9 +131,9 @@ class AccountPurchaseController extends Controller
         $form   = $this->createCreateForm($entity);
         $banks = $em->getRepository('SettingToolBundle:Bank')->findAll();
         return $this->render('AccountingBundle:AccountPurchase:new.html.twig', array(
-            'entity' => $entity,
-            'banks' => $banks,
-            'form'   => $form->createView(),
+            'entity'    => $entity,
+            'banks'     => $banks,
+            'form'      => $form->createView(),
         ));
     }
 
@@ -169,7 +171,7 @@ class AccountPurchaseController extends Controller
 
         return $this->render('AccountingBundle:AccountPurchase:edit.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
         ));
     }
 
@@ -218,7 +220,7 @@ class AccountPurchaseController extends Controller
 
         return $this->render('AccountingBundle:AccountPurchase:edit.html.twig', array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
 
         ));
     }
@@ -235,11 +237,10 @@ class AccountPurchaseController extends Controller
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Account Purchase entity.');
-        }
-
-        $currentBalance = $entity->getBalance() + $entity->getPayment();
+       }
+        //$currentBalance = $entity->getBalance() + $entity->getPayment();
         $entity->setPayment($data['value']);
-        $entity->setBalance($currentBalance - floatval($data['value']));
+        //$entity->setBalance($currentBalance - floatval($data['value']));
         $em->flush();
 
         exit;
@@ -250,8 +251,11 @@ class AccountPurchaseController extends Controller
     {
         if (!empty($entity)) {
             $em = $this->getDoctrine()->getManager();
-
-            $data = array('vendor' => $entity->getVendor()->getCompanyName());
+            if(!empty($entity->getVendor())){
+                $data = array('vendor' => $entity->getVendor()->getCompanyName());
+            }elseif(!empty($entity->getHmsVendor())){
+                $data = array('hmsVendor' => $entity->getHmsVendor()->getCompanyName());
+            }
             $result = $em->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($this->getUser()->getGlobalOption(),$data);
             $lastBalance = ( $result['purchaseAmount'] - $result['payment']);
             $entity->setBalance($lastBalance - $entity->getPayment());

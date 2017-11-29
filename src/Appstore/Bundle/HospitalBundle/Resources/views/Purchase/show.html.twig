@@ -86,7 +86,7 @@
                                         <li><strong>Created By:</strong>&nbsp;{% if entity.createdBy is defined and entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</li>
                                     </ul>
                                 </div>
-                                
+
                             </div>
                             {% include('flash-message.html.twig')  %}
                             <div class="row-fluid box green">
@@ -120,9 +120,8 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
-                                    <a target="_blank"  href="{{ path('hms_purchase_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
                                     {% if ( entity.process == 'Done') %}
-                                    <a target="_blank" href="javascript:"  data-url="{{ path('hms_purchase_approved',{'id':entity.id}) }}" class="btn blue approve "><i class="icon-ok"></i>&nbsp;Approve</a>
+                                    <a  href="javascript:"  data-url="{{ path('hms_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-ok"></i>&nbsp;Approve</a>
                                     {% endif %}
                                     <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                                 </div>

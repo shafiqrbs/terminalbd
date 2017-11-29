@@ -224,5 +224,23 @@ class VendorController extends Controller
         return $this->redirect($this->generateUrl('hms_vendor'));
     }
 
+    public function autoSearchAction(Request $request)
+    {
+        $item = $_REQUEST['q'];
+        if ($item) {
+            $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig();
+            $item = $this->getDoctrine()->getRepository('HospitalBundle:HmsVendor')->searchAutoComplete($item,$inventory);
+        }
+        return new JsonResponse($item);
+    }
+
+    public function searchVendorNameAction($vendor)
+    {
+        return new JsonResponse(array(
+            'id'=>$vendor,
+            'text'=>$vendor
+        ));
+    }
+
 
 }

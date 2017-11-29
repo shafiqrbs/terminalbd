@@ -13,7 +13,6 @@ domain_hr_attendance_month:
 domain_hr_attendance_add:
     path:     /{user}/add
     defaults: { _controller: "DomainUserBundle:HrAttendance:addAttendance" }
-    methods:  POST
     options:
            expose: true
 

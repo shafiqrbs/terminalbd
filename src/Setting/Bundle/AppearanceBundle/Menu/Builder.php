@@ -276,8 +276,8 @@ class Builder extends ContainerAware
             $accounting = array('hms');
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {
-                $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'report_income_hospital'))->setAttribute('icon', 'icon-th-list');
-                /* $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'report_monthly_income'))->setAttribute('icon', 'icon-th-list');*/
+                $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'hms_report_income'))->setAttribute('icon', 'icon-th-list');
+                 $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'hms_report_monthly_income'))->setAttribute('icon', 'icon-th-list');
             }
 
         }
@@ -331,6 +331,8 @@ class Builder extends ContainerAware
         $result = array_intersect($arrSlugs, $hospital);
         if (!empty($result)) {
             $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_hospital'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_hospital'))->setAttribute('icon', 'icon-th-list');
+
         }
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
 

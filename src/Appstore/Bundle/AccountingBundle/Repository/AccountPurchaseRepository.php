@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchase;
+use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
 use Doctrine\ORM\EntityRepository;
@@ -66,7 +67,8 @@ class AccountPurchaseRepository extends EntityRepository
 
                 $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
                 $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
-                $vendor =    isset($data['vendor'])? $data['vendor'] :'';
+                $inventoryVendor =    isset($data['vendor'])? $data['vendor'] :'';
+                $hmsVendor =    isset($data['hmsVendor'])? $data['hmsVendor'] :'';
                 $transactionMethod =    isset($data['transactionMethod'])? $data['transactionMethod'] :'';
 
                 if (!empty($data['startDate']) and !empty($data['endDate']) ) {
@@ -79,12 +81,18 @@ class AccountPurchaseRepository extends EntityRepository
                     $qb->andWhere("e.updated <= :endDate");
                     $qb->setParameter('endDate', $endDate.' 00:00:00');
                 }
-                if (!empty($vendor)) {
-
+                if (!empty($inventoryVendor)) {
                     $qb->join('e.vendor','v');
                     $qb->andWhere("v.companyName = :vendor");
-                    $qb->setParameter('vendor', $vendor);
+                    $qb->setParameter('vendor', $inventoryVendor);
                 }
+
+                if (!empty($hmsVendor)) {
+                    $qb->join('e.hmsVendor','v');
+                    $qb->andWhere("v.companyName = :vendor");
+                    $qb->setParameter('vendor', $hmsVendor);
+                }
+
                 if (!empty($transactionMethod)) {
                     $qb->andWhere("e.transactionMethod = :transactionMethod");
                     $qb->setParameter('transactionMethod', $transactionMethod);
@@ -97,7 +105,21 @@ class AccountPurchaseRepository extends EntityRepository
     {
         $em = $this->_em;
         $entity = $em->getRepository('AccountingBundle:AccountPurchase')->findOneBy(
-            array('globalOption' => $globalOption,'vendor' => $vendor,'process'=>'approved'),
+            array('globalOption' => $globalOption,'trader' => $vendor,'process'=>'approved'),
+            array('id' => 'DESC')
+        );
+
+        if (empty($entity)) {
+            return 0;
+        }
+        return $entity->getBalance();
+    }
+
+    public function lastInsertHmsPurchase($globalOption,$vendor)
+    {
+        $em = $this->_em;
+        $entity = $em->getRepository('AccountingBundle:AccountPurchase')->findOneBy(
+            array('globalOption' => $globalOption,'hmsVendor' => $vendor,'process'=>'approved'),
             array('id' => 'DESC')
         );
 
@@ -114,13 +136,11 @@ class AccountPurchaseRepository extends EntityRepository
         $data = array('vendor' => $entity->getVendor()->getCompanyName());
         $result = $this->accountPurchaseOverview($entity->getInventoryConfig()->getGlobalOption(),$data);
         $balance = ( $result['purchaseAmount'] - $result['payment']);
-
         $em = $this->_em;
-
-
         $accountPurchase = new AccountPurchase();
         $accountPurchase->setGlobalOption($entity->getInventoryConfig()->getGlobalOption());
         $accountPurchase->setPurchase($entity);
+        $accountPurchase->setVendor($entity->getVendor());
         $accountPurchase->setVendor($entity->getVendor());
         $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
         $accountPurchase->setPurchaseAmount($entity->getTotalAmount());
@@ -136,6 +156,34 @@ class AccountPurchaseRepository extends EntityRepository
         return $accountPurchase;
 
     }
+
+    public function insertHmsAccountPurchase(HmsPurchase $entity)
+    {
+
+        $data = array('hmsVendor' => $entity->getVendor()->getCompanyName());
+        $result = $this->accountPurchaseOverview($entity->getHospitalConfig()->getGlobalOption(),$data);
+        $balance = ( $result['purchaseAmount'] - $result['payment']);
+
+        $em = $this->_em;
+        $accountPurchase = new AccountPurchase();
+        $accountPurchase->setGlobalOption($entity->getHospitalConfig()->getGlobalOption());
+        $accountPurchase->setHmsPurchase($entity);
+        $accountPurchase->setHmsVendor($entity->getVendor());
+        $accountPurchase->setTransactionMethod($entity->getTransactionMethod());
+        $accountPurchase->setPurchaseAmount($entity->getNetTotal());
+        $accountPurchase->setPayment($entity->getPayment());
+        $accountPurchase->setProcessHead('Purchase');
+        $accountPurchase->setReceiveDate($entity->getReceiveDate());
+        $accountPurchase->setBalance(($balance + $entity->getNetTotal()) - $accountPurchase->getPayment() );
+        $accountPurchase->setProcess('approved');
+        $accountPurchase->setApprovedBy($entity->getApprovedBy());
+        $em->persist($accountPurchase);
+        $em->flush();
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+        return $accountPurchase;
+
+    }
+
 
     public function removeApprovedAccountPurchase(Purchase $purchase)
     {

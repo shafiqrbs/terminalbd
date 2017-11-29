@@ -218,6 +218,10 @@ class PurchaseController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
         if ($editForm->isValid()) {
+            $data = $request->request->all();
+            $deliveryDateTime = $data['appstore_bundle_hospitalbundle_hmspurchase']['receiveDate'];
+            $receiveDate = (new \DateTime($deliveryDateTime));
+            $entity->setReceiveDate($receiveDate);
             $entity->setProcess('Done');
             $entity->setDue($entity->getNetTotal() - $entity->getPayment());
             $em->flush();
@@ -250,16 +254,17 @@ class PurchaseController extends Controller
         ));
     }
 
-    public function approvedAction(HmsPurchase $entity)
+    public function approvedAction(HmsPurchase $purchase)
     {
-
         $em = $this->getDoctrine()->getManager();
-        if (!empty($entity)) {
+        if (!empty($purchase)) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setProcess('Approved');
-            $entity->setApprovedBy($this->getUser());
+            $purchase->setProcess('Approved');
+            $purchase->setApprovedBy($this->getUser());
             $em->flush();
-            $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getPurchaseUpdateQnt($entity);
+            $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getPurchaseUpdateQnt($purchase);
+            $accountPurchase = $em->getRepository('AccountingBundle:AccountPurchase')->insertHmsAccountPurchase($purchase);
+            $em->getRepository('AccountingBundle:Transaction')->purchaseGlobalTransaction($accountPurchase);
             return new Response('success');
         } else {
             return new Response('failed');

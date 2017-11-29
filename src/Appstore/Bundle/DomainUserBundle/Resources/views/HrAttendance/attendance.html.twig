@@ -70,7 +70,7 @@
                                             {% else %}
                                                 <td class="numeric"  >
                                                     <div class="row-fluid pull-center">
-                                                        <input {% if today != i %} disabled="disabled" {% endif %} type="checkbox" id="{{ i }}" class="attendance" data-url="{{ path('domain_hr_attendance_add',{'user':user.id}) }}" value="1" >
+                                                        <input {% if today != i %} disabled="disabled" {% endif %} type="checkbox" id="{{ i }}" class="attendance" data-url="{{ path('domain_hr_attendance_add',{'user':user.id}) }}" value="{{ i }}" >
                                                     </div>
                                                 </td>
                                             {% endif %}

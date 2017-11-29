@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\AccountingBundle\Entity;
 
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
+use Appstore\Bundle\HospitalBundle\Entity\HmsVendor;
 use Appstore\Bundle\InventoryBundle\Entity\Purchase;
 use Appstore\Bundle\InventoryBundle\Entity\PurchaseReturn;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,16 +27,9 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          */
         private $id;
 
-
-        /**
-         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="accountPurchase" )
-         **/
-        private  $inventoryConfig;
-
         /**
          * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="accountPurchase")
          **/
-
         protected $globalOption;
 
 
@@ -51,9 +45,15 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         private  $purchase;
 
         /**
-         * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsPurchase", inversedBy="accountPurchase" , cascade={"detach","merge"} )
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsPurchase", inversedBy="accountPurchase" )
+         * @ORM\JoinColumn(name="hmsPurchase_id", referencedColumnName="id", nullable=true, onDelete="cascade")
          **/
         private  $hmsPurchase;
+
+        /**
+         * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsVendor", inversedBy="accountPurchase" )
+         **/
+        private  $hmsVendor;
 
         /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="accountPurchases" )
@@ -108,7 +108,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
          * @ORM\Column(name="payment", type="float", nullable=true)
          */
         private $payment;
-
 
         /**
          * @var float
@@ -231,23 +230,6 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         {
             $this->updated = $updated;
         }
-
-        /**
-         * @return mixed
-         */
-        public function getInventoryConfig()
-        {
-            return $this->inventoryConfig;
-        }
-
-        /**
-         * @param mixed $inventoryConfig
-         */
-        public function setInventoryConfig($inventoryConfig)
-        {
-            $this->inventoryConfig = $inventoryConfig;
-        }
-
 
 
         /**
@@ -622,6 +604,31 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
         public function getHmsPurchase()
         {
             return $this->hmsPurchase;
+        }
+
+        /**
+         * @param mixed $hmsPurchase
+         */
+        public function setHmsPurchase($hmsPurchase)
+        {
+            $this->hmsPurchase = $hmsPurchase;
+        }
+
+
+        /**
+         * @return HmsVendor
+         */
+        public function getHmsVendor()
+        {
+            return $this->hmsVendor;
+        }
+
+        /**
+         * @param HmsVendor $hmsVendor
+         */
+        public function setHmsVendor($hmsVendor)
+        {
+            $this->hmsVendor = $hmsVendor;
         }
 
     }

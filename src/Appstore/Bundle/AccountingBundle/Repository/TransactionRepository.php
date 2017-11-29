@@ -578,7 +578,6 @@ class TransactionRepository extends EntityRepository
 
     }
 
-
     private function insertOnlineOrderItem($entity , AccountOnlineOrder $onlineOrder)
     {
 
@@ -695,7 +694,6 @@ class TransactionRepository extends EntityRepository
 
     }
 
-
     public function insertAccountSalesTransaction(AccountSales $entity){
 
         $this->insertAccountSalesDebitTransaction($entity);
@@ -754,7 +752,6 @@ class TransactionRepository extends EntityRepository
         $this->_em->persist($transaction);
         $this->_em->flush();
     }
-
 
     public function insertPettyCashTransaction($entity){
 
@@ -1086,6 +1083,92 @@ class TransactionRepository extends EntityRepository
         }
 
     }
+
+
+    public function purchaseGlobalTransaction($accountPurchase,$source='')
+    {
+        $this->insertGlobalInventoryAsset($accountPurchase);
+        $this->insertGlobalPurchaseCash($accountPurchase);
+        $this->insertGlobalPurchaseAccountPayable($accountPurchase);
+    }
+
+    private function insertGlobalInventoryAsset(AccountPurchase $accountPurchase)
+    {
+
+        $amount = $accountPurchase->getPurchaseAmount();
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($accountPurchase->getGlobalOption());
+        $transaction->setProcessHead('Purchase');
+        $transaction->setProcess('Inventory Assets');
+        $transaction->setAccountRefNo($accountPurchase->getAccountRefNo());
+        $transaction->setUpdated($accountPurchase->getUpdated());
+        /* Inventory Assets - Purchase Goods Received account */
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(6));
+        $transaction->setAmount($amount);
+        $transaction->setDebit($amount);
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+
+
+    }
+
+    private function insertGlobalPurchaseCash(AccountPurchase $accountPurchase)
+    {
+
+        $amount = $accountPurchase->getPayment();
+        if($amount > 0) {
+
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountPurchase->getGlobalOption());
+            $transaction->setProcessHead('Purchase');
+            $transaction->setProcess('Cash');
+            $transaction->setAccountRefNo($accountPurchase->getAccountRefNo());
+            $transaction->setUpdated($accountPurchase->getUpdated());
+
+            /* Cash - Cash various */
+
+            if($accountPurchase->getTransactionMethod()->getId() == 2 ){
+                /* Current Asset Bank Cash Credit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(38));
+                $transaction->setProcess('Current Assets');
+            }elseif($accountPurchase->getTransactionMethod()->getId() == 3 ){
+                /* Current Asset Mobile Account Credit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(45));
+                $transaction->setProcess('Current Assets');
+            }else{
+                /* Cash - Purchase Goods Payment Account */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
+                $transaction->setProcess('Cash');
+            }
+
+            $transaction->setAmount('-' . $amount);
+            $transaction->setCredit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+
+        }
+    }
+
+    private function insertGlobalPurchaseAccountPayable(AccountPurchase $accountPurchase)
+    {
+
+        $amount = ($accountPurchase->getPurchaseAmount() - $accountPurchase->getPayment());
+        if($amount > 0){
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountPurchase->getGlobalOption());
+            $transaction->setProcessHead('Purchase');
+            $transaction->setProcess('Current Liabilities');
+            $transaction->setAccountRefNo($accountPurchase->getAccountRefNo());
+            $transaction->setUpdated($accountPurchase->getUpdated());
+            /* Current Liabilities-Purchase Account payable */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(13));
+            $transaction->setAmount('-'.$amount);
+            $transaction->setCredit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+        }
+    }
+
 
 
     /** =========================== HOSPITAL MANAGEMENT SYSTEM  =========================== */

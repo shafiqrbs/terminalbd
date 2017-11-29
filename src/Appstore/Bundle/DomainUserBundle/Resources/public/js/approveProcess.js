@@ -26,12 +26,13 @@ var table = $('#attendance').DataTable( {
 $(document).on("click", ".attendance", function() {
 
     var url = $(this).attr('data-url');
+    alert(url);
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                location.reload();
+                alert('test');
             });
         }
     });

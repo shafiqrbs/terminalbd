@@ -1,11 +1,14 @@
 accounting_account_sales_hospital:
-    resource: "@AccountingBundle/Resources/config/routing/accountsaleshospital.yml"
-    prefix:   /finance/hms-sales
-
+    resource: "@AccountingBundle/Resources/config/routing/accounthospital.yml"
+    prefix:   /finance/hms
 
 accounting_report:
     resource: "@AccountingBundle/Resources/config/routing/accountreport.yml"
     prefix:   /finance/report
+
+accounting_hms_report:
+    resource: "@AccountingBundle/Resources/config/routing/hmsaccountreport.yml"
+    prefix:   /finance/report-hms
 
 accounting_expensecategory:
     resource: "@AccountingBundle/Resources/config/routing/expensecategory.yml"

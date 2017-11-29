@@ -66,11 +66,6 @@ class InventoryConfig
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Purchase", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
-     */
-    protected $purchases;
-
-    /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PurchaseVendorItem", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
      */
     protected $purchaseVendorItems;

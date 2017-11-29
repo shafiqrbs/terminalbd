@@ -32,10 +32,10 @@
                             <div class="btn-group">
                                 {% set startDate = searchForm.startDate is defined ? searchForm.startDate :'' %}
                                 {% set endDate = searchForm.endDate is defined ? searchForm.endDate :'' %}
-                                <a class="btn purple" target="_blank" href="{{ path('report_income_pdf',{'startDate':startDate,'endDate':endDate,}) }}" >
+                                <a class="btn purple" target="_blank" href="{{ path('hms_report_income_pdf',{'startDate':startDate,'endDate':endDate,}) }}" >
                                     <i class=" icon-download"></i>&nbsp;PDF
                                 </a>
-                                <a class="btn blue"  href="{{ path('report_income_print',{'startDate':startDate,'endDate':endDate,}) }}" >
+                                <a class="btn blue"  href="{{ path('hms_report_income_print',{'startDate':startDate,'endDate':endDate,}) }}" >
                                     <i class=" icon-print"></i>&nbsp;Print
                                 </a>
                             </div>

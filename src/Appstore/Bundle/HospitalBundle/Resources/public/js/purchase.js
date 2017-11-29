@@ -1,16 +1,28 @@
 /**
  * Created by rbs on 5/1/17.
  */
+$( ".date-picker" ).datepicker({
+    dateFormat: "dd-mm-yy"
+});
+
+$( ".dateCalendar" ).datepicker({
+    dateFormat: "dd-mm-yy",
+    changeMonth: true,
+    changeYear: true,
+    yearRange: "-100:+0",
+});
+
 $(document).on("click", ".approve", function() {
-    $(this).removeClass('approve');
-    var url = $(this).attr("data-url");
-    $.ajax({
-        url: url,
-        type: 'GET',
-        success: function (response) {
-            location.reload();
-        },
-    })
+    var url = $(this).attr('data-url');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                $(this).hide();
+            });
+        }
+    });
 });
 
 $(document).on('change', '.transactionMethod', function() {

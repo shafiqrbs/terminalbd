@@ -1,4 +1,0 @@
-account_sales_hospital:
-    path:     /
-    defaults: { _controller: "AccountingBundle:AccountSalesHospital:index" }
-

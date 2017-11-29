@@ -3,8 +3,14 @@ function AccountingApproveProcess(){
     $( ".date-picker" ).datepicker({
         dateFormat: "dd-mm-yy",
         changeMonth: true,
+        changeYear: true
+    });
+
+    $( ".datePicker" ).datepicker({
+        dateFormat: "dd-mm-yy",
+        changeMonth: true,
         changeYear: true,
-        yearRange: "-100:+0"
+        yearRange: "-10:+0"
     });
 
     $( ".dateCalendar" ).datepicker({
@@ -47,43 +53,13 @@ function AccountingApproveProcess(){
             top: '25%',
             onOkBut: function(event, el) {
                 $.get(url, function( data ) {
+                    $('#approve'+id).hide();
+                    $('delete'+id).hide();
                     location.reload();
                 });
             }
         });
 
-    });
-
-
-
-    $(".approvex").confirm({
-
-        text: "Are you sure you want to approve this operation?",
-        title: "Confirmation required",
-        confirm: function(button) {
-
-            $(this).removeClass('approve');
-            var id = $(this).attr("data-id");
-            var url = $(this).attr("data-url");
-            $('#action-'+id).hide();
-            $('#delete-'+id).hide();
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function (response) {
-                    location.reload();
-                },
-            })
-        },
-        cancel: function(button) {
-            // nothing to do
-        },
-        confirmButton: "Yes I am",
-        cancelButton: "No",
-        post: true,
-        confirmButtonClass: "btn-danger",
-        cancelButtonClass: "btn-default",
-        dialogClass: "modal-dialog modal-lg" // Bootstrap classes for large modal
     });
 
     $(".select2User").select2({
@@ -155,6 +131,44 @@ function AccountingApproveProcess(){
         initSelection: function (element, callback) {
             var id = $(element).val();
             $.ajax(Routing.generate('inventory_vendor_name', { vendor : id}), {
+                dataType: "json"
+            }).done(function (data) {
+                return  callback(data);
+            });
+        },
+        allowClear: true,
+        minimumInputLength: 1
+
+    });
+
+    $(".select2HmsVendor").select2({
+
+        placeholder: "Search vendor name",
+        ajax: {
+            url: Routing.generate('hms_vendor_search'),
+            dataType: 'json',
+            delay: 250,
+            data: function (params, page) {
+                return {
+                    q: params,
+                    page_limit: 100
+                };
+            },
+            results: function (data, page) {
+                return {
+                    results: data
+                };
+            },
+            cache: true
+        },
+        escapeMarkup: function (m) {
+            return m;
+        },
+        formatResult: function (item) { return item.text}, // omitted for brevity, see the source of this page
+        formatSelection: function (item) { return item.text }, // omitted for brevity, see the source of this page
+        initSelection: function (element, callback) {
+            var id = $(element).val();
+            $.ajax(Routing.generate('hms_vendor_name', { vendor : id}), {
                 dataType: "json"
             }).done(function (data) {
                 return  callback(data);

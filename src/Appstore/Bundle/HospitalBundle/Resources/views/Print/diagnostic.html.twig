@@ -1,5 +1,6 @@
 {% extends '::print.html.twig' %}
 {% block body %}
+ <script> window.print(); </script>
     <div style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px;margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;">
         {%  if entity.hospitalConfig.isPrintHeader == 1 %}
             <table class="table">
@@ -117,7 +118,6 @@
                 </tfoot>
             </table>
         {% endif %}
-        <script> window.print(); </script>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

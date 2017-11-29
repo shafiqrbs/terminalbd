@@ -253,13 +253,13 @@ class InvoiceController extends Controller
 
             }
             $deliveryDateTime = $request->request->get('deliveryDateTime');
-            $datetime = (new \DateTime("now"))->format('d-m-Y h:i A');
+            $datetime = (new \DateTime("tomorrow"))->format('d-m-Y 7:30');
             $datetime = empty($deliveryDateTime) ? $datetime : $deliveryDateTime ;
+            $entity->setDeliveryDateTime($datetime);
+
             if($entity->getTotal() > 0){
                 $entity->setProcess('In-progress');
             }
-
-            $entity->setDeliveryDateTime($datetime);
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
 
@@ -519,6 +519,26 @@ class InvoiceController extends Controller
 
     public function invoicePrintAction(Invoice $entity)
     {
+
+/*
+        if(isset($_POST['order'])){
+            $print_output= $_POST['order'];
+        }
+        try
+        {
+            $fp=pfsockopen("192.168.1.33", 9100);
+            fputs($fp, $print_output);
+            fclose($fp);
+
+            echo 'Successfully Printed';
+        }
+        catch (Exception $e)
+        {
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        }
+        exit;
+
+*/
 
         $em = $this->getDoctrine()->getManager();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();

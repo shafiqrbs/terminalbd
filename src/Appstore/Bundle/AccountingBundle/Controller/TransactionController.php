@@ -79,17 +79,18 @@ class TransactionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-
+        $transactionMethods = array(1,4);
         $globalOption = $this->getUser()->getGlobalOption();
-        $overviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionCashOverview( $this->getUser(),$data);
+        $transactionCashOverview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionWiseOverview( $this->getUser(),$data);
         $transactionBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBankCashOverview( $this->getUser(),$data);
-        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionBkashCashOverview( $this->getUser(),$data);
+        $transactionMobileBankCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionMobileBankCashOverview( $this->getUser(),$data);
         $transactionAccountHeadCashOverviews = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->transactionAccountHeadCashOverview( $this->getUser(),$data);
         return $this->render('AccountingBundle:Transaction:cashoverview.html.twig', array(
-            'overviews'                             => $overviews,
+            'transactionCashOverviews'               => $transactionCashOverview,
             'transactionBankCashOverviews'          => $transactionBankCashOverviews,
-            'transactionBkashCashOverviews'         => $transactionMobileBankCashOverviews,
+            'transactionMobileBankCashOverviews'    => $transactionMobileBankCashOverviews,
             'transactionAccountHeadCashOverviews'   => $transactionAccountHeadCashOverviews,
+            'searchForm' => $data,
         ));
 
     }
@@ -102,13 +103,11 @@ class TransactionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-
         $user = $this->getUser();
         $transactionMethods = array(1,4);
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
         $pagination = $this->paginate($entities);
-
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->accountCashOverview($user,$transactionMethods,$data);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
         $processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
         return $this->render('AccountingBundle:Transaction:cash.html.twig', array(
             'entities' => $pagination,
@@ -133,7 +132,7 @@ class TransactionController extends Controller
         $transactionMethods = array(2);
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
         $pagination = $this->paginate($entities);
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->accountCashOverview($user,$transactionMethods,$data);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
         $processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
         $accountBanks = $this->getDoctrine()->getRepository('AccountingBundle:AccountBank')->findBy(array('globalOption'=>$globalOption,'status'=>1));
 
@@ -160,7 +159,7 @@ class TransactionController extends Controller
         $transactionMethods = array(3);
         $entities = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->findWithSearch($user,$transactionMethods,$data);
         $pagination = $this->paginate($entities);
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->accountCashOverview($user,$transactionMethods,$data);
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->cashOverview($user,$transactionMethods,$data);
         $processHeads = $this->getDoctrine()->getRepository('AccountingBundle:ProcessHead')->findBy(array('status'=>1));
         $accountMobileBanks = $this->getDoctrine()->getRepository('AccountingBundle:AccountMobileBank')->findBy(array('globalOption' => $globalOption,'status'=>1));
         return $this->render('AccountingBundle:Transaction:mobilebank.html.twig', array(

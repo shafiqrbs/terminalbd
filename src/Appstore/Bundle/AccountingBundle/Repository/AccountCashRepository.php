@@ -1,6 +1,7 @@
 <?php
 
 namespace Appstore\Bundle\AccountingBundle\Repository;
+use Appstore\Bundle\AccountingBundle\Entity\AccountBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountJournal;
 use Appstore\Bundle\AccountingBundle\Entity\AccountOnlineOrder;
@@ -27,24 +28,141 @@ use Doctrine\ORM\EntityRepository;
 class AccountCashRepository extends EntityRepository
 {
 
-    public function transactionCashOverview(User $user,$data = '')
-    {
-
+    public function openingBalance(User $user,$transactionMethods = array(), $data = array()){
 
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
+        if(isset($data['startDate'])){
+            $date = new \DateTime($data['startDate']);
+        }else{
+            $date = new \DateTime();
+        }
+        $date->add(\DateInterval::createFromDateString('yesterday'));
+        $tillDate = $date->format('Y-m-d 23:59:59');
+        $accountBank =    isset($data['accountBank'])? $data['accountBank'] :'';
+        $accountMobileBank =    isset($data['accountMobileBank'])? $data['accountMobileBank'] :'';
 
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.transactionMethod','transactionMethod');
-        $qb->select('transactionMethod.name , SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->join('e.transactionMethod','t');
+        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
         if (!empty($branch)){
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
         }
+        if(!empty($transactionMethods)){
+            $qb->andWhere("t.id IN(:transactionMethod)");
+            $qb->setParameter('transactionMethod',array_values($transactionMethods));
+        }
+        if (!empty($accountBank)) {
+            $qb->andWhere("e.accountBank = :accountBank");
+            $qb->setParameter('accountBank', $accountBank);
+        }
+
+        if (!empty($accountMobileBank)) {
+            $qb->andWhere("e.accountMobileBank = :accountMobileBank");
+            $qb->setParameter('accountMobileBank', $accountMobileBank);
+        }
+
+        $qb->andWhere("e.updated <= :updated");
+        $qb->setParameter('updated', $tillDate);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $openingBalance = ( $result['debit'] - $result['credit']);
+        return $openingBalance;
+    }
+
+    public function openingBalanceGroup(User $user,$transactionMethods,$data){
+
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+        if(isset($data['startDate'])){
+            $date = new \DateTime($data['startDate']);
+        }else{
+            $date = new \DateTime();
+        }
+        $date->add(\DateInterval::createFromDateString('yesterday'));
+        $tillDate = $date->format('Y-m-d 23:59:59');
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.transactionMethod','t');
+        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        if (!empty($branch)){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $qb->andWhere("t.id IN(:transactionMethod)");
+        $qb->setParameter('transactionMethod',array_values($transactionMethods));
+        $qb->andWhere("e.updated <= :updated");
+        $qb->setParameter('updated', $tillDate);
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $openingBalance = ( $result['debit'] - $result['credit']);
+        return $openingBalance;
+    }
+
+    public function cashOverview(User $user,$transactionMethods,$data)
+    {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.transactionMethod','t');
+        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        if (!empty($branch)){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        $qb->andWhere("t.id IN(:transactionMethod)");
+        $qb->setParameter('transactionMethod',array_values($transactionMethods));
         $this->handleSearchBetween($qb,$data);
-        $qb->groupBy("e.transactionMethod");
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $openingBalance = $this->openingBalance($user,$transactionMethods,$data);
+        $data =  array('openingBalance'=> $openingBalance , 'debit'=> $result['debit'],'credit'=> $result['credit']);
+        return $data;
+
+    }
+
+    public function transactionWiseOverview(User $user,$data)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('SettingToolBundle:TransactionMethod','e');
+        $qb->addSelect('e.name AS transactionName');
+        $qb->addSelect('e.id AS transactionId');
+        $result = $qb->getQuery()->getArrayResult();
+        $openingBalances = array();
+        $transactionBalances = array();
+        foreach($result as $row) {
+            $transactionBalances[$row['transactionId']]     = $this->transactionCashOverview($user,$row['transactionId'],$data);
+            $openingBalances[$row['transactionId']]         = $this->openingBalance($user,array($row['transactionId']),$data);
+        }
+        $data =  array('result'=>$result,'openingBalance' => $openingBalances , 'transactionBalances'=> $transactionBalances);
+        return $data;
+    }
+
+    public function transactionCashOverview(User $user,$method,$data)
+    {
+        $globalOption = $user->getGlobalOption();
+        $branch = $user->getProfile()->getBranches();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.transactionMethod = :transactionMethod");
+        $qb->setParameter('transactionMethod',$method);
+
+        if (!empty($branch)){
+            $qb->andWhere("e.branches = :branch");
+            $qb->setParameter('branch', $branch);
+        }
+        if(!empty($method)){
+            $qb->andWhere("e.transactionMethod = :transactionMethod");
+            $qb->setParameter('transactionMethod',$method);
+        }
+        $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getArrayResult();
         return $result;
 
@@ -56,41 +174,54 @@ class AccountCashRepository extends EntityRepository
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
 
-        $qb = $this->createQueryBuilder('e');
-        $qb->join('e.accountBank','accountBank');
-        $qb->select('accountBank.name , SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('AccountingBundle:AccountBank','accountBank');
+        $qb->leftJoin('accountBank.accountCashes','e');
+        $qb->select('accountBank.id AS accountId ,accountBank.name AS bankName , SUM(e.debit) AS debit, SUM(e.credit) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.transactionMethod = :transactionMethod");
+        $qb->setParameter('transactionMethod',2);
         if (!empty($branch)){
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
         }
         $this->handleSearchBetween($qb,$data);
-        $qb->groupBy("e.accountBank");
         $result = $qb->getQuery()->getArrayResult();
-        return $result;
-
+        $openingBalances = array();
+        foreach($result as $row) {
+            $openingBalances[$row['accountId']] = $this->openingBalance($user,array(2),array('accountBank'=> $row['accountId']));
+        }
+        $data =  array('openingBalance' => $openingBalances , 'result'=> $result);
+        return $data;
     }
 
-    public function transactionBkashCashOverview(User $user ,$data = '')
+    public function transactionMobileBankCashOverview(User $user ,$data = '')
     {
 
         $globalOption = $user->getGlobalOption();
         $branch = $user->getProfile()->getBranches();
 
-        $qb = $this->createQueryBuilder('e');
-        $qb->join('e.accountMobileBank','accountMobileBank');
-        $qb->select('accountMobileBank.name , SUM(e.debit) AS debit, SUM(e.credit) AS credit');
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('AccountingBundle:AccountMobileBank','accountMobileBank');
+        $qb->leftJoin('accountMobileBank.accountCashes','e');
+        $qb->select('accountMobileBank.id AS accountId , accountMobileBank.name AS mobileBankName , SUM(e.debit) AS debit, SUM(e.credit) AS credit');
         $qb->where("e.globalOption = :globalOption");
         $qb->setParameter('globalOption', $globalOption);
+        $qb->andWhere("e.transactionMethod = :transactionMethod");
+        $qb->setParameter('transactionMethod',3);
         if (!empty($branch)){
             $qb->andWhere("e.branches = :branch");
             $qb->setParameter('branch', $branch);
         }
-        $this->handleSearchBetween($qb,$data);
-        $qb->groupBy("e.accountMobileBank");
+       // $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getArrayResult();
-        return $result;
+        $openingBalances = array();
+        foreach($result as $row) {
+            $openingBalances[$row['accountId']] = $this->openingBalance($user,array(3),array('accountMobileBank'=> $row['accountId']));
+        }
+        $data =  array('openingBalance' => $openingBalances , 'result'=> $result);
+        return $data;
 
     }
 
@@ -137,29 +268,7 @@ class AccountCashRepository extends EntityRepository
         return $result;
 
     }
-    public function accountCashOverview(User $user,$transactionMethods,$data)
-    {
-        $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
 
-        $qb = $this->createQueryBuilder('e');
-        $qb->join('e.transactionMethod','t');
-        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
-        $qb->andWhere("t.id IN(:transactionMethod)");
-        $qb->setParameter('transactionMethod',array_values($transactionMethods));
-        $this->handleSearchBetween($qb,$data);
-        $result = $qb->getQuery()->getOneOrNullResult();
-        $openingBalance = $this->openingBalance($user,$transactionMethods,$data);
-        $data =  array('openingBalance'=> $openingBalance , 'debit'=> $result['debit'],'credit'=> $result['credit']);
-        return $data;
-
-    }
 
     /**
      * @param $qb
@@ -180,7 +289,6 @@ class AccountCashRepository extends EntityRepository
             $qb->setParameter('process', $process);
         }
         if (!empty($accountRefNo)) {
-
             $qb->andWhere("e.accountRefNo = :accountRefNo");
             $qb->setParameter('accountRefNo', $accountRefNo);
         }
@@ -215,35 +323,6 @@ class AccountCashRepository extends EntityRepository
 
     }
 
-    public function openingBalance(User $user,$transactionMethods,$data){
-
-        $globalOption = $user->getGlobalOption();
-        $branch = $user->getProfile()->getBranches();
-        if(isset($data['startDate'])){
-            $date = new \DateTime($data['startDate']);
-        }else{
-            $date = new \DateTime();
-        }
-        $date->add(\DateInterval::createFromDateString('yesterday'));
-        $tillDate = $date->format('Y-m-d 23:59:59');
-
-        $qb = $this->createQueryBuilder('e');
-        $qb->join('e.transactionMethod','t');
-        $qb->select('SUM(e.debit) AS debit, SUM(e.credit) AS credit');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $globalOption);
-        if (!empty($branch)){
-            $qb->andWhere("e.branches = :branch");
-            $qb->setParameter('branch', $branch);
-        }
-        $qb->andWhere("t.id IN(:transactionMethod)");
-        $qb->setParameter('transactionMethod',array_values($transactionMethods));
-        $qb->andWhere("e.updated <= :updated");
-        $qb->setParameter('updated', $tillDate);
-        $result = $qb->getQuery()->getOneOrNullResult();
-        $openingBalance = ( $result['debit'] - $result['credit']);
-        return $openingBalance;
-    }
 
     public function lastInsertCash($entity,$processHead)
     {
@@ -523,7 +602,6 @@ class AccountCashRepository extends EntityRepository
         $em->flush();
 
     }
-
 
     public function insertSalaryCash(PaymentSalary $entity)
     {

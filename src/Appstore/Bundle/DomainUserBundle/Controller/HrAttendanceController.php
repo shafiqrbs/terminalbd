@@ -203,14 +203,27 @@ class HrAttendanceController extends Controller
     }
 
 
-    public function addAttendance(User $user)
+    public function addAttendanceAction(User $user)
     {
-
+        $em = $this->getDoctrine()->getManager();
         $datetime = new \DateTime("now");
         $today  = $datetime->format('d');
         $month  = $datetime->format('m');
         $year   = $datetime->format('y');
         $this->getDoctrine()->getRepository('DomainUserBundle:HrAttendanceMonth')->findOneBy(array('user' => $user));
+
+        $entity = New HrAttendanceMonth();
+        $entity->setUser($user);
+        $entity->setGlobalOption($user->getGlobalOption());
+        $entity->setPresent(true);
+        $entity->setIn(true);
+        $entity->setOut(true);
+        $entity->setMonth($month);
+        $entity->setYear($year);
+        $em->persist($entity);
+        $em->flush();
+        exit;
+
     }
 
 
