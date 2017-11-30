@@ -215,15 +215,20 @@ $(document).on("click", ".particularDelete", function() {
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
                 obj = JSON.parse(data);
-                $('.total').html(obj['total']);
+                $('.subTotal').html(obj['subTotal']);
+                $('.netTotal').html(obj['netTotal']);
+                $('.due').html(obj['due']);
+                $('.discountAmount').html(obj['discount']);
+                $('.discount').val('').attr( "placeholder", obj['discount'] );
                 $('.total'+id).html(obj['total']);
+                $('#msg').html(obj['msg']);
                 $('#remove-'+id).hide();
             });
         }
     });
 });
 
-$(document).on("click", ".delete", function() {
+$(document).on("click", ".particularDelete1", function() {
 
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");
@@ -232,7 +237,6 @@ $(document).on("click", ".delete", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                $('#remove-'+id).hide();
                 obj = JSON.parse(data);
                 $('.subTotal').html(obj['subTotal']);
                 $('.netTotal').html(obj['netTotal']);
@@ -247,6 +251,7 @@ $(document).on("click", ".delete", function() {
                 $('#invoiceTransaction').html(obj['invoiceTransaction']);
                 $('.msg-hidden').show();
                 $('#msg').html(obj['msg']);
+                $('#remove-'+id).hide();
             });
         }
     });

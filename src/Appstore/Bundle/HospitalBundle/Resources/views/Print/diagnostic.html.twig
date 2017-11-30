@@ -41,10 +41,13 @@
                         {% if entity.customer is not empty %}<li><strong>Name:</strong>&nbsp;{{ entity.customer.name }}</li>{% endif %}
                         {% if entity.customer is not empty %}<li><strong>Mobile No:</strong>&nbsp;{{ entity.customer.mobile }}</li>{% endif %}
                         {% if entity.customer is not empty %}<li><strong>Gender:</strong>&nbsp;{{ entity.customer.gender }}, &nbsp;{{ entity.customer.age }}&nbsp;{{ entity.customer.ageType }}</li>{% endif %}
+                        {% if entity.customer is not empty and entity.customer.location is not empty   %}<li><strong>Location:</strong>&nbsp;{{ entity.customer.location.name }}, {{ entity.customer.location.parent.name }}</li>{% endif %}
+
                     </ul>
                 </td>
                 <td class="pull-right">
                     <ul class="unstyled">
+                        <li><strong>Invoice: </strong>&nbsp;<strong>{{ entity.invoice }}</strong></li>
                         <li><strong>Created: </strong>&nbsp;<strong>{{ entity.created|date('d-m-Y h:m A') }}</strong></li>
                         {% if entity.transactionMethod is not empty %}<li><strong>Method: </strong>&nbsp;{{ entity.transactionMethod.name }}</li>{% endif %}
                         {% if entity.paymentMobile is not empty %}<li><strong><i class="icon-money"></i></strong>&nbsp;{{ entity.paymentMobile }}/{{ entity.transactionId }}</li>{% endif %}

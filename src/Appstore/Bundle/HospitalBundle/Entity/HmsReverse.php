@@ -28,6 +28,12 @@ class HmsReverse
     protected $hospitalConfig;
 
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="hmsReverse")
+     */
+    protected $hmsInvoice;
+
+
+    /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsReverse" )
      **/
@@ -204,6 +210,21 @@ class HmsReverse
         $this->updated = $updated;
     }
 
+    /**
+     * @return Invoice
+     */
+    public function getHmsInvoice()
+    {
+        return $this->hmsInvoice;
+    }
+
+    /**
+     * @param Invoice $hmsInvoice
+     */
+    public function setHmsInvoice($hmsInvoice)
+    {
+        $this->hmsInvoice = $hmsInvoice;
+    }
 
 
 }

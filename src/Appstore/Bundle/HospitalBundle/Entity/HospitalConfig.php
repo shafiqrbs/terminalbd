@@ -88,6 +88,20 @@ class HospitalConfig
     private $vatPercentage;
 
     /**
+     * @var smallint
+     *
+     * @ORM\Column(name="fontSizeLabel", type="smallint",  nullable=true)
+     */
+    private $fontSizeLabel;
+
+    /**
+     * @var smallint
+     *
+     * @ORM\Column(name="fontSizeValue", type="smallint",  nullable=true)
+     */
+    private $fontSizeValue;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="vatRegNo", type="string",  nullable=true)
@@ -969,6 +983,38 @@ class HospitalConfig
     public function setPrintMarginReportLeft($printMarginReportLeft)
     {
         $this->printMarginReportLeft = $printMarginReportLeft;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getFontSizeLabel()
+    {
+        return $this->fontSizeLabel;
+    }
+
+    /**
+     * @param smallint $fontSizeLabel
+     */
+    public function setFontSizeLabel($fontSizeLabel)
+    {
+        $this->fontSizeLabel = $fontSizeLabel;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getFontSizeValue()
+    {
+        return $this->fontSizeValue;
+    }
+
+    /**
+     * @param smallint $fontSizeValue
+     */
+    public function setFontSizeValue($fontSizeValue)
+    {
+        $this->fontSizeValue = $fontSizeValue;
     }
 
 

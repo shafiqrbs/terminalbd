@@ -30,6 +30,7 @@ class AdmissionPatientParticular
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction", inversedBy="admissionPatientParticulars")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $invoiceTransaction;
 

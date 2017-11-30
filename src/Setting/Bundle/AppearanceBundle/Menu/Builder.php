@@ -754,10 +754,10 @@ class Builder extends ContainerAware
             }
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_LAB') || $securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_DOCTOR')) {
-            $menu['Hospital & Diagnostic']->addChild('Patient Report')
+            $menu['Hospital & Diagnostic']->addChild('Diagnostic Report')
                 ->setAttribute('icon', 'fa fa-stethoscope')
                 ->setAttribute('dropdown', true);
-            $menu['Hospital & Diagnostic']['Patient Report']->addChild('Collection & Process', array('route' => 'hms_invoice_particular'))
+            $menu['Hospital & Diagnostic']['Diagnostic Report']->addChild('Collection & Process', array('route' => 'hms_invoice_particular'))
                 ->setAttribute('icon', 'fa fa-stethoscope');
         }
 

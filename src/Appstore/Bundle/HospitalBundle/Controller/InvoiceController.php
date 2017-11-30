@@ -441,18 +441,41 @@ class InvoiceController extends Controller
         exit;
     }
 
-    public function pathologicalInvoiceReverseAction(Invoice $entity){
+    public function pathologicalInvoiceReverseAction($invoice){
+
         $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findBy(array('hospitalConfig' => $hospital, 'invoice' => $invoice));
         $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsSalesTransactionReverse($entity);
         $em = $this->getDoctrine()->getManager();
         $entity->setRevised(true);
         $entity->setProcess('Revised');
         $em->flush();
-        $template = $this->get('twig')->render('HospitalBundle:Invoice:reverse.html.twig',array(
+        $template = $this->get('twig')->render('HospitalBundle:Reverse:reverse.html.twig',array(
             'entity' => $entity,
         ));
         $em->getRepository('HospitalBundle:HmsReverse')->insertInvoice($entity,$template);
         return $this->redirect($this->generateUrl('hms_invoice'));
+
+    }
+
+    public function invoiceReverseAction(Invoice $invoice)
+    {
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $this->getDoctrine()->getRepository('HospitalBundle:HmsReverse')->findOneBy(array('hospitalConfig' => $hospital, 'hmsInvoice' => $invoice));
+        return $this->render('HospitalBundle:Reverse:show.html.twig', array(
+            'entity' => $entity,
+        ));
+
+    }
+
+    public function invoiceReverseShowAction(Invoice $invoice)
+    {
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $this->getDoctrine()->getRepository('HospitalBundle:HmsReverse')->findOneBy(array('hospitalConfig' => $hospital, 'hmsInvoice' => $invoice));
+        return $this->render('HospitalBundle:Reverse:show.html.twig', array(
+            'entity' => $entity,
+        ));
 
     }
 
@@ -519,26 +542,6 @@ class InvoiceController extends Controller
 
     public function invoicePrintAction(Invoice $entity)
     {
-
-/*
-        if(isset($_POST['order'])){
-            $print_output= $_POST['order'];
-        }
-        try
-        {
-            $fp=pfsockopen("192.168.1.33", 9100);
-            fputs($fp, $print_output);
-            fclose($fp);
-
-            echo 'Successfully Printed';
-        }
-        catch (Exception $e)
-        {
-            echo 'Caught exception: ',  $e->getMessage(), "\n";
-        }
-        exit;
-
-*/
 
         $em = $this->getDoctrine()->getManager();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();

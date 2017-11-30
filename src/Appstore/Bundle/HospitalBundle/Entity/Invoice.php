@@ -67,13 +67,17 @@ class Invoice
      **/
     private  $admissionPatientParticulars;
 
-
     /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsReverse", mappedBy="hmsInvoice" )
+     **/
+    private  $hmsReverse;
+
+
+   /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="hmsInvoices" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $accountSales;
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="hmsInvoices" ,cascade={"persist"} )
@@ -1256,6 +1260,22 @@ class Invoice
     public function getAdmissionPatientParticulars()
     {
         return $this->admissionPatientParticulars;
+    }
+
+    /**
+     * @return HmsReverse
+     */
+    public function getHmsReverse()
+    {
+        return $this->hmsReverse;
+    }
+
+    /**
+     * @param HmsReverse $hmsReverse
+     */
+    public function setHmsReverse($hmsReverse)
+    {
+        $this->hmsReverse = $hmsReverse;
     }
 
 

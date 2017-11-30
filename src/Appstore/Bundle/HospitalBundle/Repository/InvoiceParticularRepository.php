@@ -108,7 +108,7 @@ class InvoiceParticularRepository extends EntityRepository
             $data .= '<td class="span2" >' . $entity->getSalesPrice() . '</td>';
             $data .= '<td class="span2" >' . $entity->getSubTotal() . '</td>';
             $data .= '<td class="span1" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/hms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
+            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/hms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
             </td>';
             $data .= '</tr>';
             $i++;
