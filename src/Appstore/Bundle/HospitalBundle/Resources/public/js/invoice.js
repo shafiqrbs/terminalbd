@@ -319,7 +319,6 @@ $('.particular-info').on('keypress', 'input', function (e) {
     }
 });
 
-
 $('form.horizontal-form').on('keypress', 'input', function (e) {
 
     if (e.which == 13) {

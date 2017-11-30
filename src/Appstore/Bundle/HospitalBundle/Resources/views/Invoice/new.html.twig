@@ -52,9 +52,12 @@
                     <div class="row-fluid customer-add">
                         <div class="span4">
                             <div class="control-group">
-                                <label class="control-label red" for="firstName"><span>Patient Code</span></label>
+                                <label class="control-label red" for="firstName"><span>Search Existing Customer Code</span></label>
                                 <div class="controls">
-                                    <input class="m-wrap span12 select2CustomerCode" id="customerId" name="customerId" value="{% if entity.customer is not empty %}{{ entity.customer.customerId }}{% endif %}">
+                                    <div class="input-icon left">
+                                        <i class="icon-search customer-search" style="margin-top:40px"></i>
+                                        <input type="text" id="customerId" name="customerId" class="m-wrap span12 select2CustomerCode" autocomplete="off" placeholder="Search existing customer code" value="{% if entity.customer is not empty %}{{ entity.customer.customerId }}{% endif %}">
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -153,9 +153,7 @@ class AdmissionPatientParticularController extends Controller
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($transaction->getHmsInvoice());
         $this->getDoctrine()->getRepository('HospitalBundle:Particular')->setAdmissionPatientUpdateQnt($transaction);
         return $this->redirect($this->generateUrl('hms_invoice_admission_confirm', array('id' => $transaction->getHmsInvoice()->getId())));
-
     }
-
 
     public function invoiceTransactionDeleteAction(InvoiceTransaction $transaction)
     {
@@ -168,19 +166,117 @@ class AdmissionPatientParticularController extends Controller
         exit;
     }
 
+    public function getBarcode($value)
+    {
+        $barcode = new BarcodeGenerator();
+        $barcode->setText($value);
+        $barcode->setType(BarcodeGenerator::Code39Extended);
+        $barcode->setScale(1);
+        $barcode->setThickness(25);
+        $barcode->setFontSize(8);
+        $code = $barcode->generate();
+        $data = '';
+        $data .= '<img src="data:image/png;base64,'.$code .'" />';
+        return $data;
+    }
+
+
     public function singleTransactionInvoicePrintAction($invoice, InvoiceTransaction $transaction)
     {
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital,'invoice' => $invoice));
+        $barcode = $this->getBarcode($entity->getInvoice());
+        $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
+        $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
 
+        $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
+
+        foreach ($transaction->getAdmissionPatientParticulars() as $item) {
+            /** @var InvoiceParticular $item */
+            $serviceName = $item->getParticular()->getService()->getName();
+            $hasQuantity = $item->getParticular()->getService()->getHasQuantity();
+
+            if(!isset($invoiceDetails[$serviceName])) {
+                $invoiceDetails[$serviceName]['items'] = [];
+                $invoiceDetails[$serviceName]['total'] = 0;
+                $invoiceDetails[$serviceName]['hasQuantity'] = ($hasQuantity == 1);
+            }
+
+            $invoiceDetails[$serviceName]['items'][] = $item;
+            $invoiceDetails[$serviceName]['total'] += $item->getSubTotal();
+        }
+
+        if(count($invoiceDetails['Pathology']['items']) == 0) {
+            unset($invoiceDetails['Pathology']);
+        }
+        $inWordTransaction = $this->get('settong.toolManageRepo')->intToWords($transaction->getPayment());
+
+        return $this->render('HospitalBundle:Print:payment.html.twig', array(
+            'entity'                => $entity,
+            'invoiceDetails'        => $invoiceDetails,
+            'invoiceBarcode'        => $barcode,
+            'patientBarcode'        => $patientId,
+            'inWords'               => $inWords,
+            'transaction'           => $transaction,
+            'inWordTransaction'     => $inWordTransaction,
+        ));
     }
 
     public function transactionInvoicePrintAction($invoice)
     {
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital,'invoice' => $invoice));
 
+        $barcode = $this->getBarcode($entity->getInvoice());
+        $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
+        $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+        return $this->render('HospitalBundle:Print:payments.html.twig', array(
+            'entity'                => $entity,
+            'invoiceBarcode'        => $barcode,
+            'patientBarcode'        => $patientId,
+            'inWords'               => $inWords,
+        ));
     }
 
     public function invoiceParticularPrintAction($invoice)
     {
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital,'invoice' => $invoice));
 
+        $barcode = $this->getBarcode($entity->getInvoice());
+        $patientId = $this->getBarcode($entity->getCustomer()->getCustomerId());
+        $inWords = $this->get('settong.toolManageRepo')->intToWords($entity->getPayment());
+
+        $invoiceDetails = ['Pathology' => ['items' => [], 'total'=> 0, 'hasQuantity' => false ]];
+
+        foreach ($entity->getInvoiceParticulars() as $item) {
+            /** @var InvoiceParticular $item */
+            $serviceName = $item->getParticular()->getService()->getName();
+            $hasQuantity = $item->getParticular()->getService()->getHasQuantity();
+
+            if(!isset($invoiceDetails[$serviceName])) {
+                $invoiceDetails[$serviceName]['items'] = [];
+                $invoiceDetails[$serviceName]['total'] = 0;
+                $invoiceDetails[$serviceName]['hasQuantity'] = ( $hasQuantity == 1);
+            }
+
+            $invoiceDetails[$serviceName]['items'][] = $item;
+            $invoiceDetails[$serviceName]['total'] += $item->getSubTotal();
+        }
+
+        if(count($invoiceDetails['Pathology']['items']) == 0) {
+            unset($invoiceDetails['Pathology']);
+        }
+        return $this->render('HospitalBundle:Print:invoiceParticular.html.twig', array(
+            'entity'                => $entity,
+            'invoiceDetails'        => $invoiceDetails,
+            'invoiceBarcode'        => $barcode,
+            'patientBarcode'        => $patientId,
+            'inWords'               => $inWords,
+        ));
     }
 
 

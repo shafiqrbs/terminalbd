@@ -222,6 +222,7 @@ class PurchaseController extends Controller
             'attr' => array(
                 'class' => 'horizontal-form purchase',
                 'novalidate' => 'novalidate',
+                'id' => 'purchaseForm',
             )
 
         ));
@@ -398,6 +399,7 @@ class PurchaseController extends Controller
             'attr' => array(
                 'class' => 'horizontal-form purchase',
                 'novalidate' => 'novalidate',
+                'id' => 'purchaseForm',
             )
 
         ));

@@ -82,7 +82,6 @@ $(".select2Grn").select2({
 
     placeholder: "Search purchase grn",
     ajax: {
-
         url: Routing.generate('inventory_grn_search'),
         dataType: 'json',
         delay: 250,
@@ -115,8 +114,6 @@ $(".select2Grn").select2({
         }).done(function (data) {
             return  callback(data);
         });
-
-
     },
     allowClear: true,
     minimumInputLength: 1
@@ -159,8 +156,6 @@ $(".select2Product").select2({
         }).done(function (data) {
             return  callback(data);
         });
-
-
     },
     allowClear: true,
     minimumInputLength: 1
@@ -268,8 +263,6 @@ $(".select2Vendor").select2({
         }).done(function (data) {
             return  callback(data);
         });
-
-
     },
     allowClear: true,
     minimumInputLength: 1

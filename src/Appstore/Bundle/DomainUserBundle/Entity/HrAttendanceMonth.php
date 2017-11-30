@@ -52,6 +52,13 @@ class HrAttendanceMonth
      */
     private $month;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="PresentDay", type="smallint", length=2, nullable =true)
+     */
+    private $presentDay;
+
 
     /**
      * @var \DateTime
@@ -257,5 +264,21 @@ class HrAttendanceMonth
     public function setPresent($present)
     {
         $this->present = $present;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPresentDay()
+    {
+        return $this->presentDay;
+    }
+
+    /**
+     * @param string $presentDay
+     */
+    public function setPresentDay($presentDay)
+    {
+        $this->presentDay = $presentDay;
     }
 }

@@ -26,13 +26,16 @@ var table = $('#attendance').DataTable( {
 $(document).on("click", ".attendance", function() {
 
     var url = $(this).attr('data-url');
-    alert(url);
+    var id = $(this).attr('data-id');
+    var present = $('#'+id).val();
+    alert(present);
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
-            $.get(url, function( data ) {
-                alert('test');
+            $.get( url,{present:present})
+                .done(function(data){
+                    alert('test');
             });
         }
     });

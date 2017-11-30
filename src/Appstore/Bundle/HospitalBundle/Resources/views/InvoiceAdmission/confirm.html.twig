@@ -38,7 +38,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="{{ path('hms_invoice_admission') }}"><i class="icon-th-list"></i> Admission</a>
-                                <a class="btn red" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> Daily Invoice</a>
+                                <a class="btn red" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> Admitted Daily Invoice</a>
                                 {% if invoiceTransaction is defined and invoiceTransaction is defined is not empty  %}
                                 <a class="btn" href="{{ path('hms_invoice_admission_confirm',{'id':entity.id}) }}"><i class="fa fa-fast-backward"></i> Return</a>
                                 {% endif %}
@@ -107,7 +107,7 @@
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-reorder"></i>Particulars Information</div>
                                     <div class="actions">
-                                        <a class="btn yellow" href="javascript:"><span class="fa fa-angle-double-up"></span>&nbsp;Show</a>
+                                        {#<a class="btn yellow" href="javascript:"><span class="fa fa-angle-double-up"></span>&nbsp;Show</a>#}
                                         <a target="_blank" href="{{ path('hms_invoice_admission_particular_print',{'invoice':entity.invoice}) }}"  class="btn purple"><i class="icon icon-print"></i> Print</a>
                                     </div>
                                 </div>
@@ -182,7 +182,7 @@
                                 <div class="portlet-title">
                                     <div class="caption"><i class="icon-money"></i>Transaction Information</div>
                                     <div class="actions">
-                                        <a class="btn yellow" href="javascript:"><span class="fa fa-angle-double-up"></span>&nbsp;Show</a>
+                                        {#<a class="btn yellow" href="javascript:"><span class="fa fa-angle-double-up"></span>&nbsp;Show</a>#}
                                         <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print',{'invoice':entity.invoice}) }}" class="btn purple"><i class="icon icon-print"></i> Print</a>
                                     </div>
                                 </div>
@@ -221,10 +221,40 @@
                                                         <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'id':transaction.id}) }}" class="btn delete red mini"><i class="icon icon-trash"></i></a>
                                                     {% endif %}
                                                     {% if transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
-                                                        <a href="javascript:" class="btn remove green mini"><i class="icon icon-eye-open"></i>View</a>
+                                                        <a href="javascript:" data-id="{{ transaction.id }}" class="btn showTransaction green mini"><i class="fa fa-plus"></i> View</a>
                                                     {% endif %}
                                                     {% if transaction.process not in processArr %}
                                                         <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print_single',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="icon icon-print"></i> Print</a>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="10" class="transaction-hide" id="transaction-{{ transaction.id }}">
+                                                    {% if transaction.admissionPatientParticulars is defined and  transaction.admissionPatientParticulars is not empty  %}
+                                                        <table class="table table-bordered table-striped table-condensed flip-content ">
+                                                            <thead class="flip-content ">
+                                                            <tr class="head-green">
+                                                                <th class="numeric">Si/No</th>
+                                                                <th class="numeric">Code</th>
+                                                                <th class="numeric">Particular</th>
+                                                                <th class="numeric">Service</th>
+                                                                <th class="numeric">Qnt</th>
+                                                                <th class="numeric">Amount</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {% for item in transaction.admissionPatientParticulars %}
+                                                                <tr id="remove-{{ item.id }}">
+                                                                    <td  class="numeric">{{ loop.index }}</td>
+                                                                    <td  class="numeric">{{ item.particular.particularCode }}</td>
+                                                                    <td class="numeric">{{ item.particular.name }}</td>
+                                                                    <td class="numeric">{{ item.particular.service.name }}</td>
+                                                                    <td class="numeric">{{ item.quantity }}</td>
+                                                                    <td class="numeric">{{ item.subTotal|number_format }}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
                                                     {% endif %}
                                                 </td>
                                             </tr>
@@ -334,7 +364,6 @@
                                             </div>
                                         </form>
                                     </div>
-
                                 </div>
                             {% else %}
                                 <div class="row-fluid particular-info" >
@@ -361,6 +390,7 @@
                                         <a target="_blank"  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
                                         <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                         <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
+                                        <a class="btn red" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> Admitted Daily Invoice</a>
                                     </div>
                                 </div>
                             {% endif %}
@@ -372,6 +402,11 @@
             </div>
         </div>
     </div>
+<style>
+    .transaction-hide{
+        display:none;
+    }
+</style>
 {% endblock %}
 {% block cssBlock %}
 {% stylesheets filter='cssrewrite'
@@ -391,21 +426,22 @@
 {% endblock  %}
 {% block documentready %}
     {{ parent() }}
-
+    $(document).on('click', '.showTransaction', function() {
+        var id = $(this).attr('data-id');
+        $('#transaction-'+id).slideToggle();
+        $("i", this).toggleClass("fa-minus fa-plus");
+    });
     $(document).on('click', '#addPayment', function() {
-
         var payment = $('#payment').val();
         var discount = $('#discount').val();
         var process = $('#process').val();
         var printFor = $('#printFor').val();
         var url = $('#addPayment').attr('data-url');
         $.ajax({
-        url: url,
-        type: 'POST',
-        data: 'payment='+payment+'&discount='+discount+'&process='+process+'&printFor='+printFor,
-        success: function (response) {
-
-        }
+            url: url,
+            type: 'POST',
+            data: 'payment='+payment+'&discount='+discount+'&process='+process+'&printFor='+printFor,
+            success: function(response){}
         })
     });
 

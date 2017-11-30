@@ -205,6 +205,7 @@ class HrAttendanceController extends Controller
 
     public function addAttendanceAction(User $user)
     {
+        $present = $_REQUEST['present'];
         $em = $this->getDoctrine()->getManager();
         $datetime = new \DateTime("now");
         $today  = $datetime->format('d');
@@ -215,9 +216,17 @@ class HrAttendanceController extends Controller
         $entity = New HrAttendanceMonth();
         $entity->setUser($user);
         $entity->setGlobalOption($user->getGlobalOption());
-        $entity->setPresent(true);
-        $entity->setIn(true);
-        $entity->setOut(true);
+        if($present == 1){
+            $entity->setPresent(true);
+            $entity->setPresentDay($today);
+            $entity->setIn(true);
+            $entity->setOut(true);
+        }else{
+            $entity->setPresent(false);
+            $entity->setPresentDay(0);
+            $entity->setIn(false);
+            $entity->setOut(false);
+        }
         $entity->setMonth($month);
         $entity->setYear($year);
         $em->persist($entity);

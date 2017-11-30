@@ -100,12 +100,12 @@
                                 </td>
                                 <td class="span4">
                                     <table class="table table-bordered table-striped">
-                                        <tr><td class="span8" ><strong class="pull-right" >Total Amount</strong></td><td class="span4 text-right" ><strong class="text-right">{{ entity.subTotal|number_format() }}</strong></td></tr>
-                                        {% if entity.discount %}<tr><td class="span8"><strong class="pull-right" >Discount Amount</strong></td><td class="span4 text-right" ><strong class="text-right">{{ entity.discount|number_format() }}</strong></td></tr>{% endif %}
-                                        {% if entity.vat %}<tr><td class="span8" ><strong class="pull-right" >Vat/Tax Amount</strong></td><td class="span4 text-right" ><strong class="text-right" >{{ entity.vat|number_format() }}</strong></td></tr>{% endif %}
-                                        <tr><td class="span8" ><strong class="pull-right" >Grand Total</strong></td><td class="span4 text-right" ><strong class="text-right" >{{ entity.total|number_format() }}</strong></td></tr>
-                                        <tr><td class="span8" ><strong class="pull-right" >Paid Amount</strong></td><td class="span4 text-right" ><strong class="text-right">{{ entity.payment|number_format() }}</strong></td></tr>
-                                        {% if entity.due %}<tr><td class="span8" ><strong class="pull-right" >Due Amount</strong></td><td class="span4 text-right" ><strong class="text-right">{{ entity.due|number_format() }}</strong></td></tr>{% endif %}
+                                        <tr><td class="span8" ><strong class="pull-right" >Sub-Total Tk.</strong></td><td class="span4 text-right" ><strong class="text-right">{{ entity.subTotal|number_format() }}</strong></td></tr>
+                                        {% if entity.discount %}<tr><td class="span8"><strong class="pull-right" >Discount Tk.</strong></td><td class="span4 text-right" ><strong class="text-right">{{ entity.discount|number_format() }}</strong></td></tr>{% endif %}
+                                        {% if entity.vat %}<tr><td class="span8" ><strong class="pull-right" >Vat/Tax Tk.</strong></td><td class="span4 text-right" ><strong class="text-right" >{{ entity.vat|number_format() }}</strong></td></tr>{% endif %}
+                                        <tr><td class="span8" ><strong class="pull-right" >Grand Total Tk.</strong></td><td class="span4 text-right" ><strong class="text-right" >{{ entity.total|number_format() }}</strong></td></tr>
+                                        <tr><td class="span8" ><strong class="pull-right" >Paid Tk.</strong></td><td class="span4 text-right" ><strong class="text-right">{{ entity.payment|number_format() }}</strong></td></tr>
+                                        {% if entity.due %}<tr><td class="span8" ><strong class="pull-right" >Due Tk.</strong></td><td class="span4 text-right" ><strong class="text-right">{{ entity.due|number_format() }}</strong></td></tr>{% endif %}
                                     </table>
                                 </td>
                             </tr>

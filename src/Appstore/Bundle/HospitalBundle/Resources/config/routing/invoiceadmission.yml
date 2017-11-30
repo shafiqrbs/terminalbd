@@ -89,18 +89,11 @@ hms_invoice_admission_daily_invoice_transaction_submit:
 hms_invoice_admission_transaction_print_single:
     path:     /{invoice}/{id}/admitted-patient-transaction-invoice-single-print
     defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:singleTransactionInvoicePrint" }
-    options:
-            expose: true
 
 hms_invoice_admission_transaction_print:
     path:      /{invoice}/admitted-patient-transaction-invoice-print
     defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:transactionInvoicePrint" }
-    options:
-            expose: true
-
 
 hms_invoice_admission_particular_print:
     path:      /{invoice}/admitted-patient-transaction-invoice-particular
     defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:invoiceParticularPrint" }
-    options:
-            expose: true
