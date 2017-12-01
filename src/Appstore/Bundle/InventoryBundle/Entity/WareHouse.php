@@ -24,6 +24,7 @@ class WareHouse
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="wareHouses")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     protected $inventoryConfig;
 

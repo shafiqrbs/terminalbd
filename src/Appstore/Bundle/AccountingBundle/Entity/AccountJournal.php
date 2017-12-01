@@ -5,7 +5,6 @@ namespace Appstore\Bundle\AccountingBundle\Entity;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Setting\Bundle\ToolBundle\Entity\PaymentType;
 use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
 
 /**

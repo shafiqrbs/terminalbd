@@ -23,6 +23,7 @@ class InventoryConfig
 
     /**
      * @ORM\OneToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", mappedBy="inventoryConfig" , cascade={"persist", "remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $categories;
 

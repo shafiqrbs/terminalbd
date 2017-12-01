@@ -4,6 +4,7 @@ namespace Appstore\Bundle\HospitalBundle\Repository;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchaseItem;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -15,6 +16,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class HmsPurchaseItemRepository extends EntityRepository
 {
+
+    public function getPurchaseAveragePrice(Particular $particular)
+    {
+
+        $qb = $this->_em->createQueryBuilder();
+        $qb->from('HospitalBundle:HmsPurchaseItem','e');
+        $qb->select('AVG(e.purchasePrice) AS avgPurchasePrice');
+        $qb->where('e.particular = :particular')->setParameter('particular', $particular) ;
+        $res = $qb->getQuery()->getOneOrNullResult();
+        if(!empty($res)){
+            $particular->setPurchaseAverage($res['avgPurchasePrice']);
+            $this->_em->persist($particular);
+            $this->_em->flush($particular);
+        }
+    }
+
     public function insertPurchaseItems($invoice, $data)
     {
         $particular = $this->_em->getRepository('HospitalBundle:Particular')->find($data['particularId']);
@@ -22,11 +39,13 @@ class HmsPurchaseItemRepository extends EntityRepository
         $entity = new HmsPurchaseItem();
         $entity->setPurchase($invoice);
         $entity->setParticular($particular);
+        $entity->setSalesPrice($particular->getPrice());
         $entity->setPurchasePrice($data['price']);
         $entity->setQuantity($data['quantity']);
         $entity->setPurchaseSubTotal($data['quantity'] * $data['price']);
         $em->persist($entity);
         $em->flush();
+        $this->getPurchaseAveragePrice($particular);
 
     }
 
@@ -36,13 +55,14 @@ class HmsPurchaseItemRepository extends EntityRepository
         $data = '';
         $i = 1;
         foreach ($entities as $entity) {
-            $data .= '<tr id="remove-'. $entity->getId() . '">';
+            $data .= '<tr id="remove-'. $entity->getId() .'">';
             $data .= '<td class="span1" >' . $i . '</td>';
             $data .= '<td class="span1" >' . $entity->getParticular()->getParticularCode() . '</td>';
             $data .= '<td class="span4" >' . $entity->getParticular()->getName() . '</td>';
             $data .= '<td class="span1" >' . $entity->getQuantity() . '</td>';
+            $data .= '<td class="span1" >' . $entity->getSalesPrice() . '</td>';
             $data .= '<td class="span1" >' . $entity->getPurchasePrice() . '</td>';
-            $data .= '<td class="span2" >' . $entity->getPurchaseSubTotal() . '</td>';
+            $data .= '<td class="span1" >' . $entity->getPurchaseSubTotal() . '</td>';
             $data .= '<td class="span1" >
                      <a id="'.$entity->getId(). '" title="Are you sure went to delete ?" data-url="/hms/purchase/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a>
                      </td>';
@@ -52,7 +72,7 @@ class HmsPurchaseItemRepository extends EntityRepository
         return $data;
     }
 
-    public function invoiceParticularLists($hospital){
+    public function invoiceParticularLists($hospital,$data = array()){
 
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
         $particular = isset($data['particular'])? $data['particular'] :'';

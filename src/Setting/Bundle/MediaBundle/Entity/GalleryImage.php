@@ -23,6 +23,7 @@ class GalleryImage
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\MediaBundle\Entity\PhotoGallery", inversedBy="galleryImages")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
 
     protected $photoGallery;

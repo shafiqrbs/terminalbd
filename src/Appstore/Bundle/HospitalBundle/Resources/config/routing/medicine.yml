@@ -23,3 +23,7 @@ hms_medicine_delete:
 hms_medicine_status:
     path:     /{id}/status
     defaults: { _controller: "HospitalBundle:Medicine:status" }
+
+hms_medicine_inline:
+    path:     /inline-update
+    defaults: { _controller: "HospitalBundle:Medicine:inlineUpdate" }

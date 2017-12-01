@@ -25,6 +25,7 @@ class Vendor implements CodeAwareEntity
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="vendors")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $inventoryConfig;
 

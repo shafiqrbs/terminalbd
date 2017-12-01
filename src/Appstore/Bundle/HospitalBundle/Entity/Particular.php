@@ -2,8 +2,9 @@
 
 namespace Appstore\Bundle\HospitalBundle\Entity;
 
-use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Core\UserBundle\Entity\User;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -149,6 +150,13 @@ class Particular
      * @ORM\Column(name="salesQuantity", type="integer", nullable=true)
      */
     private $salesQuantity;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="purchaseAverage", type="decimal", nullable=true)
+     */
+    private $purchaseAverage;
 
 
     /**
@@ -328,6 +336,20 @@ class Particular
      * @Assert\File(maxSize="8388608")
      */
     protected $file;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="created", type="datetime")
+     */
+    private $created;
+
+    /**
+     * @var \DateTime
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="updated", type="datetime")
+     */
+    private $updated;
 
 
 
@@ -1101,6 +1123,54 @@ class Particular
     public function setServiceGroup($serviceGroup)
     {
         $this->serviceGroup = $serviceGroup;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPurchaseAverage()
+    {
+        return $this->purchaseAverage;
+    }
+
+    /**
+     * @param string $purchaseAverage
+     */
+    public function setPurchaseAverage($purchaseAverage)
+    {
+        $this->purchaseAverage = $purchaseAverage;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param \DateTime $created
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * @param \DateTime $updated
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
     }
 
 

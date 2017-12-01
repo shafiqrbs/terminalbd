@@ -33,6 +33,7 @@ class Order
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="orders")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $ecommerceConfig;
 
@@ -43,6 +44,7 @@ class Order
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="orders")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $globalOption;
 

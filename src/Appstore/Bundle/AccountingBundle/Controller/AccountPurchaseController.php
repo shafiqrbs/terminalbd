@@ -85,6 +85,11 @@ class AccountPurchaseController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
             $entity->setProcessHead('Account Purchase');
+            if($entity->getPayment() < 0){
+                $entity->setPurchaseAmount(abs($entity->getPayment()));
+                $entity->setPayment(0);
+                $entity->setTransactionMethod(null);
+            }
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -237,9 +242,14 @@ class AccountPurchaseController extends Controller
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Account Purchase entity.');
-       }
+        }
+        if($data['value'] < 0){
+            $entity->setPurchaseAmount(abs($data['value']));
+            $entity->setPayment(0);
+        }else{
+            $entity->setPayment($data['value']);
+        }
         //$currentBalance = $entity->getBalance() + $entity->getPayment();
-        $entity->setPayment($data['value']);
         //$entity->setBalance($currentBalance - floatval($data['value']));
         $em->flush();
 
@@ -262,8 +272,12 @@ class AccountPurchaseController extends Controller
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();
-            $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($entity);
-            $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($entity);
+            if($entity ->getPurchaseAmount() ==  0 and $entity ->getPayment() > 0 ){
+                $this->getDoctrine()->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($entity);
+                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertPurchaseVendorTransaction($entity);
+            }else{
+                $this->getDoctrine()->getRepository('AccountingBundle:Transaction')->insertVendorOpeningTransaction($entity);
+            }
             return new Response('success');
         } else {
             return new Response('failed');

@@ -51,12 +51,14 @@ class EcommerceMenu
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="ecommerceMenus")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
 
     private $globalOption;
 
     /**
      * @ORM\ManyToMany(targetEntity="Product\Bundle\ProductBundle\Entity\Category", inversedBy="ecommerceMenus")
+
      **/
 
     private $categories;

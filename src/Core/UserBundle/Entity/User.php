@@ -90,6 +90,7 @@ class User extends BaseUser
      *  * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="globalOption_id", referencedColumnName="id")
      * })
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
 
     protected $globalOption;
@@ -99,6 +100,7 @@ class User extends BaseUser
      *  * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="globalOptionAgent_id", referencedColumnName="id")
      * })
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     protected $globalOptionAgents;
 

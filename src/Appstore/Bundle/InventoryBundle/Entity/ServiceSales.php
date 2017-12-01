@@ -31,6 +31,7 @@ class ServiceSales
 
         /**
          * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="serviceSales" )
+         * @ORM\JoinColumn(onDelete="CASCADE")
          **/
         private  $inventoryConfig;
 

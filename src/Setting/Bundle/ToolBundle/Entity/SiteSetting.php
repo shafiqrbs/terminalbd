@@ -32,6 +32,7 @@ class SiteSetting
 
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="siteSetting")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
 
     protected $globalOption;
@@ -67,7 +68,7 @@ class SiteSetting
     /**
      * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\Syndicate", inversedBy="siteSettings")
      * @ORM\JoinTable(name="sitesetting_syndicate",
-     *      joinColumns={@ORM\JoinColumn(name="sitesetting_id", referencedColumnName="id",onDelete="CASCADE")},
+     *      joinColumns={@ORM\JoinColumn(name="sitesetting_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="syndicate_id", referencedColumnName="id")}
      * )
      */

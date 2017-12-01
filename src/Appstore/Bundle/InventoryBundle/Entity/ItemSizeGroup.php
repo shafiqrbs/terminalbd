@@ -24,14 +24,15 @@ class ItemSizeGroup
 
     /**
      * @ORM\ManyToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ItemSize", inversedBy="sizeGroup" , cascade={"detach","merge"})
+     * @ORM\OrderBy({"id" = "DESC"})
      * @ORM\OrderBy({"name" = "ASC"})
      **/
-
     protected $sizes;
 
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="sizeGroup")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $inventoryConfig;
 

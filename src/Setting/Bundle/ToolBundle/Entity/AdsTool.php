@@ -23,12 +23,10 @@ class AdsTool
 
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="adsTool")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
 
     protected $globalOption;
-
-
-
 
     /**
      * @var string

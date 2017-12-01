@@ -37,12 +37,14 @@ class MenuGrouping
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="menuGroupings")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     protected $globalOption;
 
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\Menu", inversedBy="menuGrouping")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
 
     protected $menu;

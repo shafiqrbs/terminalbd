@@ -113,12 +113,12 @@
                                         <td class="numeric" >{% if entity.hmsVendor %}{{ entity.hmsVendor.companyName }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.hmsPurchase is not empty %}{{ entity.hmsPurchase.grn }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.accountRefNo }}</td>
-                                        <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% endif %}</td>
+                                        <td class="numeric" >{% if entity.transactionMethod is not empty %}{{ entity.transactionMethod.name }}{% else %}Payable{% endif %}</td>
                                         <td class="numeric" >{{ entity.purchaseAmount|number_format }}</td>
                                         <td class="numeric" >
-                                            {% if entity.process == 'approved'  %}
+                                            {% if entity.process == 'approved' %}
                                                 {{ entity.payment|number_format }}
-                                            {% else %}
+                                            {% elseif entity.payment > 0 %}
                                                 <a  class="editable" data-name="amount" href="#"  data-url="{{ path('account_purchase_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change your amount">{{ entity.payment }}</a>
                                             {% endif %}
                                         </td>

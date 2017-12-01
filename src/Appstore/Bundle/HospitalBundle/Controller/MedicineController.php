@@ -16,6 +16,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class MedicineController extends Controller
 {
 
+    public function paginate($entities)
+    {
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        return $pagination;
+    }
 
     /**
      * Lists all Particular entities.
@@ -24,8 +35,9 @@ class MedicineController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 4),array('name'=>'ASC'));
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getMedicineParticular($hospital);
+        $pagination = $this->paginate($entities);
         $entity = new Particular();
         $form = $this->createCreateForm($entity);
         return $this->render('HospitalBundle:Medicine:index.html.twig', array(
@@ -219,5 +231,19 @@ class MedicineController extends Controller
             'success',"Status has been changed successfully"
         );
         return $this->redirect($this->generateUrl('hms_medicine'));
+    }
+
+    public function inlineUpdateAction(Request $request)
+    {
+        $data = $request->request->all();
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('HospitalBundle:Particular')->find($data['pk']);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find particular entity.');
+        }
+        $entity->setPrice(abs($data['value']));
+        $em->flush();
+        exit;
+
     }
 }

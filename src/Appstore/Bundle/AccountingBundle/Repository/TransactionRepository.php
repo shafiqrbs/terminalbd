@@ -311,11 +311,29 @@ class TransactionRepository extends EntityRepository
         }
     }
 
+    public function insertVendorOpeningTransaction(AccountPurchase $entity)
+    {
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($entity->getGlobalOption());
+        $transaction->setAccountRefNo($entity->getAccountRefNo());
+        $transaction->setProcessHead('Purchase Opening');
+        $transaction->setUpdated($entity->getUpdated());
+        $transaction->setProcess('Current Liabilities');
+        /* Current Liabilities - Account Payable Payment */
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(13));
+        $transaction->setAmount('-'.$entity->getPurchaseAmount());
+        $transaction->setCredit($entity->getPurchaseAmount());
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+    }
+
     public function insertPurchaseVendorTransaction(AccountPurchase $entity)
     {
         $this->insertPurchaseCashCreditTransaction($entity);
         $this->insertPurchaseLiabilityDebitTransaction($entity);
     }
+
+
 
     public function insertPurchaseCashCreditTransaction(AccountPurchase $entity)
     {
@@ -340,7 +358,6 @@ class TransactionRepository extends EntityRepository
             $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(31));
             $transaction->setProcess('Cash');
         }
-
         $transaction->setAmount('-'.$entity->getPayment());
         $transaction->setCredit($entity->getPayment());
         $this->_em->persist($transaction);

@@ -65,6 +65,7 @@ class StockItem
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="stockItems")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $createdBy;
 

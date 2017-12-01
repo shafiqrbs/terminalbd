@@ -62,6 +62,7 @@ class ParticularRepository extends EntityRepository
             ->andWhere('s.id IN(:service)')
             ->setParameter('service',array_values($services))
             ->orderBy('e.service','ASC')
+            ->orderBy('e.name','ASC')
             ->getQuery()->getArrayResult();
         return  $qb;
     }
@@ -119,18 +120,24 @@ class ParticularRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')
+            ->leftJoin('e.unit','u')
             ->select('e.id')
             ->addSelect('e.name')
             ->addSelect('e.particularCode')
             ->addSelect('e.price')
             ->addSelect('e.minimumPrice')
             ->addSelect('e.quantity')
+            ->addSelect('e.status')
+            ->addSelect('e.salesQuantity')
+            ->addSelect('u.name as unit')
             ->addSelect('s.name as serviceName')
             ->addSelect('s.code as serviceCode')
+            ->addSelect('e.purchaseAverage')
+            ->addSelect('e.purchaseQuantity')
             ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
             ->andWhere('s.id IN(:process)')
             ->setParameter('process',array_values(array(4)))
-            ->orderBy('e.service','ASC')
+            ->orderBy('e.name','ASC')
             ->getQuery()->getArrayResult();
             return  $qb;
     }

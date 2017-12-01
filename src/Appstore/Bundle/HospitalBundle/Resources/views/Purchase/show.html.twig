@@ -38,15 +38,8 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('hms_purchase_new') }}"><i class="icon-plus-sign"></i>&nbsp;Add Purchase</a></li>
-                                    <li><a href="{{ path('hms_purchase') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-
-                                </ul>
+                                <a class="btn red" href="{{ path('hms_purchase_new') }}"><i class="icon-plus-sign"></i> Add Purchase</a>
+                                <a class="btn" href="{{ path('hms_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
                             </div>
                         </div>
 
@@ -80,7 +73,7 @@
                                 <div class="span4">
                                     <h4>Payment Method:</h4>
                                     <ul class="unstyled">
-                                        <li><strong>Payment Method:</strong>&nbsp;{{ entity.TransactionMethod.name }}</li>
+                                        <li><strong>Payment Method:</strong>&nbsp;{% if  entity.TransactionMethod is not empty %}{{ entity.TransactionMethod.name }}{% endif %}</li>
                                         {% if entity.accountMobileBank is not empty %}<li><strong>Payment Mobile:</strong>&nbsp;{{ entity.accountMobileBank.name }}</li>{% endif %}
                                         {% if entity.accountBank is not empty %}<li><strong>Bank:</strong>&nbsp;{{ entity.accountBank.name  }}</li>{% endif %}
                                         <li><strong>Created By:</strong>&nbsp;{% if entity.createdBy is defined and entity.createdBy is not empty %}{{ entity.createdBy }}{% endif %}</li>
@@ -98,7 +91,8 @@
                                             <th class="span1">Code</th>
                                             <th class="span4">Particular</th>
                                             <th class="span1">Qnt</th>
-                                            <th class="span2">Price</th>
+                                            <th class="span2">Sales Price</th>
+                                            <th class="span2">Purchase Price</th>
                                             <th class="span1">Sub-Total</th>
                                         </tr>
                                         </thead>
@@ -109,6 +103,7 @@
                                                 <td  class="span1">{{ item.particular.particularCode }}</td>
                                                 <td class="span4">{{ item.particular.name }}</td>
                                                 <td class="span1">{{ item.quantity }}</td>
+                                                <td class="span2">{{ item.salesPrice }}</td>
                                                 <td class="span2">{{ item.purchasePrice }}</td>
                                                 <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
                                             </tr>

@@ -32,6 +32,7 @@ class ItemTypeGrouping
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\InventoryConfig", inversedBy="itemTypeGrouping")
+     * @ORM\OrderBy({"id" = "DESC"})
      **/
     private $inventoryConfig;
 

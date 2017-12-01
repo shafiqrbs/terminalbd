@@ -84,8 +84,6 @@ class PurchaseController extends Controller
         $entity = new HmsPurchase();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entity->setHospitalConfig($hospital);
-        $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
-        $entity->setTransactionMethod($transactionMethod);
         $entity->setCreatedBy($this->getUser());
         $em->persist($entity);
         $em->flush();

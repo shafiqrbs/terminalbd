@@ -1,9 +1,9 @@
 <?php
 
 namespace Setting\Bundle\ToolBundle\Entity;
-use Appstore\Bundle\AccountingBundle\Entity\AccountBkash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountCash;
 use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
+use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
@@ -26,22 +26,12 @@ use Setting\Bundle\AppearanceBundle\Entity\Menu;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidget;
 use Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel;
 use Setting\Bundle\ContentBundle\Entity\Admission;
-use Setting\Bundle\ContentBundle\Entity\Blog;
-use Setting\Bundle\ContentBundle\Entity\Branch;
 use Setting\Bundle\ContentBundle\Entity\ContactPage;
-use Setting\Bundle\ContentBundle\Entity\Event;
 use Setting\Bundle\ContentBundle\Entity\HomePage;
 use Setting\Bundle\ContentBundle\Entity\HomeSlider;
 use Setting\Bundle\ContentBundle\Entity\MallConnect;
 use Setting\Bundle\ContentBundle\Entity\ModuleCategory;
-use Setting\Bundle\ContentBundle\Entity\News;
-use Setting\Bundle\ContentBundle\Entity\NoticeBoard;
 use Setting\Bundle\ContentBundle\Entity\Page;
-use Setting\Bundle\ContentBundle\Entity\Portfolio;
-use Setting\Bundle\ContentBundle\Entity\Service;
-use Setting\Bundle\ContentBundle\Entity\Team;
-use Setting\Bundle\ContentBundle\Entity\Testimonial;
-use Setting\Bundle\ContentBundle\Entity\TradeItem;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Setting\Bundle\MediaBundle\Entity\PageFile;
 use Setting\Bundle\MediaBundle\Entity\PhotoGallery;
@@ -68,7 +58,7 @@ class GlobalOption
     protected $users;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="globalOptionAgents" , cascade={"persist", "remove"} )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="globalOptionAgents" )
      **/
     protected $agent;
 
@@ -137,6 +127,7 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Setting\Bundle\MediaBundle\Entity\PageFile", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
     protected $pageFiles;
+
     /**
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", mappedBy="globalOption" , cascade={"persist", "remove"} )
      **/
@@ -159,7 +150,7 @@ class GlobalOption
      **/
     protected $customers;
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="globalOptions" , cascade={"persist", "remove"} )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="globalOptions")
      **/
     protected $location;
 
@@ -167,7 +158,6 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Setting\Bundle\AdvertismentBundle\Entity\Advertisment", mappedBy="globalOption" , cascade={"persist", "remove"} )
      */
     protected $advertisment;
-
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountingConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
@@ -254,13 +244,10 @@ class GlobalOption
      */
     protected $invoiceModules;
     /**
-     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InstituteLevel", inversedBy="globalOptions" , cascade={"persist", "remove"})
+     * @ORM\ManyToMany(targetEntity="Setting\Bundle\ToolBundle\Entity\InstituteLevel", inversedBy="globalOptions" )
      */
     protected $instituteLevels;
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\InventoryBundle\Entity\PaymentMethod", mappedBy="globalOption" , cascade={"persist", "remove"})
-     */
-    protected $paymentMethods;
+
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
@@ -288,6 +275,7 @@ class GlobalOption
      * @ORM\OneToMany(targetEntity="Setting\Bundle\ContentBundle\Entity\MallConnect", mappedBy="globalOption" , cascade={"persist", "remove"})
      */
     protected $mallConnects;
+
     /**
      * @var integer
      *
@@ -343,7 +331,7 @@ class GlobalOption
      */
     private $isMobile;
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Syndicate", inversedBy="globalOption" , cascade={"persist", "remove"} )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Syndicate", inversedBy="globalOption")
      **/
 
     private $syndicate;
@@ -588,7 +576,7 @@ class GlobalOption
 
 
     /**
-     * @return mixed
+     * @return Syndicate
      */
     public function getSyndicate()
     {
@@ -596,7 +584,7 @@ class GlobalOption
     }
 
     /**
-     * @param mixed $syndicate
+     * @param Syndicate $syndicate
      */
     public function setSyndicate($syndicate)
     {
@@ -1568,6 +1556,14 @@ class GlobalOption
     public function getMenus()
     {
         return $this->menus;
+    }
+
+    /**
+     * @return AccountMobileBank
+     */
+    public function getAccountMobileBank()
+    {
+        return $this->accountMobileBank;
     }
 
 

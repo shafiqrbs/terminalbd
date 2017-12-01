@@ -99,6 +99,11 @@ class AccountHospitalController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->setGlobalOption($this->getUser()->getGlobalOption());
             $entity->setProcessHead('Account Purchase');
+            if($entity->getPayment() < 0){
+                $entity->setPurchaseAmount(abs($entity->getPayment()));
+                $entity->setPayment(0);
+                $entity->setTransactionMethod(null);
+            }
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(

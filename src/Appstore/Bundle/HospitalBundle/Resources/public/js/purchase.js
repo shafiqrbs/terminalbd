@@ -62,12 +62,19 @@ $(document).on('click', '#addParticular', function() {
 
     var particularId = $('#particularId').val();
     var quantity = $('#quantity').val();
-    var price = $('#price').val();
+    var price = $('#purchasePrice').val();
     var url = $('#addParticular').attr('data-url');
     if(particularId == ''){
+        $('.msg-hidden').show();
+        $('input[name=particular]').focus();
         $('#msg').html('Please select medicine or accessories name');
         return false;
-
+    }
+    if(price == ''){
+        $('.msg-hidden').show();
+        $('#msg').html('Please enter purchase price');
+        $('input[name=purchasePrice]').focus();
+        return false;
     }
     $.ajax({
         url: url,
@@ -84,6 +91,8 @@ $(document).on('click', '#addParticular', function() {
             $('.dueAmount').html(obj['dueAmount']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
+            $('#purchasePrice').val('');
+            $('#particular').val('');
         }
     })
 });

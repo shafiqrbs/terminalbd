@@ -350,16 +350,16 @@ class Invoice
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="releaseDate", type="datetime", nullable=true)
-     */
-    private $releaseDate;
-
-    /**
-     * @var \DateTime
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated", type="datetime")
      */
     private $updated;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="releaseDate", type="datetime", nullable=true)
+     */
+    private $releaseDate;
 
     /**
      * @var DateTime

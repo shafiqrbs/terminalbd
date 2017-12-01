@@ -24,6 +24,7 @@ class EcommerceConfig
 
     /**
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="ecommerceConfig")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
 
     private $globalOption;

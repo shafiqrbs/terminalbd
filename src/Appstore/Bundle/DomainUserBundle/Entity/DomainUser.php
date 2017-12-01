@@ -33,12 +33,6 @@ class DomainUser
      **/
     protected $profile;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\StockItem", mappedBy="createdBy" , cascade={"persist"})
-     **/
-    protected $stockItems;
-
-
 
     /**
      * @var string

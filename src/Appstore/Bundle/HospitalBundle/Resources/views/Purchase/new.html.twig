@@ -56,7 +56,8 @@
                             <th class="span1">Code</th>
                             <th class="span4">Name</th>
                             <th class="span1">Qnt</th>
-                            <th class="span1">Price</th>
+                            <th class="span1">Sales Price</th>
+                            <th class="span1">Purchase Price</th>
                             <th class="span1">Sub Total</th>
                             <th class="span1"><i class="icon-trash"></i></th>
                         </tr>
@@ -69,6 +70,7 @@
                                     <td  class="span1">{{ item.particular.particularCode }}</td>
                                     <td class="span4">{{ item.particular.name }}</td>
                                     <td class="span1">{{ item.quantity }}</td>
+                                    <td class="span1">{{ item.salesPrice }}</td>
                                     <td class="span1">{{ item.purchasePrice }}</td>
                                     <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
                                     <td class="span1"><a id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_purchase_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
@@ -78,15 +80,15 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="7" class="span12" style="border: 1px double #000"></td>
+                            <td colspan="8" class="span12" style="border: 1px double #000"></td>
                         </tr>
                         <tr>
-                            <td colspan="5" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
+                            <td colspan="6" class="span9"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                             <td class="span2"><strong id="subTotal">{{ entity.subTotal|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
                         <tr>
-                            <td colspan="5" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
+                            <td colspan="6" class="span9"><span class="pull-right"><strong>Discount TK.</strong> =</span></td>
                             <td class="span2"><strong id="subTotal">{{ entity.discount|number_format }}</strong></td>
                             <td class="span1"></td>
                         </tr>
@@ -97,10 +99,10 @@
             </div>
             <div class="clearfix">&nbsp;</div>
             <div class="form-actions portlet box purple">
-                <div class="pull-left span2">
-                    <a class="btn black span12 pull-left" style="text-align: left" ><i class="icon-plus"></i>&nbsp;Add Particular</a>
+                <div class="pull-left span3">
+                    <a class="btn purple span12 pull-left" style="text-align: left" ><i class="icon-plus"></i>&nbsp;Add Medicine/Accessories Item</a>
                 </div>
-                <div class="pull-left span5 msg-hidden" style="display: none">
+                <div class="pull-left span4 msg-hidden" style="display: none">
                     <a class="btn yellow span12 pull-left" ><span id="msg"></span></a>
                 </div>
                 <div class="pull-right span3">
@@ -117,7 +119,7 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="row-fluid particular-info" >
-                                <div class="span7">
+                                <div class="span5">
                                     <select id="particular" name="particular" class="span12 select2">
                                         <option value="">--- Select accessories name ---</option>
                                        {% for particular in particulars %}
@@ -126,7 +128,8 @@
                                      </select>
                                 </div>
                                 <div class="span2"><input type="number" class="m-wrap span12" id="quantity" required="required" name="quantity" value="1"></div>
-                                <div class="span2"><input type="text" class="m-wrap span12" id="price" required="required" name="price" value="" maxlength="8"></div>
+                                <div class="span2"><input type="text" class="m-wrap span12" id="price" disabled="disabled" required="required" name="price" value="" maxlength="8"></div>
+                                <div class="span2"><input type="text" class="m-wrap span12" id="purchasePrice" required="required" name="purchasePrice" placeholder="Purchase price" value="" maxlength="8"></div>
                                 <div class="span1">
                                     <input type="hidden" id="particularId" name="particularId" value="">
                                     <button type="button" class="btn blue" id="addParticular" data-url="{{ path('hms_purchase_particular_add',{'invoice':entity.id}) }}" >Add</button>

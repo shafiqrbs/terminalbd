@@ -173,7 +173,6 @@ class DomainController extends Controller
     public function resetSystemDataAction(GlobalOption $option)
     {
 
-
         set_time_limit(0);
         if($option->getAccountingConfig()){
             $this->getDoctrine()->getRepository('AccountingBundle:AccountingConfig')->accountingReset($option);
@@ -198,6 +197,43 @@ class DomainController extends Controller
 
     }
 
+    public function domainDeleteAction(GlobalOption $option)
+    {
+        $em = $this->getDoctrine()->getManager();
+        set_time_limit(0);
+        if($option->getAccountingConfig()){
+            $this->getDoctrine()->getRepository('AccountingBundle:AccountingConfig')->accountingReset($option);
+        }
+        if($option->getEcommerceConfig()) {
+            $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
+        }
+        if($option->getInventoryConfig()) {
+            $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option);
+        }
+        if($option->getHospitalConfig()) {
+            $this->getDoctrine()->getRepository('HospitalBundle:HospitalConfig')->hospitalReset($option);
+        }
 
+        $em->remove($option);
+        $em->flush();
+
+        exit;
+
+
+
+        /* Menu, Application Setting, website, module, apps , user*/
+
+
+        $dir = WEB_PATH . "/uploads/domain/" . $option->getId() . "/inventory";
+        $a = new Filesystem();
+        $a->remove($dir);
+        $a->mkdir($dir);
+
+        $this->get('session')->getFlashBag()->add(
+            'success',"Successfully reset data"
+        );
+        return $this->redirect($this->generateUrl('tools_domain'));
+
+    }
 
 }

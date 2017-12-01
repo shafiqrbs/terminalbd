@@ -94,6 +94,7 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
+                                    <th class="numeric" >Avg Purchase</th>
                                     <th class="numeric" >Price</th>
                                     <th class="numeric" >Purchase Qnt</th>
                                     <th class="numeric" >Sales Qnt</th>
@@ -107,11 +108,14 @@
                                     <tr>
                                         <td class="numeric" >{{ entity.particularCode }}</td>
                                         <td class="numeric" ><a href="{{ path('hms_medicine_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
-                                        <td class="numeric" >{{ entity.price|number_format }}</td>
+                                        <td class="numeric" >{{ entity.purchaseAverage|number_format }}</td>
+                                        <td class="numeric">
+                                            <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('hms_medicine_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.price }}</a>
+                                        </td>
                                         <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
                                         <td class="numeric" >{{ (entity.purchaseQuantity - entity.salesQuantity)|number_format }}</td>
-                                        <td class="numeric">{% if entity.unit is not empty %}{{ entity.unit.name|default('---') }}{% endif %}</td>
+                                        <td class="numeric">{% if entity.unit is not empty %}{{ entity.unit|default('---') }}{% endif %}</td>
 
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
@@ -128,6 +132,9 @@
 
                                 </tbody>
                             </table>
+                            <div class="pagination pull-center" >
+                                {{ knp_pagination_render(pagination) }}
+                            </div>
 
                         </div>
                     </div>
@@ -136,4 +143,15 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascriptBlock %}
+    {{ parent() }}
+    {% javascripts
+    '@HospitalBundle/Resources/public/js/editable.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock  %}
+{% block documentready %}
+    {{ parent() }}
 {% endblock %}

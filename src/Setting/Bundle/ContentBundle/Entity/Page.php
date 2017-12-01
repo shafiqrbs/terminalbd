@@ -275,6 +275,7 @@ class Page
     /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="pages" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     protected $globalOption;
 

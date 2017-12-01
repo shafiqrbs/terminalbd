@@ -26,9 +26,9 @@ class ServiceSalesItem
      **/
     private  $purchaseVendorItem;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\ServiceSales", inversedBy="serviceSalesItems" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $serviceSales;
 

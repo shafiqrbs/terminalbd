@@ -34,11 +34,13 @@ class PreOrder
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="preOrders")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $globalOption;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig", inversedBy="preOrders")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $ecommerceConfig;
 
@@ -51,7 +53,6 @@ class PreOrder
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="preOrderProcess" )
      **/
-
     private $processBy;
 
      /**

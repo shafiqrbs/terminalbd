@@ -10,18 +10,6 @@ tools_domain_generate_path:
     path:     /generate-path
     defaults: { _controller: "SettingToolBundle:Domain:generateDomainPath" }
 
-tools_domain_application:
-    path:     /
-    defaults: { _controller: "SettingToolBundle:Domain:application" }
-
-tools_domain_sms:
-    path:     /
-    defaults: { _controller: "SettingToolBundle:Domain:sms" }
-
-tools_domain_module:
-    path:     /
-    defaults: { _controller: "SettingToolBundle:Domain:module" }
-
 tools_domain_reset_password:
     path:     /{option}/domain-reset-password
     defaults: { _controller: "SettingToolBundle:Domain:resetDomainPassword" }
@@ -38,4 +26,8 @@ tools_option_status_update:
 tools_option_reset:
     path:     /{id}/domain/option-reset
     defaults: { _controller: "SettingToolBundle:Domain:resetSystemData" }
+
+tools_option_delete:
+    path:     /{id}/option-delete
+    defaults: { _controller: "SettingToolBundle:Domain:domainDelete" }
 
