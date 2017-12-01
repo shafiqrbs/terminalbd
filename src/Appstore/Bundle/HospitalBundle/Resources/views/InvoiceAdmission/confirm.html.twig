@@ -74,7 +74,7 @@
                                     <div class="span3">
                                         <h4>Admission:</h4>
                                         <ul class="unstyled">
-                                            <li><strong>Patient Status:</strong>&nbsp;{{ entity.printFor|capitalize }}</li>
+                                            <li><strong>Patient Status:</strong>&nbsp;{{ entity.process|capitalize }}</li>
                                             <li><strong>Admission Date:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
                                             <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y') }}{% endif %}</li>
                                             <li><strong>Cabin/Bed:</strong> {% if entity.cabin is not empty %}{{ entity.cabin.name }}{% endif %}/{{ entity.cabinNo }}</li>
