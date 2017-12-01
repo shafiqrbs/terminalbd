@@ -107,9 +107,6 @@ class DoctorType extends AbstractType
                 'required'    => true,
                 'empty_value' => '---Select category---',
                 'attr'=>array('class'=>'m-wrap span12 select2'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
                 'choices'=> $this->PathologyChoiceList()
@@ -118,9 +115,6 @@ class DoctorType extends AbstractType
             ->add('department', 'entity', array(
                 'required'    => true,
                 'empty_value' => '---Select department---',
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please select required'))
-                ),
                 'attr'=>array('class'=>'m-wrap span12 select2'),
                 'class' => 'Appstore\Bundle\HospitalBundle\Entity\HmsCategory',
                 'property' => 'nestedLabel',
