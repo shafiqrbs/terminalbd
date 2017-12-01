@@ -53,6 +53,8 @@ class InvoiceAdmissionController extends Controller
 
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
+        $cabins = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(2));
+        $cabinGroups = $this->getDoctrine()->getRepository('HospitalBundle:HmsServiceGroup')->findBy(array('hospitalConfig'=>$hospital,'service'=>2),array('name'=>'ASC'));
 
         return $this->render('HospitalBundle:InvoiceAdmission:index.html.twig', array(
             'entities' => $pagination,
@@ -60,6 +62,8 @@ class InvoiceAdmissionController extends Controller
             'overview' => $overview,
             'assignDoctors' => $assignDoctors,
             'referredDoctors' => $referredDoctors,
+            'cabinGroups' => $cabinGroups,
+            'cabins' => $cabins,
             'searchForm' => $data,
         ));
 

@@ -36,6 +36,8 @@ class InvoiceRepository extends EntityRepository
         $deliveryDate = isset($data['deliveryDate'])? $data['deliveryDate'] :'';
         $transactionMethod = isset($data['transactionMethod'])? $data['transactionMethod'] :'';
         $service = isset($data['service'])? $data['service'] :'';
+        $cabinGroup = isset($data['cabinGroup'])? $data['cabinGroup'] :'';
+        $cabin = isset($data['cabinNo'])? $data['cabinNo'] :'';
 
         if (!empty($invoice)) {
             $qb->andWhere($qb->expr()->like("e.invoice", "'%$invoice%'"  ));
@@ -89,6 +91,17 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere("e.service = :service");
             $qb->setParameter('service', $service);
         }
+
+        if(!empty($cabin)){
+            $qb->andWhere("e.cabin = :cabin");
+            $qb->setParameter('cabin', $cabin);
+        }
+        if(!empty($cabinGroup)){
+            $qb->leftJoin('e.cabin','cabin');
+            $qb->leftJoin('cabin.serviceGroup','sg');
+            $qb->andWhere("sg.id = :cabinGroup");
+            $qb->setParameter('cabinGroup', $cabinGroup);
+        }
     }
 
     public function findWithOverview(User $user , $data)
@@ -105,7 +118,6 @@ class InvoiceRepository extends EntityRepository
         $netPayment = !empty($result['netPayment']) ? $result['netPayment'] :0;
         $netDue = !empty($result['netDue']) ? $result['netDue'] :0;
         $netCommission = !empty($result['netCommission']) ? $result['netCommission'] :0;
-
         $data = array('netTotal'=> $netTotal , 'netPayment'=> $netPayment , 'netDue'=> $netDue , 'netCommission'=> $netCommission);
 
         return $data;
