@@ -62,7 +62,6 @@ $(document).on("click", ".delete", function() {
 
 
 $(document).on("click", ".approve", function() {
-
     $(this).removeClass('approve');
     var id = $(this).attr("data-id");
     var url = $(this).attr("data-url");

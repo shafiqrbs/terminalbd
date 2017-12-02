@@ -742,20 +742,6 @@
                 </div>
                 <div class="clearfix">&nbsp;</div>
                 <div class="form-actions portlet box grey">
-                    <div class="pull-left span6">
-
-                    </div>
-                    <div class="pull-left span3">
-                        <div class="controls">
-                            <div class="input-append span10">
-                                {{ form_widget(form.printFor) }}
-                                {{ form_errors(form.printFor) }}
-                                <div class="btn-group">
-                                    <a class="btn green" target="_blank" href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}"><i class="fa fa-print"></i>&nbsp;Print</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="pull-right span3">
                         <input type="hidden" id="patient" name="patient" value="{% if entity.customer is not empty %}{{ entity.customer.id }}{% endif %}">
                         <input type="hidden" id="invoice" name="invoice" data-action="{{ path('hms_invoice_print_for',{'id': entity.id}) }}" value="{{ entity.id }}">

@@ -198,9 +198,11 @@
                                             <th class="numeric">Payment Method</th>
                                             <th class="numeric">Discount</th>
                                             <th class="numeric">Vat/Tax</th>
-                                            <th class="numeric">Payment</th>
                                             <th class="numeric">Total</th>
+                                            <th class="numeric">Payment</th>
+                                            <th class="numeric">Remaining</th>
                                             <th class="numeric">Created By</th>
+                                            <th class="numeric">Process</th>
                                             <th class="numeric"></th>
                                         </tr>
                                         </thead>
@@ -212,9 +214,11 @@
                                                 <td class="numeric">{% if transaction.transactionMethod is not empty %}{{ transaction.transactionMethod.name }}{% endif %}</td>
                                                 <td class="numeric">{{ transaction.discount }}</td>
                                                 <td class="numeric">{{ transaction.vat }}</td>
-                                                <td class="numeric">{{ transaction.payment }}</td>
                                                 <td class="numeric" id="total-{{ transaction.id }}">{{ transaction.total }}</td>
+                                                <td class="numeric">{{ transaction.payment }}</td>
+                                                <td class="numeric">{{ transaction.total - transaction.payment }}</td>
                                                 <td class="numeric">{{ transaction.createdBy }}</td>
+                                                <td class="numeric">{{ transaction.process }}</td>
                                                 <td class="numeric">
                                                     {% set processArr = {'Created': 'Created' ,'Pending':'Pending'} %}
                                                     {% if transaction.process in  processArr and transaction.payment == 0 and transaction.admissionPatientParticulars is defined %}
@@ -224,7 +228,7 @@
                                                         <a href="javascript:" data-id="{{ transaction.id }}" class="btn showTransaction green mini"><i class="fa fa-plus"></i> View</a>
                                                     {% endif %}
                                                     {% if transaction.process in  processArr and transaction.payment == 0 and transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
-                                                        <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
+                                                        <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_approve',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
                                                     {% endif %}
                                                     {% if transaction.process not in processArr %}
                                                         <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print_single',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="fa fa-print"></i> Print</a>
@@ -232,7 +236,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="10" class="transaction-hide" id="transaction-{{ transaction.id }}">
+                                                <td colspan="11" class="transaction-hide" id="transaction-{{ transaction.id }}">
                                                     {% if transaction.admissionPatientParticulars is defined and  transaction.admissionPatientParticulars is not empty  %}
                                                         <table class="table table-bordered table-striped table-condensed flip-content ">
                                                             <thead class="flip-content ">
@@ -268,8 +272,10 @@
                                             <td class="numeric" colspan="3"><span class="pull-right"><strong>Total TK.</strong> =</span></td>
                                             <td class="numeric"><strong class="discountAmount">{{ entity.discount|number_format }}</strong></td>
                                             <td class="numeric"><strong class="vat">{{ entity.vat|number_format }}</strong></td>
-                                            <td class="numeric"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
                                             <td class="numeric"><strong class="">{{ entity.total|number_format }}</strong></td>
+                                            <td class="numeric"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
+                                            <td class="numeric"><strong>{{ entity.due|number_format }}</strong></td>
+                                            <td class="numeric"></td>
                                             <td class="numeric"></td>
                                             <td class="numeric"></td>
                                         </tr>

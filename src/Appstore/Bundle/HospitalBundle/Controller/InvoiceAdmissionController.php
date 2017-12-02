@@ -179,7 +179,7 @@ class InvoiceAdmissionController extends Controller
             if($entity->getTotal() > 0 ) {
                 $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
                 $entity->setProcess('Admitted');
-                $entity->setPrintFor('admission');
+                $entity->setPrintFor('admitted');
                 $entity->setPaymentInWord($amountInWords);
             }
             $em->flush();
@@ -190,7 +190,7 @@ class InvoiceAdmissionController extends Controller
                 $this->getDoctrine()->getRepository('HospitalBundle:Particular')->setAdmissionPatientUpdateQnt($transaction);
             }
             if($payment > 0) {
-                 $transactionData = array('process' => $entity->getProcess(),'payment' => $payment, 'discount' => 0);
+                 $transactionData = array('process' => 'Done','payment' => $payment, 'discount' => 0);
                  $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertAdmissionTransaction($transaction,$transactionData);
                  $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
             }

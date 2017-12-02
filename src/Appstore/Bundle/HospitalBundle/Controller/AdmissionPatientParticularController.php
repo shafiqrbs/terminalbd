@@ -139,7 +139,7 @@ class AdmissionPatientParticularController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $payment = $request->request->get('payment');
-        $transaction->setProcess('In-progress');
+        $transaction->setProcess('Done');
         $transaction->setPayment($payment);
         $em->persist($transaction);
         $em->flush();
@@ -163,6 +163,27 @@ class AdmissionPatientParticularController extends Controller
         }
         $em->remove($transaction);
         $em->flush();
+        exit;
+    }
+
+     public function invoiceTransactionApproveAction(InvoiceTransaction $transaction)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (!$transaction) {
+            throw $this->createNotFoundException('Unable to find Invoice entity.');
+        }
+        $transaction->setProcess('Done');
+        $em->persist($transaction);
+        $em->flush();
+        foreach ($transaction->getAdmissionPatientParticulars() as $patientParticular ){
+            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->insertInvoiceParticularMasterUpdate($patientParticular);
+        }
+        if($transaction->getPayment() > 0){
+            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->admissionInvoiceTransactionUpdate($transaction);
+        }
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($transaction->getHmsInvoice());
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($transaction->getHmsInvoice());
+        $this->getDoctrine()->getRepository('HospitalBundle:Particular')->setAdmissionPatientUpdateQnt($transaction);
         exit;
     }
 

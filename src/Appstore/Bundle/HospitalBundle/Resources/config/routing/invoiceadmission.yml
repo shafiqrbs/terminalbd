@@ -43,8 +43,6 @@ hms_invoice_print_for:
     options:
             expose: true
 
-
-
 hms_invoice_admission_admitted:
     path:     /admitted-patient
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:admitted" }
@@ -75,11 +73,19 @@ hms_invoice_admission_daily_delete:
     options:
             expose: true
 
+hms_invoice_admission_daily_approve:
+    path:      /{id}/admitted-patient-daily-invoice-particular-approve
+    defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:invoiceTransactionApprove" }
+    options:
+            expose: true
+
 hms_invoice_admission_daily_particular_delete:
     path:      /{transaction}/{id}/admitted-patient-daily-invoice-particular-delete
     defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:invoiceParticularDelete" }
     options:
             expose: true
+
+
 
 hms_invoice_admission_daily_invoice_transaction_submit:
     path:     /{id}/admitted-patient-particular-submit

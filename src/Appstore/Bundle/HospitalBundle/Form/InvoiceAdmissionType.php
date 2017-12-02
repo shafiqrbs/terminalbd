@@ -55,7 +55,7 @@ class InvoiceAdmissionType extends AbstractType
             ))
             ->add('discount','text', array('attr'=>array('class'=>'tooltips discount','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
             ))
-            ->add('printFor', 'choice', array(
+           /* ->add('printFor', 'choice', array(
                 'attr'=>array('class'=>'span12 select-custom'),
                 'empty_value' => '--- Select Patient Status ---',
                 'expanded'      =>false,
@@ -66,7 +66,7 @@ class InvoiceAdmissionType extends AbstractType
                     'release'   => 'Release Certificate',
                     'death'     => 'Death Certificate',
                 ),
-            ))
+            ))*/
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
             ->add('disease','textarea', array('attr'=>array('class'=>'m-wrap span12','rows' => 4,'placeholder'=>'Add disease'),
                 'constraints' =>array(
