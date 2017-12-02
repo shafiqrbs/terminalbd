@@ -104,13 +104,13 @@ class InvoiceRepository extends EntityRepository
         }
     }
 
-    public function findWithOverview(User $user , $data)
+    public function findWithOverview(User $user , $data,$mode)
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->select('sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
-        $qb->where('e.hospitalConfig = :hospital');
-        $qb->setParameter('hospital', $hospital);
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $this->handleSearchBetween($qb,$data);
         $result = $qb->getQuery()->getOneOrNullResult();
 

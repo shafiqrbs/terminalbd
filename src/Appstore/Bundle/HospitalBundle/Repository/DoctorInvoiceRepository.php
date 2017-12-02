@@ -64,7 +64,7 @@ class DoctorInvoiceRepository extends EntityRepository
         return  $qb;
     }
 
-    public function  findWithOverview(User $user,$data)
+    public function  findWithOverview(User $user,$data, $mode )
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');

@@ -172,6 +172,7 @@ class AdmissionPatientParticularController extends Controller
         if (!$transaction) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
+        $transaction->setCreatedBy($this->getUser());
         $transaction->setProcess('Done');
         $em->persist($transaction);
         $em->flush();

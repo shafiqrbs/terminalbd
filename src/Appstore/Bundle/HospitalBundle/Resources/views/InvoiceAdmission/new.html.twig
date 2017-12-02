@@ -73,7 +73,7 @@
                     <ul class="unstyled">
                         <li><strong>Admission Date:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
                         <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y') }}{% endif %}</li>
-                        <li><strong>Cabin/Bed:</strong> {% if entity.cabin is not empty %}{{ entity.cabin.name }}{% endif %}/{{ entity.cabinNo }}</li>
+                        <li><strong>Cabin/Bed:</strong> {% if entity.cabin is not empty %}{{ entity.cabin.name }}{% endif %}</li>
                         <li><strong>Assign Doctor:</strong>&nbsp;{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</li>
                         <li><strong>Department:</strong>&nbsp;{% if entity.department is not empty %}{{ entity.department.name }}{% endif %}</li>
                     </ul>

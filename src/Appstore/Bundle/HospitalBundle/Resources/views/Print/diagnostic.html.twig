@@ -120,6 +120,32 @@
                 {% endif %}
                 </tfoot>
             </table>
+            <table class="table table-border">
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr>
+                <td class="span4">
+                    <ul class="unstyled">
+                        <li>Prepared By</li>
+                        <li>{{ entity.createdBy.profile.name }}</li>
+                    </ul>
+                </td>
+                <td class="span4 text-center">
+                    <ul class="unstyled">
+                        <li>Checked By</li>
+                        <li>Printed: {{ "now"|date("d-m-Y h:m A") }}</li>
+                    </ul>
+                </td>
+                <td class="span4 pull-right">
+                    <ul class="unstyled">
+                        <li>Printed By</li>
+                        <li>{{ app.user }}</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
+        </table>
         {% endif %}
 {% endblock %}
 {% block cssBlock %}

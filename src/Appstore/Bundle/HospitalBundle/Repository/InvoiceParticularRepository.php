@@ -98,7 +98,7 @@ class InvoiceParticularRepository extends EntityRepository
         $data = '';
         $i = 1;
         foreach ($entities as $entity) {
-            $data .= '<tr id="delete-'. $entity->getId() . '">';
+            $data .= '<tr id="remove-'. $entity->getId() . '">';
             $data .= '<td class="span1"><span class="badge badge-warning toggle badge-custom" id='. $entity->getId() .'" ><span>[+]</span></span></td>';
             $data .= '<td class="span1" >' . $i . '</td>';
             $data .= '<td class="span1" >' . $entity->getParticular()->getParticularCode() . '</td>';

@@ -155,7 +155,7 @@
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
-                                        <td class="numeric" >{{  entity.cabin.name }}</td>
+                                        <td class="numeric" >{% if entity.cabin %}{{  entity.cabin.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.total }}</td>
                                         <td class="numeric" >{{ entity.payment }}</td>
                                         <td class="numeric" >{{ entity.due }}</td>

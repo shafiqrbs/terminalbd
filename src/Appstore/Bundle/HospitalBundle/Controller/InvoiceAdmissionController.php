@@ -48,9 +48,7 @@ class InvoiceAdmissionController extends Controller
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user,$mode ='admission', $data);
         $pagination = $this->paginate($entities);
-        $overview = $em->getRepository('HospitalBundle:DoctorInvoice')->findWithOverview($user,$data);
-        $invoiceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithOverview($user,$data);
-
+        $invoiceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithOverview($user,$data, $mode ='admission');
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
         $cabins = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(2));
@@ -59,7 +57,6 @@ class InvoiceAdmissionController extends Controller
         return $this->render('HospitalBundle:InvoiceAdmission:index.html.twig', array(
             'entities' => $pagination,
             'invoiceOverview' => $invoiceOverview,
-            'overview' => $overview,
             'assignDoctors' => $assignDoctors,
             'referredDoctors' => $referredDoctors,
             'cabinGroups' => $cabinGroups,
