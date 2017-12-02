@@ -42,7 +42,7 @@ class InvoiceController extends Controller
 
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
-        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'pathology' , $data);
+        $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'diagnostic' , $data);
         $pagination = $this->paginate($entities);
         $overview = $em->getRepository('HospitalBundle:DoctorInvoice')->findWithOverview($user,$data);
         $invoiceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithOverview($user,$data);
@@ -82,7 +82,7 @@ class InvoiceController extends Controller
         $transactionMethod = $em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
         $entity->setTransactionMethod($transactionMethod);
         $entity->setPaymentStatus('Pending');
-        $entity->setInvoiceMode('pathology');
+        $entity->setInvoiceMode('diagnostic');
         $entity->setPrintFor('diagnostic');
         $entity->setCreatedBy($this->getUser());
         if(!empty($this->getUser()->getProfile()->getBranches())){

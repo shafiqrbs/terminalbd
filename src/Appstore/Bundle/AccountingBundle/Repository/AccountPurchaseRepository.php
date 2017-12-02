@@ -38,7 +38,7 @@ class AccountPurchaseRepository extends EntityRepository
         $qb->andWhere("e.process = :process");
         $qb->setParameter('process', 'approved');
         $this->handleSearchBetween($qb,$data);
-        $result = $qb->getQuery()->getSingleResult();
+        $result = $qb->getQuery()->getOneOrNullResult();
         $data =  array('purchaseAmount'=> $result['purchaseAmount'],'payment'=> $result['payment']);
         return $data;
 

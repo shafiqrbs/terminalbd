@@ -268,7 +268,12 @@ class AccountPurchaseController extends Controller
             }
             $result = $em->getRepository('AccountingBundle:AccountPurchase')->accountPurchaseOverview($this->getUser()->getGlobalOption(),$data);
             $lastBalance = ( $result['purchaseAmount'] - $result['payment']);
-            $entity->setBalance($lastBalance - $entity->getPayment());
+            if($entity ->getPurchaseAmount() ==  0 and $entity ->getPayment() > 0 ) {
+                $entity->setBalance($lastBalance - $entity->getPayment());
+            }else{
+                $balance = ($lastBalance + $entity->getPurchaseAmount()) - $entity->getPayment();
+                $entity->setBalance($balance);
+            }
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();

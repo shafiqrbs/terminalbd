@@ -77,7 +77,7 @@
                                             <li><strong>Patient Status:</strong>&nbsp;{{ entity.process|capitalize }}</li>
                                             <li><strong>Admission Date:</strong>&nbsp;{{ entity.created|date('d-m-Y') }}</li>
                                             <li><strong>Release Date:</strong>&nbsp;{% if entity.releaseDate is not empty %}{{ entity.releaseDate|date('d-m-Y') }}{% endif %}</li>
-                                            <li><strong>Cabin/Bed:</strong> {% if entity.cabin is not empty %}{{ entity.cabin.name }}{% endif %}/{{ entity.cabinNo }}</li>
+                                            <li><strong>Cabin/Bed:</strong> {% if entity.cabin is not empty %}{{ entity.cabin.name }}{% endif %}</li>
                                             <li><strong>Assign Doctor:</strong>&nbsp;{% if entity.assignDoctor is not empty %}{{ entity.assignDoctor.name }}{% endif %}</li>
                                             <li><strong>Department:</strong>&nbsp;{% if entity.department is not empty %}{{ entity.department.name }}{% endif %}</li>
                                         </ul>
@@ -217,14 +217,17 @@
                                                 <td class="numeric">{{ transaction.createdBy }}</td>
                                                 <td class="numeric">
                                                     {% set processArr = {'Created': 'Created' ,'Pending':'Pending'} %}
-                                                    {% if transaction.process in  processArr and transaction.payment == 0 and transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is empty %}
-                                                        <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'id':transaction.id}) }}" class="btn delete red mini"><i class="icon icon-trash"></i></a>
+                                                    {% if transaction.process in  processArr and transaction.payment == 0 and transaction.admissionPatientParticulars is defined %}
+                                                        <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
                                                     {% endif %}
                                                     {% if transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
                                                         <a href="javascript:" data-id="{{ transaction.id }}" class="btn showTransaction green mini"><i class="fa fa-plus"></i> View</a>
                                                     {% endif %}
+                                                    {% if transaction.process in  processArr and transaction.payment == 0 and transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
+                                                        <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
+                                                    {% endif %}
                                                     {% if transaction.process not in processArr %}
-                                                        <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print_single',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="icon icon-print"></i> Print</a>
+                                                        <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print_single',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="fa fa-print"></i> Print</a>
                                                     {% endif %}
                                                 </td>
                                             </tr>

@@ -743,7 +743,7 @@ class Builder extends ContainerAware
         }
         if ($securityContext->isGranted('ROLE_DOMAIN_HOSPITAL_MANAGER')) {
             if (!empty($config) and in_array('doctor', $config)) {
-                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission Invoice', array('route' => 'hms_doctor_commission_invoice'))
+                $menu['Hospital & Diagnostic']['Manage Invoice']->addChild('Commission', array('route' => 'hms_doctor_commission_invoice'))
                     ->setAttribute('icon', 'fa fa-user-md');
             }
         }

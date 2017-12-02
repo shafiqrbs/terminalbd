@@ -130,7 +130,7 @@
                                     <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice No</th>
-                                    <th class="numeric" >Delivery Date</th>
+                                    <th class="numeric" >Invoice Mode</th>
                                     <th class="numeric" >Net Total</th>
                                     <th class="numeric" >Received</th>
                                     <th class="numeric" >Balance</th>
@@ -147,7 +147,7 @@
                                         <td class="numeric"> {% if  entity.doctorInvoices is not empty %}<span class="badge badge-warning toggle badge-custom" id="{{ entity.id  }}" ><span>[+]</span></span>{% endif %}</td>
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
-                                        <td class="numeric" >{{ entity.deliveryDateTime }}</td>
+                                        <td class="numeric" >{{ entity.invoiceMode }}</td>
                                         <td class="numeric" >{{ entity.total|number_format }}</td>
                                         <td class="numeric" >{{ entity.payment|number_format }}</td>
                                         <td class="numeric" >{{ entity.due|number_format }}</td>
