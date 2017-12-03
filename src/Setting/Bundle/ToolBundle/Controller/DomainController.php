@@ -201,16 +201,16 @@ class DomainController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         set_time_limit(0);
-        if($option->getAccountingConfig()){
+        if(!empty($option->getAccountingConfig()) and $option->getAccountingConfig()){
             $this->getDoctrine()->getRepository('AccountingBundle:AccountingConfig')->accountingReset($option);
         }
-        if($option->getEcommerceConfig()) {
+        if(!empty($option->getEcommerceConfig()) and $option->getEcommerceConfig()) {
             $this->getDoctrine()->getRepository('EcommerceBundle:EcommerceConfig')->ecommerceReset($option);
         }
-        if($option->getInventoryConfig()) {
+        if(!empty($option->getInventoryConfig()) and $option->getInventoryConfig()) {
             $this->getDoctrine()->getRepository('InventoryBundle:InventoryConfig')->inventoryReset($option);
         }
-        if($option->getHospitalConfig()) {
+        if(!empty($option->getHospitalConfig()) and $option->getHospitalConfig()) {
             $this->getDoctrine()->getRepository('HospitalBundle:HospitalConfig')->hospitalReset($option);
         }
 
