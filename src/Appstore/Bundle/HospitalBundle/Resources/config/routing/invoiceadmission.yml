@@ -43,6 +43,13 @@ hms_invoice_print_for:
     options:
             expose: true
 
+hms_invoice_admission_patint_cabin:
+    path:      /admitted-patient-cabin-check
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:checkPatientCabinBooking" }
+    methods:  [POST]
+    options:
+            expose: true
+
 hms_invoice_admission_admitted:
     path:     /admitted-patient
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:admitted" }
@@ -103,3 +110,4 @@ hms_invoice_admission_transaction_print:
 hms_invoice_admission_particular_print:
     path:      /{invoice}/admitted-patient-transaction-invoice-particular
     defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:invoiceParticularPrint" }
+

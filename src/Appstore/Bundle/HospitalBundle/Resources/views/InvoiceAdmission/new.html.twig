@@ -327,7 +327,7 @@
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group">
-                                        <label class="control-label red" for="firstName"><span>Cabin/Ward/Bad<span class="required">*</span></span></label>
+                                        <label class="control-label red" for="firstName"><span>Cabin/Ward/Bed<span class="required">*</span></span></label>
                                         <div class="controls">
                                             {{ form_widget(form.cabin) }}
                                             {{ form_errors(form.cabin) }}
@@ -406,7 +406,7 @@
                             </thead>
                             <tbody id="invoiceParticulars">
                             {% for item in entity.invoiceParticulars %}
-                            <tr id="remove-{{ item.id }}">
+                            <tr id="remove-{{item.id}}">
                                 <td class="span1"><span class="badge badge-warning toggle badge-custom" id="{{ item.id  }}" ><span>[+]</span></span></td>
                                 <td  class="span1">{{ loop.index }}</td>
                                 <td  class="span1">{{ item.particular.particularCode }}</td>
@@ -415,7 +415,7 @@
                                 <td class="span1">{% if item.particular.service.hasQuantity == 1 %}{{ item.quantity }}{% endif %}</td>
                                 <td class="span2">{{ item.salesPrice }}</td>
                                 <td class="span1">{{ item.subTotal|number_format }}</td>
-                                <td class="span1"><a id="{{ item.id }}" data-id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_invoice_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini delete" ><i class="icon-trash"></i></a></td>
+                                <td class="span1"><a id="{{ item.id }}" data-id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('hms_invoice_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a></td>
                             </tr>
                             {% if item.particular.service.id == 1 %}
                                 <tr id="show-{{ item.id }}" class="showing-overview">
@@ -760,6 +760,12 @@
     </div>
     </div>
     </div>
+    <div id="cabinInvalid" style="display: none">This cabin already booked for another patient.</div>
+<style>
+    .input-error{
+        border: 1px solid red !important;
+    }
+</style>
 {% endblock %}
 {% block cssBlock %}
 {% stylesheets filter='cssrewrite'
@@ -797,21 +803,6 @@
         });
     });
 
-    $(document).on('click', '#addPatient', function(e) {
-
-        var url = $('#addPatient').attr('data-url');
-        e.preventDefault();
-        $.ajax({
-        type: 'post',
-        url: url,
-        data: $('#invoiceForm').serialize(),
-        success: function (response) {
-        obj = JSON.parse(response);
-        $('#patient').val(obj['patient']);
-        }
-        });
-    });
-
     $(document).on('change', '#appstore_bundle_hospitalbundle_invoice_printFor', function(e) {
 
         var printFor = $(this).val();
@@ -824,9 +815,34 @@
         success: function (response) {}
         });
     });
+
+    $(document).on('change', '#appstore_bundle_hospitalbundle_invoice_cabin', function(e) {
+
+        var url ="{{ path('hms_invoice_admission_patint_cabin') }}";
+        var invoice = $('#invoiceId').val();
+        var cabin = $('#appstore_bundle_hospitalbundle_invoice_cabin').val();
+        if(cabin == ''){
+            return false;
+        }
+        $.post( url,{ invoice:invoice , cabin:cabin } )
+        .done(function( data ) {
+            if(data == 'invalid'){
+                $("#appstore_bundle_hospitalbundle_invoice_cabin").select2().select2("val","");
+                $('#cabinInvalid').notifyModal({
+                    duration : 5000,
+                    placement : 'center',
+                    overlay : true,
+                    type : 'notify',
+                    icon : false,
+                });
+            }
+        });
+
+    });
     $('input[name=particular]').focus();
     $( ".payment" ).val('');
     $( ".discount" ).val('');
     $( ".payment" ).attr( "placeholder", "{{ entity.payment }}" );
     $( ".discount" ).attr( "placeholder", "{{ entity.discount }}" );
+
 {% endblock %}

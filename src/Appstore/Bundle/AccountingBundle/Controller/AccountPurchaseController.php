@@ -274,6 +274,7 @@ class AccountPurchaseController extends Controller
                 $balance = ($lastBalance + $entity->getPurchaseAmount()) - $entity->getPayment();
                 $entity->setBalance($balance);
             }
+            $entity->setTransactionMethod(null);
             $entity->setProcess('approved');
             $entity->setApprovedBy($this->getUser());
             $em->flush();

@@ -360,5 +360,15 @@ class InvoiceAdmissionController extends Controller
         $em->flush();
         exit;
     }
+
+    public function checkPatientCabinBookingAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $cabin = $request->request->get('cabin');
+        $invoice = $request->request->get('invoice');
+        $status = $em->getRepository('HospitalBundle:Invoice')->checkCabinBooking($invoice,$cabin);
+        echo $status;
+        exit;
+    }
 }
 

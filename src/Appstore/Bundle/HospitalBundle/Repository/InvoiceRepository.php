@@ -3,6 +3,7 @@
 namespace Appstore\Bundle\HospitalBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -313,6 +314,24 @@ class InvoiceRepository extends EntityRepository
         }
         $em->persist($entity);
         $em->flush($entity);
+
+    }
+
+    public function checkCabinBooking($invoice , $cabin)
+    {
+        $invoice = $this->_em->getRepository('HospitalBundle:Invoice')->find($invoice);
+        $cabin = $this->_em->getRepository('HospitalBundle:Particular')->find($cabin);
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('COUNT(e.cabin) AS cabinCount');
+        $qb->where('e.hospitalConfig = :config')->setParameter('config', $invoice ->getHospitalConfig()->getId());
+        $qb->andWhere('e.cabin = :cabin')->setParameter('cabin', $cabin ->getId());
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Admitted');
+        $res = $qb->getQuery()->getOneOrNullResult();
+        if(!empty($res) and $res['cabinCount'] > 0 ){
+            return 'invalid';
+        }else{
+            return 'valid';
+        }
 
     }
 

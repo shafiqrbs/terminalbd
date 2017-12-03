@@ -137,7 +137,7 @@ $(document).on('click', '#addParticular', function() {
             $('#invoiceTransaction').html(obj['invoiceTransaction']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
-            $('#particular').prop('selectedIndex',0);
+            $("#particular").select2().select2("val","");
             $('#price').val('');
             $('#quantity').val('1');
             $('#addParticular').attr("disabled", true);
@@ -275,13 +275,29 @@ $(document).on('click', '#addPayment', function() {
 
 $(document).on("click", "#receiveBtn", function() {
 
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-          $('#invoiceForm').submit();
+    $('#appstore_bundle_hospitalbundle_invoice_cabin, #appstore_bundle_hospitalbundle_invoice_customer_alternativeContactPerson, #appstore_bundle_hospitalbundle_invoice_customer_alternativeRelation, #appstore_bundle_hospitalbundle_invoice_customer_alternativeContactMobile').each(function() {
+        if ($(this).val() == '') {
+            $('#appstore_bundle_hospitalbundle_invoice_customer_alternativeContactPerson').addClass('input-error').focus;
+            $('#appstore_bundle_hospitalbundle_invoice_customer_alternativeRelation').addClass('input-error').focus;
+            $('#appstore_bundle_hospitalbundle_invoice_customer_alternativeContactMobile').addClass('input-error').focus;
+            $('#appstore_bundle_hospitalbundle_invoice_cabin').addClass('input-error').focus;
+            $('#updatePatient').show();
+            return false;
+
+        }else{
+
+            $('#confirm-content').confirmModal({
+                topOffset: 0,
+                top: '25%',
+                onOkBut: function(event, el) {
+                    $('#invoiceForm').submit();
+                }
+            });
         }
+
     });
+
+
 });
 
 

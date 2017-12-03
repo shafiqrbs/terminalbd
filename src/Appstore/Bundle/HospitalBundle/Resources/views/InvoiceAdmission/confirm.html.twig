@@ -471,15 +471,15 @@
         type: 'POST',
         data: 'particularId='+particularId+'&quantity='+quantity+'&price='+price,
         success: function (response) {
-        obj = JSON.parse(response);
-        $('#invoiceParticulars').html(obj['invoiceParticulars']);
-        $('.total').html(obj['total']);
-        $('.msg-hidden').show();
-        $('#msg').html(obj['msg']);
-        $('#particular').prop('selectedIndex',0);
-        $('#price').val('');
-        $('#quantity').val('1');
-        $('#addPatientParticular').attr("disabled", false);
+            obj = JSON.parse(response);
+            $('#invoiceParticulars').html(obj['invoiceParticulars']);
+            $('.total').html(obj['total']);
+            $('.msg-hidden').show();
+            $('#msg').html(obj['msg']);
+            $("#particular").select2().select2("val","");
+            $('#price').val('');
+            $('#quantity').val('1');
+            $('#addPatientParticular').attr("disabled", false);
         }
         })
         }
