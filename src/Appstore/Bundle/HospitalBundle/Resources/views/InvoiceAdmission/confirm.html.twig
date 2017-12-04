@@ -384,7 +384,7 @@
                                     </div>
                                 </div>
                             {% else %}
-                                {% if entity.paymentStatus != 'Paid' %}
+                                {% if entity.paymentStatus != 'Paid' and  entity.process not in ['Release','Death']  %}
                                     <div class="row-fluid particular-info" >
                                         <form method="post" name="form" id="form">
                                             <div class="span1 pull-right">
