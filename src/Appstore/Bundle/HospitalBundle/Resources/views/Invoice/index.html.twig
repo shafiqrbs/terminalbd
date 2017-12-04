@@ -161,24 +161,25 @@
                                         <td class="numeric" > {{ entity.process }}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
-                                                {% set processArr = {'In-progress': 'In-progress' ,'Created':'Created','Revised':'Revised'} %}
+                                                {% set processArr = {'In-progress':'In-progress'} %}
+                                                {% set processIntArr = {'Created':'Created','Pending':'Pending','Revised':'Revised'} %}
                                                 {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due'} %}
-                                                {% if  entity.process in  processArr|keys %}
-                                                 <a href="{{ path('hms_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-user"></i> Manage Diagnostic</a>
+                                                {% if  entity.process in processIntArr %}
+                                                    <a href="{{ path('hms_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-user"></i> Manage Diagnostic</a>
+                                                {% endif %}
+                                                {% if entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
+                                                    <a href="{{ path('hms_invoice_confirm', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-user"></i> Manage Diagnostic</a>
                                                 {% endif %}
                                                 <a class="btn blue mini" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                                    Action
                                                     <i class="icon-tasks"></i>
                                                 </a>
                                                 <ul class="dropdown-menu pull-right action">
-                                                    {% set processArr = {'In-progress': 'In-progress' ,'Created':'Created','Revised':'Revised'} %}
-                                                    {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due'} %}
                                                     {% if entity.process =='Created' and entity.paymentStatus =='Pending' %}
                                                         <li><a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red  delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a></li>
                                                     {% endif %}
                                                     {% if entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
                                                         <li><a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a></li>
-                                                        <li><a  href="{{ path('hms_invoice_confirm',{'id':entity.id}) }}"  class="btn yellow" ><i class=" icon-truck"></i> Delivery</a></li>
                                                         {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
                                                         <li><a  href="{{ path('hms_invoice_reverse',{'invoice':entity.invoice}) }}"  class="btn black reverse" ><i class=" icon-retweet"></i> Reverse</a></li>
                                                         {% endif %}
