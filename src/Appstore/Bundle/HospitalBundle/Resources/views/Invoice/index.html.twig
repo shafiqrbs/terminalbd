@@ -180,9 +180,6 @@
                                                     {% endif %}
                                                     {% if entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
                                                         <li><a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a></li>
-                                                        {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                                        <li><a  href="{{ path('hms_invoice_reverse',{'invoice':entity.invoice}) }}"  class="btn black reverse" ><i class=" icon-retweet"></i> Reverse</a></li>
-                                                        {% endif %}
                                                     {% endif %}
                                                     <li><a href="{{ path('hms_invoice_show', { 'id': entity.id }) }}" class="btn purple"><i class="icon-eye-open"></i> View</a></li>
                                                     {#<a href="javascript:EasyWebApp.printUrl('{{ url('hms_invoice_print_invoice',{'id':entity.id}) }}')"> Print URL</a>#}
