@@ -140,6 +140,21 @@ class Particular
     /**
      * @var integer
      *
+     * @ORM\Column(name="openingQuantity", type="integer", nullable=true)
+     */
+    private $openingQuantity;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="minQuantity", type="integer", nullable=true)
+     */
+    private $minQuantity;
+
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="purchaseQuantity", type="integer", nullable=true)
      */
     private $purchaseQuantity;
@@ -1171,6 +1186,38 @@ class Particular
     public function setUpdated($updated)
     {
         $this->updated = $updated;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOpeningQuantity()
+    {
+        return $this->openingQuantity;
+    }
+
+    /**
+     * @param int $openingQuantity
+     */
+    public function setOpeningQuantity($openingQuantity)
+    {
+        $this->openingQuantity = $openingQuantity;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMinQuantity()
+    {
+        return $this->minQuantity;
+    }
+
+    /**
+     * @param int $minQuantity
+     */
+    public function setMinQuantity($minQuantity)
+    {
+        $this->minQuantity = $minQuantity;
     }
 
 

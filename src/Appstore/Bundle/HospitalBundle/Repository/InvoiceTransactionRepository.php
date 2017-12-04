@@ -159,6 +159,8 @@ class InvoiceTransactionRepository extends EntityRepository
 
     public function hmsSalesTransactionReverse(Invoice $entity)
     {
+
+
         $em = $this->_em;
 
         if(!empty($entity->getAccountSales())){
@@ -185,11 +187,45 @@ class InvoiceTransactionRepository extends EntityRepository
         }
     }
 
+    public function hmsAdmissionSalesTransactionReverse(Invoice $entity)
+    {
+
+        $em = $this->_em;
+
+        if(!empty($entity->getAccountSales())){
+            /* @var AccountSales $sales*/
+            foreach ($entity->getAccountSales() as $sales ){
+
+                $globalOption = $sales->getGlobalOption()->getId();
+                $accountRefNo = $sales->getAccountRefNo();
+                $transaction = $em->createQuery("DELETE AccountingBundle:Transaction e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+                $transaction->execute();
+                $accountCash = $em->createQuery("DELETE AccountingBundle:AccountCash e WHERE e.globalOption = ".$globalOption ." AND e.accountRefNo =".$accountRefNo." AND e.processHead = 'Sales'");
+                $accountCash->execute();
+            }
+        }
+
+        $accountCash = $em->createQuery('DELETE AccountingBundle:AccountSales e WHERE e.hmsInvoices = '.$entity->getId());
+        if(!empty($accountCash)){
+            $accountCash->execute();
+        }
+
+        $qb = $this->createQueryBuilder('it');
+        $q = $qb->update()
+            ->set('it.process', $qb->expr()->literal('In-progress'))
+            ->where('it.hmsInvoice = :invoice')
+            ->setParameter('invoice', $entity->getId())
+            ->getQuery();
+        $p = $q->execute();
+
+
+
+    }
+
     public function updateInvoiceTransactionDiscount(Invoice $entity)
     {
 
         /** @var InvoiceTransaction $transaction */
-
         foreach ($entity->getInvoiceTransactions() as $transaction) {
 
             $transaction->setDiscount(0);

@@ -241,7 +241,8 @@ class MedicineController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find particular entity.');
         }
-        $entity->setPrice(abs($data['value']));
+        $setField = 'set'.$data['name'];
+        $entity->$setField(abs($data['value']));
         $em->flush();
         exit;
 

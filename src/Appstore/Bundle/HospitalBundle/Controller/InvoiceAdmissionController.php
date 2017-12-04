@@ -185,7 +185,7 @@ class InvoiceAdmissionController extends Controller
 
                 $transaction = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->initialInsertInvoiceTransaction($entity);
                 $this->getDoctrine()->getRepository('HospitalBundle:AdmissionPatientParticular')->initialUpdateInvoiceParticulars($entity,$transaction);
-                $this->getDoctrine()->getRepository('HospitalBundle:Particular')->setAdmissionPatientUpdateQnt($transaction);
+                $this->getDoctrine()->getRepository('HospitalBundle:Particular')->insertAccessories($entity);
                 $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
             }
 
@@ -231,28 +231,6 @@ class InvoiceAdmissionController extends Controller
     }
 
 
-    public function approvexAction(Request $request , Invoice $entity)
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $payment = $request->request->get('payment');
-        $discount = $request->request->get('discount');
-        $process = $request->request->get('process');
-        if (!empty($entity) and !empty($payment) and !empty($process)) {
-            $em = $this->getDoctrine()->getManager();
-            $entity->setProcess($process);
-            $em->flush();
-            if($payment > 0 || $discount > 0) {
-                $transactionData = array('process'=> 'Done','payment' => $payment, 'discount' => $discount);
-                $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->admissionPaymentTransaction($entity,$transactionData);
-                $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
-            }
-            return new Response('success');
-        } else {
-            return new Response('failed');
-        }
-        exit;
-    }
 
     public function approveAction(Request $request , Invoice $entity)
     {
@@ -424,6 +402,48 @@ class InvoiceAdmissionController extends Controller
         $status = $em->getRepository('HospitalBundle:Invoice')->checkCabinBooking($invoice,$cabin);
         echo $status;
         exit;
+    }
+
+
+    public function admissionInvoiceReverseAction($invoice){
+
+        $em = $this->getDoctrine()->getManager();
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital, 'invoice' => $invoice));
+        $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsAdmissionSalesTransactionReverse($entity);
+        $em->getRepository('HospitalBundle:InvoiceParticular')->hmsInvoiceParticularReverse($entity);
+        $em = $this->getDoctrine()->getManager();
+        $entity->setRevised(true);
+        $entity->setProcess('Admitted');
+        $em->flush();
+        $template = $this->get('twig')->render('HospitalBundle:Reverse:admission.html.twig',array(
+            'entity' => $entity,
+        ));
+        $em->getRepository('HospitalBundle:HmsReverse')->insertInvoice($entity,$template);
+        return $this->redirect($this->generateUrl('hms_invoice_admission_reverse_show',array('invoice' => $invoice)));
+
+    }
+
+    public function admissionInvoiceReverseShowAction($invoice)
+    {
+
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $admission = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital, 'invoice' => $invoice));
+        $entity = $this->getDoctrine()->getRepository('HospitalBundle:HmsReverse')->findOneBy(array('hospitalConfig' => $hospital, 'hmsInvoice' => $admission->getId()));
+        return $this->render('HospitalBundle:Reverse:admissionShow.html.twig', array(
+            'entity' => $entity
+        ));
+
+    }
+
+    public function invoiceReverseShowAction(Invoice $invoice)
+    {
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $entity = $this->getDoctrine()->getRepository('HospitalBundle:HmsReverse')->findOneBy(array('hospitalConfig' => $hospital, 'hmsInvoice' => $invoice));
+        return $this->render('HospitalBundle:Reverse:show.html.twig', array(
+            'entity' => $entity,
+        ));
+
     }
 }
 

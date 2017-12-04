@@ -72,7 +72,6 @@
                                             <input type="text" name="quantity" id="quantity-{{ product.rowid }}"
                                                        class="form-control input-number" value="{{ product.quantity }}"
                                                        min="1" max="{{ product.maxQuantity }}">
-
                                                 <span class="input-group-btn">
                                               <button type="button" class="btn btn-success btn-number-cart"
                                                       data-type="plus" data-field="quantity"
@@ -84,9 +83,8 @@
                                             </span>
                                                 {% if product.productUnit is not empty %}
                                                     <span class="input-group-btn">
-                                                    <button type="button"
-                                                            class="btn btn-warning">{{ product.productUnit }}</button>
-                                                </span>
+                                                        <button type="button"  class="btn btn-warning">{{ product.productUnit }}</button>
+                                                    </span>
                                                 {% endif %}
                                             <span class="input-group-btn">
                                                 <button id="{{ product.rowid }}"

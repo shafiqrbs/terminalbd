@@ -26,6 +26,20 @@ class HmsReverseRepository extends EntityRepository
         $reverse->setHospitalConfig($entity->getHospitalConfig());
         $reverse->setProcess('Pathological Invoice');
         $reverse->setContent($data);
+        $reverse->setHmsInvoice($entity);
+        $this->_em->persist($reverse);
+        $this->_em->flush($reverse);
+
+    }
+    public function insertAdmissionInvoice(Invoice $entity,$data)
+    {
+        $reverse = New HmsReverse();
+
+        $reverse->setName('Admitted Invoice');
+        $reverse->setHospitalConfig($entity->getHospitalConfig());
+        $reverse->setProcess('Admitted Invoice');
+        $reverse->setContent($data);
+        $reverse->setHmsInvoice($entity);
         $this->_em->persist($reverse);
         $this->_em->flush($reverse);
 

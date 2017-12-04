@@ -525,13 +525,27 @@
                         <div class="row-fluid">
                             <div class="span12">
                                 <div class="row-fluid particular-info" >
-                                    <div class="span7">
+                                    <div class="span6">
                                         <select id="particular" name="particular" class="span12 select2">
                                             <option value="">Test Name, Accessories, Surgery, Cabin etc. </option>
                                             {{ particularService|raw }}
                                         </select>
                                     </div>
-                                    <div class="span2"><input type="number" class="m-wrap span12" id="quantity" name="quantity" value="1"></div>
+                                    <div class="span3">
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                               <button type="button" class="btn red btn-number" data-type="minus" data-field="quantity">
+                                                        <span class="fa fa-minus"></span>
+                                               </button>
+                                            </span>
+                                            <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="100">
+                                            <span class="input-group-btn">
+                                              <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
+                                                      <span class="fa fa-plus"></span>
+                                              </button>
+                                            </span>
+                                        </div>
+                                    </div>
                                     <div class="span2"><input type="text" class="m-wrap span12" id="price" name="price" value="" maxlength="8"></div>
                                     <div class="span1">
                                         <input type="hidden" id="particularId" name="particularId" value="">
@@ -834,6 +848,39 @@
         });
 
     });
+
+    $(document).on( "click", ".btn-number", function(e){
+
+        e.preventDefault();
+        fieldName = $(this).attr('data-field');
+        type      = $(this).attr('data-type');
+        var input = $("input[name='"+fieldName+"']");
+        var currentVal = parseInt(input.val());
+        alert(currentVal);
+        if (!isNaN(currentVal)) {
+        if(type == 'minus') {
+
+        if(currentVal > input.attr('min')) {
+        input.val(currentVal - 1).change();
+        }
+        if(parseInt(input.val()) == input.attr('min')) {
+        $(this).attr('disabled', true);
+        }
+        } else if(type == 'plus') {
+
+        if(currentVal < input.attr('max')) {
+        input.val(currentVal + 1).change();
+        }
+        if(parseInt(input.val()) == input.attr('max')) {
+        $(this).attr('disabled', true);
+        }
+        }
+        } else {
+        input.val(0);
+        }
+    });
+
+
     $('input[name=particular]').focus();
     $( ".payment" ).val('');
     $( ".discount" ).val('');

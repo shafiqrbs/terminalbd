@@ -5,6 +5,7 @@ use Appstore\Bundle\HospitalBundle\Controller\InvoiceController;
 use Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -118,6 +119,28 @@ class InvoiceParticularRepository extends EntityRepository
 
     public function invoiceParticularLists($user){
 
+
+    }
+
+    public function hmsInvoiceParticularReverse(Invoice $invoice)
+    {
+
+        $em = $this->_em;
+
+        /** @var InvoiceParticular $item */
+
+        foreach($invoice->getInvoiceParticulars() as $item ){
+
+            /** @var Particular  $particular */
+
+            $particular = $item->getParticular();
+            if( $particular->getService()->getId() == 4 ){
+                $qnt = ($particular->getSalesQuantity() - $item->getQuantity());
+                $particular->setSalesQuantity($qnt);
+                $em->persist($particular);
+                $em->flush();
+            }
+        }
 
     }
 

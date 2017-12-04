@@ -129,6 +129,8 @@ class ParticularRepository extends EntityRepository
             ->addSelect('e.quantity')
             ->addSelect('e.status')
             ->addSelect('e.salesQuantity')
+            ->addSelect('e.minQuantity')
+            ->addSelect('e.openingQuantity')
             ->addSelect('u.name as unit')
             ->addSelect('s.name as serviceName')
             ->addSelect('s.code as serviceCode')
@@ -198,22 +200,22 @@ class ParticularRepository extends EntityRepository
         }
     }
 
-    public function insertDiagnosticAccessories(Invoice $invoice){
+    public function insertAccessories(Invoice $invoice){
 
         $em = $this->_em;
 
+        $em = $this->_em;
         /** @var InvoiceParticular $item */
-
-        foreach($invoice->getInvoiceParticulars() as $item ){
-
-            /** @var Particular  $particular */
-
-            $particular = $item->getParticular();
-            if( $particular->getService()->getId() == 4 ){
-                $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
-                $particular->setSalesQuantity($qnt);
-                $em->persist($particular);
-                $em->flush();
+        if(!empty($invoice->getInvoiceParticulars())){
+            foreach($invoice->getInvoiceParticulars() as $item ){
+                /** @var Particular  $particular */
+                $particular = $item->getParticular();
+                if( $particular->getService()->getId() == 4 ){
+                    $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
+                    $particular->setSalesQuantity($qnt);
+                    $em->persist($particular);
+                    $em->flush();
+                }
             }
         }
     }
@@ -239,7 +241,7 @@ class ParticularRepository extends EntityRepository
         }
     }
 
-    public function setAdmissionPatientUpdateQnt(InvoiceTransaction  $transaction){
+    public function admittedPatientAccessories(InvoiceTransaction $transaction){
 
         $em = $this->_em;
 
@@ -252,7 +254,6 @@ class ParticularRepository extends EntityRepository
 
                 $particular = $item->getParticular();
                 if( $particular->getService()->getId() == 4 ){
-
                     $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
                     $particular->setSalesQuantity($qnt);
                     $em->persist($particular);

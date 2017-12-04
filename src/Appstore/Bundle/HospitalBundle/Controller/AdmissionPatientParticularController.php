@@ -151,7 +151,7 @@ class AdmissionPatientParticularController extends Controller
         }
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($transaction->getHmsInvoice());
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($transaction->getHmsInvoice());
-        $this->getDoctrine()->getRepository('HospitalBundle:Particular')->setAdmissionPatientUpdateQnt($transaction);
+        $this->getDoctrine()->getRepository('HospitalBundle:Particular')->admittedPatientAccessories($transaction);
         return $this->redirect($this->generateUrl('hms_invoice_admission_confirm', array('id' => $transaction->getHmsInvoice()->getId())));
     }
 
@@ -186,7 +186,7 @@ class AdmissionPatientParticularController extends Controller
         }
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($transaction->getHmsInvoice());
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($transaction->getHmsInvoice());
-        $this->getDoctrine()->getRepository('HospitalBundle:Particular')->setAdmissionPatientUpdateQnt($transaction);
+        $this->getDoctrine()->getRepository('HospitalBundle:Particular')->admittedPatientAccessories($transaction);
         exit;
     }
 

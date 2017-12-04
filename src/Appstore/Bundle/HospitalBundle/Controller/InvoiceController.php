@@ -263,7 +263,7 @@ class InvoiceController extends Controller
             if($entity->getTotal() > 0) {
                 $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertTransaction($entity);
                 $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
-                $this->getDoctrine()->getRepository('HospitalBundle:Particular')->insertDiagnosticAccessories($entity);
+                $this->getDoctrine()->getRepository('HospitalBundle:Particular')->insertAccessories($entity);
             }
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
                 $dispatcher = $this->container->get('event_dispatcher');
@@ -442,8 +442,10 @@ class InvoiceController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findBy(array('hospitalConfig' => $hospital, 'invoice' => $invoice));
+        $entity = $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital, 'invoice' => $invoice));
         $em->getRepository('HospitalBundle:InvoiceTransaction')->hmsSalesTransactionReverse($entity);
+        $em->getRepository('HospitalBundle:InvoiceParticular')->hmsInvoiceParticularReverse($entity);
+
         $em = $this->getDoctrine()->getManager();
         $entity->setRevised(true);
         $entity->setProcess('Revised');

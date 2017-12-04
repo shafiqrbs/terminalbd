@@ -14,6 +14,14 @@ hms_invoice_admission_edit:
     path:     /{id}/edit
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:edit" }
 
+hms_invoice_admission_reverse:
+    path:     /{invoice}/reverse
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:admissionInvoiceReverse" }
+
+hms_invoice_admission_reverse_show:
+    path:     /{invoice}/reverse-show
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:admissionInvoiceReverseShow" }
+
 hms_invoice_admission_particular_search:
     path:     /{id}/particular-search
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:particularSearch" }

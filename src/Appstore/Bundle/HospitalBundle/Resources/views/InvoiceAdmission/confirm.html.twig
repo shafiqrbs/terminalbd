@@ -221,28 +221,21 @@
                                                 <td class="numeric">{{ transaction.createdBy }}</td>
                                                 <td class="numeric">{{ transaction.process }}</td>
                                                 <td class="numeric">
-
-
-                                                    {% if entity.paymentStatus != 'Paid' and entity.process !='Done' %}
+                                                    {% if entity.process in ['Admitted']  %}
                                                         {% set processArr = {'Created': 'Created' ,'Pending':'Pending','In-progress':'In-progress'} %}
-                                                        {% if transaction.process in  processArr and transaction.payment == 0 and transaction.admissionPatientParticulars is defined %}
+                                                        {% if transaction.process in  processArr %}
                                                             <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
                                                         {% endif %}
                                                         {% if transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
                                                             <a href="javascript:" data-id="{{ transaction.id }}" class="btn showTransaction green mini"><i class="fa fa-plus"></i> View</a>
                                                         {% endif %}
-                                                        {% if (transaction.process in  processArr and transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty ) %}
-                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_approve',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
-                                                        {% endif %}
                                                         {% if transaction.process not in processArr %}
                                                             <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print_single',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="fa fa-print"></i> Print</a>
                                                         {% endif %}
                                                         {% if transaction.process == 'In-progress' %}
-                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
                                                             <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_approve',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
                                                         {% endif %}
                                                     {% endif %}
-
                                                 </td>
                                             </tr>
                                             <tr>
@@ -384,7 +377,7 @@
                                     </div>
                                 </div>
                             {% else %}
-                                {% if entity.paymentStatus != 'Paid' and  entity.process not in ['Release','Death']  %}
+                                {% if entity.process not in ['Release','Death']  %}
                                     <div class="row-fluid particular-info" >
                                         <form method="post" name="form" id="form">
                                             <div class="span1 pull-right">
