@@ -182,6 +182,7 @@ class InvoiceAdmissionController extends Controller
             $em->flush();
 
             if($entity->getTotal() > 0 ){
+
                 $transaction = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->initialInsertInvoiceTransaction($entity);
                 $this->getDoctrine()->getRepository('HospitalBundle:AdmissionPatientParticular')->initialUpdateInvoiceParticulars($entity,$transaction);
                 $this->getDoctrine()->getRepository('HospitalBundle:Particular')->setAdmissionPatientUpdateQnt($transaction);
@@ -263,7 +264,7 @@ class InvoiceAdmissionController extends Controller
         if (!empty($entity) and !empty($payment) and !empty($process)) {
 
             $em = $this->getDoctrine()->getManager();
-            $entity->setProcess($process);
+            $entity->setProcess('Admitted');
             $em->flush();
             $transactionData = array('process'=> 'In-progress','payment' => $payment, 'discount' => $discount);
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);

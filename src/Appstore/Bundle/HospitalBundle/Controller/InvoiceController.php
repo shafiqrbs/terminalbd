@@ -266,7 +266,6 @@ class InvoiceController extends Controller
                 $this->getDoctrine()->getRepository('HospitalBundle:Particular')->insertDiagnosticAccessories($entity);
             }
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
-
                 $dispatcher = $this->container->get('event_dispatcher');
                 $dispatcher->dispatch('setting_tool.post.hms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
             }
@@ -397,7 +396,7 @@ class InvoiceController extends Controller
 
         if (!empty($entity) and !empty($payment) and !empty($process)) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setProcess($process);
+            $entity->setProcess('In-progress');
             $em->flush();
             $transactionData = array('process'=> 'In-progress','payment' => $payment, 'discount' => $discount);
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);

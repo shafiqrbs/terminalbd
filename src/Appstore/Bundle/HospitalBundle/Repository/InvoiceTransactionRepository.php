@@ -23,7 +23,7 @@ class InvoiceTransactionRepository extends EntityRepository
         $entity->setHmsInvoice($invoice);
         $entity->setCode($code + 1);
         $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
-        $entity->setProcess('In-progress');
+        $entity->setProcess('Done');
         $entity->setTransactionCode($transactionCode);
         $entity->setDiscount($invoice->getDiscount());
         $entity->setTotal($invoice->getSubTotal());
@@ -91,6 +91,7 @@ class InvoiceTransactionRepository extends EntityRepository
             $entity->setProcess('Done');
             $entity->setDiscount($invoice->getDiscount());
             $entity->setPayment($invoice->getPayment());
+            $entity->setTotal($invoice->getSubTotal());
             $entity->setTransactionMethod($invoice->getTransactionMethod());
             $entity->setAccountBank($invoice->getAccountBank());
             $entity->setPaymentCard($invoice->getPaymentCard());
