@@ -198,6 +198,26 @@ class ParticularRepository extends EntityRepository
         }
     }
 
+    public function insertDiagnosticAccessories(Invoice $invoice){
+
+        $em = $this->_em;
+
+        /** @var InvoiceParticular $item */
+
+        foreach($invoice->getInvoiceParticulars() as $item ){
+
+            /** @var Particular  $particular */
+
+            $particular = $item->getParticular();
+            if( $particular->getService()->getId() == 4 ){
+                $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
+                $particular->setSalesQuantity($qnt);
+                $em->persist($particular);
+                $em->flush();
+            }
+        }
+    }
+
     public function getSalesUpdateQnt(Invoice $invoice){
 
         $em = $this->_em;

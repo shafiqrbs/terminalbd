@@ -70,13 +70,10 @@ class InvoiceType extends AbstractType
             ))
             ->add('printFor', 'choice', array(
                 'attr'=>array('class'=>'span12 select-custom'),
-                'empty_value' => '--- Select Print For ---',
                 'expanded'      =>false,
                 'multiple'      =>false,
                 'choices' => array(
                     'diagnostic' => 'Diagnostic',
-                    'payment' => 'Payment',
-                    'payments' => 'All Payment',
                     'visit' => 'Visit',
                 ),
             ))

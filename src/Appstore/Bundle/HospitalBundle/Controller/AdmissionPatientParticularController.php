@@ -163,6 +163,8 @@ class AdmissionPatientParticularController extends Controller
         }
         $em->remove($transaction);
         $em->flush();
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($transaction->getHmsInvoice());
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($transaction->getHmsInvoice());
         exit;
     }
 

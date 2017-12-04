@@ -38,7 +38,10 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="{{ path('hms_invoice_admission') }}"><i class="icon-th-list"></i> Admission</a>
-                                <a class="btn red" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> Admitted Daily Invoice</a>
+                                <a class="btn blue" href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus"></i> New Admission</a>
+                                {% if entity.paymentStatus != 'Paid' and  entity.process not in ['Release','Death'] %}
+                                    <a class="btn red" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> Admitted Daily Invoice</a>
+                                {% endif %}
                                 {% if invoiceTransaction is defined and invoiceTransaction is defined is not empty  %}
                                 <a class="btn" href="{{ path('hms_invoice_admission_confirm',{'id':entity.id}) }}"><i class="fa fa-fast-backward"></i> Return</a>
                                 {% endif %}
@@ -200,7 +203,6 @@
                                             <th class="numeric">Vat/Tax</th>
                                             <th class="numeric">Total</th>
                                             <th class="numeric">Payment</th>
-                                            <th class="numeric">Remaining</th>
                                             <th class="numeric">Created By</th>
                                             <th class="numeric">Process</th>
                                             <th class="numeric"></th>
@@ -216,27 +218,35 @@
                                                 <td class="numeric">{{ transaction.vat }}</td>
                                                 <td class="numeric" id="total-{{ transaction.id }}">{{ transaction.total }}</td>
                                                 <td class="numeric">{{ transaction.payment }}</td>
-                                                <td class="numeric">{{ transaction.total - transaction.payment }}</td>
                                                 <td class="numeric">{{ transaction.createdBy }}</td>
                                                 <td class="numeric">{{ transaction.process }}</td>
                                                 <td class="numeric">
-                                                    {% set processArr = {'Created': 'Created' ,'Pending':'Pending'} %}
-                                                    {% if transaction.process in  processArr and transaction.payment == 0 and transaction.admissionPatientParticulars is defined %}
-                                                        <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
+
+
+                                                    {% if entity.paymentStatus != 'Paid' and entity.process !='Done' %}
+                                                        {% set processArr = {'Created': 'Created' ,'Pending':'Pending','In-progress':'In-progress'} %}
+                                                        {% if transaction.process in  processArr and transaction.payment == 0 and transaction.admissionPatientParticulars is defined %}
+                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
+                                                        {% endif %}
+                                                        {% if transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
+                                                            <a href="javascript:" data-id="{{ transaction.id }}" class="btn showTransaction green mini"><i class="fa fa-plus"></i> View</a>
+                                                        {% endif %}
+                                                        {% if (transaction.process in  processArr and transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty ) %}
+                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_approve',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
+                                                        {% endif %}
+                                                        {% if transaction.process not in processArr %}
+                                                            <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print_single',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="fa fa-print"></i> Print</a>
+                                                        {% endif %}
+                                                        {% if transaction.process == 'In-progress' %}
+                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
+                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_approve',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
+                                                        {% endif %}
                                                     {% endif %}
-                                                    {% if transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
-                                                        <a href="javascript:" data-id="{{ transaction.id }}" class="btn showTransaction green mini"><i class="fa fa-plus"></i> View</a>
-                                                    {% endif %}
-                                                    {% if transaction.process in  processArr and transaction.payment == 0 and transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
-                                                        <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_approve',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
-                                                    {% endif %}
-                                                    {% if transaction.process not in processArr %}
-                                                        <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print_single',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="fa fa-print"></i> Print</a>
-                                                    {% endif %}
+
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="11" class="transaction-hide" id="transaction-{{ transaction.id }}">
+                                                <td colspan="10" class="transaction-hide" id="transaction-{{ transaction.id }}">
                                                     {% if transaction.admissionPatientParticulars is defined and  transaction.admissionPatientParticulars is not empty  %}
                                                         <table class="table table-bordered table-striped table-condensed flip-content ">
                                                             <thead class="flip-content ">
@@ -275,7 +285,6 @@
                                             <td class="numeric"><strong class="">{{ entity.total|number_format }}</strong></td>
                                             <td class="numeric"><strong class="paymentAmount">{{ entity.payment|number_format }}</strong></td>
                                             <td class="numeric"><strong>{{ entity.due|number_format }}</strong></td>
-                                            <td class="numeric"></td>
                                             <td class="numeric"></td>
                                             <td class="numeric"></td>
                                         </tr>
@@ -375,31 +384,34 @@
                                     </div>
                                 </div>
                             {% else %}
-                                <div class="row-fluid particular-info" >
-                                    <form method="post" name="form" id="form">
-                                        <div class="span1 pull-right">
-                                            <button type="button" class="btn blue" id="addPayment" data-url="{{ path('hms_invoice_approved',{'id':entity.id}) }}" >Save</button>
-                                        </div>
-                                        <div class="span3 pull-right">
-                                            <select id="printFor" name="printFor" class="span12 m-wrap">
-                                                <option value="">--- Select Patient Status ---</option>
-                                                <option {% if entity.printFor == 'admission' %} selected="selected" {% endif %} value="admission">Admission</option>
-                                                <option {% if entity.printFor == 'admitted' %} selected="selected" {% endif %} value="admitted">Admitted</option>
-                                                <option {% if entity.printFor == 'release' %} selected="selected" {% endif %} value="release">Release Certificate</option>
-                                                <option {% if entity.printFor == 'death' %} selected="selected" {% endif %} value="death">Death Certificate</option>
-                                            </select>
-                                        </div>
-                                        <div class="span2  pull-right"><input type="text" class="m-wrap span12" id="payment" name="payment" value="" maxlength="8"  placeholder="Payment amount"></div>
-                                        <div class="span2 pull-right"><input type="number" class="m-wrap span12" id="discount" name="discount" placeholder="Discount amount"  ></div>
-                                    </form>
-                                </div>
+                                {% if entity.paymentStatus != 'Paid' %}
+                                    <div class="row-fluid particular-info" >
+                                        <form method="post" name="form" id="form">
+                                            <div class="span1 pull-right">
+                                                <button type="button" class="btn blue" id="addPayment" data-url="{{ path('hms_invoice_admission_approved',{'id':entity.id}) }}" >Save</button>
+                                            </div>
+                                            <div class="span3 pull-right">
+                                                <select id="process" name="process" class="span12 m-wrap">
+                                                    <option {% if entity.process == 'Admission' %} selected="selected" {% endif %} value="Admission">Admission</option>
+                                                    <option {% if entity.process == 'Admitted' %} selected="selected" {% endif %} value="Admitted">Admitted</option>
+                                                    <option {% if entity.process == 'Release' %} selected="selected" {% endif %} value="Release">Release Certificate</option>
+                                                    <option {% if entity.process == 'Death' %} selected="selected" {% endif %} value="Death">Death Certificate</option>
+                                                </select>
+                                            </div>
+                                            <div class="span2  pull-right"><input type="text" class="m-wrap span12" id="payment" name="payment" value="" maxlength="8"  placeholder="Payment amount"></div>
+                                            <div class="span2 pull-right"><input type="number" class="m-wrap span12" id="discount" name="discount" placeholder="Discount amount"  ></div>
+                                        </form>
+                                    </div>
+                                {% endif %}
                                 <div class="clearfix">&nbsp;</div>
                                 <div class="form-actions portlet box grey">
                                     <div class="pull-right" id="action-{{ entity.id }}">
                                         <a target="_blank"  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
                                         <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                         <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
+                                        {% if entity.paymentStatus != 'Paid' and  entity.process not in ['Release','Death'] %}
                                         <a class="btn red" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> Admitted Daily Invoice</a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             {% endif %}
@@ -440,19 +452,7 @@
         $('#transaction-'+id).slideToggle();
         $("i", this).toggleClass("fa-minus fa-plus");
     });
-    $(document).on('click', '#addPayment', function() {
-        var payment = $('#payment').val();
-        var discount = $('#discount').val();
-        var process = $('#process').val();
-        var printFor = $('#printFor').val();
-        var url = $('#addPayment').attr('data-url');
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: 'payment='+payment+'&discount='+discount+'&process='+process+'&printFor='+printFor,
-            success: function(response){}
-        })
-    });
+
 
     $(document).on('click', '#addPatientParticular', function() {
 

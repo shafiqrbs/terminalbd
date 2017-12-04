@@ -263,14 +263,39 @@ $(document).on('click', '#addPayment', function() {
     var discount = $('#discount').val();
     var process = $('#process').val();
     var url = $('#addPayment').attr('data-url');
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: 'payment='+ payment +'&discount='+ discount +'&process='+ process,
-        success: function (response) {
-            location.reload();
+
+    if (payment == '') {
+        $('#payment').addClass('input-error').focus;
+        alert('Add payment amount');
+    }
+
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function (event, el) {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: 'payment=' + payment + '&discount=' + discount + '&process=' + process,
+                success: function (response) {
+                    location.reload();
+                }
+            })
         }
-    })
+    });
+
+});
+
+$(document).on("click", "#diagnosticReceiveBtn", function() {
+
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $('#invoiceForm').submit();
+        }
+    });
+
 });
 
 $(document).on("click", "#receiveBtn", function() {
@@ -281,6 +306,7 @@ $(document).on("click", "#receiveBtn", function() {
             $('#appstore_bundle_hospitalbundle_invoice_customer_alternativeRelation').addClass('input-error').focus;
             $('#appstore_bundle_hospitalbundle_invoice_customer_alternativeContactMobile').addClass('input-error').focus;
             $('#appstore_bundle_hospitalbundle_invoice_cabin').addClass('input-error').focus;
+            $('#appstore_bundle_hospitalbundle_invoice_disease').addClass('input-error').focus;
             $('#updatePatient').show();
             return false;
 
@@ -296,8 +322,6 @@ $(document).on("click", "#receiveBtn", function() {
         }
 
     });
-
-
 });
 
 

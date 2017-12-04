@@ -180,20 +180,15 @@ class InvoiceAdmissionController extends Controller
                 $entity->setPaymentInWord($amountInWords);
             }
             $em->flush();
-            $payment = $data['payment'];
+
             if($entity->getTotal() > 0 ){
                 $transaction = $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->initialInsertInvoiceTransaction($entity);
                 $this->getDoctrine()->getRepository('HospitalBundle:AdmissionPatientParticular')->initialUpdateInvoiceParticulars($entity,$transaction);
                 $this->getDoctrine()->getRepository('HospitalBundle:Particular')->setAdmissionPatientUpdateQnt($transaction);
-            }
-            if($payment > 0) {
-                 $transactionData = array('process' => 'Done','payment' => $payment, 'discount' => 0);
-                 $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertAdmissionTransaction($transaction,$transactionData);
-                 $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
+                $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
             }
 
             if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
-
                  $dispatcher = $this->container->get('event_dispatcher');
                  $dispatcher->dispatch('setting_tool.post.hms_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
             }
@@ -233,6 +228,65 @@ class InvoiceAdmissionController extends Controller
     public function deleteAction(Request $request)
     {
     }
+
+
+    public function approvexAction(Request $request , Invoice $entity)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $payment = $request->request->get('payment');
+        $discount = $request->request->get('discount');
+        $process = $request->request->get('process');
+        if (!empty($entity) and !empty($payment) and !empty($process)) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setProcess($process);
+            $em->flush();
+            if($payment > 0 || $discount > 0) {
+                $transactionData = array('process'=> 'Done','payment' => $payment, 'discount' => $discount);
+                $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->admissionPaymentTransaction($entity,$transactionData);
+                $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
+            }
+            return new Response('success');
+        } else {
+            return new Response('failed');
+        }
+        exit;
+    }
+
+    public function approveAction(Request $request , Invoice $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $payment = $request->request->get('payment');
+        $discount = $request->request->get('discount');
+        $process = $request->request->get('process');
+
+        if (!empty($entity) and !empty($payment) and !empty($process)) {
+
+            $em = $this->getDoctrine()->getManager();
+            $entity->setProcess($process);
+            $em->flush();
+            $transactionData = array('process'=> 'In-progress','payment' => $payment, 'discount' => $discount);
+            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);
+            return new Response('success');
+
+
+        } elseif (!empty($entity) and in_array($process , array('Release','Death')) and $entity->getTotal() == ($entity->getPayment() + $discount) ) {
+
+            $em = $this->getDoctrine()->getManager();
+            $entity->setProcess($process);
+            $entity->setPaymentStatus('Paid');
+            $em->flush();
+            $transactionData = array('process'=> 'Done','payment' => $payment, 'discount' => $discount);
+            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);
+            $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
+            return new Response('success');
+
+        } else {
+            return new Response('failed');
+        }
+        exit;
+    }
+
 
 
     public function showAction(Invoice $entity)

@@ -35,6 +35,12 @@ hms_invoice_admission_empty_delete:
     path:     /delete/empty-invoice
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:deleteEmptyInvoice" }
 
+hms_invoice_admission_approved:
+    path:     /{id}/invoice-approved
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:approve" }
+    methods:  POST
+    options:
+            expose: true
 
 hms_invoice_print_for:
     path:     /{id}/invoice-patient-add

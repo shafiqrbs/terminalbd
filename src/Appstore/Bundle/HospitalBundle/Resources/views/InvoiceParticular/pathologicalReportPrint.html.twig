@@ -59,16 +59,16 @@
                     <li>Age : {{ entity.hmsInvoice.customer.age }} {{ entity.hmsInvoice.customer.ageType }}</li>
                     <li>Gender: {{ entity.hmsInvoice.customer.gender }} </li>
                     <li>Blood Group: {{ entity.hmsInvoice.customer.bloodGroup }} </li>
-                    <li>Contact No: {{ entity.hmsInvoice.customer.mobile }}</li>
-                    <li>Bed No: </li>
+                    <li>Mobile: {{ entity.hmsInvoice.customer.mobile }}</li>
+                    {% if entity.hmsInvoice.cabin %}<li>Cabin/Bed No:{{ entity.hmsInvoice.cabin.name }} </li>{% endif %}
                 </ul>
             </td>
 
         </tr>
     </table>
 
-    {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
         <table class="table table-bordered table-striped">
+            {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
             <thead class="flip-content ">
             <tr class="head-black">
                 <th class="span3">Name</th>
@@ -102,15 +102,18 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
-            {% for meta in entity.invoicePathologicalReports %}
-                {% if meta.metaValue is not empty %}
-                    <tr><td class="numeric">{{ meta.metaKey }}</td><td colspan="3">{{ meta.metaValue|raw }}</td></tr>
-                {% endif %}
-            {% endfor %}
+            {% endif %}
+            {% if  entity.invoicePathologicalReports is defined and entity.invoicePathologicalReports is not empty %}
+                {% for meta in entity.invoicePathologicalReports %}
+                    {% if meta.metaValue is not empty %}
+                        <tr><td class="numeric">{{ meta.metaKey }}</td><td colspan="3">{{ meta.metaValue|raw }}</td></tr>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
             <tr><td class="numeric">Comment</td><td colspan="3"> {{ entity.comment|raw }}</td></tr>
             </tbody>
         </table>
-    {% endif %}
+
         <table class="table print-footer" style="margin-top:30px" >
             <tr><td colspan="3">&nbsp;</td></tr>
             <tr><td colspan="3">&nbsp;</td></tr>

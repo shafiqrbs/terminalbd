@@ -145,8 +145,8 @@ class InvoiceRepository extends EntityRepository
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $this->handleSearchBetween($qb,$data);
-        $qb->andWhere("e.process IN (:processes)");
-        $qb->setParameter('processes', array('Done','Paid','In-progress','Diagnostic'));
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic'));
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();
         return  $qb;
@@ -189,7 +189,6 @@ class InvoiceRepository extends EntityRepository
 
             $invoice->setSubTotal($subTotal);
             $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
-            $invoice->setNetTotal($invoice->getTotal());
             $invoice->setEstimateCommission($subCommission);
             $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
 
@@ -198,7 +197,6 @@ class InvoiceRepository extends EntityRepository
             $invoice->setSubTotal(0);
             $invoice->setEstimateCommission(0);
             $invoice->setTotal(0);
-            $invoice->setNetTotal(0);
             $invoice->setDue(0);
             $invoice->setDiscount(0);
             $invoice->setVat(0);
@@ -219,6 +217,8 @@ class InvoiceRepository extends EntityRepository
             ->select('sum(si.payment) as payment , sum(si.discount) as discount, sum(si.vat) as vat')
             ->where('si.hmsInvoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
+            ->andWhere('si.process = :process')
+            ->setParameter('process', 'Done')
             ->getQuery()->getOneOrNullResult();
         $payment = !empty($res['payment']) ? $res['payment'] :0;
         $discount = !empty($res['discount']) ? $res['discount'] :0;
@@ -227,7 +227,6 @@ class InvoiceRepository extends EntityRepository
         $invoice->setDiscount($discount);
         $invoice->setVat($vat);
         $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
-        $invoice->setNetTotal($invoice->getTotal());
         $invoice->setDue($invoice->getTotal() - $invoice->getPayment());
         if($invoice->getPayment() >= $invoice->getTotal()){
             $invoice->setPaymentStatus('Paid');

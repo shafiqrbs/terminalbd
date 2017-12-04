@@ -23,75 +23,74 @@ class InvoiceTransactionRepository extends EntityRepository
         $entity->setHmsInvoice($invoice);
         $entity->setCode($code + 1);
         $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
+        $entity->setProcess('In-progress');
         $entity->setTransactionCode($transactionCode);
+        $entity->setDiscount($invoice->getDiscount());
         $entity->setTotal($invoice->getSubTotal());
+        $entity->setPayment($invoice->getPayment());
         $this->_em->persist($entity);
         $this->_em->flush($entity);
         return $entity;
 
     }
 
-    public function insertAdmissionTransaction(InvoiceTransaction $entity, $data)
-    {
-        if ($data['discount'] > 0) {
-            $process = $data['process'];
-            $entity->setProcess($process);
-            $entity->setDiscount($data['discount']);
-            $this->_em->persist($entity);
-            $this->_em->flush($entity);
+    public function admissionPaymentTransaction(Invoice $invoice,$data){
 
-        }
-
-        if($data['payment'] > 0){
-
-            $process = $data['process'];
-            $invoice = $entity->getHmsInvoice();
-            $entity->setProcess($process);
-            $entity->setPayment($data['payment']);
-            $entity->setTransactionMethod($invoice->getTransactionMethod());
-            $entity->setAccountBank($invoice->getAccountBank());
-            $entity->setPaymentCard($invoice->getPaymentCard());
-            $entity->setCardNo($invoice->getCardNo());
-            $entity->setBank($invoice->getBank());
-            $entity->setAccountMobileBank($invoice->getAccountMobileBank());
-            $entity->setPaymentMobile($invoice->getPaymentMobile());
-            $entity->setTransactionId($invoice->getTransactionId());
-            $entity->setComment($invoice->getComment());
-            if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
-                $vat = $this->getCulculationVat($invoice, $entity->getPayment());
-                $entity->setVat($vat);
-            }
-            $this->_em->persist($entity);
-            $this->_em->flush($entity);
-            $accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountInvoice($entity);
-            $this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountInvoice);
-        }
+        $code = $this->getLastCode($invoice);
+        $entity = New InvoiceTransaction();
+        $entity->setHmsInvoice($invoice);
+        $entity->setCode($code + 1);
+        $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
+        $entity->setTransactionCode($transactionCode);
+        $entity->setDiscount($data['discount']);
+        $entity->setPayment($data['payment']);
+        $entity->setProcess('In-progress');
+        $transactionMethod = $this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1);
+        $entity->setTransactionMethod($transactionMethod);
+        $this->_em->persist($entity);
+        $this->_em->flush($entity);
+        return $entity;
 
     }
-    public function insertTransaction(Invoice $invoice, $data)
+
+
+
+    public function insertAdmissionTransaction(InvoiceTransaction $entity, $data)
     {
-        if ($data['discount'] > 0) {
-            $process = $data['process'];
-            $entity = New InvoiceTransaction();
-            $existDiscount = $this->_em->getRepository('HospitalBundle:InvoiceTransaction')->findOneBy(array('process'=> $process));
-            if($existDiscount){
-                $entity = $existDiscount;
-            }
-            $entity->setHmsInvoice($invoice);
-            $entity->setProcess($process);
-            $entity->setDiscount($data['discount']);
-            $this->_em->persist($entity);
-            $this->_em->flush($entity);
 
+        $process = $data['process'];
+        $invoice = $entity->getHmsInvoice();
+        $entity->setProcess($process);
+        $entity->setPayment($data['discount']);
+        $entity->setPayment($data['payment']);
+        $entity->setTransactionMethod($invoice->getTransactionMethod());
+        $entity->setAccountBank($invoice->getAccountBank());
+        $entity->setPaymentCard($invoice->getPaymentCard());
+        $entity->setCardNo($invoice->getCardNo());
+        $entity->setBank($invoice->getBank());
+        $entity->setAccountMobileBank($invoice->getAccountMobileBank());
+        $entity->setPaymentMobile($invoice->getPaymentMobile());
+        $entity->setTransactionId($invoice->getTransactionId());
+        $entity->setComment($invoice->getComment());
+        if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
+            $vat = $this->getCulculationVat($invoice, $entity->getPayment());
+            $entity->setVat($vat);
         }
+        $this->_em->persist($entity);
+        $this->_em->flush($entity);
 
-        if($data['payment'] > 0){
-
-            $process = $data['process'];
+    }
+    public function insertTransaction(Invoice $invoice)
+    {
             $entity = New InvoiceTransaction();
+            $code = $this->getLastCode($invoice);
             $entity->setHmsInvoice($invoice);
-            $entity->setProcess($process);
-            $entity->setPayment($data['payment']);
+            $entity->setCode($code + 1);
+            $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
+            $entity->setTransactionCode($transactionCode);
+            $entity->setProcess('Done');
+            $entity->setDiscount($invoice->getDiscount());
+            $entity->setPayment($invoice->getPayment());
             $entity->setTransactionMethod($invoice->getTransactionMethod());
             $entity->setAccountBank($invoice->getAccountBank());
             $entity->setPaymentCard($invoice->getPaymentCard());
@@ -107,9 +106,39 @@ class InvoiceTransactionRepository extends EntityRepository
             }
             $this->_em->persist($entity);
             $this->_em->flush($entity);
-            $accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountInvoice($entity);
-            $this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountInvoice);
+            if($invoice->getPayment() > 0){
+                $accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountInvoice($entity);
+                $this->_em->getRepository('AccountingBundle:Transaction')->hmsSalesTransaction($entity, $accountInvoice);
+            }
+
+
+    }
+    public function insertPaymentTransaction(Invoice $invoice, $data)
+    {
+        $entity = New InvoiceTransaction();
+        $code = $this->getLastCode($invoice);
+        $entity->setHmsInvoice($invoice);
+        $entity->setCode($code + 1);
+        $transactionCode = sprintf("%s", str_pad($entity->getCode(),2, '0', STR_PAD_LEFT));
+        $entity->setTransactionCode($transactionCode);
+        $entity->setProcess($data['process']);
+        $entity->setDiscount($data['discount']);
+        $entity->setPayment($data['payment']);
+        $entity->setTransactionMethod($invoice->getTransactionMethod());
+        $entity->setAccountBank($invoice->getAccountBank());
+        $entity->setPaymentCard($invoice->getPaymentCard());
+        $entity->setCardNo($invoice->getCardNo());
+        $entity->setBank($invoice->getBank());
+        $entity->setAccountMobileBank($invoice->getAccountMobileBank());
+        $entity->setPaymentMobile($invoice->getPaymentMobile());
+        $entity->setTransactionId($invoice->getTransactionId());
+        $entity->setComment($invoice->getComment());
+        if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
+            $vat = $this->getCulculationVat($invoice, $entity->getPayment());
+            $entity->setVat($vat);
         }
+        $this->_em->persist($entity);
+        $this->_em->flush($entity);
 
     }
 

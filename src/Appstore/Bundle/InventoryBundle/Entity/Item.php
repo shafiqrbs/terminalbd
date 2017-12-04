@@ -235,6 +235,7 @@ class Item
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\InventoryBundle\Entity\Product", inversedBy="items" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $masterItem;
 

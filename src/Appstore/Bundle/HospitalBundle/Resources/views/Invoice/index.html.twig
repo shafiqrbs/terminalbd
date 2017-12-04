@@ -103,7 +103,7 @@
                                         </div>
                                         <div class="span3">
                                             <div class="controls">
-                                                <div class="input-append span11">
+                                                <div class="input-append span12">
                                                     <input type="text" id="invoice" name="invoice"  class="m-wrap span10" value="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.invoice is defined %}{{ searchForm.invoice }}{% else %}Patient invoice no{% endif %} ">
                                                     <div class="btn-group">
                                                         <button class="btn blue" type="submit"><i class="icon-search"></i></button>
@@ -161,6 +161,11 @@
                                         <td class="numeric" > {{ entity.process }}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
+                                                {% set processArr = {'In-progress': 'In-progress' ,'Created':'Created','Revised':'Revised'} %}
+                                                {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due'} %}
+                                                {% if  entity.process in  processArr|keys %}
+                                                 <a href="{{ path('hms_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-user"></i> Manage Diagnostic</a>
+                                                {% endif %}
                                                 <a class="btn blue mini" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                                    Action
                                                     <i class="icon-tasks"></i>
@@ -168,9 +173,6 @@
                                                 <ul class="dropdown-menu pull-right action">
                                                     {% set processArr = {'In-progress': 'In-progress' ,'Created':'Created','Revised':'Revised'} %}
                                                     {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due'} %}
-                                                    {% if  entity.process in  processArr|keys %}
-                                                        <li><a href="{{ path('hms_invoice_edit', { 'id': entity.id }) }}" class="btn green" ><i class="icon-pencil"></i> Manage Diagnostic</a></li>
-                                                    {% endif %}
                                                     {% if entity.process =='Created' and entity.paymentStatus =='Pending' %}
                                                         <li><a title="Are you sure went to delete ?" id="{{ entity.id }}" data-url="{{ path('hms_invoice_delete', { 'id': entity.id }) }}" href="javascript:" class="btn red  delete tooltips" data-trigger = "hover" data-original-title = "Delete" ><i class="icon-trash"></i> Delete</a></li>
                                                     {% endif %}

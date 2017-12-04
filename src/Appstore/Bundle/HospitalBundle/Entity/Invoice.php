@@ -264,20 +264,6 @@ class Invoice
     /**
      * @var string
      *
-     * @ORM\Column(name="grandTotal", type="decimal", nullable=true)
-     */
-    private $grandTotal;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="netTotal", type="decimal", nullable=true)
-     */
-    private $netTotal;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="payment", type="decimal", nullable=true)
      */
     private $payment;
@@ -966,21 +952,7 @@ class Invoice
         $this->percentage = $percentage;
     }
 
-    /**
-     * @return string
-     */
-    public function getNetTotal()
-    {
-        return $this->netTotal;
-    }
 
-    /**
-     * @param string $netTotal
-     */
-    public function setNetTotal($netTotal)
-    {
-        $this->netTotal = $netTotal;
-    }
 
     /**
      * @return string
@@ -1134,21 +1106,6 @@ class Invoice
         $this->cabinNo = $cabinNo;
     }
 
-    /**
-     * @return string
-     */
-    public function getGrandTotal()
-    {
-        return $this->grandTotal;
-    }
-
-    /**
-     * @param string $grandTotal
-     */
-    public function setGrandTotal($grandTotal)
-    {
-        $this->grandTotal = $grandTotal;
-    }
 
     /**
      * @return DoctorInvoice
