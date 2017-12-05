@@ -155,16 +155,18 @@ class TransactionRepository extends EntityRepository
 
         $qb = $this->createQueryBuilder('ex');
         $qb->join('ex.accountHead','accountHead');
-        $qb->select('sum(ex.credit) as credit');
+        $qb->select('sum(ex.credit) as salesVat');
         $qb->where("accountHead.id = :head");
         $qb->setParameter('head', 16);
         $qb->andWhere('ex.globalOption = :globalOption');
         $qb->setParameter('globalOption', $globalOption);
         $this->handleSearchBetween($qb,$data);
-        $qb->groupBy('ex.accountHead');
         $res =  $qb->getQuery();
         $result = $res->getOneOrNullResult();
-        return $result;
+        if($result){
+            return $result['salesVat'];
+        }
+        return 0;
 
     }
 

@@ -7,6 +7,7 @@ use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
  * AccountSalesRepository
@@ -208,6 +209,41 @@ class AccountSalesRepository extends EntityRepository
 
     }
 
+    public function reportHmsMonthlyIncome(User $user,$data)
+    {
+        $globalOption = $user->getGlobalOption();
+        if(empty($data)){
+
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-01 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-t 23:59:59');
+
+        }else{
+
+            $data['startDate'] = date('Y-m-d 00:00:00',strtotime($data['year'].'-'.$data['startMonth']));
+            $data['endDate'] = date('Y-m-t 23:59:59',strtotime($data['year'].'-'.$data['endMonth']));
+        }
+
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('SUM(e.totalAmount) AS salesAmount');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $globalOption);
+        $this->handleSearchBetween($qb,$data);
+        $result  = $qb->getQuery()->getOneOrNullResult();
+        $salesAmount = $result['salesAmount'];
+
+
+        $purchase = $this->_em->getRepository('HospitalBundle:InvoiceParticular')->reportSalesAccessories($globalOption, $data);
+        $salesVat               = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionVat($globalOption, $accountHeads = array(20), $data);
+        $expenditures           = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(37), $data);
+        $revenues               = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(20), $data);
+        $administrative         = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($user->getGlobalOption(), $accountHeads = array(23), $data);
+        $data =  array('salesAmount' => $salesAmount ,'purchase' => $purchase,'revenues' => $revenues ,'expenditures' => $expenditures,'administrative' => $administrative, 'salesVat' => $salesVat);
+        return $data;
+
+    }
+
     public function reportHmsIncome($globalOption,$data)
     {
         if(empty($data)){
@@ -227,10 +263,11 @@ class AccountSalesRepository extends EntityRepository
         $result  = $qb->getQuery()->getOneOrNullResult();
         $salesAmount = $result['salesAmount'];
 
-        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
+        $purchase = $this->_em->getRepository('HospitalBundle:InvoiceParticular')->reportSalesAccessories($globalOption, $data);
         $revenues = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(20), $data);
+        $expenditures = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionIncome($globalOption, $accountHeads = array(37), $data);
         $salesVat = $this->_em->getRepository('AccountingBundle:Transaction')->reportTransactionVat($globalOption, $accountHeads = array(20), $data);
-        $data =  array('salesAmount' => $salesAmount ,'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesVat);
+        $data =  array('salesAmount' => $salesAmount ,'purchase' => $purchase, 'revenues' => $revenues ,'expenditures' => $expenditures,'salesVat' => $salesVat);
         return $data;
 
     }

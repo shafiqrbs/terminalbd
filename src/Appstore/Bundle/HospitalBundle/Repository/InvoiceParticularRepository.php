@@ -7,6 +7,7 @@ use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 
 /**
@@ -168,5 +169,31 @@ class InvoiceParticularRepository extends EntityRepository
         }
 
         return $lastCode;
+    }
+
+
+    public function reportSalesAccessories(GlobalOption $option ,$data)
+    {
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+        $qb = $this->createQueryBuilder('ip');
+        $qb->join('ip.particular','p');
+        $qb->join('ip.hmsInvoice','i');
+        $qb->select('SUM(ip.quantity * p.purchaseAverage ) AS totalPurchaseAmount');
+        $qb->where('i.hospitalConfig = :hospital');
+        $qb->setParameter('hospital', $option->getHospitalConfig());
+        $qb->andWhere("i.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Death'));
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("i.updated >= :startDate");
+            $qb->setParameter('startDate', $startDate.' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("i.updated <= :endDate");
+            $qb->setParameter('endDate', $endDate.' 23:59:59');
+        }
+        $res = $qb->getQuery()->getOneOrNullResult();
+        return $res['totalPurchaseAmount'];
+
     }
 }

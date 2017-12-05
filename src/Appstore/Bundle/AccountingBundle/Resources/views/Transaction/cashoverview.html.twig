@@ -66,13 +66,14 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                {#{{ dump(transactionCashOverviews.transactionBalances[1][0]['debit']) }}#}
                                 {% for mode in transactionCashOverviews.result %}
                                 <tr>
                                     <th class="numeric">{{ mode.transactionName }}</th>
                                     <th class="numeric">{{ transactionCashOverviews.openingBalance[mode.transactionId]|default|number_format }}</th>
-                                    <th class="numeric">{{ transactionCashOverviews.transactionBalances[mode.transactionId].debit|default|number_format }}</th>
-                                    <th class="numeric">{{ transactionCashOverviews.transactionBalances[mode.transactionId].credit|default|number_format }}</th>
-                                    <th class="numeric" >{{ (transactionCashOverviews.openingBalance[mode.transactionId]|default(0) - transactionCashOverviews.transactionBalances[mode.transactionId].debit|default(0)) - (transactionCashOverviews.transactionBalances[mode.transactionId].credit|default(0))|number_format }}</th>
+                                    <th class="numeric">{{ transactionCashOverviews.transactionBalances[mode.transactionId][loop.index0].debit|default|number_format }}</th>
+                                    <th class="numeric">{{ transactionCashOverviews.transactionBalances[mode.transactionId][loop.index0].credit|default|number_format }}</th>
+                                    <th class="numeric" >{{ (transactionCashOverviews.openingBalance[mode.transactionId]|default(0) + transactionCashOverviews.transactionBalances[mode.transactionId][loop.index0].debit|default(0)) - (transactionCashOverviews.transactionBalances[mode.transactionId][loop.index0].credit|default(0))|number_format }}</th>
                                 </tr>
                                 {% endfor %}
                                 </tbody>

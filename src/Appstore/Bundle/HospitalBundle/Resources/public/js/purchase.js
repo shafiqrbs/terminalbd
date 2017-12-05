@@ -19,7 +19,7 @@ $(document).on("click", ".approve", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                $(this).hide();
+                location.reload();
             });
         }
     });
@@ -92,7 +92,9 @@ $(document).on('click', '#addParticular', function() {
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
             $('#purchasePrice').val('');
-            $('#particular').val('');
+            $("#particular").select2().select2("val","");
+            $('#price').val('');
+            $('#quantity').val('1');
         }
     })
 });

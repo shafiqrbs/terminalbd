@@ -179,7 +179,9 @@ class AccountPurchaseRepository extends EntityRepository
         $accountPurchase->setApprovedBy($entity->getApprovedBy());
         $em->persist($accountPurchase);
         $em->flush();
-        $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+        if($accountPurchase->getPayment() > 0 ){
+            $this->_em->getRepository('AccountingBundle:AccountCash')->insertPurchaseCash($accountPurchase);
+        }
         return $accountPurchase;
 
     }

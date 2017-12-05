@@ -116,7 +116,7 @@
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     {% if ( entity.process == 'Done') %}
-                                    <a  href="javascript:"  data-url="{{ path('hms_purchase_approved',{'id':entity.id}) }}" class="btn blue confirm"><i class="icon-refresh"></i>&nbsp;Approve</a>
+                                    <a  href="javascript:"  data-url="{{ path('hms_purchase_approved',{'id':entity.id}) }}" class="btn blue approve"><i class="icon-refresh"></i>&nbsp;Approve</a>
                                     {% endif %}
                                     <span  class="btn purple"><i class=" icon-ok"></i>&nbsp;{{ entity.process }}</span>
                                 </div>

@@ -20,7 +20,7 @@ hms_report_income_print:
 
 hms_report_monthly_income:
     path:     /monthly-income
-    defaults: { _controller: "AccountingBundle:Report:monthlyIncome" }
+    defaults: { _controller: "AccountingBundle:HmsReport:monthlyIncome" }
 
 account_bank_show:
     path:     /{id}/show

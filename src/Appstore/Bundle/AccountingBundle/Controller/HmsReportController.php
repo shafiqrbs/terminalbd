@@ -67,10 +67,11 @@ class HmsReportController extends Controller
 
     public function monthlyIncomeAction()
     {
+
         $em = $this->getDoctrine()->getManager();
         $data = $_REQUEST;
-        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportMonthlyIncome( $this->getUser(),$data);
-        return $this->render('AccountingBundle:Report/:monthlyIncome.html.twig', array(
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:AccountSales')->reportHmsMonthlyIncome( $this->getUser(),$data);
+        return $this->render('AccountingBundle:Report/Hms:monthlyIncome.html.twig', array(
             'overview' => $overview,
             'searchForm' => $data,
         ));

@@ -136,11 +136,13 @@ class AccountCashRepository extends EntityRepository
         $openingBalances = array();
         $transactionBalances = array();
         foreach($result as $row) {
-            $transactionBalances[$row['transactionId']]     = $this->transactionCashOverview($user,$row['transactionId'],$data);
             $openingBalances[$row['transactionId']]         = $this->openingBalance($user,array($row['transactionId']),$data);
+            $transactionBalances[$row['transactionId']]     = $this->transactionCashOverview($user,$row['transactionId'],$data);
         }
-        $data =  array('result'=>$result,'openingBalance' => $openingBalances , 'transactionBalances'=> $transactionBalances);
+        $data =  array('result' => $result,'openingBalance' => $openingBalances , 'transactionBalances'=> $transactionBalances);
         return $data;
+
+
     }
 
     public function transactionCashOverview(User $user,$method,$data)
