@@ -331,7 +331,14 @@ class Particular
      *
      * @ORM\Column(name="testDuration", type="boolean" )
      */
-    private $testDuration = true;
+    private $testDuration = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="reportFormat", type="boolean" )
+     */
+    private $reportFormat = false;
 
 
     /**
@@ -1218,6 +1225,22 @@ class Particular
     public function setMinQuantity($minQuantity)
     {
         $this->minQuantity = $minQuantity;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getReportFormat()
+    {
+        return $this->reportFormat;
+    }
+
+    /**
+     * @param bool $reportFormat
+     */
+    public function setReportFormat($reportFormat)
+    {
+        $this->reportFormat = $reportFormat;
     }
 
 

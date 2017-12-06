@@ -180,7 +180,9 @@
                             </div>
                         </div>
                         <div class="span1">
+                        {% if entity.process != "Done" %}
                             <a href="javascript:" id="{{ meta.id }}"  data-url="{{ path('hms_invoice_pathological_report_delete',{'id':meta.id}) }}" class="btn red  remove mini"><i class="icon-trash"></i></a>
+                        {% endif %}
                         </div>
                     </div>
                     {% endif %}
@@ -228,9 +230,11 @@
             </div>
             <div class="form-actions portlet box grey">
                 <div class="pull-right">
-                    <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
+                    {% if entity.process != "Done" %}
+                    <button type="button" class="btn green confirmSubmit"><i class="icon-save"></i> Save</button>
+                    {% endif %}
                     {% if entity.process == "Done" %}
-                    <a href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a>
+                    <a target="_blank" href="{{ path('hms_invoice_particular_report_print', {'id': entity.id}) }}"  class="btn blue"><i class="icon-print"></i> Print</a>
                     {% endif %}
                 </div>
             </div>
@@ -247,7 +251,9 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/editable.js' %}
+    '@HospitalBundle/Resources/public/js/editable.js'
+    '@HospitalBundle/Resources/public/js/approveProcess.js'
+    %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
@@ -286,5 +292,6 @@
         },
         })
     })
+
     EditableInit();
 {% endblock %}

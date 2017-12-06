@@ -18,6 +18,17 @@ function pageReload() {
     location.reload();
 }
 
+$(document).on("click", ".confirmSubmit", function() {
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $('form').submit();
+        }
+    });
+
+});
+
 $(document).on("click", ".invoiceConfirm", function() {
     $('#confirm-content').confirmModal({
         topOffset: 0,

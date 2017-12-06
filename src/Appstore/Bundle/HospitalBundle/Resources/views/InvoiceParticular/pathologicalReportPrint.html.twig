@@ -66,53 +66,85 @@
 
         </tr>
     </table>
-
-        <table class="table table-bordered table-striped">
-            {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
-            <thead class="flip-content ">
-            <tr class="head-black">
-                <th class="span3">Name</th>
-                <th class="text-right span1">Result</th>
-                <th class="span2">Unit</th>
-                <th class="span4">Reference</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% if entity.particular.pathologicalReports is not empty %}
-                {% for item in entity.particular.pathologicalReports %}
-                    {% if item.children is not empty %}
-                        <tr id="remove-{{ item.id }}">
-                            <td  class="span12" colspan="5"><strong>{{ item.name }}</strong></td>
-                        </tr>
-                        {% for child in item.children %}
-                            <tr>
-                                <td  class="span3">{{ child.name }}</td>
-                                <td class="span1">{% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %}</td>
-                                <td class="span2">{{ child.unit }}</td>
-                                <td class="span4">{{ child.referenceValue }}</td>
+        {% if entity.particular.reportFormat == 1 %}
+            <table class="table" style="margin-top:20px">
+                <tbody>
+                {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
+                    <tr><td>
+                        {% if entity.particular.pathologicalReports is not empty %}
+                            {% for item in entity.particular.pathologicalReports %}
+                                {% if item.children is not empty %}
+                                    <div class="span6" style="float: left; display:flex; margin-bottom:15px">
+                                        <ul class="unstyled span12">
+                                            <li><h2><strong>{{ item.name }}</strong></h2></li>
+                                            {% for child in item.children %}
+                                            <li><span class="span3" style="display:inline-block">{{ child.name }}</span> {% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </td></tr>
+                {% endif %}
+                {% if  entity.invoicePathologicalReports is defined and entity.invoicePathologicalReports is not empty %}
+                    {% for meta in entity.invoicePathologicalReports %}
+                        {% if meta.metaValue is not empty %}
+                            <tr><td class=""><span class="span3">{{ meta.metaKey }}</span>{{ meta.metaValue|raw }}</td></tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <tr><td>{{ entity.comment|raw }}</td></tr>
+                </tbody>
+            </table>
+        {% else %}
+            <table class="table table-bordered table-striped">
+                {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
+                <thead class="flip-content ">
+                <tr class="head-black">
+                    <th class="span3">Name</th>
+                    <th class="text-right span1">Result</th>
+                    <th class="span2">Unit</th>
+                    <th class="span4">Reference</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if entity.particular.pathologicalReports is not empty %}
+                    {% for item in entity.particular.pathologicalReports %}
+                        {% if item.children is not empty %}
+                            <tr id="remove-{{ item.id }}">
+                                <td  class="span12" colspan="5"><strong>{{ item.name }}</strong></td>
                             </tr>
-                        {% endfor %}
-                    {% elseif item.parent is empty %}
-                        <tr id="remove-{{ item.id }}">
-                            <td  class="span4">{{ item.name }}</td>
-                            <td class="span1">{% if item.children is empty %}{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }}{% endif %}{% endif %}</td>
-                            <td class="span2">{{ item.unit }}</td>
-                            <td class="span4">{{ item.referenceValue }}</td>
-                        </tr>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-            {% endif %}
-            {% if  entity.invoicePathologicalReports is defined and entity.invoicePathologicalReports is not empty %}
-                {% for meta in entity.invoicePathologicalReports %}
-                    {% if meta.metaValue is not empty %}
-                        <tr><td class="numeric">{{ meta.metaKey }}</td><td colspan="3">{{ meta.metaValue|raw }}</td></tr>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-            <tr><td class="numeric">Comment</td><td colspan="3"> {{ entity.comment|raw }}</td></tr>
-            </tbody>
-        </table>
+                            {% for child in item.children %}
+                                <tr>
+                                    <td  class="span3">{{ child.name }}</td>
+                                    <td class="span1">{% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %}</td>
+                                    <td class="span2">{{ child.unit }}</td>
+                                    <td class="span4">{{ child.referenceValue }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% elseif item.parent is empty %}
+                            <tr id="remove-{{ item.id }}">
+                                <td  class="span4">{{ item.name }}</td>
+                                <td class="span1">{% if item.children is empty %}{% if report is not empty and report[item.id] is defined and report[item.id] is not empty %}{{ report[item.id].result }}{% endif %}{% endif %}</td>
+                                <td class="span2">{{ item.unit }}</td>
+                                <td class="span4">{{ item.referenceValue }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% endif %}
+                {% if  entity.invoicePathologicalReports is defined and entity.invoicePathologicalReports is not empty %}
+                    {% for meta in entity.invoicePathologicalReports %}
+                        {% if meta.metaValue is not empty %}
+                            <tr><td class="numeric span3">{{ meta.metaKey }}</td><td colspan="3">{{ meta.metaValue|raw }}</td></tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <tr><td class="numeric">Comment</td><td colspan="3"> {{ entity.comment|raw }}</td></tr>
+                </tbody>
+            </table>
+        {% endif %}
 
         <table class="table print-footer" style="margin-top:30px" >
             <tr><td colspan="3">&nbsp;</td></tr>
