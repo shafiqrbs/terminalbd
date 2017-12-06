@@ -77,4 +77,28 @@ class HmsReportController extends Controller
         ));
     }
 
+    public function expenditureSummaryAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->reportHmsExpenditure( $this->getUser(),$data);
+        return $this->render('AccountingBundle:Report/Hms:expenditureSummary.html.twig', array(
+            'overview' => $overview,
+            'searchForm' => $data,
+        ));
+    }
+
+    public function expenditureDetailsAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+        $overview = $this->getDoctrine()->getRepository('AccountingBundle:Expenditure')->reportHmsExpenditure( $this->getUser(),$data);
+        return $this->render('AccountingBundle:Report/Hms:expenditureDetails.html.twig', array(
+            'overview' => $overview,
+            'searchForm' => $data,
+        ));
+    }
+
+
+
 }

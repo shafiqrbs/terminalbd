@@ -2,6 +2,7 @@
 
 namespace  Appstore\Bundle\AccountingBundle\Repository;
 
+use Core\UserBundle\Entity\User;
 use Doctrine\Common\Util\Debug;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
 
@@ -185,6 +186,11 @@ class ExpenseCategoryRepository extends MaterializedPathRepository
 
         //\Doctrine\Common\Util\Debug::dump($ret);
         //exit;
+    }
+
+    public function reportHmsExpenditure(User $user,$data)
+    {
+
     }
 
 

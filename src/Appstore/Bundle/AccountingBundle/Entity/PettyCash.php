@@ -93,7 +93,6 @@ class PettyCash
      */
     private $returnAmount;
 
-
     /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="pettyCash" )

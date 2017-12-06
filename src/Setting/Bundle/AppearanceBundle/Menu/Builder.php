@@ -277,7 +277,9 @@ class Builder extends ContainerAware
             $result = array_intersect($arrSlugs, $accounting);
             if (!empty($result)) {
                 $menu['Accounting']['Transaction & Report']->addChild('Income', array('route' => 'hms_report_income'))->setAttribute('icon', 'icon-th-list');
-                 $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'hms_report_monthly_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Monthly Income',        array('route' => 'hms_report_monthly_income'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Expenditure Summary',        array('route' => 'hms_report_expenditure_summary'))->setAttribute('icon', 'icon-th-list');
+                $menu['Accounting']['Transaction & Report']->addChild('Expenditure Details',        array('route' => 'hms_report_expenditure_details'))->setAttribute('icon', 'icon-th-list');
             }
 
         }
@@ -793,9 +795,19 @@ class Builder extends ContainerAware
             $menu['Hospital & Diagnostic']['Purchase']->addChild('Accessories', array('route' => 'hms_medicine'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Hospital & Diagnostic']['Purchase']->addChild('Vendor', array('route' => 'hms_vendor'))->setAttribute('icon', 'icon-tag');
+
+            $menu['Hospital & Diagnostic']->addChild('Reports')
+                ->setAttribute('icon', 'icon icon-cog')
+                ->setAttribute('dropdown', true);
+            $menu['Hospital & Diagnostic']['Reports']->addChild('Sales Summary', array('route' => 'hms_report_sales_summary'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Hospital & Diagnostic']['Reports']->addChild('Sales Details', array('route' => 'hms_report_sales_details'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Hospital & Diagnostic']['Reports']->addChild('Particular Wise Sales', array('route' => 'hms_report_sales_particular'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Hospital & Diagnostic']['Reports']->addChild('Purchase', array('route' => 'hms_pathology'))
+                ->setAttribute('icon', 'icon-th-list');
         }
-
-
         return $menu;
 
     }
@@ -1260,7 +1272,7 @@ class Builder extends ContainerAware
         $menu['Application Setting']->addChild('Transaction Method', array('route' => 'transactionmethod_new'))->setAttribute('icon', 'icon-th-list');
         $menu['Application Setting']->addChild('Color', array('route' => 'color'))->setAttribute('icon', 'icon-th-list');
         $menu['Application Setting']->addChild('Size', array('route' => 'size'))->setAttribute('icon', 'icon-th-list');
-
+        $menu['Application Setting']->addChild('Hospital Category', array('route' => 'hms_category'))->setAttribute('icon', 'icon-th-list');
         return $menu;
 
     }

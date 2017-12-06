@@ -25,7 +25,6 @@ class InvoiceRepository extends EntityRepository
     protected function handleSearchBetween($qb,$data)
     {
 
-
         $invoice = isset($data['invoice'])? $data['invoice'] :'';
         $commission = isset($data['commission'])? $data['commission'] :'';
         $assignDoctor = isset($data['doctor'])? $data['doctor'] :'';
@@ -55,13 +54,15 @@ class InvoiceRepository extends EntityRepository
         if (!empty($created)) {
             $compareTo = new \DateTime($created);
             $created =  $compareTo->format('Y-m-d');
-            $qb->andWhere("e.updated LIKE :created");
+            $qb->andWhere("e.created LIKE :created");
             $qb->setParameter('created', $created.'%');
         }
 
         if (!empty($deliveryDate)) {
+            $compareTo = new \DateTime($deliveryDate);
+            $created =  $compareTo->format('Y-m-d');
             $qb->andWhere("e.deliveryDateTime LIKE :deliveryDate");
-            $qb->setParameter('deliveryDate', $deliveryDate.'%');
+            $qb->setParameter('deliveryDate', $created.'%');
         }
 
         if(!empty($commission)){
@@ -105,24 +106,119 @@ class InvoiceRepository extends EntityRepository
         }
     }
 
-    public function findWithOverview(User $user , $data,$mode)
+    public function handleDateRangeFind($qb,$data)
+    {
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+        }
+
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("e.created >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("e.created <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+    }
+
+    public function findWithOverview(User $user , $data , $mode='')
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->select('sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
+        $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
-        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
+        if (!empty($mode)){
+            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
+        }
         $this->handleSearchBetween($qb,$data);
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
         $result = $qb->getQuery()->getOneOrNullResult();
 
+        $subTotal = !empty($result['subTotal']) ? $result['subTotal'] :0;
         $netTotal = !empty($result['netTotal']) ? $result['netTotal'] :0;
         $netPayment = !empty($result['netPayment']) ? $result['netPayment'] :0;
         $netDue = !empty($result['netDue']) ? $result['netDue'] :0;
+        $discount = !empty($result['discount']) ? $result['discount'] :0;
+        $vat = !empty($result['vat']) ? $result['vat'] :0;
         $netCommission = !empty($result['netCommission']) ? $result['netCommission'] :0;
-        $data = array('netTotal'=> $netTotal , 'netPayment'=> $netPayment , 'netDue'=> $netDue , 'netCommission'=> $netCommission);
+        $data = array('subTotal'=> $subTotal ,'discount'=> $discount ,'vat'=> $vat ,'netTotal'=> $netTotal , 'netPayment'=> $netPayment , 'netDue'=> $netDue , 'netCommission'=> $netCommission);
 
         return $data;
     }
+
+    public function findWithSalesOverview(User $user , $data , $mode='')
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        if (!empty($mode)){
+            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
+        }
+        $this->handleDateRangeFind($qb,$data);
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $subTotal = !empty($result['subTotal']) ? $result['subTotal'] :0;
+        $netTotal = !empty($result['netTotal']) ? $result['netTotal'] :0;
+        $netPayment = !empty($result['netPayment']) ? $result['netPayment'] :0;
+        $netDue = !empty($result['netDue']) ? $result['netDue'] :0;
+        $discount = !empty($result['discount']) ? $result['discount'] :0;
+        $vat = !empty($result['vat']) ? $result['vat'] :0;
+        $netCommission = !empty($result['netCommission']) ? $result['netCommission'] :0;
+        $data = array('subTotal'=> $subTotal ,'discount'=> $discount ,'vat'=> $vat ,'netTotal'=> $netTotal , 'netPayment'=> $netPayment , 'netDue'=> $netDue , 'netCommission'=> $netCommission);
+
+        return $data;
+    }
+
+    public function findWithServiceOverview(User $user, $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.invoiceParticulars','ip');
+        $qb->leftJoin('ip.particular','p');
+        $qb->leftJoin('p.service','s');
+        $qb->select('sum(ip.subTotal) as subTotal');
+        $qb->addSelect('s.name as serviceName');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        if (!empty($mode)){
+            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
+        }
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
+        $this->handleDateRangeFind($qb,$data);
+        $qb->groupBy('s.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+    public function findWithTransactionOverview(User $user, $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.invoiceTransactions','ip');
+        $qb->leftJoin('ip.transactionMethod','p');
+        $qb->select('sum(ip.payment) as paymentTotal');
+        $qb->addSelect('p.name as transName');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        if (!empty($mode)){
+            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
+        }
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
+        $this->handleDateRangeFind($qb,$data);
+        $qb->groupBy('p.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
 
     public function invoiceLists(User $user , $mode , $data)
     {
@@ -146,7 +242,7 @@ class InvoiceRepository extends EntityRepository
         $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $this->handleSearchBetween($qb,$data);
         $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic'));
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
         $qb->orderBy('e.created','DESC');
         $qb->getQuery();
         return  $qb;

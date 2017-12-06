@@ -1,0 +1,61 @@
+<?php
+
+namespace Appstore\Bundle\HospitalBundle\Controller;
+
+use Appstore\Bundle\HospitalBundle\Entity\Invoice;
+use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
+use Appstore\Bundle\HospitalBundle\Entity\Particular;
+use Appstore\Bundle\HospitalBundle\Form\InvoiceType;
+use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
+use Frontend\FrontentBundle\Service\MobileDetect;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+use JMS\SecurityExtraBundle\Annotation\RunAs;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * Invoice controller.
+ *
+ */
+class ReportController extends Controller
+{
+
+    public function paginate($entities)
+    {
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            25  /*limit per page*/
+        );
+        return $pagination;
+    }
+
+    public function salesSummaryAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        $diagnosticOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user,$data,$mode = 'diagnostic');
+        $admissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user,$data,$mode = 'admission');
+        $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user,$data);
+        $transactionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithTransactionOverview($user,$data);
+        return $this->render('HospitalBundle:Report:salesSumary.html.twig', array(
+            'diagnosticOverview'    => $diagnosticOverview,
+            'admissionOverview'     => $admissionOverview,
+            'serviceOverview'       => $serviceOverview,
+            'transactionOverview'   => $transactionOverview,
+            'searchForm'            => $data,
+        ));
+
+    }
+
+
+
+}
+

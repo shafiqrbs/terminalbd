@@ -22,6 +22,10 @@ setting_tool_size:
     resource: "@SettingToolBundle/Resources/config/routing/size.yml"
     prefix:   /admin/size
 
+setting_tool_hms_cateory:
+    resource: "@SettingToolBundle/Resources/config/routing/category.yml"
+    prefix:   /admin/hms-category
+
 setting_tool_invoicesmsemail:
     resource: "@SettingToolBundle/Resources/config/routing/invoicesmsemail.yml"
     prefix:   /domain/invoice-sms-email

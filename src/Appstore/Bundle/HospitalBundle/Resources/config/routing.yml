@@ -1,3 +1,7 @@
+hospital_report:
+    resource: "@HospitalBundle/Resources/config/routing/report.yml"
+    prefix:   /report
+
 hospital_purchase:
     resource: "@HospitalBundle/Resources/config/routing/purchase.yml"
     prefix:   /purchase
@@ -65,10 +69,6 @@ hospital_other_service:
 hospital_referred_doctor:
     resource: "@HospitalBundle/Resources/config/routing/referreddoctor.yml"
     prefix:   /referred-doctor
-
-hospital_category:
-    resource: "@HospitalBundle/Resources/config/routing/category.yml"
-    prefix:   /category
 
 hospital_config:
     resource: "@HospitalBundle/Resources/config/routing/config.yml"

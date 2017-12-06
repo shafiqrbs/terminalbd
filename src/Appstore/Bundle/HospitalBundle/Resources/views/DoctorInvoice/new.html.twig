@@ -193,7 +193,7 @@
                             <tr>
                                 <td  class="numeric">{{ loop.index }}</td>
                                 <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
-                                <td class="numeric">{{ transaction.transactionMethod.name }}</td>
+                                <td class="numeric">{% if transaction.transactionMethod is not empty %}{{ transaction.transactionMethod.name }}{% endif %}</td>
                                 <td class="numeric">{{ transaction.discount }}</td>
                                 <td class="numeric">{{ transaction.vat }}</td>
                                 <td class="numeric">{{ transaction.payment }}</td>
