@@ -88,9 +88,10 @@
                     </td></tr>
                 {% endif %}
                 {% if  entity.invoicePathologicalReports is defined and entity.invoicePathologicalReports is not empty %}
+                    <tr><td>&nbsp;</td></tr>
                     {% for meta in entity.invoicePathologicalReports %}
                         {% if meta.metaValue is not empty %}
-                            <tr><td class=""><span class="span3">{{ meta.metaKey }}</span>{{ meta.metaValue|raw }}</td></tr>
+                            <tr><td><span class="span3" style="display:inline-block">{{ meta.metaKey }}</span>{{ meta.metaValue|raw }}</td></tr>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
