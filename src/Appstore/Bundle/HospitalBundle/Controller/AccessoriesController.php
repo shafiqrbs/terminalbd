@@ -3,17 +3,17 @@
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
-use Appstore\Bundle\HospitalBundle\Form\MedicineType;
+use Appstore\Bundle\HospitalBundle\Form\AccessoriesType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 
 /**
- * MedicineController controller.
+ * AccessoriesController controller.
  *
  */
-class MedicineController extends Controller
+class AccessoriesController extends Controller
 {
 
     public function paginate($entities)
@@ -36,11 +36,11 @@ class MedicineController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getMedicineParticular($hospital);
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getAccessoriesParticular($hospital);
         $pagination = $this->paginate($entities);
         $entity = new Particular();
         $form = $this->createCreateForm($entity);
-        return $this->render('HospitalBundle:Medicine:index.html.twig', array(
+        return $this->render('HospitalBundle:Accessories:index.html.twig', array(
             'pagination' => $pagination,
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -56,7 +56,7 @@ class MedicineController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 4),array('name'=>'ASC'));
+        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 8),array('name'=>'ASC'));
         $entity = new Particular();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -64,16 +64,16 @@ class MedicineController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setHospitalConfig($config);
-            $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(4);
+            $service = $this->getDoctrine()->getRepository('HospitalBundle:Service')->find(8);
             $entity->setService($service);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been added successfully"
             );
-            return $this->redirect($this->generateUrl('hms_medicine'));
+            return $this->redirect($this->generateUrl('hms_accessories'));
         }
-        return $this->render('HospitalBundle:Medicine:index.html.twig', array(
+        return $this->render('HospitalBundle:Accessories:index.html.twig', array(
             'entity' => $entity,
             'pagination' => $pagination,
             'form'   => $form->createView(),
@@ -90,8 +90,8 @@ class MedicineController extends Controller
     private function createCreateForm(Particular $entity)
     {
 
-        $form = $this->createForm(new MedicineType(), $entity, array(
-            'action' => $this->generateUrl('hms_medicine_create', array('id' => $entity->getId())),
+        $form = $this->createForm(new AccessoriesType(), $entity, array(
+            'action' => $this->generateUrl('hms_accessories_create', array('id' => $entity->getId())),
             'method' => 'POST',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -117,7 +117,7 @@ class MedicineController extends Controller
             throw $this->createNotFoundException('Unable to find Particular entity.');
         }
         $editForm = $this->createEditForm($entity);
-        return $this->render('HospitalBundle:Medicine:index.html.twig', array(
+        return $this->render('HospitalBundle:Accessories:index.html.twig', array(
             'pagination'        => $pagination,
             'entity'            => $entity,
             'form'              => $editForm->createView(),
@@ -133,8 +133,8 @@ class MedicineController extends Controller
      */
     private function createEditForm(Particular $entity)
     {
-        $form = $this->createForm(new MedicineType(), $entity, array(
-            'action' => $this->generateUrl('hms_medicine_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new AccessoriesType(), $entity, array(
+            'action' => $this->generateUrl('hms_accessories_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'horizontal-form',
@@ -152,7 +152,7 @@ class MedicineController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 4),array('name'=>'ASC'));
+        $entities = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 8),array('name'=>'ASC'));
         $pagination = $this->paginate($entities);
         $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
 
@@ -169,9 +169,9 @@ class MedicineController extends Controller
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"
             );
-            return $this->redirect($this->generateUrl('hms_medicine'));
+            return $this->redirect($this->generateUrl('hms_accessories'));
         }
-        return $this->render('HospitalBundle:Medicine:index.html.twig', array(
+        return $this->render('HospitalBundle:Accessories:index.html.twig', array(
             'pagination'      => $pagination,
             'entity'      => $entity,
             'form'   => $editForm->createView(),
@@ -204,7 +204,7 @@ class MedicineController extends Controller
                 'notice', 'Please contact system administrator further notification.'
             );
         }
-        return $this->redirect($this->generateUrl('hms_medicine'));
+        return $this->redirect($this->generateUrl('hms_accessories'));
     }
 
    
@@ -230,7 +230,7 @@ class MedicineController extends Controller
         $this->get('session')->getFlashBag()->add(
             'success',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('hms_medicine'));
+        return $this->redirect($this->generateUrl('hms_accessories'));
     }
 
     public function inlineUpdateAction(Request $request)

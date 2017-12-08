@@ -50,6 +50,10 @@ hms_invoice_admission_approved:
     options:
             expose: true
 
+hms_invoice_admission_patient_release:
+    path:     /{invoice}/invoice-confirm
+    defaults: { _controller: "HospitalBundle:InvoiceAdmission:release" }
+
 hms_invoice_print_for:
     path:     /{id}/invoice-patient-add
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:invoicePrintFor" }

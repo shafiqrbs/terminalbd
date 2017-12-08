@@ -49,6 +49,12 @@ class HmsVendor
      */
     private $name;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", length=30, nullable=true)
+     */
+    private $mode ='medicine';
 
     /**
      * @var string
@@ -338,6 +344,22 @@ class HmsVendor
     public function getPurchases()
     {
         return $this->purchases;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
     }
 
 

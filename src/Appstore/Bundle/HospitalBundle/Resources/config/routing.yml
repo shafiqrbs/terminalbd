@@ -6,6 +6,14 @@ hospital_purchase:
     resource: "@HospitalBundle/Resources/config/routing/purchase.yml"
     prefix:   /purchase
 
+hospital_accessories_purchase:
+    resource: "@HospitalBundle/Resources/config/routing/accessoriesPurchase.yml"
+    prefix:   /accessories-purchase
+
+hospital_accessories:
+    resource: "@HospitalBundle/Resources/config/routing/accessories.yml"
+    prefix:   /accessories
+
 hospital_commission:
     resource: "@HospitalBundle/Resources/config/routing/commission.yml"
     prefix:   /commission
@@ -60,7 +68,7 @@ hospital_surgery:
 
 hospital_medicine:
     resource: "@HospitalBundle/Resources/config/routing/medicine.yml"
-    prefix:   /accessories
+    prefix:   /medicine
 
 hospital_other_service:
     resource: "@HospitalBundle/Resources/config/routing/otherservice.yml"

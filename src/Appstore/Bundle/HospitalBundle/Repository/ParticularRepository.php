@@ -134,11 +134,38 @@ class ParticularRepository extends EntityRepository
             ->addSelect('u.name as unit')
             ->addSelect('s.name as serviceName')
             ->addSelect('s.code as serviceCode')
-            ->addSelect('e.purchaseAverage')
+            ->addSelect('e.purchasePrice')
             ->addSelect('e.purchaseQuantity')
             ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
             ->andWhere('s.id IN(:process)')
             ->setParameter('process',array_values(array(4)))
+            ->orderBy('e.name','ASC')
+            ->getQuery()->getArrayResult();
+            return  $qb;
+    }
+    public function getAccessoriesParticular($hospital){
+
+        $qb = $this->createQueryBuilder('e')
+            ->leftJoin('e.service','s')
+            ->leftJoin('e.unit','u')
+            ->select('e.id')
+            ->addSelect('e.name')
+            ->addSelect('e.particularCode')
+            ->addSelect('e.price')
+            ->addSelect('e.minimumPrice')
+            ->addSelect('e.quantity')
+            ->addSelect('e.status')
+            ->addSelect('e.salesQuantity')
+            ->addSelect('e.minQuantity')
+            ->addSelect('e.openingQuantity')
+            ->addSelect('u.name as unit')
+            ->addSelect('s.name as serviceName')
+            ->addSelect('s.code as serviceCode')
+            ->addSelect('e.purchasePrice')
+            ->addSelect('e.purchaseQuantity')
+            ->where('e.hospitalConfig = :config')->setParameter('config', $hospital)
+            ->andWhere('s.id IN(:process)')
+            ->setParameter('process',array_values(array(8)))
             ->orderBy('e.name','ASC')
             ->getQuery()->getArrayResult();
             return  $qb;

@@ -53,6 +53,7 @@ $(document).on('change', '#particular', function() {
             $('#particularId').val(obj['particularId']);
             $('#quantity').val(obj['quantity']);
             $('#price').val(obj['price']);
+            $('#purchasePrice').val(obj['purchasePrice']);
             $('#instruction').html(obj['instruction']);
         }
     })

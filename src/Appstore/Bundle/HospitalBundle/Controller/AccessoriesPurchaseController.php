@@ -2,10 +2,12 @@
 
 namespace Appstore\Bundle\HospitalBundle\Controller;
 
+use Appstore\Bundle\AccountingBundle\Form\AccountHmsPurchaseType;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchase;
 use Appstore\Bundle\HospitalBundle\Entity\HmsPurchaseItem;
 use Appstore\Bundle\HospitalBundle\Entity\HmsVendor;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
+use Appstore\Bundle\HospitalBundle\Form\AccessoriesPurchaseType;
 use Appstore\Bundle\HospitalBundle\Form\PurchaseType;
 use Appstore\Bundle\HospitalBundle\Form\VendorType;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Vendor controller.
  *
  */
-class PurchaseController extends Controller
+class AccessoriesPurchaseController extends Controller
 {
 
     public function paginate($entities)
@@ -38,45 +40,15 @@ class PurchaseController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsPurchase')->findBy(array('hospitalConfig' => $hospital,'mode'=>'accessories'),array('created'=>'DESC'));
         $pagination = $this->paginate($entities);
-
-        return $this->render('HospitalBundle:Purchase:index.html.twig', array(
+        return $this->render('HospitalBundle:AccessoriesPurchase:index.html.twig', array(
             'entities' => $pagination,
         ));
+
     }
-    /**
-     * Creates a new Vendor entity.
-     *
-     */
-    public function createAction(Request $request)
-    {
-        $entity = new HmsVendor();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-
-            $em = $this->getDoctrine()->getManager();
-            $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
-            $entity->setHospitalConfig($hospital);
-            $em->persist($entity);
-            $em->flush();
-            $this->get('session')->getFlashBag()->add(
-                'success',"Data has been inserted successfully"
-            );
-            return $this->redirect($this->generateUrl('hms_vendor', array('id' => $entity->getId())));
-        }
-
-        return $this->render('HospitalBundle:Vendor:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
-    }
-
-
+   
     public function newAction()
     {
 
@@ -84,11 +56,11 @@ class PurchaseController extends Controller
         $entity = new HmsPurchase();
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
         $entity->setHospitalConfig($hospital);
-        $entity->setMode('medicine');
+        $entity->setMode('accessories');
         $entity->setCreatedBy($this->getUser());
         $em->persist($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('hms_purchase_edit', array('id' => $entity->getId())));
+        return $this->redirect($this->generateUrl('hms_accessories_purchase_edit', array('id' => $entity->getId())));
 
     }
 
@@ -103,8 +75,8 @@ class PurchaseController extends Controller
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
         $editForm = $this->createEditForm($entity);
-        $particulars = $em->getRepository('HospitalBundle:Particular')->getMedicineParticular($hospital);
-        return $this->render('HospitalBundle:Purchase:new.html.twig', array(
+        $particulars = $em->getRepository('HospitalBundle:Particular')->getAccessoriesParticular($hospital);
+        return $this->render('HospitalBundle:AccessoriesPurchase:new.html.twig', array(
             'entity' => $entity,
             'particulars' => $particulars,
             'form' => $editForm->createView(),
@@ -121,8 +93,8 @@ class PurchaseController extends Controller
     private function createEditForm(HmsPurchase $entity)
     {
         $globalOption = $this->getUser()->getGlobalOption();
-        $form = $this->createForm(new PurchaseType($globalOption), $entity, array(
-            'action' => $this->generateUrl('hms_purchase_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new AccessoriesPurchaseType($globalOption), $entity, array(
+            'action' => $this->generateUrl('hms_accessories_purchase_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
                 'class' => 'form-horizontal',
@@ -224,10 +196,10 @@ class PurchaseController extends Controller
             $entity->setProcess('Done');
             $entity->setDue($entity->getNetTotal() - $entity->getPayment());
             $em->flush();
-            return $this->redirect($this->generateUrl('hms_purchase_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('hms_accessories_purchase_show', array('id' => $entity->getId())));
         }
-        $particulars = $em->getRepository('HospitalBundle:Particular')->getMedicineParticular($entity->getHospitalConfig());
-        return $this->render('HospitalBundle:Purchase:new.html.twig', array(
+        $particulars = $em->getRepository('HospitalBundle:Particular')->getAccessoriesParticular($entity->getHospitalConfig());
+        return $this->render('HospitalBundle:AccessoriesPurchase:new.html.twig', array(
             'entity' => $entity,
             'particulars' => $particulars,
             'form' => $editForm->createView(),
@@ -248,7 +220,7 @@ class PurchaseController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Vendor entity.');
         }
-        return $this->render('HospitalBundle:Purchase:show.html.twig', array(
+        return $this->render('HospitalBundle:AccessoriesPurchase:show.html.twig', array(
             'entity'      => $entity,
         ));
     }
@@ -287,7 +259,7 @@ class PurchaseController extends Controller
 
         $em->remove($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('hms_purchase'));
+        return $this->redirect($this->generateUrl('hms_accessories_purchase'));
     }
 
 

@@ -40,9 +40,9 @@ class HmsPurchaseItemRepository extends EntityRepository
         $entity->setPurchase($invoice);
         $entity->setParticular($particular);
         $entity->setSalesPrice($particular->getPrice());
-        $entity->setPurchasePrice($data['price']);
+        $entity->setPurchasePrice($particular->getPurchasePrice());
         $entity->setQuantity($data['quantity']);
-        $entity->setPurchaseSubTotal($data['quantity'] * $data['price']);
+        $entity->setPurchaseSubTotal($data['quantity'] * $particular->getPurchasePrice());
         $em->persist($entity);
         $em->flush();
         $this->getPurchaseAveragePrice($particular);

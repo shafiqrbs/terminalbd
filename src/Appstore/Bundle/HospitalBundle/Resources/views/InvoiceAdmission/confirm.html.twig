@@ -387,8 +387,8 @@
                                                 <select id="process" name="process" class="span12 m-wrap">
                                                     <option {% if entity.process == 'Admission' %} selected="selected" {% endif %} value="Admission">Admission</option>
                                                     <option {% if entity.process == 'Admitted' %} selected="selected" {% endif %} value="Admitted">Admitted</option>
-                                                    <option {% if entity.process == 'Release' %} selected="selected" {% endif %} value="Release">Release Certificate</option>
-                                                    <option {% if entity.process == 'Death' %} selected="selected" {% endif %} value="Death">Death Certificate</option>
+                                                    <option {% if entity.process == 'Release' %} selected="selected" {% endif %} value="Release">Release</option>
+                                                    <option {% if entity.process == 'Death' %} selected="selected" {% endif %} value="Death">Death</option>
                                                 </select>
                                             </div>
                                             <div class="span2  pull-right"><input type="text" class="m-wrap span12" id="payment" name="payment" value="" maxlength="8"  placeholder="Payment amount"></div>
@@ -402,6 +402,11 @@
                                         <a target="_blank"  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
                                         <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                         <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
+                                        {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_MANAGER"))  %}
+                                            {% if entity.process in ['Release','Death'] %}
+                                                <a class="btn purple confirm" href="javascript:" data-url="{{ path('hms_invoice_admission_patient_release',{'invoice':entity.invoice}) }}" ><i class="icon-ok"></i> {{ entity.process }} Confirm</a>
+                                            {% endif %}
+                                        {% endif %}
                                         {% if entity.paymentStatus != 'Paid' and  entity.process not in ['Release','Death'] %}
                                         <a class="btn red" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> Admitted Daily Invoice</a>
                                         {% endif %}

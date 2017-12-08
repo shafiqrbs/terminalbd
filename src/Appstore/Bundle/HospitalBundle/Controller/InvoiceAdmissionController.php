@@ -237,6 +237,7 @@ class InvoiceAdmissionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $payment = $request->request->get('payment');
         $discount = $request->request->get('discount');
+        $discount = $discount !="" ? $discount : 0 ;
         $process = $request->request->get('process');
 
         if (!empty($entity) and !empty($payment) and !empty($process)) {
@@ -291,6 +292,21 @@ class InvoiceAdmissionController extends Controller
         } else {
             return $this->redirect($this->generateUrl('hms_invoice_admission'));
         }
+    }
+
+    public function releaseAction($invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
+        $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig'=>$inventory,'invoice'=>$invoice));
+        $entity->setApprovedBy($this->getUser());
+        if($entity->getProcess() == 'Release'){
+            $entity->setProcess('Released');
+        }elseif($entity->getProcess() == 'Death'){
+            $entity->setProcess('Dead');
+        }
+        $em->flush();
+        exit;
     }
 
     public function admittedAction()

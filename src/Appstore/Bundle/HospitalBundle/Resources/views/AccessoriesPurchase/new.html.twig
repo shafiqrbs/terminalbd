@@ -15,10 +15,10 @@
                     <span class="icon-angle-right"></span>
                 </li>
                 <li>
-                    <a href="{{ path('hms_purchase') }}">Medicine</a>
+                    <a href="{{ path('hms_purchase') }}">Accessories Receive</a>
                     <span class="icon-angle-right"></span>
                 </li>
-                <li><a href="#">Manage Medicine</a></li>
+                <li><a href="#">Manage Accessories Receive</a></li>
                 <li class="pull-right btn blue disabled mini">
                     <i class="fa fa-calendar"></i>
                     {{ "now"|date("d-F-Y") }}
@@ -33,11 +33,11 @@
 
     <div class="portlet box green tabbable">
         <div class="portlet-title">
-            <div class="caption"><i class="icon-reorder"></i>Medicine Information</div>
+            <div class="caption"><i class="icon-reorder"></i>Accessories Information</div>
             <div class="actions">
                 <div class="btn-group">
-                    <a class="btn red" href="{{ path('hms_purchase_new') }}"><i class="icon-plus-sign"></i> Medicine Receive</a>
-                    <a class="btn" href="{{ path('hms_purchase') }}"><i class="icon-th-list"></i> Medicine</a>
+                    <a class="btn red" href="{{ path('hms_accessories_purchase_new') }}"><i class="icon-plus-sign"></i> Accessories Receive</a>
+                    <a class="btn" href="{{ path('hms_accessories_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
                 </div>
             </div>
         </div>
@@ -54,8 +54,8 @@
                         <tr>
                             <th class="span1">&nbsp;&nbsp;<i class="icon-list"></i></th>
                             <th class="span1">Code</th>
-                            <th class="span4">Name</th>
-                            <th class="span1">Sales Price</th>
+                            <th class="span3">Name</th>
+                            <th class="span2">Sales Price</th>
                             <th class="span1">Receive Price</th>
                             <th class="span1">Qnt</th>
                             <th class="span1">Sub Total</th>
@@ -68,8 +68,8 @@
                                 <tr id="remove-{{ item.id }}">
                                     <td  class="span1">{{ loop.index }}</td>
                                     <td  class="span1">{{ item.particular.particularCode }}</td>
-                                    <td class="span4">{{ item.particular.name }}</td>
-                                    <td class="span1">{{ item.salesPrice }}</td>
+                                    <td class="span3">{{ item.particular.name }}</td>
+                                    <td class="span2">{{ item.salesPrice }}</td>
                                     <td class="span1">{{ item.purchasePrice }}</td>
                                     <td class="span1">{{ item.quantity }}</td>
                                     <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
@@ -100,7 +100,7 @@
             <div class="clearfix">&nbsp;</div>
             <div class="form-actions portlet box purple">
                 <div class="pull-left span3">
-                    <a class="btn purple span12 pull-left" style="text-align: left" ><i class="icon-plus"></i>&nbsp;Add Medicine Item</a>
+                    <a class="btn purple span12 pull-left" style="text-align: left" ><i class="icon-plus"></i>&nbsp;Add Accessories Item</a>
                 </div>
                 <div class="pull-left span4 msg-hidden" style="display: none">
                     <a class="btn yellow span12 pull-left" ><span id="msg"></span></a>
@@ -121,7 +121,7 @@
                             <div class="row-fluid particular-info" >
                                 <div class="span4">
                                     <select id="particular" name="particular" class="span12 select2">
-                                        <option value="">--- Select medicine name ---</option>
+                                        <option value="">--- Select accessories name ---</option>
                                        {% for particular in particulars %}
                                            <option value="{{ path('hms_purchase_particular_search',{'id':particular.id}) }}">{{ particular.particularCode }}-{{ particular.name }} </option>
                                        {% endfor %}
@@ -277,7 +277,7 @@
                 <input type="hidden" name="purchaseId" id="purchaseId" value="{{ entity.id }}">
                 <input type="hidden" name="paymentTotal" id="paymentTotal" value="{{ entity.netTotal }}">
                 <div class="pull-right">
-                    <button type="button" class="btn blue span12 confirmSubmit" id="receiveBtn"><i class="icon-save"></i> Payment</button>
+                    <button type="button" class="btn blue span12 confirmSubmit" id="receiveBtn"><i class="icon-save"></i> Save</button>
                 </div>
             </div>
             {{ form_end(form) }}

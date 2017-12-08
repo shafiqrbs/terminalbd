@@ -45,15 +45,42 @@ class ReportController extends Controller
         $admissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user,$data,$mode = 'admission');
         $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user,$data);
         $transactionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithTransactionOverview($user,$data);
+        $commissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithCommissionOverview($user,$data);
         return $this->render('HospitalBundle:Report:salesSumary.html.twig', array(
             'diagnosticOverview'    => $diagnosticOverview,
             'admissionOverview'     => $admissionOverview,
             'serviceOverview'       => $serviceOverview,
             'transactionOverview'   => $transactionOverview,
+            'commissionOverview'    => $commissionOverview,
             'searchForm'            => $data,
         ));
 
     }
+public function serviceBaseSummaryAction()
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $data = $_REQUEST;
+
+        $user = $this->getUser();
+        $entity = '';
+        if(!empty($data) and $data['service']){
+            $entity = $em->getRepository('HospitalBundle:Service')->find($data['service']);
+        }
+        $services = $em->getRepository('HospitalBundle:Service')->findBy(array(),array('name'=>'ASC'));
+        $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user,$data);
+        $serviceGroup = $em->getRepository('HospitalBundle:InvoiceParticular')->serviceParticularDetails($user,$data);
+        return $this->render('HospitalBundle:Report:serviceBaseSales.html.twig', array(
+            'serviceOverview'       => $serviceOverview,
+            'serviceGroup'          => $serviceGroup,
+            'services'              => $services,
+            'entity'                => $entity,
+            'searchForm'            => $data,
+        ));
+
+    }
+
+    
 
 
 

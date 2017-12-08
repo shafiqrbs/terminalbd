@@ -52,7 +52,7 @@ class DoctorInvoiceType extends AbstractType
                       return $er->createQueryBuilder('e')
                           ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
                           ->andWhere('e.service IN (:service)')
-                          ->setParameter('service', array('5','6'))
+                          ->setParameter('service', array(5,6))
                           ->orderBy("e.name","ASC");
                   }
 

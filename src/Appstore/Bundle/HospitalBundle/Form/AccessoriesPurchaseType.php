@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class PurchaseType extends AbstractType
+class AccessoriesPurchaseType extends AbstractType
 {
     /** @var  HospitalConfig */
     public  $option;
@@ -39,7 +39,7 @@ class PurchaseType extends AbstractType
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('wt')
                         ->where("wt.status = 1")
-                        ->andWhere("wt.mode = 'medicine'")
+                        ->andWhere("wt.mode = 'accessories'")
                         ->andWhere("wt.hospitalConfig =".$this->option->getHospitalConfig()->getId());
                 },
             ))
@@ -47,7 +47,6 @@ class PurchaseType extends AbstractType
                 'required'    => true,
                 'class' => 'Setting\Bundle\ToolBundle\Entity\TransactionMethod',
                 'property' => 'name',
-                'empty_value' => '---Choose a Transaction---',
                 'attr'=>array('class'=>'span12 transactionMethod'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')

@@ -25,6 +25,15 @@ class VendorType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')))
             ))
+            ->add('mode', 'choice', array(
+                'attr'=>array('class'=>'span12 select-custom'),
+                'expanded'      =>false,
+                'multiple'      =>false,
+                'choices' => array(
+                    'medicine' => 'Medicine',
+                    'accessories' => 'Accessories',
+                ),
+            ))
             ->add('address','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter vendor address')))
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter email address')))
             ->add('country', 'entity', array(

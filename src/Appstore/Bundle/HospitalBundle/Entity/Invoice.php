@@ -111,6 +111,11 @@ class Invoice
      **/
     private  $createdBy;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceApprovedBy" )
+     **/
+    private  $approvedBy;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="hmsInvoiceDeliveredBy" )
@@ -1233,6 +1238,22 @@ class Invoice
     public function setHmsReverse($hmsReverse)
     {
         $this->hmsReverse = $hmsReverse;
+    }
+
+    /**
+     * @return User
+     */
+    public function getApprovedBy()
+    {
+        return $this->approvedBy;
+    }
+
+    /**
+     * @param User $approvedBy
+     */
+    public function setApprovedBy($approvedBy)
+    {
+        $this->approvedBy = $approvedBy;
     }
 
 

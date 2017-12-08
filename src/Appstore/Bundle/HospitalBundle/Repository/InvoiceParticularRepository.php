@@ -6,6 +6,7 @@ use Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -18,6 +19,28 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class InvoiceParticularRepository extends EntityRepository
 {
+
+    public function handleDateRangeFind($qb,$data)
+    {
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+        }
+
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("e.created >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("e.created <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+    }
+
 
     public function insertInvoiceItems($invoice, $data)
     {
@@ -194,6 +217,38 @@ class InvoiceParticularRepository extends EntityRepository
         }
         $res = $qb->getQuery()->getOneOrNullResult();
         return $res['totalPurchaseAmount'];
+
+    }
+
+    public function serviceParticularDetails(User $user, $data)
+    {
+
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $startDate = isset($data['startDate'])  ? $data['startDate'] : '';
+        $endDate =   isset($data['endDate'])  ? $data['endDate'] : '';
+        if(!empty($data['service'])){
+
+            $qb = $this->createQueryBuilder('ip');
+            $qb->leftJoin('ip.particular','p');
+            $qb->leftJoin('ip.hmsInvoice','e');
+            $qb->select('SUM(ip.quantity) AS totalQuantity');
+            $qb->addSelect('SUM(ip.quantity * ip.salesPrice ) AS totalAmount');
+            $qb->addSelect('p.name AS serviceName');
+            $qb->where('e.hospitalConfig = :hospital');
+            $qb->setParameter('hospital', $hospital);
+            $qb->andWhere('p.service = :service');
+            $qb->setParameter('service', $data['service']);
+            $qb->andWhere("e.process IN (:process)");
+            $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Death'));
+            $this->handleDateRangeFind($qb,$data);
+            $qb->groupBy('p.id');
+            $res = $qb->getQuery()->getArrayResult();
+            return $res;
+
+        }else{
+
+            return false;
+        }
 
     }
 }

@@ -88,7 +88,7 @@
 
                             </div>
                             <div class="row-fluid">
-                                <div class="span9">
+                                <div class="span6">
                                     <div class="control-group">
                                         <label class="control-label" for="firstName">Address</label>
                                         <div class="controls">
@@ -102,6 +102,15 @@
                                 </div>
                                 <div class="span3">
                                     <div class="control-group">
+                                        <label class="control-label" for="firstName">Mode</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.mode) }}
+                                            {{ form_errors(form.mode) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
                                         <label class="control-label" for="firstName">Country</label>
                                         <div class="controls">
                                             {{ form_widget(form.country) }}
@@ -109,8 +118,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
 
                             <div class="clearfix"><br/></div>
@@ -130,9 +137,9 @@
 
                                 <thead class="flip-content ">
                                 <tr class="head-grey">
-
                                     <th class="numeric" >Company Name </th>
                                     <th class="numeric" >Name </th>
+                                    <th class="numeric" >Mode </th>
                                     <th class="numeric" >Mobile</th>
                                     <th class="numeric" >Country</th>
                                     <th class="numeric" >Action</th>
@@ -145,6 +152,7 @@
 
                                         <td class="numeric" ><a href="{{ path('hms_vendor_edit',{'id': entity.id })}}">{{ entity.companyName }}</a></td>
                                         <td class="numeric" >{{ entity.name }}</td>
+                                        <td class="numeric" >{{ entity.mode|capitalize }}</td>
                                         <td class="numeric" >{{ entity.mobile }}</td>
                                         <td class="numeric" >{% if entity.country %}{{ entity.country.name }}{% endif %}</td>
                                         <td class="numeric" >

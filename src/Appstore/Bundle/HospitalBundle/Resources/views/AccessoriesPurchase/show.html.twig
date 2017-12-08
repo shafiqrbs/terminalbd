@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Receive GRN # {{ entity.grn }}
+                    Accessories Receive GRN # {{ entity.grn }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,12 +15,12 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('hms_purchase') }}">Receive</a>
+                        <a href="{{ path('hms_purchase') }}">Accessories Receive</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Receive</a></li>
+                    <li><a href="#">Manage Accessories Receive</a></li>
                     <li class="pull-right btn blue disabled mini">
-                        <i class="fa fa-calendar"></i>c
+                        <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
                     </li>
                 </ul>
@@ -31,15 +31,15 @@
         <div class="row-fluid">
             <div class="span12">
 
-                <div class="portlet box green tabbable">
+                <div class="portlet box green">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Receive Details</div>
+                        <div class="caption"><i class="icon-reorder"></i>Accessories Receive Details</div>
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('hms_purchase_new') }}"><i class="icon-plus-sign"></i> Medicine Receive</a>
-                                <a class="btn" href="{{ path('hms_purchase') }}"><i class="icon-th-list"></i> Medicine</a>
+                                <a class="btn red" href="{{ path('hms_accessories_purchase_new') }}"><i class="icon-plus-sign"></i> Accessories Receive</a>
+                                <a class="btn" href="{{ path('hms_accessories_purchase') }}"><i class="icon-th-list"></i> Purchase</a>
                             </div>
                         </div>
 
@@ -90,9 +90,9 @@
                                             <td class="span1">&nbsp;&nbsp;<i class="icon-list"></i></td>
                                             <th class="span1">Code</th>
                                             <th class="span4">Particular</th>
-                                            <th class="span1">Qnt</th>
                                             <th class="span2">Sales Price</th>
                                             <th class="span2">Purchase Price</th>
+                                            <th class="span1">Qnt</th>
                                             <th class="span1">Sub-Total</th>
                                         </tr>
                                         </thead>
@@ -102,9 +102,9 @@
                                                 <td  class="span1">{{ loop.index }}</td>
                                                 <td  class="span1">{{ item.particular.particularCode }}</td>
                                                 <td class="span4">{{ item.particular.name }}</td>
-                                                <td class="span1">{{ item.quantity }}</td>
                                                 <td class="span2">{{ item.salesPrice }}</td>
                                                 <td class="span2">{{ item.purchasePrice }}</td>
+                                                <td class="span1">{{ item.quantity }}</td>
                                                 <td class="span1">{{ item.purchaseSubTotal|number_format }}</td>
                                             </tr>
                                         {% endfor %}

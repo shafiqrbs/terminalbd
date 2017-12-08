@@ -17,6 +17,13 @@ ul.page-sidebar-menu > li > a {
     color: #ffffff !important;
 }
 
+.hide{
+    display:none;
+}
+.show{
+    display:block;
+}
+
 ul.page-sidebar-menu > li > ul.sub-menu > li > a {
     display: block;
     margin: 0px 0px 0px 0px;

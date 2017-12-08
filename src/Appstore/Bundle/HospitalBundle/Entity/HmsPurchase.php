@@ -99,6 +99,13 @@ class HmsPurchase
      */
     private $memo;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mode", type="string", length=30, nullable=true)
+     */
+    private $mode ='medicine';
+
 
     /**
      * @var datetime
@@ -643,6 +650,22 @@ class HmsPurchase
     public function setRemark($remark)
     {
         $this->remark = $remark;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
     }
 
 

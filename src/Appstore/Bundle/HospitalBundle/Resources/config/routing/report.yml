@@ -6,9 +6,9 @@ hms_report_sales_details:
     path:     /sales-details
     defaults: { _controller: "HospitalBundle:Report:salesDetails" }
 
-hms_report_sales_particular:
-    path:     /sales-particular
-    defaults: { _controller: "HospitalBundle:Report:salesParticular" }
+hms_report_sales_service:
+    path:     /service-wise-sales
+    defaults: { _controller: "HospitalBundle:Report:serviceBaseSummary" }
 
 hms_report_purchase_summary:
     path:     /purchase-summary

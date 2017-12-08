@@ -18,6 +18,11 @@ function pageReload() {
     location.reload();
 }
 
+$(document).on( "click", "#show", function(e){
+    $('#hide').slideToggle(2000);
+    $("i", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");
+});
+
 $(document).on("click", ".confirmSubmit", function() {
     $('#confirm-content').confirmModal({
         topOffset: 0,
@@ -47,7 +52,7 @@ $(document).on("click", ".confirm", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                location.reload();
+               /* location.reload();*/
             });
         }
     });
@@ -403,70 +408,34 @@ $(".select2Location").select2({
     minimumInputLength: 1
 });
 
-$("#barcodeNo").select2({
+$(document).on( "click", ".btn-number", function(e){
 
-    placeholder: "Enter specific barcode",
-    allowClear: true,
-    ajax: {
+    e.preventDefault();
+    fieldName = $(this).attr('data-field');
+    type      = $(this).attr('data-type');
+    var input = $("input[name='"+fieldName+"']");
+    var currentVal = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if(type == 'minus') {
 
-        url: Routing.generate('inventory_purchaseitem_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function(item){ return item.text +'(' +item.item_name+')'}, // omitted for brevity, see the source of this page
-    formatSelection: function(item){return item.text +'(' +item.item_name+')' }, // omitted for brevity, see the source of this page
-    initSelection: function(element, callback) {
-        var id = $(element).val();
-    },
-    minimumInputLength:1
+            if(currentVal > input.attr('min')) {
+                input.val(currentVal - 1).change();
+            }
+            if(parseInt(input.val()) == input.attr('min')) {
+                $(this).attr('disabled', true);
+            }
+        } else if(type == 'plus') {
+
+            if(currentVal < input.attr('max')) {
+                input.val(currentVal + 1).change();
+            }
+            if(parseInt(input.val()) == input.attr('max')) {
+                $(this).attr('disabled', true);
+            }
+        }
+    } else {
+        input.val(0);
+    }
 });
 
-$("#sku").select2({
-
-    placeholder: "Enter product sku",
-    allowClear: true,
-    ajax: {
-
-        url: Routing.generate('inventory_purchaseitem_search'),
-        dataType: 'json',
-        delay: 250,
-        data: function (params, page) {
-            return {
-                q: params,
-                page_limit: 100
-            };
-        },
-        results: function (data, page) {
-            return {
-                results: data
-            };
-        },
-        cache: true
-    },
-    escapeMarkup: function (m) {
-        return m;
-    },
-    formatResult: function(item){ return item.text +'(' +item.item_name+')'}, // omitted for brevity, see the source of this page
-    formatSelection: function(item){return item.text +'(' +item.item_name+')' }, // omitted for brevity, see the source of this page
-    initSelection: function(element, callback) {
-        var id = $(element).val();
-    },
-    minimumInputLength:1
-
-});
 

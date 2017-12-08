@@ -173,6 +173,13 @@ class Particular
      */
     private $purchaseAverage;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="purchasePrice", type="decimal", nullable=true)
+     */
+    private $purchasePrice;
+
 
     /**
      * @var string
@@ -1241,6 +1248,22 @@ class Particular
     public function setReportFormat($reportFormat)
     {
         $this->reportFormat = $reportFormat;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
+     * @param string $purchasePrice
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
     }
 
 

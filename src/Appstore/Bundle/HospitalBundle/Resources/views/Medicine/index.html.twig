@@ -14,7 +14,7 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('hms_medicine') }}">Accessories</a>
+                        <a href="{{ path('hms_medicine') }}">Manage Medicine</a>
                         <span class="icon-angle-right"></span>
                     </li>
                     <li><a href="#">View Lists</a></li>
@@ -33,57 +33,74 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Accessories</div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Medicine</div>
+                        <div class="actions">
+                            <a href="javascript:" id="show"  data-trigger="hover" data-original-title="Add medicine" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Add Medicine</a>
+                        </div>
                     </div>
 
                     <div class="portlet-body">
                         <div class="portlet-body form">
                             {% include('flash-message.html.twig')  %}
                             <!-- BEGIN FORM-->
-                            {{ form_start(form) }}
-                            {{ form_row(form._token) }}
-                            <div class="row-fluid">
-                                <!--/span-->
-                                <div class="span8">
-                                    <div class="control-group">
-                                        <label class="control-label"  for="category" >Name<span class="required">*</span></label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-medkit"></i>
-                                                {{ form_widget(form.name) }}
-                                                {{ form_errors(form.name) }}
+                            <div class="hide" id="hide">
+                                {{ form_start(form) }}
+                                {{ form_row(form._token) }}
+                                <div class="row-fluid" >
+                                    <!--/span-->
+                                    <div class="span6">
+                                        <div class="control-group">
+                                            <label class="control-label"  for="category" >Name<span class="required">*</span></label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-medkit"></i>
+                                                    {{ form_widget(form.name) }}
+                                                    {{ form_errors(form.name) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span2">
+                                        <div class="control-group">
+                                            <label class="control-label"  for="category" >Unit<span class="required">*</span></label>
+                                            <div class="controls">
+                                                {{ form_widget(form.unit) }}
+                                                {{ form_errors(form.unit) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span2">
+                                        <div class="control-group">
+                                            <label class="control-label" for="name">Purchase Price<span class="required">*</span></label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-money"></i>
+                                                    {{ form_widget(form.purchasePrice) }}
+                                                    {{ form_errors(form.purchasePrice) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="span2">
+                                        <div class="control-group">
+                                            <label class="control-label" for="name">Sales Price<span class="required">*</span></label>
+                                            <div class="controls">
+                                                <div class="input-icon left">
+                                                    <i class="icon-money"></i>
+                                                    {{ form_widget(form.price) }}
+                                                    {{ form_errors(form.price) }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label"  for="category" >Unit<span class="required">*</span></label>
-                                        <div class="controls">
-                                            {{ form_widget(form.unit) }}
-                                            {{ form_errors(form.unit) }}
-                                        </div>
-                                    </div>
+                                <div class="form-actions portlet box grey">
+                                    <div class="pull-right">
+                                        <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
+                                     </div>
                                 </div>
-                                <div class="span2">
-                                    <div class="control-group">
-                                        <label class="control-label" for="name">Price<span class="required">*</span></label>
-                                        <div class="controls">
-                                            <div class="input-icon left">
-                                                <i class="icon-money"></i>
-                                                {{ form_widget(form.price) }}
-                                                {{ form_errors(form.price) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {{ form_end(form) }}
                             </div>
-                            <div class="form-actions portlet box grey">
-                                <div class="pull-right">
-                                    <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
-                                 </div>
-                            </div>
-                            {{ form_end(form) }}
                             <!-- END FORM-->
                         </div>
                         <div class="clearfix"><br/></div>
@@ -94,12 +111,12 @@
                                 <tr class="head-blue">
                                     <th class="numeric" >Code</th>
                                     <th class="numeric" >Name</th>
-                                    <th class="numeric" >Avg Purchase</th>
-                                    <th class="numeric" >Price</th>
+                                    <th class="numeric" >Receive Price</th>
+                                    <th class="numeric" >Sales Price</th>
                                     <th class="numeric" >Opening</th>
-                                    <th class="numeric" >Purchase Qnt</th>
+                                    <th class="numeric" >Receive Qnt</th>
                                     <th class="numeric" >Sales Qnt</th>
-                                    <th class="numeric" >Remain. Qnt</th>
+                                    <th class="numeric" >Stock Qnt</th>
                                     <th class="numeric" >Min. Qnt</th>
                                     <th class="numeric" >Unit</th>
                                     <th class="numeric" >Action</th>
@@ -107,13 +124,18 @@
                                 </thead>
                                 <tbody>
                                 {% for entity in pagination %}
-                                    <tr>
+                                    {% set stockQnt = (entity.purchaseQuantity + entity.openingQuantity) - entity.salesQuantity %}
+                                    <tr {% if stockQnt == entity.minQuantity %} style="background-color:yellow" {% endif %}>
                                         <td class="numeric" >{{ entity.particularCode }}</td>
                                         <td class="numeric" ><a href="{{ path('hms_medicine_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
-                                        <td class="numeric" >{{ entity.purchaseAverage|number_format }}</td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                            <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('hms_medicine_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.price }}</a>
+                                            <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('hms_medicine_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
+                                            {% endif %}
+                                        </td>
+                                        <td class="numeric">
+                                            {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
+                                            <a  class="editable" data-name="price" href="#"  data-url="{{ path('hms_medicine_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.price }}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric">
@@ -123,14 +145,13 @@
                                         </td>
                                         <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
                                         <td class="numeric" >{{ entity.salesQuantity|number_format }}</td>
-                                        <td class="numeric" >{{ (entity.purchaseQuantity - entity.salesQuantity)|number_format }}</td>
+                                        <td class="numeric" >{{ stockQnt }}</td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
                                             <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('hms_medicine_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
                                             {% endif %}
                                         </td>
-                                        <td class="numeric">{% if entity.unit is not empty %}{{ entity.unit|default('---') }}{% endif %}</td>
-
+                                        <td class="numeric">{% if  entity.unit is defined and  entity.unit is not empty %}{{ entity.unit.name|default('---') }}{% endif %}</td>
                                         <td class="numeric" >
                                             {% if( entity.status == 1) %}
                                                 <a class="btn mini blue btn-action" href="{{ path('hms_medicine_status', { 'id': entity.id}) }}"><i class="icon-ok"></i></a>
@@ -164,6 +185,7 @@
     {{ parent() }}
     {% javascripts
     '@HospitalBundle/Resources/public/js/editable.js'
+    '@HospitalBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

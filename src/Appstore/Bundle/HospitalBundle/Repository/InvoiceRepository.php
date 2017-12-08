@@ -219,6 +219,22 @@ class InvoiceRepository extends EntityRepository
         return $result;
     }
 
+    public function findWithCommissionOverview(User $user, $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.doctorInvoices','ip');
+        $qb->leftJoin('ip.assignDoctor','d');
+        $qb->select('sum(ip.payment) as paymentTotal');
+        $qb->addSelect('d.name as referredName');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->andWhere('ip.process = :mode')->setParameter('mode', 'Paid');
+        $this->handleDateRangeFind($qb,$data);
+        $qb->groupBy('ip.assignDoctor');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
 
     public function invoiceLists(User $user , $mode , $data)
     {
