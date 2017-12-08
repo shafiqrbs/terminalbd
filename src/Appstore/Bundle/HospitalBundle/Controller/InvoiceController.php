@@ -106,7 +106,7 @@ class InvoiceController extends Controller
         if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created" and $entity->getRevised() != 1) {
             return $this->redirect($this->generateUrl('hms_invoice_show', array('id' => $entity->getId())));
         }
-        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,4,7));
+        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,8,7));
         $referredDoctors    = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $hospital,'status' => 1,'service' => 6),array('name'=>'ASC'));
         return $this->render('HospitalBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
