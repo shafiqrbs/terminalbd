@@ -787,6 +787,13 @@ class Builder extends ContainerAware
                 $menu['Hospital & Diagnostic']['Master Data']->addChild('Configuration', array('route' => 'hms_config_manage'))
                     ->setAttribute('icon', 'icon-cog');
             }
+            $menu['Hospital & Diagnostic']->addChild('Manage Stock')
+                ->setAttribute('icon', 'icon icon-truck')
+                ->setAttribute('dropdown', true);
+            $menu['Hospital & Diagnostic']['Manage Stock']->addChild('Medicine', array('route' => 'hms_medicine'))
+                ->setAttribute('icon', 'icon-th-list');
+            $menu['Hospital & Diagnostic']['Manage Stock']->addChild('Accessories', array('route' => 'hms_accessories'))
+                ->setAttribute('icon', 'icon-th-list');
             $menu['Hospital & Diagnostic']->addChild('Purchase')
                 ->setAttribute('icon', 'icon icon-truck')
                 ->setAttribute('dropdown', true);
@@ -795,14 +802,6 @@ class Builder extends ContainerAware
             $menu['Hospital & Diagnostic']['Purchase']->addChild('Accessories Receive', array('route' => 'hms_accessories_purchase'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Hospital & Diagnostic']['Purchase']->addChild('Vendor', array('route' => 'hms_vendor'))->setAttribute('icon', 'icon-tag');
-
-            $menu['Hospital & Diagnostic']->addChild('Manage Stock')
-                ->setAttribute('icon', 'icon icon-truck')
-                ->setAttribute('dropdown', true);
-            $menu['Hospital & Diagnostic']['Manage Stock']->addChild('Medicine', array('route' => 'hms_medicine'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Hospital & Diagnostic']['Manage Stock']->addChild('Accessories', array('route' => 'hms_accessories'))
-                ->setAttribute('icon', 'icon-th-list');
 
             $menu['Hospital & Diagnostic']->addChild('Reports')
                 ->setAttribute('icon', 'icon icon-cog')

@@ -40,7 +40,7 @@ class PurchaseController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsPurchase')->findBy(array('hospitalConfig' => $hospital,'mode'=>'accessories'),array('created'=>'DESC'));
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:HmsPurchase')->findBy(array('hospitalConfig' => $hospital,'mode'=>'medicine'),array('created'=>'DESC'));
         $pagination = $this->paginate($entities);
 
         return $this->render('HospitalBundle:Purchase:index.html.twig', array(

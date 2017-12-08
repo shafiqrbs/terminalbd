@@ -37,7 +37,7 @@ class AdmissionPatientParticularController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
-        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,2,3,4,7));
+        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($hospital,array(1,2,3,4,8,7));
         return $this->render('HospitalBundle:InvoiceAdmission:admissionPatientParticular.html.twig', array(
             'entity' => $entity,
             'particularService' => $services,

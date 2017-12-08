@@ -276,7 +276,7 @@ class InvoiceController extends Controller
         }
 
         $referredDoctors = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $entity->getHospitalConfig(),'status'=>1,'service'=> 6),array('name'=>'ASC'));
-        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($entity->getHospitalConfig(),array(1,4,7));
+        $services        = $em->getRepository('HospitalBundle:Particular')->getServices($entity->getHospitalConfig(),array(1,8,7));
         return $this->render('HospitalBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
             'particularService' => $services,

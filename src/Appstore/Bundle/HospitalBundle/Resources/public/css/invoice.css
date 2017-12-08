@@ -11,6 +11,10 @@
     padding-right: 4px;
 }
 
+.table-striped tbody>tr.min:nth-child(odd)>td, .table-striped tbody>tr.min:nth-child(odd)>th{
+    background-color: yellow;
+}
+
 input.m-wrap.input-error , select.m-wrap.input-error{
     border: 1px solid red !important;
 }
