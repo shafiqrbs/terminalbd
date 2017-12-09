@@ -118,12 +118,12 @@ class InvoiceRepository extends EntityRepository
         }
 
         if (!empty($data['startDate']) ) {
-            $qb->andWhere("e.updated >= :startDate");
+            $qb->andWhere("it.created >= :startDate");
             $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
         }
 
         if (!empty($data['endDate'])) {
-            $qb->andWhere("e.updated <= :endDate");
+            $qb->andWhere("it.created <= :endDate");
             $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
         }
     }
@@ -134,12 +134,14 @@ class InvoiceRepository extends EntityRepository
 
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
+        $qb->leftJoin('e.invoiceTransactions','it');
+        $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(it.total) as netTotal , sum(it.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
-        $this->handleSearchBetween($qb,$data);
+       // $this->handleSearchBetween($qb,$data);
+        $this->handleDateRangeFind($qb,$data);
         $qb->andWhere("e.process IN (:process)");
         $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Released','Death','Dead'));
         $result = $qb->getQuery()->getOneOrNullResult();
@@ -160,6 +162,7 @@ class InvoiceRepository extends EntityRepository
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.invoiceTransactions','it');
         $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
         if (!empty($mode)){
@@ -185,6 +188,7 @@ class InvoiceRepository extends EntityRepository
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
+        $qb->leftJoin('e.invoiceTransactions','it');
         $qb->leftJoin('e.invoiceParticulars','ip');
         $qb->leftJoin('ip.particular','p');
         $qb->leftJoin('p.service','s');
@@ -206,7 +210,7 @@ class InvoiceRepository extends EntityRepository
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.invoiceTransactions','ip');
+        $qb->leftJoin('e.invoiceTransactions','it');
         $qb->leftJoin('ip.transactionMethod','p');
         $qb->select('sum(ip.payment) as paymentTotal');
         $qb->addSelect('p.name as transName');

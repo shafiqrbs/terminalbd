@@ -118,13 +118,13 @@
                                     <thead class="flip-content">
                                     <tr class="head-red">
                                         <th class="numeric" ><strong>Total Sales Tk.</strong></th>
-                                        <th class="numeric" ><strong>{{ invoiceOverview.netTotal|number_format }}</strong></th>
-                                        <th class="numeric" ><strong>Received Tk.</strong></th>
-                                        <th class="numeric" ><strong>{{ invoiceOverview.netPayment|number_format }}</strong></th>
-                                        <th class="numeric" ><strong>Due Tk.</strong></th>
-                                        <th class="numeric" ><strong>{{ invoiceOverview.netDue|number_format }}</strong></th>
-                                        <th class="numeric" ><strong>Commission Tk.</strong></th>
-                                        <th class="numeric" ><strong>{{ invoiceOverview.netCommission|number_format }}</strong></th>
+                                        <th class="numeric" ><strong>{{ salesTransactionOverview.total|number_format }}</strong></th>
+                                        <th class="numeric" ><strong>Today Sales Receive Tk.</strong></th>
+                                        <th class="numeric" ><strong>{{ salesTransactionOverview.receive|number_format }}</strong></th>
+                                        <th class="numeric" ><strong>Due Received Tk.</strong></th>
+                                        <th class="numeric" ><strong>{{ previousSalesTransactionOverview.receive|number_format }}</strong></th>
+                                        <th class="numeric" ><strong>Total Received Tk.</strong></th>
+                                        <th class="numeric" ><strong>{{ (previousSalesTransactionOverview.receive + salesTransactionOverview.receive)|number_format }}</strong></th>
                                     </tr>
                                     </thead>
                                 </table>

@@ -232,7 +232,8 @@ class InvoiceParticularRepository extends EntityRepository
             $qb->leftJoin('ip.particular','p');
             $qb->leftJoin('ip.hmsInvoice','e');
             $qb->select('SUM(ip.quantity) AS totalQuantity');
-            $qb->addSelect('SUM(ip.quantity * ip.salesPrice ) AS totalAmount');
+            $qb->addSelect('SUM(ip.quantity * p.purchasePrice ) AS purchaseAmount');
+            $qb->addSelect('SUM(ip.quantity * ip.salesPrice ) AS salesAmount');
             $qb->addSelect('p.name AS serviceName');
             $qb->where('e.hospitalConfig = :hospital');
             $qb->setParameter('hospital', $hospital);

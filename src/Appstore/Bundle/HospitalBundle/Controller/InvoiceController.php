@@ -44,13 +44,16 @@ class InvoiceController extends Controller
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user , $mode = 'diagnostic' , $data);
         $pagination = $this->paginate($entities);
-        $invoiceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithOverview($user,$data,$mode = 'diagnostic');
+        $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true','diagnostic');
+        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false','diagnostic');
+
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
 
         return $this->render('HospitalBundle:Invoice:index.html.twig', array(
             'entities' => $pagination,
-            'invoiceOverview' => $invoiceOverview,
+            'salesTransactionOverview' => $salesTransactionOverview,
+            'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
             'assignDoctors' => $assignDoctors,
             'referredDoctors' => $referredDoctors,
             'searchForm' => $data,

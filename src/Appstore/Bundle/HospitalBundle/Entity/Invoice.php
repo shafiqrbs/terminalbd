@@ -68,7 +68,7 @@ class Invoice
     private  $admissionPatientParticulars;
 
     /**
-     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsReverse", mappedBy="hmsInvoice" )
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsReverse", mappedBy="hmsInvoice" , cascade={"remove"} )
      **/
     private  $hmsReverse;
 

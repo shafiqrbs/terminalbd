@@ -48,7 +48,10 @@ class InvoiceAdmissionController extends Controller
         $hospital = $user->getGlobalOption()->getHospitalConfig();
         $entities = $em->getRepository('HospitalBundle:Invoice')->invoiceLists( $user,$mode ='admission', $data);
         $pagination = $this->paginate($entities);
-        $invoiceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithOverview($user,$data, $mode ='admission');
+
+        $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true','admission');
+        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false','admission');
+
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
         $cabins = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(2));
@@ -56,7 +59,8 @@ class InvoiceAdmissionController extends Controller
 
         return $this->render('HospitalBundle:InvoiceAdmission:index.html.twig', array(
             'entities' => $pagination,
-            'invoiceOverview' => $invoiceOverview,
+            'salesTransactionOverview' => $salesTransactionOverview,
+            'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
             'assignDoctors' => $assignDoctors,
             'referredDoctors' => $referredDoctors,
             'cabinGroups' => $cabinGroups,

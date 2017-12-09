@@ -69,17 +69,28 @@
                         <div class="clearfix">&nbsp;</div>
                         {% if serviceGroup is defined and serviceGroup is not empty %}
                         <table class="table table-bordered table-striped table-condensed flip-content ">
+                            <thead>
+                            <th class="numeric">Particular</th>
+                            <th class="numeric">Quantity</th>
+                            <th class="numeric">Purchase Price</th>
+                            <th class="numeric">Sales Price</th>
+                            <th class="numeric">Profit</th>
+                            </thead>
                             <tbody>
-                                {% set sumTotal = 0 %}
+                                {% set sumSalesTotal = 0 %}
+                                {% set sumPurchaseTotal = 0 %}
                                 {% for service in serviceGroup %}
-                                    {% set sumTotal = sumTotal + service.totalAmount %}
+                                    {% set sumPurchaseTotal = sumPurchaseTotal + service.purchaseAmount %}
+                                    {% set sumSalesTotal = sumSalesTotal + service.salesAmount %}
                                     <tr>
                                         <th class="numeric span10">{{ loop.index }}. {{ service.serviceName }}</th>
                                         <th class="numeric span1">{{ service.totalQuantity }}</th>
-                                        <td class="numeric">{{ service.totalAmount|number_format }}</td>
+                                        <td class="numeric">{{ service.purchaseAmount|number_format }}</td>
+                                        <td class="numeric">{{ service.salesAmount|number_format }}</td>
+                                        <td class="numeric">{{ (service.salesAmount- service.purchaseAmount)|number_format }}</td>
                                     </tr>
                                 {% endfor %}
-                                <tr><th class="span11" colspan="2" ><span class=" pull-right">Total</span></th><th>{{ sumTotal|number_format }}</th></tr>
+                                <tr><th class="span11" colspan="2" ><span class=" pull-right">Total</span></th><th>{{ sumPurchaseTotal|number_format }}</th><th>{{ sumSalesTotal|number_format }}</th><th>{{ (sumSalesTotal - sumPurchaseTotal)|number_format }}</th></tr>
                             </tbody>
                         </table>
                         {% endif %}

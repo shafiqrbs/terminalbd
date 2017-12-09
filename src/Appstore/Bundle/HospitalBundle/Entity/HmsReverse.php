@@ -29,6 +29,7 @@ class HmsReverse
 
     /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="hmsReverse")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $hmsInvoice;
 
