@@ -162,7 +162,7 @@
                                         <td class="numeric" >{{ entity.paymentStatus }}</td>
                                         <td class="numeric" >
                                             {% if entity.payment > 0 and entity.total > 0 and entity.process == 'In-progress' %}
-                                            {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_MANAGER"))  %}
+                                            {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN"))  %}
                                                 <a  data-type="select" class="btn mini purple-stripe btn-action editable" id="process" data-name="process" href="#" data-source="{{ path('hms_invoice_status_select') }}"  data-url="" data-pk="{{ entity.id }}" data-value="{% if entity.process is not empty %}{{ entity.process }}{% endif %}" data-original-title="Enter invoice process">{% if entity.process is not empty %}{{ entity.process }}{% endif %}</a>
                                             {% endif %}
                                             {% else %}

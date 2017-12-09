@@ -118,17 +118,20 @@ class InvoiceRepository extends EntityRepository
         }
 
         if (!empty($data['startDate']) ) {
-            $qb->andWhere("e.created >= :startDate");
+            $qb->andWhere("e.updated >= :startDate");
             $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
         }
+
         if (!empty($data['endDate'])) {
-            $qb->andWhere("e.created <= :endDate");
+            $qb->andWhere("e.updated <= :endDate");
             $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
         }
     }
 
+
     public function findWithOverview(User $user , $data , $mode='')
     {
+
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
@@ -138,7 +141,7 @@ class InvoiceRepository extends EntityRepository
         }
         $this->handleSearchBetween($qb,$data);
         $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Released','Death','Dead'));
         $result = $qb->getQuery()->getOneOrNullResult();
 
         $subTotal = !empty($result['subTotal']) ? $result['subTotal'] :0;
@@ -192,7 +195,7 @@ class InvoiceRepository extends EntityRepository
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
         $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Death','Released','Dead'));
         $this->handleDateRangeFind($qb,$data);
         $qb->groupBy('s.id');
         $result = $qb->getQuery()->getArrayResult();

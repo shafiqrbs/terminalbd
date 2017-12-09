@@ -4,6 +4,7 @@ namespace Appstore\Bundle\HospitalBundle\Repository;
 use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\HospitalBundle\Entity\Invoice;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 
@@ -15,6 +16,114 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvoiceTransactionRepository extends EntityRepository
 {
+
+    public function todaySalesOverview(User $user , $data , $previous ='', $mode='')
+    {
+
+        if (empty($data)) {
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+        } else {
+            $data['startDate'] = date('Y-m-d', strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d', strtotime($data['endDate']));
+        }
+
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('it');
+        $qb->join('it.hmsInvoice', 'e');
+        $qb->select('sum(it.total) as total ,sum(it.discount) as discount , sum(it.payment) as payment');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        if ($previous == 'true'){
+
+            if (!empty($data['startDate'])) {
+                $qb->andWhere("it.updated >= :startDate");
+                $qb->setParameter('startDate', $data['startDate'] . ' 00:00:00');
+            }
+            if (!empty($data['endDate'])) {
+                $qb->andWhere("it.updated <= :endDate");
+                $qb->setParameter('endDate', $data['endDate'] . ' 23:59:59');
+            }
+            if (!empty($data['startDate'])) {
+                $qb->andWhere("e.created >= :startDate");
+                $qb->setParameter('startDate', $data['startDate'] . ' 00:00:00');
+            }
+            if (!empty($data['endDate'])) {
+                $qb->andWhere("e.created <= :endDate");
+                $qb->setParameter('endDate', $data['endDate'] . ' 23:59:59');
+            }
+
+        }elseif ($previous == 'false'){
+
+            if (!empty($data['startDate'])) {
+                $qb->andWhere("e.created < :startDate");
+                $qb->setParameter('startDate', $data['startDate'] . ' 00:00:00');
+            }
+            if (!empty($data['startDate'])) {
+                $qb->andWhere("it.updated >= :startDate");
+                $qb->setParameter('startDate', $data['startDate'] . ' 00:00:00');
+            }
+            if (!empty($data['endDate'])) {
+                $qb->andWhere("it.updated <= :endDate");
+                $qb->setParameter('endDate', $data['endDate'] . ' 23:59:59');
+            }
+
+        }
+        if (!empty($mode)){
+            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
+        }
+        $qb->andWhere('it.process = :process')->setParameter('process', 'Done');
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $total = !empty($result['total']) ? $result['total'] :0;
+        $discount = !empty($result['discount']) ? $result['discount'] :0;
+        $receive = !empty($result['payment']) ? $result['payment'] :0;
+        $data = array('total'=> $total ,'discount'=> $discount ,'receive'=> $receive);
+        return $data;
+    }
+
+    public function handleDateRangeFind($qb,$data)
+    {
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+        }
+
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("ip.updated >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("ip.updated <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+    }
+
+
+    public function findWithTransactionOverview(User $user, $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('ip');
+        $qb->join('ip.hmsInvoice','e');
+        $qb->leftJoin('ip.transactionMethod','p');
+        $qb->select('sum(ip.payment) as paymentTotal');
+        $qb->addSelect('p.name as transName');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        if (!empty($mode)){
+            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
+        }
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
+        $this->handleDateRangeFind($qb,$data);
+        $qb->groupBy('p.id');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+    }
+
+
 
     public function initialInsertInvoiceTransaction(Invoice $invoice){
 

@@ -34,14 +34,27 @@
                 <div class="portlet-body form">
                     <form class="search-form" action="" method="get" name="itemSearch">
                         <div class="row-fluid">
-                            <div class="span6"></div>
+                            <div class="span3"></div>
                             <div class="span3">
-                                <input type="text" id="startDate" name="startDate"  class="m-wrap  span12 datePicker" value="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.startDate is defined %}{{ searchForm.startDate }}{% else %}Start date{% endif %} ">
+                                <select id="process" name="process" class="span12 m-wrap">
+                                    <option {% if searchForm.process is defined and searchForm.process == 'Admission' %} selected="selected" {% endif %} value="Admission">Admission</option>
+                                    <option {% if searchForm.process is defined and searchForm.process == 'Admitted' %} selected="selected" {% endif %} value="Admitted">Admitted</option>
+                                    <option {% if searchForm.process is defined and searchForm.process == 'Release' %} selected="selected" {% endif %} value="Release">Release</option>
+                                    <option {% if searchForm.process is defined and searchForm.process == 'Death' %} selected="selected" {% endif %} value="Death">Death</option>
+                                    <option {% if searchForm.process is defined and searchForm.process == 'Released' %} selected="selected" {% endif %} value="Released">Released</option>
+                                    <option {% if searchForm.process is defined and searchForm.process == 'Dead' %} selected="selected" {% endif %} value="Dead">Dead</option>
+                                </select>
+                            </div>
+                            <div class="span3">
+                                <select id="mode" name="mode" class="span12 m-wrap">
+                                    <option {% if searchForm.mode is defined and searchForm.mode == 'diagnostic' %} selected="selected" {% endif %} value="diagnostic">Diagnostic</option>
+                                    <option {% if searchForm.mode is defined and searchForm.mode == 'admission' %} selected="selected" {% endif %} value="admission">Admission</option>
+                                </select>
                             </div>
                             <div class="span3">
                                 <div class="controls">
                                     <div class="input-append span11">
-                                        <input type="text" id="endDate" name="endDate"  class="span11 m-wrap datePicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
+                                        <input type="text" id="date" name="date"  class="span11 m-wrap datePicker" value="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}{{ "now"|date("d-m-Y") }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.endDate is defined %}{{ searchForm.endDate }}{% else %}End date{% endif %}  ">
                                         <div class="btn-group">
                                             <button class="btn blue" type="submit"><i class="icon-search"></i></button>
                                         </div>
@@ -50,6 +63,59 @@
                             </div>
                         </div>
                     </form>
+                    <div class="form-actions portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption"><i class="icon-money"></i>Sales Overview</div>
+                            <div class="actions">
+                                <a target="_blank" href="" class="btn purple"><i class="icon icon-print"></i> Print</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <table class="table table-bordered table-striped table-condensed flip-content ">
+                        <tbody class="flip-content ">
+                        <tr class="green"><th colspan="3">Sales Overview</th></tr>
+                        <tr>
+                            <td class="numeric span11">Total Sales</td>
+                            <td class="numeric">{{ (salesTotalTransactionOverview.total)|number_format }}</td>
+                        </tr>
+                        <tr>
+                            <td class="numeric span11">Received</td>
+                            <td class="numeric">{{ (previousSalesTransactionOverview.receive + salesTransactionOverview.receive)|number_format }}</td>
+
+                        </tr>
+                        <tr>
+                            <th class="numeric span11">Due Total</th>
+                            <th class="numeric">{{  ((salesTotalTransactionOverview.total) - (previousSalesTransactionOverview.receive + salesTransactionOverview.receive))|number_format }}</th>
+                        </tr>
+                        <tr class="green"><th colspan="3">Today Sales Overview</th></tr>
+                        <tr>
+                            <td class="numeric span11">Total Sales</td>
+                            <td class="numeric">{{ salesTransactionOverview.total|number_format }}</td>
+                        </tr>
+                        <tr>
+                            <td class="numeric span11">Receive</td>
+                            <td class="numeric">{{ salesTransactionOverview.receive|number_format }}</td>
+                        </tr>
+                        <tr>
+                            <th class="numeric span11">Due</th>
+                            <th>{{ (salesTransactionOverview.total - salesTransactionOverview.receive)|number_format }}</th>
+                        </tr>
+                        <tr class="blue"><th colspan="3">Previous Overview</th></tr>
+                        <tr>
+                            <td class="numeric span11">Previous Due</td>
+                            <td class="numeric">{{ (salesTotalTransactionOverview.total-salesTransactionOverview.total)|number_format }}</td>
+                        </tr>
+                        <tr>
+                            <td class="numeric span11">Receive</td>
+                            <td class="numeric">{{ previousSalesTransactionOverview.receive|number_format }}</td>
+                        </tr>
+                        <tr>
+                            <th class="numeric span11">Due</th>
+                            <th>{{( salesTotalTransactionOverview.total - previousSalesTransactionOverview.receive-salesTransactionOverview.total)|number_format }}</th>
+                        </tr>
+                        </tbody>
+                    </table>
                     <div class="form-actions portlet box green">
                         <div class="portlet-title">
                             <div class="caption"><i class="icon-money"></i>Mode Base Sales</div>
@@ -198,8 +264,3 @@
         {{ parent() }}
         AccountingApproveProcess();
     {% endblock %}
-
-
-
-
-

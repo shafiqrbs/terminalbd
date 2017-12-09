@@ -52,7 +52,7 @@ $(document).on("click", ".confirm", function() {
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-               /* location.reload();*/
+                location.reload();
             });
         }
     });

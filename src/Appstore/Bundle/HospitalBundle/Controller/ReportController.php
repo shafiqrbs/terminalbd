@@ -41,18 +41,28 @@ class ReportController extends Controller
         $data = $_REQUEST;
 
         $user = $this->getUser();
+
+        $salesTotalTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data);
+        $salesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'true');
+        $previousSalesTransactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->todaySalesOverview($user,$data,'false');
+
         $diagnosticOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user,$data,$mode = 'diagnostic');
         $admissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithSalesOverview($user,$data,$mode = 'admission');
         $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user,$data);
-        $transactionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithTransactionOverview($user,$data);
+        $transactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->findWithTransactionOverview($user,$data);
         $commissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithCommissionOverview($user,$data);
         return $this->render('HospitalBundle:Report:salesSumary.html.twig', array(
-            'diagnosticOverview'    => $diagnosticOverview,
-            'admissionOverview'     => $admissionOverview,
-            'serviceOverview'       => $serviceOverview,
-            'transactionOverview'   => $transactionOverview,
-            'commissionOverview'    => $commissionOverview,
-            'searchForm'            => $data,
+
+            'salesTotalTransactionOverview'      => $salesTotalTransactionOverview,
+            'salesTransactionOverview'      => $salesTransactionOverview,
+            'previousSalesTransactionOverview' => $previousSalesTransactionOverview,
+            'diagnosticOverview'            => $diagnosticOverview,
+            'admissionOverview'             => $admissionOverview,
+            'serviceOverview'               => $serviceOverview,
+            'transactionOverview'           => $transactionOverview,
+            'commissionOverview'            => $commissionOverview,
+            'searchForm'                    => $data,
+
         ));
 
     }
