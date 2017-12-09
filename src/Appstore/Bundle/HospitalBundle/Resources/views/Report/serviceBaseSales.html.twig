@@ -90,7 +90,7 @@
                                         <td class="numeric">{{ (service.salesAmount- service.purchaseAmount)|number_format }}</td>
                                     </tr>
                                 {% endfor %}
-                                <tr><th class="span11" colspan="2" ><span class=" pull-right">Total</span></th><th>{{ sumPurchaseTotal|number_format }}</th><th>{{ sumSalesTotal|number_format }}</th><th>{{ (sumSalesTotal - sumPurchaseTotal)|number_format }}</th></tr>
+                                <tr><th class="span11" colspan="2"><span class=" pull-right">Total</span></th><th>{{ sumPurchaseTotal|number_format }}</th><th>{{ sumSalesTotal|number_format }}</th><th>{{ (sumSalesTotal - sumPurchaseTotal)|number_format }}</th></tr>
                             </tbody>
                         </table>
                         {% endif %}
