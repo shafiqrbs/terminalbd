@@ -224,7 +224,7 @@
                                     <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                     <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
                                     <span  id="show"  data-trigger="hover" data-original-title="All payment history" class="btn purple receivePayment tooltips" ><i class="icon-money"></i>&nbsp;Payment History</span>
-                                     {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
+                                     {% if app.user.granted("ROLE_DOMAIN") %}
                                          <a  href="{{ path('hms_invoice_admission_reverse',{'invoice':entity.invoice}) }}"  data-trigger="hover" data-original-title="Admission Invoice Reverse" class="btn black tooltips" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
                                      {% endif %}
                                 </div>
