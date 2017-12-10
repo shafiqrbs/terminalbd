@@ -56,7 +56,8 @@ class MedicineController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 4),array('name'=>'ASC'));
+        $entities = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 4),array('name'=>'ASC'));
+        $pagination = $this->paginate($entities);
         $entity = new Particular();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
