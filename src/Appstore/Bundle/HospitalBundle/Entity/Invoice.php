@@ -62,12 +62,6 @@ class Invoice
     private  $invoiceParticulars;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular", mappedBy="hmsInvoice" , cascade={"remove"} )
-     * @ORM\OrderBy({"updated" = "DESC"})
-     **/
-    private  $admissionPatientParticulars;
-
-    /**
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsReverse", mappedBy="hmsInvoice" , cascade={"remove"} )
      **/
     private  $hmsReverse;

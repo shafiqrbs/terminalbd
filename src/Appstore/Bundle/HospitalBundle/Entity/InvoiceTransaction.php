@@ -39,7 +39,6 @@ class InvoiceTransaction
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular", mappedBy="invoiceTransaction")
-     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private $admissionPatientParticulars;
 

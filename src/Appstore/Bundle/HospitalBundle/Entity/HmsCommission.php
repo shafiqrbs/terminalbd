@@ -24,6 +24,7 @@ class HmsCommission
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="hmsCommission" )
+     * @ORM\JoinColumn(onDelete="CASCADE")
      **/
     private  $doctorInvoices;
 

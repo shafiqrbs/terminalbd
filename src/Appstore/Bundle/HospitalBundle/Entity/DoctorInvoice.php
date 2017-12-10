@@ -37,6 +37,7 @@ class DoctorInvoice
 
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", inversedBy="doctorInvoices")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @ORM\OrderBy({"updated" = "DESC"})
      **/
     private $hmsInvoice;
