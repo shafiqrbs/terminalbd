@@ -21,7 +21,7 @@ class AccessoriesType extends AbstractType
     {
         $builder
 
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter medicine name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter accessories name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required')),
                 )

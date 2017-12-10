@@ -30,7 +30,7 @@
         <div class="row-fluid">
             <div class="span12">
 
-                <div class="portlet box green tabbable">
+                <div class="portlet box green ">
 
                     <div class="portlet-title">
                         <div class="caption"><i class="icon-reorder"></i>Manage Accessories</div>
@@ -38,11 +38,71 @@
                             <a href="javascript:" id="show"  data-trigger="hover" data-original-title="Add accessories" class=" btn red tooltips"><i class="fa fa-angle-double-down"></i> Add Accessories</a>
                         </div>
                     </div>
-
-                    <div class="portlet-body">
+                    <div class="portlet-body form">
+                        {% include('flash-message.html.twig')  %}
+                        <!-- BEGIN FORM-->
+                        <div class="hide" id="hide">
+                            {{ form_start(form) }}
+                            {{ form_row(form._token) }}
+                            <div class="row-fluid" >
+                                <!--/span-->
+                                <div class="span6">
+                                    <div class="control-group">
+                                        <label class="control-label"  for="category" >Name<span class="required">*</span></label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-medkit"></i>
+                                                {{ form_widget(form.name) }}
+                                                {{ form_errors(form.name) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label"  for="category" >Unit<span class="required">*</span></label>
+                                        <div class="controls">
+                                            {{ form_widget(form.unit) }}
+                                            {{ form_errors(form.unit) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="name">Purchase Price<span class="required">*</span></label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-money"></i>
+                                                {{ form_widget(form.purchasePrice) }}
+                                                {{ form_errors(form.purchasePrice) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span2">
+                                    <div class="control-group">
+                                        <label class="control-label" for="name">Sales Price<span class="required">*</span></label>
+                                        <div class="controls">
+                                            <div class="input-icon left">
+                                                <i class="icon-money"></i>
+                                                {{ form_widget(form.price) }}
+                                                {{ form_errors(form.price) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions portlet box grey">
+                                <div class="pull-right">
+                                    <button type="submit" class="btn green"><i class="icon-save"></i> Save</button>
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                        <!-- END FORM-->
                         <div class="clearfix"><br/></div>
                         <div class="portlet-body flip-scroll">
-                             <table class="table table-bordered table-striped table-condensed flip-content ">
+                            <table class="table table-bordered table-striped table-condensed flip-content ">
 
                                 <thead class="flip-content ">
                                 <tr class="head-blue">
@@ -64,21 +124,21 @@
                                     {% set stockQnt = (entity.purchaseQuantity + entity.openingQuantity) - entity.salesQuantity %}
 
                                     <tr {% if entity.minQuantity > 0 and stockQnt <= entity.minQuantity %} class="min" {% endif %}>
-                                    <td class="numeric" >{{ entity.particularCode }}</td>
+                                        <td class="numeric" >{{ entity.particularCode }}</td>
                                         <td class="numeric" ><a href="{{ path('hms_accessories_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                            <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('hms_accessories_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
+                                                <a  class="editable" data-name="purchasePrice" href="#"  data-url="{{ path('hms_accessories_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change purcahse price">{{ entity.purchasePrice }}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                            <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('hms_accessories_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.price }}</a>
+                                                <a  class="editable" data-name="salesPrice" href="#"  data-url="{{ path('hms_accessories_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change sales price">{{ entity.price }}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                            <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('hms_accessories_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
+                                                <a  class="editable" data-name="openingQuantity" href="#"  data-url="{{ path('hms_accessories_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change opening quantity">{{ entity.openingQuantity }}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >{{ entity.purchaseQuantity|number_format }}</td>
@@ -86,7 +146,7 @@
                                         <td class="numeric" >{{ stockQnt }}</td>
                                         <td class="numeric">
                                             {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                            <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('hms_accessories_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
+                                                <a  class="editable" data-name="minQuantity" href="#"  data-url="{{ path('hms_accessories_inline') }}" data-type="text" data-pk="{{ entity.id }}" data-original-title="Change min Quantity">{{ entity.minQuantity }}</a>
                                             {% endif %}
                                         </td>
                                         <td class="numeric">{% if  entity.unit is defined and  entity.unit is not empty %}{{ entity.unit.name|default('---') }}{% endif %}</td>
@@ -97,8 +157,8 @@
                                                 <a class="btn mini red btn-action" href="{{ path('hms_accessories_status', { 'id': entity.id}) }}">x</a>
                                             {% endif %}
                                             {% if ( app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN") or app.user.granted("ROLE_DOMAIN"))  %}
-                                            <a href="{{ path('hms_accessories_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
-                                            <a title="Are you sure went to delete ?" href="{{ path('hms_accessories_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
+                                                <a href="{{ path('hms_accessories_edit', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-edit"></i></a>
+                                                <a title="Are you sure went to delete ?" href="{{ path('hms_accessories_delete', { 'id': entity.id }) }}" class="btn red mini" ><i class="icon-trash"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -113,6 +173,7 @@
 
                         </div>
                     </div>
+
                 </div>
 
             </div>

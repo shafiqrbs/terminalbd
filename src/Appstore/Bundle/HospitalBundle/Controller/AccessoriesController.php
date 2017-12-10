@@ -56,7 +56,8 @@ class AccessoriesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $pagination = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 8),array('name'=>'ASC'));
+        $entities = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 8),array('name'=>'ASC'));
+        $pagination = $this->paginate($entities);
         $entity = new Particular();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -73,6 +74,9 @@ class AccessoriesController extends Controller
             );
             return $this->redirect($this->generateUrl('hms_accessories'));
         }
+        $this->get('session')->getFlashBag()->add(
+            'error',"Required field does not input"
+        );
         return $this->render('HospitalBundle:Accessories:index.html.twig', array(
             'entity' => $entity,
             'pagination' => $pagination,

@@ -178,26 +178,6 @@
                                 {% endif %}
                             </div>
                             <div class="clearfix">&nbsp;</div>
-                            {% if entity.paymentStatus != 'Paid' %}
-                            <div class="row-fluid particular-info" >
-                                <form method="post" name="form" id="form">
-                                    <div class="span2 pull-right">
-                                        <button type="button" class="btn blue" id="addPayment" data-url="{{ path('hms_invoice_approved',{'id':entity.id}) }}" ><i class="icon-save"></i>&nbsp;Save</button>
-                                    </div>
-                                    <div class="span3 pull-right">
-                                        <select id="process" name="process" class="span12 m-wrap">
-                                            <option value="">--- Select Process Status ---</option>
-                                            <option {% if entity.process == 'In-progress' %} selected="selected" {% endif %} value="In-progress">In-progress</option>
-                                            <option {% if entity.process == 'Done' %} selected="selected" {% endif %} value="Done">Done</option>
-                                            <option {% if entity.process == 'Canceled' %} selected="selected" {% endif %} value="Canceled">Canceled</option>
-                                        </select>
-                                    </div>
-                                    <div class="span2  pull-right"><input type="text" class="m-wrap span12" id="payment" name="payment" value="" maxlength="8"  placeholder="Payment amount"></div>
-                                    <div class="span2 pull-right"><input type="number" class="m-wrap span12" id="discount" name="discount" placeholder="Discount amount"  ></div>
-                                </form>
-                            </div>
-                            <div class="clearfix">&nbsp;</div>
-                            {% endif %}
                             <div class="row-fluid" id="showPayment">
                                 <div class="span12">
                                     <table class="table table-bordered table-striped table-condensed table-fixed">
