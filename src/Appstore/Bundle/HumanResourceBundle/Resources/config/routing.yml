@@ -1,0 +1,7 @@
+human_resource_leavepolicy:
+    resource: "@HumanResourceBundle/Resources/config/routing/leavepolicy.yml"
+    prefix:   /leavepolicy
+
+human_resource_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: HumanResourceBundle:Default:index }
