@@ -629,6 +629,17 @@ class User extends BaseUser
         return $this->profile->getName().' ('. $this->username .')';
     }
 
+     public function userDoctor(){
+
+         if(!empty($this->profile->getDesignation())){
+             $designation = $this->profile->getDesignation()->getName();
+         }else{
+             $designation ='';
+         }
+
+        return $this->profile->getName().' ('.$designation.')';
+    }
+
     public function toArray($collection)
     {
         $this->setRoles($collection->toArray());

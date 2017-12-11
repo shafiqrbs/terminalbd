@@ -160,8 +160,8 @@
                     <ul class="unstyled">
                         <li>Printed By</li>
                         <li><strong>{{ printUser.profile.name }}</strong></li>
-                {#        <li>{% if entity.particularPreparedBy.profile.designation is not empty %}{{ printUser.profile.designation.name }}{% endif %}</li>
-         #}           </ul>
+                        <li>{% if entity.particularPreparedBy.profile.designation is not empty %}{{ printUser.profile.designation.name }}{% endif %}</li>
+                    </ul>
                 </td>
                 <td class="span4">
                     {% if entity.assignDoctor is not empty %}
@@ -169,8 +169,8 @@
                             <li><strong>{{ entity.assignDoctor.name }}</strong></li>
                             <li>{{ entity.assignDoctor.educationalDegree|raw }}</li>
                             <li>{{ entity.assignDoctor.specialist|raw }}</li>
-               {#             <li>{{ entity.assignDoctor.category.name }},{{ entity.assignDoctor.department.name }}</li>
-   #}                         <li>{{ entity.assignDoctor.designation }}</li>
+                            {% if entity.assignDoctor.category is not empty or entity.assignDoctor.department is not empty %}<li> {% if entity.assignDoctor.category is not empty %}{{ entity.assignDoctor.category.name }}{% endif %} {% if entity.assignDoctor.department is not empty %} ,{{ entity.assignDoctor.department.name }}{% endif %}</li>{% endif %}
+                            <li>{{ entity.assignDoctor.designation }}</li>
                             <li>{{ entity.assignDoctor.currentJob }}</li>
                         </ul>
                     {% endif %}

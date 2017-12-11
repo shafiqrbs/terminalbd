@@ -39,16 +39,8 @@ class DoctorType extends AbstractType
         $builder
 
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
-            ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter fees'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
-            ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter doctor designation'),
-                'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
-                )
-            ))
+            ->add('price','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter fees')))
+            ->add('designation','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter doctor designation')))
             ->add('commission','text', array('attr'=>array('class'=>'m-wrap span12 numeric','autocomplete'=>'off','placeholder'=>'Commission no')))
             ->add('phoneNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter additional phone no')))
             ->add('email','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter valid email')))
@@ -66,22 +58,21 @@ class DoctorType extends AbstractType
             ->add('room','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter room/cabin name or no')))
             ->add('assignDoctor', 'entity', array(
                 'required'    => false,
-                'empty_value' => '---Select doctor---',
+                'empty_value' => '---Select doctor from employee list---',
                 'class' => 'Core\UserBundle\Entity\User',
-                'property' => 'userFullName',
+                'property' => 'userDoctor',
                 'constraints' =>array(
-                    new NotBlank(array('message'=>'Please input required')),
+                    new NotBlank(array('message'=>'Please select doctor from employee list')),
                 ),
                 'attr'=>array('class'=>'span12 select2'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
+                        ->join('e.profile','p')
                         ->where("e.enabled = 1")
                         ->andWhere("e.globalOption =".$this->globalOption->getId())
-                   /*     ->join('e.profile','p')*/
-                   /*     ->join('p.designation','designation')*/
-                   /*     ->where("e.enabled = 1")*/
-                   /*     ->andWhere("designation.slug = 'doctor'")*/
-                        ->orderBy("e.id","ASC");
+                        ->andWhere('e.roles NOT LIKE :roles')
+                        ->setParameter('roles', '%"ROLE_DOMAIN"%')
+                        ->orderBy("p.name","ASC");
                 }
             ))
 
