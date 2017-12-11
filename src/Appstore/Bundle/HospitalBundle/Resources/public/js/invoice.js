@@ -277,7 +277,7 @@ $(document).on('click', '#addPayment', function() {
                 url: url,
                 type: 'POST',
                 data: 'payment=' + payment + '&discount=' + discount + '&process=' + process,
-                success: function (response) {
+                success: function (response){
                     location.reload();
                 }
             })

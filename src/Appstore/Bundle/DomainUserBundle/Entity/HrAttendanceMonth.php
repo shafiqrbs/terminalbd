@@ -77,21 +77,21 @@ class HrAttendanceMonth
     /**
      * @var boolean
      *
-     * @ORM\Column(name="present", type="boolean")
+     * @ORM\Column(name="present", type="boolean", nullable =true)
      */
     private $present = false;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="in", type="boolean")
+     * @ORM\Column(name="in", type="boolean", nullable =true)
      */
     private $in = false;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="out", type="boolean")
+     * @ORM\Column(name="out", type="boolean", nullable =true)
      */
     private $out = false;
 

@@ -171,6 +171,18 @@ class UserRepository extends EntityRepository
         return $array;
     }
 
+    public function getEmployees(GlobalOption $option)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.profile','p');
+        $qb->select('e.id');
+        $qb->addSelect('p.name');
+        $qb->where("e.globalOption = :globalOption");
+        $qb->setParameter('globalOption', $option);
+        $qb->orderBy('p.name','ASC');
+        $qb->getQuery();
+    }
+
 
 
 }

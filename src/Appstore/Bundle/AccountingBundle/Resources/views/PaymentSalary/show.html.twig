@@ -136,14 +136,14 @@
                                                 </td>
                                             </tr>
                                             <tr id="show-{{ payment.id }}" class="showing-overview">
-                                                <td colspan="9">
+                                                <td colspan="10">
                                                     <table class="table">
-                                                        <tr><td>Remark</td><td>{{ payment.remark }}</td></tr>
+                                                        <tr><td class="span2">Remark</td><td>{{ payment.remark }}</td></tr>
                                                         {% if payment.accountBank is not empty %}
-                                                        <tr><td>Bank name</td><td>{{ payment.accountBank.name }}</td></tr>
+                                                        <tr><td class="span2">Bank name</td><td>{{ payment.accountBank.name }}</td></tr>
                                                         {% endif %}
                                                         {% if payment.accountMobileBank is not empty %}
-                                                        <tr><td>Mobile Account no</td><td>{{ payment.accountMobileBank.name }}</td></tr>
+                                                        <tr><td class="span2">Mobile Account no</td><td>{{ payment.accountMobileBank.name }}</td></tr>
                                                         {% endif %}
                                                     </table>
                                                 </td>

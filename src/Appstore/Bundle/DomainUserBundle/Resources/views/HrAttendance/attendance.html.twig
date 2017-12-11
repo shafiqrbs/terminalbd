@@ -61,22 +61,24 @@
                             <tbody>
                             {% for user in globalOption.users  %}
                                 {%  if user.granted("ROLE_DOMAIN") == false %}
-                                <tr>
-                                    <th class="numeric"><span class="pull-left">{{ user.profile.name }}</span></th>
-                                    {% for i in 1..max %}
-                                        {% set blackO = date(month~i)|date('m/d/Y') %}
-                                            {% if blackO  in  blackoutdate %}
-                                                <td class="numeric  red" >&nbsp;</td>
-                                            {% else %}
-                                                <td class="numeric"  >
-                                                    <div class="row-fluid pull-center">
-                                                        <input type="checkbox" data-id="{{ i }}" id="{{ i }}" class="attendance" data-url="{{ path('domain_hr_attendance_add',{'user':user.id}) }}" name="present"  value="{{ i }}" >
-                                                    </div>
-                                                </td>
-                                            {% endif %}
-                                    {% endfor %}
-                                    <td>1</td>
-                                </tr>
+                                    {%  if user.enabled == 1 and user.isDelete == 0 %}
+                                        <tr>
+                                            <th class="numeric"><span class="pull-left">{{ user.profile.name }}</span></th>
+                                            {% for i in 1..max %}
+                                                {% set blackO = date(month~i)|date('m/d/Y') %}
+                                                    {% if blackO  in  blackoutdate %}
+                                                        <td class="numeric  red" >&nbsp;</td>
+                                                    {% else %}
+                                                        <td class="numeric"  >
+                                                            <div class="row-fluid pull-center">
+                                                                <input type="checkbox" data-id="{{ i }}" id="{{ i }}" class="attendance" data-url="{{ path('domain_hr_attendance_add',{'user':user.id}) }}" name="present"  value="{{ i }}" >
+                                                            </div>
+                                                        </td>
+                                                    {% endif %}
+                                            {% endfor %}
+                                            <td>1</td>
+                                        </tr>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                             </tbody>

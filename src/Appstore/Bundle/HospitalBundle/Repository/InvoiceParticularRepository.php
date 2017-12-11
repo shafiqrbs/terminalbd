@@ -202,11 +202,11 @@ class InvoiceParticularRepository extends EntityRepository
         $qb = $this->createQueryBuilder('ip');
         $qb->join('ip.particular','p');
         $qb->join('ip.hmsInvoice','i');
-        $qb->select('SUM(ip.quantity * p.purchaseAverage ) AS totalPurchaseAmount');
+        $qb->select('SUM(ip.quantity * p.purchasePrice ) AS totalPurchaseAmount');
         $qb->where('i.hospitalConfig = :hospital');
         $qb->setParameter('hospital', $option->getHospitalConfig());
         $qb->andWhere("i.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Death'));
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted','Release','Death','Released','Dead'));
         if (!empty($data['startDate']) ) {
             $qb->andWhere("i.updated >= :startDate");
             $qb->setParameter('startDate', $startDate.' 00:00:00');

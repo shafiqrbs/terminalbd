@@ -59,14 +59,16 @@ class HrAttendanceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
+        $blackoutdate ='';
+        //$employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
         $calendarBlackout = $em->getRepository('DomainUserBundle:HrBlackout')->findOneBy(array('globalOption' => $globalOption));
         $blackOutDate =  $calendarBlackout ->getBlackOutDate();
         if($blackOutDate){
             $blackoutdate = (array_map('trim',array_filter(explode(',',$blackOutDate))));
         }
         return $this->render('DomainUserBundle:HrAttendance:attendance.html.twig', array(
-            'globalOption' => $globalOption,
-            'blackoutdate' => $blackoutdate,
+            'globalOption'  => $globalOption,
+            'blackoutdate'  => $blackoutdate,
         ));
 
     }

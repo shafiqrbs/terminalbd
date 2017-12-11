@@ -11,7 +11,6 @@ var PaymentSalary = function() {
         if(id === ''){
             return false;
         }
-        alert(id);
         $.ajax({
             url: Routing.generate('account_salarysetting_salaryAmount'),
             type: 'POST',
@@ -40,7 +39,6 @@ var PaymentSalary = function() {
         var salary          = parseInt($('#salaryAmount').val()  != '' ? $('#salaryAmount').val() : 0 );
         var adjustment      = parseInt($('#appstore_bundle_accountingBundle_paymentsalary_adjustmentAmount').val() != '' ? $('#appstore_bundle_accountingBundle_paymentsalary_adjustmentAmount').val() : 0);
         var netAmount       = (salary - adjustment);
-        alert(netAmount);
         if(netAmount < paidAmount){
             alert('This is wrong payment amount: '+paidAmount+' Tk.');
             return false;

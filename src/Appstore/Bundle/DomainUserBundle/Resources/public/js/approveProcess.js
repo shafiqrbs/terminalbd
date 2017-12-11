@@ -28,7 +28,6 @@ $(document).on("click", ".attendance", function() {
     var url = $(this).attr('data-url');
     var id = $(this).attr('data-id');
     var present = $('#'+id).val();
-    alert(present);
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
@@ -37,6 +36,10 @@ $(document).on("click", ".attendance", function() {
                 .done(function(data){
                     alert('test');
             });
+        },
+        onClose:function(el){
+            alert('true');
+            $(this).prop( "checked", false ).removeAttr('checked');
         }
     });
 });
