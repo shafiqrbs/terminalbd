@@ -38,7 +38,7 @@
                         {% include('flash-message.html.twig')  %}
 
                         <table id="attendance" class="stripe row-border order-column" cellspacing="0" width="100%">
-                            <thead class="head-yellow">
+                            <thead class="head-blue">
                             <tr>
                                 <th class="numeric" >Name of Employee</th>
                                 {% set max =  "now"|date("t") %}
@@ -67,16 +67,16 @@
                                             {% for i in 1..max %}
                                                 {% set blackO = date(month~i)|date('m/d/Y') %}
                                                     {% if blackO  in  blackoutdate %}
-                                                        <td class="numeric  red" >&nbsp;</td>
+                                                        <td class="numeric red" >&nbsp;</td>
                                                     {% else %}
                                                         <td class="numeric"  >
                                                             <div class="row-fluid pull-center">
-                                                                <input type="checkbox" data-id="{{ i }}" id="{{ i }}" class="attendance" data-url="{{ path('domain_hr_attendance_add',{'user':user.id}) }}" name="present"  value="{{ i }}" >
+                                                                <input type="checkbox" {% if i in user.userAttendanceMonth(17,12) %} checked="checked" {% endif %} data-id="{{ i }}" id="{{ i }}" class="attendance" data-url="{{ path('domain_hr_attendance_add',{'user':user.id}) }}" name="present"  value="{{ i }}" >
                                                             </div>
                                                         </td>
                                                     {% endif %}
                                             {% endfor %}
-                                            <td>1</td>
+                                            <td>{{ user.monthlyPresentDay(17,12) }}</td>
                                         </tr>
                                     {% endif %}
                                 {% endif %}

@@ -59,6 +59,7 @@ class AppKernel extends Kernel
             new Xiidea\Bundle\DomainBundle\XiideaDomainBundle(),
             new Appstore\Bundle\CustomerBundle\CustomerBundle(),
             new Appstore\Bundle\HospitalBundle\HospitalBundle(),
+            new Appstore\Bundle\HumanResourceBundle\HumanResourceBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -408,6 +408,4 @@ $(document).ready(function(){
             }
 
         });
-
-
 });

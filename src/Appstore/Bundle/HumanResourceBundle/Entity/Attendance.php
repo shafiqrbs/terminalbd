@@ -1,18 +1,18 @@
 <?php
 
-namespace Appstore\Bundle\DomainUserBundle\Entity;
+namespace Appstore\Bundle\HumanResourceBundle\Entity;
 
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
-use Gedmo\Mapping\Annotation as Gedmo;
+
 /**
- * HrAttendanceMonth
+ * HrBlackout
  *
- * @ORM\Table(name="hr_attendance_month")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\DomainUserBundle\Repository\HrAttendanceMonthRepository")
+ * @ORM\Table(name="hrb_attendance")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\HumanResourceBundle\Repository\AttendanceRepository")
  */
-class HrAttendanceMonth
+class Attendance
 {
     /**
      * @var integer
@@ -55,45 +55,44 @@ class HrAttendanceMonth
     /**
      * @var integer
      *
-     * @ORM\Column(name="PresentDay", type="smallint", length=3, nullable =true)
+     * @ORM\Column(name="workingDay", type="integer", nullable =true)
      */
-    private $presentDay;
-
+    private $workingDay;
 
     /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created", type="datetime")
-     */
-    private $created;
-
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated", type="datetime")
-     */
-    private $updated;
-
-    /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="present", type="boolean", nullable =true)
+     * @ORM\Column(name="present", type="integer", nullable =true)
      */
-    private $present = false;
+    private $present;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="presentIn", type="boolean", nullable =true)
+     * @ORM\Column(name="absence", type="integer", nullable =true)
      */
-    private $presentIn = false;
+    private $absence;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="presentOut", type="boolean", nullable =true)
+     * @ORM\Column(name="casualLeave", type="integer", nullable =true)
      */
-    private $presentOut = false;
+    private $casualLeave;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="earnedLeave", type="integer", nullable =true)
+     */
+    private $earnedLeave;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sickLeave", type="integer", nullable =true)
+     */
+    private $sickLeave;
 
     /**
      * Get id
@@ -106,7 +105,7 @@ class HrAttendanceMonth
     }
 
     /**
-     * @return HrAttendance
+     * @return Attendance
      */
     public function getHrAttendance()
     {
@@ -114,7 +113,7 @@ class HrAttendanceMonth
     }
 
     /**
-     * @param HrAttendance $hrAttendance
+     * @param Attendance $hrAttendance
      */
     public function setHrAttendance($hrAttendance)
     {
@@ -169,37 +168,6 @@ class HrAttendanceMonth
         $this->month = $month;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * @param \DateTime $created
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    /**
-     * @param \DateTime $updated
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-    }
 
 
     /**
@@ -219,7 +187,7 @@ class HrAttendanceMonth
     }
 
     /**
-     * @return bool
+     * @return int
      */
     public function getPresent()
     {
@@ -227,7 +195,7 @@ class HrAttendanceMonth
     }
 
     /**
-     * @param bool $present
+     * @param int $present
      */
     public function setPresent($present)
     {
@@ -235,50 +203,82 @@ class HrAttendanceMonth
     }
 
     /**
-     * @return integer
+     * @return int
      */
-    public function getPresentDay()
+    public function getAbsence()
     {
-        return $this->presentDay;
+        return $this->absence;
     }
 
     /**
-     * @param integer $presentDay
+     * @param int $absence
      */
-    public function setPresentDay($presentDay)
+    public function setAbsence($absence)
     {
-        $this->presentDay = $presentDay;
+        $this->absence = $absence;
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function isPresentIn()
+    public function getCasualLeave()
     {
-        return $this->presentIn;
+        return $this->casualLeave;
     }
 
     /**
-     * @param bool $presentIn
+     * @param int $casualLeave
      */
-    public function setPresentIn($presentIn)
+    public function setCasualLeave($casualLeave)
     {
-        $this->presentIn = $presentIn;
+        $this->casualLeave = $casualLeave;
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function isPresentOut()
+    public function getEarnedLeave()
     {
-        return $this->presentOut;
+        return $this->earnedLeave;
     }
 
     /**
-     * @param bool $presentOut
+     * @param int $earnedLeave
      */
-    public function setPresentOut($presentOut)
+    public function setEarnedLeave($earnedLeave)
     {
-        $this->presentOut = $presentOut;
+        $this->earnedLeave = $earnedLeave;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSickLeave()
+    {
+        return $this->sickLeave;
+    }
+
+    /**
+     * @param int $sickLeave
+     */
+    public function setSickLeave($sickLeave)
+    {
+        $this->sickLeave = $sickLeave;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWorkingDay()
+    {
+        return $this->workingDay;
+    }
+
+    /**
+     * @param int $workingDay
+     */
+    public function setWorkingDay($workingDay)
+    {
+        $this->workingDay = $workingDay;
     }
 }

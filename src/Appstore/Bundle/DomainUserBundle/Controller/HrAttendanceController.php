@@ -218,16 +218,16 @@ class HrAttendanceController extends Controller
         $entity = New HrAttendanceMonth();
         $entity->setUser($user);
         $entity->setGlobalOption($user->getGlobalOption());
-        if($present == 1){
+        if($present > 0 ){
             $entity->setPresent(true);
-            $entity->setPresentDay($today);
-            $entity->setIn(true);
-            $entity->setOut(true);
+            $entity->setPresentDay($present);
+            $entity->setPresentIn(true);
+            $entity->setPresentOut(true);
         }else{
             $entity->setPresent(false);
-            $entity->setPresentDay(0);
-            $entity->setIn(false);
-            $entity->setOut(false);
+            $entity->setPresentDay(null);
+            $entity->setPresentIn(true);
+            $entity->setPresentOut(true);
         }
         $entity->setMonth($month);
         $entity->setYear($year);

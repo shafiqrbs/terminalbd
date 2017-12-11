@@ -34,11 +34,10 @@ $(document).on("click", ".attendance", function() {
         onOkBut: function(event, el) {
             $.get( url,{present:present})
                 .done(function(data){
-                    alert('test');
+                    $('this').prop('checked',true);
             });
         },
         onClose:function(el){
-            alert('true');
             $(this).prop( "checked", false ).removeAttr('checked');
         }
     });

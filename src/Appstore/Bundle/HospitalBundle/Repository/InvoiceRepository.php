@@ -446,10 +446,11 @@ class InvoiceRepository extends EntityRepository
         $qb->andWhere('e.process = :process')->setParameter('process', 'Admitted');
         $res = $qb->getQuery()->getOneOrNullResult();
         if(!empty($res) and $res['cabinCount'] > 0 ){
-            return 'invalid';
+            echo 'invalid';
         }else{
-            return 'valid';
+            echo 'valid';
         }
+        exit;
 
     }
 

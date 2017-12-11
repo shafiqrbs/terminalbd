@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\DomainUserBundle\Entity;
+namespace Appstore\Bundle\HumanResourceBundle\Entity;
 
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,10 +9,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * HrAttendanceMonth
  *
- * @ORM\Table(name="hr_attendance_month")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\DomainUserBundle\Repository\HrAttendanceMonthRepository")
+ * @ORM\Table(name="hrb_attendance_month")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\HumanResourceBundle\Repository\AttendanceMonthRepository")
  */
-class HrAttendanceMonth
+class AttendanceMonth
 {
     /**
      * @var integer
@@ -106,7 +106,7 @@ class HrAttendanceMonth
     }
 
     /**
-     * @return HrAttendance
+     * @return Attendance
      */
     public function getHrAttendance()
     {
@@ -114,7 +114,7 @@ class HrAttendanceMonth
     }
 
     /**
-     * @param HrAttendance $hrAttendance
+     * @param Attendance $hrAttendance
      */
     public function setHrAttendance($hrAttendance)
     {

@@ -4,6 +4,7 @@ namespace Core\UserBundle\Entity;
 
 use Appstore\Bundle\DomainUserBundle\Entity\Branch;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
+use Appstore\Bundle\DomainUserBundle\Entity\HrAttendanceMonth;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
@@ -586,6 +587,13 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsReverse", mappedBy="createdBy" , cascade={"persist", "remove"})
      */
     protected $hmsReverse;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\HrAttendanceMonth", mappedBy="user" , cascade={"persist", "remove"})
+     */
+    protected $userAttendance;
+
+
 
 
     public function isGranted($role)
@@ -1229,6 +1237,53 @@ class User extends BaseUser
     {
         return $this->hmsInvoiceParticularCollected;
     }
+
+    /**
+     * @return HrAttendanceMonth
+     */
+    public function getUserAttendance()
+    {
+        return $this->userAttendance;
+    }
+
+
+    /**
+     * @return HrAttendanceMonth
+     */
+    public function getUserAttendanceMonth($year,$month)
+    {
+        $attendances = $this->getUserAttendance();
+
+        /* @var HrAttendanceMonth $attendance */
+
+        $presentDays = array();
+        foreach ($attendances as $attendance){
+            if($attendance->getYear() == $year and $attendance->getMonth() == $month ){
+                $presentDays[] = $attendance->getPresentDay();
+            }
+        }
+        return $presentDays;
+    }
+
+    /**
+     * @return HrAttendanceMonth
+     */
+    public function getMonthlyPresentDay($year,$month)
+    {
+        $attendances = $this->getUserAttendance();
+
+        /* @var HrAttendanceMonth $attendance */
+
+        $presentDays = array();
+        foreach ($attendances as $attendance){
+            if($attendance->getYear() == $year and $attendance->getMonth() == $month ){
+                $presentDays[] = $attendance->getPresentDay();
+            }
+        }
+        return count($presentDays);
+    }
+
+
 
 
 }

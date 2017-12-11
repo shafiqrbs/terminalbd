@@ -1,6 +1,5 @@
-{% extends '::print.html.twig' %}
+{% extends '::hms-print.html.twig' %}
 {% block body %}
-    <script> window.print(); </script>
     <div style="margin-top:{{ entity.hospitalConfig.printTopMargin }}px;margin-left:{{ entity.hospitalConfig.printLeftMargin }}px;">
         {%  if entity.hospitalConfig.isPrintHeader == 1 %}
             <table class="table">
