@@ -75,7 +75,7 @@
                                         <ul class="unstyled span12">
                                             <li><h2><strong>{{ item.name }}</strong></h2></li>
                                             {% for child in item.children %}
-                                            <li><span class="span3" style="display:inline-block">{{ child.name }}</span> {% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %}</li>
+                                            <li><span class="span3" style="display:inline-block">{{ child.name }}</span> {% if report is not empty and report[child.id] is defined and report[child.id] is not empty %}{{ report[child.id].result }}{% endif %} {{ child.unit }}</li>
                                             {% endfor %}
                                         </ul>
                                     </div>

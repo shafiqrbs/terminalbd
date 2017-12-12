@@ -7,12 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Gedmo\Mapping\Annotation as Gedmo;
 /**
- * HrAttendanceMonth
+ * DailyAttendance
  *
- * @ORM\Table(name="hrb_attendance_month")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\HumanResourceBundle\Repository\AttendanceMonthRepository")
+ * @ORM\Table(name="hr_attendance_daily")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\HumanResourceBundle\Repository\DailyAttendanceRepository")
  */
-class AttendanceMonth
+class DailyAttendance
 {
     /**
      * @var integer
@@ -24,19 +24,15 @@ class AttendanceMonth
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="domainUser")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="dailyAttendance")
      **/
     protected $globalOption;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\HrAttendance", inversedBy="hrAttendanceMonth")
-     **/
-    protected $hrAttendance;
 
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="userAttendance")
      **/
     private  $user;
+
 
     /**
      * @var string

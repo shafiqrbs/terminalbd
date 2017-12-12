@@ -70,6 +70,9 @@ class DoctorController extends Controller
             $entity->setService($service);
             $entity->setName($entity->getAssignDoctor()->getProfile()->getName());
             $entity->setMobile($entity->getAssignDoctor()->getProfile()->getMobile());
+            if(empty($entity->getDesignation())){
+                $entity->setDesignation($entity->getAssignDoctor()->getProfile()->getDesignation()->getName());
+            }
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add(
@@ -203,6 +206,9 @@ class DoctorController extends Controller
         if ($editForm->isValid()) {
             $entity->setName($entity->getAssignDoctor()->getProfile()->getName());
             $entity->setMobile($entity->getAssignDoctor()->getProfile()->getMobile());
+            if(empty($entity->getDesignation())){
+                $entity->setDesignation($entity->getAssignDoctor()->getProfile()->getDesignation()->getName());
+            }
             $em->flush();
             $this->get('session')->getFlashBag()->add(
                 'success',"Data has been updated successfully"

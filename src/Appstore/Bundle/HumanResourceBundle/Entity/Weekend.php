@@ -6,12 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
 /**
- * HrBlackout
+ * Weekend
  *
- * @ORM\Table(name="hrb_blackout")
+ * @ORM\Table(name="hr_weekend")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\HumanResourceBundle\Repository\BlackoutRepository")
  */
-class Blackout
+class Weekend
 {
     /**
      * @var integer
@@ -25,7 +25,7 @@ class Blackout
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="blackout")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="weekend")
      **/
 
     protected $globalOption;
@@ -33,9 +33,9 @@ class Blackout
     /**
      * @var array
      *
-     * @ORM\Column(name="blackoutDate", type="array" , nullable=true)
+     * @ORM\Column(name="weekendDate", type="array" , nullable=true)
      */
-    private $blackoutDate;
+    private $weekendDate;
 
     /**
      * @var text
@@ -63,36 +63,15 @@ class Blackout
         return $this->id;
     }
 
-    /**
-     * Set blackoutDate
-     *
-     * @param string $blackoutDate
-     * @return Blackout
-     */
-    public function setBlackoutDate($blackoutDate)
-    {
-        $this->blackoutDate = $blackoutDate;
-        return $this;
-    }
-
-    /**
-     * Get blackoutDate
-     *
-     * @return string 
-     */
-    public function getBlackoutDate()
-    {
-        return $this->blackoutDate;
-    }
 
     /**
      * Get blackoutDate
      *
      * @return string
      */
-    public function getOffBlackoutDate()
+    public function getOffWeekendDateDate()
     {
-        return explode(',' , $this->blackoutDate);
+        return explode(',' , $this->weekendDate);
     }
 
     /**
@@ -142,5 +121,21 @@ class Blackout
     public function setGlobalOption($globalOption)
     {
         $this->globalOption = $globalOption;
+    }
+
+    /**
+     * @return array
+     */
+    public function getWeekendDate()
+    {
+        return $this->weekendDate;
+    }
+
+    /**
+     * @param array $weekendDate
+     */
+    public function setWeekendDate($weekendDate)
+    {
+        $this->weekendDate = $weekendDate;
     }
 }

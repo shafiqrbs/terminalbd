@@ -70,8 +70,8 @@ class DoctorType extends AbstractType
                         ->join('e.profile','p')
                         ->where("e.enabled = 1")
                         ->andWhere("e.globalOption =".$this->globalOption->getId())
-                        ->andWhere('e.roles NOT LIKE :roles')
-                        ->setParameter('roles', '%"ROLE_DOMAIN"%')
+                        ->andWhere('e.roles LIKE :roles')
+                        ->setParameter('roles', '%"ROLE_DOMAIN_HOSPITAL_DOCTOR"%')
                         ->orderBy("p.name","ASC");
                 }
             ))

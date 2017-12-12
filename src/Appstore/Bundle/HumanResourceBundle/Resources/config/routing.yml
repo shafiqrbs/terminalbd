@@ -2,6 +2,18 @@ human_resource_leavepolicy:
     resource: "@HumanResourceBundle/Resources/config/routing/leavepolicy.yml"
     prefix:   /leavepolicy
 
+human_resource_leave:
+    resource: "@HumanResourceBundle/Resources/config/routing/leave.yml"
+    prefix:   /leavepolicy
+
+human_resource_blackout:
+    resource: "@HumanResourceBundle/Resources/config/routing/weekend.yml"
+    prefix:   /weekend-leave
+
+human_resource_attendance:
+    resource: "@HumanResourceBundle/Resources/config/routing/attendance.yml"
+    prefix:   /attendance
+
 human_resource_homepage:
     path:     /hello/{name}
     defaults: { _controller: HumanResourceBundle:Default:index }

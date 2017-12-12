@@ -160,8 +160,8 @@ class UserRepository extends EntityRepository
             $array['HMS'] = array(
                 'ROLE_HOSPITAL'                              => 'Hms',
                 'ROLE_DOMAIN_HOSPITAL_MANAGER'               => 'Hms Manager',
-                'ROLE_DOMAIN_HOSPITAL_OPERATOR'              => 'Hms Operator',
-                'ROLE_DOMAIN_HOSPITAL_LAB'                   => 'Hms Lab Operator',
+                'ROLE_DOMAIN_HOSPITAL_OPERATOR'              => 'Hms Officer',
+                'ROLE_DOMAIN_HOSPITAL_LAB'                   => 'Hms Lab Assistant',
                 'ROLE_DOMAIN_HOSPITAL_DOCTOR'                => 'Hms Doctor',
                 'ROLE_DOMAIN_HOSPITAL_ADMIN'                 => 'Hms Admin',
                 'ROLE_DOMAIN_HOSPITAL_CONFIG'                => 'Hms Config',
@@ -175,12 +175,12 @@ class UserRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('e');
         $qb->join('e.profile','p');
-        $qb->select('e.id');
-        $qb->addSelect('p.name');
-        $qb->where("e.globalOption = :globalOption");
-        $qb->setParameter('globalOption', $option);
-        $qb->orderBy('p.name','ASC');
-        $qb->getQuery();
+        $qb->andWhere("e.globalOption =".$option->getId());
+        $qb->andWhere('e.roles NOT LIKE :roles');
+        $qb->setParameter('roles', '%"ROLE_DOMAIN"%');
+        $qb->orderBy("p.name","ASC");
+        $result = $qb->getQuery()->getResult();
+        return $result;
     }
 
 
