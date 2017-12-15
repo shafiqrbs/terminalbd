@@ -20,8 +20,11 @@ class HmsReverseRepository extends EntityRepository
 {
     public function insertInvoice(Invoice $entity,$data)
     {
-        $reverse = New HmsReverse();
-
+        if(empty($entity->getHmsReverse())){
+            $reverse = New HmsReverse();
+        }else{
+            $reverse = $entity->getHmsReverse();
+        }
         $reverse->setName('Pathological Invoice');
         $reverse->setHospitalConfig($entity->getHospitalConfig());
         $reverse->setProcess('Pathological Invoice');
@@ -33,7 +36,12 @@ class HmsReverseRepository extends EntityRepository
     }
     public function insertAdmissionInvoice(Invoice $entity,$data)
     {
-        $reverse = New HmsReverse();
+
+        if(empty($entity->getHmsReverse())){
+            $reverse = New HmsReverse();
+        }else{
+            $reverse = $entity->getHmsReverse();
+        }
 
         $reverse->setName('Admitted Invoice');
         $reverse->setHospitalConfig($entity->getHospitalConfig());

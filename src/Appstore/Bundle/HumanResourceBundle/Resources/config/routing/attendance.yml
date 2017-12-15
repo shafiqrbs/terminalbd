@@ -1,21 +1,13 @@
-domain_hr_attendance:
+attendance:
     path:     /
-    defaults: { _controller: "DomainUserBundle:HrAttendance:index" }
+    defaults: { _controller: "HumanResourceBundle:Attendance:index" }
 
-domain_hr_attendance_show:
-    path:     /{month}/show
-    defaults: { _controller: "DomainUserBundle:HrAttendance:show" }
+attendance_user:
+    path:     /{user}/employee
+    defaults: { _controller: "HumanResourceBundle:Attendance:employeeDetails" }
 
-domain_hr_attendance_month:
-    path:     /current-month
-    defaults: { _controller: "DomainUserBundle:HrAttendance:month" }
+weekend_update:
+    path:     /{id}/update
+    defaults: { _controller: "HumanResourceBundle:Weekend:update" }
+    methods:  [POST, PUT]
 
-domain_hr_attendance_add:
-    path:     /{user}/add
-    defaults: { _controller: "DomainUserBundle:HrAttendance:addAttendance" }
-    options:
-           expose: true
-
-domain_hr_attendance_delete:
-    path:     /{id}/delete
-    defaults: { _controller: "DomainUserBundle:HrAttendance:delete" }

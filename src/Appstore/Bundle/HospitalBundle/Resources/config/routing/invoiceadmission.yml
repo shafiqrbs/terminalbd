@@ -51,7 +51,7 @@ hms_invoice_admission_approved:
             expose: true
 
 hms_invoice_admission_patient_release:
-    path:     /{invoice}/invoice-confirm
+    path:     /{invoice}/{process}/invoice-confirm
     defaults: { _controller: "HospitalBundle:InvoiceAdmission:release" }
 
 hms_invoice_print_for:
@@ -93,7 +93,7 @@ hms_invoice_admission_daily_invoice_add:
             expose: true
 
 hms_invoice_admission_daily_delete:
-    path:      /{id}/admitted-patient-daily-invoice-delete
+    path:      /{invoice}/{id}/admitted-patient-daily-invoice-delete
     defaults: { _controller: "HospitalBundle:AdmissionPatientParticular:invoiceTransactionDelete" }
     options:
             expose: true

@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Attendance
+                    Attendance Month: {{ showMonth|date("F-Y") }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Attendance</a></li>
+                    <li><a href="{{ path('daily_attendance') }}">Attendance</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -30,7 +30,7 @@
                         <div class="caption"><i class="icon-reorder"></i>Attendance Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="red btn" href="{{ path('domain_hr_attendance_month') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a>
+                                <a class="red btn" href="{{ path('daily_attendance') }}"><i class="icon-th-list"></i>&nbsp; Attendance</a>
                             </div>
                         </div>
                     </div>
@@ -41,9 +41,11 @@
                             <thead class="head-blue">
                             <tr>
                                 <th class="numeric" >Name of Employee</th>
-                                {% set max =  "now"|date("t") %}
-                                {% set today =  "now"|date("d") %}
-                                {% set month =  "now"|date("Y/m/") %}
+                                {% set max          =  showMonth|date("t") %}
+                                {% set today        =  showMonth|date("d") %}
+                                {% set month        =  showMonth|date("Y/m/") %}
+                                {% set year         =  showMonth|date("Y") %}
+                                {% set currentMonth =  showMonth|date("F") %}
                                 {% for i in 1..max %}
                                     {% set blackO = date(month~i)|date('m/d/Y') %}
                                     <td class="numeric {% if blackO  in  blackoutdate %} red {% endif %}" >
@@ -59,27 +61,23 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for user in globalOption.users  %}
-                                {%  if user.granted("ROLE_DOMAIN") == false %}
-                                    {%  if user.enabled == 1 and user.isDelete == 0 %}
-                                        <tr>
-                                            <th class="numeric"><span class="pull-left">{{ user.profile.name }}</span></th>
-                                            {% for i in 1..max %}
-                                                {% set blackO = date(month~i)|date('m/d/Y') %}
-                                                    {% if blackO  in  blackoutdate %}
-                                                        <td class="numeric red" >&nbsp;</td>
-                                                    {% else %}
-                                                        <td class="numeric"  >
-                                                            <div class="row-fluid pull-center">
-                                                                <input type="checkbox" {% if i in user.userAttendanceMonth(17,12) %} checked="checked" {% endif %} data-id="{{ i }}" id="{{ i }}" class="attendance" data-url="{{ path('domain_hr_attendance_add',{'user':user.id}) }}" name="present"  value="{{ i }}" >
-                                                            </div>
-                                                        </td>
-                                                    {% endif %}
-                                            {% endfor %}
-                                            <td>{{ user.monthlyPresentDay(17,12) }}</td>
-                                        </tr>
-                                    {% endif %}
-                                {% endif %}
+                            {% for user in employees  %}
+                                <tr>
+                                    <th class=""><span class="">{{ user.profile.name }}<br/><sub>{{ user.profile.designation.name }}</sub></span></th>
+                                    {% for i in 1..max %}
+                                        {% set blackO = date(month~i)|date('m/d/Y') %}
+                                        {% if blackO  in  blackoutdate %}
+                                            <td class="red" >&nbsp;</td>
+                                        {% else %}
+                                            <td>
+                                    <span class="row-fluid pull-center">
+                                    <input type="checkbox" disabled="disabled"  {% if i in user.userAttendanceMonth(year,currentMonth) %} checked="checked" {% endif %} data-id="{{ i }}" id="{{ i }}" class="attendance" data-url="{{ path('daily_attendance_add',{'user':user.id}) }}" name="present"  value="{{ i }}" >
+                                    </span>
+                                            </td>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <td>{{ user.monthlyPresentDay(year,currentMonth) }}</td>
+                                </tr>
                             {% endfor %}
                             </tbody>
                         </table>
@@ -92,7 +90,7 @@
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'
-    '@DomainUserBundle/Resources/public/css/style.css'
+    '@HumanResourceBundle/Resources/public/css/style.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
@@ -100,7 +98,7 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@DomainUserBundle/Resources/public/js/approveProcess.js'
+    '@HumanResourceBundle/Resources/public/js/approveProcess.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

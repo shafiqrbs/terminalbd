@@ -36,8 +36,8 @@
             <div class="caption"><i class="icon-reorder"></i>Patient Invoice Diagnostic Information</div>
             <div class="actions">
                 <div class="btn-group">
+                    <a class="btn" href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i> Diagnostic</a>
                     <a class="btn red" href="{{ path('hms_invoice_new') }}"><i class="icon-plus-sign"></i> Add Invoice</a>
-                    <a class="btn" href="{{ path('hms_invoice') }}"><i class="icon-trash"></i> Diagnostic</a>
                 </div>
             </div>
         </div>
@@ -283,15 +283,35 @@
                             <div class="row-fluid particular-info" >
                                 <div class="span7">
                                     <select id="particular" name="particular" class="span12 select2">
-                                        <option value="">Diagnostic Test Name & Accessories. </option>
+                                        <option value="">Test Name, Accessories, Surgery, Cabin etc. </option>
                                         {{ particularService|raw }}
-                                     </select>
+                                    </select>
                                 </div>
-                                <div class="span2"><input type="number" class="m-wrap span12" id="quantity" name="quantity" value="1" min="1"></div>
-                                <div class="span2"><input type="text" class="m-wrap span12" id="price" name="price" value="" maxlength="8"></div>
-                                <div class="span1">
-                                    <input type="hidden" id="particularId" name="particularId" value="">
-                                    <button type="button" class="btn blue" disabled="disabled" id="addParticular" data-url="{{ path('hms_invoice_particular_add',{'invoice':entity.id}) }}" >Add</button>
+                                <div class="span2">
+                                    <div class="input-append span12" style="margin-bottom:0!important">
+                                        <div class="input-group">
+                                                <span class="input-group-btn">
+                                                   <button type="button" class="btn yellow btn-number" data-type="minus" data-field="quantity">
+                                                            <span class="fa fa-minus"></span>
+                                                   </button>
+                                                </span>
+                                            <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="100">
+                                            <span class="input-group-btn">
+                                                  <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
+                                                          <span class="fa fa-plus"></span>
+                                                  </button>
+                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="input-append span11" style="margin-bottom:0!important">
+                                        <input type="hidden" id="particularId" name="particularId" value="">
+                                        <input type="text" class="m-wrap span8" id="price" name="price" value="" maxlength="8">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn blue" id="addParticular" data-url="{{ path('hms_invoice_particular_add',{'invoice':entity.id}) }}" ><i class="icon-plus"></i> Add</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -323,7 +343,7 @@
                             <div class="span12">
                                 <div class="control-group">
                                     <label class="control-label red" for="firstName"><span>Referred & Department</span>
-                                            <a href="javascript:" id="hide" class="pull-right btn mini red addReferred"><i class="icon-remove"></i></a>
+                                            <a href="javascript:" id="hide" class="pull-right btn mini red addReferred" style="display:block!important;"><i class="icon-remove"></i></a>
                                     </label>
                                     <div class="controls">
                                         <div class="span6">

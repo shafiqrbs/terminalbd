@@ -245,6 +245,13 @@ class PurchaseVendorItem
      */
     private $status = true;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="preOrder", type="boolean", nullable = true)
+     */
+    private $preOrder = false;
+
 
      /**
      * @var boolean
@@ -1224,6 +1231,22 @@ class PurchaseVendorItem
     public function setProductUnit($productUnit)
     {
         $this->productUnit = $productUnit;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPreOrder()
+    {
+        return $this->preOrder;
+    }
+
+    /**
+     * @param bool $preOrder
+     */
+    public function setPreOrder($preOrder)
+    {
+        $this->preOrder = $preOrder;
     }
 
 

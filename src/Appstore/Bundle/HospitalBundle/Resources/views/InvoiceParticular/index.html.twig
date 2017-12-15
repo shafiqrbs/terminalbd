@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="page-title">
-                    Pathological Report Prepared
+                    Diagnostic Report Prepared
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Pathological Report Prepared</a></li>
+                    <li><a href="#">Diagnostic Report Prepared</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -29,19 +29,7 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Manage Pathological Report Prepared</div>
-                        <div class="actions">
-                            <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('hms_invoice_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                        <div class="caption"><i class="icon-reorder"></i>Manage Diagnostic Report Prepared</div>
                     </div>
 
                     <div class="portlet-body">
@@ -63,14 +51,12 @@
                                                 <input class="m-wrap span12 search-input" name="mobile" id="mobile" value="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.mobile is defined %}{{ searchForm.mobile }}{% else %}Patient mobile{% endif %}">
                                             </div>
                                         </div>
-
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-calendar"></i>
                                                 <input class="m-wrap span12 search-input dateCalendar" name="created" id="created" value="{% if searchForm.created is defined %}{{ searchForm.created }}{% endif %}"  autocomplete="off" placeholder="{% if searchForm.created is defined %}{{ searchForm.created }}{% else %}Created Date{% endif %}" >
                                             </div>
                                         </div>
-
                                         <div class="span3">
                                             <div class="input-icon left">
                                                 <i class="icon-calendar"></i>
@@ -133,8 +119,8 @@
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.name }}{% endif %}</td>
                                         <td class="numeric" >{% if entity.customer is defined and entity.customer is not empty %}{{ entity.customer.mobile }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.deliveryDateTime }}</td>
-                                        <td class="numeric" >{{ entity.invoiceParticulars|length(0) }}</td>
-                                        <td class="numeric" ></td>
+                                        <td class="numeric" >{{ entity.reportCount }}</td>
+                                        <td class="numeric" >{{ entity.deliveryCount }}</td>
                                         <td class="numeric" >
                                             <a  href="{{ path('hms_invoice_particular_show',{'id':entity.id}) }}"  class="btn purple mini" ><i class=" icon-plus"></i> Report Process</a>
                                         </td>

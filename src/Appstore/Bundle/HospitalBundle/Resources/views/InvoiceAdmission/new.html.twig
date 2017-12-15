@@ -525,31 +525,37 @@
                         <div class="row-fluid">
                             <div class="span12">
                                 <div class="row-fluid particular-info" >
-                                    <div class="span6">
+                                    <div class="span7">
                                         <select id="particular" name="particular" class="span12 select2">
                                             <option value="">Test Name, Accessories, Surgery, Cabin etc. </option>
                                             {{ particularService|raw }}
                                         </select>
                                     </div>
-                                    <div class="span3">
-                                        <div class="input-group">
-                                            <span class="input-group-btn">
-                                               <button type="button" class="btn red btn-number" data-type="minus" data-field="quantity">
-                                                        <span class="fa fa-minus"></span>
-                                               </button>
-                                            </span>
-                                            <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="100">
-                                            <span class="input-group-btn">
-                                              <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
-                                                      <span class="fa fa-plus"></span>
-                                              </button>
-                                            </span>
+                                    <div class="span2">
+                                        <div class="input-append span12" style="margin-bottom:0!important">
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                                   <button type="button" class="btn yellow btn-number" data-type="minus" data-field="quantity">
+                                                            <span class="fa fa-minus"></span>
+                                                   </button>
+                                                </span>
+                                                <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="100">
+                                                <span class="input-group-btn">
+                                                  <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
+                                                          <span class="fa fa-plus"></span>
+                                                  </button>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="span2"><input type="text" class="m-wrap span12" id="price" name="price" value="" maxlength="8"></div>
-                                    <div class="span1">
-                                        <input type="hidden" id="particularId" name="particularId" value="">
-                                        <button type="button" class="btn blue" id="addParticular" data-url="{{ path('hms_invoice_particular_add',{'invoice':entity.id}) }}" >Add</button>
+                                    <div class="span3">
+                                        <div class="input-append span11" style="margin-bottom:0!important">
+                                            <input type="hidden" id="particularId" name="particularId" value="">
+                                            <input type="text" class="m-wrap span8" id="price" name="price" value="" maxlength="8">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn blue" id="addParticular" data-url="{{ path('hms_invoice_particular_add',{'invoice':entity.id}) }}" ><i class="icon-plus"></i> Add</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

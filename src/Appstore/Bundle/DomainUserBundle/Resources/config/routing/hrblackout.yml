@@ -1,9 +1,0 @@
-domain_hr_blackout:
-    path:     /
-    defaults: { _controller: "DomainUserBundle:HrBlackout:index" }
-
-domain_hr_blackout_update:
-    path:     /{id}/update
-    defaults: { _controller: "DomainUserBundle:HrBlackout:update" }
-    methods:  [POST, PUT]
-

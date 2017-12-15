@@ -475,11 +475,11 @@ class Builder extends ContainerAware
 
 
         }
-        /*
-            if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
+
+        if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
             $menu['Inventory']->addChild('Purchase Item for Web', array('route' => 'inventory_purchasevendoritem'))
                 ->setAttribute('icon', 'icon-info-sign');
-        }*/
+        }
 
         if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_STOCK')) {
 
@@ -911,10 +911,10 @@ class Builder extends ContainerAware
         }
         if ($securityContext->isGranted('ROLE_HR_ATTENDANCE')) {
             $menu['HR & Payroll']->addChild('Attendance')->setAttribute('icon', 'icon-group')->setAttribute('dropdown', true);
-            $menu['HR & Payroll']['Attendance']->addChild('Attendance', array('route' => 'domain_hr_attendance'))->setAttribute('icon', 'icon-user');
-            $menu['HR & Payroll']['Attendance']->addChild('Leave', array('route' => 'domain_hr_leave'))->setAttribute('icon', 'icon-user');
-            $menu['HR & Payroll']['Attendance']->addChild('Calendar Blackout', array('route' => 'domain_hr_blackout'))->setAttribute('icon', 'icon-user');
-            $menu['HR & Payroll']['Attendance']->addChild('Report', array('route' => 'domain_hr_report'))->setAttribute('icon', 'icon-user');
+            $menu['HR & Payroll']['Attendance']->addChild('Employee', array('route' => 'attendance'))->setAttribute('icon', 'icon-user');
+            $menu['HR & Payroll']['Attendance']->addChild('Leave Setup', array('route' => 'leave_setup'))->setAttribute('icon', 'icon-user');
+            $menu['HR & Payroll']['Attendance']->addChild('Daily Attendance', array('route' => 'daily_attendance'))->setAttribute('icon', 'icon-user');
+            $menu['HR & Payroll']['Attendance']->addChild('Calendar Weekend', array('route' => 'weekend'))->setAttribute('icon', 'icon-user');
         }
         if ($securityContext->isGranted('ROLE_PAYROLL_SALARY')) {
 

@@ -31,7 +31,7 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <div class="btn-group">
-                                    <a class="red btn" href="{{ path('domain_hr_attendance_month') }}"><i class="icon-calendar"></i>&nbsp; Attendance {{ "now"|date("F,Y") }}</a>
+                                    <a class="red btn" href="{{ path('daily_attendance_month') }}"><i class="icon-calendar"></i>&nbsp; Attendance {{ "now"|date("F,Y") }}</a>
                                 </div>
                             </div>
                         </div>
@@ -44,14 +44,12 @@
                                 <td>&nbsp;&nbsp;<i class="icon-list"></i></td>
                                 <th class="numeric">Name of Month</th>
                                 <th class="numeric" >Year</th>
-                                <th class="numeric" >Action</th>
+                                <th class="numeric" ></th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for entity in entities  %}
-                                <tr><td>{{ entity.month }}</td></tr>
-                                <tr><td>{{ entity.Year }}</td></tr>
-                                <tr><td><a class="blue" href="{{ path('domain_hr_attendance_show',{'month':entity.month}) }}">View</a></td></tr>
+                                <tr><td>{{ loop.index }}.</td><td>{{ entity.month }}</td><td>{{ entity.year }}</td><td><a class="blue btn mini" href="{{ path('daily_attendance_show',{'month':entity.month,'year':entity.year}) }}"><i class="fa fa-eye"></i> View</a></td></tr>
                             {% endfor %}
                             </tbody>
                         </table>

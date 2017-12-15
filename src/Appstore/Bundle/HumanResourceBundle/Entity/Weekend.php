@@ -9,7 +9,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  * Weekend
  *
  * @ORM\Table(name="hr_weekend")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\HumanResourceBundle\Repository\BlackoutRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\HumanResourceBundle\Repository\WeekendRepository")
  */
 class Weekend
 {
@@ -21,8 +21,6 @@ class Weekend
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\GlobalOption", inversedBy="weekend")

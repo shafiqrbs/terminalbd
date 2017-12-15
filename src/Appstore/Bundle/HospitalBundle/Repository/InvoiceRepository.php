@@ -228,6 +228,16 @@ class InvoiceRepository extends EntityRepository
 
     public function findWithCommissionOverview(User $user, $data)
     {
+        if(empty($data)){
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
+            $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
+        }else{
+            $data['startDate'] = date('Y-m-d',strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d',strtotime($data['endDate']));
+        }
+
+
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.doctorInvoices','ip');
@@ -236,7 +246,16 @@ class InvoiceRepository extends EntityRepository
         $qb->addSelect('d.name as referredName');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
         $qb->andWhere('ip.process = :mode')->setParameter('mode', 'Paid');
-        $this->handleDateRangeFind($qb,$data);
+        if (!empty($data['startDate']) ) {
+            $qb->andWhere("ip.updated >= :startDate");
+            $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
+        }
+
+        if (!empty($data['endDate'])) {
+            $qb->andWhere("ip.updated <= :endDate");
+            $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
+        }
+
         $qb->groupBy('ip.assignDoctor');
         $result = $qb->getQuery()->getArrayResult();
         return $result;

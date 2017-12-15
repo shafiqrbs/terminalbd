@@ -24,7 +24,7 @@ class InvoiceTransactionRepository extends EntityRepository
             $datetime = new \DateTime("now");
             $data['startDate'] = $datetime->format('Y-m-d 00:00:00');
             $data['endDate'] = $datetime->format('Y-m-d 23:59:59');
-        } else {
+        } elseif (!empty($data['startDate']) and !empty($data['endDate'])) {
             $data['startDate'] = date('Y-m-d', strtotime($data['startDate']));
             $data['endDate'] = date('Y-m-d', strtotime($data['endDate']));
         }
@@ -259,6 +259,9 @@ class InvoiceTransactionRepository extends EntityRepository
             $vat = $this->getCulculationVat($invoice, $entity->getPayment());
             $entity->setVat($vat);
         }
+        if(empty($entity->getTransactionMethod())){
+            $entity->setTransactionMethod($this->_em->getRepository('SettingToolBundle:TransactionMethod')->find(1));
+        }
         $this->_em->persist($entity);
         $this->_em->flush($entity);
         $accountInvoice = $this->_em->getRepository('AccountingBundle:AccountSales')->insertAccountInvoice($entity);
@@ -322,13 +325,11 @@ class InvoiceTransactionRepository extends EntityRepository
         $qb = $this->createQueryBuilder('it');
         $q = $qb->update()
             ->set('it.process', $qb->expr()->literal('In-progress'))
+            ->set('it.revised', $qb->expr()->literal(1))
             ->where('it.hmsInvoice = :invoice')
             ->setParameter('invoice', $entity->getId())
             ->getQuery();
-        $p = $q->execute();
-
-
-
+        $q->execute();
     }
 
     public function updateInvoiceTransactionDiscount(Invoice $entity)
@@ -351,9 +352,22 @@ class InvoiceTransactionRepository extends EntityRepository
                     ->setParameter('id', $transaction->getId());
                 $qb->getQuery()->execute();
             }
-
         }
+    }
 
+    public function removePendingTransaction(Invoice $entity)
+    {
+        $em = $this->_em;
+        $qb = $em->createQueryBuilder();
+        $query = $qb->delete('HospitalBundle:InvoiceTransaction', 'e')
+            ->where('e.hmsInvoice = :hmsInvoice')
+            ->setParameter('hmsInvoice', $entity->getId())
+            ->andWhere('e.process IN (:process)')
+            ->setParameter('process',array('Pending','In-progress'))
+            ->getQuery();
+        if(!empty($query)) {
+            $query->execute();
+        }
     }
 
     public function getCulculationVat(Invoice $invoice, $totalAmount)

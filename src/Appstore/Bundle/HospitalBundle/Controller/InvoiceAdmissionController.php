@@ -234,8 +234,6 @@ class InvoiceAdmissionController extends Controller
     {
     }
 
-
-
     public function approveAction(Request $request , Invoice $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -244,7 +242,7 @@ class InvoiceAdmissionController extends Controller
         $discount = $discount !="" ? $discount : 0 ;
         $process = $request->request->get('process');
 
-        if (!empty($entity) and !empty($payment) and !empty($process)) {
+        if ((!empty($entity) and !empty($payment)) or !empty($entity) and !empty($discount)) {
 
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('Admitted');
@@ -252,19 +250,11 @@ class InvoiceAdmissionController extends Controller
             $transactionData = array('process'=> 'In-progress','payment' => $payment, 'discount' => $discount);
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);
             return new Response('success');
-
-
-        } elseif (!empty($entity) and in_array($process , array('Release','Death')) and $entity->getTotal() == ($entity->getPayment() + $discount) ) {
-
+        } elseif (!empty($entity) and in_array($process , array('Release','Death')) and $entity->getTotal() <= $entity->getPayment() ) {
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess($process);
-            $entity->setPaymentStatus('Paid');
             $em->flush();
-            $transactionData = array('process'=> 'Done','payment' => $payment, 'discount' => $discount);
-            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);
-            $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
             return new Response('success');
-
         } else {
             return new Response('failed');
         }
@@ -298,17 +288,23 @@ class InvoiceAdmissionController extends Controller
         }
     }
 
-    public function releaseAction($invoice)
+    public function releaseAction($invoice,$process)
     {
         $em = $this->getDoctrine()->getManager();
         $inventory = $this->getUser()->getGlobalOption()->getHospitalConfig()->getId();
         $entity = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig'=>$inventory,'invoice'=>$invoice));
         $entity->setApprovedBy($this->getUser());
-        if($entity->getProcess() == 'Release'){
-            $entity->setProcess('Released');
-        }elseif($entity->getProcess() == 'Death'){
-            $entity->setProcess('Dead');
+        if($process == 'confirm'){
+            if($entity->getProcess() == 'Release'){
+                $entity->setProcess('Released');
+            }elseif($entity->getProcess() == 'Death'){
+                $entity->setProcess('Dead');
+            }
+            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->removePendingTransaction($entity);
+        }elseif($process == 'cancel'){
+            $entity->setProcess('Admitted');
         }
+
         $em->flush();
         exit;
     }
@@ -434,13 +430,18 @@ class InvoiceAdmissionController extends Controller
         $em->getRepository('HospitalBundle:InvoiceParticular')->hmsInvoiceParticularReverse($entity);
         $em = $this->getDoctrine()->getManager();
         $entity->setRevised(true);
+        $entity->setTotal($entity->getSubTotal());
         $entity->setProcess('Admitted');
+        $entity->setPaymentStatus('Due');
+        $entity->setDiscount(null);
+        $entity->setPaymentInWord(null);
+        $entity->setPayment(null);
         $em->flush();
         $template = $this->get('twig')->render('HospitalBundle:Reverse:admission.html.twig',array(
             'entity' => $entity,
         ));
-        $em->getRepository('HospitalBundle:HmsReverse')->insertInvoice($entity,$template);
-        return $this->redirect($this->generateUrl('hms_invoice_admission_reverse_show',array('invoice' => $invoice)));
+        $em->getRepository('HospitalBundle:HmsReverse')->insertAdmissionInvoice($entity,$template);
+        return $this->redirect($this->generateUrl('hms_invoice_admission_confirm',array('id' => $entity->getId())));
 
     }
 

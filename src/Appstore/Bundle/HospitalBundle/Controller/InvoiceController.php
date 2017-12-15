@@ -230,7 +230,7 @@ class InvoiceController extends Controller
         $referredId = $request->request->get('referredId');
         $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
 
-        if($editForm->isValid() and !empty($entity->getInvoiceParticulars()) and in_array($entity->getProcess(),array('Created','Pending'))) {
+        if($editForm->isValid() and !empty($entity->getInvoiceParticulars()) and in_array($entity->getProcess(),array('Created','Pending','Revised'))) {
 
             if (!empty($data['customer']['name'])) {
 
@@ -398,7 +398,7 @@ class InvoiceController extends Controller
         $discount = $discount !="" ? $discount : 0 ;
         $process = $request->request->get('process');
 
-        if (!empty($entity) and !empty($payment) and !empty($process)) {
+        if ( (!empty($entity) and !empty($payment)) or (!empty($entity) and $discount > 0 ) ) {
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess('In-progress');
             $em->flush();
@@ -406,16 +406,12 @@ class InvoiceController extends Controller
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);
             return new Response('success');
 
-
-        } elseif (!empty($entity) and $process == 'Done' and $entity->getTotal() == ($entity->getPayment() + $discount) ) {
+        } elseif(!empty($entity) and $process == 'Done' and $entity->getTotal() <= $entity->getPayment()  ) {
 
             $em = $this->getDoctrine()->getManager();
             $entity->setProcess($process);
             $entity->setPaymentStatus('Paid');
             $em->flush();
-            $transactionData = array('process'=> $entity->getProcess(),'payment' => $payment, 'discount' => $discount);
-            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->insertPaymentTransaction($entity,$transactionData);
-            $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($entity);
             return new Response('success');
 
         } else {
@@ -453,12 +449,19 @@ class InvoiceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity->setRevised(true);
         $entity->setProcess('Revised');
+        $entity->setRevised(true);
+        $entity->setTotal($entity->getSubTotal());
+        $entity->setPaymentStatus('Due');
+        $entity->setDiscount(null);
+        $entity->setDue($entity->getSubTotal());
+        $entity->setPaymentInWord(null);
+        $entity->setPayment(null);
         $em->flush();
         $template = $this->get('twig')->render('HospitalBundle:Reverse:reverse.html.twig',array(
             'entity' => $entity,
         ));
         $em->getRepository('HospitalBundle:HmsReverse')->insertInvoice($entity,$template);
-        return $this->redirect($this->generateUrl('hms_invoice'));
+        return $this->redirect($this->generateUrl('hms_invoice_edit',array('id'=>$entity->getId())));
 
     }
 
@@ -583,7 +586,6 @@ class InvoiceController extends Controller
             if(!empty($transaction[0]->getPayment())){
                 $lastTransaction = $transaction[0]->getPayment();
                 $inWordTransaction = $this->get('settong.toolManageRepo')->intToWords($lastTransaction);
-
             }
 
         }

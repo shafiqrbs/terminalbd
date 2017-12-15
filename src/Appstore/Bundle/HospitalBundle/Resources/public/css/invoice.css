@@ -5,10 +5,14 @@
     display: none;
 }
 .particular-info{
-    background: #8FAF99;
+    background: red;
     padding: 10px;
     padding-left:0;
     padding-right: 4px;
+}
+
+.btn-show{
+    display: block!important;
 }
 
 .table-striped tbody>tr.min:nth-child(odd)>td, .table-striped tbody>tr.min:nth-child(odd)>th{
@@ -29,8 +33,6 @@ input.m-wrap.input-error , select.m-wrap.input-error{
     padding-left: 6px;
     line-height: 24px;
 }
-
-
 
 #particular-table .table-fixed {
     width: 100%;
@@ -130,7 +132,7 @@ input.m-wrap.input-error , select.m-wrap.input-error{
 }
 
 input[class*="span"].m-wrap  {
-    height: 33px!important;
+    height: 34px!important;
     background: #ffffff;
 }
 
@@ -148,4 +150,8 @@ input[class*="span"].m-wrap  {
 .grandTotal{
     font-weight: bold;
     font-size:15px;
+}
+
+.yellow-alert td{
+    background-color: yellow!important;
 }

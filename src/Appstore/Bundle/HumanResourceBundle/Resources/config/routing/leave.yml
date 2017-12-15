@@ -1,41 +1,41 @@
-domain_hr_leave:
-    path:     /
+leave:
+    path:      /{user}
     defaults: { _controller: "DomainUserBundle:Agent:index" }
 
-agent_show:
+leave_show:
     path:     /{id}/show
     defaults: { _controller: "DomainUserBundle:Agent:show" }
 
-agent_new:
-    path:     /new
+leave_user_new:
+    path:     /{user}/new
     defaults: { _controller: "DomainUserBundle:Agent:new" }
 
-agent_create:
-    path:     /create
+leave_create:
+    path:     /{user}/create
     defaults: { _controller: "DomainUserBundle:Agent:create" }
     methods:  POST
 
-agent_edit:
-    path:     /{id}/edit
+leave_edit:
+    path:     /{user}/{id}/edit
     defaults: { _controller: "DomainUserBundle:Agent:edit" }
 
-agent_update:
-    path:     /{id}/update
+leave_update:
+    path:     /{user}/{id}/update
     defaults: { _controller: "DomainUserBundle:Agent:update" }
     methods:  [POST, PUT]
 
-agent_delete:
+leave_delete:
     path:     /{id}/delete
     defaults: { _controller: "DomainUserBundle:Agent:delete" }
     methods:  [POST, DELETE]
 
-agent_search:
+leave_search:
     path:     /customer-search
     defaults: { _controller: "DomainUserBundle:Agent:autoSearch" }
     options:
             expose: true
 
-agent_name:
+leave_name:
     path:      /{customer}/customer-name
     defaults: { _controller: "DomainUserBundle:Agent:searchCustomerName" }
     options:

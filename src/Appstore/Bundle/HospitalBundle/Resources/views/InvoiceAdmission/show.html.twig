@@ -38,8 +38,8 @@
 
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn red" href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus-sign"></i> Add Invoice</a>
                                 <a class="btn" href="{{ path('hms_invoice_admission') }}"><i class="icon-th-list"></i> Admission</a>
+                                <a class="btn red" href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus"></i> New Admission</a>
                             </div>
                         </div>
 
@@ -220,13 +220,15 @@
                             <div class="clearfix">&nbsp;</div>
                             <div class="form-actions portlet box grey">
                                  <div class="pull-right" id="action-{{ entity.id }}">
+                                     <div class="btn-group">
                                     <a target="_blank"  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
                                     <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                     <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
                                     <span  id="show"  data-trigger="hover" data-original-title="All payment history" class="btn purple receivePayment tooltips" ><i class="icon-money"></i>&nbsp;Payment History</span>
                                      {% if app.user.granted("ROLE_DOMAIN") %}
-                                         <a  href="{{ path('hms_invoice_admission_reverse',{'invoice':entity.invoice}) }}"  data-trigger="hover" data-original-title="Admission Invoice Reverse" class="btn black tooltips" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
+                                         <a  href="{{ path('hms_invoice_admission_reverse',{'invoice':entity.invoice}) }}"  data-trigger="hover" data-original-title="Diagnostic Invoice Reverse" class="btn black tooltips" ><i class="icon-refresh"></i>&nbsp;Reverse</a>
                                      {% endif %}
+                                     </div>
                                 </div>
                            </div>
                         </div>

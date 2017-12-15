@@ -9,6 +9,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
 use Appstore\Bundle\HospitalBundle\Entity\Particular;
+use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
 use Appstore\Bundle\InventoryBundle\Entity\BranchInvoice;
 use Appstore\Bundle\InventoryBundle\Entity\Damage;
 use Appstore\Bundle\InventoryBundle\Entity\Delivery;
@@ -589,7 +590,7 @@ class User extends BaseUser
     protected $hmsReverse;
 
      /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\HrAttendanceMonth", mappedBy="user" , cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance", mappedBy="user" , cascade={"persist", "remove"})
      */
     protected $userAttendance;
 
@@ -1250,7 +1251,7 @@ class User extends BaseUser
     }
 
     /**
-     * @return HrAttendanceMonth
+     * @return DailyAttendance
      */
     public function getUserAttendance()
     {
@@ -1259,13 +1260,13 @@ class User extends BaseUser
 
 
     /**
-     * @return HrAttendanceMonth
+     * @return DailyAttendance
      */
     public function getUserAttendanceMonth($year,$month)
     {
         $attendances = $this->getUserAttendance();
 
-        /* @var HrAttendanceMonth $attendance */
+        /* @var DailyAttendance $attendance */
 
         $presentDays = array();
         foreach ($attendances as $attendance){

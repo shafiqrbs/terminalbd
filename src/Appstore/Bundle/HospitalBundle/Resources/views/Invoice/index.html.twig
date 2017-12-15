@@ -164,12 +164,12 @@
                                             <div class="btn-group">
                                                 {% set processArr = {'In-progress':'In-progress'} %}
                                                 {% set processIntArr = {'Created':'Created','Pending':'Pending','Revised':'Revised'} %}
-                                                {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due'} %}
+                                                {% set PaymentArr = {'In-progress': 'In-progress' ,'Due':'Due' ,'Paid':'Paid'} %}
                                                 {% if  entity.process in processIntArr %}
                                                     <a href="{{ path('hms_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-user"></i> Manage Diagnostic</a>
                                                 {% endif %}
                                                 {% if entity.paymentStatus in  PaymentArr|keys and  entity.process == 'In-progress' %}
-                                                    <a href="{{ path('hms_invoice_confirm', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-user"></i> Manage Diagnostic</a>
+                                                    <a href="{{ path('hms_invoice_confirm', { 'id': entity.id }) }}" class="btn green mini" ><i class="icon-user"></i> Manage Diagnostic</a>
                                                 {% endif %}
                                                 <a class="btn blue mini" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                                    Action

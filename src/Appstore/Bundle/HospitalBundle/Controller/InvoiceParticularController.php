@@ -212,6 +212,13 @@ class InvoiceParticularController extends Controller
             $entity->setParticularDeliveredBy($this->getUser());
             $em->flush();
         }
+        $invoice = $entity->getHmsInvoice();
+        if($invoice->getPaymentStatus() == 'Paid' and $invoice->getReportCount() == $invoice->getDeliveryCount()){
+            $em = $this->getDoctrine()->getManager();
+            $invoice->setProcess('Done');
+            $em->flush();
+        }
+
         return $this->redirect($this->generateUrl('hms_invoice_confirm', array('id' => $entity->getHmsInvoice()->getId())));
     }
 

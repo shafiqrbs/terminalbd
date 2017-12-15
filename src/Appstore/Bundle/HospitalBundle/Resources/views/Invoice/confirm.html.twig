@@ -6,7 +6,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="purchase_order-title">
-                    Patient Pathological Invoice # {{ entity.invoice }}
+                    Patient Diagnostic Invoice # {{ entity.invoice }}
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -15,10 +15,10 @@
                         <span class="icon-angle-right"></span>
                     </li>
                     <li>
-                        <a href="{{ path('hms_invoice') }}">Invoice</a>
+                        <a href="{{ path('hms_invoice') }}">Diagnostic</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Manage Patient</a></li>
+                    <li><a href="#">Manage Diagnostic Patient</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>c
                         {{ "now"|date("d-F-Y") }}
@@ -38,8 +38,8 @@
 
                         <div class="actions">
                             <div class="btn-group">
+                                <a class="btn" href="{{ path('hms_invoice') }}"><i class="icon-th-list"></i> Diagnostic</a>
                                 <a class="btn red" href="{{ path('hms_invoice_new') }}"><i class="icon-plus-sign"></i> Add Invoice</a>
-                                <a class="btn" href="{{ path('hms_invoice') }}"><i class="icon-plus"></i> Diagnostic</a>
                             </div>
                         </div>
                     </div>
@@ -120,8 +120,8 @@
                                                 <th class="numeric">{% if item.particular.service.id == 1 %}{{ item.process }} By {{ item.particularPreparedBy }}{% endif %}</th>
                                                 <td class="numeric">
                                                     {% if item.particular.service.id == 1 and item.process == 'Done' and item.particularDeliveredBy is empty %}
-                                                    <a class="btn mini green " href="{{ path('hms_invoice_particular_delivery', {'id': item.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
-                                                    <a class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': item.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
+                                                    <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': item.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
+                                                    <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': item.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
                                                     {% endif %}
                                                     {% if item.particular.service.id == 1 and item.process == 'Done' and item.particularDeliveredBy is not empty %}
                                                     <a class="btn mini purple confirm"   href="javascript:"><i class="icon-truck"></i>&nbsp;Delivered </a>
@@ -224,7 +224,7 @@
                                         </thead>
                                         <tbody id="invoiceTransaction">
                                         {% for transaction in entity.invoiceTransactions %}
-                                            <tr id="delete-{{ transaction.id }}">
+                                            <tr id="delete-{{ transaction.id }}" {% if transaction.process in ['Pending','In-progress'] %} class="yellow-alert" {% endif %}  >
                                                 <td  class="numeric">{{ transaction.transactionCode }}</td>
                                                 <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
                                                 <td class="numeric">{% if transaction.transactionMethod is not empty %}{{ transaction.transactionMethod.name }}{% endif %}</td>
@@ -238,9 +238,9 @@
 
 
                                                     {% if entity.paymentStatus != 'Paid' and entity.process !='Done' %}
-                                                        {% set processArr = {'Created': 'Created' ,'Pending':'Pending','In-progress':'In-progress'} %}
-                                                        {% if transaction.process in  processArr and transaction.payment == 0 and transaction.admissionPatientParticulars is defined %}
-                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
+                                                        {% set processArr = ['Created','Pending','In-progress'] %}
+                                                        {% if transaction.process in  processArr %}
+                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'invoice':entity.invoice,'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
                                                         {% endif %}
                                                         {% if transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
                                                             <a href="javascript:" data-id="{{ transaction.id }}" class="btn showTransaction green mini"><i class="fa fa-plus"></i> View</a>
@@ -251,8 +251,7 @@
                                                         {% if transaction.process not in processArr %}
                                                             <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print_single',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="fa fa-print"></i> Print</a>
                                                         {% endif %}
-                                                        {% if transaction.process == 'In-progress' %}
-                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
+                                                        {% if transaction.process == 'In-progress' or ( transaction.process == 'Pending' and transaction.total > 0 ) %}
                                                             <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_approve',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
                                                         {% endif %}
                                                     {% endif %}
@@ -280,23 +279,25 @@
                             {% if entity.process !='Done' %}
                                 <div class="row-fluid particular-info" >
                                     <form method="post" name="form" id="form">
-                                        <div class="span2 pull-right">
-                                            <button type="button" class="btn blue" id="addPayment" data-url="{{ path('hms_invoice_approved',{'id':entity.id}) }}" ><i class="icon-save"></i>&nbsp;Save</button>
+                                        <div class="span4" >&nbsp;</div>
+                                        <div class="span8 text-right">
+                                            <div class="input-append span12" style="margin-bottom:0!important">
+                                                <input type="text" class="m-wrap span3" id="discount" name="discount" placeholder="Discount amount"  >
+                                                <input type="text" class="m-wrap span3" id="payment" name="payment" value="" maxlength="8"  placeholder="Payment amount">
+                                                <select id="process" name="process" class="span3 m-wrap">
+                                                    <option {% if entity.process == 'In-progress' %} selected="selected" {% endif %} value="In-progress">In-progress</option>
+                                                    <option {% if entity.process == 'Done' %} selected="selected" {% endif %} value="Done">Done</option>
+                                                </select>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn blue" id="addPayment" data-url="{{ path('hms_invoice_approved',{'id':entity.id}) }}" ><i class="fa fa-save"></i> Save</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="span3 pull-right">
-                                            <select id="process" name="process" class="span12 m-wrap">
-                                                <option {% if entity.process == 'In-progress' %} selected="selected" {% endif %} value="In-progress">In-progress</option>
-                                                <option {% if entity.process == 'Done' %} selected="selected" {% endif %} value="Done">Done</option>
-                                            </select>
-                                        </div>
-                                        <div class="span2  pull-right"><input type="text" class="m-wrap span12" id="payment" name="payment" value="" maxlength="8"  placeholder="Payment amount"></div>
-                                        <div class="span2 pull-right"><input type="number" class="m-wrap span12" id="discount" name="discount" placeholder="Discount amount"  ></div>
                                     </form>
                                 </div>
                                 <div class="clearfix">&nbsp;</div>
                             {% endif %}
                             <div class="clearfix">&nbsp;</div>
-
                             <div class="form-actions portlet box grey">
                                 <div class="pull-right" id="action-{{ entity.id }}">
                                     <a target="_blank"  href="{{ path('hms_invoice_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>

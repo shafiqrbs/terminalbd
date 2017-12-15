@@ -52,11 +52,11 @@ $(".addReferred").click(function(){
 
     if ($(this).attr("id") == 'show') {
 
+        $('#hide').addClass('btn-show');
         $( ".referred-add" ).slideDown( "slow" );
         $( ".referred-search" ).slideUp( "slow" );
 
     }else {
-
         $( ".referred-add" ).slideUp( "slow" );
         $( ".referred-search" ).slideDown( "slow" );
 
@@ -228,47 +228,12 @@ $(document).on("click", ".particularDelete", function() {
     });
 });
 
-$(document).on("click", ".particularDelete1", function() {
-
-    var id = $(this).attr("data-id");
-    var url = $(this).attr("data-url");
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url, function( data ) {
-                obj = JSON.parse(data);
-                $('.subTotal').html(obj['subTotal']);
-                $('.netTotal').html(obj['netTotal']);
-                $('#netTotal').val(obj['netTotal']);
-                $('.paymentAmount').html(obj['payment']);
-                $('.vat').html(obj['vat']);
-                $('.due').html(obj['due']);
-                $('#due').val(obj['due']);
-                $('.discountAmount').html(obj['discount']);
-                $('.discount').val('').attr( "placeholder", obj['discount'] );
-                $('#invoiceParticulars').html(obj['invoiceParticulars']);
-                $('#invoiceTransaction').html(obj['invoiceTransaction']);
-                $('.msg-hidden').show();
-                $('#msg').html(obj['msg']);
-                $('#remove-'+id).hide();
-            });
-        }
-    });
-});
-
 $(document).on('click', '#addPayment', function() {
 
     var payment = $('#payment').val();
     var discount = $('#discount').val();
     var process = $('#process').val();
     var url = $('#addPayment').attr('data-url');
-
-    if (payment == '') {
-        $('#payment').addClass('input-error').focus;
-        alert('Add payment amount');
-    }
-
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',

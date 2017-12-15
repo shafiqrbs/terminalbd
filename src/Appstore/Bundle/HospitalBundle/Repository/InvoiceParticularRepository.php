@@ -117,6 +117,36 @@ class InvoiceParticularRepository extends EntityRepository
         $em->flush();
     }
 
+    public function reverseInvoiceParticularMasterUpdate(AdmissionPatientParticular $patientParticular)
+    {
+
+        $em = $this->_em;
+        $invoice = $patientParticular->getInvoiceTransaction()->getHmsInvoice();
+        $entity = $this->findOneBy(array('hmsInvoice' => $invoice,'particular' => $patientParticular->getParticular()));
+
+        if($entity->getQuantity() == 1){
+
+            $em->remove($entity);
+            $em->flush();
+
+        }else{
+
+            /* @var $entity InvoiceParticular */
+
+            $entity->setSubTotal( $entity->getSubTotal() - $patientParticular->getSubTotal());
+            $entity->setQuantity( $entity->getQuantity() - $patientParticular->getQuantity());
+            if($entity->getCommission()){
+                $entity->setCommission($entity->getCommission() * $entity->getQuantity());
+            }
+            $em->persist($entity);
+            $em->flush();
+
+        }
+
+
+    }
+
+
     public function getSalesItems(Invoice $sales)
     {
         $entities = $sales->getInvoiceParticulars();

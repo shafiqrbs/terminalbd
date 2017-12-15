@@ -38,9 +38,9 @@
                         <div class="actions">
                             <div class="btn-group">
                                 <a class="btn" href="{{ path('hms_invoice_admission') }}"><i class="icon-th-list"></i> Admission</a>
-                                <a class="btn blue" href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus"></i> New Admission</a>
-                                {% if entity.paymentStatus != 'Paid' and  entity.process not in ['Release','Death'] %}
-                                    <a class="btn red" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> Admitted Invoice</a>
+                                <a class="btn red" href="{{ path('hms_invoice_admission_new') }}"><i class="icon-plus"></i> New Admission</a>
+                                {% if entity.paymentStatus != 'Paid' and  entity.process not in ['Release','Death','Released','Dead']  %}
+                                    <a class="btn purple" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> Admitted Invoice</a>
                                 {% endif %}
                                 {% if invoiceTransaction is defined and invoiceTransaction is defined is not empty  %}
                                 <a class="btn" href="{{ path('hms_invoice_admission_confirm',{'id':entity.id}) }}"><i class="fa fa-fast-backward"></i> Return</a>
@@ -210,7 +210,9 @@
                                         </thead>
                                         <tbody id="invoiceTransaction">
                                         {% for transaction in entity.invoiceTransactions %}
-                                            <tr id="delete-{{ transaction.id }}">
+
+
+                                            <tr id="delete-{{ transaction.id }}" {% if transaction.process in ['Pending','In-progress'] %} class="yellow-alert" {% endif %} >
                                                 <td  class="numeric">{{ transaction.transactionCode }}</td>
                                                 <td  class="numeric">{{ transaction.updated|date('d-m-Y') }}</td>
                                                 <td class="numeric">{% if transaction.transactionMethod is not empty %}{{ transaction.transactionMethod.name }}{% endif %}</td>
@@ -222,18 +224,18 @@
                                                 <td class="numeric">{{ transaction.process }}</td>
                                                 <td class="numeric">
                                                     {% if entity.process in ['Admitted']  %}
-                                                        {% set processArr = {'Created': 'Created' ,'Pending':'Pending','In-progress':'In-progress'} %}
+                                                        {% set processArr = ['Created','Pending','In-progress'] %}
                                                         {% if transaction.process in  processArr %}
-                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
+                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_delete',{'invoice':entity.invoice,'id':transaction.id}) }}" class="btn delete red mini"><i class="fa fa-trash"></i></a>
                                                         {% endif %}
                                                         {% if transaction.admissionPatientParticulars is defined and transaction.admissionPatientParticulars is not empty %}
-                                                            <a href="javascript:" data-id="{{ transaction.id }}" class="btn showTransaction green mini"><i class="fa fa-plus"></i> View</a>
+                                                            <a href="javascript:" data-id="{{ transaction.id }}" class="btn showTransaction blue mini"><i class="fa fa-plus"></i> View Particulars</a>
                                                         {% endif %}
                                                         {% if transaction.process not in processArr %}
                                                             <a target="_blank" href="{{ path('hms_invoice_admission_transaction_print_single',{'invoice':entity.invoice,'id':transaction.id}) }}" data-id="{{ transaction.id }}"  class="btn purple mini"><i class="fa fa-print"></i> Print</a>
                                                         {% endif %}
-                                                        {% if transaction.process == 'In-progress' %}
-                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_approve',{'id':transaction.id}) }}" class="btn approve blue mini"><i class="fa fa-ok"></i> Approve</a>
+                                                        {% if transaction.process == 'In-progress' or ( transaction.process == 'Pending' and transaction.total > 0 ) %}
+                                                            <a href="javascript:" data-id="{{ transaction.id }}" data-url="{{ path('hms_invoice_admission_daily_approve',{'id':transaction.id}) }}" class="btn approve green mini"><i class="fa fa-ok"></i> Approve</a>
                                                         {% endif %}
                                                     {% endif %}
                                                 </td>
@@ -243,25 +245,35 @@
                                                     {% if transaction.admissionPatientParticulars is defined and  transaction.admissionPatientParticulars is not empty  %}
                                                         <table class="table table-bordered table-striped table-condensed flip-content ">
                                                             <thead class="flip-content ">
-                                                            <tr class="head-green">
+                                                            <tr class="head-blue">
                                                                 <th class="numeric">Si/No</th>
                                                                 <th class="numeric">Code</th>
                                                                 <th class="numeric">Particular</th>
                                                                 <th class="numeric">Service</th>
                                                                 <th class="numeric">Qnt</th>
                                                                 <th class="numeric">Amount</th>
+                                                                <th class="numeric">Action</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
                                                             {% for item in transaction.admissionPatientParticulars %}
                                                                 <tr id="remove-{{ item.id }}">
-                                                                    <td  class="numeric">{{ loop.index }}</td>
-                                                                    <td  class="numeric">{{ item.particular.particularCode }}</td>
+                                                                    <td class="numeric">{{ loop.index }}</td>
+                                                                    <td class="numeric">{{ item.particular.particularCode }}</td>
                                                                     <td class="numeric">{{ item.particular.name }}</td>
                                                                     <td class="numeric">{{ item.particular.service.name }}</td>
                                                                     <td class="numeric">{{ item.quantity }}</td>
                                                                     <td class="numeric">{{ item.subTotal|number_format }}</td>
-                                                                </tr>
+                                                                    <td class="numeric">
+                                                                        {% if item.particular.service.id == 1 and item.process == 'Done' and item.particularDeliveredBy is empty %}
+                                                                            <a class="btn mini green confirm" href="javascript:" data-url="{{ path('hms_invoice_particular_delivery', {'id': item.id}) }}"><i class="icon-truck"></i>&nbsp;Delivery</a>
+                                                                            <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': item.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
+                                                                        {% endif %}
+                                                                        {% if item.particular.service.id == 1 and item.process == 'Done' and item.particularDeliveredBy is not empty %}
+                                                                            <a class="btn mini purple confirm"   href="javascript:"><i class="icon-truck"></i>&nbsp;Delivered </a>
+                                                                            <a target="_blank" class="btn mini blue" href="{{ path('hms_invoice_particular_report_print', {'id': item.id}) }}"><i class="icon-print"></i>&nbsp;Report </a>
+                                                                        {% endif %}</td>
+                                                                    </tr>
                                                             {% endfor %}
                                                             </tbody>
                                                         </table>
@@ -304,7 +316,23 @@
                                                             {{ particularService|raw }}
                                                         </select>
                                                     </div>
-                                                    <div class="span2"><input type="number" class="m-wrap span12" id="quantity" name="quantity" value="1"></div>
+                                                    <div class="span2">
+                                                        <div class="input-append span12" style="margin-bottom:0!important">
+                                                        <div class="input-group">
+                                                            <span class="input-group-btn">
+                                                               <button type="button" class="btn yellow btn-number" data-type="minus" data-field="quantity">
+                                                                        <span class="fa fa-minus"></span>
+                                                               </button>
+                                                            </span>
+                                                                            <input type="number" class="m-wrap span5 form-control input-number" id="quantity" name="quantity" value="1" min="1" max="100">
+                                                                            <span class="input-group-btn">
+                                                              <button type="button" class="btn green btn-number"  data-type="plus" data-field="quantity">
+                                                                      <span class="fa fa-plus"></span>
+                                                              </button>
+                                                            </span>
+                                                        </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="span3">
                                                         <div class="input-append span11" style="margin-bottom:0!important">
                                                             <input type="hidden" id="particularId" name="particularId" value="">
@@ -380,36 +408,46 @@
                                 {% if entity.process not in ['Release','Death','Released','Dead']  %}
                                     <div class="row-fluid particular-info" >
                                         <form method="post" name="form" id="form">
-                                            <div class="span1 pull-right">
-                                                <button type="button" class="btn blue" id="addPayment" data-url="{{ path('hms_invoice_admission_approved',{'id':entity.id}) }}" >Save</button>
+                                            <div class="span4" >&nbsp;</div>
+                                            <div class="span8 text-right">
+                                                <div class="input-append span12" style="margin-bottom:0!important">
+                                                    <input type="text" class="m-wrap span3" id="discount" name="discount" placeholder="Discount amount"  >
+                                                    <input type="text" class="m-wrap span3" id="payment" name="payment" value="" maxlength="8"  placeholder="Payment amount">
+                                                    <select id="process" name="process" class="span4 m-wrap">
+                                                        <option {% if entity.process == 'Admitted' %} selected="selected" {% endif %} value="Admitted">Admitted</option>
+                                                        <option {% if entity.process == 'Release' %} selected="selected" {% endif %} value="Release">Release</option>
+                                                        <option {% if entity.process == 'Death' %} selected="selected" {% endif %} value="Death">Death</option>
+                                                    </select>
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn blue" id="addPayment" data-url="{{ path('hms_invoice_admission_approved',{'id':entity.id}) }}" ><i class="fa fa-save"></i> Save</button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="span3 pull-right">
-                                                <select id="process" name="process" class="span12 m-wrap">
-                                                    <option {% if entity.process == 'Admission' %} selected="selected" {% endif %} value="Admission">Admission</option>
-                                                    <option {% if entity.process == 'Admitted' %} selected="selected" {% endif %} value="Admitted">Admitted</option>
-                                                    <option {% if entity.process == 'Release' %} selected="selected" {% endif %} value="Release">Release</option>
-                                                    <option {% if entity.process == 'Death' %} selected="selected" {% endif %} value="Death">Death</option>
-                                                </select>
-                                            </div>
-                                            <div class="span2  pull-right"><input type="text" class="m-wrap span12" id="payment" name="payment" value="" maxlength="8"  placeholder="Payment amount"></div>
-                                            <div class="span2 pull-right"><input type="number" class="m-wrap span12" id="discount" name="discount" placeholder="Discount amount"  ></div>
                                         </form>
                                     </div>
                                 {% endif %}
                                 <div class="clearfix">&nbsp;</div>
                                 <div class="form-actions portlet box grey">
                                     <div class="pull-right" id="action-{{ entity.id }}">
+                                        <div class="btn-group dropup">
                                         <a target="_blank"  href="{{ path('hms_invoice_admission_print_invoice',{'id':entity.id}) }}" class="btn green"><i class="icon-print"></i>&nbsp;Print</a>
                                         <span  class="btn blue"><i class=" icon-retweet"></i>&nbsp;{{ entity.process }}</span>
                                         <span  class="btn yellow"><i class="icon-money"></i>&nbsp;{{ entity.paymentStatus }}</span>
                                         {% if ( app.user.granted("ROLE_DOMAIN")  or app.user.granted("ROLE_DOMAIN_HOSPITAL_ADMIN"))  %}
                                             {% if entity.process in ['Release','Death'] %}
-                                                <a class="btn purple confirm" href="javascript:" data-url="{{ path('hms_invoice_admission_patient_release',{'invoice':entity.invoice}) }}" ><i class="icon-ok"></i> {{ entity.process }} Confirm</a>
+                                                <a class="btn purple" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                                    Process <i class="icon-tasks"></i>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right action">
+                                                    <li> <a class="btn red confirm" href="javascript:" data-url="{{ path('hms_invoice_admission_patient_release',{'invoice':entity.invoice,'process':'cancel'}) }}" ><i class="fa fa-close"></i> Cancel</a></li>
+                                                    <li><a class="btn green confirm" href="javascript:" data-url="{{ path('hms_invoice_admission_patient_release',{'invoice':entity.invoice,'process':'confirm'}) }}" ><i class="icon-ok"></i> {{ entity.process }} Confirm</a></li>
+                                                </ul>
                                             {% endif %}
                                         {% endif %}
                                         {% if entity.paymentStatus != 'Paid' and  entity.process not in ['Release','Death','Released','Dead'] %}
-                                        <a class="btn red" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> Admitted Invoice</a>
+                                        <a class="btn purple" href="{{ path('hms_invoice_admission_daily_invoice',{'invoice':entity.invoice}) }}"><i class="icon-plus-sign"></i> Admitted Invoice</a>
                                         {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             {% endif %}

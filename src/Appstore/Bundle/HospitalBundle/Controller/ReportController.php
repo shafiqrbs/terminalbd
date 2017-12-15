@@ -51,6 +51,7 @@ class ReportController extends Controller
         $serviceOverview = $em->getRepository('HospitalBundle:Invoice')->findWithServiceOverview($user,$data);
         $transactionOverview = $em->getRepository('HospitalBundle:InvoiceTransaction')->findWithTransactionOverview($user,$data);
         $commissionOverview = $em->getRepository('HospitalBundle:Invoice')->findWithCommissionOverview($user,$data);
+
         return $this->render('HospitalBundle:Report:salesSumary.html.twig', array(
 
             'salesTotalTransactionOverview'      => $salesTotalTransactionOverview,

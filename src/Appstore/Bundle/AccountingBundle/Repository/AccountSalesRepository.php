@@ -92,7 +92,7 @@ class AccountSalesRepository extends EntityRepository
                 $qb->andWhere("e.transactionMethod = :transaction");
                 $qb->setParameter('transaction', $transaction);
             }
-           if (!empty($mobile)) {
+            if (!empty($mobile)) {
                 $qb->join('e.customer','c');
                 $qb->andWhere("c.mobile = :mobile");
                 $qb->setParameter('mobile', $mobile);

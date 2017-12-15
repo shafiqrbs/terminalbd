@@ -153,6 +153,13 @@ class InvoiceTransaction
      */
      private $transactionCode;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="revised", type="boolean" )
+     */
+    private $revised = false;
+
 
     /**
      * @var \DateTime
@@ -523,6 +530,22 @@ class InvoiceTransaction
     public function setTotal($total)
     {
         $this->total = $total;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getRevised()
+    {
+        return $this->revised;
+    }
+
+    /**
+     * @param bool $revised
+     */
+    public function setRevised($revised)
+    {
+        $this->revised = $revised;
     }
 
 

@@ -18,35 +18,18 @@ use Symfony\Component\Validator\Constraints\Date;
  * Customer controller.
  *
  */
-class DailyAttendanceController extends Controller
+class AttendanceController extends Controller
 {
 
-    public function paginate($entities)
-    {
 
-        $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $entities,
-            $this->get('request')->query->get('page', 1)/*page number*/,
-            50  /*limit per page*/
-        );
-        return $pagination;
-    }
-
-
-    /**
-     * Lists all Customer entities.
-     *
-     */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $data = $_REQUEST;
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('HumanResourceBundle:DailyAttendance')->attendanceYearMonth($globalOption,$data);
-        return $this->render('HumanResourceBundle:DailyAttendance:index.html.twig', array(
-            'entities' => $entities,
-            'searchForm' => $data,
+        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        return $this->render('HumanResourceBundle:Attendance:index.html.twig', array(
+            'globalOption'  => $globalOption,
+            'employees'     => $employees,
         ));
     }
 
@@ -127,18 +110,8 @@ class DailyAttendanceController extends Controller
         ));
     }
 
-    public function employeeList()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $globalOption = $this->getUser()->getGlobalOption();
-        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
-        return $this->render('HumanResourceBundle:DailyAttendance:employee.html.twig', array(
-            'globalOption'  => $globalOption,
-            'employees'     => $employees,
-        ));
-    }
 
-    public function employeeAttendance(User $user)
+    public function employeeDetailsAction(User $user)
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();

@@ -14,6 +14,14 @@ human_resource_attendance:
     resource: "@HumanResourceBundle/Resources/config/routing/attendance.yml"
     prefix:   /attendance
 
+human_resource_daily_attendance:
+    resource: "@HumanResourceBundle/Resources/config/routing/dailyattendance.yml"
+    prefix:   /daily-attendance
+
+human_resource_leave_setup:
+    resource: "@HumanResourceBundle/Resources/config/routing/leavesetup.yml"
+    prefix:   /leave-setup
+
 human_resource_homepage:
     path:     /hello/{name}
     defaults: { _controller: HumanResourceBundle:Default:index }

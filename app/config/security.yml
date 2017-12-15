@@ -152,6 +152,7 @@ security:
         - { path: ^/finance,            role: ROLE_ACCOUNTING }
         - { path: ^/hr/employee,        role: ROLE_USER }
         - { path: ^/hr,                 role: ROLE_HR }
+        - { path: ^/human-resource,     role: ROLE_HR }
         - { path: ^/payroll,            role: ROLE_PAYROLL }
         - { path: ^/inventory,          role: ROLE_INVENTORY }
         - { path: ^/hms,                role: ROLE_HOSPITAL }

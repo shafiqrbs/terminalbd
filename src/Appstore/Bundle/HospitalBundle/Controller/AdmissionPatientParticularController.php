@@ -139,11 +139,11 @@ class AdmissionPatientParticularController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $payment = $request->request->get('payment');
-        $transaction->setProcess('Done');
+        $transaction->setProcess('In-progress');
         $transaction->setPayment($payment);
         $em->persist($transaction);
         $em->flush();
-        foreach ($transaction->getAdmissionPatientParticulars() as $patientParticular ){
+        /*foreach ($transaction->getAdmissionPatientParticulars() as $patientParticular ){
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->insertInvoiceParticularMasterUpdate($patientParticular);
         }
         if($transaction->getPayment() > 0){
@@ -151,24 +151,32 @@ class AdmissionPatientParticularController extends Controller
         }
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($transaction->getHmsInvoice());
         $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($transaction->getHmsInvoice());
-        $this->getDoctrine()->getRepository('HospitalBundle:Particular')->admittedPatientAccessories($transaction);
+        $this->getDoctrine()->getRepository('HospitalBundle:Particular')->admittedPatientAccessories($transaction);*/
         return $this->redirect($this->generateUrl('hms_invoice_admission_confirm', array('id' => $transaction->getHmsInvoice()->getId())));
     }
 
-    public function invoiceTransactionDeleteAction(InvoiceTransaction $transaction)
+    public function invoiceTransactionDeleteAction($invoice ,InvoiceTransaction $transaction)
     {
         $em = $this->getDoctrine()->getManager();
-        if (!$transaction) {
+        $hospital = $this->getUser()->getGlobalOption()->getHospitalConfig();
+        $invoice = $em->getRepository('HospitalBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital,'invoice' => $invoice));
+        if (!$invoice) {
             throw $this->createNotFoundException('Unable to find Invoice entity.');
         }
+        if($transaction->getRevised() == 1 and !empty($transaction->getAdmissionPatientParticulars())){
+            /* @var $transaction InvoiceTransaction */
+            foreach ($transaction->getAdmissionPatientParticulars() as $patientParticular) {
+                $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->reverseInvoiceParticularMasterUpdate($patientParticular);
+            }
+        }
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($invoice);
+        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($invoice);
         $em->remove($transaction);
         $em->flush();
-        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updateInvoiceTotalPrice($transaction->getHmsInvoice());
-        $this->getDoctrine()->getRepository('HospitalBundle:Invoice')->updatePaymentReceive($transaction->getHmsInvoice());
         exit;
     }
 
-     public function invoiceTransactionApproveAction(InvoiceTransaction $transaction)
+    public function invoiceTransactionApproveAction(InvoiceTransaction $transaction)
     {
         $em = $this->getDoctrine()->getManager();
         if (!$transaction) {
@@ -178,8 +186,10 @@ class AdmissionPatientParticularController extends Controller
         $transaction->setProcess('Done');
         $em->persist($transaction);
         $em->flush();
-        foreach ($transaction->getAdmissionPatientParticulars() as $patientParticular ){
-            $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->insertInvoiceParticularMasterUpdate($patientParticular);
+        if(empty($transaction->getRevised())){
+            foreach ($transaction->getAdmissionPatientParticulars() as $patientParticular ){
+                $this->getDoctrine()->getRepository('HospitalBundle:InvoiceParticular')->insertInvoiceParticularMasterUpdate($patientParticular);
+            }
         }
         if($transaction->getPayment() > 0){
             $this->getDoctrine()->getRepository('HospitalBundle:InvoiceTransaction')->admissionInvoiceTransactionUpdate($transaction);

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LeavePolicy
  *
- * @ORM\Table(name="leave_policy")
+ * @ORM\Table(name="hr_leave_policy")
  * @ORM\Entity(repositoryClass="Appstore\Bundle\HumanResourceBundle\Repository\LeavePolicyRepository")
  */
 class LeavePolicy
@@ -20,6 +20,12 @@ class LeavePolicy
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\LeaveSetup", mappedBy="leavePolicy")
+     **/
+    protected $leaveSetup;
+
 
     /**
      * @var string
@@ -91,6 +97,14 @@ class LeavePolicy
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @return LeaveSetup
+     */
+    public function getLeaveSetup()
+    {
+        return $this->leaveSetup;
     }
 }
 

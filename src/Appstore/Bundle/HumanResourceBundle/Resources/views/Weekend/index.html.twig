@@ -5,7 +5,7 @@
         <div class="row-fluid">
             <div class="span12">
                 <h3 class="inventory_customer-title">
-                    Calendar Blackout
+                    Calendar Weekend Setup
                 </h3>
                 <ul class="breadcrumb">
                     <li>
@@ -13,7 +13,7 @@
                         <a href="{{ path('homepage') }}">Home</a>
                         <span class="icon-angle-right"></span>
                     </li>
-                    <li><a href="#">Calendar Blackout</a></li>
+                    <li><a href="#">Calendar Weekend Setup</a></li>
                     <li class="pull-right btn blue disabled mini">
                         <i class="fa fa-calendar"></i>
                         {{ "now"|date("d-F-Y") }}
@@ -26,26 +26,9 @@
         <div class="row-fluid">
             <div class="span12">
 
-                <div class="portlet box green tabbable">
+                <div class="portlet box green">
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Calendar Blackout</div>
-                        <div class="actions">
-                            <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('inventory_customer_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('inventory_customer') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                    {% if(entity.id > 0 ) %}
-                                        <li><a href="{{ path('inventory_customer_edit',{'id':entity.id}) }}"><i class="icon-edit"></i>&nbsp;Edit</a></li>
-                                        <li><a href="{{ path('inventory_customer_show',{'id':entity.id}) }}"><i class="icon-eye-open"></i>&nbsp;Show</a></li>
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        </div>
-
+                        <div class="caption"><i class="icon-reorder"></i>Calendar Weekend Setup</div>
                     </div>
 
                     <div class="portlet-body">
@@ -55,7 +38,7 @@
                             {{ form_start(form) }}
                             {{ form_row(form._token) }}
                             <div id="blackout"></div>
-                            {{ form_widget(form.blackoutDate) }}
+                            {{ form_widget(form.weekendDate) }}
                             <div class="clearfix"><br/></div>
                             <!--/span-->
                             <div class="form-actions portlet box grey">
@@ -113,21 +96,21 @@
     var y = today.getFullYear();
     {% if blackout is not empty %}
         $('#blackout').multiDatesPicker({
-            altField:'#appstore_bundle_domainuserbundle_blackout_blackoutDate',
+            altField:'#appstore_bundle_weekend_weekendDate',
             addDates: [{{ blackout|raw }}],
             numberOfMonths: [3,4],
             defaultDate: '1/1/'+y
         });
     {% else %}
         $('#blackout').multiDatesPicker({
-        altField:'#appstore_bundle_domainuserbundle_blackout_blackoutDate',
+        altField:'#appstore_bundle_weekend_weekendDate',
         numberOfMonths: [3,4],
         defaultDate: '1/1/'+y
         });
     {% endif %}
 
     $('.btn-dark').click(function(){
-        var blackout_date = $('#appstore_bundle_domainuserbundle_blackout_blackoutDate').val();
+        var blackout_date = $('#appstore_bundle_weekend_weekendDate').val();
         if(blackout_date ==""){
             alert('Error. You cannot select a date in the past. Please try again.');
             return false;
