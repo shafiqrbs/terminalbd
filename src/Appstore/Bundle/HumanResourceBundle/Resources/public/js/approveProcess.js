@@ -2,6 +2,11 @@
 $( ".date-picker" ).datepicker({
     dateFormat: "dd-mm-yy"
 });
+var dateToday = new Date();
+$( ".datePicker" ).datepicker({
+    dateFormat: "dd-mm-yy",
+    minDate: dateToday
+});
 
 $( ".dateCalendar" ).datepicker({
     dateFormat: "dd-mm-yy",
@@ -9,6 +14,69 @@ $( ".dateCalendar" ).datepicker({
     changeYear: true,
     yearRange: "-100:+0",
 });
+
+$(document).on( "click", "#show", function(e){
+    $('#hide').slideToggle(2000);
+    $("i", this).toggleClass("fa fa-angle-double-up fa fa-angle-double-down");
+});
+
+
+$(document).on("click", ".confirmSubmit", function() {
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $('form').submit();
+        }
+    });
+
+});
+
+$(document).on("click", ".confirm", function() {
+    var url = $(this).attr('data-url');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                location.reload();
+            });
+        }
+    });
+});
+
+
+
+$(document).on("click", ".delete", function() {
+    var id = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                location.reload();
+            });
+        }
+    });
+});
+
+
+$(document).on("click", ".approve", function() {
+    $(this).removeClass('approve');
+    var id = $(this).attr("data-id");
+    var url = $(this).attr("data-url");
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( data ) {
+                location.reload();
+            });
+        }
+    });
+});
+
 
 
 var table = $('#attendance').DataTable( {

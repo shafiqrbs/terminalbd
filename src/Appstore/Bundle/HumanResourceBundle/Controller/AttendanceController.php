@@ -5,6 +5,8 @@ namespace Appstore\Bundle\HumanResourceBundle\Controller;
 use Appstore\Bundle\DomainUserBundle\Entity\HrAttendance;
 use Appstore\Bundle\DomainUserBundle\Entity\HrAttendanceMonth;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
+use Appstore\Bundle\HumanResourceBundle\Entity\EmployeeLeave;
+use Appstore\Bundle\HumanResourceBundle\Form\EmployeeLeaveType;
 use Core\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,8 +44,8 @@ class AttendanceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $blackoutdate ='';
         $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
+        $blackoutdate ='';
         $calendarBlackout = $em->getRepository('HumanResourceBundle:Weekend')->findOneBy(array('globalOption' => $globalOption));
         $blackOutDate =  $calendarBlackout ->getWeekendDate();
         if($blackOutDate){
@@ -57,70 +59,125 @@ class AttendanceController extends Controller
 
     }
 
-
-    public function addAttendanceAction(User $user)
+    public function employeeDetailsAction(User $user)
     {
-        $present = $_REQUEST['present'];
         $em = $this->getDoctrine()->getManager();
-        $datetime = new \DateTime("now");
-        $today  = $datetime->format('d');
-        $month  = $datetime->format('F');
-        $year   = $datetime->format('Y');
-        $this->getDoctrine()->getRepository('HumanResourceBundle:DailyAttendance')->findOneBy(array('user' => $user));
+        $entity = new EmployeeLeave();
+        $form = $this->createCreateForm($entity,$user->getId());
+        $globalOption = $this->getUser()->getGlobalOption();
+        $monthWiseAttendance = $em->getRepository('HumanResourceBundle:Attendance')->findBy(array('employee'=>$user),array('year'=>'DESC','month'=>'ASC'));
+        $leaveTypeWiseAbsence = $em->getRepository('HumanResourceBundle:EmployeeLeave')->leaveTypeWiseAbsence($user);
+        $entities = $em->getRepository('HumanResourceBundle:EmployeeLeave')->findBy(array(),array('updated'=>'DESC'));
 
-        $entity = New DailyAttendance();
-        $entity->setUser($user);
-        $entity->setGlobalOption($user->getGlobalOption());
-        if($present > 0 ){
-            $entity->setPresent(true);
-            $entity->setPresentDay($present);
-            $entity->setPresentIn(true);
-            $entity->setPresentOut(true);
-        }else{
-            $entity->setPresent(false);
-            $entity->setPresentDay(null);
-            $entity->setPresentIn(true);
-            $entity->setPresentOut(true);
-        }
-        $entity->setMonth($month);
-        $entity->setYear($year);
-        $em->persist($entity);
-        $em->flush();
-        exit;
-
+        return $this->render('HumanResourceBundle:Attendance:employeeDetails.html.twig', array(
+            'user'  => $user,
+            'entities'  => $entities,
+            'monthWiseAttendance'     => $monthWiseAttendance,
+            'leaveTypeWiseAbsence'     => $leaveTypeWiseAbsence,
+            'form'   => $form->createView(),
+        ));
     }
 
-    public function showAction($month,$year)
+    /**
+     * Creates a form to create a Vendor entity.
+     *
+     * @param Vendor $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(EmployeeLeave $entity,$user)
     {
-        $showMonth = new \DateTime("$month $year");
+        $option = $this->getUser()->getGlobalOption();
+        $form = $this->createForm(new EmployeeLeaveType($option), $entity, array(
+            'action' => $this->generateUrl('attendance_user_create',array('user'=> $user)),
+            'method' => 'POST',
+            'attr' => array(
+                'class' => 'horizontal-form',
+                'novalidate' => 'novalidate',
+            )
+        ));
+        return $form;
+    }
+
+    public function employeeLeaveCreateAction(Request $request ,User $user)
+    {
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $this->getUser()->getGlobalOption();
+        $entity = new EmployeeLeave();
+        $global = $this->getUser()->getGlobalOption();
+        $form = $this->createCreateForm($entity,$user->getId());
+        $form->handleRequest($request);
+        $startDate = $entity->getStartDate();
+        $endDate = $entity->getEndDate();
+        $start = new \DateTime("$startDate");
+        $end = new \DateTime("$endDate");
+        $interval = $start->diff($end);
+        $offDay = $interval->format('%a');
+
+        $leaveDay = $em->getRepository('HumanResourceBundle:EmployeeLeave')->leaveTypeWiseAbsence($user,$entity->getLeaveSetup()->getId());
+        if(!empty($leaveDay)){
+            $remaining = $leaveDay['offDay'] + (int)$offDay;
+        }else{
+            $remaining = (int)$offDay;
+        }
+        $datetime = new \DateTime("now");
+        if ($form->isValid() and $entity->getLeaveSetup()->getOffDay() >= $remaining) {
+            $em = $this->getDoctrine()->getManager();
+            $entity->setGlobalOption($global);
+            $entity->setEmployee($user);
+            $entity->setYear($datetime->format('Y'));
+            $entity->setStartDate($start);
+            $entity->setEndDate($end);
+            $entity->setNoOffDay($offDay);
+            $em->persist($entity);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been inserted successfully"
+            );
+            return $this->redirect($this->generateUrl('attendance_user', array('user' => $user->getId())));
+        }
+        $this->get('session')->getFlashBag()->add(
+            'notice',$entity->getLeaveSetup()->getName() ."leave is not available"
+        );
+        $monthWiseAttendance = $em->getRepository('HumanResourceBundle:DailyAttendance')->monthWiseAttendance($user);
+        $leaveTypeWiseAbsence = $em->getRepository('HumanResourceBundle:EmployeeLeave')->leaveTypeWiseAbsence($user);
+        $entities = $em->getRepository('HumanResourceBundle:EmployeeLeave')->findBy(array(),array('updated'=>'DESC'));
+        return $this->render('HumanResourceBundle:Attendance:employeeDetails.html.twig', array(
+            'user'  => $user,
+            'entities'     => $entities,
+            'monthWiseAttendance'     => $monthWiseAttendance,
+            'leaveTypeWiseAbsence'     => $leaveTypeWiseAbsence,
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        ));
+    }
+
+    public function employeeLeaveApproveAction(EmployeeLeave $leave)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $leave->setApprovedBy($this->getUser());
+        $em->persist($leave);
+        $em->flush();
+
         $blackoutdate ='';
-        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
-        $calendarBlackout = $em->getRepository('HumanResourceBundle:Weekend')->findOneBy(array('globalOption' => $globalOption));
+        $calendarBlackout = $em->getRepository('HumanResourceBundle:Weekend')->findOneBy(array('globalOption' => $leave->getGlobalOption()));
         $blackOutDate =  $calendarBlackout ->getWeekendDate();
         if($blackOutDate){
             $blackoutdate = (array_map('trim',array_filter(explode(',',$blackOutDate))));
         }
-        return $this->render('HumanResourceBundle:DailyAttendance:show.html.twig', array(
-            'showMonth' => $showMonth,
-            'globalOption'  => $globalOption,
-            'employees'     => $employees,
-            'blackoutdate'  => $blackoutdate,
-        ));
+
+        $em->getRepository('HumanResourceBundle:Attendance')->leaveAttendance($leave,$blackoutdate);
+
+        exit;
     }
 
-
-    public function employeeDetailsAction(User $user)
+    public function employeeLeaveDeleteAction(EmployeeLeave $leave)
     {
         $em = $this->getDoctrine()->getManager();
-        $globalOption = $this->getUser()->getGlobalOption();
-        $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
-        return $this->render('HumanResourceBundle:DailyAttendance:employee.html.twig', array(
-            'globalOption'  => $globalOption,
-            'employees'     => $employees,
-        ));
+        $em->remove($leave);
+        $em->flush();
+        exit;
     }
+
 
 
 
@@ -140,6 +197,7 @@ class AttendanceController extends Controller
     {
 
     }
+
 
 
 }

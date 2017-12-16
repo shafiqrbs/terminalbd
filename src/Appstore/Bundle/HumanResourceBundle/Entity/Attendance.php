@@ -29,10 +29,14 @@ class Attendance
     protected $globalOption;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="userAttendance")
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="employeeAttendance")
      **/
-    private  $user;
+    private  $employee;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance", mappedBy="attendance")
+     **/
+    protected $dailyAttendance;
 
     /**
      * @var string
@@ -47,6 +51,20 @@ class Attendance
      * @ORM\Column(name="month", type="string", length=30, nullable =true)
      */
     private $month;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="totalDay", type="smallint", length=3, nullable =true)
+     */
+    private $totalDay;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="weekend", type="smallint", length=3, nullable =true)
+     */
+    private $weekend;
 
     /**
      * @var integer
@@ -70,22 +88,6 @@ class Attendance
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param User $user
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
     }
 
     /**
@@ -167,5 +169,73 @@ class Attendance
     public function setPresent($present)
     {
         $this->present = $present;
+    }
+
+    /**
+     * @return User
+     */
+    public function getEmployee()
+    {
+        return $this->employee;
+    }
+
+    /**
+     * @param User $employee
+     */
+    public function setEmployee($employee)
+    {
+        $this->employee = $employee;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWeekend()
+    {
+        return $this->weekend;
+    }
+
+    /**
+     * @param string $weekend
+     */
+    public function setWeekend($weekend)
+    {
+        $this->weekend = $weekend;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTotalDay()
+    {
+        return $this->totalDay;
+    }
+
+    /**
+     * @param string $totalDay
+     */
+    public function setTotalDay($totalDay)
+    {
+        $this->totalDay = $totalDay;
+    }
+
+    /**
+     * @return DailyAttendance
+     */
+    public function getDailyAttendance()
+    {
+        return $this->dailyAttendance;
+    }
+
+    public function monthlyPresentDays()
+    {
+        $presents = array();
+
+        /* @var $row DailyAttendance */
+
+        foreach ($this->getDailyAttendance() as $row ){
+            $presents[] = $row->getPresentDay();
+        }
+        return $presents;
     }
 }

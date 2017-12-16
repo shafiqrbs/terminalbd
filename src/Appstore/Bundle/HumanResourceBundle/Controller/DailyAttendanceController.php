@@ -4,6 +4,7 @@ namespace Appstore\Bundle\HumanResourceBundle\Controller;
 
 use Appstore\Bundle\DomainUserBundle\Entity\HrAttendance;
 use Appstore\Bundle\DomainUserBundle\Entity\HrAttendanceMonth;
+use Appstore\Bundle\HumanResourceBundle\Entity\Attendance;
 use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
 use Core\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -60,22 +61,26 @@ class DailyAttendanceController extends Controller
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
         $blackoutdate ='';
+
         $employees = $em->getRepository('UserBundle:User')->getEmployees($globalOption);
         $calendarBlackout = $em->getRepository('HumanResourceBundle:Weekend')->findOneBy(array('globalOption' => $globalOption));
         $blackOutDate =  $calendarBlackout ->getWeekendDate();
         if($blackOutDate){
             $blackoutdate = (array_map('trim',array_filter(explode(',',$blackOutDate))));
         }
+        $this->getDoctrine()->getRepository('HumanResourceBundle:Attendance')->setupMonthlyAttendance($employees,$blackoutdate);
+        $currentMonthEmployeeAttendance = $this->getDoctrine()->getRepository('HumanResourceBundle:Attendance')->currentMonthEmployeeAttendance($globalOption);
         return $this->render('HumanResourceBundle:DailyAttendance:attendance.html.twig', array(
-            'globalOption'  => $globalOption,
-            'employees'     => $employees,
-            'blackoutdate'  => $blackoutdate,
+            'globalOption'                          => $globalOption,
+            'employees'                             => $employees,
+            'currentMonthEmployeeAttendance'        => $currentMonthEmployeeAttendance,
+            'blackoutdate'                          => $blackoutdate,
         ));
 
     }
 
 
-    public function addAttendanceAction(User $user)
+    public function addAttendanceAction(Attendance $attendance)
     {
         $present = $_REQUEST['present'];
         $em = $this->getDoctrine()->getManager();
@@ -83,11 +88,11 @@ class DailyAttendanceController extends Controller
         $today  = $datetime->format('d');
         $month  = $datetime->format('F');
         $year   = $datetime->format('Y');
-        $this->getDoctrine()->getRepository('HumanResourceBundle:DailyAttendance')->findOneBy(array('user' => $user));
 
         $entity = New DailyAttendance();
-        $entity->setUser($user);
-        $entity->setGlobalOption($user->getGlobalOption());
+        $entity->setAttendance($attendance);
+        $entity->setUser($attendance->getEmployee());
+        $entity->setGlobalOption($attendance->getGlobalOption());
         if($present > 0 ){
             $entity->setPresent(true);
             $entity->setPresentDay($present);
@@ -103,6 +108,7 @@ class DailyAttendanceController extends Controller
         $entity->setYear($year);
         $em->persist($entity);
         $em->flush();
+        $this->getDoctrine()->getRepository('HumanResourceBundle:Attendance')->employeeTotalPresentDay($attendance);
         exit;
 
     }

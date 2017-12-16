@@ -9,7 +9,7 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  * LeaveSetup
  *
  * @ORM\Table(name="hr_leave_setup")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\HumanResourceBundle\Repository\LeavePolicyRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\HumanResourceBundle\Repository\LeaveSetupRepository")
  */
 class LeaveSetup
 {
@@ -159,6 +159,12 @@ class LeaveSetup
     public function setGlobalOption($globalOption)
     {
         $this->globalOption = $globalOption;
+    }
+
+    public function leaveOffDay()
+    {
+        $leaveOffDay = $this->getName().'('.$this->getOffDay().')';
+        return $leaveOffDay;
     }
 
 }

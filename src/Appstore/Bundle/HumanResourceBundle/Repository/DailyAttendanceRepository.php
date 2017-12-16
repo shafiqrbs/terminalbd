@@ -1,7 +1,10 @@
 <?php
 
 namespace Appstore\Bundle\HumanResourceBundle\Repository;
-use Appstore\Bundle\DomainUserBundle\Entity\CustomerInbox;
+use Appstore\Bundle\HumanResourceBundle\Entity\Attendance;
+use Appstore\Bundle\HumanResourceBundle\Entity\DailyAttendance;
+use Appstore\Bundle\HumanResourceBundle\Entity\EmployeeLeave;
+use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 
@@ -13,11 +16,6 @@ use Setting\Bundle\ToolBundle\Entity\GlobalOption;
  */
 class DailyAttendanceRepository extends EntityRepository
 {
-    public function searchAutoComplete()
-    {
-
-
-    }
 
     public function attendanceYearMonth(GlobalOption $option)
     {
@@ -32,5 +30,47 @@ class DailyAttendanceRepository extends EntityRepository
         return $result;
 
     }
+
+    public function monthWiseAttendance(User $user)
+    {
+
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('e.year AS year ,e.month AS month, sum(e.present) AS present');
+        $qb->where('e.user = :employee')->setParameter('employee', $user->getId());
+        $qb->groupBy('e.year','e.month');
+        $qb->orderBy('e.year','DESC');
+        $qb->orderBy('e.month','ASC');
+        $result = $qb->getQuery()->getArrayResult();
+        return $result;
+
+    }
+
+    public function leaveAttendance(EmployeeLeave $leave,Attendance $attendance,\DateTime $datetime)
+    {
+
+        $em = $this->_em;
+        $today  = $datetime->format('d');
+        $month  = $datetime->format('F');
+        $year   = $datetime->format('Y');
+
+        $entity = New DailyAttendance();
+        $entity->setAttendance($attendance);
+        $entity->setUser($leave->getEmployee());
+        $entity->setGlobalOption($leave->getGlobalOption());
+        $entity->setEmployeeLeave($leave);
+        $entity->setPresent(false);
+        $entity->setPresentDay($today);
+        $entity->setPresentIn(false);
+        $entity->setPresentOut(false);
+        $entity->setMonth($month);
+        $entity->setYear($year);
+        $em->persist($entity);
+        $em->flush();
+        $this->_em->getRepository('HumanResourceBundle:Attendance')->employeeTotalPresentDay($attendance);
+        exit;
+
+    }
+
+
 
 }

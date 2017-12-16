@@ -57,10 +57,10 @@
                                         </div>
                                     </td>
                                 {% endfor %}
-                                <th class="numeric" >Yes</th>
+                                <th>Yes</th>
                             </tr>
                             </thead>
-                            <tbody>
+                           {# <tbody>
                             {% for user in employees  %}
                                 <tr>
                                 <th class=""><span class="">{{ user.profile.name }}<br/><sub>{{ user.profile.designation.name }}</sub></span></th>
@@ -78,6 +78,26 @@
                                 {% endfor %}
                                 <td>{{ user.monthlyPresentDay(year,currentMonth) }}</td>
                             </tr>
+                            {% endfor %}
+                            </tbody>#}
+                            <tbody>
+                            {% for entity in currentMonthEmployeeAttendance  %}
+                                <tr>
+                                    <th class=""><span class="">{{ entity.employee.profile.name }}<br/><sub>{{ entity.employee.profile.designation.name }}</sub></span></th>
+                                    {% for i in 1..max %}
+                                        {% set blackO = date(month~i)|date('m/d/Y') %}
+                                        {% if blackO  in  blackoutdate %}
+                                            <td class="red" >&nbsp;</td>
+                                        {% else %}
+                                            <td>
+                                    <span class="row-fluid pull-center">
+                                    <input type="checkbox" data-id="{{ i }}" {% if i != today %} disabled {% endif %} id="{{ i }}" {% if i in entity.monthlyPresentDays %} checked="checked" {% endif %} class="attendance" data-url="{{ path('daily_attendance_add',{'id':entity.id}) }}" name="present"  value="{{ i }}" >
+                                    </span>
+                                            </td>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <td class="text-center">{{ entity.present }}</td>
+                                </tr>
                             {% endfor %}
                             </tbody>
                         </table>

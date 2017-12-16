@@ -20,7 +20,7 @@ daily_attendance_menual_create:
     methods:  POST
 
 daily_attendance_add:
-    path:     /{user}/add
+    path:     /{id}/add
     defaults: { _controller: "HumanResourceBundle:DailyAttendance:addAttendance" }
     options:
            expose: true

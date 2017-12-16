@@ -29,6 +29,17 @@ class DailyAttendance
     protected $globalOption;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\EmployeeLeave", inversedBy="dailyAttendance")
+     **/
+    protected $employeeLeave;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HumanResourceBundle\Entity\Attendance", inversedBy="dailyAttendance")
+     **/
+    protected $attendance;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="userAttendance")
      **/
     private  $user;
@@ -70,6 +81,7 @@ class DailyAttendance
      */
     private $updated;
 
+
     /**
      * @var boolean
      *
@@ -99,22 +111,6 @@ class DailyAttendance
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return Attendance
-     */
-    public function getHrAttendance()
-    {
-        return $this->hrAttendance;
-    }
-
-    /**
-     * @param Attendance $hrAttendance
-     */
-    public function setHrAttendance($hrAttendance)
-    {
-        $this->hrAttendance = $hrAttendance;
     }
 
     /**
@@ -276,5 +272,38 @@ class DailyAttendance
     public function setPresentOut($presentOut)
     {
         $this->presentOut = $presentOut;
+    }
+
+    /**
+     * @return Attendance
+     */
+    public function getAttendance()
+    {
+        return $this->attendance;
+    }
+
+    /**
+     * @param Attendance $attendance
+     */
+    public function setAttendance($attendance)
+    {
+        $this->attendance = $attendance;
+    }
+
+
+    /**
+     * @return EmployeeLeave
+     */
+    public function getEmployeeLeave()
+    {
+        return $this->employeeLeave;
+    }
+
+    /**
+     * @param EmployeeLeave $employeeLeave
+     */
+    public function setEmployeeLeave($employeeLeave)
+    {
+        $this->employeeLeave = $employeeLeave;
     }
 }

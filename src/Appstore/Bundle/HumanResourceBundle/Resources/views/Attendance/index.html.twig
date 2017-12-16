@@ -58,8 +58,7 @@
                                         <td class="numeric" >{{ user.profile.mobile }}</td>
                                         <td class="numeric" >{{ user.profile.joiningDate|date('d-m-Y') }}</td>
                                         <td class="numeric" >
-                                            <a href="{{ path('attendance_user',{'user':user.id}) }}" class="btn blue mini" ><i class="icon-eye-open"></i>&nbsp;View</a>
-                                            <a href="{{ path('leave',{'user':user.id}) }}" class="btn red mini" ><i class="fa fa-sign-out"></i>&nbsp;Manage Leave</a>
+                                            <a href="{{ path('attendance_user',{'user':user.id}) }}" class="btn red mini" ><i class="fa fa-sign-out"></i>&nbsp;Manage Leave</a>
                                         </td>
                                     </tr>
                                 {% endfor %}
