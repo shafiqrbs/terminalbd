@@ -73,18 +73,16 @@ class AttendanceRepository extends EntityRepository
             }
             $totalNumberOfDays = cal_days_in_month(CAL_GREGORIAN, $monthNumber, $year);
             $monthWeekend = count(array_intersect($weekend, $dates));
-
-
             $attendance = $this->findOneBy(array('globalOption' => $leave->getGlobalOption(), 'employee' => $leave->getEmployee(), 'month' => $month, 'year' => $year));
             if(empty($attendance)){
-                $entity = new Attendance();
-                $entity->setYear($year);
-                $entity->setMonth($month);
-                $entity->setGlobalOption($leave->getGlobalOption());
-                $entity->setEmployee($leave->getEmployee());
-                $entity->setTotalDay($totalNumberOfDays);
-                $entity->setWeekend($monthWeekend);
-                $this->_em->persist($entity);
+                $attendance = new Attendance();
+                $attendance->setYear($year);
+                $attendance->setMonth($month);
+                $attendance->setGlobalOption($leave->getGlobalOption());
+                $attendance->setEmployee($leave->getEmployee());
+                $attendance->setTotalDay($totalNumberOfDays);
+                $attendance->setWeekend($monthWeekend);
+                $this->_em->persist($attendance);
                 $this->_em->flush();
             }
             $this->_em->getRepository('HumanResourceBundle:DailyAttendance')->leaveAttendance($leave,$attendance,$datetime);
