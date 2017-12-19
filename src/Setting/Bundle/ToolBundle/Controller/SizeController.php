@@ -27,6 +27,27 @@ class SizeController extends Controller
      */
     public function indexAction()
     {
+
+
+        $a = 0;
+        $em = $this->getDoctrine()->getManager();
+        for( $i = 0; $i < 100; $i++ ) {
+       // for( $i = 0; $i < 200; $i++ ) {
+           // $a += 5;
+            $entity = $em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('isValid'=>1,'name'=> $i));
+            if(empty($entity)) {
+                $entity = new ItemSize();
+                $entity->setName($i);
+                $entity->setStatus(true);
+                $entity->setIsValid(true);
+                $em->persist($entity);
+            }
+            $em->flush();
+        }
+
+        exit;
+
+
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('InventoryBundle:ItemSize')->findBy(array('isValid'=>1),array('code'=>'asc'));
         return $this->render('SettingToolBundle:Size:index.html.twig', array(
@@ -45,8 +66,6 @@ class SizeController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-            $entity->setInventoryConfig($inventory);
             $entity->setStatus(false);
             $em->persist($entity);
             $em->flush();
@@ -71,9 +90,7 @@ class SizeController extends Controller
      */
     private function createCreateForm(ItemSize $entity)
     {
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
-        $form = $this->createForm(new SizeType($em,$inventory), $entity, array(
+        $form = $this->createForm(new SizeType(), $entity, array(
             'action' => $this->generateUrl('size_create'),
             'method' => 'POST',
             'attr' => array(
@@ -149,9 +166,7 @@ class SizeController extends Controller
     */
     private function createEditForm(ItemSize $entity)
     {
-        $inventory = $this->getUser()->getGlobalOption()->getInventoryConfig();
-        $em = $this->getDoctrine()->getRepository('ProductProductBundle:Category');
-        $form = $this->createForm(new SizeType($em,$inventory), $entity, array(
+         $form = $this->createForm(new SizeType(), $entity, array(
             'action' => $this->generateUrl('size_update', array('id' => $entity->getId())),
             'method' => 'PUT',
             'attr' => array(
@@ -216,6 +231,24 @@ class SizeController extends Controller
             );
         }
         return $this->redirect($this->generateUrl('size'));
+    }
+
+    public function autoInsertAction()
+    {
+        $a = 0;
+        $em = $this->getDoctrine()->getManager();
+        for( $i = 0; $i <= 20; $i++ ) {
+            $a += 5;
+            $entity = new ItemSize();
+            $entity->setName($a);
+            $entity->setStatus(true);
+            $entity->setIsValid(true);
+            //$em->persist($entity);
+        }
+
+        exit;
+        //$em->flush();
+
     }
 
 

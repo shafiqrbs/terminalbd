@@ -13,16 +13,6 @@ class SizeType extends AbstractType
 {
 
 
-    /** @var  CategoryRepository */
-    private $em;
-
-    function __construct(CategoryRepository $em)
-    {
-        $this->em = $em;
-
-    }
-
-
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
