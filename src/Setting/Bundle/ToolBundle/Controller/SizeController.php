@@ -31,13 +31,12 @@ class SizeController extends Controller
 
         $a = 0;
         $em = $this->getDoctrine()->getManager();
-        for( $i = 0; $i < 100; $i++ ) {
-       // for( $i = 0; $i < 200; $i++ ) {
-           // $a += 5;
-            $entity = $em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('isValid'=>1,'name'=> $i));
+        for( $i = 0; $i < 200; $i++ ) {
+            $a += 5;
+            $entity = $em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('isValid'=>1,'name'=>$a));
             if(empty($entity)) {
                 $entity = new ItemSize();
-                $entity->setName($i);
+                $entity->setName($a);
                 $entity->setStatus(true);
                 $entity->setIsValid(true);
                 $em->persist($entity);
