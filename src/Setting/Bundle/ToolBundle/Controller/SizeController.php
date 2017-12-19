@@ -21,6 +21,18 @@ use Setting\Bundle\ToolBundle\Form\SizeType;
 class SizeController extends Controller
 {
 
+
+    public function paginate($entities)
+    {
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $entities,
+            $this->get('request')->query->get('page', 1)/*page number*/,
+            20  /*limit per page*/
+        );
+        return $pagination;
+    }
+
     /**
      * Lists all ItemSize entities.
      * @Secure(roles="ROLE_ADMIN")
@@ -28,27 +40,9 @@ class SizeController extends Controller
     public function indexAction()
     {
 
-
-        $a = 0;
-        $em = $this->getDoctrine()->getManager();
-        for( $i = 0; $i < 200; $i++ ) {
-            $a += 5;
-            $entity = $em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('isValid'=>1,'name'=>$a));
-            if(empty($entity)) {
-                $entity = new ItemSize();
-                $entity->setName($a);
-                $entity->setStatus(true);
-                $entity->setIsValid(true);
-                $em->persist($entity);
-            }
-            $em->flush();
-        }
-
-        exit;
-
-
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('InventoryBundle:ItemSize')->findBy(array('isValid'=>1),array('code'=>'asc'));
+        $entities = $this->paginate($entities);
         return $this->render('SettingToolBundle:Size:index.html.twig', array(
             'entities' => $entities,
         ));
@@ -234,19 +228,23 @@ class SizeController extends Controller
 
     public function autoInsertAction()
     {
+
         $a = 0;
         $em = $this->getDoctrine()->getManager();
-        for( $i = 0; $i <= 20; $i++ ) {
+        for( $i = 0; $i < 200; $i++ ) {
             $a += 5;
-            $entity = new ItemSize();
-            $entity->setName($a);
-            $entity->setStatus(true);
-            $entity->setIsValid(true);
-            //$em->persist($entity);
+            $entity = $em->getRepository('InventoryBundle:ItemSize')->findOneBy(array('isValid'=>1,'name'=>$a));
+            if(empty($entity)) {
+                $entity = new ItemSize();
+                $entity->setName($a);
+                $entity->setStatus(true);
+                $entity->setIsValid(true);
+                $em->persist($entity);
+            }
+            $em->flush();
         }
 
-        exit;
-        //$em->flush();
+
 
     }
 
