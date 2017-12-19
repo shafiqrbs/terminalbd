@@ -43,6 +43,7 @@ class AccessoriesController extends Controller
         return $this->render('HospitalBundle:Accessories:index.html.twig', array(
             'pagination' => $pagination,
             'entity' => $entity,
+            'formShow'            => 'hide',
             'form'   => $form->createView(),
         ));
 
@@ -56,7 +57,7 @@ class AccessoriesController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 8),array('name'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getAccessoriesParticular($config);
         $pagination = $this->paginate($entities);
         $entity = new Particular();
         $form = $this->createCreateForm($entity);
@@ -80,6 +81,7 @@ class AccessoriesController extends Controller
         return $this->render('HospitalBundle:Accessories:index.html.twig', array(
             'entity' => $entity,
             'pagination' => $pagination,
+            'formShow'            => 'show',
             'form'   => $form->createView(),
         ));
     }
@@ -115,7 +117,7 @@ class AccessoriesController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 4),array('name'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getAccessoriesParticular($config);
         $pagination = $this->paginate($entities);
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');
@@ -124,6 +126,7 @@ class AccessoriesController extends Controller
         return $this->render('HospitalBundle:Accessories:index.html.twig', array(
             'pagination'        => $pagination,
             'entity'            => $entity,
+            'formShow'            => 'show',
             'form'              => $editForm->createView(),
         ));
     }
@@ -156,7 +159,7 @@ class AccessoriesController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $entities = $em->getRepository('HospitalBundle:Particular')->findBy(array('hospitalConfig' => $config,'service'=> 8),array('name'=>'ASC'));
+        $entities = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getAccessoriesParticular($config);
         $pagination = $this->paginate($entities);
         $entity = $em->getRepository('HospitalBundle:Particular')->find($id);
 
@@ -178,6 +181,7 @@ class AccessoriesController extends Controller
         return $this->render('HospitalBundle:Accessories:index.html.twig', array(
             'pagination'      => $pagination,
             'entity'      => $entity,
+            'formShow'            => 'show',
             'form'   => $editForm->createView(),
         ));
     }

@@ -32,52 +32,18 @@ $(document).on("click", ".confirmSubmit", function() {
 
 });
 
-$(document).on("click", ".confirm", function() {
+$(document).on("click", ".confirm , .approve , .delete ", function() {
     var url = $(this).attr('data-url');
     $('#confirm-content').confirmModal({
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
             $.get(url, function( data ) {
-                location.reload();
+               /* location.reload();*/
             });
         }
     });
 });
-
-
-
-$(document).on("click", ".delete", function() {
-    var id = $(this).attr("data-id");
-    var url = $(this).attr("data-url");
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url, function( data ) {
-                location.reload();
-            });
-        }
-    });
-});
-
-
-$(document).on("click", ".approve", function() {
-    $(this).removeClass('approve');
-    var id = $(this).attr("data-id");
-    var url = $(this).attr("data-url");
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $.get(url, function( data ) {
-                location.reload();
-            });
-        }
-    });
-});
-
-
 
 var table = $('#attendance').DataTable( {
     scrollY:        "auto",

@@ -55,49 +55,42 @@ class AttendanceRepository extends EntityRepository
     public function leaveAttendance(EmployeeLeave $leave,$weekend)
     {
 
-        $noOfDay = $leave->getNoOffDay();
-        for ($i = 0; $i > $noOfDay; $i++) {
-
-            $date = $leave->getStartDate();
-            $datetime = new \DateTime("$date");
-            $datetime->modify('+' . $i . ' day');
-            $monthEndDay = $datetime->format('t');
-            $monthNumber = $datetime->format('m');
-            $month = $datetime->format('F');
-            $year = $datetime->format('Y');
-
-            $dates =array();
-            for($i = 1; $i <=  date($monthEndDay); $i++)
-            {
-                $dates[] = date('m') . "/" . str_pad($i, 2, '0', STR_PAD_LEFT) . "/" .date('Y');
+         $noOfDay = 4;
+         for ($i = 1; $i <= $noOfDay; $i++) {
+            $datetime = $leave->getStartDate();
+            if($i != 1){
+                $datetime->modify('+' . 1 . ' day');
             }
-            $totalNumberOfDays = cal_days_in_month(CAL_GREGORIAN, $monthNumber, $year);
-            $monthWeekend = count(array_intersect($weekend, $dates));
-            $attendance = $this->findOneBy(array('globalOption' => $leave->getGlobalOption(), 'employee' => $leave->getEmployee(), 'month' => $month, 'year' => $year));
-            if(empty($attendance)){
-                $attendance = new Attendance();
-                $attendance->setYear($year);
-                $attendance->setMonth($month);
-                $attendance->setGlobalOption($leave->getGlobalOption());
-                $attendance->setEmployee($leave->getEmployee());
-                $attendance->setTotalDay($totalNumberOfDays);
-                $attendance->setWeekend($monthWeekend);
-                $this->_em->persist($attendance);
-                $this->_em->flush();
-            }
-            $this->_em->getRepository('HumanResourceBundle:DailyAttendance')->leaveAttendance($leave,$attendance,$datetime);
-        }
+            $attendance = $this->findLeaveMonth($leave,$datetime,$weekend);
+            $this->_em->getRepository('HumanResourceBundle:DailyAttendance')->dailyLeaveAttendance($leave,$attendance,$datetime);
+         }
     }
 
-    public function findLeaveMonth(EmployeeLeave $leave,$month,$year){
+    public function findLeaveMonth(EmployeeLeave $leave,\DateTime $datetime,$weekend){
 
-        $attendance = $this->findOneBy(array('globalOption' => $leave->getGlobalOption(), 'employee' => $leave->getEmployee(),'month' => $month,'year' => $year));
-        if($attendance){
-            return $attendance;
+        $monthEndDay = $datetime->format('t');
+        $month = $datetime->format('F');
+        $year = $datetime->format('Y');
+
+        $dates =array();
+        for($i = 1; $i <=  date($monthEndDay); $i++)
+        {
+            $dates[] = date('m') . "/" . str_pad($i, 2, '0', STR_PAD_LEFT) . "/" .date('Y');
         }
-        return false;
-
-
+        $monthWeekend = count(array_intersect($weekend, $dates));
+        $attendance = $this->findOneBy(array('globalOption' => $leave->getGlobalOption(), 'employee' => $leave->getEmployee(), 'month' => $month, 'year' => $year));
+        if(empty($attendance)){
+            $attendance = new Attendance();
+            $attendance->setYear($year);
+            $attendance->setMonth($month);
+            $attendance->setGlobalOption($leave->getGlobalOption());
+            $attendance->setEmployee($leave->getEmployee());
+            $attendance->setTotalDay($monthEndDay);
+            $attendance->setWeekend($monthWeekend);
+            $this->_em->persist($attendance);
+            $this->_em->flush();
+        }
+        return $attendance;
     }
 
     public function currentMonthEmployeeAttendance(GlobalOption $option)
@@ -120,12 +113,10 @@ class AttendanceRepository extends EntityRepository
     {
 
         $qb = $this->createQueryBuilder('e');
-        $qb->select('e.year AS year ,e.month AS month ');
-        $qb->andWhere('e.month = :month')->setParameter('month',$month);
-        $qb->groupBy('e.year','e.month');
+        $qb->andWhere('e.employee = :employee')->setParameter('employee',$user);
         $qb->orderBy('e.year','DESC');
         $qb->orderBy('e.month','ASC');
-        $result = $qb->getQuery()->getArrayResult();
+        $result = $qb->getQuery()->getResult();
         return $result;
 
     }
@@ -136,6 +127,7 @@ class AttendanceRepository extends EntityRepository
         $qb->from('HumanResourceBundle:DailyAttendance','e');
         $qb->select('sum(e.present) AS present');
         $qb->where('e.attendance = :attendance')->setParameter('attendance', $attendance->getId());
+        $qb->andWhere('e.present = :present')->setParameter('present', 1);
         $result = $qb->getQuery()->getOneOrNullResult();
         $presentDay =  $result['present'];
         $attendance->setPresent($presentDay);

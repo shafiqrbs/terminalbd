@@ -43,6 +43,7 @@ class MedicineController extends Controller
         return $this->render('HospitalBundle:Medicine:index.html.twig', array(
             'pagination' => $pagination,
             'entity' => $entity,
+            'formShow'            => 'hide',
             'form'   => $form->createView(),
         ));
 
@@ -121,6 +122,7 @@ class MedicineController extends Controller
         return $this->render('HospitalBundle:Medicine:index.html.twig', array(
             'pagination'        => $pagination,
             'entity'            => $entity,
+            'formShow'            => 'show',
             'form'              => $editForm->createView(),
         ));
     }
@@ -175,6 +177,7 @@ class MedicineController extends Controller
         return $this->render('HospitalBundle:Medicine:index.html.twig', array(
             'pagination'      => $pagination,
             'entity'      => $entity,
+            'formShow'            => 'show',
             'form'   => $editForm->createView(),
         ));
     }

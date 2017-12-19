@@ -43,7 +43,7 @@
                         <div class="portlet-body form">
                             {% include('flash-message.html.twig')  %}
                             <!-- BEGIN FORM-->
-                            <div class="hide" id="hide">
+                            <div class="{{ formShow }}" id="hide">
                                 {{ form_start(form) }}
                                 {{ form_row(form._token) }}
                                 <div class="row-fluid" >
