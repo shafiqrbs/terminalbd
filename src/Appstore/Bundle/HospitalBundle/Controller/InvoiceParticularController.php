@@ -27,7 +27,7 @@ class InvoiceParticularController extends Controller
         $pagination = $paginator->paginate(
             $entities,
             $this->get('request')->query->get('page', 1)/*page number*/,
-            25  /*limit per page*/
+            50  /*limit per page*/
         );
         return $pagination;
     }
@@ -40,12 +40,13 @@ class InvoiceParticularController extends Controller
         $data = $_REQUEST;
         $user = $this->getUser();
         $hospital = $user->getGlobalOption()->getHospitalConfig();
-        $entities = $em->getRepository('HospitalBundle:Invoice')->invoicePathologicalReportLists( $user , $mode = 'diagnostic' , $data);
+       // $entities = $em->getRepository('HospitalBundle:Invoice')->invoicePathologicalReportLists( $user , $mode = 'diagnostic' , $data);
+        $entities = $em->getRepository('HospitalBundle:InvoiceParticular')->invoicePathologicalReportLists( $user , $mode = 'diagnostic' , $data);
         $pagination = $this->paginate($entities);
         $assignDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(5));
         $referredDoctors = $this->getDoctrine()->getRepository('HospitalBundle:Particular')->getFindWithParticular($hospital,array(6));
 
-        return $this->render('HospitalBundle:InvoiceParticular:index.html.twig', array(
+        return $this->render('HospitalBundle:InvoiceParticular:diagnostic.html.twig', array(
             'entities' => $pagination,
             'assignDoctors' => $assignDoctors,
             'referredDoctors' => $referredDoctors,

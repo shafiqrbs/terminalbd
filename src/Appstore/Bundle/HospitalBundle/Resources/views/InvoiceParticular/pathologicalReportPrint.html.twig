@@ -63,8 +63,9 @@
 
         </tr>
     </table>
+        <div>
         {% if entity.particular.reportFormat == 1 %}
-            <table class="table" style="margin-top:20px">
+            <table class="table" style="margin-top:20px;min-height:{{  entity.hmsInvoice.hospitalConfig.reportHeight }}px">
                 <tbody>
                 {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
                     <tr><td>
@@ -96,12 +97,12 @@
                 </tbody>
             </table>
         {% else %}
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped report-table" style="margin-top:20px;">
                 {% if entity.particular.pathologicalReports is defined and  entity.particular.pathologicalReports is not empty  %}
                 <thead class="flip-content ">
                 <tr class="head-black">
                     <th class="span3">Name</th>
-                    <th class="text-right span1">Result</th>
+                    <th class="span1">Result</th>
                     <th class="span2">Unit</th>
                     <th class="span4">Reference</th>
                 </tr>
@@ -143,7 +144,7 @@
                 </tbody>
             </table>
         {% endif %}
-
+        </div>
         <table class="table print-footer" style="margin-top:30px" >
             <tr><td colspan="3">&nbsp;</td></tr>
             <tr><td colspan="3">&nbsp;</td></tr>
@@ -178,7 +179,15 @@
             </tr>
         </table>
     </div>
-
+<style>
+    table.report-table {
+        display:inline-block;
+        width: 100%;
+        {% if entity.hmsInvoice.hospitalConfig.reportHeight  %}
+        min-height:{{ entity.hmsInvoice.hospitalConfig.reportHeight }}px;
+        {% endif %}
+    }
+</style>
 {% endblock %}
 {% block cssBlock %}
     {% stylesheets filter='cssrewrite'

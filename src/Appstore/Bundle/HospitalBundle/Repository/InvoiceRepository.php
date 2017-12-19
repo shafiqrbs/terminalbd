@@ -278,10 +278,8 @@ class InvoiceRepository extends EntityRepository
     public function invoicePathologicalReportLists(User $user , $mode , $data)
     {
         $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
-
         $qb = $this->createQueryBuilder('e');
         $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
-        $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $this->handleSearchBetween($qb,$data);
         $qb->andWhere("e.process IN (:process)");
         $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));

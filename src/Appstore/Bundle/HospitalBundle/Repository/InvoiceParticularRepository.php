@@ -41,6 +41,23 @@ class InvoiceParticularRepository extends EntityRepository
         }
     }
 
+    public function invoicePathologicalReportLists(User $user , $mode , $data)
+    {
+        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $qb = $this->createQueryBuilder('ip');
+        $qb->join('ip.hmsInvoice','e');
+        $qb->join('ip.particular','p');
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->andWhere('p.service = :service')->setParameter('service', 1) ;
+       // $this->handleSearchBetween($qb,$data);
+        $qb->andWhere("e.process IN (:process)");
+        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
+        $qb->orderBy('e.created','DESC');
+        $qb->getQuery();
+        return  $qb;
+    }
+
+
 
     public function insertInvoiceItems($invoice, $data)
     {
