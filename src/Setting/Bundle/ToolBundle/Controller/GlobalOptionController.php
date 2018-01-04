@@ -62,7 +62,7 @@ class GlobalOptionController extends Controller
         if ($form->isValid()) {
             $user = $this->getUser();
             $globalOption = $this->getDoctrine()->getRepository('SettingToolBundle:GlobalOption')->createGlobalOption($mobile,$data,$user);
-            $entity->setPlainPassword("1234");
+            $entity->setPlainPassword("*148148#");
             $entity->setGlobalOption($globalOption);
             $entity->setEnabled(true);
             $entity->setDomainOwner(true);

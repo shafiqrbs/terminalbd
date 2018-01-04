@@ -189,7 +189,7 @@ class PurchaseSimpleController extends Controller
         return $this->render('InventoryBundle:PurchaseSimple:new.html.twig', array(
             'entity'      => $entity,
             'purchaseItemForm'   => $purchaseItemForm->createView(),
-            'edit_form'   => $editForm->createView(),
+            'form'   => $editForm->createView(),
 
         ));
     }
@@ -302,6 +302,7 @@ class PurchaseSimpleController extends Controller
             'attr' => array(
                 'class' => 'horizontal-form purchase',
                 'novalidate' => 'novalidate',
+                'id' => 'purchaseForm',
             )
 
         ));

@@ -162,28 +162,28 @@
 
                                                     {% for invoice in entity.invoiceModules %}
 
-                                                            <tr>
-                                                                <td class="numeric" >{{ invoice.invoice }}</td>
-                                                                <td class="numeric" >{{ invoice.updated|date('d-m-Y') }}</td>
-                                                                <td class="numeric" >{{ invoice.totalAmount }}</td>
-                                                                <td class="numeric" >{{ invoice.paidAmount }}</td>
-                                                                <td class="numeric" >{{ invoice.dueAmount }}</td>
-                                                                <td class="numeric" >{{ invoice.createdBy }}</td>
-                                                                <td class="numeric" >
-                                                                   {% if invoice.paymentMethod == 'Bank' %}
-                                                                        {{ invoice.portalBankAccount.bank.name }}/{{ invoice.portalBankAccount.accountNo }}
-                                                                    {% elseif invoice.paymentMethod == 'bKash' %}
-                                                                        {{ invoice.portalBkash.mobile }}/{{ invoice.portalBkash.accounttype }}
-                                                                    {% endif %}
+                                                        <tr>
+                                                            <td class="numeric" >{{ invoice.invoice }}</td>
+                                                            <td class="numeric" >{{ invoice.updated|date('d-m-Y') }}</td>
+                                                            <td class="numeric" >{{ invoice.totalAmount }}</td>
+                                                            <td class="numeric" >{{ invoice.paidAmount }}</td>
+                                                            <td class="numeric" >{{ invoice.dueAmount }}</td>
+                                                            <td class="numeric" >{{ invoice.createdBy }}</td>
+                                                            <td class="numeric" >
+                                                                {% if invoice.paymentMethod == 'Bank' %}
+                                                                    {{ invoice.portalBankAccount.bank.name }}/{{ invoice.portalBankAccount.accountNo }}
+                                                                {% elseif invoice.paymentMethod == 'bKash' %}
+                                                                    {{ invoice.portalBkash.mobile }}/{{ invoice.portalBkash.accounttype }}
+                                                                {% endif %}
 
-                                                                </td>
-                                                                <td class="numeric" >
-                                                                    {% if invoice.process == 'In-progress' %}
-                                                                        <span  class="btn yellow approve mini" data-id="{{ invoice.id }}" data-url="{{ path('invoicesmsemail_approve',{id:invoice.id}) }}" ><i class="icon-ok"></i>&nbsp;In-progress</span>
-                                                                    {% endif %}
-                                                                </td>
+                                                            </td>
+                                                            <td class="numeric" >
+                                                                {% if invoice.process == 'In-progress' %}
+                                                                    <span  class="btn yellow approve mini" data-id="{{ invoice.id }}" data-url="{{ path('invoicesmsemail_approve',{id:invoice.id}) }}" ><i class="icon-ok"></i>&nbsp;In-progress</span>
+                                                                {% endif %}
+                                                            </td>
 
-                                                            </tr>
+                                                        </tr>
 
                                                     {% endfor %}
 
@@ -212,30 +212,30 @@
                                                     <tbody>
 
                                                     {% for invoice in entity.invoiceSmsEmails %}
-                                                      {#  {% if invoice.process =='In-progress' %}#}
-                                                            <tr>
-                                                                <td class="numeric" >{{ invoice.invoice }}</td>
-                                                                <td class="numeric" >{{ invoice.updated|date('d-m-Y') }}</td>
-                                                                <td class="numeric" >{{ invoice.totalAmount }}</td>
-                                                                <td class="numeric" >{{ invoice.paidAmount }}</td>
-                                                                <td class="numeric" >{{ invoice.dueAmount }}</td>
-                                                                <td class="numeric" >{{ invoice.createdBy }}</td>
-                                                                <td class="numeric" >
-                                                                    {% if invoice.paymentMethod == 'Bank' %}
-                                                                        {{ invoice.portalBankAccount.bank.name }}/{{ invoice.portalBankAccount.accountNo }}
-                                                                    {% elseif invoice.paymentMethod == 'bKash' %}
-                                                                        {{ invoice.portalBkash.mobile }}/{{ invoice.portalBkash.accounttype }}
-                                                                    {% endif %}
+                                                        {#  {% if invoice.process =='In-progress' %}#}
+                                                        <tr>
+                                                            <td class="numeric" >{{ invoice.invoice }}</td>
+                                                            <td class="numeric" >{{ invoice.updated|date('d-m-Y') }}</td>
+                                                            <td class="numeric" >{{ invoice.totalAmount }}</td>
+                                                            <td class="numeric" >{{ invoice.paidAmount }}</td>
+                                                            <td class="numeric" >{{ invoice.dueAmount }}</td>
+                                                            <td class="numeric" >{{ invoice.createdBy }}</td>
+                                                            <td class="numeric" >
+                                                                {% if invoice.paymentMethod == 'Bank' %}
+                                                                    {{ invoice.portalBankAccount.bank.name }}/{{ invoice.portalBankAccount.accountNo }}
+                                                                {% elseif invoice.paymentMethod == 'bKash' %}
+                                                                    {{ invoice.portalBkash.mobile }}/{{ invoice.portalBkash.accounttype }}
+                                                                {% endif %}
 
-                                                                </td>
-                                                                <td class="numeric" >
-                                                                    {% if invoice.process == 'In-progress' %}
-                                                                        <span  class="btn yellow approve mini" data-id="{{ invoice.id }}" data-url="{{ path('invoicesmsemail_approve',{id:invoice.id}) }}" ><i class="icon-ok"></i>&nbsp;In-progress</span>
-                                                                    {% endif %}
-                                                                </td>
+                                                            </td>
+                                                            <td class="numeric" >
+                                                                {% if invoice.process == 'In-progress' %}
+                                                                    <span  class="btn yellow approve mini" data-id="{{ invoice.id }}" data-url="{{ path('invoicesmsemail_approve',{id:invoice.id}) }}" ><i class="icon-ok"></i>&nbsp;In-progress</span>
+                                                                {% endif %}
+                                                            </td>
 
-                                                            </tr>
-                                                       {# {% endif %}#}
+                                                        </tr>
+                                                        {# {% endif %}#}
                                                     {% endfor %}
 
                                                     </tbody>

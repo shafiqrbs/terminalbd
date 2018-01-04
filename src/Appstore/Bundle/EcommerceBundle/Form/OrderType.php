@@ -35,7 +35,7 @@ class OrderType extends AbstractType
     {
         $builder
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12 tooltips', 'data-trigger' => 'hover','placeholder'=>'Enter sms content for order.','data-original-title'=>'Enter sms content for order.','autocomplete'=>'off')))
-            ->add('deliveryDate','date', array('attr'=>array('class'=>'m-wrap span12 tooltips', 'data-trigger' => 'hover','placeholder'=>'Receive your product date(Approximately)','data-original-title'=>'Please receive your product date(Approximately).',),
+            ->add('deliveryDate','date', array('attr'=>array('class'=>'m-wrap span12 tooltips datePicker', 'data-trigger' => 'hover','placeholder'=>'Receive product date(Approximately)','data-original-title'=>'Please receive your product date(Approximately).',),
                 'constraints' =>array(new NotBlank(array('message'=>'Please input required')))
             ))
             ->add('process', 'choice', array(

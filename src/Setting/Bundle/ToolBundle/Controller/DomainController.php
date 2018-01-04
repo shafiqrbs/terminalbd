@@ -219,8 +219,6 @@ class DomainController extends Controller
 
         exit;
 
-
-
         /* Menu, Application Setting, website, module, apps , user*/
 
 

@@ -18,6 +18,10 @@ setting_content_service:
     resource: "@SettingContentBundle/Resources/config/routing/service.yml"
     prefix:    /website/service
 
+setting_content_product:
+    resource: "@SettingContentBundle/Resources/config/routing/product.yml"
+    prefix:    /website/product
+
 setting_content_mallconnect:
     resource: "@SettingContentBundle/Resources/config/routing/mallconnect.yml"
     prefix:   /website/mallconnect

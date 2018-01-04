@@ -225,6 +225,7 @@
 {% block javascriptBlock %}
 {% endblock %}
 {#'http://bp.yahooapis.com/2.4.21/browserplus-min.js'#}
+
 <script type="text/javascript">
     jQuery(document).ready(function () {
 
@@ -452,6 +453,15 @@
         <div id="micalc"></div>
     </div>
 </div>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111963509-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-111963509-1');
+</script>
 <!-- /WhatsHelp.io widget -->
 </body>
 </html>
