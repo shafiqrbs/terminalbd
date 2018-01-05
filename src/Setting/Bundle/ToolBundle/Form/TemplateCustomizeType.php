@@ -37,11 +37,11 @@ class TemplateCustomizeType extends AbstractType
                 'choices' => array('' => 'Font Size', '10px' => '10px',  '12px' => '12px','14px' => '14px', '16px' => '16px','18px' => '18px',  '20px' => '20px'),
             ))
             ->add('breadcrumbBg','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
             ->add('breadcrumbActiveBg','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
             ->add('breadcrumbHome','text', array('attr'=>array(
@@ -49,21 +49,21 @@ class TemplateCustomizeType extends AbstractType
                 'placeholder'=>'')
             ))
             ->add('breadcrumbColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
             ->add('breadcrumbBorderColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
             
             ->add('siteBgColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('sidebarColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
@@ -74,17 +74,17 @@ class TemplateCustomizeType extends AbstractType
             ))
             ->add('siteSlogan','textarea', array('attr'=>array('class'=>'m-wrap span12','row'=> 4,'placeholder'=>'Site slogan')))
             ->add('homeBgColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('homeAnchorColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('homeAnchorColorHover','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
@@ -146,37 +146,37 @@ class TemplateCustomizeType extends AbstractType
             ))
 
             ->add('anchorColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
             ->add('anchorHoverColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('buttonBgColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('buttonBgColorHover','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
             ->add('dividerBorder','text', array('attr'=>array('class'=>'m-wrap span12 numeric','placeholder'=>'Border size')))
 
             ->add('dividerAfterColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('dividerBeforeColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('dividerFontColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
             ->add('dividerFontSize', 'choice', array(
@@ -203,40 +203,40 @@ class TemplateCustomizeType extends AbstractType
             ))
 
             ->add('siteTitleBgColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('subPageBgColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
             ->add('topBgColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
             ->add('headerBgColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('menuBgColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('menuBgColorHover','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('menuLiAColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('menuLiAHoverColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
@@ -246,35 +246,35 @@ class TemplateCustomizeType extends AbstractType
             ))
 
             ->add('bodyColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('borderColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('borderColorHover','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('footerBgColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
             ->add('footerTextColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
             ->add('footerAnchorColor','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
             ->add('footerAnchorColorHover','text', array('attr'=>array(
-                'class'=>'m-wrap span12 colorpicker-default',
+                'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
 
