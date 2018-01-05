@@ -43,9 +43,13 @@ class ModuleCategoryController extends Controller
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
             $entity->setGlobalOption($user->getGlobalOption());
+            $entity->upload();
             $em->persist($entity);
             $em->flush();
-
+            $this->getDoctrine()->getRepository('SettingAppearanceBundle:Menu')->createMenuForCategory($entity);
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been insrted successfully"
+            );
             return $this->redirect($this->generateUrl('modulecategory'));
         }
 
@@ -168,7 +172,15 @@ class ModuleCategoryController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-             $em->flush();
+            if($entity->upload() && !empty($entity->getFile())){
+                $entity->removeUpload();
+            }
+            $entity->upload();
+            $em->flush();
+            $this->get('session')->getFlashBag()->add(
+                'success',"Data has been updated successfully"
+            );
+            $this->getDoctrine()->getRepository('SettingAppearanceBundle:Menu')->updateMenuForCategory($entity);
             return $this->redirect($this->generateUrl('modulecategory_edit', array('id' => $id)));
         }
 

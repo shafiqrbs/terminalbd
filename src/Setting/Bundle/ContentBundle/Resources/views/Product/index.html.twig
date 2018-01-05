@@ -33,17 +33,12 @@
                 <div class="portlet box green tabbable">
 
                     <div class="portlet-title">
-                        <div class="caption"><i class="icon-reorder"></i>Basic Information</div>
+                        <div class="caption"><i class="icon-reorder"></i>Product Information</div>
                         <div class="actions">
                             <div class="btn-group">
-                                <a class="btn" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    <i class="icon-cogs"></i>&nbsp;Tools
-                                    <i class="icon-tasks"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <li><a href="{{ path('product_new') }}"><i class="icon-plus-sign"></i>&nbsp; Create</a></li>
-                                    <li><a href="{{ path('service') }}"><i class="icon-th-list"></i>&nbsp;Lists</a></li>
-                                </ul>
+                                <div class="btn-group">
+                                    <a class="btn red" href="{{ path('product_new') }}"><i class="icon-plus-sign"></i>&nbsp;Products</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -82,7 +77,8 @@
                                                 <a class="btn mini green-stripe btn-action" href="{{ path('product_status', { 'id': entity.id}) }}"><span class="badge badge-important">a</span>    </a>
                                             {% endif %}
                                             <a class="btn mini green-stripe btn-action" href="{{ path('product_edit', { 'id': entity.id }) }}">Edit</a>
-                                             <a class="btn mini red-stripe btn-action confirm" title="Are you sure went to delete ?" href="{{ path('product_delete', { 'id': entity.id }) }}" >Delete</a>
+                                            <a class="btn mini red-stripe btn-action confirm" title="Are you sure went to delete ?" href="{{ path('product_delete', { 'id': entity.id }) }}" >Delete</a>
+                                            <a class="btn mini red-stripe btn-action confirm" title="Are you sure went to delete ?" href="{{ path('product_copy', { 'id': entity.id }) }}" >Copy Product</a>
                                         </td>
                                     </tr>
 

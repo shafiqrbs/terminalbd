@@ -11,28 +11,28 @@
     <div class="clearfix"><br/></div>
     <div id="categories-list" class="list-group">
         {% for key,entity in pagination  %}
-        <div  class="item  {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.featureWidgets is empty  %} col-md-4 col-xs-4 col-lg-4 {% else %}  col-md-3 col-xs-3 col-lg-3 {% endif %}">
-            <div class="thumbnail">
-                <img class="group list-group-image" style="max-height: 250px; min-height: 250px"  src="{{ image(entity.webPath).forceResize(400,250) }}" alt="" />
-                <div class="caption">
-                    <h4 class="group inner list-group-item-heading">{{ entity.name }}</h4>
-                    <p class="group inner list-group-item-text">{{ entity.content|striptags|raw|truncate(150) }}</p>
-                    <p class="group inner list-group-item-text"> {% if entity.moduleCategory is not empty %}
-                            {% for cat in entity.moduleCategory  %}
-                                <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module': entity.module.slug,'slug':cat.slug }) }}"> {{ cat.name }}</a>
-                                {% if not loop.last %},{% endif %}
-                            {% endfor %}
-                        {% endif %}</p>
-                    <div class="row">
-                        <div class="col-xs-12 col-md-6">
-                        </div>
-                        <div class="col-xs-12 col-md-6">
-                            <a class="btn btn-success" href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': entity.module.slug,'slug':entity.slug }) }}">Details</a>
+            <div  class="item  {% if globalOption.templateCustomize.showSidebar == 1 and globalOption.featureWidgets is empty  %} col-md-4 col-xs-4 col-lg-4 {% else %}  col-md-3 col-xs-3 col-lg-3 {% endif %}">
+                <div class="thumbnail">
+                    <img class="group list-group-image" style="max-height: 250px; min-height: 250px"  src="{{ image(entity.webPath).forceResize(400,250) }}" alt="" />
+                    <div class="caption">
+                        <h4 class="group inner list-group-item-heading">{{ entity.name }}</h4>
+                        <p class="group inner list-group-item-text">{{ entity.content|striptags|raw|truncate(150) }}</p>
+                        <p class="group inner list-group-item-text"> {% if entity.moduleCategory is not empty %}
+                                {% for cat in entity.moduleCategory  %}
+                                    <a class="" href="{{ path(globalOption.subDomain ~ '_webservice_module_category',{'subdomain': globalOption.subDomain,'module': entity.module.slug,'slug':entity.slug }) }}"> {{ cat.name }}</a>
+                                    {% if not loop.last %},{% endif %}
+                                {% endfor %}
+                            {% endif %}</p>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <a class="btn btn-success" href="{{ path(globalOption.subDomain ~ '_webservice_module_page',{'subdomain': globalOption.subDomain,'module': entity.module.slug,'slug':entity.slug }) }}">Details</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         {% endfor %}
     </div>
 </div>

@@ -33,14 +33,14 @@ class ModuleCategoryType extends AbstractType
                     new NotBlank(array('message'=>'Please input required'))
             )))
             ->add('module', 'entity', array(
-                'expanded'      =>true,
-                'multiple'      =>true,
+                'expanded'      =>false,
+                'multiple'      =>false,
                 'constraints' => array(
                     new NotBlank(array('message' => 'Please input required'))
                 ),
                 'class' => 'Setting\Bundle\ToolBundle\Entity\Module',
                 'property' => 'name',
-                'attr'=>array('class'=>'check-list span12'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('o')
                         ->join('o.siteSettings','m')
@@ -49,7 +49,10 @@ class ModuleCategoryType extends AbstractType
                         ->andWhere("m.globalOption =".$this->globalOption->getId())
                         ->orderBy('o.name','ASC');
                 },
-            ));
+            ))
+            ->add('file','file', array('attr'=>array('class'=>'default')))
+
+        ;
     }
     
     /**

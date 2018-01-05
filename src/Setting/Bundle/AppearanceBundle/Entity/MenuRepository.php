@@ -3,6 +3,7 @@
 namespace Setting\Bundle\AppearanceBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Setting\Bundle\ContentBundle\Entity\ModuleCategory;
 use Setting\Bundle\ContentBundle\Entity\Page;
 
 /**
@@ -42,5 +43,41 @@ class MenuRepository extends EntityRepository
             }
         }
         $em->flush();
+    }
+
+
+    public function createMenuForCategory(ModuleCategory $reEntity = null)
+    {
+        $entity = new Menu();
+
+        if ($reEntity != null) {
+
+            $slug = 'category/'.$reEntity->getModule()->getSlug().'/'.$reEntity->getSlug();
+            $entity->setGlobalOption($reEntity->getGlobalOption());
+            $entity->setCategory($reEntity);
+            $entity->setMenu($reEntity->getName());
+            $entity->setSlug($slug);
+            $this->getEntityManager()->persist($entity);
+            $this->getEntityManager()->flush();
+
+        }
+    }
+
+    public function updateMenuForCategory(ModuleCategory $entity)
+    {
+
+        $em = $this->_em;
+
+        $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('category' => $entity));
+        if(!empty($menu)){
+            $slug = 'category/'.$entity->getModule()->getSlug().'/'.$entity->getSlug();
+            $menu->setMenu($entity->getName());
+            $menu->setSlug($slug);
+            $em->persist($menu);
+            $em->flush();
+
+        }else{
+            $this->createMenuForCategory($entity);
+        }
     }
 }

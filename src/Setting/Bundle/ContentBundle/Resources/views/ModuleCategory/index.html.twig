@@ -69,11 +69,7 @@
                                         <td class="numeric" ><a href="{{ path('modulecategory_edit',{'id': entity.id })}}">{{ entity.name }}</a></td>
                                         <td class="numeric" >
                                             {% if(entity.module is defined and entity.module is not empty ) %}
-                                                <ul>
-                                                {% for module in entity.module %}
-                                                    <li>{{ module.name }}</li>
-                                            {% endfor %}
-                                                </ul>
+                                                {{ entity.module.name }}
                                             {% endif %}
                                         </td>
                                         <td class="numeric" >
@@ -86,7 +82,6 @@
                                              <a class="btn mini red-stripe btn-action confirm" title="Are you sure went to delete ?" href="{{ path('modulecategory_delete', { 'id': entity.id }) }}" >Delete</a>
                                         </td>
                                     </tr>
-
                                 {% endfor %}
 
                                 </tbody>

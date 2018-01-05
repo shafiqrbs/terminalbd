@@ -176,7 +176,7 @@ webservice_login:
     defaults: { _controller: FrontendBundle:WebServiceCustomer:confirm }
 
 webservice_search:
-    path:     /content-search
+    path:     /search
     defaults: { _controller: FrontendBundle:WebServiceModule:search }
 
 

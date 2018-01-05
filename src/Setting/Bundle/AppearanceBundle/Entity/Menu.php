@@ -4,6 +4,7 @@ namespace Setting\Bundle\AppearanceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Setting\Bundle\ContentBundle\Entity\ModuleCategory;
 use Setting\Bundle\ContentBundle\Entity\PageModule;
 
 /**
@@ -80,7 +81,6 @@ class Menu
      */
     protected $features;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Module", inversedBy="nav")
      */
@@ -100,6 +100,12 @@ class Menu
      * @ORM\OneToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\Page", inversedBy="nav")
      */
     protected $page;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\ContentBundle\Entity\ModuleCategory", inversedBy="nav")
+     */
+    protected $category;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Syndicate", inversedBy="nav")
@@ -152,7 +158,6 @@ class Menu
     {
         return $this->id;
     }
-
 
 
     /**
@@ -444,6 +449,22 @@ class Menu
         }
         return $data;
 
+    }
+
+    /**
+     * @return ModuleCategory
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param ModuleCategory $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
     }
 
 

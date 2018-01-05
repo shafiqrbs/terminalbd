@@ -27,6 +27,7 @@ class WebServiceModuleController extends Controller
             $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption'=> $globalOption ,'slug' => $module));
             if(!empty($menu)){
 
+
                 $siteEntity = $globalOption->getSiteSetting();
                 /* @var SiteSetting $siteEntity */
                 $themeName = $siteEntity->getTheme()->getFolderName();
@@ -40,6 +41,7 @@ class WebServiceModuleController extends Controller
                     if(!empty($menu->getModule())){
                         //$categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
                     }
+
                 }else{
 
                     $page = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption,'slug' => $module));
@@ -63,6 +65,7 @@ class WebServiceModuleController extends Controller
         }else{
             $theme = 'Template/Desktop/'.$themeName;
         }
+
         return $this->render('FrontendBundle:'.$theme.':'.$twigName.'.html.twig',
 
             array(
@@ -144,7 +147,7 @@ class WebServiceModuleController extends Controller
             $page ='';
             $pagination ='';
             $moduleName ='';
-
+            $category ='';
             if(!empty($menu)){
 
                 $siteEntity = $globalOption->getSiteSetting();
@@ -153,9 +156,10 @@ class WebServiceModuleController extends Controller
                 $moduleName = $this->get('setting.menuTreeSettingRepo')->getCheckModule($menu);
                 if($moduleName){
                     $twigName = "module";
-                    $cat = $em->getRepository('SettingContentBundle:ModuleCategory')->findOneBy(array('globalOption'=>$globalOption ,'slug' => $slug));
+                    $cat = $em->getRepository('SettingContentBundle:ModuleCategory')->findOneBy(array('slug' => $slug));
+                    $category = $cat;
                     $pagination = $em->getRepository('SettingContentBundle:Page')->getCategoryPage($globalOption,$menu->getModule(),$cat);
-                    $pagination = $this->paginate( $pagination,$limit= 10 );
+                    $pagination = $this->paginate( $pagination,$limit= 12 );
                     if(!empty($menu->getModule())){
                         $categories = $em->getRepository('SettingContentBundle:ModuleCategory')->moduleBaseCategory($globalOption->getId(),$menu->getModule()->getId());
                     }
@@ -188,6 +192,7 @@ class WebServiceModuleController extends Controller
                 'pagination'    => $pagination,
                 'menu'          => $menu,
                 'page'          => $page,
+                'category'  => $category,
                 'pageName'      => 'pageName',
             )
         );
@@ -218,8 +223,8 @@ class WebServiceModuleController extends Controller
         return $this->render('FrontendBundle:'.$theme.':contact.html.twig',
             array(
                 'globalOption'        => $globalOption,
-                'menu'              => $menu,
-                'page'              => $globalOption->getContactPage(),
+                'menu'                => $menu,
+                'page'                => $globalOption->getContactPage(),
                 'pageName'      => 'pageName',
               )
         );
@@ -288,6 +293,7 @@ class WebServiceModuleController extends Controller
         $data = $_REQUEST;
         $globalOption = $em->getRepository('SettingToolBundle:GlobalOption')->findOneBy(array('subDomain'=>$subdomain));
         $siteEntity = $globalOption->getSiteSetting();
+        $menu = $em->getRepository('SettingAppearanceBundle:Menu')->findOneBy(array('globalOption' => $globalOption ,'slug' => 'search'));
         if(!empty($siteEntity)){
             $themeName = $siteEntity->getTheme()->getFolderName();
         }else{
@@ -311,6 +317,7 @@ class WebServiceModuleController extends Controller
 
                 'globalOption'  => $globalOption,
                 'pagination'    => $pagination,
+                'menu'                => $menu,
                 'searchForm' => $data,
                 'pageName'      => 'Search',
             )

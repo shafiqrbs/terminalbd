@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Setting\Bundle\AppearanceBundle\Entity\FeatureWidget;
 use Setting\Bundle\LocationBundle\Entity\Location;
 use Setting\Bundle\MediaBundle\Entity\PhotoGallery;
+use Setting\Bundle\ToolBundle\Entity\Module;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -1081,7 +1082,7 @@ class Page
     }
 
     /**
-     * @return mixed
+     * @return Module
      */
     public function getModule()
     {
@@ -1089,7 +1090,7 @@ class Page
     }
 
     /**
-     * @param mixed $module
+     * @param Module $module
      */
     public function setModule($module)
     {
@@ -1256,6 +1257,22 @@ class Page
     public function setPrice($price)
     {
         $this->price = $price;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFeature()
+    {
+        return $this->feature;
+    }
+
+    /**
+     * @param bool $feature
+     */
+    public function setFeature($feature)
+    {
+        $this->feature = $feature;
     }
 
 }

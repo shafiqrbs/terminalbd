@@ -32,3 +32,7 @@ product_delete:
     path:     /{id}/delete
     defaults: { _controller: "SettingContentBundle:Product:delete" }
 
+product_copy:
+    path:     /{id}/product-copy
+    defaults: { _controller: "SettingContentBundle:Product:copy" }
+

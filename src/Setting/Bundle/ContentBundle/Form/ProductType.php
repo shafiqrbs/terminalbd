@@ -27,7 +27,7 @@ class ProductType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Enter service name'),
+            ->add('name','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','placeholder'=>'Enter product name'),
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please input required'))
                 )
@@ -40,7 +40,7 @@ class ProductType extends AbstractType
                 'class' => 'Setting\Bundle\MediaBundle\Entity\PhotoGallery',
                 'empty_value' => '---Select Photo Gallery---',
                 'property' => 'name',
-                'attr'=>array('class'=>'select2 span12'),
+                'attr'=>array('class'=>'m-wrap span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('o')
                         ->where("o.status = 1")
@@ -58,9 +58,11 @@ class ProductType extends AbstractType
                 'attr'=>array('class'=>'check-list  span12'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('o')
+                        ->join('o.module', 'module')
                         ->where("o.status = 1")
-                        ->andWhere(':module MEMBER OF o.module')
-                        ->setParameter('module', 19)
+                       /* ->andWhere(':module MEMBER OF o.module')*/
+                        ->andWhere("module.slug = :module")
+                        ->setParameter('module', 'products')
                         ->andWhere("o.globalOption =".$this->globalOption->getId())
                         ->orderBy('o.name','ASC');
                 },

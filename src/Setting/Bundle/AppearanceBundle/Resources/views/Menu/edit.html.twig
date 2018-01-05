@@ -86,7 +86,6 @@
 
                                             </tr>
                                         {% endif %}
-
                                         {% if(entity.syndicate) %}
                                             <tr>
                                                 <td >
@@ -122,13 +121,13 @@
                                             </tr>
                                         {% endif %}
 
-                                        {% if(entity.syndicateModule) %}
+                                        {% if(entity.category) %}
                                             <tr>
                                                 <td >
                                                     <input type="hidden" name="id[]" value="{{ entity.id }}">
                                                     <input type="text" class="m-wrap span12" name="menu[]" value="{{ entity.menu }}"></td>
                                                 <td class="numeric">{{ entity.slug }}</td>
-                                                <td class="numeric"><a href="{{ path('syndicatemodule_edit',{ 'id':entity.syndicateModule.id }) }}">Click for Edit</a> </td>
+                                                <td class="numeric"><a href="">Click for Edit</a> </td>
                                                 <td class="numeric">
                                                     {% if( entity.status == 1) %}
                                                         <a class="" href="{{ path('menu_status', { 'globalOption':  entity.globalOption.id,'id': entity.id}) }}"><span class="badge badge-success">x</span></a>

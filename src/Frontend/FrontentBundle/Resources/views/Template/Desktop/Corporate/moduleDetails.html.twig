@@ -60,6 +60,8 @@
                                 {{ include('@Frontend/Template/Desktop/ModuleDetails/service.html.twig')}}
                             {% elseif( menu.module.slug == 'team' ) %}
                                 {{ include('@Frontend/Template/Desktop/ModuleDetails/team.html.twig')}}
+                            {% elseif( menu.module.slug == 'products' ) %}
+                                {{ include('@Frontend/Template/Desktop/ModuleDetails/product.html.twig')}}
                             {% elseif( menu.module.slug == 'syndicate' ) %}
                                 {{ include('@Frontend/Template/Desktop/ModuleDetails/syndicate.html.twig')}}
                             {% else %}

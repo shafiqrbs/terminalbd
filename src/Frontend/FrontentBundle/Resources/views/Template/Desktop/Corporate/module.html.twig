@@ -5,7 +5,12 @@
         <div class="container">
             <ul class="breadcrumb">
                 <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
-                <li class="active"><a href="javascript:void(0);">{{ menu.menu }}</a></li>
+                {% if category is defined and category is not empty %} :
+                    <li><a href="{{ path(globalOption.subDomain ~ '_webservice_module',{'subdomain': globalOption.subDomain,'module': category.module.slug }) }}">{{ menu.menu }}</a></li>
+                    <li class="active"><a href="javascript:void(0);">{{ category.name }}</a></li>
+                {% else %}
+                    <li class="active"><a href="javascript:void(0);">{{ menu.menu }}</a></li>
+                {% endif %}
             </ul>
         </div>
     </section>
@@ -43,7 +48,7 @@
                     <div class="page-title-bar">
                         <div class="col-md-12">
                             <div class="btn-group pull-left">
-                                <div class="page-title"><span class="glyphicon glyphicon-bookmark"></span>&nbsp;{{ menu.menu }}</div>
+                                <div class="page-title"><span class="glyphicon glyphicon-bookmark"></span>&nbsp;{{ menu.menu }} {% if category is defined and category is not empty %} : {{ category.name }}{% endif %}</div>
                             </div>
                         </div>
                     </div>
@@ -80,6 +85,8 @@
                                 {{ include('@Frontend/Template/Desktop/Module/admission.html.twig')}}
                             {% elseif( menu.module.slug == 'syndicate' ) %}
                                 {{ include('@Frontend/Template/Desktop/Module/syndicate.html.twig')}}
+                            {% elseif( menu.module.slug == 'products' ) %}
+                                {{ include('@Frontend/Template/Desktop/Module/product.html.twig')}}
                             {% else %}
                                 {{ include('@Frontend/Template/Desktop/Module/default.html.twig')}}
                             {% endif %}
@@ -151,5 +158,7 @@
     {% else %}
         sliderPageOwl(4);
     {% endif %}
+    $('#list').click(function(event){event.preventDefault();$('#categories-list .item').addClass('list-group-item');});
+    $('#grid').click(function(event){event.preventDefault();$('#categories-list .item').removeClass('list-group-item');$('#categories-list .item').addClass('grid-group-item');});
 {% endblock %}
 

@@ -24,7 +24,7 @@ class ProductController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $globalOption = $this->getUser()->getGlobalOption();
-        $entities = $em->getRepository('SettingContentBundle:Page')->getPagesFor($globalOption,'product');
+        $entities = $em->getRepository('SettingContentBundle:Page')->getPagesFor($globalOption,'products');
         return $this->render('SettingContentBundle:Product:index.html.twig', array(
             'entities' => $entities,
         ));
@@ -43,12 +43,12 @@ class ProductController extends Controller
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
             $entity->setGlobalOption($user->getGlobalOption());
-            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'service')));
+            $entity ->setModule($this->getDoctrine()->getRepository('SettingToolBundle:Module')->findOneBy(array('slug' => 'products')));
             $entity->upload();
             $em->persist($entity);
             $em->flush();
             $this->getDoctrine()->getRepository('SettingContentBundle:PageMeta')->pageMeta($entity,$data);
-            return $this->redirect($this->generateUrl('service'));
+            return $this->redirect($this->generateUrl('product_new'));
         }
 
         return $this->render('SettingContentBundle:Product:new.html.twig', array(
@@ -200,7 +200,7 @@ class ProductController extends Controller
         $em->remove($entity);
         $em->flush();
         $this->get('session')->getFlashBag()->add('success',"Data has been deleted successfully");
-        return $this->redirect($this->generateUrl('service'));
+        return $this->redirect($this->generateUrl('product'));
     }
 
 
@@ -229,7 +229,28 @@ class ProductController extends Controller
         $this->get('session')->getFlashBag()->add(
             'error',"Status has been changed successfully"
         );
-        return $this->redirect($this->generateUrl('service'));
+        return $this->redirect($this->generateUrl('product'));
+    }
+
+
+    public function copyAction(Page $page)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = New Page();
+
+        $entity->setGlobalOption($page->getGlobalOption());
+        $entity->setName($page->getName());
+        $entity->setModule($page->getModule());
+        $entity->setModuleCategory($page->getModuleCategory());
+        $entity->setContent($page->getContent());
+        $entity->setPhotoGallery($page->getPhotoGallery());
+        $em->persist($entity);
+        $em->flush();
+        $this->getDoctrine()->getRepository('SettingContentBundle:PageMeta')->insertMetaKeyValue($entity,$page);
+        $this->get('session')->getFlashBag()->add(
+            'success',"Data has been added successfully"
+        );
+        return $this->redirect($this->generateUrl('product_edit',array('id'=>$entity->getId())));
     }
 
 

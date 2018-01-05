@@ -48,5 +48,20 @@ class PageMetaRepository extends EntityRepository
 
     }
 
+    public function insertMetaKeyValue(Page $entity , Page $page)
+    {
+
+        /* @var $row PageMeta */
+        foreach ($page->getPageMetas() as $row){
+
+            $meta = New PageMeta();
+            $meta->setPage($entity);
+            $meta->setMetaKey($row->getMetaKey());
+            $meta->setMetaValue($row->getMetaValue());
+            $this->_em->persist($meta);
+            $this->_em->flush();
+        }
+    }
+
 
 }
