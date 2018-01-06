@@ -272,6 +272,13 @@ class TemplateCustomize
      */
     private $menuTopMargin;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="stickyMenuTopMargin", type="integer", length=3, nullable=true)
+     */
+    private $stickyMenuTopMargin;
+
 
     /**
      * @var string
@@ -2115,6 +2122,22 @@ class TemplateCustomize
     public function setHeaderBorderHeight($headerBorderHeight)
     {
         $this->headerBorderHeight = $headerBorderHeight;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStickyMenuTopMargin()
+    {
+        return $this->stickyMenuTopMargin;
+    }
+
+    /**
+     * @param int $stickyMenuTopMargin
+     */
+    public function setStickyMenuTopMargin($stickyMenuTopMargin)
+    {
+        $this->stickyMenuTopMargin = $stickyMenuTopMargin;
     }
 
 

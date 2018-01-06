@@ -265,7 +265,11 @@ class TemplateCustomizeType extends AbstractType
             ))
 
             ->add('menuTopMargin','text', array('attr'=>array(
-                'class'=>'m-wrap span6 numeric',
+                'class'=>'m-wrap span12 numeric',
+                'placeholder'=>'')
+            ))
+            ->add('stickyMenuTopMargin','text', array('attr'=>array(
+                'class'=>'m-wrap span12 numeric',
                 'placeholder'=>'')
             ))
 

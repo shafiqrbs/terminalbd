@@ -82,7 +82,7 @@
 
     {% if globalOption.templateCustomize.menuTopMargin is not empty %}
         .fixed-top #menu{
-            margin-top:{{ globalOption.templateCustomize.menuTopMargin - 20 }}px!important;;
+            margin-top:{{ globalOption.templateCustomize.menuTopMargin - globalOption.templateCustomize.stickyMenuTopMargin }}px!important;;
         }
     {% endif %}
 
