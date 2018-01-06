@@ -1,6 +1,6 @@
 <?php
 
-namespace Setting\Bundle\ToolBundle\Entity;
+namespace Setting\Bundle\AppearanceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * TemplateCustomize
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Setting\Bundle\ToolBundle\Repository\TemplateCustomizeRepository")
+ * @ORM\Entity(repositoryClass="Setting\Bundle\AppearanceBundle\Repository\TemplateCustomizeRepository")
  */
 class TemplateCustomize
 {
@@ -228,6 +228,20 @@ class TemplateCustomize
      */
     private $siteBgColor;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="headerBorderColor", type="string", length=20, nullable=true)
+     */
+    private $headerBorderColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="headerBorderHeight", type="string", length=5, nullable=true)
+     */
+    private $headerBorderHeight;
+
 
     /**
      * @var string
@@ -242,6 +256,29 @@ class TemplateCustomize
      * @ORM\Column(name="sliderPosition", type="string", length=20, nullable=true)
      */
     private $sliderPosition='top-right';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="menuLetter", type="string", length=20, nullable=true)
+     */
+    private $menuLetter = 'uppercase';
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="menuTopMargin", type="integer", length=3, nullable=true)
+     */
+    private $menuTopMargin;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="menuPosition", type="string", length=10, nullable=true)
+     */
+    private $menuPosition;
 
 
     /**
@@ -412,6 +449,21 @@ class TemplateCustomize
      * @ORM\Column(name="dividerAfterColor", type="string", length=20, nullable=true)
      */
     private $dividerAfterColor;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="logoWidth", type="integer", length=10, nullable=true)
+     */
+    private $logoWidth;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="logoHeight", type="integer", length=10, nullable=true)
+     */
+    private $logoHeight;
+
 
     /**
      * @var string
@@ -1932,6 +1984,137 @@ class TemplateCustomize
     public function setMobileCarouselHeight($mobileCarouselHeight)
     {
         $this->mobileCarouselHeight = $mobileCarouselHeight;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHomeTitle()
+    {
+        return $this->homeTitle;
+    }
+
+    /**
+     * @param string $homeTitle
+     */
+    public function setHomeTitle($homeTitle)
+    {
+        $this->homeTitle = $homeTitle;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLogoWidth()
+    {
+        return $this->logoWidth;
+    }
+
+    /**
+     * @param int $logoWidth
+     */
+    public function setLogoWidth($logoWidth)
+    {
+        $this->logoWidth = $logoWidth;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLogoHeight()
+    {
+        return $this->logoHeight;
+    }
+
+    /**
+     * @param int $logoHeight
+     */
+    public function setLogoHeight($logoHeight)
+    {
+        $this->logoHeight = $logoHeight;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenuLetter()
+    {
+        return $this->menuLetter;
+    }
+
+    /**
+     * @param string $menuLetter
+     * uppercase
+     * capitalize
+     * lowercase
+     */
+    public function setMenuLetter($menuLetter)
+    {
+        $this->menuLetter = $menuLetter;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMenuPosition()
+    {
+        return $this->menuPosition;
+    }
+
+    /**
+     * @param string $menuPosition
+     */
+    public function setMenuPosition($menuPosition)
+    {
+        $this->menuPosition = $menuPosition;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMenuTopMargin()
+    {
+        return $this->menuTopMargin;
+    }
+
+    /**
+     * @param int $menuTopMargin
+     */
+    public function setMenuTopMargin($menuTopMargin)
+    {
+        $this->menuTopMargin = $menuTopMargin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHeaderBorderColor()
+    {
+        return $this->headerBorderColor;
+    }
+
+    /**
+     * @param string $headerBorderColor
+     */
+    public function setHeaderBorderColor($headerBorderColor)
+    {
+        $this->headerBorderColor = $headerBorderColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHeaderBorderHeight()
+    {
+        return $this->headerBorderHeight;
+    }
+
+    /**
+     * @param string $headerBorderHeight
+     */
+    public function setHeaderBorderHeight($headerBorderHeight)
+    {
+        $this->headerBorderHeight = $headerBorderHeight;
     }
 
 

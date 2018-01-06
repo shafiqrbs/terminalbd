@@ -6,11 +6,11 @@
  * Time: 8:05 AM
  */
 
-namespace Setting\Bundle\ToolBundle\Repository;
+namespace Setting\Bundle\AppearanceBundle\Repository;
 
 
 use Doctrine\ORM\EntityRepository;
-use Setting\Bundle\ToolBundle\Entity\TemplateCustomize;
+use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 
 class TemplateCustomizeRepository extends EntityRepository {
 

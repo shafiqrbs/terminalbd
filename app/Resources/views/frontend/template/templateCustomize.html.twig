@@ -67,8 +67,36 @@
     }
     {% endif %}
 
+    {% if globalOption.templateCustomize.headerBorderColor is not empty %}
+        .navbar-header{
+            border-bottom:solid {{ globalOption.templateCustomize.headerBorderHeight }}!important;
+            border-color:{{ globalOption.templateCustomize.headerBorderColor }}!important;
+        }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.menuTopMargin is not empty %}
+        #menu{
+            margin-top:{{ globalOption.templateCustomize.menuTopMargin }}px!important;
+        }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.menuTopMargin is not empty %}
+        .fixed-top #menu{
+            margin-top:{{ globalOption.templateCustomize.menuTopMargin - 20 }}px!important;;
+        }
+    {% endif %}
+
+    {% if globalOption.templateCustomize.menuPosition is not empty %}
+        #header-menu{
+            float:{{ globalOption.templateCustomize.menuPosition }} !important;
+            margin-right:40px;
+        }
+    {% endif %}
+
     #header-menu ul a{
         color: {{ globalOption.templateCustomize.menuLiAColor }} !important;
+        font-size: {{ globalOption.templateCustomize.menuFontSize }} !important;
+        text-transform: {{ globalOption.templateCustomize.menuLetter }} !important;
     }
     #header-menu ul a:hover{
         color: {{ globalOption.templateCustomize.menuLiAHoverColor }} !important;

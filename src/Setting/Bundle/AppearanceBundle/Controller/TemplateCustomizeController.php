@@ -1,13 +1,13 @@
 <?php
 
-namespace Setting\Bundle\ToolBundle\Controller;
+namespace Setting\Bundle\AppearanceBundle\Controller;
 
 use Doctrine\Entity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Setting\Bundle\ToolBundle\Entity\TemplateCustomize;
-use Setting\Bundle\ToolBundle\Form\TemplateCustomizeType;
+use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
+use Setting\Bundle\AppearanceBundle\Form\TemplateCustomizeType;
 
 /**
  * TemplateCustomize controller.
@@ -24,9 +24,9 @@ class TemplateCustomizeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('SettingToolBundle:TemplateCustomize')->findAll();
+        $entities = $em->getRepository('SettingAppearanceBundle:TemplateCustomize')->findAll();
 
-        return $this->render('SettingToolBundle:TemplateCustomize:index.html.twig', array(
+        return $this->render('SettingAppearanceBundle:TemplateCustomize:index.html.twig', array(
             'entities' => $entities,
         ));
     }
@@ -48,7 +48,7 @@ class TemplateCustomizeController extends Controller
             return $this->redirect($this->generateUrl('templatecustomize_show', array('id' => $entity->getId())));
         }
 
-        return $this->render('SettingToolBundle:TemplateCustomize:new.html.twig', array(
+        return $this->render('SettingAppearanceBundle:TemplateCustomize:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -83,7 +83,7 @@ class TemplateCustomizeController extends Controller
         $entity = new TemplateCustomize();
         $form   = $this->createCreateForm($entity);
 
-        return $this->render('SettingToolBundle:TemplateCustomize:new.html.twig', array(
+        return $this->render('SettingAppearanceBundle:TemplateCustomize:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -97,13 +97,13 @@ class TemplateCustomizeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingToolBundle:TemplateCustomize')->find($id);
+        $entity = $em->getRepository('SettingAppearanceBundle:TemplateCustomize')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find TemplateCustomize entity.');
         }
 
-        return $this->render('SettingToolBundle:TemplateCustomize:show.html.twig', array(
+        return $this->render('SettingAppearanceBundle:TemplateCustomize:show.html.twig', array(
             'entity'      => $entity,
         ));
     }
@@ -116,13 +116,13 @@ class TemplateCustomizeController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('SettingToolBundle:TemplateCustomize')->findOneBy(array('globalOption'=>$id));
+        $entity = $em->getRepository('SettingAppearanceBundle:TemplateCustomize')->findOneBy(array('globalOption'=>$id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find TemplateCustomize entity.');
         }
 
         $editForm = $this->createEditForm($entity);
-        return $this->render('SettingToolBundle:TemplateCustomize:new.html.twig', array(
+        return $this->render('SettingAppearanceBundle:TemplateCustomize:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
 
@@ -158,7 +158,7 @@ class TemplateCustomizeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('SettingToolBundle:TemplateCustomize')->findOneBy(array('globalOption'=> $id));
+        $entity = $em->getRepository('SettingAppearanceBundle:TemplateCustomize')->findOneBy(array('globalOption'=> $id));
         $data = $request->request->all();
         $file = $request->files->all();
         if (!$entity) {
@@ -188,11 +188,11 @@ class TemplateCustomizeController extends Controller
             }
             $entity->upload();
             $em->flush();
-            $this->getDoctrine()->getRepository('SettingToolBundle:TemplateCustomize')->fileUploader($entity,$file);
+            $this->getDoctrine()->getRepository('SettingAppearanceBundle:TemplateCustomize')->fileUploader($entity,$file);
             return $this->redirect($this->generateUrl('templatecustomize_edit', array('id' => $id)));
         }
 
-        return $this->render('SettingToolBundle:TemplateCustomize:new.html.twig', array(
+        return $this->render('SettingAppearanceBundle:TemplateCustomize:new.html.twig', array(
             'entity'      => $entity,
             'form'   => $editForm->createView(),
         ));
@@ -237,8 +237,7 @@ class TemplateCustomizeController extends Controller
         $entity->setSliderTopBottomPosition(NULL);
         $entity->setSliderLeftRightPosition(NULL);
         $em->persist($entity);
-        $em->flush($entity);
-
+        $em->flush();
         return $this->redirect($this->generateUrl('templatecustomize_edit', array('id' => $entity->getGlobalOption()->getId())));
 
     }

@@ -1,3 +1,7 @@
+setting_tool_templatecustomize:
+    resource: "@SettingAppearanceBundle/Resources/config/routing/templatecustomize.yml"
+    prefix:   /appearance/templatecustomize
+
 setting_appearance_feature:
     resource: "@SettingAppearanceBundle/Resources/config/routing/appearancefeature.yml"
     prefix:   /appearance/feature

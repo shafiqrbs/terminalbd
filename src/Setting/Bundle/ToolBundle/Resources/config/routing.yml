@@ -82,10 +82,6 @@ setting_tool_footersetting:
     resource: "@SettingToolBundle/Resources/config/routing/footersetting.yml"
     prefix:   /domain/footersetting
 
-setting_tool_templatecustomize:
-    resource: "@SettingToolBundle/Resources/config/routing/templatecustomize.yml"
-    prefix:   /appearance/templatecustomize
-
 setting_tool_institutelevel:
     resource: "@SettingToolBundle/Resources/config/routing/institutelevel.yml"
     prefix:   /domain/institutelevel

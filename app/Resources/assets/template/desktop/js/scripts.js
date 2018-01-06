@@ -9,22 +9,21 @@ wow = new WOW(
     }
 );
 wow.init();
+
+
+
 $(document).ready(function(){
 
         var stickyOffset = $('.sticky').offset().top;
         $(window).scroll(function(){
             var sticky = $('.sticky'),
                 scroll = $(window).scrollTop();
-            if (scroll >= stickyOffset) sticky.addClass('fixed-top');
+            if (scroll > 1) sticky.addClass('fixed-top');
             else sticky.removeClass('fixed-top');
         });
 
-        var navbar = $('.navbar-header').outerHeight(true);
-        var mins = 22;
-        $('.bs-example-form').css({
-            'margin-top':(navbar/2 - mins)
-        });
-        
+
+
         $('.social-tooltip').tooltip({
             selector: "[data-toggle=tooltip]",
             container: "body"

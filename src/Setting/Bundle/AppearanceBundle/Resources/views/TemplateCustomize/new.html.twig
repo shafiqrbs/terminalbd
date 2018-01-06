@@ -492,13 +492,61 @@
                             <div class="row-fluid">
                                 <div class="span3">
                                     <div class="control-group">
-                                        <label class="control-label" for="firstName">Menu Font Size</label>
+                                        <label class="control-label"  for="firstName">Header Border Height</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.headerBorderHeight) }}
+                                            {{ form_errors(form.headerBorderHeight) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label"  for="firstName">Header Border Color</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.headerBorderColor) }}
+                                            {{ form_errors(form.headerBorderColor) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label"  for="firstName">Menu Top Margin</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.menuTopMargin) }}
+                                            {{ form_errors(form.menuTopMargin) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label"  for="firstName">Menu Position</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.menuPosition) }}
+                                            {{ form_errors(form.menuPosition) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label" for="firstName">Menu Letter</label>
+                                        <div class="controls">
+                                            {{ form_widget(form.menuLetter) }}
+                                            {{ form_errors(form.menuLetter) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span3">
+                                    <div class="control-group">
+                                        <label class="control-label"  for="firstName">Menu Font Size</label>
                                         <div class="controls">
                                             {{ form_widget(form.menuFontSize) }}
                                             {{ form_errors(form.menuFontSize) }}
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                             <!--/row-->
                             <!--/row-->
@@ -860,7 +908,7 @@
                             <div class="clearfix">&nbsp;</div>
                             <!--/row-->
                             <div class="row-fluid" >
-                                <div class="span6 ">
+                                <div class="span4">
                                     <div class="control-group">
                                         <div class="controls">
                                             <div data-provides="fileupload" class="fileupload fileupload-new">
@@ -886,7 +934,31 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="span6 ">
+                                <div  class="span4">
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Logo Width</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.logoWidth) }}
+                                                    {{ form_errors(form.logoWidth) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row-fluid">
+                                        <div class="span12">
+                                            <div class="control-group">
+                                                <label class="control-label" for="firstName">Logo Height</label>
+                                                <div class="controls">
+                                                    {{ form_widget(form.logoHeight) }}
+                                                    {{ form_errors(form.logoHeight) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="span4">
                                     <div class="control-group">
                                         <div class="controls">
                                             <div data-provides="fileupload" class="fileupload fileupload-new">

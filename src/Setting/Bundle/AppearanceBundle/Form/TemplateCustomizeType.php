@@ -1,6 +1,6 @@
 <?php
 
-namespace Setting\Bundle\ToolBundle\Form;
+namespace Setting\Bundle\AppearanceBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -220,6 +220,16 @@ class TemplateCustomizeType extends AbstractType
                 'placeholder'=>'')
             ))
 
+            ->add('headerBorderColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default',
+                'placeholder'=>'')
+            ))
+
+            ->add('headerBorderHeight', 'choice', array(
+                'attr'=>array('class'=>'span6 m-wrap'),
+                'choices' => array('1px' => '1px',  '2px' => '2px', '3px' => '3px', '4px' => '4px',  '5px' => '5px'),
+            ))
+
             ->add('menuBgColor','text', array('attr'=>array(
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
@@ -241,9 +251,24 @@ class TemplateCustomizeType extends AbstractType
             ))
 
             ->add('menuFontSize', 'choice', array(
-                'attr'=>array('class'=>'span12'),
-                'choices' => array('' => '---Select One---','10px' => '10px',  '12px' => '12px', '13px' => '13px', '14px' => '14px'),
+                'attr'=>array('class'=>'span6 m-wrap'),
+                'choices' => array('' => '---Select One---','10px' => '10px',  '11px' => '11px',  '12px' => '12px', '13px' => '13px', '14px' => '14px',  '15px' => '15px', '16px' => '16px', '17px' => '17px',  '18px' => '18px', '19px' => '19px', '20px' => '20px'),
             ))
+
+            ->add('menuLetter', 'choice', array(
+                'attr'=>array('class'=>'span10 m-wrap'),
+                'choices' => array('uppercase' => 'Uppercase',  'capitalize' => 'Capitalize', 'lowercase' => 'Lowercase'),
+            ))
+            ->add('menuPosition', 'choice', array(
+                'attr'=>array('class'=>'span10 m-wrap'),
+                'choices' => array('left' => 'Left',  'right' => 'Right'),
+            ))
+
+            ->add('menuTopMargin','text', array('attr'=>array(
+                'class'=>'m-wrap span6 numeric',
+                'placeholder'=>'')
+            ))
+
 
             ->add('bodyColor','text', array('attr'=>array(
                 'class'=>'m-wrap span10 colorpicker-default',
@@ -277,6 +302,17 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 colorpicker-default',
                 'placeholder'=>'')
             ))
+            ->add('logoHeight','text', array('attr'=>array(
+                'class'=>'m-wrap span10 numeric',
+                'placeholder'=>'')
+            ))
+            ->add('logoWidth','text', array('attr'=>array(
+                'class'=>'m-wrap span10 numeric',
+                'placeholder'=>'')
+            ))
+
+
+
 
         ;
     }
@@ -287,7 +323,7 @@ class TemplateCustomizeType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Setting\Bundle\ToolBundle\Entity\TemplateCustomize'
+            'data_class' => 'Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize'
         ));
     }
 

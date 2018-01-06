@@ -2,7 +2,7 @@
 
 namespace Setting\Bundle\AppearanceBundle\Controller;
 
-use Setting\Bundle\AppearanceBundle\Entity\SidebarWidgetPanel;
+
 use Setting\Bundle\AppearanceBundle\Form\SidebarWidgetPanelType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

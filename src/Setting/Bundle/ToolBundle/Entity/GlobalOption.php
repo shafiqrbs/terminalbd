@@ -356,7 +356,7 @@ class GlobalOption
 
     private $contactPage;
     /**
-     * @ORM\OneToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TemplateCustomize", mappedBy="globalOption" , cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize", mappedBy="globalOption" , cascade={"remove"})
      **/
 
     private $templateCustomize;
