@@ -80,6 +80,13 @@
         }
     {% endif %}
 
+    {% if globalOption.templateCustomize.logoWidth is not empty or globalOption.templateCustomize.logoHeight is not empty %}
+        .img-logo{
+            width:{{ globalOption.templateCustomize.logoWidth }}px!important;
+            height:{{ globalOption.templateCustomize.logoHeight }}px!important;
+        }
+    {% endif %}
+
     {% if globalOption.templateCustomize.menuTopMargin is not empty %}
         .fixed-top #menu{
             margin-top:{{ globalOption.templateCustomize.menuTopMargin - globalOption.templateCustomize.stickyMenuTopMargin }}px!important;;

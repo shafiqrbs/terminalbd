@@ -2,6 +2,7 @@
 {% block body %}
     <section class="siteBgColor">
     <div class="clearfix"></div>
+{% if globalOption.templateCustomize.breadcrumb == 1 %}
     <section id="breadcrumb">
         <div class="container">
             <ul class="breadcrumb">
@@ -10,6 +11,7 @@
             </ul>
         </div>
     </section>
+{% endif %}
     <div class="clearfix"></div>
 {#    {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
         <div class="container bodyColor" >

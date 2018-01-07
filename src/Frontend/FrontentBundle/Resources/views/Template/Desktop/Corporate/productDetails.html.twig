@@ -3,15 +3,17 @@
     {% set paymentID = globalOption.id~'-ecommerce-product-'~product.id %}
     <section class="siteBgColor">
         <div class="clearfix"></div>
-        <section id="breadcrumb">
-            <div class="container">
-                <ul class="breadcrumb">
-                    <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
-                    <li class=""><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subdomain}) }}">Product</a></li>
-                    <li class="active"><a href="javascript:void(0);">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></li>
-                </ul>
-            </div>
-        </section>
+    {% if globalOption.templateCustomize.breadcrumb == 1 %}
+    <section id="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li class="home"><a href="{{ path(globalOption.subDomain ~ '_ecommercesubdomain') }}"><span class="glyphicon glyphicon-home"></span></a></li>
+                <li class=""><a href="{{ path(globalOption.subDomain ~ '_webservice_product',{'subdomain':globalOption.subdomain}) }}">Product</a></li>
+                <li class="active"><a href="javascript:void(0);">{% if product.masterItem is not empty and globalOption.ecommerceConfig.showMasterName == 1 %}{{ product.masterItem.name }}&nbsp;-&nbsp;{% endif %}{{ product.webName }}</a></li>
+            </ul>
+        </div>
+    </section>
+    {% endif %}
         <div class="clearfix"></div>
         {% if globalOption.featureWidgets is defined and globalOption.featureWidgets is not empty %}
             <div class="container bodyColor" >

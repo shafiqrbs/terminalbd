@@ -1,6 +1,7 @@
 {% extends ':frontend/template:base.html.twig' %}
 {% block body %}
     <div class="clearfix"></div>
+{% if globalOption.templateCustomize.breadcrumb == 1 %}
     <section id="breadcrumb">
         <div class="container">
             <ul class="breadcrumb">
@@ -10,6 +11,7 @@
             </ul>
         </div>
     </section>
+{% endif %}
     <div class="clearfix"></div>
     <section>
         <div class="container">
