@@ -82,24 +82,3 @@
         {% render controller("FrontendBundle:WebsiteWidget:featureWidget",{'globalOption':globalOption.id, 'menu':menu.id,'position':'header'}) %}
     </section>
 {% endif %}
-
-<style>
-
-    .sticky{
-        transition: all 0.4s ease;
-    }
-
-    #header{
-        position: relative;
-    }
-
-    .fixed-top {
-        transition: all 0.4s ease;
-        position: fixed!important;
-    }
-
-    .fixed-top .img-logo img{
-        height:60px;
-    }
-
-</style>

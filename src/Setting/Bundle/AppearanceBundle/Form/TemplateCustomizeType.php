@@ -250,6 +250,14 @@ class TemplateCustomizeType extends AbstractType
                 'placeholder'=>'')
             ))
 
+            ->add('subMenuBgColor','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default','placeholder'=>'')
+            ))
+
+            ->add('subMenuBgColorHover','text', array('attr'=>array(
+                'class'=>'m-wrap span10 colorpicker-default','placeholder'=>'')
+            ))
+
             ->add('menuFontSize', 'choice', array(
                 'attr'=>array('class'=>'span6 m-wrap'),
                 'choices' => array('' => '---Select One---','10px' => '10px',  '11px' => '11px',  '12px' => '12px', '13px' => '13px', '14px' => '14px',  '15px' => '15px', '16px' => '16px', '17px' => '17px',  '18px' => '18px', '19px' => '19px', '20px' => '20px'),

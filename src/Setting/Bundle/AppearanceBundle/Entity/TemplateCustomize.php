@@ -542,6 +542,21 @@ class TemplateCustomize
      */
     private $menuBgColorHover;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="subMenuBgColor", type="string", length=20, nullable=true)
+     */
+    private $subMenuBgColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="subMenuBgColorHover", type="string", length=20, nullable=true)
+     */
+    private $subMenuBgColorHover;
+
+
     /**
      * @var string
      *
@@ -2138,6 +2153,38 @@ class TemplateCustomize
     public function setStickyMenuTopMargin($stickyMenuTopMargin)
     {
         $this->stickyMenuTopMargin = $stickyMenuTopMargin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubMenuBgColor()
+    {
+        return $this->subMenuBgColor;
+    }
+
+    /**
+     * @param string $subMenuBgColor
+     */
+    public function setSubMenuBgColor($subMenuBgColor)
+    {
+        $this->subMenuBgColor = $subMenuBgColor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubMenuBgColorHover()
+    {
+        return $this->subMenuBgColorHover;
+    }
+
+    /**
+     * @param string $subMenuBgColorHover
+     */
+    public function setSubMenuBgColorHover($subMenuBgColorHover)
+    {
+        $this->subMenuBgColorHover = $subMenuBgColorHover;
     }
 
 
