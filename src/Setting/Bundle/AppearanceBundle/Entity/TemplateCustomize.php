@@ -73,6 +73,13 @@ class TemplateCustomize
      */
     private $sidebarTooltip = false;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="menuBold", type="boolean", nullable=true)
+     */
+    private $menuBold = false;
+
 
     /**
      * @var string
@@ -2185,6 +2192,22 @@ class TemplateCustomize
     public function setSubMenuBgColorHover($subMenuBgColorHover)
     {
         $this->subMenuBgColorHover = $subMenuBgColorHover;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMenuBold()
+    {
+        return $this->menuBold;
+    }
+
+    /**
+     * @param bool $menuBold
+     */
+    public function setMenuBold($menuBold)
+    {
+        $this->menuBold = $menuBold;
     }
 
 

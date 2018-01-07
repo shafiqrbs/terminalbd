@@ -24,6 +24,7 @@ class TemplateCustomizeType extends AbstractType
             ->add('showSearch')
             ->add('showSidebar')
             ->add('sidebarTooltip')
+            ->add('menuBold')
 
             ->add('sidebarTitle','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Enter sidebar title')))
             ->add('sidebarPosition', 'choice', array(
@@ -259,7 +260,7 @@ class TemplateCustomizeType extends AbstractType
             ))
 
             ->add('menuFontSize', 'choice', array(
-                'attr'=>array('class'=>'span6 m-wrap'),
+                'attr'=>array('class'=>'span12 m-wrap'),
                 'choices' => array('' => '---Select One---','10px' => '10px',  '11px' => '11px',  '12px' => '12px', '13px' => '13px', '14px' => '14px',  '15px' => '15px', '16px' => '16px', '17px' => '17px',  '18px' => '18px', '19px' => '19px', '20px' => '20px'),
             ))
 
@@ -322,11 +323,7 @@ class TemplateCustomizeType extends AbstractType
                 'class'=>'m-wrap span10 numeric',
                 'placeholder'=>'')
             ))
-
-
-
-
-        ;
+            ;
     }
     
     /**
