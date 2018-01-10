@@ -1,20 +1,21 @@
 <?php
 
-namespace Appstore\Bundle\HospitalBundle\Entity;
+namespace Appstore\Bundle\DmsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Core\UserBundle\Entity\User;
 use Setting\Bundle\LocationBundle\Entity\Location;
+use Setting\Bundle\ToolBundle\Entity\ProductUnit;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 /**
- * Particular
+ * DmsParticular
  *
- * @ORM\Table( name = "hms_particular")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\HospitalBundle\Repository\ParticularRepository")
+ * @ORM\Table( name = "dms_particular")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\DmsBundle\Repository\DmsParticularRepository")
  */
-class Particular
+class DmsParticular
 {
     /**
      * @var integer
@@ -26,98 +27,41 @@ class Particular
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", inversedBy="particulars")
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsConfig", inversedBy="dmsParticulars")
      **/
-    private $hospitalConfig;
+    private $dmsConfig;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="referredDoctor")
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoice", mappedBy="referredDoctor")
      **/
-    private $hmsInvoice;
+    private $dmsInvoice;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="cabin")
-     **/
-    private $hmsInvoiceCabin;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsPurchaseItem", mappedBy="particular")
-     **/
-    private $purchaseItems;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Service", inversedBy="particulars" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsService", inversedBy="dmsParticulars" )
      * @ORM\OrderBy({"sorting" = "ASC"})
      **/
     private $service;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsServiceGroup", inversedBy="particulars" )
-     * @ORM\OrderBy({"sorting" = "ASC"})
-     **/
-    private $serviceGroup;
 
     /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\PathologicalReport", mappedBy="particular")
-     * @ORM\OrderBy({"sorting" = "ASC"})
-     **/
-    private $pathologicalReports;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="particulars")
-     **/
-    private $category;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HmsCategory", inversedBy="particularDepartments")
-     **/
-    private $department;
-
-    /**
-     * @ORM\OneTomany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\DoctorInvoice", mappedBy="assignDoctor")
-     **/
-    private $doctorInvoices;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\Invoice", mappedBy="assignDoctor")
-     **/
-    private $assignDoctorInvoices;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\invoiceParticular", mappedBy="assignDoctor")
-     **/
-    private $invoiceParticularDoctor;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular", mappedBy="particular" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceParticular", mappedBy="dmsParticular" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $invoiceParticular;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular", mappedBy="particular" )
-     * @ORM\OrderBy({"id" = "DESC"})
-     **/
-    private  $admissionPatientParticular;
-
 
     /**
-     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularOperator" )
+     * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="dmsParticularOperator" )
      **/
     private  $assignOperator;
 
     /**
-     * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="particularDoctor" )
+     * @ORM\OneToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="dmsParticularDoctor" )
      **/
     private  $assignDoctor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\ProductUnit", inversedBy="particulars" )
-     **/
-    private  $unit;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="particulars")
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\LocationBundle\Entity\Location", inversedBy="dmsParticulars")
      **/
     protected $location;
 
@@ -135,57 +79,6 @@ class Particular
      * @ORM\Column(name="quantity", type="smallint", length=3, nullable=true)
      */
     private $quantity = 1;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="openingQuantity", type="integer", nullable=true)
-     */
-    private $openingQuantity;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="minQuantity", type="integer", nullable=true)
-     */
-    private $minQuantity;
-
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="purchaseQuantity", type="integer", nullable=true)
-     */
-    private $purchaseQuantity;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="salesQuantity", type="integer", nullable=true)
-     */
-    private $salesQuantity;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="purchaseAverage", type="decimal", nullable=true)
-     */
-    private $purchaseAverage;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="purchasePrice", type="decimal", nullable=true)
-     */
-    private $purchasePrice;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="room", type="string", length=10, nullable=true)
-     */
-    private $room;
 
 
     /**
@@ -214,30 +107,10 @@ class Particular
     /**
      * @var string
      *
-     * @ORM\Column(name="overHeadCost", type="decimal", nullable=true)
-     */
-    private $overHeadCost;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="price", type="decimal", nullable=true)
      */
     private $price;
 
-    /**
-     * @var \string
-     *
-     * @ORM\Column(name="minimumPrice", type="decimal", nullable=true)
-     */
-    private $minimumPrice;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="commission", type="decimal" , nullable=true)
-     */
-    private $commission;
 
     /**
      * @var string
@@ -313,9 +186,9 @@ class Particular
     /**
      * @var string
      *
-     * @ORM\Column(name="particularCode", type="string", length=10, nullable=true)
+     * @ORM\Column(name="dmsParticularCode", type="string", length=10, nullable=true)
      */
-    private $particularCode;
+    private $dmsParticularCode;
 
 
     /**
@@ -331,6 +204,13 @@ class Particular
      * @ORM\Column(name="mobile", type="string", length=15, nullable=true)
      */
     private $mobile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="particularCode", type="string", length=15, nullable=true)
+     */
+    private $particularCode;
 
     /**
      * @var boolean
@@ -396,7 +276,7 @@ class Particular
      *
      * @param string $name
      *
-     * @return Particular
+     * @return DmsParticular
      */
     public function setName($name)
     {
@@ -417,11 +297,11 @@ class Particular
 
     public function getReferred(){
 
-        return $this->particularCode.' - '.$this->name .' ('. $this->mobile .')/'.$this->getService()->getName();
+        return $this->dmsParticularCode.' - '.$this->name .' ('. $this->mobile .')/'.$this->getService()->getName();
     }
 
     public function getDoctor(){
-        return $this->particularCode.' - '.$this->name;
+        return $this->dmsParticularCode.' - '.$this->name;
     }
 
     /**
@@ -429,7 +309,7 @@ class Particular
      *
      * @param string $content
      *
-     * @return Particular
+     * @return DmsParticular
      */
     public function setContent($content)
     {
@@ -453,7 +333,7 @@ class Particular
      *
      * @param string $price
      *
-     * @return Particular
+     * @return DmsParticular
      */
     public function setPrice($price)
     {
@@ -473,62 +353,6 @@ class Particular
     }
 
 
-
-    /**
-     * Set commission
-     *
-     * @param string $commission
-     *
-     * @return Particular
-     */
-    public function setCommission($commission)
-    {
-        $this->commission = $commission;
-
-        return $this;
-    }
-
-    /**
-     * Get commission
-     *
-     * @return string
-     */
-    public function getCommission()
-    {
-        return $this->commission;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMinimumPrice()
-    {
-        return $this->minimumPrice;
-    }
-
-    /**
-     * @param string $minimumPrice
-     */
-    public function setMinimumPrice($minimumPrice)
-    {
-        $this->minimumPrice = $minimumPrice;
-    }
-
-    /**
-     * @return HospitalConfig
-     */
-    public function getHospitalConfig()
-    {
-        return $this->hospitalConfig;
-    }
-
-    /**
-     * @param HospitalConfig $hospitalConfig
-     */
-    public function setHospitalConfig($hospitalConfig)
-    {
-        $this->hospitalConfig = $hospitalConfig;
-    }
 
     /**
      * @return int
@@ -597,17 +421,17 @@ class Particular
     /**
      * @return string
      */
-    public function getParticularCode()
+    public function getDmsParticularCode()
     {
-        return $this->particularCode;
+        return $this->dmsParticularCode;
     }
 
     /**
-     * @param string $particularCode
+     * @param string $dmsParticularCode
      */
-    public function setParticularCode($particularCode)
+    public function setDmsParticularCode($dmsParticularCode)
     {
-        $this->particularCode = $particularCode;
+        $this->dmsParticularCode = $dmsParticularCode;
     }
 
     /**
@@ -624,40 +448,6 @@ class Particular
     public function setService($service)
     {
         $this->service = $service;
-    }
-
-
-    /**
-     * @return HmsCategory
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * @param HmsCategory $category
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
-    }
-
-
-    /**
-     * @return HmsCategory
-     */
-    public function getDepartment()
-    {
-        return $this->department;
-    }
-
-    /**
-     * @param HmsCategory $department
-     */
-    public function setDepartment($department)
-    {
-        $this->department = $department;
     }
 
     /**
@@ -820,13 +610,7 @@ class Particular
         $this->unit = $unit;
     }
 
-    /**
-     * @return InvoiceParticular
-     */
-    public function getInvoiceParticular()
-    {
-        return $this->invoiceParticular;
-    }
+
 
     /**
      * @return Location
@@ -879,7 +663,7 @@ class Particular
     /**
      * Sets file.
      *
-     * @param Particular $file
+     * @param DmsParticular $file
      */
     public function setFile(UploadedFile $file = null)
     {
@@ -889,7 +673,7 @@ class Particular
     /**
      * Get file.
      *
-     * @return Particular
+     * @return DmsParticular
      */
     public function getFile()
     {
@@ -944,13 +728,7 @@ class Particular
         $this->file = null;
     }
 
-    /**
-     * @return Invoice
-     */
-    public function getHmsInvoice()
-    {
-        return $this->hmsInvoice;
-    }
+
 
     /**
      * @return string
@@ -969,39 +747,6 @@ class Particular
     }
 
     /**
-     * @return Invoice
-     */
-    public function getHmsInvoiceCabin()
-    {
-        return $this->hmsInvoiceCabin;
-    }
-
-
-    /**
-     * @return int
-     */
-    public function getPurchaseQuantity()
-    {
-        return $this->purchaseQuantity;
-    }
-
-    /**
-     * @param int $purchaseQuantity
-     */
-    public function setPurchaseQuantity($purchaseQuantity)
-    {
-        $this->purchaseQuantity = $purchaseQuantity;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSalesQuantity()
-    {
-        return $this->salesQuantity;
-    }
-
-    /**
      * @param int $salesQuantity
      */
     public function setSalesQuantity($salesQuantity)
@@ -1009,37 +754,6 @@ class Particular
         $this->salesQuantity = $salesQuantity;
     }
 
-    /**
-     * @return DoctorInvoice
-     */
-    public function getDoctorInvoices()
-    {
-        return $this->doctorInvoices;
-    }
-
-    /**
-     * @return Invoice
-     */
-    public function getAssignDoctorInvoices()
-    {
-        return $this->assignDoctorInvoices;
-    }
-
-    /**
-     * @return HmsPurchaseItem
-     */
-    public function getPurchaseItems()
-    {
-        return $this->purchaseItems;
-    }
-
-    /**
-     * @return PathologicalReport
-     */
-    public function getPathologicalReports()
-    {
-        return $this->pathologicalReports;
-    }
 
     /**
      * @return User
@@ -1055,14 +769,6 @@ class Particular
     public function setAssignDoctor($assignDoctor)
     {
         $this->assignDoctor = $assignDoctor;
-    }
-
-    /**
-     * @return InvoiceParticular
-     */
-    public function getInvoiceParticularDoctor()
-    {
-        return $this->invoiceParticularDoctor;
     }
 
     /**
@@ -1097,21 +803,6 @@ class Particular
         $this->designation = $designation;
     }
 
-    /**
-     * @return string
-     */
-    public function getOverHeadCost()
-    {
-        return $this->overHeadCost;
-    }
-
-    /**
-     * @param string $overHeadCost
-     */
-    public function setOverHeadCost($overHeadCost)
-    {
-        $this->overHeadCost = $overHeadCost;
-    }
 
     /**
      * @return bool
@@ -1129,45 +820,6 @@ class Particular
         $this->testDuration = $testDuration;
     }
 
-    /**
-     * @return AdmissionPatientParticular
-     */
-    public function getAdmissionPatientParticular()
-    {
-        return $this->admissionPatientParticular;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getServiceGroup()
-    {
-        return $this->serviceGroup;
-    }
-
-    /**
-     * @param mixed $serviceGroup
-     */
-    public function setServiceGroup($serviceGroup)
-    {
-        $this->serviceGroup = $serviceGroup;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPurchaseAverage()
-    {
-        return $this->purchaseAverage;
-    }
-
-    /**
-     * @param string $purchaseAverage
-     */
-    public function setPurchaseAverage($purchaseAverage)
-    {
-        $this->purchaseAverage = $purchaseAverage;
-    }
 
     /**
      * @return \DateTime
@@ -1201,37 +853,7 @@ class Particular
         $this->updated = $updated;
     }
 
-    /**
-     * @return int
-     */
-    public function getOpeningQuantity()
-    {
-        return $this->openingQuantity;
-    }
 
-    /**
-     * @param int $openingQuantity
-     */
-    public function setOpeningQuantity($openingQuantity)
-    {
-        $this->openingQuantity = $openingQuantity;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMinQuantity()
-    {
-        return $this->minQuantity;
-    }
-
-    /**
-     * @param int $minQuantity
-     */
-    public function setMinQuantity($minQuantity)
-    {
-        $this->minQuantity = $minQuantity;
-    }
 
     /**
      * @return bool
@@ -1249,20 +871,54 @@ class Particular
         $this->reportFormat = $reportFormat;
     }
 
+
+
     /**
-     * @return string
+     * @return DmsInvoice
      */
-    public function getPurchasePrice()
+    public function getDmsInvoice()
     {
-        return $this->purchasePrice;
+        return $this->dmsInvoice;
     }
 
     /**
-     * @param string $purchasePrice
+     * @return DmsConfig
      */
-    public function setPurchasePrice($purchasePrice)
+    public function getDmsConfig()
     {
-        $this->purchasePrice = $purchasePrice;
+        return $this->dmsConfig;
+    }
+
+    /**
+     * @param DmsConfig $dmsConfig
+     */
+    public function setDmsConfig($dmsConfig)
+    {
+        $this->dmsConfig = $dmsConfig;
+    }
+
+    /**
+     * @return DmsInvoiceParticular
+     */
+    public function getInvoiceParticular()
+    {
+        return $this->invoiceParticular;
+    }
+
+    /**
+     * @return string
+     */
+    public function getParticularCode()
+    {
+        return $this->particularCode;
+    }
+
+    /**
+     * @param string $particularCode
+     */
+    public function setParticularCode($particularCode)
+    {
+        $this->particularCode = $particularCode;
     }
 
 

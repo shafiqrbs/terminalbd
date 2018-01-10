@@ -1,3 +1,11 @@
+medicine:
+    resource: "@MedicineBundle/Resources/config/routing.yml"
+    prefix:   /
+
+appstore_dms:
+    resource: "@DmsBundle/Resources/config/routing.yml"
+    prefix:   /dms
+
 human_resource:
     resource: "@HumanResourceBundle/Resources/config/routing.yml"
     prefix:   /human-resource

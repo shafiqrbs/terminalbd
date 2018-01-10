@@ -3,6 +3,7 @@
 namespace Setting\Bundle\ToolBundle\Repository;
 
 use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
+use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
@@ -18,7 +19,7 @@ use Setting\Bundle\ToolBundle\Entity\AdsTool;
 use Setting\Bundle\ToolBundle\Entity\FooterSetting;
 use Setting\Bundle\ToolBundle\Entity\MobileIcon;
 use Setting\Bundle\ToolBundle\Entity\SiteSetting;
-use Setting\Bundle\ToolBundle\Entity\TemplateCustomize;
+use Setting\Bundle\AppearanceBundle\Entity\TemplateCustomize;
 
 /**
  * GlobalOptionRepository
@@ -246,6 +247,14 @@ class GlobalOptionRepository extends EntityRepository
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }
+
+        $dms = $this->_em->getRepository('DmsBundle:DmsConfig')->findOneBy(array('globalOption'=>$globalOption));
+        if(empty($dms)){
+            $config = new DmsConfig();
+            $config->setGlobalOption($globalOption);
+            $this->_em->persist($config);
+        }
+
         $this->_em->flush();
 
     }
@@ -288,6 +297,7 @@ class GlobalOptionRepository extends EntityRepository
         $iconEntity->setGlobalOption($globalOption);
         $em->persist($iconEntity);
 
+
         $contactEntity = new ContactPage();
         $contactEntity->setGlobalOption($globalOption);
         $contactEntity->setUser($entity);
@@ -301,15 +311,15 @@ class GlobalOptionRepository extends EntityRepository
         $adsEntity->setGlobalOption($globalOption);
         $em->persist($adsEntity);
 
-        $inventory = new InventoryConfig();
-        $inventory->setGlobalOption($globalOption);
-        $em->persist($inventory);
-
         $customer = new Customer();
         $customer->setGlobalOption($globalOption);
         $customer->setMobile($globalOption->getMobile(0));
         $customer->setName('Default');
         $em->persist($customer);
+
+        $inventory = new InventoryConfig();
+        $inventory->setGlobalOption($globalOption);
+        $em->persist($inventory);
 
 
         $ecommerce = new EcommerceConfig();

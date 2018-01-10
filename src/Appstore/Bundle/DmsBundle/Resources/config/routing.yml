@@ -1,0 +1,51 @@
+dms_report:
+    resource: "@DmsBundle/Resources/config/routing/report.yml"
+    prefix:   /report
+
+dms_purchase:
+    resource: "@DmsBundle/Resources/config/routing/purchase.yml"
+    prefix:   /purchase
+
+dms_vendor:
+    resource: "@DmsBundle/Resources/config/routing/vendor.yml"
+    prefix:   /vendor
+
+dms_invoice:
+    resource: "@DmsBundle/Resources/config/routing/invoice.yml"
+    prefix:   /invoice
+
+dms_doctor_invoice:
+    resource: "@DmsBundle/Resources/config/routing/doctorinvoice.yml"
+    prefix:   /doctor-invoice
+
+dms_invoice_admission:
+    resource: "@DmsBundle/Resources/config/routing/invoiceadmission.yml"
+    prefix:   /invoice-admission
+
+dms_invoice_particular:
+    resource: "@DmsBundle/Resources/config/routing/invoiceparticular.yml"
+    prefix:   /invoice-particular
+
+dms_particular:
+    resource: "@DmsBundle/Resources/config/routing/particular.yml"
+    prefix:   /particular
+
+dms_pathology:
+    resource: "@DmsBundle/Resources/config/routing/pathology.yml"
+    prefix:   /pathology
+
+
+dms_doctor:
+    resource: "@DmsBundle/Resources/config/routing/doctor.yml"
+    prefix:   /doctor
+
+
+dms_medicine:
+    resource: "@DmsBundle/Resources/config/routing/medicine.yml"
+    prefix:   /medicine
+
+
+dms_config:
+    resource: "@DmsBundle/Resources/config/routing/config.yml"
+    prefix:   /config
+

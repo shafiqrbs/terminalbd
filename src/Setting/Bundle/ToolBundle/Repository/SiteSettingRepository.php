@@ -6,6 +6,7 @@ use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
+use Setting\Bundle\ToolBundle\Entity\SiteSetting;
 
 /**
  * SiteSettingRepository
@@ -20,7 +21,7 @@ class SiteSettingRepository extends EntityRepository
     {
         $em = $this->_em;
 
-        $reEntity = $em->getRepository('SettingToolBundle:SiteSetting')->findOneBy(array('globalOption'=>$globalOption));
+        $reEntity = $this->findOneBy(array('globalOption'=>$globalOption));
         if(empty($reEntity) && $globalOption){
             $entity = New SiteSetting();
             $entity->setGlobalOption($globalOption);

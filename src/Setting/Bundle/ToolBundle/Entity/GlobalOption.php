@@ -6,6 +6,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountingConfig;
 use Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank;
 use Appstore\Bundle\AccountingBundle\Entity\AccountPurchaseReturn;
 use Appstore\Bundle\AccountingBundle\Entity\Transaction;
+use Appstore\Bundle\DmsBundle\Entity\DmsConfig;
 use Appstore\Bundle\DomainUserBundle\Entity\Branches;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\DomainUserBundle\Entity\DomainUser;
@@ -524,6 +525,11 @@ class GlobalOption
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\HospitalBundle\Entity\HospitalConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
     private $hospitalConfig;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $dmsConfig;
 
 
     /**
@@ -1564,6 +1570,14 @@ class GlobalOption
     public function getAccountMobileBank()
     {
         return $this->accountMobileBank;
+    }
+
+    /**
+     * @return DmsConfig
+     */
+    public function getDmsConfig()
+    {
+        return $this->dmsConfig;
     }
 
 
