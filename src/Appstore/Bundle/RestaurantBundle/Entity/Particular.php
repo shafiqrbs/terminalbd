@@ -933,21 +933,7 @@ class Particular
         $this->salesQuantity = $salesQuantity;
     }
 
-    /**
-     * @return DoctorInvoice
-     */
-    public function getDoctorInvoices()
-    {
-        return $this->doctorInvoices;
-    }
 
-    /**
-     * @return Invoice
-     */
-    public function getAssignDoctorInvoices()
-    {
-        return $this->assignDoctorInvoices;
-    }
 
     /**
      * @return HmsPurchaseItem
@@ -957,37 +943,7 @@ class Particular
         return $this->purchaseItems;
     }
 
-    /**
-     * @return PathologicalReport
-     */
-    public function getPathologicalReports()
-    {
-        return $this->pathologicalReports;
-    }
 
-    /**
-     * @return User
-     */
-    public function getAssignDoctor()
-    {
-        return $this->assignDoctor;
-    }
-
-    /**
-     * @param User $assignDoctor
-     */
-    public function setAssignDoctor($assignDoctor)
-    {
-        $this->assignDoctor = $assignDoctor;
-    }
-
-    /**
-     * @return InvoiceParticular
-     */
-    public function getInvoiceParticularDoctor()
-    {
-        return $this->invoiceParticularDoctor;
-    }
 
     /**
      * @return string

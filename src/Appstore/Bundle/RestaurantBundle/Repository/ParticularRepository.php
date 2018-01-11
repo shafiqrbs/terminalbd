@@ -2,6 +2,11 @@
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
 
+use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
+use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
+use Appstore\Bundle\RestaurantBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Entity\Purchase;
+use Appstore\Bundle\RestaurantBundle\Entity\PurchaseItem;
 use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Doctrine\ORM\EntityRepository;
 
@@ -75,11 +80,10 @@ class ParticularRepository extends EntityRepository
         return  $qb;
     }
 
-    public function getServices($hospital,$services){
+    public function getServices($config,$services){
 
 
-        $particulars = $this->getServiceWithParticular($hospital,$services);
-
+        $particulars = $this->getServiceWithParticular($config,$services);
         $data = '';
         $service = '';
         foreach ($particulars as $particular) {
@@ -89,11 +93,7 @@ class ParticularRepository extends EntityRepository
                 }
                 $data .= '<optgroup label="' . $particular['serviceCode'] . '-' . ucfirst($particular['serviceName']) . '">';
             }
-            if ($particular['serviceCode'] != '04'){
-                $data .= '<option value="/hms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['price'] .'</option>';
-            }else{
-                $data .= '<option value="/hms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['price'].'</option>';
-            }
+            $data .= '<option value="/restaurant/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])).' - '.$particular['category'] . ' - Tk. ' . $particular['price'] .'</option>';
             $service = $particular['serviceName'];
         }
         if ($service != '') {
@@ -104,19 +104,21 @@ class ParticularRepository extends EntityRepository
     }
 
 
-    public function getServiceWithParticular($hospital,$services){
+    public function getServiceWithParticular($config,$services){
 
         $qb = $this->createQueryBuilder('e')
             ->leftJoin('e.service','s')
+            ->leftJoin('e.category','c')
             ->select('e.id')
             ->addSelect('e.name')
             ->addSelect('e.particularCode')
             ->addSelect('e.price')
             ->addSelect('e.quantity')
+            ->addSelect('c.name as category')
             ->addSelect('s.name as serviceName')
             ->addSelect('s.code as serviceCode')
-            ->where('e.restaurantConfig = :config')->setParameter('config', $hospital)
-            ->andWhere('s.id IN(:service)')
+            ->where('e.restaurantConfig = :config')->setParameter('config', $config)
+            ->andWhere('s.slug IN(:service)')
             ->setParameter('service',array_values($services))
             ->orderBy('e.service','ASC')
             ->getQuery()->getArrayResult();
@@ -178,47 +180,12 @@ class ParticularRepository extends EntityRepository
             return  $qb;
     }
 
-    public function findDmsExistingCustomer($hospital, $mobile,$data)
-    {
-        $em = $this->_em;
 
-        $name = $data['referredDoctor']['name'];
-        $department = $data['referredDoctor']['department'];
-        $location = $data['referredDoctor']['location'];
-        $address = $data['referredDoctor']['address'];
-        $entity = $em->getRepository('RestaurantBundle:Particular')->findOneBy(array('restaurantConfig' => $hospital ,'service' => 6 ,'mobile' => $mobile));
-        if($entity){
-
-            return $entity;
-
-        }else{
-
-            $entity = new Particular();
-            if(!empty($location)){
-                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
-                $entity->setLocation($location);
-            }
-            if(!empty($department)){
-                $department = $em->getRepository('RestaurantBundle:DmsCategory')->find($department);
-                $entity->setDepartment($department);
-            }
-            $entity->setService($em->getRepository('RestaurantBundle:Service')->find(6));
-            $entity->setMobile($mobile);
-            $entity->setName($name);
-            $entity->setAddress($address);
-            $entity->setDmsConfig($hospital);
-            $em->persist($entity);
-            $em->flush($entity);
-            return $entity;
-        }
-
-    }
-
-    public function getPurchaseUpdateQnt(DmsPurchase $purchase){
+    public function getPurchaseUpdateQnt(Purchase $purchase){
 
         $em = $this->_em;
 
-        /** @var DmsPurchaseItem $purchaseItem */
+        /** @var PurchaseItem $purchaseItem */
 
         foreach($purchase->getPurchaseItems() as $purchaseItem ){
 
@@ -234,17 +201,18 @@ class ParticularRepository extends EntityRepository
         }
     }
 
-    public function insertAccessories(Invoice $invoice){
+    public function insertAccessories(Invoice  $invoice){
 
         $em = $this->_em;
 
         $em = $this->_em;
         /** @var InvoiceParticular $item */
+
         if(!empty($invoice->getInvoiceParticulars())){
             foreach($invoice->getInvoiceParticulars() as $item ){
                 /** @var Particular  $particular */
                 $particular = $item->getParticular();
-                if( $particular->getService()->getId() == 4 ){
+                if( $particular->getService()->getSlug() == 'stockable' ){
                     $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
                     $particular->setSalesQuantity($qnt);
                     $em->persist($particular);
@@ -275,28 +243,6 @@ class ParticularRepository extends EntityRepository
         }
     }
 
-    public function admittedPatientAccessories(InvoiceTransaction $transaction){
-
-        $em = $this->_em;
-
-        /** @var InvoiceParticular $item */
-        if(!empty($transaction->getAdmissionPatientParticulars())){
-
-            foreach($transaction->getAdmissionPatientParticulars() as $item ){
-
-                /** @var Particular  $particular */
-
-                $particular = $item->getParticular();
-                if( $particular->getService()->getId() == 4 ){
-                    $qnt = ($particular->getSalesQuantity() + $item->getQuantity());
-                    $particular->setSalesQuantity($qnt);
-                    $em->persist($particular);
-                    $em->flush();
-                }
-            }
-        }
-
-    }
 
     public function groupServiceBy(){
 

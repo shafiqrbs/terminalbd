@@ -1,11 +1,10 @@
 <?php
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
-use Appstore\Bundle\HospitalBundle\Controller\InvoiceController;
-use Appstore\Bundle\HospitalBundle\Entity\AdmissionPatientParticular;
-use Appstore\Bundle\HospitalBundle\Entity\Invoice;
-use Appstore\Bundle\HospitalBundle\Entity\InvoiceParticular;
-use Appstore\Bundle\HospitalBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Controller\InvoiceController;
+use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
+use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
+use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -61,10 +60,10 @@ class InvoiceParticularRepository extends EntityRepository
 
     public function insertInvoiceItems($invoice, $data)
     {
-        $particular = $this->_em->getRepository('HospitalBundle:Particular')->find($data['particularId']);
+        $particular = $this->_em->getRepository('RestaurantBundle:Particular')->find($data['particularId']);
         $em = $this->_em;
         $entity = new InvoiceParticular();
-        $invoiceParticular = $this->_em->getRepository('HospitalBundle:InvoiceParticular')->findOneBy(array('invoice'=>$invoice ,'particular' => $particular));
+        $invoiceParticular = $this->_em->getRepository('RestaurantBundle:InvoiceParticular')->findOneBy(array('invoice'=>$invoice ,'particular' => $particular));
         if(!empty($invoiceParticular)) {
             $entity = $invoiceParticular;
             if ($particular->getService()->getHasQuantity() == 1){
@@ -84,7 +83,7 @@ class InvoiceParticularRepository extends EntityRepository
             $entity->setSalesPrice($data['price']);
             $entity->setSubTotal($data['price'] * $data['quantity']);
         }
-        $entity->setHmsInvoice($invoice);
+        $entity->setInvoice($invoice);
         if($particular->getService()->getCode() == '01'){
             $datetime = new \DateTime("now");
             $entity->setCode($invoice);
@@ -114,21 +113,16 @@ class InvoiceParticularRepository extends EntityRepository
             $entity = new InvoiceParticular();
             $entity->setSubTotal($patientParticular->getSubTotal());
             $entity->setQuantity($patientParticular->getQuantity());
-            $entity->setHmsInvoice($invoice);
+            $entity->setInvoice($invoice);
             $entity->setParticular($patientParticular->getParticular());
             $entity->setSalesPrice($patientParticular->getSalesPrice());
             $entity->setEstimatePrice($patientParticular->getParticular()->getPrice());
-            if($patientParticular->getParticular()->getCommission()){
-                $entity->setCommission($patientParticular->getParticular()->getCommission() * $entity->getQuantity());
-            }
 
         }else{
 
             $entity->setSubTotal( $entity->getSubTotal() + $patientParticular->getSubTotal());
             $entity->setQuantity( $entity->getQuantity() + $patientParticular->getQuantity());
-            if($entity->getCommission()){
-                $entity->setCommission($entity->getCommission() * $entity->getQuantity());
-            }
+
         }
         $em->persist($entity);
         $em->flush();
@@ -136,29 +130,6 @@ class InvoiceParticularRepository extends EntityRepository
 
     public function reverseInvoiceParticularMasterUpdate(AdmissionPatientParticular $patientParticular)
     {
-
-        $em = $this->_em;
-        $invoice = $patientParticular->getInvoiceTransaction()->getHmsInvoice();
-        $entity = $this->findOneBy(array('invoice' => $invoice,'particular' => $patientParticular->getParticular()));
-
-        if($entity->getQuantity() == 1){
-
-            $em->remove($entity);
-            $em->flush();
-
-        }else{
-
-            /* @var $entity InvoiceParticular */
-
-            $entity->setSubTotal( $entity->getSubTotal() - $patientParticular->getSubTotal());
-            $entity->setQuantity( $entity->getQuantity() - $patientParticular->getQuantity());
-            if($entity->getCommission()){
-                $entity->setCommission($entity->getCommission() * $entity->getQuantity());
-            }
-            $em->persist($entity);
-            $em->flush();
-
-        }
 
 
     }
@@ -175,12 +146,12 @@ class InvoiceParticularRepository extends EntityRepository
             $data .= '<td class="span1" >' . $i . '</td>';
             $data .= '<td class="span1" >' . $entity->getParticular()->getParticularCode() . '</td>';
             $data .= '<td class="span4" >' . $entity->getParticular()->getName() . '</td>';
-            $data .= '<td class="span2" >' . $entity->getParticular()->getService()->getName() . '</td>';
+            $data .= '<td class="span2" >' . $entity->getParticular()->getCategory()->getName() . '</td>';
             $data .= '<td class="span1" >' . $entity->getQuantity() . '</td>';
             $data .= '<td class="span2" >' . $entity->getSalesPrice() . '</td>';
             $data .= '<td class="span2" >' . $entity->getSubTotal() . '</td>';
             $data .= '<td class="span1" >
-            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/hms/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
+            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/restaurant/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
             </td>';
             $data .= '</tr>';
             $i++;
@@ -226,7 +197,7 @@ class InvoiceParticularRepository extends EntityRepository
         $qb
             ->select('MAX(ip.code)')
             ->join('ip.invoice','s')
-            ->where('s.hospitalConfig = :hospital')
+            ->where('s.restaurantConfig = :hospital')
             ->andWhere('s.updated >= :today_startdatetime')
             ->andWhere('s.updated <= :today_enddatetime')
             ->setParameter('hospital', $entity->getRestaurantConfig())

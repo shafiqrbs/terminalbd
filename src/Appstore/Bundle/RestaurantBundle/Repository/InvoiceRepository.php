@@ -2,8 +2,8 @@
 
 namespace Appstore\Bundle\RestaurantBundle\Repository;
 use Appstore\Bundle\DomainUserBundle\Entity\Customer;
-use Appstore\Bundle\HospitalBundle\Entity\Invoice;
-use Appstore\Bundle\HospitalBundle\Entity\Particular;
+use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
+use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
@@ -132,11 +132,11 @@ class InvoiceRepository extends EntityRepository
     public function findWithOverview(User $user , $data , $mode='')
     {
 
-        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.invoiceTransactions','it');
         $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(it.total) as netTotal , sum(it.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->where('e.restaurantConfig = :hospital')->setParameter('hospital', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -160,11 +160,11 @@ class InvoiceRepository extends EntityRepository
 
     public function findWithSalesOverview(User $user , $data , $mode='')
     {
-        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.invoiceTransactions','it');
         $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -186,7 +186,7 @@ class InvoiceRepository extends EntityRepository
 
     public function findWithServiceOverview(User $user, $data)
     {
-        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.invoiceTransactions','it');
         $qb->leftJoin('e.invoiceParticulars','ip');
@@ -194,7 +194,7 @@ class InvoiceRepository extends EntityRepository
         $qb->leftJoin('p.service','s');
         $qb->select('sum(ip.subTotal) as subTotal');
         $qb->addSelect('s.name as serviceName');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -208,13 +208,13 @@ class InvoiceRepository extends EntityRepository
 
     public function findWithTransactionOverview(User $user, $data)
     {
-        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.invoiceTransactions','it');
         $qb->leftJoin('ip.transactionMethod','p');
         $qb->select('sum(ip.payment) as paymentTotal');
         $qb->addSelect('p.name as transName');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -238,13 +238,13 @@ class InvoiceRepository extends EntityRepository
         }
 
 
-        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
         $qb->leftJoin('e.doctorInvoices','ip');
         $qb->leftJoin('ip.assignDoctor','d');
         $qb->select('sum(ip.payment) as paymentTotal');
         $qb->addSelect('d.name as referredName');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital);
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config);
         $qb->andWhere('ip.process = :mode')->setParameter('mode', 'Paid');
         if (!empty($data['startDate']) ) {
             $qb->andWhere("ip.updated >= :startDate");
@@ -264,10 +264,10 @@ class InvoiceRepository extends EntityRepository
 
     public function invoiceLists(User $user , $mode , $data)
     {
-        $hospital = $user->getGlobalOption()->getRestaurantConfig()->getId();
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
 
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.restaurantConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->where('e.restaurantConfig = :hospital')->setParameter('hospital', $config) ;
         //$qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
@@ -277,9 +277,9 @@ class InvoiceRepository extends EntityRepository
 
     public function invoicePathologicalReportLists(User $user , $mode , $data)
     {
-        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config) ;
         $this->handleSearchBetween($qb,$data);
         $qb->andWhere("e.process IN (:process)");
         $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
@@ -291,10 +291,10 @@ class InvoiceRepository extends EntityRepository
 
     public function doctorInvoiceLists(User $user,$data)
     {
-        $hospital = $user->getGlobalOption()->getHospitalConfig()->getId();
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
 
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $hospital) ;
+        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config) ;
         $qb->andWhere('e.paymentStatus != :status')->setParameter('status', 'pending') ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
@@ -306,18 +306,18 @@ class InvoiceRepository extends EntityRepository
     {
         $em = $this->_em;
         $total = $em->createQueryBuilder()
-            ->from('HospitalBundle:InvoiceParticular','si')
+            ->from('RestaurantBundle:InvoiceParticular','si')
             ->select('sum(si.subTotal) as subTotal')
-            ->addSelect('sum(si.commission) as subCommission')
-            ->where('si.hmsInvoice = :invoice')
+            ->where('si.invoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->getQuery()->getOneOrNullResult();
+
 
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
         $subCommission = !empty($total['subCommission']) ? $total['subCommission'] :0;
         if($subTotal > 0){
 
-            if ($invoice->getHospitalConfig()->getVatEnable() == 1 && $invoice->getHospitalConfig()->getVatPercentage() > 0) {
+            if ($invoice->getRestaurantConfig()->getVatEnable() == 1 && $invoice->getRestaurantConfig()->getVatPercentage() > 0) {
                 $totalAmount = ($subTotal- $invoice->getDiscount());
                 $vat = $this->getCulculationVat($invoice,$totalAmount);
                 $invoice->setVat($vat);
@@ -349,9 +349,9 @@ class InvoiceRepository extends EntityRepository
     {
         $em = $this->_em;
         $res = $em->createQueryBuilder()
-            ->from('HospitalBundle:InvoiceTransaction','si')
+            ->from('RestaurantBundle:InvoiceTransaction','si')
             ->select('sum(si.payment) as payment , sum(si.discount) as discount, sum(si.vat) as vat')
-            ->where('si.hmsInvoice = :invoice')
+            ->where('si.invoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->andWhere('si.process = :process')
             ->setParameter('process', 'Done')
@@ -381,9 +381,9 @@ class InvoiceRepository extends EntityRepository
     {
         $em = $this->_em;
         $res = $em->createQueryBuilder()
-            ->from('HospitalBundle:DoctorInvoice','si')
+            ->from('RestaurantBundle:DoctorInvoice','si')
             ->select('sum(si.payment) as payment')
-            ->where('si.hmsInvoice = :invoice')
+            ->where('si.invoice = :invoice')
             ->setParameter('invoice', $invoice ->getId())
             ->andWhere('si.process = :process')
             ->setParameter('process', 'Paid')
@@ -398,7 +398,7 @@ class InvoiceRepository extends EntityRepository
 
     public function getCulculationVat(Invoice $sales,$totalAmount)
     {
-        $vat = ( ($totalAmount * (int)$sales->getHospitalConfig()->getVatPercentage())/100 );
+        $vat = ( ($totalAmount * (int)$sales->getRestaurantConfig()->getVatPercentage())/100 );
         return round($vat);
     }
 
@@ -406,9 +406,9 @@ class InvoiceRepository extends EntityRepository
 
         $em = $this->_em;
         $qb = $em->createQueryBuilder();
-        $qb->from('HospitalBundle:InvoiceParticular','ip');
+        $qb->from('RestaurantBundle:InvoiceParticular','ip');
         $qb->innerJoin('ip.particular','particular');
-        $qb->where('si.hmsInvoice = :invoice');
+        $qb->where('si.invoice = :invoice');
         $qb->setParameter('invoice', $invoice ->getId());
         $qb->groupBy('particular.service');
 
@@ -417,7 +417,7 @@ class InvoiceRepository extends EntityRepository
     public function updatePatientInfo($invoice,Customer $patient)
     {
         $em = $this->_em;
-        $invoice = $this->_em->getRepository('HospitalBundle:Invoice')->find($invoice);
+        $invoice = $this->_em->getRepository('RestaurantBundle:Invoice')->find($invoice);
         $invoice->setCustomer($patient);
         $invoice->setMobile($patient->getMobile());
         $em->persist($invoice);
@@ -430,15 +430,15 @@ class InvoiceRepository extends EntityRepository
         $em = $this->_em;
         $invoiceInfo = $data['appstore_bundle_hospitalbundle_invoice'];
         if($invoiceInfo['cabin']){
-            $cabin = $em->getRepository('HospitalBundle:Particular')->find($invoiceInfo['cabin']);
+            $cabin = $em->getRepository('RestaurantBundle:Particular')->find($invoiceInfo['cabin']);
             $entity->setCabin($cabin);
         }
         if($invoiceInfo['assignDoctor']){
-            $assignDoctor = $em->getRepository('HospitalBundle:Particular')->find($invoiceInfo['assignDoctor']);
+            $assignDoctor = $em->getRepository('RestaurantBundle:Particular')->find($invoiceInfo['assignDoctor']);
             $entity->setAssignDoctor($assignDoctor);
         }
         if($invoiceInfo['department']){
-            $department = $em->getRepository('HospitalBundle:HmsCategory')->find($invoiceInfo['department']);
+            $department = $em->getRepository('RestaurantBundle:HmsCategory')->find($invoiceInfo['department']);
             $entity->setDepartment($department);
         }
         if($invoiceInfo['cabinNo']){
@@ -452,19 +452,22 @@ class InvoiceRepository extends EntityRepository
 
     }
 
-    public function checkCabinBooking($invoice , $cabin)
+    public function checkTokenBooking($invoice , $tokenNo)
     {
-        $invoice = $this->_em->getRepository('HospitalBundle:Invoice')->find($invoice);
-        $cabin = $this->_em->getRepository('HospitalBundle:Particular')->find($cabin);
+        $invoice = $this->_em->getRepository('RestaurantBundle:Invoice')->find($invoice);
+        $cabin = $this->_em->getRepository('RestaurantBundle:Particular')->find($tokenNo);
         $qb = $this->createQueryBuilder('e');
-        $qb->select('COUNT(e.cabin) AS cabinCount');
-        $qb->where('e.hospitalConfig = :config')->setParameter('config', $invoice ->getHospitalConfig()->getId());
-        $qb->andWhere('e.cabin = :cabin')->setParameter('cabin', $cabin ->getId());
-        $qb->andWhere('e.process = :process')->setParameter('process', 'Admitted');
+        $qb->select('COUNT(e.tokenNo) AS cabinCount');
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $invoice ->getRestaurantConfig()->getId());
+        $qb->andWhere('e.tokenNo = :token')->setParameter('token', $cabin ->getId());
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Kitchen');
         $res = $qb->getQuery()->getOneOrNullResult();
         if(!empty($res) and $res['cabinCount'] > 0 ){
             echo 'invalid';
         }else{
+            $invoice->setTokenNo($cabin);
+            $this->_em->persist($invoice);
+            $this->_em->flush();
             echo 'valid';
         }
         exit;

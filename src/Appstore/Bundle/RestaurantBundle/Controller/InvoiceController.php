@@ -4,14 +4,16 @@ namespace Appstore\Bundle\RestaurantBundle\Controller;
 
 use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Appstore\Bundle\RestaurantBundle\Entity\InvoiceParticular;
-use Appstore\Bundle\RestaurantBundle\Entity\InvoiceTransaction;
-use Appstore\Bundle\RestaurantBundle\Entity\DmsParticular;
 use Appstore\Bundle\RestaurantBundle\Entity\Particular;
 use Appstore\Bundle\RestaurantBundle\Form\InvoiceType;
+use Appstore\Bundle\RestaurantBundle\Service\PosItemManager;
 use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 use Frontend\FrontentBundle\Service\MobileDetect;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use JMS\SecurityExtraBundle\Annotation\RunAs;
+use Mike42\Escpos\PrintConnectors\FilePrintConnector;
+use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
+use Mike42\Escpos\Printer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -90,7 +92,7 @@ class InvoiceController extends Controller
         if ($entity->getProcess() != "In-progress" and $entity->getProcess() != "Created" and $entity->getRevised() != 1) {
             return $this->redirect($this->generateUrl('restaurant_invoice_show', array('id' => $entity->getId())));
         }
-        $services        = $em->getRepository('RestaurantBundle:Particular')->getServices($config,array(2,3));
+        $services        = $em->getRepository('RestaurantBundle:Particular')->getServices($config,array('product','stockable'));
         return $this->render('RestaurantBundle:Invoice:new.html.twig', array(
             'entity' => $entity,
             'particularService' => $services,
@@ -106,8 +108,6 @@ class InvoiceController extends Controller
     public function returnResultData(Invoice $entity,$msg=''){
 
         $invoiceParticulars = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->getSalesItems($entity);
-        $invoiceTransaction = $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceTransaction')->getInvoiceTransactionItems($entity);
-
         $subTotal = $entity->getSubTotal() > 0 ? $entity->getSubTotal() : 0;
         $netTotal = $entity->getTotal() > 0 ? $entity->getTotal() : 0;
         $payment = $entity->getPayment() > 0 ? $entity->getPayment() : 0;
@@ -123,7 +123,6 @@ class InvoiceController extends Controller
            'due' => $due,
            'vat' => $vat,
            'discount' => $discount,
-           'invoiceTransaction' => $invoiceTransaction,
            'invoiceParticulars' => $invoiceParticulars ,
            'msg' => $msg ,
            'success' => 'success'
@@ -143,8 +142,7 @@ class InvoiceController extends Controller
         $invoiceItems = array('particularId' => $particularId , 'quantity' => $quantity,'price' => $price );
         $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceParticular')->insertInvoiceItems($invoice, $invoiceItems);
         $invoice = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updateInvoiceTotalPrice($invoice);
-        $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updatePaymentReceive($invoice);
-
+      //  $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updatePaymentReceive($invoice);
         $msg = 'Particular added successfully';
         $result = $this->returnResultData($invoice,$msg);
         return new Response(json_encode($result));
@@ -206,74 +204,43 @@ class InvoiceController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-        $referredId = $request->request->get('referredId');
-        $data = $request->request->all()['appstore_bundle_hospitalbundle_invoice'];
+        $data = $request->request->all()['appstore_bundle_restaurant_invoice'];
+        if($editForm->isValid() and !empty($entity->getInvoiceParticulars()) and in_array($entity->getProcess(),array('Created','Pending','In-progress'))) {
 
-        if($editForm->isValid() and !empty($entity->getInvoiceParticulars()) and in_array($entity->getProcess(),array('Created','Pending','Revised'))) {
-
-            if (!empty($data['customer']['name'])) {
-
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['customer']['mobile']);
-                $customer = $this->getDoctrine()->getRepository('DomainUserBundle:Customer')->findHmsExistingCustomerDiagnostic($this->getUser()->getGlobalOption(), $mobile,$data);
-                $entity->setCustomer($customer);
-                $entity->setMobile($mobile);
-
-            }
-            if(!empty($data['referredDoctor']['name']) && !empty($data['referredDoctor']['mobile'])) {
-
-                $mobile = $this->get('settong.toolManageRepo')->specialExpClean($data['referredDoctor']['mobile']);
-                $referred = $this->getDoctrine()->getRepository('RestaurantBundle:DmsParticular')->findHmsExistingCustomer($entity->getRestaurantConfig() , $mobile,$data);
-                $entity->setReferredDoctor($referred);
-
-            }else{
-
-                $referred = $this->getDoctrine()->getRepository('RestaurantBundle:DmsParticular')->findOneBy(array('hospitalConfig' => $entity->getRestaurantConfig() , 'service' => 6, 'id' => $referredId ));
-                $entity->setReferredDoctor($referred);
-
-            }
-            $deliveryDateTime = $request->request->get('deliveryDateTime');
-            $datetime = (new \DateTime("tomorrow"))->format('d-m-Y 7:30');
-            $datetime = empty($deliveryDateTime) ? $datetime : $deliveryDateTime ;
-            $entity->setDeliveryDateTime($datetime);
-
-            if($entity->getTotal() > 0){
+            if ($entity->getTotal() > 0) {
                 $entity->setProcess('In-progress');
             }
             $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
             $entity->setPaymentInWord($amountInWords);
             $em->flush();
-            if($entity->getTotal() > 0) {
+            if ($entity->getTotal() > 0) {
                 $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceTransaction')->insertTransaction($entity);
                 $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updatePaymentReceive($entity);
-                $this->getDoctrine()->getRepository('RestaurantBundle:DmsParticular')->insertAccessories($entity);
-            }
-            if(!empty($this->getUser()->getGlobalOption()->getNotificationConfig()) and  !empty($this->getUser()->getGlobalOption()->getSmsSenderTotal())) {
-                $dispatcher = $this->container->get('event_dispatcher');
-                $dispatcher->dispatch('setting_tool.post.restaurant_invoice_sms', new \Setting\Bundle\ToolBundle\Event\HmsInvoiceSmsEvent($entity));
+                $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
             }
 
-            return $this->redirect($this->generateUrl('restaurant_invoice_confirm', array('id' => $entity->getId())));
-        }elseif (in_array($entity->getProcess(),array('In-progress','Done','Cancel'))){
-            return $this->redirect($this->generateUrl('restaurant_invoice_confirm', array('id' => $entity->getId())));
         }
 
-        $referredDoctors = $em->getRepository('RestaurantBundle:DmsParticular')->findBy(array('hospitalConfig' => $entity->getRestaurantConfig(),'status'=>1,'service'=> 6),array('name'=>'ASC'));
-        $services        = $em->getRepository('RestaurantBundle:DmsParticular')->getServices($entity->getRestaurantConfig(),array(1,8,7));
-        return $this->render('RestaurantBundle:Invoice:new.html.twig', array(
-            'entity' => $entity,
-            'particularService' => $services,
-            'referredDoctors' => $referredDoctors,
-            'form' => $editForm->createView(),
-        ));
-
     }
+
+    public function ajaxFormSubmit(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $data = $request->request->all()['appstore_bundle_restaurant_invoice'];
+        $amountInWords = $this->get('settong.toolManageRepo')->intToWords($entity->getTotal());
+        $entity->setPaymentInWord($amountInWords);
+        $em->flush();
+        if ($entity->getTotal() > 0) {
+            $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updatePaymentReceive($entity);
+            $this->getDoctrine()->getRepository('RestaurantBundle:Particular')->insertAccessories($entity);
+        }
+    }
+
 
     public function discountDeleteAction(Invoice $entity)
     {
 
-        $this->getDoctrine()->getRepository('RestaurantBundle:InvoiceTransaction')->updateInvoiceTransactionDiscount($entity);
         $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->updatePaymentReceive($entity);
-
         $msg = 'Discount deleted successfully';
         $result = $this->returnResultData($entity,$msg);
         return new Response(json_encode($result));
@@ -419,8 +386,8 @@ class InvoiceController extends Controller
     public function pathologicalInvoiceReverseAction($invoice){
 
         $em = $this->getDoctrine()->getManager();
-        $hospital = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $entity = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findOneBy(array('hospitalConfig' => $hospital, 'invoice' => $invoice));
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $entity = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findOneBy(array('hospitalConfig' => $config, 'invoice' => $invoice));
         $em->getRepository('RestaurantBundle:InvoiceTransaction')->hmsSalesTransactionReverse($entity);
         $em->getRepository('RestaurantBundle:InvoiceParticular')->hmsInvoiceParticularReverse($entity);
 
@@ -445,8 +412,8 @@ class InvoiceController extends Controller
 
     public function invoiceReverseAction(Invoice $invoice)
     {
-        $hospital = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $entity = $this->getDoctrine()->getRepository('RestaurantBundle:HmsReverse')->findOneBy(array('hospitalConfig' => $hospital, 'hmsInvoice' => $invoice));
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $entity = $this->getDoctrine()->getRepository('RestaurantBundle:HmsReverse')->findOneBy(array('hospitalConfig' => $config, 'hmsInvoice' => $invoice));
         return $this->render('RestaurantBundle:Reverse:show.html.twig', array(
             'entity' => $entity,
         ));
@@ -455,8 +422,8 @@ class InvoiceController extends Controller
 
     public function invoiceReverseShowAction(Invoice $invoice)
     {
-        $hospital = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $entity = $this->getDoctrine()->getRepository('RestaurantBundle:HmsReverse')->findOneBy(array('hospitalConfig' => $hospital, 'hmsInvoice' => $invoice));
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $entity = $this->getDoctrine()->getRepository('RestaurantBundle:HmsReverse')->findOneBy(array('hospitalConfig' => $config, 'hmsInvoice' => $invoice));
         return $this->render('RestaurantBundle:Reverse:show.html.twig', array(
             'entity' => $entity,
         ));
@@ -465,8 +432,8 @@ class InvoiceController extends Controller
 
     public function deleteEmptyInvoiceAction()
     {
-        $hospital = $this->getUser()->getGlobalOption()->getRestaurantConfig();
-        $entities = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findBy(array('hospitalConfig' => $hospital, 'process' => 'Created','invoiceMode'=>'diagnostic'));
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $entities = $this->getDoctrine()->getRepository('RestaurantBundle:Invoice')->findBy(array('hospitalConfig' => $config, 'process' => 'Created','invoiceMode'=>'diagnostic'));
         $em = $this->getDoctrine()->getManager();
         foreach ($entities as $entity) {
             $em->remove($entity);
@@ -528,9 +495,9 @@ class InvoiceController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $hospital = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
 
-        if($entity->getRestaurantConfig()->getId() != $hospital->getId()){
+        if($entity->getRestaurantConfig()->getId() != $config->getId()){
             return $this->redirect($this->generateUrl('restaurant_invoice'));
         }
         $barcode = $this->getBarcode($entity->getInvoice());
@@ -578,5 +545,278 @@ class InvoiceController extends Controller
             'inWordTransaction'     => $inWordTransaction,
         ));
     }
+
+
+    public function checkTokenBookingAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tokenNo = $request->request->get('tokenNo');
+        $invoice = $request->request->get('invoice');
+        $status = $em->getRepository('RestaurantBundle:Invoice')->checkTokenBooking($invoice,$tokenNo);
+        echo $status;
+        exit;
+    }
+
+    public function PosPrintAction(Request $request,$invoice)
+    {
+        $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
+        $printer = new Printer($connector);
+        $printer -> initialize();
+
+        $em = $this->getDoctrine()->getManager();
+        $option = $this->getUser()->getGlobalOption();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+
+        $entity = $em->getRepository('RestaurantBundle:Invoice')->findOneBy(array('restaurantConfig'=>$config,'invoice'=>$invoice));
+        if(!empty($entity)){
+            $data = $request->request->all()['appstore_bundle_restaurant_invoice'];
+            $this->approvedOrder($entity,$data);
+        }
+
+        $address1       = $option->getContactPage()->getAddress1();
+        $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
+        $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
+        $address = $address1.$thana.$district;
+
+        $vatRegNo       = $config->getVatRegNo();
+        $companyName    = $option->getName();
+        $mobile         = $option->getMobile();
+        $website        = $option->getDomain();
+
+
+        /** ===================Customer Information=================================== */
+
+        $invoice            = $entity->getInvoice();
+        $subTotal           = $entity->getSubTotal();
+        $total              = $entity->getTotal();
+        $discount           = $entity->getDiscount();
+        $vat                = $entity->getVat();
+        $due                = $entity->getDue();
+        $payment            = $entity->getPayment();
+        $transaction        = $entity->getTransactionMethod()->getName();
+        $salesBy            = $entity->getCreatedBy();
+
+
+        /** ===================Invoice Sales Item Information========================= */
+
+
+        /* Date is kept the same for testing */
+        $date = date('l jS \of F Y h:i:s A');
+
+        /* Name of shop */
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text($companyName."\n");
+        $printer -> selectPrintMode();
+        $printer -> text($address."\n");
+        /* $printer -> text($mobile."\n");*/
+        $printer -> feed();
+
+        /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> setEmphasis(true);
+        if(!empty($vatRegNo)){
+            $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
+            $printer -> setEmphasis(false);
+        }
+        $printer -> feed();
+        $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
+        $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
+        $vat            = new PosItemManager('Add Vat: ','Tk.',number_format($vat));
+        $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
+        $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
+        $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
+        $due            = new PosItemManager('Due: ','Tk.',number_format($due));
+
+        /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> setEmphasis(true);
+        $printer -> text("SALES INVOICE\n\n");
+        $printer -> setEmphasis(false);
+
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
+        $printer -> setEmphasis(false);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);;
+        $printer -> setEmphasis(false);
+        $printer -> feed();
+        $i=1;
+        foreach ( $entity->getInvoiceParticulars() as $row){
+
+            $printer -> setUnderline(Printer::UNDERLINE_NONE);
+            $printer -> text( new PosItemManager($i.'. '.$row->getParticular()->getName(),"",""));
+            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
+            $printer -> text(new PosItemManager($row->getParticular()->getParticularCode(),$row->getQuantity(),number_format($row->getSubTotal())));
+            $i++;
+        }
+        $printer -> feed();
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> setEmphasis(true);
+        $printer -> text ( "\n" );
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($subTotal);
+        $printer -> setEmphasis(false);
+
+        if($vat){
+            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
+            $printer->text($vat);
+            $printer->setEmphasis(false);
+        }
+        if($discount){
+            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+            $printer->text($discount);
+            $printer -> setEmphasis(false);
+            $printer -> text ( "\n" );
+        }
+        $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text($grandTotal);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+
+        $printer->text("\n");
+        $printer -> feed();
+        $printer->text($transaction);
+        $printer->selectPrintMode();
+        /* Barcode Print */
+        $printer->selectPrintMode ( Printer::MODE_DOUBLE_HEIGHT | Printer::MODE_DOUBLE_WIDTH );
+        $printer->text ( "\n" );
+        $printer->selectPrintMode ();
+        $printer->setBarcodeHeight (60);
+        $hri = array (Printer::BARCODE_TEXT_BELOW => "");
+        $printer -> feed();
+        foreach ( $hri as $position => $caption){
+            $printer->selectPrintMode ();
+            $printer -> setJustification(Printer::JUSTIFY_CENTER);
+            $printer->text ($caption);
+            $printer->feed ();
+        }
+        $printer -> feed();
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text("Sales By: ".$salesBy."\n");
+        $printer -> text("Thank you for shopping\n");
+        if($website){
+            $printer -> text("Please visit www.".$website."\n");
+        }
+        $printer -> text($date . "\n");
+        $response =  base64_encode($connector->getData());
+        $printer -> close();
+        return new Response($response);
+
+    }
+
+    public function KitchenPrintAction($invoice)
+    {
+
+        $connector = new \Mike42\Escpos\PrintConnectors\DummyPrintConnector();
+        $printer = new Printer($connector);
+        $printer -> initialize();
+
+        $em = $this->getDoctrine()->getManager();
+        $option = $this->getUser()->getGlobalOption();
+        $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
+
+        $entity = $em->getRepository('RestaurantBundle:Invoice')->findOneBy(array('restaurantConfig'=>$config,'invoice'=>$invoice));
+        if(!empty($entity)){
+            $entity->setProcess('Kitchen');
+            $em->flush();
+        }
+        $address1       = $option->getContactPage()->getAddress1();
+        $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
+        $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
+        $address = $address1.$thana.$district;
+
+        $vatRegNo       = $config->getVatRegNo();
+        $companyName    = $option->getName();
+        $mobile         = $option->getMobile();
+        $website        = $option->getDomain();
+
+
+        /** ===================Customer Information=================================== */
+        $salesBy            = $entity->getCreatedBy();
+
+        /** ===================Invoice Sales Item Information========================= */
+
+        /* Date is kept the same for testing */
+        $date = date('l jS \of F Y h:i:s A');
+
+        /* Name of shop */
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);
+        $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text($companyName."\n");
+        $printer -> selectPrintMode();
+        $printer -> text($address."\n");
+        /* $printer -> text($mobile."\n");*/
+        $printer -> feed();
+
+        /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> setEmphasis(true);
+        if(!empty($vatRegNo)){
+            $printer -> text("Token No. ".$entity->getTokenNo()->getName().".\n");
+            $printer -> setEmphasis(false);
+        }
+        $printer -> feed();
+
+        /* Title of receipt */
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> setEmphasis(true);
+        $printer -> text("KITCHEN INVOICE\n\n");
+        $printer -> setEmphasis(false);
+
+        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer -> setEmphasis(true);
+        $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+        $printer -> text(new PosItemManager('Item Code', 'Qnt', 'Amount'));
+        $printer -> setEmphasis(false);
+        $printer -> setUnderline(Printer::UNDERLINE_NONE);;
+        $printer -> setEmphasis(false);
+        $printer -> feed();
+        $i=1;
+        foreach ( $entity->getInvoiceParticulars() as $row){
+
+            $printer -> setUnderline(Printer::UNDERLINE_NONE);
+            $printer -> text( new PosItemManager($i.'. '.$row->getParticular()->getName(),"",""));
+            $printer -> setUnderline(Printer::UNDERLINE_SINGLE);
+            $printer -> text(new PosItemManager($row->getParticular()->getParticularCode(),$row->getQuantity(),number_format($row->getSubTotal())));
+            $i++;
+        }
+        $printer -> feed();
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text("Sales By: ".$salesBy."\n");
+        $printer -> text("Thank you for shopping\n");
+        if($website){
+            $printer -> text("Please visit www.".$website."\n");
+        }
+        $printer -> text($date . "\n");
+        $response =  base64_encode($connector->getData());
+        $printer -> close();
+        return new Response($response);
+    }
+
+    public function approvedOrder(Invoice $entity,$data)
+    {
+
+        $em =  $em = $this->getDoctrine()->getManager();
+        $payment = !empty($data['payment']) ? $data['payment'] :0;
+        if($entity->getPayment() >= $entity->getTotal()){
+            $entity->setPayment($entity->getTotal());
+            $entity->setPaymentStatus('Paid');
+        }else{
+            $entity->setPayment($payment);
+            $entity->setDue($entity->getTotal() - $payment);
+            $entity->setPaymentStatus('Due');
+        }
+        $em->flush();
+
+    }
+
+
+
+
+
 }
 

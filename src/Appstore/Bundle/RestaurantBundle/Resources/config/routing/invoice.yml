@@ -98,10 +98,22 @@ restaurant_invoice_customer_details:
     options:
            expose: true
 
-restaurant_invoice_add_patient:
-    path:     /{id}/invoice-patient-add
-    defaults: { _controller: "RestaurantBundle:Invoice:addPatient" }
-    methods:  [POST, PUT]
+restaurant_invoice_pos:
+    path:     /{invoice}/invoice-pos-print
+    defaults: { _controller: "RestaurantBundle:Invoice:PosPrint" }
+    methods:  [PUT,POST]
     options:
             expose: true
 
+restaurant_invoice_kitchen:
+    path:     /{invoice}/invoice-kitchen-print
+    defaults: { _controller: "RestaurantBundle:Invoice:KitchenPrint" }
+    options:
+            expose: true
+
+restaurant_invoice_token_check:
+    path:      /invoice-token-check
+    defaults: { _controller: "RestaurantBundle:Invoice:checkTokenBooking" }
+    methods:  [POST]
+    options:
+            expose: true
