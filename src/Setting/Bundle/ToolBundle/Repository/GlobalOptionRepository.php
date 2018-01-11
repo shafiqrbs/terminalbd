@@ -8,6 +8,7 @@ use Appstore\Bundle\DomainUserBundle\Entity\Customer;
 use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
 use Appstore\Bundle\InventoryBundle\Entity\InventoryConfig;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
 use Setting\Bundle\AppearanceBundle\Entity\Menu;
@@ -254,6 +255,14 @@ class GlobalOptionRepository extends EntityRepository
             $config->setGlobalOption($globalOption);
             $this->_em->persist($config);
         }
+
+        $restaurantConfig = $this->_em->getRepository('RestaurantBundle:RestaurantConfig')->findOneBy(array('globalOption'=>$globalOption));
+        if(empty($restaurantConfig)){
+            $config = new RestaurantConfig();
+            $config->setGlobalOption($globalOption);
+            $this->_em->persist($config);
+        }
+
 
         $this->_em->flush();
 

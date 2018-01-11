@@ -64,7 +64,7 @@ class ParticularController extends Controller
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getDmsConfig();
         $pagination = $em->getRepository('DmsBundle:DmsParticular')->getServiceLists($config);
-        $pagination = $this->paginate($pagination);
+        //$pagination = $this->paginate($pagination);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -116,8 +116,8 @@ class ParticularController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $pagination = $em->getRepository('DmsBundle:DmsParticular')->findBy(array('hospitalConfig' => $config,'service'=> 7),array('name'=>'ASC'));
-
+        $pagination = $em->getRepository('DmsBundle:DmsParticular')->getServiceLists($config);
+        //$pagination = $this->paginate($pagination);
         $entity = $em->getRepository('DmsBundle:DmsParticular')->find($id);
 
         if (!$entity) {
@@ -159,10 +159,10 @@ class ParticularController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $config = $this->getUser()->getGlobalOption()->getHospitalConfig();
-        $pagination = $em->getRepository('DmsBundle:DmsParticular')->findBy(array('hospitalConfig' => $config,'service'=> 7),array('name'=>'ASC'));
-
-        $entity = $em->getRepository('DmsBundle:Particular')->find($id);
+        $config = $this->getUser()->getGlobalOption()->getDmsConfig();
+        $pagination = $em->getRepository('DmsBundle:DmsParticular')->getServiceLists($config);
+        //$pagination = $this->paginate($pagination);
+        $entity = $em->getRepository('DmsBundle:DmsParticular')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Particular entity.');

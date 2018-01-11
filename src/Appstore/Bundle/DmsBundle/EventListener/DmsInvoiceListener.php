@@ -19,10 +19,11 @@ class DmsInvoiceListener
         // perhaps you only want to act on some "Sales" entity
         if ($entity instanceof DmsInvoice) {
 
+
             $datetime = new \DateTime("now");
             $lastCode = $this->getLastCode($args, $datetime, $entity);
             $entity->setCode($lastCode+1);
-            if(empty($entity->getHospitalConfig()->getInvoicePrefix())){
+            if(empty($entity->getConfig()->getInvoicePrefix())){
                 $entity->setInvoice(sprintf("%s%s", $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
             }else{
                 $entity->setInvoice(sprintf("%s%s%s", $entity->getHospitalConfig()->getInvoicePrefix(), $datetime->format('ym'), str_pad($entity->getCode(),4, '0', STR_PAD_LEFT)));
@@ -44,12 +45,12 @@ class DmsInvoiceListener
 
 
         $entityManager = $args->getEntityManager();
-        $qb = $entityManager->getRepository('HospitalBundle:Invoice')->createQueryBuilder('s');
+        $qb = $entityManager->getRepository('DmsBundle:DmsInvoice')->createQueryBuilder('s');
 
         $qb
             ->select('MAX(s.code)')
-            ->where('s.dmsConfig = :dms')
-            ->setParameter('dms', $entity->getDmsConfig())
+            ->where('s.config = :dms')
+            ->setParameter('dms', $entity->getConfig())
             ->andWhere('s.updated >= :today_startdatetime')
             ->andWhere('s.updated <= :today_enddatetime')
             ->setParameter('today_startdatetime', $today_startdatetime)

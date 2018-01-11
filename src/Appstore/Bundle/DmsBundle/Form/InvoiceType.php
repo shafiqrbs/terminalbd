@@ -1,6 +1,6 @@
 <?php
 
-namespace Appstore\Bundle\HospitalBundle\Form;
+namespace Appstore\Bundle\DmsBundle\Form;
 
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForHospitalType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
@@ -22,17 +22,13 @@ class InvoiceType extends AbstractType
     /** @var  LocationRepository */
     private $location;
 
-    /** @var  HmsCategoryRepository */
-    private $emCategory;
-
     /** @var  GlobalOption */
     private $globalOption;
 
 
-    function __construct(GlobalOption $globalOption , HmsCategoryRepository $emCategory ,  LocationRepository $location)
+    function __construct(GlobalOption $globalOption ,  LocationRepository $location)
     {
         $this->location         = $location;
-        $this->emCategory       = $emCategory;
         $this->globalOption     = $globalOption;
     }
 
@@ -53,21 +49,6 @@ class InvoiceType extends AbstractType
             ->add('discount','text', array('attr'=>array('class'=>'tooltips discount input2','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
             ))
             ->add('comment','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add remarks','autocomplete'=>'off')))
-            ->add('referredDoctor', 'entity', array(
-                  'required'    => true,
-                  'property' => 'referred',
-                  'empty_value' => '--- Select Referred Doctor/Agent ---',
-                  'attr'=>array('class'=>'m-wrap span12 select2'),
-                  'class' => 'Appstore\Bundle\HospitalBundle\Entity\Particular',
-                  'query_builder' => function(EntityRepository $er){
-                      return $er->createQueryBuilder('e')
-                          ->where('e.hospitalConfig ='.$this->globalOption->getHospitalConfig()->getId())
-                          ->andWhere("e.service = 6")
-                          ->andWhere("e.status = 1")
-                          ->orderBy("e.name","ASC");
-                  }
-
-            ))
             ->add('printFor', 'choice', array(
                 'attr'=>array('class'=>'span12 select-custom'),
                 'expanded'      =>false,
@@ -129,8 +110,7 @@ class InvoiceType extends AbstractType
                 }
             ))
         ;
-        $builder->add('referredDoctor', new InvoiceReferredDoctorType( $this->emCategory ,$this->globalOption,$this->location));
-        $builder->add('customer', new CustomerForHospitalType( $this->location ));
+           $builder->add('customer', new CustomerForHospitalType( $this->location ));
     }
     
     /**
@@ -139,7 +119,7 @@ class InvoiceType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Appstore\Bundle\HospitalBundle\Entity\Invoice'
+            'data_class' => 'Appstore\Bundle\DmsBundle\Entity\DmsInvoice'
         ));
     }
 
@@ -148,26 +128,7 @@ class InvoiceType extends AbstractType
      */
     public function getName()
     {
-        return 'appstore_bundle_hospitalbundle_invoice';
+        return 'appstore_bundle_dmsbundle_invoice';
     }
-
-    /**
-     * @return mixed
-     */
-    protected function PathologyChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 2 /** Pathology */ );
-
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function DepartmentChoiceList()
-    {
-        return $this->emCategory->getParentCategoryTree($parent = 7 /** Department */);
-
-    }
-
 
 }

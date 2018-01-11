@@ -28,7 +28,7 @@ class DmsParticularRepository extends EntityRepository
         $qb->setParameter('config',$config);
         $qb->andWhere('service.slug IN (:services)');
         $qb->setParameter('services',array('general-examination','past-medical-history','treatment-plan','physical-examination'));
-        $qb->orderBy('e.name','ASC');
+        $qb->orderBy('service.name , e.name','ASC');
         $result = $qb->getQuery()->getResult();
         return $result;
     }
@@ -68,12 +68,11 @@ class DmsParticularRepository extends EntityRepository
             ->addSelect('e.particularCode')
             ->addSelect('e.mobile')
             ->addSelect('e.price')
-            ->addSelect('e.minimumPrice')
             ->addSelect('e.quantity')
             ->addSelect('s.name as serviceName')
             ->addSelect('s.code as serviceCode')
             ->where('e.dmsConfig = :config')->setParameter('config', $hospital)
-            ->andWhere('s.id IN(:service)')
+            ->andWhere('s.slug IN(:service)')
             ->setParameter('service',array_values($services))
             ->orderBy('e.service','ASC')
             ->orderBy('e.name','ASC')
@@ -96,7 +95,7 @@ class DmsParticularRepository extends EntityRepository
                 $data .= '<optgroup label="' . $particular['serviceCode'] . '-' . ucfirst($particular['serviceName']) . '">';
             }
             if ($particular['serviceCode'] != '04'){
-                $data .= '<option value="/hms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['price'] . ' to ' . $particular['minimumPrice'] . '</option>';
+                $data .= '<option value="/hms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['price'] .'</option>';
             }else{
                 $data .= '<option value="/hms/invoice/' . $particular['id'] . '/particular-search">' . $particular['particularCode'] . ' - ' . htmlspecialchars(ucfirst($particular['name'])) . ' - Tk. ' . $particular['price'].'</option>';
             }
@@ -118,7 +117,6 @@ class DmsParticularRepository extends EntityRepository
             ->addSelect('e.name')
             ->addSelect('e.particularCode')
             ->addSelect('e.price')
-            ->addSelect('e.minimumPrice')
             ->addSelect('e.quantity')
             ->addSelect('s.name as serviceName')
             ->addSelect('s.code as serviceCode')

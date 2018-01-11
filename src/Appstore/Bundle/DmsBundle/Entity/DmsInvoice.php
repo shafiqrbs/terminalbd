@@ -17,7 +17,7 @@ use Setting\Bundle\ToolBundle\Entity\TransactionMethod;
  * Invoice
  *
  * @ORM\Table( name ="dms_invoice")
- * @ORM\Entity(repositoryClass="Appstore\Bundle\DmsBundle\Bundle\Repository\DmsInvoiceRepository")
+ * @ORM\Entity(repositoryClass="Appstore\Bundle\DmsBundle\Repository\DmsInvoiceRepository")
  */
 class DmsInvoice
 {
@@ -34,7 +34,7 @@ class DmsInvoice
     /**
      * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsConfig", inversedBy="dmsInvoices")
      **/
-    private $hospitalConfig;
+    private $config;
 
     /**
      * @ORM\OneToMany(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsInvoiceTransaction", mappedBy="dmsInvoice" , cascade={"remove"})
@@ -377,22 +377,6 @@ class DmsInvoice
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return HospitalConfig
-     */
-    public function getHospitalConfig()
-    {
-        return $this->hospitalConfig;
-    }
-
-    /**
-     * @param HospitalConfig $hospitalConfig
-     */
-    public function setHospitalConfig($hospitalConfig)
-    {
-        $this->hospitalConfig = $hospitalConfig;
     }
 
 
@@ -1270,6 +1254,22 @@ class DmsInvoice
     public function getDmsReverse()
     {
         return $this->dmsReverse;
+    }
+
+    /**
+     * @return DmsConfig
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
+     * @param DmsConfig $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
     }
 
 

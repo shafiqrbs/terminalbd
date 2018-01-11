@@ -15,6 +15,7 @@ use Appstore\Bundle\EcommerceBundle\Entity\EcommerceConfig;
 use Appstore\Bundle\EcommerceBundle\Entity\Order;
 use Appstore\Bundle\EcommerceBundle\Entity\PreOrder;
 use Appstore\Bundle\HospitalBundle\Entity\HospitalConfig;
+use Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig;
 use Core\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -530,6 +531,12 @@ class GlobalOption
      * @ORM\OneToOne(targetEntity="Appstore\Bundle\DmsBundle\Entity\DmsConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
      **/
     private $dmsConfig;
+
+
+    /**
+     * @ORM\OneToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\RestaurantConfig", mappedBy="globalOption" , cascade={"persist", "remove"})
+     **/
+    private $restaurantConfig;
 
 
     /**
@@ -1578,6 +1585,14 @@ class GlobalOption
     public function getDmsConfig()
     {
         return $this->dmsConfig;
+    }
+
+    /**
+     * @return RestaurantConfig
+     */
+    public function getRestaurantConfig()
+    {
+        return $this->restaurantConfig;
     }
 
 

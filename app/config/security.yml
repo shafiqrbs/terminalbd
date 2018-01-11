@@ -17,6 +17,7 @@ security:
         ROLE_APPEARANCE:                                [ROLE_APPEARANCE]
         ROLE_HMS:                                       [ROLE_HMS,ROLE_WEBSITE]
         ROLE_DMS:                                       [ROLE_DMS,ROLE_WEBSITE]
+        ROLE_RESTAURANT:                                [ROLE_RESTAURANT,ROLE_WEBSITE]
 
         # THIS IS PART OF WEBSITE MANAGE
 
@@ -97,6 +98,11 @@ security:
         ROLE_DOMAIN_SERVICE:                            [ROLE_SERVICE,ROLE_DOMAIN_SERVICE]
         ROLE_DOMAIN_SERVICE_MANAGER:                    [ROLE_DOMAIN_SERVICE,ROLE_DOMAIN_SERVICE_MANAGER]
 
+        ROLE_RESTAURANT:                                [ROLE_RESTAURANT]
+        ROLE_DOMAIN_RESTAURANT:                         [ROLE_RESTAURANT,ROLE_DOMAIN_RESTAURANT]
+        ROLE_DOMAIN_RESTAURANT_MANAGER:                 [ROLE_RESTAURANT,ROLE_DOMAIN_RESTAURANT,ROLE_DOMAIN_RESTAURANT_MANAGER]
+        ROLE_DOMAIN_RESTAURANT_ADMIN:                   [ROLE_RESTAURANT,ROLE_DOMAIN_RESTAURANT_MANAGER,ROLE_DOMAIN_RESTAURANT_ADMIN]
+
 
         ROLE_HOSPITAL:                                  [ROLE_HOSPITAL,ROLE_WEBSITE]
         ROLE_DOMAIN_HOSPITAL_CONFIG:                    [ROLE_HOSPITAL,ROLE_DOMAIN_HOSPITAL_CONFIG]
@@ -123,7 +129,7 @@ security:
         # THIS IS PART OF MAIN DOMAIN MANAGE
 
         ROLE_DOMAIN_MANAGER:                            []
-        ROLE_DOMAIN:                                    [ROLE_DOMAIN,ROLE_AGENT,ROLE_FOOD,ROLE_SERVICE,ROLE_HOSPITAL,ROLE_GOODS,ROLE_DOMAIN_WEBSITE,ROLE_DOMAIN_INVENTORY,ROLE_DOMAIN_HR_PAYROLL,ROLE_DOMAIN_ACCOUNTING,ROLE_DOMAIN_ECOMMERCE,ROLE_APP_SETTING,ROLE_APPEARANCE,ROLE_DOMAIN_HOSPITAL_ADMIN,ROLE_DOMAIN_DMS_ADMIN]
+        ROLE_DOMAIN:                                    [ROLE_DOMAIN,ROLE_AGENT,ROLE_RESTAURANT,ROLE_SERVICE,ROLE_HOSPITAL,ROLE_GOODS,ROLE_DOMAIN_WEBSITE,ROLE_DOMAIN_INVENTORY,ROLE_DOMAIN_HR_PAYROLL,ROLE_DOMAIN_ACCOUNTING,ROLE_DOMAIN_ECOMMERCE,ROLE_APP_SETTING,ROLE_APPEARANCE,ROLE_DOMAIN_HOSPITAL_ADMIN,ROLE_DOMAIN_DMS_ADMIN,ROLE_DOMAIN_ADMIN]
 
         ROLE_ADMIN_OPERATION_USER:                      [ROLE_ADMIN_OPERATION_USER,ROLE_DOMAIN]
         ROLE_ADMIN_OPERATION_MANAGER:                   [ROLE_ADMIN_OPERATION_MANAGER,ROLE_ADMIN_OPERATION_USER]
@@ -166,6 +172,7 @@ security:
         - { path: ^/payroll,            role: ROLE_PAYROLL }
         - { path: ^/inventory,          role: ROLE_INVENTORY }
         - { path: ^/hms,                role: ROLE_HOSPITAL }
+        - { path: ^/resturant,          role: ROLE_RESTAURANT }
         - { path: ^/dms,                role: ROLE_DMS }
         - { path: ^/vendor,             role: ROLE_DOMAIN }
         - { path: ^/web-builder/build,  role: ROLE_DOMAIN }

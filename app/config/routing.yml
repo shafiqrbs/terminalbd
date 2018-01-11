@@ -6,6 +6,10 @@ appstore_dms:
     resource: "@DmsBundle/Resources/config/routing.yml"
     prefix:   /dms
 
+appstore_restaurant:
+    resource: "@RestaurantBundle/Resources/config/routing.yml"
+    prefix:   /restaurant
+
 human_resource:
     resource: "@HumanResourceBundle/Resources/config/routing.yml"
     prefix:   /human-resource

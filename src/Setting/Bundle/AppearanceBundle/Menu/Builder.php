@@ -111,10 +111,10 @@ class Builder extends ContainerAware
                 }
             }
 
-            $result = array_intersect($menuName, array('FoodProduct'));
+            $result = array_intersect($menuName, array('Restaurant'));
             if (!empty($result)) {
-                if ($securityContext->isGranted('ROLE_DOMAIN')){
-                    $menu = $this->FoodProductMenu($menu);
+                if ($securityContext->isGranted('ROLE_RESTAURANT')){
+                    $menu = $this->RestaurantMenu($menu);
                 }
             }
 
@@ -841,13 +841,12 @@ class Builder extends ContainerAware
         $menu['Dental & Diagnosis']->addChild('Manage Invoice')
             ->setAttribute('icon', 'icon icon-medkit')
             ->setAttribute('dropdown', true);
+
+        $menu['Dental & Diagnosis']['Manage Invoice']->addChild('Patient', array('route' => 'dms_invoice'))
+            ->setAttribute('icon', 'fa fa-ambulance');
         if ($securityContext->isGranted('ROLE_DOMAIN_DMS_OPERATOR')) {
-            if (!empty($config) and in_array('diagnostic', $config)) {
-                $menu['Dental & Diagnosis']['Manage Invoice']->addChild('Diagnostic', array('route' => 'hms_invoice'))
-                    ->setAttribute('icon', 'fa fa-hospital-o');
-            }
             if (!empty($config) and in_array('admission', $config)) {
-            $menu['Dental & Diagnosis']['Manage Invoice']->addChild('Admission', array('route' => 'hms_invoice_admission'))
+            $menu['Dental & Diagnosis']['Manage Invoice']->addChild('Patient', array('route' => 'dms_invoice'))
                 ->setAttribute('icon', 'fa fa-ambulance');
             }
         }
@@ -878,15 +877,11 @@ class Builder extends ContainerAware
                 ->setAttribute('dropdown', true);
             $menu['Dental & Diagnosis']['Master Data']->addChild('Diagnostic Test', array('route' => 'hms_pathology'))
                 ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Master Data']->addChild('Doctor', array('route' => 'hms_doctor'))
-                ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']['Master Data']->addChild('Particular', array('route' => 'dms_particular'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']['Master Data']->addChild('Cabin/Ward', array('route' => 'hms_cabin'))
                 ->setAttribute('icon', 'icon-th-list');
             $menu['Dental & Diagnosis']['Master Data']->addChild('Surgery', array('route' => 'hms_surgery'))
-                ->setAttribute('icon', 'icon-th-list');
-            $menu['Dental & Diagnosis']['Master Data']->addChild('Other Service', array('route' => 'hms_other_service'))
                 ->setAttribute('icon', 'icon-th-list');
             if ($securityContext->isGranted('ROLE_DOMAIN_DMS_CONFIG')) {
                 $menu['Dental & Diagnosis']['Master Data']->addChild('Configuration', array('route' => 'hms_config_manage'))
@@ -924,28 +919,61 @@ class Builder extends ContainerAware
 
     }
 
-    public function FoodProductMenu($menu)
+    public function RestaurantMenu($menu)
     {
 
         $securityContext = $this->container->get('security.context');
         $user = $securityContext->getToken()->getUser();
-        $inventory = $user->getGlobalOption()->getInventoryConfig();
-
         $menu
-            ->addChild('Food Product')
+            ->addChild('Restaurant')
             ->setAttribute('icon', 'icon icon-th-large')
             ->setAttribute('dropdown', true);
 
-        $menu['Food Product']->addChild('Manage Food Product')
-            ->setAttribute('icon', 'icon icon-reorder')
+        $menu['Restaurant']->addChild('Point of Sales ', array('route' => 'restaurant_invoice_new'))
+            ->setAttribute('icon', 'icon-th-large');
+
+        $menu['Restaurant']->addChild('Manage Sales', array('route' => 'restaurant_invoice'))
+            ->setAttribute('icon', 'icon-list');
+
+        $menu['Restaurant']->addChild('Master Data')
+            ->setAttribute('icon', 'icon icon-cog')
             ->setAttribute('dropdown', true);
-        $menu['Food Product']['Manage Food Product']->addChild('Add food product', array('route' => 'inventory_foodproduct_new'))
-            ->setAttribute('icon', 'icon-plus');
-        $menu['Food Product']['Manage Food Product']->addChild('Food Product', array('route' => 'inventory_foodproduct'))
+        $menu['Restaurant']['Master Data']->addChild('Product', array('route' => 'restaurant_product'))
             ->setAttribute('icon', 'icon-th-list');
-        $menu['Food Product']->addChild('System Setting')
-            ->setAttribute('icon', 'icon icon-cogs')
+        $menu['Restaurant']['Master Data']->addChild('Particular', array('route' => 'restaurant_particular'))
+            ->setAttribute('icon', 'icon-th-list');
+       // if ($securityContext->isGranted('ROLE_DOMAIN_RESTAURANT_MANAGER')) {
+            $menu['Restaurant']['Master Data']->addChild('Configuration', array('route' => 'restaurant_config_manage'))
+                ->setAttribute('icon', 'icon-cog');
+        //}
+        $menu['Restaurant']->addChild('Manage Stock')
+            ->setAttribute('icon', 'icon icon-truck')
             ->setAttribute('dropdown', true);
+        $menu['Restaurant']['Manage Stock']->addChild('Stock Product', array('route' => 'restaurant_stock'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Restaurant']['Manage Stock']->addChild('Purchase', array('route' => 'restaurant_purchase'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Restaurant']['Manage Stock']->addChild('Vendor', array('route' => 'restaurant_vendor'))->setAttribute('icon', 'icon-tag');
+
+        $menu['Restaurant']->addChild('Reports')
+            ->setAttribute('icon', 'icon icon-cog')
+            ->setAttribute('dropdown', true);
+        $menu['Restaurant']['Reports']->addChild('Sales Summary', array('route' => 'restaurant_report_sales_summary'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Restaurant']['Reports']->addChild('Sales Details', array('route' => 'restaurant_report_sales_details'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Restaurant']['Reports']->addChild('Product Wise Sales', array('route' => 'restaurant_report_sales_service'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Restaurant']['Reports']->addChild('Stock Wise Sales', array('route' => 'restaurant_report_sales_service'))
+            ->setAttribute('icon', 'icon-th-list');
+        $menu['Restaurant']['Reports']->addChild('Stock Summary', array('route' => 'restaurant_report_stock'))
+            ->setAttribute('icon', 'icon-th-list');
+
+        if ($securityContext->isGranted('ROLE_DOMAIN_RESTAURANT_MANAGER')) {
+
+
+        }
+
         return $menu;
 
     }

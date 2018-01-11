@@ -16,8 +16,6 @@ class DmsParticularListener
     {
 
         $entity = $args->getEntity();
-        echo $entity->getDmsConfig()->getId();
-        exit;
         if ($entity instanceof DmsParticular) {
             $lastCode = $this->getLastCode($args,$entity);
             $entity->setCode((int)$lastCode + 1);
@@ -47,6 +45,7 @@ class DmsParticularListener
         if (empty($lastCode)) {
             return 0;
         }
+        return $lastCode;
 
     }
 
