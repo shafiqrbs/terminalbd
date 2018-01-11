@@ -19,7 +19,7 @@ $(document).on("click", "#kitchenBtn", function() {
         topOffset: 0,
         top: '25%',
         onOkBut: function(event, el) {
-            $.get(url, function( data ) {
+            $.get(url, function( response ) {
                 jsPostPrint(response);
                 setTimeout(pageRedirect(),3000);
             });
