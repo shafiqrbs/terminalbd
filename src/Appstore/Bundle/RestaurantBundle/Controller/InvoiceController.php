@@ -936,11 +936,11 @@ class InvoiceController extends Controller
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n\n");
+        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n");
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("Table No. ".$entity->setTokenNo()->getName().".\n");
+        $printer -> text("Table No. ".$entity->getTokenNo()->getName().".\n\n");
         $printer -> setEmphasis(false);
 
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
