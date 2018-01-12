@@ -628,7 +628,7 @@ class InvoiceController extends Controller
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("Table No. ".$entity->setTokenNo()->getName().".\n");
+        $printer -> text("Table No. ".$entity->getTokenNo()->getName().".\n");
         $printer -> setEmphasis(false);
 
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
@@ -807,7 +807,7 @@ class InvoiceController extends Controller
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("Table No. ".$entity->setTokenNo()->getName().".\n");
+        $printer -> text("Table No. ".$entity->getTokenNo()->getName().".\n");
         $printer -> setEmphasis(false);
 
 
