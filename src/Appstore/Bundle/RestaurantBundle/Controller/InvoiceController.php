@@ -560,7 +560,7 @@ class InvoiceController extends Controller
         if(!empty($entity)){
             $this->approvedOrder($entity,$data);
         }
-        $payment = !empty($data['payment']) ? $data['payment'] :0;
+        $currentPayment = !empty($data['payment']) ? $data['payment'] :0;
 
 
         $address1       = $option->getContactPage()->getAddress1();
@@ -619,12 +619,16 @@ class InvoiceController extends Controller
         $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
         $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
         $due            = new PosItemManager('Due: ','Tk.',number_format($due));
-        $return         = new PosItemManager('Return: ','Tk.',number_format($payment-$total));
+        $return         = new PosItemManager('Return: ','Tk.',number_format($currentPayment-$total));
 
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("SALES INVOICE\n\n");
+        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n\n");
+        $printer -> setEmphasis(false);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> setEmphasis(true);
+        $printer -> text("Table No. ".$entity->setTokenNo()->getName().".\n");
         $printer -> setEmphasis(false);
 
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
