@@ -344,6 +344,13 @@ class Builder extends ContainerAware
             $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_hospital'))->setAttribute('icon', 'icon-th-list');
 
         }
+        $restaurant = array('restaurant');
+        $result = array_intersect($arrSlugs, $restaurant);
+        if (!empty($result)) {
+            $menu['Accounting']->addChild('Sales', array('route' => 'account_sales_restaurant'))->setAttribute('icon', 'icon-th-list');
+            $menu['Accounting']->addChild('Purchase', array('route' => 'account_purchase_restaurant'))->setAttribute('icon', 'icon-th-list');
+
+        }
         if($securityContext->isGranted('ROLE_DOMAIN_ACCOUNTING_JOURNAL')){
 
             $menu['Accounting']->addChild('Journal', array('route' => 'account_journal'))->setAttribute('icon', 'icon-retweet');

@@ -113,6 +113,7 @@
                                 <tr class="head-green">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice No</th>
+                                    <th class="numeric" >Token No</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Vat</th>
                                     <th class="numeric" >Discount</th>
@@ -130,6 +131,7 @@
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
+                                        <td class="numeric" >{% if entity.tokenNo is not empty %}{{ entity.tokenNo.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.subTotal }}</td>
                                         <td class="numeric" >{{ entity.vat }}</td>
                                         <td class="numeric" >{{ entity.discount }}</td>
@@ -143,6 +145,9 @@
                                                 {% set processIntArr = ['Created','Pending','Kitchen'] %}
                                                 {% if  entity.process in processIntArr %}
                                                     <a href="{{ path('restaurant_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-th-large"></i> Manage </a>
+                                                {% endif %}
+                                                {% if entity.process == 'Kitchen' %}
+                                                <a href="javascript:" data-url="{{ path('restaurant_invoice_payment',{'id':entity.id}) }}" class="btn blue mini paymentReceive" ><i class="icon-money"></i> Payment Receive </a>
                                                 {% endif %}
                                             </div>
                                         </td>
@@ -170,7 +175,9 @@
 {% block javascriptBlock %}
     {{ parent() }}
     {% javascripts
-    '@HospitalBundle/Resources/public/js/approveProcess.js'
+    '@RestaurantBundle/Resources/public/js/invoice.js'
+    '@RestaurantBundle/Resources/public/js/posprint.js'
+
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -178,10 +185,4 @@
 {% block documentready %}
     {{ parent() }}
     EditableInit();
-
-    $(document).on('click', '.print', function(e) {
-
-    });
-
-
 {% endblock %}

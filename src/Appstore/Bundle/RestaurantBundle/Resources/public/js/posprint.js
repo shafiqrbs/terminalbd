@@ -27,6 +27,21 @@ $(document).on("click", "#kitchenBtn", function() {
     });
 });
 
+$(document).on("click", ".paymentReceive", function() {
+    var url = $(this).attr('data-url');
+    $('#confirm-content').confirmModal({
+        topOffset: 0,
+        top: '25%',
+        onOkBut: function(event, el) {
+            $.get(url, function( response ) {
+                jsPostPrint(response);
+                setTimeout(pageRedirect(),3000);
+            });
+        }
+    });
+});
+
+
 function pageRedirect() {
     window.location.href = "/restaurant/invoice/new";
 }

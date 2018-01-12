@@ -91,6 +91,12 @@ class AccountSales
     private  $hmsInvoices;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", inversedBy="accountSales" )
+     * @ORM\JoinColumn(name="restaurant_id", referencedColumnName="id", nullable=true, onDelete="cascade")
+     **/
+    private  $restaurantInvoice;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="processHead", type="string", length=255, nullable = true)
@@ -543,6 +549,22 @@ class AccountSales
     public function setHmsInvoices($hmsInvoices)
     {
         $this->hmsInvoices = $hmsInvoices;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRestaurantInvoice()
+    {
+        return $this->restaurantInvoice;
+    }
+
+    /**
+     * @param mixed $restaurantInvoice
+     */
+    public function setRestaurantInvoice($restaurantInvoice)
+    {
+        $this->restaurantInvoice = $restaurantInvoice;
     }
 }
 

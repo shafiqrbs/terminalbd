@@ -51,7 +51,7 @@ class Invoice
 
 
    /**
-     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="invoices" )
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountSales", mappedBy="restaurantInvoice" )
      * @ORM\OrderBy({"id" = "DESC"})
      **/
     private  $accountSales;

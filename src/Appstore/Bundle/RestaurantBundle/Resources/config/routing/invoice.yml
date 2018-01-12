@@ -111,6 +111,12 @@ restaurant_invoice_kitchen:
     options:
             expose: true
 
+restaurant_invoice_payment:
+    path:     /{id}/invoice-payment-print
+    defaults: { _controller: "RestaurantBundle:Invoice:PaymentPrint" }
+    options:
+            expose: true
+
 restaurant_invoice_token_check:
     path:      /invoice-token-check
     defaults: { _controller: "RestaurantBundle:Invoice:checkTokenBooking" }

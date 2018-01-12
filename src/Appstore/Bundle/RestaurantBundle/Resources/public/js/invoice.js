@@ -152,10 +152,10 @@ $(document).on('change', '.discount', function() {
 
     var discount = parseInt($('.discount').val());
     var invoice = parseInt($('#invoiceId').val());
-    var payment  = parseInt($('#appstore_bundle_hospitalbundle_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
+    var payment  = parseInt($('#appstore_bundle_restaurant_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
 
     $.ajax({
-        url: Routing.generate('hms_invoice_discount_update'),
+        url: Routing.generate('restaurant_invoice_discount_update'),
         type: 'POST',
         data:'discount=' + discount+'&invoice='+ invoice,
         success: function(response) {

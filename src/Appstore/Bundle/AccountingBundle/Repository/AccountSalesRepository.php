@@ -5,6 +5,7 @@ use Appstore\Bundle\AccountingBundle\Entity\AccountSales;
 use Appstore\Bundle\HospitalBundle\Entity\InvoiceTransaction;
 use Appstore\Bundle\InventoryBundle\Entity\Sales;
 use Appstore\Bundle\InventoryBundle\Entity\SalesReturn;
+use Appstore\Bundle\RestaurantBundle\Entity\Invoice;
 use Core\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Setting\Bundle\ToolBundle\Entity\GlobalOption;
@@ -289,6 +290,30 @@ class AccountSalesRepository extends EntityRepository
         if(!empty($entity->getCreatedBy()->getProfile()->getBranches())){
             $accountSales->setBranches($entity->getCreatedBy()->getProfile()->getBranches());
         }
+        $accountSales->setProcessHead('Sales');
+        $accountSales->setProcess('approved');
+        $em->persist($accountSales);
+        $em->flush();
+        $this->_em->getRepository('AccountingBundle:AccountCash')->insertSalesCash($accountSales);
+        return $accountSales;
+
+    }
+
+
+    public function insertRestaurantAccountInvoice(Invoice $entity)
+    {
+        $em = $this->_em;
+        $accountSales = new AccountSales();
+
+        $accountSales->setAccountBank($entity->getAccountBank());
+        $accountSales->setAccountMobileBank($entity->getAccountMobileBank());
+        $accountSales->setGlobalOption($entity->getRestaurantConfig()->getGlobalOption());
+        $accountSales->setRestaurantInvoice($entity);
+        $accountSales->setCustomer($entity->getCustomer());
+        $accountSales->setTransactionMethod($entity->getTransactionMethod());
+        $accountSales->setTotalAmount($entity->getPayment());
+        $accountSales->setAmount($entity->getPayment());
+        $accountSales->setApprovedBy($entity->getCreatedBy());
         $accountSales->setProcessHead('Sales');
         $accountSales->setProcess('approved');
         $em->persist($accountSales);

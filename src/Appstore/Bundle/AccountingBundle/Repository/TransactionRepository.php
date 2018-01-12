@@ -1057,27 +1057,6 @@ class TransactionRepository extends EntityRepository
         }
     }
 
-    public function insertHmsCashCredit(InvoiceTransaction $entity , AccountSales $accountSales)
-    {
-
-        $transaction = new Transaction();
-        $transaction->setGlobalOption($accountSales->getGlobalOption());
-        if(!empty($accountSales->getBranches())){
-            $transaction->setBranches($accountSales->getBranches());
-        }
-        $transaction->setProcessHead('Sales');
-        $transaction->setProcess('Operating Revenue');
-        $transaction->setAccountRefNo($accountSales->getAccountRefNo());
-        $transaction->setUpdated($entity->getUpdated());
-        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(8));
-        $transaction->setAmount('-'.$entity->getPayment());
-        $transaction->setCredit($entity->getPayment());
-        $this->_em->persist($transaction);
-        $this->_em->flush();
-        return $transaction;
-
-    }
-
     private function insertHmsSalesVatAccountPayable(InvoiceTransaction $entity, AccountSales $accountSales)
     {
 
@@ -1102,6 +1081,96 @@ class TransactionRepository extends EntityRepository
         }
 
     }
+
+    /** =========================== HOSPITAL MANAGEMENT SYSTEM    =========================== */
+
+
+
+    public function restaurantSalesTransaction(\Appstore\Bundle\RestaurantBundle\Entity\Invoice $entity , $accountSales)
+    {
+        $this->insertRestaurantCashDebit($entity,$accountSales);
+        $this->insertRestaurantCashCredit($entity,$accountSales);
+        if($entity->getVat() > 0){
+            $this->insertRestaurantSalesVatAccountPayable($entity,$accountSales);
+        }
+    }
+
+    private function insertRestaurantCashDebit(\Appstore\Bundle\RestaurantBundle\Entity\Invoice $entity , AccountSales $accountSales)
+    {
+        $amount = $entity->getPayment();
+        if($amount > 0) {
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountSales->getGlobalOption());
+            $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+            $transaction->setProcessHead('Sales');
+            $transaction->setUpdated($entity->getUpdated());
+
+            /* Cash - Cash various */
+            if($accountSales->getTransactionMethod()->getId() == 2 ){
+                /* Current Asset Bank Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(3));
+                $transaction->setProcess('Current Assets');
+            }elseif($accountSales->getTransactionMethod()->getId() == 3 ){
+                /* Current Asset Mobile Account Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(10));
+                $transaction->setProcess('Current Assets');
+            }else{
+                /* Cash - Cash Debit */
+                $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(30));
+                $transaction->setProcess('Cash');
+            }
+
+            $transaction->setAmount($amount);
+            $transaction->setDebit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+        }
+    }
+
+    public function insertRestaurantCashCredit(\Appstore\Bundle\RestaurantBundle\Entity\Invoice $entity , AccountSales $accountSales)
+    {
+
+        $transaction = new Transaction();
+        $transaction->setGlobalOption($accountSales->getGlobalOption());
+        if(!empty($accountSales->getBranches())){
+            $transaction->setBranches($accountSales->getBranches());
+        }
+        $transaction->setProcessHead('Sales');
+        $transaction->setProcess('Operating Revenue');
+        $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+        $transaction->setUpdated($entity->getUpdated());
+        $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(8));
+        $transaction->setAmount('-'.$entity->getPayment());
+        $transaction->setCredit($entity->getPayment());
+        $this->_em->persist($transaction);
+        $this->_em->flush();
+        return $transaction;
+
+    }
+
+    private function insertRestaurantSalesVatAccountPayable(\Appstore\Bundle\RestaurantBundle\Entity\Invoice $entity, AccountSales $accountSales)
+    {
+
+        $amount = $entity->getVat();
+        if($amount > 0){
+
+            $transaction = new Transaction();
+            $transaction->setGlobalOption($accountSales->getGlobalOption());
+            $transaction->setAccountRefNo($accountSales->getAccountRefNo());
+            $transaction->setProcessHead('Sales');
+            $transaction->setProcess('AccountPayable');
+            /* Current Liabilities - Sales Vat & Tax */
+            $transaction->setAccountHead($this->_em->getRepository('AccountingBundle:AccountHead')->find(16));
+            $transaction->setAmount('-'.$amount);
+            $transaction->setCredit($amount);
+            $this->_em->persist($transaction);
+            $this->_em->flush();
+
+        }
+
+    }
+
+
 
 
     public function purchaseGlobalTransaction($accountPurchase,$source='')
