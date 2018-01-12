@@ -560,7 +560,7 @@ class InvoiceController extends Controller
         if(!empty($entity)){
             $this->approvedOrder($entity,$data);
         }
-        $currentPayment = !empty($data['payment']) ? $data['payment'] :0;
+        $payment = !empty($data['payment']) ? $data['payment'] :0;
 
 
         $address1       = $option->getContactPage()->getAddress1();
@@ -619,7 +619,7 @@ class InvoiceController extends Controller
         $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
         $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
         $due            = new PosItemManager('Due: ','Tk.',number_format($due));
-        $return         = new PosItemManager('Return: ','Tk.',number_format($currentPayment-$total));
+        $return         = new PosItemManager('Return: ','Tk.',number_format($payment-$total));
 
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
@@ -671,13 +671,7 @@ class InvoiceController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($grandTotal);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-        $printer->text("\n");
-        if($return > 0){
-            $printer->setEmphasis(true);
-            $printer->setUnderline(Printer::UNDERLINE_DOUBLE);
-            $printer->text($return);
-            $printer->setUnderline(Printer::UNDERLINE_NONE);
-        }
+
         $printer->text("\n");
         $printer -> feed();
         $printer->text($transaction);
