@@ -697,7 +697,7 @@ class InvoiceController extends Controller
         $printer -> feed();
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Sales By: ".$salesBy."\n");
-        $printer -> text("Thank you for shopping\n");
+        $printer -> text("Thanks for being here\n");
         if($website){
             $printer -> text("Please visit www.".$website."\n");
         }
@@ -878,7 +878,7 @@ class InvoiceController extends Controller
         $printer -> feed();
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Sales By: ".$salesBy."\n");
-        $printer -> text("Thank you for shopping\n");
+        $printer -> text("Thanks for being here\n");
         if($website){
             $printer -> text("Please visit www.".$website."\n");
         }
