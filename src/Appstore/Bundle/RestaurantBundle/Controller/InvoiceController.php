@@ -560,7 +560,7 @@ class InvoiceController extends Controller
         if(!empty($entity)){
             $this->approvedOrder($entity,$data);
         }
-        $payment = !empty($data['payment']) ? $data['payment'] :0;
+        $currentPayment = !empty($data['payment']) ? $data['payment'] :0;
 
 
         $address1       = $option->getContactPage()->getAddress1();
@@ -606,10 +606,10 @@ class InvoiceController extends Controller
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        if(!empty($vatRegNo)){
+        /*if(!empty($vatRegNo)){
             $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
-        }
+        }*/
 
         $printer -> feed();
         $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
@@ -619,16 +619,16 @@ class InvoiceController extends Controller
         $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
         $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
         $due            = new PosItemManager('Due: ','Tk.',number_format($due));
-        $return         = new PosItemManager('Return: ','Tk.',number_format($payment-$total));
+        $return         = new PosItemManager('Return: ','Tk.',number_format($currentPayment-$total));
 
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n\n");
+        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n");
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("Table No. ".$entity->getTokenNo()->getName().".\n");
+        $printer -> text("Table No. ".$entity->getTokenNo()->getName().".\n\n");
         $printer -> setEmphasis(false);
 
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
@@ -671,7 +671,12 @@ class InvoiceController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($grandTotal);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-
+        if($return > 0){
+            $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
+            $printer->text($return);
+            $printer -> setEmphasis(false);
+            $printer -> text ( "\n" );
+        }
         $printer->text("\n");
         $printer -> feed();
         $printer->text($transaction);
@@ -785,12 +790,13 @@ class InvoiceController extends Controller
         $printer -> feed();
 
         /* Title of receipt */
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        /*$printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
         if(!empty($vatRegNo)){
             $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
         }
+        */
         $printer -> feed();
         $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
@@ -803,11 +809,11 @@ class InvoiceController extends Controller
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n\n");
+        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n");
         $printer -> setEmphasis(false);
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("Table No. ".$entity->getTokenNo()->getName().".\n");
+        $printer -> text("Table No. ".$entity->getTokenNo()->getName().".\n\n");
         $printer -> setEmphasis(false);
 
 
