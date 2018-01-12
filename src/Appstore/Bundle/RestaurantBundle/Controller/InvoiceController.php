@@ -556,15 +556,17 @@ class InvoiceController extends Controller
         $config = $this->getUser()->getGlobalOption()->getRestaurantConfig();
 
         $entity = $em->getRepository('RestaurantBundle:Invoice')->findOneBy(array('restaurantConfig'=>$config,'invoice'=>$invoice));
+        $data = $request->request->all()['appstore_bundle_restaurant_invoice'];
         if(!empty($entity)){
-            $data = $request->request->all()['appstore_bundle_restaurant_invoice'];
             $this->approvedOrder($entity,$data);
         }
+        $payment = !empty($data['payment']) ? $data['payment'] :0;
+
 
         $address1       = $option->getContactPage()->getAddress1();
         $thana          = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getName():'';
         $district       = !empty($option->getContactPage()->getLocation()) ? ', '.$option->getContactPage()->getLocation()->getParent()->getName():'';
-        $address = $address1.$thana.$district;
+        $address        = $address1.$thana.$district;
 
         $vatRegNo       = $config->getVatRegNo();
         $companyName    = $option->getName();
@@ -608,6 +610,7 @@ class InvoiceController extends Controller
             $printer -> text("Vat Reg No. ".$vatRegNo.".\n");
             $printer -> setEmphasis(false);
         }
+
         $printer -> feed();
         $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
@@ -616,6 +619,7 @@ class InvoiceController extends Controller
         $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
         $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
         $due            = new PosItemManager('Due: ','Tk.',number_format($due));
+        $return         = new PosItemManager('Return: ','Tk.',number_format($payment-$total));
 
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
@@ -663,7 +667,13 @@ class InvoiceController extends Controller
         $printer -> setUnderline(Printer::UNDERLINE_DOUBLE);
         $printer -> text($grandTotal);
         $printer -> setUnderline(Printer::UNDERLINE_NONE);
-
+        $printer->text("\n");
+        if($return > 0){
+            $printer->setEmphasis(true);
+            $printer->setUnderline(Printer::UNDERLINE_DOUBLE);
+            $printer->text($return);
+            $printer->setUnderline(Printer::UNDERLINE_NONE);
+        }
         $printer->text("\n");
         $printer -> feed();
         $printer->text($transaction);
@@ -795,8 +805,13 @@ class InvoiceController extends Controller
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("SALES INVOICE\n\n");
+        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n\n");
         $printer -> setEmphasis(false);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> setEmphasis(true);
+        $printer -> text("Table No. ".$entity->setTokenNo()->getName().".\n");
+        $printer -> setEmphasis(false);
+
 
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
         $printer -> setEmphasis(true);
@@ -917,7 +932,11 @@ class InvoiceController extends Controller
         /* Title of receipt */
         $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> setEmphasis(true);
-        $printer -> text("KITCHEN TOKEN NO. ".$entity->getTokenNo()->getName().".\n\n");
+        $printer -> text("INVOICE NO. ".$entity->getInvoice().".\n\n");
+        $printer -> setEmphasis(false);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> setEmphasis(true);
+        $printer -> text("Table No. ".$entity->setTokenNo()->getName().".\n");
         $printer -> setEmphasis(false);
 
         $printer -> setJustification(Printer::JUSTIFY_LEFT);
