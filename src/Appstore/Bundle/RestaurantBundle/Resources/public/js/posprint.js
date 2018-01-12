@@ -35,6 +35,7 @@ $(document).on("click", ".paymentReceive", function() {
         onOkBut: function(event, el) {
             $.get(url, function( response ) {
                 jsPostPrint(response);
+                location.reload();
                 //setTimeout(pageRedirect(),3000);
             });
         }
