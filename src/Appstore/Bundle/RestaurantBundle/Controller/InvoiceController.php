@@ -611,7 +611,7 @@ class InvoiceController extends Controller
         $printer -> feed();
         $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
-        $vat            = new PosItemManager('Add Vat: ','Tk.',number_format($vat));
+        $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
         $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
         $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
         $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
@@ -786,7 +786,7 @@ class InvoiceController extends Controller
         $printer -> feed();
         $transaction    = new PosItemManager('Payment Mode: '.$transaction,'','');
         $subTotal       = new PosItemManager('Sub Total: ','Tk.',number_format($subTotal));
-        $vat            = new PosItemManager('Add Vat: ','Tk.',number_format($vat));
+        $vat            = new PosItemManager('Vat: ','Tk.',number_format($vat));
         $discount       = new PosItemManager('Discount: ','Tk.',number_format($discount));
         $grandTotal     = new PosItemManager('Net Payable: ','Tk.',number_format($total));
         $payment        = new PosItemManager('Received: ','Tk.',number_format($payment));
