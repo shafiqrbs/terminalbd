@@ -290,18 +290,20 @@ $(document).on("click", "#receiveBtn", function() {
 });
 
 
-$(document).on('change', '#appstore_bundle_hospitalbundle_invoice_payment', function() {
+$(document).on('change', '#appstore_bundle_restaurant_invoice_payment', function() {
 
-    var payment  = parseInt($('#appstore_bundle_hospitalbundle_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
+    var payment  = parseInt($('#appstore_bundle_restaurant_invoice_payment').val()  != '' ? $('#appstore_bundle_restaurant_invoice_payment').val() : 0 );
     var due  = parseInt($('#due').val()  != '' ? $('#due').val() : 0 );
     var dueAmount = (due - payment);
     if(dueAmount > 0){
         $('#balance').html('Due Tk.');
         $('.due').html(dueAmount);
+        $('#dueable').html(dueAmount);
     }else{
         var balance =  payment - due ;
         $('#balance').html('Return Tk.');
         $('.due').html(balance);
+        $('#dueable').html(balance);
     }
 });
 

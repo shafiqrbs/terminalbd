@@ -55,7 +55,7 @@ class InvoiceType extends AbstractType
                 'constraints' =>array(
                     new NotBlank(array('message'=>'Please select required'))
                 ),
-                'empty_value' => '---Choose Token no ---',
+                'empty_value' => '---Select Table no ---',
                 'attr'=>array('class'=>'span12 m-wrap'),
                 'query_builder' => function(EntityRepository $er){
                     return $er->createQueryBuilder('e')
