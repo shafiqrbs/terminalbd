@@ -142,8 +142,7 @@ class InvoiceParticularRepository extends EntityRepository
         $i = 1;
         foreach ($entities as $entity) {
             $data .= '<tr id="remove-'. $entity->getId().'">';
-            $data .= '<td class="span1" >' . $i . '</td>';
-            $data .= '<td class="span4" >' . $entity->getParticular()->getName() . '</td>';
+            $data .= '<td class="span4" >'.$i.'. '. $entity->getParticular()->getParticularCode() . '</td>';
             $data .= '<td class="span1" >' . $entity->getSalesPrice().'</td>';
             $data .= '<td class="span1" >' . $entity->getQuantity().'</td>';
             $data .= '<td class="span2" >' . $entity->getSubTotal() . '</td>';

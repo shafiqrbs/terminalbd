@@ -20,17 +20,57 @@ use Doctrine\ORM\EntityRepository;
 class ParticularRepository extends EntityRepository
 {
 
-    public function getServiceLists(RestaurantConfig $config,$services = array())
+    public function getServiceLists(Invoice $invoice,$data)
     {
+        $config = $invoice->getRestaurantConfig();
         $qb = $this->createQueryBuilder('e');
-        $qb->join('e.service','service');
+        $qb->join('e.service','s');
+        $qb->join('e.category','c');
+        $qb->addSelect('e.id as id');
+        $qb->addSelect('e.name as name');
+        $qb->addSelect('e.particularCode');
+        $qb->addSelect('e.price');
+        $qb->addSelect('e.quantity');
+        $qb->addSelect('c.name as categoryName');
+        $qb->addSelect('s.name as serviceName');
+        $qb->addSelect('s.code as serviceCode');
         $qb->where('e.restaurantConfig = :config');
         $qb->setParameter('config',$config);
-        $qb->andWhere('service.slug IN (:services)');
-        $qb->setParameter('services',$services);
-        $qb->orderBy('service.name , e.name','ASC');
+        $qb->orderBy('c.name , e.name','ASC');
         $result = $qb->getQuery()->getResult();
-        return $result;
+      //  $particulars = $this->getServiceWithParticular($config,$services);
+        $data = '';
+        $service = '';
+        foreach ($result as $particular) {
+
+            if ($service != $particular['categoryName']) {
+                $data .='<tr>';
+                $data .= '<td class="category">'.$particular['categoryName'].'</td>';
+                $data .= '<td class="category">&nbsp;</td>';
+                $data .= '<td class="category">&nbsp;</td>';
+                $data .='</tr>';
+            }
+            $data .='<tr>';
+            $data .='<td>'.$particular['particularCode'] .'-'. $particular['name'].'</td>';
+            $data .='<td>'.$particular['price'].'</td>';
+            $data .='<td>';
+            $data .='<div class="input-group input-append">';
+            $data .='<span class="input-group-btn">';
+            $data .='<button type="button" class="btn yellow btn-number" data-type="minus" data-field="quantity" data-id="'.$particular['id'].'"  data-text="'.$particular['id'].'" data-title="'.$particular['price'].'"><i class="icon-minus"></i></button>';
+            $data .='</span>';
+            $data .='<input type="text" readonly="readonly" name="quantity" id="quantity-'.$particular['id'].'" class="form-control m-wrap  span4 input-number" value="1" min="1" max="100" >';
+            $data .='<span class="input-group-btn">';
+            $data .='<button type="button" class="btn green btn-number" data-type="plus" data-field="quantity" data-id="'.$particular['id'].'"   data-title="'.$particular['price'].'"><i class="icon-plus"></i></button>';
+            $data .='<input type="hidden" id="price-'.$particular['id'].'" value="'.$particular['price'].'" name="">';
+            $data .='<button type="button" class="btn red addCart" id=""  data-id="'.$particular['id'].'"  data-url="/restaurant/invoice/'.$invoice->getId().'/particular" ><i class="icon-shopping-cart"></i></button>';
+            $data .='<div>';
+            $data .='</td>';
+            $data .='</tr>';
+            $service = $particular['categoryName'];
+        }
+
+        return $data ;
+
     }
 
     public function findWithSearch($config,$service, $data){

@@ -183,38 +183,6 @@ $(document).on('click', '.addCart', function() {
     })
 });
 
-
-$(document).on('change', '.discount', function() {
-
-    var discount = parseInt($('.discount').val());
-    var invoice = parseInt($('#invoiceId').val());
-    var payment  = parseInt($('#appstore_bundle_restaurant_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
-
-    $.ajax({
-        url: Routing.generate('restaurant_invoice_discount_update'),
-        type: 'POST',
-        data:'discount=' + discount+'&invoice='+ invoice,
-        success: function(response) {
-
-            obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('#netTotal').val(obj['netTotal']);
-            $('.paymentAmount').html(obj['payment']);
-            $('.vat').html(obj['vat']);
-            $('.due').html(obj['due']-payment);
-            $('#due').val(obj['due']);
-            $('.discountAmount').html(obj['discount']);
-            $('.discount').val(obj['discount']).attr("placeholder", obj['discount']);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('#invoiceTransaction').html(obj['invoiceTransaction']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
-        }
-
-    })
-});
-
 $(document).on("click", ".removeDiscount", function() {
 
     var url = $(this).attr("data-url");
@@ -264,109 +232,18 @@ $(document).on("click", ".particularDelete", function() {
     });
 });
 
-$(document).on('click', '#addPayment', function() {
+$(document).on("change", "#invoiceForm", function() {
 
-    var payment = $('#payment').val();
-    var discount = $('#discount').val();
-    var process = $('#process').val();
-    var url = $('#addPayment').attr('data-url');
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function (event, el) {
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: 'payment=' + payment + '&discount=' + discount + '&process=' + process,
-                success: function (response){
-                    location.reload();
-                }
-            })
-        }
-    });
-
-});
-
-$(document).on('change', '#customerMobile', function() {
-
-    var mobile = $('#customerMobile').val();
-    var invoice = parseInt($('#invoiceId').val());
-    if(mobile == ''){
-        return false;
-    }
-
-    $.ajax({
-        url: Routing.generate('restaurant_invoice_customer_discount'),
-        type: 'POST',
-        data:'mobile=' + mobile+'&invoice='+ invoice,
-        success: function(response) {
-
-            obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('#netTotal').val(obj['netTotal']);
-            $('.paymentAmount').html(obj['payment']);
-            $('.vat').html(obj['vat']);
-            $('.due').html(obj['due']-payment);
-            $('#due').val(obj['due']);
-            $('.discountAmount').html(obj['discount']);
-            $('.discount').val(obj['discount']).attr("placeholder", obj['discount']);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('#invoiceTransaction').html(obj['invoiceTransaction']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
-        }
-
-    })
-});
-
-$(document).on('change', '#appstore_bundle_restaurant_invoice_customer_mobile , #appstore_bundle_restaurant_invoice_customer_name , #appstore_bundle_restaurant_invoice_customer_location', function() {
-
-    var mobile = $('#appstore_bundle_restaurant_invoice_customer_mobile').val();
-    var customer = $('#appstore_bundle_restaurant_invoice_customer_name').val();
-    var location = $('#appstore_bundle_restaurant_invoice_customer_location').val();
-    var invoice = parseInt($('#invoiceId').val());
-    if(mobile == ''){
-        return false;
-    }
-
-    $.ajax({
-        url: Routing.generate('restaurant_invoice_new_customer_discount'),
-        type: 'POST',
-        data:'mobile=' + mobile+'&name='+ customer +'&location='+ location +'&invoice='+ invoice,
-        success: function(response) {
-
-            obj = JSON.parse(response);
-            $('.subTotal').html(obj['subTotal']);
-            $('.netTotal').html(obj['netTotal']);
-            $('#netTotal').val(obj['netTotal']);
-            $('.paymentAmount').html(obj['payment']);
-            $('.vat').html(obj['vat']);
-            $('.due').html(obj['due']-payment);
-            $('#due').val(obj['due']);
-            $('.discountAmount').html(obj['discount']);
-            $('.discount').val(obj['discount']).attr("placeholder", obj['discount']);
-            $('#invoiceParticulars').html(obj['invoiceParticulars']);
-            $('#invoiceTransaction').html(obj['invoiceTransaction']);
-            $('.msg-hidden').show();
-            $('#msg').html(obj['msg']);
-        }
-
-    })
-});
-
-
-$(document).on('change', '.discount', function() {
-
-    var discount = parseInt($('.discount').val());
-    var invoice = parseInt($('#invoiceId').val());
+    var url = $(this).attr("action");
     var payment  = parseInt($('#appstore_bundle_restaurant_invoice_payment').val()  != '' ? $('#appstore_bundle_hospitalbundle_invoice_payment').val() : 0 );
 
     $.ajax({
-        url: Routing.generate('restaurant_invoice_discount_update'),
+        url: url,
         type: 'POST',
-        data:'discount=' + discount+'&invoice='+ invoice,
-        success: function(response) {
+        data: new FormData($('form')[0]),
+        processData: false,
+        contentType: false,
+        success: function (response) {
 
             obj = JSON.parse(response);
             $('.subTotal').html(obj['subTotal']);
@@ -374,56 +251,17 @@ $(document).on('change', '.discount', function() {
             $('#netTotal').val(obj['netTotal']);
             $('.paymentAmount').html(obj['payment']);
             $('.vat').html(obj['vat']);
-            $('.due').html(obj['due']-payment);
+            $('.due').html(obj['due'] - payment);
             $('#due').val(obj['due']);
-            $('.discountAmount').html(obj['discount']);
+            $('.totalDiscount').html(obj['totalDiscount']);
             $('.discount').val(obj['discount']).attr("placeholder", obj['discount']);
             $('#invoiceParticulars').html(obj['invoiceParticulars']);
             $('#invoiceTransaction').html(obj['invoiceTransaction']);
             $('.msg-hidden').show();
             $('#msg').html(obj['msg']);
         }
-
     })
-});
 
-
-$(document).on("click", "#diagnosticReceiveBtn", function() {
-
-    $('#confirm-content').confirmModal({
-        topOffset: 0,
-        top: '25%',
-        onOkBut: function(event, el) {
-            $('#invoiceForm').submit();
-        }
-    });
-
-});
-
-$(document).on("click", "#receiveBtn", function() {
-
-    $('#appstore_bundle_hospitalbundle_invoice_cabin, #appstore_bundle_hospitalbundle_invoice_customer_alternativeContactPerson, #appstore_bundle_hospitalbundle_invoice_customer_alternativeRelation, #appstore_bundle_hospitalbundle_invoice_customer_alternativeContactMobile').each(function() {
-        if ($(this).val() == '') {
-            $('#appstore_bundle_hospitalbundle_invoice_customer_alternativeContactPerson').addClass('input-error').focus;
-            $('#appstore_bundle_hospitalbundle_invoice_customer_alternativeRelation').addClass('input-error').focus;
-            $('#appstore_bundle_hospitalbundle_invoice_customer_alternativeContactMobile').addClass('input-error').focus;
-            $('#appstore_bundle_hospitalbundle_invoice_cabin').addClass('input-error').focus;
-            $('#appstore_bundle_hospitalbundle_invoice_disease').addClass('input-error').focus;
-            $('#updatePatient').show();
-            return false;
-
-        }else{
-
-            $('#confirm-content').confirmModal({
-                topOffset: 0,
-                top: '25%',
-                onOkBut: function(event, el) {
-                    $('#invoiceForm').submit();
-                }
-            });
-        }
-
-    });
 });
 
 
@@ -444,7 +282,114 @@ $(document).on('change', '#appstore_bundle_restaurant_invoice_payment', function
     }
 });
 
+$('#product').DataTable( {
+    scrollY:        '110vh',
+    scrollCollapse: true,
+    paging:         false,
+    bInfo : false,
+    orderable: false,
+    bSort: false,
+    aoColumnDefs: [
+        {
+            bSortable: false,
+            aTargets: [ -1 ]
+        }
+    ]
+});
 
+$('#invoiceParticular').DataTable( {
+    scrollY:        '25vh',
+    scrollCollapse: true,
+    paging:         false,
+    bInfo : false,
+    sScrollX: '100%',
+    bSort: false,
+    bFilter: false,
+});
+
+$('#salesList').DataTable( {
+    scrollY:        '50vh',
+    scrollCollapse: true,
+    paging:         false,
+    bInfo : false,
+    bSort: false,
+});
+
+$(window).scroll(function ()
+{
+    if($(document).height() <= $(window).scrollTop() + $(window).height())
+    {
+        loadmore();
+    }
+});
+
+/*
+$(window).scroll(function (){
+   if($(document).height() <= $(window).scrollTop() + $(window).height()){loadmore();}
+});
+function loadmore()
+{
+    var val = document.getElementById("row_no").value;
+        $.ajax({
+        type: 'post',
+        url: 'get_results.php',
+        data: {
+            getresult:val
+        },
+        success: function (response) {
+            var content = document.getElementById("all_rows");
+            content.innerHTML = content.innerHTML+response;
+            // We increase the value by 10 because we limit the results by 10
+            document.getElementById("row_no").value = Number(val)+10;
+        }
+    });
+}
+*/
+
+
+$(document).on('change', '#appstore_bundle_restaurant_invoice_tokenNo', function(e) {
+
+    var invoice = $('#invoiceId').val();
+    var tokenNo = $('#appstore_bundle_restaurant_invoice_tokenNo').val();
+    if(tokenNo == ''){
+        return false;
+    }
+    $.post( Routing.generate('restaurant_invoice_token_check') ,{ invoice:invoice , tokenNo:tokenNo} )
+        .done(function( data ) {
+            if(data == 'invalid'){
+                $("#appstore_bundle_restaurant_invoice_tokenNo").select2().select2("val","");
+                $('#cabinInvalid').notifyModal({
+                    duration : 5000,
+                    placement : 'center',
+                    overlay : true,
+                    type : 'notify',
+                    icon : false,
+                });
+
+            }else{
+
+                $("#receiveBtn").attr("disabled", false);
+                $("#kitchenBtn").attr("disabled", false);
+            }
+        });
+
+});
+
+$("input:text:visible:first").focus();
+$('input[name=particular]').focus();
+
+$('.inputs').keydown(function (e) {
+    if (e.which === 13) {
+        var index = $('.inputs').index(this) + 1;
+        $('.inputs').eq(index).focus();
+    }
+});
+$('.input2').keydown(function (e) {
+    if (e.which === 13) {
+        var index = $('.input2').index(this) + 1;
+        $('.input2').eq(index).focus();
+    }
+});
 
 $('.particular-info').on('keypress', 'input', function (e) {
     if (e.which == 13) {

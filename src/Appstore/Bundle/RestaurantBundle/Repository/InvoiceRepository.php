@@ -303,7 +303,7 @@ class InvoiceRepository extends EntityRepository
     }
 
 
-    public function invoiceLists(User $user , $mode , $data)
+    public function invoiceLists(User $user,$data)
     {
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
 
@@ -364,7 +364,7 @@ class InvoiceRepository extends EntityRepository
             }
 
             $invoice->setSubTotal($subTotal);
-            $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
+            $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getTotalDiscount());
             $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
 
         }else{
@@ -522,6 +522,32 @@ class InvoiceRepository extends EntityRepository
             $val = ( ($invoice->getSubTotal() * (int)$discount)/100 );
         }
         return round($val);
+    }
+
+    public function insertNewCustomerWithDiscount(Invoice $invoice,Customer $customer )
+    {
+         if($invoice->getSubTotal()  > 0 && !empty($customer) ){
+            $discount = $invoice->getRestaurantConfig()->getDiscountPercentage();
+            $returnDiscount = $this->discountCalculation($invoice,$discount);
+            $invoice->setDiscount($discount);
+            $invoice->setTotalDiscount($returnDiscount);
+            $invoice->setTotal($invoice->getSubTotal() - $returnDiscount);
+            $invoice->setDue($invoice->getTotal() - $invoice->getPayment());
+            $invoice->setCustomer($customer);
+            $invoice->setMobile($customer->getMobile());
+            $this->_em->flush();
+        }
+    }
+
+    public function insertDiscount(Invoice $invoice , $discount)
+    {
+        $returnDiscount =$this->discountCalculation($invoice,$discount);
+        $invoice->setDiscount($discount);
+        $invoice->setTotalDiscount($returnDiscount);
+        $invoice->setTotal($invoice->getSubTotal() - $returnDiscount);
+        $invoice->setDue($invoice->getTotal() - $invoice->getPayment());
+        $this->_em->flush();
+
     }
 
 

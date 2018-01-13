@@ -1,10 +1,6 @@
 {% extends '::base.html.twig' %}
 {% block body %}
     <div class="container-fluid">
-        <!-- BEGIN PAGE HEADER-->
-
-        <!-- END PAGE HEADER-->
-        <!-- BEGIN PAGE CONTENT-->
         <div class="row-fluid">
             <div class="span12">
                 <div class="portlet box green tabbable">
@@ -18,68 +14,41 @@
                         </div>
                     </div>
 
-                    <div class="portlet-body">
+                    <div class="portlet-body form">
                         <div class="portlet-body flip-scroll">
                             {% include('flash-message.html.twig')  %}
-                            {{ form_start(form) }}
-                            {{ form_row(form._token) }}
+
                             <div class="clearfix">&nbsp;</div>
                             <div class="row-fluid">
                                <div class="span8">
                                    <table id="product" class="table table-bordered table-striped table-condensed" cellspacing="0" width="100%">
                                         <thead>
-                                        <tr class="head-grey">
-                                            <th class="" >Name </th>
-                                            <th class="numeric" >Price</th>
+                                        <tr class="head-green">
+                                            <th class="span6" >Name </th>
+                                            <th class="span1" >Price</th>
                                             <th class="" ></th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for item in pagination %}
-                                            <tr>
-                                                <td class="numeric span6" >{{ item.particularCode }} - {{ item.name }}</td>
-                                                <td class="numeric span1" >{{ item.price }}</td>
-                                                <td class="">
-                                                    <div class="input-group input-append">
-                                                    <span class="input-group-btn">
-                                                        <button type="button" class="btn yellow btn-number" data-type="minus" data-field="quantity" data-id="{{ item.id }}"  data-text="{{ item.id }}" data-title="{{ item.price }}">
-                                                             <i class="icon-minus"></i>
-                                                        </button>
-                                                    </span>
-                                                        <input type="text" readonly="readonly" name="quantity" id="quantity-{{ item.id }}" class="form-control m-wrap  span4 input-number" value="{{ item.quantity }}" min="1" max="100" >
-                                                        <span class="input-group-btn">
-                                                          <button type="button" class="btn green btn-number" data-type="plus" data-field="quantity" data-id="{{ item.id }}"   data-title="{{ item.price }}">
-                                                           <i class="icon-plus"></i>
-                                                          </button>
-                                                    </span>
-                                                        <input type="hidden" id="price-{{ item.id }}" value="{{ item.price }}" name="">
-                                                        <button type="button" class="btn red addCart" id=""  data-id="{{ item.id }}"  data-url="{{ path('restaurant_invoice_particular_add',{'invoice':entity.id}) }}" ><i class="icon-shopping-cart"></i></button>
-                                                    </div>
-
-
-                                                </td>
-                                            </tr>
-
-                                        {% endfor %}
-
+                                            {{ pagination|raw }}
                                         </tbody>
                                     </table>
 
                                 </div>
                                 <div class="span4">
-
+                                    {{ form_start(form) }}
+                                    {{ form_row(form._token) }}
                                     <div class="clearfix"></div>
                                     <div class="row-fluid">
                                         <div class="span12 payment-info">
-                                            <table class="table table-bordered table-striped table-condensed flip-content ">
+                                            <table id="invoiceParticular" class="table table-bordered table-striped table-condensed">
 
                                                 <thead class="flip-content ">
                                                 <tr class="head-blue">
-                                                    <th class="numeric" ><i class="icon-list"></i></th>
-                                                    <th class="numeric" >Product Code</th>
-                                                    <th class="numeric" >Price</th>
-                                                    <th class="numeric" >Qnt</th>
-                                                    <th class="numeric" >Total</th>
+                                                    <th class="" >Product</th>
+                                                    <th class="" >Price</th>
+                                                    <th class="" >Qnt</th>
+                                                    <th class="" >Total</th>
                                                     <th></th>
                                                 </tr>
                                                 </thead>
@@ -88,10 +57,9 @@
                                                 {% set salesPrice = 0 %}
                                                 {% for item in entity.invoiceParticulars %}
                                                     <tr id="remove-{{ item.id }}">
-                                                        <td class="numeric" >{{ loop.index }}</td>
-                                                        <td class="numeric" >{{ item.particular.particularCode }}</td>
-                                                        <td class="numeric" >{{ item.salesPrice }}</td>
-                                                        <td class="numeric" >
+                                                        <td class="" >{{ loop.index }}. {{ item.particular.particularCode }}</td>
+                                                        <td class="" >{{ item.salesPrice }}</td>
+                                                        <td class="" >
                                                             {{ item.quantity }}
                                             {#                <a class="editable" data-name="Quantity" href="#"  data-url="{{ path('inventory_salesmanual_item_inline_update',{'salesItem':item.id}) }}" data-type="text" data-pk="{{ item.id }}" data-original-title="Enter sales quantity">{{ item.quantity }}</a>
                                             #}            </td>
@@ -109,18 +77,36 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            {% if entity.restaurantConfig.vatEnable == 1 %}
                                             <div class="clearfix"></div>
                                             <div class="row-fluid">
                                                 <div class="span12">
                                                     <div class="control-group">
-                                                        <label class="control-label" for="firstName"><span>VAT/TAX Tk.</span> <span class="pull-right sales-right">{{ entity.vat }}</span></label>
+                                                        <label class="control-label" for="firstName"><span>VAT Tk.</span> <span class="pull-right sales-right">{{ entity.vat }}</span></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            <div class="clearfix"></div>
+                                            <div class="row-fluid">
+                                                <div class="span12">
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="firstName"><span>Discount Tk.</span> <span class="pull-right sales-right totalDiscount">{{ entity.totalDiscount }}</span></label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="clearfix"></div>
                                             <div class="row-fluid">
-                                                <div class="input-append span12">
-                                                    <input type="text" style="margin-left: 0!important;" id="customerMobile" name="mobile"  class="span10 select2Customer" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Customer mobile">
+                                                <div class="span12">
+                                                    <div class="control-group">
+                                                        <label class="control-label" for="firstName"><span>Net-Total Tk.</span> <span class="pull-right sales-right netTotal">{{ entity.total }}</span></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <div class="row-fluid">
+                                                <div class="span12">
+                                                    <input type="text" style="margin-left: 0!important;" id="customerMobile" name="customerMobile"  class="span10 select2Customer" value="{{ entity.mobile }}"  autocomplete="off" placeholder="Customer mobile">
                                                     <div class="btn-group span2">
                                                         <a href="javascript:" class="pull-right btn blue  addCustomer span12"><i class="icon-user"></i></a>
                                                     </div>
@@ -296,27 +282,75 @@
 
                                         </div>
                                     </div>
+                                    <div class="form-actions portlet box grey">
+                                        <div class="pull-center span12">
+                                            <input type="hidden" id="patient" name="patient" value="{% if entity.customer is not empty %}{{ entity.customer.id }}{% endif %}">
+                                            <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}" >
+                                            <input type="hidden" name="netTotal" class="" id="netTotal" value="{{ entity.total }}">
+                                            <input type="hidden" name="due" class="" id="due" value="{{ entity.due }}">
+                                            <div class="controls">
+                                                <div class="btn-group pull-center">
+                                                    <button type="button" class="btn red spa12 " {% if entity.tokenNo is empty %} disabled="disabled" {% endif %} id="receiveBtn" data-url="{{ path('restaurant_invoice_pos',{'invoice':entity.invoice}) }}"><i class="icon-print"></i> Receive & Print</button>
+                                                    {# <button type="button" class="btn green spa12" {% if entity.tokenNo is empty %} disabled="disabled" {% endif %}  id="kitchenBtn" data-url="{{ path('restaurant_invoice_kitchen',{'invoice':entity.invoice}) }}" ><i class="icon-print"></i> Kitchen Print</button> #}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{ form_end(form) }}
                                 </div>
                             </div>
                             <div class="clearfix">&nbsp;</div>
-                            <div class="form-actions portlet box grey">
-                                <div class="pull-left span9"></div>
-                                <div class="pull-right span3">
-                                    <input type="hidden" id="patient" name="patient" value="{% if entity.customer is not empty %}{{ entity.customer.id }}{% endif %}">
-                                    <input type="hidden" name="invoiceId" id="invoiceId" value="{{ entity.id }}" >
-                                    <input type="hidden" name="netTotal" class="" id="netTotal" value="{{ entity.total }}">
-                                    <input type="hidden" name="due" class="" id="due" value="{{ entity.due }}">
-                                    <div class="controls">
-                                        <div class="input-append span7">
-                                            <div class="btn-group pull-center">
-                                                <button type="button" class="btn red spa12 " {% if entity.tokenNo is empty %} disabled="disabled" {% endif %} id="receiveBtn" data-url="{{ path('restaurant_invoice_pos',{'invoice':entity.invoice}) }}"><i class="icon-print"></i> Payment Print</button>
-                                  {#              <button type="button" class="btn green spa12" {% if entity.tokenNo is empty %} disabled="disabled" {% endif %}  id="kitchenBtn" data-url="{{ path('restaurant_invoice_kitchen',{'invoice':entity.invoice}) }}" ><i class="icon-print"></i> Kitchen Print</button>
-                                  #}          </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="form-actions portlet box">
+                                <div class="pull-center span12"><h4><strong>Today Sales</strong></h4></div>
                             </div>
-                            {{ form_end(form) }}
+                            <div class="clearfix">&nbsp;</div>
+                            <table id="salesList" class="table table-bordered table-striped table-condensed">
+
+                                <thead class="flip-content ">
+                                <tr class="head-green">
+                                    <th class="numeric" >Invoice</th>
+                                    <th class="numeric" >Slip/Table</th>
+                                    <th class="numeric" >Total</th>
+                                    <th class="numeric" >Vat</th>
+                                    <th class="numeric" >Discount</th>
+                                    <th class="numeric" >NetTotal</th>
+                                    <th class="numeric" >Payment</th>
+                                    <th class="numeric" >Due</th>
+                                    <th class="numeric" >Process</th>
+                                    <th class="numeric" >Served By</th>
+                                    <th class="numeric" >Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for entity in salesLists %}
+                                    <tr id="delete-{{ entity.id }}">
+                                        <td class="numeric" >{{ entity.invoice }}</td>
+                                        <td class="numeric" >{{ entity.slipNo }} / {% if entity.tokenNo is not empty %}{{ entity.tokenNo.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.subTotal }}</td>
+                                        <td class="numeric" >{{ entity.vat }}</td>
+                                        <td class="numeric" >{{ entity.discount }}</td>
+                                        <td class="numeric" >{{ entity.total }}</td>
+                                        <td class="numeric" >{{ entity.payment }}</td>
+                                        <td class="numeric" >{{ entity.due }}</td>
+                                        <td class="numeric" > {{ entity.process }}</td>
+                                        <td class="numeric" > {{ entity.salesBy }}</td>
+                                        <td class="numeric" >
+                                            <div class="btn-group">
+                                                {% set processIntArr = ['Created','Pending','Kitchen'] %}
+                                                {% if  entity.process in processIntArr %}
+                                                    <a href="{{ path('restaurant_invoice_edit', { 'id': entity.id }) }}" class="btn purple mini" ><i class="icon-th-large"></i> Manage </a>
+                                                {% endif %}
+                                                {% if entity.process == 'Kitchen' %}
+                                                    <a href="javascript:" data-url="{{ path('restaurant_invoice_payment',{'id':entity.id}) }}" class="btn blue mini paymentReceive" ><i class="icon-money"></i> Payment Receive </a>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="clearfix">&nbsp;</div>
 
                         </div>
                     </div>
@@ -335,6 +369,15 @@
             background-color:#E5E7E7;
             border:1px solid #B7B9B9;
         }
+        .input-append, .input-prepend{
+            margin-bottom: 0!important;
+        }
+        .category{
+            padding: 7px 10px !important;
+            background: grey !important;
+            color: #fff;
+            font-weight: bold;
+        }
         .customer{
             display: none;
         }
@@ -344,6 +387,17 @@
 
 
     </style>
+    <script>
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "http://localhost.xiidea.net:9432/assets/easy-print-server.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, "script", "xiidea-epp-sdk"));
+
+    </script>
 {% endblock %}
 
 {% block cssBlock %}
@@ -369,71 +423,4 @@
 {% block documentready %}
     {{ parent() }}
     EditableInit();
-
-
-
-
-    var table = $('#product').DataTable( {
-        scrollY:        '50vh',
-        scrollCollapse: true,
-        paging:         false,
-        bInfo : false,
-        orderable: false,
-        aoColumnDefs: [
-        {
-            bSortable: false,
-            aTargets: [ -1 ]
-        }
-        ]
-    });
-
-
-    $(document).on('change', '#appstore_bundle_restaurant_invoice_tokenNo', function(e) {
-
-    var url ="{{ path('restaurant_invoice_token_check') }}";
-    var invoice = $('#invoiceId').val();
-    var tokenNo = $('#appstore_bundle_restaurant_invoice_tokenNo').val();
-    if(tokenNo == ''){
-    return false;
-    }
-    $.post( url,{ invoice:invoice , tokenNo:tokenNo } )
-    .done(function( data ) {
-    if(data == 'invalid'){
-    $("#appstore_bundle_restaurant_invoice_tokenNo").select2().select2("val","");
-    $('#cabinInvalid').notifyModal({
-    duration : 5000,
-    placement : 'center',
-    overlay : true,
-    type : 'notify',
-    icon : false,
-    });
-
-    }else{
-
-    $("#receiveBtn").attr("disabled", false);
-    $("#kitchenBtn").attr("disabled", false);
-    }
-    });
-
-    });
-
-    $("input:text:visible:first").focus();
-    $('input[name=particular]').focus();
-
-    $('.inputs').keydown(function (e) {
-    if (e.which === 13) {
-    var index = $('.inputs').index(this) + 1;
-    $('.inputs').eq(index).focus();
-    }
-    });
-    $('.input2').keydown(function (e) {
-    if (e.which === 13) {
-    var index = $('.input2').index(this) + 1;
-    $('.input2').eq(index).focus();
-    }
-    });
-    $( ".payment" ).val('');
-    $( ".payment" ).attr( "placeholder", "{{ entity.payment }}" );
-
-
 {% endblock %}

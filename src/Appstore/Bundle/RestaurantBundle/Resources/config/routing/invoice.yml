@@ -27,34 +27,6 @@ restaurant_invoice_particular_add:
     options:
             expose: true
 
-restaurant_invoice_discount_update:
-    path:     /invoice/invoice-dicount-update
-    defaults: { _controller: "RestaurantBundle:Invoice:invoiceDiscountUpdate" }
-    methods:  POST
-    options:
-            expose: true
-
-restaurant_invoice_customer_discount:
-    path:     /invoice/invoice-customer-dicount-update
-    defaults: { _controller: "RestaurantBundle:Invoice:invoiceDiscountExistingCustomer" }
-    methods:  POST
-    options:
-            expose: true
-
-restaurant_invoice_new_customer_discount:
-    path:     /invoice/invoice-new-customer-dicount-update
-    defaults: { _controller: "RestaurantBundle:Invoice:invoiceDiscountNewCustomer" }
-    methods:  POST
-    options:
-            expose: true
-
-restaurant_invoice_approved:
-    path:     /{id}/invoice-approved
-    defaults: { _controller: "RestaurantBundle:Invoice:approve" }
-    methods:  POST
-    options:
-            expose: true
-
 restaurant_invoice_update:
     path:     /{id}/update
     defaults: { _controller: "RestaurantBundle:Invoice:update" }
@@ -64,42 +36,13 @@ restaurant_invoice_delete:
     path:     /{id}/delete
     defaults: { _controller: "RestaurantBundle:Invoice:delete" }
 
-restaurant_invoice_reverse:
-    path:     /{invoice}/invoice-reverse-create
-    defaults: { _controller: "RestaurantBundle:Invoice:pathologicalInvoiceReverse" }
-
-restaurant_invoice_reverse_show:
-    path:     /{id}/invoice-reverse-show
-    defaults: { _controller: "RestaurantBundle:Invoice:InvoiceReverseShow" }
-
 restaurant_invoice_discount_delete:
     path:     /{id}/discount-delete
     defaults: { _controller: "RestaurantBundle:Invoice:discountDelete" }
 
-restaurant_invoice_confirm:
-    path:     /{id}/invoice-confirm
-    defaults: { _controller: "RestaurantBundle:Invoice:confirm" }
-
 restaurant_invoice_particular_delete:
     path:     /{invoice}/{id}/particular-delete
     defaults: { _controller: "RestaurantBundle:Invoice:invoiceParticularDelete" }
-
-restaurant_invoice_print_invoice:
-    path:     /{id}/print
-    defaults: { _controller: "RestaurantBundle:Invoice:invoicePrint" }
-
-restaurant_invoice_process_update:
-    path:     /hms-invoice/upadte-process
-    defaults: { _controller: "RestaurantBundle:Invoice:invoiceProcessUpdate" }
-    methods:  POST
-    options:
-            expose: true
-
-restaurant_invoice_status_select:
-    path:     /invoice-status-select
-    defaults: { _controller: "RestaurantBundle:Invoice:statusSelect" }
-    options:
-           expose: true
 
 restaurant_invoice_empty_delete:
     path:     /delete/empty-invoice

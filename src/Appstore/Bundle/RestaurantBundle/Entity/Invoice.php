@@ -211,6 +211,13 @@ class Invoice
     /**
      * @var string
      *
+     * @ORM\Column(name="totalDiscount", type="decimal", nullable=true)
+     */
+    private $totalDiscount;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="discount", type="decimal", nullable=true)
      */
     private $discount;
@@ -1279,6 +1286,22 @@ class Invoice
     public function setSlipNo($slipNo)
     {
         $this->slipNo = $slipNo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTotalDiscount()
+    {
+        return $this->totalDiscount;
+    }
+
+    /**
+     * @param string $totalDiscount
+     */
+    public function setTotalDiscount($totalDiscount)
+    {
+        $this->totalDiscount = $totalDiscount;
     }
 
 

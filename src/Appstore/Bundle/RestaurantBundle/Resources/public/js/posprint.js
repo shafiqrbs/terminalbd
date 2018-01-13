@@ -6,8 +6,8 @@ $(document).on("click", "#receiveBtn", function() {
         type: 'POST',
         data : $('.form-horizontal').serialize(),
         success: function (response) {
-           // jsPostPrint(response);
-           // setTimeout(pageRedirect(), 3000);
+           jsPostPrint(response);
+           setTimeout(pageRedirect(), 3000);
         }
     })
 
@@ -36,7 +36,6 @@ $(document).on("click", ".paymentReceive", function() {
             $.get(url, function( response ) {
                 jsPostPrint(response);
                 location.reload();
-                //setTimeout(pageRedirect(),3000);
             });
         }
     });
