@@ -28,15 +28,18 @@ class DefaultController extends Controller
             $enable = 0;
         }
 
-
         if ($this->get('security.authorization_checker')->isGranted('ROLE_SUPER_ADMIN')) {
             return $this->redirect($this->generateUrl('admin'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {
+            return $this->redirect($this->generateUrl('bindu_build'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_RESTAURANT') && $enable == 1) {
+            return $this->redirect($this->generateUrl('restaurant_homepage'));
+        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DMS') && $enable == 1) {
+            return $this->redirect($this->generateUrl('dms_homepage'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable == 1) {
             return $this->redirect($this->generateUrl('domain'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_WEBSITE') && $enable == 1) {
             return $this->redirect($this->generateUrl('website'));
-        }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_DOMAIN') && $enable != 1) {
-            return $this->redirect($this->generateUrl('bindu_build'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_INVENTORY') && $enable == 1 ) {
             return $this->redirect($this->generateUrl('inventoryconfig_dashboard'));
         }elseif ($this->get('security.authorization_checker')->isGranted('ROLE_HOSPITAL') && $enable == 1 ) {

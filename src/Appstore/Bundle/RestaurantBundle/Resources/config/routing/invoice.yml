@@ -34,6 +34,20 @@ restaurant_invoice_discount_update:
     options:
             expose: true
 
+restaurant_invoice_customer_discount:
+    path:     /invoice/invoice-customer-dicount-update
+    defaults: { _controller: "RestaurantBundle:Invoice:invoiceDiscountExistingCustomer" }
+    methods:  POST
+    options:
+            expose: true
+
+restaurant_invoice_new_customer_discount:
+    path:     /invoice/invoice-new-customer-dicount-update
+    defaults: { _controller: "RestaurantBundle:Invoice:invoiceDiscountNewCustomer" }
+    methods:  POST
+    options:
+            expose: true
+
 restaurant_invoice_approved:
     path:     /{id}/invoice-approved
     defaults: { _controller: "RestaurantBundle:Invoice:approve" }

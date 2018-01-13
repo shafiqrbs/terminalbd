@@ -68,6 +68,20 @@ class RestaurantConfig
      */
     private $fontSizeValue;
 
+     /**
+     * @var smallint
+     *
+     * @ORM\Column(name="discountType", type="string", length = 20,  nullable=true)
+     */
+    private $discountType = 'percentage';
+
+     /**
+     * @var smallint
+     *
+     * @ORM\Column(name="discountPercentage", type="smallint",  nullable=true)
+     */
+    private $discountPercentage = 0;
+
     /**
      * @var string
      *
@@ -917,6 +931,38 @@ class RestaurantConfig
     public function getInvoices()
     {
         return $this->invoices;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getDiscountType()
+    {
+        return $this->discountType;
+    }
+
+    /**
+     * @param smallint $discountType
+     */
+    public function setDiscountType($discountType)
+    {
+        $this->discountType = $discountType;
+    }
+
+    /**
+     * @return smallint
+     */
+    public function getDiscountPercentage()
+    {
+        return $this->discountPercentage;
+    }
+
+    /**
+     * @param smallint $discountPercentage
+     */
+    public function setDiscountPercentage($discountPercentage)
+    {
+        $this->discountPercentage = $discountPercentage;
     }
 
 

@@ -31,3 +31,6 @@ restaurant_config:
     resource: "@RestaurantBundle/Resources/config/routing/config.yml"
     prefix:   /config
 
+restaurant_homepage:
+    path:     /dashoard
+    defaults: { _controller: RestaurantBundle:Default:index }

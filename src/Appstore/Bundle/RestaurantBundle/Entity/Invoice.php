@@ -67,8 +67,6 @@ class Invoice
      **/
     private  $tokenNo;
 
-
-
     /**
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="invoiceCreatedBy" )
@@ -84,7 +82,7 @@ class Invoice
     /**
      * @ORM\ManyToOne(targetEntity="Core\UserBundle\Entity\User", inversedBy="invoiceDeliveredBy" )
      **/
-    private  $deliveredBy;
+    private  $salesBy;
 
     /**
      * @var string
@@ -177,6 +175,15 @@ class Invoice
      * @ORM\Column(name="paymentStatus", type="string", length=50, nullable=true)
      */
     private $paymentStatus = "Pending";
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="slipNo", type="string", length=10, nullable=true)
+     */
+    private $slipNo;
+
+
 
     /**
      * @var string
@@ -1240,6 +1247,38 @@ class Invoice
     public function setTokenNo($tokenNo)
     {
         $this->tokenNo = $tokenNo;
+    }
+
+    /**
+     * @return User
+     */
+    public function getSalesBy()
+    {
+        return $this->salesBy;
+    }
+
+    /**
+     * @param user $salesBy
+     */
+    public function setSalesBy($salesBy)
+    {
+        $this->salesBy = $salesBy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlipNo()
+    {
+        return $this->slipNo;
+    }
+
+    /**
+     * @param string $slipNo
+     */
+    public function setSlipNo($slipNo)
+    {
+        $this->slipNo = $slipNo;
     }
 
 

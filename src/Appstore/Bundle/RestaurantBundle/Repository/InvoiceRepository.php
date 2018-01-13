@@ -118,14 +118,60 @@ class InvoiceRepository extends EntityRepository
         }
 
         if (!empty($data['startDate']) ) {
-            $qb->andWhere("it.created >= :startDate");
+            $qb->andWhere("e.created >= :startDate");
             $qb->setParameter('startDate', $data['startDate'].' 00:00:00');
         }
 
         if (!empty($data['endDate'])) {
-            $qb->andWhere("it.created <= :endDate");
+            $qb->andWhere("e.created <= :endDate");
             $qb->setParameter('endDate', $data['endDate'].' 23:59:59');
         }
+    }
+
+    public function todaySalesOverview(User $user , $data , $previous ='')
+    {
+
+        if (empty($data)) {
+            $datetime = new \DateTime("now");
+            $data['startDate'] = $datetime->format('Y-m-d');
+            $data['endDate'] = $datetime->format('Y-m-d');
+        } elseif (!empty($data['startDate']) and !empty($data['endDate'])) {
+            $data['startDate'] = date('Y-m-d', strtotime($data['startDate']));
+            $data['endDate'] = date('Y-m-d', strtotime($data['endDate']));
+        }
+
+        $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('sum(e.subTotal) as subTotal ,sum(e.total) as total ,sum(e.discount) as discount , sum(e.vat) as vat, sum(e.payment) as payment, sum(e.due) as due');
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config);
+        if ($previous == 'true'){
+
+            if (!empty($data['startDate'])) {
+                $qb->andWhere("e.updated >= :startDate");
+                $qb->setParameter('startDate', $data['startDate'] . ' 00:00:00');
+            }
+            if (!empty($data['endDate'])) {
+                $qb->andWhere("e.updated <= :endDate");
+                $qb->setParameter('endDate', $data['endDate'] . ' 23:59:59');
+            }
+
+        }elseif ($previous == 'false'){
+
+            if (!empty($data['startDate'])) {
+                $qb->andWhere("e.updated < :startDate");
+                $qb->setParameter('startDate', $data['startDate'] . ' 00:00:00');
+            }
+        }
+        $qb->andWhere('e.process = :process')->setParameter('process', 'Done');
+        $result = $qb->getQuery()->getOneOrNullResult();
+        $subTotal = !empty($result['subTotal']) ? $result['subTotal'] :0;
+        $total = !empty($result['total']) ? $result['total'] :0;
+        $discount = !empty($result['discount']) ? $result['discount'] :0;
+        $vat = !empty($result['vat']) ? $result['vat'] :0;
+        $due = !empty($result['due']) ? $result['due'] :0;
+        $receive = !empty($result['payment']) ? $result['payment'] :0;
+        $data = array('subTotal'=> $subTotal ,'total'=> $total ,'discount'=> $discount ,'vat'=> $vat,'receive'=> $receive,'due'=>$due);
+        return $data;
     }
 
 
@@ -134,9 +180,9 @@ class InvoiceRepository extends EntityRepository
 
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.invoiceTransactions','it');
-        $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(it.total) as netTotal , sum(it.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
-        $qb->where('e.restaurantConfig = :hospital')->setParameter('hospital', $config);
+        $qb->leftJoin('e.invoiceTransactions','e');
+        $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -158,19 +204,15 @@ class InvoiceRepository extends EntityRepository
         return $data;
     }
 
-    public function findWithSalesOverview(User $user , $data , $mode='')
+    public function findWithSalesOverview(User $user , $data = array())
     {
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->leftJoin('e.invoiceTransactions','it');
-        $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue , sum(e.commission) as netCommission');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config);
-        if (!empty($mode)){
-            $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
-        }
+        $qb->select('sum(e.subTotal) as subTotal ,sum(e.discount) as discount ,sum(e.total) as netTotal , sum(e.payment) as netPayment , sum(e.due) as netDue');
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config);
         $this->handleDateRangeFind($qb,$data);
         $qb->andWhere("e.process IN (:process)");
-        $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
+        $qb->setParameter('process', array('Done'));
         $result = $qb->getQuery()->getOneOrNullResult();
         $subTotal = !empty($result['subTotal']) ? $result['subTotal'] :0;
         $netTotal = !empty($result['netTotal']) ? $result['netTotal'] :0;
@@ -178,8 +220,7 @@ class InvoiceRepository extends EntityRepository
         $netDue = !empty($result['netDue']) ? $result['netDue'] :0;
         $discount = !empty($result['discount']) ? $result['discount'] :0;
         $vat = !empty($result['vat']) ? $result['vat'] :0;
-        $netCommission = !empty($result['netCommission']) ? $result['netCommission'] :0;
-        $data = array('subTotal'=> $subTotal ,'discount'=> $discount ,'vat'=> $vat ,'netTotal'=> $netTotal , 'netPayment'=> $netPayment , 'netDue'=> $netDue , 'netCommission'=> $netCommission);
+        $data = array('subTotal'=> $subTotal ,'discount'=> $discount ,'vat'=> $vat ,'total'=> $netTotal , 'receive'=> $netPayment , 'due'=> $netDue);
 
         return $data;
     }
@@ -194,7 +235,7 @@ class InvoiceRepository extends EntityRepository
         $qb->leftJoin('p.service','s');
         $qb->select('sum(ip.subTotal) as subTotal');
         $qb->addSelect('s.name as serviceName');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config);
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -214,7 +255,7 @@ class InvoiceRepository extends EntityRepository
         $qb->leftJoin('ip.transactionMethod','p');
         $qb->select('sum(ip.payment) as paymentTotal');
         $qb->addSelect('p.name as transName');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config);
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config);
         if (!empty($mode)){
             $qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode);
         }
@@ -244,7 +285,7 @@ class InvoiceRepository extends EntityRepository
         $qb->leftJoin('ip.assignDoctor','d');
         $qb->select('sum(ip.payment) as paymentTotal');
         $qb->addSelect('d.name as referredName');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config);
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config);
         $qb->andWhere('ip.process = :mode')->setParameter('mode', 'Paid');
         if (!empty($data['startDate']) ) {
             $qb->andWhere("ip.updated >= :startDate");
@@ -267,7 +308,7 @@ class InvoiceRepository extends EntityRepository
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
 
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.restaurantConfig = :hospital')->setParameter('hospital', $config) ;
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
         //$qb->andWhere('e.invoiceMode = :mode')->setParameter('mode', $mode) ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.created','DESC');
@@ -279,7 +320,7 @@ class InvoiceRepository extends EntityRepository
     {
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config) ;
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
         $this->handleSearchBetween($qb,$data);
         $qb->andWhere("e.process IN (:process)");
         $qb->setParameter('process', array('Done','Paid','In-progress','Diagnostic','Admitted'));
@@ -294,7 +335,7 @@ class InvoiceRepository extends EntityRepository
         $config = $user->getGlobalOption()->getRestaurantConfig()->getId();
 
         $qb = $this->createQueryBuilder('e');
-        $qb->where('e.hospitalConfig = :hospital')->setParameter('hospital', $config) ;
+        $qb->where('e.restaurantConfig = :config')->setParameter('config', $config) ;
         $qb->andWhere('e.paymentStatus != :status')->setParameter('status', 'pending') ;
         $this->handleSearchBetween($qb,$data);
         $qb->orderBy('e.updated','DESC');
@@ -314,7 +355,6 @@ class InvoiceRepository extends EntityRepository
 
 
         $subTotal = !empty($total['subTotal']) ? $total['subTotal'] :0;
-        $subCommission = !empty($total['subCommission']) ? $total['subCommission'] :0;
         if($subTotal > 0){
 
             if ($invoice->getRestaurantConfig()->getVatEnable() == 1 && $invoice->getRestaurantConfig()->getVatPercentage() > 0) {
@@ -325,7 +365,6 @@ class InvoiceRepository extends EntityRepository
 
             $invoice->setSubTotal($subTotal);
             $invoice->setTotal($invoice->getSubTotal() + $invoice->getVat() - $invoice->getDiscount());
-            $invoice->setEstimateCommission($subCommission);
             $invoice->setDue($invoice->getTotal() - $invoice->getPayment() );
 
         }else{
@@ -428,7 +467,7 @@ class InvoiceRepository extends EntityRepository
     public function patientAdmissionUpdate($data,Invoice $entity)
     {
         $em = $this->_em;
-        $invoiceInfo = $data['appstore_bundle_hospitalbundle_invoice'];
+        $invoiceInfo = $data['appstore_bundle_configbundle_invoice'];
         if($invoiceInfo['cabin']){
             $cabin = $em->getRepository('RestaurantBundle:Particular')->find($invoiceInfo['cabin']);
             $entity->setCabin($cabin);
@@ -473,6 +512,18 @@ class InvoiceRepository extends EntityRepository
         exit;
 
     }
+
+    public function discountCalculation(Invoice $invoice,$discount)
+    {
+        $type = $invoice->getRestaurantConfig()->getDiscountType();
+        if($type == 'flat'){
+            $val = ( $invoice->getSubTotal() - $discount );
+        }else{
+            $val = ( ($invoice->getSubTotal() * (int)$discount)/100 );
+        }
+        return round($val);
+    }
+
 
 
 }

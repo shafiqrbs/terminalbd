@@ -72,6 +72,38 @@ class CustomerRepository extends EntityRepository
         }
     }
 
+    public function newExistingRestaurantCustomer($globalOption,$mobile,$data)
+    {
+        $em = $this->_em;
+        $name = $data['name'];
+        $location = $data['location'];
+        $entity = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $globalOption ,'mobile' => $mobile));
+        if($entity){
+
+            $entity->setName($name);
+            if($location) {
+                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
+                $entity->setLocation($location);
+            }
+            $em->flush($entity);
+            return $entity;
+
+        }else{
+
+            $entity = new Customer();
+            $entity->setMobile($mobile);
+            $entity->setName($name);
+            if($location) {
+                $location = $em->getRepository('SettingLocationBundle:Location')->find($location);
+                $entity->setLocation($location);
+            }
+            $entity->setGlobalOption($globalOption);
+            $em->persist($entity);
+            $em->flush($entity);
+            return $entity;
+        }
+    }
+
     public function findExistingCustomer($sales, $mobile)
     {
         $em = $this->_em;

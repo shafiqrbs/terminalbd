@@ -141,6 +141,24 @@ class InvoiceParticularRepository extends EntityRepository
         $data = '';
         $i = 1;
         foreach ($entities as $entity) {
+            $data .= '<tr id="remove-'. $entity->getId().'">';
+            $data .= '<td class="span1" >' . $i . '</td>';
+            $data .= '<td class="span4" >' . $entity->getParticular()->getName() . '</td>';
+            $data .= '<td class="span1" >' . $entity->getQuantity() .'*'.$entity->getSalesPrice().'</td>';
+            $data .= '<td class="span2" >' . $entity->getSubTotal() . '</td>';
+            $data .= '<td class="span1" >
+            <a id="'.$entity->getId().'" data-id="'.$entity->getId().'" title="Are you sure went to delete ?" data-url="/restaurant/invoice/' . $sales->getId() . '/' . $entity->getId() . '/particular-delete" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a>
+            </td>';
+            $data .= '</tr>';
+            $i++;
+        }
+        return $data;
+
+
+        /*$entities = $sales->getInvoiceParticulars();
+        $data = '';
+        $i = 1;
+        foreach ($entities as $entity) {
             $data .= '<tr id="remove-'. $entity->getId() . '">';
             $data .= '<td class="span1"><span class="badge badge-warning toggle badge-custom" id='. $entity->getId() .'" ><span>[+]</span></span></td>';
             $data .= '<td class="span1" >' . $i . '</td>';
@@ -156,7 +174,7 @@ class InvoiceParticularRepository extends EntityRepository
             $data .= '</tr>';
             $i++;
         }
-        return $data;
+        return $data;*/
     }
 
     public function invoiceParticularLists($user){

@@ -6,8 +6,8 @@ $(document).on("click", "#receiveBtn", function() {
         type: 'POST',
         data : $('.form-horizontal').serialize(),
         success: function (response) {
-            jsPostPrint(response);
-            setTimeout(pageRedirect(), 3000);
+           // jsPostPrint(response);
+           // setTimeout(pageRedirect(), 3000);
         }
     })
 

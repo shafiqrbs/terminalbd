@@ -49,3 +49,6 @@ dms_config:
     resource: "@DmsBundle/Resources/config/routing/config.yml"
     prefix:   /config
 
+dms_homepage:
+    path:     /dashoard
+    defaults: { _controller: DmsBundle:Default:index }

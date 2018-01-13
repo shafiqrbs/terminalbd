@@ -9,6 +9,13 @@ $( ".dateCalendar" ).datepicker({
     yearRange: "-100:+0",
 });
 
+$(".addCustomer").click(function(){
+    $( ".customer" ).slideToggle( "slow" );
+}).toggle( function() {
+    $(this).removeClass("blue").addClass("red").html('<i class="icon-remove"></i>');
+}, function() {
+    $(this).removeClass("red").addClass("blue").html('<i class="icon-user"></i>');
+});
 
 
 $(document).on("click", ".editable-submit", function() {
@@ -365,6 +372,48 @@ $(".select2Customer").select2({
     minimumInputLength: 1
 });
 
+
+$(".select2CustomerName").select2({
+
+    ajax: {
+
+        url: Routing.generate('domain_customer_auto_name_search'),
+        dataType: 'json',
+        delay: 250,
+        data: function (params, page) {
+            return {
+                q: params,
+                page_limit: 100
+            };
+        },
+        results: function (data, page) {
+            return {
+                results: data
+            };
+        },
+        cache: true
+    },
+    escapeMarkup: function (m) {
+        return m;
+    },
+    formatResult: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    formatSelection: function (item) {
+        return item.text
+    }, // omitted for brevity, see the source of this page
+    initSelection: function (element, callback) {
+        var customer = $(element).val();
+        $.ajax(Routing.generate('domain_customer_name', { customer : customer}), {
+            dataType: "json"
+        }).done(function (data) {
+            return  callback(data);
+        });
+    },
+    allowClear: true,
+    minimumInputLength: 2
+});
+
 $(".select2Location").select2({
 
     ajax: {
@@ -409,31 +458,37 @@ $(".select2Location").select2({
 $(document).on( "click", ".btn-number", function(e){
 
     e.preventDefault();
+
+    url = $(this).attr('data-url');
+    var productId = $(this).attr('data-text');
+    var price = $(this).attr('data-title');
+    fieldId = $(this).attr('data-id');
     fieldName = $(this).attr('data-field');
     type      = $(this).attr('data-type');
-    var input = $("input[name='"+fieldName+"']");
+    var input = $('#quantity-'+$(this).attr('data-id'));
     var currentVal = parseInt(input.val());
     if (!isNaN(currentVal)) {
         if(type == 'minus') {
-
             if(currentVal > input.attr('min')) {
-                input.val(currentVal - 1).change();
+                var existVal = (currentVal - 1);
+                input.val(existVal).change();
             }
             if(parseInt(input.val()) == input.attr('min')) {
                 $(this).attr('disabled', true);
             }
+
         } else if(type == 'plus') {
 
             if(currentVal < input.attr('max')) {
-                input.val(currentVal + 1).change();
+                var existVal = (currentVal + 1);
+                input.val(existVal).change();
             }
             if(parseInt(input.val()) == input.attr('max')) {
                 $(this).attr('disabled', true);
             }
+
         }
     } else {
         input.val(0);
     }
 });
-
-

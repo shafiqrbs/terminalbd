@@ -29,6 +29,16 @@ class ConfigType extends AbstractType
             ->add('isPrintHeader')
             ->add('isPrintFooter')
             ->add('printInstruction')
+            ->add('discountType', 'choice', array(
+                'required'    => false,
+                'attr'=>array('class'=>'m-wrap span12'),
+                'empty_value' => '---Discount Type---',
+                'choices' => array(
+                    'percentage' => 'Percentage',
+                    'flat' => 'Flat',
+                ),
+            ))
+            ->add('discountPercentage','integer',array('attr'=>array('class'=>'m-wrap numeric span5')))
             ->add('invoiceHeight','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printLeftMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))
             ->add('printTopMargin','text',array('attr'=>array('class'=>'m-wrap numeric span12')))

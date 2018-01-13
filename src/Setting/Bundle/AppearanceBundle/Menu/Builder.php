@@ -458,7 +458,7 @@ class Builder extends ContainerAware
         }
         $menu
             ->addChild('Inventory')
-            ->setAttribute('icon', 'icon-archive')
+            ->setAttribute('icon', 'irescon-archive')
             ->setAttribute('dropdown', true);
 
        /* if ($securityContext->isGranted('ROLE_DOMAIN_INVENTORY_PURCHASE')) {
@@ -938,10 +938,10 @@ class Builder extends ContainerAware
 
         $menu['Restaurant']->addChild('Point of Sales ', array('route' => 'restaurant_invoice_new'))
             ->setAttribute('icon', 'icon-th-large');
-
         $menu['Restaurant']->addChild('Manage Sales', array('route' => 'restaurant_invoice'))
             ->setAttribute('icon', 'icon-list');
-
+        $menu['Restaurant']->addChild('Customer', array('route' => 'restaurant_customer'))->setAttribute('icon', 'icon icon-user');
+        if ($securityContext->isGranted('ROLE_DOMAIN_RESTAURANT_MANAGER')) {
         $menu['Restaurant']->addChild('Master Data')
             ->setAttribute('icon', 'icon icon-cog')
             ->setAttribute('dropdown', true);
@@ -949,10 +949,8 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon-th-list');
         $menu['Restaurant']['Master Data']->addChild('Particular', array('route' => 'restaurant_particular'))
             ->setAttribute('icon', 'icon-th-list');
-       // if ($securityContext->isGranted('ROLE_DOMAIN_RESTAURANT_MANAGER')) {
-            $menu['Restaurant']['Master Data']->addChild('Configuration', array('route' => 'restaurant_config_manage'))
-                ->setAttribute('icon', 'icon-cog');
-        //}
+        $menu['Restaurant']['Master Data']->addChild('Configuration', array('route' => 'restaurant_config_manage'))
+            ->setAttribute('icon', 'icon-cog');
         $menu['Restaurant']->addChild('Manage Stock')
             ->setAttribute('icon', 'icon icon-truck')
             ->setAttribute('dropdown', true);
@@ -975,12 +973,7 @@ class Builder extends ContainerAware
             ->setAttribute('icon', 'icon-th-list');
         $menu['Restaurant']['Reports']->addChild('Stock Summary', array('route' => 'restaurant_report_stock'))
             ->setAttribute('icon', 'icon-th-list');
-
-        if ($securityContext->isGranted('ROLE_DOMAIN_RESTAURANT_MANAGER')) {
-
-
         }
-
         return $menu;
 
     }

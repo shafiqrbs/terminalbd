@@ -168,6 +168,31 @@ class UserRepository extends EntityRepository
             );
         }
 
+        $restaurant = array('restaurant');
+        $result = array_intersect($arrSlugs, $restaurant);
+        if (!empty($result)) {
+            $array['RESTAURANT'] = array(
+                'ROLE_RESTAURANT'                           => 'Restaurant',
+                'ROLE_DOMAIN_RESTAURANT'                    => 'Restaurant Operator',
+                'ROLE_DOMAIN_RESTAURANT_MANAGER'            => 'Restaurant Manager',
+                'ROLE_DOMAIN_RESTAURANT_ADMIN'              => 'Restaurant Admin',
+            );
+        }
+
+        $dms = array('dms');
+        $result = array_intersect($arrSlugs, $dms);
+        if (!empty($result)) {
+            $array['DMS'] = array(
+                'ROLE_DMS'                                  => 'Dental',
+                'ROLE_DOMAIN_DMS_LAB'                       => 'Dental Lab',
+                'ROLE_DOMAIN_DMS_DOCTOR'                    => 'Dental Doctor',
+                'ROLE_DOMAIN_DMS_MANAGER'                   => 'Dental Manager',
+                'ROLE_DOMAIN_DMS_ADMIN'                     => 'Dental Admin',
+            );
+        }
+
+
+
         return $array;
     }
 

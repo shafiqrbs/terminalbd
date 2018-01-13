@@ -4,6 +4,7 @@ namespace Appstore\Bundle\RestaurantBundle\Form;
 
 use Appstore\Bundle\DomainUserBundle\Form\CustomerForHospitalType;
 use Appstore\Bundle\DomainUserBundle\Form\CustomerType;
+use Appstore\Bundle\DomainUserBundle\Form\RestaurantCustomerType;
 use Appstore\Bundle\HospitalBundle\Entity\Category;
 use Appstore\Bundle\HospitalBundle\Entity\HmsCategory;
 use Appstore\Bundle\HospitalBundle\Repository\CategoryRepository;
@@ -44,6 +45,7 @@ class InvoiceType extends AbstractType
             ->add('cardNo','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment card no','data-original-title'=>'Add payment card no','autocomplete'=>'off')))
             ->add('transactionId','text', array('attr'=>array('class'=>'m-wrap span12','placeholder'=>'Add payment transaction id','data-original-title'=>'Add payment transaction id','autocomplete'=>'off')))
             ->add('paymentMobile','text', array('attr'=>array('class'=>'m-wrap span12 mobile','placeholder'=>'Add payment mobile no','data-original-title'=>'Add payment mobile no','autocomplete'=>'off')))
+            ->add('slipNo','text', array('attr'=>array('class'=>'m-wrap span12 tooltips','data-trigger' => 'hover','placeholder'=>'Add slip no','data-original-title'=>'Add slip no','autocomplete'=>'off')))
             ->add('payment','text', array('attr'=>array('class'=>'tooltips payment input2','data-trigger' => 'hover','placeholder'=>'Receive amount','data-original-title'=>'Enter received amount','autocomplete'=>'off'),
             ))
             ->add('discount','text', array('attr'=>array('class'=>'tooltips discount input2','data-trigger' => 'hover','placeholder'=>'Discount amount','data-original-title'=>'Enter discount amount','autocomplete'=>'off'),
@@ -104,6 +106,20 @@ class InvoiceType extends AbstractType
                 }
             ))
 
+            ->add('salesBy', 'entity', array(
+                'required'    => true,
+                'class' => 'Core\UserBundle\Entity\User',
+                'property' => 'userFullName',
+                'attr'=>array('class'=>'span12 select2'),
+                'empty_value' => '---Served By---',
+                'query_builder' => function(EntityRepository $er){
+                    return $er->createQueryBuilder('u')
+                        ->where("u.isDelete != 1")
+                        ->andWhere("u.globalOption =".$this->globalOption->getId())
+                        ->orderBy("u.username", "ASC");
+                }
+            ))
+
             ->add('accountMobileBank', 'entity', array(
                 'required'    => false,
                 'class' => 'Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank',
@@ -117,6 +133,7 @@ class InvoiceType extends AbstractType
                         ->orderBy("b.name", "ASC");
                 }
             ));
+            $builder->add('customer', new RestaurantCustomerType($this->location));
     }
     
     /**
