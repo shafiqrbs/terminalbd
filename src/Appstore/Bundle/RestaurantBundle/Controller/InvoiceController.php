@@ -211,7 +211,7 @@ class InvoiceController extends Controller
         $customer = $em->getRepository('DomainUserBundle:Customer')->findOneBy(array('globalOption' => $option,'mobile' => $mobile));
         if($entity->getSubTotal()  > 0 && !empty($customer) ){
             $discount = $entity->getRestaurantConfig()->getDiscountPercentage();
-            $returnDiscount =$em->getRepository('RestaurantBundle:Invoice')->discountCalculation($entity,$discount);
+            $returnDiscount = $em->getRepository('RestaurantBundle:Invoice')->discountCalculation($entity,$discount);
             $entity->setCustomer($customer);
             $entity->setMobile($customer->getMobile());
             $entity->setDiscount($returnDiscount);

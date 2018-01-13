@@ -291,9 +291,7 @@ $(document).on('change', '#customerMobile', function() {
 
     var mobile = $('#customerMobile').val();
     var invoice = parseInt($('#invoiceId').val());
-    alert(mobile);
     if(mobile == ''){
-        $('#wrongBarcode').html('Using wrong barcode, Please try again correct barcode.');
         return false;
     }
 
@@ -329,7 +327,6 @@ $(document).on('change', '#appstore_bundle_restaurant_invoice_customer_mobile , 
     var location = $('#appstore_bundle_restaurant_invoice_customer_location').val();
     var invoice = parseInt($('#invoiceId').val());
     if(mobile == ''){
-        $('#wrongBarcode').html('Please try again correct barcode.');
         return false;
     }
 

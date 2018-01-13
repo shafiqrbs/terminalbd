@@ -113,7 +113,7 @@
                                 <tr class="head-green">
                                     <th class="numeric" >Created</th>
                                     <th class="numeric" >Invoice No</th>
-                                    <th class="numeric" >Table No</th>
+                                    <th class="numeric" >Slip/Table No</th>
                                     <th class="numeric" >Total</th>
                                     <th class="numeric" >Vat</th>
                                     <th class="numeric" >Discount</th>
@@ -122,6 +122,7 @@
                                     <th class="numeric" >Due</th>
                                     <th class="numeric" >Status</th>
                                     <th class="numeric" >Process</th>
+                                    <th class="numeric" >Served By</th>
                                     <th class="numeric" >Action</th>
                                 </tr>
                                 </thead>
@@ -131,7 +132,7 @@
                                     <tr id="delete-{{ entity.id }}">
                                         <td class="numeric" >{{ entity.created|date('d-m-Y') }}</td>
                                         <td class="numeric" >{{ entity.invoice }}</td>
-                                        <td class="numeric" >{% if entity.tokenNo is not empty %}{{ entity.tokenNo.name }}{% endif %}</td>
+                                        <td class="numeric" >{{ entity.slipNo }} / {% if entity.tokenNo is not empty %}{{ entity.tokenNo.name }}{% endif %}</td>
                                         <td class="numeric" >{{ entity.subTotal }}</td>
                                         <td class="numeric" >{{ entity.vat }}</td>
                                         <td class="numeric" >{{ entity.discount }}</td>
@@ -140,6 +141,7 @@
                                         <td class="numeric" >{{ entity.due }}</td>
                                         <td class="numeric" >{{ entity.paymentStatus }}</td>
                                         <td class="numeric" > {{ entity.process }}</td>
+                                        <td class="numeric" > {{ entity.salesBy }}</td>
                                         <td class="numeric" >
                                             <div class="btn-group">
                                                 {% set processIntArr = ['Created','Pending','Kitchen'] %}

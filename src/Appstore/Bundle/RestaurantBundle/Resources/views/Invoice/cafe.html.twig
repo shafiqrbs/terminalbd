@@ -92,8 +92,9 @@
                                                         <td class="numeric" >{{ item.particular.particularCode }}</td>
                                                         <td class="numeric" >{{ item.salesPrice }}</td>
                                                         <td class="numeric" >
-                                                            <a class="editable" data-name="Quantity" href="#"  data-url="{{ path('inventory_salesmanual_item_inline_update',{'salesItem':item.id}) }}" data-type="text" data-pk="{{ item.id }}" data-original-title="Enter sales quantity">{{ item.quantity }}</a>
-                                                        </td>
+                                                            {{ item.quantity }}
+                                            {#                <a class="editable" data-name="Quantity" href="#"  data-url="{{ path('inventory_salesmanual_item_inline_update',{'salesItem':item.id}) }}" data-type="text" data-pk="{{ item.id }}" data-original-title="Enter sales quantity">{{ item.quantity }}</a>
+                                            #}            </td>
                                                         <td>= {{ item.subTotal }}</td>
                                                         <td><a id="{{ item.id }}" data-id="{{ item.id }}" title="Are you sure went to delete ?" data-url="{{ path('restaurant_invoice_particular_delete',{'invoice': entity.id ,'id': item.id }) }}" href="javascript:" class="btn red mini particularDelete" ><i class="icon-trash"></i></a></td>
                                                     </tr>

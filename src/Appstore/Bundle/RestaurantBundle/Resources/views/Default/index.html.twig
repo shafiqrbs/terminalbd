@@ -94,6 +94,7 @@
                                 </a>
                             </div>
                         </div>
+                        {% if is_granted('ROLE_DOMAIN_RESTAURANT_MANAGER') %}
                         <div class="span3 responsive" data-tablet="span6" data-desktop="span3">
                             <div class="dashboard-stat yellow">
                                 <a class="visual" href="{{ path('restaurant_report_sales_summary') }}">
@@ -104,10 +105,12 @@
                                 </a>
                             </div>
                         </div>
+                        {% endif %}
 
                     </div>
                 </div>
             </div>
+            {% if is_granted('ROLE_DOMAIN_RESTAURANT_MANAGER') %}
             <div class="portlet box purple">
                 <div class="portlet-title">
                     <div class="caption"><i class="fa fa-database"></i>Inventory</div>
@@ -158,6 +161,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
     <style>
