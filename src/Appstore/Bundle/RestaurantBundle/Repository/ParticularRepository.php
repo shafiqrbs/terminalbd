@@ -62,7 +62,7 @@ class ParticularRepository extends EntityRepository
             $data .='<span class="input-group-btn">';
             $data .='<button type="button" class="btn green btn-number" data-type="plus" data-field="quantity" data-id="'.$particular['id'].'"   data-title="'.$particular['price'].'"><i class="icon-plus"></i></button>';
             $data .='<input type="hidden" id="price-'.$particular['id'].'" value="'.$particular['price'].'" name="">';
-            $data .='<button type="button" class="btn red addCart" id=""  data-id="'.$particular['id'].'"  data-url="/restaurant/invoice/'.$invoice->getId().'/particular" ><i class="icon-shopping-cart"></i></button>';
+            $data .='<button type="button" class="btn red addCart" id=""  data-id="'.$particular['id'].'"  data-url="/restaurant/invoice/'.$invoice->getId().'/particular-add" ><i class="icon-shopping-cart"></i></button>';
             $data .='<div>';
             $data .='</td>';
             $data .='</tr>';
