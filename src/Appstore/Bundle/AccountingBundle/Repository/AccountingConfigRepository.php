@@ -54,11 +54,11 @@ class AccountingConfigRepository extends EntityRepository
         $Expenditure = $em->createQuery('DELETE AccountingBundle:Expenditure e WHERE e.globalOption = '.$option);
         $Expenditure->execute();
 
-        $AccountMobileBank = $em->createQuery('DELETE AccountingBundle:AccountMobileBank e WHERE e.globalOption = '.$option);
+      /*  $AccountMobileBank = $em->createQuery('DELETE AccountingBundle:AccountMobileBank e WHERE e.globalOption = '.$option);
         $AccountMobileBank->execute();
 
         $AccountBank = $em->createQuery('DELETE AccountingBundle:AccountBank e WHERE e.globalOption = '.$option);
-        $AccountBank->execute();
+        $AccountBank->execute();*/
 
 
 

@@ -186,6 +186,9 @@ class DomainController extends Controller
         if($option->getHospitalConfig()) {
             $this->getDoctrine()->getRepository('HospitalBundle:HospitalConfig')->hospitalReset($option);
         }
+        if($option->getRestaurantConfig()) {
+            $this->getDoctrine()->getRepository('RestaurantBundle:RestaurantConfig')->reset($option);
+        }
         $dir = WEB_PATH . "/uploads/domain/" . $option->getId() . "/inventory";
         $a = new Filesystem();
         $a->remove($dir);

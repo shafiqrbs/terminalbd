@@ -57,13 +57,13 @@ class Invoice
     private  $accountSales;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="invoices" ,cascade={"persist"} )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\DomainUserBundle\Entity\Customer", inversedBy="invoices" ,cascade={"persist","remove"} )
      **/
     private  $customer;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="invoiceCabin", cascade={"persist"}  )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Particular", inversedBy="invoiceCabin", cascade={"persist","remove"}  )
      **/
     private  $tokenNo;
 
@@ -93,29 +93,29 @@ class Invoice
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="invoices" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\TransactionMethod", inversedBy="invoices" , cascade={"persist","remove"} )
      **/
     private  $transactionMethod;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="invoices" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\Bank", inversedBy="invoices" , cascade={"persist","remove"}  )
      **/
     private  $bank;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="invoices" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountBank", inversedBy="restaurantInvoices" , cascade={"persist","remove"}  )
      **/
     private  $accountBank;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="invoices" )
+     * @ORM\ManyToOne(targetEntity="Appstore\Bundle\AccountingBundle\Entity\AccountMobileBank", inversedBy="restaurantInvoices", cascade={"persist","remove"}  )
      **/
     private  $accountMobileBank;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PaymentCard", inversedBy="invoices" )
+     * @ORM\ManyToOne(targetEntity="Setting\Bundle\ToolBundle\Entity\PaymentCard", inversedBy="invoices" , cascade={"persist","remove","remove"}  )
      **/
     private  $paymentCard;
 

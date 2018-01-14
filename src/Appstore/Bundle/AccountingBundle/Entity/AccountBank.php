@@ -126,6 +126,11 @@ class AccountBank
      */
     protected $invoiceTransactions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Appstore\Bundle\RestaurantBundle\Entity\Invoice", mappedBy="accountBank" )
+     */
+    protected $restaurantInvoices;
+
 
     /**
      * @var string
@@ -502,6 +507,14 @@ class AccountBank
     public function getOrderPayments()
     {
         return $this->orderPayments;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRestaurantInvoices()
+    {
+        return $this->restaurantInvoices;
     }
 
 }
